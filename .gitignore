@@ -1,0 +1,12 @@
+# Ignore everything by default. Re-allow only the public static site files.
+/*
+!.gitignore
+!README.md
+!index.html
+!lib/
+!lib/d3.min.js
+!data/
+data/*
+!data/manifest.json
+!data/search-index.json
+!data/xref-map.json

@@ -1,0 +1,268 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-06T18:00:31.866Z",
+  "phase": "6",
+  "sources": {
+    "nist-800-53-rev5": {
+      "name": "NIST SP 800-53 Rev. 5",
+      "source": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+        "silver": "https://csrc.nist.gov/projects/risk-management/sp800-53-controls/downloads",
+        "bronze": "none"
+      },
+      "source_git": {
+        "gold": {
+          "repo": "https://github.com/usnistgov/oscal-content",
+          "path": "nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+          "ref": "main"
+        }
+      },
+      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "schema_version": "1.0",
+      "record_count": 1196,
+      "cadence": "nightly",
+      "notes": "Phase 2 seed: AC-2, AC-3, AC-6 from public NIST control text."
+    },
+    "nist-csf-2": {
+      "name": "NIST Cybersecurity Framework 2.0",
+      "source": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://www.nist.gov/cyberframework",
+        "silver": "https://csrc.nist.gov/projects/cybersecurity-framework",
+        "bronze": "none"
+      },
+      "source_git": {
+        "gold": {
+          "repo": "https://github.com/usnistgov/oscal-content",
+          "path": "nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json",
+          "ref": "main"
+        }
+      },
+      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "schema_version": "1.0",
+      "record_count": 185,
+      "cadence": "nightly",
+      "notes": "Phase 2 CSF subcategory seed."
+    },
+    "nist-800-53-to-csf": {
+      "name": "NIST SP 800-53 Rev. 5 to CSF 2.0 Informative Reference",
+      "source": "https://www.nist.gov/cyberframework/informative-references",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "silver",
+      "resolved_from": "silver",
+      "source_urls": {
+        "gold": "https://www.nist.gov/cyberframework/informative-references",
+        "silver": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
+        "bronze": "none"
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 6,
+      "cadence": "manual",
+      "notes": "Phase 2 relationship seed from NIST informative references."
+    },
+    "nist-800-171-rev3": {
+      "name": "NIST SP 800-171 Rev 3",
+      "source": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
+        "silver": "https://csrc.nist.gov/Projects/protecting-controlled-unclassified-information",
+        "bronze": "none"
+      },
+      "source_git": {
+        "gold": {
+          "repo": "https://github.com/usnistgov/oscal-content",
+          "path": "nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+          "ref": "main"
+        }
+      },
+      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "schema_version": "1.0",
+      "record_count": 130,
+      "cadence": "nightly",
+      "notes": "CMMC assessments may still reference 800-171 Rev 2 operationally."
+    },
+    "nist-800-37-rev2": {
+      "name": "NIST SP 800-37 Rev 2",
+      "source": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+        "silver": "https://csrc.nist.gov/projects/risk-management/about-rmf",
+        "bronze": "none"
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 1,
+      "cadence": "manual",
+      "notes": "RMF process publication; task map is manual derived."
+    },
+    "dod-cmmc-2": {
+      "name": "DoD CMMC 2.0",
+      "source": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+      "authoritative": true,
+      "source_trust": "manual",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+        "silver": "none",
+        "bronze": "none"
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 2,
+      "cadence": "manual",
+      "notes": "Manual extract from DoD CMMC documentation; no OSCAL Git."
+    },
+    "gsa-fedramp-rev5": {
+      "name": "FedRAMP Rev 5 OSCAL Baselines",
+      "source": "https://github.com/GSA/fedramp-automation",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://github.com/GSA/fedramp-automation",
+        "silver": "https://www.fedramp.gov/",
+        "bronze": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json"
+      },
+      "source_git": {
+        "gold": {
+          "repo": "https://github.com/GSA/fedramp-automation",
+          "path": "dist/content/rev5/baselines/json/",
+          "ref": "main"
+        }
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 3,
+      "cadence": "manual",
+      "notes": "Repo archived 2025-07-01. Phase 2 seed uses curated baseline flags on AC-2/3/6."
+    },
+    "nist-fisma-reference": {
+      "name": "FISMA FIPS 199 / 800-53B Reference",
+      "source": "https://csrc.nist.gov/pubs/fips/199/final",
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://csrc.nist.gov/pubs/fips/199/final",
+        "silver": "https://csrc.nist.gov/pubs/sp/800/53b/final",
+        "bronze": "none"
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 1,
+      "cadence": "manual",
+      "notes": "Impact categorization reference node for moderate baseline selection."
+    },
+    "cci-curated": {
+      "name": "DISA Control Correlation Identifiers (CCIs)",
+      "source": "curated",
+      "authoritative": false,
+      "source_trust": "public-fallback",
+      "source_tier": "bronze",
+      "resolved_from": "bronze",
+      "source_urls": {
+        "gold": "https://public.cyber.mil/stigs/downloads/",
+        "silver": "none",
+        "bronze": "none"
+      },
+      "snapshot_date": "2026-06-04T12:00:00Z",
+      "schema_version": "1.0",
+      "record_count": 3,
+      "cadence": "manual",
+      "notes": "Curated CCIs directly mapped to NIST 800-53."
+    },
+    "nist-nvd": {
+      "name": "NIST National Vulnerability Database",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+        "silver": "https://nvd.nist.gov/",
+        "bronze": "none"
+      },
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "schema_version": "1.0",
+      "cadence": "nightly",
+      "notes": "Phase 3 seed CVE list; expand via nvd-sync-state in later runs.",
+      "snapshot_date": "2026-06-06T00:12:08.648Z",
+      "record_count": 2
+    },
+    "nist-airmf": {
+      "name": "NIST AI Risk Management Framework",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://www.nist.gov/itl/ai-risk-management-framework",
+        "silver": "none",
+        "bronze": "none"
+      },
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "schema_version": "1.0",
+      "cadence": "manual",
+      "notes": "Phase 5 AI RMF crosswalk.",
+      "snapshot_date": "2026-06-04T12:00:00.000Z",
+      "record_count": 1
+    },
+    "nist-ssdf": {
+      "name": "NIST Secure Software Development Framework (SSDF)",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://csrc.nist.gov/projects/ssdf",
+        "silver": "none",
+        "bronze": "none"
+      },
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "schema_version": "1.0",
+      "cadence": "manual",
+      "notes": "Phase 5 SSDF crosswalk.",
+      "snapshot_date": "2026-06-04T12:00:00.000Z",
+      "record_count": 1
+    },
+    "cisa-cpg": {
+      "name": "CISA Cybersecurity Performance Goals",
+      "source_tier": "gold",
+      "resolved_from": "gold",
+      "source_urls": {
+        "gold": "https://www.cisa.gov/cross-sector-cybersecurity-performance-goals",
+        "silver": "none",
+        "bronze": "none"
+      },
+      "authoritative": true,
+      "source_trust": "authoritative",
+      "schema_version": "1.0",
+      "cadence": "manual",
+      "notes": "Phase 5 CPG crosswalk.",
+      "snapshot_date": "2026-06-04T12:00:00.000Z",
+      "record_count": 1
+    }
+  },
+  "xref_mode": "monolithic",
+  "sharding_enabled": false,
+  "total_records": 1523
+}
