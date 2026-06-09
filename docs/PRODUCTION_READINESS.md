@@ -17,4 +17,4 @@ GovFrame is under comprehensive refactor. Previous v1.0, accessibility, performa
 
 Use `data/generated/coverage.json` for current catalog and mapping coverage. `limited-public-scope` entries are intentional and must remain visible.
 
-The June 9, 2026 live browser audit is recorded in `docs/audits/live-browser-audit-2026-06-09.md`. It validates primary live journeys and mobile overflow, but does not close the remaining readiness checks.
+The June 9, 2026 live browser audit is recorded in `docs/audits/live-browser-audit-2026-06-09.md`. It validates expert and junior-assessor journeys, educational copy, mobile and 200%-equivalent reflow, stable asset deployment, and console health. Native keyboard-only, screen-reader, and browser-controlled 200% zoom proof remain open.
