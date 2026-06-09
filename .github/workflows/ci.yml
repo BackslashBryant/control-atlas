@@ -14,5 +14,5 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci || npm install
-      - name: Public verification
-        run: npm run verify:public
+      - name: Full verification
+        run: npm run precommit

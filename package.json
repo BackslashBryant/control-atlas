@@ -2,18 +2,27 @@
   "name": "govframe-navigator",
   "version": "1.0.0",
   "private": true,
-  "description": "Browser-based cybersecurity control and crosswalk reference for public U.S. government frameworks.",
+  "description": "Evidence-backed mapper for public U.S. government cybersecurity frameworks.",
   "scripts": {
-    "build:xref": "node ./scripts/build-xref.mjs",
+    "build:data": "node ./scripts/build-framework-data.mjs",
+    "build:xref": "npm run build:data",
     "fetch:oscal": "node ./scripts/fetch-oscal-catalogs.mjs",
-    "fetch:nvd": "node ./scripts/fetch-nvd.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
     "check:data-size": "node ./scripts/check-data-size.mjs",
     "smoke:static": "node ./scripts/static-smoke.mjs",
     "refresh:data": "node ./scripts/refresh-data.mjs",
-    "verify:public": "npm run check:data-size && npm run smoke:static"
+    "test": "npm run test:data && npm run test:runtime",
+    "test:data": "node --test ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
+    "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
+    "test:browser": "node --test ./tests/browser-contract.test.mjs",
+    "audit:coverage": "node ./scripts/audit-coverage.mjs",
+    "verify:public": "npm run check:data-size && npm run smoke:static && npm run audit:coverage",
+    "precommit": "npm test && npm run test:browser && npm run verify:public"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "fflate": "^0.8.3"
   }
 }

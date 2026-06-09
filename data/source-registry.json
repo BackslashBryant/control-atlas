@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0",
+  "sources": [
+    {
+      "id": "nist-oscal",
+      "name": "NIST OSCAL Content",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://github.com/usnistgov/oscal-content",
+      "frameworks": ["nist-800-53", "nist-800-171", "csf-2"]
+    },
+    {
+      "id": "nist-informative-references",
+      "name": "NIST Informative References",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://www.nist.gov/cyberframework/informative-references",
+      "frameworks": ["nist-800-53", "csf-2"]
+    },
+    {
+      "id": "disa-cci-list",
+      "name": "DISA Control Correlation Identifier List",
+      "tier": "gold",
+      "issuer": "DISA",
+      "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+      "frameworks": ["disa-cci"]
+    },
+    {
+      "id": "dod-cmmc",
+      "name": "DoD CMMC Resources",
+      "tier": "gold",
+      "issuer": "DoD",
+      "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+      "frameworks": ["cmmc-2"]
+    },
+    {
+      "id": "fedramp-rev5",
+      "name": "FedRAMP Rev. 5 Baselines",
+      "tier": "gold",
+      "issuer": "FedRAMP",
+      "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
+      "frameworks": ["fedramp-rev5", "nist-800-53"]
+    },
+    {
+      "id": "tradewind-rai-toolkit",
+      "name": "DoD Responsible AI Toolkit",
+      "tier": "gold",
+      "issuer": "DoD Tradewind",
+      "artifact": "https://www.tradewindai.com/rai-toolkit",
+      "frameworks": ["dod-rai"]
+    },
+    {
+      "id": "mitre-cis-cci-mappings",
+      "name": "MITRE CIS/CCI Mappings",
+      "tier": "silver",
+      "issuer": "MITRE",
+      "artifact": "https://github.com/mitre/cis-cci-mappings",
+      "frameworks": ["disa-cci"]
+    },
+    {
+      "id": "community-cci-research",
+      "name": "Community CCI Research",
+      "tier": "bronze",
+      "issuer": "Community",
+      "artifact": "https://www.reddit.com/r/NISTControls/comments/wg8bit/comprehensive_list_of_ccis/",
+      "frameworks": ["disa-cci"]
+    }
+  ]
+}

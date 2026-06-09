@@ -1,65 +1,63 @@
 #!/usr/bin/env node
-/**
- * Generate Bronze-tier CCI metadata for GovFrame Navigator.
- * Maps CCIs directly to NIST 800-53 controls (seed records for AC-2, AC-3, AC-6).
- */
+import { createHash } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { strFromU8, unzipSync } from 'fflate';
+import { parseCciXml } from './lib/cci-adapter.mjs';
 
-const CCIS = [
-  {
-    id: 'CCI-000015',
-    nist_control: 'AC-2',
-    title: 'Account Management',
-    description: 'The organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts.',
-  },
-  {
-    id: 'CCI-000213',
-    nist_control: 'AC-3',
-    title: 'Access Enforcement',
-    description: 'The organization enforces approved authorizations for logical access to information and system resources in accordance with applicable access control policies.',
-  },
-  {
-    id: 'CCI-000225',
-    nist_control: 'AC-6',
-    title: 'Least Privilege',
-    description: 'The organization employs the principle of least privilege, allowing only authorized accesses for users (or processes acting on behalf of users) which are necessary to accomplish assigned tasks in accordance with organizational missions and business functions.',
-  }
-];
+const CCI_URL = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip';
 
-function generateCciRecords(snapshotDate) {
-  return CCIS.map((entry) => ({
-    id: entry.id,
-    type: 'cci-item',
-    framework: 'cci',
-    title: `CCI ${entry.id} (${entry.nist_control})`,
-    description: entry.description,
-    nist_control: entry.nist_control,
-    source: {
-      key: 'cci-curated',
-      snapshot_date: snapshotDate,
-    },
-  }));
+function checksum(value) {
+  return `sha256:${createHash('sha256').update(value).digest('hex')}`;
+}
+
+async function fetchOfficialXml() {
+  const response = await fetch(CCI_URL);
+  if (!response.ok) throw new Error(`CCI download failed: ${response.status} ${response.statusText}`);
+  const archive = unzipSync(new Uint8Array(await response.arrayBuffer()));
+  if (!archive['U_CCI_List.xml']) throw new Error('CCI archive did not contain U_CCI_List.xml');
+  return strFromU8(archive['U_CCI_List.xml']);
 }
 
 export async function fetchCcis(options = {}) {
-  const snapshotDate = options.snapshotDate || new Date().toISOString();
-  const records = generateCciRecords(snapshotDate);
+  const xml = options.xml || await fetchOfficialXml();
+  const parsed = parseCciXml(xml);
+  const sourceChecksum = checksum(xml);
+  const records = parsed.records.map((record) => ({
+    ...record,
+    source: { ...record.source, checksum: sourceChecksum },
+  }));
 
   return {
-    schema_version: "1.0",
-    source_key: "cci-curated",
-    records
+    catalog: {
+      schema_version: '2.0',
+      source_key: 'disa-cci-list',
+      source_artifact: CCI_URL,
+      source_version: parsed.version,
+      snapshot_date: parsed.publish_date,
+      checksum: sourceChecksum,
+      records,
+    },
+    mappings: {
+      schema_version: '2.0',
+      source_key: 'disa-cci-list',
+      source_artifact: CCI_URL,
+      source_version: parsed.version,
+      snapshot_date: parsed.publish_date,
+      checksum: sourceChecksum,
+      provenance: 'Official DISA CCI List NIST SP 800-53 Revision 5 references',
+      relationships: parsed.relationships,
+    },
   };
 }
 
 async function main() {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-  const outPath = join(root, 'data', 'ccis.json');
-  const seed = await fetchCcis();
-  writeFileSync(outPath, `${JSON.stringify(seed, null, 2)}\n`, 'utf8');
-  console.log(`Wrote ${seed.records.length} CCI records to data/ccis.json`);
+  const result = await fetchCcis();
+  writeFileSync(join(root, 'data', 'ccis.json'), `${JSON.stringify(result.catalog, null, 2)}\n`, 'utf8');
+  writeFileSync(join(root, 'maps', 'cci-to-800-53.json'), `${JSON.stringify(result.mappings, null, 2)}\n`, 'utf8');
+  console.log(`Wrote ${result.catalog.records.length} official CCI records and ${result.mappings.relationships.length} CCI-to-control references`);
 }
 
 if (process.argv[1]?.includes('fetch-ccis.mjs')) {
