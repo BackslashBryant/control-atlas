@@ -13,7 +13,7 @@
       ],
       "source": {
         "key": "nist-nvd",
-        "snapshot_date": "2026-06-06T00:12:08.648Z"
+        "snapshot_date": "2026-06-09T07:19:48.968Z"
       }
     },
     {
@@ -29,7 +29,7 @@
       "last_modified": "2024-09-27T14:08:57.327",
       "source": {
         "key": "nist-nvd",
-        "snapshot_date": "2026-06-06T00:12:08.648Z"
+        "snapshot_date": "2026-06-09T07:19:48.968Z"
       }
     }
   ]

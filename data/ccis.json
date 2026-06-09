@@ -11,7 +11,7 @@
       "nist_control": "AC-2",
       "source": {
         "key": "cci-curated",
-        "snapshot_date": "2026-06-06T00:12:10.827Z"
+        "snapshot_date": "2026-06-09T07:19:50.467Z"
       }
     },
     {
@@ -23,7 +23,7 @@
       "nist_control": "AC-3",
       "source": {
         "key": "cci-curated",
-        "snapshot_date": "2026-06-06T00:12:10.827Z"
+        "snapshot_date": "2026-06-09T07:19:50.467Z"
       }
     },
     {
@@ -35,7 +35,7 @@
       "nist_control": "AC-6",
       "source": {
         "key": "cci-curated",
-        "snapshot_date": "2026-06-06T00:12:10.827Z"
+        "snapshot_date": "2026-06-09T07:19:50.467Z"
       }
     }
   ]
