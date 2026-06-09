@@ -8,8 +8,8 @@ const app = readFileSync('app/app.mjs', 'utf8');
 
 test('shell is modular, accessible, and starts without mass results', () => {
   assert.match(html, /<h1[^>]*>GovFrame/);
-  assert.match(html, /<script type="module" src="\.\/app\/app\.mjs"/);
-  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css"/);
+  assert.match(html, /<script type="module" src="\.\/app\/app\.mjs\?v=[^"]+"/);
+  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=[^"]+"/);
   assert.match(html, /data-view="search"/);
   assert.match(html, /data-view="matrix"/);
   assert.match(html, /data-view="browse"/);
