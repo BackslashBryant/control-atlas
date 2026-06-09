@@ -1,0 +1,19 @@
+{
+  "name": "govframe-navigator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser-based cybersecurity control and crosswalk reference for public U.S. government frameworks.",
+  "scripts": {
+    "build:xref": "node ./scripts/build-xref.mjs",
+    "fetch:oscal": "node ./scripts/fetch-oscal-catalogs.mjs",
+    "fetch:nvd": "node ./scripts/fetch-nvd.mjs",
+    "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
+    "check:data-size": "node ./scripts/check-data-size.mjs",
+    "smoke:static": "node ./scripts/static-smoke.mjs",
+    "refresh:data": "node ./scripts/refresh-data.mjs",
+    "verify:public": "npm run check:data-size && npm run smoke:static"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

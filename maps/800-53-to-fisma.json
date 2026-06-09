@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "source_key": "map-800-53-to-fisma",
+  "provenance": "FIPS 199 moderate impact to 800-53B baseline selection",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "FIPS-199-MODERATE",
+      "why": "Moderate FISMA categorization drives moderate baseline controls including AC-2."
+    },
+    {
+      "source_id": "AC-3",
+      "target_id": "FIPS-199-MODERATE",
+      "why": "Moderate FISMA categorization drives moderate baseline controls including AC-3."
+    },
+    {
+      "source_id": "AC-6",
+      "target_id": "FIPS-199-MODERATE",
+      "why": "Moderate FISMA categorization drives moderate baseline controls including AC-6."
+    }
+  ]
+}

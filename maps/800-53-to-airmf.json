@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-800-53-to-airmf",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "GOVERN 1.1",
+      "why": "NIST maps account management practices to AI RMF governance requirements."
+    }
+  ]
+}

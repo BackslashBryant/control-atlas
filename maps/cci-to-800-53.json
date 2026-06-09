@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "source_key": "map-cci-to-800-53",
+  "provenance": "curated CCI to NIST 800-53 crosswalk",
+  "relationships": [
+    {
+      "source_id": "CCI-000015",
+      "target_id": "AC-2",
+      "why": "Curated direct confidence mapping from CCI to NIST AC-2."
+    },
+    {
+      "source_id": "CCI-000213",
+      "target_id": "AC-3",
+      "why": "Curated direct confidence mapping from CCI to NIST AC-3."
+    },
+    {
+      "source_id": "CCI-000225",
+      "target_id": "AC-6",
+      "why": "Curated direct confidence mapping from CCI to NIST AC-6."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-800-53-to-csf",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "PR.AA-01",
+      "why": "NIST maps account management to CSF identity and credential management outcomes."
+    },
+    {
+      "source_id": "AC-2",
+      "target_id": "PR.AA-02",
+      "why": "NIST maps account lifecycle practices to identity proofing and credential binding outcomes."
+    },
+    {
+      "source_id": "AC-2",
+      "target_id": "PR.AA-05",
+      "why": "NIST maps account authorization practices to CSF access permission management outcomes."
+    },
+    {
+      "source_id": "AC-3",
+      "target_id": "PR.AA-05",
+      "why": "NIST maps access enforcement to CSF access permission enforcement and review outcomes."
+    },
+    {
+      "source_id": "AC-6",
+      "target_id": "PR.AA-05",
+      "why": "NIST maps least privilege to CSF access entitlement definition, enforcement, and review outcomes."
+    }
+  ]
+}

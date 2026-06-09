@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-airmf",
+  "records": [
+    {
+      "id": "GOVERN 1.1",
+      "type": "airmf-function",
+      "framework": "airmf",
+      "title": "Legal and Regulatory Requirements",
+      "description": "Legal and regulatory requirements involving AI are understood, managed, and documented."
+    }
+  ]
+}

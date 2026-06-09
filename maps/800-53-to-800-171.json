@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "source_key": "map-800-53-to-800-171",
+  "provenance": "NIST SP 800-171 Rev 3 access control family alignment (Phase 2 seed)",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "3.1.1",
+      "why": "800-171 account management requirements align with 800-53 account management controls."
+    },
+    {
+      "source_id": "AC-3",
+      "target_id": "3.1.2",
+      "why": "800-171 access enforcement aligns with 800-53 access enforcement controls."
+    },
+    {
+      "source_id": "AC-6",
+      "target_id": "3.1.5",
+      "why": "800-171 least privilege aligns with 800-53 least privilege controls."
+    }
+  ]
+}

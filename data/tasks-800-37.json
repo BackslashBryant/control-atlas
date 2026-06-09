@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-800-37-rev2",
+  "records": [
+    {
+      "id": "RMF-AC-2",
+      "type": "800-37-task",
+      "framework": "800-37",
+      "title": "Select controls for access management",
+      "family": "Access Control",
+      "description": "RMF task aligned to access control family practices for account and credential management."
+    }
+  ]
+}

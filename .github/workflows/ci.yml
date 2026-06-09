@@ -1,0 +1,18 @@
+name: Public Repo Checks
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || npm install
+      - name: Public verification
+        run: npm run verify:public

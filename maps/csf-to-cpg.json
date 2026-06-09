@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "source_key": "csf-to-cpg",
+  "relationships": [
+    {
+      "source_id": "PR.AA-01",
+      "target_id": "CPG-2.1",
+      "why": "CISA CPG maps MFA requirements to CSF Identity and Credential Management."
+    }
+  ]
+}

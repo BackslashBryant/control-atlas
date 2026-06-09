@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "source_key": "cisa-cpg",
+  "records": [
+    {
+      "id": "CPG-2.1",
+      "type": "cisa-cpg",
+      "framework": "cisa-cpg",
+      "title": "Multi-Factor Authentication",
+      "description": "Implement Multi-Factor Authentication (MFA) for all users and administrative access."
+    }
+  ]
+}

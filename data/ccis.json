@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "source_key": "cci-curated",
+  "records": [
+    {
+      "id": "CCI-000015",
+      "type": "cci-item",
+      "framework": "cci",
+      "title": "CCI CCI-000015 (AC-2)",
+      "description": "The organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts.",
+      "nist_control": "AC-2",
+      "source": {
+        "key": "cci-curated",
+        "snapshot_date": "2026-06-06T00:12:10.827Z"
+      }
+    },
+    {
+      "id": "CCI-000213",
+      "type": "cci-item",
+      "framework": "cci",
+      "title": "CCI CCI-000213 (AC-3)",
+      "description": "The organization enforces approved authorizations for logical access to information and system resources in accordance with applicable access control policies.",
+      "nist_control": "AC-3",
+      "source": {
+        "key": "cci-curated",
+        "snapshot_date": "2026-06-06T00:12:10.827Z"
+      }
+    },
+    {
+      "id": "CCI-000225",
+      "type": "cci-item",
+      "framework": "cci",
+      "title": "CCI CCI-000225 (AC-6)",
+      "description": "The organization employs the principle of least privilege, allowing only authorized accesses for users (or processes acting on behalf of users) which are necessary to accomplish assigned tasks in accordance with organizational missions and business functions.",
+      "nist_control": "AC-6",
+      "source": {
+        "key": "cci-curated",
+        "snapshot_date": "2026-06-06T00:12:10.827Z"
+      }
+    }
+  ]
+}

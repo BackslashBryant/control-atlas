@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "source_key": "map-800-53-to-800-37",
+  "provenance": "NIST SP 800-37 Rev 2 RMF task alignment (Phase 2 manual seed)",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "RMF-AC-2",
+      "why": "RMF control selection tasks for access management reference 800-53 AC-2."
+    }
+  ]
+}

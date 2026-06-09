@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-ssdf",
+  "records": [
+    {
+      "id": "PO.1.1",
+      "type": "ssdf-practice",
+      "framework": "ssdf",
+      "title": "Define Security Requirements for Software Development",
+      "description": "Ensure that security requirements for software development are known at all times so that they can be taken into account throughout the SDLC."
+    }
+  ]
+}

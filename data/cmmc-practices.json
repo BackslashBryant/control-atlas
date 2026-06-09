@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "source_key": "dod-cmmc-2",
+  "records": [
+    {
+      "id": "AC.L1-3.1.1",
+      "type": "cmmc-practice",
+      "framework": "cmmc",
+      "title": "Authorized Access Control",
+      "family": "Access Control",
+      "description": "Limit information system access to authorized users, processes acting on behalf of authorized users, and devices."
+    },
+    {
+      "id": "AC.L2-3.1.2",
+      "type": "cmmc-practice",
+      "framework": "cmmc",
+      "title": "Transaction and Function Control",
+      "family": "Access Control",
+      "description": "Limit information system access to the types of transactions and functions that authorized users are permitted to execute."
+    }
+  ]
+}

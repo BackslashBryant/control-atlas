@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+import { spawnSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+function run(label, script) {
+  console.log(`\n==> ${label}`);
+  const result = spawnSync(process.execPath, [join(ROOT, 'scripts', script)], {
+    cwd: ROOT,
+    stdio: 'inherit',
+    env: process.env,
+  });
+  if (result.status !== 0) {
+    throw new Error(`${script} failed with exit ${result.status}`);
+  }
+}
+
+async function main() {
+  await import('./fetch-oscal-catalogs.mjs').then((m) => m.fetchOscalCatalogs());
+  await import('./fetch-nvd.mjs').then((m) => m.fetchNvdSeed());
+  run('fetch-ccis', 'fetch-ccis.mjs');
+  run('build-xref', 'build-xref.mjs');
+  run('check-data-size', 'check-data-size.mjs');
+  console.log('\nrefresh:data complete');
+}
+
+main().catch((error) => {
+  console.error(error.message);
+  process.exit(1);
+});

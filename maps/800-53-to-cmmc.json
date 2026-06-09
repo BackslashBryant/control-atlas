@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "source_key": "map-800-53-to-cmmc",
+  "provenance": "DoD CMMC 2.0 Level 1/2 practices via 800-171 bridge (Rev 2 operational alignment noted in UI)",
+  "relationships": [
+    {
+      "source_id": "AC-2",
+      "target_id": "AC.L1-3.1.1",
+      "why": "CMMC Level 1 access control practice maps to account management via 800-171."
+    },
+    {
+      "source_id": "AC-3",
+      "target_id": "AC.L2-3.1.2",
+      "why": "CMMC Level 2 practice maps to access enforcement via 800-171."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-fisma-reference",
+  "records": [
+    {
+      "id": "FIPS-199-MODERATE",
+      "type": "fisma-reference",
+      "framework": "fisma",
+      "title": "Moderate impact baseline selection",
+      "family": "FIPS 199",
+      "description": "FISMA categorization reference for moderate impact systems selecting 800-53 moderate baseline controls."
+    }
+  ]
+}
