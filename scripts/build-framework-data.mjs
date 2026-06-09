@@ -12,12 +12,12 @@ const FRAMEWORKS = [
   { id: 'nist-800-53', name: 'NIST SP 800-53 Rev. 5', issuer: 'NIST', status: 'active', source_id: 'nist-oscal' },
   { id: 'nist-800-171', name: 'NIST SP 800-171 Rev. 3', issuer: 'NIST', status: 'active', source_id: 'nist-oscal' },
   { id: 'csf-2', name: 'NIST Cybersecurity Framework 2.0', issuer: 'NIST', status: 'active', source_id: 'nist-oscal' },
-  { id: 'cmmc-2', name: 'CMMC 2.0', issuer: 'DoD', status: 'partial', source_id: 'dod-cmmc' },
-  { id: 'fedramp-rev5', name: 'FedRAMP Rev. 5 Baselines', issuer: 'FedRAMP', status: 'source-gap', source_id: 'fedramp-rev5' },
+  { id: 'cmmc-2', name: 'CMMC 2.0', issuer: 'DoD', status: 'limited-public-scope', source_id: 'dod-cmmc-rule' },
+  { id: 'fedramp-rev5', name: 'FedRAMP Rev. 5 Baselines', issuer: 'FedRAMP', status: 'limited-public-scope', source_id: 'fedramp-rev5' },
   { id: 'disa-cci', name: 'Control Correlation Identifiers', issuer: 'DISA', status: 'active', source_id: 'disa-cci-list' },
-  { id: 'nist-ai-rmf', name: 'NIST AI Risk Management Framework', issuer: 'NIST', status: 'partial', source_id: 'nist-oscal' },
-  { id: 'nist-ssdf', name: 'NIST Secure Software Development Framework', issuer: 'NIST', status: 'partial', source_id: 'nist-oscal' },
-  { id: 'dod-rai', name: 'DoD Responsible AI Toolkit', issuer: 'DoD', status: 'source-gap', source_id: 'tradewind-rai-toolkit' },
+  { id: 'nist-ai-rmf', name: 'NIST AI Risk Management Framework', issuer: 'NIST', status: 'active', source_id: 'nist-ai-rmf-playbook' },
+  { id: 'nist-ssdf', name: 'NIST Secure Software Development Framework', issuer: 'NIST', status: 'active', source_id: 'nist-ssdf-oscal' },
+  { id: 'dod-rai', name: 'DoD Responsible AI Toolkit', issuer: 'DoD', status: 'limited-public-scope', source_id: 'dod-rai-toolkit' },
 ];
 
 const SOURCE_CATALOGS = [
@@ -25,17 +25,16 @@ const SOURCE_CATALOGS = [
   ['requirements-800-171.json', 'nist-800-171'],
   ['csf-subcategories.json', 'csf-2'],
   ['cmmc-practices.json', 'cmmc-2'],
+  ['fedramp-baselines.json', 'fedramp-rev5'],
   ['ccis.json', 'disa-cci'],
   ['ai-rmf.json', 'nist-ai-rmf'],
   ['ssdf.json', 'nist-ssdf'],
+  ['dod-rai.json', 'dod-rai'],
 ];
 
 const MAPS = [
   ['800-53-to-csf.json', 'nist-800-53', 'csf-2', 'maps_to', 'nist-informative-references'],
   ['800-53-to-800-171.json', 'nist-800-53', 'nist-800-171', 'maps_to', 'nist-oscal'],
-  ['800-53-to-cmmc.json', 'nist-800-53', 'cmmc-2', 'supports', 'dod-cmmc'],
-  ['800-53-to-airmf.json', 'nist-800-53', 'nist-ai-rmf', 'supports', 'nist-oscal'],
-  ['800-53-to-ssdf.json', 'nist-800-53', 'nist-ssdf', 'supports', 'nist-oscal'],
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'maps_to', 'disa-cci-list'],
 ];
 

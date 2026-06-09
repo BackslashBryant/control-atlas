@@ -1,22 +1,45 @@
 {
   "schema_version": "1.0",
-  "source_key": "dod-cmmc-2",
+  "source_key": "dod-cmmc-rule",
   "records": [
     {
-      "id": "AC.L1-3.1.1",
-      "type": "cmmc-practice",
+      "id": "LEVEL-1",
+      "type": "cmmc-level",
       "framework": "cmmc",
-      "title": "Authorized Access Control",
-      "family": "Access Control",
-      "description": "Limit information system access to authorized users, processes acting on behalf of authorized users, and devices."
+      "title": "CMMC Level 1",
+      "family": "CMMC 2.0 Levels",
+      "description": "Safeguarding Federal Contract Information using the 15 requirements in FAR 52.204-21.",
+      "source": {
+        "key": "dod-cmmc-rule",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "32-CFR-170.14(c)(2)"
+      }
     },
     {
-      "id": "AC.L2-3.1.2",
-      "type": "cmmc-practice",
+      "id": "LEVEL-2",
+      "type": "cmmc-level",
       "framework": "cmmc",
-      "title": "Transaction and Function Control",
-      "family": "Access Control",
-      "description": "Limit information system access to the types of transactions and functions that authorized users are permitted to execute."
+      "title": "CMMC Level 2",
+      "family": "CMMC 2.0 Levels",
+      "description": "Protecting Controlled Unclassified Information using the 110 requirements in NIST SP 800-171 Revision 2.",
+      "source": {
+        "key": "dod-cmmc-rule",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "32-CFR-170.14(c)(3)"
+      }
+    },
+    {
+      "id": "LEVEL-3",
+      "type": "cmmc-level",
+      "framework": "cmmc",
+      "title": "CMMC Level 3",
+      "family": "CMMC 2.0 Levels",
+      "description": "Protecting Controlled Unclassified Information using selected NIST SP 800-172 requirements and DoD-defined parameters.",
+      "source": {
+        "key": "dod-cmmc-rule",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "32-CFR-170.14(c)(4)"
+      }
     }
   ]
 }

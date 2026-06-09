@@ -24,3 +24,15 @@ test('responsive contract explicitly prevents horizontal overflow', () => {
   assert.match(css, /@media\s*\(max-width:\s*720px\)/);
   assert.match(css, /min-width:\s*0/);
 });
+
+test('matrix supports pasted source IDs and exports the complete scoped result', () => {
+  assert.match(app, /id="matrix-items"/);
+  assert.match(app, /parseSelectedItemKeys/);
+  assert.match(app, /item_keys/);
+  assert.match(app, /CSV export includes the complete matrix/);
+});
+
+test('user-facing shell and runtime contain no encoding corruption', () => {
+  assert.doesNotMatch(html, /Ã|Â|â€¦|â†|â€|ðŸ/);
+  assert.doesNotMatch(app, /Ã|Â|â€¦|â†|â€|ðŸ/);
+});

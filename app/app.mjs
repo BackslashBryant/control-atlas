@@ -119,17 +119,33 @@ function frameworkOptions(selected = '') {
   return dataset.frameworks.map((framework) => `<option value="${escapeHtml(framework.id)}" ${framework.id === selected ? 'selected' : ''}>${escapeHtml(framework.name)}</option>`).join('');
 }
 
+function parseSelectedItemKeys(value, frameworkId) {
+  return [...new Set(String(value || '')
+    .split(/[\s,]+/)
+    .map((id) => id.trim())
+    .filter(Boolean)
+    .map((id) => id.includes(':') ? id : `${frameworkId}:${id}`))];
+}
+
 async function renderMatrix(state) {
   await ensureDataset();
   const source = state.source || dataset.frameworks.find((item) => dataset.items.some((record) => record.framework_id === item.id))?.id || '';
   const target = state.target || dataset.frameworks.find((item) => item.id !== source && dataset.items.some((record) => record.framework_id === item.id))?.id || '';
-  const matrix = source && target ? runtime.buildMappingMatrix({ source_framework: source, target_framework: target }) : null;
+  const selectedIds = state.items || '';
+  const selectedKeys = parseSelectedItemKeys(selectedIds, source);
+  const request = {
+    source_framework: source,
+    target_framework: target,
+    ...(selectedKeys.length ? { item_keys: selectedKeys } : {}),
+  };
+  const matrix = source && target ? runtime.buildMappingMatrix(request) : null;
   app.innerHTML = `
     <section class="panel">
       <p class="eyebrow">Map frameworks</p><h2>Build a source-to-target mapping matrix</h2>
       <form id="matrix-form" class="controls">
         <div class="field"><label for="matrix-source">Source framework</label><select id="matrix-source">${frameworkOptions(source)}</select></div>
         <div class="field"><label for="matrix-target">Target framework</label><select id="matrix-target">${frameworkOptions(target)}</select></div>
+        <div class="field matrix-items-field"><label for="matrix-items">Optional source item IDs</label><textarea id="matrix-items" placeholder="AC-2, AC-3, AC-6">${escapeHtml(selectedIds)}</textarea><span class="muted">Paste IDs separated by commas, spaces, or lines. Leave blank for the whole source framework.</span></div>
         <button class="primary" type="submit">Build matrix</button>
         <button class="secondary" id="export-matrix" type="button">Export CSV</button>
       </form>
@@ -139,10 +155,14 @@ async function renderMatrix(state) {
     </section>`;
   document.querySelector('#matrix-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    setView('matrix', { source: document.querySelector('#matrix-source').value, target: document.querySelector('#matrix-target').value });
+    setView('matrix', {
+      source: document.querySelector('#matrix-source').value,
+      target: document.querySelector('#matrix-target').value,
+      items: document.querySelector('#matrix-items').value.trim(),
+    });
   });
   document.querySelector('#export-matrix').addEventListener('click', () => {
-    const content = runtime.buildMatrixCsv({ source_framework: source, target_framework: target });
+    const content = runtime.buildMatrixCsv(matrix);
     const link = document.createElement('a');
     link.href = URL.createObjectURL(new Blob([content], { type: 'text/csv' }));
     link.download = `GovFrame-${source}-to-${target}.csv`;

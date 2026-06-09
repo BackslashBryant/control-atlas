@@ -30,7 +30,7 @@ scripts/*
 !scripts/audit-coverage.mjs
 !scripts/check-data-size.mjs
 !scripts/fetch-ccis.mjs
-!scripts/fetch-oscal-catalogs.mjs
+!scripts/fetch-framework-catalogs.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
 !scripts/lib/
@@ -39,6 +39,7 @@ scripts/lib/*
 !scripts/lib/cci-adapter.mjs
 !scripts/lib/oscal-normalize.mjs
 !scripts/lib/resolve-source-tier.mjs
+!scripts/lib/framework-adapters.mjs
 
 !data/
 data/*

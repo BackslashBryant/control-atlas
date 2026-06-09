@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -8,6 +9,13 @@ import {
   reconcileAssertions,
 } from '../scripts/lib/framework-engine.mjs';
 import { parseCciXml } from '../scripts/lib/cci-adapter.mjs';
+import {
+  buildCmmcPublicCatalog,
+  buildDodRaiPublicCatalog,
+  buildFedrampPublicCatalog,
+  parseAiRmfPlaybook,
+  parseSsdfCatalog,
+} from '../scripts/lib/framework-adapters.mjs';
 
 const evidence = (tier, sourceId, agreement = 'agrees') => ({
   tier,
@@ -116,4 +124,61 @@ test('CCI adapter treats CCIs as bridge requirements and maps official NIST refe
   assert.equal(result.records[0].source.key, 'disa-cci-list');
   assert.deepEqual(result.relationships.map((item) => item.target_id), ['AC-2.1']);
   assert.ok(result.relationships.every((item) => item.evidence_source === 'disa-cci-list'));
+});
+
+test('AI RMF adapter normalizes official playbook outcomes with source locators', () => {
+  const result = parseAiRmfPlaybook([
+    {
+      title: 'GOVERN 1.1',
+      category: 'Govern',
+      description: 'Legal and regulatory requirements involving AI are understood.',
+      section_actions: ['Document applicable requirements.'],
+    },
+  ], '2026-06-09');
+
+  assert.equal(result.records[0].id, 'GOVERN 1.1');
+  assert.equal(result.records[0].family, 'Govern');
+  assert.equal(result.records[0].source.key, 'nist-ai-rmf-playbook');
+  assert.match(result.records[0].source.locator, /GOVERN 1\.1/);
+});
+
+test('SSDF adapter emits granular task controls from official OSCAL', () => {
+  const result = parseSsdfCatalog({
+    catalog: {
+      groups: [{
+        id: 'po',
+        title: 'Prepare the Organization',
+        controls: [{
+          id: 'po-1',
+          title: 'Define Security Requirements',
+          controls: [{
+            id: 'po-1.1',
+            title: 'Identify and document requirements',
+            parts: [{ prose: 'Identify and document all security requirements.' }],
+          }],
+        }],
+      }],
+    },
+  }, '2026-06-09');
+
+  assert.deepEqual(result.records.map((record) => record.id), ['PO.1.1']);
+  assert.equal(result.records[0].family, 'Prepare the Organization');
+  assert.equal(result.records[0].source.key, 'nist-ssdf-oscal');
+});
+
+test('limited public catalogs publish only defensible official structures', () => {
+  const fedramp = buildFedrampPublicCatalog('2026-06-09');
+  const cmmc = buildCmmcPublicCatalog('2026-06-09');
+  const rai = buildDodRaiPublicCatalog('2026-06-09');
+
+  assert.deepEqual(fedramp.records.map((record) => record.id), ['LI-SAAS', 'LOW', 'MODERATE', 'HIGH']);
+  assert.deepEqual(cmmc.records.map((record) => record.id), ['LEVEL-1', 'LEVEL-2', 'LEVEL-3']);
+  assert.equal(rai.records.length, 11);
+  assert.ok([...fedramp.records, ...cmmc.records, ...rai.records].every((record) => record.source?.locator));
+});
+
+test('generated framework data excludes unsupported seed crosswalk assertions', () => {
+  const catalog = JSON.parse(readFileSync('data/generated/catalog.json', 'utf8'));
+  const unsupportedTargets = new Set(['cmmc-2', 'fedramp-rev5', 'nist-ai-rmf', 'nist-ssdf']);
+  assert.ok(catalog.mappings.every((mapping) => !unsupportedTargets.has(mapping.target_key.split(':')[0])));
 });
