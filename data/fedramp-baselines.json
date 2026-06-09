@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "source_key": "fedramp-rev5",
+  "records": [
+    {
+      "id": "LI-SAAS",
+      "type": "fedramp-baseline",
+      "framework": "fedramp",
+      "title": "LI-SaaS Baseline",
+      "family": "Rev. 5 Baselines",
+      "description": "FedRAMP Tailored baseline for low-impact software-as-a-service offerings.",
+      "source": {
+        "key": "fedramp-rev5",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "rev5/documents-templates/#LI-SaaS"
+      }
+    },
+    {
+      "id": "LOW",
+      "type": "fedramp-baseline",
+      "framework": "fedramp",
+      "title": "Low Baseline",
+      "family": "Rev. 5 Baselines",
+      "description": "FedRAMP Rev. 5 Low security control baseline.",
+      "source": {
+        "key": "fedramp-rev5",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "rev5/documents-templates/#Low"
+      }
+    },
+    {
+      "id": "MODERATE",
+      "type": "fedramp-baseline",
+      "framework": "fedramp",
+      "title": "Moderate Baseline",
+      "family": "Rev. 5 Baselines",
+      "description": "FedRAMP Rev. 5 Moderate security control baseline.",
+      "source": {
+        "key": "fedramp-rev5",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "rev5/documents-templates/#Moderate"
+      }
+    },
+    {
+      "id": "HIGH",
+      "type": "fedramp-baseline",
+      "framework": "fedramp",
+      "title": "High Baseline",
+      "family": "Rev. 5 Baselines",
+      "description": "FedRAMP Rev. 5 High security control baseline.",
+      "source": {
+        "key": "fedramp-rev5",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "rev5/documents-templates/#High"
+      }
+    }
+  ]
+}

@@ -93,6 +93,7 @@ textarea { min-height: 110px; resize: vertical; }
 .primary:hover, .secondary:hover { transform: translateY(-1px); }
 .controls { display: flex; flex-wrap: wrap; gap: .65rem; align-items: end; }
 .field { display: grid; gap: .35rem; flex: 1 1 230px; }
+.matrix-items-field { flex-basis: 100%; }
 .field label { font-size: .8rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }

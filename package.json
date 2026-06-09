@@ -6,7 +6,7 @@
   "scripts": {
     "build:data": "node ./scripts/build-framework-data.mjs",
     "build:xref": "npm run build:data",
-    "fetch:oscal": "node ./scripts/fetch-oscal-catalogs.mjs",
+    "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
     "check:data-size": "node ./scripts/check-data-size.mjs",
     "smoke:static": "node ./scripts/static-smoke.mjs",

@@ -7,7 +7,7 @@
       "tier": "gold",
       "issuer": "NIST",
       "artifact": "https://github.com/usnistgov/oscal-content",
-      "frameworks": ["nist-800-53", "nist-800-171", "csf-2"]
+      "frameworks": ["nist-800-53", "nist-800-171", "csf-2", "nist-ssdf"]
     },
     {
       "id": "nist-informative-references",
@@ -26,11 +26,27 @@
       "frameworks": ["disa-cci"]
     },
     {
-      "id": "dod-cmmc",
-      "name": "DoD CMMC Resources",
+      "id": "nist-ai-rmf-playbook",
+      "name": "NIST AI RMF Playbook",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://airc.nist.gov/docs/playbook.json",
+      "frameworks": ["nist-ai-rmf"]
+    },
+    {
+      "id": "nist-ssdf-oscal",
+      "name": "NIST SSDF OSCAL Catalog",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
+      "frameworks": ["nist-ssdf"]
+    },
+    {
+      "id": "dod-cmmc-rule",
+      "name": "CMMC Program Rule",
       "tier": "gold",
       "issuer": "DoD",
-      "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+      "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "frameworks": ["cmmc-2"]
     },
     {
@@ -42,11 +58,11 @@
       "frameworks": ["fedramp-rev5", "nist-800-53"]
     },
     {
-      "id": "tradewind-rai-toolkit",
+      "id": "dod-rai-toolkit",
       "name": "DoD Responsible AI Toolkit",
       "tier": "gold",
-      "issuer": "DoD Tradewind",
-      "artifact": "https://www.tradewindai.com/rai-toolkit",
+      "issuer": "DoD",
+      "artifact": "https://rai.acqbot.com/executive-summary",
       "frameworks": ["dod-rai"]
     },
     {

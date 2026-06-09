@@ -26,6 +26,12 @@ assert.ok(catalog.paths.length > 0, 'calculated paths required');
 assert.ok(catalog.items.filter((item) => item.framework_id === 'disa-cci').length > 5000, 'complete official CCI catalog required');
 assert.ok(catalog.mappings.filter((mapping) => mapping.source_key.startsWith('disa-cci:')).length > 3000, 'official CCI-to-control references required');
 assert.ok(catalog.items.filter((item) => item.framework_id === 'disa-cci').every((item) => item.canonical_evidence.source_id === 'disa-cci-list'), 'CCI identity must come from the official CCI List');
+assert.equal(catalog.items.filter((item) => item.framework_id === 'nist-ai-rmf').length, 72, 'complete official AI RMF Playbook catalog required');
+assert.equal(catalog.items.filter((item) => item.framework_id === 'nist-ssdf').length, 42, 'complete official SSDF task catalog required');
+assert.equal(catalog.items.filter((item) => item.framework_id === 'fedramp-rev5').length, 4, 'FedRAMP public baseline identities required');
+assert.equal(catalog.items.filter((item) => item.framework_id === 'cmmc-2').length, 3, 'CMMC public level identities required');
+assert.equal(catalog.items.filter((item) => item.framework_id === 'dod-rai').length, 11, 'DoD RAI public toolkit modules required');
+assert.ok(catalog.mappings.every((mapping) => !['cmmc-2', 'fedramp-rev5', 'nist-ai-rmf', 'nist-ssdf'].includes(mapping.target_key.split(':')[0])), 'unsupported seed crosswalks must not publish');
 assert.ok(!catalog.frameworks.some((framework) => /stig/i.test(framework.id)), 'STIG catalogs are not first-class framework goals');
 
 const html = readFileSync('index.html', 'utf8');

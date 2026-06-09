@@ -38,10 +38,21 @@ test('runtime exposes direct mappings, evidence summaries, and matrix output', (
   assert.equal(runtime.getEvidenceSummary('m1').sources[0].tier, 'gold');
   assert.equal(runtime.buildMappingMatrix({ source_framework: 'nist-800-53', target_framework: 'csf-2' }).rows.length, 2);
   assert.match(runtime.buildMatrixCsv({ source_framework: 'nist-800-53', target_framework: 'csf-2' }), /AC-2/);
+  assert.equal(runtime.buildMappingMatrix({
+    source_framework: 'nist-800-53',
+    target_framework: 'csf-2',
+    item_keys: ['nist-800-53:AC-2'],
+  }).rows.length, 1);
 });
 
 test('view state preserves supported queries and identifies retired query types', () => {
   assert.deepEqual(parseViewState('?q=AC-2'), { view: 'search', query: 'AC-2' });
   assert.deepEqual(parseViewState('?q=ABC-2024-0001'), { view: 'retired', query: 'ABC-2024-0001', retired_type: 'retired identifier' });
   assert.equal(serializeViewState({ view: 'matrix', source: 'nist-800-53', target: 'csf-2' }), '?view=matrix&source=nist-800-53&target=csf-2');
+  assert.deepEqual(parseViewState('?view=matrix&source=nist-800-53&target=csf-2&items=AC-2%2CAC-3'), {
+    view: 'matrix',
+    source: 'nist-800-53',
+    target: 'csf-2',
+    items: 'AC-2,AC-3',
+  });
 });

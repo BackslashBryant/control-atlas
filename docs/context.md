@@ -23,4 +23,4 @@ Issue 8 rebuilds GovFrame as a framework-neutral federal and DoD mapper.
 
 ## Current Limitations
 
-Several registry entries are explicitly partial or source-gap status. Coverage reports are authoritative; do not claim full framework coverage until adapters and source evidence support it.
+FedRAMP, CMMC, and DoD RAI are explicitly `limited-public-scope` catalogs. They expose defensible public structures without inventing controls or mappings. Coverage reports are authoritative.

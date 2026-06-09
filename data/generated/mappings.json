@@ -11,7 +11,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -35,7 +35,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[1]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -59,7 +59,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[2]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -83,7 +83,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[3]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -107,7 +107,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[4]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -131,7 +131,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -155,7 +155,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[1]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -179,103 +179,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[2]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
-        "checksum": null,
-        "agreement": "agrees"
-      }
-    ],
-    "status": "published",
-    "evidence_gaps": [
-      "silver",
-      "bronze"
-    ],
-    "conflicts": []
-  },
-  {
-    "id": "800-53-to-cmmc:1",
-    "source_key": "nist-800-53:AC-2",
-    "target_key": "cmmc-2:AC.L1-3.1.1",
-    "relationship_type": "supports",
-    "rationale": "CMMC Level 1 access control practice maps to account management via 800-171.",
-    "evidence": [
-      {
-        "tier": "gold",
-        "source_id": "dod-cmmc",
-        "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
-        "locator": "800-53-to-cmmc.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
-        "checksum": null,
-        "agreement": "agrees"
-      }
-    ],
-    "status": "published",
-    "evidence_gaps": [
-      "silver",
-      "bronze"
-    ],
-    "conflicts": []
-  },
-  {
-    "id": "800-53-to-cmmc:2",
-    "source_key": "nist-800-53:AC-3",
-    "target_key": "cmmc-2:AC.L2-3.1.2",
-    "relationship_type": "supports",
-    "rationale": "CMMC Level 2 practice maps to access enforcement via 800-171.",
-    "evidence": [
-      {
-        "tier": "gold",
-        "source_id": "dod-cmmc",
-        "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
-        "locator": "800-53-to-cmmc.json#relationships[1]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
-        "checksum": null,
-        "agreement": "agrees"
-      }
-    ],
-    "status": "published",
-    "evidence_gaps": [
-      "silver",
-      "bronze"
-    ],
-    "conflicts": []
-  },
-  {
-    "id": "800-53-to-airmf:1",
-    "source_key": "nist-800-53:AC-2",
-    "target_key": "nist-ai-rmf:GOVERN 1.1",
-    "relationship_type": "supports",
-    "rationale": "NIST maps account management practices to AI RMF governance requirements.",
-    "evidence": [
-      {
-        "tier": "gold",
-        "source_id": "nist-oscal",
-        "artifact": "https://github.com/usnistgov/oscal-content",
-        "locator": "800-53-to-airmf.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
-        "checksum": null,
-        "agreement": "agrees"
-      }
-    ],
-    "status": "published",
-    "evidence_gaps": [
-      "silver",
-      "bronze"
-    ],
-    "conflicts": []
-  },
-  {
-    "id": "800-53-to-ssdf:1",
-    "source_key": "nist-800-53:AC-2",
-    "target_key": "nist-ssdf:PO.1.1",
-    "relationship_type": "supports",
-    "rationale": "NIST maps account management to SSDF preparation and organization.",
-    "evidence": [
-      {
-        "tier": "gold",
-        "source_id": "nist-oscal",
-        "artifact": "https://github.com/usnistgov/oscal-content",
-        "locator": "800-53-to-ssdf.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:31:13.817Z",
+        "snapshot_date": "2026-06-09T11:56:25.861Z",
         "checksum": null,
         "agreement": "agrees"
       }

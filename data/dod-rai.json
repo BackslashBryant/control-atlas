@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "source_key": "dod-rai-toolkit",
+  "records": [
+    {
+      "id": "PRINCIPLE-MODULAR",
+      "type": "rai-toolkit-principle",
+      "framework": "dod-rai",
+      "title": "Modular and Tailorable",
+      "family": "Toolkit Focus Principles",
+      "description": "Apply the toolkit in a modular and tailorable way.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#modular-and-tailorable"
+      }
+    },
+    {
+      "id": "PRINCIPLE-RASCI",
+      "type": "rai-toolkit-principle",
+      "framework": "dod-rai",
+      "title": "Aligned to RASCI Matrix",
+      "family": "Toolkit Focus Principles",
+      "description": "Align responsible AI activities with accountable roles.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#rasci-matrix"
+      }
+    },
+    {
+      "id": "PRINCIPLE-HOLISTIC",
+      "type": "rai-toolkit-principle",
+      "framework": "dod-rai",
+      "title": "Holistic",
+      "family": "Toolkit Focus Principles",
+      "description": "Assess responsible AI holistically across the lifecycle.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#holistic"
+      }
+    },
+    {
+      "id": "PRINCIPLE-ETHICS",
+      "type": "rai-toolkit-principle",
+      "framework": "dod-rai",
+      "title": "DoW AI Ethical Principles",
+      "family": "Toolkit Focus Principles",
+      "description": "Operationalize Department of War AI Ethical Principles.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#ethical-principles"
+      }
+    },
+    {
+      "id": "PRINCIPLE-TOOLS",
+      "type": "rai-toolkit-principle",
+      "framework": "dod-rai",
+      "title": "Tools List",
+      "family": "Toolkit Focus Principles",
+      "description": "Use a maintained list of supporting responsible AI tools.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#tools-list"
+      }
+    },
+    {
+      "id": "SHIELD-SET",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Set Foundations",
+      "family": "SHIELD Activities",
+      "description": "Set foundations for responsible AI.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-set"
+      }
+    },
+    {
+      "id": "SHIELD-HONE",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Hone Operationalizations",
+      "family": "SHIELD Activities",
+      "description": "Hone responsible AI operationalizations.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-hone"
+      }
+    },
+    {
+      "id": "SHIELD-IMPROVE",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Improve and Innovate",
+      "family": "SHIELD Activities",
+      "description": "Improve and innovate responsible AI practices.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-improve"
+      }
+    },
+    {
+      "id": "SHIELD-EVALUATE",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Evaluate Status",
+      "family": "SHIELD Activities",
+      "description": "Evaluate responsible AI status.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-evaluate"
+      }
+    },
+    {
+      "id": "SHIELD-LOG",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Log for Traceability",
+      "family": "SHIELD Activities",
+      "description": "Log responsible AI decisions and evidence for traceability.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-log"
+      }
+    },
+    {
+      "id": "SHIELD-DETECT",
+      "type": "rai-shield-activity",
+      "framework": "dod-rai",
+      "title": "Detect via Continuous Monitoring",
+      "family": "SHIELD Activities",
+      "description": "Detect responsible AI concerns through continuous monitoring.",
+      "source": {
+        "key": "dod-rai-toolkit",
+        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "locator": "executive-summary#shield-detect"
+      }
+    }
+  ]
+}

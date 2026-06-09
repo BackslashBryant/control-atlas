@@ -18,7 +18,7 @@ function run(label, script) {
 }
 
 async function main() {
-  await import('./fetch-oscal-catalogs.mjs').then((m) => m.fetchOscalCatalogs());
+  await import('./fetch-framework-catalogs.mjs').then((m) => m.fetchFrameworkCatalogs());
   run('fetch-ccis', 'fetch-ccis.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');

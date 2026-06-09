@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T11:31:13.817Z",
+  "generated_at": "2026-06-09T11:56:25.861Z",
   "frameworks": [
     {
       "framework_id": "nist-800-53",
@@ -24,17 +24,17 @@
     },
     {
       "framework_id": "cmmc-2",
-      "catalog_items": 2,
-      "mapped_items": 2,
-      "mapped_percent": 100,
-      "status": "partial"
+      "catalog_items": 3,
+      "mapped_items": 0,
+      "mapped_percent": 0,
+      "status": "limited-public-scope"
     },
     {
       "framework_id": "fedramp-rev5",
-      "catalog_items": 0,
+      "catalog_items": 4,
       "mapped_items": 0,
       "mapped_percent": 0,
-      "status": "source-gap"
+      "status": "limited-public-scope"
     },
     {
       "framework_id": "disa-cci",
@@ -45,30 +45,30 @@
     },
     {
       "framework_id": "nist-ai-rmf",
-      "catalog_items": 1,
-      "mapped_items": 1,
-      "mapped_percent": 100,
-      "status": "partial"
+      "catalog_items": 72,
+      "mapped_items": 0,
+      "mapped_percent": 0,
+      "status": "active"
     },
     {
       "framework_id": "nist-ssdf",
-      "catalog_items": 1,
-      "mapped_items": 1,
-      "mapped_percent": 100,
-      "status": "partial"
+      "catalog_items": 42,
+      "mapped_items": 0,
+      "mapped_percent": 0,
+      "status": "active"
     },
     {
       "framework_id": "dod-rai",
-      "catalog_items": 0,
+      "catalog_items": 11,
       "mapped_items": 0,
       "mapped_percent": 0,
-      "status": "source-gap"
+      "status": "limited-public-scope"
     }
   ],
   "mappings": {
-    "published": 3850,
+    "published": 3846,
     "blocked": 0,
-    "evidence_gaps": 3850
+    "evidence_gaps": 3846
   },
   "sources": [
     {
@@ -80,7 +80,8 @@
       "frameworks": [
         "nist-800-53",
         "nist-800-171",
-        "csf-2"
+        "csf-2",
+        "nist-ssdf"
       ]
     },
     {
@@ -105,11 +106,31 @@
       ]
     },
     {
-      "id": "dod-cmmc",
-      "name": "DoD CMMC Resources",
+      "id": "nist-ai-rmf-playbook",
+      "name": "NIST AI RMF Playbook",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://airc.nist.gov/docs/playbook.json",
+      "frameworks": [
+        "nist-ai-rmf"
+      ]
+    },
+    {
+      "id": "nist-ssdf-oscal",
+      "name": "NIST SSDF OSCAL Catalog",
+      "tier": "gold",
+      "issuer": "NIST",
+      "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
+      "frameworks": [
+        "nist-ssdf"
+      ]
+    },
+    {
+      "id": "dod-cmmc-rule",
+      "name": "CMMC Program Rule",
       "tier": "gold",
       "issuer": "DoD",
-      "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+      "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "frameworks": [
         "cmmc-2"
       ]
@@ -126,11 +147,11 @@
       ]
     },
     {
-      "id": "tradewind-rai-toolkit",
+      "id": "dod-rai-toolkit",
       "name": "DoD Responsible AI Toolkit",
       "tier": "gold",
-      "issuer": "DoD Tradewind",
-      "artifact": "https://www.tradewindai.com/rai-toolkit",
+      "issuer": "DoD",
+      "artifact": "https://rai.acqbot.com/executive-summary",
       "frameworks": [
         "dod-rai"
       ]

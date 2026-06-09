@@ -59,7 +59,12 @@ export function parseViewState(searchParams) {
     return { view: 'retired', query, retired_type: 'retired identifier' };
   }
   const view = params.get('view') || 'search';
-  if (view === 'matrix') return { view, source: params.get('source') || '', target: params.get('target') || '' };
+  if (view === 'matrix') return {
+    view,
+    source: params.get('source') || '',
+    target: params.get('target') || '',
+    items: params.get('items') || '',
+  };
   if (view === 'browse') return { view, framework: params.get('framework') || '' };
   if (view === 'sources') return { view };
   return { view: 'search', query };
@@ -71,6 +76,7 @@ export function serializeViewState(state) {
   if (state.query) params.set('q', state.query);
   if (state.source) params.set('source', state.source);
   if (state.target) params.set('target', state.target);
+  if (state.items) params.set('items', state.items);
   if (state.framework) params.set('framework', state.framework);
   const value = params.toString();
   return value ? `?${value}` : '';
