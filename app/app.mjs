@@ -39,17 +39,22 @@ async function setView(view, state = {}, replace = false) {
 
 async function renderSearch(state) {
   const query = state.query || '';
+  const filter = state.filter || '';
   if (query) await ensureDataset();
-  const results = query ? runtime.searchFrameworkItems(query) : [];
+  const filters = { framework_id: filter || undefined };
+  const results = query ? runtime.searchFrameworkItems(query, filters) : [];
   app.innerHTML = `
     <section class="panel" aria-labelledby="search-title">
       <p class="eyebrow">Explore an item</p>
       <h2 id="search-title">Search every supported framework</h2>
-      <form class="toolbar" id="search-form">
-        <input id="search-query" type="search" aria-label="Search framework items" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, PR.AA-01, account management">
+      <p>Start with the requirement you already have: an ID from a document, a control title, or a plain-language topic. GovFrame finds similar requirements in other frameworks and shows where evidence may help you reuse the same control work across multiple assessments.</p>
+      <details class="learning-callout" ${query ? '' : 'open'}><summary>New to framework mapping?</summary><div class="learning-grid"><p><strong>1. Find your starting item.</strong><br>Search the ID or topic you were assigned.</p><p><strong>2. Review direct mappings.</strong><br>These are relationships stated by an official source.</p><p><strong>3. Treat calculated paths carefully.</strong><br>They connect multiple direct mappings and are useful leads, not direct equivalence.</p></div></details>
+      <form class="search-controls" id="search-form">
+        <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, PR.AA-01, account management"></div>
+        <div class="field"><label for="search-framework">Framework filter</label><select id="search-framework"><option value="">All frameworks</option>${frameworkOptions(filter)}</select></div>
         <button class="primary" type="submit">Search</button>
       </form>
-      <p class="muted">${query ? `${results.length} matching item${results.length === 1 ? '' : 's'}` : 'Enter an identifier or phrase. The landing page does not load the full catalog.'}</p>
+      <p class="muted">${query ? `${results.length} matching item${results.length === 1 ? '' : 's'}. Exact IDs appear first; use the framework filter when a topic returns too many results.` : 'Enter an identifier or phrase. The landing page does not load the full catalog.'}</p>
     </section>
     <section class="results" aria-label="Search results">
       ${results.map((item) => `
@@ -64,7 +69,10 @@ async function renderSearch(state) {
     </section>`;
   document.querySelector('#search-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    setView('search', { query: document.querySelector('#search-query').value.trim() });
+    setView('search', {
+      query: document.querySelector('#search-query').value.trim(),
+      filter: document.querySelector('#search-framework').value,
+    });
   });
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
 }
@@ -75,6 +83,14 @@ async function renderItem(key) {
   if (!item) return;
   const direct = runtime.getDirectMappings(key);
   const paths = runtime.getCalculatedPaths(key);
+  const mappingCard = (mapping) => {
+    const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
+    const counterpart = itemFor(counterpartKey);
+    const direction = mapping.source_key === key ? 'outgoing' : 'incoming';
+    return `<article class="mapping-card"><div class="badge-row"><span class="badge">${escapeHtml(mapping.relationship_type)} · ${direction}</span>${evidenceBadges(mapping.evidence_gaps)}</div><h4>${escapeHtml(counterpart?.item_id || counterpartKey)} · ${escapeHtml(counterpart?.title || '')}</h4><p>${escapeHtml(mapping.rationale || '')}</p><button class="secondary" type="button" data-open-item="${escapeHtml(counterpartKey)}">Open mapped item</button><details><summary>Evidence audit</summary><pre>${escapeHtml(JSON.stringify(runtime.getEvidenceSummary(mapping.id), null, 2))}</pre></details></article>`;
+  };
+  const visibleDirect = direct.slice(0, 8);
+  const additionalDirect = direct.slice(8);
   app.innerHTML = `
     <button class="secondary" type="button" id="back-search">← Back to search</button>
     <section class="detail-layout" aria-labelledby="item-heading">
@@ -89,20 +105,18 @@ async function renderItem(key) {
         <section class="panel">
           <p class="eyebrow">Direct sourced mappings</p>
           <h3>${direct.length} direct mapping${direct.length === 1 ? '' : 's'}</h3>
-          <div class="stack">${direct.length ? direct.map((mapping) => {
-            const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
-            const counterpart = itemFor(counterpartKey);
-            const direction = mapping.source_key === key ? 'outgoing' : 'incoming';
-            return `<article class="mapping-card"><div class="badge-row"><span class="badge">${escapeHtml(mapping.relationship_type)} · ${direction}</span>${evidenceBadges(mapping.evidence_gaps)}</div><h4>${escapeHtml(counterpart?.item_id || counterpartKey)} · ${escapeHtml(counterpart?.title || '')}</h4><p>${escapeHtml(mapping.rationale || '')}</p><button class="secondary" type="button" data-open-item="${escapeHtml(counterpartKey)}">Open mapped item</button><details><summary>Evidence audit</summary><pre>${escapeHtml(JSON.stringify(runtime.getEvidenceSummary(mapping.id), null, 2))}</pre></details></article>`;
-          }).join('') : '<p class="notice">No gold-supported direct mapping is currently known.</p>'}</div>
+          <p class="muted"><strong>Direct mapping</strong> means an official source explicitly connects these items. <strong>Outgoing</strong> means this item points to the other item; <strong>Incoming</strong> means the other item points here. Direction records the source claim, not which requirement is more important. An <strong>Evidence gap</strong> means the gold source is sufficient to publish, but independent corroboration is missing.</p>
+          <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No gold-supported direct mapping is currently known. This does not mean the requirements are unrelated; it means GovFrame has no publishable official relationship.</p>'}</div>
+          ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
         </section>
         <section class="panel">
           <p class="eyebrow">Explained paths</p>
           <h3>${paths.length} calculated path${paths.length === 1 ? '' : 's'}</h3>
+          <p class="muted"><strong>Calculated path</strong> means GovFrame connected two or three direct mappings through intermediate items. Use it as a research lead and review every hop; it is never presented as direct equivalence.</p>
           <div class="stack">${paths.length ? paths.slice(0, 30).map((path) => `<article class="mapping-card calculated"><div class="badge-row"><span class="badge">Calculated · ${path.hops.length} hops</span>${evidenceBadges(path.evidence_gaps)}</div><div class="path">${path.item_keys.map((itemKey) => `<span>${escapeHtml(itemFor(itemKey)?.item_id || itemKey)}</span>`).join(' → ')}</div></article>`).join('') : '<p class="notice">No calculated path is currently known.</p>'}</div>
         </section>
       </div>
-      <aside class="detail-side panel"><p class="eyebrow">Mapping posture</p><h3>${direct.length + paths.length} known routes</h3><p class="muted">Direct mappings are source assertions. Calculated paths preserve each intermediate hop and never imply direct equivalence.</p><button class="secondary" id="show-graph" type="button">Show optional path graph</button><div id="graph-output"></div></aside>
+      <aside class="detail-side panel"><p class="eyebrow">How to use this result</p><h3>${direct.length + paths.length} known routes</h3><p class="muted">First read the requirement itself. Then review direct mappings to understand how another framework addresses the same or related obligation. Use calculated paths only as leads.</p><button class="secondary" id="show-graph" type="button">Show optional path graph</button><div id="graph-output"></div></aside>
     </section>`;
   document.querySelector('#back-search').addEventListener('click', () => setView('search', {}, false));
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
@@ -142,6 +156,7 @@ async function renderMatrix(state) {
   app.innerHTML = `
     <section class="panel">
       <p class="eyebrow">Map frameworks</p><h2>Build a source-to-target mapping matrix</h2>
+      <div class="learning-grid"><p><strong>Source means where you are starting.</strong><br>Choose the framework or requirements you already need to satisfy.</p><p><strong>Target means what you are comparing against.</strong><br>GovFrame shows where the source work may support the target and reduce duplicate assessment work.</p><p><strong>Unmapped is an honest result.</strong><br>It means no publishable relationship is known, not that the target can be ignored.</p></div>
       <form id="matrix-form" class="controls">
         <div class="field"><label for="matrix-source">Source framework</label><select id="matrix-source">${frameworkOptions(source)}</select></div>
         <div class="field"><label for="matrix-target">Target framework</label><select id="matrix-target">${frameworkOptions(target)}</select></div>
@@ -150,6 +165,7 @@ async function renderMatrix(state) {
         <button class="secondary" id="export-matrix" type="button">Export CSV</button>
       </form>
       ${matrix ? `<p class="muted">${matrix.summary.total} source items · ${matrix.summary.direct} direct · ${matrix.summary.calculated} calculated · ${matrix.summary.unmapped} unmapped</p>
+      <p class="muted"><strong>Direct</strong>: an official source states the relationship. <strong>Calculated</strong>: a multi-hop research lead. <strong>Unmapped</strong>: no gold-supported route is currently known.</p>
       ${matrix.rows.length > 200 ? '<p class="notice">Showing the first 200 rows. CSV export includes the complete matrix.</p>' : ''}
       <table class="matrix-table"><thead><tr><th>Source</th><th>Classification</th><th>Mapped destination or path</th></tr></thead><tbody>${matrix.rows.slice(0, 200).map((row) => `<tr><td>${escapeHtml(row.source_key)}</td><td><span class="badge ${row.classification === 'unmapped' ? 'gap' : ''}">${escapeHtml(row.classification)}</span></td><td>${escapeHtml([...row.direct.map((item) => `${item.matrix_target_key || item.target_key} (${item.matrix_direction || 'outgoing'})`), ...row.paths.map((item) => item.item_keys.join(' > '))].join(' | ') || 'No sourced mapping known')}</td></tr>`).join('')}</tbody></table>` : ''}
     </section>`;
@@ -175,7 +191,7 @@ async function renderBrowse(state) {
   await ensureDataset();
   const selected = state.framework || '';
   const frameworkItems = selected ? dataset.items.filter((item) => item.framework_id === selected) : [];
-  app.innerHTML = `<section class="panel"><p class="eyebrow">Browse</p><h2>Framework catalog and coverage</h2><div class="grid">${dataset.coverage.frameworks.map((coverage) => {
+  app.innerHTML = `<section class="panel"><p class="eyebrow">Browse</p><h2>Framework catalog and coverage</h2><p class="muted"><strong>Active</strong> catalogs are normalized from complete official machine-readable artifacts. <strong>Limited public scope</strong> means GovFrame publishes only the defensible public structure available from the issuing authority, without inventing missing controls.</p><div class="grid">${dataset.coverage.frameworks.map((coverage) => {
     const framework = dataset.frameworks.find((item) => item.id === coverage.framework_id);
     return `<article class="framework-card"><span class="badge">${escapeHtml(framework.status)}</span><h3>${escapeHtml(framework.name)}</h3><p>${coverage.catalog_items} catalog items · ${coverage.mapped_items} mapped</p><div class="coverage-meter" aria-label="${coverage.mapped_percent}% mapped"><span style="width:${coverage.mapped_percent}%"></span></div><button class="secondary" data-browse-framework="${escapeHtml(framework.id)}" type="button">Browse catalog</button></article>`;
   }).join('')}</div>${selected ? `<section class="results"><h3>${escapeHtml(frameworkName(selected))}</h3>${frameworkItems.slice(0, 200).map((item) => `<article class="item-card"><button data-open-item="${escapeHtml(item.key)}"><h4 class="item-id">${escapeHtml(item.item_id)}</h4><strong>${escapeHtml(item.title)}</strong></button></article>`).join('')}</section>` : ''}</section>`;
@@ -184,7 +200,7 @@ async function renderBrowse(state) {
 }
 
 function renderSources() {
-  app.innerHTML = `<section class="panel"><p class="eyebrow">Sources and evidence health</p><h2>Gold decides. Silver and bronze corroborate.</h2><p class="muted">${dataset.coverage.mappings.published} published mappings · ${dataset.coverage.mappings.evidence_gaps} evidence gaps · ${dataset.coverage.mappings.blocked} blocked candidates</p><div class="grid">${dataset.coverage.sources.map((source) => `<article class="framework-card"><span class="badge">${escapeHtml(source.tier)}</span><h3>${escapeHtml(source.name)}</h3><p class="muted">${escapeHtml(source.issuer)} · ${escapeHtml(source.frameworks.join(', '))}</p><a href="${escapeHtml(source.artifact)}" target="_blank" rel="noreferrer">Open source artifact</a></article>`).join('')}</div></section>`;
+  app.innerHTML = `<section class="panel"><p class="eyebrow">Sources and evidence health</p><h2>Gold decides. Silver and bronze corroborate.</h2><div class="learning-grid"><p><strong>Gold</strong><br>Official issuing-authority evidence. Required before GovFrame publishes a direct mapping.</p><p><strong>Silver</strong><br>Credible maintained crosswalks that corroborate or challenge a gold claim.</p><p><strong>Bronze</strong><br>Community research useful for discovery, never for overriding gold.</p></div><p class="muted">${dataset.coverage.mappings.published} published mappings · ${dataset.coverage.mappings.evidence_gaps} evidence gaps · ${dataset.coverage.mappings.blocked} blocked candidates. An evidence gap means a published gold claim is missing silver or bronze corroboration.</p><div class="grid">${dataset.coverage.sources.map((source) => `<article class="framework-card"><span class="badge">${escapeHtml(source.tier)}</span><h3>${escapeHtml(source.name)}</h3><p class="muted">${escapeHtml(source.issuer)} · ${escapeHtml(source.frameworks.join(', '))}</p><a href="${escapeHtml(source.artifact)}" target="_blank" rel="noreferrer">Open source artifact</a></article>`).join('')}</div></section>`;
 }
 
 function renderRetired(state) {
@@ -208,12 +224,14 @@ async function init() {
   dataset = await response.json();
   navButtons.forEach((button) => button.addEventListener('click', () => setView(button.dataset.view)));
   addEventListener('popstate', () => render(parseViewState(location.search)));
-  const state = parseViewState(location.search);
-  await render(state);
-  if (state.view === 'search' && state.query) {
-    const exact = runtime.searchFrameworkItems(state.query).find((item) => item.item_id.toLowerCase() === state.query.toLowerCase());
-    if (exact) await renderItem(exact.key);
-  }
+      const state = parseViewState(location.search);
+      await render(state);
+      if (state.view === 'search' && state.query) {
+        const exact = runtime.searchFrameworkItems(state.query, {
+          framework_id: state.filter || undefined,
+        }).find((item) => item.item_id.toLowerCase() === state.query.toLowerCase());
+        if (exact) await renderItem(exact.key);
+      }
 }
 
 init().catch((error) => {

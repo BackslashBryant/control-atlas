@@ -73,6 +73,7 @@ h2, h3, h4 { line-height: 1.15; }
 }
 .panel { padding: clamp(1rem, 3vw, 2rem); }
 .toolbar { display: grid; grid-template-columns: 1fr auto; gap: .75rem; }
+.search-controls { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr) auto; gap: .75rem; align-items: end; }
 .toolbar input, select, textarea {
   width: 100%;
   border: 1px solid var(--line);
@@ -129,6 +130,10 @@ summary { font-weight: 750; cursor: pointer; }
 .coverage-meter { height: 8px; border-radius: 999px; overflow: hidden; background: rgba(20,35,31,.1); }
 .coverage-meter span { display: block; height: 100%; background: var(--moss); }
 .notice, .loading-card { padding: 1.2rem; }
+.learning-callout { margin: 1rem 0; border: 1px solid rgba(71, 113, 93, .28); border-radius: 14px; padding: 1rem; background: rgba(71, 113, 93, .07); }
+.learning-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: .75rem; margin: 1rem 0; }
+.learning-grid p { margin: 0; padding: .8rem; border-left: 3px solid var(--gold); background: rgba(210,168,75,.08); }
+.more-mappings { margin-top: 1rem; }
 .notice.retired { border-color: rgba(180,93,54,.4); }
 footer { padding: 1rem; text-align: center; color: var(--muted); }
 
@@ -142,7 +147,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   nav { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
   nav button { border-color: rgba(255,255,255,.18); }
   main { width: min(100% - 1rem, 1240px); padding-top: 1.4rem; }
-  .toolbar, .detail-layout { grid-template-columns: 1fr; }
+  .toolbar, .search-controls, .detail-layout { grid-template-columns: 1fr; }
   .matrix-table, .matrix-table tbody, .matrix-table tr, .matrix-table td { display: block; width: 100%; }
   .matrix-table thead { display: none; }
   .matrix-table tr { padding: .5rem; border-bottom: 1px solid var(--line); }

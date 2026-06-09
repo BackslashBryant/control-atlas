@@ -36,3 +36,22 @@ test('user-facing shell and runtime contain no encoding corruption', () => {
   assert.doesNotMatch(html, /Ã|Â|â€¦|â†|â€|ðŸ/);
   assert.doesNotMatch(app, /Ã|Â|â€¦|â†|â€|ðŸ/);
 });
+
+test('interface teaches framework mapping concepts at the point of use', () => {
+  assert.match(app, /New to framework mapping\?/);
+  assert.match(app, /Start with the requirement you already have/);
+  assert.match(app, /Source means where you are starting/);
+  assert.match(app, /Direct mapping/);
+  assert.match(app, /Calculated path/);
+  assert.match(app, /Incoming/);
+  assert.match(app, /Evidence gap/);
+  assert.match(app, /limited public scope/i);
+  assert.match(app, /reuse the same control work across multiple assessments/);
+});
+
+test('search supports a framework filter and item mappings are progressively disclosed', () => {
+  assert.match(app, /id="search-framework"/);
+  assert.match(app, /const filters = \{\s*framework_id/);
+  assert.match(app, /framework_id: state\.filter/);
+  assert.match(app, /Show all .* direct mappings/);
+});
