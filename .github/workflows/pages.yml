@@ -32,6 +32,9 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html _site/index.html
+          cp -R app _site/app
+          cp -R styles _site/styles
+          cp -R scripts _site/scripts
           cp -R data _site/data
           cp -R maps _site/maps
           cp -R lib _site/lib

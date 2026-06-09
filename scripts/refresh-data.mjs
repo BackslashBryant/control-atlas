@@ -19,9 +19,8 @@ function run(label, script) {
 
 async function main() {
   await import('./fetch-oscal-catalogs.mjs').then((m) => m.fetchOscalCatalogs());
-  await import('./fetch-nvd.mjs').then((m) => m.fetchNvdSeed());
   run('fetch-ccis', 'fetch-ccis.mjs');
-  run('build-xref', 'build-xref.mjs');
+  run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');
   console.log('\nrefresh:data complete');
 }

@@ -5,6 +5,14 @@
 !index.html
 !package.json
 !package-lock.json
+!app/
+!app/*.mjs
+!styles/
+!styles/*.css
+!tests/
+!tests/*.mjs
+!docs/
+!docs/**
 
 !.github/
 !.github/workflows/
@@ -18,15 +26,17 @@ lib/*
 
 !scripts/
 scripts/*
-!scripts/build-xref.mjs
+!scripts/build-framework-data.mjs
+!scripts/audit-coverage.mjs
 !scripts/check-data-size.mjs
 !scripts/fetch-ccis.mjs
-!scripts/fetch-nvd.mjs
 !scripts/fetch-oscal-catalogs.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
 !scripts/lib/
 scripts/lib/*
+!scripts/lib/framework-engine.mjs
+!scripts/lib/cci-adapter.mjs
 !scripts/lib/oscal-normalize.mjs
 !scripts/lib/resolve-source-tier.mjs
 
@@ -34,6 +44,8 @@ scripts/lib/*
 data/*
 !data/*.json
 data/tenable-sync-state.json
+!data/generated/
+!data/generated/*.json
 !data/shards/
 data/shards/*
 !data/shards/*.json

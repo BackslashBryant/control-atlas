@@ -1,0 +1,228 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-06-09T11:31:13.817Z",
+  "frameworks": [
+    {
+      "id": "nist-800-53",
+      "name": "NIST SP 800-53 Rev. 5",
+      "issuer": "NIST",
+      "status": "active",
+      "source_id": "nist-oscal"
+    },
+    {
+      "id": "nist-800-171",
+      "name": "NIST SP 800-171 Rev. 3",
+      "issuer": "NIST",
+      "status": "active",
+      "source_id": "nist-oscal"
+    },
+    {
+      "id": "csf-2",
+      "name": "NIST Cybersecurity Framework 2.0",
+      "issuer": "NIST",
+      "status": "active",
+      "source_id": "nist-oscal"
+    },
+    {
+      "id": "cmmc-2",
+      "name": "CMMC 2.0",
+      "issuer": "DoD",
+      "status": "partial",
+      "source_id": "dod-cmmc"
+    },
+    {
+      "id": "fedramp-rev5",
+      "name": "FedRAMP Rev. 5 Baselines",
+      "issuer": "FedRAMP",
+      "status": "source-gap",
+      "source_id": "fedramp-rev5"
+    },
+    {
+      "id": "disa-cci",
+      "name": "Control Correlation Identifiers",
+      "issuer": "DISA",
+      "status": "active",
+      "source_id": "disa-cci-list"
+    },
+    {
+      "id": "nist-ai-rmf",
+      "name": "NIST AI Risk Management Framework",
+      "issuer": "NIST",
+      "status": "partial",
+      "source_id": "nist-oscal"
+    },
+    {
+      "id": "nist-ssdf",
+      "name": "NIST Secure Software Development Framework",
+      "issuer": "NIST",
+      "status": "partial",
+      "source_id": "nist-oscal"
+    },
+    {
+      "id": "dod-rai",
+      "name": "DoD Responsible AI Toolkit",
+      "issuer": "DoD",
+      "status": "source-gap",
+      "source_id": "tradewind-rai-toolkit"
+    }
+  ],
+  "coverage": {
+    "generated_at": "2026-06-09T11:31:13.817Z",
+    "frameworks": [
+      {
+        "framework_id": "nist-800-53",
+        "catalog_items": 1196,
+        "mapped_items": 1012,
+        "mapped_percent": 84.6,
+        "status": "active"
+      },
+      {
+        "framework_id": "nist-800-171",
+        "catalog_items": 130,
+        "mapped_items": 3,
+        "mapped_percent": 2.3,
+        "status": "active"
+      },
+      {
+        "framework_id": "csf-2",
+        "catalog_items": 185,
+        "mapped_items": 3,
+        "mapped_percent": 1.6,
+        "status": "active"
+      },
+      {
+        "framework_id": "cmmc-2",
+        "catalog_items": 2,
+        "mapped_items": 2,
+        "mapped_percent": 100,
+        "status": "partial"
+      },
+      {
+        "framework_id": "fedramp-rev5",
+        "catalog_items": 0,
+        "mapped_items": 0,
+        "mapped_percent": 0,
+        "status": "source-gap"
+      },
+      {
+        "framework_id": "disa-cci",
+        "catalog_items": 5137,
+        "mapped_items": 3836,
+        "mapped_percent": 74.7,
+        "status": "active"
+      },
+      {
+        "framework_id": "nist-ai-rmf",
+        "catalog_items": 1,
+        "mapped_items": 1,
+        "mapped_percent": 100,
+        "status": "partial"
+      },
+      {
+        "framework_id": "nist-ssdf",
+        "catalog_items": 1,
+        "mapped_items": 1,
+        "mapped_percent": 100,
+        "status": "partial"
+      },
+      {
+        "framework_id": "dod-rai",
+        "catalog_items": 0,
+        "mapped_items": 0,
+        "mapped_percent": 0,
+        "status": "source-gap"
+      }
+    ],
+    "mappings": {
+      "published": 3850,
+      "blocked": 0,
+      "evidence_gaps": 3850
+    },
+    "sources": [
+      {
+        "id": "nist-oscal",
+        "name": "NIST OSCAL Content",
+        "tier": "gold",
+        "issuer": "NIST",
+        "artifact": "https://github.com/usnistgov/oscal-content",
+        "frameworks": [
+          "nist-800-53",
+          "nist-800-171",
+          "csf-2"
+        ]
+      },
+      {
+        "id": "nist-informative-references",
+        "name": "NIST Informative References",
+        "tier": "gold",
+        "issuer": "NIST",
+        "artifact": "https://www.nist.gov/cyberframework/informative-references",
+        "frameworks": [
+          "nist-800-53",
+          "csf-2"
+        ]
+      },
+      {
+        "id": "disa-cci-list",
+        "name": "DISA Control Correlation Identifier List",
+        "tier": "gold",
+        "issuer": "DISA",
+        "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+        "frameworks": [
+          "disa-cci"
+        ]
+      },
+      {
+        "id": "dod-cmmc",
+        "name": "DoD CMMC Resources",
+        "tier": "gold",
+        "issuer": "DoD",
+        "artifact": "https://dodcio.defense.gov/CMMC/Resources-Documentation/",
+        "frameworks": [
+          "cmmc-2"
+        ]
+      },
+      {
+        "id": "fedramp-rev5",
+        "name": "FedRAMP Rev. 5 Baselines",
+        "tier": "gold",
+        "issuer": "FedRAMP",
+        "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
+        "frameworks": [
+          "fedramp-rev5",
+          "nist-800-53"
+        ]
+      },
+      {
+        "id": "tradewind-rai-toolkit",
+        "name": "DoD Responsible AI Toolkit",
+        "tier": "gold",
+        "issuer": "DoD Tradewind",
+        "artifact": "https://www.tradewindai.com/rai-toolkit",
+        "frameworks": [
+          "dod-rai"
+        ]
+      },
+      {
+        "id": "mitre-cis-cci-mappings",
+        "name": "MITRE CIS/CCI Mappings",
+        "tier": "silver",
+        "issuer": "MITRE",
+        "artifact": "https://github.com/mitre/cis-cci-mappings",
+        "frameworks": [
+          "disa-cci"
+        ]
+      },
+      {
+        "id": "community-cci-research",
+        "name": "Community CCI Research",
+        "tier": "bronze",
+        "issuer": "Community",
+        "artifact": "https://www.reddit.com/r/NISTControls/comments/wg8bit/comprehensive_list_of_ccis/",
+        "frameworks": [
+          "disa-cci"
+        ]
+      }
+    ]
+  }
+}
