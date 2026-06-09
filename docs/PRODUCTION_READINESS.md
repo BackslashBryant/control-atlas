@@ -16,3 +16,5 @@ GovFrame is under comprehensive refactor. Previous v1.0, accessibility, performa
 ## Current Evidence
 
 Use `data/generated/coverage.json` for current catalog and mapping coverage. Partial and source-gap entries are expected during Issue 8 and must remain visible.
+
+The June 9, 2026 live browser audit is recorded in `docs/audits/live-browser-audit-2026-06-09.md`. It validates primary live journeys and mobile overflow, but does not close the remaining readiness checks.
