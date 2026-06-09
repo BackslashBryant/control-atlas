@@ -67,13 +67,14 @@ export function parseViewState(searchParams) {
   };
   if (view === 'browse') return { view, framework: params.get('framework') || '' };
   if (view === 'sources') return { view };
-  return { view: 'search', query };
+  return { view: 'search', query, filter: params.get('filter') || '' };
 }
 
 export function serializeViewState(state) {
   const params = new URLSearchParams();
   if (state.view && state.view !== 'search') params.set('view', state.view);
   if (state.query) params.set('q', state.query);
+  if (state.filter) params.set('filter', state.filter);
   if (state.source) params.set('source', state.source);
   if (state.target) params.set('target', state.target);
   if (state.items) params.set('items', state.items);
