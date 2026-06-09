@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-06T18:00:31.866Z",
+  "generated_at": "2026-06-09T07:19:50.504Z",
   "phase": "6",
   "sources": {
     "nist-800-53-rev5": {
@@ -22,7 +22,7 @@
           "ref": "main"
         }
       },
-      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "snapshot_date": "2026-06-09T07:19:48.004Z",
       "schema_version": "1.0",
       "record_count": 1196,
       "cadence": "nightly",
@@ -47,7 +47,7 @@
           "ref": "main"
         }
       },
-      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "snapshot_date": "2026-06-09T07:19:48.004Z",
       "schema_version": "1.0",
       "record_count": 185,
       "cadence": "nightly",
@@ -90,7 +90,7 @@
           "ref": "main"
         }
       },
-      "snapshot_date": "2026-06-06T00:12:06.320Z",
+      "snapshot_date": "2026-06-09T07:19:48.004Z",
       "schema_version": "1.0",
       "record_count": 130,
       "cadence": "nightly",
@@ -207,7 +207,7 @@
       "schema_version": "1.0",
       "cadence": "nightly",
       "notes": "Phase 3 seed CVE list; expand via nvd-sync-state in later runs.",
-      "snapshot_date": "2026-06-06T00:12:08.648Z",
+      "snapshot_date": "2026-06-09T07:19:48.968Z",
       "record_count": 2
     },
     "nist-airmf": {
