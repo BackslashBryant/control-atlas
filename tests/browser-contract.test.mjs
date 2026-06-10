@@ -38,15 +38,13 @@ test('user-facing shell and runtime contain no encoding corruption', () => {
 });
 
 test('interface teaches framework mapping concepts at the point of use', () => {
-  assert.match(app, /New to framework mapping\?/);
-  assert.match(app, /Start with the requirement you already have/);
-  assert.match(app, /Source means where you are starting/);
-  assert.match(app, /Direct mapping/);
-  assert.match(app, /Calculated path/);
-  assert.match(app, /Incoming/);
-  assert.match(app, /Evidence gap/);
-  assert.match(app, /limited public scope/i);
-  assert.match(app, /reuse the same control work across multiple assessments/);
+  assert.match(app, /new to mapping/i);
+  assert.match(app, /how mapping works/i);
+  assert.match(app, /Official match/);
+  assert.match(app, /Possible connection/);
+  assert.match(app, /incoming/i);
+  assert.match(app, /Needs supporting source/);
+  assert.match(app, /limited-public-scope/i);
 });
 
 test('search supports a framework filter and item mappings are progressively disclosed', () => {
@@ -54,4 +52,13 @@ test('search supports a framework filter and item mappings are progressively dis
   assert.match(app, /const filters = \{\s*framework_id/);
   assert.match(app, /framework_id: state\.filter/);
   assert.match(app, /Show all .* direct mappings/);
+});
+
+test('copy reuse modules and D3 visualizations are integrated', () => {
+  assert.match(app, /import\s+\{\s*terms\s*\}\s+from\s+'\.\/content\/terms\.mjs'/);
+  assert.match(app, /import\s+\{\s*glossary\s*\}\s+from\s+'\.\/content\/glossary\.mjs'/);
+  assert.match(app, /drawNodeLink/);
+  assert.match(app, /drawAdjacencyMatrix/);
+  assert.match(app, /toggleGlossaryDrawer/);
+  assert.match(app, /startWalkthrough/);
 });

@@ -7,6 +7,8 @@
 !package-lock.json
 !app/
 !app/*.mjs
+!app/content/
+!app/content/*.mjs
 !styles/
 !styles/*.css
 !tests/

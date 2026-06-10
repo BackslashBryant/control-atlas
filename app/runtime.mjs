@@ -59,15 +59,18 @@ export function parseViewState(searchParams) {
     return { view: 'retired', query, retired_type: 'retired identifier' };
   }
   const view = params.get('view') || 'search';
+  const mode = params.get('mode');
+  const base = mode ? { mode } : {};
   if (view === 'matrix') return {
+    ...base,
     view,
     source: params.get('source') || '',
     target: params.get('target') || '',
     items: params.get('items') || '',
   };
-  if (view === 'browse') return { view, framework: params.get('framework') || '' };
-  if (view === 'sources') return { view };
-  return { view: 'search', query, filter: params.get('filter') || '' };
+  if (view === 'browse') return { ...base, view, framework: params.get('framework') || '' };
+  if (view === 'sources') return { ...base, view };
+  return { ...base, view: 'search', query, filter: params.get('filter') || '' };
 }
 
 export function serializeViewState(state) {
@@ -79,6 +82,7 @@ export function serializeViewState(state) {
   if (state.target) params.set('target', state.target);
   if (state.items) params.set('items', state.items);
   if (state.framework) params.set('framework', state.framework);
+  if (state.mode) params.set('mode', state.mode);
   const value = params.toString();
   return value ? `?${value}` : '';
 }

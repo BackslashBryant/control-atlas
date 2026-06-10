@@ -103,10 +103,10 @@ test('matrix classifies direct, calculated, and unmapped source items and export
   assert.equal(reverseMatrix.rows.find((row) => row.source_key === 'f2:B').classification, 'direct');
   assert.equal(reverseMatrix.rows.find((row) => row.source_key === 'f2:B').direct[0].matrix_direction, 'incoming');
   assert.equal(reverseMatrix.rows.find((row) => row.source_key === 'f2:B').direct[0].matrix_target_key, 'f1:A');
-  assert.match(buildMatrixCsv(matrix), /"classification"/);
-  assert.match(buildMatrixCsv(reverseMatrix), /"incoming"/);
-  assert.match(buildMatrixCsv(matrix), /"calculated"/);
-  assert.match(buildMatrixCsv(matrix), /"unmapped"/);
+  assert.match(buildMatrixCsv(matrix), /"Match type"/);
+  assert.match(buildMatrixCsv(reverseMatrix), /incoming/);
+  assert.match(buildMatrixCsv(matrix), /"Possible connection"/);
+  assert.match(buildMatrixCsv(matrix), /"No known match"/);
 });
 
 test('CCI adapter treats CCIs as bridge requirements and maps official NIST references without STIG data', () => {
