@@ -32,6 +32,13 @@ test('runtime searches exact IDs before text and keeps unmapped records searchab
   assert.equal(runtime.getDirectMappings('nist-800-53:AC-3').length, 0);
 });
 
+test('runtime resolves PR.AA-01 to the CSF item key', () => {
+  const runtime = createFrameworkRuntime(fixture);
+  const results = runtime.searchFrameworkItems('PR.AA-01');
+  assert.equal(results[0].item_id, 'PR.AA-01');
+  assert.equal(results[0].key, 'csf-2:PR.AA-01');
+});
+
 test('runtime exposes direct mappings, evidence summaries, and matrix output', () => {
   const runtime = createFrameworkRuntime(fixture);
   assert.equal(runtime.getDirectMappings('nist-800-53:AC-2')[0].id, 'm1');

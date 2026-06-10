@@ -50,7 +50,7 @@ test('interface teaches framework mapping concepts at the point of use', () => {
 test('search supports a framework filter and item mappings are progressively disclosed', () => {
   assert.match(app, /id="search-framework"/);
   assert.match(app, /const filters = \{\s*framework_id/);
-  assert.match(app, /framework_id: state\.filter/);
+  assert.match(app, /framework_id: filter/);
   assert.match(app, /Show all .* direct mappings/);
 });
 
@@ -71,7 +71,7 @@ test('routing state and interactive repair contracts are present', () => {
   assert.match(app, /requestSubmit\(\)/);
   assert.match(app, /input\.value\.trim\(\)/);
   assert.match(app, /externalAnchor/);
-  assert.match(app, /Open GitHub issue in a new tab/);
+  assert.match(app, /Contribute mapping evidence \(opens GitHub in new tab\)/);
   assert.match(html, /Loading GovFrame/);
   assert.doesNotMatch(html, /id="btn-toggle-glossary"[^>]*target="_blank"/);
 });
@@ -80,7 +80,7 @@ test('mode toggle preserves detail pages and onboarding is resilient', () => {
   assert.match(app, /async function setNoviceMode/);
   assert.match(app, /if \(currentActiveState\.key\)/);
   assert.match(app, /preserveScroll: true/);
-  assert.match(app, /console\.error\('Failed to set/);
+  assert.match(app, /console\.error\(`Failed to set/);
   assert.match(app, /finally\s*\{[\s\S]*overlay\.remove\(\)/);
   assert.match(app, /Shows calculated multi-hop paths/);
 });
@@ -103,4 +103,24 @@ test('june 10 stability contracts are present', () => {
   assert.match(css, /#workspace\[data-search-active\] \.hero/);
   assert.match(css, /\.hero h1, \.hero p, \.hero \.eyebrow \{ user-select: none/);
   assert.doesNotMatch(css, /#app.*user-select:\s*none/);
+});
+
+test('sign-off repair pass contracts are present', () => {
+  assert.match(app, /datasetLoadPromise/);
+  assert.match(app, /AbortController/);
+  assert.match(app, /CATALOG_LOAD_TIMEOUT_MS/);
+  assert.match(app, /\[GovFrame\] catalog load failed/);
+  assert.match(app, /let navigationGeneration/);
+  assert.match(app, /navigationGeneration \+= 1/);
+  assert.match(app, /async function openDeepLinkedItem\(generation\)/);
+  assert.match(app, /parseViewState\(location\.search\)/);
+  assert.match(app, /event\.currentTarget\.dataset\.openItem/);
+  assert.match(app, /bindOpenItemButtons/);
+  assert.match(app, /if \(searchFilters\.match === 'none'\) return/);
+  assert.match(app, /Copy issue URL/);
+  assert.match(app, /data-copy-contribution/);
+  assert.match(app, /GITHUB_ISSUES_BASE/);
+  assert.match(app, /renderNoviceIntro\('detail'\)/);
+  assert.match(app, /contribution-callout[\s\S]*?Copy issue URL/);
+  assert.match(html, /v=20260610-3/);
 });

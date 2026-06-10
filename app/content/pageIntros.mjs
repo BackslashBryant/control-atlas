@@ -18,5 +18,11 @@ export const pageIntros = {
   sources: {
     title: "Sources and evidence health",
     description: "Official sources decide. Supporting and research leads corroborate. A 'needs supporting source' status means a published official claim lacks additional corroborating sources."
+  },
+  detail: {
+    description: "Review the official match and evidence before using this mapping in an audit."
+  },
+  mapping: {
+    description: "Compare frameworks here. Use \"Open mapped item\" only when you need the counterpart control."
   }
 };

@@ -48,4 +48,70 @@ const exerciseState = new Function(`
 
 await exerciseState();
 
+const navigationGuard = new Function(`
+  'use strict';
+  let navigationGeneration = 0;
+  let renderItemCalls = [];
+
+  function setView() {
+    navigationGeneration += 1;
+  }
+
+  async function openDeepLinkedItem(generation) {
+    if (generation !== navigationGeneration) return;
+    renderItemCalls.push('stale-blocked');
+  }
+
+  async function renderItem(key) {
+    navigationGeneration += 1;
+    renderItemCalls.push(key);
+  }
+
+  return (async () => {
+    const initGeneration = navigationGeneration;
+    setView();
+    await openDeepLinkedItem(initGeneration);
+    if (renderItemCalls.length !== 0) throw new Error('stale deep link should not render');
+    await renderItem('csf-2:PR.AA-01');
+    if (renderItemCalls[0] !== 'csf-2:PR.AA-01') throw new Error('expected PR.AA-01 detail');
+  })();
+`);
+
+await navigationGuard();
+
+const filterReset = new Function(`
+  'use strict';
+  let lastSearchQuery = '';
+  let searchFilters = { match: 'official', source: 'gold' };
+
+  function normalizeQuery(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  function resetSearchFilters() {
+    searchFilters = { framework: '', match: 'all', source: 'all' };
+  }
+
+  function prepareSearchSubmission(query, { resetFilters = true } = {}) {
+    const trimmed = String(query || '').trim();
+    const queryChanged = normalizeQuery(trimmed) !== normalizeQuery(lastSearchQuery);
+    if (resetFilters && queryChanged) {
+      resetSearchFilters();
+    }
+    if (queryChanged) {
+      lastSearchQuery = trimmed;
+    }
+    return trimmed;
+  }
+
+  prepareSearchSubmission('AC-2');
+  if (searchFilters.match !== 'all') throw new Error('expected filters reset on first query');
+  prepareSearchSubmission('AC-2');
+  if (searchFilters.match !== 'all') throw new Error('expected filters preserved on same query');
+  prepareSearchSubmission('PR.AA-01');
+  if (searchFilters.match !== 'all') throw new Error('expected filters reset on new query');
+`);
+
+filterReset();
+
 console.log('dom-smoke: viewState runtime patterns OK');
