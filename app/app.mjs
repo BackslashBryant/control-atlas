@@ -10,6 +10,11 @@ const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
 let dataset;
 let runtime;
+let datasetLoadPromise = null;
+let navigationGeneration = 0;
+
+const CATALOG_LOAD_TIMEOUT_MS = 30000;
+const GITHUB_ISSUES_BASE = 'https://github.com/BackslashBryant/GovFrame/issues';
 
 // Persistent UI states
 let noviceMode = true;
@@ -40,12 +45,40 @@ const frameworkDates = {
   'dod-rai': '2026-06-09'
 };
 
+function catalogLoadError(error) {
+  if (error?.name === 'AbortError') {
+    return new Error('Catalog load timed out. Check your connection and retry.');
+  }
+  if (error instanceof Error) return error;
+  return new Error('Validated framework catalog is unavailable.');
+}
+
+async function fetchCatalogDataset() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), CATALOG_LOAD_TIMEOUT_MS);
+  try {
+    const response = await fetch('./data/generated/catalog.json', { signal: controller.signal });
+    if (!response.ok) throw new Error('Validated framework catalog is unavailable.');
+    const data = await response.json();
+    dataset = data;
+    runtime = createFrameworkRuntime(dataset);
+  } catch (error) {
+    console.error('[GovFrame] catalog load failed', error);
+    throw catalogLoadError(error);
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function ensureDataset() {
   if (runtime) return;
-  const response = await fetch('./data/generated/catalog.json');
-  if (!response.ok) throw new Error('Validated framework catalog is unavailable.');
-  dataset = await response.json();
-  runtime = createFrameworkRuntime(dataset);
+  if (!datasetLoadPromise) {
+    datasetLoadPromise = fetchCatalogDataset().catch((error) => {
+      datasetLoadPromise = null;
+      throw error;
+    });
+  }
+  await datasetLoadPromise;
 }
 
 function showLoadingCard(message) {
@@ -70,9 +103,35 @@ async function ensureDatasetWithLoading(retryFn) {
   try {
     await ensureDataset();
   } catch (error) {
+    console.error('[GovFrame] catalog load failed', error);
     renderCatalogError(error, retryFn);
     throw error;
   }
+}
+
+function bindOpenItemButtons(root = app) {
+  root.querySelectorAll('[data-open-item]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      const key = event.currentTarget.dataset.openItem;
+      if (!key) return;
+      void renderItem(key);
+    });
+  });
+}
+
+function bindContributionCopyButtons(root = app) {
+  root.querySelectorAll('[data-copy-contribution]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const url = button.dataset.copyContribution;
+      if (!url) return;
+      try {
+        await navigator.clipboard.writeText(url);
+        showStatusMessage('Issue URL copied');
+      } catch {
+        showStatusMessage('Could not copy URL');
+      }
+    });
+  });
 }
 
 function renderNotice(message) {
@@ -160,21 +219,13 @@ function getSourceBadgesHtml(mapping) {
 function getContributionLink(mapping) {
   const sourceItem = itemFor(mapping.source_key);
   const targetItem = itemFor(mapping.target_key);
-  const title = encodeURIComponent(`Contribute mapping evidence: ${sourceItem?.item_id} to ${targetItem?.item_id}`);
-  const body = encodeURIComponent(
-`### Suggested Mapping Evidence
-
-**Source Framework:** ${sourceItem?.framework_id}
-**Source Control ID:** ${sourceItem?.item_id}
-**Target Framework:** ${targetItem?.framework_id}
-**Target Control ID:** ${targetItem?.item_id}
-
-**Evidence Link / Rationale:**
-[Please provide the link to the official source or crosswalk and brief rationale supporting this mapping]
-
-**Mapping ID (GovFrame):** ${mapping.id}`
+  const title = encodeURIComponent(
+    `Contribute mapping evidence: ${sourceItem?.item_id || mapping.source_key} → ${targetItem?.item_id || mapping.target_key}`
   );
-  return `https://github.com/BackslashBryant/GovFrame/issues/new?title=${title}&body=${body}`;
+  const body = encodeURIComponent(
+    `Mapping ID: ${mapping.id}\nSource: ${sourceItem?.item_id || mapping.source_key} (${sourceItem?.framework_id || ''})\nTarget: ${targetItem?.item_id || mapping.target_key} (${targetItem?.framework_id || ''})`
+  );
+  return `${GITHUB_ISSUES_BASE}/new?title=${title}&body=${body}`;
 }
 
 // Epic 4.1 Plain language Evidence Panel
@@ -644,6 +695,7 @@ function prepareSearchSubmission(query, { resetFilters = true } = {}) {
 }
 
 async function setView(view, state = {}, replace = false) {
+  navigationGeneration += 1;
   const merged = {
     ...viewState,
     view,
@@ -839,7 +891,12 @@ async function renderSearch(state) {
 
   const sourceFilterSelect = document.querySelector('#filter-source-type');
   if (sourceFilterSelect) {
+    if (searchFilters.match === 'none') {
+      sourceFilterSelect.disabled = true;
+      sourceFilterSelect.setAttribute('aria-disabled', 'true');
+    }
     sourceFilterSelect.addEventListener('change', () => {
+      if (searchFilters.match === 'none') return;
       searchFilters.source = sourceFilterSelect.value;
       renderSearch(state);
     });
@@ -852,7 +909,7 @@ async function renderSearch(state) {
   document.querySelector('#btn-clear-filters')?.addEventListener('click', clearFilters);
   document.querySelector('#btn-clear-filters-empty')?.addEventListener('click', clearFilters);
 
-  document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
+  bindOpenItemButtons();
 
   if (query) {
     requestAnimationFrame(() => {
@@ -885,6 +942,9 @@ function bindDetailsScrollPreservation(root) {
 
 async function renderItem(key, options = {}) {
   const preserveScroll = options.preserveScroll === true;
+  if (!preserveScroll) {
+    navigationGeneration += 1;
+  }
   const scrollY = preserveScroll ? window.scrollY : null;
   try {
     await ensureDatasetWithLoading(() => renderItem(key, options));
@@ -912,7 +972,7 @@ async function renderItem(key, options = {}) {
     const contributionHtml = mapping.evidence_gaps && mapping.evidence_gaps.length
       ? `<div class="contribution-callout">
           ${externalAnchor(contributionUrl, 'Contribute mapping evidence ↗', 'Contribute mapping evidence (opens GitHub in new tab)', 'contribute-link')}
-          <p class="muted external-url-display"><code class="external-url">${escapeHtml(contributionUrl)}</code></p>
+          <button type="button" class="secondary" data-copy-contribution="${escapeHtml(contributionUrl)}">Copy issue URL</button>
         </div>`
       : '';
 
@@ -967,7 +1027,8 @@ async function renderItem(key, options = {}) {
         <section class="panel">
           <p class="eyebrow">Direct sourced mappings</p>
           <h3>${direct.length} Official match${direct.length === 1 ? '' : 'es'}</h3>
-          ${renderNoviceIntro('search')}
+          ${renderNoviceIntro('detail')}
+          ${direct.length ? renderNoviceIntro('mapping') : ''}
           <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No official matches are currently known.</p>'}</div>
           ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
         </section>
@@ -999,7 +1060,8 @@ async function renderItem(key, options = {}) {
     </section>`;
 
   document.querySelector('#back-search').addEventListener('click', () => setView('search', {}, false));
-  document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
+  bindOpenItemButtons();
+  bindContributionCopyButtons();
 
   // D3 Visualization tabs binding
   const visContainer = document.querySelector('#vis-container');
@@ -1326,7 +1388,7 @@ async function renderBrowse(state) {
     browseCatalogFilter = '';
     setView('browse', { framework: button.dataset.browseFramework });
   }));
-  document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
+  bindOpenItemButtons();
 
   const catalogFilterInput = document.querySelector('#catalog-filter');
   if (catalogFilterInput) {
@@ -1426,6 +1488,7 @@ async function init() {
 
   navButtons.forEach((button) => button.addEventListener('click', () => void setView(button.dataset.view)));
   addEventListener('popstate', () => {
+    navigationGeneration += 1;
     const state = parseViewState(location.search);
     viewState = { ...viewState, ...state };
     void render(state);
@@ -1455,27 +1518,38 @@ async function init() {
     toggleModeBtn.setAttribute('aria-pressed', String(noviceMode));
   }
 
+  const initGeneration = navigationGeneration;
   await render(state);
 
   if (state.view === 'search' && state.query) {
-    await openDeepLinkedItem(state);
+    await openDeepLinkedItem(initGeneration);
   }
 }
 
-async function openDeepLinkedItem(state) {
+async function openDeepLinkedItem(generation) {
+  if (generation !== navigationGeneration) return;
+  const fresh = parseViewState(location.search);
+  if (fresh.view !== 'search' || !fresh.query) return;
+
   try {
     await ensureDataset();
   } catch (error) {
-    renderCatalogError(error, () => openDeepLinkedItem(state));
+    if (generation !== navigationGeneration) return;
+    console.error('[GovFrame] catalog load failed', error);
+    renderCatalogError(error, () => openDeepLinkedItem(generation));
     return;
   }
-  const exact = runtime.searchFrameworkItems(state.query, {
-    framework_id: state.filter || undefined,
-  }).find((item) => item.item_id.toLowerCase() === state.query.toLowerCase());
+
+  if (generation !== navigationGeneration) return;
+
+  const exact = runtime.searchFrameworkItems(fresh.query, {
+    framework_id: fresh.filter || undefined,
+  }).find((item) => item.item_id.toLowerCase() === fresh.query.toLowerCase());
   if (exact) await renderItem(exact.key);
 }
 
 init().catch((error) => {
+  console.error('[GovFrame] catalog load failed', error);
   app.setAttribute('aria-busy', 'false');
   app.innerHTML = `<section class="notice"><h2>GovFrame could not load the validated catalog.</h2><p>${escapeHtml(error.message)}</p></section>`;
 });

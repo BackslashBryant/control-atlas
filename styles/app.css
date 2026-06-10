@@ -450,6 +450,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .contribution-callout {
   margin-top: 0.5rem;
   font-size: 0.82rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 .contribute-link {
   color: var(--copper);
@@ -503,4 +507,3 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   stroke: var(--line);
   stroke-width: 0.5px;
 }
-
