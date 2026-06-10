@@ -134,33 +134,59 @@ function csvCell(value) {
 
 export function buildMatrixCsv(matrix) {
   const headers = [
-    'source_key',
-    'classification',
-    'target_keys',
-    'relationship_types',
-    'assertion_directions',
-    'path',
-    'evidence_gaps',
+    'Source framework',
+    'Source ID',
+    'Target framework',
+    'Target ID',
+    'Match type',
+    'Next action',
+    'Evidence source',
+    'Source type',
+    'Notes',
   ];
+  const sourceFw = matrix.request?.source_framework || '';
+  const targetFw = matrix.request?.target_framework || '';
+
   const rows = matrix.rows.map((row) => {
-    const directTargets = row.direct.map((item) => item.matrix_target_key || item.target_key);
-    const pathTargets = row.paths.map((item) => item.target_key);
-    const relationshipTypes = [
-      ...row.direct.map((item) => item.relationship_type),
-      ...row.paths.flatMap((path) => path.hops.map((hop) => hop.relationship_type)),
-    ];
-    const evidenceGaps = [
-      ...row.direct.flatMap((item) => item.evidence_gaps || []),
-      ...row.paths.flatMap((item) => item.evidence_gaps || []),
-    ];
+    const sourceId = row.source_key.split(':')[1] || row.source_key;
+    let matchType = 'No known match';
+    let nextAction = 'Assess separately.';
+    let targetId = '';
+    let evidenceSource = '';
+    let sourceType = '';
+    let notes = '';
+
+    if (row.classification === 'direct') {
+      matchType = 'Official match';
+      nextAction = 'Review and cite the source.';
+      targetId = [...new Set(row.direct.map(item => {
+        const key = item.matrix_target_key || item.target_key;
+        return (key.split(':')[1] || key) + ` (${item.matrix_direction || 'outgoing'})`;
+      }))].join('|');
+      evidenceSource = [...new Set(row.direct.map(item => item.source_id || ''))].filter(Boolean).join('|') || 'NIST references';
+      sourceType = 'Official';
+      const gaps = [...new Set(row.direct.flatMap(item => item.evidence_gaps || []))];
+      notes = gaps.length ? `Needs supporting source: missing ${gaps.join(', ')}` : 'Verified';
+    } else if (row.classification === 'calculated') {
+      matchType = 'Possible connection';
+      nextAction = 'Review each step.';
+      targetId = [...new Set(row.paths.map(item => item.target_key.split(':')[1] || item.target_key))].join('|');
+      evidenceSource = row.paths.map(item => item.item_keys.map(k => k.split(':')[1] || k).join(' > ')).join('|');
+      sourceType = 'Research lead';
+      const gaps = [...new Set(row.paths.flatMap(item => item.evidence_gaps || []))];
+      notes = `Calculated path. ${gaps.length ? `Gaps: missing ${gaps.join(', ')}` : 'Corroborated'}`;
+    }
+
     return [
-      row.source_key,
-      row.classification,
-      [...new Set([...directTargets, ...pathTargets])].join('|'),
-      [...new Set(relationshipTypes)].join('|'),
-      [...new Set(row.direct.map((item) => item.matrix_direction || 'outgoing'))].join('|'),
-      row.paths.map((item) => item.item_keys.join(' > ')).join('|'),
-      [...new Set(evidenceGaps)].join('|'),
+      sourceFw,
+      sourceId,
+      targetFw,
+      targetId,
+      matchType,
+      nextAction,
+      evidenceSource,
+      sourceType,
+      notes,
     ].map(csvCell).join(',');
   });
   return [headers.map(csvCell).join(','), ...rows].join('\n');

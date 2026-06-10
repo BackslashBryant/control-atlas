@@ -21,6 +21,10 @@
       <button type="button" data-view="browse">Browse</button>
       <button type="button" data-view="sources">Sources</button>
     </nav>
+    <div class="header-actions">
+      <button type="button" id="btn-toggle-mode">Novice Mode</button>
+      <button type="button" id="btn-toggle-glossary">Help & Glossary</button>
+    </div>
   </header>
 
   <main id="workspace" tabindex="-1">
@@ -37,6 +41,7 @@
   <footer>
     <p>Static, public, and browser-only. No accounts, tracking, or user-data storage.</p>
   </footer>
+  <script src="./lib/d3.min.js"></script>
   <script type="module" src="./app/app.mjs?v=20260609-3"></script>
 </body>
 </html>
