@@ -17,6 +17,6 @@ export const pageIntros = {
   },
   sources: {
     title: "Sources and evidence health",
-    description: "Gold decides. Silver and bronze corroborate. An evidence gap means a published gold claim is missing silver or bronze corroboration."
+    description: "Official sources decide. Supporting and research leads corroborate. A 'needs supporting source' status means a published official claim lacks additional corroborating sources."
   }
 };
