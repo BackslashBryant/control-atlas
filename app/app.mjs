@@ -1,4 +1,4 @@
-import { createFrameworkRuntime, parseViewState, serializeViewState } from './runtime.mjs';
+import { createFrameworkRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs';
 import { terms } from './content/terms.mjs';
 import { tooltips } from './content/tooltips.mjs';
 import { emptyStates } from './content/emptyStates.mjs';
@@ -17,12 +17,15 @@ let walkthroughStep = null;
 let browseSort = 'alpha';
 let browseFilter = 'all';
 let searchFilters = { framework: '', match: 'all', source: 'all' };
+let lastSearchQuery = '';
 let currentActiveView = 'search';
 let currentActiveState = {};
 let viewState = { view: 'search', mode: 'novice' };
 
 const TOUR_EXAMPLE_KEY = 'nist-800-53:AC-2';
 const TOUR_EXAMPLE_QUERY = 'AC-2';
+const WALKTHROUGH_STORAGE_KEY = 'govframe-walkthrough-step';
+let browseCatalogFilter = '';
 
 // Framework date additions lookup
 const frameworkDates = {
@@ -73,22 +76,42 @@ async function ensureDatasetWithLoading(retryFn) {
 }
 
 function renderNotice(message) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'vis-empty-state';
   const el = document.createElement('p');
   el.className = 'notice muted';
   el.textContent = message;
-  return el;
+  wrapper.appendChild(el);
+  return wrapper;
+}
+
+function showStatusMessage(message) {
+  let el = document.querySelector('#app-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'app-status';
+    el.setAttribute('aria-live', 'polite');
+    el.className = 'app-status muted';
+    app.prepend(el);
+  }
+  el.textContent = message;
+  clearTimeout(showStatusMessage._timer);
+  showStatusMessage._timer = setTimeout(() => {
+    el.textContent = '';
+  }, 4000);
 }
 
 function isSecureExternalUrl(url) {
   return typeof url === 'string' && url.startsWith('https://');
 }
 
-function externalAnchor(href, label, title = '') {
+function externalAnchor(href, label, title = '', className = 'external-link') {
   if (!isSecureExternalUrl(href)) {
     return `<span class="muted">${escapeHtml(label)} (link unavailable)</span>`;
   }
   const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
-  return `<a href="${escapeHtml(href)}" target="_blank" rel="noreferrer"${titleAttr}>${escapeHtml(label)}</a>`;
+  const ariaLabel = title || label;
+  return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" class="${className}"${titleAttr} aria-label="${escapeHtml(ariaLabel)}">${escapeHtml(label)}</a>`;
 }
 
 function sourceArtifactLabel(source) {
@@ -264,12 +287,13 @@ async function setNoviceMode(isNovice) {
   if (toggleBtn) {
     toggleBtn.textContent = `Mode: ${isNovice ? 'Novice' : 'Expert'}`;
     toggleBtn.classList.toggle('active-novice', isNovice);
+    toggleBtn.setAttribute('aria-pressed', String(isNovice));
   }
 
   history.replaceState(null, '', location.pathname + serializeViewState(viewState));
 
   if (currentActiveState.key) {
-    await renderItem(currentActiveState.key);
+    await renderItem(currentActiveState.key, { preserveScroll: true });
     return;
   }
 
@@ -332,12 +356,35 @@ function toggleGlossaryDrawer(forceOpen) {
   }
 }
 
+function saveWalkthroughStep(step) {
+  if (step === null) sessionStorage.removeItem(WALKTHROUGH_STORAGE_KEY);
+  else sessionStorage.setItem(WALKTHROUGH_STORAGE_KEY, String(step));
+}
+
+function loadWalkthroughStep() {
+  const raw = sessionStorage.getItem(WALKTHROUGH_STORAGE_KEY);
+  if (raw === null) return null;
+  const step = Number(raw);
+  return Number.isFinite(step) && step >= 0 && step < walkthroughSteps.length ? step : null;
+}
+
+function highlightTourTarget(itemKey) {
+  document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
+  const button = document.querySelector(`[data-open-item="${itemKey}"]`);
+  const card = button?.closest('.item-card');
+  if (card) {
+    card.classList.add('tour-highlight');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
 // Epic 1.2 Guided Walkthrough
 const walkthroughSteps = [
   {
     title: "1. Search a Control ID",
-    text: "Let's search for the NIST control 'AC-2'. We've prefilled it in the search input. Click the Search button to execute.",
+    text: "Let's search for the NIST control 'AC-2'. We've prefilled it in the search input. Press Next Step to run the search.",
     setup: async () => {
+      lastSearchQuery = '';
       await setView('search', { query: '', filter: '' });
       const queryInput = document.querySelector('#search-query');
       if (queryInput) {
@@ -347,9 +394,11 @@ const walkthroughSteps = [
   },
   {
     title: "2. Open Search Result",
-    text: "The search found matching items. Look for the 'AC-2' card and click it to view detail.",
+    text: "The search found matching items. Look for the highlighted 'AC-2' card and click it to view detail.",
     setup: async () => {
+      prepareSearchSubmission(TOUR_EXAMPLE_QUERY);
       await setView('search', { query: TOUR_EXAMPLE_QUERY, filter: '' });
+      highlightTourTarget(TOUR_EXAMPLE_KEY);
     }
   },
   {
@@ -378,6 +427,7 @@ const walkthroughSteps = [
 async function startWalkthrough() {
   dismissOnboardingOverlay();
   walkthroughStep = 0;
+  saveWalkthroughStep(0);
   try {
     await walkthroughSteps[0].setup();
   } catch (error) {
@@ -414,6 +464,8 @@ function renderWalkthroughBubble() {
 
   document.querySelector('#btn-walkthrough-skip').addEventListener('click', () => {
     walkthroughStep = null;
+    saveWalkthroughStep(null);
+    document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
     renderWalkthroughBubble();
   });
 
@@ -421,8 +473,11 @@ function renderWalkthroughBubble() {
     walkthroughStep++;
     if (walkthroughStep >= walkthroughSteps.length) {
       walkthroughStep = null;
+      saveWalkthroughStep(null);
+      document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
       renderWalkthroughBubble();
     } else {
+      saveWalkthroughStep(walkthroughStep);
       const nextStep = walkthroughSteps[walkthroughStep];
       if (nextStep.setup) {
         try {
@@ -568,13 +623,34 @@ function drawAdjacencyMatrix(container, paths, direct) {
   `;
 }
 
+function normalizeQuery(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function resetSearchFilters() {
+  searchFilters = { framework: '', match: 'all', source: 'all' };
+}
+
+function prepareSearchSubmission(query, { resetFilters = true } = {}) {
+  const trimmed = String(query || '').trim();
+  const queryChanged = normalizeQuery(trimmed) !== normalizeQuery(lastSearchQuery);
+  if (resetFilters && queryChanged) {
+    resetSearchFilters();
+  }
+  if (queryChanged) {
+    lastSearchQuery = trimmed;
+  }
+  return trimmed;
+}
+
 async function setView(view, state = {}, replace = false) {
-  const next = {
+  const merged = {
     ...viewState,
     view,
     mode: noviceMode ? 'novice' : 'expert',
     ...state,
   };
+  const next = normalizeViewState(view, merged);
 
   viewState = next;
   history[replace ? 'replaceState' : 'pushState'](null, '', location.pathname + serializeViewState(next));
@@ -607,7 +683,7 @@ async function renderSearch(state) {
         return true;
       });
     }
-    if (searchFilters.source !== 'all') {
+    if (searchFilters.source !== 'all' && searchFilters.match !== 'none') {
       results = results.filter(item => {
         const direct = runtime.getDirectMappings(item.key);
         return direct.some(mapping => {
@@ -620,6 +696,13 @@ async function renderSearch(state) {
 
   const hasResults = query && results.length > 0;
   const noResults = query && results.length === 0;
+  const filtersActive = searchFilters.match !== 'all' || searchFilters.source !== 'all';
+  const sourceTierDisabled = searchFilters.match === 'none';
+
+  const workspace = document.getElementById('workspace');
+  if (workspace) {
+    workspace.toggleAttribute('data-search-active', Boolean(query));
+  }
 
   const title = query ? pageIntros.search.title : pageIntros.home.title;
   const description = query ? pageIntros.search.description : pageIntros.home.description;
@@ -654,7 +737,7 @@ async function renderSearch(state) {
     </section>
 
     <!-- Epic 3.3 Dynamic Filters -->
-    ${hasResults ? `
+    ${query ? `
     <div class="results-filters-bar">
       <span class="filter-label">Filter matches:</span>
       <select id="filter-match-type">
@@ -663,12 +746,13 @@ async function renderSearch(state) {
         <option value="connection" ${searchFilters.match === 'connection' ? 'selected' : ''}>Possible connections only</option>
         <option value="none" ${searchFilters.match === 'none' ? 'selected' : ''}>No known matches only</option>
       </select>
-      <select id="filter-source-type">
+      <select id="filter-source-type"${sourceTierDisabled ? ' disabled aria-disabled="true" title="Source tier is unavailable when filtering for items with no known matches"' : ''}>
         <option value="all" ${searchFilters.source === 'all' ? 'selected' : ''}>All source tiers</option>
         <option value="gold" ${searchFilters.source === 'gold' ? 'selected' : ''}>Official</option>
         <option value="silver" ${searchFilters.source === 'silver' ? 'selected' : ''}>Supporting</option>
         <option value="bronze" ${searchFilters.source === 'bronze' ? 'selected' : ''}>Research lead</option>
       </select>
+      ${filtersActive ? `<button type="button" class="secondary" id="btn-clear-filters">Clear filters</button>` : ''}
     </div>` : ''}
 
     <section class="results" aria-label="Search results">
@@ -676,8 +760,9 @@ async function renderSearch(state) {
       ${noResults ? `
       <div class="notice empty-search">
         <h3>No matches found</h3>
-        <p>${escapeHtml(emptyStates.search)}</p>
+        <p>${filtersActive ? 'No items match the current filters. Try clearing filters or changing your search.' : escapeHtml(emptyStates.search)}</p>
         <div style="margin-top: 1rem;">
+          ${filtersActive ? `<button class="secondary" id="btn-clear-filters-empty" type="button">Clear filters</button>` : ''}
           <button class="secondary" id="empty-btn-browse" type="button">Browse catalogs</button>
         </div>
       </div>` : ''}
@@ -696,8 +781,9 @@ async function renderSearch(state) {
   // Event bindings
   document.querySelector('#search-form').addEventListener('submit', (event) => {
     event.preventDefault();
+    const query = prepareSearchSubmission(document.querySelector('#search-query').value);
     setView('search', {
-      query: document.querySelector('#search-query').value.trim(),
+      query,
       filter: document.querySelector('#search-framework').value,
     });
   });
@@ -727,9 +813,9 @@ async function renderSearch(state) {
   document.querySelectorAll('[data-example]').forEach((chip) => {
     chip.addEventListener('click', () => {
       document.querySelector('#search-query').value = chip.dataset.example;
-      searchFilters = { framework: '', match: 'all', source: 'all' };
+      const query = prepareSearchSubmission(chip.dataset.example);
       setView('search', {
-        query: chip.dataset.example,
+        query,
         filter: '',
       });
     });
@@ -744,6 +830,9 @@ async function renderSearch(state) {
   if (matchFilterSelect) {
     matchFilterSelect.addEventListener('change', () => {
       searchFilters.match = matchFilterSelect.value;
+      if (searchFilters.match === 'none') {
+        searchFilters.source = 'all';
+      }
       renderSearch(state);
     });
   }
@@ -756,18 +845,49 @@ async function renderSearch(state) {
     });
   }
 
+  const clearFilters = () => {
+    resetSearchFilters();
+    renderSearch(state);
+  };
+  document.querySelector('#btn-clear-filters')?.addEventListener('click', clearFilters);
+  document.querySelector('#btn-clear-filters-empty')?.addEventListener('click', clearFilters);
+
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
 
-  if (hasResults) {
+  if (query) {
     requestAnimationFrame(() => {
-      document.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 }
 
-async function renderItem(key) {
+function bindDetailsScrollPreservation(root) {
+  let savedScrollY = null;
+  root.querySelectorAll('details summary').forEach((summary) => {
+    summary.addEventListener('pointerdown', () => {
+      savedScrollY = window.scrollY;
+    });
+    summary.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        savedScrollY = window.scrollY;
+      }
+    });
+  });
+  root.querySelectorAll('details').forEach((details) => {
+    details.addEventListener('toggle', () => {
+      if (savedScrollY !== null) {
+        const y = savedScrollY;
+        requestAnimationFrame(() => window.scrollTo(0, y));
+      }
+    });
+  });
+}
+
+async function renderItem(key, options = {}) {
+  const preserveScroll = options.preserveScroll === true;
+  const scrollY = preserveScroll ? window.scrollY : null;
   try {
-    await ensureDatasetWithLoading(() => renderItem(key));
+    await ensureDatasetWithLoading(() => renderItem(key, options));
   } catch {
     return;
   }
@@ -788,8 +908,12 @@ async function renderItem(key) {
       : `<span class="badge badge-official" title="${escapeHtml(tooltips.officialMatch)}">Official match</span>`;
 
     // Contribution link
+    const contributionUrl = getContributionLink(mapping);
     const contributionHtml = mapping.evidence_gaps && mapping.evidence_gaps.length
-      ? `<div class="contribution-callout">${externalAnchor(getContributionLink(mapping), 'Contribute mapping evidence', 'Open GitHub issue in a new tab')}</div>`
+      ? `<div class="contribution-callout">
+          ${externalAnchor(contributionUrl, 'Contribute mapping evidence ↗', 'Contribute mapping evidence (opens GitHub in new tab)', 'contribute-link')}
+          <p class="muted external-url-display"><code class="external-url">${escapeHtml(contributionUrl)}</code></p>
+        </div>`
       : '';
 
     const sourceBadges = getSourceBadgesHtml(mapping);
@@ -911,8 +1035,14 @@ async function renderItem(key) {
   // Initial draw
   drawVis('node');
 
-  document.querySelector('#item-heading').focus();
-  scrollTo({ top: 0, behavior: 'smooth' });
+  bindDetailsScrollPreservation(app);
+
+  if (preserveScroll) {
+    window.scrollTo(0, scrollY);
+  } else {
+    document.querySelector('#item-heading')?.focus();
+    scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function frameworkOptions(selected = '') {
@@ -925,6 +1055,21 @@ function parseSelectedItemKeys(value, frameworkId) {
     .map((id) => id.trim())
     .filter(Boolean)
     .map((id) => id.includes(':') ? id : `${frameworkId}:${id}`))];
+}
+
+function validateMatrixItemIds(value, frameworkId) {
+  const tokens = [...new Set(String(value || '')
+    .split(/[\s,]+/)
+    .map((id) => id.trim())
+    .filter(Boolean))];
+  const unknown = [];
+  for (const token of tokens) {
+    const itemId = token.includes(':') ? token.split(':').slice(1).join(':') : token;
+    const exists = dataset.items.some((item) => item.framework_id === frameworkId
+      && item.item_id.toLowerCase() === itemId.toLowerCase());
+    if (!exists) unknown.push(token);
+  }
+  return unknown;
 }
 
 async function renderMatrix(state) {
@@ -1019,6 +1164,14 @@ async function renderMatrix(state) {
     const src = document.querySelector('#matrix-source').value;
     const tgt = document.querySelector('#matrix-target').value;
 
+    if (itemsVal) {
+      const unknown = validateMatrixItemIds(itemsVal, src);
+      if (unknown.length) {
+        showStatusMessage(`Unrecognized control ID${unknown.length === 1 ? '' : 's'}: ${unknown.join(', ')}`);
+        return;
+      }
+    }
+
     // Epic 5.2 Confirmation for whole framework
     if (!itemsVal) {
       const confirmWhole = confirm("You are about to compare the entire framework. This may generate a large table. Do you want to continue?");
@@ -1035,12 +1188,17 @@ async function renderMatrix(state) {
   const exportBtn = document.querySelector('#export-matrix');
   if (exportBtn) {
     exportBtn.addEventListener('click', () => {
+      if (!matrix) {
+        showStatusMessage('Build a matrix before exporting.');
+        return;
+      }
       const content = runtime.buildMatrixCsv(matrix);
       const link = document.createElement('a');
       link.href = URL.createObjectURL(new Blob([content], { type: 'text/csv' }));
       link.download = `GovFrame-${source}-to-${target}.csv`;
       link.click();
       URL.revokeObjectURL(link.href);
+      showStatusMessage('Export started — check your downloads folder.');
     });
   }
 }
@@ -1052,7 +1210,13 @@ async function renderBrowse(state) {
     return;
   }
   const selected = state.framework || '';
-  const frameworkItems = selected ? dataset.items.filter((item) => item.framework_id === selected) : [];
+  const allFrameworkItems = selected ? dataset.items.filter((item) => item.framework_id === selected) : [];
+  const catalogNeedle = normalizeQuery(browseCatalogFilter);
+  const frameworkItems = catalogNeedle
+    ? allFrameworkItems.filter((item) => normalizeQuery(item.item_id).includes(catalogNeedle)
+      || normalizeQuery(item.title).includes(catalogNeedle))
+    : allFrameworkItems;
+  const visibleItems = frameworkItems.slice(0, 200);
 
   // Epic 6.2 Framework Sorting and Filtering
   let frameworksToRender = [...dataset.coverage.frameworks];
@@ -1131,9 +1295,14 @@ async function renderBrowse(state) {
       </div>
 
       ${selected ? `
-      <section class="results">
+      <section class="results" id="catalog-list">
         <h3>${escapeHtml(frameworkName(selected))}</h3>
-        ${frameworkItems.slice(0, 200).map((item) => `
+        <div class="field" style="margin-bottom: 1rem;">
+          <label for="catalog-filter">Quick jump in catalog</label>
+          <input id="catalog-filter" type="search" value="${escapeHtml(browseCatalogFilter)}" placeholder="Filter by ID or title">
+        </div>
+        <p class="muted">Showing ${visibleItems.length} of ${frameworkItems.length} items${frameworkItems.length > 200 ? ' (first 200 displayed)' : ''}.</p>
+        ${visibleItems.map((item) => `
           <article class="item-card">
             <button data-open-item="${escapeHtml(item.key)}">
               <h4 class="item-id">${escapeHtml(item.item_id)}</h4>
@@ -1153,8 +1322,25 @@ async function renderBrowse(state) {
     renderBrowse(state);
   });
 
-  document.querySelectorAll('[data-browse-framework]').forEach((button) => button.addEventListener('click', () => setView('browse', { framework: button.dataset.browseFramework })));
+  document.querySelectorAll('[data-browse-framework]').forEach((button) => button.addEventListener('click', () => {
+    browseCatalogFilter = '';
+    setView('browse', { framework: button.dataset.browseFramework });
+  }));
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
+
+  const catalogFilterInput = document.querySelector('#catalog-filter');
+  if (catalogFilterInput) {
+    catalogFilterInput.addEventListener('input', () => {
+      browseCatalogFilter = catalogFilterInput.value;
+      renderBrowse(state);
+    });
+  }
+
+  if (selected) {
+    requestAnimationFrame(() => {
+      document.getElementById('catalog-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 }
 
 function renderSources() {
@@ -1182,7 +1368,8 @@ function renderSources() {
               <span class="badge ${badgeClass}">${escapeHtml(tierLabel)}</span>
               <h3>${escapeHtml(source.name)}</h3>
               <p class="muted">${escapeHtml(source.issuer)} · ${escapeHtml(source.frameworks.join(', '))}</p>
-              ${externalAnchor(source.artifact, sourceArtifactLabel(source))}
+              <p class="muted external-url-display"><code class="external-url">${escapeHtml(source.artifact)}</code></p>
+              ${externalAnchor(source.artifact, sourceArtifactLabel(source), 'Opens in new tab')}
             </article>`;
         }).join('')}
       </div>
@@ -1246,6 +1433,10 @@ async function init() {
 
   const state = parseViewState(location.search);
   viewState = { ...viewState, ...state };
+  if (state.query) lastSearchQuery = state.query;
+
+  const savedTour = loadWalkthroughStep();
+  if (savedTour !== null) walkthroughStep = savedTour;
 
   // Parse mode preference from URL (Epic 1.1)
   if (state.mode === 'expert') {
@@ -1261,6 +1452,7 @@ async function init() {
   if (toggleModeBtn) {
     toggleModeBtn.textContent = `Mode: ${noviceMode ? 'Novice' : 'Expert'}`;
     toggleModeBtn.classList.toggle('active-novice', noviceMode);
+    toggleModeBtn.setAttribute('aria-pressed', String(noviceMode));
   }
 
   await render(state);

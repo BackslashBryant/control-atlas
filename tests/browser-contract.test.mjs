@@ -79,7 +79,28 @@ test('routing state and interactive repair contracts are present', () => {
 test('mode toggle preserves detail pages and onboarding is resilient', () => {
   assert.match(app, /async function setNoviceMode/);
   assert.match(app, /if \(currentActiveState\.key\)/);
+  assert.match(app, /preserveScroll: true/);
   assert.match(app, /console\.error\('Failed to set/);
   assert.match(app, /finally\s*\{[\s\S]*overlay\.remove\(\)/);
   assert.match(app, /Shows calculated multi-hop paths/);
+});
+
+test('june 10 stability contracts are present', () => {
+  assert.match(app, /normalizeViewState/);
+  assert.match(app, /lastSearchQuery/);
+  assert.match(app, /prepareSearchSubmission/);
+  assert.match(app, /data-search-active/);
+  assert.match(app, /disabled aria-disabled="true"/);
+  assert.match(app, /searchFilters\.match !== 'none'/);
+  assert.match(app, /WALKTHROUGH_STORAGE_KEY/);
+  assert.match(app, /highlightTourTarget/);
+  assert.match(app, /bindDetailsScrollPreservation/);
+  assert.match(app, /validateMatrixItemIds/);
+  assert.match(app, /id="catalog-list"/);
+  assert.match(app, /rel="noopener noreferrer"/);
+  assert.match(app, /external-url/);
+  assert.match(app, /aria-pressed/);
+  assert.match(css, /#workspace\[data-search-active\] \.hero/);
+  assert.match(css, /\.hero h1, \.hero p, \.hero \.eyebrow \{ user-select: none/);
+  assert.doesNotMatch(css, /#app.*user-select:\s*none/);
 });
