@@ -19,6 +19,10 @@ let browseFilter = 'all';
 let searchFilters = { framework: '', match: 'all', source: 'all' };
 let currentActiveView = 'search';
 let currentActiveState = {};
+let viewState = { view: 'search', mode: 'novice' };
+
+const TOUR_EXAMPLE_KEY = 'nist-800-53:AC-2';
+const TOUR_EXAMPLE_QUERY = 'AC-2';
 
 // Framework date additions lookup
 const frameworkDates = {
@@ -39,6 +43,59 @@ async function ensureDataset() {
   if (!response.ok) throw new Error('Validated framework catalog is unavailable.');
   dataset = await response.json();
   runtime = createFrameworkRuntime(dataset);
+}
+
+function showLoadingCard(message) {
+  app.setAttribute('aria-busy', 'true');
+  app.innerHTML = `<div class="loading-card">${escapeHtml(message)}</div>`;
+}
+
+function renderCatalogError(error, retry) {
+  app.setAttribute('aria-busy', 'false');
+  app.innerHTML = `
+    <section class="notice">
+      <h2>Catalog could not load</h2>
+      <p>${escapeHtml(error.message)}</p>
+      <button class="primary" type="button" id="catalog-retry">Retry</button>
+    </section>`;
+  document.querySelector('#catalog-retry').addEventListener('click', () => retry());
+}
+
+async function ensureDatasetWithLoading(retryFn) {
+  if (runtime) return;
+  showLoadingCard('Loading catalog…');
+  try {
+    await ensureDataset();
+  } catch (error) {
+    renderCatalogError(error, retryFn);
+    throw error;
+  }
+}
+
+function renderNotice(message) {
+  const el = document.createElement('p');
+  el.className = 'notice muted';
+  el.textContent = message;
+  return el;
+}
+
+function isSecureExternalUrl(url) {
+  return typeof url === 'string' && url.startsWith('https://');
+}
+
+function externalAnchor(href, label, title = '') {
+  if (!isSecureExternalUrl(href)) {
+    return `<span class="muted">${escapeHtml(label)} (link unavailable)</span>`;
+  }
+  const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+  return `<a href="${escapeHtml(href)}" target="_blank" rel="noreferrer"${titleAttr}>${escapeHtml(label)}</a>`;
+}
+
+function sourceArtifactLabel(source) {
+  const url = source.artifact || '';
+  if (url.includes('github.com')) return `GitHub — ${source.name}`;
+  if (url.includes('nist.gov')) return `NIST — ${source.name}`;
+  return source.name;
 }
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
@@ -106,7 +163,7 @@ function renderEvidenceSummaryPanel(mapping, key) {
   const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
   const counterpart = itemFor(counterpartKey);
   const currentItem = itemFor(key);
-  
+
   const sourcesHtml = evidence.sources.map(source => {
     const tierName = sourceTierLabel(source.tier);
     return `
@@ -116,7 +173,7 @@ function renderEvidenceSummaryPanel(mapping, key) {
           <li><strong>Source:</strong> ${escapeHtml(source.source_id)}</li>
           <li><strong>Source type:</strong> ${escapeHtml(tierName)}</li>
           <li><strong>What it supports:</strong> ${escapeHtml(currentItem?.item_id || key)} maps to ${escapeHtml(counterpart?.item_id || counterpartKey)}.</li>
-          <li><strong>Use in audit:</strong> Review and cite the source: <a href="${escapeHtml(source.artifact)}" target="_blank" rel="noreferrer" class="source-link">${escapeHtml(source.locator)}</a></li>
+          <li><strong>Use in audit:</strong> Review and cite the source: ${externalAnchor(source.artifact, source.locator)}</li>
         </ul>
       </div>`;
   }).join('');
@@ -143,6 +200,10 @@ function renderNoviceIntro(pageKey) {
   `;
 }
 
+function dismissOnboardingOverlay() {
+  document.querySelector('#onboarding-overlay')?.remove();
+}
+
 // Onboarding Choice Modal
 function showOnboardingOverlay() {
   let overlay = document.querySelector('#onboarding-overlay');
@@ -158,32 +219,61 @@ function showOnboardingOverlay() {
         <button class="primary" id="btn-mode-novice">I'm new to mapping</button>
         <button class="secondary" id="btn-mode-expert">I know what I need</button>
       </div>
+      <button class="secondary" id="btn-onboarding-skip" type="button" aria-label="Skip onboarding for now" style="margin-top: 1rem; width: 100%;">Skip for now</button>
     </div>
   `;
   document.body.appendChild(overlay);
-  
-  document.querySelector('#btn-mode-novice').addEventListener('click', () => {
-    setNoviceMode(true);
+
+  const bindModeChoice = (buttonId, isNovice) => {
+    document.querySelector(buttonId).addEventListener('click', async () => {
+      try {
+        await setNoviceMode(isNovice);
+      } catch (error) {
+        console.error(`Failed to set ${isNovice ? 'novice' : 'expert'} mode`, error);
+      } finally {
+        overlay.remove();
+      }
+    });
+  };
+
+  bindModeChoice('#btn-mode-novice', true);
+  bindModeChoice('#btn-mode-expert', false);
+
+  document.querySelector('#btn-onboarding-skip').addEventListener('click', () => {
     overlay.remove();
   });
-  document.querySelector('#btn-mode-expert').addEventListener('click', () => {
-    setNoviceMode(false);
-    overlay.remove();
-  });
+
+  const escHandler = (event) => {
+    if (event.key === 'Escape') {
+      overlay.remove();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
 }
 
-function setNoviceMode(isNovice) {
+async function setNoviceMode(isNovice) {
   noviceMode = isNovice;
-  viewState.mode = isNovice ? 'novice' : 'expert';
-  
+
+  viewState = {
+    ...viewState,
+    mode: isNovice ? 'novice' : 'expert',
+  };
+
   const toggleBtn = document.querySelector('#btn-toggle-mode');
   if (toggleBtn) {
     toggleBtn.textContent = `Mode: ${isNovice ? 'Novice' : 'Expert'}`;
     toggleBtn.classList.toggle('active-novice', isNovice);
   }
-  
+
   history.replaceState(null, '', location.pathname + serializeViewState(viewState));
-  render(viewState);
+
+  if (currentActiveState.key) {
+    await renderItem(currentActiveState.key);
+    return;
+  }
+
+  await render(viewState);
 }
 
 // Help & Glossary Drawer
@@ -196,14 +286,14 @@ function toggleGlossaryDrawer(forceOpen) {
     drawer.setAttribute('role', 'dialog');
     drawer.setAttribute('aria-modal', 'true');
     drawer.setAttribute('aria-labelledby', 'glossary-title');
-    
+
     const glossaryHtml = glossary.map(item => `
       <div class="glossary-item">
         <dt>${escapeHtml(item.term)}</dt>
         <dd>${escapeHtml(item.definition)}</dd>
       </div>
     `).join('');
-    
+
     drawer.innerHTML = `
       <button class="close-drawer" id="btn-close-glossary" aria-label="Close glossary">&times;</button>
       <h2 id="glossary-title">Help & Glossary</h2>
@@ -216,17 +306,17 @@ function toggleGlossaryDrawer(forceOpen) {
       </div>
     `;
     document.body.appendChild(drawer);
-    
+
     document.querySelector('#btn-close-glossary').addEventListener('click', () => toggleGlossaryDrawer(false));
     document.querySelector('#btn-restart-walkthrough').addEventListener('click', () => {
       toggleGlossaryDrawer(false);
       startWalkthrough();
     });
   }
-  
+
   const isOpen = forceOpen !== undefined ? forceOpen : !drawer.classList.contains('open');
   drawer.classList.toggle('open', isOpen);
-  
+
   if (isOpen) {
     drawer.querySelector('#btn-close-glossary').focus();
     const escHandler = (e) => {
@@ -251,7 +341,7 @@ const walkthroughSteps = [
       await setView('search', { query: '', filter: '' });
       const queryInput = document.querySelector('#search-query');
       if (queryInput) {
-        queryInput.value = 'AC-2';
+        queryInput.value = TOUR_EXAMPLE_QUERY;
       }
     }
   },
@@ -259,14 +349,14 @@ const walkthroughSteps = [
     title: "2. Open Search Result",
     text: "The search found matching items. Look for the 'AC-2' card and click it to view detail.",
     setup: async () => {
-      await setView('search', { query: 'AC-2', filter: '' });
+      await setView('search', { query: TOUR_EXAMPLE_QUERY, filter: '' });
     }
   },
   {
     title: "3. Understand Official Matches",
     text: "Under 'Direct sourced mappings', you see 'Official matches'. These are verified, trusted mappings directly from official source organizations (e.g. NIST or DISA).",
     setup: async () => {
-      await renderItem('80053:AC-2');
+      await renderItem(TOUR_EXAMPLE_KEY);
     }
   },
   {
@@ -285,8 +375,14 @@ const walkthroughSteps = [
   }
 ];
 
-function startWalkthrough() {
+async function startWalkthrough() {
+  dismissOnboardingOverlay();
   walkthroughStep = 0;
+  try {
+    await walkthroughSteps[0].setup();
+  } catch (error) {
+    console.error('Walkthrough setup failed', error);
+  }
   renderWalkthroughBubble();
 }
 
@@ -296,14 +392,14 @@ function renderWalkthroughBubble() {
     if (bubble) bubble.remove();
     return;
   }
-  
+
   if (!bubble) {
     bubble = document.createElement('div');
     bubble.id = 'walkthrough-bubble';
     bubble.className = 'walkthrough-bubble';
     document.body.appendChild(bubble);
   }
-  
+
   const step = walkthroughSteps[walkthroughStep];
   bubble.innerHTML = `
     <h4>${escapeHtml(step.title)}</h4>
@@ -315,12 +411,12 @@ function renderWalkthroughBubble() {
       </button>
     </div>
   `;
-  
+
   document.querySelector('#btn-walkthrough-skip').addEventListener('click', () => {
     walkthroughStep = null;
     renderWalkthroughBubble();
   });
-  
+
   document.querySelector('#btn-walkthrough-next').addEventListener('click', async () => {
     walkthroughStep++;
     if (walkthroughStep >= walkthroughSteps.length) {
@@ -329,7 +425,11 @@ function renderWalkthroughBubble() {
     } else {
       const nextStep = walkthroughSteps[walkthroughStep];
       if (nextStep.setup) {
-        await nextStep.setup();
+        try {
+          await nextStep.setup();
+        } catch (error) {
+          console.error('Walkthrough step setup failed', error);
+        }
       }
       renderWalkthroughBubble();
     }
@@ -339,13 +439,20 @@ function renderWalkthroughBubble() {
 // D3 Node-link visualization
 function drawNodeLink(svgElement, paths) {
   const d3 = window.d3;
-  if (!d3) return;
+  if (!d3) {
+    svgElement.replaceWith(renderNotice('Graph library unavailable.'));
+    return;
+  }
+  if (!paths.length) {
+    svgElement.replaceWith(renderNotice(emptyStates.paths));
+    return;
+  }
   svgElement.innerHTML = '';
-  
+
   const nodesMap = new Map();
   const links = [];
   const slicedPaths = paths.slice(0, 8);
-  
+
   slicedPaths.forEach(path => {
     path.item_keys.forEach((key, index) => {
       if (!nodesMap.has(key)) {
@@ -365,17 +472,17 @@ function drawNodeLink(svgElement, paths) {
       }
     }
   });
-  
+
   const nodes = [...nodesMap.values()];
   const columns = [[], [], [], []];
   nodes.forEach(n => {
     if (columns[n.column]) columns[n.column].push(n);
   });
-  
+
   const width = svgElement.clientWidth || 300;
   const height = svgElement.clientHeight || 240;
   const colWidth = width / 3;
-  
+
   columns.forEach((colNodes, colIndex) => {
     const spacing = height / (colNodes.length + 1);
     colNodes.forEach((n, nodeIndex) => {
@@ -383,9 +490,9 @@ function drawNodeLink(svgElement, paths) {
       n.y = (nodeIndex + 1) * spacing;
     });
   });
-  
+
   const svg = d3.select(svgElement);
-  
+
   svg.selectAll('.vis-link')
     .data(links)
     .enter()
@@ -397,20 +504,20 @@ function drawNodeLink(svgElement, paths) {
     .attr('y2', d => nodesMap.get(d.target).y)
     .attr('stroke', '#47715d')
     .attr('stroke-width', 2);
-    
+
   const nodeGroups = svg.selectAll('.vis-node')
     .data(nodes)
     .enter()
     .append('g')
     .attr('class', 'vis-node')
     .attr('transform', d => `translate(${d.x},${d.y})`);
-    
+
   nodeGroups.append('circle')
     .attr('r', 12)
     .attr('fill', '#173f35')
     .attr('stroke', '#d2a84b')
     .attr('stroke-width', 1.5);
-    
+
   nodeGroups.append('text')
     .attr('dy', -18)
     .attr('text-anchor', 'middle')
@@ -422,7 +529,7 @@ function drawNodeLink(svgElement, paths) {
 function drawAdjacencyMatrix(container, paths, direct) {
   const targets = new Set();
   const rows = [];
-  
+
   direct.forEach(m => {
     const counterpartKey = m.source_key === currentActiveState.key ? m.target_key : m.source_key;
     const counterpart = itemFor(counterpartKey);
@@ -430,7 +537,7 @@ function drawAdjacencyMatrix(container, paths, direct) {
     targets.add(id);
     rows.push({ id, type: 'Official' });
   });
-  
+
   paths.forEach(p => {
     const lastKey = p.item_keys[p.item_keys.length - 1];
     const counterpart = itemFor(lastKey);
@@ -440,19 +547,19 @@ function drawAdjacencyMatrix(container, paths, direct) {
       rows.push({ id, type: 'Possible' });
     }
   });
-  
+
   if (rows.length === 0) {
     container.innerHTML = '<p class="muted">No relationships to display.</p>';
     return;
   }
-  
+
   const cellsHtml = rows.map(r => `
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem; border-bottom: 1px solid var(--line); font-size: 0.85rem;">
       <strong>${escapeHtml(r.id)}</strong>
       <span class="badge ${r.type === 'Official' ? 'badge-official' : 'badge-connection'}">${escapeHtml(r.type)}</span>
     </div>
   `).join('');
-  
+
   container.innerHTML = `
     <div style="border: 1px solid var(--line); border-radius: 8px; background: white; padding: 0.5rem;">
       <div style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--muted); padding-bottom: 0.4rem; border-bottom: 1.5px solid var(--line); margin-bottom: 0.4rem;">Mapped Counterparts</div>
@@ -462,7 +569,13 @@ function drawAdjacencyMatrix(container, paths, direct) {
 }
 
 async function setView(view, state = {}, replace = false) {
-  const next = { view, mode: noviceMode ? 'novice' : 'expert', ...state };
+  const next = {
+    ...viewState,
+    view,
+    mode: noviceMode ? 'novice' : 'expert',
+    ...state,
+  };
+
   viewState = next;
   history[replace ? 'replaceState' : 'pushState'](null, '', location.pathname + serializeViewState(next));
   await render(next);
@@ -471,10 +584,16 @@ async function setView(view, state = {}, replace = false) {
 async function renderSearch(state) {
   const query = state.query || '';
   const filter = state.filter || '';
-  if (query) await ensureDataset();
+  if (query) {
+    try {
+      await ensureDatasetWithLoading(() => renderSearch(state));
+    } catch {
+      return;
+    }
+  }
   const filters = { framework_id: filter || undefined };
   const rawResults = query ? runtime.searchFrameworkItems(query, filters) : [];
-  
+
   // Epic 3.3 Search Filters
   let results = rawResults;
   if (query) {
@@ -521,7 +640,7 @@ async function renderSearch(state) {
         <div class="field"><label for="search-framework">Framework filter</label><select id="search-framework"><option value="">All frameworks</option>${frameworkOptions(filter)}</select></div>
         <button class="primary" type="submit">Search</button>
       </form>
-      
+
       <!-- Epic 3.1 Search Examples -->
       <div class="search-examples">
         <span class="label">Examples:</span>
@@ -586,14 +705,22 @@ async function renderSearch(state) {
   const focusSearchBtn = document.querySelector('#btn-focus-search');
   if (focusSearchBtn) {
     focusSearchBtn.addEventListener('click', () => {
-      document.querySelector('#search-query').focus();
+      const form = document.querySelector('#search-form');
+      const input = document.querySelector('#search-query');
+
+      if (input.value.trim()) {
+        form.requestSubmit();
+        return;
+      }
+
+      input.focus();
     });
   }
 
   const learnMappingBtn = document.querySelector('#btn-learn-mapping');
   if (learnMappingBtn) {
     learnMappingBtn.addEventListener('click', () => {
-      startWalkthrough();
+      void startWalkthrough();
     });
   }
 
@@ -630,29 +757,39 @@ async function renderSearch(state) {
   }
 
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
+
+  if (hasResults) {
+    requestAnimationFrame(() => {
+      document.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 }
 
 async function renderItem(key) {
-  await ensureDataset();
+  try {
+    await ensureDatasetWithLoading(() => renderItem(key));
+  } catch {
+    return;
+  }
   const item = itemFor(key);
   if (!item) return;
   currentActiveState = { key };
   const direct = runtime.getDirectMappings(key);
   const paths = runtime.getCalculatedPaths(key);
-  
+
   const mappingCard = (mapping) => {
     const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
     const counterpart = itemFor(counterpartKey);
     const direction = mapping.source_key === key ? 'outgoing' : 'incoming';
-    
+
     // Gaps renamed to "Needs supporting source" (Epic 4.2)
     const gapBadge = mapping.evidence_gaps && mapping.evidence_gaps.length
       ? `<span class="badge badge-needs-source" title="${escapeHtml(tooltips.needsSupportingSource)}">Needs supporting source</span>`
       : `<span class="badge badge-official" title="${escapeHtml(tooltips.officialMatch)}">Official match</span>`;
-      
+
     // Contribution link
     const contributionHtml = mapping.evidence_gaps && mapping.evidence_gaps.length
-      ? `<div class="contribution-callout"><a href="${escapeHtml(getContributionLink(mapping))}" target="_blank" rel="noreferrer" class="contribute-link">Contribute mapping evidence</a></div>`
+      ? `<div class="contribution-callout">${externalAnchor(getContributionLink(mapping), 'Contribute mapping evidence', 'Open GitHub issue in a new tab')}</div>`
       : '';
 
     const sourceBadges = getSourceBadgesHtml(mapping);
@@ -690,7 +827,7 @@ async function renderItem(key) {
 
   const visibleDirect = direct.slice(0, 8);
   const additionalDirect = direct.slice(8);
-  
+
   app.innerHTML = `
     <button class="secondary" type="button" id="back-search">← Back to search</button>
     <section class="detail-layout" aria-labelledby="item-heading">
@@ -702,7 +839,7 @@ async function renderItem(key) {
           <p>${escapeHtml(item.text)}</p>
           <details><summary>Canonical source evidence</summary><p>${escapeHtml(item.canonical_evidence.source_id)} · ${escapeHtml(item.canonical_evidence.locator)} · ${escapeHtml(item.canonical_evidence.snapshot_date)}</p></details>
         </article>
-        
+
         <section class="panel">
           <p class="eyebrow">Direct sourced mappings</p>
           <h3>${direct.length} Official match${direct.length === 1 ? '' : 'es'}</h3>
@@ -710,7 +847,7 @@ async function renderItem(key) {
           <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No official matches are currently known.</p>'}</div>
           ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
         </section>
-        
+
         <section class="panel">
           <p class="eyebrow">Explained paths</p>
           <h3>${paths.length} Possible connection${paths.length === 1 ? '' : 's'}</h3>
@@ -718,18 +855,19 @@ async function renderItem(key) {
           <div class="stack">${paths.length ? paths.slice(0, 30).map(pathCard).join('') : '<p class="notice">No possible connections known.</p>'}</div>
         </section>
       </div>
-      
+
       <aside class="detail-side panel">
         <p class="eyebrow">How to use this result</p>
         <h3>${direct.length + paths.length} known routes</h3>
         <p class="muted">Review official matches for direct reuse. Treat possible connections as leads.</p>
-        
+
         <!-- Epic 7.2 Relationship Visualizations -->
         <div class="visualization-tabs">
           <button type="button" id="vis-tab-node" class="active">Flow Graph</button>
           <button type="button" id="vis-tab-matrix">Grid Matrix</button>
           <button type="button" id="vis-tab-list">List View</button>
         </div>
+        <p class="muted" style="font-size: 0.85rem; margin: 0.5rem 0 0;">Shows calculated multi-hop paths. See mapping cards for evidence.</p>
         <div id="vis-container" style="margin-top: 10px;">
           <svg id="vis-svg" class="visualization-canvas"></svg>
         </div>
@@ -738,7 +876,7 @@ async function renderItem(key) {
 
   document.querySelector('#back-search').addEventListener('click', () => setView('search', {}, false));
   document.querySelectorAll('[data-open-item]').forEach((button) => button.addEventListener('click', () => renderItem(button.dataset.openItem)));
-  
+
   // D3 Visualization tabs binding
   const visContainer = document.querySelector('#vis-container');
   const drawVis = (tab) => {
@@ -753,19 +891,26 @@ async function renderItem(key) {
       drawAdjacencyMatrix(document.querySelector('#vis-matrix-list'), paths, direct);
     } else {
       document.querySelector('#vis-tab-list').classList.add('active');
-      visContainer.innerHTML = paths.length
-        ? `<div class="stack">${paths.slice(0, 8).map((path) => `<div class="path">${path.item_keys.map((itemKey) => `<span>${escapeHtml(itemFor(itemKey)?.item_id || itemKey)}</span>`).join(' → ')}</div>`).join('')}</div>`
-        : '<p class="muted">No path list is available.</p>';
+      const directRows = direct.slice(0, 8).map((mapping) => {
+        const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
+        const counterpart = itemFor(counterpartKey);
+        return `<div class="path"><span class="badge badge-official">Official</span> ${escapeHtml(counterpart?.item_id || counterpartKey)}</div>`;
+      });
+      const pathRows = paths.slice(0, 8).map((path) => `<div class="path">${path.item_keys.map((itemKey) => `<span>${escapeHtml(itemFor(itemKey)?.item_id || itemKey)}</span>`).join(' → ')}</div>`);
+      const rows = [...directRows, ...pathRows];
+      visContainer.innerHTML = rows.length
+        ? `<div class="stack">${rows.join('')}</div>`
+        : '<p class="muted">No relationships to list.</p>';
     }
   };
-  
+
   document.querySelector('#vis-tab-node').addEventListener('click', () => drawVis('node'));
   document.querySelector('#vis-tab-matrix').addEventListener('click', () => drawVis('matrix'));
   document.querySelector('#vis-tab-list').addEventListener('click', () => drawVis('list'));
-  
+
   // Initial draw
   drawVis('node');
-  
+
   document.querySelector('#item-heading').focus();
   scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -783,7 +928,11 @@ function parseSelectedItemKeys(value, frameworkId) {
 }
 
 async function renderMatrix(state) {
-  await ensureDataset();
+  try {
+    await ensureDatasetWithLoading(() => renderMatrix(state));
+  } catch {
+    return;
+  }
   const source = state.source || dataset.frameworks[0]?.id || '';
   const target = state.target || dataset.frameworks.find((item) => item.id !== source)?.id || '';
   const selectedIds = state.items || '';
@@ -793,7 +942,7 @@ async function renderMatrix(state) {
     target_framework: target,
     ...(selectedKeys.length ? { item_keys: selectedKeys } : {}),
   };
-  
+
   // Matrix classifications mapping (Epic 5.1)
   const matrixClassInfo = (classification) => {
     if (classification === 'direct') return { label: 'Official match', action: 'Review and cite the source.', badgeClass: 'badge-official' };
@@ -819,7 +968,7 @@ async function renderMatrix(state) {
         <button class="primary" type="submit">Build matrix</button>
         <button class="secondary" id="export-matrix" type="button">Export CSV</button>
       </form>
-      
+
       ${matrix ? `
       <p class="muted" style="margin-top: 1.5rem;">${matrix.summary.total} source items · ${matrix.summary.direct} official matches · ${matrix.summary.calculated} possible connections · ${matrix.summary.unmapped} no known matches</p>
       ${matrix.rows.length > 200 ? '<p class="notice">Showing the first 200 rows. CSV export includes the complete matrix.</p>' : ''}
@@ -869,13 +1018,13 @@ async function renderMatrix(state) {
     const itemsVal = document.querySelector('#matrix-items').value.trim();
     const src = document.querySelector('#matrix-source').value;
     const tgt = document.querySelector('#matrix-target').value;
-    
+
     // Epic 5.2 Confirmation for whole framework
     if (!itemsVal) {
       const confirmWhole = confirm("You are about to compare the entire framework. This may generate a large table. Do you want to continue?");
       if (!confirmWhole) return;
     }
-    
+
     setView('matrix', {
       source: src,
       target: tgt,
@@ -897,13 +1046,17 @@ async function renderMatrix(state) {
 }
 
 async function renderBrowse(state) {
-  await ensureDataset();
+  try {
+    await ensureDatasetWithLoading(() => renderBrowse(state));
+  } catch {
+    return;
+  }
   const selected = state.framework || '';
   const frameworkItems = selected ? dataset.items.filter((item) => item.framework_id === selected) : [];
-  
+
   // Epic 6.2 Framework Sorting and Filtering
   let frameworksToRender = [...dataset.coverage.frameworks];
-  
+
   if (browseFilter === 'full') {
     frameworksToRender = frameworksToRender.filter(cov => {
       const fw = dataset.frameworks.find(item => item.id === cov.framework_id);
@@ -915,7 +1068,7 @@ async function renderBrowse(state) {
       return fw && fw.status === 'limited-public-scope';
     });
   }
-  
+
   frameworksToRender.sort((a, b) => {
     const fwA = dataset.frameworks.find(item => item.id === a.framework_id);
     const fwB = dataset.frameworks.find(item => item.id === b.framework_id);
@@ -935,7 +1088,7 @@ async function renderBrowse(state) {
       <p class="eyebrow">Browse</p>
       <h2>${escapeHtml(pageIntros.browse.title)}</h2>
       ${renderNoviceIntro('browse')}
-      
+
       <!-- Epic 6.2 Sorting & Filtering Bar -->
       <div class="results-filters-bar" style="margin-bottom: 1.5rem;">
         <span class="filter-label">Sort by:</span>
@@ -956,7 +1109,7 @@ async function renderBrowse(state) {
         ${frameworksToRender.map((coverage) => {
           const framework = dataset.frameworks.find((item) => item.id === coverage.framework_id);
           const isLimited = framework.status === 'limited-public-scope';
-          
+
           // Epic 6.1 Explain Framework Coverage Labels
           const coverageLabelsHtml = `
             <div class="badge-row" style="margin-bottom: 0.5rem;">
@@ -965,7 +1118,7 @@ async function renderBrowse(state) {
               ${isLimited ? '<span class="badge badge-research">Partial public data</span>' : ''}
             </div>
           `;
-          
+
           return `
             <article class="framework-card">
               ${coverageLabelsHtml}
@@ -976,7 +1129,7 @@ async function renderBrowse(state) {
             </article>`;
         }).join('')}
       </div>
-      
+
       ${selected ? `
       <section class="results">
         <h3>${escapeHtml(frameworkName(selected))}</h3>
@@ -994,7 +1147,7 @@ async function renderBrowse(state) {
     browseSort = e.target.value;
     renderBrowse(state);
   });
-  
+
   document.querySelector('#browse-filter').addEventListener('change', (e) => {
     browseFilter = e.target.value;
     renderBrowse(state);
@@ -1011,15 +1164,15 @@ function renderSources() {
       <p class="eyebrow">Sources and evidence health</p>
       <h2>${escapeHtml(pageIntros.sources.title)}</h2>
       ${renderNoviceIntro('sources')}
-      
+
       <div class="learning-grid">
         <p><strong>Official</strong><br>Primary source.</p>
         <p><strong>Supporting</strong><br>Confirms or adds context.</p>
         <p><strong>Research lead</strong><br>Useful, but verify before use.</p>
       </div>
-      
+
       <p class="muted">${dataset.coverage.mappings.published} published mappings · ${dataset.coverage.mappings.evidence_gaps} needs supporting source gaps · ${dataset.coverage.mappings.blocked} blocked candidates.</p>
-      
+
       <div class="grid">
         ${dataset.coverage.sources.map((source) => {
           const badgeClass = source.tier === 'gold' ? 'badge-official' : source.tier === 'silver' ? 'badge-supporting' : 'badge-research';
@@ -1029,7 +1182,7 @@ function renderSources() {
               <span class="badge ${badgeClass}">${escapeHtml(tierLabel)}</span>
               <h3>${escapeHtml(source.name)}</h3>
               <p class="muted">${escapeHtml(source.issuer)} · ${escapeHtml(source.frameworks.join(', '))}</p>
-              <a href="${escapeHtml(source.artifact)}" target="_blank" rel="noreferrer">Open source artifact</a>
+              ${externalAnchor(source.artifact, sourceArtifactLabel(source))}
             </article>`;
         }).join('')}
       </div>
@@ -1050,14 +1203,16 @@ function renderRetired(state) {
 async function render(state) {
   app.setAttribute('aria-busy', 'false');
   currentActiveView = state.view || 'search';
+  currentActiveState = {};
+  viewState = { ...viewState, ...state };
   navButtons.forEach((button) => button.toggleAttribute('aria-current', button.dataset.view === state.view));
-  
+
   if (state.view === 'matrix') await renderMatrix(state);
   else if (state.view === 'browse') await renderBrowse(state);
   else if (state.view === 'sources') renderSources();
   else if (state.view === 'retired') renderRetired(state);
   else await renderSearch(state);
-  
+
   renderWalkthroughBubble();
 }
 
@@ -1065,28 +1220,33 @@ async function init() {
   const response = await fetch('./data/generated/bootstrap.json');
   if (!response.ok) throw new Error('Framework registry is unavailable.');
   dataset = await response.json();
-  
+
   // Bind Header Controls
   const toggleModeBtn = document.querySelector('#btn-toggle-mode');
   const toggleGlossaryBtn = document.querySelector('#btn-toggle-glossary');
-  
+
   if (toggleModeBtn) {
     toggleModeBtn.addEventListener('click', () => {
-      setNoviceMode(!noviceMode);
+      void setNoviceMode(!noviceMode);
     });
   }
-  
+
   if (toggleGlossaryBtn) {
     toggleGlossaryBtn.addEventListener('click', () => {
       toggleGlossaryDrawer();
     });
   }
 
-  navButtons.forEach((button) => button.addEventListener('click', () => setView(button.dataset.view)));
-  addEventListener('popstate', () => render(parseViewState(location.search)));
-  
+  navButtons.forEach((button) => button.addEventListener('click', () => void setView(button.dataset.view)));
+  addEventListener('popstate', () => {
+    const state = parseViewState(location.search);
+    viewState = { ...viewState, ...state };
+    void render(state);
+  });
+
   const state = parseViewState(location.search);
-  
+  viewState = { ...viewState, ...state };
+
   // Parse mode preference from URL (Epic 1.1)
   if (state.mode === 'expert') {
     noviceMode = false;
@@ -1096,7 +1256,7 @@ async function init() {
     // Prompt first time user
     showOnboardingOverlay();
   }
-  
+
   // Sync toggle state button visual
   if (toggleModeBtn) {
     toggleModeBtn.textContent = `Mode: ${noviceMode ? 'Novice' : 'Expert'}`;
@@ -1104,13 +1264,23 @@ async function init() {
   }
 
   await render(state);
-  
+
   if (state.view === 'search' && state.query) {
-    const exact = runtime.searchFrameworkItems(state.query, {
-      framework_id: state.filter || undefined,
-    }).find((item) => item.item_id.toLowerCase() === state.query.toLowerCase());
-    if (exact) await renderItem(exact.key);
+    await openDeepLinkedItem(state);
   }
+}
+
+async function openDeepLinkedItem(state) {
+  try {
+    await ensureDataset();
+  } catch (error) {
+    renderCatalogError(error, () => openDeepLinkedItem(state));
+    return;
+  }
+  const exact = runtime.searchFrameworkItems(state.query, {
+    framework_id: state.filter || undefined,
+  }).find((item) => item.item_id.toLowerCase() === state.query.toLowerCase());
+  if (exact) await renderItem(exact.key);
 }
 
 init().catch((error) => {

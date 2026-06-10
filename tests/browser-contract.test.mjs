@@ -62,3 +62,24 @@ test('copy reuse modules and D3 visualizations are integrated', () => {
   assert.match(app, /toggleGlossaryDrawer/);
   assert.match(app, /startWalkthrough/);
 });
+
+test('routing state and interactive repair contracts are present', () => {
+  assert.match(app, /let viewState\s*=/);
+  assert.match(app, /TOUR_EXAMPLE_KEY\s*=\s*'nist-800-53:AC-2'/);
+  assert.match(app, /btn-onboarding-skip/);
+  assert.match(app, /event\.key === 'Escape'/);
+  assert.match(app, /requestSubmit\(\)/);
+  assert.match(app, /input\.value\.trim\(\)/);
+  assert.match(app, /externalAnchor/);
+  assert.match(app, /Open GitHub issue in a new tab/);
+  assert.match(html, /Loading GovFrame/);
+  assert.doesNotMatch(html, /id="btn-toggle-glossary"[^>]*target="_blank"/);
+});
+
+test('mode toggle preserves detail pages and onboarding is resilient', () => {
+  assert.match(app, /async function setNoviceMode/);
+  assert.match(app, /if \(currentActiveState\.key\)/);
+  assert.match(app, /console\.error\('Failed to set/);
+  assert.match(app, /finally\s*\{[\s\S]*overlay\.remove\(\)/);
+  assert.match(app, /Shows calculated multi-hop paths/);
+});
