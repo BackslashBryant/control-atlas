@@ -15,9 +15,10 @@
     "test:data": "node --test ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
+    "smoke:dom": "node ./scripts/dom-smoke.mjs",
     "audit:coverage": "node ./scripts/audit-coverage.mjs",
     "verify:public": "npm run check:data-size && npm run smoke:static && npm run audit:coverage",
-    "precommit": "npm test && npm run test:browser && npm run verify:public"
+    "precommit": "npm test && npm run test:browser && npm run smoke:dom && npm run verify:public"
   },
   "engines": {
     "node": ">=20.0.0"
