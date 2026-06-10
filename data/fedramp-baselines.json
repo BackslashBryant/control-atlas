@@ -11,7 +11,7 @@
       "description": "FedRAMP Tailored baseline for low-impact software-as-a-service offerings.",
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "snapshot_date": "2026-06-10T07:34:35.000Z",
         "locator": "rev5/documents-templates/#LI-SaaS"
       }
     },
@@ -24,7 +24,7 @@
       "description": "FedRAMP Rev. 5 Low security control baseline.",
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "snapshot_date": "2026-06-10T07:34:35.000Z",
         "locator": "rev5/documents-templates/#Low"
       }
     },
@@ -37,7 +37,7 @@
       "description": "FedRAMP Rev. 5 Moderate security control baseline.",
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "snapshot_date": "2026-06-10T07:34:35.000Z",
         "locator": "rev5/documents-templates/#Moderate"
       }
     },
@@ -50,7 +50,7 @@
       "description": "FedRAMP Rev. 5 High security control baseline.",
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-06-09T11:56:23.450Z",
+        "snapshot_date": "2026-06-10T07:34:35.000Z",
         "locator": "rev5/documents-templates/#High"
       }
     }
