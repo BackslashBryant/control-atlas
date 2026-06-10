@@ -546,9 +546,9 @@ async function renderSearch(state) {
       </select>
       <select id="filter-source-type">
         <option value="all" ${searchFilters.source === 'all' ? 'selected' : ''}>All source tiers</option>
-        <option value="gold" ${searchFilters.source === 'gold' ? 'selected' : ''}>Official (Gold)</option>
-        <option value="silver" ${searchFilters.source === 'silver' ? 'selected' : ''}>Supporting (Silver)</option>
-        <option value="bronze" ${searchFilters.source === 'bronze' ? 'selected' : ''}>Research lead (Bronze)</option>
+        <option value="gold" ${searchFilters.source === 'gold' ? 'selected' : ''}>Official</option>
+        <option value="silver" ${searchFilters.source === 'silver' ? 'selected' : ''}>Supporting</option>
+        <option value="bronze" ${searchFilters.source === 'bronze' ? 'selected' : ''}>Research lead</option>
       </select>
     </div>` : ''}
 
@@ -1013,9 +1013,9 @@ function renderSources() {
       ${renderNoviceIntro('sources')}
       
       <div class="learning-grid">
-        <p><strong>Official (Gold)</strong><br>Direct official evidence from the issuing authority (e.g. NIST, DISA). Required before GovFrame publishes a mapping.</p>
-        <p><strong>Supporting (Silver)</strong><br>Credible verified crosswalks that corroborate or challenge a gold claim.</p>
-        <p><strong>Research lead (Bronze)</strong><br>Community and research files useful for discovery but never overrides gold.</p>
+        <p><strong>Official</strong><br>Primary source.</p>
+        <p><strong>Supporting</strong><br>Confirms or adds context.</p>
+        <p><strong>Research lead</strong><br>Useful, but verify before use.</p>
       </div>
       
       <p class="muted">${dataset.coverage.mappings.published} published mappings · ${dataset.coverage.mappings.evidence_gaps} needs supporting source gaps · ${dataset.coverage.mappings.blocked} blocked candidates.</p>
