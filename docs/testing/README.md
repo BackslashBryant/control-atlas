@@ -24,3 +24,6 @@ After each live-facing push, verify in a real browser:
 6. Help & Glossary opens in-page drawer (same tab).
 7. Sources artifact links open valid `https://` destinations.
 8. Guided tour advances through all steps; End Tour dismisses the bubble.
+9. Search URL includes `view=search` when `q` is set; browse URL has no stale `q`.
+10. Mode toggle on item detail preserves scroll; Evidence audit expand does not jump to top.
+11. Browse catalog scrolls into view; catalog quick-jump filter works.

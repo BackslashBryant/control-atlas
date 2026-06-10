@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   createFrameworkRuntime,
+  normalizeViewState,
   parseViewState,
   serializeViewState,
 } from '../app/runtime.mjs';
@@ -47,7 +48,10 @@ test('runtime exposes direct mappings, evidence summaries, and matrix output', (
 
 test('view state preserves supported queries and identifies retired query types', () => {
   assert.deepEqual(parseViewState('?q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
+  assert.deepEqual(parseViewState('?view=search&q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
   assert.deepEqual(parseViewState('?q=ABC-2024-0001'), { view: 'retired', query: 'ABC-2024-0001', retired_type: 'retired identifier' });
+  assert.equal(serializeViewState({ view: 'search', query: 'AC-2' }), '?view=search&q=AC-2');
+  assert.equal(serializeViewState({ view: 'retired', query: 'ABC-2024-0001' }), '?view=retired&q=ABC-2024-0001');
   assert.equal(serializeViewState({ view: 'matrix', source: 'nist-800-53', target: 'csf-2' }), '?view=matrix&source=nist-800-53&target=csf-2');
   assert.deepEqual(parseViewState('?view=matrix&source=nist-800-53&target=csf-2&items=AC-2%2CAC-3'), {
     view: 'matrix',
@@ -55,4 +59,26 @@ test('view state preserves supported queries and identifies retired query types'
     target: 'csf-2',
     items: 'AC-2,AC-3',
   });
+});
+
+test('normalizeViewState strips stale params per view', () => {
+  assert.deepEqual(normalizeViewState('browse', {
+    view: 'search',
+    query: 'AC-2',
+    framework: 'disa-cci',
+    mode: 'expert',
+  }), { mode: 'expert', view: 'browse', framework: 'disa-cci' });
+  assert.deepEqual(normalizeViewState('search', {
+    view: 'browse',
+    framework: 'disa-cci',
+    query: 'AC-2',
+    filter: '',
+    mode: 'novice',
+  }), { mode: 'novice', view: 'search', query: 'AC-2', filter: '' });
+  assert.deepEqual(normalizeViewState('sources', {
+    query: 'AC-2',
+    framework: 'disa-cci',
+    source: 'nist-800-53',
+    mode: 'expert',
+  }), { mode: 'expert', view: 'sources' });
 });

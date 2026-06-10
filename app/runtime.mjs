@@ -73,15 +73,62 @@ export function parseViewState(searchParams) {
   return { ...base, view: 'search', query, filter: params.get('filter') || '' };
 }
 
+export function normalizeViewState(view, state = {}) {
+  const mode = state.mode;
+  const base = mode ? { mode } : {};
+
+  if (view === 'retired') {
+    return { ...base, view: 'retired', query: state.query || '' };
+  }
+  if (view === 'matrix') {
+    return {
+      ...base,
+      view: 'matrix',
+      source: state.source || '',
+      target: state.target || '',
+      items: state.items || '',
+    };
+  }
+  if (view === 'browse') {
+    return { ...base, view: 'browse', framework: state.framework || '' };
+  }
+  if (view === 'sources') {
+    return { ...base, view: 'sources' };
+  }
+  return {
+    ...base,
+    view: 'search',
+    query: state.query || '',
+    filter: state.filter || '',
+  };
+}
+
 export function serializeViewState(state) {
   const params = new URLSearchParams();
-  if (state.view && state.view !== 'search') params.set('view', state.view);
-  if (state.query) params.set('q', state.query);
-  if (state.filter) params.set('filter', state.filter);
-  if (state.source) params.set('source', state.source);
-  if (state.target) params.set('target', state.target);
-  if (state.items) params.set('items', state.items);
-  if (state.framework) params.set('framework', state.framework);
+  const view = state.view || 'search';
+
+  if (view === 'retired') {
+    params.set('view', 'retired');
+    if (state.query) params.set('q', state.query);
+  } else if (view === 'matrix') {
+    params.set('view', 'matrix');
+    if (state.source) params.set('source', state.source);
+    if (state.target) params.set('target', state.target);
+    if (state.items) params.set('items', state.items);
+  } else if (view === 'browse') {
+    params.set('view', 'browse');
+    if (state.framework) params.set('framework', state.framework);
+  } else if (view === 'sources') {
+    params.set('view', 'sources');
+  } else if (state.query && view !== 'retired') {
+    params.set('view', 'search');
+    params.set('q', state.query);
+    if (state.filter) params.set('filter', state.filter);
+  } else if (state.filter) {
+    params.set('view', 'search');
+    params.set('filter', state.filter);
+  }
+
   if (state.mode) params.set('mode', state.mode);
   const value = params.toString();
   return value ? `?${value}` : '';
