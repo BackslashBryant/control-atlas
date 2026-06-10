@@ -11,7 +11,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -35,7 +35,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[1]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -59,7 +59,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[2]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -83,7 +83,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[3]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -107,7 +107,7 @@
         "source_id": "nist-informative-references",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "locator": "800-53-to-csf.json#relationships[4]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -131,7 +131,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[0]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -155,7 +155,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[1]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
@@ -179,7 +179,7 @@
         "source_id": "nist-oscal",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "locator": "800-53-to-800-171.json#relationships[2]",
-        "snapshot_date": "2026-06-09T11:56:25.861Z",
+        "snapshot_date": "2026-06-10T07:34:36.580Z",
         "checksum": null,
         "agreement": "agrees"
       }
