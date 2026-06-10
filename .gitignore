@@ -35,6 +35,7 @@ scripts/*
 !scripts/fetch-framework-catalogs.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
+!scripts/dom-smoke.mjs
 !scripts/lib/
 scripts/lib/*
 !scripts/lib/framework-engine.mjs
