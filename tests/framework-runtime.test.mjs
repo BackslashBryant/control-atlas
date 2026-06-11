@@ -57,6 +57,7 @@ test('view state preserves supported queries and identifies retired query types'
   assert.deepEqual(parseViewState('?q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
   assert.deepEqual(parseViewState('?view=search&q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
   assert.deepEqual(parseViewState('?q=ABC-2024-0001'), { view: 'retired', query: 'ABC-2024-0001', retired_type: 'retired identifier' });
+  assert.deepEqual(parseViewState('?view=search&q=AC-2&mode=novice&v=20260610-3'), { view: 'search', query: 'AC-2', filter: '', mode: 'novice' });
   assert.equal(serializeViewState({ view: 'search', query: 'AC-2' }), '?view=search&q=AC-2');
   assert.equal(serializeViewState({ view: 'retired', query: 'ABC-2024-0001' }), '?view=retired&q=ABC-2024-0001');
   assert.equal(serializeViewState({ view: 'matrix', source: 'nist-800-53', target: 'csf-2' }), '?view=matrix&source=nist-800-53&target=csf-2');
