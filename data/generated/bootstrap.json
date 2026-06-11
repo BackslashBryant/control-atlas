@@ -1,6 +1,6 @@
 {
-  "schema_version": "2.0",
-  "generated_at": "2026-06-10T07:34:36.580Z",
+  "schema_version": "2.1",
+  "generated_at": "2026-06-11T00:46:25.934Z",
   "frameworks": [
     {
       "id": "nist-800-53",
@@ -67,82 +67,112 @@
     }
   ],
   "coverage": {
-    "generated_at": "2026-06-10T07:34:36.580Z",
+    "generated_at": "2026-06-11T00:46:25.934Z",
     "frameworks": [
       {
         "framework_id": "nist-800-53",
         "catalog_items": 1196,
         "mapped_items": 1012,
         "mapped_percent": 84.6,
-        "status": "active"
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "nist-800-171",
         "catalog_items": 130,
-        "mapped_items": 3,
-        "mapped_percent": 2.3,
-        "status": "active"
+        "mapped_items": 21,
+        "mapped_percent": 16.2,
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "csf-2",
         "catalog_items": 185,
-        "mapped_items": 3,
-        "mapped_percent": 1.6,
-        "status": "active"
+        "mapped_items": 87,
+        "mapped_percent": 47,
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "cmmc-2",
         "catalog_items": 3,
         "mapped_items": 0,
         "mapped_percent": 0,
-        "status": "limited-public-scope"
+        "status": "limited-public-scope",
+        "limited_reason": "Public artifacts describe program structure but not complete machine-readable crosswalk coverage."
       },
       {
         "framework_id": "fedramp-rev5",
         "catalog_items": 4,
         "mapped_items": 0,
         "mapped_percent": 0,
-        "status": "limited-public-scope"
+        "status": "limited-public-scope",
+        "limited_reason": "Public artifacts describe program structure but not complete machine-readable crosswalk coverage."
       },
       {
         "framework_id": "disa-cci",
         "catalog_items": 5137,
         "mapped_items": 3836,
         "mapped_percent": 74.7,
-        "status": "active"
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "nist-ai-rmf",
         "catalog_items": 72,
         "mapped_items": 0,
         "mapped_percent": 0,
-        "status": "active"
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "nist-ssdf",
         "catalog_items": 42,
         "mapped_items": 0,
         "mapped_percent": 0,
-        "status": "active"
+        "status": "active",
+        "limited_reason": null
       },
       {
         "framework_id": "dod-rai",
         "catalog_items": 11,
         "mapped_items": 0,
         "mapped_percent": 0,
-        "status": "limited-public-scope"
+        "status": "limited-public-scope",
+        "limited_reason": "Public artifacts describe program structure but not complete machine-readable crosswalk coverage."
       }
     ],
     "mappings": {
-      "published": 3846,
+      "published": 4508,
       "blocked": 0,
-      "evidence_gaps": 3846
+      "candidates": 0,
+      "evidence_gaps": 4508,
+      "by_source": {
+        "nist-csf-53-supplemental": 639,
+        "nist-800-171-oscal-mappings": 31,
+        "disa-cci-nist-references": 3838
+      },
+      "by_pair": {
+        "nist-800-53->csf-2": 639,
+        "nist-800-53->nist-800-171": 31,
+        "disa-cci->nist-800-53": 3838
+      }
     },
+    "paths": {
+      "published": 5882,
+      "by_pair": {
+        "disa-cci->csf-2": 5771,
+        "disa-cci->nist-800-171": 111
+      }
+    },
+    "blocked_by_reason": {},
+    "candidates_by_source": {},
     "sources": [
       {
         "id": "nist-oscal",
         "name": "NIST OSCAL Content",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "NIST",
         "artifact": "https://github.com/usnistgov/oscal-content",
         "frameworks": [
@@ -150,99 +180,181 @@
           "nist-800-171",
           "csf-2",
           "nist-ssdf"
-        ]
-      },
-      {
-        "id": "nist-informative-references",
-        "name": "NIST Informative References",
-        "tier": "gold",
-        "issuer": "NIST",
-        "artifact": "https://www.nist.gov/cyberframework/informative-references",
-        "frameworks": [
-          "nist-800-53",
-          "csf-2"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "disa-cci-list",
         "name": "DISA Control Correlation Identifier List",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "DISA",
         "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
         "frameworks": [
           "disa-cci"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "nist-ai-rmf-playbook",
         "name": "NIST AI RMF Playbook",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "NIST",
         "artifact": "https://airc.nist.gov/docs/playbook.json",
         "frameworks": [
           "nist-ai-rmf"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "nist-ssdf-oscal",
         "name": "NIST SSDF OSCAL Catalog",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "NIST",
         "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
         "frameworks": [
           "nist-ssdf"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "dod-cmmc-rule",
         "name": "CMMC Program Rule",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "DoD",
         "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
         "frameworks": [
           "cmmc-2"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "fedramp-rev5",
         "name": "FedRAMP Rev. 5 Baselines",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "FedRAMP",
         "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
         "frameworks": [
           "fedramp-rev5",
           "nist-800-53"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "dod-rai-toolkit",
         "name": "DoD Responsible AI Toolkit",
         "tier": "gold",
+        "authority_type": "catalog_authority",
         "issuer": "DoD",
         "artifact": "https://rai.acqbot.com/executive-summary",
         "frameworks": [
           "dod-rai"
-        ]
+        ],
+        "status": "final"
+      },
+      {
+        "id": "nist-800-53b-baselines",
+        "name": "NIST SP 800-53B Baseline Profiles",
+        "tier": "gold",
+        "authority_type": "catalog_authority",
+        "issuer": "NIST",
+        "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+        "frameworks": [
+          "nist-800-53"
+        ],
+        "status": "final"
+      },
+      {
+        "id": "nist-csf-53-supplemental",
+        "name": "NIST CSF 1.1 to SP 800-53 Supplemental Mapping",
+        "tier": "gold",
+        "authority_type": "mapping_authority",
+        "issuer": "NIST",
+        "artifact": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
+        "frameworks": [
+          "nist-800-53",
+          "csf-2"
+        ],
+        "status": "final"
+      },
+      {
+        "id": "nist-csf11-csf20-crosswalk",
+        "name": "NIST CSF 1.1 to CSF 2.0 OLIR Crosswalk",
+        "tier": "gold",
+        "authority_type": "mapping_authority",
+        "issuer": "NIST",
+        "artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx",
+        "frameworks": [
+          "csf-2"
+        ],
+        "status": "final"
+      },
+      {
+        "id": "nist-800-171-oscal-mappings",
+        "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
+        "tier": "gold",
+        "authority_type": "mapping_authority",
+        "issuer": "NIST",
+        "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+        "frameworks": [
+          "nist-800-53",
+          "nist-800-171"
+        ],
+        "status": "final"
+      },
+      {
+        "id": "disa-cci-nist-references",
+        "name": "DISA CCI NIST SP 800-53 Revision 5 References",
+        "tier": "gold",
+        "authority_type": "mapping_authority",
+        "issuer": "DISA",
+        "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+        "frameworks": [
+          "disa-cci",
+          "nist-800-53"
+        ],
+        "status": "final"
+      },
+      {
+        "id": "nist-informative-references",
+        "name": "NIST Informative References",
+        "tier": "gold",
+        "authority_type": "mapping_authority",
+        "issuer": "NIST",
+        "artifact": "https://www.nist.gov/cyberframework/informative-references",
+        "frameworks": [
+          "nist-800-53",
+          "csf-2"
+        ],
+        "status": "partial"
       },
       {
         "id": "mitre-cis-cci-mappings",
         "name": "MITRE CIS/CCI Mappings",
         "tier": "silver",
+        "authority_type": "corroboration",
         "issuer": "MITRE",
         "artifact": "https://github.com/mitre/cis-cci-mappings",
         "frameworks": [
           "disa-cci"
-        ]
+        ],
+        "status": "final"
       },
       {
         "id": "community-cci-research",
         "name": "Community CCI Research",
         "tier": "bronze",
+        "authority_type": "research_candidate",
         "issuer": "Community",
         "artifact": "https://www.reddit.com/r/NISTControls/comments/wg8bit/comprehensive_list_of_ccis/",
         "frameworks": [
           "disa-cci"
-        ]
+        ],
+        "status": "candidate"
       }
     ]
   }

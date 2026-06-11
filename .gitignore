@@ -13,6 +13,8 @@
 !styles/*.css
 !tests/
 !tests/*.mjs
+!tests/fixtures/
+!tests/fixtures/**
 !docs/
 !docs/**
 
@@ -32,6 +34,7 @@ scripts/*
 !scripts/audit-coverage.mjs
 !scripts/check-data-size.mjs
 !scripts/fetch-ccis.mjs
+!scripts/fetch-olir-mappings.mjs
 !scripts/fetch-framework-catalogs.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
@@ -43,6 +46,11 @@ scripts/lib/*
 !scripts/lib/oscal-normalize.mjs
 !scripts/lib/resolve-source-tier.mjs
 !scripts/lib/framework-adapters.mjs
+!scripts/lib/source-registry.mjs
+!scripts/lib/olir-adapter.mjs
+!scripts/lib/800-171-mapping-adapter.mjs
+!scripts/lib/catalog-adapters-ext.mjs
+!scripts/lib/cci-diff-report.mjs
 
 !data/
 data/*

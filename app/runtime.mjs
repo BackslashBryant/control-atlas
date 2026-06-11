@@ -47,7 +47,15 @@ export function createFrameworkRuntime(dataset) {
       return buildMatrixCsv(requestOrMatrix.rows ? requestOrMatrix : buildMappingMatrix(requestOrMatrix, dataset));
     },
     getEvidenceSummary(assertionId) {
-      return dataset.evidence?.[assertionId] || null;
+      const summary = dataset.evidence?.[assertionId] || null;
+      if (!summary) return null;
+      return {
+        ...summary,
+        sources: (summary.sources || []).map((source) => ({
+          ...source,
+          authority_type: source.authority_type || null,
+        })),
+      };
     },
   };
 }

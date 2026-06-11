@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<cci_list>
+  <metadata>
+    <version>2025-01-23</version>
+    <publishdate>2025-01-23</publishdate>
+  </metadata>
+  <cci_items>
+    <cci_item id="CCI-000015">
+      <status>draft</status>
+      <publishdate>2009-05-13</publishdate>
+      <contributor>DISA FSO</contributor>
+      <definition>Support account management.</definition>
+      <type>technical</type>
+      <references>
+        <reference creator="NIST" title="NIST SP 800-53 Revision 5" version="5" location="https://csrc.nist.gov/" index="AC-2 (1)" />
+        <reference creator="NIST" title="NIST SP 800-53 Revision 4" version="4" location="https://csrc.nist.gov/" index="AC-2 (1)" />
+      </references>
+    </cci_item>
+  </cci_items>
+</cci_list>

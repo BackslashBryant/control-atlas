@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -9,6 +9,11 @@ import {
   parseAiRmfPlaybook,
   parseSsdfCatalog,
 } from './lib/framework-adapters.mjs';
+import {
+  enrichCatalogMetadata,
+  fetch80053BBaselines,
+  fetchFedrampBaselineMembership,
+} from './lib/catalog-adapters-ext.mjs';
 import {
   parse80053Catalog,
   parse800171Catalog,
@@ -24,6 +29,28 @@ const REMOTE_CATALOGS = [
     url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json',
     outfile: 'controls-800-53.json',
     parse: parse80053Catalog,
+    enrich: async (records) => {
+      const [fedramp, baselines] = await Promise.all([
+        fetchFedrampBaselineMembership(),
+        fetch80053BBaselines(),
+      ]);
+      const enrichment = {};
+      for (const record of records) {
+        const fedrampBaselines = Object.entries(fedramp)
+          .filter(([, controls]) => controls.includes(record.id))
+          .map(([baseline]) => baseline);
+        const nistBaselines = Object.entries(baselines)
+          .filter(([, controls]) => controls.includes(record.id))
+          .map(([baseline]) => baseline);
+        if (fedrampBaselines.length || nistBaselines.length) {
+          enrichment[record.id] = {
+            fedramp_baselines: fedrampBaselines,
+            nist_800_53b_baselines: nistBaselines,
+          };
+        }
+      }
+      return enrichCatalogMetadata(records, enrichment);
+    },
   },
   {
     id: 'nist-csf-2',
@@ -67,7 +94,11 @@ export async function fetchFrameworkCatalogs() {
   for (const target of REMOTE_CATALOGS) {
     const response = await fetch(target.url);
     if (!response.ok) throw new Error(`${target.id} fetch failed: ${response.status} ${target.url}`);
-    results.push(writeCatalog(target.outfile, target.parse(await response.json(), target.id)));
+    let document = target.parse(await response.json(), target.id);
+    if (target.enrich) {
+      document = { ...document, records: await target.enrich(document.records) };
+    }
+    results.push(writeCatalog(target.outfile, document));
   }
   for (const [filename, build] of PUBLIC_CATALOGS) {
     results.push(writeCatalog(filename, build(SNAPSHOT)));

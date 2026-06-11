@@ -8,42 +8,143 @@ export const RELATIONSHIP_TYPES = new Set([
   'related_to',
 ]);
 
+export const RELATIONSHIP_COMPOSITION_RULES = {
+  maps_to: new Set(['maps_to', 'implements', 'supports', 'includes', 'inherits']),
+  implements: new Set(['maps_to', 'implements', 'supports']),
+  supports: new Set(['maps_to', 'supports']),
+  includes: new Set(['maps_to', 'includes']),
+  inherits: new Set(['maps_to', 'inherits']),
+  equivalent_to: new Set(['equivalent_to']),
+};
+
 const PATH_RELATIONSHIP_TYPES = new Set([...RELATIONSHIP_TYPES].filter((type) => type !== 'related_to'));
 const TIER_ORDER = ['gold', 'silver', 'bronze'];
+
+function authorityTypeForEvidence(entry) {
+  return entry?.authority_type || null;
+}
+
+function isMappingAuthorityEvidence(entry) {
+  return entry?.tier === 'gold' && authorityTypeForEvidence(entry) === 'mapping_authority';
+}
+
+function isCatalogAuthorityEvidence(entry) {
+  return entry?.tier === 'gold' && authorityTypeForEvidence(entry) === 'catalog_authority';
+}
+
+function collectWarnings(evidence = []) {
+  return evidence
+    .filter((entry) => entry.tier === 'silver' && entry.agreement === 'conflicts')
+    .map((entry) => ({
+      code: 'conflicting_silver_evidence',
+      source_id: entry.source_id,
+      message: `Silver source ${entry.source_id} conflicts with other evidence.`,
+    }));
+}
+
+export function buildEvidenceEntry(assertion) {
+  const warnings = assertion.warnings || collectWarnings(assertion.evidence);
+  let confidence = 'blocked';
+  if (assertion.status === 'published') {
+    confidence = warnings.length ? 'derived' : 'direct';
+  } else if (assertion.status === 'candidate') {
+    confidence = 'candidate';
+  }
+
+  return {
+    assertion_id: assertion.id,
+    status: assertion.status || 'blocked',
+    block_reason: assertion.block_reason || null,
+    candidate_reason: assertion.candidate_reason || null,
+    confidence,
+    gaps: assertion.evidence_gaps || [],
+    warnings,
+    sources: (assertion.evidence || []).map((entry) => ({
+      ...entry,
+      authority_type: authorityTypeForEvidence(entry),
+    })),
+  };
+}
 
 export function reconcileAssertions(assertions) {
   const published = [];
   const blocked = [];
+  const candidates = [];
 
   for (const assertion of assertions) {
     if (!RELATIONSHIP_TYPES.has(assertion.relationship_type)) {
-      blocked.push({ ...assertion, block_reason: 'unsupported_relationship_type' });
+      blocked.push({ ...assertion, status: 'blocked', block_reason: 'unsupported_relationship_type' });
       continue;
     }
-    const gold = (assertion.evidence || []).filter((item) => item.tier === 'gold');
-    if (!gold.length) {
-      blocked.push({ ...assertion, block_reason: 'missing_gold_evidence' });
+
+    const evidence = assertion.evidence || [];
+    const goldMapping = evidence.filter((entry) => isMappingAuthorityEvidence(entry) && entry.agreement !== 'conflicts');
+    const goldCatalogOnly = evidence.filter((entry) => isCatalogAuthorityEvidence(entry));
+    const goldConflicts = evidence.filter((entry) => entry.tier === 'gold' && entry.agreement === 'conflicts');
+    const bronzeOnly = evidence.length > 0 && evidence.every((entry) => entry.tier === 'bronze');
+    const warnings = collectWarnings(evidence);
+
+    if (bronzeOnly) {
+      candidates.push({
+        ...assertion,
+        status: 'candidate',
+        candidate_reason: 'bronze_only_evidence',
+        warnings,
+      });
       continue;
     }
-    if (gold.some((item) => item.agreement === 'conflicts')) {
-      blocked.push({ ...assertion, block_reason: 'conflicting_gold_evidence' });
+
+    if (goldConflicts.some((entry) => isMappingAuthorityEvidence(entry) || isCatalogAuthorityEvidence(entry))) {
+      blocked.push({ ...assertion, status: 'blocked', block_reason: 'conflicting_gold_evidence', warnings });
       continue;
     }
-    const presentTiers = new Set((assertion.evidence || []).map((item) => item.tier));
+
+    if (goldCatalogOnly.length && !goldMapping.length) {
+      blocked.push({ ...assertion, status: 'blocked', block_reason: 'catalog_source_used_for_crosswalk', warnings });
+      continue;
+    }
+
+    if (!goldMapping.length) {
+      blocked.push({ ...assertion, status: 'blocked', block_reason: 'missing_gold_evidence', warnings });
+      continue;
+    }
+
+    const presentTiers = new Set(evidence.map((entry) => entry.tier));
     published.push({
       ...assertion,
       status: 'published',
       evidence_gaps: TIER_ORDER.filter((tier) => !presentTiers.has(tier)),
-      conflicts: (assertion.evidence || []).filter((item) => item.agreement === 'conflicts'),
+      warnings,
+      conflicts: evidence.filter((entry) => entry.agreement === 'conflicts'),
     });
   }
 
-  return { published, blocked };
+  return { published, blocked, candidates };
+}
+
+function canComposeRelationship(fromType, toType) {
+  return RELATIONSHIP_COMPOSITION_RULES[fromType]?.has(toType) ?? false;
+}
+
+function hopEvidenceSummary(edge) {
+  const primary = (edge.evidence || [])[0];
+  return {
+    assertion_id: edge.id,
+    source_key: edge.source_key,
+    target_key: edge.target_key,
+    relationship_type: edge.relationship_type,
+    source_id: primary?.source_id || null,
+    locator: primary?.locator || null,
+    tier: primary?.tier || null,
+    authority_type: primary?.authority_type || null,
+    evidence_gaps: edge.evidence_gaps || [],
+  };
 }
 
 export function buildCalculatedPaths(mappings, options = {}) {
   const maxHops = Math.min(Math.max(options.maxHops || 3, 2), 3);
   const graph = new Map();
+
   for (const mapping of mappings) {
     if (!PATH_RELATIONSHIP_TYPES.has(mapping.relationship_type)) continue;
     if (!graph.has(mapping.source_key)) graph.set(mapping.source_key, []);
@@ -52,11 +153,15 @@ export function buildCalculatedPaths(mappings, options = {}) {
 
   const results = [];
   const seen = new Set();
+
   for (const sourceKey of graph.keys()) {
     const walk = (currentKey, hops, itemKeys) => {
       if (hops.length >= maxHops) return;
       for (const edge of graph.get(currentKey) || []) {
         if (itemKeys.includes(edge.target_key)) continue;
+        const previous = hops[hops.length - 1];
+        if (previous && !canComposeRelationship(previous.relationship_type, edge.relationship_type)) continue;
+
         const nextHops = [...hops, edge];
         const nextItems = [...itemKeys, edge.target_key];
         if (nextHops.length >= 2) {
@@ -68,13 +173,8 @@ export function buildCalculatedPaths(mappings, options = {}) {
               source_key: sourceKey,
               target_key: edge.target_key,
               item_keys: nextItems,
-              hops: nextHops.map((item) => ({
-                assertion_id: item.id,
-                source_key: item.source_key,
-                target_key: item.target_key,
-                relationship_type: item.relationship_type,
-                evidence_gaps: item.evidence_gaps || [],
-              })),
+              confidence: 'derived',
+              hops: nextHops.map((item) => hopEvidenceSummary(item)),
               evidence_gaps: [...new Set(nextHops.flatMap((item) => item.evidence_gaps || []))],
             });
           }
@@ -132,6 +232,12 @@ function csvCell(value) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
+function hopEvidenceSources(path) {
+  return (path.hops || [])
+    .map((hop) => [hop.source_id, hop.locator].filter(Boolean).join('@'))
+    .join(' > ');
+}
+
 export function buildMatrixCsv(matrix) {
   const headers = [
     'Source framework',
@@ -159,21 +265,23 @@ export function buildMatrixCsv(matrix) {
     if (row.classification === 'direct') {
       matchType = 'Official match';
       nextAction = 'Review and cite the source.';
-      targetId = [...new Set(row.direct.map(item => {
+      targetId = [...new Set(row.direct.map((item) => {
         const key = item.matrix_target_key || item.target_key;
-        return (key.split(':')[1] || key) + ` (${item.matrix_direction || 'outgoing'})`;
+        return `${key.split(':')[1] || key} (${item.matrix_direction || 'outgoing'})`;
       }))].join('|');
-      evidenceSource = [...new Set(row.direct.map(item => item.source_id || ''))].filter(Boolean).join('|') || 'NIST references';
+      evidenceSource = [...new Set(row.direct.flatMap((item) =>
+        (item.evidence || []).map((entry) => `${entry.source_id}${entry.locator ? `@${entry.locator}` : ''}`),
+      ))].filter(Boolean).join('|') || 'NIST references';
       sourceType = 'Official';
-      const gaps = [...new Set(row.direct.flatMap(item => item.evidence_gaps || []))];
+      const gaps = [...new Set(row.direct.flatMap((item) => item.evidence_gaps || []))];
       notes = gaps.length ? `Needs supporting source: missing ${gaps.join(', ')}` : 'Verified';
     } else if (row.classification === 'calculated') {
       matchType = 'Possible connection';
       nextAction = 'Review each step.';
-      targetId = [...new Set(row.paths.map(item => item.target_key.split(':')[1] || item.target_key))].join('|');
-      evidenceSource = row.paths.map(item => item.item_keys.map(k => k.split(':')[1] || k).join(' > ')).join('|');
+      targetId = [...new Set(row.paths.map((item) => item.target_key.split(':')[1] || item.target_key))].join('|');
+      evidenceSource = row.paths.map((item) => hopEvidenceSources(item)).join('|');
       sourceType = 'Research lead';
-      const gaps = [...new Set(row.paths.flatMap(item => item.evidence_gaps || []))];
+      const gaps = [...new Set(row.paths.flatMap((item) => item.evidence_gaps || []))];
       notes = `Calculated path. ${gaps.length ? `Gaps: missing ${gaps.join(', ')}` : 'Corroborated'}`;
     }
 
