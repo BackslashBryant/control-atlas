@@ -825,7 +825,7 @@ async function renderSearch(state) {
             <div class="badge-row"><span class="badge">${escapeHtml(frameworkName(item.framework_id))}</span></div>
             <h3 class="item-id">${escapeHtml(item.item_id)}</h3>
             <strong>${escapeHtml(item.title)}</strong>
-            <p class="muted">${escapeHtml(item.text.slice(0, 240))}${item.text.length > 240 ? '…' : ''}</p>
+            <p class="muted">${escapeHtml((item.text || '').slice(0, 240))}${(item.text || '').length > 240 ? '…' : ''}</p>
           </button>
         </article>`).join('')}
     </section>`;
@@ -1020,7 +1020,7 @@ async function renderItem(key, options = {}) {
           <div class="badge-row"><span class="badge">${escapeHtml(frameworkName(item.framework_id))}</span><span class="badge badge-official">Official source</span></div>
           <h2 id="item-heading" class="item-id" tabindex="-1">${escapeHtml(item.item_id)}</h2>
           <h3>${escapeHtml(item.title)}</h3>
-          <p>${escapeHtml(item.text)}</p>
+          <p>${escapeHtml(item.text || '')}</p>
           <details><summary>Canonical source evidence</summary><p>${escapeHtml(item.canonical_evidence.source_id)} · ${escapeHtml(item.canonical_evidence.locator)} · ${escapeHtml(item.canonical_evidence.snapshot_date)}</p></details>
         </article>
 
