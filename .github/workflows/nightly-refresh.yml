@@ -19,6 +19,8 @@ jobs:
       - run: npm ci || npm install
       - name: Refresh data artifacts
         run: npm run refresh:data
+      - name: Runtime checks
+        run: npm run test:browser && npm run smoke:dom
       - name: Public verification
         run: npm run verify:public
       - name: Commit data changes

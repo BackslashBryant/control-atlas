@@ -26,6 +26,8 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci || npm install
+      - name: Runtime checks
+        run: npm run test:browser && npm run smoke:dom
       - name: Public verification
         run: npm run verify:public
       - name: Stage static site artifact
