@@ -19,9 +19,11 @@ function run(label, script) {
 
 async function main() {
   await import('./fetch-framework-catalogs.mjs').then((m) => m.fetchFrameworkCatalogs());
+  run('fetch-olir-mappings', 'fetch-olir-mappings.mjs');
   run('fetch-ccis', 'fetch-ccis.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');
+  run('audit-coverage', 'audit-coverage.mjs');
   console.log('\nrefresh:data complete');
 }
 

@@ -1,0 +1,3 @@
+focal element,reference element,relationship,status
+nist-800-53:AC-2,csf-2:PR.AA-01,maps_to,final
+nist-800-53:AC-3,csf-2:PR.AA-05,maps_to,final

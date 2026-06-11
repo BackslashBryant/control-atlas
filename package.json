@@ -8,11 +8,12 @@
     "build:xref": "npm run build:data",
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
+    "fetch:olir-mappings": "node ./scripts/fetch-olir-mappings.mjs",
     "check:data-size": "node ./scripts/check-data-size.mjs",
     "smoke:static": "node ./scripts/static-smoke.mjs",
     "refresh:data": "node ./scripts/refresh-data.mjs",
     "test": "npm run test:data && npm run test:runtime",
-    "test:data": "node --test ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
+    "test:data": "node --test ./tests/source-registry.test.mjs ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
     "smoke:dom": "node ./scripts/dom-smoke.mjs",
@@ -24,6 +25,8 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "fflate": "^0.8.3"
+    "fast-xml-parser": "^5.2.5",
+    "fflate": "^0.8.3",
+    "xlsx": "^0.18.5"
   }
 }
