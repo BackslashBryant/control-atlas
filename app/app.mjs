@@ -23,6 +23,7 @@ let browseSort = 'alpha';
 let browseFilter = 'all';
 let searchFilters = { framework: '', match: 'all', source: 'all' };
 let lastSearchQuery = '';
+let lastFilterResetReason = '';
 let currentActiveView = 'search';
 let currentActiveState = {};
 let viewState = { view: 'search', mode: 'novice' };
@@ -134,6 +135,21 @@ function bindContributionCopyButtons(root = app) {
   });
 }
 
+function bindCopyCitationButtons(root = app) {
+  root.querySelectorAll('[data-copy-citation]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const citation = button.dataset.copyCitation;
+      if (!citation) return;
+      try {
+        await navigator.clipboard.writeText(citation);
+        showStatusMessage('Citation copied');
+      } catch {
+        showStatusMessage('Could not copy citation');
+      }
+    });
+  });
+}
+
 function renderNotice(message) {
   const wrapper = document.createElement('div');
   wrapper.className = 'vis-empty-state';
@@ -199,6 +215,75 @@ function sourceTierLabel(tier) {
   return tier;
 }
 
+function buildResultCardSummary(item) {
+  const direct = runtime.getDirectMappings(item.key);
+  const paths = runtime.getCalculatedPaths(item.key);
+  const hasEvidenceGaps = direct.some((mapping) => mapping.evidence_gaps?.length);
+
+  let evidenceStatus = 'No source evidence yet';
+  if (direct.length) {
+    evidenceStatus = hasEvidenceGaps
+      ? 'Official source · Needs supporting source'
+      : 'Official source';
+  } else if (paths.length) {
+    evidenceStatus = 'Research leads only';
+  }
+
+  return {
+    directCount: direct.length,
+    pathCount: paths.length,
+    evidenceStatus,
+    nextAction: getNextActionLabel(direct.length, paths.length),
+  };
+}
+
+function getNextActionLabel(directCount, pathCount) {
+  if (directCount > 0) return 'Review official mappings';
+  if (pathCount > 0) return 'Review possible connections';
+  return 'Assess separately';
+}
+
+function getPrimaryEvidenceSource(mapping) {
+  const evidence = runtime.getEvidenceSummary(mapping.id);
+  return evidence?.sources?.[0] || null;
+}
+
+function buildEvidenceStatusLabel(mapping) {
+  if (mapping.evidence_gaps?.length) return 'Needs supporting source';
+  const source = getPrimaryEvidenceSource(mapping);
+  if (source?.tier === 'silver') return 'Supporting';
+  return 'Official';
+}
+
+function formatCitationText(mapping) {
+  const sourceItem = itemFor(mapping.source_key);
+  const targetItem = itemFor(mapping.target_key);
+  const source = getPrimaryEvidenceSource(mapping);
+  const evidenceName = source
+    ? `${sourceArtifactLabel(source)}${source.locator ? ` (${source.locator})` : ''}`
+    : 'No human-readable evidence source available';
+  return `${frameworkName(sourceItem?.framework_id || mapping.source_key.split(':')[0])} ${sourceItem?.item_id || mapping.source_key.split(':')[1]} maps to ${frameworkName(targetItem?.framework_id || mapping.target_key.split(':')[0])} ${targetItem?.item_id || mapping.target_key.split(':')[1]}. Source: ${evidenceName}. Status: ${buildEvidenceStatusLabel(mapping)}.`;
+}
+
+function buildActiveFilterChips(filter) {
+  const chips = [];
+  if (filter) {
+    chips.push({ kind: 'framework', label: frameworkName(filter) });
+  }
+  if (searchFilters.match !== 'all') {
+    const labels = {
+      official: 'Official matches only',
+      connection: 'Possible connections only',
+      none: 'No known matches only',
+    };
+    chips.push({ kind: 'match', label: labels[searchFilters.match] });
+  }
+  if (searchFilters.source !== 'all') {
+    chips.push({ kind: 'source', label: `${sourceTierLabel(searchFilters.source)} source` });
+  }
+  return chips;
+}
+
 // Epic 4.3 & 4.2 Source badges
 function getSourceBadgesHtml(mapping) {
   const evidence = runtime.getEvidenceSummary(mapping.id);
@@ -242,7 +327,7 @@ function renderEvidenceSummaryPanel(mapping, key) {
     const tierName = sourceTierLabel(source.tier);
     return `
       <div class="evidence-source-item" style="margin-bottom: 1rem;">
-        <h5>Why GovFrame shows this</h5>
+        <h5>Evidence summary</h5>
         <ul>
           <li><strong>Source:</strong> ${escapeHtml(source.source_id)}</li>
           <li><strong>Source type:</strong> ${escapeHtml(tierName)}</li>
@@ -255,11 +340,17 @@ function renderEvidenceSummaryPanel(mapping, key) {
   return `
     <div class="evidence-summary-panel">
       ${sourcesHtml}
-      <details class="raw-evidence-details">
-        <summary>View raw evidence</summary>
-        <pre>${escapeHtml(JSON.stringify(evidence, null, 2))}</pre>
-      </details>
     </div>`;
+}
+
+function renderRawEvidenceDetails(mapping) {
+  const evidence = runtime.getEvidenceSummary(mapping.id);
+  if (!evidence) return '';
+  return `
+    <details class="raw-evidence-details">
+      <summary>View raw evidence</summary>
+      <pre>${escapeHtml(JSON.stringify(evidence, null, 2))}</pre>
+    </details>`;
 }
 
 // Epic 1.1 Novice mode State and View helper
@@ -413,6 +504,7 @@ function saveWalkthroughStep(step) {
 }
 
 function loadWalkthroughStep() {
+  const walkthroughSteps = buildAdaptiveWalkthrough();
   const raw = sessionStorage.getItem(WALKTHROUGH_STORAGE_KEY);
   if (raw === null) return null;
   const step = Number(raw);
@@ -430,50 +522,58 @@ function highlightTourTarget(itemKey) {
 }
 
 // Epic 1.2 Guided Walkthrough
-const walkthroughSteps = [
-  {
-    title: "1. Search a Control ID",
-    text: "Let's search for the NIST control 'AC-2'. We've prefilled it in the search input. Press Next Step to run the search.",
-    setup: async () => {
-      lastSearchQuery = '';
-      await setView('search', { query: '', filter: '' });
-      const queryInput = document.querySelector('#search-query');
-      if (queryInput) {
-        queryInput.value = TOUR_EXAMPLE_QUERY;
+function buildAdaptiveWalkthrough(itemKey = TOUR_EXAMPLE_KEY) {
+  const direct = runtime ? runtime.getDirectMappings(itemKey) : [];
+  const paths = runtime ? runtime.getCalculatedPaths(itemKey) : [];
+  return [
+    {
+      title: "1. Search a Control ID",
+      text: "Let's search for the NIST control 'AC-2'. We've prefilled it in the search input. Press Next Step to run the search.",
+      setup: async () => {
+        lastSearchQuery = '';
+        await setView('search', { query: '', filter: '' });
+        const queryInput = document.querySelector('#search-query');
+        if (queryInput) {
+          queryInput.value = TOUR_EXAMPLE_QUERY;
+        }
+      }
+    },
+    {
+      title: "2. Open Search Result",
+      text: "The search found matching items. Look for the highlighted 'AC-2' card and click it to view detail.",
+      setup: async () => {
+        prepareSearchSubmission(TOUR_EXAMPLE_QUERY);
+        await setView('search', { query: TOUR_EXAMPLE_QUERY, filter: '' });
+        highlightTourTarget(TOUR_EXAMPLE_KEY);
+      }
+    },
+    {
+      title: "3. Understand Official Matches",
+      text: direct.length
+        ? "Under 'Direct sourced mappings', you see 'Official matches'. These are verified mappings backed by published source organizations."
+        : 'This item has no official matches. That means GovFrame did not find a direct published mapping here.',
+      setup: async () => {
+        await renderItem(TOUR_EXAMPLE_KEY);
+      }
+    },
+    {
+      title: "4. Review Possible Connections",
+      text: paths.length
+        ? 'Scroll down to possible connections. These are multi-hop research leads that still need audit review.'
+        : 'This item has no possible connections. That means GovFrame only found direct official mappings here.',
+      setup: async () => {
+        // already on item page
+      }
+    },
+    {
+      title: "5. Compare or Export Mappings",
+      text: "Use the evidence summary first, then copy a citation or export comparisons from the 'Map Frameworks' tab.",
+      setup: async () => {
+        // already on item page
       }
     }
-  },
-  {
-    title: "2. Open Search Result",
-    text: "The search found matching items. Look for the highlighted 'AC-2' card and click it to view detail.",
-    setup: async () => {
-      prepareSearchSubmission(TOUR_EXAMPLE_QUERY);
-      await setView('search', { query: TOUR_EXAMPLE_QUERY, filter: '' });
-      highlightTourTarget(TOUR_EXAMPLE_KEY);
-    }
-  },
-  {
-    title: "3. Understand Official Matches",
-    text: "Under 'Direct sourced mappings', you see 'Official matches'. These are verified, trusted mappings directly from official source organizations (e.g. NIST or DISA).",
-    setup: async () => {
-      await renderItem(TOUR_EXAMPLE_KEY);
-    }
-  },
-  {
-    title: "4. Review Possible Connections",
-    text: "Scroll down to 'Possible connections'. These are paths GovFrame calculated through intermediate requirements. They are useful research leads, but require auditing.",
-    setup: async () => {
-      // already on item page
-    }
-  },
-  {
-    title: "5. Compare or Export Mappings",
-    text: "You can click 'Export CSV' to download the relationships, or copy a citation-ready summary. You can also build a full matrix from the 'Map Frameworks' tab.",
-    setup: async () => {
-      // already on item page
-    }
-  }
-];
+  ];
+}
 
 async function startWalkthrough() {
   dismissOnboardingOverlay();
@@ -488,6 +588,7 @@ async function startWalkthrough() {
 }
 
 function renderWalkthroughBubble() {
+  const walkthroughSteps = buildAdaptiveWalkthrough();
   let bubble = document.querySelector('#walkthrough-bubble');
   if (walkthroughStep === null) {
     if (bubble) bubble.remove();
@@ -687,9 +788,12 @@ function prepareSearchSubmission(query, { resetFilters = true } = {}) {
   const queryChanged = normalizeQuery(trimmed) !== normalizeQuery(lastSearchQuery);
   if (resetFilters && queryChanged) {
     resetSearchFilters();
+    lastFilterResetReason = 'query-changed';
   }
   if (queryChanged) {
     lastSearchQuery = trimmed;
+  } else {
+    lastFilterResetReason = '';
   }
   return trimmed;
 }
@@ -722,11 +826,10 @@ async function renderSearch(state) {
   const filters = { framework_id: filter || undefined };
   const rawResults = query ? runtime.searchFrameworkItems(query, filters) : [];
 
-  // Epic 3.3 Search Filters
   let results = rawResults;
   if (query) {
     if (searchFilters.match !== 'all') {
-      results = results.filter(item => {
+      results = results.filter((item) => {
         const direct = runtime.getDirectMappings(item.key);
         const paths = runtime.getCalculatedPaths(item.key);
         if (searchFilters.match === 'official') return direct.length > 0;
@@ -736,19 +839,19 @@ async function renderSearch(state) {
       });
     }
     if (searchFilters.source !== 'all' && searchFilters.match !== 'none') {
-      results = results.filter(item => {
+      results = results.filter((item) => {
         const direct = runtime.getDirectMappings(item.key);
-        return direct.some(mapping => {
+        return direct.some((mapping) => {
           const evidence = runtime.getEvidenceSummary(mapping.id);
-          return evidence && evidence.sources.some(src => src.tier === searchFilters.source);
+          return evidence && evidence.sources.some((src) => src.tier === searchFilters.source);
         });
       });
     }
   }
 
-  const hasResults = query && results.length > 0;
   const noResults = query && results.length === 0;
-  const filtersActive = searchFilters.match !== 'all' || searchFilters.source !== 'all';
+  const activeFilterChips = buildActiveFilterChips(filter);
+  const filtersActive = activeFilterChips.length > 0;
   const sourceTierDisabled = searchFilters.match === 'none';
 
   const workspace = document.getElementById('workspace');
@@ -756,12 +859,28 @@ async function renderSearch(state) {
     workspace.toggleAttribute('data-search-active', Boolean(query));
   }
 
-  const title = query ? pageIntros.search.title : pageIntros.home.title;
-  const description = query ? pageIntros.search.description : pageIntros.home.description;
+  const title = query ? 'Search GovFrame' : pageIntros.home.title;
+  const description = query
+    ? 'Find the requirement, compare what is known, and open the requirement when you are ready to verify evidence.'
+    : pageIntros.home.description;
+
+  const resultsMarkup = results.map((item) => {
+    const summary = buildResultCardSummary(item);
+    return `
+      <article class="item-card workbench-card">
+        <div class="workbench-card-header">
+          <h3 class="workbench-card-title">${escapeHtml(item.item_id)} — ${escapeHtml(item.title)}</h3>
+          <p class="workbench-card-meta">${escapeHtml(frameworkName(item.framework_id))} · ${escapeHtml(summary.evidenceStatus)}</p>
+          <p class="workbench-card-counts">${summary.directCount} official match${summary.directCount === 1 ? '' : 'es'} · ${summary.pathCount} possible connection${summary.pathCount === 1 ? '' : 's'}</p>
+          <p class="workbench-card-next">Next action: ${escapeHtml(summary.nextAction)}</p>
+        </div>
+        <button class="primary" type="button" data-open-item="${escapeHtml(item.key)}">Open requirement</button>
+      </article>`;
+  }).join('');
 
   app.innerHTML = `
-    <section class="panel" aria-labelledby="search-title">
-      <p class="eyebrow">Explore an item</p>
+    <section class="panel ${query ? 'search-workbench' : ''}" aria-labelledby="search-title">
+      <p class="eyebrow">${query ? 'Search workbench' : 'Explore an item'}</p>
       <h2 id="search-title">${escapeHtml(title)}</h2>
       <p>${escapeHtml(description)}</p>
       ${!query ? `
@@ -769,14 +888,13 @@ async function renderSearch(state) {
         <button class="primary" id="btn-focus-search" type="button">Search requirements</button>
         <button class="secondary" id="btn-learn-mapping" type="button">Learn how mapping works</button>
       </div>` : ''}
-      ${renderNoviceIntro(query ? 'search' : 'home')}
+      ${!query ? renderNoviceIntro('home') : ''}
       <form class="search-controls" id="search-form">
         <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, PR.AA-01, account management"></div>
         <div class="field"><label for="search-framework">Framework filter</label><select id="search-framework"><option value="">All frameworks</option>${frameworkOptions(filter)}</select></div>
         <button class="primary" type="submit">Search</button>
       </form>
 
-      <!-- Epic 3.1 Search Examples -->
       <div class="search-examples">
         <span class="label">Examples:</span>
         <button type="button" class="chip" data-example="AC-2">AC-2</button>
@@ -786,9 +904,19 @@ async function renderSearch(state) {
       </div>
 
       <p class="muted">${query ? `${results.length} matching item${results.length === 1 ? '' : 's'} found.` : 'Enter an identifier or phrase. The landing page does not load the full catalog.'}</p>
+      ${query && lastFilterResetReason === 'query-changed' ? '<p class="muted filter-reset-note">Filters reset because the query changed.</p>' : ''}
     </section>
 
-    <!-- Epic 3.3 Dynamic Filters -->
+    ${query && activeFilterChips.length ? `
+    <div class="active-filter-chips" aria-label="Active filters">
+      <span class="filter-chip-label">Active filters:</span>
+      ${activeFilterChips.map((chip) => `
+        <button type="button" class="filter-chip" data-filter-chip="${escapeHtml(chip.kind)}">
+          ${escapeHtml(chip.label)} <span aria-hidden="true">×</span>
+        </button>`).join('')}
+      <button type="button" class="secondary" id="btn-clear-filters">Clear filters</button>
+    </div>` : ''}
+
     ${query ? `
     <div class="results-filters-bar">
       <span class="filter-label">Filter matches:</span>
@@ -804,11 +932,10 @@ async function renderSearch(state) {
         <option value="silver" ${searchFilters.source === 'silver' ? 'selected' : ''}>Supporting</option>
         <option value="bronze" ${searchFilters.source === 'bronze' ? 'selected' : ''}>Research lead</option>
       </select>
-      ${filtersActive ? `<button type="button" class="secondary" id="btn-clear-filters">Clear filters</button>` : ''}
     </div>` : ''}
+    ${query && sourceTierDisabled ? '<p class="muted filter-note">Source tier disabled because no-known-match items do not have source evidence.</p>' : ''}
 
     <section class="results" aria-label="Search results">
-      <!-- Epic 3.2 Empty State -->
       ${noResults ? `
       <div class="notice empty-search">
         <h3>No matches found</h3>
@@ -818,24 +945,14 @@ async function renderSearch(state) {
           <button class="secondary" id="empty-btn-browse" type="button">Browse catalogs</button>
         </div>
       </div>` : ''}
-
-      ${results.map((item) => `
-        <article class="item-card">
-          <button type="button" data-open-item="${escapeHtml(item.key)}">
-            <div class="badge-row"><span class="badge">${escapeHtml(frameworkName(item.framework_id))}</span></div>
-            <h3 class="item-id">${escapeHtml(item.item_id)}</h3>
-            <strong>${escapeHtml(item.title)}</strong>
-            <p class="muted">${escapeHtml((item.text || '').slice(0, 240))}${(item.text || '').length > 240 ? '…' : ''}</p>
-          </button>
-        </article>`).join('')}
+      ${resultsMarkup}
     </section>`;
 
-  // Event bindings
   document.querySelector('#search-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    const query = prepareSearchSubmission(document.querySelector('#search-query').value);
+    const submittedQuery = prepareSearchSubmission(document.querySelector('#search-query').value);
     setView('search', {
-      query,
+      query: submittedQuery,
       filter: document.querySelector('#search-framework').value,
     });
   });
@@ -845,12 +962,10 @@ async function renderSearch(state) {
     focusSearchBtn.addEventListener('click', () => {
       const form = document.querySelector('#search-form');
       const input = document.querySelector('#search-query');
-
       if (input.value.trim()) {
         form.requestSubmit();
         return;
       }
-
       input.focus();
     });
   }
@@ -865,9 +980,9 @@ async function renderSearch(state) {
   document.querySelectorAll('[data-example]').forEach((chip) => {
     chip.addEventListener('click', () => {
       document.querySelector('#search-query').value = chip.dataset.example;
-      const query = prepareSearchSubmission(chip.dataset.example);
+      const exampleQuery = prepareSearchSubmission(chip.dataset.example);
       setView('search', {
-        query,
+        query: exampleQuery,
         filter: '',
       });
     });
@@ -904,10 +1019,26 @@ async function renderSearch(state) {
 
   const clearFilters = () => {
     resetSearchFilters();
+    if (filter) {
+      void setView('search', { query, filter: '' }, true);
+      return;
+    }
     renderSearch(state);
   };
   document.querySelector('#btn-clear-filters')?.addEventListener('click', clearFilters);
   document.querySelector('#btn-clear-filters-empty')?.addEventListener('click', clearFilters);
+  document.querySelectorAll('[data-filter-chip]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const kind = button.dataset.filterChip;
+      if (kind === 'framework') {
+        void setView('search', { query, filter: '' }, true);
+        return;
+      }
+      if (kind === 'match') searchFilters.match = 'all';
+      if (kind === 'source') searchFilters.source = 'all';
+      renderSearch(state);
+    });
+  });
 
   bindOpenItemButtons();
 
@@ -978,6 +1109,7 @@ async function renderItem(key, options = {}) {
 
     const sourceBadges = getSourceBadgesHtml(mapping);
     const evidenceSummaryPanel = renderEvidenceSummaryPanel(mapping, key);
+    const citationText = formatCitationText(mapping);
 
     return `
       <article class="mapping-card badge-official">
@@ -988,12 +1120,17 @@ async function renderItem(key, options = {}) {
         </div>
         <h4>${escapeHtml(counterpart?.item_id || counterpartKey)} · ${escapeHtml(counterpart?.title || '')}</h4>
         <p>${escapeHtml(mapping.rationale || '')}</p>
-        ${contributionHtml}
-        <button class="secondary" type="button" data-open-item="${escapeHtml(counterpartKey)}">Open mapped item</button>
-        <details>
-          <summary>Evidence audit</summary>
+        <div class="mapping-workflow">
           ${evidenceSummaryPanel}
-        </details>
+          <div class="mapping-actions">
+            <button class="secondary" type="button" data-open-item="${escapeHtml(counterpartKey)}">Open mapped item</button>
+            <button class="secondary" type="button" data-copy-citation="${escapeHtml(citationText)}">Copy citation</button>
+          </div>
+          ${mapping.evidence_gaps && mapping.evidence_gaps.length ? '<p class="muted">Contribute missing evidence</p>' : ''}
+          ${contributionHtml}
+          <!-- Evidence summary -> Open mapped item -> Copy citation -> Contribute missing evidence -> View raw evidence -->
+          ${renderRawEvidenceDetails(mapping)}
+        </div>
       </article>`;
   };
 
@@ -1028,7 +1165,6 @@ async function renderItem(key, options = {}) {
           <p class="eyebrow">Direct sourced mappings</p>
           <h3>${direct.length} Official match${direct.length === 1 ? '' : 'es'}</h3>
           ${renderNoviceIntro('detail')}
-          ${direct.length ? renderNoviceIntro('mapping') : ''}
           <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No official matches are currently known.</p>'}</div>
           ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
         </section>
@@ -1044,24 +1180,26 @@ async function renderItem(key, options = {}) {
       <aside class="detail-side panel">
         <p class="eyebrow">How to use this result</p>
         <h3>${direct.length + paths.length} known routes</h3>
-        <p class="muted">Review official matches for direct reuse. Treat possible connections as leads.</p>
-
-        <!-- Epic 7.2 Relationship Visualizations -->
-        <div class="visualization-tabs">
-          <button type="button" id="vis-tab-node" class="active">Flow Graph</button>
-          <button type="button" id="vis-tab-matrix">Grid Matrix</button>
-          <button type="button" id="vis-tab-list">List View</button>
-        </div>
-        <p class="muted" style="font-size: 0.85rem; margin: 0.5rem 0 0;">Shows calculated multi-hop paths. See mapping cards for evidence.</p>
-        <div id="vis-container" style="margin-top: 10px;">
-          <svg id="vis-svg" class="visualization-canvas"></svg>
-        </div>
+        <p class="muted">Review the evidence summary first, then open mapped items, copy citations, or contribute missing evidence.</p>
+        <details class="relationship-views">
+          <summary>Relationship views</summary>
+          <div class="visualization-tabs">
+            <button type="button" id="vis-tab-node" class="active">Flow Graph</button>
+            <button type="button" id="vis-tab-matrix">Grid Matrix</button>
+            <button type="button" id="vis-tab-list">List View</button>
+          </div>
+          <p class="muted" style="font-size: 0.85rem; margin: 0.5rem 0 0;">Shows calculated multi-hop paths. See mapping cards for evidence.</p>
+          <div id="vis-container" style="margin-top: 10px;">
+            <svg id="vis-svg" class="visualization-canvas"></svg>
+          </div>
+        </details>
       </aside>
     </section>`;
 
   document.querySelector('#back-search').addEventListener('click', () => setView('search', {}, false));
   bindOpenItemButtons();
   bindContributionCopyButtons();
+  bindCopyCitationButtons();
 
   // D3 Visualization tabs binding
   const visContainer = document.querySelector('#vis-container');
