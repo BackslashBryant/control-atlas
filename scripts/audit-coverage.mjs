@@ -18,11 +18,16 @@ for (const framework of coverage.frameworks || []) {
   if (framework.status === 'active' && framework.catalog_items === 0) {
     errors.push(`active framework ${framework.framework_id} has zero catalog items`);
   }
+  if (framework.status === 'limited-public-scope' && framework.catalog_items === 0) {
+    warnings.push(`limited-public-scope framework ${framework.framework_id} has zero catalog items`);
+  }
 }
 
 for (const source of registry.sources) {
-  if (source.tier === 'gold' && !source.authority_type) {
-    errors.push(`gold source ${source.id} missing authority_type`);
+  if (source.tier === 'gold') {
+    if (!source.authority_type) {
+      errors.push(`gold source ${source.id} missing authority_type`);
+    }
   }
 }
 
@@ -36,8 +41,13 @@ for (const path of manualSeedMaps) {
 }
 
 for (const source of sourceHealth.sources || []) {
-  if (source.used_in_publish_path && source.authority_type === 'mapping_authority' && !source.checksum) {
-    errors.push(`mapping authority ${source.id} used in publish path without checksum`);
+  if (source.tier === 'gold') {
+    if (!source.checksum) {
+      errors.push(`gold source ${source.id} missing checksum`);
+    }
+    if (!source.snapshot_date) {
+      errors.push(`gold source ${source.id} missing snapshot date`);
+    }
   }
   if (source.stale) {
     warnings.push(`source ${source.id} snapshot is stale (${source.snapshot_date})`);
@@ -48,16 +58,45 @@ if (candidates.some((item) => item.status !== 'candidate')) {
   errors.push('candidates.json contains non-candidate assertions');
 }
 
-const mappingAuthorities = registry.sources.filter((source) => source.authority_type === 'mapping_authority');
-if (mappingAuthorities.length !== 5) {
-  errors.push(`expected 5 mapping_authority sources, found ${mappingAuthorities.length}`);
+const ownerMappingAuthorities = registry.sources.filter((source) => source.authority_type === 'owner_authority_mapping');
+if (ownerMappingAuthorities.length !== 6) {
+  errors.push(`expected 6 owner_authority_mapping sources, found ${ownerMappingAuthorities.length}`);
 }
 
 if (errors.length) {
   throw new Error(`Coverage audit failed:\n- ${errors.join('\n- ')}`);
 }
 
-console.log(`Coverage audit passed: ${coverage.frameworks.length} frameworks, ${coverage.mappings.published} published mappings, ${coverage.mappings.blocked} blocked, ${coverage.mappings.candidates || candidates.length} candidates`);
+console.log('=== GovFrame Coverage Audit Report ===');
+console.log('\n--- Catalog Item Count by Framework ---');
+for (const fw of coverage.frameworks || []) {
+  console.log(`- ${fw.framework_id}: ${fw.catalog_items} items (${fw.status})`);
+}
+
+console.log('\n--- Direct Mapping Count by Framework Pair ---');
+for (const [pair, count] of Object.entries(coverage.mappings.by_pair || {})) {
+  console.log(`- ${pair}: ${count} mappings`);
+}
+
+console.log('\n--- Calculated Path Count by Framework Pair ---');
+for (const [pair, count] of Object.entries(coverage.paths.by_pair || {})) {
+  console.log(`- ${pair}: ${count} paths`);
+}
+
+console.log('\n--- Blocked Assertion Count by Reason ---');
+for (const [reason, count] of Object.entries(coverage.blocked_by_reason || {})) {
+  console.log(`- ${reason}: ${count} blocked`);
+}
+
+console.log('\n--- Candidate Assertion Count by Source ---');
+for (const [src, count] of Object.entries(coverage.candidates_by_source || {})) {
+  console.log(`- ${src}: ${count} candidates`);
+}
+
+const staleCount = (sourceHealth.sources || []).filter((s) => s.stale).length;
+console.log(`\nStale source count: ${staleCount}`);
+
+console.log(`\nCoverage audit passed: ${coverage.frameworks.length} frameworks, ${coverage.mappings.published} published mappings, ${coverage.mappings.blocked} blocked, ${coverage.mappings.candidates || candidates.length} candidates`);
 if (warnings.length) {
   console.log(`Warnings:\n- ${warnings.join('\n- ')}`);
 }

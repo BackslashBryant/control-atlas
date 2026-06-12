@@ -43,8 +43,8 @@ export function parse800171OscalMappings(catalogJson) {
         if (seen.has(signature)) continue;
         seen.add(signature);
         relationships.push({
-          source_id: controlId,
-          target_id: requirementId,
+          source_id: requirementId,
+          target_id: controlId,
           relationship_type: 'maps_to',
           why: `Official NIST SP 800-171 Rev. 3 OSCAL catalog references SP 800-53 ${controlId} for requirement ${requirementId}.`,
           source_locator: `${node.id}#${link.href}`,

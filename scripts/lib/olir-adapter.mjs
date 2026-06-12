@@ -6,104 +6,66 @@ export function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;
 }
 
-function parseControlList(value = '') {
-  return String(value)
-    .split(/[,;]/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .map((item) => normalize80053Id(item.replace(/\s*\([^)]*\)/g, '').trim()))
-    .filter(Boolean);
-}
-
-function extractSubcategoryId(value = '') {
-  const match = String(value).trim().match(/^([A-Z]{2,3}\.[A-Z]{2,3}-\d{2})/);
-  return match ? match[1] : null;
-}
-
-function extractCsf11Id(value = '') {
-  const match = String(value).trim().match(/^([A-Z]{2,3}\.[A-Z]{2,3}-\d+)/);
-  return match ? match[1] : null;
-}
-
-export function parseCsf11To80053Sheet(buffer) {
+export function parseOlirExcel(buffer, options = {}) {
   const workbook = read(buffer);
-  const sheet = workbook.Sheets['CSF to SP 800-53r5'];
-  if (!sheet) throw new Error('CSF to SP 800-53r5 sheet not found');
+  const sheetName = workbook.SheetNames.find((name) =>
+    ['relationships', 'olir', 'mapping', 'crosswalk'].some((k) => name.toLowerCase().includes(k))
+  ) || workbook.SheetNames[0];
+
+  const sheet = workbook.Sheets[sheetName];
+  if (!sheet) throw new Error(`Relationships sheet not found in workbook: ${sheetName}`);
+
   const rows = utils.sheet_to_json(sheet, { header: 1, defval: '' });
-  const relationships = [];
-  let currentSubcategory = null;
-
-  for (const row of rows) {
-    const subcategoryCell = row[2] || '';
-    const controlsCell = row[3] || '';
-    const subcategoryId = extractCsf11Id(subcategoryCell);
-    if (subcategoryId) currentSubcategory = subcategoryId;
-    if (!currentSubcategory || !controlsCell) continue;
-    for (const controlId of parseControlList(controlsCell)) {
-      relationships.push({
-        source_id: controlId,
-        target_id: currentSubcategory,
-        relationship_type: 'maps_to',
-        why: `Official NIST supplemental mapping associates SP 800-53 ${controlId} with CSF 1.1 ${currentSubcategory}.`,
-        source_locator: `CSF to SP 800-53r5#${controlId}->${currentSubcategory}`,
-        olir_status: 'final',
-        owner_authority: true,
-        submitter: 'NIST',
-      });
-    }
-  }
-
-  return relationships;
-}
-
-export function parseCsf11ToCsf20Crosswalk(buffer) {
-  const workbook = read(buffer);
-  const sheet = workbook.Sheets.Relationships || workbook.Sheets[workbook.SheetNames[0]];
-  const rows = utils.sheet_to_json(sheet, { header: 1, defval: '' });
-  const csf20ToCsf11 = new Map();
-
-  for (const row of rows.slice(1)) {
-    const csf20 = extractSubcategoryId(row[0] || '');
-    const csf11 = extractCsf11Id(row[2] || '');
-    if (!csf20 || !csf11) continue;
-    if (!csf20ToCsf11.has(csf20)) csf20ToCsf11.set(csf20, new Set());
-    csf20ToCsf11.get(csf20).add(csf11);
-  }
-
-  return csf20ToCsf11;
-}
-
-export function compose80053ToCsf20Relationships(csf11To80053, csf20ToCsf11) {
-  const csf11ByControl = new Map();
-  for (const rel of csf11To80053) {
-    if (!csf11ByControl.has(rel.source_id)) csf11ByControl.set(rel.source_id, new Set());
-    csf11ByControl.get(rel.source_id).add(rel.target_id);
-  }
-
   const relationships = [];
   const seen = new Set();
-  for (const [csf20, csf11Set] of csf20ToCsf11.entries()) {
-    for (const controlId of csf11ByControl.keys()) {
-      const csf11Targets = csf11ByControl.get(controlId);
-      const overlap = [...csf11Set].filter((id) => csf11Targets.has(id));
-      if (!overlap.length) continue;
-      const signature = `${controlId}|${csf20}`;
+
+  if (!rows.length) return [];
+
+  const headers = rows[0].map((h) => String(h).trim().replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').toLowerCase());
+  const focalIdx = headers.findIndex((h) => h.includes('focal'));
+  const referenceIdx = headers.findIndex((h) => h.includes('reference'));
+  const commentIdx = headers.findIndex((h) => h.includes('comment'));
+  const strengthIdx = headers.findIndex((h) => h.includes('strength') || h.includes('relationship'));
+
+  if (focalIdx === -1 || referenceIdx === -1) {
+    throw new Error('Focal or Reference columns not found in OLIR sheet');
+  }
+
+  for (const row of rows.slice(1)) {
+    const focalCell = String(row[focalIdx] || '').trim();
+    const referenceCell = String(row[referenceIdx] || '').trim();
+    if (!focalCell || !referenceCell) continue;
+
+    const focalId = focalCell.replace(/\r?\n/g, '').trim();
+    // Split references by comma, semicolon, or newline
+    const refIds = referenceCell.split(/[,;\n]/).map((r) => r.trim()).filter(Boolean);
+
+    for (const rawRefId of refIds) {
+      const refId = rawRefId.replace(/\r?\n/g, '').trim();
+      const controlId = normalize80053Id(refId);
+      if (!controlId) continue;
+
+      const signature = `${controlId}|${focalId}`;
       if (seen.has(signature)) continue;
       seen.add(signature);
+
+      const comment = row[commentIdx] ? String(row[commentIdx]).trim() : '';
+      const strength = row[strengthIdx] ? String(row[strengthIdx]).trim() : '';
+
       relationships.push({
         source_id: controlId,
-        target_id: csf20,
-        relationship_type: 'maps_to',
-        why: `Composed from official NIST CSF 1.1→800-53 supplemental mapping and CSF 1.1→2.0 OLIR crosswalk via ${overlap.join(', ')}.`,
-        source_locator: `composed#${controlId}->${csf20}`,
-        olir_status: 'final',
-        owner_authority: true,
-        submitter: 'NIST',
+        target_id: focalId,
+        relationship_type: strength.toLowerCase() === 'equivalent' ? 'equivalent_to' : 'maps_to',
+        why: comment || `NIST OLIR concept crosswalk associates SP 800-53 ${controlId} with CSF 2.0 ${focalId}.`,
+        source_locator: `${sheetName}#${focalId}->${controlId}`,
+        olir_status: options.status || 'draft',
+        owner_authority: options.ownerAuthority !== false,
+        submitter: options.submitter || 'NIST',
       });
     }
   }
 
-  return relationships;
+  return relationships.sort((a, b) => a.source_id.localeCompare(b.source_id) || a.target_id.localeCompare(b.target_id));
 }
 
 export function parseOlirCsv(text) {
@@ -137,28 +99,25 @@ export async function fetchBuffer(url) {
 }
 
 export async function build80053ToCsf20Map(options = {}) {
-  const supplementalUrl = options.supplementalUrl
-    || 'https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx';
-  const crosswalkUrl = options.crosswalkUrl
-    || 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx';
+  const url = options.url || 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx';
+  const buffer = options.buffer || await fetchBuffer(url);
+  const checksumValue = checksum(buffer);
 
-  const supplementalBuffer = options.supplementalBuffer || await fetchBuffer(supplementalUrl);
-  const crosswalkBuffer = options.crosswalkBuffer || await fetchBuffer(crosswalkUrl);
-  const checksumValue = checksum(Buffer.concat([supplementalBuffer, crosswalkBuffer]));
-
-  const csf11To80053 = parseCsf11To80053Sheet(supplementalBuffer);
-  const csf20ToCsf11 = parseCsf11ToCsf20Crosswalk(crosswalkBuffer);
-  const relationships = compose80053ToCsf20Relationships(csf11To80053, csf20ToCsf11);
+  const relationships = parseOlirExcel(buffer, {
+    status: 'draft',
+    ownerAuthority: true,
+    submitter: 'NIST',
+  });
 
   return {
     schema_version: '2.0',
-    source_key: 'nist-csf-53-supplemental',
-    source_artifact: supplementalUrl,
-    source_version: 'csf11-csf20-composed',
+    source_key: 'nist-olir-csf2-to-sp800-53',
+    source_artifact: url,
+    source_version: '2.0-draft',
     snapshot_date: new Date().toISOString().slice(0, 10),
     checksum: checksumValue,
-    provenance: 'Official NIST CSF 1.1→800-53 supplemental mapping composed with CSF 1.1→2.0 OLIR crosswalk',
-    olir_status: 'final',
+    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-53 Rev 5.2.0 Concept Crosswalk (Draft)',
+    olir_status: 'draft',
     owner_authority: true,
     submitter: 'NIST',
     relationships,

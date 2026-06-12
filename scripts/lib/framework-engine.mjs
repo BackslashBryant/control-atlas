@@ -25,7 +25,8 @@ function authorityTypeForEvidence(entry) {
 }
 
 function isMappingAuthorityEvidence(entry) {
-  return entry?.tier === 'gold' && authorityTypeForEvidence(entry) === 'mapping_authority';
+  const type = authorityTypeForEvidence(entry);
+  return entry?.tier === 'gold' && (type === 'owner_authority_mapping' || type === 'mapping_authority');
 }
 
 function isCatalogAuthorityEvidence(entry) {
@@ -133,6 +134,7 @@ function hopEvidenceSummary(edge) {
     source_key: edge.source_key,
     target_key: edge.target_key,
     relationship_type: edge.relationship_type,
+    direction: edge.direction || 'forward',
     source_id: primary?.source_id || null,
     locator: primary?.locator || null,
     tier: primary?.tier || null,
@@ -143,46 +145,110 @@ function hopEvidenceSummary(edge) {
 
 export function buildCalculatedPaths(mappings, options = {}) {
   const maxHops = Math.min(Math.max(options.maxHops || 3, 2), 3);
-  const graph = new Map();
+  const forwardGraph = new Map();
+  const reverseGraph = new Map();
 
   for (const mapping of mappings) {
     if (!PATH_RELATIONSHIP_TYPES.has(mapping.relationship_type)) continue;
-    if (!graph.has(mapping.source_key)) graph.set(mapping.source_key, []);
-    graph.get(mapping.source_key).push(mapping);
+
+    if (!forwardGraph.has(mapping.source_key)) forwardGraph.set(mapping.source_key, []);
+    forwardGraph.get(mapping.source_key).push({
+      edge: mapping,
+      target: mapping.target_key,
+      direction: 'forward',
+    });
+
+    if (!reverseGraph.has(mapping.target_key)) reverseGraph.set(mapping.target_key, []);
+    reverseGraph.get(mapping.target_key).push({
+      edge: mapping,
+      target: mapping.source_key,
+      direction: 'reverse',
+    });
   }
 
   const results = [];
   const seen = new Set();
 
-  for (const sourceKey of graph.keys()) {
-    const walk = (currentKey, hops, itemKeys) => {
-      if (hops.length >= maxHops) return;
-      for (const edge of graph.get(currentKey) || []) {
-        if (itemKeys.includes(edge.target_key)) continue;
-        const previous = hops[hops.length - 1];
-        if (previous && !canComposeRelationship(previous.relationship_type, edge.relationship_type)) continue;
+  // Walk forward
+  const walkForward = (startKey, currentKey, hops, itemKeys) => {
+    if (hops.length >= maxHops) return;
+    for (const step of forwardGraph.get(currentKey) || []) {
+      if (itemKeys.includes(step.target)) continue;
+      const previous = hops[hops.length - 1];
+      if (previous && !canComposeRelationship(previous.relationship_type, step.edge.relationship_type)) continue;
 
-        const nextHops = [...hops, edge];
-        const nextItems = [...itemKeys, edge.target_key];
-        if (nextHops.length >= 2) {
-          const signature = `${sourceKey}|${edge.target_key}|${nextHops.map((item) => item.id).join('>')}`;
-          if (!seen.has(signature)) {
-            seen.add(signature);
-            results.push({
-              id: `path:${signature}`,
-              source_key: sourceKey,
-              target_key: edge.target_key,
-              item_keys: nextItems,
-              confidence: 'derived',
-              hops: nextHops.map((item) => hopEvidenceSummary(item)),
-              evidence_gaps: [...new Set(nextHops.flatMap((item) => item.evidence_gaps || []))],
-            });
+      const nextHops = [...hops, { ...step.edge, direction: 'forward' }];
+      const nextItems = [...itemKeys, step.target];
+
+      if (nextHops.length >= 2) {
+        const signature = `${startKey}|${step.target}|${nextHops.map((item) => item.id).join('>')}`;
+        if (!seen.has(signature)) {
+          seen.add(signature);
+          
+          let confidence = 'derived';
+          if (nextHops.some((h) => h.status === 'blocked')) {
+            confidence = 'blocked';
+          } else if (nextHops.some((h) => h.status === 'candidate')) {
+            confidence = 'candidate';
           }
+
+          results.push({
+            id: `path:${signature}`,
+            source_key: startKey,
+            target_key: step.target,
+            item_keys: nextItems,
+            confidence,
+            hops: nextHops.map((item) => hopEvidenceSummary(item)),
+            evidence_gaps: [...new Set(nextHops.flatMap((item) => item.evidence_gaps || []))],
+          });
         }
-        walk(edge.target_key, nextHops, nextItems);
       }
-    };
-    walk(sourceKey, [], [sourceKey]);
+      walkForward(startKey, step.target, nextHops, nextItems);
+    }
+  };
+
+  // Walk reverse
+  const walkReverse = (startKey, currentKey, hops, itemKeys) => {
+    if (hops.length >= maxHops) return;
+    for (const step of reverseGraph.get(currentKey) || []) {
+      if (itemKeys.includes(step.target)) continue;
+      const previous = hops[hops.length - 1];
+      if (previous && !canComposeRelationship(step.edge.relationship_type, previous.relationship_type)) continue;
+
+      const nextHops = [...hops, { ...step.edge, direction: 'reverse' }];
+      const nextItems = [...itemKeys, step.target];
+
+      if (nextHops.length >= 2) {
+        const signature = `${startKey}|${step.target}|${nextHops.map((item) => item.id).join('>')}`;
+        if (!seen.has(signature)) {
+          seen.add(signature);
+
+          let confidence = 'derived';
+          if (nextHops.some((h) => h.status === 'blocked')) {
+            confidence = 'blocked';
+          } else if (nextHops.some((h) => h.status === 'candidate')) {
+            confidence = 'candidate';
+          }
+
+          results.push({
+            id: `path:${signature}`,
+            source_key: startKey,
+            target_key: step.target,
+            item_keys: nextItems,
+            confidence,
+            hops: nextHops.map((item) => hopEvidenceSummary(item)),
+            evidence_gaps: [...new Set(nextHops.flatMap((item) => item.evidence_gaps || []))],
+          });
+        }
+      }
+      walkReverse(startKey, step.target, nextHops, nextItems);
+    }
+  };
+
+  const allKeys = new Set([...forwardGraph.keys(), ...reverseGraph.keys()]);
+  for (const startKey of allKeys) {
+    walkForward(startKey, startKey, [], [startKey]);
+    walkReverse(startKey, startKey, [], [startKey]);
   }
 
   return results.sort((a, b) => a.hops.length - b.hops.length || a.target_key.localeCompare(b.target_key));

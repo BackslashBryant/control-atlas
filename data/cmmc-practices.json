@@ -9,9 +9,14 @@
       "title": "CMMC Level 1",
       "family": "CMMC 2.0 Levels",
       "description": "Safeguarding Federal Contract Information using the 15 requirements in FAR 52.204-21.",
+      "metadata": {
+        "dependencies": [
+          "FAR 52.204-21"
+        ]
+      },
       "source": {
         "key": "dod-cmmc-rule",
-        "snapshot_date": "2026-06-10T07:34:35.000Z",
+        "snapshot_date": "2026-06-11T23:30:22.158Z",
         "locator": "32-CFR-170.14(c)(2)"
       }
     },
@@ -22,9 +27,15 @@
       "title": "CMMC Level 2",
       "family": "CMMC 2.0 Levels",
       "description": "Protecting Controlled Unclassified Information using the 110 requirements in NIST SP 800-171 Revision 2.",
+      "metadata": {
+        "dependencies": [
+          "NIST SP 800-171 Rev. 2"
+        ],
+        "requires_800_171_rev": "rev2"
+      },
       "source": {
         "key": "dod-cmmc-rule",
-        "snapshot_date": "2026-06-10T07:34:35.000Z",
+        "snapshot_date": "2026-06-11T23:30:22.158Z",
         "locator": "32-CFR-170.14(c)(3)"
       }
     },
@@ -35,9 +46,16 @@
       "title": "CMMC Level 3",
       "family": "CMMC 2.0 Levels",
       "description": "Protecting Controlled Unclassified Information using selected NIST SP 800-172 requirements and DoD-defined parameters.",
+      "metadata": {
+        "dependencies": [
+          "NIST SP 800-171 Rev. 2",
+          "NIST SP 800-172"
+        ],
+        "requires_800_172": true
+      },
       "source": {
         "key": "dod-cmmc-rule",
-        "snapshot_date": "2026-06-10T07:34:35.000Z",
+        "snapshot_date": "2026-06-11T23:30:22.158Z",
         "locator": "32-CFR-170.14(c)(4)"
       }
     }
