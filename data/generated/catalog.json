@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-06-11T23:30:28.575Z",
+  "generated_at": "2026-06-12T07:43:06.611Z",
   "frameworks": [
     {
       "id": "nist-800-53",
@@ -288087,7 +288087,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288111,7 +288111,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-03->AC-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288135,7 +288135,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-01->AC-14",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288159,7 +288159,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288183,7 +288183,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-17",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288207,7 +288207,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288231,7 +288231,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288255,7 +288255,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-02->AC-20",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288279,7 +288279,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-04->AC-20",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288303,7 +288303,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->AC-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288327,7 +288327,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-04->AU-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288351,7 +288351,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-01->AU-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288375,7 +288375,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-03->AU-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288399,7 +288399,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-09->AU-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288423,7 +288423,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-04->AU-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288447,7 +288447,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-03->AU-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288471,7 +288471,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->AU-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288495,7 +288495,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->AU-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288519,7 +288519,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-03->CM-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288543,7 +288543,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-09->CM-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288567,7 +288567,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-01->CM-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288591,7 +288591,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-03->CM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288615,7 +288615,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-09->CM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288639,7 +288639,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-01->CM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288663,7 +288663,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-02->CM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288687,7 +288687,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-07->CM-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288711,7 +288711,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-07->CM-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288735,7 +288735,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->CM-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288759,7 +288759,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#RC.RP-01->CP-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288783,7 +288783,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#RC.RP-02->CP-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288807,7 +288807,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#RC.RP-05->CP-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288831,7 +288831,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-01->IA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288855,7 +288855,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-03->IA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288879,7 +288879,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-01->IA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288903,7 +288903,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-03->IA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288927,7 +288927,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-02->IA-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288951,7 +288951,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-04->IA-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288975,7 +288975,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-05->IA-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -288999,7 +288999,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289023,7 +289023,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289047,7 +289047,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289071,7 +289071,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289095,7 +289095,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-14",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289119,7 +289119,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-15",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289143,7 +289143,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-06->PE-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289167,7 +289167,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289191,7 +289191,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-06->PE-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289215,7 +289215,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-02->PE-20",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289239,7 +289239,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.AA-06->PE-20",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289263,7 +289263,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-02->PE-23",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289287,7 +289287,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-04->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289311,7 +289311,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-01->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289335,7 +289335,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-04->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289359,7 +289359,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-05->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289383,7 +289383,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-04->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289407,7 +289407,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#RC.RP-04->PM-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289431,7 +289431,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-03->PM-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289455,7 +289455,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-02->PM-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289479,7 +289479,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-04->PM-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289503,7 +289503,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-06->PM-15",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289527,7 +289527,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-02->PM-15",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289551,7 +289551,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-03->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289575,7 +289575,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-06->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289599,7 +289599,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-07->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289623,7 +289623,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-02->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289647,7 +289647,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-03->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289671,7 +289671,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-05->PM-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289695,7 +289695,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-04->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289719,7 +289719,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-02->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289743,7 +289743,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-01->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289767,7 +289767,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-06->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289791,7 +289791,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-07->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289815,7 +289815,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-03->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289839,7 +289839,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-06->PM-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289863,7 +289863,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-02->PM-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289887,7 +289887,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-01->PM-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289911,7 +289911,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-02->PM-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289935,7 +289935,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-09->PM-19",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289959,7 +289959,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->PM-22",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -289983,7 +289983,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-01->PM-23",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290007,7 +290007,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-02->PM-23",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290031,7 +290031,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->PM-23",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290055,7 +290055,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-01->PM-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290079,7 +290079,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-02->PM-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290103,7 +290103,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-04->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290127,7 +290127,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-03->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290151,7 +290151,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-04->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290175,7 +290175,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-06->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290199,7 +290199,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-07->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290223,7 +290223,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-09->PM-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290247,7 +290247,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-01->PM-29",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290271,7 +290271,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RR-02->PM-29",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290295,7 +290295,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-04->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290319,7 +290319,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-02->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290343,7 +290343,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OC-05->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290367,7 +290367,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-01->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290391,7 +290391,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-02->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290415,7 +290415,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-03->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290439,7 +290439,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-04->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290463,7 +290463,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-05->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290487,7 +290487,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-06->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290511,7 +290511,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-07->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290535,7 +290535,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-01->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290559,7 +290559,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-03->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290583,7 +290583,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-09->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290607,7 +290607,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-06->PM-30",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290631,7 +290631,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-01->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290655,7 +290655,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.OV-02->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290679,7 +290679,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-03->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290703,7 +290703,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-09->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290727,7 +290727,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-10->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290751,7 +290751,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.IM-02->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290775,7 +290775,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.IM-03->PM-31",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290799,7 +290799,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-06->RA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290823,7 +290823,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.AE-07->RA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290847,7 +290847,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290871,7 +290871,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-06->SA-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290895,7 +290895,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.IM-01->SA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290919,7 +290919,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.IM-02->SA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290943,7 +290943,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.IM-03->SA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290967,7 +290967,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -290991,7 +290991,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-06->SA-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291015,7 +291015,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SA-15",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291039,7 +291039,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-06->SA-15",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291063,7 +291063,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SA-17",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291087,7 +291087,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-06->SA-17",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291111,7 +291111,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->SA-22",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291135,7 +291135,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.RM-03->SA-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291159,7 +291159,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-03->SA-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291183,7 +291183,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-06->SA-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291207,7 +291207,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291231,7 +291231,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291255,7 +291255,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291279,7 +291279,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291303,7 +291303,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291327,7 +291327,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291351,7 +291351,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291375,7 +291375,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291399,7 +291399,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291423,7 +291423,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-03->SC-24",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291447,7 +291447,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-28",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291471,7 +291471,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-32",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291495,7 +291495,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-32",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291519,7 +291519,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-09->SC-34",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291543,7 +291543,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-05->SC-34",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291567,7 +291567,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#DE.CM-09->SC-35",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291591,7 +291591,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-03->SC-36",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291615,7 +291615,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-39",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291639,7 +291639,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-39",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291663,7 +291663,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-03->SC-39",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291687,7 +291687,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-40",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291711,7 +291711,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-40",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291735,7 +291735,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-01->SC-43",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291759,7 +291759,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-02->SC-43",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291783,7 +291783,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SC-43",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291807,7 +291807,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-03->SC-49",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291831,7 +291831,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.PS-03->SC-51",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291855,7 +291855,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SI-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291879,7 +291879,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-07->SI-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291903,7 +291903,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->SI-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291927,7 +291927,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.IR-03->SI-13",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291951,7 +291951,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#PR.DS-10->SI-16",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291975,7 +291975,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->SI-18",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -291999,7 +291999,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#GV.SC-05->SR-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -292023,7 +292023,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SR-10",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -292047,7 +292047,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.RA-09->SR-11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -292071,7 +292071,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "locator": "Relationships#ID.AM-08->SR-12",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
           "agreement": "agrees"
         }
@@ -292095,7 +292095,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.10##b3dcf788-1166-44ff-9abe-1c140f2975da",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292119,7 +292119,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.10##3b4eda46-abb8-4dc0-8983-cb43c22e72ef",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292143,7 +292143,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.11##fe6e872e-39da-4949-a8e4-63670f03386e",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292167,7 +292167,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.12##4108e300-3475-4ccc-8e09-7a5bfdd282cf",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292191,7 +292191,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.12##6a901397-ab79-4174-9af3-96040731a7e3",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292215,7 +292215,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.12##002ac0fe-a790-4a93-be63-571ecb414e89",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292239,7 +292239,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.16##b22943e2-fcb6-43b7-8895-eeff60a3a222",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292263,7 +292263,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.16##1db363ba-2f6c-43d9-aed7-37c23fd45f9d",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292287,7 +292287,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.16##799f75c1-3e9a-47a1-994f-a7bf60460550",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292311,7 +292311,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.18##600d351d-0d99-4789-abcd-3a1dfcce2d52",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292335,7 +292335,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.18##c436a93b-debb-411e-a0d6-81e2f6cb49d5",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292359,7 +292359,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.20##45969a10-8816-4ae0-abc4-d0c1764bab75",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292383,7 +292383,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.20##52fd9e23-defd-4647-a7d2-b96416edefc9",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292407,7 +292407,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.20##50c6d509-5e60-4b57-802c-1c5253946ef4",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292431,7 +292431,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.01.22##08316684-be23-473a-abd0-22abe611ad1a",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292455,7 +292455,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.03.03##c6c510a7-6932-4d6d-9d1e-f51196efded7",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292479,7 +292479,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.03.03##9389a9df-1134-499e-8d25-c55eb991f169",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292503,7 +292503,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.04.11##cba05591-32fa-439a-9f3c-c72b11c18b11",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292527,7 +292527,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.05.01##35f942bb-4765-4a2a-9049-d1c4efb56dc9",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292551,7 +292551,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.08.05##1a3eaa86-0aed-4af8-9be8-0477122cae56",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292575,7 +292575,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.10.06##d9fe2bca-43e7-40af-85f4-a3758363dc95",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292599,7 +292599,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.08##1a3eaa86-0aed-4af8-9be8-0477122cae56",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292623,7 +292623,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.08##7f931c0d-e575-4392-aa68-3cdb755a6ea4",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292647,7 +292647,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.09##f70cb413-b2ce-416a-a89d-cd27549d01b4",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292671,7 +292671,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.10##8e5443e8-137c-48bf-95d3-297142328d64",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292695,7 +292695,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.11##2d31b72b-97a1-497f-b99d-79f01dce0dc5",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292719,7 +292719,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.12##1fc5134c-7c9e-4cc7-a894-f4d088d291b6",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292743,7 +292743,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.13##5fdb115e-695d-4a5e-963f-3693835c8fd1",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292767,7 +292767,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.13.15##247bb5d5-5121-4330-9f32-7cd8e0bf505a",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292791,7 +292791,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.14.08##b885e0fc-d253-46df-831f-47198e312eb3",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -292815,7 +292815,7 @@
           "authority_type": "owner_authority_mapping",
           "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
           "locator": "SP_800_171_03.16.02##f271ee7e-4dce-4846-bbd7-f9da0faf71dd",
-          "snapshot_date": "2026-06-11",
+          "snapshot_date": "2026-06-12",
           "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
           "agreement": "agrees"
         }
@@ -384935,7 +384935,7 @@
     }
   },
   "coverage": {
-    "generated_at": "2026-06-11T23:30:28.575Z",
+    "generated_at": "2026-06-12T07:43:06.611Z",
     "frameworks": [
       {
         "framework_id": "nist-800-53",
