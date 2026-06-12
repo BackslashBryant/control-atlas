@@ -103,6 +103,35 @@ textarea { min-height: 110px; resize: vertical; }
 .results, .stack { display: grid; gap: 1rem; margin-top: 1rem; }
 .item-card, .framework-card, .mapping-card { padding: 1rem; }
 .item-card button { width: 100%; text-align: left; border: 0; background: transparent; color: inherit; }
+.workbench-card {
+  display: grid;
+  gap: .9rem;
+}
+.workbench-card .primary {
+  width: fit-content;
+}
+.workbench-card-title,
+.workbench-card-meta,
+.workbench-card-counts,
+.workbench-card-next {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workbench-card-title {
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+.workbench-card-meta,
+.workbench-card-counts,
+.workbench-card-next {
+  color: var(--muted);
+  font-size: .92rem;
+}
+.search-workbench {
+  padding-bottom: 1.2rem;
+}
 .badge-row { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
 .badge {
   display: inline-flex;
@@ -137,6 +166,29 @@ summary { font-weight: 750; cursor: pointer; }
 .learning-grid p { margin: 0; padding: .8rem; border-left: 3px solid var(--gold); background: rgba(210,168,75,.08); }
 .more-mappings { margin-top: 1rem; }
 .notice.retired { border-color: rgba(180,93,54,.4); }
+.active-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.filter-chip-label {
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.filter-chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .35rem .7rem;
+  background: #fffefb;
+  color: var(--ink);
+}
+.filter-note,
+.filter-reset-note {
+  margin: .75rem 0 0;
+}
 footer { padding: 1rem; text-align: center; color: var(--muted); }
 
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, a:focus-visible {
@@ -407,6 +459,15 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   border-radius: 8px;
   font-size: 0.85rem;
 }
+.mapping-workflow {
+  display: grid;
+  gap: 0.85rem;
+}
+.mapping-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
 
 /* Evidence Summary Panel */
 .evidence-summary-panel {
@@ -466,6 +527,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   display: flex;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
+}
+.relationship-views[open] {
+  display: grid;
+  gap: 0.75rem;
 }
 .visualization-tabs button {
   flex: 1;

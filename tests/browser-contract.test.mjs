@@ -122,5 +122,28 @@ test('sign-off repair pass contracts are present', () => {
   assert.match(app, /GITHUB_ISSUES_BASE/);
   assert.match(app, /renderNoviceIntro\('detail'\)/);
   assert.match(app, /contribution-callout[\s\S]*?Copy issue URL/);
-  assert.match(html, /v=20260610-3/);
+  assert.match(html, /v=20260612-1/);
+});
+
+test('workbench search contracts prioritize compact decision-ready cards', () => {
+  assert.match(app, /Search GovFrame/);
+  assert.match(app, /official match\$\{.*possible connection/s);
+  assert.match(app, /Next action:/);
+  assert.match(app, /Open requirement/);
+  assert.match(app, /Active filters:/);
+  assert.match(app, /filter-chip/);
+  assert.match(app, /Source tier disabled because no-known-match items do not have source evidence/);
+});
+
+test('detail workflow is evidence-first and uses a shared citation shape', () => {
+  assert.match(app, /Evidence summary/);
+  assert.match(app, /Copy citation/);
+  assert.match(app, /View raw evidence/);
+  assert.match(app, /Evidence summary[\s\S]*Open mapped item[\s\S]*Copy citation[\s\S]*Contribute missing evidence[\s\S]*View raw evidence/s);
+  assert.match(app, /maps to .*Source: .*Status:/s);
+});
+
+test('guided tour adapts to runtime relationship availability', () => {
+  assert.match(app, /This item has no possible connections/);
+  assert.match(app, /buildAdaptiveWalkthrough/);
 });
