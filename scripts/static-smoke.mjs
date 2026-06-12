@@ -22,10 +22,10 @@ for (const path of required) assert.ok(existsSync(path), `${path} is required`);
 
 const registry = loadSourceRegistry(JSON.parse(readFileSync('data/source-registry.json', 'utf8')));
 const catalogAuthorities = registry.sources.filter((source) => source.authority_type === 'catalog_authority');
-const mappingAuthorities = registry.sources.filter((source) => source.authority_type === 'mapping_authority');
+const mappingAuthorities = registry.sources.filter((source) => source.authority_type === 'owner_authority_mapping');
 assert.equal(registry.registry.schema_version, '3.0');
 assert.equal(catalogAuthorities.length, 8);
-assert.equal(mappingAuthorities.length, 5);
+assert.equal(mappingAuthorities.length, 6);
 
 const catalog = JSON.parse(readFileSync('data/generated/catalog.json', 'utf8'));
 assert.equal(catalog.schema_version, '2.1');
@@ -37,8 +37,8 @@ assert.ok(catalog.items.filter((item) => item.framework_id === 'disa-cci').lengt
 assert.ok(catalog.mappings.filter((mapping) => mapping.source_key.startsWith('disa-cci:')).length > 3000, 'official CCI-to-control references required');
 assert.ok(catalog.items.filter((item) => item.framework_id === 'disa-cci').every((item) => item.canonical_evidence.source_id === 'disa-cci-list'), 'CCI identity must come from the official CCI List');
 assert.ok(catalog.mappings.every((mapping) =>
-  (mapping.evidence || []).some((entry) => entry.authority_type === 'mapping_authority'),
-), 'published mappings must include mapping_authority evidence');
+  (mapping.evidence || []).some((entry) => entry.authority_type === 'owner_authority_mapping'),
+), 'published mappings must include owner_authority_mapping evidence');
 assert.equal(catalog.items.filter((item) => item.framework_id === 'nist-ai-rmf').length, 72, 'complete official AI RMF Playbook catalog required');
 assert.equal(catalog.items.filter((item) => item.framework_id === 'nist-ssdf').length, 42, 'complete official SSDF task catalog required');
 assert.equal(catalog.items.filter((item) => item.framework_id === 'fedramp-rev5').length, 4, 'FedRAMP public baseline identities required');

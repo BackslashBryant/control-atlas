@@ -23,7 +23,7 @@ const evidence = (tier, sourceId, agreement = 'agrees') => ({
   tier,
   source_id: sourceId,
   authority_type: tier === 'gold'
-    ? 'mapping_authority'
+    ? 'owner_authority_mapping'
     : tier === 'silver'
       ? 'corroboration'
       : 'research_candidate',
@@ -208,7 +208,7 @@ test('buildEvidenceEntry surfaces confidence, warnings, and authority_type', () 
     evidence: [evidence('gold', 'disa-cci-nist-references')],
   });
   assert.equal(entry.confidence, 'derived');
-  assert.equal(entry.sources[0].authority_type, 'mapping_authority');
+  assert.equal(entry.sources[0].authority_type, 'owner_authority_mapping');
   assert.equal(entry.warnings.length, 1);
 });
 
@@ -220,6 +220,61 @@ test('CCI adapter treats CCIs as bridge requirements and maps official NIST refe
   assert.equal(result.records[0].source.key, 'disa-cci-list');
   assert.deepEqual(result.relationships.map((item) => item.target_id), ['AC-2.1']);
   assert.ok(result.relationships.every((item) => item.evidence_source === 'disa-cci-nist-references'));
+});
+
+test('CCI adapter validates malformed XML, missing version, empty records, and parses multiple references and deprecated status', () => {
+  assert.throws(() => {
+    parseCciXml('<cci_list><metadata>');
+  }, /Invalid CCI XML structure/);
+
+  const missingMetadataXml = `<?xml version="1.0"?>
+<cci_list>
+  <cci_items>
+    <cci_item id="CCI-000015">
+      <status>draft</status>
+    </cci_item>
+  </cci_items>
+</cci_list>`;
+  assert.throws(() => {
+    parseCciXml(missingMetadataXml);
+  }, /CCI XML missing or invalid version or publish date metadata/);
+
+  const emptyRecordsXml = `<?xml version="1.0"?>
+<cci_list>
+  <metadata>
+    <version>2025-01-23</version>
+    <publishdate>2025-01-23</publishdate>
+  </metadata>
+  <cci_items>
+  </cci_items>
+</cci_list>`;
+  assert.throws(() => {
+    parseCciXml(emptyRecordsXml);
+  }, /CCI XML contains no CCI items/);
+
+  const validXml = `<?xml version="1.0"?>
+<cci_list>
+  <metadata>
+    <version>2025-01-23</version>
+    <publishdate>2025-01-23</publishdate>
+  </metadata>
+  <cci_items>
+    <cci_item id="CCI-000016">
+      <status>deprecated</status>
+      <publishdate>2010-01-01</publishdate>
+      <definition>Test CCI definition</definition>
+      <references>
+        <reference creator="NIST" title="NIST SP 800-53 Revision 5" version="5" location="url" index="AC-3" />
+        <reference creator="NIST" title="NIST SP 800-53 Revision 5" version="5" location="url" index="AC-3 (2)" />
+      </references>
+    </cci_item>
+  </cci_items>
+</cci_list>`;
+  const result = parseCciXml(validXml);
+  assert.equal(result.records.length, 1);
+  assert.equal(result.records[0].status, 'deprecated');
+  assert.equal(result.relationships.length, 2);
+  assert.deepEqual(result.relationships.map((r) => r.target_id), ['AC-3', 'AC-3.2']);
 });
 
 test('OLIR CSV adapter parses focal and reference columns', () => {
@@ -287,7 +342,7 @@ test('generated framework data uses schema 2.1 and mapping authority evidence', 
   assert.equal(catalog.schema_version, '2.1');
   assert.ok(catalog.mappings.every((mapping) => !unsupportedTargets.has(mapping.target_key.split(':')[0])));
   assert.ok(catalog.mappings.every((mapping) =>
-    (mapping.evidence || []).some((entry) => entry.authority_type === 'mapping_authority'),
+    (mapping.evidence || []).some((entry) => entry.authority_type === 'owner_authority_mapping'),
   ));
   assert.ok(catalog.paths.every((path) => (path.hops || []).every((hop) => hop.source_id)));
 });
@@ -299,3 +354,66 @@ test('generated artifacts include candidates and source health', () => {
   assert.ok(sourceHealth.sources.length >= 15);
   assert.ok(sourceHealth.published_mappings > 0);
 });
+
+test('calculated paths enforce strict directionality (all-forward or all-reverse)', () => {
+  const mappings = [
+    {
+      id: 'm1',
+      source_key: 'A',
+      target_key: 'B',
+      relationship_type: 'maps_to',
+      evidence: [evidence('gold', 'map-1')],
+      status: 'published',
+    },
+    {
+      id: 'm2',
+      source_key: 'C',
+      target_key: 'B',
+      relationship_type: 'maps_to',
+      evidence: [evidence('gold', 'map-2')],
+      status: 'published',
+    },
+    {
+      id: 'm3',
+      source_key: 'C',
+      target_key: 'D',
+      relationship_type: 'maps_to',
+      evidence: [evidence('gold', 'map-3')],
+      status: 'published',
+    },
+  ];
+
+  const paths = buildCalculatedPaths(mappings, { maxHops: 3 });
+  
+  // Mixed path A -> B <- C must NOT exist
+  assert.ok(!paths.some((p) => p.source_key === 'A' && p.target_key === 'C'));
+  
+  // Forward path C -> B <- A must NOT exist
+  assert.ok(!paths.some((p) => p.source_key === 'C' && p.target_key === 'A'));
+
+  const mappings3 = [
+    {
+      id: 'm1',
+      source_key: 'A',
+      target_key: 'B',
+      relationship_type: 'maps_to',
+      evidence: [evidence('gold', 'map-1')],
+      status: 'published',
+    },
+    {
+      id: 'm4',
+      source_key: 'B',
+      target_key: 'D',
+      relationship_type: 'maps_to',
+      evidence: [evidence('gold', 'map-4')],
+      status: 'published',
+    },
+  ];
+  const paths3 = buildCalculatedPaths(mappings3, { maxHops: 3 });
+  // Forward path A -> B -> D must exist
+  assert.ok(paths3.some((p) => p.source_key === 'A' && p.target_key === 'D' && p.hops[0].direction === 'forward'));
+
+  // Reverse path D <- B <- A must exist
+  assert.ok(paths3.some((p) => p.source_key === 'D' && p.target_key === 'A' && p.hops[0].direction === 'reverse'));
+});
+

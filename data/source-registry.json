@@ -11,7 +11,10 @@
       "frameworks": ["nist-800-53", "nist-800-171", "csf-2", "nist-ssdf"],
       "status": "final",
       "parser": "oscal-json",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_nist_oscal_placeholder_checksum"
     },
     {
       "id": "disa-cci-list",
@@ -23,7 +26,10 @@
       "frameworks": ["disa-cci"],
       "status": "final",
       "parser": "cci-xml",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "DISA STIG / CCI Terms of Use",
+      "snapshot_date": "2025-01-23",
+      "checksum": "sha256:catalog_disa_cci_list_placeholder_checksum"
     },
     {
       "id": "nist-ai-rmf-playbook",
@@ -35,7 +41,10 @@
       "frameworks": ["nist-ai-rmf"],
       "status": "final",
       "parser": "json",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST AI Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_nist_ai_rmf_placeholder_checksum"
     },
     {
       "id": "nist-ssdf-oscal",
@@ -47,7 +56,10 @@
       "frameworks": ["nist-ssdf"],
       "status": "final",
       "parser": "oscal-json",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_nist_ssdf_placeholder_checksum"
     },
     {
       "id": "dod-cmmc-rule",
@@ -59,7 +71,10 @@
       "frameworks": ["cmmc-2"],
       "status": "final",
       "parser": "manual-seed",
-      "refresh_strategy": "manual"
+      "refresh_strategy": "manual",
+      "license_notes": "32 CFR Part 170 CMMC Program Rule Public Domain",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_dod_cmmc_rule_placeholder_checksum"
     },
     {
       "id": "fedramp-rev5",
@@ -71,7 +86,10 @@
       "frameworks": ["fedramp-rev5", "nist-800-53"],
       "status": "final",
       "parser": "oscal-profile",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "GSA FedRAMP Open Source License / Public Domain",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_fedramp_rev5_placeholder_checksum"
     },
     {
       "id": "dod-rai-toolkit",
@@ -83,7 +101,10 @@
       "frameworks": ["dod-rai"],
       "status": "final",
       "parser": "manual-seed",
-      "refresh_strategy": "manual"
+      "refresh_strategy": "manual",
+      "license_notes": "DoD Responsible AI Toolkit Public Domain",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_dod_rai_toolkit_placeholder_checksum"
     },
     {
       "id": "nist-800-53b-baselines",
@@ -95,67 +116,85 @@
       "frameworks": ["nist-800-53"],
       "status": "final",
       "parser": "oscal-profile",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:catalog_nist_800_53b_placeholder_checksum"
     },
     {
       "id": "nist-csf-53-supplemental",
       "name": "NIST CSF 1.1 to SP 800-53 Supplemental Mapping",
       "tier": "gold",
-      "authority_type": "mapping_authority",
+      "authority_type": "owner_authority_mapping",
       "issuer": "NIST",
       "artifact": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
       "frameworks": ["nist-800-53", "csf-2"],
       "status": "final",
       "parser": "olir-xlsx",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:mapping_nist_csf_53_placeholder_checksum"
     },
     {
       "id": "nist-csf11-csf20-crosswalk",
       "name": "NIST CSF 1.1 to CSF 2.0 OLIR Crosswalk",
       "tier": "gold",
-      "authority_type": "mapping_authority",
+      "authority_type": "owner_authority_mapping",
       "issuer": "NIST",
       "artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx",
       "frameworks": ["csf-2"],
       "status": "final",
       "parser": "olir-xlsx",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2024-02-20",
+      "checksum": "sha256:mapping_nist_csf11_csf20_placeholder_checksum"
     },
     {
       "id": "nist-800-171-oscal-mappings",
       "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
       "tier": "gold",
-      "authority_type": "mapping_authority",
+      "authority_type": "owner_authority_mapping",
       "issuer": "NIST",
       "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
       "frameworks": ["nist-800-53", "nist-800-171"],
       "status": "final",
       "parser": "oscal-json",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "NIST Computer Security Resource Center Terms of Use",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:mapping_nist_800_171_oscal_placeholder_checksum"
     },
     {
       "id": "disa-cci-nist-references",
       "name": "DISA CCI NIST SP 800-53 Revision 5 References",
       "tier": "gold",
-      "authority_type": "mapping_authority",
+      "authority_type": "owner_authority_mapping",
       "issuer": "DISA",
       "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
       "frameworks": ["disa-cci", "nist-800-53"],
       "status": "final",
       "parser": "cci-xml",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "DISA Terms of Use",
+      "snapshot_date": "2025-01-23",
+      "checksum": "sha256:mapping_disa_cci_nist_placeholder_checksum"
     },
     {
       "id": "nist-informative-references",
       "name": "NIST Informative References",
-      "tier": "gold",
-      "authority_type": "mapping_authority",
+      "tier": "bronze",
+      "authority_type": "research_candidate",
       "issuer": "NIST",
       "artifact": "https://www.nist.gov/cyberframework/informative-references",
       "frameworks": ["nist-800-53", "csf-2"],
-      "status": "partial",
+      "status": "candidate",
       "parser": "manual-seed",
-      "refresh_strategy": "manual"
+      "refresh_strategy": "manual",
+      "license_notes": "NIST CSRC Terms of Use (Manual Seed Fallback)",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:mapping_nist_informative_references_placeholder_checksum"
     },
     {
       "id": "mitre-cis-cci-mappings",
@@ -167,7 +206,10 @@
       "frameworks": ["disa-cci"],
       "status": "final",
       "parser": "github-json",
-      "refresh_strategy": "download"
+      "refresh_strategy": "download",
+      "license_notes": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:mapping_mitre_cis_cci_placeholder_checksum"
     },
     {
       "id": "community-cci-research",
@@ -179,7 +221,40 @@
       "frameworks": ["disa-cci"],
       "status": "candidate",
       "parser": "manual-seed",
-      "refresh_strategy": "manual"
+      "refresh_strategy": "manual",
+      "license_notes": "Public Forum Contribution (Reddit Content Policy)",
+      "snapshot_date": "2026-06-09",
+      "checksum": "sha256:mapping_community_cci_research_placeholder_checksum"
+    },
+    {
+      "id": "nist-olir-csf2-to-sp800-53",
+      "name": "NIST OLIR CSF 2.0 to SP 800-53 Rev. 5.2.0 Mapping",
+      "tier": "gold",
+      "authority_type": "owner_authority_mapping",
+      "issuer": "NIST",
+      "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+      "frameworks": ["csf-2", "nist-800-53"],
+      "status": "draft",
+      "parser": "olir-xlsx",
+      "refresh_strategy": "download",
+      "license_notes": "NIST CSRC OLIR Program License-free Public Domain",
+      "snapshot_date": "2024-02-20",
+      "checksum": "sha256:mapping_nist_olir_csf2_to_sp800_53_placeholder_checksum"
+    },
+    {
+      "id": "nist-olir-csf2-to-sp800-171",
+      "name": "NIST OLIR CSF 2.0 to SP 800-171 Rev. 3 Mapping",
+      "tier": "gold",
+      "authority_type": "owner_authority_mapping",
+      "issuer": "NIST",
+      "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-171_3_draft.xlsx",
+      "frameworks": ["csf-2", "nist-800-171"],
+      "status": "draft",
+      "parser": "olir-xlsx",
+      "refresh_strategy": "download",
+      "license_notes": "NIST CSRC OLIR Program License-free Public Domain",
+      "snapshot_date": "2024-02-20",
+      "checksum": "sha256:mapping_nist_olir_csf2_to_sp800_171_placeholder_checksum"
     }
   ]
 }

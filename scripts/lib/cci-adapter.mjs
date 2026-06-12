@@ -1,4 +1,4 @@
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -20,11 +20,21 @@ function textValue(value) {
 }
 
 export function parseCciXml(xml) {
+  const validation = XMLValidator.validate(xml);
+  if (validation !== true) {
+    throw new Error(`Invalid CCI XML structure: ${validation.err?.msg || 'malformed XML'}`);
+  }
+
   const parsed = parser.parse(xml);
   const root = parsed.cci_list || parsed;
   const metadata = root.metadata || {};
   const version = textValue(metadata.version);
   const publishDate = textValue(metadata.publishdate);
+
+  if (!version || !/^\d{4}-\d{2}-\d{2}$/.test(publishDate)) {
+    throw new Error('CCI XML missing or invalid version or publish date metadata');
+  }
+
   const records = [];
   const relationships = [];
 
@@ -68,6 +78,9 @@ export function parseCciXml(xml) {
         evidence_source: 'disa-cci-nist-references',
       });
     }
+  }
+  if (records.length === 0) {
+    throw new Error('CCI XML contains no CCI items');
   }
 
   return { version, publish_date: publishDate, records, relationships };

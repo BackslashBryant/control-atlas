@@ -91,6 +91,13 @@ function writeCatalog(filename, document) {
 
 export async function fetchFrameworkCatalogs() {
   const results = [];
+  let fedrampMembership = null;
+  try {
+    fedrampMembership = await fetchFedrampBaselineMembership();
+  } catch (err) {
+    console.warn('Failed to pre-fetch FedRAMP baseline membership:', err.message);
+  }
+
   for (const target of REMOTE_CATALOGS) {
     const response = await fetch(target.url);
     if (!response.ok) throw new Error(`${target.id} fetch failed: ${response.status} ${target.url}`);
@@ -101,7 +108,8 @@ export async function fetchFrameworkCatalogs() {
     results.push(writeCatalog(target.outfile, document));
   }
   for (const [filename, build] of PUBLIC_CATALOGS) {
-    results.push(writeCatalog(filename, build(SNAPSHOT)));
+    const doc = build === buildFedrampPublicCatalog ? build(SNAPSHOT, fedrampMembership) : build(SNAPSHOT);
+    results.push(writeCatalog(filename, doc));
   }
   return results;
 }

@@ -78,20 +78,20 @@ function publicCatalog(sourceKey, snapshotDate, definitions) {
   };
 }
 
-export function buildFedrampPublicCatalog(snapshotDate) {
+export function buildFedrampPublicCatalog(snapshotDate, baselineMembership = null) {
   return publicCatalog(FEDRAMP_SOURCE, snapshotDate, [
-    { id: 'LI-SAAS', type: 'fedramp-baseline', framework: 'fedramp', title: 'LI-SaaS Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Tailored baseline for low-impact software-as-a-service offerings.', locator: 'rev5/documents-templates/#LI-SaaS' },
-    { id: 'LOW', type: 'fedramp-baseline', framework: 'fedramp', title: 'Low Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Low security control baseline.', locator: 'rev5/documents-templates/#Low' },
-    { id: 'MODERATE', type: 'fedramp-baseline', framework: 'fedramp', title: 'Moderate Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Moderate security control baseline.', locator: 'rev5/documents-templates/#Moderate' },
-    { id: 'HIGH', type: 'fedramp-baseline', framework: 'fedramp', title: 'High Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 High security control baseline.', locator: 'rev5/documents-templates/#High' },
+    { id: 'LI-SAAS', type: 'fedramp-baseline', framework: 'fedramp', title: 'LI-SaaS Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Tailored baseline for low-impact software-as-a-service offerings.', locator: 'rev5/documents-templates/#LI-SaaS', metadata: { controls: baselineMembership?.['LI-SAAS'] || [] } },
+    { id: 'LOW', type: 'fedramp-baseline', framework: 'fedramp', title: 'Low Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Low security control baseline.', locator: 'rev5/documents-templates/#Low', metadata: { controls: baselineMembership?.['LOW'] || [] } },
+    { id: 'MODERATE', type: 'fedramp-baseline', framework: 'fedramp', title: 'Moderate Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Moderate security control baseline.', locator: 'rev5/documents-templates/#Moderate', metadata: { controls: baselineMembership?.['MODERATE'] || [] } },
+    { id: 'HIGH', type: 'fedramp-baseline', framework: 'fedramp', title: 'High Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 High security control baseline.', locator: 'rev5/documents-templates/#High', metadata: { controls: baselineMembership?.['HIGH'] || [] } },
   ]);
 }
 
 export function buildCmmcPublicCatalog(snapshotDate) {
   return publicCatalog(CMMC_SOURCE, snapshotDate, [
-    { id: 'LEVEL-1', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 1', family: 'CMMC 2.0 Levels', description: 'Safeguarding Federal Contract Information using the 15 requirements in FAR 52.204-21.', locator: '32-CFR-170.14(c)(2)' },
-    { id: 'LEVEL-2', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 2', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using the 110 requirements in NIST SP 800-171 Revision 2.', locator: '32-CFR-170.14(c)(3)' },
-    { id: 'LEVEL-3', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 3', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using selected NIST SP 800-172 requirements and DoD-defined parameters.', locator: '32-CFR-170.14(c)(4)' },
+    { id: 'LEVEL-1', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 1', family: 'CMMC 2.0 Levels', description: 'Safeguarding Federal Contract Information using the 15 requirements in FAR 52.204-21.', locator: '32-CFR-170.14(c)(2)', metadata: { dependencies: ['FAR 52.204-21'] } },
+    { id: 'LEVEL-2', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 2', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using the 110 requirements in NIST SP 800-171 Revision 2.', locator: '32-CFR-170.14(c)(3)', metadata: { dependencies: ['NIST SP 800-171 Rev. 2'], requires_800_171_rev: 'rev2' } },
+    { id: 'LEVEL-3', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 3', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using selected NIST SP 800-172 requirements and DoD-defined parameters.', locator: '32-CFR-170.14(c)(4)', metadata: { dependencies: ['NIST SP 800-171 Rev. 2', 'NIST SP 800-172'], requires_800_172: true } },
   ]);
 }
 

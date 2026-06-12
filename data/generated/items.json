@@ -19,7 +19,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "locator": "32-CFR-170.14(c)(2)",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -44,7 +44,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "locator": "32-CFR-170.14(c)(3)",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -69,7 +69,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "locator": "32-CFR-170.14(c)(4)",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209699,7 +209699,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#ethical-principles",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209724,7 +209724,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#holistic",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209749,7 +209749,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#modular-and-tailorable",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209774,7 +209774,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#rasci-matrix",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209799,7 +209799,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#tools-list",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209824,7 +209824,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-detect",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209849,7 +209849,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-evaluate",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209874,7 +209874,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-hone",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209899,7 +209899,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-improve",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209924,7 +209924,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-log",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209949,7 +209949,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://rai.acqbot.com/executive-summary",
       "locator": "executive-summary#shield-set",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209974,7 +209974,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
       "locator": "rev5/documents-templates/#High",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -209999,7 +209999,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
       "locator": "rev5/documents-templates/#LI-SaaS",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -210024,7 +210024,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
       "locator": "rev5/documents-templates/#Low",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -210049,7 +210049,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://www.fedramp.gov/rev5/documents-templates/",
       "locator": "rev5/documents-templates/#Moderate",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243224,7 +243224,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243249,7 +243249,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243274,7 +243274,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243299,7 +243299,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243324,7 +243324,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.5",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243349,7 +243349,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.6",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243374,7 +243374,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 1.7",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243399,7 +243399,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243424,7 +243424,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243449,7 +243449,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 2.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243474,7 +243474,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243499,7 +243499,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243524,7 +243524,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243549,7 +243549,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243574,7 +243574,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 4.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243599,7 +243599,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 5.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243624,7 +243624,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 5.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243649,7 +243649,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 6.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243674,7 +243674,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#GOVERN 6.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243699,7 +243699,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243724,7 +243724,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243749,7 +243749,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243774,7 +243774,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 1.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243799,7 +243799,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243824,7 +243824,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243849,7 +243849,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 2.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243874,7 +243874,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 2.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243899,7 +243899,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243924,7 +243924,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243949,7 +243949,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243974,7 +243974,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -243999,7 +243999,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MANAGE 4.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244024,7 +244024,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244049,7 +244049,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244074,7 +244074,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244099,7 +244099,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244124,7 +244124,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.5",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244149,7 +244149,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 1.6",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244174,7 +244174,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244199,7 +244199,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244224,7 +244224,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 2.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244249,7 +244249,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244274,7 +244274,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244299,7 +244299,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 3.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244324,7 +244324,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 3.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244349,7 +244349,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 3.5",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244374,7 +244374,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244399,7 +244399,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244424,7 +244424,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 5.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244449,7 +244449,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MAP 5.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244474,7 +244474,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244499,7 +244499,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244524,7 +244524,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244549,7 +244549,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244574,7 +244574,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.10",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244599,7 +244599,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.11",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244624,7 +244624,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.12",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244649,7 +244649,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.13",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244674,7 +244674,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244699,7 +244699,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244724,7 +244724,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244749,7 +244749,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.5",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244774,7 +244774,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.6",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244799,7 +244799,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.7",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244824,7 +244824,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.8",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244849,7 +244849,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 2.9",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244874,7 +244874,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244899,7 +244899,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244924,7 +244924,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 3.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244949,7 +244949,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244974,7 +244974,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -244999,7 +244999,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://airc.nist.gov/docs/playbook.json",
       "locator": "playbook.json#MEASURE 4.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245024,7 +245024,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245049,7 +245049,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245074,7 +245074,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245099,7 +245099,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245124,7 +245124,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245149,7 +245149,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.2.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245174,7 +245174,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245199,7 +245199,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245224,7 +245224,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.3.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245249,7 +245249,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245274,7 +245274,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245299,7 +245299,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.5.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245324,7 +245324,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PO.5.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245349,7 +245349,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PS.1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245374,7 +245374,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PS.2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245399,7 +245399,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PS.3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245424,7 +245424,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PS.3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245449,7 +245449,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245474,7 +245474,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245499,7 +245499,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245524,7 +245524,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245549,7 +245549,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.4.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245574,7 +245574,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.4.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245599,7 +245599,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.4.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245624,7 +245624,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.5.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245649,7 +245649,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.6.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245674,7 +245674,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.6.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245699,7 +245699,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.7.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245724,7 +245724,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.7.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245749,7 +245749,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.8.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245774,7 +245774,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.8.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245799,7 +245799,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.9.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245824,7 +245824,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#PW.9.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245849,7 +245849,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.1.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245874,7 +245874,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.1.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245899,7 +245899,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.1.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245924,7 +245924,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.2.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245949,7 +245949,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.2.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245974,7 +245974,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.3.1",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -245999,7 +245999,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.3.2",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -246024,7 +246024,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.3.3",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }
@@ -246049,7 +246049,7 @@
       "authority_type": "catalog_authority",
       "artifact": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
       "locator": "NIST_SP800-218_ver1_catalog.json#RV.3.4",
-      "snapshot_date": "2026-06-10T07:34:35.000Z",
+      "snapshot_date": "2026-06-11T23:30:22.158Z",
       "checksum": null,
       "agreement": "agrees"
     }

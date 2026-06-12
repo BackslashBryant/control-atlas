@@ -38,8 +38,8 @@ const SOURCE_CATALOGS = [
 ];
 
 const MAPS = [
-  ['800-53-to-csf.json', 'nist-800-53', 'csf-2', 'maps_to', 'nist-csf-53-supplemental'],
-  ['800-53-to-800-171.json', 'nist-800-53', 'nist-800-171', 'maps_to', 'nist-800-171-oscal-mappings'],
+  ['800-53-to-csf.json', 'nist-800-53', 'csf-2', 'maps_to', 'nist-olir-csf2-to-sp800-53'],
+  ['800-53-to-800-171.json', 'nist-800-171', 'nist-800-53', 'maps_to', 'nist-800-171-oscal-mappings'],
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'maps_to', 'disa-cci-nist-references'],
 ];
 
@@ -228,7 +228,7 @@ export function buildSourceHealth(registryState, mappings, blocked, candidates, 
     generated_at: SNAPSHOT,
     sources: registryState.sources.map((source) => {
       const mapDoc = mapBySource.get(source.id);
-      const snapshotDate = mapDoc?.snapshot_date || null;
+      const snapshotDate = mapDoc?.snapshot_date || source.snapshot_date || null;
       const ageDays = snapshotDate
         ? Math.floor((now - Date.parse(snapshotDate)) / (1000 * 60 * 60 * 24))
         : null;
@@ -242,7 +242,7 @@ export function buildSourceHealth(registryState, mappings, blocked, candidates, 
         parser: source.parser,
         refresh_strategy: source.refresh_strategy,
         snapshot_date: snapshotDate,
-        checksum: mapDoc?.checksum || null,
+        checksum: mapDoc?.checksum || source.checksum || null,
         stale: ageDays !== null ? ageDays > staleDays : false,
       };
     }),
@@ -307,6 +307,7 @@ function compactPaths(paths) {
       locator: hop.locator,
       tier: hop.tier,
       authority_type: hop.authority_type,
+      direction: hop.direction,
     })),
   }));
 }

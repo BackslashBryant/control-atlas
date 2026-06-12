@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-06-11T00:46:25.934Z",
+  "generated_at": "2026-06-11T23:30:28.575Z",
   "frameworks": [
     {
       "id": "nist-800-53",
@@ -67,13 +67,13 @@
     }
   ],
   "coverage": {
-    "generated_at": "2026-06-11T00:46:25.934Z",
+    "generated_at": "2026-06-11T23:30:28.575Z",
     "frameworks": [
       {
         "framework_id": "nist-800-53",
         "catalog_items": 1196,
-        "mapped_items": 1012,
-        "mapped_percent": 84.6,
+        "mapped_items": 1013,
+        "mapped_percent": 84.7,
         "status": "active",
         "limited_reason": null
       },
@@ -88,8 +88,8 @@
       {
         "framework_id": "csf-2",
         "catalog_items": 185,
-        "mapped_items": 87,
-        "mapped_percent": 47,
+        "mapped_items": 62,
+        "mapped_percent": 33.5,
         "status": "active",
         "limited_reason": null
       },
@@ -143,26 +143,28 @@
       }
     ],
     "mappings": {
-      "published": 4508,
+      "published": 4036,
       "blocked": 0,
       "candidates": 0,
-      "evidence_gaps": 4508,
+      "evidence_gaps": 4036,
       "by_source": {
-        "nist-csf-53-supplemental": 639,
+        "nist-olir-csf2-to-sp800-53": 167,
         "nist-800-171-oscal-mappings": 31,
         "disa-cci-nist-references": 3838
       },
       "by_pair": {
-        "nist-800-53->csf-2": 639,
-        "nist-800-53->nist-800-171": 31,
+        "nist-800-53->csf-2": 167,
+        "nist-800-171->nist-800-53": 31,
         "disa-cci->nist-800-53": 3838
       }
     },
     "paths": {
-      "published": 5882,
+      "published": 2172,
       "by_pair": {
-        "disa-cci->csf-2": 5771,
-        "disa-cci->nist-800-171": 111
+        "disa-cci->csf-2": 1062,
+        "nist-800-171->csf-2": 24,
+        "csf-2->disa-cci": 1062,
+        "csf-2->nist-800-171": 24
       }
     },
     "blocked_by_reason": {},
@@ -272,7 +274,7 @@
         "id": "nist-csf-53-supplemental",
         "name": "NIST CSF 1.1 to SP 800-53 Supplemental Mapping",
         "tier": "gold",
-        "authority_type": "mapping_authority",
+        "authority_type": "owner_authority_mapping",
         "issuer": "NIST",
         "artifact": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
         "frameworks": [
@@ -285,7 +287,7 @@
         "id": "nist-csf11-csf20-crosswalk",
         "name": "NIST CSF 1.1 to CSF 2.0 OLIR Crosswalk",
         "tier": "gold",
-        "authority_type": "mapping_authority",
+        "authority_type": "owner_authority_mapping",
         "issuer": "NIST",
         "artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx",
         "frameworks": [
@@ -297,7 +299,7 @@
         "id": "nist-800-171-oscal-mappings",
         "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
         "tier": "gold",
-        "authority_type": "mapping_authority",
+        "authority_type": "owner_authority_mapping",
         "issuer": "NIST",
         "artifact": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
         "frameworks": [
@@ -310,7 +312,7 @@
         "id": "disa-cci-nist-references",
         "name": "DISA CCI NIST SP 800-53 Revision 5 References",
         "tier": "gold",
-        "authority_type": "mapping_authority",
+        "authority_type": "owner_authority_mapping",
         "issuer": "DISA",
         "artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
         "frameworks": [
@@ -322,15 +324,15 @@
       {
         "id": "nist-informative-references",
         "name": "NIST Informative References",
-        "tier": "gold",
-        "authority_type": "mapping_authority",
+        "tier": "bronze",
+        "authority_type": "research_candidate",
         "issuer": "NIST",
         "artifact": "https://www.nist.gov/cyberframework/informative-references",
         "frameworks": [
           "nist-800-53",
           "csf-2"
         ],
-        "status": "partial"
+        "status": "candidate"
       },
       {
         "id": "mitre-cis-cci-mappings",
@@ -355,6 +357,32 @@
           "disa-cci"
         ],
         "status": "candidate"
+      },
+      {
+        "id": "nist-olir-csf2-to-sp800-53",
+        "name": "NIST OLIR CSF 2.0 to SP 800-53 Rev. 5.2.0 Mapping",
+        "tier": "gold",
+        "authority_type": "owner_authority_mapping",
+        "issuer": "NIST",
+        "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+        "frameworks": [
+          "csf-2",
+          "nist-800-53"
+        ],
+        "status": "draft"
+      },
+      {
+        "id": "nist-olir-csf2-to-sp800-171",
+        "name": "NIST OLIR CSF 2.0 to SP 800-171 Rev. 3 Mapping",
+        "tier": "gold",
+        "authority_type": "owner_authority_mapping",
+        "issuer": "NIST",
+        "artifact": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-171_3_draft.xlsx",
+        "frameworks": [
+          "csf-2",
+          "nist-800-171"
+        ],
+        "status": "draft"
       }
     ]
   }
