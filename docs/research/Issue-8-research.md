@@ -1,5 +1,7 @@
 # Issue 8 Research
 
+> **Status: HISTORICAL.** Issue 8 is superseded by the Federal Security Control Integration Directory contract. Retain the UX and source findings below only where they comply with the federal source policy.
+
 ## Product Correction
 
 GovFrame is a framework mapper, not a STIG-first tool. Control Correlation Identifiers are granular bridge requirements that may connect controls and mappable technical requirements. They are not synonymous with STIGs, and complete STIG ingestion is not a goal.

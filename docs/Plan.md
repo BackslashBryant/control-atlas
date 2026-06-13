@@ -1,38 +1,46 @@
 # Plan Index
 
-This index tracks development against the **full GovFrame Navigator v1.0** release. Phases in `docs/roadmap.md` define scope and exit criteria; per-issue plans under `docs/plans/` hold implementation detail.
+This index tracks delivery of the U.S. Federal Security Control Integration Directory defined in `docs/PRD.md` and `docs/roadmap.md`.
 
-## Active Issues
+## Active Release
 
-| Issue | Status | Plan | Research | Branch | Owner |
-| --- | --- | --- | --- | --- | --- |
-| Issue 8 - Refactor & UX | IN PROGRESS | [Issue-8 plan](plans/Issue-8-plan-status-IN-PROGRESS.md) | [Issue-8 research](research/Issue-8-research.md) | `agent/muse/issue-8-junior-assessor-ux` | Forge -> Muse -> Pixel |
+| Issue | Status | Plan | Branch | Lead |
+| --- | --- | --- | --- | --- |
+| Issue 9 / FEDGRAPH-001 - Federal graph contract vertical migration | READY | [Issue 9 plan](plans/Issue-9-plan-status-READY.md) | `agent/forge/issue-9-federal-graph-contract` | Forge |
+| Issue 10 / FEDGRAPH-002A - RMF, categorization, and baseline context | BLOCKED ON ISSUE 9 | [Issue 10 plan](plans/Issue-10-plan-status-BLOCKED.md) | `agent/forge/issue-10-rmf-baseline-context` | Forge |
+| Issue 11 / FEDGRAPH-002B - Assessment and OSCAL backbone | BLOCKED ON ISSUE 10 | [Issue 11 plan](plans/Issue-11-plan-status-BLOCKED.md) | `agent/forge/issue-11-assessment-oscal-backbone` | Forge |
 
-## Completed Issues
+## Superseded Work
 
-| Issue | Status | Plan | Research | Branch | Owner |
-| --- | --- | --- | --- | --- | --- |
-| Issue 1 - Phase 1 foundation | COMPLETE | [Issue-1 plan](plans/Issue-1-plan-status-COMPLETE.md) | [Issue-1 research](research/Issue-1-research.md) | shipped: `agent/forge/issue-1-phase-1-foundation` | Forge -> Nexus |
-| Issue 2 - GitHub Pages and CI smoke gates | COMPLETE | [Issue-2 plan](plans/Issue-2-plan-status-COMPLETE.md) | [Issue-2 research](research/Issue-2-research.md) | shipped: `agent/nexus/issue-2-pages-ci-smoke` | Nexus -> Pixel |
-| Issue 3 - Phase 2 framework expansion | COMPLETE | [Issue-3 plan](plans/Issue-3-plan-status-COMPLETE.md) | [Issue-3 research](research/Issue-3-research.md) | shipped: `571e9f8` on `main` | Forge -> Pixel |
-| Issue 4 - Phase 3 data automation | COMPLETE | [Issue-4 plan](plans/Issue-4-plan-status-COMPLETE.md) | [Issue-4 research](research/Issue-4-research.md) | `agent/nexus/issue-4-phase-3-data-automation` | Nexus -> Forge |
-| Issue 5 - Phase 4 Tenable integration | COMPLETE | [Issue-5 plan](plans/Issue-5-plan-status-COMPLETE.md) | [Issue-5 research](research/Issue-5-research.md) | `agent/forge/issue-5-tenable` | Forge -> Nexus |
-| Issue 6 - Phase 5 emerging frameworks | COMPLETE | [Issue-6 plan](plans/Issue-6-plan-status-COMPLETE.md) | [Issue-6 research](research/Issue-6-research.md) | shipped: `078e52f` on `main` | Forge -> Nexus |
-| Issue 7 - Phase 6 polish and release quality | COMPLETE | [Issue-7 plan](plans/Issue-7-plan-status-COMPLETE.md) | [Issue-7 research](research/Issue-7-research.md) | shipped: `6280440` on `main` | Vector -> Muse -> Forge -> Pixel |
+| Issue | Status | Plan | Disposition |
+| --- | --- | --- | --- |
+| Issue 8 - Junior assessor UX | SUPERSEDED | [Issue 8 plan](plans/Issue-8-plan-status-SUPERSEDED.md) | Preserve useful shipped UX; replace framework-neutral contract and terminology in Issue 9 |
+| Source provenance hardening backlog | SUPERSEDED AS CONTRACT | [Historical backlog](plans/epic-source-provenance-hardening.md) | Useful implementation findings are inputs to Issues 9-11; federal provenance is now the primary trust model |
 
-## v1.0 Build Order (Roadmap Phases)
+## Release 1 Requirement Ownership
 
-1. **Phase 1 - Foundation** (Issues 1-2) - **COMPLETE**
-2. **Phase 2 - Framework expansion** (Issue 3) - **COMPLETE**
-3. **Phase 3 - Data automation** (Issue 4) - **COMPLETE**
-4. **Phase 4 - Tenable integration** (Issue 5) - **COMPLETE**
-5. **Phase 5 - AI and emerging frameworks** (Issue 6) - **COMPLETE**
-6. **Phase 6 - Polish and release quality** (Issue 7) - **COMPLETE**
+| Requirement | Owning issue |
+| --- | --- |
+| Federal inclusion policy and source registry migration | Issue 9 |
+| Source, node, edge, evidence, and graph-health contracts | Issue 9 |
+| Breaking runtime/UI vertical migration | Issue 9 |
+| FIPS 199 and FIPS 200 context | Issue 10 |
+| SP 800-37 RMF lifecycle context | Issue 10 |
+| SP 800-53B baseline context | Issue 10 |
+| SP 800-53A assessment context | Issue 11 |
+| Canonical OSCAL ingest boundary | Issue 11 |
+| Release 1 manifests, reproducibility, and graph-quality gates | Issue 11 |
 
-## How to Work a New Issue
+Each Release 1 requirement has one owning issue. Supporting work may occur elsewhere only when its owning plan explicitly requires it.
 
-1. Create the plan file using `.cursor/templates/Issue-plan-status.md` and name it `Issue-<id>-plan-status-<STATUS>.md`.
-2. Create the matching `docs/research/Issue-<id>-research.md`.
-3. Link roadmap phase exit criteria in the plan acceptance section.
-4. Add a row to the Active Issues table (move to Completed when shipped on `main`).
-5. Update `docs/context.md` and `docs/PRODUCTION_READINESS.md` when exit criteria are met.
+## Later Releases
+
+Releases 2-6 remain milestone-level roadmap entries. Implementation plans are created only after Release 1 establishes the graph contract.
+
+## Issue Workflow
+
+1. Work on the branch named in the issue plan.
+2. Revalidate official source versions and access before implementing importers.
+3. Keep the static application deployable after every issue.
+4. Run the issue-specific checks and `npm run precommit`.
+5. Complete required live audits before marking the issue or release complete.

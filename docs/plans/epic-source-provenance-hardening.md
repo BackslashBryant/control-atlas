@@ -1,4 +1,6 @@
-## Backlog: GovFrame source coverage, evidence quality, and mapping correctness hardening
+## Historical Backlog: Source Coverage and Evidence Hardening
+
+> **Status: SUPERSEDED AS A PRODUCT CONTRACT.** Retain this document as implementation research for Issues 9-11. The federal source policy and separate relationship semantics, federal provenance, confidence, and evidence-quality contracts now govern product behavior.
 
 ### Context
 

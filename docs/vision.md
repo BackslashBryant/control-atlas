@@ -1,12 +1,16 @@
 # Product Vision
 
-GovFrame is the evidence-backed framework mapper professionals use when multiple federal and DoD requirements overlap.
+GovFrame is the U.S. Federal Security Control Integration Directory.
 
-The product does not designate one framework as the hub. Every supported framework item can be an entry point. Direct sourced mappings are the primary answer; calculated paths are a transparent research aid.
+It gives practitioners one source-backed place to understand how a federal control connects across RMF, baselines, assessment procedures, FedRAMP, CUI, CMMC, implementation checks, vulnerability operations, threat-informed defense, validation paths, and evidence.
 
-Success means users can answer both:
+GovFrame is not a generic cybersecurity framework aggregator. Federal provenance determines eligibility, every relationship explains why it exists, and inferred candidates remain visibly separate from federal-published relationships.
 
-- “What does this one requirement map to?”
-- “How does this source framework map into that target framework?”
+Success means a user can start with a federal control such as `AC-2` and answer:
 
-Coverage and evidence gaps remain visible so the product never presents seed data as complete.
+- What federal source defines or mandates it?
+- Which federal baselines and programs use it?
+- How is it assessed and implemented?
+- What vulnerability, threat, defensive, and validation context is relevant?
+- What evidence supports each relationship?
+- Which relationships are federal-published, federal-utilized, federal-referenced, or inferred?

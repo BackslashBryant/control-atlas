@@ -1,26 +1,31 @@
 # Production Readiness
 
-## Issue 8 Status
+## Current Status
 
-GovFrame is under comprehensive refactor. Previous v1.0, accessibility, performance, coverage, and browser-audit completion claims are superseded.
+The existing static mapper remains deployed, but its product contract is superseded. Release 1 of the Federal Security Control Integration Directory is not production-ready until Issues 9-11 ship and the required audits pass.
 
-## Required Before Release
+## Release 1 Required Before Completion
 
-- [x] Complete intended first-class source adapters with explicit limited-public-scope boundaries.
-- [x] Reconcile direct mappings and remove unsupported seed assertions.
-- [x] Confirm generated coverage matches normalized authoritative snapshots.
-- [x] Pass `npm run precommit`.
-- [ ] Pass strict keyboard, screen-reader, responsive, zoom, performance, and live GitHub Pages browser audits.
-- [x] Confirm documentation claims match generated coverage artifacts.
+- [ ] Issue 9 replaces the generated-data and runtime contracts while preserving current user journeys.
+- [ ] Issue 10 publishes source-backed FIPS, RMF, and baseline context.
+- [ ] Issue 11 publishes source-backed assessment context and canonical OSCAL ingestion.
+- [ ] Every displayable node and edge passes federal eligibility and provenance validation.
+- [ ] Blocked relationships appear only in graph-health reporting.
+- [ ] Source manifests and graph-health artifacts are reproducible and reviewable.
+- [ ] `npm run precommit` passes for every issue and the merged release.
+- [ ] Native keyboard-only, screen-reader, responsive, zoom, performance, and live GitHub Pages audits pass.
 
-## Current Evidence
+## Retained Evidence
 
-Use `data/generated/coverage.json` for current catalog and mapping coverage. `limited-public-scope` entries are intentional and must remain visible.
+The June 9, 2026 audit in `docs/audits/live-browser-audit-2026-06-09.md` remains evidence for retained search, browse, evidence-first detail, onboarding, responsive, and accessible-name behavior. It is not Release 1 federal graph acceptance evidence.
 
-The June 9, 2026 live browser audit is recorded in `docs/audits/live-browser-audit-2026-06-09.md`. It validates expert and junior-assessor journeys, educational copy, mobile and 200%-equivalent reflow, stable asset deployment, and console health. Native keyboard-only, screen-reader, and browser-controlled 200% zoom proof remain open.
+## Open Audit Requirements
+
+- Validate downloadable exports in a browser environment that supports downloads when export work resumes.
+- Complete native keyboard-only and screen-reader audits.
+- Complete browser-controlled 200% zoom and release performance audits.
+- Re-run live-site journeys after every Release 1 issue that changes runtime behavior.
 
 ## Performance and Data Strategy
 
-GovFrame leverages modern browser JavaScript engines to process and query tens of thousands of items and relationships instantaneously on the client side.
-
-To prevent initial blocking and ensure rapid time-to-interactive, large catalog and relationship data (e.g. `catalog.json`, `relationships.json`, `evidence.json`) are intentionally not bundled into the initial `app.js` payload. They are fetched asynchronously via efficient HTTP lazy-loading during application initialization.
+The application remains static and browser-only. Large federal graph artifacts and projections must lazy-load, initial interaction must not wait for the complete graph, and every release must document artifact sizes and performance evidence.
