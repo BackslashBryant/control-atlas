@@ -18,7 +18,7 @@ test('source registry schema 4.0 validates the federal source contract', () => {
 
 test('source provenance and eligibility remain separate', () => {
   const { sources } = loadSourceRegistry(registry);
-  assert.equal(sources.length, 20);
+  assert.equal(sources.length, 21);
   assert.ok(!sources.some((source) => source.provenance_class === 'inferred'));
   assert.ok(!sources.some((source) => source.provenance_class === 'excluded'));
   assert.ok(sources.some((source) => source.eligibility_status === 'excluded'));
@@ -35,6 +35,7 @@ test('required federal sources are registered', () => {
     'nist-fips-199',
     'nist-fips-200',
     'nist-800-37-rev2',
+    'nist-800-53a-assessment-procedures',
   ]) {
     assert.ok(ids.has(id), `missing source ${id}`);
   }

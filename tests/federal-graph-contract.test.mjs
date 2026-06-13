@@ -27,6 +27,9 @@ test('generated output uses only the federal graph artifact contract', () => {
   for (const name of retiredArtifacts) {
     assert.ok(!existsSync(`data/generated/${name}.json`), `retired artifact remains: ${name}.json`);
   }
+  assert.ok(existsSync('data/generated/build-manifest.json'));
+  assert.ok(existsSync('data/generated/source-manifests.json'));
+  assert.ok(existsSync('data/generated/graph-diff-summary.json'));
 });
 
 test('every graph node has an eligible defining federal source', () => {
@@ -82,19 +85,39 @@ test('candidate edges are inferred and blocked relationships appear only in grap
   assert.ok(!edges.some((edge) => edge.publication_status === 'blocked'));
 });
 
-test('graph validation rejects ineligible nodes, missing edge evidence, and blocked edges', () => {
+test('graph validation rejects duplicates, non-public leakage, missing edge evidence, inferred published edges, and blocked edges', () => {
   const artifacts = {
     sources: [{
       id: 'excluded-source',
       provenance_class: 'federal_referenced',
       eligibility_status: 'excluded',
       graph_eligible: false,
+      access_status: 'public',
+    }, {
+      id: 'restricted-source',
+      provenance_class: 'federal_published',
+      eligibility_status: 'eligible',
+      graph_eligible: true,
+      access_status: 'restricted',
+    }, {
+      id: 'restricted-source',
+      provenance_class: 'federal_published',
+      eligibility_status: 'eligible',
+      graph_eligible: true,
+      access_status: 'restricted',
     }],
     nodes: [{
       id: 'node:one',
       node_type: 'requirement',
       label: 'One',
       source_id: 'excluded-source',
+      lifecycle_status: 'active',
+      metadata: {},
+    }, {
+      id: 'node:one',
+      node_type: 'requirement',
+      label: 'Duplicate',
+      source_id: 'restricted-source',
       lifecycle_status: 'active',
       metadata: {},
     }],
@@ -110,14 +133,34 @@ test('graph validation rejects ineligible nodes, missing edge evidence, and bloc
       display_label: 'Blocked',
       warning: null,
       inference_rule_id: null,
+    }, {
+      id: 'edge:published-inferred',
+      source_node_id: 'node:one',
+      target_node_id: 'node:one',
+      relationship_type: 'maps_to',
+      provenance_class: 'inferred',
+      confidence: 'inferred_high',
+      publication_status: 'published',
+      evidence_ids: ['evidence:restricted'],
+      display_label: 'Bad',
+      warning: null,
+      inference_rule_id: 'rule-1',
     }],
-    evidence: [],
+    evidence: [{
+      id: 'evidence:restricted',
+      source_id: 'restricted-source',
+      evidence_quality: 'primary',
+    }],
     findings: [],
   };
 
-  assert.deepEqual(validateGraphArtifacts(artifacts), [
-    'node node:one defining source excluded-source is not graph eligible',
-    'edge edge:blocked cannot use blocked publication_status',
-    'edge edge:blocked must reference evidence',
-  ]);
+  const errors = validateGraphArtifacts(artifacts);
+  assert.ok(errors.includes('duplicate source id: restricted-source'));
+  assert.ok(errors.includes('duplicate node id: node:one'));
+  assert.ok(errors.includes('node node:one defining source excluded-source is not graph eligible'));
+  assert.ok(errors.includes('node node:one defining source restricted-source must remain public for displayable graph content'));
+  assert.ok(errors.includes('edge edge:blocked cannot use blocked publication_status'));
+  assert.ok(errors.includes('edge edge:blocked must reference evidence'));
+  assert.ok(errors.includes('published edge edge:published-inferred cannot use inferred provenance_class'));
+  assert.ok(errors.includes('evidence evidence:restricted source restricted-source must remain public for displayable graph content'));
 });

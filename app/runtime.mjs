@@ -137,6 +137,7 @@ export function createFederalGraphRuntime(dataset) {
           categorizationContext: [],
           minimumSecurityRequirements: [],
           rmfLifecycle: [],
+          assessmentContext: [],
         };
       }
 
@@ -208,11 +209,20 @@ export function createFederalGraphRuntime(dataset) {
           }))
           .filter((item) => item.stepNode?.node_type === 'rmf_step'))], (entry) => `${entry.stepNode.id}:${entry.viaNode.id}`);
 
+      const assessmentContext = uniqueBy(directEdges
+        .filter((edge) => edge.relationship_type === 'assesses')
+        .map((assessmentEdge) => ({
+          assessmentNode: counterpartFor(assessmentEdge, nodeId),
+          assessmentEdge,
+        }))
+        .filter((entry) => entry.assessmentNode?.node_type === 'assessment_procedure'), (entry) => entry.assessmentNode.id);
+
       return {
         baselineMembership,
         categorizationContext,
         minimumSecurityRequirements,
         rmfLifecycle,
+        assessmentContext,
       };
     },
   };

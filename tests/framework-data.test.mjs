@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseCciXml } from '../scripts/lib/cci-adapter.mjs';
 import { parseOlirCsv } from '../scripts/lib/olir-adapter.mjs';
@@ -24,7 +24,7 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 20);
+  assert.equal(result.sources, 21);
   assert.ok(result.nodes > 6800);
   assert.ok(result.edges > 4200);
   assert.equal(result.edges, result.evidence);
@@ -60,4 +60,39 @@ test('issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2
     edge.source_node_id === 'nist-800-37:RMF-SELECT'
     && edge.target_node_id === 'nist-800-53b:MODERATE'
     && edge.relationship_type === 'selects'));
+});
+
+test('issue 11 graph build emits assessment context and governance artifacts for AC-2', () => {
+  buildFrameworkData();
+  const sources = generated('sources').sources;
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const evidence = generated('evidence').evidence;
+  const buildManifest = generated('build-manifest');
+  const sourceManifests = generated('source-manifests');
+  const diffSummary = generated('graph-diff-summary');
+
+  assert.ok(sources.some((source) => source.id === 'nist-800-53a-assessment-procedures'));
+  const assessmentNode = nodes.find((node) => node.id === 'nist-800-53a:AC-2');
+  assert.ok(assessmentNode, 'missing AC-2 assessment node');
+  assert.equal(assessmentNode.node_type, 'assessment_procedure');
+  assert.ok(Array.isArray(assessmentNode.metadata.assessment_methods));
+  assert.ok(Array.isArray(assessmentNode.metadata.assessment_objectives));
+  assert.ok(Array.isArray(assessmentNode.metadata.assessment_objects));
+  assert.match(assessmentNode.metadata.procedure_text, /account managers are assigned/i);
+
+  const assessmentEdge = edges.find((edge) =>
+    edge.source_node_id === 'nist-800-53a:AC-2'
+    && edge.target_node_id === 'nist-800-53:AC-2'
+    && edge.relationship_type === 'assesses');
+  assert.ok(assessmentEdge, 'missing AC-2 assesses edge');
+  assert.ok(evidence.some((entry) => assessmentEdge.evidence_ids.includes(entry.id)));
+
+  assert.ok(existsSync('data/generated/build-manifest.json'));
+  assert.ok(existsSync('data/generated/source-manifests.json'));
+  assert.ok(existsSync('data/generated/graph-diff-summary.json'));
+  assert.ok(buildManifest.build_manifest.runtime_artifacts.includes('graph-health.json'));
+  assert.ok(buildManifest.build_manifest.governance_artifacts.includes('build-manifest.json'));
+  assert.ok(sourceManifests.source_manifests.some((entry) => entry.source_id === 'nist-800-53a-assessment-procedures'));
+  assert.equal(diffSummary.graph_diff_summary.kind, 'graph_diff_summary');
 });

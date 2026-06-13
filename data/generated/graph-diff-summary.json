@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-13T23:46:52.886Z",
+  "graph_diff_summary": {
+    "kind": "graph_diff_summary",
+    "previous_generated_at": "2026-06-13T23:46:52.886Z",
+    "current_generated_at": "2026-06-13T23:46:52.886Z",
+    "changed_runtime_artifacts": [],
+    "unchanged_runtime_artifacts": [
+      "sources",
+      "nodes",
+      "edges",
+      "evidence",
+      "graph-health"
+    ]
+  }
+}

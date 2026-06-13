@@ -7,6 +7,8 @@ import { loadSourceRegistry } from './lib/source-registry.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data', 'generated');
+const RUNTIME_COLLECTIONS = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];
+const GOVERNANCE_FILES = ['build-manifest.json', 'source-manifests.json', 'graph-diff-summary.json'];
 
 const CATALOGS = [
   ['controls-800-53.json', 'nist-800-53', 'nist-oscal', 'control'],
@@ -55,9 +57,55 @@ function normalize53BBaselineId(value) {
   return null;
 }
 
+function assessmentNodeId(recordId) {
+  return nodeId('nist-800-53a', recordId);
+}
+
+function pushEligibleNode(state, registry, node, sourceId) {
+  const source = registry.byId.get(sourceId);
+  if (!source?.graph_eligible) {
+    state.findings.push({
+      id: `finding:ineligible-node:${node.id}`,
+      finding_type: 'ineligible_source_node',
+      severity: 'warning',
+      source_id: sourceId,
+      subject_id: node.id,
+      message: `Node ${node.id} was not published because its defining source is not graph eligible.`,
+    });
+    return;
+  }
+  state.nodes.push(node);
+}
+
+function buildAssessmentNode(record) {
+  const assessment = record.metadata?.assessment;
+  if (!assessment?.source_key) return null;
+  return {
+    id: assessmentNodeId(record.id),
+    node_type: 'assessment_procedure',
+    label: `${record.id} Assessment Procedure`,
+    source_id: assessment.source_key,
+    lifecycle_status: record.status === 'deprecated' ? 'deprecated' : 'active',
+    metadata: {
+      catalog_id: 'nist-800-53a',
+      item_id: record.id,
+      title: `${record.title || record.id} Assessment Procedure`,
+      description: `Assessment procedures for ${record.id} ${record.title || ''}`.trim(),
+      family: record.family || '',
+      type: 'assessment_procedure',
+      assessment_methods: assessment.methods.map((entry) => entry.method),
+      assessment_method_details: assessment.methods,
+      assessment_objects: assessment.objects,
+      assessment_objectives: assessment.objectives,
+      procedure_text: assessment.procedure_text || '',
+      nist_control: record.id,
+      references: null,
+    },
+  };
+}
+
 function buildNodes(registry) {
-  const nodes = [];
-  const findings = [];
+  const state = { nodes: [], findings: [] };
   const familyNodes = new Map();
   for (const [filename, catalogId, defaultSourceId, defaultType] of CATALOGS) {
     const path = join(ROOT, 'data', filename);
@@ -65,20 +113,8 @@ function buildNodes(registry) {
     const document = readJson(path);
     for (const record of document.records || []) {
       const sourceId = record.source?.key || defaultSourceId;
-      const source = registry.byId.get(sourceId);
       const id = nodeId(catalogId, record.id);
-      if (!source?.graph_eligible) {
-        findings.push({
-          id: `finding:ineligible-node:${id}`,
-          finding_type: 'ineligible_source_node',
-          severity: 'warning',
-          source_id: sourceId,
-          subject_id: id,
-          message: `Node ${id} was not published because its defining source is not graph eligible.`,
-        });
-        continue;
-      }
-      nodes.push({
+      pushEligibleNode(state, registry, {
         id,
         node_type: nodeType(defaultType, record.id),
         label: record.title ? `${record.id} ${record.title}` : String(record.id),
@@ -96,9 +132,14 @@ function buildNodes(registry) {
           type: record.type || null,
           references: record.references || null,
         },
-      });
+      }, sourceId);
 
       if (catalogId === 'nist-800-53') {
+        const assessmentNode = buildAssessmentNode(record);
+        if (assessmentNode) {
+          pushEligibleNode(state, registry, assessmentNode, assessmentNode.source_id);
+        }
+
         const familyCode = familyCodeFromControlId(record.id);
         if (familyCode && record.family) {
           const familyId = nodeId('nist-800-53', `FAMILY-${familyCode}`);
@@ -127,7 +168,15 @@ function buildNodes(registry) {
       }
     }
   }
-  return { nodes: [...nodes, ...familyNodes.values()].sort((a, b) => a.id.localeCompare(b.id)), findings };
+
+  for (const familyNode of familyNodes.values()) {
+    pushEligibleNode(state, registry, familyNode, familyNode.source_id);
+  }
+
+  return {
+    nodes: state.nodes.sort((a, b) => a.id.localeCompare(b.id)),
+    findings: state.findings,
+  };
 }
 
 function addPublishedEdge(state, registry, nodeIds, payload) {
@@ -244,6 +293,29 @@ function addBaselineMembershipEdges(state, registry, nodeIds) {
   }
 }
 
+function addAssessmentEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'controls-800-53.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    const sourceId = record.metadata?.assessment?.source_key;
+    if (!sourceId) continue;
+    const sourceNodeId = assessmentNodeId(record.id);
+    const targetNodeId = nodeId('nist-800-53', record.id);
+    const subjectId = relationshipId('800-53a-assessment', sourceNodeId, targetNodeId, 'assesses');
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId,
+      sourceId,
+      sourceNodeId,
+      targetNodeId,
+      relationshipType: 'assesses',
+      locator: `sp800-53a#${record.id}`,
+      rationale: `NIST SP 800-53A assessment procedures for ${record.id} assess the corresponding control.`,
+      displayLabel: `${sourceNodeId} assesses ${targetNodeId}`,
+    });
+  }
+}
+
 function buildEdges(registry, nodes) {
   const nodeIds = new Set(nodes.map((node) => node.id));
   const state = { edges: [], evidence: [], findings: [] };
@@ -274,6 +346,7 @@ function buildEdges(registry, nodes) {
   addDocumentRelationshipEdges(state, registry, nodeIds);
   addFamilyMembershipEdges(state, registry, nodeIds);
   addBaselineMembershipEdges(state, registry, nodeIds);
+  addAssessmentEdges(state, registry, nodeIds);
   return state;
 }
 
@@ -294,6 +367,85 @@ function existingGeneratedAt(collections) {
     generatedAt = existing.generated_at;
   }
   return generatedAt;
+}
+
+function loadExistingCollections() {
+  const previous = {};
+  for (const name of RUNTIME_COLLECTIONS) {
+    const path = join(GENERATED, `${name}.json`);
+    if (!existsSync(path)) continue;
+    previous[name] = readJson(path);
+  }
+  return previous;
+}
+
+function countBy(items, keyFn) {
+  const counts = new Map();
+  for (const item of items) {
+    const key = keyFn(item);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+function buildSourceManifests(graph) {
+  const evidenceById = new Map(graph.evidence.map((entry) => [entry.id, entry]));
+  const nodeCounts = countBy(graph.nodes, (node) => node.source_id);
+  const evidenceCounts = countBy(graph.evidence, (entry) => entry.source_id);
+  const edgeCounts = countBy(graph.edges, (edge) => evidenceById.get(edge.evidence_ids[0])?.source_id || '');
+  const findingCounts = countBy(graph.findings, (entry) => entry.source_id);
+
+  return graph.sources.map((source) => ({
+    source_id: source.id,
+    owner: source.owner,
+    version: source.version,
+    retrieved_at: source.retrieved_at,
+    artifact_url: source.artifact_url,
+    artifact_type: source.artifact_type,
+    checksum: source.checksum,
+    access_status: source.access_status,
+    lifecycle_status: source.lifecycle_status,
+    graph_eligible: source.graph_eligible,
+    node_count: nodeCounts.get(source.id) || 0,
+    relationship_count: edgeCounts.get(source.id) || 0,
+    evidence_count: evidenceCounts.get(source.id) || 0,
+    finding_count: findingCounts.get(source.id) || 0,
+  })).sort((a, b) => a.source_id.localeCompare(b.source_id));
+}
+
+function createBuildManifest(graph) {
+  return {
+    kind: 'build_manifest',
+    runtime_artifacts: RUNTIME_COLLECTIONS.map((name) => `${name}.json`),
+    governance_artifacts: GOVERNANCE_FILES,
+    source_registry_path: 'data/source-registry.json',
+    source_registry_schema: '4.0',
+    counts: {
+      sources: graph.sources.length,
+      nodes: graph.nodes.length,
+      edges: graph.edges.length,
+      evidence: graph.evidence.length,
+      findings: graph.findings.length,
+    },
+  };
+}
+
+function buildDiffSummary(previous, collections, generatedAt) {
+  const changedRuntimeArtifacts = RUNTIME_COLLECTIONS.filter((name) => {
+    const previousCollection = previous[name];
+    const currentCollection = collections[name];
+    if (!previousCollection) return true;
+    const previousPayload = JSON.stringify(previousCollection[name === 'graph-health' ? 'findings' : name]);
+    return previousPayload !== JSON.stringify(currentCollection);
+  });
+
+  return {
+    kind: 'graph_diff_summary',
+    previous_generated_at: previous.sources?.generated_at || null,
+    current_generated_at: generatedAt,
+    changed_runtime_artifacts: changedRuntimeArtifacts,
+    unchanged_runtime_artifacts: RUNTIME_COLLECTIONS.filter((name) => !changedRuntimeArtifacts.includes(name)),
+  };
 }
 
 export function buildFrameworkData() {
@@ -318,7 +470,12 @@ export function buildFrameworkData() {
     evidence: graph.evidence,
     'graph-health': graph.findings,
   };
+  const previousCollections = loadExistingCollections();
   const generatedAt = existingGeneratedAt(collections) || new Date().toISOString();
+
+  const sourceManifests = buildSourceManifests(graph);
+  const buildManifest = createBuildManifest(graph);
+  const diffSummary = buildDiffSummary(previousCollections, collections, generatedAt);
 
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
@@ -329,6 +486,11 @@ export function buildFrameworkData() {
     const value = artifact(collection, values, generatedAt);
     writeFileSync(join(GENERATED, `${name}.json`), `${JSON.stringify(value, null, 2)}\n`, 'utf8');
   }
+
+  writeFileSync(join(GENERATED, 'source-manifests.json'), `${JSON.stringify(artifact('source_manifests', sourceManifests, generatedAt), null, 2)}\n`, 'utf8');
+  writeFileSync(join(GENERATED, 'build-manifest.json'), `${JSON.stringify(artifact('build_manifest', buildManifest, generatedAt), null, 2)}\n`, 'utf8');
+  writeFileSync(join(GENERATED, 'graph-diff-summary.json'), `${JSON.stringify(artifact('graph_diff_summary', diffSummary, generatedAt), null, 2)}\n`, 'utf8');
+
   return {
     sources: graph.sources.length,
     nodes: graph.nodes.length,
