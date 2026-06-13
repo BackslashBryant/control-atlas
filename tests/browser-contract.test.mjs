@@ -17,9 +17,10 @@ test('shell identifies the federal integration directory and preserves core jour
 });
 
 test('application loads only the five federal graph artifacts', () => {
-  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-1'/);
+  assert.match(html, /app\/app\.mjs\?v=20260613-2/);
+  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-2'/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
-    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-1`));
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-2`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
   assert.match(app, /createFederalGraphRuntime/);
