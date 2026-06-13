@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T14:50:32.658Z",
+  "generated_at": "2026-06-13T23:14:24.735Z",
   "sources": [
     {
       "id": "nist-oscal",
@@ -221,9 +221,92 @@
       "graph_eligible": true,
       "metadata": {
         "frameworks": [
-          "nist-800-53"
+          "nist-800-53",
+          "nist-800-53b"
         ],
         "parser": "oscal-profile"
+      }
+    },
+    {
+      "id": "nist-fips-199",
+      "name": "FIPS 199 Standards for Security Categorization of Federal Information and Information Systems",
+      "owner": "NIST",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "FISMA"
+      ],
+      "version": "2004-02",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/fips/199/final",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nist_fips_199_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "fips-199"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "nist-fips-200",
+      "name": "FIPS 200 Minimum Security Requirements for Federal Information and Information Systems",
+      "owner": "NIST",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "FISMA"
+      ],
+      "version": "2006-03",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/fips/200/final",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nist_fips_200_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "fips-200"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "nist-800-37-rev2",
+      "name": "NIST SP 800-37 Rev. 2 Risk Management Framework",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "FIPS 200"
+      ],
+      "version": "2018-12",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nist_800_37_rev2_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "nist-800-37"
+        ],
+        "parser": "manual-seed"
       }
     },
     {

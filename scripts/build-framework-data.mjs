@@ -10,6 +10,10 @@ const GENERATED = join(ROOT, 'data', 'generated');
 
 const CATALOGS = [
   ['controls-800-53.json', 'nist-800-53', 'nist-oscal', 'control'],
+  ['800-53b-baselines.json', 'nist-800-53b', 'nist-800-53b-baselines', 'baseline'],
+  ['fips-199.json', 'fips-199', 'nist-fips-199', 'impact_category'],
+  ['fips-200.json', 'fips-200', 'nist-fips-200', 'requirement'],
+  ['tasks-800-37.json', 'nist-800-37', 'nist-800-37-rev2', 'rmf_step'],
   ['requirements-800-171.json', 'nist-800-171', 'nist-oscal', 'requirement'],
   ['csf-subcategories.json', 'csf-2', 'nist-oscal', 'requirement'],
   ['cmmc-practices.json', 'cmmc-2', 'dod-cmmc-rule', 'program'],
@@ -28,14 +32,33 @@ const MAPS = [
 
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
 const nodeId = (catalogId, recordId) => `${catalogId}:${recordId}`;
+const identifier = (value) => String(value).replace(/[^A-Za-z0-9:_-]+/g, '-');
+
+function relationshipId(prefix, sourceNodeId, targetNodeId, relationshipType) {
+  return identifier(`${prefix}:${relationshipType}:${sourceNodeId}:${targetNodeId}`);
+}
 
 function nodeType(defaultType, recordId) {
   return defaultType === 'control' && String(recordId).includes('.') ? 'control_enhancement' : defaultType;
 }
 
+function familyCodeFromControlId(recordId) {
+  return String(recordId || '').match(/^([A-Z]{2})-/)?.[1] || null;
+}
+
+function normalize53BBaselineId(value) {
+  const label = String(value || '').toUpperCase();
+  if (label.includes('PRIVACY')) return 'PRIVACY';
+  if (label.includes('MODERATE')) return 'MODERATE';
+  if (label.includes('HIGH')) return 'HIGH';
+  if (label.includes('LOW')) return 'LOW';
+  return null;
+}
+
 function buildNodes(registry) {
   const nodes = [];
   const findings = [];
+  const familyNodes = new Map();
   for (const [filename, catalogId, defaultSourceId, defaultType] of CATALOGS) {
     const path = join(ROOT, 'data', filename);
     if (!existsSync(path)) continue;
@@ -68,21 +91,162 @@ function buildNodes(registry) {
           description: record.description || '',
           family: record.family || record.group || '',
           baselines: record.fedramp_baselines || record.metadata?.baselines || null,
+          nist_800_53b_baselines: record.metadata?.nist_800_53b_baselines || null,
           nist_control: record.nist_control || null,
           type: record.type || null,
           references: record.references || null,
         },
       });
+
+      if (catalogId === 'nist-800-53') {
+        const familyCode = familyCodeFromControlId(record.id);
+        if (familyCode && record.family) {
+          const familyId = nodeId('nist-800-53', `FAMILY-${familyCode}`);
+          if (!familyNodes.has(familyId)) {
+            familyNodes.set(familyId, {
+              id: familyId,
+              node_type: 'family',
+              label: `${familyCode} ${record.family} Family`,
+              source_id: defaultSourceId,
+              lifecycle_status: 'active',
+              metadata: {
+                catalog_id: 'nist-800-53',
+                item_id: `FAMILY-${familyCode}`,
+                title: record.family,
+                description: `${record.family} controls and enhancements from NIST SP 800-53 Rev. 5.`,
+                family: record.family,
+                baselines: null,
+                nist_800_53b_baselines: null,
+                nist_control: null,
+                type: 'control_family',
+                references: null,
+              },
+            });
+          }
+        }
+      }
     }
   }
-  return { nodes: nodes.sort((a, b) => a.id.localeCompare(b.id)), findings };
+  return { nodes: [...nodes, ...familyNodes.values()].sort((a, b) => a.id.localeCompare(b.id)), findings };
+}
+
+function addPublishedEdge(state, registry, nodeIds, payload) {
+  const source = registry.byId.get(payload.sourceId);
+  if (!source?.graph_eligible || !nodeIds.has(payload.sourceNodeId) || !nodeIds.has(payload.targetNodeId)) {
+    state.findings.push({
+      id: `finding:blocked-relationship:${payload.subjectId}`,
+      finding_type: 'blocked_relationship',
+      severity: 'warning',
+      source_id: payload.sourceId,
+      subject_id: payload.subjectId,
+      message: `Relationship ${payload.subjectId} was blocked because its source or endpoint is not graph eligible.`,
+    });
+    return;
+  }
+
+  const edgeId = `edge:${payload.subjectId}`;
+  const evidenceId = `evidence:${payload.subjectId}`;
+  state.evidence.push({
+    id: evidenceId,
+    source_id: payload.sourceId,
+    source_version: payload.sourceVersion || source.version,
+    locator: payload.locator,
+    retrieved_at: payload.retrievedAt || source.retrieved_at,
+    checksum: payload.checksum || source.checksum,
+    evidence_quality: payload.evidenceQuality || 'primary',
+  });
+  state.edges.push({
+    id: edgeId,
+    source_node_id: payload.sourceNodeId,
+    target_node_id: payload.targetNodeId,
+    relationship_type: payload.relationshipType,
+    provenance_class: payload.provenanceClass || source.provenance_class,
+    confidence: payload.confidence || 'direct',
+    publication_status: payload.publicationStatus || 'published',
+    evidence_ids: [evidenceId],
+    display_label: payload.displayLabel || `${payload.sourceNodeId} ${payload.relationshipType} ${payload.targetNodeId}`,
+    warning: payload.warning || null,
+    inference_rule_id: payload.inferenceRuleId || null,
+    rationale: payload.rationale || '',
+  });
+}
+
+function addDocumentRelationshipEdges(state, registry, nodeIds) {
+  for (const [filename, catalogId, defaultSourceId] of CATALOGS) {
+    const path = join(ROOT, 'data', filename);
+    if (!existsSync(path)) continue;
+    const document = readJson(path);
+    for (const record of document.records || []) {
+      for (const relationship of record.metadata?.relationships || []) {
+        const sourceNodeId = nodeId(catalogId, record.id);
+        const targetNodeId = nodeId(relationship.target_catalog, relationship.target_id);
+        const subjectId = relationshipId(filename.replace('.json', ''), sourceNodeId, targetNodeId, relationship.relationship_type || 'references');
+        addPublishedEdge(state, registry, nodeIds, {
+          subjectId,
+          sourceId: record.source?.key || defaultSourceId,
+          sourceNodeId,
+          targetNodeId,
+          relationshipType: relationship.relationship_type || 'references',
+          locator: `${record.source?.locator || `${filename}#${record.id}`}->${relationship.target_catalog}:${relationship.target_id}`,
+          retrievedAt: record.source?.snapshot_date,
+          rationale: relationship.rationale || record.description || document.provenance || '',
+        });
+      }
+    }
+  }
+}
+
+function addFamilyMembershipEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'controls-800-53.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    const familyCode = familyCodeFromControlId(record.id);
+    if (!familyCode) continue;
+    const sourceNodeId = nodeId('nist-800-53', `FAMILY-${familyCode}`);
+    const targetNodeId = nodeId('nist-800-53', record.id);
+    const subjectId = relationshipId('800-53-family-membership', sourceNodeId, targetNodeId, 'includes');
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId,
+      sourceId: record.source?.key || 'nist-oscal',
+      sourceNodeId,
+      targetNodeId,
+      relationshipType: 'includes',
+      locator: record.source?.locator || `controls-800-53.json#${record.id}`,
+      retrievedAt: record.source?.snapshot_date,
+      rationale: `${record.id} is part of the ${record.family} family in NIST SP 800-53 Rev. 5.`,
+    });
+  }
+}
+
+function addBaselineMembershipEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'controls-800-53.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    const baselineIds = [...new Set((record.metadata?.nist_800_53b_baselines || [])
+      .map(normalize53BBaselineId)
+      .filter(Boolean))];
+    for (const baselineId of baselineIds) {
+      const sourceNodeId = nodeId('nist-800-53b', baselineId);
+      const targetNodeId = nodeId('nist-800-53', record.id);
+      const subjectId = relationshipId('800-53b-membership', sourceNodeId, targetNodeId, 'includes');
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: 'nist-800-53b-baselines',
+        sourceNodeId,
+        targetNodeId,
+        relationshipType: 'includes',
+        locator: `sp800-53b#${baselineId}:${record.id}`,
+        rationale: `NIST SP 800-53B ${baselineId} baseline membership includes ${record.id}.`,
+      });
+    }
+  }
 }
 
 function buildEdges(registry, nodes) {
   const nodeIds = new Set(nodes.map((node) => node.id));
-  const edges = [];
-  const evidence = [];
-  const findings = [];
+  const state = { edges: [], evidence: [], findings: [] };
 
   for (const [filename, sourceCatalog, targetCatalog, defaultSourceId] of MAPS) {
     const path = join(ROOT, 'maps', filename);
@@ -92,48 +256,25 @@ function buildEdges(registry, nodes) {
       const sourceNodeId = nodeId(sourceCatalog, relationship.source_id);
       const targetNodeId = nodeId(targetCatalog, relationship.target_id);
       const sourceId = relationship.evidence_source || document.source_key || defaultSourceId;
-      const source = registry.byId.get(sourceId);
       const subjectId = `${filename.replace('.json', '')}:${index + 1}`;
-      if (!source?.graph_eligible || !nodeIds.has(sourceNodeId) || !nodeIds.has(targetNodeId)) {
-        findings.push({
-          id: `finding:blocked-relationship:${subjectId}`,
-          finding_type: 'blocked_relationship',
-          severity: 'warning',
-          source_id: sourceId,
-          subject_id: subjectId,
-          message: `Relationship ${subjectId} was blocked because its source or endpoint is not graph eligible.`,
-        });
-        continue;
-      }
-
-      const evidenceId = `evidence:${subjectId}`;
-      const edgeId = `edge:${subjectId}`;
-      evidence.push({
-        id: evidenceId,
-        source_id: sourceId,
-        source_version: document.source_version || source.version,
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId,
+        sourceNodeId,
+        targetNodeId,
+        relationshipType: relationship.relationship_type || 'maps_to',
+        sourceVersion: document.source_version,
         locator: relationship.source_locator || `${document.source_key || sourceId}#relationship`,
-        retrieved_at: document.snapshot_date || source.retrieved_at,
-        checksum: document.checksum || source.checksum,
-        evidence_quality: 'primary',
-      });
-      edges.push({
-        id: edgeId,
-        source_node_id: sourceNodeId,
-        target_node_id: targetNodeId,
-        relationship_type: relationship.relationship_type || 'maps_to',
-        provenance_class: source.provenance_class,
-        confidence: 'direct',
-        publication_status: 'published',
-        evidence_ids: [evidenceId],
-        display_label: `${sourceNodeId} maps to ${targetNodeId}`,
-        warning: null,
-        inference_rule_id: null,
+        retrievedAt: document.snapshot_date,
+        checksum: document.checksum,
         rationale: relationship.why || document.provenance || '',
       });
     }
   }
-  return { edges, evidence, findings };
+  addDocumentRelationshipEdges(state, registry, nodeIds);
+  addFamilyMembershipEdges(state, registry, nodeIds);
+  addBaselineMembershipEdges(state, registry, nodeIds);
+  return state;
 }
 
 function artifact(collection, values, generatedAt) {

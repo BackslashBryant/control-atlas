@@ -6,6 +6,10 @@ import {
   buildCmmcPublicCatalog,
   buildDodRaiPublicCatalog,
   buildFedrampPublicCatalog,
+  buildFips199Catalog,
+  buildFips200Catalog,
+  buildNist80053BBaselineCatalog,
+  buildRmfCatalog,
   parseAiRmfPlaybook,
   parseSsdfCatalog,
 } from './lib/framework-adapters.mjs';
@@ -80,7 +84,11 @@ const REMOTE_CATALOGS = [
 
 const PUBLIC_CATALOGS = [
   ['cmmc-practices.json', buildCmmcPublicCatalog],
+  ['fips-199.json', buildFips199Catalog],
+  ['fips-200.json', buildFips200Catalog],
   ['fedramp-baselines.json', buildFedrampPublicCatalog],
+  ['800-53b-baselines.json', buildNist80053BBaselineCatalog],
+  ['tasks-800-37.json', buildRmfCatalog],
   ['dod-rai.json', buildDodRaiPublicCatalog],
 ];
 
@@ -108,7 +116,9 @@ export async function fetchFrameworkCatalogs() {
     results.push(writeCatalog(target.outfile, document));
   }
   for (const [filename, build] of PUBLIC_CATALOGS) {
-    const doc = build === buildFedrampPublicCatalog ? build(SNAPSHOT, fedrampMembership) : build(SNAPSHOT);
+    const doc = build === buildFedrampPublicCatalog
+      ? build(SNAPSHOT, fedrampMembership)
+      : build(SNAPSHOT);
     results.push(writeCatalog(filename, doc));
   }
   return results;

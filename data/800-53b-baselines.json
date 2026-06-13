@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-800-53b-baselines",
+  "records": [
+    {
+      "id": "LOW",
+      "type": "nist-800-53b-baseline",
+      "framework": "nist-800-53b",
+      "title": "Low Impact Baseline",
+      "family": "NIST SP 800-53B Baselines",
+      "description": "NIST SP 800-53B low impact baseline for federal information systems.",
+      "source": {
+        "key": "nist-800-53b-baselines",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-53b#low"
+      }
+    },
+    {
+      "id": "MODERATE",
+      "type": "nist-800-53b-baseline",
+      "framework": "nist-800-53b",
+      "title": "Moderate Impact Baseline",
+      "family": "NIST SP 800-53B Baselines",
+      "description": "NIST SP 800-53B moderate impact baseline for federal information systems.",
+      "source": {
+        "key": "nist-800-53b-baselines",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-53b#moderate"
+      }
+    },
+    {
+      "id": "HIGH",
+      "type": "nist-800-53b-baseline",
+      "framework": "nist-800-53b",
+      "title": "High Impact Baseline",
+      "family": "NIST SP 800-53B Baselines",
+      "description": "NIST SP 800-53B high impact baseline for federal information systems.",
+      "source": {
+        "key": "nist-800-53b-baselines",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-53b#high"
+      }
+    },
+    {
+      "id": "PRIVACY",
+      "type": "nist-800-53b-baseline",
+      "framework": "nist-800-53b",
+      "title": "Privacy Baseline",
+      "family": "NIST SP 800-53B Baselines",
+      "description": "NIST SP 800-53B privacy baseline for federal information systems.",
+      "source": {
+        "key": "nist-800-53b-baselines",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-53b#privacy"
+      }
+    }
+  ]
+}

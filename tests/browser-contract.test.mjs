@@ -17,10 +17,10 @@ test('shell identifies the federal integration directory and preserves core jour
 });
 
 test('application loads only the five federal graph artifacts', () => {
-  assert.match(html, /app\/app\.mjs\?v=20260613-2/);
-  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-2'/);
+  assert.match(html, /app\/app\.mjs\?v=20260613-3/);
+  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-3'/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
-    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-2`));
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-3`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
   assert.match(app, /createFederalGraphRuntime/);
@@ -30,6 +30,7 @@ test('search, browse, detail, sources, and comparison use graph runtime APIs', (
   assert.match(app, /searchNodes/);
   assert.match(app, /getEdgesForNode/);
   assert.match(app, /getEvidenceForEdge/);
+  assert.match(app, /getFederalContext/);
   assert.match(app, /getSources/);
   assert.match(app, /getGraphHealth/);
   assert.match(app, /buildRelationshipMatrix/);
@@ -37,6 +38,10 @@ test('search, browse, detail, sources, and comparison use graph runtime APIs', (
 });
 
 test('federal trust dimensions remain visibly separate', () => {
+  assert.match(app, /Baseline membership/);
+  assert.match(app, /Categorization context/);
+  assert.match(app, /Minimum security requirements/);
+  assert.match(app, /RMF lifecycle/);
   assert.match(app, /Federal provenance/);
   assert.match(app, /Relationship type/);
   assert.match(app, /Confidence/);
