@@ -6,17 +6,50 @@ const html = readFileSync('index.html', 'utf8');
 const css = readFileSync('styles/app.css', 'utf8');
 const app = readFileSync('app/app.mjs', 'utf8');
 
-test('shell is modular, accessible, and starts without mass results', () => {
-  assert.match(html, /<h1[^>]*>GovFrame/);
-  assert.match(html, /<script type="module" src="\.\/app\/app\.mjs\?v=[^"]+"/);
-  assert.match(html, /<link rel="stylesheet" href="\.\/styles\/app\.css\?v=[^"]+"/);
+test('shell identifies the federal integration directory and preserves core journeys', () => {
+  assert.match(html, /Federal Security Control Integration Directory/);
   assert.match(html, /data-view="search"/);
   assert.match(html, /data-view="matrix"/);
   assert.match(html, /data-view="browse"/);
   assert.match(html, /data-view="sources"/);
-  assert.doesNotMatch(html, /<article/);
-  assert.match(app, /fetch\('\.\/data\/generated\/bootstrap\.json'\)/);
-  assert.match(app, /async function ensureDataset/);
+  assert.match(html, /Skip to workspace/);
+  assert.match(html, /aria-live="polite"/);
+});
+
+test('application loads only the five federal graph artifacts', () => {
+  for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json`));
+  }
+  assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
+  assert.match(app, /createFederalGraphRuntime/);
+});
+
+test('search, browse, detail, sources, and comparison use graph runtime APIs', () => {
+  assert.match(app, /searchNodes/);
+  assert.match(app, /getEdgesForNode/);
+  assert.match(app, /getEvidenceForEdge/);
+  assert.match(app, /getSources/);
+  assert.match(app, /getGraphHealth/);
+  assert.match(app, /buildRelationshipMatrix/);
+  assert.match(app, /buildRelationshipCsv/);
+});
+
+test('federal trust dimensions remain visibly separate', () => {
+  assert.match(app, /Federal provenance/);
+  assert.match(app, /Relationship type/);
+  assert.match(app, /Confidence/);
+  assert.match(app, /Evidence quality/);
+  assert.match(app, /Eligibility/);
+  assert.doesNotMatch(app, /gold|silver|bronze/i);
+});
+
+test('onboarding and accessible relationship alternatives remain available', () => {
+  assert.match(app, /onboarding-overlay/);
+  assert.match(app, /btn-onboarding-skip/);
+  assert.match(app, /event\.key === 'Escape'/);
+  assert.match(app, /Relationship list/);
+  assert.match(app, /aria-label="Relationship list"/);
+  assert.match(app, /aria-pressed/);
 });
 
 test('responsive contract explicitly prevents horizontal overflow', () => {
@@ -25,125 +58,7 @@ test('responsive contract explicitly prevents horizontal overflow', () => {
   assert.match(css, /min-width:\s*0/);
 });
 
-test('matrix supports pasted source IDs and exports the complete scoped result', () => {
-  assert.match(app, /id="matrix-items"/);
-  assert.match(app, /parseSelectedItemKeys/);
-  assert.match(app, /item_keys/);
-  assert.match(app, /CSV export includes the complete matrix/);
-});
-
 test('user-facing shell and runtime contain no encoding corruption', () => {
-  assert.doesNotMatch(html, /Ã|Â|â€¦|â†|â€|ðŸ/);
-  assert.doesNotMatch(app, /Ã|Â|â€¦|â†|â€|ðŸ/);
-});
-
-test('interface teaches framework mapping concepts at the point of use', () => {
-  assert.match(app, /new to mapping/i);
-  assert.match(app, /how mapping works/i);
-  assert.match(app, /Official match/);
-  assert.match(app, /Possible connection/);
-  assert.match(app, /incoming/i);
-  assert.match(app, /Needs supporting source/);
-  assert.match(app, /limited-public-scope/i);
-});
-
-test('search supports a framework filter and item mappings are progressively disclosed', () => {
-  assert.match(app, /id="search-framework"/);
-  assert.match(app, /const filters = \{\s*framework_id/);
-  assert.match(app, /framework_id: filter/);
-  assert.match(app, /Show all .* direct mappings/);
-});
-
-test('copy reuse modules and D3 visualizations are integrated', () => {
-  assert.match(app, /import\s+\{\s*terms\s*\}\s+from\s+'\.\/content\/terms\.mjs'/);
-  assert.match(app, /import\s+\{\s*glossary\s*\}\s+from\s+'\.\/content\/glossary\.mjs'/);
-  assert.match(app, /drawNodeLink/);
-  assert.match(app, /drawAdjacencyMatrix/);
-  assert.match(app, /toggleGlossaryDrawer/);
-  assert.match(app, /startWalkthrough/);
-});
-
-test('routing state and interactive repair contracts are present', () => {
-  assert.match(app, /let viewState\s*=/);
-  assert.match(app, /TOUR_EXAMPLE_KEY\s*=\s*'nist-800-53:AC-2'/);
-  assert.match(app, /btn-onboarding-skip/);
-  assert.match(app, /event\.key === 'Escape'/);
-  assert.match(app, /requestSubmit\(\)/);
-  assert.match(app, /input\.value\.trim\(\)/);
-  assert.match(app, /externalAnchor/);
-  assert.match(app, /Contribute mapping evidence \(opens GitHub in new tab\)/);
-  assert.match(html, /Loading GovFrame/);
-  assert.doesNotMatch(html, /id="btn-toggle-glossary"[^>]*target="_blank"/);
-});
-
-test('mode toggle preserves detail pages and onboarding is resilient', () => {
-  assert.match(app, /async function setNoviceMode/);
-  assert.match(app, /if \(currentActiveState\.key\)/);
-  assert.match(app, /preserveScroll: true/);
-  assert.match(app, /console\.error\(`Failed to set/);
-  assert.match(app, /finally\s*\{[\s\S]*overlay\.remove\(\)/);
-  assert.match(app, /Shows calculated multi-hop paths/);
-});
-
-test('june 10 stability contracts are present', () => {
-  assert.match(app, /normalizeViewState/);
-  assert.match(app, /lastSearchQuery/);
-  assert.match(app, /prepareSearchSubmission/);
-  assert.match(app, /data-search-active/);
-  assert.match(app, /disabled aria-disabled="true"/);
-  assert.match(app, /searchFilters\.match !== 'none'/);
-  assert.match(app, /WALKTHROUGH_STORAGE_KEY/);
-  assert.match(app, /highlightTourTarget/);
-  assert.match(app, /bindDetailsScrollPreservation/);
-  assert.match(app, /validateMatrixItemIds/);
-  assert.match(app, /id="catalog-list"/);
-  assert.match(app, /rel="noopener noreferrer"/);
-  assert.match(app, /external-url/);
-  assert.match(app, /aria-pressed/);
-  assert.match(css, /#workspace\[data-search-active\] \.hero/);
-  assert.match(css, /\.hero h1, \.hero p, \.hero \.eyebrow \{ user-select: none/);
-  assert.doesNotMatch(css, /#app.*user-select:\s*none/);
-});
-
-test('sign-off repair pass contracts are present', () => {
-  assert.match(app, /datasetLoadPromise/);
-  assert.match(app, /AbortController/);
-  assert.match(app, /CATALOG_LOAD_TIMEOUT_MS/);
-  assert.match(app, /\[GovFrame\] catalog load failed/);
-  assert.match(app, /let navigationGeneration/);
-  assert.match(app, /navigationGeneration \+= 1/);
-  assert.match(app, /async function openDeepLinkedItem\(generation\)/);
-  assert.match(app, /parseViewState\(location\.search\)/);
-  assert.match(app, /event\.currentTarget\.dataset\.openItem/);
-  assert.match(app, /bindOpenItemButtons/);
-  assert.match(app, /if \(searchFilters\.match === 'none'\) return/);
-  assert.match(app, /Copy issue URL/);
-  assert.match(app, /data-copy-contribution/);
-  assert.match(app, /GITHUB_ISSUES_BASE/);
-  assert.match(app, /direct\.length \? '' : renderNoviceIntro\('detailZero'\)/);
-  assert.match(app, /contribution-callout[\s\S]*?Copy issue URL/);
-  assert.match(html, /v=20260612-1/);
-});
-
-test('workbench search contracts prioritize compact decision-ready cards', () => {
-  assert.match(app, /Search GovFrame/);
-  assert.match(app, /official match\$\{.*possible connection/s);
-  assert.match(app, /Next action:/);
-  assert.match(app, /Open requirement/);
-  assert.match(app, /Active filters:/);
-  assert.match(app, /filter-chip/);
-  assert.match(app, /Source tier disabled because no-known-match items do not have source evidence/);
-});
-
-test('detail workflow is evidence-first and uses a shared citation shape', () => {
-  assert.match(app, /Evidence summary/);
-  assert.match(app, /Copy citation/);
-  assert.match(app, /View raw evidence/);
-  assert.match(app, /Evidence summary[\s\S]*Open mapped item[\s\S]*Copy citation[\s\S]*Contribute missing evidence[\s\S]*View raw evidence/s);
-  assert.match(app, /maps to .*Source: .*Status:/s);
-});
-
-test('guided tour adapts to runtime relationship availability', () => {
-  assert.match(app, /This item has no possible connections/);
-  assert.match(app, /buildAdaptiveWalkthrough/);
+  assert.doesNotMatch(html, /Ãƒ|Ã‚|Ã¢|Ã°/);
+  assert.doesNotMatch(app, /Ãƒ|Ã‚|Ã¢|Ã°/);
 });

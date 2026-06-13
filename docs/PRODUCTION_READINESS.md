@@ -6,7 +6,7 @@ The existing static mapper remains deployed, but its product contract is superse
 
 ## Release 1 Required Before Completion
 
-- [ ] Issue 9 replaces the generated-data and runtime contracts while preserving current user journeys.
+- [x] Issue 9 replaces the generated-data and runtime contracts while preserving current user journeys.
 - [ ] Issue 10 publishes source-backed FIPS, RMF, and baseline context.
 - [ ] Issue 11 publishes source-backed assessment context and canonical OSCAL ingestion.
 - [ ] Every displayable node and edge passes federal eligibility and provenance validation.

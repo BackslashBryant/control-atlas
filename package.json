@@ -13,7 +13,7 @@
     "smoke:static": "node ./scripts/static-smoke.mjs",
     "refresh:data": "node ./scripts/refresh-data.mjs",
     "test": "npm run test:data && npm run test:runtime",
-    "test:data": "node --test ./tests/source-registry.test.mjs ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
+    "test:data": "node --test ./tests/source-registry.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/retired-concepts.test.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
     "smoke:dom": "node ./scripts/dom-smoke.mjs",

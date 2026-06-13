@@ -1,55 +1,65 @@
-export const AUTHORITY_TYPES = new Set([
-  'catalog_authority',
-  'owner_authority_mapping',
-  'non_owner_authority_mapping',
-  'corroboration',
-  'research_candidate',
+export const PROVENANCE_CLASSES = new Set([
+  'mandated',
+  'federal_published',
+  'federal_program',
+  'federal_utilized',
+  'federal_referenced',
 ]);
 
-export const TIER_ORDER = ['gold', 'silver', 'bronze'];
+export const ELIGIBILITY_STATUSES = new Set(['eligible', 'limited', 'excluded', 'pending_review']);
+export const LIFECYCLE_STATUSES = new Set(['active', 'archived', 'deprecated', 'draft', 'restricted']);
+export const ACCESS_STATUSES = new Set(['public', 'restricted', 'authenticated']);
+export const RETRIEVAL_METHODS = new Set(['download', 'api', 'committed_artifact', 'manual_review']);
+export const ARTIFACT_TYPES = new Set([
+  'publication',
+  'spreadsheet',
+  'oscal_json',
+  'oscal_xml',
+  'api',
+  'stix',
+  'xccdf',
+  'other',
+]);
 
-const GOLD_REQUIRED_FIELDS = ['authority_type', 'artifact', 'parser', 'refresh_strategy', 'status', 'snapshot_date', 'checksum'];
-const ALL_REQUIRED_FIELDS = [
+const REQUIRED_FIELDS = [
   'id',
   'name',
-  'tier',
-  'issuer',
-  'artifact',
-  'frameworks',
-  'authority_type',
-  'status',
-  'parser',
-  'refresh_strategy',
-  'license_notes',
-  'snapshot_date',
-  'checksum'
+  'owner',
+  'provenance_class',
+  'mandate_basis',
+  'version',
+  'retrieved_at',
+  'retrieval_method',
+  'artifact_url',
+  'artifact_type',
+  'checksum',
+  'access_status',
+  'license_or_use',
+  'lifecycle_status',
+  'eligibility_status',
+  'federal_referenced_by',
+  'graph_eligible',
 ];
 
-export function isMappingAuthority(source) {
-  return source?.authority_type === 'owner_authority_mapping' || source?.authority_type === 'non_owner_authority_mapping';
-}
-
-export function isCatalogAuthority(source) {
-  return source?.authority_type === 'catalog_authority';
-}
-
-export function canPublishCrosswalk(source) {
-  return source?.tier === 'gold' && source?.authority_type === 'owner_authority_mapping';
+function requireAllowed(errors, source, field, values) {
+  if (!values.has(source[field])) {
+    errors.push(`source ${source.id || '<unknown>'} has unsupported ${field}: ${source[field] || 'missing'}`);
+  }
 }
 
 export function validateSourceRegistry(registry) {
   const errors = [];
+  if (registry?.schema_version !== '4.0') {
+    errors.push(`source registry schema_version must be 4.0 (got ${registry?.schema_version || 'missing'})`);
+  }
   if (!registry?.sources?.length) {
     errors.push('source registry must include at least one source');
     return errors;
   }
-  if (registry.schema_version !== '3.0') {
-    errors.push(`source registry schema_version must be 3.0 (got ${registry.schema_version || 'missing'})`);
-  }
 
   const seen = new Set();
   for (const source of registry.sources) {
-    for (const field of ALL_REQUIRED_FIELDS) {
+    for (const field of REQUIRED_FIELDS) {
       if (source[field] === undefined || source[field] === null || source[field] === '') {
         errors.push(`source ${source.id || '<unknown>'} missing required field: ${field}`);
       }
@@ -58,56 +68,37 @@ export function validateSourceRegistry(registry) {
       if (seen.has(source.id)) errors.push(`duplicate source id: ${source.id}`);
       seen.add(source.id);
     }
-    if (source.tier === 'gold' && !source.authority_type) {
-      errors.push(`gold source ${source.id} missing authority_type`);
-    }
-    if (source.tier === 'gold') {
-      for (const field of GOLD_REQUIRED_FIELDS) {
-        if (!source[field]) errors.push(`gold source ${source.id} missing ${field}`);
-      }
-    }
-    if (source.authority_type && !AUTHORITY_TYPES.has(source.authority_type)) {
-      errors.push(`source ${source.id} has unsupported authority_type: ${source.authority_type}`);
-    }
-    if (source.tier === 'gold' && source.authority_type === 'research_candidate') {
-      errors.push(`gold source ${source.id} cannot use research_candidate authority_type`);
-    }
-    if (source.tier === 'bronze' && source.authority_type !== 'research_candidate') {
-      errors.push(`bronze source ${source.id} must use research_candidate authority_type`);
-    }
-    if (source.tier === 'silver' && source.authority_type !== 'corroboration' && source.authority_type !== 'non_owner_authority_mapping') {
-      errors.push(`silver source ${source.id} must use corroboration or non_owner_authority_mapping authority_type`);
-    }
 
-    // Manual seed mapping files must be bronze or candidate by default
-    if (source.parser === 'manual-seed' && source.authority_type !== 'catalog_authority') {
-      if (source.tier === 'gold' || source.tier === 'silver') {
-        errors.push(`manual seed mapping source ${source.id} cannot be gold or silver`);
-      }
-    }
+    requireAllowed(errors, source, 'provenance_class', PROVENANCE_CLASSES);
+    requireAllowed(errors, source, 'eligibility_status', ELIGIBILITY_STATUSES);
+    requireAllowed(errors, source, 'lifecycle_status', LIFECYCLE_STATUSES);
+    requireAllowed(errors, source, 'access_status', ACCESS_STATUSES);
+    requireAllowed(errors, source, 'retrieval_method', RETRIEVAL_METHODS);
+    requireAllowed(errors, source, 'artifact_type', ARTIFACT_TYPES);
 
-    // Third-party OLIR mappings are silver unless the submitter is the owner authority
-    if (source.parser?.startsWith('olir-') && source.authority_type === 'owner_authority_mapping') {
-      const isOwner = source.owner_authority === true || source.issuer === 'NIST' || source.submitter === 'NIST';
-      if (!isOwner) {
-        errors.push(`third-party OLIR mapping ${source.id} cannot be gold/owner_authority_mapping`);
-      }
+    if (!Array.isArray(source.mandate_basis)) errors.push(`source ${source.id} mandate_basis must be an array`);
+    if (!Array.isArray(source.federal_referenced_by)) errors.push(`source ${source.id} federal_referenced_by must be an array`);
+    if (typeof source.graph_eligible !== 'boolean') errors.push(`source ${source.id} graph_eligible must be boolean`);
+    if (source.eligibility_status === 'excluded' && source.graph_eligible) {
+      errors.push(`excluded source ${source.id} cannot be graph_eligible`);
+    }
+    if (source.access_status !== 'public' && source.graph_eligible) {
+      errors.push(`non-public source ${source.id} cannot be graph_eligible`);
     }
   }
-
   return errors;
 }
 
 export function loadSourceRegistry(registry) {
   const errors = validateSourceRegistry(registry);
-  if (errors.length) {
-    throw new Error(`Invalid source registry:\n- ${errors.join('\n- ')}`);
-  }
-  const byId = new Map(registry.sources.map((source) => [source.id, source]));
-  return { registry, byId, sources: registry.sources };
+  if (errors.length) throw new Error(`Invalid source registry:\n- ${errors.join('\n- ')}`);
+  return {
+    registry,
+    byId: new Map(registry.sources.map((source) => [source.id, source])),
+    sources: registry.sources,
+  };
 }
 
 export function getSource(registryState, sourceId) {
   return registryState.byId.get(sourceId) || null;
 }
-

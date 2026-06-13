@@ -2,7 +2,7 @@
 
 ## Current Gates
 
-Until Issue 9 replaces the runtime and generated contracts, the existing commands remain the required regression gates:
+The federal graph runtime and generated contracts use these required regression gates:
 
 - `npm run test:data`
 - `npm run test:runtime`
@@ -13,7 +13,7 @@ Until Issue 9 replaces the runtime and generated contracts, the existing command
 
 ## Release 1 Contract Tests
 
-Issue 9 must replace stale mapper assertions with tests that enforce:
+Issue 9 contract tests enforce:
 
 - Separate relationship semantics, federal provenance, confidence, and evidence quality.
 - `inferred` is never a source class.
