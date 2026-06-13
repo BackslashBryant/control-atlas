@@ -1,4 +1,4 @@
-import { createFederalGraphRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260613-2';
+import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260613-3';
 
 const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
@@ -24,11 +24,11 @@ async function fetchCollection(path, collection) {
 
 async function loadFederalGraph() {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
-    fetchCollection('./data/generated/sources.json?v=20260613-2', 'sources'),
-    fetchCollection('./data/generated/nodes.json?v=20260613-2', 'nodes'),
-    fetchCollection('./data/generated/edges.json?v=20260613-2', 'edges'),
-    fetchCollection('./data/generated/evidence.json?v=20260613-2', 'evidence'),
-    fetchCollection('./data/generated/graph-health.json?v=20260613-2', 'findings'),
+    fetchCollection('./data/generated/sources.json?v=20260613-3', 'sources'),
+    fetchCollection('./data/generated/nodes.json?v=20260613-3', 'nodes'),
+    fetchCollection('./data/generated/edges.json?v=20260613-3', 'edges'),
+    fetchCollection('./data/generated/evidence.json?v=20260613-3', 'evidence'),
+    fetchCollection('./data/generated/graph-health.json?v=20260613-3', 'findings'),
   ]);
   runtime = createFederalGraphRuntime({ sources, nodes, edges, evidence, findings });
 }
@@ -155,12 +155,44 @@ function evidencePanel(edge) {
     </div>`).join('');
 }
 
+function renderContextCards(title, entries, renderEntry) {
+  return `
+    <section class="panel">
+      <p class="eyebrow">${escapeHtml(title)}</p>
+      <div class="stack">
+        ${entries.length ? entries.map(renderEntry).join('') : '<p class="notice">No source-backed context is currently available.</p>'}
+      </div>
+    </section>`;
+}
+
+function contextCard(node, edge, extras = []) {
+  return `
+    <article class="mapping-card">
+      <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+      <h4>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || '')}</h4>
+      <ul>
+        <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
+        <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+        <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+        ${extras.join('')}
+      </ul>
+      ${evidencePanel(edge)}
+      <button class="secondary" type="button" data-open-node="${escapeHtml(node.id)}">Open related node</button>
+    </article>`;
+}
+
 async function renderDetail(nodeId) {
   await withGraph(async () => {
     const node = runtime.getNode(nodeId);
     if (!node) return;
     const definingSource = runtime.getSources().find((source) => source.id === node.source_id);
     const edges = runtime.getEdgesForNode(node.id);
+    const isControl = node.node_type === 'control' || node.node_type === 'control_enhancement';
+    const federalContext = isControl ? getFederalContext(runtime, node.id) : null;
+    const consumedEdgeIds = new Set([
+      ...(federalContext?.baselineMembership || []).map((entry) => entry.membershipEdge.id),
+      ...(federalContext?.minimumSecurityRequirements || []).map((entry) => entry.familyEdge.id),
+    ]);
     const relationshipCards = edges.map((edge) => {
       const counterpartId = edge.source_node_id === node.id ? edge.target_node_id : edge.source_node_id;
       const counterpart = runtime.getNode(counterpartId);
@@ -178,6 +210,25 @@ async function renderDetail(nodeId) {
           <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">Open related node</button>
         </article>`;
     }).join('');
+    const additionalRelationshipCards = edges
+      .filter((edge) => !consumedEdgeIds.has(edge.id))
+      .map((edge) => {
+        const counterpartId = edge.source_node_id === node.id ? edge.target_node_id : edge.source_node_id;
+        const counterpart = runtime.getNode(counterpartId);
+        return `
+          <article class="mapping-card">
+            <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+            <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
+            <ul>
+              <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
+              <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+              <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+            </ul>
+            ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
+            ${evidencePanel(edge)}
+            <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">Open related node</button>
+          </article>`;
+      }).join('');
 
     app.innerHTML = `
       <button class="secondary" id="back-search" type="button">Back to search</button>
@@ -190,7 +241,25 @@ async function renderDetail(nodeId) {
             <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
             <details><summary>Defining federal source</summary><p>${escapeHtml(definingSource?.name || node.source_id)} · Eligibility: ${escapeHtml(definingSource?.eligibility_status || 'unknown')} · Lifecycle: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p></details>
           </article>
-          <section class="panel"><p class="eyebrow">Federal context</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${relationshipCards || '<p class="notice">No displayable relationships are known.</p>'}</div></section>
+          ${isControl ? `
+            ${renderContextCards('Baseline membership', federalContext.baselineMembership, (entry) =>
+              contextCard(entry.baselineNode, entry.membershipEdge))}
+            ${renderContextCards('Categorization context', federalContext.categorizationContext, (entry) =>
+              contextCard(entry.categoryNode, entry.categoryEdge, [
+                `<li><strong>Through baseline:</strong> ${escapeHtml(entry.baselineNode.metadata.item_id)} - ${escapeHtml(entry.baselineNode.metadata.title)}</li>`,
+              ]))}
+            ${renderContextCards('Minimum security requirements', federalContext.minimumSecurityRequirements, (entry) =>
+              contextCard(entry.requirementNode, entry.requirementEdge, [
+                `<li><strong>Through family:</strong> ${escapeHtml(entry.familyNode.metadata.item_id)} - ${escapeHtml(entry.familyNode.metadata.title)}</li>`,
+              ]))}
+            ${renderContextCards('RMF lifecycle', federalContext.rmfLifecycle, (entry) =>
+              contextCard(entry.stepNode, entry.contextEdge, [
+                `<li><strong>Through node:</strong> ${escapeHtml(entry.viaNode.metadata.item_id)} - ${escapeHtml(entry.viaNode.metadata.title)}</li>`,
+              ]))}
+            <section class="panel"><p class="eyebrow">Additional published relationships</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${additionalRelationshipCards || '<p class="notice">No additional displayable relationships are known.</p>'}</div></section>
+          ` : `
+            <section class="panel"><p class="eyebrow">Federal context</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${relationshipCards || '<p class="notice">No displayable relationships are known.</p>'}</div></section>
+          `}
         </div>
         <aside class="detail-side panel">
           <h3>Accessible alternative</h3>
@@ -225,6 +294,7 @@ async function renderSources() {
     app.innerHTML = `
       <section class="panel"><p class="eyebrow">Sources</p><h2>Federal provenance and graph health</h2>
         <div class="learning-grid"><p><strong>Federal provenance</strong><br>Why the source or relationship is eligible.</p><p><strong>Eligibility</strong><br>Whether a source may publish graph records.</p><p><strong>Graph health</strong><br>Blocked relationships and quality findings stay outside displayable edges.</p></div>
+        <p class="muted">Issue 10 adds categorization, minimum requirement, RMF, and 800-53B baseline sources as first-class federal graph inputs.</p>
         <p class="muted">${findings.length} graph-health finding${findings.length === 1 ? '' : 's'}.</p>
         <div class="grid">${runtime.getSources().map((source) => `
           <article class="framework-card">${sourceBadge(source.provenance_class)}<h3>${escapeHtml(source.name)}</h3><p>${escapeHtml(source.owner)} · Eligibility: ${escapeHtml(source.eligibility_status)} · Access: ${escapeHtml(source.access_status)}</p><p class="muted">Version ${escapeHtml(source.version)} · Retrieved ${escapeHtml(source.retrieved_at)} · Lifecycle ${escapeHtml(source.lifecycle_status)}</p><a href="${escapeHtml(source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></article>`).join('')}</div>

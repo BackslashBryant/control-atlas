@@ -1,0 +1,380 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-fips-200",
+  "records": [
+    {
+      "id": "AC",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Access Control",
+      "family": "Minimum Security Requirements",
+      "description": "Limit information system access to authorized users, processes acting on behalf of authorized users, and devices.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AC",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#access-control"
+      }
+    },
+    {
+      "id": "AT",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Awareness and Training",
+      "family": "Minimum Security Requirements",
+      "description": "Ensure that managers and users understand and practice security responsibilities before authorizing access.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AT",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#awareness-and-training"
+      }
+    },
+    {
+      "id": "AU",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Audit and Accountability",
+      "family": "Minimum Security Requirements",
+      "description": "Create, protect, and retain information system audit records and provide accountability for actions affecting the system.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AU",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#audit-and-accountability"
+      }
+    },
+    {
+      "id": "CA",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Security Assessment and Authorization",
+      "family": "Minimum Security Requirements",
+      "description": "Assess security controls, determine residual risk, and authorize information systems before operation.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-CA",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#security-assessment-and-authorization"
+      }
+    },
+    {
+      "id": "CM",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Configuration Management",
+      "family": "Minimum Security Requirements",
+      "description": "Establish and maintain baseline configurations and controlled changes to information systems.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-CM",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#configuration-management"
+      }
+    },
+    {
+      "id": "CP",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Contingency Planning",
+      "family": "Minimum Security Requirements",
+      "description": "Establish, maintain, and test emergency response, backup, and recovery capabilities for information systems.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-CP",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#contingency-planning"
+      }
+    },
+    {
+      "id": "IA",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Identification and Authentication",
+      "family": "Minimum Security Requirements",
+      "description": "Identify system users, processes, and devices and authenticate identities before allowing access.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-IA",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#identification-and-authentication"
+      }
+    },
+    {
+      "id": "IR",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Incident Response",
+      "family": "Minimum Security Requirements",
+      "description": "Establish operational capabilities to respond to and recover from security incidents.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-IR",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#incident-response"
+      }
+    },
+    {
+      "id": "MA",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Maintenance",
+      "family": "Minimum Security Requirements",
+      "description": "Perform timely and controlled maintenance on information systems and system components.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-MA",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#maintenance"
+      }
+    },
+    {
+      "id": "MP",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Media Protection",
+      "family": "Minimum Security Requirements",
+      "description": "Protect information system media during transport, storage, access, and disposal.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-MP",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#media-protection"
+      }
+    },
+    {
+      "id": "PE",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Physical and Environmental Protection",
+      "family": "Minimum Security Requirements",
+      "description": "Limit physical access to information systems and protect facilities and infrastructure from environmental hazards.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-PE",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#physical-and-environmental-protection"
+      }
+    },
+    {
+      "id": "PL",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Planning",
+      "family": "Minimum Security Requirements",
+      "description": "Develop, document, and maintain security plans describing system boundaries, controls, and operating conditions.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-PL",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#planning"
+      }
+    },
+    {
+      "id": "PS",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Personnel Security",
+      "family": "Minimum Security Requirements",
+      "description": "Ensure that individuals occupying positions of responsibility are trustworthy and meet established security criteria.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-PS",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#personnel-security"
+      }
+    },
+    {
+      "id": "RA",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "Risk Assessment",
+      "family": "Minimum Security Requirements",
+      "description": "Assess risk to organizational operations, assets, individuals, and other organizations resulting from system operation.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-RA",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#risk-assessment"
+      }
+    },
+    {
+      "id": "SA",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "System and Services Acquisition",
+      "family": "Minimum Security Requirements",
+      "description": "Integrate security into acquisition, development, and external service usage throughout the system lifecycle.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-SA",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#system-and-services-acquisition"
+      }
+    },
+    {
+      "id": "SC",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "System and Communications Protection",
+      "family": "Minimum Security Requirements",
+      "description": "Monitor, control, and protect organizational communications and system boundaries.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-SC",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#system-and-communications-protection"
+      }
+    },
+    {
+      "id": "SI",
+      "type": "fips-200-requirement",
+      "framework": "fips-200",
+      "title": "System and Information Integrity",
+      "family": "Minimum Security Requirements",
+      "description": "Identify, report, and correct information and information system flaws in a timely manner and protect against malicious code.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-SI",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-200",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-200#system-and-information-integrity"
+      }
+    }
+  ]
+}

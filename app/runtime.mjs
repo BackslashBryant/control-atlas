@@ -6,6 +6,16 @@ function csvCell(value) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
+function uniqueBy(items, keyFn) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = keyFn(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export function createFederalGraphRuntime(dataset) {
   const nodeById = new Map(dataset.nodes.map((node) => [node.id, node]));
   const sourceById = new Map(dataset.sources.map((source) => [source.id, source]));
@@ -84,10 +94,10 @@ export function createFederalGraphRuntime(dataset) {
           return counterpartId && nodeById.get(counterpartId)?.metadata?.catalog_id === request.target_catalog;
         });
         return {
-          source_node_id: node.id,
-          classification: edges.some((edge) => edge.publication_status === 'published')
-            ? 'published'
-            : edges.some((edge) => edge.publication_status === 'candidate')
+        source_node_id: node.id,
+        classification: edges.some((edge) => edge.publication_status === 'published')
+          ? 'published'
+          : edges.some((edge) => edge.publication_status === 'candidate')
               ? 'candidate'
               : 'unmapped',
           edges,
@@ -119,7 +129,97 @@ export function createFederalGraphRuntime(dataset) {
       }
       return rows.map((row) => row.map(csvCell).join(',')).join('\n');
     },
+    getFederalContext(nodeId) {
+      const node = nodeById.get(nodeId);
+      if (!node) {
+        return {
+          baselineMembership: [],
+          categorizationContext: [],
+          minimumSecurityRequirements: [],
+          rmfLifecycle: [],
+        };
+      }
+
+      const directEdges = dataset.edges.filter((edge) =>
+        edge.publication_status === 'published'
+        && (edge.source_node_id === nodeId || edge.target_node_id === nodeId));
+      const counterpartFor = (edge, currentId) => nodeById.get(edge.source_node_id === currentId ? edge.target_node_id : edge.source_node_id) || null;
+
+      const baselineMembership = uniqueBy(directEdges
+        .filter((edge) => edge.relationship_type === 'includes')
+        .map((membershipEdge) => ({
+          baselineNode: counterpartFor(membershipEdge, nodeId),
+          membershipEdge,
+        }))
+        .filter((entry) => entry.baselineNode?.node_type === 'baseline'), (entry) => entry.baselineNode.id);
+
+      const familyMembership = uniqueBy(directEdges
+        .filter((edge) => edge.relationship_type === 'includes')
+        .map((familyEdge) => ({
+          familyNode: counterpartFor(familyEdge, nodeId),
+          familyEdge,
+        }))
+        .filter((entry) => entry.familyNode?.node_type === 'family'), (entry) => entry.familyNode.id);
+
+      const categorizationContext = uniqueBy(baselineMembership.flatMap((entry) =>
+        dataset.edges
+          .filter((edge) => edge.publication_status === 'published'
+            && (edge.source_node_id === entry.baselineNode.id || edge.target_node_id === entry.baselineNode.id))
+          .map((categoryEdge) => ({
+            categoryNode: counterpartFor(categoryEdge, entry.baselineNode.id),
+            baselineNode: entry.baselineNode,
+            categoryEdge,
+            membershipEdge: entry.membershipEdge,
+          }))
+          .filter((item) => item.categoryNode?.node_type === 'impact_category')), (entry) => `${entry.categoryNode.id}:${entry.baselineNode.id}`);
+
+      const minimumSecurityRequirements = uniqueBy(familyMembership.flatMap((entry) =>
+        dataset.edges
+          .filter((edge) => edge.publication_status === 'published'
+            && (edge.source_node_id === entry.familyNode.id || edge.target_node_id === entry.familyNode.id))
+          .map((requirementEdge) => ({
+            requirementNode: counterpartFor(requirementEdge, entry.familyNode.id),
+            familyNode: entry.familyNode,
+            requirementEdge,
+            familyEdge: entry.familyEdge,
+          }))
+          .filter((item) => item.requirementNode?.metadata?.catalog_id === 'fips-200')), (entry) => `${entry.requirementNode.id}:${entry.familyNode.id}`);
+
+      const rmfLifecycle = uniqueBy([...baselineMembership.flatMap((entry) =>
+        dataset.edges
+          .filter((edge) => edge.publication_status === 'published'
+            && (edge.source_node_id === entry.baselineNode.id || edge.target_node_id === entry.baselineNode.id))
+          .map((contextEdge) => ({
+            stepNode: counterpartFor(contextEdge, entry.baselineNode.id),
+            viaNode: entry.baselineNode,
+            contextEdge,
+            supportingEdge: entry.membershipEdge,
+          }))
+          .filter((item) => item.stepNode?.node_type === 'rmf_step')),
+      ...familyMembership.flatMap((entry) =>
+        dataset.edges
+          .filter((edge) => edge.publication_status === 'published'
+            && (edge.source_node_id === entry.familyNode.id || edge.target_node_id === entry.familyNode.id))
+          .map((contextEdge) => ({
+            stepNode: counterpartFor(contextEdge, entry.familyNode.id),
+            viaNode: entry.familyNode,
+            contextEdge,
+            supportingEdge: entry.familyEdge,
+          }))
+          .filter((item) => item.stepNode?.node_type === 'rmf_step'))], (entry) => `${entry.stepNode.id}:${entry.viaNode.id}`);
+
+      return {
+        baselineMembership,
+        categorizationContext,
+        minimumSecurityRequirements,
+        rmfLifecycle,
+      };
+    },
   };
+}
+
+export function getFederalContext(runtime, nodeId) {
+  return runtime.getFederalContext(nodeId);
 }
 
 export function parseViewState(searchParams) {

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-fips-199",
+  "records": [
+    {
+      "id": "FIPS-199-LOW",
+      "type": "fips-199-impact-category",
+      "framework": "fips-199",
+      "title": "Low Impact",
+      "family": "Security Categorization",
+      "description": "Potential impact is low when a loss of confidentiality, integrity, or availability could be expected to have a limited adverse effect on organizational operations, organizational assets, or individuals.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "LOW",
+            "relationship_type": "selects"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-199",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-199#low-impact"
+      }
+    },
+    {
+      "id": "FIPS-199-MODERATE",
+      "type": "fips-199-impact-category",
+      "framework": "fips-199",
+      "title": "Moderate Impact",
+      "family": "Security Categorization",
+      "description": "Potential impact is moderate when a loss of confidentiality, integrity, or availability could be expected to have a serious adverse effect on organizational operations, organizational assets, or individuals.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "MODERATE",
+            "relationship_type": "selects"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-199",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-199#moderate-impact"
+      }
+    },
+    {
+      "id": "FIPS-199-HIGH",
+      "type": "fips-199-impact-category",
+      "framework": "fips-199",
+      "title": "High Impact",
+      "family": "Security Categorization",
+      "description": "Potential impact is high when a loss of confidentiality, integrity, or availability could be expected to have a severe or catastrophic adverse effect on organizational operations, organizational assets, or individuals.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "HIGH",
+            "relationship_type": "selects"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-fips-199",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "fips-199#high-impact"
+      }
+    }
+  ]
+}

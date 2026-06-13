@@ -3,12 +3,193 @@
   "source_key": "nist-800-37-rev2",
   "records": [
     {
-      "id": "RMF-AC-2",
-      "type": "800-37-task",
+      "id": "RMF-PREPARE",
+      "type": "800-37-step",
       "framework": "800-37",
-      "title": "Select controls for access management",
-      "family": "Access Control",
-      "description": "RMF task aligned to access control family practices for account and credential management."
+      "title": "Prepare",
+      "family": "Risk Management Framework",
+      "description": "Carry out essential activities to prepare the organization and system for managing security and privacy risk using the RMF.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "fips-200",
+            "target_id": "AC",
+            "relationship_type": "references"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#prepare"
+      }
+    },
+    {
+      "id": "RMF-CATEGORIZE",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Categorize",
+      "family": "Risk Management Framework",
+      "description": "Categorize the system and the information processed, stored, and transmitted by the system based on impact analysis.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "fips-199",
+            "target_id": "FIPS-199-LOW",
+            "relationship_type": "uses"
+          },
+          {
+            "target_catalog": "fips-199",
+            "target_id": "FIPS-199-MODERATE",
+            "relationship_type": "uses"
+          },
+          {
+            "target_catalog": "fips-199",
+            "target_id": "FIPS-199-HIGH",
+            "relationship_type": "uses"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#categorize"
+      }
+    },
+    {
+      "id": "RMF-SELECT",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Select",
+      "family": "Risk Management Framework",
+      "description": "Select an initial set of security and privacy controls for the system and tailor them as needed.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "LOW",
+            "relationship_type": "selects"
+          },
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "MODERATE",
+            "relationship_type": "selects"
+          },
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "HIGH",
+            "relationship_type": "selects"
+          },
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "PRIVACY",
+            "relationship_type": "selects"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#select"
+      }
+    },
+    {
+      "id": "RMF-IMPLEMENT",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Implement",
+      "family": "Risk Management Framework",
+      "description": "Implement the selected controls within the system and organization and document how they are deployed.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AC",
+            "relationship_type": "uses"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#implement"
+      }
+    },
+    {
+      "id": "RMF-ASSESS",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Assess",
+      "family": "Risk Management Framework",
+      "description": "Assess the implemented controls to determine if they are effective and producing the intended outcomes.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AC",
+            "relationship_type": "uses"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#assess"
+      }
+    },
+    {
+      "id": "RMF-AUTHORIZE",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Authorize",
+      "family": "Risk Management Framework",
+      "description": "Determine if the remaining risk is acceptable and authorize the system or common controls for operation.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "LOW",
+            "relationship_type": "applies_to"
+          },
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "MODERATE",
+            "relationship_type": "applies_to"
+          },
+          {
+            "target_catalog": "nist-800-53b",
+            "target_id": "HIGH",
+            "relationship_type": "applies_to"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#authorize"
+      }
+    },
+    {
+      "id": "RMF-MONITOR",
+      "type": "800-37-step",
+      "framework": "800-37",
+      "title": "Monitor",
+      "family": "Risk Management Framework",
+      "description": "Continuously monitor controls and system changes to maintain ongoing awareness of risk and security posture.",
+      "metadata": {
+        "relationships": [
+          {
+            "target_catalog": "nist-800-53",
+            "target_id": "FAMILY-AC",
+            "relationship_type": "uses"
+          }
+        ]
+      },
+      "source": {
+        "key": "nist-800-37-rev2",
+        "snapshot_date": "2026-06-13T00:00:00.000Z",
+        "locator": "sp800-37#monitor"
+      }
     }
   ]
 }
