@@ -882,18 +882,19 @@ async function renderSearch(state) {
     <section class="panel ${query ? 'search-workbench' : ''}" aria-labelledby="search-title">
       <p class="eyebrow">${query ? 'Search workbench' : 'Explore an item'}</p>
       <h2 id="search-title">${escapeHtml(title)}</h2>
-      <p>${escapeHtml(description)}</p>
-      ${!query ? `
-      <div style="margin: 1rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <button class="primary" id="btn-focus-search" type="button">Search requirements</button>
-        <button class="secondary" id="btn-learn-mapping" type="button">Learn how mapping works</button>
-      </div>` : ''}
-      ${!query ? renderNoviceIntro('home') : ''}
+
       <form class="search-controls" id="search-form">
         <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, PR.AA-01, account management"></div>
         <div class="field"><label for="search-framework">Framework filter</label><select id="search-framework"><option value="">All frameworks</option>${frameworkOptions(filter)}</select></div>
         <button class="primary" type="submit">Search</button>
       </form>
+
+      ${!query ? `<p style="margin-top: 1.5rem;">${escapeHtml(description)}</p>
+      <div style="margin: 1rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button class="primary" id="btn-focus-search" type="button">Search requirements</button>
+        <button class="secondary" id="btn-learn-mapping" type="button">Learn how mapping works</button>
+      </div>` : `<p>${escapeHtml(description)}</p>`}
+      ${!query ? renderNoviceIntro('home') : ''}
 
       <div class="search-examples">
         <span class="label">Examples:</span>
@@ -946,6 +947,10 @@ async function renderSearch(state) {
         </div>
       </div>` : ''}
       ${resultsMarkup}
+      ${query && !noResults ? `
+      <div class="browse-reminder" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); text-align: center;">
+        <p class="muted">Not finding what you need? <button class="link-btn" id="subtle-btn-browse" type="button" style="padding:0; vertical-align: baseline; background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline;">Browse full catalogs</button> instead.</p>
+      </div>` : ''}
     </section>`;
 
   document.querySelector('#search-form').addEventListener('submit', (event) => {
@@ -991,6 +996,11 @@ async function renderSearch(state) {
   const emptyBrowseBtn = document.querySelector('#empty-btn-browse');
   if (emptyBrowseBtn) {
     emptyBrowseBtn.addEventListener('click', () => setView('browse'));
+  }
+
+  const subtleBrowseBtn = document.querySelector('#subtle-btn-browse');
+  if (subtleBrowseBtn) {
+    subtleBrowseBtn.addEventListener('click', () => setView('browse'));
   }
 
   const matchFilterSelect = document.querySelector('#filter-match-type');
@@ -1179,7 +1189,7 @@ async function renderItem(key, options = {}) {
       <aside class="detail-side panel">
         <p class="eyebrow">How to use this result</p>
         <h3>${direct.length + paths.length} known routes</h3>
-        ${renderNoviceIntro(direct.length ? 'detail' : 'detailZero')}
+        ${direct.length ? '' : renderNoviceIntro('detailZero')}
         <details class="relationship-views">
           <summary>Relationship views</summary>
           <div class="visualization-tabs">
