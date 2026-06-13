@@ -7,7 +7,6 @@ import { loadSourceRegistry } from './lib/source-registry.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data', 'generated');
-const GENERATED_AT = new Date().toISOString();
 
 const CATALOGS = [
   ['controls-800-53.json', 'nist-800-53', 'nist-oscal', 'control'],
@@ -137,8 +136,23 @@ function buildEdges(registry, nodes) {
   return { edges, evidence, findings };
 }
 
-function artifact(collection, values) {
-  return { schema_version: '1.0', generated_at: GENERATED_AT, [collection]: values };
+function artifact(collection, values, generatedAt) {
+  return { schema_version: '1.0', generated_at: generatedAt, [collection]: values };
+}
+
+function existingGeneratedAt(collections) {
+  let generatedAt = null;
+  for (const [name, values] of Object.entries(collections)) {
+    const path = join(GENERATED, `${name}.json`);
+    if (!existsSync(path)) return null;
+    const existing = readJson(path);
+    const collection = name === 'graph-health' ? 'findings' : name;
+    if (!existing.generated_at || existing.schema_version !== '1.0') return null;
+    if (generatedAt && existing.generated_at !== generatedAt) return null;
+    if (JSON.stringify(existing[collection]) !== JSON.stringify(values)) return null;
+    generatedAt = existing.generated_at;
+  }
+  return generatedAt;
 }
 
 export function buildFrameworkData() {
@@ -156,17 +170,22 @@ export function buildFrameworkData() {
   const errors = validateGraphArtifacts(graph);
   if (errors.length) throw new Error(`Invalid federal graph:\n- ${errors.join('\n- ')}`);
 
+  const collections = {
+    sources: graph.sources,
+    nodes: graph.nodes,
+    edges: graph.edges,
+    evidence: graph.evidence,
+    'graph-health': graph.findings,
+  };
+  const generatedAt = existingGeneratedAt(collections) || new Date().toISOString();
+
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
     if (entry.endsWith('.json')) rmSync(join(GENERATED, entry));
   }
-  for (const [name, value] of Object.entries({
-    sources: artifact('sources', graph.sources),
-    nodes: artifact('nodes', graph.nodes),
-    edges: artifact('edges', graph.edges),
-    evidence: artifact('evidence', graph.evidence),
-    'graph-health': artifact('findings', graph.findings),
-  })) {
+  for (const [name, values] of Object.entries(collections)) {
+    const collection = name === 'graph-health' ? 'findings' : name;
+    const value = artifact(collection, values, generatedAt);
     writeFileSync(join(GENERATED, `${name}.json`), `${JSON.stringify(value, null, 2)}\n`, 'utf8');
   }
   return {
