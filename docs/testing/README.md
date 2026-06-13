@@ -1,29 +1,43 @@
 # Testing Strategy
 
-Required gates:
+## Current Gates
 
-- `npm run test:data`: reconciliation, paths, matrix behavior, and retired-concept regression.
-- `npm run test:runtime`: search, item exploration APIs, evidence, matrix output, and URL state.
-- `npm run test:browser`: modular, accessible, responsive static shell contract.
-- `npm run smoke:dom`: lightweight runtime check that `viewState` merge patterns do not throw in strict mode.
-- `npm run audit:coverage`: generated coverage consistency.
-- `npm run verify:public`: static artifacts and size budgets.
-- `npm run precommit`: all required local gates.
+Until Issue 9 replaces the runtime and generated contracts, the existing commands remain the required regression gates:
 
-Release still requires a strict live browser audit. Static marker tests cannot be used as evidence of completed accessibility or UX behavior.
+- `npm run test:data`
+- `npm run test:runtime`
+- `npm run test:browser`
+- `npm run smoke:dom`
+- `npm run verify:public`
+- `npm run precommit`
 
-## Manual live smoke (post-repair)
+## Release 1 Contract Tests
 
-After each live-facing push, verify in a real browser:
+Issue 9 must replace stale mapper assertions with tests that enforce:
 
-1. Fresh visit shows onboarding; Novice/Expert/Skip/Escape all dismiss the overlay.
-2. Mode toggle updates URL (`?mode=novice` or `?mode=expert`) and novice intros.
-3. Nav buttons (Search, Map Frameworks, Browse, Sources) swap `#app` without freezing.
-4. Search form, Enter, example chips, and Search requirements CTA (empty → focus, filled → submit).
-5. `?view=search&q=AC-2&mode=expert` opens item detail; Flow Graph / Grid Matrix / List View tabs render.
-6. Help & Glossary opens in-page drawer (same tab).
-7. Sources artifact links open valid `https://` destinations.
-8. Guided tour advances through all steps; End Tour dismisses the bubble.
-9. Search URL includes `view=search` when `q` is set; browse URL has no stale `q`.
-10. Mode toggle on item detail preserves scroll; Evidence audit expand does not jump to top.
-11. Browse catalog scrolls into view; catalog quick-jump filter works.
+- Separate relationship semantics, federal provenance, confidence, and evidence quality.
+- `inferred` is never a source class.
+- `excluded` is never a source provenance class.
+- Every displayable node has a defining eligible source.
+- Every displayable edge has evidence and a valid provenance class.
+- Blocked relationships appear only in graph-health.
+- Search, browse, source inspection, evidence-first detail, onboarding, and accessible alternatives remain usable.
+
+Issue 10 must add tests for FIPS 199, FIPS 200, RMF steps, 800-53 controls, and 800-53B baseline membership.
+
+Issue 11 must add tests for 800-53A assessment objectives, canonical OSCAL ingest, source manifests, duplicate IDs, orphaned edges, unknown sources, restricted-content leakage, missing evidence, and reproducible graph-health output.
+
+## Manual Release 1 Smoke
+
+1. Search `AC-2` and open its federal context.
+2. Confirm the defining federal source is visible.
+3. Confirm baseline membership and RMF context are source-backed.
+4. Confirm assessment objectives and evidence references are visible after Issue 11.
+5. Confirm inferred candidates are visibly distinct from federal-published relationships.
+6. Confirm a blocked relationship cannot appear in the user-facing graph.
+7. Confirm graph or relationship views have a keyboard-accessible text alternative.
+8. Confirm Sources shows provenance, owner, version, retrieval date, lifecycle, access, and eligibility.
+
+## Release Audit
+
+Static marker tests are not sufficient evidence for accessibility or release completion. Every release requires native keyboard-only, screen-reader, responsive, zoom, performance, and live GitHub Pages verification.

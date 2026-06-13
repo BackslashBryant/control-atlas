@@ -1,56 +1,55 @@
-# Data Sources And Evidence
+# Federal Sources and Evidence
 
-`data/source-registry.json` is the source policy contract (schema `3.0`).
+`docs/FEDERAL_SOURCE_POLICY.md` is the canonical inclusion and exclusion policy. Issue 9 will replace the current registry and generated contracts with the federal source, node, edge, evidence, and graph-health contracts defined in the architecture.
 
-## Tier vs authority_type
+## Federal Provenance
 
-GovFrame may register many sources. `tier` describes trust level; `authority_type` describes what a source is allowed to do.
+Federal provenance is the primary user-facing trust model.
 
-| Tier | Typical authority_type | Can publish catalog items | Can publish direct mappings |
-| --- | --- | --- | --- |
-| Gold | `catalog_authority` | Yes | No |
-| Gold | `mapping_authority` | No | Yes |
-| Silver | `corroboration` | No | No (corroborate only) |
-| Bronze | `research_candidate` | No | No (candidate only) |
+| Provenance class | Meaning |
+| --- | --- |
+| `mandated` | Required by federal law, regulation, policy, directive, contract clause, or authorization process |
+| `federal_published` | Published by a U.S. federal entity |
+| `federal_program` | Used by a federal program such as RMF, FedRAMP, CMMC, SCAP, NCP, or KEV |
+| `federal_utilized` | Used in federal or federally sponsored cyber operations |
+| `federal_referenced` | Non-federal content included only through an official federal reference |
+| `inferred` | GovFrame-created edge candidate from transparent rules; never a source class |
 
-- Gold sources are official issuing-authority artifacts and decide canonical truth for their lane.
-- Silver sources are credible maintained crosswalks or alternate representations that corroborate or warn.
-- Bronze sources support discovery and research leads only.
-- Gold-supported claims may publish with visible silver or bronze evidence gaps.
-- Conflicting gold evidence blocks a mapping.
-- Conflicting silver evidence publishes with warnings.
+`excluded` is an eligibility/status value, not a provenance class.
 
-## Publication states
+## Relationship Publication
 
-- **Direct** — a published mapping backed by at least one gold `mapping_authority` source.
-- **Calculated** — a multi-hop path composed from published direct mappings; each hop exposes evidence.
-- **Candidate** — bronze-only or manual research leads exported to `data/generated/candidates.json`, never `mappings.json`.
-- **Blocked** — assertions that fail publication rules (for example `catalog_source_used_for_crosswalk`, missing mapping authority, or conflicting gold evidence).
+Every displayable relationship must include:
 
-Every published assertion records source artifact, locator, snapshot date, checksum when available, agreement status, authority type, and evidence gaps.
+- Semantic `relationship_type`.
+- Federal `provenance_class`.
+- Confidence.
+- One or more evidence references.
+- Display label and warning where needed.
 
-## Source-count policy
+Federal-published relationships and inferred candidates remain separate. Blocked relationships are recorded in `graph-health` and are never displayable graph edges.
 
-- Many gold catalog sources are fine.
-- Gold catalog sources create items, not crosswalks.
-- Gold mapping-authority sources publish direct mappings.
-- Silver sources corroborate or warn.
-- Bronze sources create candidate leads only.
+## Evidence Quality
 
-## Catalog Scope
+Evidence quality describes support for a claim, not federal provenance. Existing gold/silver/bronze values may be migrated into internal evidence-quality values during Issue 9. They will not remain the primary user-facing federal trust model.
 
-- NIST SP 800-53 Rev. 5, NIST SP 800-171 Rev. 3, NIST CSF 2.0, NIST AI RMF Playbook, NIST SSDF tasks, and DISA CCIs are normalized from official machine-readable artifacts.
-- FedRAMP publishes four official Rev. 5 baseline identities. GovFrame does not claim that these identities are complete baseline control profiles.
-- CMMC publishes the three official program levels from 32 CFR 170.14. GovFrame does not substitute NIST SP 800-171 Rev. 3 for CMMC Level 2's referenced Revision 2 requirements.
-- DoD RAI publishes the eleven publicly described toolkit focus principles and SHIELD activities.
-- Items remain searchable even when no gold-supported direct mapping exists.
+## Release 1 Sources
 
-## CCI Source Contract
+Release 1 establishes:
 
-Control Correlation Identifiers are imported from the official DISA CCI List as their own complete catalog. CCI-to-NIST SP 800-53 Revision 5 mappings are derived from references inside that list via the `disa-cci-nist-references` mapping authority. STIG catalogs are neither required for those mappings nor treated as a synonym for CCI.
+- FIPS 199 categorization context.
+- FIPS 200 minimum requirement context.
+- NIST SP 800-37 Rev. 2 RMF lifecycle context.
+- NIST SP 800-53 Rev. 5 controls and enhancements.
+- NIST SP 800-53B baselines.
+- NIST SP 800-53A Rev. 5 assessment objectives and procedures.
+- OSCAL artifacts used to represent federal control, baseline, implementation, and assessment content.
 
-## OLIR preference
+Source versions, URLs, public access, licenses, and artifact availability must be revalidated against official sources during importer implementation.
 
-Owner-authority NIST OLIR and supplemental mappings (`nist-csf-53-supplemental`, `nist-csf11-csf20-crosswalk`, `nist-800-171-oscal-mappings`) replace manual seed crosswalks. Manual seeds must not appear in published mappings.
+## Lawful Access Boundary
 
-Generated dataset schema version: `2.1`.
+- Import only public official releases or committed artifacts with documented provenance.
+- Do not scrape around authentication.
+- Do not redistribute restricted standards or source text without redistribution rights.
+- Store references and metadata instead of restricted text where necessary.
