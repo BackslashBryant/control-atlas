@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | BLOCKED ON ISSUE 9 |
+| Status | READY |
 | Branch | `agent/forge/issue-10-rmf-baseline-context` |
 | Lead | Forge |
 | Review | Scout -> Pixel -> Sentinel -> Nexus |

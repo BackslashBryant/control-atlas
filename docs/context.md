@@ -2,20 +2,19 @@
 
 ## Current Objective
 
-The active product objective is Release 1 of the U.S. Federal Security Control Integration Directory. Issue 9 will replace the framework-neutral generated-data and runtime contracts with the federal graph contract through an atomic vertical migration.
+The active product objective is Release 1 of the U.S. Federal Security Control Integration Directory. Issue 9 completed the atomic federal graph contract migration. Issue 10 is next and adds FIPS, RMF, and baseline context without changing that contract.
 
 ## Current State
 
-- The current static application on `main` remains usable and must stay usable through each Release 1 issue.
-- Existing source registry, evidence reconciliation, search, browse, source inspection, evidence-first detail, onboarding, and accessibility work are reusable foundations.
-- Existing generated schema `2.1`, source registry schema `3.0`, mapper terminology, and gold/silver/bronze user-facing trust model are superseded implementation contracts.
+- The current static application on `main` uses the federal source, node, edge, evidence, and graph-health contracts and must stay usable through each Release 1 issue.
+- Search, browse, source inspection, evidence-first detail, onboarding, and accessibility work remain reusable foundations.
+- Generated schema `2.1`, source registry schema `3.0`, mapper terminology, and gold/silver/bronze user-facing trust model have been removed from the active runtime contract.
 - Issue 8 is superseded by the federal directory mission; retained capabilities are recorded in its superseded plan.
 
 ## Active Build Order
 
-1. Issue 9 / FEDGRAPH-001 - federal graph contract vertical migration.
-2. Issue 10 / FEDGRAPH-002A - FIPS, RMF, and baseline context.
-3. Issue 11 / FEDGRAPH-002B - assessment and OSCAL backbone.
+1. Issue 10 / FEDGRAPH-002A - FIPS, RMF, and baseline context.
+2. Issue 11 / FEDGRAPH-002B - assessment and OSCAL backbone.
 
 ## Important Product Rules
 

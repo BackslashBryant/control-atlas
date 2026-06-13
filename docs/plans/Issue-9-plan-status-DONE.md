@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | READY |
+| Status | DONE |
 | Branch | `agent/forge/issue-9-federal-graph-contract` |
 | Lead | Forge |
 | Review | Pixel -> Sentinel -> Muse -> Nexus |
@@ -77,3 +77,5 @@ Replace the current framework-mapper generated-data, runtime, and user-facing tr
 - All acceptance rows pass.
 - The static site is deployable and usable.
 - Issue 10 can add RMF context without another contract migration.
+- `npm run precommit` passed on the feature branch and merged `main`.
+- The June 13, 2026 live GitHub Pages audit passed the retained journeys and federal graph trust checks.

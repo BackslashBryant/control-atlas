@@ -15,9 +15,10 @@ The existing static mapper remains deployed, but its product contract is superse
 - [ ] `npm run precommit` passes for every issue and the merged release.
 - [ ] Native keyboard-only, screen-reader, responsive, zoom, performance, and live GitHub Pages audits pass.
 
-## Retained Evidence
+## Release 1 Evidence
 
-The June 9, 2026 audit in `docs/audits/live-browser-audit-2026-06-09.md` remains evidence for retained search, browse, evidence-first detail, onboarding, responsive, and accessible-name behavior. It is not Release 1 federal graph acceptance evidence.
+- The June 13, 2026 audit in `docs/audits/live-browser-audit-2026-06-13-issue-9.md` is Issue 9 federal graph acceptance evidence.
+- The June 9, 2026 audit in `docs/audits/live-browser-audit-2026-06-09.md` remains evidence for retained pre-migration behavior.
 
 ## Open Audit Requirements
 
