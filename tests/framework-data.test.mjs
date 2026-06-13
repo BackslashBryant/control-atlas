@@ -20,9 +20,12 @@ test('OLIR adapter preserves source and target identifiers', () => {
 
 test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
+  const generatedAt = JSON.parse(readFileSync('data/generated/sources.json', 'utf8')).generated_at;
+  buildFrameworkData();
   assert.equal(result.sources, 17);
   assert.ok(result.nodes > 6000);
   assert.ok(result.edges > 3000);
   assert.equal(result.edges, result.evidence);
   assert.ok(result.findings > 0);
+  assert.equal(JSON.parse(readFileSync('data/generated/sources.json', 'utf8')).generated_at, generatedAt);
 });
