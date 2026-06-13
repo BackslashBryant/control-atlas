@@ -1,4 +1,4 @@
-import { createFederalGraphRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260613-1';
+import { createFederalGraphRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260613-2';
 
 const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
@@ -24,11 +24,11 @@ async function fetchCollection(path, collection) {
 
 async function loadFederalGraph() {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
-    fetchCollection('./data/generated/sources.json?v=20260613-1', 'sources'),
-    fetchCollection('./data/generated/nodes.json?v=20260613-1', 'nodes'),
-    fetchCollection('./data/generated/edges.json?v=20260613-1', 'edges'),
-    fetchCollection('./data/generated/evidence.json?v=20260613-1', 'evidence'),
-    fetchCollection('./data/generated/graph-health.json?v=20260613-1', 'findings'),
+    fetchCollection('./data/generated/sources.json?v=20260613-2', 'sources'),
+    fetchCollection('./data/generated/nodes.json?v=20260613-2', 'nodes'),
+    fetchCollection('./data/generated/edges.json?v=20260613-2', 'edges'),
+    fetchCollection('./data/generated/evidence.json?v=20260613-2', 'evidence'),
+    fetchCollection('./data/generated/graph-health.json?v=20260613-2', 'findings'),
   ]);
   runtime = createFederalGraphRuntime({ sources, nodes, edges, evidence, findings });
 }
