@@ -1,6 +1,6 @@
 # Federal Sources and Evidence
 
-`docs/FEDERAL_SOURCE_POLICY.md` is the canonical inclusion and exclusion policy. Issue 9 will replace the current registry and generated contracts with the federal source, node, edge, evidence, and graph-health contracts defined in the architecture.
+`docs/FEDERAL_SOURCE_POLICY.md` is the canonical inclusion and exclusion policy. Issue 9 replaced the registry and generated contracts with the federal source, node, edge, evidence, and graph-health contracts defined in the architecture.
 
 ## Federal Provenance
 
@@ -31,7 +31,7 @@ Federal-published relationships and inferred candidates remain separate. Blocked
 
 ## Evidence Quality
 
-Evidence quality describes support for a claim, not federal provenance. Existing gold/silver/bronze values may be migrated into internal evidence-quality values during Issue 9. They will not remain the primary user-facing federal trust model.
+Evidence quality describes support for a claim, not federal provenance. The Issue 9 graph contract uses `primary`, `corroborating`, `contextual`, and `candidate`; legacy tier values are not part of the active contract.
 
 ## Release 1 Sources
 

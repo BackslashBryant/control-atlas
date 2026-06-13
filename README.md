@@ -34,4 +34,4 @@ npm run verify:public
 npm run precommit
 ```
 
-The existing generated artifacts remain under `data/generated/` until Issue 9 performs the breaking vertical migration.
+Issue 9 establishes the breaking graph contract under `data/generated/`: `sources.json`, `nodes.json`, `edges.json`, `evidence.json`, and `graph-health.json`.

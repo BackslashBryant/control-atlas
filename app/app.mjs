@@ -1,1702 +1,349 @@
-import { createFrameworkRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs';
-import { terms } from './content/terms.mjs';
-import { tooltips } from './content/tooltips.mjs';
-import { emptyStates } from './content/emptyStates.mjs';
-import { pageIntros } from './content/pageIntros.mjs';
-import { statusLabels } from './content/statusLabels.mjs';
-import { glossary } from './content/glossary.mjs';
+import { createFederalGraphRuntime, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs';
 
 const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
-let dataset;
-let runtime;
-let datasetLoadPromise = null;
-let navigationGeneration = 0;
-
-const CATALOG_LOAD_TIMEOUT_MS = 30000;
-const GITHUB_ISSUES_BASE = 'https://github.com/BackslashBryant/GovFrame/issues';
-
-// Persistent UI states
+const workspace = document.querySelector('#workspace');
+let runtime = null;
+let graphLoadPromise = null;
+let currentState = { view: 'search' };
 let noviceMode = true;
-let walkthroughStep = null;
-let browseSort = 'alpha';
-let browseFilter = 'all';
-let searchFilters = { framework: '', match: 'all', source: 'all' };
-let lastSearchQuery = '';
-let lastFilterResetReason = '';
-let currentActiveView = 'search';
-let currentActiveState = {};
-let viewState = { view: 'search', mode: 'novice' };
-
-const TOUR_EXAMPLE_KEY = 'nist-800-53:AC-2';
-const TOUR_EXAMPLE_QUERY = 'AC-2';
-const WALKTHROUGH_STORAGE_KEY = 'govframe-walkthrough-step';
-let browseCatalogFilter = '';
-
-// Framework date additions lookup
-const frameworkDates = {
-  'nist-800-53': '2026-01-01',
-  'nist-800-171': '2026-02-01',
-  'csf-2': '2026-03-01',
-  'cmmc-2': '2026-04-01',
-  'fedramp-rev5': '2026-05-01',
-  'disa-cci': '2026-05-15',
-  'nist-ai-rmf': '2026-06-01',
-  'nist-ssdf': '2026-06-05',
-  'dod-rai': '2026-06-09'
-};
-
-function catalogLoadError(error) {
-  if (error?.name === 'AbortError') {
-    return new Error('Catalog load timed out. Check your connection and retry.');
-  }
-  if (error instanceof Error) return error;
-  return new Error('Validated framework catalog is unavailable.');
-}
-
-async function fetchCatalogDataset() {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), CATALOG_LOAD_TIMEOUT_MS);
-  try {
-    const response = await fetch('./data/generated/catalog.json', { signal: controller.signal });
-    if (!response.ok) throw new Error('Validated framework catalog is unavailable.');
-    const data = await response.json();
-    dataset = data;
-    runtime = createFrameworkRuntime(dataset);
-  } catch (error) {
-    console.error('[GovFrame] catalog load failed', error);
-    throw catalogLoadError(error);
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
-async function ensureDataset() {
-  if (runtime) return;
-  if (!datasetLoadPromise) {
-    datasetLoadPromise = fetchCatalogDataset().catch((error) => {
-      datasetLoadPromise = null;
-      throw error;
-    });
-  }
-  await datasetLoadPromise;
-}
-
-function showLoadingCard(message) {
-  app.setAttribute('aria-busy', 'true');
-  app.innerHTML = `<div class="loading-card">${escapeHtml(message)}</div>`;
-}
-
-function renderCatalogError(error, retry) {
-  app.setAttribute('aria-busy', 'false');
-  app.innerHTML = `
-    <section class="notice">
-      <h2>Catalog could not load</h2>
-      <p>${escapeHtml(error.message)}</p>
-      <button class="primary" type="button" id="catalog-retry">Retry</button>
-    </section>`;
-  document.querySelector('#catalog-retry').addEventListener('click', () => retry());
-}
-
-async function ensureDatasetWithLoading(retryFn) {
-  if (runtime) return;
-  showLoadingCard('Loading catalog…');
-  try {
-    await ensureDataset();
-  } catch (error) {
-    console.error('[GovFrame] catalog load failed', error);
-    renderCatalogError(error, retryFn);
-    throw error;
-  }
-}
-
-function bindOpenItemButtons(root = app) {
-  root.querySelectorAll('[data-open-item]').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const key = event.currentTarget.dataset.openItem;
-      if (!key) return;
-      void renderItem(key);
-    });
-  });
-}
-
-function bindContributionCopyButtons(root = app) {
-  root.querySelectorAll('[data-copy-contribution]').forEach((button) => {
-    button.addEventListener('click', async () => {
-      const url = button.dataset.copyContribution;
-      if (!url) return;
-      try {
-        await navigator.clipboard.writeText(url);
-        showStatusMessage('Issue URL copied');
-      } catch {
-        showStatusMessage('Could not copy URL');
-      }
-    });
-  });
-}
-
-function bindCopyCitationButtons(root = app) {
-  root.querySelectorAll('[data-copy-citation]').forEach((button) => {
-    button.addEventListener('click', async () => {
-      const citation = button.dataset.copyCitation;
-      if (!citation) return;
-      try {
-        await navigator.clipboard.writeText(citation);
-        showStatusMessage('Citation copied');
-      } catch {
-        showStatusMessage('Could not copy citation');
-      }
-    });
-  });
-}
-
-function renderNotice(message) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'vis-empty-state';
-  const el = document.createElement('p');
-  el.className = 'notice muted';
-  el.textContent = message;
-  wrapper.appendChild(el);
-  return wrapper;
-}
-
-function showStatusMessage(message) {
-  let el = document.querySelector('#app-status');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'app-status';
-    el.setAttribute('aria-live', 'polite');
-    el.className = 'app-status muted';
-    app.prepend(el);
-  }
-  el.textContent = message;
-  clearTimeout(showStatusMessage._timer);
-  showStatusMessage._timer = setTimeout(() => {
-    el.textContent = '';
-  }, 4000);
-}
-
-function isSecureExternalUrl(url) {
-  return typeof url === 'string' && url.startsWith('https://');
-}
-
-function externalAnchor(href, label, title = '', className = 'external-link') {
-  if (!isSecureExternalUrl(href)) {
-    return `<span class="muted">${escapeHtml(label)} (link unavailable)</span>`;
-  }
-  const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
-  const ariaLabel = title || label;
-  return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" class="${className}"${titleAttr} aria-label="${escapeHtml(ariaLabel)}">${escapeHtml(label)}</a>`;
-}
-
-function sourceArtifactLabel(source) {
-  const url = source.artifact || '';
-  if (url.includes('github.com')) return `GitHub — ${source.name}`;
-  if (url.includes('nist.gov')) return `NIST — ${source.name}`;
-  return source.name;
-}
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
 })[character]);
 
-function frameworkName(id) {
-  return dataset.frameworks.find((item) => item.id === id)?.name || id;
-}
-
-function itemFor(key) {
-  return dataset.items.find((item) => item.key === key);
-}
-
-function sourceTierLabel(tier) {
-  if (tier === 'gold') return 'Official';
-  if (tier === 'silver') return 'Supporting';
-  if (tier === 'bronze') return 'Research lead';
-  return tier;
-}
-
-function buildResultCardSummary(item) {
-  const direct = runtime.getDirectMappings(item.key);
-  const paths = runtime.getCalculatedPaths(item.key);
-  const hasEvidenceGaps = direct.some((mapping) => mapping.evidence_gaps?.length);
-
-  let evidenceStatus = 'No source evidence yet';
-  if (direct.length) {
-    evidenceStatus = hasEvidenceGaps
-      ? 'Official source · Needs supporting source'
-      : 'Official source';
-  } else if (paths.length) {
-    evidenceStatus = 'Research leads only';
+async function fetchCollection(path, collection) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error(`Unable to load ${collection}.`);
+  const artifact = await response.json();
+  if (artifact.schema_version !== '1.0' || !Array.isArray(artifact[collection])) {
+    throw new Error(`Invalid ${collection} graph artifact.`);
   }
-
-  return {
-    directCount: direct.length,
-    pathCount: paths.length,
-    evidenceStatus,
-    nextAction: getNextActionLabel(direct.length, paths.length),
-  };
+  return artifact[collection];
 }
 
-function getNextActionLabel(directCount, pathCount) {
-  if (directCount > 0) return 'Review official mappings';
-  if (pathCount > 0) return 'Review possible connections';
-  return 'Assess separately';
+async function loadFederalGraph() {
+  const [sources, nodes, edges, evidence, findings] = await Promise.all([
+    fetchCollection('./data/generated/sources.json', 'sources'),
+    fetchCollection('./data/generated/nodes.json', 'nodes'),
+    fetchCollection('./data/generated/edges.json', 'edges'),
+    fetchCollection('./data/generated/evidence.json', 'evidence'),
+    fetchCollection('./data/generated/graph-health.json', 'findings'),
+  ]);
+  runtime = createFederalGraphRuntime({ sources, nodes, edges, evidence, findings });
 }
 
-function getPrimaryEvidenceSource(mapping) {
-  const evidence = runtime.getEvidenceSummary(mapping.id);
-  return evidence?.sources?.[0] || null;
-}
-
-function buildEvidenceStatusLabel(mapping) {
-  if (mapping.evidence_gaps?.length) return 'Needs supporting source';
-  const source = getPrimaryEvidenceSource(mapping);
-  if (source?.tier === 'silver') return 'Supporting';
-  return 'Official';
-}
-
-function formatCitationText(mapping) {
-  const sourceItem = itemFor(mapping.source_key);
-  const targetItem = itemFor(mapping.target_key);
-  const source = getPrimaryEvidenceSource(mapping);
-  const evidenceName = source
-    ? `${sourceArtifactLabel(source)}${source.locator ? ` (${source.locator})` : ''}`
-    : 'No human-readable evidence source available';
-  return `${frameworkName(sourceItem?.framework_id || mapping.source_key.split(':')[0])} ${sourceItem?.item_id || mapping.source_key.split(':')[1]} maps to ${frameworkName(targetItem?.framework_id || mapping.target_key.split(':')[0])} ${targetItem?.item_id || mapping.target_key.split(':')[1]}. Source: ${evidenceName}. Status: ${buildEvidenceStatusLabel(mapping)}.`;
-}
-
-function buildActiveFilterChips(filter) {
-  const chips = [];
-  if (filter) {
-    chips.push({ kind: 'framework', label: frameworkName(filter) });
-  }
-  if (searchFilters.match !== 'all') {
-    const labels = {
-      official: 'Official matches only',
-      connection: 'Possible connections only',
-      none: 'No known matches only',
-    };
-    chips.push({ kind: 'match', label: labels[searchFilters.match] });
-  }
-  if (searchFilters.source !== 'all') {
-    chips.push({ kind: 'source', label: `${sourceTierLabel(searchFilters.source)} source` });
-  }
-  return chips;
-}
-
-// Epic 4.3 & 4.2 Source badges
-function getSourceBadgesHtml(mapping) {
-  const evidence = runtime.getEvidenceSummary(mapping.id);
-  const presentBadges = [];
-  if (evidence) {
-    evidence.sources.forEach(src => {
-      const label = sourceTierLabel(src.tier);
-      const badgeClass = src.tier === 'gold' ? 'badge-official' : src.tier === 'silver' ? 'badge-supporting' : 'badge-research';
-      presentBadges.push(`<span class="badge ${badgeClass}">${escapeHtml(label)} source</span>`);
-    });
-  } else {
-    presentBadges.push(`<span class="badge badge-official">Official source</span>`);
-  }
-  return presentBadges.join(' ');
-}
-
-// Epic 8.2 Contribution Link
-function getContributionLink(mapping) {
-  const sourceItem = itemFor(mapping.source_key);
-  const targetItem = itemFor(mapping.target_key);
-  const title = encodeURIComponent(
-    `Contribute mapping evidence: ${sourceItem?.item_id || mapping.source_key} → ${targetItem?.item_id || mapping.target_key}`
-  );
-  const body = encodeURIComponent(
-    `Mapping ID: ${mapping.id}\nSource: ${sourceItem?.item_id || mapping.source_key} (${sourceItem?.framework_id || ''})\nTarget: ${targetItem?.item_id || mapping.target_key} (${targetItem?.framework_id || ''})`
-  );
-  return `${GITHUB_ISSUES_BASE}/new?title=${title}&body=${body}`;
-}
-
-// Epic 4.1 Plain language Evidence Panel
-function renderEvidenceSummaryPanel(mapping, key) {
-  const evidence = runtime.getEvidenceSummary(mapping.id);
-  if (!evidence) {
-    return `<div class="evidence-summary-panel"><p class="muted">No detailed evidence available.</p></div>`;
-  }
-  const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
-  const counterpart = itemFor(counterpartKey);
-  const currentItem = itemFor(key);
-
-  const sourcesHtml = evidence.sources.map(source => {
-    const tierName = sourceTierLabel(source.tier);
-    return `
-      <div class="evidence-source-item" style="margin-bottom: 1rem;">
-        <h5>Evidence summary</h5>
-        <ul>
-          <li><strong>Source:</strong> ${escapeHtml(source.source_id)}</li>
-          <li><strong>Source type:</strong> ${escapeHtml(tierName)}</li>
-          <li><strong>What it supports:</strong> ${escapeHtml(currentItem?.item_id || key)} maps to ${escapeHtml(counterpart?.item_id || counterpartKey)}.</li>
-          <li><strong>Use in audit:</strong> Review and cite the ${escapeHtml(frameworkName(currentItem?.framework_id || key.split(':')[0]))} mapping source for ${escapeHtml(counterpart?.item_id || counterpartKey)}. ${externalAnchor(source.artifact, source.locator)}</li>
-        </ul>
-      </div>`;
-  }).join('');
-
-  return `
-    <div class="evidence-summary-panel">
-      ${sourcesHtml}
-    </div>`;
-}
-
-function renderRawEvidenceDetails(mapping) {
-  const evidence = runtime.getEvidenceSummary(mapping.id);
-  if (!evidence) return '';
-  return `
-    <details class="raw-evidence-details">
-      <summary>View raw evidence</summary>
-      <pre>${escapeHtml(JSON.stringify(evidence, null, 2))}</pre>
-    </details>`;
-}
-
-// Epic 1.1 Novice mode State and View helper
-function renderNoviceIntro(pageKey) {
-  if (!noviceMode || !pageIntros[pageKey]) return '';
-  return `
-    <div class="learning-callout" style="margin-bottom: 1.5rem;">
-      <p style="margin: 0; font-size: 0.92rem; line-height: 1.4;">
-        <strong>Educational Guide:</strong> ${escapeHtml(pageIntros[pageKey].description)}
-      </p>
-    </div>
-  `;
-}
-
-function dismissOnboardingOverlay() {
-  document.querySelector('#onboarding-overlay')?.remove();
-}
-
-// Onboarding Choice Modal
-function showOnboardingOverlay() {
-  let overlay = document.querySelector('#onboarding-overlay');
-  if (overlay) return;
-  overlay = document.createElement('div');
-  overlay.id = 'onboarding-overlay';
-  overlay.className = 'onboarding-overlay';
-  overlay.innerHTML = `
-    <div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
-      <h3 id="onboard-title">Welcome to GovFrame</h3>
-      <p>Select your mapping experience level to customize help tips and explanations:</p>
-      <div class="onboarding-choices">
-        <button class="primary" id="btn-mode-novice">I'm new to mapping</button>
-        <button class="secondary" id="btn-mode-expert">I know what I need</button>
-      </div>
-      <button class="secondary" id="btn-onboarding-skip" type="button" aria-label="Skip onboarding for now" style="margin-top: 1rem; width: 100%;">Skip for now</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  const bindModeChoice = (buttonId, isNovice) => {
-    document.querySelector(buttonId).addEventListener('click', async () => {
-      try {
-        await setNoviceMode(isNovice);
-      } catch (error) {
-        console.error(`Failed to set ${isNovice ? 'novice' : 'expert'} mode`, error);
-      } finally {
-        overlay.remove();
-      }
-    });
-  };
-
-  bindModeChoice('#btn-mode-novice', true);
-  bindModeChoice('#btn-mode-expert', false);
-
-  document.querySelector('#btn-onboarding-skip').addEventListener('click', () => {
-    overlay.remove();
+async function ensureGraph() {
+  if (runtime) return;
+  if (!graphLoadPromise) graphLoadPromise = loadFederalGraph().catch((error) => {
+    graphLoadPromise = null;
+    throw error;
   });
-
-  const escHandler = (event) => {
-    if (event.key === 'Escape') {
-      overlay.remove();
-      document.removeEventListener('keydown', escHandler);
-    }
-  };
-  document.addEventListener('keydown', escHandler);
+  app.setAttribute('aria-busy', 'true');
+  await graphLoadPromise;
+  app.setAttribute('aria-busy', 'false');
 }
 
-async function setNoviceMode(isNovice) {
-  noviceMode = isNovice;
-
-  viewState = {
-    ...viewState,
-    mode: isNovice ? 'novice' : 'expert',
-  };
-
-  const toggleBtn = document.querySelector('#btn-toggle-mode');
-  if (toggleBtn) {
-    toggleBtn.textContent = `Mode: ${isNovice ? 'Novice' : 'Expert'}`;
-    toggleBtn.classList.toggle('active-novice', isNovice);
-    toggleBtn.setAttribute('aria-pressed', String(isNovice));
-  }
-
-  history.replaceState(null, '', location.pathname + serializeViewState(viewState));
-
-  if (currentActiveState.key) {
-    await renderItem(currentActiveState.key, { preserveScroll: true });
-    return;
-  }
-
-  await render(viewState);
-}
-
-// Help & Glossary Drawer
-function toggleGlossaryDrawer(forceOpen) {
-  let drawer = document.querySelector('#glossary-drawer');
-  if (!drawer) {
-    drawer = document.createElement('div');
-    drawer.id = 'glossary-drawer';
-    drawer.className = 'glossary-drawer';
-    drawer.setAttribute('role', 'dialog');
-    drawer.setAttribute('aria-modal', 'true');
-    drawer.setAttribute('aria-labelledby', 'glossary-title');
-
-    const glossaryHtml = glossary.map(item => `
-      <div class="glossary-item">
-        <dt>${escapeHtml(item.term)}</dt>
-        <dd>${escapeHtml(item.definition)}</dd>
-      </div>
-    `).join('');
-
-    drawer.innerHTML = `
-      <button class="close-drawer" id="btn-close-glossary" aria-label="Close glossary">&times;</button>
-      <h2 id="glossary-title">Help & Glossary</h2>
-      <p class="muted" style="margin-bottom: 1.5rem;">Key concepts and definitions:</p>
-      <dl class="glossary-list">
-        ${glossaryHtml}
-      </dl>
-      <div style="margin-top: 2rem; border-top: 1px solid var(--line); padding-top: 1rem;">
-        <button class="primary" id="btn-restart-walkthrough" style="width: 100%;">Restart Guided Tour</button>
-      </div>
-    `;
-    document.body.appendChild(drawer);
-
-    document.querySelector('#btn-close-glossary').addEventListener('click', () => toggleGlossaryDrawer(false));
-    document.querySelector('#btn-restart-walkthrough').addEventListener('click', () => {
-      toggleGlossaryDrawer(false);
-      startWalkthrough();
-    });
-  }
-
-  const isOpen = forceOpen !== undefined ? forceOpen : !drawer.classList.contains('open');
-  drawer.classList.toggle('open', isOpen);
-
-  if (isOpen) {
-    drawer.querySelector('#btn-close-glossary').focus();
-    const escHandler = (e) => {
-      if (e.key === 'Escape') {
-        toggleGlossaryDrawer(false);
-        document.removeEventListener('keydown', escHandler);
-      }
-    };
-    document.addEventListener('keydown', escHandler);
-  } else {
-    const trigger = document.querySelector('#btn-toggle-glossary');
-    if (trigger) trigger.focus();
-  }
-}
-
-function saveWalkthroughStep(step) {
-  if (step === null) sessionStorage.removeItem(WALKTHROUGH_STORAGE_KEY);
-  else sessionStorage.setItem(WALKTHROUGH_STORAGE_KEY, String(step));
-}
-
-function loadWalkthroughStep() {
-  const walkthroughSteps = buildAdaptiveWalkthrough();
-  const raw = sessionStorage.getItem(WALKTHROUGH_STORAGE_KEY);
-  if (raw === null) return null;
-  const step = Number(raw);
-  return Number.isFinite(step) && step >= 0 && step < walkthroughSteps.length ? step : null;
-}
-
-function highlightTourTarget(itemKey) {
-  document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
-  const button = document.querySelector(`[data-open-item="${itemKey}"]`);
-  const card = button?.closest('.item-card');
-  if (card) {
-    card.classList.add('tour-highlight');
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
-
-// Epic 1.2 Guided Walkthrough
-function buildAdaptiveWalkthrough(itemKey = TOUR_EXAMPLE_KEY) {
-  const direct = runtime ? runtime.getDirectMappings(itemKey) : [];
-  const paths = runtime ? runtime.getCalculatedPaths(itemKey) : [];
-  return [
-    {
-      title: "1. Search a Control ID",
-      text: "Let's search for the NIST control 'AC-2'. We've prefilled it in the search input. Press Next Step to run the search.",
-      setup: async () => {
-        lastSearchQuery = '';
-        await setView('search', { query: '', filter: '' });
-        const queryInput = document.querySelector('#search-query');
-        if (queryInput) {
-          queryInput.value = TOUR_EXAMPLE_QUERY;
-        }
-      }
-    },
-    {
-      title: "2. Open Search Result",
-      text: "The search found matching items. Look for the highlighted 'AC-2' card and click it to view detail.",
-      setup: async () => {
-        prepareSearchSubmission(TOUR_EXAMPLE_QUERY);
-        await setView('search', { query: TOUR_EXAMPLE_QUERY, filter: '' });
-        highlightTourTarget(TOUR_EXAMPLE_KEY);
-      }
-    },
-    {
-      title: "3. Understand Official Matches",
-      text: direct.length
-        ? "Under 'Direct sourced mappings', you see 'Official matches'. These are verified mappings backed by published source organizations."
-        : 'This item has no official matches. That means GovFrame did not find a direct published mapping here.',
-      setup: async () => {
-        await renderItem(TOUR_EXAMPLE_KEY);
-      }
-    },
-    {
-      title: "4. Review Possible Connections",
-      text: paths.length
-        ? 'Scroll down to possible connections. These are multi-hop research leads that still need audit review.'
-        : 'This item has no possible connections. That means GovFrame only found direct official mappings here.',
-      setup: async () => {
-        // already on item page
-      }
-    },
-    {
-      title: "5. Compare or Export Mappings",
-      text: "Use the evidence summary first, then copy a citation or export comparisons from the 'Map Frameworks' tab.",
-      setup: async () => {
-        // already on item page
-      }
-    }
-  ];
-}
-
-async function startWalkthrough() {
-  dismissOnboardingOverlay();
-  walkthroughStep = 0;
-  saveWalkthroughStep(0);
+async function withGraph(render) {
   try {
-    await walkthroughSteps[0].setup();
+    if (!runtime) app.innerHTML = '<div class="loading-card">Loading federal graph...</div>';
+    await ensureGraph();
+    await render();
   } catch (error) {
-    console.error('Walkthrough setup failed', error);
+    app.setAttribute('aria-busy', 'false');
+    app.innerHTML = `<section class="notice"><h2>Federal graph unavailable</h2><p>${escapeHtml(error.message)}</p><button class="primary" id="retry-load" type="button">Retry</button></section>`;
+    document.querySelector('#retry-load')?.addEventListener('click', () => void renderState(currentState));
   }
-  renderWalkthroughBubble();
 }
 
-function renderWalkthroughBubble() {
-  const walkthroughSteps = buildAdaptiveWalkthrough();
-  let bubble = document.querySelector('#walkthrough-bubble');
-  if (walkthroughStep === null) {
-    if (bubble) bubble.remove();
-    return;
-  }
-
-  if (!bubble) {
-    bubble = document.createElement('div');
-    bubble.id = 'walkthrough-bubble';
-    bubble.className = 'walkthrough-bubble';
-    document.body.appendChild(bubble);
-  }
-
-  const step = walkthroughSteps[walkthroughStep];
-  bubble.innerHTML = `
-    <h4>${escapeHtml(step.title)}</h4>
-    <p>${escapeHtml(step.text)}</p>
-    <div class="walkthrough-actions">
-      <button type="button" class="btn-skip" id="btn-walkthrough-skip">End Tour</button>
-      <button type="button" class="btn-next" id="btn-walkthrough-next">
-        ${walkthroughStep === walkthroughSteps.length - 1 ? 'Finish' : 'Next Step'}
-      </button>
-    </div>
-  `;
-
-  document.querySelector('#btn-walkthrough-skip').addEventListener('click', () => {
-    walkthroughStep = null;
-    saveWalkthroughStep(null);
-    document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
-    renderWalkthroughBubble();
-  });
-
-  document.querySelector('#btn-walkthrough-next').addEventListener('click', async () => {
-    walkthroughStep++;
-    if (walkthroughStep >= walkthroughSteps.length) {
-      walkthroughStep = null;
-      saveWalkthroughStep(null);
-      document.querySelectorAll('.tour-highlight').forEach((el) => el.classList.remove('tour-highlight'));
-      renderWalkthroughBubble();
-    } else {
-      saveWalkthroughStep(walkthroughStep);
-      const nextStep = walkthroughSteps[walkthroughStep];
-      if (nextStep.setup) {
-        try {
-          await nextStep.setup();
-        } catch (error) {
-          console.error('Walkthrough step setup failed', error);
-        }
-      }
-      renderWalkthroughBubble();
-    }
-  });
+function catalogOptions(selected = '') {
+  return runtime.getCatalogs().map((catalog) =>
+    `<option value="${escapeHtml(catalog.id)}" ${catalog.id === selected ? 'selected' : ''}>${escapeHtml(catalog.name)}</option>`).join('');
 }
 
-// D3 Node-link visualization
-function drawNodeLink(svgElement, paths) {
-  const d3 = window.d3;
-  if (!d3) {
-    svgElement.replaceWith(renderNotice('Graph library unavailable.'));
-    return;
-  }
-  if (!paths.length) {
-    svgElement.replaceWith(renderNotice(emptyStates.paths));
-    return;
-  }
-  svgElement.innerHTML = '';
-
-  const nodesMap = new Map();
-  const links = [];
-  const slicedPaths = paths.slice(0, 8);
-
-  slicedPaths.forEach(path => {
-    path.item_keys.forEach((key, index) => {
-      if (!nodesMap.has(key)) {
-        const item = itemFor(key);
-        nodesMap.set(key, {
-          key,
-          id: item?.item_id || key.split(':')[1] || key,
-          column: index,
-        });
-      }
-    });
-    for (let i = 0; i < path.item_keys.length - 1; i++) {
-      const source = path.item_keys[i];
-      const target = path.item_keys[i+1];
-      if (!links.some(l => l.source === source && l.target === target)) {
-        links.push({ source, target });
-      }
-    }
-  });
-
-  const nodes = [...nodesMap.values()];
-  const columns = [[], [], [], []];
-  nodes.forEach(n => {
-    if (columns[n.column]) columns[n.column].push(n);
-  });
-
-  const width = svgElement.clientWidth || 300;
-  const height = svgElement.clientHeight || 240;
-  const colWidth = width / 3;
-
-  columns.forEach((colNodes, colIndex) => {
-    const spacing = height / (colNodes.length + 1);
-    colNodes.forEach((n, nodeIndex) => {
-      n.x = colIndex * colWidth + colWidth / 2;
-      n.y = (nodeIndex + 1) * spacing;
-    });
-  });
-
-  const svg = d3.select(svgElement);
-
-  svg.selectAll('.vis-link')
-    .data(links)
-    .enter()
-    .append('line')
-    .attr('class', 'vis-link')
-    .attr('x1', d => nodesMap.get(d.source).x)
-    .attr('y1', d => nodesMap.get(d.source).y)
-    .attr('x2', d => nodesMap.get(d.target).x)
-    .attr('y2', d => nodesMap.get(d.target).y)
-    .attr('stroke', '#47715d')
-    .attr('stroke-width', 2);
-
-  const nodeGroups = svg.selectAll('.vis-node')
-    .data(nodes)
-    .enter()
-    .append('g')
-    .attr('class', 'vis-node')
-    .attr('transform', d => `translate(${d.x},${d.y})`);
-
-  nodeGroups.append('circle')
-    .attr('r', 12)
-    .attr('fill', '#173f35')
-    .attr('stroke', '#d2a84b')
-    .attr('stroke-width', 1.5);
-
-  nodeGroups.append('text')
-    .attr('dy', -18)
-    .attr('text-anchor', 'middle')
-    .attr('font-size', '10px')
-    .attr('fill', '#14231f')
-    .text(d => d.id);
+function sourceBadge(provenance) {
+  const label = provenance.replaceAll('_', ' ');
+  const cssClass = provenance === 'inferred' ? 'badge-research' : 'badge-official';
+  return `<span class="badge ${cssClass}">${escapeHtml(label)}</span>`;
 }
 
-function drawAdjacencyMatrix(container, paths, direct) {
-  const targets = new Set();
-  const rows = [];
-
-  direct.forEach(m => {
-    const counterpartKey = m.source_key === currentActiveState.key ? m.target_key : m.source_key;
-    const counterpart = itemFor(counterpartKey);
-    const id = counterpart?.item_id || counterpartKey;
-    targets.add(id);
-    rows.push({ id, type: 'Official' });
-  });
-
-  paths.forEach(p => {
-    const lastKey = p.item_keys[p.item_keys.length - 1];
-    const counterpart = itemFor(lastKey);
-    const id = counterpart?.item_id || lastKey;
-    if (!targets.has(id)) {
-      targets.add(id);
-      rows.push({ id, type: 'Possible' });
-    }
-  });
-
-  if (rows.length === 0) {
-    container.innerHTML = '<p class="muted">No relationships to display.</p>';
-    return;
-  }
-
-  const cellsHtml = rows.map(r => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem; border-bottom: 1px solid var(--line); font-size: 0.85rem;">
-      <strong>${escapeHtml(r.id)}</strong>
-      <span class="badge ${r.type === 'Official' ? 'badge-official' : 'badge-connection'}">${escapeHtml(r.type)}</span>
-    </div>
-  `).join('');
-
-  container.innerHTML = `
-    <div style="border: 1px solid var(--line); border-radius: 8px; background: white; padding: 0.5rem;">
-      <div style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--muted); padding-bottom: 0.4rem; border-bottom: 1.5px solid var(--line); margin-bottom: 0.4rem;">Mapped Counterparts</div>
-      ${cellsHtml}
-    </div>
-  `;
+function nodeCard(node) {
+  const edges = runtime.getEdgesForNode(node.id);
+  const published = edges.filter((edge) => edge.publication_status === 'published').length;
+  const candidates = edges.filter((edge) => edge.publication_status === 'candidate').length;
+  return `
+    <article class="item-card workbench-card">
+      <div>
+        <h3 class="workbench-card-title">${escapeHtml(node.metadata.item_id)} - ${escapeHtml(node.metadata.title)}</h3>
+        <p class="workbench-card-meta">${escapeHtml(node.metadata.catalog_id)} · ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
+        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'} · ${candidates} inferred candidate${candidates === 1 ? '' : 's'}</p>
+      </div>
+      <button class="primary" type="button" data-open-node="${escapeHtml(node.id)}">Open federal context</button>
+    </article>`;
 }
 
-function normalizeQuery(value) {
-  return String(value || '').trim().toLowerCase();
-}
-
-function resetSearchFilters() {
-  searchFilters = { framework: '', match: 'all', source: 'all' };
-}
-
-function prepareSearchSubmission(query, { resetFilters = true } = {}) {
-  const trimmed = String(query || '').trim();
-  const queryChanged = normalizeQuery(trimmed) !== normalizeQuery(lastSearchQuery);
-  if (resetFilters && queryChanged) {
-    resetSearchFilters();
-    lastFilterResetReason = 'query-changed';
-  }
-  if (queryChanged) {
-    lastSearchQuery = trimmed;
-  } else {
-    lastFilterResetReason = '';
-  }
-  return trimmed;
-}
-
-async function setView(view, state = {}, replace = false) {
-  navigationGeneration += 1;
-  const merged = {
-    ...viewState,
-    view,
-    mode: noviceMode ? 'novice' : 'expert',
-    ...state,
-  };
-  const next = normalizeViewState(view, merged);
-
-  viewState = next;
-  history[replace ? 'replaceState' : 'pushState'](null, '', location.pathname + serializeViewState(next));
-  await render(next);
+function bindNodeButtons() {
+  document.querySelectorAll('[data-open-node]').forEach((button) => button.addEventListener('click', () => {
+    void renderDetail(button.dataset.openNode);
+  }));
 }
 
 async function renderSearch(state) {
   const query = state.query || '';
   const filter = state.filter || '';
-  if (query) {
-    try {
-      await ensureDatasetWithLoading(() => renderSearch(state));
-    } catch {
-      return;
-    }
-  }
-  const filters = { framework_id: filter || undefined };
-  const rawResults = query ? runtime.searchFrameworkItems(query, filters) : [];
+  workspace.toggleAttribute('data-search-active', Boolean(query));
 
-  let results = rawResults;
-  if (query) {
-    if (searchFilters.match !== 'all') {
-      results = results.filter((item) => {
-        const direct = runtime.getDirectMappings(item.key);
-        const paths = runtime.getCalculatedPaths(item.key);
-        if (searchFilters.match === 'official') return direct.length > 0;
-        if (searchFilters.match === 'connection') return paths.length > 0;
-        if (searchFilters.match === 'none') return direct.length === 0 && paths.length === 0;
-        return true;
-      });
-    }
-    if (searchFilters.source !== 'all' && searchFilters.match !== 'none') {
-      results = results.filter((item) => {
-        const direct = runtime.getDirectMappings(item.key);
-        return direct.some((mapping) => {
-          const evidence = runtime.getEvidenceSummary(mapping.id);
-          return evidence && evidence.sources.some((src) => src.tier === searchFilters.source);
-        });
-      });
-    }
-  }
-
-  const noResults = query && results.length === 0;
-  const activeFilterChips = buildActiveFilterChips(filter);
-  const filtersActive = activeFilterChips.length > 0;
-  const sourceTierDisabled = searchFilters.match === 'none';
-
-  const workspace = document.getElementById('workspace');
-  if (workspace) {
-    workspace.toggleAttribute('data-search-active', Boolean(query));
-  }
-
-  const title = query ? 'Search GovFrame' : pageIntros.home.title;
-  const description = query
-    ? 'Find the requirement, compare what is known, and open the requirement when you are ready to verify evidence.'
-    : pageIntros.home.description;
-
-  const resultsMarkup = results.map((item) => {
-    const summary = buildResultCardSummary(item);
-    return `
-      <article class="item-card workbench-card">
-        <div class="workbench-card-header">
-          <h3 class="workbench-card-title">${escapeHtml(item.item_id)} — ${escapeHtml(item.title)}</h3>
-          <p class="workbench-card-meta">${escapeHtml(frameworkName(item.framework_id))} · ${escapeHtml(summary.evidenceStatus)}</p>
-          <p class="workbench-card-counts">${summary.directCount} official match${summary.directCount === 1 ? '' : 'es'} · ${summary.pathCount} possible connection${summary.pathCount === 1 ? '' : 's'}</p>
-          <p class="workbench-card-next">Next action: ${escapeHtml(summary.nextAction)}</p>
-        </div>
-        <button class="primary" type="button" data-open-item="${escapeHtml(item.key)}">Open requirement</button>
-      </article>`;
-  }).join('');
-
-  app.innerHTML = `
-    <section class="panel ${query ? 'search-workbench' : ''}" aria-labelledby="search-title">
-      <p class="eyebrow">${query ? 'Search workbench' : 'Explore an item'}</p>
-      <h2 id="search-title">${escapeHtml(title)}</h2>
-
-      <form class="search-controls" id="search-form">
-        <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, PR.AA-01, account management"></div>
-        <div class="field"><label for="search-framework">Framework filter</label><select id="search-framework"><option value="">All frameworks</option>${frameworkOptions(filter)}</select></div>
-        <button class="primary" type="submit">Search</button>
-      </form>
-
-      ${!query ? `<p style="margin-top: 1.5rem;">${escapeHtml(description)}</p>
-      <div style="margin: 1rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <button class="primary" id="btn-focus-search" type="button">Search requirements</button>
-        <button class="secondary" id="btn-learn-mapping" type="button">Learn how mapping works</button>
-      </div>` : `<p>${escapeHtml(description)}</p>`}
-      ${!query ? renderNoviceIntro('home') : ''}
-
-      <div class="search-examples">
-        <span class="label">Examples:</span>
-        <button type="button" class="chip" data-example="AC-2">AC-2</button>
-        <button type="button" class="chip" data-example="CCI-000225">CCI-000225</button>
-        <button type="button" class="chip" data-example="PR.AA-01">PR.AA-01</button>
-        <button type="button" class="chip" data-example="account management">account management</button>
-      </div>
-
-      <p class="muted">${query ? `${results.length} matching item${results.length === 1 ? '' : 's'} found.` : 'Enter an identifier or phrase. The landing page does not load the full catalog.'}</p>
-      ${query && lastFilterResetReason === 'query-changed' ? '<p class="muted filter-reset-note">Filters reset because the query changed.</p>' : ''}
-    </section>
-
-    ${query && activeFilterChips.length ? `
-    <div class="active-filter-chips" aria-label="Active filters">
-      <span class="filter-chip-label">Active filters:</span>
-      ${activeFilterChips.map((chip) => `
-        <button type="button" class="filter-chip" data-filter-chip="${escapeHtml(chip.kind)}">
-          ${escapeHtml(chip.label)} <span aria-hidden="true">×</span>
-        </button>`).join('')}
-      <button type="button" class="secondary" id="btn-clear-filters">Clear filters</button>
-    </div>` : ''}
-
-    ${query ? `
-    <div class="results-filters-bar">
-      <span class="filter-label">Filter matches:</span>
-      <select id="filter-match-type">
-        <option value="all" ${searchFilters.match === 'all' ? 'selected' : ''}>All match types</option>
-        <option value="official" ${searchFilters.match === 'official' ? 'selected' : ''}>Official matches only</option>
-        <option value="connection" ${searchFilters.match === 'connection' ? 'selected' : ''}>Possible connections only</option>
-        <option value="none" ${searchFilters.match === 'none' ? 'selected' : ''}>No known matches only</option>
-      </select>
-      <select id="filter-source-type"${sourceTierDisabled ? ' disabled aria-disabled="true" title="Source tier is unavailable when filtering for items with no known matches"' : ''}>
-        <option value="all" ${searchFilters.source === 'all' ? 'selected' : ''}>All source tiers</option>
-        <option value="gold" ${searchFilters.source === 'gold' ? 'selected' : ''}>Official</option>
-        <option value="silver" ${searchFilters.source === 'silver' ? 'selected' : ''}>Supporting</option>
-        <option value="bronze" ${searchFilters.source === 'bronze' ? 'selected' : ''}>Research lead</option>
-      </select>
-    </div>` : ''}
-    ${query && sourceTierDisabled ? '<p class="muted filter-note">Source tier disabled because no-known-match items do not have source evidence.</p>' : ''}
-
-    <section class="results" aria-label="Search results">
-      ${noResults ? `
-      <div class="notice empty-search">
-        <h3>No matches found</h3>
-        <p>${filtersActive ? 'No items match the current filters. Try clearing filters or changing your search.' : escapeHtml(emptyStates.search)}</p>
-        <div style="margin-top: 1rem;">
-          ${filtersActive ? `<button class="secondary" id="btn-clear-filters-empty" type="button">Clear filters</button>` : ''}
-          <button class="secondary" id="empty-btn-browse" type="button">Browse catalogs</button>
-        </div>
-      </div>` : ''}
-      ${resultsMarkup}
-      ${query && !noResults ? `
-      <div class="browse-reminder" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); text-align: center;">
-        <p class="muted">Not finding what you need? <button class="link-btn" id="subtle-btn-browse" type="button" style="padding:0; vertical-align: baseline; background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline;">Browse full catalogs</button> instead.</p>
-      </div>` : ''}
-    </section>`;
-
-  document.querySelector('#search-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const submittedQuery = prepareSearchSubmission(document.querySelector('#search-query').value);
-    setView('search', {
-      query: submittedQuery,
-      filter: document.querySelector('#search-framework').value,
-    });
-  });
-
-  const focusSearchBtn = document.querySelector('#btn-focus-search');
-  if (focusSearchBtn) {
-    focusSearchBtn.addEventListener('click', () => {
-      const form = document.querySelector('#search-form');
-      const input = document.querySelector('#search-query');
-      if (input.value.trim()) {
-        form.requestSubmit();
-        return;
-      }
-      input.focus();
-    });
-  }
-
-  const learnMappingBtn = document.querySelector('#btn-learn-mapping');
-  if (learnMappingBtn) {
-    learnMappingBtn.addEventListener('click', () => {
-      void startWalkthrough();
-    });
-  }
-
-  document.querySelectorAll('[data-example]').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      document.querySelector('#search-query').value = chip.dataset.example;
-      const exampleQuery = prepareSearchSubmission(chip.dataset.example);
-      setView('search', {
-        query: exampleQuery,
-        filter: '',
-      });
-    });
-  });
-
-  const emptyBrowseBtn = document.querySelector('#empty-btn-browse');
-  if (emptyBrowseBtn) {
-    emptyBrowseBtn.addEventListener('click', () => setView('browse'));
-  }
-
-  const subtleBrowseBtn = document.querySelector('#subtle-btn-browse');
-  if (subtleBrowseBtn) {
-    subtleBrowseBtn.addEventListener('click', () => setView('browse'));
-  }
-
-  const matchFilterSelect = document.querySelector('#filter-match-type');
-  if (matchFilterSelect) {
-    matchFilterSelect.addEventListener('change', () => {
-      searchFilters.match = matchFilterSelect.value;
-      if (searchFilters.match === 'none') {
-        searchFilters.source = 'all';
-      }
-      renderSearch(state);
-    });
-  }
-
-  const sourceFilterSelect = document.querySelector('#filter-source-type');
-  if (sourceFilterSelect) {
-    if (searchFilters.match === 'none') {
-      sourceFilterSelect.disabled = true;
-      sourceFilterSelect.setAttribute('aria-disabled', 'true');
-    }
-    sourceFilterSelect.addEventListener('change', () => {
-      if (searchFilters.match === 'none') return;
-      searchFilters.source = sourceFilterSelect.value;
-      renderSearch(state);
-    });
-  }
-
-  const clearFilters = () => {
-    resetSearchFilters();
-    if (filter) {
-      void setView('search', { query, filter: '' }, true);
-      return;
-    }
-    renderSearch(state);
-  };
-  document.querySelector('#btn-clear-filters')?.addEventListener('click', clearFilters);
-  document.querySelector('#btn-clear-filters-empty')?.addEventListener('click', clearFilters);
-  document.querySelectorAll('[data-filter-chip]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const kind = button.dataset.filterChip;
-      if (kind === 'framework') {
-        void setView('search', { query, filter: '' }, true);
-        return;
-      }
-      if (kind === 'match') searchFilters.match = 'all';
-      if (kind === 'source') searchFilters.source = 'all';
-      renderSearch(state);
-    });
-  });
-
-  bindOpenItemButtons();
-
-  if (query) {
-    requestAnimationFrame(() => {
-      document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-}
-
-function bindDetailsScrollPreservation(root) {
-  let savedScrollY = null;
-  root.querySelectorAll('details summary').forEach((summary) => {
-    summary.addEventListener('pointerdown', () => {
-      savedScrollY = window.scrollY;
-    });
-    summary.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        savedScrollY = window.scrollY;
-      }
-    });
-  });
-  root.querySelectorAll('details').forEach((details) => {
-    details.addEventListener('toggle', () => {
-      if (savedScrollY !== null) {
-        const y = savedScrollY;
-        requestAnimationFrame(() => window.scrollTo(0, y));
-      }
-    });
-  });
-}
-
-async function renderItem(key, options = {}) {
-  const preserveScroll = options.preserveScroll === true;
-  if (!preserveScroll) {
-    navigationGeneration += 1;
-  }
-  const scrollY = preserveScroll ? window.scrollY : null;
-  try {
-    await ensureDatasetWithLoading(() => renderItem(key, options));
-  } catch {
+  if (!query) {
+    app.innerHTML = `
+      <section class="panel" aria-labelledby="search-title">
+        <p class="eyebrow">Federal integration graph</p>
+        <h2 id="search-title">Find a federal security control or requirement</h2>
+        <p>Search federal controls, requirements, programs, and relationship evidence. The full graph loads only after you search or browse.</p>
+        <form id="search-form" class="search-controls">
+          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" placeholder="AC-2, CCI-000225, account management"></div>
+          <button class="primary" type="submit">Search</button>
+        </form>
+        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+      </section>`;
+    bindSearchForm();
     return;
   }
-  const item = itemFor(key);
-  if (!item) return;
-  currentActiveState = { key };
-  const direct = runtime.getDirectMappings(key);
-  const paths = runtime.getCalculatedPaths(key);
 
-  const mappingCard = (mapping) => {
-    const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
-    const counterpart = itemFor(counterpartKey);
-    const direction = mapping.source_key === key ? 'outgoing' : 'incoming';
-
-    // Gaps renamed to "Needs supporting source" (Epic 4.2)
-    const gapBadge = mapping.evidence_gaps && mapping.evidence_gaps.length
-      ? `<span class="badge badge-needs-source" title="${escapeHtml(tooltips.needsSupportingSource)}">Needs supporting source</span>`
-      : `<span class="badge badge-official" title="${escapeHtml(tooltips.officialMatch)}">Official match</span>`;
-
-    // Contribution link
-    const contributionUrl = getContributionLink(mapping);
-    const contributionHtml = mapping.evidence_gaps && mapping.evidence_gaps.length
-      ? `<div class="contribution-callout">
-          ${externalAnchor(contributionUrl, 'Contribute mapping evidence ↗', 'Contribute mapping evidence (opens GitHub in new tab)', 'contribute-link')}
-          <button type="button" class="secondary" data-copy-contribution="${escapeHtml(contributionUrl)}">Copy issue URL</button>
-        </div>`
-      : '';
-
-    const sourceBadges = getSourceBadgesHtml(mapping);
-    const evidenceSummaryPanel = renderEvidenceSummaryPanel(mapping, key);
-    const citationText = formatCitationText(mapping);
-
-    return `
-      <article class="mapping-card badge-official">
-        <div class="badge-row">
-          <span class="badge">${escapeHtml(mapping.relationship_type)} · ${direction}</span>
-          ${sourceBadges}
-          ${gapBadge}
-        </div>
-        <h4>${escapeHtml(counterpart?.item_id || counterpartKey)} · ${escapeHtml(counterpart?.title || '')}</h4>
-        <p>${escapeHtml(mapping.rationale || '')}</p>
-        <div class="mapping-workflow">
-          ${evidenceSummaryPanel}
-          <div class="mapping-actions">
-            <button class="secondary" type="button" data-open-item="${escapeHtml(counterpartKey)}">Open mapped item</button>
-            <button class="secondary" type="button" data-copy-citation="${escapeHtml(citationText)}">Copy citation</button>
-          </div>
-          ${mapping.evidence_gaps && mapping.evidence_gaps.length ? '<p class="muted">Contribute missing evidence</p>' : ''}
-          ${contributionHtml}
-          <!-- Evidence summary -> Open mapped item -> Copy citation -> Contribute missing evidence -> View raw evidence -->
-          ${renderRawEvidenceDetails(mapping)}
-        </div>
-      </article>`;
-  };
-
-  const pathCard = (path) => {
-    return `
-      <article class="mapping-card calculated">
-        <div class="badge-row">
-          <span class="badge" title="${escapeHtml(tooltips.possibleConnection)}">Possible connection · ${path.hops.length} hops</span>
-        </div>
-        <div class="path" style="margin-top: 0.5rem;">
-          ${path.item_keys.map((itemKey) => `<span>${escapeHtml(itemFor(itemKey)?.item_id || itemKey)}</span>`).join(' → ')}
-        </div>
-      </article>`;
-  };
-
-  const visibleDirect = direct.slice(0, 8);
-  const additionalDirect = direct.slice(8);
-
-  app.innerHTML = `
-    <button class="secondary" type="button" id="back-search">← Back to search</button>
-    <section class="detail-layout" aria-labelledby="item-heading">
-      <div class="detail-main">
-        <article class="panel">
-          <div class="badge-row"><span class="badge">${escapeHtml(frameworkName(item.framework_id))}</span><span class="badge badge-official">Official source</span></div>
-          <h2 id="item-heading" class="item-id" tabindex="-1">${escapeHtml(item.item_id)}</h2>
-          <h3>${escapeHtml(item.title)}</h3>
-          <p>${escapeHtml(item.text || '')}</p>
-          <details><summary>Canonical source evidence</summary><p>${escapeHtml(item.canonical_evidence.source_id)} · ${escapeHtml(item.canonical_evidence.locator)} · ${escapeHtml(item.canonical_evidence.snapshot_date)}</p></details>
-        </article>
-
-        <section class="panel">
-          <p class="eyebrow">Direct sourced mappings</p>
-          <h3>${direct.length} Official match${direct.length === 1 ? '' : 'es'}</h3>
-          <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No official matches are currently known.</p>'}</div>
-          ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
-        </section>
-
-        <section class="panel">
-          <p class="eyebrow">Explained paths</p>
-          <h3>${paths.length} Possible connection${paths.length === 1 ? '' : 's'}</h3>
-          <p class="muted">Possible connections link requirements through related hops.</p>
-          <div class="stack">${paths.length ? paths.slice(0, 30).map(pathCard).join('') : '<p class="notice">No possible connections known.</p>'}</div>
-        </section>
-      </div>
-
-      <aside class="detail-side panel">
-        <p class="eyebrow">How to use this result</p>
-        <h3>${direct.length + paths.length} known routes</h3>
-        ${direct.length ? '' : renderNoviceIntro('detailZero')}
-        <details class="relationship-views">
-          <summary>Relationship views</summary>
-          <div class="visualization-tabs">
-            <button type="button" id="vis-tab-node" class="active">Flow Graph</button>
-            <button type="button" id="vis-tab-matrix">Grid Matrix</button>
-            <button type="button" id="vis-tab-list">List View</button>
-          </div>
-          <p class="muted" style="font-size: 0.85rem; margin: 0.5rem 0 0;">Shows calculated multi-hop paths. See mapping cards for evidence.</p>
-          <div id="vis-container" style="margin-top: 10px;">
-            <svg id="vis-svg" class="visualization-canvas"></svg>
-          </div>
-        </details>
-      </aside>
-    </section>`;
-
-  document.querySelector('#back-search').addEventListener('click', () => setView('search', {}, false));
-  bindOpenItemButtons();
-  bindContributionCopyButtons();
-  bindCopyCitationButtons();
-
-  // D3 Visualization tabs binding
-  const visContainer = document.querySelector('#vis-container');
-  const drawVis = (tab) => {
-    document.querySelectorAll('.visualization-tabs button').forEach(btn => btn.classList.remove('active'));
-    if (tab === 'node') {
-      document.querySelector('#vis-tab-node').classList.add('active');
-      visContainer.innerHTML = '<svg id="vis-svg" class="visualization-canvas"></svg>';
-      drawNodeLink(document.querySelector('#vis-svg'), paths);
-    } else if (tab === 'matrix') {
-      document.querySelector('#vis-tab-matrix').classList.add('active');
-      visContainer.innerHTML = '<div id="vis-matrix-list"></div>';
-      drawAdjacencyMatrix(document.querySelector('#vis-matrix-list'), paths, direct);
-    } else {
-      document.querySelector('#vis-tab-list').classList.add('active');
-      const directRows = direct.slice(0, 8).map((mapping) => {
-        const counterpartKey = mapping.source_key === key ? mapping.target_key : mapping.source_key;
-        const counterpart = itemFor(counterpartKey);
-        return `<div class="path"><span class="badge badge-official">Official</span> ${escapeHtml(counterpart?.item_id || counterpartKey)}</div>`;
-      });
-      const pathRows = paths.slice(0, 8).map((path) => `<div class="path">${path.item_keys.map((itemKey) => `<span>${escapeHtml(itemFor(itemKey)?.item_id || itemKey)}</span>`).join(' → ')}</div>`);
-      const rows = [...directRows, ...pathRows];
-      visContainer.innerHTML = rows.length
-        ? `<div class="stack">${rows.join('')}</div>`
-        : '<p class="muted">No relationships to list.</p>';
-    }
-  };
-
-  document.querySelector('#vis-tab-node').addEventListener('click', () => drawVis('node'));
-  document.querySelector('#vis-tab-matrix').addEventListener('click', () => drawVis('matrix'));
-  document.querySelector('#vis-tab-list').addEventListener('click', () => drawVis('list'));
-
-  // Initial draw
-  drawVis('node');
-
-  bindDetailsScrollPreservation(app);
-
-  if (preserveScroll) {
-    window.scrollTo(0, scrollY);
-  } else {
-    document.querySelector('#item-heading')?.focus();
-    scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  await withGraph(async () => {
+    const results = runtime.searchNodes(query, { catalog_id: filter || undefined });
+    app.innerHTML = `
+      <section class="panel search-workbench" aria-labelledby="search-title">
+        <p class="eyebrow">Search</p><h2 id="search-title">Federal graph results</h2>
+        <form id="search-form" class="search-controls">
+          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}"></div>
+          <div class="field"><label for="search-catalog">Catalog filter</label><select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(filter)}</select></div>
+          <button class="primary" type="submit">Search</button>
+        </form>
+        <p class="muted">${results.length} matching node${results.length === 1 ? '' : 's'} found.</p>
+      </section>
+      <section class="results" aria-label="Search results">${results.length ? results.map(nodeCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or browse the catalogs.</p></div>'}</section>`;
+    bindSearchForm();
+    bindNodeButtons();
+  });
 }
 
-function frameworkOptions(selected = '') {
-  return dataset.frameworks.map((framework) => `<option value="${escapeHtml(framework.id)}" ${framework.id === selected ? 'selected' : ''}>${escapeHtml(framework.name)}</option>`).join('');
+function bindSearchForm() {
+  document.querySelector('#search-form')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    void setView('search', {
+      query: document.querySelector('#search-query').value.trim(),
+      filter: document.querySelector('#search-catalog')?.value || '',
+    });
+  });
+  document.querySelectorAll('[data-example]').forEach((button) => button.addEventListener('click', () => {
+    void setView('search', { query: button.dataset.example, filter: '' });
+  }));
 }
 
-function parseSelectedItemKeys(value, frameworkId) {
-  return [...new Set(String(value || '')
-    .split(/[\s,]+/)
-    .map((id) => id.trim())
-    .filter(Boolean)
-    .map((id) => id.includes(':') ? id : `${frameworkId}:${id}`))];
+function evidencePanel(edge) {
+  const records = runtime.getEvidenceForEdge(edge.id);
+  return records.map((record) => `
+    <div class="evidence-summary-panel">
+      <h4>Evidence summary</h4>
+      <ul>
+        <li><strong>Evidence quality:</strong> ${escapeHtml(record.evidence_quality)}</li>
+        <li><strong>Source:</strong> ${escapeHtml(record.source?.name || record.source_id)}</li>
+        <li><strong>Locator:</strong> ${escapeHtml(record.locator)}</li>
+        <li><strong>Retrieved:</strong> ${escapeHtml(record.retrieved_at)}</li>
+      </ul>
+      ${record.source?.artifact_url ? `<a href="${escapeHtml(record.source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a>` : ''}
+    </div>`).join('');
 }
 
-function validateMatrixItemIds(value, frameworkId) {
-  const tokens = [...new Set(String(value || '')
-    .split(/[\s,]+/)
-    .map((id) => id.trim())
-    .filter(Boolean))];
-  const unknown = [];
-  for (const token of tokens) {
-    const itemId = token.includes(':') ? token.split(':').slice(1).join(':') : token;
-    const exists = dataset.items.some((item) => item.framework_id === frameworkId
-      && item.item_id.toLowerCase() === itemId.toLowerCase());
-    if (!exists) unknown.push(token);
-  }
-  return unknown;
+async function renderDetail(nodeId) {
+  await withGraph(async () => {
+    const node = runtime.getNode(nodeId);
+    if (!node) return;
+    const definingSource = runtime.getSources().find((source) => source.id === node.source_id);
+    const edges = runtime.getEdgesForNode(node.id);
+    const relationshipCards = edges.map((edge) => {
+      const counterpartId = edge.source_node_id === node.id ? edge.target_node_id : edge.source_node_id;
+      const counterpart = runtime.getNode(counterpartId);
+      return `
+        <article class="mapping-card">
+          <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+          <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
+          <ul>
+            <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
+            <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+            <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+          </ul>
+          ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
+          ${evidencePanel(edge)}
+          <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">Open related node</button>
+        </article>`;
+    }).join('');
+
+    app.innerHTML = `
+      <button class="secondary" id="back-search" type="button">Back to search</button>
+      <section class="detail-layout">
+        <div class="detail-main">
+          <article class="panel">
+            <div class="badge-row"><span class="badge">${escapeHtml(node.node_type.replaceAll('_', ' '))}</span>${definingSource ? sourceBadge(definingSource.provenance_class) : ''}</div>
+            <h2 class="item-id" tabindex="-1">${escapeHtml(node.metadata.item_id)}</h2>
+            <h3>${escapeHtml(node.metadata.title)}</h3>
+            <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
+            <details><summary>Defining federal source</summary><p>${escapeHtml(definingSource?.name || node.source_id)} · Eligibility: ${escapeHtml(definingSource?.eligibility_status || 'unknown')} · Lifecycle: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p></details>
+          </article>
+          <section class="panel"><p class="eyebrow">Federal context</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${relationshipCards || '<p class="notice">No displayable relationships are known.</p>'}</div></section>
+        </div>
+        <aside class="detail-side panel">
+          <h3>Accessible alternative</h3>
+          <p>Relationship list</p>
+          <ul aria-label="Relationship list">${edges.map((edge) => `<li>${escapeHtml(edge.display_label)}</li>`).join('') || '<li>No displayable relationships</li>'}</ul>
+        </aside>
+      </section>`;
+    document.querySelector('#back-search').addEventListener('click', () => void renderState(currentState));
+    bindNodeButtons();
+    document.querySelector('.item-id')?.focus();
+  });
+}
+
+async function renderBrowse(state) {
+  await withGraph(async () => {
+    const selected = state.framework || '';
+    const catalogs = runtime.getCatalogs();
+    const cards = catalogs.map((catalog) => `
+      <article class="framework-card"><span class="badge badge-official">Federal catalog</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} nodes · ${catalog.relationship_count} relationships</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse catalog</button></article>`).join('');
+    const selectedList = selected ? runtime.getNodes({ catalog_id: selected }) : [];
+    app.innerHTML = `
+      <section class="panel"><p class="eyebrow">Browse</p><h2>Federal graph catalogs</h2><div class="grid">${cards}</div>
+      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(selected)}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} nodes.</p>${selectedList.slice(0, 200).map(nodeCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
+    document.querySelectorAll('[data-browse-catalog]').forEach((button) => button.addEventListener('click', () => void setView('browse', { framework: button.dataset.browseCatalog })));
+    bindNodeButtons();
+  });
+}
+
+async function renderSources() {
+  await withGraph(async () => {
+    const findings = runtime.getGraphHealth();
+    app.innerHTML = `
+      <section class="panel"><p class="eyebrow">Sources</p><h2>Federal provenance and graph health</h2>
+        <div class="learning-grid"><p><strong>Federal provenance</strong><br>Why the source or relationship is eligible.</p><p><strong>Eligibility</strong><br>Whether a source may publish graph records.</p><p><strong>Graph health</strong><br>Blocked relationships and quality findings stay outside displayable edges.</p></div>
+        <p class="muted">${findings.length} graph-health finding${findings.length === 1 ? '' : 's'}.</p>
+        <div class="grid">${runtime.getSources().map((source) => `
+          <article class="framework-card">${sourceBadge(source.provenance_class)}<h3>${escapeHtml(source.name)}</h3><p>${escapeHtml(source.owner)} · Eligibility: ${escapeHtml(source.eligibility_status)} · Access: ${escapeHtml(source.access_status)}</p><p class="muted">Version ${escapeHtml(source.version)} · Retrieved ${escapeHtml(source.retrieved_at)} · Lifecycle ${escapeHtml(source.lifecycle_status)}</p><a href="${escapeHtml(source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></article>`).join('')}</div>
+      </section>`;
+  });
+}
+
+function parseNodeIds(value, catalogId) {
+  return [...new Set(String(value || '').split(/[\s,]+/).filter(Boolean).map((id) => id.includes(':') ? id : `${catalogId}:${id}`))];
 }
 
 async function renderMatrix(state) {
-  try {
-    await ensureDatasetWithLoading(() => renderMatrix(state));
-  } catch {
-    return;
-  }
-  const source = state.source || dataset.frameworks[0]?.id || '';
-  const target = state.target || dataset.frameworks.find((item) => item.id !== source)?.id || '';
-  const selectedIds = state.items || '';
-  const selectedKeys = parseSelectedItemKeys(selectedIds, source);
-  const request = {
-    source_framework: source,
-    target_framework: target,
-    ...(selectedKeys.length ? { item_keys: selectedKeys } : {}),
-  };
-
-  // Matrix classifications mapping (Epic 5.1)
-  const matrixClassInfo = (classification) => {
-    if (classification === 'direct') return { label: 'Official match', action: 'Review and cite the source.', badgeClass: 'badge-official' };
-    if (classification === 'calculated') return { label: 'Possible connection', action: 'Review each step.', badgeClass: 'badge-connection' };
-    return { label: 'No known match', action: 'Assess separately.', badgeClass: 'badge-no-match' };
-  };
-
-  const matrix = source && target ? runtime.buildMappingMatrix(request) : null;
-  const estimatedRows = selectedKeys.length || dataset.items.filter(item => item.framework_id === source).length;
-
-  app.innerHTML = `
-    <section class="panel">
-      <p class="eyebrow">Map frameworks</p><h2>${escapeHtml(pageIntros.matrix.title)}</h2>
-      ${renderNoviceIntro('matrix')}
-      <form id="matrix-form" class="controls">
-        <div class="field"><label for="matrix-source">Source framework</label><select id="matrix-source">${frameworkOptions(source)}</select></div>
-        <div class="field"><label for="matrix-target">Target framework</label><select id="matrix-target">${frameworkOptions(target)}</select></div>
-        <div class="field matrix-items-field">
-          <label for="matrix-items">Optional source item IDs</label>
-          <textarea id="matrix-items" placeholder="AC-2, AC-3, AC-6">${escapeHtml(selectedIds)}</textarea>
-          <span class="muted" id="matrix-estimated-rows">Paste IDs separated by commas, spaces, or lines. Estimated matrix rows: ${estimatedRows}. Leave blank for the whole source framework.</span>
-        </div>
-        <button class="primary" type="submit">Build matrix</button>
-        <button class="secondary" id="export-matrix" type="button">Export CSV</button>
-      </form>
-
-      ${matrix ? `
-      <p class="muted" style="margin-top: 1.5rem;">${matrix.summary.total} source items · ${matrix.summary.direct} official matches · ${matrix.summary.calculated} possible connections · ${matrix.summary.unmapped} no known matches</p>
-      ${matrix.rows.length > 200 ? '<p class="notice">Showing the first 200 rows. CSV export includes the complete matrix.</p>' : ''}
-      <table class="matrix-table">
-        <thead>
-          <tr>
-            <th>Source ID</th>
-            <th>Match Type</th>
-            <th>Next Action</th>
-            <th>Mapped Destination or Path</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${matrix.rows.slice(0, 200).map((row) => {
-            const info = matrixClassInfo(row.classification);
-            const destinations = [
-              ...row.direct.map((item) => `${item.matrix_target_key.split(':')[1] || item.matrix_target_key} (${item.matrix_direction || 'outgoing'})`),
-              ...row.paths.map((item) => item.item_keys.map(k => k.split(':')[1] || k).join(' > '))
-            ].join(' | ') || 'No sourced mapping known';
-            return `
-              <tr>
-                <td>${escapeHtml(row.source_key.split(':')[1] || row.source_key)}</td>
-                <td><span class="badge ${info.badgeClass}">${escapeHtml(info.label)}</span></td>
-                <td><small>${escapeHtml(info.action)}</small></td>
-                <td>${escapeHtml(destinations)}</td>
-              </tr>`;
-          }).join('')}
-        </tbody>
-      </table>` : ''}
-    </section>`;
-
-  // Dynamic row estimation (Epic 5.2)
-  const itemsTextarea = document.querySelector('#matrix-items');
-  const sourceSelect = document.querySelector('#matrix-source');
-  const estimateLabel = document.querySelector('#matrix-estimated-rows');
-  const updateEstimate = () => {
-    const src = sourceSelect.value;
-    const ids = parseSelectedItemKeys(itemsTextarea.value, src);
-    const count = ids.length || dataset.items.filter(item => item.framework_id === src).length;
-    estimateLabel.textContent = `Paste IDs separated by commas, spaces, or lines. Estimated matrix rows: ${count}. Leave blank for the whole source framework.`;
-  };
-  itemsTextarea.addEventListener('input', updateEstimate);
-  sourceSelect.addEventListener('change', updateEstimate);
-
-  document.querySelector('#matrix-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const itemsVal = document.querySelector('#matrix-items').value.trim();
-    const src = document.querySelector('#matrix-source').value;
-    const tgt = document.querySelector('#matrix-target').value;
-
-    if (itemsVal) {
-      const unknown = validateMatrixItemIds(itemsVal, src);
-      if (unknown.length) {
-        showStatusMessage(`Unrecognized control ID${unknown.length === 1 ? '' : 's'}: ${unknown.join(', ')}`);
-        return;
-      }
-    }
-
-    // Epic 5.2 Confirmation for whole framework
-    if (!itemsVal) {
-      const confirmWhole = confirm("You are about to compare the entire framework. This may generate a large table. Do you want to continue?");
-      if (!confirmWhole) return;
-    }
-
-    setView('matrix', {
-      source: src,
-      target: tgt,
-      items: itemsVal,
+  await withGraph(async () => {
+    const catalogs = runtime.getCatalogs();
+    const source = state.source || catalogs[0]?.id || '';
+    const target = state.target || catalogs.find((catalog) => catalog.id !== source)?.id || '';
+    const itemText = state.items || '';
+    const matrix = source && target ? runtime.buildRelationshipMatrix({
+      source_catalog: source,
+      target_catalog: target,
+      node_ids: parseNodeIds(itemText, source),
+    }) : null;
+    app.innerHTML = `
+      <section class="panel"><p class="eyebrow">Compare</p><h2>Build a federal relationship matrix</h2>
+        <form id="matrix-form" class="controls">
+          <div class="field"><label for="matrix-source">Source catalog</label><select id="matrix-source">${catalogOptions(source)}</select></div>
+          <div class="field"><label for="matrix-target">Target catalog</label><select id="matrix-target">${catalogOptions(target)}</select></div>
+          <div class="field matrix-items-field"><label for="matrix-items">Optional source IDs</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
+          <button class="primary" type="submit">Build matrix</button><button class="secondary" id="export-matrix" type="button">Export CSV</button>
+        </form>
+        ${matrix ? `<p class="muted">${matrix.summary.total} rows · ${matrix.summary.published} published · ${matrix.summary.candidate} inferred candidates · ${matrix.summary.unmapped} unmapped</p><table class="matrix-table"><thead><tr><th>Source ID</th><th>Status</th><th>Related nodes</th></tr></thead><tbody>${matrix.rows.slice(0, 200).map((row) => `<tr><td>${escapeHtml(row.source_node_id)}</td><td>${escapeHtml(row.classification)}</td><td>${escapeHtml(row.edges.map((edge) => edge.display_label).join(' | ') || 'No sourced relationship')}</td></tr>`).join('')}</tbody></table>` : ''}
+      </section>`;
+    document.querySelector('#matrix-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      void setView('matrix', { source: document.querySelector('#matrix-source').value, target: document.querySelector('#matrix-target').value, items: document.querySelector('#matrix-items').value.trim() });
     });
-  });
-
-  const exportBtn = document.querySelector('#export-matrix');
-  if (exportBtn) {
-    exportBtn.addEventListener('click', () => {
-      if (!matrix) {
-        showStatusMessage('Build a matrix before exporting.');
-        return;
-      }
-      const content = runtime.buildMatrixCsv(matrix);
+    document.querySelector('#export-matrix').addEventListener('click', () => {
+      const content = runtime.buildRelationshipCsv(matrix);
       const link = document.createElement('a');
       link.href = URL.createObjectURL(new Blob([content], { type: 'text/csv' }));
       link.download = `GovFrame-${source}-to-${target}.csv`;
       link.click();
       URL.revokeObjectURL(link.href);
-      showStatusMessage('Export started — check your downloads folder.');
     });
-  }
-}
-
-async function renderBrowse(state) {
-  try {
-    await ensureDatasetWithLoading(() => renderBrowse(state));
-  } catch {
-    return;
-  }
-  const selected = state.framework || '';
-  const allFrameworkItems = selected ? dataset.items.filter((item) => item.framework_id === selected) : [];
-  const catalogNeedle = normalizeQuery(browseCatalogFilter);
-  const frameworkItems = catalogNeedle
-    ? allFrameworkItems.filter((item) => normalizeQuery(item.item_id).includes(catalogNeedle)
-      || normalizeQuery(item.title).includes(catalogNeedle))
-    : allFrameworkItems;
-  const visibleItems = frameworkItems.slice(0, 200);
-
-  // Epic 6.2 Framework Sorting and Filtering
-  let frameworksToRender = [...dataset.coverage.frameworks];
-
-  if (browseFilter === 'full') {
-    frameworksToRender = frameworksToRender.filter(cov => {
-      const fw = dataset.frameworks.find(item => item.id === cov.framework_id);
-      return fw && fw.status !== 'limited-public-scope';
-    });
-  } else if (browseFilter === 'partial') {
-    frameworksToRender = frameworksToRender.filter(cov => {
-      const fw = dataset.frameworks.find(item => item.id === cov.framework_id);
-      return fw && fw.status === 'limited-public-scope';
-    });
-  }
-
-  frameworksToRender.sort((a, b) => {
-    const fwA = dataset.frameworks.find(item => item.id === a.framework_id);
-    const fwB = dataset.frameworks.find(item => item.id === b.framework_id);
-    if (browseSort === 'coverage') {
-      return b.mapped_percent - a.mapped_percent;
-    }
-    if (browseSort === 'date') {
-      const dateA = frameworkDates[a.framework_id] || '2026-01-01';
-      const dateB = frameworkDates[b.framework_id] || '2026-01-01';
-      return dateB.localeCompare(dateA);
-    }
-    return (fwA.name || '').localeCompare(fwB.name || '');
   });
-
-  app.innerHTML = `
-    <section class="panel">
-      <p class="eyebrow">Browse</p>
-      <h2>${escapeHtml(pageIntros.browse.title)}</h2>
-      ${renderNoviceIntro('browse')}
-
-      <!-- Epic 6.2 Sorting & Filtering Bar -->
-      <div class="results-filters-bar" style="margin-bottom: 1.5rem;">
-        <span class="filter-label">Sort by:</span>
-        <select id="browse-sort">
-          <option value="alpha" ${browseSort === 'alpha' ? 'selected' : ''}>Alphabetical</option>
-          <option value="coverage" ${browseSort === 'coverage' ? 'selected' : ''}>Mapping coverage</option>
-          <option value="date" ${browseSort === 'date' ? 'selected' : ''}>Date added</option>
-        </select>
-        <span class="filter-label" style="margin-left: 1rem;">Filter coverage:</span>
-        <select id="browse-filter">
-          <option value="all" ${browseFilter === 'all' ? 'selected' : ''}>All frameworks</option>
-          <option value="full" ${browseFilter === 'full' ? 'selected' : ''}>Full catalogs only</option>
-          <option value="partial" ${browseFilter === 'partial' ? 'selected' : ''}>Partial public scope only</option>
-        </select>
-      </div>
-
-      <div class="grid">
-        ${frameworksToRender.map((coverage) => {
-          const framework = dataset.frameworks.find((item) => item.id === coverage.framework_id);
-          const isLimited = framework.status === 'limited-public-scope';
-
-          // Epic 6.1 Explain Framework Coverage Labels
-          const coverageLabelsHtml = `
-            <div class="badge-row" style="margin-bottom: 0.5rem;">
-              <span class="badge badge-official">Catalog available</span>
-              ${coverage.mapped_items > 0 ? '<span class="badge badge-supporting">Mappings available</span>' : ''}
-              ${isLimited ? '<span class="badge badge-research">Partial public data</span>' : ''}
-            </div>
-          `;
-
-          return `
-            <article class="framework-card">
-              ${coverageLabelsHtml}
-              <h3>${escapeHtml(framework.name)}</h3>
-              <p>${coverage.catalog_items} catalog items · ${coverage.mapped_items} mapped</p>
-              <div class="coverage-meter" aria-label="${coverage.mapped_percent}% mapped"><span style="width:${coverage.mapped_percent}%"></span></div>
-              <button class="secondary" data-browse-framework="${escapeHtml(framework.id)}" type="button" style="margin-top: 1rem;">Browse catalog</button>
-            </article>`;
-        }).join('')}
-      </div>
-
-      ${selected ? `
-      <section class="results" id="catalog-list">
-        <h3>${escapeHtml(frameworkName(selected))}</h3>
-        <div class="field" style="margin-bottom: 1rem;">
-          <label for="catalog-filter">Quick jump in catalog</label>
-          <input id="catalog-filter" type="search" value="${escapeHtml(browseCatalogFilter)}" placeholder="Filter by ID or title">
-        </div>
-        <p class="muted">Showing ${visibleItems.length} of ${frameworkItems.length} items${frameworkItems.length > 200 ? ' (first 200 displayed)' : ''}.</p>
-        ${visibleItems.map((item) => `
-          <article class="item-card">
-            <button data-open-item="${escapeHtml(item.key)}">
-              <h4 class="item-id">${escapeHtml(item.item_id)}</h4>
-              <strong>${escapeHtml(item.title)}</strong>
-            </button>
-          </article>`).join('')}
-      </section>` : ''}
-    </section>`;
-
-  document.querySelector('#browse-sort').addEventListener('change', (e) => {
-    browseSort = e.target.value;
-    renderBrowse(state);
-  });
-
-  document.querySelector('#browse-filter').addEventListener('change', (e) => {
-    browseFilter = e.target.value;
-    renderBrowse(state);
-  });
-
-  document.querySelectorAll('[data-browse-framework]').forEach((button) => button.addEventListener('click', () => {
-    browseCatalogFilter = '';
-    setView('browse', { framework: button.dataset.browseFramework });
-  }));
-  bindOpenItemButtons();
-
-  const catalogFilterInput = document.querySelector('#catalog-filter');
-  if (catalogFilterInput) {
-    catalogFilterInput.addEventListener('input', () => {
-      browseCatalogFilter = catalogFilterInput.value;
-      renderBrowse(state);
-    });
-  }
-
-  if (selected) {
-    requestAnimationFrame(() => {
-      document.getElementById('catalog-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-}
-
-function renderSources() {
-  // Epic 4.3 plain-language source badges legend
-  app.innerHTML = `
-    <section class="panel">
-      <p class="eyebrow">Sources and evidence health</p>
-      <h2>${escapeHtml(pageIntros.sources.title)}</h2>
-      ${renderNoviceIntro('sources')}
-
-      <div class="learning-grid">
-        <p><strong>Official</strong><br>Primary source.</p>
-        <p><strong>Supporting</strong><br>Confirms or adds context.</p>
-        <p><strong>Research lead</strong><br>Useful, but verify before use.</p>
-      </div>
-
-      <p class="muted">${dataset.coverage.mappings.published} published mappings · ${dataset.coverage.mappings.evidence_gaps} needs supporting source gaps · ${dataset.coverage.mappings.blocked} blocked candidates.</p>
-
-      <div class="grid">
-        ${dataset.coverage.sources.map((source) => {
-          const badgeClass = source.tier === 'gold' ? 'badge-official' : source.tier === 'silver' ? 'badge-supporting' : 'badge-research';
-          const tierLabel = sourceTierLabel(source.tier);
-          return `
-            <article class="framework-card">
-              <span class="badge ${badgeClass}">${escapeHtml(tierLabel)}</span>
-              <h3>${escapeHtml(source.name)}</h3>
-              <p class="muted">${escapeHtml(source.issuer)} · ${escapeHtml(source.frameworks.join(', '))}</p>
-              <p class="muted external-url-display"><code class="external-url">${escapeHtml(source.artifact)}</code></p>
-              ${externalAnchor(source.artifact, sourceArtifactLabel(source), 'Opens in new tab')}
-            </article>`;
-        }).join('')}
-      </div>
-    </section>`;
 }
 
 function renderRetired(state) {
-  app.innerHTML = `
-    <section class="notice retired">
-      <p class="eyebrow">Retired identifier type</p>
-      <h2>${escapeHtml(state.query)} is outside GovFrame's framework-mapping scope.</h2>
-      <p>GovFrame now focuses on framework requirements, controls, Control Correlation Identifiers, and evidence-backed mappings.</p>
-      <button class="primary" type="button" id="retired-search">Search frameworks</button>
-    </section>`;
-  document.querySelector('#retired-search').addEventListener('click', () => setView('search'));
+  app.innerHTML = `<section class="notice"><h2>${escapeHtml(state.query)} is outside the active federal graph scope.</h2><button class="primary" id="retired-search" type="button">Search federal controls</button></section>`;
+  document.querySelector('#retired-search').addEventListener('click', () => void setView('search'));
 }
 
-async function render(state) {
-  app.setAttribute('aria-busy', 'false');
-  currentActiveView = state.view || 'search';
-  currentActiveState = {};
-  viewState = { ...viewState, ...state };
+async function renderState(state) {
+  currentState = state;
   navButtons.forEach((button) => button.toggleAttribute('aria-current', button.dataset.view === state.view));
-
   if (state.view === 'matrix') await renderMatrix(state);
   else if (state.view === 'browse') await renderBrowse(state);
-  else if (state.view === 'sources') renderSources();
+  else if (state.view === 'sources') await renderSources();
   else if (state.view === 'retired') renderRetired(state);
   else await renderSearch(state);
+}
 
-  renderWalkthroughBubble();
+async function setView(view, state = {}) {
+  const next = normalizeViewState(view, { ...currentState, ...state, mode: noviceMode ? 'novice' : 'expert' });
+  history.pushState(null, '', location.pathname + serializeViewState(next));
+  await renderState(next);
+}
+
+function showOnboardingOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'onboarding-overlay';
+  overlay.id = 'onboarding-overlay';
+  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore federal security relationships</h2><p>GovFrame separates relationship semantics, federal provenance, confidence, and evidence quality.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
+  document.body.appendChild(overlay);
+  const close = () => overlay.remove();
+  document.querySelector('#btn-onboarding-start').addEventListener('click', close);
+  document.querySelector('#btn-onboarding-skip').addEventListener('click', close);
+  overlay.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
+  document.querySelector('#btn-onboarding-start').focus();
+}
+
+function toggleHelp() {
+  const existing = document.querySelector('#glossary-drawer');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+  const drawer = document.createElement('aside');
+  drawer.id = 'glossary-drawer';
+  drawer.className = 'glossary-drawer open';
+  drawer.innerHTML = `<button class="close-drawer" aria-label="Close help" type="button">×</button><h2>Federal graph help</h2><dl class="glossary-list"><div class="glossary-item"><dt>Federal provenance</dt><dd>Why a source or relationship is eligible for the federal graph.</dd></div><div class="glossary-item"><dt>Confidence</dt><dd>The support strength for a relationship.</dd></div><div class="glossary-item"><dt>Evidence quality</dt><dd>The role of a source record supporting a claim.</dd></div></dl>`;
+  document.body.appendChild(drawer);
+  drawer.querySelector('button').addEventListener('click', () => drawer.remove());
 }
 
 async function init() {
-  const response = await fetch('./data/generated/bootstrap.json');
-  if (!response.ok) throw new Error('Framework registry is unavailable.');
-  dataset = await response.json();
-
-  // Bind Header Controls
-  const toggleModeBtn = document.querySelector('#btn-toggle-mode');
-  const toggleGlossaryBtn = document.querySelector('#btn-toggle-glossary');
-
-  if (toggleModeBtn) {
-    toggleModeBtn.addEventListener('click', () => {
-      void setNoviceMode(!noviceMode);
-    });
-  }
-
-  if (toggleGlossaryBtn) {
-    toggleGlossaryBtn.addEventListener('click', () => {
-      toggleGlossaryDrawer();
-    });
-  }
-
   navButtons.forEach((button) => button.addEventListener('click', () => void setView(button.dataset.view)));
-  addEventListener('popstate', () => {
-    navigationGeneration += 1;
-    const state = parseViewState(location.search);
-    viewState = { ...viewState, ...state };
-    void render(state);
+  document.querySelector('#btn-toggle-mode').addEventListener('click', (event) => {
+    noviceMode = !noviceMode;
+    event.currentTarget.setAttribute('aria-pressed', String(noviceMode));
+    event.currentTarget.textContent = noviceMode ? 'Novice Mode' : 'Expert Mode';
   });
-
+  document.querySelector('#btn-toggle-mode').setAttribute('aria-pressed', 'true');
+  document.querySelector('#btn-toggle-glossary').addEventListener('click', toggleHelp);
+  addEventListener('popstate', () => void renderState(parseViewState(location.search)));
   const state = parseViewState(location.search);
-  viewState = { ...viewState, ...state };
-  if (state.query) lastSearchQuery = state.query;
-
-  const savedTour = loadWalkthroughStep();
-  if (savedTour !== null) walkthroughStep = savedTour;
-
-  // Parse mode preference from URL (Epic 1.1)
-  if (state.mode === 'expert') {
-    noviceMode = false;
-  } else if (state.mode === 'novice') {
-    noviceMode = true;
-  } else {
-    // Prompt first time user
-    showOnboardingOverlay();
+  if (!state.mode) showOnboardingOverlay();
+  await renderState(state);
+  if (state.query) {
+    await ensureGraph();
+    const exact = runtime.searchNodes(state.query, { catalog_id: state.filter || undefined })
+      .find((node) => node.metadata.item_id.toLowerCase() === state.query.toLowerCase());
+    if (exact) await renderDetail(exact.id);
   }
-
-  // Sync toggle state button visual
-  if (toggleModeBtn) {
-    toggleModeBtn.textContent = `Mode: ${noviceMode ? 'Novice' : 'Expert'}`;
-    toggleModeBtn.classList.toggle('active-novice', noviceMode);
-    toggleModeBtn.setAttribute('aria-pressed', String(noviceMode));
-  }
-
-  const initGeneration = navigationGeneration;
-  await render(state);
-
-  if (state.view === 'search' && state.query) {
-    await openDeepLinkedItem(initGeneration);
-  }
-}
-
-async function openDeepLinkedItem(generation) {
-  if (generation !== navigationGeneration) return;
-  const fresh = parseViewState(location.search);
-  if (fresh.view !== 'search' || !fresh.query) return;
-
-  try {
-    await ensureDataset();
-  } catch (error) {
-    if (generation !== navigationGeneration) return;
-    console.error('[GovFrame] catalog load failed', error);
-    renderCatalogError(error, () => openDeepLinkedItem(generation));
-    return;
-  }
-
-  if (generation !== navigationGeneration) return;
-
-  const exact = runtime.searchFrameworkItems(fresh.query, {
-    framework_id: fresh.filter || undefined,
-  }).find((item) => item.item_id.toLowerCase() === fresh.query.toLowerCase());
-  if (exact) await renderItem(exact.key);
 }
 
 init().catch((error) => {
-  console.error('[GovFrame] catalog load failed', error);
   app.setAttribute('aria-busy', 'false');
-  app.innerHTML = `<section class="notice"><h2>GovFrame could not load the validated catalog.</h2><p>${escapeHtml(error.message)}</p></section>`;
+  app.innerHTML = `<section class="notice"><h2>GovFrame could not start</h2><p>${escapeHtml(error.message)}</p></section>`;
 });

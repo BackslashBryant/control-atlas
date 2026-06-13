@@ -1,61 +1,123 @@
-import {
-  buildMappingMatrix,
-  buildMatrixCsv,
-} from '../scripts/lib/framework-engine.mjs';
-
 function normalize(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-export function createFrameworkRuntime(dataset) {
-  const itemByKey = new Map(dataset.items.map((item) => [item.key, item]));
-  const mappings = dataset.mappings || [];
-  const paths = dataset.paths || [];
+function csvCell(value) {
+  return `"${String(value ?? '').replaceAll('"', '""')}"`;
+}
+
+export function createFederalGraphRuntime(dataset) {
+  const nodeById = new Map(dataset.nodes.map((node) => [node.id, node]));
+  const sourceById = new Map(dataset.sources.map((source) => [source.id, source]));
+  const evidenceById = new Map(dataset.evidence.map((entry) => [entry.id, entry]));
+  const edgeById = new Map(dataset.edges.map((edge) => [edge.id, edge]));
+  const catalogs = [...new Set(dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean))]
+    .sort()
+    .map((id) => ({
+      id,
+      name: id,
+      node_count: dataset.nodes.filter((node) => node.metadata?.catalog_id === id).length,
+      relationship_count: dataset.edges.filter((edge) =>
+        nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id
+        || nodeById.get(edge.target_node_id)?.metadata?.catalog_id === id).length,
+    }));
 
   return {
-    searchFrameworkItems(query, filters = {}) {
+    searchNodes(query, filters = {}) {
       const needle = normalize(query);
       if (!needle) return [];
-      return dataset.items
-        .filter((item) => !filters.framework_id || item.framework_id === filters.framework_id)
-        .map((item) => {
-          const id = normalize(item.item_id);
-          const title = normalize(item.title);
-          const text = normalize(item.text);
-          const score = id === needle ? 0 : id.startsWith(needle) ? 1 : title.includes(needle) ? 2 : text.includes(needle) ? 3 : 99;
-          return { item, score };
+      return dataset.nodes
+        .filter((node) => !filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
+        .filter((node) => !filters.node_type || node.node_type === filters.node_type)
+        .map((node) => {
+          const itemId = normalize(node.metadata?.item_id);
+          const label = normalize(node.label);
+          const description = normalize(node.metadata?.description);
+          const score = itemId === needle ? 0 : itemId.startsWith(needle) ? 1 : label.includes(needle) ? 2 : description.includes(needle) ? 3 : 99;
+          return { node, score };
         })
         .filter((entry) => entry.score < 99)
-        .sort((a, b) => a.score - b.score || a.item.item_id.localeCompare(b.item.item_id))
+        .sort((a, b) => a.score - b.score || a.node.id.localeCompare(b.node.id))
         .slice(0, 100)
-        .map((entry) => entry.item);
+        .map((entry) => entry.node);
     },
-    getFrameworkItem(frameworkId, itemId) {
-      return itemByKey.get(`${frameworkId}:${itemId}`) || null;
+    getNode(id) {
+      return nodeById.get(id) || null;
     },
-    getDirectMappings(itemKey) {
-      return mappings.filter((mapping) => mapping.source_key === itemKey || mapping.target_key === itemKey);
+    getNodes(filters = {}) {
+      return dataset.nodes.filter((node) =>
+        (!filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
+        && (!filters.node_type || node.node_type === filters.node_type));
     },
-    getCalculatedPaths(itemKey, options = {}) {
-      return paths.filter((path) => path.source_key === itemKey && (!options.target_framework
-        || itemByKey.get(path.target_key)?.framework_id === options.target_framework));
+    getEdgesForNode(id, options = {}) {
+      return dataset.edges.filter((edge) =>
+        (edge.source_node_id === id || edge.target_node_id === id)
+        && (!options.publication_status || edge.publication_status === options.publication_status));
     },
-    buildMappingMatrix(request) {
-      return buildMappingMatrix(request, dataset);
+    getEvidenceForEdge(edgeId) {
+      const edge = edgeById.get(edgeId);
+      return (edge?.evidence_ids || []).map((id) => {
+        const entry = evidenceById.get(id);
+        return entry ? { ...entry, source: sourceById.get(entry.source_id) || null } : null;
+      }).filter(Boolean);
     },
-    buildMatrixCsv(requestOrMatrix) {
-      return buildMatrixCsv(requestOrMatrix.rows ? requestOrMatrix : buildMappingMatrix(requestOrMatrix, dataset));
+    getSources() {
+      return dataset.sources;
     },
-    getEvidenceSummary(assertionId) {
-      const summary = dataset.evidence?.[assertionId] || null;
-      if (!summary) return null;
+    getGraphHealth() {
+      return dataset.findings;
+    },
+    getCatalogs() {
+      return catalogs;
+    },
+    buildRelationshipMatrix(request) {
+      const sourceNodes = dataset.nodes.filter((node) =>
+        node.metadata?.catalog_id === request.source_catalog
+        && (!request.node_ids?.length || request.node_ids.includes(node.id)));
+      const rows = sourceNodes.map((node) => {
+        const edges = dataset.edges.filter((edge) => {
+          const counterpartId = edge.source_node_id === node.id
+            ? edge.target_node_id
+            : edge.target_node_id === node.id
+              ? edge.source_node_id
+              : null;
+          return counterpartId && nodeById.get(counterpartId)?.metadata?.catalog_id === request.target_catalog;
+        });
+        return {
+          source_node_id: node.id,
+          classification: edges.some((edge) => edge.publication_status === 'published')
+            ? 'published'
+            : edges.some((edge) => edge.publication_status === 'candidate')
+              ? 'candidate'
+              : 'unmapped',
+          edges,
+        };
+      });
       return {
-        ...summary,
-        sources: (summary.sources || []).map((source) => ({
-          ...source,
-          authority_type: source.authority_type || null,
-        })),
+        request,
+        rows,
+        summary: {
+          total: rows.length,
+          published: rows.filter((row) => row.classification === 'published').length,
+          candidate: rows.filter((row) => row.classification === 'candidate').length,
+          unmapped: rows.filter((row) => row.classification === 'unmapped').length,
+        },
       };
+    },
+    buildRelationshipCsv(matrix) {
+      const rows = [['Source ID', 'Relationship status', 'Target IDs', 'Evidence IDs']];
+      for (const row of matrix.rows) {
+        rows.push([
+          nodeById.get(row.source_node_id)?.metadata?.item_id || row.source_node_id,
+          row.classification,
+          row.edges.map((edge) => {
+            const counterpartId = edge.source_node_id === row.source_node_id ? edge.target_node_id : edge.source_node_id;
+            return nodeById.get(counterpartId)?.metadata?.item_id || counterpartId;
+          }).join('|'),
+          row.edges.flatMap((edge) => edge.evidence_ids || []).join('|'),
+        ]);
+      }
+      return rows.map((row) => row.map(csvCell).join(',')).join('\n');
     },
   };
 }
@@ -82,39 +144,17 @@ export function parseViewState(searchParams) {
 }
 
 export function normalizeViewState(view, state = {}) {
-  const mode = state.mode;
-  const base = mode ? { mode } : {};
-
-  if (view === 'retired') {
-    return { ...base, view: 'retired', query: state.query || '' };
-  }
-  if (view === 'matrix') {
-    return {
-      ...base,
-      view: 'matrix',
-      source: state.source || '',
-      target: state.target || '',
-      items: state.items || '',
-    };
-  }
-  if (view === 'browse') {
-    return { ...base, view: 'browse', framework: state.framework || '' };
-  }
-  if (view === 'sources') {
-    return { ...base, view: 'sources' };
-  }
-  return {
-    ...base,
-    view: 'search',
-    query: state.query || '',
-    filter: state.filter || '',
-  };
+  const base = state.mode ? { mode: state.mode } : {};
+  if (view === 'retired') return { ...base, view: 'retired', query: state.query || '' };
+  if (view === 'matrix') return { ...base, view: 'matrix', source: state.source || '', target: state.target || '', items: state.items || '' };
+  if (view === 'browse') return { ...base, view: 'browse', framework: state.framework || '' };
+  if (view === 'sources') return { ...base, view: 'sources' };
+  return { ...base, view: 'search', query: state.query || '', filter: state.filter || '' };
 }
 
 export function serializeViewState(state) {
   const params = new URLSearchParams();
   const view = state.view || 'search';
-
   if (view === 'retired') {
     params.set('view', 'retired');
     if (state.query) params.set('q', state.query);
@@ -128,15 +168,11 @@ export function serializeViewState(state) {
     if (state.framework) params.set('framework', state.framework);
   } else if (view === 'sources') {
     params.set('view', 'sources');
-  } else if (state.query && view !== 'retired') {
+  } else if (state.query || state.filter) {
     params.set('view', 'search');
-    params.set('q', state.query);
+    if (state.query) params.set('q', state.query);
     if (state.filter) params.set('filter', state.filter);
-  } else if (state.filter) {
-    params.set('view', 'search');
-    params.set('filter', state.filter);
   }
-
   if (state.mode) params.set('mode', state.mode);
   const value = params.toString();
   return value ? `?${value}` : '';

@@ -41,11 +41,10 @@ scripts/*
 !scripts/dom-smoke.mjs
 !scripts/lib/
 scripts/lib/*
-!scripts/lib/framework-engine.mjs
 !scripts/lib/cci-adapter.mjs
 !scripts/lib/oscal-normalize.mjs
-!scripts/lib/resolve-source-tier.mjs
 !scripts/lib/framework-adapters.mjs
+!scripts/lib/federal-graph.mjs
 !scripts/lib/source-registry.mjs
 !scripts/lib/olir-adapter.mjs
 !scripts/lib/800-171-mapping-adapter.mjs
