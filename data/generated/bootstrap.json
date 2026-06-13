@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-06-12T07:43:06.611Z",
+  "generated_at": "2026-06-13T07:23:32.080Z",
   "frameworks": [
     {
       "id": "nist-800-53",
@@ -67,7 +67,7 @@
     }
   ],
   "coverage": {
-    "generated_at": "2026-06-12T07:43:06.611Z",
+    "generated_at": "2026-06-13T07:23:32.080Z",
     "frameworks": [
       {
         "framework_id": "nist-800-53",
