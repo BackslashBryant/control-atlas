@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T23:14:24.735Z",
+  "generated_at": "2026-06-13T23:46:52.886Z",
   "sources": [
     {
       "id": "nist-oscal",
@@ -307,6 +307,35 @@
           "nist-800-37"
         ],
         "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "nist-800-53a-assessment-procedures",
+      "name": "NIST SP 800-53A Assessment Procedures",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "FIPS 200"
+      ],
+      "version": "2026-06-09",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "download",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "artifact_type": "oscal_json",
+      "checksum": "sha256:catalog_nist_800_53a_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "nist-800-53a",
+          "nist-800-53"
+        ],
+        "parser": "oscal-assessment-procedures"
       }
     },
     {

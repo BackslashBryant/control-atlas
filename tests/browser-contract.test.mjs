@@ -23,6 +23,7 @@ test('application loads only the five federal graph artifacts', () => {
     assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-3`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
+  assert.doesNotMatch(app, /build-manifest\.json|source-manifests\.json|graph-diff-summary\.json/);
   assert.match(app, /createFederalGraphRuntime/);
 });
 
@@ -42,6 +43,7 @@ test('federal trust dimensions remain visibly separate', () => {
   assert.match(app, /Categorization context/);
   assert.match(app, /Minimum security requirements/);
   assert.match(app, /RMF lifecycle/);
+  assert.match(app, /Assessment procedures/);
   assert.match(app, /Federal provenance/);
   assert.match(app, /Relationship type/);
   assert.match(app, /Confidence/);

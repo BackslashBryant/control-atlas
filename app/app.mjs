@@ -181,6 +181,36 @@ function contextCard(node, edge, extras = []) {
     </article>`;
 }
 
+function assessmentProcedureCard(entry) {
+  const objectives = entry.assessmentNode.metadata?.assessment_objectives || [];
+  const methodDetails = entry.assessmentNode.metadata?.assessment_method_details || [];
+  const objectGroups = entry.assessmentNode.metadata?.assessment_objects || [];
+  return `
+    <article class="mapping-card">
+      <div class="badge-row">${sourceBadge(entry.assessmentEdge.provenance_class)}<span class="badge">${escapeHtml(entry.assessmentEdge.publication_status)}</span></div>
+      <h4>${escapeHtml(entry.assessmentNode.metadata?.item_id || entry.assessmentNode.id)} - ${escapeHtml(entry.assessmentNode.metadata?.title || '')}</h4>
+      <ul>
+        <li><strong>Relationship type:</strong> ${escapeHtml(entry.assessmentEdge.relationship_type)}</li>
+        <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
+        <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
+      </ul>
+      <details>
+        <summary>Assessment objectives</summary>
+        <ul>${objectives.map((objective) => `<li><strong>${escapeHtml(objective.label || objective.id || 'Objective')}</strong>: ${escapeHtml(objective.prose || '')}</li>`).join('') || '<li>No source-backed objectives available.</li>'}</ul>
+      </details>
+      <details>
+        <summary>Assessment methods and objects</summary>
+        <ul>${methodDetails.map((detail) => `<li><strong>${escapeHtml(detail.method || detail.label || 'Method')}</strong>: ${escapeHtml((detail.objects || []).join('; ') || 'No assessment objects listed.')}</li>`).join('') || '<li>No source-backed assessment methods available.</li>'}</ul>
+      </details>
+      <details>
+        <summary>Procedure text</summary>
+        <p>${escapeHtml(entry.assessmentNode.metadata?.procedure_text || 'No source-backed procedure text available.')}</p>
+      </details>
+      ${evidencePanel(entry.assessmentEdge)}
+      <button class="secondary" type="button" data-open-node="${escapeHtml(entry.assessmentNode.id)}">Open related node</button>
+    </article>`;
+}
+
 async function renderDetail(nodeId) {
   await withGraph(async () => {
     const node = runtime.getNode(nodeId);
@@ -192,6 +222,7 @@ async function renderDetail(nodeId) {
     const consumedEdgeIds = new Set([
       ...(federalContext?.baselineMembership || []).map((entry) => entry.membershipEdge.id),
       ...(federalContext?.minimumSecurityRequirements || []).map((entry) => entry.familyEdge.id),
+      ...(federalContext?.assessmentContext || []).map((entry) => entry.assessmentEdge.id),
     ]);
     const relationshipCards = edges.map((edge) => {
       const counterpartId = edge.source_node_id === node.id ? edge.target_node_id : edge.source_node_id;
@@ -256,6 +287,7 @@ async function renderDetail(nodeId) {
               contextCard(entry.stepNode, entry.contextEdge, [
                 `<li><strong>Through node:</strong> ${escapeHtml(entry.viaNode.metadata.item_id)} - ${escapeHtml(entry.viaNode.metadata.title)}</li>`,
               ]))}
+            ${renderContextCards('Assessment procedures', federalContext.assessmentContext, assessmentProcedureCard)}
             <section class="panel"><p class="eyebrow">Additional published relationships</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${additionalRelationshipCards || '<p class="notice">No additional displayable relationships are known.</p>'}</div></section>
           ` : `
             <section class="panel"><p class="eyebrow">Federal context</p><h3>${edges.length} relationship${edges.length === 1 ? '' : 's'}</h3><div class="stack">${relationshipCards || '<p class="notice">No displayable relationships are known.</p>'}</div></section>
@@ -294,7 +326,7 @@ async function renderSources() {
     app.innerHTML = `
       <section class="panel"><p class="eyebrow">Sources</p><h2>Federal provenance and graph health</h2>
         <div class="learning-grid"><p><strong>Federal provenance</strong><br>Why the source or relationship is eligible.</p><p><strong>Eligibility</strong><br>Whether a source may publish graph records.</p><p><strong>Graph health</strong><br>Blocked relationships and quality findings stay outside displayable edges.</p></div>
-        <p class="muted">Issue 10 adds categorization, minimum requirement, RMF, and 800-53B baseline sources as first-class federal graph inputs.</p>
+        <p class="muted">Release 1 sources include categorization, minimum requirement, RMF, baseline, and assessment procedure context as first-class federal graph inputs.</p>
         <p class="muted">${findings.length} graph-health finding${findings.length === 1 ? '' : 's'}.</p>
         <div class="grid">${runtime.getSources().map((source) => `
           <article class="framework-card">${sourceBadge(source.provenance_class)}<h3>${escapeHtml(source.name)}</h3><p>${escapeHtml(source.owner)} · Eligibility: ${escapeHtml(source.eligibility_status)} · Access: ${escapeHtml(source.access_status)}</p><p class="muted">Version ${escapeHtml(source.version)} · Retrieved ${escapeHtml(source.retrieved_at)} · Lifecycle ${escapeHtml(source.lifecycle_status)}</p><a href="${escapeHtml(source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></article>`).join('')}</div>

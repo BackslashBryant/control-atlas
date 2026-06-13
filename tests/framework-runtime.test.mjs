@@ -17,10 +17,12 @@ const fixture = {
     { id: 'nist-fips-199', name: 'FIPS 199', owner: 'NIST', provenance_class: 'mandated', graph_eligible: true, metadata: { frameworks: ['fips-199'] } },
     { id: 'nist-fips-200', name: 'FIPS 200', owner: 'NIST', provenance_class: 'mandated', graph_eligible: true, metadata: { frameworks: ['fips-200'] } },
     { id: 'nist-800-37-rev2', name: 'SP 800-37 Rev. 2', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-37'] } },
+    { id: 'nist-800-53a-assessment-procedures', name: 'SP 800-53A Assessment Procedures', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-53a'] } },
   ],
   nodes: [
     { id: 'nist-800-53:AC-2', node_type: 'control', label: 'AC-2 Account Management', source_id: 'nist-oscal', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-2', title: 'Account Management', description: 'Manage system accounts.' } },
     { id: 'nist-800-53:AC-3', node_type: 'control', label: 'AC-3 Access Enforcement', source_id: 'nist-oscal', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-3', title: 'Access Enforcement', description: 'Enforce access.' } },
+    { id: 'nist-800-53a:AC-2', node_type: 'assessment_procedure', label: 'AC-2 Assessment Procedure', source_id: 'nist-800-53a-assessment-procedures', metadata: { catalog_id: 'nist-800-53a', item_id: 'AC-2', title: 'Account Management Assessment Procedure', description: 'Assess AC-2.', assessment_methods: ['EXAMINE', 'INTERVIEW'], assessment_objects: [['Access control policy', 'system security plan'], ['System owners']], assessment_objectives: [{ label: 'AC-02a.[01]', prose: 'account types allowed are defined and documented;' }], procedure_text: 'account types allowed are defined and documented; account managers are assigned;' } },
     { id: 'nist-800-53:FAMILY-AC', node_type: 'family', label: 'AC Access Control Family', source_id: 'nist-oscal', metadata: { catalog_id: 'nist-800-53', item_id: 'FAMILY-AC', title: 'Access Control', description: 'Access control family.' } },
     { id: 'csf-2:PR.AA-01', node_type: 'requirement', label: 'PR.AA-01 Identity Management', source_id: 'nist-oscal', metadata: { catalog_id: 'csf-2', item_id: 'PR.AA-01', title: 'Identity Management', description: 'Identity controls.' } },
     { id: 'nist-800-53b:MODERATE', node_type: 'baseline', label: 'MODERATE Moderate Baseline', source_id: 'nist-800-53b-baselines', metadata: { catalog_id: 'nist-800-53b', item_id: 'MODERATE', title: 'Moderate Baseline', description: 'Moderate impact baseline.' } },
@@ -35,6 +37,7 @@ const fixture = {
     { id: 'edge:fips199-moderate', source_node_id: 'fips-199:FIPS-199-MODERATE', target_node_id: 'nist-800-53b:MODERATE', relationship_type: 'selects', provenance_class: 'mandated', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:fips199-moderate'] },
     { id: 'edge:fips200-ac', source_node_id: 'fips-200:AC', target_node_id: 'nist-800-53:FAMILY-AC', relationship_type: 'references', provenance_class: 'mandated', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:fips200-ac'] },
     { id: 'edge:rmf-select-baseline', source_node_id: 'nist-800-37:RMF-SELECT', target_node_id: 'nist-800-53b:MODERATE', relationship_type: 'selects', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:rmf-select-baseline'] },
+    { id: 'edge:assessment-ac2', source_node_id: 'nist-800-53a:AC-2', target_node_id: 'nist-800-53:AC-2', relationship_type: 'assesses', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:assessment-ac2'] },
   ],
   evidence: [
     { id: 'evidence:m1', source_id: 'nist-map', source_version: '2026', locator: 'map:1', evidence_quality: 'primary' },
@@ -43,6 +46,7 @@ const fixture = {
     { id: 'evidence:fips199-moderate', source_id: 'nist-fips-199', source_version: '2004', locator: 'section-3', evidence_quality: 'primary' },
     { id: 'evidence:fips200-ac', source_id: 'nist-fips-200', source_version: '2006', locator: 'section-3', evidence_quality: 'primary' },
     { id: 'evidence:rmf-select-baseline', source_id: 'nist-800-37-rev2', source_version: '2018', locator: 'section-3.2', evidence_quality: 'primary' },
+    { id: 'evidence:assessment-ac2', source_id: 'nist-800-53a-assessment-procedures', source_version: '2026', locator: 'AC-2', evidence_quality: 'primary' },
   ],
   findings: [{ id: 'finding:1', finding_type: 'blocked_relationship', severity: 'warning', source_id: 'excluded', subject_id: 'edge:x', message: 'Blocked' }],
 };
@@ -60,7 +64,7 @@ test('runtime exposes source-backed edges, evidence, sources, and graph health',
   assert.equal(runtime.getNodes({ catalog_id: 'nist-800-53' }).length, 3);
   assert.equal(runtime.getEdgesForNode('nist-800-53:AC-2')[0].id, 'edge:m1');
   assert.equal(runtime.getEvidenceForEdge('edge:m1')[0].source.name, 'NIST mapping');
-  assert.equal(runtime.getSources().length, 6);
+  assert.equal(runtime.getSources().length, 7);
   assert.equal(runtime.getGraphHealth().length, 1);
 });
 
@@ -81,6 +85,8 @@ test('runtime composes issue 10 federal context for a control from adjacent node
   assert.deepEqual(context.categorizationContext.map((entry) => entry.categoryNode.id), ['fips-199:FIPS-199-MODERATE']);
   assert.deepEqual(context.minimumSecurityRequirements.map((entry) => entry.requirementNode.id), ['fips-200:AC']);
   assert.deepEqual(context.rmfLifecycle.map((entry) => entry.stepNode.id), ['nist-800-37:RMF-SELECT']);
+  assert.deepEqual(context.assessmentContext.map((entry) => entry.assessmentNode.id), ['nist-800-53a:AC-2']);
+  assert.deepEqual(context.assessmentContext[0].assessmentNode.metadata.assessment_methods, ['EXAMINE', 'INTERVIEW']);
 });
 
 test('view state preserves supported queries and identifies retired query types', () => {
