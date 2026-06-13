@@ -332,7 +332,7 @@ function renderEvidenceSummaryPanel(mapping, key) {
           <li><strong>Source:</strong> ${escapeHtml(source.source_id)}</li>
           <li><strong>Source type:</strong> ${escapeHtml(tierName)}</li>
           <li><strong>What it supports:</strong> ${escapeHtml(currentItem?.item_id || key)} maps to ${escapeHtml(counterpart?.item_id || counterpartKey)}.</li>
-          <li><strong>Use in audit:</strong> Review and cite the source: ${externalAnchor(source.artifact, source.locator)}</li>
+          <li><strong>Use in audit:</strong> Review and cite the ${escapeHtml(frameworkName(currentItem?.framework_id || key.split(':')[0]))} mapping source for ${escapeHtml(counterpart?.item_id || counterpartKey)}. ${externalAnchor(source.artifact, source.locator)}</li>
         </ul>
       </div>`;
   }).join('');
@@ -1164,7 +1164,6 @@ async function renderItem(key, options = {}) {
         <section class="panel">
           <p class="eyebrow">Direct sourced mappings</p>
           <h3>${direct.length} Official match${direct.length === 1 ? '' : 'es'}</h3>
-          ${renderNoviceIntro('detail')}
           <div class="stack">${direct.length ? visibleDirect.map(mappingCard).join('') : '<p class="notice">No official matches are currently known.</p>'}</div>
           ${additionalDirect.length ? `<details class="more-mappings"><summary>Show all ${direct.length} direct mappings</summary><div class="stack">${additionalDirect.map(mappingCard).join('')}</div></details>` : ''}
         </section>
@@ -1180,7 +1179,7 @@ async function renderItem(key, options = {}) {
       <aside class="detail-side panel">
         <p class="eyebrow">How to use this result</p>
         <h3>${direct.length + paths.length} known routes</h3>
-        <p class="muted">Review the evidence summary first, then open mapped items, copy citations, or contribute missing evidence.</p>
+        ${renderNoviceIntro(direct.length ? 'detail' : 'detailZero')}
         <details class="relationship-views">
           <summary>Relationship views</summary>
           <div class="visualization-tabs">

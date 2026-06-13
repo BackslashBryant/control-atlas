@@ -18,3 +18,9 @@ GovFrame is under comprehensive refactor. Previous v1.0, accessibility, performa
 Use `data/generated/coverage.json` for current catalog and mapping coverage. `limited-public-scope` entries are intentional and must remain visible.
 
 The June 9, 2026 live browser audit is recorded in `docs/audits/live-browser-audit-2026-06-09.md`. It validates expert and junior-assessor journeys, educational copy, mobile and 200%-equivalent reflow, stable asset deployment, and console health. Native keyboard-only, screen-reader, and browser-controlled 200% zoom proof remain open.
+
+## Performance and Data Strategy
+
+GovFrame leverages modern browser JavaScript engines to process and query tens of thousands of items and relationships instantaneously on the client side.
+
+To prevent initial blocking and ensure rapid time-to-interactive, large catalog and relationship data (e.g. `catalog.json`, `relationships.json`, `evidence.json`) are intentionally not bundled into the initial `app.js` payload. They are fetched asynchronously via efficient HTTP lazy-loading during application initialization.

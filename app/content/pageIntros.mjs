@@ -22,6 +22,9 @@ export const pageIntros = {
   detail: {
     description: "Review the official match and evidence before using this mapping in an audit."
   },
+  detailZero: {
+    description: "No official matches are known for this item; you can assess it separately or contribute evidence."
+  },
   mapping: {
     description: "Compare frameworks here. Use \"Open mapped item\" only when you need the counterpart control."
   }

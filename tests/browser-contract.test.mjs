@@ -120,7 +120,7 @@ test('sign-off repair pass contracts are present', () => {
   assert.match(app, /Copy issue URL/);
   assert.match(app, /data-copy-contribution/);
   assert.match(app, /GITHUB_ISSUES_BASE/);
-  assert.match(app, /renderNoviceIntro\('detail'\)/);
+  assert.match(app, /renderNoviceIntro\(direct\.length \? 'detail' : 'detailZero'\)/);
   assert.match(app, /contribution-callout[\s\S]*?Copy issue URL/);
   assert.match(html, /v=20260612-1/);
 });
