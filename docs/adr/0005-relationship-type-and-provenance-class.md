@@ -4,7 +4,7 @@
 
 ## Context
 
-Relationship meaning and trust basis answer different questions and must not be conflated.
+Control Atlas and Ctrl+Alt+Comply need user-facing provenance clarity. Relationship meaning and trust basis answer different questions and must not be conflated.
 
 ## Decision
 
@@ -12,4 +12,4 @@ Relationship meaning and trust basis answer different questions and must not be 
 
 ## Consequences
 
-Validators and UI labels preserve all dimensions. Inferred candidates cannot appear as published relationships, and blocked relationships remain graph-health findings.
+Validators and UI labels preserve all dimensions. Inferred candidates cannot appear as published relationships, and blocked relationships remain graph-health findings. Public product copy should refer to provenance consistently while preserving the underlying runtime contract.

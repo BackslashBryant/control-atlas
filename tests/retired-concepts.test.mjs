@@ -16,9 +16,8 @@ test('retired vulnerability data and ingestion files are removed', () => {
 
 test('runtime surfaces do not implement prohibited operational capabilities', () => {
   const paths = [
-    'index.html',
-    'app/runtime.mjs',
-    'app/app.mjs',
+    'src/app/runtime.mjs',
+    'src/app/app.mjs',
     'package.json',
     '.github/workflows/nightly-refresh.yml',
   ];
@@ -31,9 +30,9 @@ test('runtime surfaces do not implement prohibited operational capabilities', ()
 
 test('runtime surfaces do not collect, upload, or store user data', () => {
   const runtime = [
-    readFileSync('index.html', 'utf8'),
-    readFileSync('app/runtime.mjs', 'utf8'),
-    readFileSync('app/app.mjs', 'utf8'),
+    readFileSync('src/index.html', 'utf8'),
+    readFileSync('src/app/runtime.mjs', 'utf8'),
+    readFileSync('src/app/app.mjs', 'utf8'),
   ].join('\n');
 
   assert.doesNotMatch(runtime, /<input[^>]+type=["']file["']/i);

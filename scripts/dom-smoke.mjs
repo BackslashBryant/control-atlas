@@ -2,8 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-const app = readFileSync('app/app.mjs', 'utf8');
-const html = readFileSync('index.html', 'utf8');
+const app = readFileSync('src/app/app.mjs', 'utf8');
+const html = readFileSync('src/index.html', 'utf8');
 
 assert.match(app, /createFederalGraphRuntime/, 'graph runtime must be created');
 assert.match(app, /normalizeViewState/, 'view state must be normalized');

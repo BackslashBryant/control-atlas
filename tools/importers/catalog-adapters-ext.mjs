@@ -1,4 +1,4 @@
-import { normalize80053Id } from './oscal-normalize.mjs';
+import { normalize80053Id } from '../normalizers/oscal-normalize.mjs';
 
 const FEDRAMP_BASELINE_URLS = {
   LOW: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_LOW-baseline_profile.json',

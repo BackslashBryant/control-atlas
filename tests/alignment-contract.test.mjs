@@ -15,6 +15,10 @@ const requiredDocs = [
   'docs/adr/0005-relationship-type-and-provenance-class.md',
   'docs/adr/0006-build-time-imports-not-runtime-ingestion.md',
   'docs/adr/0007-control-atlas-branding.md',
+  'docs/adr/0008-govframe-baseline.md',
+  'docs/adr/0009-provenance-registry-naming.md',
+  'docs/adr/0010-d3-phase-0-baseline.md',
+  'docs/adr/0011-defer-risky-renames.md',
 ];
 
 test('alignment deliverables exist', () => {
@@ -22,27 +26,67 @@ test('alignment deliverables exist', () => {
 });
 
 test('core product docs state the canonical Control Atlas boundary', () => {
-  for (const path of ['README.md', 'docs/vision.md', 'docs/architecture/ARCHITECTURE.md', 'docs/context.md']) {
+  for (const path of [
+    'README.md',
+    'docs/context.md',
+    'docs/vision.md',
+    'docs/Plan.md',
+    'docs/PRODUCTION_READINESS.md',
+    'docs/architecture/ARCHITECTURE.md',
+    'CONTRIBUTING.md',
+    'SECURITY.md',
+  ]) {
     const content = readFileSync(path, 'utf8');
     assert.match(content, /Control Atlas/);
+    assert.match(content, /Ctrl\+Alt\+Comply/);
+    assert.match(content, /The public map for federal cyber compliance\./);
+    assert.match(content, /Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF\/ATO templates/i);
     assert.match(content, /public.data.only/i);
     assert.match(content, /no (?:backend|user\/org\/system data|user, organization, or system data)/i);
   }
 });
 
-test('roadmap contains all nine Control Atlas epics', () => {
+test('roadmap contains the Phase 0 through Phase 8 Control Atlas epics', () => {
   const roadmap = readFileSync('docs/roadmap.md', 'utf8');
   for (const epic of [
-    'Project Foundation',
-    'Source Registry',
-    'Data Normalization Pipeline',
-    'Library Browser',
-    'Crosswalk Workbench',
-    'Template Factory',
-    'Pattern Library',
-    'Relationship Graph',
-    'QA, Accessibility, and Release Hardening',
+    'Epic 0: Control Atlas Full Rename and Phase 0 Baseline',
+    'Epic 1: Source / Provenance Registry',
+    'Epic 2: Data Normalization Pipeline',
+    'Epic 3: Library Browser',
+    'Epic 4: Crosswalk Workbench',
+    'Epic 5: Template Factory',
+    'Epic 6: Pattern Library',
+    'Epic 7: Start Here \\+ Glossary',
+    'Epic 8: QA, Accessibility, and Release Hardening',
   ]) {
     assert.match(roadmap, new RegExp(epic));
   }
+  assert.match(roadmap, /Repository\/package\/Pages rename and hosted cutover/i);
+  assert.match(roadmap, /staged static build from `src\/`/i);
+  assert.match(roadmap, /CI\/CD and SecDevOps hardening around the staged site/i);
+  assert.match(roadmap, /five-artifact runtime contract/i);
+});
+
+test('architecture and inventory docs reflect the adopted Phase 0 baseline', () => {
+  const architecture = readFileSync('docs/architecture/ARCHITECTURE.md', 'utf8');
+  assert.match(architecture, /Build-Time Importers/);
+  assert.match(architecture, /Client-Side Search \/ Template Generation \/ Export/);
+  assert.match(architecture, /D3 graph engine is reused for Phase 0/i);
+  assert.match(architecture, /Cytoscape\.js may be evaluated later/i);
+  assert.match(architecture, /MiniSearch/i);
+  assert.match(architecture, /Zod \+ JSON Schema/i);
+  assert.match(architecture, /JSON\/JSONL runtime bundles and YAML curated registry/i);
+  assert.match(architecture, /tools\/build-static-site\.mjs/);
+  assert.match(architecture, /dist\/site/);
+
+  const inventory = readFileSync('docs/inventory/repository-inventory.md', 'utf8');
+  for (const label of ['Keep As-Is', 'Reuse With Rename Or Refactor', 'Reuse Later', 'Deprecate', 'Remove']) {
+    assert.match(inventory, new RegExp(label));
+  }
+
+  const scope = readFileSync('docs/inventory/out-of-scope.md', 'utf8');
+  assert.match(scope, /Deprecated\/out-of-scope/i);
+  assert.match(scope, /eMASS/i);
+  assert.match(scope, /ServiceNow GRC/i);
+  assert.match(scope, /No login/i);
 });

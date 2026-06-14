@@ -2,8 +2,8 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateGraphArtifacts } from './lib/federal-graph.mjs';
-import { loadSourceRegistry } from './lib/source-registry.mjs';
+import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
+import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data', 'generated');

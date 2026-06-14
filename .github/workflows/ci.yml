@@ -17,8 +17,20 @@ jobs:
       - run: npm ci || npm install
       - name: Dependency audit
         run: npm run audit:deps
-      - name: Full verification
-        run: npm run precommit
+      - name: Build staged static site
+        run: npm run build:site
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: License check
+        run: npm run license:check
+      - name: Unit and contract verification
+        run: npm test && npm run test:browser && npm run smoke:dom && npm run verify:public
+      - name: Install Playwright browser
+        run: npx playwright install chromium
+      - name: End-to-end verification
+        run: npm run test:e2e
       - name: Generate SBOM
         run: npm run sbom:generate
       - name: Upload SBOM artifact

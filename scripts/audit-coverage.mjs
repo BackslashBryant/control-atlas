@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
-import { validateGraphArtifacts } from './lib/federal-graph.mjs';
-import { loadSourceRegistry } from './lib/source-registry.mjs';
+import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
+import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const registry = loadSourceRegistry(JSON.parse(readFileSync('data/source-registry.json', 'utf8')));
 const graph = {
@@ -19,7 +19,7 @@ if (errors.length) throw new Error(`Graph audit failed:\n- ${errors.join('\n- ')
 const excluded = registry.sources.filter((source) => source.eligibility_status === 'excluded');
 const candidateEdges = graph.edges.filter((edge) => edge.publication_status === 'candidate');
 const assessmentNodes = graph.nodes.filter((node) => node.node_type === 'assessment_procedure');
-console.log('=== GovFrame Federal Graph Audit ===');
+console.log('=== Control Atlas Federal Graph Audit ===');
 console.log(`Sources: ${graph.sources.length} (${excluded.length} excluded from publishing)`);
 console.log(`Nodes: ${graph.nodes.length}`);
 console.log(`Assessment procedure nodes: ${assessmentNodes.length}`);

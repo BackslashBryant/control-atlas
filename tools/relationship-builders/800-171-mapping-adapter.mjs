@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { normalize800171Id, normalize80053Id } from './oscal-normalize.mjs';
+import { normalize800171Id, normalize80053Id } from '../normalizers/oscal-normalize.mjs';
 
 export function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;

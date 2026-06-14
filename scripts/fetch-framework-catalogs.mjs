@@ -13,19 +13,19 @@ import {
   buildRmfCatalog,
   parseAiRmfPlaybook,
   parseSsdfCatalog,
-} from './lib/framework-adapters.mjs';
+} from '../tools/importers/framework-adapters.mjs';
 import {
   enrichCatalogMetadata,
   fetch80053BBaselines,
   fetchFedrampBaselineMembership,
-} from './lib/catalog-adapters-ext.mjs';
+} from '../tools/importers/catalog-adapters-ext.mjs';
 import {
   parse800171CsvCatalog,
   parse800172Catalog,
   parse80053Catalog,
   parse800171Catalog,
   parseCsfCatalog,
-} from './lib/oscal-normalize.mjs';
+} from '../tools/normalizers/oscal-normalize.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SNAPSHOT = new Date().toISOString();

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import { parseCciXml } from '../scripts/lib/cci-adapter.mjs';
-import { parseOlirCsv } from '../scripts/lib/olir-adapter.mjs';
+import { parseCciXml } from '../tools/importers/cci-adapter.mjs';
+import { parseOlirCsv } from '../tools/relationship-builders/olir-adapter.mjs';
 import { buildFrameworkData } from '../scripts/build-framework-data.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));

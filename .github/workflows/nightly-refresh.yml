@@ -21,6 +21,10 @@ jobs:
         run: npm run audit:deps
       - name: Refresh data artifacts
         run: npm run refresh:data
+      - name: Build staged static site
+        run: npm run build:site
+      - name: License check
+        run: npm run license:check
       - name: Runtime checks
         run: npm run test:browser && npm run smoke:dom
       - name: Public verification

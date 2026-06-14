@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Normalize NIST OSCAL documents into GovFrame source record arrays.
+ * Normalize NIST OSCAL documents into Control Atlas source record arrays.
  */
 
 const MAX_DESCRIPTION = 1200;

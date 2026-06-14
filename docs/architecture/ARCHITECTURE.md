@@ -1,8 +1,15 @@
 # Control Atlas Architecture
 
-## Decision
+## Product Identity
 
-Control Atlas adopts the existing static JavaScript application and federal graph contract as its public-data-only implementation baseline. The repository does not need a framework, TypeScript, backend, database, authentication, or broad rename migration before continuing product delivery.
+- Public product name: **Control Atlas**
+- Campaign line: **Ctrl+Alt+Comply**
+- Tagline: **The public map for federal cyber compliance.**
+- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.
+
+## Adopted Phase 0 Architecture
+
+Control Atlas adopts a `src/`-based static JavaScript application and staged static deployment as its public-data-only baseline. The repository does not need a framework migration, backend, database, or authentication layer to continue product delivery.
 
 ```text
 Public Sources
@@ -20,7 +27,7 @@ Public Sources
 
 - GitHub Pages serves static HTML, CSS, JavaScript, and generated public-data bundles.
 - Search, browsing, relationship comparison, and exports run in the browser.
-- No backend, database, authentication, login, telemetry, or user/org/system data exists.
+- No backend, database, authentication, login, telemetry, or user, organization, or system data exists.
 - No user uploads, evidence ingestion, runtime scan parsing, operational-system connections, or server-side template generation are allowed.
 - Generated templates must remain local to the browser and must not be transmitted or stored.
 
@@ -28,7 +35,7 @@ Public Sources
 
 The source registry remains `data/source-registry.json` at schema version `4.0`.
 
-Generated graph artifacts remain:
+Generated runtime graph artifacts remain:
 
 - `data/generated/sources.json`
 - `data/generated/nodes.json`
@@ -45,15 +52,27 @@ Every displayable relationship separates:
 
 Blocked relationships remain graph-health findings and never become displayable edges.
 
+## Technology Baseline
+
+- `src/` is the source-of-truth application tree and `tools/build-static-site.mjs` stages the deployable site into `dist/site`.
+- Existing D3 graph engine is reused for Phase 0.
+- Cytoscape.js may be evaluated later if graph complexity demands it, but no graph-library migration is part of this pass.
+- GitHub Pages remains the deployment target.
+- MiniSearch is the target search pattern.
+- Zod + JSON Schema is the target validation pattern.
+- JSON/JSONL runtime bundles and YAML curated registry files are the target data format pattern.
+
 ## Component Boundaries
 
-- `scripts/` and `scripts/lib/`: fetch, normalize, validate, relate, and build public data.
-- `data/source-registry.json`: canonical public-source trust registry.
+- `src/app/`, `src/content/`, and `src/styles/`: static public interface and runtime shell source.
+- `scripts/`: fetch and orchestrate public-data refresh/build flows.
+- `tools/importers/`, `tools/normalizers/`, `tools/validators/`, and `tools/relationship-builders/`: product pipeline modules for public data ingestion, normalization, validation, and relationship assembly.
+- `data/source-registry.json`: canonical source registry file retained under the new public-facing Provenance Registry naming.
 - `data/generated/`: validated static runtime bundles and build-governance artifacts.
-- `app/runtime.mjs`: pure browser query and export APIs over static bundles.
-- `app/app.mjs`, `index.html`, and `styles/`: static public interface.
+- `src/app/runtime.mjs`: pure browser query and export APIs over static bundles.
+- `dist/site/`: generated deploy surface used by Pages and public sync.
 - `tests/`: graph, source, runtime, browser-contract, and product-boundary gates.
 
 ## Compatibility
 
-GovFrame remains the repository name, deployment path, package identifier, and selected internal naming until a separate migration is justified. Public-facing copy uses Control Atlas. Existing runtime APIs and graph contracts remain stable while future epics add capabilities.
+The hosted repository, package metadata, workflow labels, and Pages path now use Control Atlas. Existing runtime APIs and the five generated graph artifacts remain stable while future epics add capabilities.

@@ -2,37 +2,54 @@
 
 Analysis date: 2026-06-14
 
-## Existing Controls
+## Workflow Baseline
 
-| Control | Current implementation |
+- `.github/workflows/ci.yml`: dependency audit, staged build, lint, typecheck, contract checks, browser checks, Playwright, SBOM artifact upload
+- `.github/workflows/pages.yml`: audit, staged build, runtime checks, public verification, Playwright, SBOM generation, GitHub Pages deploy
+- `.github/workflows/codeql.yml`: JavaScript CodeQL
+- `.github/workflows/secret-scan.yml`: gitleaks-based secret scan
+- `.github/workflows/nightly-refresh.yml`: scheduled public-data refresh plus staged-build verification
+
+## Already Present
+
+| Required control | Current evidence |
 | --- | --- |
-| Unit and contract tests | Node test suites in `npm test` |
-| Data schema/source/relationship validation | Source registry, graph contract, build, and graph-health tests |
-| Static build/smoke validation | `smoke:static`, `smoke:dom`, `verify:public` |
-| Browser contract checks | `test:browser` |
-| Full local/CI gate | `npm run precommit` in `.github/workflows/ci.yml` |
-| Public-data refresh | Scheduled nightly refresh with verification |
-| GitHub Pages deployment | Verified static artifact deployment from `main` |
+| Unit tests | `npm test` in local and CI flows |
+| Build | Static-site staging and Pages deployment in `pages.yml` |
+| Lint | `npm run lint` in local, CI, Pages, and precommit flows |
+| Type check | `npm run typecheck` in local, CI, Pages, and precommit flows |
+| Data schema validation | Source and graph contract tests plus build validation |
+| Source/provenance registry validation | `tests/source-registry.test.mjs` and graph contract coverage |
+| Relationship validation | Graph contract and runtime tests over `edges`, `evidence`, and `graph-health` |
+| npm audit | `npm run audit:deps` in CI, Pages, and nightly refresh |
+| CodeQL | `codeql.yml` |
+| CycloneDX SBOM | `npm run sbom:generate` plus artifact upload |
+| Playwright E2E tests | `tests/e2e/control-atlas-shell.spec.mjs` in local, CI, Pages, and precommit flows |
+| Dependency review | `.github/workflows/dependency-review.yml` |
+| Dependabot | `.github/dependabot.yml` for npm and GitHub Actions |
+| License check | `npm run license:check` in local, CI, Pages, nightly, and precommit flows |
+| GitHub secret scanning and push protection | Enabled at the repository settings level after the hosted rename |
+| GitHub Pages deployment | `pages.yml` |
 
-## Gaps
+## Partially Present
 
-| Required control | Gap | Recommended implementation |
+| Required control | Current evidence | Missing next |
 | --- | --- | --- |
-| Lint | No lint script or CI stage | Add a non-rewriting JavaScript/Markdown lint gate |
-| Type/static analysis | No type-check script | Add `tsc --checkJs` or equivalent without forcing a framework migration |
-| Dependency audit | Closed | `npm run audit:deps` enforces `npm audit` with a documented exception policy |
-| Accessibility automation | Marker checks only | Add automated accessibility smoke tests plus manual release audit |
-| Secret scanning | Partially closed | Repo-level gitleaks workflow added; GitHub secret scanning/push protection still needs repository settings |
-| CodeQL | Closed | Dedicated JavaScript CodeQL workflow added |
-| SBOM | Closed | CycloneDX JSON SBOM is generated and uploaded in CI |
-| Dependency review | No workflow | Add dependency-review check for pull requests or protected changes |
-| License check | No automated gate | Add dependency and source-license review |
-| Branch protection | Not documented/verified | Require green release gates on `main` |
-| Supply-chain pinning | Actions use tags | Evaluate immutable action SHA pinning |
+| Accessibility smoke tests | `smoke:dom` plus browser/shell marker tests | Add explicit accessibility automation and keep manual release audit |
+| Secret scanning | `secret-scan.yml` runs gitleaks and GitHub secret scanning plus push protection are enabled | Keep release evidence that hosted settings remain enabled after future admin changes |
+| Static build gate | CI, Pages, nightly, and precommit all run `npm run build:site` before verification | Keep the staged-output contract covered as repo layout evolves |
+| Release audit coverage | Browser contract tests and historical live audits exist | Add repeatable Control Atlas live Pages audit checklist for every public-shell change |
 
-## Priority
+## Missing Next
 
-1. GitHub secret scanning/push protection repository settings, lint/static analysis, and accessibility automation.
-2. Dependency review, license checks, branch protection, and action pinning.
+| Required control | Recommended implementation |
+| --- | --- |
+| Branch protection verification | Document and enforce protected `main` gates outside repo contents |
+| Action pinning | Review tag-based GitHub Actions usage and decide on SHA pinning |
 
-Existing workflows should be extended, not replaced blindly. Security automation must not introduce a backend or production patching bot.
+## Priority Order
+
+1. Accessibility automation plus repeatable live Pages audit evidence.
+2. Branch protection verification and action pinning.
+
+Existing workflows should be extended, not replaced blindly. Security automation must not introduce a backend, telemetry, or any production patching bot behavior.
