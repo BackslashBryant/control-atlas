@@ -17,12 +17,20 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci || npm install
+      - name: Dependency audit
+        run: npm run audit:deps
       - name: Refresh data artifacts
         run: npm run refresh:data
       - name: Runtime checks
         run: npm run test:browser && npm run smoke:dom
       - name: Public verification
         run: npm run verify:public
+      - name: Generate SBOM
+        run: npm run sbom:generate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-sbom-cdx-json
+          path: artifacts/sbom.cdx.json
       - name: Commit data changes
         run: |
           if git diff --quiet; then

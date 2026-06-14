@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "threshold": "high",
+  "exceptions": [
+    {
+      "package": "xlsx",
+      "id": 1108110,
+      "reason": "Direct dependency required for workbook parsing in current import and spreadsheet flows; no upstream npm fix available.",
+      "tracked_in": "docs/SECDEVOPS_GAP_ANALYSIS.md"
+    },
+    {
+      "package": "xlsx",
+      "id": 1108111,
+      "reason": "Direct dependency required for workbook parsing in current import and spreadsheet flows; no upstream npm fix available.",
+      "tracked_in": "docs/SECDEVOPS_GAP_ANALYSIS.md"
+    }
+  ]
+}
