@@ -1,32 +1,24 @@
-# Production Readiness
+# Control Atlas Production Readiness
 
 ## Current Status
 
-The existing static mapper remains deployed, but its product contract is superseded. Release 1 of the Federal Security Control Integration Directory is not production-ready until Issues 9-11 ship and the required audits pass.
+The static public reference application is deployable and provides a reusable Control Atlas foundation. The full Control Atlas MVP is not production-ready until the nine roadmap epics and release-hardening requirements are complete.
 
-## Release 1 Required Before Completion
+## Required Before MVP Release
 
-- [x] Issue 9 replaces the generated-data and runtime contracts while preserving current user journeys.
-- [ ] Issue 10 publishes source-backed FIPS, RMF, and baseline context.
-- [ ] Issue 11 publishes source-backed assessment context and canonical OSCAL ingestion.
-- [ ] Every displayable node and edge passes federal eligibility and provenance validation.
-- [ ] Blocked relationships appear only in graph-health reporting.
-- [ ] Source manifests and graph-health artifacts are reproducible and reviewable.
-- [ ] `npm run precommit` passes for every issue and the merged release.
-- [ ] Native keyboard-only, screen-reader, responsive, zoom, performance, and live GitHub Pages audits pass.
+- [x] Static GitHub Pages delivery with no backend or login
+- [x] Public source registry and validated graph bundles
+- [x] Search, browse, sources, relationship comparison, and public-reference CSV export
+- [x] Product boundary documented and enforced in runtime tests
+- [ ] Missing SecDevOps controls from `docs/SECDEVOPS_GAP_ANALYSIS.md`
+- [ ] Required Library, Crosswalk, Template Factory, Pattern Library, and Relationship Graph scope
+- [ ] Native keyboard-only, screen-reader, responsive, zoom, performance, and live Pages audits
+- [ ] Content, disclaimer, source-license, and prohibited-claim review
 
-## Release 1 Evidence
+## Historical Evidence
 
-- The June 13, 2026 audit in `docs/audits/live-browser-audit-2026-06-13-issue-9.md` is Issue 9 federal graph acceptance evidence.
-- The June 9, 2026 audit in `docs/audits/live-browser-audit-2026-06-09.md` remains evidence for retained pre-migration behavior.
+Dated files under `docs/audits/` remain historical evidence for the GovFrame-era implementation they tested. New runtime changes require new Control Atlas audit evidence rather than rewriting old records.
 
-## Open Audit Requirements
+## Runtime Boundary
 
-- Validate downloadable exports in a browser environment that supports downloads when export work resumes.
-- Complete native keyboard-only and screen-reader audits.
-- Complete browser-controlled 200% zoom and release performance audits.
-- Re-run live-site journeys after every Release 1 issue that changes runtime behavior.
-
-## Performance and Data Strategy
-
-The application remains static and browser-only. Large federal graph artifacts and projections must lazy-load, initial interaction must not wait for the complete graph, and every release must document artifact sizes and performance evidence.
+Control Atlas remains static and public-data-only with no backend, authentication, user uploads, user/org/system data, scoring, operational integrations, or stored generated templates.

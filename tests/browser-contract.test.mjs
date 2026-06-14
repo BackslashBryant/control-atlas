@@ -6,8 +6,12 @@ const html = readFileSync('index.html', 'utf8');
 const css = readFileSync('styles/app.css', 'utf8');
 const app = readFileSync('app/app.mjs', 'utf8');
 
-test('shell identifies the federal integration directory and preserves core journeys', () => {
-  assert.match(html, /Federal Security Control Integration Directory/);
+test('shell identifies Control Atlas and preserves core journeys', () => {
+  assert.match(html, /Control Atlas/);
+  assert.match(html, /Public maps and templates for federal cyber compliance/);
+  assert.match(html, /open-source reference and template-generation tool based on public sources/i);
+  assert.match(html, /does not make authorization, compliance, assessment, or risk acceptance decisions/i);
+  assert.match(html, /Official decisions remain with the applicable Authorizing Official, agency, assessor, program office, or governing authority/i);
   assert.match(html, /data-view="search"/);
   assert.match(html, /data-view="matrix"/);
   assert.match(html, /data-view="browse"/);
@@ -17,10 +21,10 @@ test('shell identifies the federal integration directory and preserves core jour
 });
 
 test('application loads only the five federal graph artifacts', () => {
-  assert.match(html, /app\/app\.mjs\?v=20260613-4/);
-  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-4'/);
+  assert.match(html, /app\/app\.mjs\?v=20260614-1/);
+  assert.match(app, /from '\.\/runtime\.mjs\?v=20260614-1'/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
-    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-4`));
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260614-1`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
   assert.doesNotMatch(app, /build-manifest\.json|source-manifests\.json|graph-diff-summary\.json/);
@@ -36,6 +40,7 @@ test('search, browse, detail, sources, and comparison use graph runtime APIs', (
   assert.match(app, /getGraphHealth/);
   assert.match(app, /buildRelationshipMatrix/);
   assert.match(app, /buildRelationshipCsv/);
+  assert.match(app, /Control-Atlas-\$\{source\}-to-\$\{target\}\.csv/);
 });
 
 test('federal trust dimensions remain visibly separate', () => {

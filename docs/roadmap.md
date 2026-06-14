@@ -1,46 +1,120 @@
-# Federal Integration Directory Roadmap
+# Control Atlas Roadmap
 
-## Active: Release 1 - Trust and RMF Backbone
+The replacement PRD defines the complete product direction. Existing working components are reused; each epic closes only its remaining gaps.
 
-Release 1 replaces the framework-neutral mapper contract with the federal integration graph while keeping the static application deployable after every issue.
+## Epic 1: Project Foundation
 
-1. **Issue 9 / FEDGRAPH-001 - Federal Graph Contract Vertical Migration**
-   - Replace generated and runtime contracts with federal `sources`, `nodes`, `edges`, `evidence`, and `graph-health`.
-   - Migrate current user journeys and federal terminology atomically.
-2. **Issue 10 / FEDGRAPH-002A - RMF, Categorization, and Baseline Context**
-   - Add FIPS 199, FIPS 200, SP 800-37 RMF lifecycle, and SP 800-53B baseline context.
-3. **Issue 11 / FEDGRAPH-002B - Assessment and OSCAL Backbone**
-   - Add SP 800-53A assessment context, canonical OSCAL ingestion, and Release 1 quality gates.
+**Goal:** Keep a coherent, secure, static public product baseline.
 
-Release 1 exits when source provenance, RMF context, baseline membership, assessment procedures, and graph-health validation are source-backed and usable through the static application.
+**Key stories:** Align product docs and branding; enforce product boundaries; close CI/security gaps; maintain GitHub Pages deployment.
 
-## Release 2 - Federal Program Context
+**Acceptance:** Canonical docs agree, prohibited runtime capabilities fail tests, `npm run precommit` passes, and Pages deploys.
 
-Add CUI, SP 800-171, SP 800-172, CMMC, and FedRAMP program relationships. Program labels and relationships must remain distinct and source-backed.
+**Reuse:** Static shell, tests, Pages workflow, package scripts.
+**Dependencies:** None.
+**SecDevOps:** Dependency audit, secret scanning, CodeQL, SBOM, accessibility automation, branch protection.
 
-## Release 3 - Implementation and Vulnerability Context
+## Epic 2: Source Registry
 
-Add federal vulnerability and known-exploited enrichment, SCAP and National Checklist Program metadata, and lawful public DISA STIG/SRG/CCI implementation context. GovFrame will not become a general vulnerability search engine.
+**Goal:** Maintain the public-source trust backbone.
 
-## Release 4 - Threat, Defense, and Validation Context
+**Key stories:** Improve registry validation, source freshness, filtering, lifecycle warnings, and license/use review.
 
-Add ATT&CK, D3FEND, and Caldera only as federal-utilized threat, defensive, and validation context. These relationships must never be presented as compliance or audit evidence by themselves.
+**Acceptance:** Every displayed object and relationship traces to eligible public source metadata.
 
-## Release 5 - Integration Graph and Discovery UX
+**Reuse:** Schema `4.0`, registry validator, Sources view.
+**Dependencies:** Epic 1.
+**SecDevOps:** Validate URLs, licenses, access status, and restricted-content handling.
 
-Deliver layered integration graph projections, federal catalogue discovery, actionable empty states, source-backed insights, and federal-context detail sections.
+## Epic 3: Data Normalization Pipeline
 
-## Release 6 - Citation, Export, and Governance
+**Goal:** Convert public sources into reproducible normalized bundles.
 
-Standardize relationship citations, add audit-friendly CSV and JSON graph exports, add import manifests and reproducible diffs, and enforce graph-quality governance.
+**Key stories:** Extend build-time importers, validators, relationship building, manifests, and graph-health reporting.
 
-JSON graph export is intentionally reopened for Release 6 and is not part of Release 1.
+**Acceptance:** Builds are reproducible; invalid, unsupported, or non-public records are blocked.
 
-## Cross-Cutting Exit Criteria
+**Reuse:** OSCAL/CCI/OLIR adapters, federal graph builder, manifests, graph-health.
+**Dependencies:** Epic 2.
+**SecDevOps:** Parser fixtures, schema validation, source integrity, dependency controls.
 
-- Every node and displayed edge has source-backed provenance.
-- Inferred relationships cannot be mistaken for federal-published relationships.
-- Restricted content is not redistributed.
-- Static artifact size and first-interaction performance remain documented.
-- Graph and relationship views have keyboard-accessible text equivalents.
-- Native keyboard-only, screen-reader, responsive, zoom, performance, and live-site browser audits are completed before a release is called complete.
+## Epic 4: Library Browser
+
+**Goal:** Provide searchable public reference objects.
+
+**Key stories:** Improve search, filters, stable object views, STIG/SRG references, and source context.
+
+**Acceptance:** Users can find public objects by identifier or topic and inspect source-backed details.
+
+**Reuse:** Search, browse, detail, source views.
+**Dependencies:** Epic 3.
+**SecDevOps:** No runtime ingestion or unsafe external content.
+
+## Epic 5: Crosswalk Workbench
+
+**Goal:** Expose public relationships and baseline comparisons.
+
+**Key stories:** Relationship tables, provenance filters, STIG-to-CCI-to-NIST views, baseline deltas, public-reference exports.
+
+**Acceptance:** Official and inferred mappings remain distinct and exportable.
+
+**Reuse:** Matrix runtime/API, CSV export, graph contracts.
+**Dependencies:** Epics 3-4.
+**SecDevOps:** Export only public/reference data; validate relationship provenance.
+
+## Epic 6: Template Factory
+
+**Goal:** Generate blank reference-driven templates locally in the browser.
+
+**Key stories:** Client-side template engine, blank starters, reference metadata, disclaimers, Markdown/CSV/JSON/YAML exports.
+
+**Acceptance:** No user/org/system data is required, transmitted, or stored; outputs are blank/reference-only.
+
+**Reuse:** Browser export patterns and static public bundles.
+**Dependencies:** Epics 3-5.
+**SecDevOps:** No network submission, storage, scoring, or completed artifact generation.
+
+## Epic 7: Pattern Library
+
+**Goal:** Explain common public-reference authorization patterns.
+
+**Key stories:** Inheritance, reciprocity, shared responsibility, RMF/ATO/ATC, and failure-pattern pages.
+
+**Acceptance:** Content is source-linked, generic, disclaimed, searchable, and avoids organization-specific decisions.
+
+**Reuse:** Content modules, glossary, detail-card patterns.
+**Dependencies:** Epics 4 and 6.
+**SecDevOps:** SME review and prohibited-claim checks.
+
+## Epic 8: Relationship Graph
+
+**Goal:** Visualize public relationships accessibly.
+
+**Key stories:** Object-local graph projections, filters, provenance labels, and table fallback.
+
+**Acceptance:** Visual and text views use the same validated public graph and remain keyboard accessible.
+
+**Reuse:** Graph bundles, D3 asset, relationship lists.
+**Dependencies:** Epics 3-5.
+**SecDevOps:** No runtime inference upgrades; performance and accessibility gates.
+
+## Epic 9: QA, Accessibility, and Release Hardening
+
+**Goal:** Deliver a stable, accessible, secure public MVP.
+
+**Key stories:** End-to-end coverage, accessibility audit, source/content review, dependency hardening, release evidence.
+
+**Acceptance:** Automated gates, live Pages audit, accessibility review, and security checks are green.
+
+**Reuse:** Current contract tests, smoke checks, audit records.
+**Dependencies:** All prior epics.
+**SecDevOps:** Release-blocking CI/security controls and documented exceptions.
+
+## Recommended Next Sequence
+
+1. Close Epic 1 gaps: enforceable boundaries and missing CI/security controls.
+2. Reconcile and harden the Source Registry and normalization pipeline.
+3. Extend the Library Browser and Crosswalk Workbench using current runtime contracts.
+4. Build the client-only Template Factory.
+5. Add patterns and graph UX.
+6. Complete release hardening and live audits.

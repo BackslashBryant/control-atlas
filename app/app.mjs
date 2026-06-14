@@ -1,4 +1,4 @@
-import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260613-4';
+import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs?v=20260614-1';
 
 const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
@@ -24,11 +24,11 @@ async function fetchCollection(path, collection) {
 
 async function loadFederalGraph() {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
-    fetchCollection('./data/generated/sources.json?v=20260613-4', 'sources'),
-    fetchCollection('./data/generated/nodes.json?v=20260613-4', 'nodes'),
-    fetchCollection('./data/generated/edges.json?v=20260613-4', 'edges'),
-    fetchCollection('./data/generated/evidence.json?v=20260613-4', 'evidence'),
-    fetchCollection('./data/generated/graph-health.json?v=20260613-4', 'findings'),
+    fetchCollection('./data/generated/sources.json?v=20260614-1', 'sources'),
+    fetchCollection('./data/generated/nodes.json?v=20260614-1', 'nodes'),
+    fetchCollection('./data/generated/edges.json?v=20260614-1', 'edges'),
+    fetchCollection('./data/generated/evidence.json?v=20260614-1', 'evidence'),
+    fetchCollection('./data/generated/graph-health.json?v=20260614-1', 'findings'),
   ]);
   runtime = createFederalGraphRuntime({ sources, nodes, edges, evidence, findings });
 }
@@ -379,7 +379,7 @@ async function renderMatrix(state) {
       const content = runtime.buildRelationshipCsv(matrix);
       const link = document.createElement('a');
       link.href = URL.createObjectURL(new Blob([content], { type: 'text/csv' }));
-      link.download = `GovFrame-${source}-to-${target}.csv`;
+      link.download = `Control-Atlas-${source}-to-${target}.csv`;
       link.click();
       URL.revokeObjectURL(link.href);
     });
@@ -411,7 +411,7 @@ function showOnboardingOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboarding-overlay';
-  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore federal security relationships</h2><p>GovFrame separates relationship semantics, federal provenance, confidence, and evidence quality.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
+  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore federal security relationships</h2><p>Control Atlas separates relationship semantics, federal provenance, confidence, and evidence quality.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
   document.querySelector('#btn-onboarding-start').addEventListener('click', close);
@@ -459,5 +459,5 @@ async function init() {
 
 init().catch((error) => {
   app.setAttribute('aria-busy', 'false');
-  app.innerHTML = `<section class="notice"><h2>GovFrame could not start</h2><p>${escapeHtml(error.message)}</p></section>`;
+  app.innerHTML = `<section class="notice"><h2>Control Atlas could not start</h2><p>${escapeHtml(error.message)}</p></section>`;
 });
