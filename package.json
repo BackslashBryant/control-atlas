@@ -32,7 +32,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "^3.1.0",
+    "@cyclonedx/cyclonedx-npm": "^4.2.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.3",
