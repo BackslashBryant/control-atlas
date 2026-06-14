@@ -24,3 +24,5 @@ The deployed `main` branch is the supported version.
 ## Supply Chain
 
 Current and missing controls are tracked in `docs/SECDEVOPS_GAP_ANALYSIS.md`. Security controls should block release when they detect an unresolved high-impact issue.
+
+Dependency audit policy is enforced by `npm run audit:deps`. Current approved exceptions are recorded in `security/npm-audit-exceptions.json` and must remain narrow, documented, and temporary.
