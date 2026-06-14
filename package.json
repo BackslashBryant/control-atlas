@@ -6,12 +6,14 @@
   "scripts": {
     "build:data": "node ./scripts/build-framework-data.mjs",
     "build:xref": "npm run build:data",
+    "audit:deps": "node ./scripts/security/npm-audit.mjs",
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
     "fetch:olir-mappings": "node ./scripts/fetch-olir-mappings.mjs",
     "check:data-size": "node ./scripts/check-data-size.mjs",
     "smoke:static": "node ./scripts/static-smoke.mjs",
     "refresh:data": "node ./scripts/refresh-data.mjs",
+    "sbom:generate": "cyclonedx-npm --package-lock-only --output-format json --output-file artifacts/sbom.cdx.json",
     "test": "npm run test:data && npm run test:runtime",
     "test:data": "node --test --test-concurrency=1 ./tests/source-registry.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/oscal-normalize.test.mjs ./tests/retired-concepts.test.mjs ./tests/alignment-contract.test.mjs ./tests/package-scripts.test.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
@@ -25,6 +27,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "^3.1.0",
     "fast-xml-parser": "^5.2.5",
     "fflate": "^0.8.3",
     "xlsx": "^0.18.5"
