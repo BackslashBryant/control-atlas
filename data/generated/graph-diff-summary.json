@@ -3,15 +3,14 @@
   "generated_at": "2026-06-14T07:40:44.284Z",
   "graph_diff_summary": {
     "kind": "graph_diff_summary",
-    "previous_generated_at": "2026-06-14T00:29:52.175Z",
+    "previous_generated_at": "2026-06-14T07:40:44.284Z",
     "current_generated_at": "2026-06-14T07:40:44.284Z",
-    "changed_runtime_artifacts": [
-      "evidence"
-    ],
+    "changed_runtime_artifacts": [],
     "unchanged_runtime_artifacts": [
       "sources",
       "nodes",
       "edges",
+      "evidence",
       "graph-health"
     ]
   }
