@@ -14,23 +14,29 @@ test('retired vulnerability data and ingestion files are removed', () => {
   for (const path of retiredFiles) assert.equal(existsSync(path), false, `${path} must be removed`);
 });
 
-test('active product surfaces contain no retired vulnerability concepts', () => {
+test('runtime surfaces do not implement prohibited operational capabilities', () => {
   const paths = [
     'index.html',
     'app/runtime.mjs',
     'app/app.mjs',
-    'styles/app.css',
     'package.json',
     '.github/workflows/nightly-refresh.yml',
-    'README.md',
-    'docs/PRD.md',
-    'docs/vision.md',
-    'docs/roadmap.md',
-    'docs/context.md',
   ];
-  const retired = /\b(CVE|NVD|Tenable|Nessus|plugin ID|plugin IDs)\b/i;
+  const prohibited = /\b(eMASS|Tenable|ACAS|Nessus|scan ingestion|evidence upload|compliance scoring|asset tracking)\b/i;
   for (const path of paths) {
     assert.ok(existsSync(path), `${path} must exist`);
-    assert.doesNotMatch(readFileSync(path, 'utf8'), retired, `${path} contains retired product language`);
+    assert.doesNotMatch(readFileSync(path, 'utf8'), prohibited, `${path} contains a prohibited runtime capability`);
   }
+});
+
+test('runtime surfaces do not collect, upload, or store user data', () => {
+  const runtime = [
+    readFileSync('index.html', 'utf8'),
+    readFileSync('app/runtime.mjs', 'utf8'),
+    readFileSync('app/app.mjs', 'utf8'),
+  ].join('\n');
+
+  assert.doesNotMatch(runtime, /<input[^>]+type=["']file["']/i);
+  assert.doesNotMatch(runtime, /\b(localStorage|sessionStorage|WebSocket|XMLHttpRequest)\b/);
+  assert.doesNotMatch(runtime, /fetch\([^)]*(?:POST|PUT|PATCH|DELETE)/i);
 });

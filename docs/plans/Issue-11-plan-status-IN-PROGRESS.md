@@ -1,5 +1,7 @@
 # Issue 11 / FEDGRAPH-002B - Assessment and OSCAL Backbone
 
+> **Historical status:** The implementation represented by this plan is present on `main`. This document is retained as delivery history; it is not an active Control Atlas backlog item.
+
 | Field | Value |
 | --- | --- |
 | Status | IN PROGRESS |

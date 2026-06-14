@@ -1,16 +1,9 @@
-# Product Vision
+# Control Atlas Product Vision
 
-GovFrame is the U.S. Federal Security Control Integration Directory.
+Control Atlas is a static, open-source, public-data-only reference and template workbench for federal cyber compliance.
 
-It gives practitioners one source-backed place to understand how a federal control connects across RMF, baselines, assessment procedures, FedRAMP, CUI, CMMC, implementation checks, vulnerability operations, threat-informed defense, validation paths, and evidence.
+It helps practitioners understand public controls, baselines, STIGs, SRGs, CCIs, mappings, provenance, and reusable authorization patterns before they begin organization-specific work. It may generate blank reference templates locally in the browser.
 
-GovFrame is not a generic cybersecurity framework aggregator. Federal provenance determines eligibility, every relationship explains why it exists, and inferred candidates remain visibly separate from federal-published relationships.
+Control Atlas is not a GRC system, evidence processor, scan parser, compliance scoring engine, package manager, eMASS replacement, or authorization decision tool. It has no backend and collects no user, organization, or system data.
 
-Success means a user can start with a federal control such as `AC-2` and answer:
-
-- What federal source defines or mandates it?
-- Which federal baselines and programs use it?
-- How is it assessed and implemented?
-- What vulnerability, threat, defensive, and validation context is relevant?
-- What evidence supports each relationship?
-- Which relationships are federal-published, federal-utilized, federal-referenced, or inferred?
+Success means users can navigate trustworthy public relationships and export blank/public-reference materials without submitting operational data or confusing reference guidance with an official decision.

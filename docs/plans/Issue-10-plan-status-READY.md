@@ -1,5 +1,7 @@
 # Issue 10 / FEDGRAPH-002A - RMF, Categorization, and Baseline Context
 
+> **Historical status:** The implementation represented by this plan is present on `main`. This document is retained as delivery history; it is not an active Control Atlas backlog item.
+
 | Field | Value |
 | --- | --- |
 | Status | READY |
