@@ -17,12 +17,13 @@ test('shell identifies the federal integration directory and preserves core jour
 });
 
 test('application loads only the five federal graph artifacts', () => {
-  assert.match(html, /app\/app\.mjs\?v=20260613-3/);
-  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-3'/);
+  assert.match(html, /app\/app\.mjs\?v=20260613-4/);
+  assert.match(app, /from '\.\/runtime\.mjs\?v=20260613-4'/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
-    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-3`));
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260613-4`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
+  assert.doesNotMatch(app, /build-manifest\.json|source-manifests\.json|graph-diff-summary\.json/);
   assert.match(app, /createFederalGraphRuntime/);
 });
 
@@ -39,9 +40,14 @@ test('search, browse, detail, sources, and comparison use graph runtime APIs', (
 
 test('federal trust dimensions remain visibly separate', () => {
   assert.match(app, /Baseline membership/);
+  assert.match(app, /FedRAMP baseline context/);
   assert.match(app, /Categorization context/);
   assert.match(app, /Minimum security requirements/);
   assert.match(app, /RMF lifecycle/);
+  assert.match(app, /Assessment procedures/);
+  assert.match(app, /Program requirement context/);
+  assert.match(app, /CMMC program context/);
+  assert.match(app, /CUI policy context/);
   assert.match(app, /Federal provenance/);
   assert.match(app, /Relationship type/);
   assert.match(app, /Confidence/);

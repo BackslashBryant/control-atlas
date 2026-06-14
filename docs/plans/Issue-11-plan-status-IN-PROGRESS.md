@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | BLOCKED ON ISSUE 10 |
+| Status | IN PROGRESS |
 | Branch | `agent/forge/issue-11-assessment-oscal-backbone` |
 | Lead | Forge |
 | Review | Scout -> Pixel -> Sentinel -> Nexus |

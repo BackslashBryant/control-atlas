@@ -8,7 +8,7 @@ This index tracks delivery of the U.S. Federal Security Control Integration Dire
 | --- | --- | --- | --- | --- |
 | Issue 9 / FEDGRAPH-001 - Federal graph contract vertical migration | DONE | [Issue 9 plan](plans/Issue-9-plan-status-DONE.md) | `agent/forge/issue-9-federal-graph-contract` | Forge |
 | Issue 10 / FEDGRAPH-002A - RMF, categorization, and baseline context | READY | [Issue 10 plan](plans/Issue-10-plan-status-READY.md) | `agent/forge/issue-10-rmf-baseline-context` | Forge |
-| Issue 11 / FEDGRAPH-002B - Assessment and OSCAL backbone | BLOCKED ON ISSUE 10 | [Issue 11 plan](plans/Issue-11-plan-status-BLOCKED.md) | `agent/forge/issue-11-assessment-oscal-backbone` | Forge |
+| Issue 11 / FEDGRAPH-002B - Assessment and OSCAL backbone | IN PROGRESS | [Issue 11 plan](plans/Issue-11-plan-status-IN-PROGRESS.md) | `agent/forge/issue-11-assessment-oscal-backbone` | Forge |
 
 ## Superseded Work
 
