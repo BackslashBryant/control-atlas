@@ -7,6 +7,8 @@ const NIST_800_37_SOURCE = 'nist-800-37-rev2';
 const NIST_800_53B_SOURCE = 'nist-800-53b-baselines';
 const CMMC_SOURCE = 'dod-cmmc-rule';
 const DOD_RAI_SOURCE = 'dod-rai-toolkit';
+const ISOO_CUI_SOURCE = 'isoo-cui-regulation';
+const NARA_CUI_SOURCE = 'nara-cui-registry';
 
 function source(key, snapshotDate, locator) {
   return { key, snapshot_date: snapshotDate, locator };
@@ -285,6 +287,42 @@ export function buildCmmcPublicCatalog(snapshotDate) {
     { id: 'LEVEL-2', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 2', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using the 110 requirements in NIST SP 800-171 Revision 2.', locator: '32-CFR-170.14(c)(3)', metadata: { dependencies: ['NIST SP 800-171 Rev. 2'], requires_800_171_rev: 'rev2' } },
     { id: 'LEVEL-3', type: 'cmmc-level', framework: 'cmmc', title: 'CMMC Level 3', family: 'CMMC 2.0 Levels', description: 'Protecting Controlled Unclassified Information using selected NIST SP 800-172 requirements and DoD-defined parameters.', locator: '32-CFR-170.14(c)(4)', metadata: { dependencies: ['NIST SP 800-171 Rev. 2', 'NIST SP 800-172'], requires_800_172: true } },
   ]);
+}
+
+export function buildCuiPolicyCatalog(snapshotDate) {
+  return {
+    schema_version: '1.0',
+    source_key: ISOO_CUI_SOURCE,
+    records: [
+      {
+        id: 'CUI-PROGRAM',
+        type: 'cui-policy',
+        framework: 'cui-policy',
+        title: 'CUI Program',
+        family: 'Controlled Unclassified Information',
+        description: 'The CUI Program is the executive branch-wide program to standardize CUI handling across federal agencies.',
+        source: source(ISOO_CUI_SOURCE, snapshotDate, '32-cfr-part-2002#cui-program'),
+      },
+      {
+        id: 'CUI-BASIC',
+        type: 'cui-policy',
+        framework: 'cui-policy',
+        title: 'CUI Basic',
+        family: 'Controlled Unclassified Information',
+        description: 'CUI Basic covers information for which the underlying authority does not specify handling controls beyond the uniform CUI controls.',
+        source: source(NARA_CUI_SOURCE, snapshotDate, 'cui-glossary#cui-basic'),
+      },
+      {
+        id: 'CUI-SPECIFIED',
+        type: 'cui-policy',
+        framework: 'cui-policy',
+        title: 'CUI Specified',
+        family: 'Controlled Unclassified Information',
+        description: 'CUI Specified covers information whose underlying authority provides specific handling or dissemination controls.',
+        source: source(NARA_CUI_SOURCE, snapshotDate, 'cui-glossary#cui-specified'),
+      },
+    ],
+  };
 }
 
 export function buildDodRaiPublicCatalog(snapshotDate) {

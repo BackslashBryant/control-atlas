@@ -138,6 +138,10 @@ export function createFederalGraphRuntime(dataset) {
           minimumSecurityRequirements: [],
           rmfLifecycle: [],
           assessmentContext: [],
+          fedrampBaselineContext: [],
+          programRequirementContext: [],
+          cmmcProgramContext: [],
+          cuiPolicyContext: [],
         };
       }
 
@@ -152,7 +156,15 @@ export function createFederalGraphRuntime(dataset) {
           baselineNode: counterpartFor(membershipEdge, nodeId),
           membershipEdge,
         }))
-        .filter((entry) => entry.baselineNode?.node_type === 'baseline'), (entry) => entry.baselineNode.id);
+        .filter((entry) => entry.baselineNode?.node_type === 'baseline' && entry.baselineNode?.metadata?.catalog_id === 'nist-800-53b'), (entry) => entry.baselineNode.id);
+
+      const fedrampBaselineContext = uniqueBy(directEdges
+        .filter((edge) => edge.relationship_type === 'includes')
+        .map((membershipEdge) => ({
+          baselineNode: counterpartFor(membershipEdge, nodeId),
+          membershipEdge,
+        }))
+        .filter((entry) => entry.baselineNode?.node_type === 'baseline' && entry.baselineNode?.metadata?.catalog_id === 'fedramp-rev5'), (entry) => entry.baselineNode.id);
 
       const familyMembership = uniqueBy(directEdges
         .filter((edge) => edge.relationship_type === 'includes')
@@ -217,12 +229,60 @@ export function createFederalGraphRuntime(dataset) {
         }))
         .filter((entry) => entry.assessmentNode?.node_type === 'assessment_procedure'), (entry) => entry.assessmentNode.id);
 
+      const programCatalogs = new Set(['nist-800-171-rev2', 'nist-800-171', 'nist-800-172']);
+      const programRequirementContext = uniqueBy(
+        programCatalogs.has(node.metadata?.catalog_id)
+          ? directEdges
+            .map((relationshipEdge) => ({
+              relatedNode: counterpartFor(relationshipEdge, nodeId),
+              relationshipEdge,
+            }))
+            .filter((entry) => entry.relatedNode?.metadata?.catalog_id === 'cmmc-2')
+          : [],
+        (entry) => entry.relatedNode.id,
+      );
+
+      const cmmcProgramContext = uniqueBy(
+        node.metadata?.catalog_id === 'cmmc-2'
+          ? directEdges
+            .map((relationshipEdge) => ({
+              relatedNode: counterpartFor(relationshipEdge, nodeId),
+              relationshipEdge,
+            }))
+            .filter((entry) => programCatalogs.has(entry.relatedNode?.metadata?.catalog_id))
+          : [],
+        (entry) => entry.relatedNode.id,
+      );
+
+      const cuiPolicyContext = uniqueBy(
+        node.metadata?.catalog_id === 'cui-policy'
+          ? directEdges
+            .map((relationshipEdge) => ({
+              relatedNode: counterpartFor(relationshipEdge, nodeId),
+              relationshipEdge,
+            }))
+            .filter((entry) => programCatalogs.has(entry.relatedNode?.metadata?.catalog_id))
+          : programCatalogs.has(node.metadata?.catalog_id)
+            ? directEdges
+              .map((relationshipEdge) => ({
+                relatedNode: counterpartFor(relationshipEdge, nodeId),
+                relationshipEdge,
+              }))
+              .filter((entry) => entry.relatedNode?.metadata?.catalog_id === 'cui-policy')
+            : [],
+        (entry) => entry.relatedNode.id,
+      );
+
       return {
         baselineMembership,
         categorizationContext,
         minimumSecurityRequirements,
         rmfLifecycle,
         assessmentContext,
+        fedrampBaselineContext,
+        programRequirementContext,
+        cmmcProgramContext,
+        cuiPolicyContext,
       };
     },
   };

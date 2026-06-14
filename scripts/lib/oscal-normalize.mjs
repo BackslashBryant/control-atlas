@@ -119,6 +119,12 @@ export function normalize800171Id(oscalId) {
   return `${Number(match[1])}.${Number(match[2])}.${Number(match[3])}`;
 }
 
+export function normalize800172Id(oscalId) {
+  const match = String(oscalId || '').match(/(\d{2})\.(\d{2})\.(\d{2})([A-Z]?)/i);
+  if (!match) return oscalId;
+  return `${Number(match[1])}.${Number(match[2])}.${Number(match[3])}${match[4]?.toUpperCase() || ''}`;
+}
+
 function walk80053(nodes, familyTitle, records, sourceKey) {
   for (const node of nodes || []) {
     const family = node.class === 'family' ? node.title : familyTitle;
@@ -210,6 +216,101 @@ export function parse800171Catalog(catalogJson, sourceKey) {
   }
   const records = [];
   walk800171(catalogJson.catalog?.groups, null, records);
+  return {
+    schema_version: '1.0',
+    source_key: sourceKey,
+    records,
+  };
+}
+
+function parseCsvRows(text) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+    if (char === ',' && !inQuotes) {
+      row.push(field);
+      field = '';
+      continue;
+    }
+    if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && next === '\n') index += 1;
+      row.push(field);
+      if (row.some((entry) => entry.trim())) rows.push(row);
+      row = [];
+      field = '';
+      continue;
+    }
+    field += char;
+  }
+  row.push(field);
+  if (row.some((entry) => entry.trim())) rows.push(row);
+  return rows;
+}
+
+export function parse800171CsvCatalog(csvText, sourceKey) {
+  const [header = [], ...rows] = parseCsvRows(csvText);
+  const columnIndex = (name) => header.findIndex((entry) => cleanText(entry).toLowerCase() === name.toLowerCase());
+  const familyColumn = columnIndex('Family');
+  const identifierColumn = columnIndex('Identifier');
+  const requirementColumn = columnIndex('Security Requirement');
+  const discussionColumn = columnIndex('Discussion');
+
+  const records = rows
+    .filter((row) => row[identifierColumn])
+    .map((row) => ({
+      id: normalize800171Id(row[identifierColumn]),
+      type: '800-171-requirement',
+      framework: '800-171',
+      title: normalize800171Id(row[identifierColumn]),
+      family: cleanText(row[familyColumn]) || 'Requirements',
+      description: cleanText([row[requirementColumn], row[discussionColumn]].filter(Boolean).join(' ')),
+    }));
+
+  return {
+    schema_version: '1.0',
+    source_key: sourceKey,
+    records,
+  };
+}
+
+function walk800172(nodes, familyTitle, records) {
+  for (const node of nodes || []) {
+    const family = node.class === 'family' ? node.title : familyTitle;
+    if (node.controls) walk800172(node.controls, family, records);
+    if (node.groups) walk800172(node.groups, family, records);
+    if (node.class === 'security_requirement' && node.id) {
+      const id = normalize800172Id(node.id);
+      records.push({
+        id,
+        type: '800-172-requirement',
+        framework: '800-172',
+        title: node.title || id,
+        family: family || 'Requirements',
+        description: descriptionFromControl(node),
+      });
+    }
+  }
+}
+
+export function parse800172Catalog(catalogJson, sourceKey) {
+  if (classifyOscalDocument(catalogJson) !== 'catalog') {
+    throw new Error('Expected OSCAL catalog document');
+  }
+  const records = [];
+  walk800172(catalogJson.catalog?.groups, null, records);
   return {
     schema_version: '1.0',
     source_key: sourceKey,

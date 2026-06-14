@@ -24,7 +24,7 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 21);
+  assert.equal(result.sources, 25);
   assert.ok(result.nodes > 6800);
   assert.ok(result.edges > 4200);
   assert.equal(result.edges, result.evidence);
@@ -95,4 +95,63 @@ test('issue 11 graph build emits assessment context and governance artifacts for
   assert.ok(buildManifest.build_manifest.governance_artifacts.includes('build-manifest.json'));
   assert.ok(sourceManifests.source_manifests.some((entry) => entry.source_id === 'nist-800-53a-assessment-procedures'));
   assert.equal(diffSummary.graph_diff_summary.kind, 'graph_diff_summary');
+});
+
+test('issue 12 graph build emits Release 2 program context without a synthetic revision bridge', () => {
+  buildFrameworkData();
+  const sources = generated('sources').sources;
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  const sourceIds = new Set(sources.map((source) => source.id));
+  const nodeIds = new Set(nodes.map((node) => node.id));
+
+  for (const id of ['nist-800-171-rev2', 'nist-800-172-rev3', 'isoo-cui-regulation', 'nara-cui-registry']) {
+    assert.ok(sourceIds.has(id), `missing source ${id}`);
+  }
+
+  for (const id of [
+    'nist-800-171-rev2:3.1.1',
+    'nist-800-171-rev2:CATALOG',
+    'nist-800-171:CATALOG',
+    'nist-800-172:3.1.1E',
+    'nist-800-172:CATALOG',
+    'cui-policy:CUI-PROGRAM',
+    'cui-policy:CUI-BASIC',
+    'cui-policy:CUI-SPECIFIED',
+  ]) {
+    assert.ok(nodeIds.has(id), `missing node ${id}`);
+  }
+
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'fedramp-rev5:MODERATE'
+    && edge.target_node_id === 'nist-800-53:AC-2'
+    && edge.relationship_type === 'includes'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'cmmc-2:LEVEL-2'
+    && edge.target_node_id === 'nist-800-171-rev2:3.1.1'
+    && edge.relationship_type === 'requires'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'cmmc-2:LEVEL-3'
+    && edge.target_node_id === 'nist-800-171-rev2:CATALOG'
+    && edge.relationship_type === 'depends_on'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'cmmc-2:LEVEL-3'
+    && edge.target_node_id === 'nist-800-172:CATALOG'
+    && edge.relationship_type === 'depends_on'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'nist-800-171-rev2:CATALOG'
+    && edge.target_node_id === 'cui-policy:CUI-BASIC'
+    && edge.relationship_type === 'protects'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'nist-800-172:CATALOG'
+    && edge.target_node_id === 'cui-policy:CUI-PROGRAM'
+    && edge.relationship_type === 'supports'));
+  assert.ok(!edges.some((edge) =>
+    edge.source_node_id === 'cmmc-2:LEVEL-2'
+    && edge.target_node_id.startsWith('nist-800-171:')
+    && edge.relationship_type === 'requires'));
+  assert.ok(!edges.some((edge) =>
+    edge.source_node_id === 'cmmc-2:LEVEL-2'
+    && edge.target_node_id === 'nist-800-53:AC-2'));
 });

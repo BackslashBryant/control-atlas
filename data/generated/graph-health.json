@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T23:46:52.886Z",
+  "generated_at": "2026-06-14T00:29:52.175Z",
   "findings": [
     {
       "id": "finding:blocked-relationship:800-53-to-csf:1",

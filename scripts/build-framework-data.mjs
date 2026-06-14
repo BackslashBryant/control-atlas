@@ -16,10 +16,13 @@ const CATALOGS = [
   ['fips-199.json', 'fips-199', 'nist-fips-199', 'impact_category'],
   ['fips-200.json', 'fips-200', 'nist-fips-200', 'requirement'],
   ['tasks-800-37.json', 'nist-800-37', 'nist-800-37-rev2', 'rmf_step'],
+  ['requirements-800-171-rev2.json', 'nist-800-171-rev2', 'nist-800-171-rev2', 'requirement'],
   ['requirements-800-171.json', 'nist-800-171', 'nist-oscal', 'requirement'],
+  ['requirements-800-172.json', 'nist-800-172', 'nist-800-172-rev3', 'requirement'],
   ['csf-subcategories.json', 'csf-2', 'nist-oscal', 'requirement'],
   ['cmmc-practices.json', 'cmmc-2', 'dod-cmmc-rule', 'program'],
   ['fedramp-baselines.json', 'fedramp-rev5', 'fedramp-rev5', 'baseline'],
+  ['cui-policy.json', 'cui-policy', 'isoo-cui-regulation', 'policy'],
   ['ccis.json', 'disa-cci', 'disa-cci-list', 'requirement'],
   ['ai-rmf.json', 'nist-ai-rmf', 'nist-ai-rmf-playbook', 'requirement'],
   ['ssdf.json', 'nist-ssdf', 'nist-ssdf-oscal', 'requirement'],
@@ -31,6 +34,24 @@ const MAPS = [
   ['800-53-to-800-171.json', 'nist-800-171', 'nist-800-53', 'nist-800-171-oscal-mappings'],
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'disa-cci-nist-references'],
 ];
+
+const CATALOG_SUMMARIES = new Map([
+  ['nist-800-171-rev2', {
+    sourceId: 'nist-800-171-rev2',
+    title: 'SP 800-171 Rev. 2 Catalog',
+    description: 'Catalog summary for NIST SP 800-171 Rev. 2 controlled unclassified information security requirements.',
+  }],
+  ['nist-800-171', {
+    sourceId: 'nist-oscal',
+    title: 'SP 800-171 Rev. 3 Catalog',
+    description: 'Catalog summary for NIST SP 800-171 Rev. 3 controlled unclassified information security requirements.',
+  }],
+  ['nist-800-172', {
+    sourceId: 'nist-800-172-rev3',
+    title: 'SP 800-172 Rev. 3 Catalog',
+    description: 'Catalog summary for NIST SP 800-172 Rev. 3 enhanced CUI security requirements.',
+  }],
+]);
 
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
 const nodeId = (catalogId, recordId) => `${catalogId}:${recordId}`;
@@ -104,6 +125,28 @@ function buildAssessmentNode(record) {
   };
 }
 
+function buildCatalogSummaryNode(catalogId, sourceId, summary) {
+  return {
+    id: nodeId(catalogId, 'CATALOG'),
+    node_type: 'catalog',
+    label: summary.title,
+    source_id: sourceId,
+    lifecycle_status: 'active',
+    metadata: {
+      catalog_id: catalogId,
+      item_id: 'CATALOG',
+      title: summary.title,
+      description: summary.description,
+      family: 'Catalog',
+      baselines: null,
+      nist_800_53b_baselines: null,
+      nist_control: null,
+      type: 'catalog_summary',
+      references: null,
+    },
+  };
+}
+
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
   const familyNodes = new Map();
@@ -166,6 +209,11 @@ function buildNodes(registry) {
           }
         }
       }
+    }
+
+    const summary = CATALOG_SUMMARIES.get(catalogId);
+    if (summary && (document.records || []).length) {
+      pushEligibleNode(state, registry, buildCatalogSummaryNode(catalogId, summary.sourceId, summary), summary.sourceId);
     }
   }
 
@@ -293,6 +341,29 @@ function addBaselineMembershipEdges(state, registry, nodeIds) {
   }
 }
 
+function addFedrampMembershipEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'fedramp-baselines.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    const sourceNodeId = nodeId('fedramp-rev5', record.id);
+    for (const controlId of record.metadata?.controls || []) {
+      const targetNodeId = nodeId('nist-800-53', controlId);
+      const subjectId = relationshipId('fedramp-membership', sourceNodeId, targetNodeId, 'includes');
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || 'fedramp-rev5',
+        sourceNodeId,
+        targetNodeId,
+        relationshipType: 'includes',
+        locator: `${record.source?.locator || `fedramp#${record.id}`}:${controlId}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.title} includes ${controlId} in the published FedRAMP Rev. 5 baseline membership.`,
+      });
+    }
+  }
+}
+
 function addAssessmentEdges(state, registry, nodeIds) {
   const path = join(ROOT, 'data', 'controls-800-53.json');
   if (!existsSync(path)) return;
@@ -313,6 +384,83 @@ function addAssessmentEdges(state, registry, nodeIds) {
       rationale: `NIST SP 800-53A assessment procedures for ${record.id} assess the corresponding control.`,
       displayLabel: `${sourceNodeId} assesses ${targetNodeId}`,
     });
+  }
+}
+
+function addCmmcProgramEdges(state, registry, nodeIds, nodes) {
+  const path = join(ROOT, 'data', 'cmmc-practices.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  const rev2Requirements = nodes.filter((node) =>
+    node.metadata?.catalog_id === 'nist-800-171-rev2' && node.node_type === 'requirement');
+  for (const record of document.records || []) {
+    const sourceNodeId = nodeId('cmmc-2', record.id);
+    if (record.metadata?.requires_800_171_rev === 'rev2') {
+      for (const requirement of rev2Requirements) {
+        const subjectId = relationshipId('cmmc-level2', sourceNodeId, requirement.id, 'requires');
+        addPublishedEdge(state, registry, nodeIds, {
+          subjectId,
+          sourceId: record.source?.key || 'dod-cmmc-rule',
+          sourceNodeId,
+          targetNodeId: requirement.id,
+          relationshipType: 'requires',
+          locator: record.source?.locator || '32-CFR-170.14(c)(3)',
+          retrievedAt: record.source?.snapshot_date,
+          rationale: `${record.title} uses the 110 requirements in NIST SP 800-171 Rev. 2.`,
+        });
+      }
+    }
+    if (record.metadata?.requires_800_172) {
+      for (const targetNodeId of ['nist-800-171-rev2:CATALOG', 'nist-800-172:CATALOG']) {
+        const subjectId = relationshipId('cmmc-level3', sourceNodeId, targetNodeId, 'depends_on');
+        addPublishedEdge(state, registry, nodeIds, {
+          subjectId,
+          sourceId: record.source?.key || 'dod-cmmc-rule',
+          sourceNodeId,
+          targetNodeId,
+          relationshipType: 'depends_on',
+          locator: record.source?.locator || '32-CFR-170.14(c)(4)',
+          retrievedAt: record.source?.snapshot_date,
+          rationale: `${record.title} depends on SP 800-171 Rev. 2 and SP 800-172 requirement context.`,
+        });
+      }
+    }
+  }
+}
+
+function addCuiPolicyEdges(state, registry, nodeIds) {
+  const relationships = [
+    {
+      subjectId: 'issue12-171r2-cui-basic',
+      sourceId: 'nist-800-171-rev2',
+      sourceNodeId: 'nist-800-171-rev2:CATALOG',
+      targetNodeId: 'cui-policy:CUI-BASIC',
+      relationshipType: 'protects',
+      locator: 'abstract',
+      rationale: 'SP 800-171 Rev. 2 protects the confidentiality of CUI in nonfederal systems where no category-specific handling controls are prescribed.',
+    },
+    {
+      subjectId: 'issue12-171r3-cui-basic',
+      sourceId: 'nist-oscal',
+      sourceNodeId: 'nist-800-171:CATALOG',
+      targetNodeId: 'cui-policy:CUI-BASIC',
+      relationshipType: 'protects',
+      locator: 'abstract',
+      rationale: 'SP 800-171 Rev. 3 protects the confidentiality of CUI in nonfederal systems where no category-specific handling controls are prescribed.',
+    },
+    {
+      subjectId: 'issue12-172-cui-program',
+      sourceId: 'nist-800-172-rev3',
+      sourceNodeId: 'nist-800-172:CATALOG',
+      targetNodeId: 'cui-policy:CUI-PROGRAM',
+      relationshipType: 'supports',
+      locator: 'abstract',
+      rationale: 'SP 800-172 Rev. 3 provides enhanced security requirements for protecting CUI associated with critical programs or high value assets.',
+    },
+  ];
+
+  for (const relationship of relationships) {
+    addPublishedEdge(state, registry, nodeIds, relationship);
   }
 }
 
@@ -346,7 +494,10 @@ function buildEdges(registry, nodes) {
   addDocumentRelationshipEdges(state, registry, nodeIds);
   addFamilyMembershipEdges(state, registry, nodeIds);
   addBaselineMembershipEdges(state, registry, nodeIds);
+  addFedrampMembershipEdges(state, registry, nodeIds);
   addAssessmentEdges(state, registry, nodeIds);
+  addCmmcProgramEdges(state, registry, nodeIds, nodes);
+  addCuiPolicyEdges(state, registry, nodeIds);
   return state;
 }
 
