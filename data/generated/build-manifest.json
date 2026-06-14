@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-14T00:29:52.175Z",
+  "build_manifest": {
+    "kind": "build_manifest",
+    "runtime_artifacts": [
+      "sources.json",
+      "nodes.json",
+      "edges.json",
+      "evidence.json",
+      "graph-health.json"
+    ],
+    "governance_artifacts": [
+      "build-manifest.json",
+      "source-manifests.json",
+      "graph-diff-summary.json"
+    ],
+    "source_registry_path": "data/source-registry.json",
+    "source_registry_schema": "4.0",
+    "counts": {
+      "sources": 25,
+      "nodes": 8076,
+      "edges": 8252,
+      "evidence": 8252,
+      "findings": 705
+    }
+  }
+}

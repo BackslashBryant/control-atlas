@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "source_key": "isoo-cui-regulation",
+  "records": [
+    {
+      "id": "CUI-PROGRAM",
+      "type": "cui-policy",
+      "framework": "cui-policy",
+      "title": "CUI Program",
+      "family": "Controlled Unclassified Information",
+      "description": "The CUI Program is the executive branch-wide program to standardize CUI handling across federal agencies.",
+      "source": {
+        "key": "isoo-cui-regulation",
+        "snapshot_date": "2026-06-14T00:28:57.270Z",
+        "locator": "32-cfr-part-2002#cui-program"
+      }
+    },
+    {
+      "id": "CUI-BASIC",
+      "type": "cui-policy",
+      "framework": "cui-policy",
+      "title": "CUI Basic",
+      "family": "Controlled Unclassified Information",
+      "description": "CUI Basic covers information for which the underlying authority does not specify handling controls beyond the uniform CUI controls.",
+      "source": {
+        "key": "nara-cui-registry",
+        "snapshot_date": "2026-06-14T00:28:57.270Z",
+        "locator": "cui-glossary#cui-basic"
+      }
+    },
+    {
+      "id": "CUI-SPECIFIED",
+      "type": "cui-policy",
+      "framework": "cui-policy",
+      "title": "CUI Specified",
+      "family": "Controlled Unclassified Information",
+      "description": "CUI Specified covers information whose underlying authority provides specific handling or dissemination controls.",
+      "source": {
+        "key": "nara-cui-registry",
+        "snapshot_date": "2026-06-14T00:28:57.270Z",
+        "locator": "cui-glossary#cui-specified"
+      }
+    }
+  ]
+}

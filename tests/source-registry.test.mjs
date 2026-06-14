@@ -18,7 +18,7 @@ test('source registry schema 4.0 validates the federal source contract', () => {
 
 test('source provenance and eligibility remain separate', () => {
   const { sources } = loadSourceRegistry(registry);
-  assert.equal(sources.length, 20);
+  assert.equal(sources.length, 25);
   assert.ok(!sources.some((source) => source.provenance_class === 'inferred'));
   assert.ok(!sources.some((source) => source.provenance_class === 'excluded'));
   assert.ok(sources.some((source) => source.eligibility_status === 'excluded'));
@@ -35,9 +35,23 @@ test('required federal sources are registered', () => {
     'nist-fips-199',
     'nist-fips-200',
     'nist-800-37-rev2',
+    'nist-800-53a-assessment-procedures',
+    'nist-800-171-rev2',
+    'nist-800-172-rev3',
+    'isoo-cui-regulation',
+    'nara-cui-registry',
   ]) {
     assert.ok(ids.has(id), `missing source ${id}`);
   }
+});
+
+test('release 2 sources keep revision boundaries and avoid a draft-only bridge source', () => {
+  const { sources } = loadSourceRegistry(registry);
+  const ids = new Set(sources.map((source) => source.id));
+  assert.ok(ids.has('nist-800-171-rev2'));
+  assert.ok(ids.has('nist-800-171-oscal-mappings'));
+  assert.ok(ids.has('nist-800-172-rev3'));
+  assert.ok(!ids.has('nist-800-171-rev2-rev3-bridge'));
 });
 
 test('registry rejects inferred or excluded as source provenance classes', () => {
