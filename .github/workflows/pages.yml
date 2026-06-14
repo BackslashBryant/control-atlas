@@ -50,7 +50,7 @@ jobs:
         with:
           name: pages-sbom-cdx-json
           path: artifacts/sbom.cdx.json
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist/site'
