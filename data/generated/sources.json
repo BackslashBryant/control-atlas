@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T23:46:52.886Z",
+  "generated_at": "2026-06-14T00:29:52.175Z",
   "sources": [
     {
       "id": "nist-oscal",
@@ -31,6 +31,118 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
+      }
+    },
+    {
+      "id": "nist-800-171-rev2",
+      "name": "NIST SP 800-171 Rev. 2 Security Requirements CSV",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "Federal Acquisition Regulation"
+      ],
+      "version": "2021-01",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "download",
+      "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv",
+      "artifact_type": "spreadsheet",
+      "checksum": "sha256:catalog_nist_800_171_rev2_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "nist-800-171-rev2"
+        ],
+        "parser": "csv"
+      }
+    },
+    {
+      "id": "nist-800-172-rev3",
+      "name": "NIST SP 800-172 Rev. 3 OSCAL Catalog",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "Federal Acquisition Regulation"
+      ],
+      "version": "2026-05",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "download",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json",
+      "artifact_type": "oscal_json",
+      "checksum": "sha256:catalog_nist_800_172_rev3_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "nist-800-172"
+        ],
+        "parser": "oscal-json"
+      }
+    },
+    {
+      "id": "isoo-cui-regulation",
+      "name": "32 CFR Part 2002 Controlled Unclassified Information",
+      "owner": "ISOO",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Executive Order 13556",
+        "32 CFR Part 2002"
+      ],
+      "version": "current",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_isoo_cui_regulation_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "eCFR Public Domain",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "cui-policy"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "nara-cui-registry",
+      "name": "NARA CUI Registry",
+      "owner": "NARA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "Executive Order 13556",
+        "32 CFR Part 2002"
+      ],
+      "version": "2026-06-13",
+      "retrieved_at": "2026-06-13",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nara_cui_registry_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "National Archives Public Domain",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "cui-policy"
+        ],
+        "parser": "manual-seed"
       }
     },
     {

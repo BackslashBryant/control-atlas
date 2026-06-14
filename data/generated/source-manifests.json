@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T23:46:52.886Z",
+  "generated_at": "2026-06-14T00:29:52.175Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -62,8 +62,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 3,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "relationship_count": 112,
+      "evidence_count": 112,
       "finding_count": 0
     },
     {
@@ -94,6 +94,22 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 4,
+      "relationship_count": 955,
+      "evidence_count": 955,
+      "finding_count": 0
+    },
+    {
+      "source_id": "isoo-cui-regulation",
+      "owner": "ISOO",
+      "version": "current",
+      "retrieved_at": "2026-06-13",
+      "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_isoo_cui_regulation_placeholder_checksum",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 1,
       "relationship_count": 0,
       "evidence_count": 0,
       "finding_count": 0
@@ -115,6 +131,22 @@
       "finding_count": 0
     },
     {
+      "source_id": "nara-cui-registry",
+      "owner": "NARA",
+      "version": "2026-06-13",
+      "retrieved_at": "2026-06-13",
+      "artifact_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nara_cui_registry_placeholder_checksum",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 2,
+      "relationship_count": 0,
+      "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
       "source_id": "nist-800-171-oscal-mappings",
       "owner": "NIST",
       "version": "2026-06-09",
@@ -129,6 +161,38 @@
       "relationship_count": 31,
       "evidence_count": 31,
       "finding_count": 126
+    },
+    {
+      "source_id": "nist-800-171-rev2",
+      "owner": "NIST",
+      "version": "2021-01",
+      "retrieved_at": "2026-06-13",
+      "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv",
+      "artifact_type": "spreadsheet",
+      "checksum": "sha256:catalog_nist_800_171_rev2_placeholder_checksum",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 111,
+      "relationship_count": 1,
+      "evidence_count": 1,
+      "finding_count": 0
+    },
+    {
+      "source_id": "nist-800-172-rev3",
+      "owner": "NIST",
+      "version": "2026-05",
+      "retrieved_at": "2026-06-13",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json",
+      "artifact_type": "oscal_json",
+      "checksum": "sha256:catalog_nist_800_172_rev3_placeholder_checksum",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 116,
+      "relationship_count": 1,
+      "evidence_count": 1,
+      "finding_count": 0
     },
     {
       "source_id": "nist-800-37-rev2",
@@ -317,9 +381,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1531,
-      "relationship_count": 1196,
-      "evidence_count": 1196,
+      "node_count": 1532,
+      "relationship_count": 1197,
+      "evidence_count": 1197,
       "finding_count": 0
     },
     {

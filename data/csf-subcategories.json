@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "source_key": "nist-csf-2",
+  "source_key": "nist-oscal",
   "records": [
     {
       "id": "GV.OC-01",

@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildCmmcPublicCatalog,
+  buildCuiPolicyCatalog,
   buildDodRaiPublicCatalog,
   buildFedrampPublicCatalog,
   buildFips199Catalog,
@@ -19,6 +20,8 @@ import {
   fetchFedrampBaselineMembership,
 } from './lib/catalog-adapters-ext.mjs';
 import {
+  parse800171CsvCatalog,
+  parse800172Catalog,
   parse80053Catalog,
   parse800171Catalog,
   parseCsfCatalog,
@@ -30,6 +33,7 @@ const SNAPSHOT = new Date().toISOString();
 const REMOTE_CATALOGS = [
   {
     id: 'nist-800-53-rev5',
+    sourceKey: 'nist-oscal',
     url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json',
     outfile: 'controls-800-53.json',
     parse: parse80053Catalog,
@@ -58,15 +62,30 @@ const REMOTE_CATALOGS = [
   },
   {
     id: 'nist-csf-2',
+    sourceKey: 'nist-oscal',
     url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json',
     outfile: 'csf-subcategories.json',
     parse: parseCsfCatalog,
   },
   {
     id: 'nist-800-171-rev3',
+    sourceKey: 'nist-oscal',
     url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json',
     outfile: 'requirements-800-171.json',
     parse: parse800171Catalog,
+  },
+  {
+    id: 'nist-800-171-rev2',
+    url: 'https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv',
+    outfile: 'requirements-800-171-rev2.json',
+    parse: (csv) => parse800171CsvCatalog(csv, 'nist-800-171-rev2'),
+    responseType: 'text',
+  },
+  {
+    id: 'nist-800-172-rev3',
+    url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json',
+    outfile: 'requirements-800-172.json',
+    parse: parse800172Catalog,
   },
   {
     id: 'nist-ai-rmf-playbook',
@@ -89,6 +108,7 @@ const PUBLIC_CATALOGS = [
   ['fedramp-baselines.json', buildFedrampPublicCatalog],
   ['800-53b-baselines.json', buildNist80053BBaselineCatalog],
   ['tasks-800-37.json', buildRmfCatalog],
+  ['cui-policy.json', buildCuiPolicyCatalog],
   ['dod-rai.json', buildDodRaiPublicCatalog],
 ];
 
@@ -109,7 +129,10 @@ export async function fetchFrameworkCatalogs() {
   for (const target of REMOTE_CATALOGS) {
     const response = await fetch(target.url);
     if (!response.ok) throw new Error(`${target.id} fetch failed: ${response.status} ${target.url}`);
-    let document = target.parse(await response.json(), target.id);
+    const payload = target.responseType === 'text'
+      ? await response.text()
+      : await response.json();
+    let document = target.parse(payload, target.sourceKey || target.id);
     if (target.enrich) {
       document = { ...document, records: await target.enrich(document.records) };
     }
