@@ -29,6 +29,8 @@ See `docs/PRD.md`, `docs/architecture/ARCHITECTURE.md`, `docs/roadmap.md`, and `
 
 ```text
 npm run build:data
+npm run audit:deps
+npm run sbom:generate
 npm test
 npm run test:browser
 npm run audit:coverage

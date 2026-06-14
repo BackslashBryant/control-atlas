@@ -26,10 +26,14 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci || npm install
+      - name: Dependency audit
+        run: npm run audit:deps
       - name: Runtime checks
         run: npm run test:browser && npm run smoke:dom
       - name: Public verification
         run: npm run verify:public
+      - name: Generate SBOM
+        run: npm run sbom:generate
       - name: Stage static site artifact
         run: |
           mkdir -p _site
@@ -40,6 +44,10 @@ jobs:
           cp -R data _site/data
           cp -R maps _site/maps
           cp -R lib _site/lib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pages-sbom-cdx-json
+          path: artifacts/sbom.cdx.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
