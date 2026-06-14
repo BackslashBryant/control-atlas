@@ -1,5 +1,7 @@
 ## Historical Backlog: Source Coverage and Evidence Hardening
 
+> **Historical status:** Retained for research and implementation history. Active work is governed by the Control Atlas PRD, roadmap, architecture, and ADRs.
+
 > **Status: SUPERSEDED AS A PRODUCT CONTRACT.** Retain this document as implementation research for Issues 9-11. The federal source policy and separate relationship semantics, federal provenance, confidence, and evidence-quality contracts now govern product behavior.
 
 ### Context

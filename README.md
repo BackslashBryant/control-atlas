@@ -1,27 +1,29 @@
-# GovFrame Federal Security Control Integration Directory
+# Control Atlas
 
-GovFrame is a static, public directory for understanding how U.S. federal security controls connect to mandates, baselines, programs, assessment procedures, implementation checks, vulnerability operations, threat-informed context, validation paths, and evidence.
+**Public maps and templates for federal cyber compliance**
+
+Control Atlas is a static, open-source, public-data-only reference and template workbench. It helps practitioners browse federal cyber sources, inspect provenance-aware relationships, compare public baselines and mappings, and eventually generate blank reference templates locally in the browser.
+
+The repository and deployment URL retain the legacy name **GovFrame** for compatibility. GovFrame is an internal/repository identifier, not the public product direction. Broad path, package, import, or deployment renames require a separate migration plan.
 
 Live site: https://backslashbryant.github.io/GovFrame/
 
-## Product Contract
+## Product Boundary
 
-- Federal provenance determines primary graph eligibility.
-- Every displayable relationship separates semantics, federal provenance, confidence, and evidence quality.
-- Federal-published and inferred relationships are never conflated.
-- Restricted or authenticated content is not redistributed or scraped around access controls.
-- Search, browse, source inspection, evidence-first detail, and accessible text alternatives remain core journeys.
-- Delivery remains static, browser-only, no-auth, no-backend, and no-telemetry.
+Control Atlas may use and normalize public sources at build time, display public controls and mappings, and generate blank/public-reference exports in the browser.
 
-## Current Delivery
+Control Atlas does not ingest evidence, accept user uploads, connect to operational systems, store user/organization/system data, score compliance, track real assets or packages, make authorization decisions, or require login. It has no backend.
 
-Release 1 establishes the federal graph contract and RMF/control backbone through:
+## Current Reusable Foundation
 
-1. Issue 9 - federal graph contract vertical migration.
-2. Issue 10 - FIPS, RMF, and baseline context.
-3. Issue 11 - assessment and OSCAL backbone.
+- Public source registry with access, lifecycle, provenance, and eligibility metadata
+- Build-time importers and normalizers for public federal data
+- Validated static `sources`, `nodes`, `edges`, `evidence`, and `graph-health` bundles
+- Browser-only search, browse, comparison, source inspection, and CSV export
+- Provenance, confidence, evidence-quality, accessibility, and graph-health tests
+- GitHub Pages deployment and nightly public-data refresh
 
-See `docs/PRD.md`, `docs/roadmap.md`, `docs/FEDERAL_SOURCE_POLICY.md`, and `docs/Plan.md`.
+See `docs/PRD.md`, `docs/architecture/ARCHITECTURE.md`, `docs/roadmap.md`, and `docs/inventory/repository-inventory.md`.
 
 ## Commands
 
@@ -34,4 +36,6 @@ npm run verify:public
 npm run precommit
 ```
 
-Issue 9 establishes the breaking graph contract under `data/generated/`: `sources.json`, `nodes.json`, `edges.json`, `evidence.json`, and `graph-health.json`.
+## Disclaimer
+
+Control Atlas is an open-source reference and template-generation tool based on public sources. It is not an official government system and does not make authorization, compliance, assessment, or risk acceptance decisions. Mappings and templates are reference aids only. Official decisions remain with the applicable Authorizing Official, agency, assessor, program office, or governing authority.
