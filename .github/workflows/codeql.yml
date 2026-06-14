@@ -23,11 +23,11 @@ jobs:
         language: [ 'javascript-typescript' ]
     steps:
       - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - run: npm ci || npm install
-      - uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/analyze@v4
