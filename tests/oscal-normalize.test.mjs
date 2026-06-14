@@ -7,7 +7,7 @@ import {
   parse800171CsvCatalog,
   parse800172Catalog,
   parse80053Catalog,
-} from '../scripts/lib/oscal-normalize.mjs';
+} from '../tools/normalizers/oscal-normalize.mjs';
 
 const sample80053Assessment = JSON.parse(readFileSync('tests/fixtures/oscal/sample-800-53-assessment.json', 'utf8'));
 

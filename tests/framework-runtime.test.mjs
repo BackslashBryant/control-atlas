@@ -7,7 +7,7 @@ import {
   normalizeViewState,
   parseViewState,
   serializeViewState,
-} from '../app/runtime.mjs';
+} from '../src/app/runtime.mjs';
 
 const fixture = {
   sources: [
@@ -153,4 +153,11 @@ test('normalizeViewState strips stale params per view', () => {
     framework: 'disa-cci',
   });
   assert.deepEqual(normalizeViewState('sources', { query: 'AC-2', mode: 'expert' }), { mode: 'expert', view: 'sources' });
+});
+
+test('view state preserves epic 0 navigation-only surfaces', () => {
+  assert.deepEqual(parseViewState('?view=patterns'), { view: 'patterns' });
+  assert.deepEqual(parseViewState('?view=templates&mode=expert'), { mode: 'expert', view: 'templates' });
+  assert.deepEqual(normalizeViewState('start-here', { query: 'AC-2', mode: 'expert' }), { mode: 'expert', view: 'start-here' });
+  assert.equal(serializeViewState({ view: 'patterns' }), '?view=patterns');
 });

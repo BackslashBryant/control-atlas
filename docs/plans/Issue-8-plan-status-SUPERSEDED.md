@@ -9,7 +9,7 @@
 
 ## Disposition
 
-Issue 8 shipped useful assessor-facing capabilities, but its framework-neutral mapper mission and terminology are superseded by the U.S. Federal Security Control Integration Directory contract.
+Issue 8 shipped useful assessor-facing capabilities, but its original mission and terminology are superseded by the current Control Atlas product contract. Retain this file as delivery history only.
 
 ## Retained Capabilities
 

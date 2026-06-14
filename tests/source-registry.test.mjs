@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { loadSourceRegistry, validateSourceRegistry } from '../scripts/lib/source-registry.mjs';
+import { loadSourceRegistry, validateSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const registry = JSON.parse(readFileSync('data/source-registry.json', 'utf8'));
 

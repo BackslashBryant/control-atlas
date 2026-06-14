@@ -4,8 +4,8 @@ import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { strFromU8, unzipSync } from 'fflate';
-import { parseCciXml } from './lib/cci-adapter.mjs';
-import { writeCciDiffReport } from './lib/cci-diff-report.mjs';
+import { parseCciXml } from '../tools/importers/cci-adapter.mjs';
+import { writeCciDiffReport } from '../tools/importers/cci-diff-report.mjs';
 
 const CCI_URL = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip';
 

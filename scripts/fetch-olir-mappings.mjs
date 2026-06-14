@@ -2,8 +2,8 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { build80053To800171Map } from './lib/800-171-mapping-adapter.mjs';
-import { build80053ToCsf20Map } from './lib/olir-adapter.mjs';
+import { build80053To800171Map } from '../tools/relationship-builders/800-171-mapping-adapter.mjs';
+import { build80053ToCsf20Map } from '../tools/relationship-builders/olir-adapter.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 

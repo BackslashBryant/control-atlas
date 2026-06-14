@@ -1,33 +1,33 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { loadSourceRegistry } from './lib/source-registry.mjs';
+import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const required = [
-  'index.html',
-  'app/app.mjs',
-  'app/runtime.mjs',
-  'styles/app.css',
-  'data/source-registry.json',
-  'data/generated/sources.json',
-  'data/generated/nodes.json',
-  'data/generated/edges.json',
-  'data/generated/evidence.json',
-  'data/generated/graph-health.json',
-  'data/generated/build-manifest.json',
-  'data/generated/source-manifests.json',
-  'data/generated/graph-diff-summary.json',
+  'dist/site/index.html',
+  'dist/site/app/app.mjs',
+  'dist/site/app/runtime.mjs',
+  'dist/site/styles/app.css',
+  'dist/site/data/source-registry.json',
+  'dist/site/data/generated/sources.json',
+  'dist/site/data/generated/nodes.json',
+  'dist/site/data/generated/edges.json',
+  'dist/site/data/generated/evidence.json',
+  'dist/site/data/generated/graph-health.json',
+  'dist/site/data/generated/build-manifest.json',
+  'dist/site/data/generated/source-manifests.json',
+  'dist/site/data/generated/graph-diff-summary.json',
 ];
 for (const path of required) assert.ok(existsSync(path), `${path} is required`);
 
-const registry = loadSourceRegistry(JSON.parse(readFileSync('data/source-registry.json', 'utf8')));
-const nodes = JSON.parse(readFileSync('data/generated/nodes.json', 'utf8')).nodes;
-const edges = JSON.parse(readFileSync('data/generated/edges.json', 'utf8')).edges;
-const evidence = JSON.parse(readFileSync('data/generated/evidence.json', 'utf8')).evidence;
-const findings = JSON.parse(readFileSync('data/generated/graph-health.json', 'utf8')).findings;
-const buildManifest = JSON.parse(readFileSync('data/generated/build-manifest.json', 'utf8')).build_manifest;
-const sourceManifests = JSON.parse(readFileSync('data/generated/source-manifests.json', 'utf8')).source_manifests;
-const app = readFileSync('app/app.mjs', 'utf8');
+const registry = loadSourceRegistry(JSON.parse(readFileSync('dist/site/data/source-registry.json', 'utf8')));
+const nodes = JSON.parse(readFileSync('dist/site/data/generated/nodes.json', 'utf8')).nodes;
+const edges = JSON.parse(readFileSync('dist/site/data/generated/edges.json', 'utf8')).edges;
+const evidence = JSON.parse(readFileSync('dist/site/data/generated/evidence.json', 'utf8')).evidence;
+const findings = JSON.parse(readFileSync('dist/site/data/generated/graph-health.json', 'utf8')).findings;
+const buildManifest = JSON.parse(readFileSync('dist/site/data/generated/build-manifest.json', 'utf8')).build_manifest;
+const sourceManifests = JSON.parse(readFileSync('dist/site/data/generated/source-manifests.json', 'utf8')).source_manifests;
+const app = readFileSync('dist/site/app/app.mjs', 'utf8');
 
 assert.equal(registry.registry.schema_version, '4.0');
 assert.ok(nodes.length > 6000, 'normalized federal graph nodes required');

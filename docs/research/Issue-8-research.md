@@ -1,6 +1,8 @@
 # Issue 8 Research
 
-> **Status: HISTORICAL.** Issue 8 is superseded by the Federal Security Control Integration Directory contract. Retain the UX and source findings below only where they comply with the federal source policy.
+> **Status: HISTORICAL.** Issue 8 is superseded by the later Control Atlas v2.1 product contract. Retain the UX and source findings below only where they comply with the current PRD, roadmap, architecture, and ADRs.
+
+> **Historical terminology note:** References below to gold/silver/bronze trust tiers are retained as research history only and are not active user-facing Control Atlas language.
 
 ## Product Correction
 

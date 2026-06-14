@@ -28,22 +28,24 @@ jobs:
       - run: npm ci || npm install
       - name: Dependency audit
         run: npm run audit:deps
+      - name: Build staged static site
+        run: npm run build:site
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: License check
+        run: npm run license:check
       - name: Runtime checks
         run: npm run test:browser && npm run smoke:dom
       - name: Public verification
         run: npm run verify:public
+      - name: Install Playwright browser
+        run: npx playwright install chromium
+      - name: End-to-end verification
+        run: npm run test:e2e
       - name: Generate SBOM
         run: npm run sbom:generate
-      - name: Stage static site artifact
-        run: |
-          mkdir -p _site
-          cp index.html _site/index.html
-          cp -R app _site/app
-          cp -R styles _site/styles
-          cp -R scripts _site/scripts
-          cp -R data _site/data
-          cp -R maps _site/maps
-          cp -R lib _site/lib
       - uses: actions/upload-artifact@v4
         with:
           name: pages-sbom-cdx-json
@@ -51,6 +53,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: 'dist/site'
       - id: deployment
         uses: actions/deploy-pages@v4

@@ -3,10 +3,13 @@ import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parse
 const app = document.querySelector('#app');
 const navButtons = [...document.querySelectorAll('nav [data-view]')];
 const workspace = document.querySelector('#workspace');
+const heroRotatingWord = document.querySelector('#hero-rotating-word');
 let runtime = null;
 let graphLoadPromise = null;
 let currentState = { view: 'search' };
 let noviceMode = true;
+const heroPrefix = 'Ctrl+Alt+';
+const heroWords = ['Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize'];
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
@@ -46,12 +49,12 @@ async function ensureGraph() {
 
 async function withGraph(render) {
   try {
-    if (!runtime) app.innerHTML = '<div class="loading-card">Loading federal graph...</div>';
+    if (!runtime) app.innerHTML = '<div class="loading-card">Loading the public compliance map...</div>';
     await ensureGraph();
     await render();
   } catch (error) {
     app.setAttribute('aria-busy', 'false');
-    app.innerHTML = `<section class="notice"><h2>Federal graph unavailable</h2><p>${escapeHtml(error.message)}</p><button class="primary" id="retry-load" type="button">Retry</button></section>`;
+    app.innerHTML = `<section class="notice"><h2>Control Atlas map unavailable</h2><p>${escapeHtml(error.message)}</p><button class="primary" id="retry-load" type="button">Retry</button></section>`;
     document.querySelector('#retry-load')?.addEventListener('click', () => void renderState(currentState));
   }
 }
@@ -75,10 +78,10 @@ function nodeCard(node) {
     <article class="item-card workbench-card">
       <div>
         <h3 class="workbench-card-title">${escapeHtml(node.metadata.item_id)} - ${escapeHtml(node.metadata.title)}</h3>
-        <p class="workbench-card-meta">${escapeHtml(node.metadata.catalog_id)} · ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
-        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'} · ${candidates} inferred candidate${candidates === 1 ? '' : 's'}</p>
+        <p class="workbench-card-meta">${escapeHtml(node.metadata.catalog_id)}  -  ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
+        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'}  -  ${candidates} inferred candidate${candidates === 1 ? '' : 's'}</p>
       </div>
-      <button class="primary" type="button" data-open-node="${escapeHtml(node.id)}">Open federal context</button>
+      <button class="primary" type="button" data-open-node="${escapeHtml(node.id)}">Open mapped context</button>
     </article>`;
 }
 
@@ -96,9 +99,9 @@ async function renderSearch(state) {
   if (!query) {
     app.innerHTML = `
       <section class="panel" aria-labelledby="search-title">
-        <p class="eyebrow">Federal integration graph</p>
-        <h2 id="search-title">Find a federal security control or requirement</h2>
-        <p>Search federal controls, requirements, programs, and relationship evidence. The full graph loads only after you search or browse.</p>
+        <p class="eyebrow">Control Atlas library</p>
+        <h2 id="search-title">Find a control, STIG, CCI, or framework topic</h2>
+        <p>Search public controls, requirements, programs, and relationship evidence. The full map loads only after you search or browse.</p>
         <form id="search-form" class="search-controls">
           <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" placeholder="AC-2, CCI-000225, account management"></div>
           <button class="primary" type="submit">Search</button>
@@ -113,7 +116,7 @@ async function renderSearch(state) {
     const results = runtime.searchNodes(query, { catalog_id: filter || undefined });
     app.innerHTML = `
       <section class="panel search-workbench" aria-labelledby="search-title">
-        <p class="eyebrow">Search</p><h2 id="search-title">Federal graph results</h2>
+        <p class="eyebrow">Search</p><h2 id="search-title">Control Atlas results</h2>
         <form id="search-form" class="search-controls">
           <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}"></div>
           <div class="field"><label for="search-catalog">Catalog filter</label><select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(filter)}</select></div>
@@ -172,7 +175,7 @@ function contextCard(node, edge, extras = []) {
       <h4>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || '')}</h4>
       <ul>
         <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-        <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+        <li><strong>Provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
         <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
         ${extras.join('')}
       </ul>
@@ -237,7 +240,7 @@ async function renderDetail(nodeId) {
           <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
           <ul>
             <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-            <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+            <li><strong>Provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
             <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
           </ul>
           ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
@@ -256,7 +259,7 @@ async function renderDetail(nodeId) {
             <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
             <ul>
               <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-              <li><strong>Federal provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
+              <li><strong>Provenance:</strong> ${escapeHtml(edge.provenance_class)}</li>
               <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
             </ul>
             ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
@@ -274,7 +277,7 @@ async function renderDetail(nodeId) {
             <h2 class="item-id" tabindex="-1">${escapeHtml(node.metadata.item_id)}</h2>
             <h3>${escapeHtml(node.metadata.title)}</h3>
             <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
-            <details><summary>Defining federal source</summary><p>${escapeHtml(definingSource?.name || node.source_id)} · Eligibility: ${escapeHtml(definingSource?.eligibility_status || 'unknown')} · Lifecycle: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p></details>
+            <details><summary>Defining public source</summary><p>${escapeHtml(definingSource?.name || node.source_id)}  -  Eligibility: ${escapeHtml(definingSource?.eligibility_status || 'unknown')}  -  Lifecycle: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p></details>
           </article>
           ${isControl ? `
             ${renderContextCards('Baseline membership', federalContext.baselineMembership, (entry) =>
@@ -322,10 +325,10 @@ async function renderBrowse(state) {
     const selected = state.framework || '';
     const catalogs = runtime.getCatalogs();
     const cards = catalogs.map((catalog) => `
-      <article class="framework-card"><span class="badge badge-official">Federal catalog</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} nodes · ${catalog.relationship_count} relationships</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse catalog</button></article>`).join('');
+      <article class="framework-card"><span class="badge badge-official">Public catalog</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} nodes  -  ${catalog.relationship_count} relationships</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse catalog</button></article>`).join('');
     const selectedList = selected ? runtime.getNodes({ catalog_id: selected }) : [];
     app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Browse</p><h2>Federal graph catalogs</h2><div class="grid">${cards}</div>
+      <section class="panel"><p class="eyebrow">Library</p><h2>Public catalog coverage</h2><div class="grid">${cards}</div>
       ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(selected)}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} nodes.</p>${selectedList.slice(0, 200).map(nodeCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
     document.querySelectorAll('[data-browse-catalog]').forEach((button) => button.addEventListener('click', () => void setView('browse', { framework: button.dataset.browseCatalog })));
     bindNodeButtons();
@@ -336,12 +339,12 @@ async function renderSources() {
   await withGraph(async () => {
     const findings = runtime.getGraphHealth();
     app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Sources</p><h2>Federal provenance and graph health</h2>
-        <div class="learning-grid"><p><strong>Federal provenance</strong><br>Why the source or relationship is eligible.</p><p><strong>Eligibility</strong><br>Whether a source may publish graph records.</p><p><strong>Graph health</strong><br>Blocked relationships and quality findings stay outside displayable edges.</p></div>
-        <p class="muted">Release 1 and Release 2 sources include categorization, minimum requirement, RMF, NIST and FedRAMP baseline, assessment procedure, CMMC, CUI, and 800-171/800-172 program context as first-class federal graph inputs.</p>
+      <section class="panel"><p class="eyebrow">Provenance</p><h2>Provenance and graph health</h2>
+        <div class="learning-grid"><p><strong>Provenance</strong><br>Why the source or relationship is eligible.</p><p><strong>Eligibility</strong><br>Whether a source may publish graph records.</p><p><strong>Graph health</strong><br>Blocked relationships and quality findings stay outside displayable edges.</p></div>
+        <p class="muted">Current sources cover baseline, RMF, assessment, CMMC, CUI, and program-context relationships while preserving the adopted static artifact contract.</p>
         <p class="muted">${findings.length} graph-health finding${findings.length === 1 ? '' : 's'}.</p>
         <div class="grid">${runtime.getSources().map((source) => `
-          <article class="framework-card">${sourceBadge(source.provenance_class)}<h3>${escapeHtml(source.name)}</h3><p>${escapeHtml(source.owner)} · Eligibility: ${escapeHtml(source.eligibility_status)} · Access: ${escapeHtml(source.access_status)}</p><p class="muted">Version ${escapeHtml(source.version)} · Retrieved ${escapeHtml(source.retrieved_at)} · Lifecycle ${escapeHtml(source.lifecycle_status)}</p><a href="${escapeHtml(source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></article>`).join('')}</div>
+          <article class="framework-card">${sourceBadge(source.provenance_class)}<h3>${escapeHtml(source.name)}</h3><p>${escapeHtml(source.owner)}  -  Eligibility: ${escapeHtml(source.eligibility_status)}  -  Access: ${escapeHtml(source.access_status)}</p><p class="muted">Version ${escapeHtml(source.version)}  -  Retrieved ${escapeHtml(source.retrieved_at)}  -  Lifecycle ${escapeHtml(source.lifecycle_status)}</p><a href="${escapeHtml(source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></article>`).join('')}</div>
       </section>`;
   });
 }
@@ -362,14 +365,14 @@ async function renderMatrix(state) {
       node_ids: parseNodeIds(itemText, source),
     }) : null;
     app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Compare</p><h2>Build a federal relationship matrix</h2>
+      <section class="panel"><p class="eyebrow">Crosswalks</p><h2>Build a provenance-aware relationship matrix</h2>
         <form id="matrix-form" class="controls">
           <div class="field"><label for="matrix-source">Source catalog</label><select id="matrix-source">${catalogOptions(source)}</select></div>
           <div class="field"><label for="matrix-target">Target catalog</label><select id="matrix-target">${catalogOptions(target)}</select></div>
           <div class="field matrix-items-field"><label for="matrix-items">Optional source IDs</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
           <button class="primary" type="submit">Build matrix</button><button class="secondary" id="export-matrix" type="button">Export CSV</button>
         </form>
-        ${matrix ? `<p class="muted">${matrix.summary.total} rows · ${matrix.summary.published} published · ${matrix.summary.candidate} inferred candidates · ${matrix.summary.unmapped} unmapped</p><table class="matrix-table"><thead><tr><th>Source ID</th><th>Status</th><th>Related nodes</th></tr></thead><tbody>${matrix.rows.slice(0, 200).map((row) => `<tr><td>${escapeHtml(row.source_node_id)}</td><td>${escapeHtml(row.classification)}</td><td>${escapeHtml(row.edges.map((edge) => edge.display_label).join(' | ') || 'No sourced relationship')}</td></tr>`).join('')}</tbody></table>` : ''}
+        ${matrix ? `<p class="muted">${matrix.summary.total} rows  -  ${matrix.summary.published} published  -  ${matrix.summary.candidate} inferred candidates  -  ${matrix.summary.unmapped} unmapped</p><table class="matrix-table"><thead><tr><th>Source ID</th><th>Status</th><th>Related nodes</th></tr></thead><tbody>${matrix.rows.slice(0, 200).map((row) => `<tr><td>${escapeHtml(row.source_node_id)}</td><td>${escapeHtml(row.classification)}</td><td>${escapeHtml(row.edges.map((edge) => edge.display_label).join(' | ') || 'No sourced relationship')}</td></tr>`).join('')}</tbody></table>` : ''}
       </section>`;
     document.querySelector('#matrix-form').addEventListener('submit', (event) => {
       event.preventDefault();
@@ -387,7 +390,7 @@ async function renderMatrix(state) {
 }
 
 function renderRetired(state) {
-  app.innerHTML = `<section class="notice"><h2>${escapeHtml(state.query)} is outside the active federal graph scope.</h2><button class="primary" id="retired-search" type="button">Search federal controls</button></section>`;
+  app.innerHTML = `<section class="notice"><h2>${escapeHtml(state.query)} is outside the active public-map scope.</h2><button class="primary" id="retired-search" type="button">Search the library</button></section>`;
   document.querySelector('#retired-search').addEventListener('click', () => void setView('search'));
 }
 
@@ -407,11 +410,29 @@ async function setView(view, state = {}) {
   await renderState(next);
 }
 
+function initHeroRotation() {
+  if (!heroRotatingWord) return;
+  const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  if (reducedMotionQuery.matches) {
+    heroRotatingWord.textContent = 'Comply';
+    heroRotatingWord.setAttribute('aria-label', `${heroPrefix}Comply`);
+    return;
+  }
+  let index = 0;
+  heroRotatingWord.textContent = heroWords[index];
+  heroRotatingWord.setAttribute('aria-label', `${heroPrefix}${heroWords[index]}`);
+  setInterval(() => {
+    index = (index + 1) % heroWords.length;
+    heroRotatingWord.textContent = heroWords[index];
+    heroRotatingWord.setAttribute('aria-label', `${heroPrefix}${heroWords[index]}`);
+  }, 1800);
+}
+
 function showOnboardingOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboarding-overlay';
-  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore federal security relationships</h2><p>Control Atlas separates relationship semantics, federal provenance, confidence, and evidence quality.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
+  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore public security relationships</h2><p>Control Atlas separates relationship semantics, provenance, confidence, and evidence quality.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
   document.querySelector('#btn-onboarding-start').addEventListener('click', close);
@@ -431,12 +452,13 @@ function toggleHelp() {
   const drawer = document.createElement('aside');
   drawer.id = 'glossary-drawer';
   drawer.className = 'glossary-drawer open';
-  drawer.innerHTML = `<button class="close-drawer" aria-label="Close help" type="button">×</button><h2>Federal graph help</h2><dl class="glossary-list"><div class="glossary-item"><dt>Federal provenance</dt><dd>Why a source or relationship is eligible for the federal graph.</dd></div><div class="glossary-item"><dt>Confidence</dt><dd>The support strength for a relationship.</dd></div><div class="glossary-item"><dt>Evidence quality</dt><dd>The role of a source record supporting a claim.</dd></div></dl>`;
+  drawer.innerHTML = `<button class="close-drawer" aria-label="Close help" type="button">x</button><h2>Control Atlas help</h2><dl class="glossary-list"><div class="glossary-item"><dt>Provenance</dt><dd>Why a source or relationship is eligible for the public map.</dd></div><div class="glossary-item"><dt>Confidence</dt><dd>The support strength for a relationship.</dd></div><div class="glossary-item"><dt>Evidence quality</dt><dd>The role of a source record supporting a claim.</dd></div></dl>`;
   document.body.appendChild(drawer);
   drawer.querySelector('button').addEventListener('click', () => drawer.remove());
 }
 
 async function init() {
+  initHeroRotation();
   navButtons.forEach((button) => button.addEventListener('click', () => void setView(button.dataset.view)));
   document.querySelector('#btn-toggle-mode').addEventListener('click', (event) => {
     noviceMode = !noviceMode;

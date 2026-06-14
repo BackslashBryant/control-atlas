@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import { validateGraphArtifacts } from '../scripts/lib/federal-graph.mjs';
+import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
 const expectedArtifacts = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];

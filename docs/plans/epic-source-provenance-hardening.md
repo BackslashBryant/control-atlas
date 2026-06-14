@@ -4,6 +4,8 @@
 
 > **Status: SUPERSEDED AS A PRODUCT CONTRACT.** Retain this document as implementation research for Issues 9-11. The federal source policy and separate relationship semantics, federal provenance, confidence, and evidence-quality contracts now govern product behavior.
 
+> **Historical terminology note:** References below to backend completion, gold/silver/bronze evidence tiers, or older GovFrame framing are historical only and are not the active Control Atlas product contract.
+
 ### Context
 
 GovFrame has the right skeleton: a static build pipeline, normalized framework items, mapping assertions, evidence reconciliation, calculated paths, and coverage artifacts. But the backend currently feels half done because source ingestion and crosswalk completeness are too narrow.
