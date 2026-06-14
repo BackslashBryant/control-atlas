@@ -9,7 +9,7 @@ export const glossary = [
   },
   {
     term: "Possible connection",
-    definition: "A path calculated by GovFrame through intermediate requirements, requiring human review."
+    definition: "A path calculated by Control Atlas through intermediate requirements, requiring human review."
   },
   {
     term: "Evidence",

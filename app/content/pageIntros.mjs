@@ -1,7 +1,7 @@
 export const pageIntros = {
   home: {
     title: "Find where cybersecurity requirements overlap.",
-    description: "Search a control ID or topic. GovFrame shows official matches, possible connections, and places where no public match is known."
+    description: "Search a control ID or topic. Control Atlas shows official matches, possible connections, and places where no public match is known."
   },
   search: {
     title: "Search every supported framework",
@@ -9,7 +9,7 @@ export const pageIntros = {
   },
   matrix: {
     title: "Build a source-to-target mapping matrix",
-    description: "Choose two frameworks. GovFrame will show official matches, possible connections, and no known matches."
+    description: "Choose two frameworks. Control Atlas will show official matches, possible connections, and no known matches."
   },
   browse: {
     title: "Framework catalog and coverage",
