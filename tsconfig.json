@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "types": ["node", "@playwright/test"]
+  },
+  "include": [
+    "src/**/*.mjs",
+    "scripts/dom-smoke.mjs",
+    "scripts/static-smoke.mjs",
+    "scripts/audit-coverage.mjs",
+    "tests/browser-contract.test.mjs",
+    "tests/build-layout-contract.test.mjs",
+    "tests/framework-runtime.test.mjs",
+    "tests/package-scripts.test.mjs",
+    "tests/e2e/**/*.mjs",
+    "tools/build-static-site.mjs",
+    "tools/check-licenses.mjs",
+    "tools/serve-static-site.mjs",
+    "tools/sync-public.mjs"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-public",
+    "data/generated"
+  ]
+}

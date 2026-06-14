@@ -6,19 +6,26 @@
 !SECURITY.md
 !package.json
 !package-lock.json
+!eslint.config.mjs
+!playwright.config.mjs
+!tsconfig.json
 !src/
 !src/**
 !tests/
 !tests/*.mjs
+!tests/e2e/
+!tests/e2e/**
 !tests/fixtures/
 !tests/fixtures/**
 !docs/
 !docs/**
 
 !.github/
+!.github/dependabot.yml
 !.github/workflows/
 !.github/workflows/ci.yml
 !.github/workflows/codeql.yml
+!.github/workflows/dependency-review.yml
 !.github/workflows/nightly-refresh.yml
 !.github/workflows/pages.yml
 !.github/workflows/secret-scan.yml
