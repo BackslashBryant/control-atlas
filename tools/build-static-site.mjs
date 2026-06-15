@@ -10,6 +10,7 @@ const REQUIRED_GENERATED_FILES = ['data/generated/library-search.json'];
 
 const COPY_PATHS = [
   ['src/index.html', 'index.html'],
+  ['src/favicon.ico', 'favicon.ico'],
   ['src/favicon.svg', 'favicon.svg'],
   ['src/app', 'app'],
   ['src/content', 'content'],
