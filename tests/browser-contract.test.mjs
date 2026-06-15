@@ -21,7 +21,7 @@ test('shell identifies Control Atlas and preserves core journeys', () => {
   assert.match(html, /data-view="start-here"/);
   assert.match(html, /Skip to workspace/);
   assert.match(html, /aria-live="polite"/);
-  assert.match(html, />Provenance</);
+  assert.match(html, />Sources</);
   assert.match(html, />Library</);
   assert.match(html, />Crosswalks</);
   assert.match(html, />Patterns</);
@@ -66,11 +66,11 @@ test('federal trust dimensions remain visibly separate', () => {
   assert.match(app, /Program requirement context/);
   assert.match(app, /CMMC program context/);
   assert.match(app, /CUI policy context/);
-  assert.match(app, /Provenance/);
+  assert.match(app, /Source basis/);
   assert.match(app, /Relationship type/);
   assert.match(app, /Confidence/);
-  assert.match(app, /Evidence quality/);
-  assert.match(app, /Eligibility/);
+  assert.match(app, /Evidence strength/);
+  assert.match(app, /Use status/);
   assert.doesNotMatch(app, /Federal provenance/);
   assert.doesNotMatch(app, /gold|silver|bronze/i);
 });
@@ -116,23 +116,23 @@ test('runtime exposes provenance-aware relationship filters in the source shell'
   assert.match(app, /Table view/);
 });
 
-test('provenance registry exposes source filters, detail views, and warning metadata', () => {
+test('source check view exposes source filters, detail views, and warning metadata', () => {
   assert.match(app, /source-provenance-filter/);
   assert.match(app, /source-eligibility-filter/);
   assert.match(app, /source-lifecycle-filter/);
   assert.match(app, /source-access-filter/);
   assert.match(app, /View source details/);
-  assert.match(app, /License\/use/);
-  assert.match(app, /Graph eligibility/);
-  assert.match(app, /Restricted or excluded from the public graph/);
-  assert.match(app, /Deprecated or draft content needs extra review/);
+  assert.match(app, /Use rules/);
+  assert.match(app, /Used in map/);
+  assert.match(app, /Not used in the public map/);
+  assert.match(app, /Old or draft content\. Check it carefully\./);
   assert.match(app, /data-open-source=/);
 });
 
 test('node detail links defining sources back to provenance details', () => {
-  assert.match(app, /Defining public source/);
-  assert.match(app, /Open source details/);
-  assert.match(app, /Source warning/);
+  assert.match(app, /Main source/);
+  assert.match(app, /Open source info/);
+  assert.match(app, /Heads up/);
 });
 
 test('library browser exposes epic 3 filter controls, result metadata, and deep-link detail actions', () => {

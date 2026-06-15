@@ -17,29 +17,29 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(primaryNav.getByRole('button', { name: 'Crosswalks', exact: true })).toBeVisible();
   await expect(primaryNav.getByRole('button', { name: 'Patterns', exact: true })).toBeVisible();
   await expect(primaryNav.getByRole('button', { name: 'Templates', exact: true })).toBeVisible();
-  await expect(primaryNav.getByRole('button', { name: 'Provenance', exact: true })).toBeVisible();
+  await expect(primaryNav.getByRole('button', { name: 'Sources', exact: true })).toBeVisible();
   await expect(primaryNav.getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the right public entry point before diving into the graph' })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Build a provenance-aware relationship matrix' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Build a source-backed match table' })).toBeVisible();
 
-  await primaryNav.getByRole('button', { name: 'Provenance', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Provenance and graph health' })).toBeVisible();
-  await expect(page.getByLabel('Source class')).toBeVisible();
-  await expect(page.getByLabel('Eligibility')).toBeVisible();
-  await expect(page.getByLabel('Lifecycle')).toBeVisible();
-  await expect(page.getByLabel('Access')).toBeVisible();
-  await page.getByLabel('Eligibility').selectOption('excluded');
+  await primaryNav.getByRole('button', { name: 'Sources', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible();
+  await expect(page.getByLabel('Source type', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Use status', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Status', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Access', { exact: true })).toBeVisible();
+  await page.getByLabel('Use status', { exact: true }).selectOption('excluded');
   const communityCard = page.locator('.source-card').filter({ hasText: 'Community CCI Research' });
   await expect(communityCard).toBeVisible();
-  await expect(communityCard.getByText('Restricted or excluded from the public graph.')).toBeVisible();
+  await expect(communityCard.getByText('Not used in the public map.')).toBeVisible();
   await communityCard.getByRole('button', { name: 'View source details' }).click();
   await expect(page.getByRole('heading', { name: 'Community CCI Research' })).toBeVisible();
-  await expect(page.getByText('License/use')).toBeVisible();
-  await expect(page.getByText('Deprecated or draft content needs extra review.')).toBeVisible();
+  await expect(page.getByText('Use rules')).toBeVisible();
+  await expect(page.getByText('Old or draft content. Check it carefully.')).toBeVisible();
 });
 
 test('library detail opens from a copied deep link', async ({ page }) => {
