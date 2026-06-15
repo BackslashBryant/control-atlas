@@ -16,11 +16,21 @@ function uniqueBy(items, keyFn) {
   });
 }
 
+function matchesLibraryFacet(document, filters = {}) {
+  return (!filters.object_type || document.object_type === filters.object_type)
+    && (!filters.source_class || document.source_class === filters.source_class)
+    && (!filters.control_family || document.control_family === filters.control_family)
+    && (!filters.severity || document.severity === filters.severity)
+    && (!filters.catalog_id || document.catalog_id === filters.catalog_id);
+}
+
 export function createFederalGraphRuntime(dataset) {
   const nodeById = new Map(dataset.nodes.map((node) => [node.id, node]));
   const sourceById = new Map(dataset.sources.map((source) => [source.id, source]));
   const evidenceById = new Map(dataset.evidence.map((entry) => [entry.id, entry]));
   const edgeById = new Map(dataset.edges.map((edge) => [edge.id, edge]));
+  const libraryDocuments = dataset.librarySearch?.documents || [];
+  const libraryDocumentById = new Map(libraryDocuments.map((entry) => [entry.id, entry]));
   const catalogs = [...new Set(dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean))]
     .sort()
     .map((id) => ({
@@ -51,8 +61,32 @@ export function createFederalGraphRuntime(dataset) {
         .slice(0, 100)
         .map((entry) => entry.node);
     },
+    searchLibrary(query, filters = {}) {
+      const needle = normalize(query);
+      return libraryDocuments
+        .filter((document) => matchesLibraryFacet(document, filters))
+        .map((document) => {
+          if (!needle) return { document, score: 0 };
+          const itemId = normalize(document.item_id);
+          const title = normalize(document.title);
+          const description = normalize(document.description);
+          const score = itemId === needle ? 0
+            : itemId.startsWith(needle) ? 1
+              : title.includes(needle) ? 2
+                : description.includes(needle) ? 3
+                  : 99;
+          return { document, score };
+        })
+        .filter((entry) => entry.score < 99)
+        .sort((a, b) => a.score - b.score || a.document.id.localeCompare(b.document.id))
+        .slice(0, 100)
+        .map((entry) => entry.document);
+    },
     getNode(id) {
       return nodeById.get(id) || null;
+    },
+    getLibraryDocument(id) {
+      return libraryDocumentById.get(id) || null;
     },
     getNodes(filters = {}) {
       return dataset.nodes.filter((node) =>
@@ -87,6 +121,14 @@ export function createFederalGraphRuntime(dataset) {
     },
     getCatalogs() {
       return catalogs;
+    },
+    getLibraryFacets() {
+      return {
+        objectTypes: [...new Set(libraryDocuments.map((entry) => entry.object_type).filter(Boolean))].sort(),
+        sourceClasses: [...new Set(libraryDocuments.map((entry) => entry.source_class).filter(Boolean))].sort(),
+        controlFamilies: [...new Set(libraryDocuments.map((entry) => entry.control_family).filter(Boolean))].sort(),
+        severities: [...new Set(libraryDocuments.map((entry) => entry.severity).filter(Boolean))].sort(),
+      };
     },
     buildRelationshipMatrix(request) {
       const sourceNodes = dataset.nodes.filter((node) =>
@@ -316,6 +358,7 @@ export function parseViewState(searchParams) {
     target: params.get('target') || '',
     items: params.get('items') || '',
   };
+  if (view === 'library-detail') return { ...base, view, node: params.get('node') || '' };
   if (view === 'browse') return { ...base, view, framework: params.get('framework') || '' };
   if (view === 'sources') return {
     ...base,
@@ -334,6 +377,7 @@ export function normalizeViewState(view, state = {}) {
   const base = state.mode ? { mode: state.mode } : {};
   if (view === 'retired') return { ...base, view: 'retired', query: state.query || '' };
   if (view === 'matrix') return { ...base, view: 'matrix', source: state.source || '', target: state.target || '', items: state.items || '' };
+  if (view === 'library-detail') return { ...base, view: 'library-detail', node: state.node || '' };
   if (view === 'browse') return { ...base, view: 'browse', framework: state.framework || '' };
   if (view === 'sources') return {
     ...base,
@@ -359,6 +403,9 @@ export function serializeViewState(state) {
     if (state.source) params.set('source', state.source);
     if (state.target) params.set('target', state.target);
     if (state.items) params.set('items', state.items);
+  } else if (view === 'library-detail') {
+    params.set('view', 'library-detail');
+    if (state.node) params.set('node', state.node);
   } else if (view === 'browse') {
     params.set('view', 'browse');
     if (state.framework) params.set('framework', state.framework);
