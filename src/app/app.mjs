@@ -561,6 +561,7 @@ async function renderLibraryDetail(state) {
     await setView('search');
     return;
   }
+  await ensureGraph();
   const node = runtime?.getNode(state.node) || runtime?.searchNodes(state.node)?.[0];
   if (!node) {
     await setView('search');

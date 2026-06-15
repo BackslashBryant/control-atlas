@@ -63,8 +63,12 @@ export function createFederalGraphRuntime(dataset) {
     },
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
-      return libraryDocuments
-        .filter((document) => matchesLibraryFacet(document, filters))
+      const candidates = libraryDocuments.filter((document) => matchesLibraryFacet(document, filters));
+      const exactMatches = needle
+        ? candidates.filter((document) => normalize(document.item_id) === needle)
+        : [];
+      if (exactMatches.length) return exactMatches;
+      return candidates
         .map((document) => {
           if (!needle) return { document, score: 0 };
           const itemId = normalize(document.item_id);
