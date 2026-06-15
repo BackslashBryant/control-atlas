@@ -9,7 +9,7 @@
 
 ## Current Objective
 
-Prepare the repository for controlled Phase 0 development against the v2.1 PRD. This means aligning docs, ADRs, inventories, shell copy, and readiness guidance around a static, open-source, public-data-only product direction before major new feature work begins.
+Carry the repository from the Phase 0 baseline into the next roadmap slice. The static runtime, renamed shell, and Provenance Registry behavior are in place; the remaining near-term gap is live Pages audit evidence before broader feature expansion.
 
 ## Adopted Baseline
 
@@ -27,8 +27,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next Sequence
 
-1. Execute Epic 0: branding/docs migration, design-token application, provenance-ready shell updates, and CI/CD gap closure.
-2. Harden the source/provenance registry and normalization pipeline without changing the adopted runtime artifact contract.
+1. Complete Epic 0 closeout with a fresh live Pages audit against the deployed shell.
+2. Extend the data normalization pipeline without changing the adopted runtime artifact contract.
 3. Extend the Library Browser and Crosswalk Workbench using current static bundles and browser runtime patterns.
 4. Add client-side blank template generation.
 5. Build Start Here, glossary, and pattern surfaces.

@@ -261,6 +261,47 @@ summary { font-weight: 750; cursor: pointer; }
   text-align: left;
   vertical-align: top;
 }
+.badge-success {
+  background: rgba(22, 163, 74, 0.16);
+  color: #bbf7d0;
+  border: 1px solid rgba(22, 163, 74, 0.35);
+}
+.badge-warning {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.source-card {
+  display: grid;
+  gap: .85rem;
+}
+.source-card-actions,
+.source-trace-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  align-items: center;
+}
+.source-warning {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 12px;
+  padding: .85rem 1rem;
+  background: rgba(245, 158, 11, 0.08);
+}
+.source-warning strong {
+  display: block;
+  margin-bottom: .45rem;
+}
+.source-warning ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.source-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
 footer { padding: 1rem; text-align: center; color: var(--muted); }
 
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, a:focus-visible {
