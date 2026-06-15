@@ -184,3 +184,18 @@ test('epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
     edge.source_node_id === 'disa-stig:V-100001'
     && edge.target_node_id === 'nist-800-53:AC-2'));
 });
+
+test('epic 3 graph build emits a library search artifact with filter facets', () => {
+  buildFrameworkData();
+  const library = generated('library-search');
+
+  assert.equal(library.schema_version, '1.0');
+  assert.ok(Array.isArray(library.library_search.documents));
+  assert.ok(typeof library.library_search.serialized_index === 'string');
+
+  const ac2 = library.library_search.documents.find((entry) => entry.id === 'nist-800-53:AC-2');
+  assert.ok(ac2, 'missing AC-2 library document');
+  assert.equal(ac2.object_type, 'control');
+  assert.equal(ac2.source_class, 'federal_published');
+  assert.equal(ac2.control_family, 'Access Control');
+});
