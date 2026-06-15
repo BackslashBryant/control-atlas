@@ -77,6 +77,35 @@ const fixture = {
     { id: 'evidence:172-cui-program', source_id: 'nist-800-172-rev3', source_version: '2026', locator: 'abstract', evidence_quality: 'primary' },
   ],
   findings: [{ id: 'finding:1', finding_type: 'blocked_relationship', severity: 'warning', source_id: 'excluded', subject_id: 'edge:x', message: 'Blocked' }],
+  librarySearch: {
+    serialized_index: '',
+    documents: [
+      {
+        id: 'nist-800-53:AC-2',
+        item_id: 'AC-2',
+        title: 'Account Management',
+        description: 'Manage system accounts.',
+        object_type: 'control',
+        source_id: 'nist-oscal',
+        source_class: 'federal_published',
+        catalog_id: 'nist-800-53',
+        control_family: 'Access Control',
+        severity: '',
+      },
+      {
+        id: 'disa-stig:V-100001',
+        item_id: 'V-100001',
+        title: 'Sample STIG Rule',
+        description: 'Sample severity finding.',
+        object_type: 'stig_rule',
+        source_id: 'nist-map',
+        source_class: 'federal_published',
+        catalog_id: 'disa-stig',
+        control_family: '',
+        severity: 'high',
+      },
+    ],
+  },
 };
 
 test('runtime searches graph nodes by exact ID before text', () => {
@@ -124,6 +153,18 @@ test('runtime builds a catalog relationship matrix and CSV from graph edges', ()
   assert.match(runtime.buildRelationshipCsv(matrix), /AC-2/);
 });
 
+test('runtime filters library documents by keyword and facets', () => {
+  const runtime = createFederalGraphRuntime(fixture);
+  const controlResults = runtime.searchLibrary('account', {
+    object_type: 'control',
+    source_class: 'federal_published',
+  });
+  assert.deepEqual(controlResults.map((entry) => entry.id), ['nist-800-53:AC-2']);
+
+  const severityResults = runtime.searchLibrary('', { severity: 'high' });
+  assert.deepEqual(severityResults.map((entry) => entry.id), ['disa-stig:V-100001']);
+});
+
 test('runtime composes issue 10 federal context for a control from adjacent nodes', () => {
   const runtime = createFederalGraphRuntime(fixture);
   const context = getFederalContext(runtime, 'nist-800-53:AC-2');
@@ -158,6 +199,14 @@ test('view state preserves supported queries and identifies retired query types'
   assert.deepEqual(parseViewState('?q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
   assert.deepEqual(parseViewState('?q=ABC-2024-0001'), { view: 'retired', query: 'ABC-2024-0001', retired_type: 'retired identifier' });
   assert.equal(serializeViewState({ view: 'search', query: 'AC-2' }), '?view=search&q=AC-2');
+  assert.deepEqual(parseViewState('?view=library-detail&node=nist-800-53%3AAC-2'), {
+    view: 'library-detail',
+    node: 'nist-800-53:AC-2',
+  });
+  assert.equal(
+    serializeViewState({ view: 'library-detail', node: 'nist-800-53:AC-2' }),
+    '?view=library-detail&node=nist-800-53%3AAC-2',
+  );
   assert.deepEqual(parseViewState('?view=matrix&source=nist-800-53&target=csf-2&items=AC-2%2CAC-3'), {
     view: 'matrix',
     source: 'nist-800-53',

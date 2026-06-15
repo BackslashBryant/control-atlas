@@ -42,11 +42,13 @@ test('application loads only the five federal graph artifacts', () => {
 
 test('search, browse, detail, provenance, and comparison use graph runtime APIs', () => {
   assert.match(app, /searchNodes/);
+  assert.match(app, /searchLibrary/);
   assert.match(app, /getEdgesForNode/);
   assert.match(app, /getEvidenceForEdge/);
   assert.match(app, /getFederalContext/);
   assert.match(app, /getSources/);
   assert.match(app, /getSource/);
+  assert.match(app, /getLibraryFacets/);
   assert.match(app, /getGraphHealth/);
   assert.match(app, /buildRelationshipMatrix/);
   assert.match(app, /buildRelationshipCsv/);
@@ -130,6 +132,18 @@ test('node detail links defining sources back to provenance details', () => {
   assert.match(app, /Defining public source/);
   assert.match(app, /Open source details/);
   assert.match(app, /Source warning/);
+});
+
+test('library browser exposes epic 3 filter controls, result metadata, and deep-link detail actions', () => {
+  assert.match(app, /library-object-type-filter/);
+  assert.match(app, /library-source-class-filter/);
+  assert.match(app, /library-family-filter/);
+  assert.match(app, /library-severity-filter/);
+  assert.match(app, /Defining source/);
+  assert.match(app, /Object type/);
+  assert.match(app, /library-results/);
+  assert.match(app, /view === 'library-detail'/);
+  assert.match(app, /Copy link/);
 });
 
 test('responsive contract explicitly prevents horizontal overflow', () => {
