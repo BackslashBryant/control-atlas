@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-14T07:40:44.284Z",
+  "generated_at": "2026-06-15T05:12:52.869Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -13,15 +13,16 @@
     "governance_artifacts": [
       "build-manifest.json",
       "source-manifests.json",
-      "graph-diff-summary.json"
+      "graph-diff-summary.json",
+      "library-search.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
     "counts": {
-      "sources": 25,
-      "nodes": 8076,
-      "edges": 8252,
-      "evidence": 8252,
+      "sources": 35,
+      "nodes": 8078,
+      "edges": 8255,
+      "evidence": 8255,
       "findings": 705
     }
   }

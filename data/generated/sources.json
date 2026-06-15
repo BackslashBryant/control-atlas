@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-14T07:40:44.284Z",
+  "generated_at": "2026-06-15T05:12:52.869Z",
   "sources": [
     {
       "id": "nist-oscal",
@@ -170,6 +170,356 @@
           "disa-cci"
         ],
         "parser": "cci-xml"
+      }
+    },
+    {
+      "id": "disa-stig-library",
+      "name": "DISA Public STIG Library",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-14",
+      "retrieved_at": "2026-06-14",
+      "retrieval_method": "download",
+      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_type": "xccdf",
+      "checksum": "sha256:catalog_disa_stig_library_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA STIG Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "disa-stig"
+        ],
+        "parser": "xccdf",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "disa-srg-library",
+      "name": "DISA Public SRG Library",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-14",
+      "retrieved_at": "2026-06-14",
+      "retrieval_method": "download",
+      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_type": "xccdf",
+      "checksum": "sha256:catalog_disa_srg_library_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA STIG Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "disa-srg"
+        ],
+        "parser": "xccdf",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "disa-stig-srg-cci-references",
+      "name": "DISA Public STIG and SRG CCI References",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-14",
+      "retrieved_at": "2026-06-14",
+      "retrieval_method": "download",
+      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_type": "xccdf",
+      "checksum": "sha256:mapping_disa_stig_srg_cci_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA STIG Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg",
+          "disa-cci"
+        ],
+        "parser": "xccdf",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "cyber-mil-stig-compilations",
+      "name": "DISA STIG Compilations Landing Page",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://www.cyber.mil/stigs/compilations/",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_cyber_mil_stig_compilations_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA Public Website Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "disa-stig-library",
+        "disa-srg-library",
+        "disa-stig-srg-cci-references"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": [
+            "stigviewer-catalog",
+            "stigviewer-clkb-api",
+            "nuwcdivnpt-github-org",
+            "nuwcdivnpt-stig-manager"
+          ]
+        }
+      }
+    },
+    {
+      "id": "cyber-mil-stig-downloads",
+      "name": "DISA STIG Downloads Landing Page",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://www.cyber.mil/stigs/downloads",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_cyber_mil_stig_downloads_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA Public Website Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "disa-stig-library",
+        "disa-srg-library"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": [
+            "stigviewer-catalog",
+            "stigviewer-clkb-api"
+          ]
+        }
+      }
+    },
+    {
+      "id": "cyber-mil-stig-gpo",
+      "name": "DISA STIG GPO Landing Page",
+      "owner": "DISA",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://www.cyber.mil/stigs/gpo/",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_cyber_mil_stig_gpo_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DISA Public Website Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "disa-stig-library"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "gold",
+          "resolved_from": "gold",
+          "fallbacks": [
+            "nuwcdivnpt-stig-manager"
+          ]
+        }
+      }
+    },
+    {
+      "id": "stigviewer-catalog",
+      "name": "STIG Viewer Public Catalog",
+      "owner": "OpenControls.ai",
+      "provenance_class": "federal_referenced",
+      "mandate_basis": [],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://www.stigviewer.com/stigs",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_stigviewer_catalog_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "STIG Viewer Public Site Terms of Service",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "cyber-mil-stig-compilations",
+        "cyber-mil-stig-downloads"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "silver",
+          "resolved_from": "silver",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "stigviewer-clkb-api",
+      "name": "STIG Viewer CLKB API Announcement",
+      "owner": "OpenControls.ai",
+      "provenance_class": "federal_referenced",
+      "mandate_basis": [],
+      "version": "2026-03-16",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://www.stigviewer.com/press-releases/2026-03-16",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_stigviewer_clkb_api_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "STIG Viewer Public Site Terms of Service",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "cyber-mil-stig-compilations",
+        "cyber-mil-stig-downloads"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "silver",
+          "resolved_from": "silver",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "nuwcdivnpt-github-org",
+      "name": "NUWCDIVNPT GitHub Organization",
+      "owner": "NUWCDIVNPT",
+      "provenance_class": "federal_referenced",
+      "mandate_basis": [],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://github.com/NUWCDIVNPT",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nuwcdivnpt_github_org_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "GitHub Terms of Service",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "nuwcdivnpt-stig-manager"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "silver",
+          "resolved_from": "silver",
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "id": "nuwcdivnpt-stig-manager",
+      "name": "NUWCDIVNPT STIG Manager",
+      "owner": "NUWCDIVNPT",
+      "provenance_class": "federal_referenced",
+      "mandate_basis": [],
+      "version": "2026-06-15",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://github.com/nuwcdivnpt/stig-manager",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_nuwcdivnpt_stig_manager_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "GitHub Terms of Service",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "federal_referenced_by": [
+        "cyber-mil-stig-compilations",
+        "cyber-mil-stig-gpo"
+      ],
+      "graph_eligible": false,
+      "metadata": {
+        "frameworks": [
+          "disa-stig",
+          "disa-srg"
+        ],
+        "parser": "html-observer",
+        "source_authority": {
+          "tier": "silver",
+          "resolved_from": "silver",
+          "fallbacks": []
+        }
       }
     },
     {

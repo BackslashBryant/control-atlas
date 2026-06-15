@@ -24,7 +24,7 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 25);
+  assert.equal(result.sources, 35);
   assert.ok(result.nodes > 6800);
   assert.ok(result.edges > 4200);
   assert.equal(result.edges, result.evidence);
@@ -154,4 +154,48 @@ test('issue 12 graph build emits Release 2 program context without a synthetic r
   assert.ok(!edges.some((edge) =>
     edge.source_node_id === 'cmmc-2:LEVEL-2'
     && edge.target_node_id === 'nist-800-53:AC-2'));
+});
+
+test('epic 2 graph build emits DISA STIG and SRG nodes plus official CCI references', () => {
+  buildFrameworkData();
+  const sources = generated('sources').sources;
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  const sourceIds = new Set(sources.map((source) => source.id));
+  const nodeIds = new Set(nodes.map((node) => node.id));
+
+  for (const id of ['disa-stig-library', 'disa-srg-library', 'disa-stig-srg-cci-references']) {
+    assert.ok(sourceIds.has(id), `missing source ${id}`);
+  }
+
+  assert.ok(nodeIds.has('disa-stig:V-100001'));
+  assert.ok(nodeIds.has('disa-srg:V-200001'));
+
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'disa-stig:V-100001'
+    && edge.target_node_id === 'disa-cci:CCI-000015'
+    && edge.relationship_type === 'references'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'disa-srg:V-200001'
+    && edge.target_node_id === 'disa-cci:CCI-000213'
+    && edge.relationship_type === 'references'));
+  assert.ok(!edges.some((edge) =>
+    edge.source_node_id === 'disa-stig:V-100001'
+    && edge.target_node_id === 'nist-800-53:AC-2'));
+});
+
+test('epic 3 graph build emits a library search artifact with filter facets', () => {
+  buildFrameworkData();
+  const library = generated('library-search');
+
+  assert.equal(library.schema_version, '1.0');
+  assert.ok(Array.isArray(library.library_search.documents));
+  assert.ok(typeof library.library_search.serialized_index === 'string');
+
+  const ac2 = library.library_search.documents.find((entry) => entry.id === 'nist-800-53:AC-2');
+  assert.ok(ac2, 'missing AC-2 library document');
+  assert.equal(ac2.object_type, 'control');
+  assert.equal(ac2.source_class, 'federal_published');
+  assert.equal(ac2.control_family, 'Access Control');
 });

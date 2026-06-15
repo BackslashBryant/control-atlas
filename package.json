@@ -11,6 +11,7 @@
     "lint": "eslint src tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/framework-runtime.test.mjs tests/package-scripts.test.mjs tests/e2e/control-atlas-shell.spec.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/check-licenses.mjs tools/serve-static-site.mjs tools/sync-public.mjs --max-warnings=0",
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
+    "fetch:disa-stigs": "node ./scripts/fetch-disa-stigs.mjs",
     "fetch:olir-mappings": "node ./scripts/fetch-olir-mappings.mjs",
     "check:data-size": "node ./scripts/check-data-size.mjs",
     "license:check": "node ./tools/check-licenses.mjs",
@@ -18,7 +19,7 @@
     "refresh:data": "node ./scripts/refresh-data.mjs",
     "sbom:generate": "cyclonedx-npm --package-lock-only --output-format json --output-file artifacts/sbom.cdx.json",
     "test": "npm run test:data && npm run test:runtime",
-    "test:data": "node --test --test-concurrency=1 ./tests/source-registry.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/oscal-normalize.test.mjs ./tests/retired-concepts.test.mjs ./tests/alignment-contract.test.mjs ./tests/package-scripts.test.mjs",
+    "test:data": "node --test --test-concurrency=1 ./tests/source-registry.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/oscal-normalize.test.mjs ./tests/disa-stig-importer.test.mjs ./tests/stig-source-observer.test.mjs ./tests/retired-concepts.test.mjs ./tests/alignment-contract.test.mjs ./tests/package-scripts.test.mjs",
     "test:e2e": "npm run build:site && playwright test",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
@@ -42,5 +43,8 @@
     "globals": "^17.6.0",
     "typescript": "^6.0.3",
     "xlsx": "^0.18.5"
+  },
+  "dependencies": {
+    "minisearch": "^7.2.0"
   }
 }
