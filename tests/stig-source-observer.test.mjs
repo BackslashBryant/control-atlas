@@ -61,6 +61,19 @@ const githubRepoHtml = `
     </body>
   </html>`;
 
+const cyberMilShellHtml = `
+  <!DOCTYPE html>
+  <html lang="en-US">
+    <head>
+      <meta http-equiv="Content-Security-Policy" content="img-src 'self' dl.dod.cyber.mil;">
+      <script>globalThis.LWR = globalThis.LWR || {};</script>
+      <title>Welcome to LWC Communities!</title>
+    </head>
+    <body>
+      <webruntime-app></webruntime-app>
+    </body>
+  </html>`;
+
 test('cyber.mil landing parser captures official STIG acquisition entrypoints', () => {
   assert.deepEqual(
     parseCyberMilLanding(cyberMilHtml, 'https://www.cyber.mil/stigs/compilations/'),
@@ -70,6 +83,19 @@ test('cyber.mil landing parser captures official STIG acquisition entrypoints', 
       kind: 'official_entrypoint',
       signals: ['official-disa', 'stigs-entrypoint'],
       summary: 'Official DISA public entrypoint for STIG library compilations.',
+    },
+  );
+});
+
+test('cyber.mil landing parser recognizes Salesforce shell delivery and preserves STIG meaning', () => {
+  assert.deepEqual(
+    parseCyberMilLanding(cyberMilShellHtml, 'https://www.cyber.mil/stigs/compilations/'),
+    {
+      url: 'https://www.cyber.mil/stigs/compilations/',
+      title: 'SRG and STIG Library Compilations',
+      kind: 'official_entrypoint',
+      signals: ['official-disa', 'stigs-entrypoint', 'salesforce-lwc-shell', 'static-html-withheld'],
+      summary: 'Official DISA STIG entrypoint delivered through a Salesforce LWC shell; direct artifact links are not exposed in static HTML.',
     },
   );
 });

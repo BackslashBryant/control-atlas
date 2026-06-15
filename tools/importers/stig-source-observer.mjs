@@ -20,19 +20,36 @@ function collectMatches(html, pattern) {
   return [...String(html).matchAll(pattern)].map((match) => normalizeWhitespace(match[1])).filter(Boolean);
 }
 
+function officialCyberMilLabel(url) {
+  if (/\/compilations\/?$/i.test(url)) return 'SRG and STIG Library Compilations';
+  if (/\/downloads\/?$/i.test(url)) return 'STIG Downloads';
+  if (/\/gpo\/?$/i.test(url)) return 'STIG GPO Downloads';
+  return 'DISA STIG entrypoint';
+}
+
 export function parseCyberMilLanding(html, url) {
-  const title = matchTitle(html) || matchFirst(html, /<h1[^>]*>([\s\S]*?)<\/h1>/i) || 'DISA STIG entrypoint';
+  const shell = /<webruntime-app>/i.test(html) || /Welcome to LWC Communities!/i.test(html) || /globalThis\.LWR/i.test(html);
+  const title = shell
+    ? officialCyberMilLabel(url)
+    : (matchTitle(html) || matchFirst(html, /<h1[^>]*>([\s\S]*?)<\/h1>/i) || officialCyberMilLabel(url));
   const summary = stripTags(
     matchFirst(html, /<p[^>]*>([\s\S]*?)<\/p>/i)
     || 'Official DISA public entrypoint for STIG acquisition resources.',
   );
+  const signals = ['official-disa', 'stigs-entrypoint'];
+
+  if (shell) {
+    signals.push('salesforce-lwc-shell', 'static-html-withheld');
+  }
 
   return {
     url,
     title,
     kind: 'official_entrypoint',
-    signals: ['official-disa', 'stigs-entrypoint'],
-    summary,
+    signals,
+    summary: shell
+      ? 'Official DISA STIG entrypoint delivered through a Salesforce LWC shell; direct artifact links are not exposed in static HTML.'
+      : summary,
   };
 }
 
