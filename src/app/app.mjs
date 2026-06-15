@@ -16,6 +16,7 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character
 })[character]);
 
 const controlBySelector = (selector) => /** @type {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null} */ (document.querySelector(selector));
+const checkboxBySelector = (selector) => /** @type {HTMLInputElement | null} */ (document.querySelector(selector));
 const buttonBySelector = (selector) => /** @type {HTMLButtonElement | null} */ (document.querySelector(selector));
 const elementBySelector = (selector) => /** @type {HTMLElement | null} */ (document.querySelector(selector));
 
@@ -717,42 +718,231 @@ function renderStartHere() {
   /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-start-here-target]')).forEach((button) => button.addEventListener('click', () => void setView(button.dataset.startHereTarget)));
 }
 
+function optionObjectsMarkup(options, selected, fallbackLabel) {
+  const values = [`<option value="">${escapeHtml(fallbackLabel)}</option>`];
+  for (const option of options) {
+    values.push(`<option value="${escapeHtml(option.value)}" ${option.value === selected ? 'selected' : ''}>${escapeHtml(option.label)}</option>`);
+  }
+  return values.join('');
+}
+
 function parseNodeIds(value, catalogId) {
   return [...new Set(String(value || '').split(/[\s,]+/).filter(Boolean).map((id) => id.includes(':') ? id : `${catalogId}:${id}`))];
+}
+
+function sanitizeDownloadSegment(value) {
+  return String(value || 'selection').replaceAll(':', '-').replaceAll('/', '-');
+}
+
+function downloadTextFile(filename, content, type) {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(new Blob([content], { type }));
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function sourceRefList(sourceRefs) {
+  if (!sourceRefs.length) return '<span class="muted">No public source references</span>';
+  return `<ul>${sourceRefs.map((ref) => `<li><strong>${escapeHtml(ref.source_name)}</strong> ${escapeHtml(ref.source_version ? `v${ref.source_version}` : '')}${ref.locator ? ` <span class="muted">@ ${escapeHtml(ref.locator)}</span>` : ''}${ref.evidence_quality ? ` <span class="badge">${escapeHtml(ref.evidence_quality)}</span>` : ''}</li>`).join('')}</ul>`;
+}
+
+function exportButtonMarkup(disabled = false) {
+  return `
+    <div class="source-card-actions">
+      <button class="secondary" type="button" data-export-format="csv" ${disabled ? 'disabled' : ''}>Export CSV</button>
+      <button class="secondary" type="button" data-export-format="markdown" ${disabled ? 'disabled' : ''}>Export Markdown</button>
+      <button class="secondary" type="button" data-export-format="json" ${disabled ? 'disabled' : ''}>Export JSON</button>
+    </div>
+    <p class="muted">Only the currently visible results are exported.</p>`;
+}
+
+function workbenchModeButtons(currentMode) {
+  return `
+    <div class="relationship-view-toggle" role="tablist" aria-label="Crosswalk modes">
+      <button class="secondary" type="button" data-workbench-mode="relationships" aria-pressed="${currentMode === 'relationships'}">Relationship Table</button>
+      <button class="secondary" type="button" data-workbench-mode="stig-chain" aria-pressed="${currentMode === 'stig-chain'}">STIG -&gt; CCI -&gt; NIST</button>
+      <button class="secondary" type="button" data-workbench-mode="baseline-compare" aria-pressed="${currentMode === 'baseline-compare'}">Baseline Compare</button>
+    </div>`;
+}
+
+function bindWorkbenchModeButtons() {
+  /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-workbench-mode]')).forEach((button) => {
+    button.addEventListener('click', () => void setView('matrix', { workbench: button.dataset.workbenchMode || 'relationships' }));
+  });
 }
 
 async function renderMatrix(state) {
   await withGraph(async () => {
     const catalogs = runtime.getCatalogs();
+    const workbench = state.workbench || 'relationships';
     const source = state.source || catalogs[0]?.id || '';
     const target = state.target || catalogs.find((catalog) => catalog.id !== source)?.id || '';
     const itemText = state.items || '';
-    const matrix = source && target ? runtime.buildRelationshipMatrix({
+    const relationshipOptionRows = runtime.buildRelationshipRows({
       source_catalog: source,
       target_catalog: target,
       node_ids: parseNodeIds(itemText, source),
-    }) : null;
-    app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Crosswalks</p><h2>Build a source-backed match table</h2>
-        <form id="matrix-form" class="controls">
+      include_candidates: true,
+    });
+    const relationshipRows = runtime.buildRelationshipRows({
+      source_catalog: source,
+      target_catalog: target,
+      node_ids: parseNodeIds(itemText, source),
+      relationship_type: state.relationshipType || '',
+      provenance_class: state.provenance || '',
+      confidence: state.confidence || '',
+      include_candidates: state.includeCandidates === 'true',
+    });
+    const relationshipTypes = [...new Set(relationshipOptionRows.rows.map((row) => row.relationship_type).filter(Boolean))].sort();
+    const provenances = [...new Set(relationshipOptionRows.rows.map((row) => row.provenance_class).filter(Boolean))].sort();
+    const confidences = [...new Set(relationshipOptionRows.rows.map((row) => row.confidence).filter(Boolean))].sort();
+
+    const chainCatalog = state.chainCatalog || 'disa-stig';
+    const chainCatalogNodes = runtime.getNodes({ catalog_id: chainCatalog })
+      .sort((left, right) => (left.metadata?.item_id || '').localeCompare(right.metadata?.item_id || '') || left.id.localeCompare(right.id));
+    const benchmarkOptions = [...new Map(chainCatalogNodes.map((node) => {
+      const value = node.metadata?.benchmark_id || node.source_id;
+      const label = node.metadata?.benchmark_title || runtime.getSource(node.source_id)?.name || value;
+      return [value, { value, label }];
+    })).values()];
+    const chainBenchmark = state.chainBenchmark || '';
+    const chainItemOptions = chainCatalogNodes
+      .filter((node) => !chainBenchmark || node.metadata?.benchmark_id === chainBenchmark || node.source_id === chainBenchmark)
+      .map((node) => ({
+        value: node.id,
+        label: `${node.metadata?.item_id || node.id} - ${node.metadata?.title || node.label}`,
+      }));
+    const chainPayload = runtime.buildStigChain({
+      chain_catalog: chainCatalog,
+      chain_benchmark: chainBenchmark,
+      chain_item: state.chainItem || '',
+      include_candidates: state.includeCandidates === 'true',
+    });
+
+    const baselineOptions = runtime.getNodes({ node_type: 'baseline' })
+      .sort((left, right) => (left.metadata?.catalog_id || '').localeCompare(right.metadata?.catalog_id || '') || (left.metadata?.item_id || '').localeCompare(right.metadata?.item_id || ''))
+      .map((node) => ({
+        value: node.id,
+        label: `${node.metadata?.catalog_id || node.id} - ${node.metadata?.title || node.label}`,
+      }));
+    const baselineA = state.baselineA || '';
+    const baselineB = state.baselineB || '';
+    const baselineComparison = baselineA && baselineB && baselineA !== baselineB
+      ? runtime.buildBaselineComparison({
+        baseline_a: baselineA,
+        baseline_b: baselineB,
+      })
+      : null;
+
+    let modeMarkup;
+    if (workbench === 'relationships') {
+      modeMarkup = `
+        <form id="relationship-workbench-form" class="controls">
           <div class="field"><label for="matrix-source">Source catalog</label><select id="matrix-source">${catalogOptions(source)}</select></div>
           <div class="field"><label for="matrix-target">Target catalog</label><select id="matrix-target">${catalogOptions(target)}</select></div>
+          <div class="field"><label for="matrix-relationship-type">Relationship type</label><select id="matrix-relationship-type">${optionMarkup(relationshipTypes, state.relationshipType || '', 'All relationship types')}</select></div>
+          <div class="field"><label for="matrix-provenance">Source basis</label><select id="matrix-provenance">${optionMarkup(provenances, state.provenance || '', 'All source basis types')}</select></div>
+          <div class="field"><label for="matrix-confidence">Confidence</label><select id="matrix-confidence">${optionMarkup(confidences, state.confidence || '', 'All confidence')}</select></div>
           <div class="field matrix-items-field"><label for="matrix-items">Optional source IDs</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
-          <button class="primary" type="submit">Build matrix</button><button class="secondary" id="export-matrix" type="button">Export CSV</button>
+          <div class="field"><label for="matrix-include-candidates">Show inferred mappings</label><input id="matrix-include-candidates" type="checkbox" ${state.includeCandidates === 'true' ? 'checked' : ''}></div>
+          <button class="primary" type="submit">Apply filters</button>
         </form>
-        ${matrix ? `<p class="muted">${matrix.summary.total} rows  -  ${matrix.summary.published} published  -  ${matrix.summary.candidate} inferred candidates  -  ${matrix.summary.unmapped} unmapped</p><table class="matrix-table"><thead><tr><th>Source ID</th><th>Status</th><th>Related nodes</th></tr></thead><tbody>${matrix.rows.slice(0, 200).map((row) => `<tr><td>${escapeHtml(row.source_node_id)}</td><td>${escapeHtml(row.classification)}</td><td>${escapeHtml(row.edges.map((edge) => edge.display_label).join(' | ') || 'No source-backed match')}</td></tr>`).join('')}</tbody></table>` : ''}
+        <p class="muted">${relationshipRows.summary.visible} visible relationship${relationshipRows.summary.visible === 1 ? '' : 's'}${relationshipRows.summary.hidden_candidate_count ? ` - ${relationshipRows.summary.hidden_candidate_count} inferred mapping${relationshipRows.summary.hidden_candidate_count === 1 ? '' : 's'} hidden by default` : ''}</p>
+        ${exportButtonMarkup(!relationshipRows.rows.length)}
+        ${relationshipRows.rows.length
+          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>Relationship type</th><th>Source basis</th><th>Confidence</th><th>Rationale</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
+          : '<p class="notice">No visible relationships match these filters.</p>'}`;
+    } else if (workbench === 'stig-chain') {
+      modeMarkup = `
+        <form id="stig-chain-form" class="controls">
+          <div class="field"><label for="chain-catalog">Catalog</label><select id="chain-catalog">${optionObjectsMarkup([{ value: 'disa-stig', label: 'DISA STIG' }, { value: 'disa-srg', label: 'DISA SRG' }], chainCatalog, 'Select catalog')}</select></div>
+          <div class="field"><label for="chain-benchmark">Benchmark scope</label><select id="chain-benchmark">${optionObjectsMarkup(benchmarkOptions, chainBenchmark, 'All benchmarks')}</select></div>
+          <div class="field"><label for="chain-item">Select a STIG or SRG item</label><select id="chain-item">${optionObjectsMarkup(chainItemOptions, state.chainItem || '', 'All visible items')}</select></div>
+          <div class="field"><label for="chain-include-candidates">Show inferred mappings</label><input id="chain-include-candidates" type="checkbox" ${state.includeCandidates === 'true' ? 'checked' : ''}></div>
+          <button class="primary" type="submit">Trace chain</button>
+        </form>
+        <p class="muted">${chainPayload.rows.length} visible item${chainPayload.rows.length === 1 ? '' : 's'} in this package scope.</p>
+        ${exportButtonMarkup(!(chainPayload.rows.length || chainPayload.selected_chain))}
+        ${chainPayload.rows.length
+          ? `<table class="matrix-table" aria-label="STIG chain summary"><thead><tr><th>Item</th><th>Benchmark</th><th>CCIs</th><th>NIST controls</th><th>Unmapped CCIs</th></tr></thead><tbody>${chainPayload.rows.map((row) => `<tr><td>${escapeHtml(row.item_id)} - ${escapeHtml(row.title)}</td><td>${escapeHtml(row.benchmark_title)}</td><td>${row.cci_count}</td><td>${row.nist_control_count}</td><td>${row.unmapped_cci_count}</td></tr>`).join('')}</tbody></table>`
+          : '<p class="notice">No STIG or SRG items match this scope.</p>'}
+        ${chainPayload.selected_chain
+          ? `<section class="panel more-mappings"><p class="eyebrow">Selected chain</p><h3>${escapeHtml(chainPayload.selected_chain.source_node.metadata?.title || chainPayload.selected_chain.source_node.label)}</h3><p class="muted">${escapeHtml(chainPayload.selected_chain.source_node.metadata?.item_id || chainPayload.selected_chain.source_node.id)}</p><div class="grid"><article class="framework-card"><h4>CCI links</h4><ul>${chainPayload.selected_chain.cci_entries.map((entry) => `<li><strong>${escapeHtml(entry.cciNode.metadata?.item_id || entry.cciNode.id)}</strong> - ${escapeHtml(entry.cciNode.metadata?.title || entry.cciNode.label)}${sourceRefList(entry.sourceRefs)}</li>`).join('') || '<li>No CCI links.</li>'}</ul></article><article class="framework-card"><h4>NIST controls</h4><ul>${chainPayload.selected_chain.nist_entries.map((entry) => `<li><strong>${escapeHtml(entry.nistNode.metadata?.item_id || entry.nistNode.id)}</strong> - ${escapeHtml(entry.nistNode.metadata?.title || entry.nistNode.label)}${sourceRefList(entry.sourceRefs)}</li>`).join('') || '<li>No NIST controls reached from this visible chain.</li>'}</ul></article><article class="framework-card"><h4>Unmapped CCIs</h4><ul>${chainPayload.selected_chain.unmapped_cci_nodes.map((node) => `<li>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || node.label)}</li>`).join('') || '<li>Every visible CCI has a visible NIST link.</li>'}</ul></article></div></section>`
+          : ''}`;
+    } else {
+      modeMarkup = `
+        <form id="baseline-compare-form" class="controls">
+          <div class="field"><label for="baseline-a">Baseline A</label><select id="baseline-a">${optionObjectsMarkup(baselineOptions, baselineA, 'Select baseline A')}</select></div>
+          <div class="field"><label for="baseline-b">Baseline B</label><select id="baseline-b">${optionObjectsMarkup(baselineOptions, baselineB, 'Select baseline B')}</select></div>
+          <button class="primary" type="submit">Compare baselines</button>
+        </form>
+        ${exportButtonMarkup(!baselineComparison)}
+        ${baselineComparison
+          ? `<div class="grid"><article class="framework-card"><span class="badge">Shared controls</span><h3>${baselineComparison.shared.length}</h3><ul>${baselineComparison.shared.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No shared controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in A</span><h3>${baselineComparison.only_a.length}</h3><ul>${baselineComparison.only_a.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No A-only controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in B</span><h3>${baselineComparison.only_b.length}</h3><ul>${baselineComparison.only_b.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No B-only controls.</li>'}</ul></article></div>`
+          : '<p class="notice">Choose two distinct public baselines to compare.</p>'}`;
+    }
+
+    app.innerHTML = `
+      <section class="panel">
+        <p class="eyebrow">Crosswalks</p>
+        <h2>Crosswalk Workbench</h2>
+        <p class="muted">Official and inferred mappings stay separate. Published relationships remain primary, and visible crosswalks export with their public source references.</p>
+        ${workbenchModeButtons(workbench)}
+        ${modeMarkup}
       </section>`;
-    elementBySelector('#matrix-form')?.addEventListener('submit', (event) => {
+
+    bindWorkbenchModeButtons();
+    elementBySelector('#relationship-workbench-form')?.addEventListener('submit', (event) => {
       event.preventDefault();
-      void setView('matrix', { source: controlBySelector('#matrix-source')?.value || '', target: controlBySelector('#matrix-target')?.value || '', items: controlBySelector('#matrix-items')?.value.trim() || '' });
+      void setView('matrix', {
+        workbench: 'relationships',
+        source: controlBySelector('#matrix-source')?.value || '',
+        target: controlBySelector('#matrix-target')?.value || '',
+        items: controlBySelector('#matrix-items')?.value.trim() || '',
+        relationshipType: controlBySelector('#matrix-relationship-type')?.value || '',
+        provenance: controlBySelector('#matrix-provenance')?.value || '',
+        confidence: controlBySelector('#matrix-confidence')?.value || '',
+        includeCandidates: checkboxBySelector('#matrix-include-candidates')?.checked ? 'true' : '',
+      });
     });
-    buttonBySelector('#export-matrix')?.addEventListener('click', () => {
-      const content = runtime.buildRelationshipCsv(matrix);
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(new Blob([content], { type: 'text/csv' }));
-      link.download = `Control-Atlas-${source}-to-${target}.csv`;
-      link.click();
-      URL.revokeObjectURL(link.href);
+    elementBySelector('#stig-chain-form')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      void setView('matrix', {
+        workbench: 'stig-chain',
+        chainCatalog: controlBySelector('#chain-catalog')?.value || '',
+        chainBenchmark: controlBySelector('#chain-benchmark')?.value || '',
+        chainItem: controlBySelector('#chain-item')?.value || '',
+        includeCandidates: checkboxBySelector('#chain-include-candidates')?.checked ? 'true' : '',
+      });
+    });
+    elementBySelector('#baseline-compare-form')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      void setView('matrix', {
+        workbench: 'baseline-compare',
+        baselineA: controlBySelector('#baseline-a')?.value || '',
+        baselineB: controlBySelector('#baseline-b')?.value || '',
+      });
+    });
+
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-export-format]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        const format = button.dataset.exportFormat || 'csv';
+        if (workbench === 'relationships') {
+          const content = runtime.exportRelationshipRows(relationshipRows.rows, format);
+          const extension = format === 'markdown' ? 'md' : format;
+          downloadTextFile(`Control-Atlas-${sanitizeDownloadSegment(source)}-to-${sanitizeDownloadSegment(target)}.${extension}`, content, format === 'json' ? 'application/json' : 'text/plain');
+        } else if (workbench === 'stig-chain') {
+          const content = runtime.exportStigChain(chainPayload, format);
+          const extension = format === 'markdown' ? 'md' : format;
+          const slug = sanitizeDownloadSegment(state.chainItem || chainCatalog);
+          downloadTextFile(`Control-Atlas-${slug}-chain.${extension}`, content, format === 'json' ? 'application/json' : 'text/plain');
+        } else if (baselineComparison) {
+          const content = runtime.exportBaselineComparison(baselineComparison, format);
+          const extension = format === 'markdown' ? 'md' : format;
+          downloadTextFile(`Control-Atlas-${sanitizeDownloadSegment(baselineA)}-vs-${sanitizeDownloadSegment(baselineB)}.${extension}`, content, format === 'json' ? 'application/json' : 'text/plain');
+        }
+      });
     });
   });
 }

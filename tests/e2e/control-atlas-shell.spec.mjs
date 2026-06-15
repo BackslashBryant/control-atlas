@@ -24,7 +24,10 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByRole('heading', { name: 'Find the right public entry point before diving into the graph' })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Build a source-backed match table' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Relationship Table', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'STIG -> CCI -> NIST', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Baseline Compare', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Sources', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible();
@@ -58,4 +61,30 @@ test('library filters narrow results without a page reload', async ({ page }) =>
   await page.getByLabel('Object type').selectOption('control');
   await expect(page.locator('#library-results .item-card')).toHaveCount(1);
   await expect(page.locator('#library-results')).toContainText('Account Management');
+});
+
+test('crosswalk workbench deep links into relationship mode with visible-only exports', async ({ page }) => {
+  await page.goto('/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2&items=AC-10');
+  await dismissOnboarding(page);
+  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Relationship Table', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByLabel('Show inferred mappings')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
+  await expect(page.getByText('Only the currently visible results are exported.')).toBeVisible();
+  await expect(page.locator('table')).toContainText('AC-10');
+});
+
+test('crosswalk workbench compares public baselines', async ({ page }) => {
+  await page.goto('/');
+  await dismissOnboarding(page);
+  await page.getByRole('button', { name: 'Crosswalks', exact: true }).click();
+  await page.getByRole('button', { name: 'Baseline Compare', exact: true }).click();
+  await page.getByLabel('Baseline A').selectOption('nist-800-53b:MODERATE');
+  await page.getByLabel('Baseline B').selectOption('fedramp-rev5:MODERATE');
+  await page.getByRole('button', { name: 'Compare baselines', exact: true }).click();
+  await expect(page.getByText('Shared controls')).toBeVisible();
+  await expect(page.getByText('Only in A')).toBeVisible();
+  await expect(page.getByText('Only in B')).toBeVisible();
 });

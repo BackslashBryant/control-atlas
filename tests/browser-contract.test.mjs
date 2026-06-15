@@ -50,9 +50,12 @@ test('search, browse, detail, provenance, and comparison use graph runtime APIs'
   assert.match(app, /getSource/);
   assert.match(app, /getLibraryFacets/);
   assert.match(app, /getGraphHealth/);
-  assert.match(app, /buildRelationshipMatrix/);
-  assert.match(app, /buildRelationshipCsv/);
-  assert.match(app, /Control-Atlas-\$\{source\}-to-\$\{target\}\.csv/);
+  assert.match(app, /buildRelationshipRows/);
+  assert.match(app, /buildStigChain/);
+  assert.match(app, /buildBaselineComparison/);
+  assert.match(app, /exportRelationshipRows/);
+  assert.match(app, /exportStigChain/);
+  assert.match(app, /exportBaselineComparison/);
   assert.match(app, /view === 'sources'/);
 });
 
@@ -114,6 +117,22 @@ test('runtime exposes provenance-aware relationship filters in the source shell'
   assert.match(app, /provenance-filter/);
   assert.match(app, /confidence-filter/);
   assert.match(app, /Table view/);
+});
+
+test('crosswalk workbench exposes epic 4 modes, visible-only exports, and inferred gating', () => {
+  assert.match(app, /Relationship Table/);
+  assert.match(app, /STIG -&gt; CCI -&gt; NIST/);
+  assert.match(app, /Baseline Compare/);
+  assert.match(app, /Show inferred mappings/);
+  assert.match(app, /Source references/);
+  assert.match(app, /Export CSV/);
+  assert.match(app, /Export Markdown/);
+  assert.match(app, /Export JSON/);
+  assert.match(app, /Only the currently visible results are exported/);
+  assert.match(app, /Shared controls/);
+  assert.match(app, /Only in A/);
+  assert.match(app, /Only in B/);
+  assert.match(app, /Select a STIG or SRG item/);
 });
 
 test('source check view exposes source filters, detail views, and warning metadata', () => {
