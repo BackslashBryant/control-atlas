@@ -21,7 +21,7 @@ The static public reference application is deployable and provides a reusable Co
 - [x] Node and edge provenance extensions completed
 - [x] Provenance renderer updates completed
 - [x] Missing CI/CD and SecDevOps controls addressed or explicitly deferred
-- [ ] New Control Atlas live Pages audit completed
+- [x] New Control Atlas live Pages audit completed
 
 ## Required Before MVP Release
 
@@ -31,7 +31,7 @@ The static public reference application is deployable and provides a reusable Co
 - [x] Product boundary documented and enforced in runtime tests
 - [ ] Missing SecDevOps controls from `docs/SECDEVOPS_GAP_ANALYSIS.md`
 - [ ] Required Library, Crosswalk Workbench, Template Factory, Pattern Library, Start Here, and QA scope
-- [ ] Native keyboard-only, screen-reader, responsive, zoom, performance, and live Pages audits
+- [ ] Native keyboard-only, screen-reader, zoom, and performance audits
 - [ ] Content, disclaimer, source-license, and prohibited-claim review
 
 ## Historical Evidence
@@ -40,7 +40,7 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Complete Epic 0 closeout with a fresh live Pages audit against the renamed deployment path. Preserve the existing runtime bundle contract and keep all changes static, public-data-only, and deployable.
+Extend the data normalization pipeline and remaining MVP surfaces while preserving the existing runtime bundle contract and static public-data-only boundary.
 
 ## Runtime Boundary
 

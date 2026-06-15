@@ -9,7 +9,7 @@
 
 ## Active Direction
 
-`docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines the active backlog through Epic 0 to Epic 8. Epic 0 remains open for live Pages audit evidence, while Epic 1 Provenance Registry behavior is now implemented on the adopted static runtime baseline.
+`docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines the active backlog through Epic 0 to Epic 8. Epic 0 baseline and live Pages audit evidence are now in place, and Epic 1 Provenance Registry behavior is deployed on the adopted static runtime baseline.
 
 No backend or user, organization, or system data is part of this product direction.
 
@@ -32,7 +32,7 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Provenance-facing renderer updates executed
 - [x] Epic 1 Provenance filtering, source detail views, lifecycle warnings, and source traceability executed
 - [x] Missing CI/CD and SecDevOps controls closed or explicitly deferred
-- [ ] Live Pages audit completed against the new shell copy
+- [x] Live Pages audit completed against the new shell copy
 
 ## Historical Delivery Records
 
@@ -40,12 +40,11 @@ Plans for Issues 8-12, older source-hardening proposals, and dated browser audit
 
 ## Recommended Next Implementation Sequence
 
-1. Complete Epic 0 closeout with a fresh live Pages audit against `https://backslashbryant.github.io/control-atlas/`.
-2. Extend the data normalization pipeline using the adopted five-artifact runtime contract.
-3. Expand Library and Crosswalk experiences without introducing backend behavior.
-4. Add client-side blank template generation and export surfaces.
-5. Build Start Here, glossary, and pattern content.
-6. Finish accessibility, release evidence, and live deployment hardening.
+1. Extend the data normalization pipeline using the adopted five-artifact runtime contract.
+2. Expand Library and Crosswalk experiences without introducing backend behavior.
+3. Add client-side blank template generation and export surfaces.
+4. Build Start Here, glossary, and pattern content.
+5. Finish accessibility, release evidence, and live deployment hardening.
 
 ## Delivery Rules
 
