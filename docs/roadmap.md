@@ -20,6 +20,8 @@ The v2.1 PRD defines the active product direction. Existing working components a
 
 ## Epic 1: Source / Provenance Registry
 
+**Implementation status:** Implemented on the current static runtime baseline. Provenance now supports public-facing registry framing, source filtering, source detail views, lifecycle/access warnings, and source traceability cues without changing the internal `source-registry` contract.
+
 **Goal:** Maintain the public trust backbone behind every displayed object and mapping.
 
 **Stories:** Provenance Registry framing; source lifecycle warnings; source filtering; license/use review; provenance-facing copy and detail improvements.
@@ -149,7 +151,7 @@ The v2.1 PRD defines the active product direction. Existing working components a
 ## Recommended Next Sequence
 
 1. Complete Epic 0 closeout with a fresh live Pages audit against `https://backslashbryant.github.io/control-atlas/`.
-2. Extend the source/provenance registry and normalization pipeline using the adopted five-artifact runtime contract.
+2. Extend the data normalization pipeline using the adopted five-artifact runtime contract.
 3. Expand Library Browser and Crosswalk Workbench.
 4. Add Template Factory, then Pattern Library and Start Here.
 5. Finish Epic 8 release hardening and live audits.

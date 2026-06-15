@@ -71,8 +71,16 @@ export function createFederalGraphRuntime(dataset) {
         return entry ? { ...entry, source: sourceById.get(entry.source_id) || null } : null;
       }).filter(Boolean);
     },
-    getSources() {
-      return dataset.sources;
+    getSource(id) {
+      return sourceById.get(id) || null;
+    },
+    getSources(filters = {}) {
+      return dataset.sources.filter((source) =>
+        (!filters.provenance_class || source.provenance_class === filters.provenance_class)
+        && (!filters.eligibility_status || source.eligibility_status === filters.eligibility_status)
+        && (!filters.lifecycle_status || source.lifecycle_status === filters.lifecycle_status)
+        && (!filters.access_status || source.access_status === filters.access_status)
+        && (filters.graph_eligible === undefined || source.graph_eligible === filters.graph_eligible));
     },
     getGraphHealth() {
       return dataset.findings;
@@ -309,7 +317,15 @@ export function parseViewState(searchParams) {
     items: params.get('items') || '',
   };
   if (view === 'browse') return { ...base, view, framework: params.get('framework') || '' };
-  if (view === 'sources') return { ...base, view };
+  if (view === 'sources') return {
+    ...base,
+    view,
+    source: params.get('source') || '',
+    provenance: params.get('provenance') || '',
+    eligibility: params.get('eligibility') || '',
+    lifecycle: params.get('lifecycle') || '',
+    access: params.get('access') || '',
+  };
   if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
   return { ...base, view: 'search', query, filter: params.get('filter') || '' };
 }
@@ -319,7 +335,15 @@ export function normalizeViewState(view, state = {}) {
   if (view === 'retired') return { ...base, view: 'retired', query: state.query || '' };
   if (view === 'matrix') return { ...base, view: 'matrix', source: state.source || '', target: state.target || '', items: state.items || '' };
   if (view === 'browse') return { ...base, view: 'browse', framework: state.framework || '' };
-  if (view === 'sources') return { ...base, view: 'sources' };
+  if (view === 'sources') return {
+    ...base,
+    view: 'sources',
+    source: state.source || '',
+    provenance: state.provenance || '',
+    eligibility: state.eligibility || '',
+    lifecycle: state.lifecycle || '',
+    access: state.access || '',
+  };
   if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
   return { ...base, view: 'search', query: state.query || '', filter: state.filter || '' };
 }
@@ -340,6 +364,11 @@ export function serializeViewState(state) {
     if (state.framework) params.set('framework', state.framework);
   } else if (view === 'sources') {
     params.set('view', 'sources');
+    if (state.source) params.set('source', state.source);
+    if (state.provenance) params.set('provenance', state.provenance);
+    if (state.eligibility) params.set('eligibility', state.eligibility);
+    if (state.lifecycle) params.set('lifecycle', state.lifecycle);
+    if (state.access) params.set('access', state.access);
   } else if (view === 'patterns' || view === 'templates' || view === 'start-here') {
     params.set('view', view);
   } else if (state.query || state.filter) {

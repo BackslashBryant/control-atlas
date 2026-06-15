@@ -24,4 +24,16 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
 
   await primaryNav.getByRole('button', { name: 'Provenance', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Provenance and graph health' })).toBeVisible();
+  await expect(page.getByLabel('Source class')).toBeVisible();
+  await expect(page.getByLabel('Eligibility')).toBeVisible();
+  await expect(page.getByLabel('Lifecycle')).toBeVisible();
+  await expect(page.getByLabel('Access')).toBeVisible();
+  await page.getByLabel('Eligibility').selectOption('excluded');
+  const communityCard = page.locator('.source-card').filter({ hasText: 'Community CCI Research' });
+  await expect(communityCard).toBeVisible();
+  await expect(communityCard.getByText('Restricted or excluded from the public graph.')).toBeVisible();
+  await communityCard.getByRole('button', { name: 'View source details' }).click();
+  await expect(page.getByRole('heading', { name: 'Community CCI Research' })).toBeVisible();
+  await expect(page.getByText('License/use')).toBeVisible();
+  await expect(page.getByText('Deprecated or draft content needs extra review.')).toBeVisible();
 });

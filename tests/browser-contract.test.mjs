@@ -46,6 +46,7 @@ test('search, browse, detail, provenance, and comparison use graph runtime APIs'
   assert.match(app, /getEvidenceForEdge/);
   assert.match(app, /getFederalContext/);
   assert.match(app, /getSources/);
+  assert.match(app, /getSource/);
   assert.match(app, /getGraphHealth/);
   assert.match(app, /buildRelationshipMatrix/);
   assert.match(app, /buildRelationshipCsv/);
@@ -107,6 +108,25 @@ test('runtime exposes provenance-aware relationship filters in the source shell'
   assert.match(app, /provenance-filter/);
   assert.match(app, /confidence-filter/);
   assert.match(app, /Table view/);
+});
+
+test('provenance registry exposes source filters, detail views, and warning metadata', () => {
+  assert.match(app, /source-provenance-filter/);
+  assert.match(app, /source-eligibility-filter/);
+  assert.match(app, /source-lifecycle-filter/);
+  assert.match(app, /source-access-filter/);
+  assert.match(app, /View source details/);
+  assert.match(app, /License\/use/);
+  assert.match(app, /Graph eligibility/);
+  assert.match(app, /Restricted or excluded from the public graph/);
+  assert.match(app, /Deprecated or draft content needs extra review/);
+  assert.match(app, /data-open-source=/);
+});
+
+test('node detail links defining sources back to provenance details', () => {
+  assert.match(app, /Defining public source/);
+  assert.match(app, /Open source details/);
+  assert.match(app, /Source warning/);
 });
 
 test('responsive contract explicitly prevents horizontal overflow', () => {

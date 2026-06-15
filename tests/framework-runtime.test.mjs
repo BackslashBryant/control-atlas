@@ -24,6 +24,7 @@ const fixture = {
     { id: 'nist-800-172-rev3', name: 'SP 800-172 Rev. 3', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-172'] } },
     { id: 'isoo-cui-regulation', name: '32 CFR Part 2002', owner: 'ISOO', provenance_class: 'mandated', graph_eligible: true, metadata: { frameworks: ['cui-policy'] } },
     { id: 'nara-cui-registry', name: 'CUI Registry', owner: 'NARA', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['cui-policy'] } },
+    { id: 'community-research', name: 'Community Research', owner: 'Community', provenance_class: 'federal_referenced', graph_eligible: false, access_status: 'restricted', eligibility_status: 'excluded', lifecycle_status: 'deprecated', metadata: { frameworks: ['disa-cci'] } },
   ],
   nodes: [
     { id: 'nist-800-53:AC-2', node_type: 'control', label: 'AC-2 Account Management', source_id: 'nist-oscal', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-2', title: 'Account Management', description: 'Manage system accounts.' } },
@@ -91,8 +92,27 @@ test('runtime exposes source-backed edges, evidence, sources, and graph health',
   assert.equal(runtime.getNodes({ catalog_id: 'nist-800-53' }).length, 3);
   assert.equal(runtime.getEdgesForNode('nist-800-53:AC-2')[0].id, 'edge:m1');
   assert.equal(runtime.getEvidenceForEdge('edge:m1')[0].source.name, 'NIST mapping');
-  assert.equal(runtime.getSources().length, 13);
+  assert.equal(runtime.getSources().length, 14);
   assert.equal(runtime.getGraphHealth().length, 1);
+});
+
+test('runtime filters sources and supports source lookup for provenance detail views', () => {
+  const runtime = createFederalGraphRuntime(fixture);
+
+  assert.equal(runtime.getSource('nist-oscal').name, 'NIST OSCAL Content');
+  assert.equal(runtime.getSource('missing-source'), null);
+  assert.deepEqual(
+    runtime.getSources({ provenance_class: 'mandated' }).map((source) => source.id),
+    ['nist-fips-199', 'nist-fips-200', 'isoo-cui-regulation'],
+  );
+  assert.deepEqual(
+    runtime.getSources({ eligibility_status: 'excluded' }).map((source) => source.id),
+    ['community-research'],
+  );
+  assert.deepEqual(
+    runtime.getSources({ lifecycle_status: 'deprecated', access_status: 'restricted', graph_eligible: false }).map((source) => source.id),
+    ['community-research'],
+  );
 });
 
 test('runtime builds a catalog relationship matrix and CSV from graph edges', () => {
@@ -144,6 +164,14 @@ test('view state preserves supported queries and identifies retired query types'
     target: 'csf-2',
     items: 'AC-2,AC-3',
   });
+  assert.deepEqual(parseViewState('?view=sources&source=nist-oscal&provenance=federal_published&eligibility=eligible&lifecycle=active&access=public'), {
+    view: 'sources',
+    source: 'nist-oscal',
+    provenance: 'federal_published',
+    eligibility: 'eligible',
+    lifecycle: 'active',
+    access: 'public',
+  });
 });
 
 test('normalizeViewState strips stale params per view', () => {
@@ -152,7 +180,37 @@ test('normalizeViewState strips stale params per view', () => {
     view: 'browse',
     framework: 'disa-cci',
   });
-  assert.deepEqual(normalizeViewState('sources', { query: 'AC-2', mode: 'expert' }), { mode: 'expert', view: 'sources' });
+  assert.deepEqual(normalizeViewState('sources', {
+    query: 'AC-2',
+    source: 'nist-oscal',
+    provenance: 'federal_published',
+    eligibility: 'eligible',
+    lifecycle: 'active',
+    access: 'public',
+    mode: 'expert',
+  }), {
+    mode: 'expert',
+    view: 'sources',
+    source: 'nist-oscal',
+    provenance: 'federal_published',
+    eligibility: 'eligible',
+    lifecycle: 'active',
+    access: 'public',
+  });
+});
+
+test('source view state serializes detail and filter params', () => {
+  assert.equal(
+    serializeViewState({
+      view: 'sources',
+      source: 'nist-oscal',
+      provenance: 'federal_published',
+      eligibility: 'eligible',
+      lifecycle: 'active',
+      access: 'public',
+    }),
+    '?view=sources&source=nist-oscal&provenance=federal_published&eligibility=eligible&lifecycle=active&access=public',
+  );
 });
 
 test('view state preserves epic 0 navigation-only surfaces', () => {
