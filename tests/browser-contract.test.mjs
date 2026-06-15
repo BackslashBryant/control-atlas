@@ -91,8 +91,11 @@ test('hero uses the Ctrl+Alt rotating line with reduced-motion fallback', () => 
 
 test('shell applies the PRD dark-atlas token system and CSP', () => {
   assert.match(html, /Content-Security-Policy/);
+  assert.match(html, /rel="icon"/);
+  assert.match(html, /href="\.\/favicon\.svg"/);
   assert.match(html, /fonts\.googleapis\.com/);
   assert.match(html, /fonts\.gstatic\.com/);
+  assert.doesNotMatch(html, /frame-ancestors/);
   assert.match(css, /--ca-bg:\s*#0B1020/i);
   assert.match(css, /--ca-surface:\s*#111827/i);
   assert.match(css, /--ca-primary:\s*#2563EB/i);
@@ -134,6 +137,12 @@ test('responsive contract explicitly prevents horizontal overflow', () => {
   assert.match(css, /@media\s*\(max-width:\s*720px\)/);
   assert.match(css, /min-width:\s*0/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+});
+
+test('staged build publishes the favicon asset', () => {
+  const buildScript = readFileSync('tools/build-static-site.mjs', 'utf8');
+  assert.match(buildScript, /src\/favicon\.svg/);
+  assert.match(buildScript, /favicon\.svg/);
 });
 
 test('user-facing shell and runtime contain no encoding corruption', () => {

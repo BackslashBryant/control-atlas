@@ -9,6 +9,7 @@ const DIST = join(ROOT, 'dist', 'site');
 
 const COPY_PATHS = [
   ['src/index.html', 'index.html'],
+  ['src/favicon.svg', 'favicon.svg'],
   ['src/app', 'app'],
   ['src/content', 'content'],
   ['src/styles', 'styles'],
