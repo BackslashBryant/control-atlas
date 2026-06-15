@@ -33,3 +33,8 @@ test('control atlas source of truth moves into src and builds from a staged outp
   assert.match(staticSmoke, /dist\/site\/app\/app\.mjs/);
   assert.match(runtimeTest, /\.\.\/src\/app\/runtime\.mjs/);
 });
+
+test('staged build publishes the generated library search artifact', () => {
+  const siteBuilder = readFileSync('tools/build-static-site.mjs', 'utf8');
+  assert.match(siteBuilder, /library-search\.json/);
+});

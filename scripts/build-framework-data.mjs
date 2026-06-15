@@ -2,13 +2,14 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import MiniSearch from 'minisearch';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data', 'generated');
 const RUNTIME_COLLECTIONS = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];
-const GOVERNANCE_FILES = ['build-manifest.json', 'source-manifests.json', 'graph-diff-summary.json'];
+const GOVERNANCE_FILES = ['build-manifest.json', 'source-manifests.json', 'graph-diff-summary.json', 'library-search.json'];
 
 const CATALOGS = [
   ['controls-800-53.json', 'nist-800-53', 'nist-oscal', 'control'],
@@ -150,6 +151,10 @@ function buildCatalogSummaryNode(catalogId, sourceId, summary) {
   };
 }
 
+function nodeSeverity(record) {
+  return record.severity || record.cat || record.metadata?.severity || null;
+}
+
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
   const familyNodes = new Map();
@@ -172,6 +177,7 @@ function buildNodes(registry) {
           title: record.title || record.id,
           description: record.description || '',
           family: record.family || record.group || '',
+          severity: nodeSeverity(record),
           baselines: record.fedramp_baselines || record.metadata?.baselines || null,
           nist_800_53b_baselines: record.metadata?.nist_800_53b_baselines || null,
           nist_control: record.nist_control || null,
@@ -584,6 +590,40 @@ function createBuildManifest(graph) {
   };
 }
 
+function buildLibrarySearch(graph) {
+  const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
+  const documents = graph.nodes.map((node) => {
+    const source = sourceById.get(node.source_id);
+    return {
+      id: node.id,
+      item_id: node.metadata?.item_id || node.id,
+      title: node.metadata?.title || node.label,
+      description: node.metadata?.description || '',
+      object_type: node.node_type,
+      source_id: node.source_id,
+      source_class: source?.provenance_class || '',
+      catalog_id: node.metadata?.catalog_id || '',
+      control_family: node.metadata?.family || '',
+      severity: node.metadata?.severity || '',
+    };
+  });
+
+  const index = new MiniSearch({
+    fields: ['item_id', 'title', 'description'],
+    storeFields: ['id'],
+    searchOptions: {
+      prefix: true,
+      boost: { item_id: 5, title: 3, description: 1 },
+    },
+  });
+  index.addAll(documents);
+
+  return {
+    serialized_index: JSON.stringify(index.toJSON()),
+    documents,
+  };
+}
+
 function buildDiffSummary(previous, collections, generatedAt) {
   const changedRuntimeArtifacts = RUNTIME_COLLECTIONS.filter((name) => {
     const previousCollection = previous[name];
@@ -630,6 +670,7 @@ export function buildFrameworkData() {
   const sourceManifests = buildSourceManifests(graph);
   const buildManifest = createBuildManifest(graph);
   const diffSummary = buildDiffSummary(previousCollections, collections, generatedAt);
+  const librarySearch = buildLibrarySearch(graph);
 
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
@@ -644,6 +685,7 @@ export function buildFrameworkData() {
   writeFileSync(join(GENERATED, 'source-manifests.json'), `${JSON.stringify(artifact('source_manifests', sourceManifests, generatedAt), null, 2)}\n`, 'utf8');
   writeFileSync(join(GENERATED, 'build-manifest.json'), `${JSON.stringify(artifact('build_manifest', buildManifest, generatedAt), null, 2)}\n`, 'utf8');
   writeFileSync(join(GENERATED, 'graph-diff-summary.json'), `${JSON.stringify(artifact('graph_diff_summary', diffSummary, generatedAt), null, 2)}\n`, 'utf8');
+  writeFileSync(join(GENERATED, 'library-search.json'), `${JSON.stringify(artifact('library_search', librarySearch, generatedAt), null, 2)}\n`, 'utf8');
 
   return {
     sources: graph.sources.length,
