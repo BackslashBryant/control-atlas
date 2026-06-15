@@ -1,0 +1,41 @@
+{
+  "schema_version": "2.0",
+  "source_key": "disa-stig-library",
+  "source_artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+  "source_version": "V1R1",
+  "snapshot_date": "2026-06-14",
+  "checksum": "sha256:sample_disa_stig_library_checksum",
+  "records": [
+    {
+      "id": "V-100001",
+      "type": "stig_rule",
+      "title": "Configure account management",
+      "description": "Accounts must be managed.",
+      "severity": "medium",
+      "rule_id": "SV-100001r1_rule",
+      "vuln_id": "V-100001",
+      "stig_id": "WN11-00-000001",
+      "check_text": "If the account management policy is disabled, this is a finding.",
+      "fix_text": "Enable the required account management policy.",
+      "references": [
+        {
+          "href": "https://public.cyber.mil/stigs/compilations/",
+          "label": "DISA reference"
+        }
+      ],
+      "source": {
+        "key": "disa-stig-library",
+        "snapshot_date": "2026-06-14",
+        "version": "V1R1",
+        "locator": "U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml#V-100001"
+      },
+      "metadata": {
+        "benchmark_id": "xccdf_mil.disa.stig_benchmark_Windows_11_STIG",
+        "benchmark_title": "Windows 11 STIG",
+        "benchmark_description": "Public DISA Windows 11 STIG benchmark.",
+        "relationship_catalog": "disa-cci",
+        "relationships": []
+      }
+    }
+  ]
+}

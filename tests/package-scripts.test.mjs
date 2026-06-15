@@ -49,6 +49,12 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.match(packageJson.scripts.precommit, /npm run license:check/);
 });
 
+test('Epic 2 data refresh includes official DISA STIG and SRG ingestion', () => {
+  assert.equal(typeof packageJson.scripts['refresh:data'], 'string');
+  assert.ok(existsSync('scripts/fetch-disa-stigs.mjs'));
+  assert.ok(existsSync('scripts/fetch-stig-source-observations.mjs'));
+});
+
 test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(ciWorkflow, /npm run build:site/);
   assert.match(ciWorkflow, /npm run lint/);

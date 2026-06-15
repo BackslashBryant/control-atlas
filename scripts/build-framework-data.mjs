@@ -27,12 +27,15 @@ const CATALOGS = [
   ['ai-rmf.json', 'nist-ai-rmf', 'nist-ai-rmf-playbook', 'requirement'],
   ['ssdf.json', 'nist-ssdf', 'nist-ssdf-oscal', 'requirement'],
   ['dod-rai.json', 'dod-rai', 'dod-rai-toolkit', 'requirement'],
+  ['stig-rules.json', 'disa-stig', 'disa-stig-library', 'stig_rule'],
+  ['srg-requirements.json', 'disa-srg', 'disa-srg-library', 'srg_requirement'],
 ];
 
 const MAPS = [
   ['800-53-to-csf.json', 'nist-800-53', 'csf-2', 'nist-olir-csf2-to-sp800-53'],
   ['800-53-to-800-171.json', 'nist-800-171', 'nist-800-53', 'nist-800-171-oscal-mappings'],
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'disa-cci-nist-references'],
+  ['stig-srg-to-cci.json', 'disa-stig', 'disa-cci', 'disa-stig-srg-cci-references'],
 ];
 
 const CATALOG_SUMMARIES = new Map([
@@ -473,8 +476,8 @@ function buildEdges(registry, nodes) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const [index, relationship] of (document.relationships || []).entries()) {
-      const sourceNodeId = nodeId(sourceCatalog, relationship.source_id);
-      const targetNodeId = nodeId(targetCatalog, relationship.target_id);
+      const sourceNodeId = nodeId(relationship.source_catalog || sourceCatalog, relationship.source_id);
+      const targetNodeId = nodeId(relationship.target_catalog || targetCatalog, relationship.target_id);
       const sourceId = relationship.evidence_source || document.source_key || defaultSourceId;
       const subjectId = `${filename.replace('.json', '')}:${index + 1}`;
       addPublishedEdge(state, registry, nodeIds, {
