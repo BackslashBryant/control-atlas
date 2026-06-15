@@ -70,3 +70,13 @@ test('excluded sources cannot publish graph records', () => {
   const errors = validateSourceRegistry(invalid);
   assert.ok(errors.some((error) => error.includes('excluded source') && error.includes('graph_eligible')));
 });
+
+test('restricted, limited, and excluded sources still require full provenance metadata', () => {
+  const invalid = structuredClone(registry);
+  invalid.sources[0].eligibility_status = 'limited';
+  invalid.sources[0].access_status = 'restricted';
+  invalid.sources[0].license_or_use = '';
+  invalid.sources[0].lifecycle_status = 'deprecated';
+  const errors = validateSourceRegistry(invalid);
+  assert.ok(errors.some((error) => error.includes('missing required field: license_or_use')));
+});

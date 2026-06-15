@@ -16,8 +16,8 @@ export const pageIntros = {
     description: "Browse frameworks. Catalog available means you can read it; mappings available means some items connect to other frameworks."
   },
   sources: {
-    title: "Provenance and evidence health",
-    description: "Public sources explain why a mapping is shown. Graph health shows what remains blocked or unsupported."
+    title: "Provenance registry and graph health",
+    description: "Review source eligibility, access, lifecycle, and license/use notes before trusting a public mapping."
   },
   detail: {
     description: "Review the public mapping and provenance before using this reference in an assessment."
