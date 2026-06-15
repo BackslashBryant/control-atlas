@@ -42,6 +42,7 @@ scripts/*
 !scripts/fetch-ccis.mjs
 !scripts/fetch-olir-mappings.mjs
 !scripts/fetch-framework-catalogs.mjs
+!scripts/fetch-stig-source-observations.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
 !scripts/dom-smoke.mjs

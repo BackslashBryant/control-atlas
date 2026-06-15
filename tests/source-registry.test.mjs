@@ -18,7 +18,7 @@ test('source registry schema 4.0 validates the federal source contract', () => {
 
 test('source provenance and eligibility remain separate', () => {
   const { sources } = loadSourceRegistry(registry);
-  assert.equal(sources.length, 25);
+  assert.ok(sources.length >= 35);
   assert.ok(!sources.some((source) => source.provenance_class === 'inferred'));
   assert.ok(!sources.some((source) => source.provenance_class === 'excluded'));
   assert.ok(sources.some((source) => source.eligibility_status === 'excluded'));
@@ -40,9 +40,36 @@ test('required federal sources are registered', () => {
     'nist-800-172-rev3',
     'isoo-cui-regulation',
     'nara-cui-registry',
+    'disa-stig-library',
+    'disa-srg-library',
+    'disa-stig-srg-cci-references',
+    'cyber-mil-stig-compilations',
+    'cyber-mil-stig-downloads',
+    'cyber-mil-stig-gpo',
+    'stigviewer-catalog',
+    'stigviewer-clkb-api',
+    'nuwcdivnpt-github-org',
+    'nuwcdivnpt-stig-manager',
   ]) {
     assert.ok(ids.has(id), `missing source ${id}`);
   }
+});
+
+test('official DISA sources record source-tier precedence metadata', () => {
+  const { byId } = loadSourceRegistry(registry);
+  for (const id of ['disa-stig-library', 'disa-srg-library', 'disa-stig-srg-cci-references']) {
+    const source = byId.get(id);
+    assert.equal(source.metadata.source_authority.tier, 'gold');
+    assert.equal(source.metadata.source_authority.resolved_from, 'gold');
+    assert.ok(Array.isArray(source.metadata.source_authority.fallbacks));
+  }
+});
+
+test('supplemental STIG acquisition sources record non-gold fallback tiers', () => {
+  const { byId } = loadSourceRegistry(registry);
+  assert.equal(byId.get('stigviewer-catalog').metadata.source_authority.tier, 'silver');
+  assert.equal(byId.get('stigviewer-clkb-api').metadata.source_authority.tier, 'silver');
+  assert.equal(byId.get('nuwcdivnpt-stig-manager').metadata.source_authority.tier, 'silver');
 });
 
 test('release 2 sources keep revision boundaries and avoid a draft-only bridge source', () => {

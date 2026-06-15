@@ -21,6 +21,8 @@ async function main() {
   await import('./fetch-framework-catalogs.mjs').then((m) => m.fetchFrameworkCatalogs());
   run('fetch-olir-mappings', 'fetch-olir-mappings.mjs');
   run('fetch-ccis', 'fetch-ccis.mjs');
+  run('fetch-stig-source-observations', 'fetch-stig-source-observations.mjs');
+  run('fetch-disa-stigs', 'fetch-disa-stigs.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');
   run('audit-coverage', 'audit-coverage.mjs');

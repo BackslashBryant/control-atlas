@@ -24,7 +24,7 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 25);
+  assert.equal(result.sources, 35);
   assert.ok(result.nodes > 6800);
   assert.ok(result.edges > 4200);
   assert.equal(result.edges, result.evidence);
@@ -153,5 +153,34 @@ test('issue 12 graph build emits Release 2 program context without a synthetic r
     && edge.relationship_type === 'requires'));
   assert.ok(!edges.some((edge) =>
     edge.source_node_id === 'cmmc-2:LEVEL-2'
+    && edge.target_node_id === 'nist-800-53:AC-2'));
+});
+
+test('epic 2 graph build emits DISA STIG and SRG nodes plus official CCI references', () => {
+  buildFrameworkData();
+  const sources = generated('sources').sources;
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  const sourceIds = new Set(sources.map((source) => source.id));
+  const nodeIds = new Set(nodes.map((node) => node.id));
+
+  for (const id of ['disa-stig-library', 'disa-srg-library', 'disa-stig-srg-cci-references']) {
+    assert.ok(sourceIds.has(id), `missing source ${id}`);
+  }
+
+  assert.ok(nodeIds.has('disa-stig:V-100001'));
+  assert.ok(nodeIds.has('disa-srg:V-200001'));
+
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'disa-stig:V-100001'
+    && edge.target_node_id === 'disa-cci:CCI-000015'
+    && edge.relationship_type === 'references'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'disa-srg:V-200001'
+    && edge.target_node_id === 'disa-cci:CCI-000213'
+    && edge.relationship_type === 'references'));
+  assert.ok(!edges.some((edge) =>
+    edge.source_node_id === 'disa-stig:V-100001'
     && edge.target_node_id === 'nist-800-53:AC-2'));
 });

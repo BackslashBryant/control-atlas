@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-14T07:40:44.284Z",
+  "generated_at": "2026-06-15T04:49:52.454Z",
   "nodes": [
     {
       "id": "cmmc-2:LEVEL-1",
@@ -177785,6 +177785,49 @@
             "version": "5",
             "location": "http://csrc.nist.gov/publications/PubsSPs.html",
             "index": "IA-13 (03) (f)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "disa-srg:V-200001",
+      "node_type": "srg_requirement",
+      "label": "V-200001 Enforce secure application logging",
+      "source_id": "disa-srg-library",
+      "lifecycle_status": "active",
+      "metadata": {
+        "catalog_id": "disa-srg",
+        "item_id": "V-200001",
+        "title": "Enforce secure application logging",
+        "description": "Applications must log privileged events.",
+        "family": "",
+        "baselines": null,
+        "nist_800_53b_baselines": null,
+        "nist_control": null,
+        "type": "srg_requirement",
+        "references": []
+      }
+    },
+    {
+      "id": "disa-stig:V-100001",
+      "node_type": "stig_rule",
+      "label": "V-100001 Configure account management",
+      "source_id": "disa-stig-library",
+      "lifecycle_status": "active",
+      "metadata": {
+        "catalog_id": "disa-stig",
+        "item_id": "V-100001",
+        "title": "Configure account management",
+        "description": "Accounts must be managed.",
+        "family": "",
+        "baselines": null,
+        "nist_800_53b_baselines": null,
+        "nist_control": null,
+        "type": "stig_rule",
+        "references": [
+          {
+            "href": "https://public.cyber.mil/stigs/compilations/",
+            "label": "DISA reference"
           }
         ]
       }
