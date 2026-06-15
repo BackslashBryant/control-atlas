@@ -20,6 +20,7 @@ export const ARTIFACT_TYPES = new Set([
   'xccdf',
   'other',
 ]);
+export const SOURCE_TIERS = new Set(['gold', 'silver', 'bronze']);
 
 const REQUIRED_FIELDS = [
   'id',
@@ -84,6 +85,18 @@ export function validateSourceRegistry(registry) {
     }
     if (source.access_status !== 'public' && source.graph_eligible) {
       errors.push(`non-public source ${source.id} cannot be graph_eligible`);
+    }
+    const authority = source.metadata?.source_authority;
+    if (authority !== undefined) {
+      if (!SOURCE_TIERS.has(authority.tier)) {
+        errors.push(`source ${source.id} has unsupported source_authority.tier: ${authority?.tier || 'missing'}`);
+      }
+      if (!SOURCE_TIERS.has(authority.resolved_from)) {
+        errors.push(`source ${source.id} has unsupported source_authority.resolved_from: ${authority?.resolved_from || 'missing'}`);
+      }
+      if (!Array.isArray(authority.fallbacks)) {
+        errors.push(`source ${source.id} source_authority.fallbacks must be an array`);
+      }
     }
   }
   return errors;

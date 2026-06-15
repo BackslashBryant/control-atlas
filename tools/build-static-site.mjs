@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist', 'site');
+const REQUIRED_GENERATED_FILES = ['data/generated/library-search.json'];
 
 const COPY_PATHS = [
   ['src/index.html', 'index.html'],
@@ -33,6 +34,12 @@ mkdirSync(DIST, { recursive: true });
 
 for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
   copyIntoDist(sourceRelativePath, destRelativePath);
+}
+
+for (const sourceRelativePath of REQUIRED_GENERATED_FILES) {
+  if (!existsSync(join(ROOT, sourceRelativePath))) {
+    throw new Error(`Required generated artifact missing: ${sourceRelativePath}`);
+  }
 }
 
 console.log(`Built staged static site at ${DIST}`);

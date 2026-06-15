@@ -1,0 +1,41 @@
+{
+  "schema_version": "2.0",
+  "source_key": "disa-stig-srg-cci-references",
+  "source_artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+  "source_version": "2026-06-14",
+  "snapshot_date": "2026-06-14",
+  "checksum": "sha256:sample_disa_stig_srg_cci_checksum",
+  "provenance": "Official DISA public STIG and SRG references to CCIs",
+  "relationships": [
+    {
+      "source_catalog": "disa-stig",
+      "source_id": "V-100001",
+      "target_catalog": "disa-cci",
+      "target_id": "CCI-000015",
+      "relationship_type": "references",
+      "why": "The official DISA STIG content references CCI-000015.",
+      "source_locator": "U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml#V-100001",
+      "evidence_source": "disa-stig-srg-cci-references"
+    },
+    {
+      "source_catalog": "disa-stig",
+      "source_id": "V-100001",
+      "target_catalog": "disa-cci",
+      "target_id": "CCI-000016",
+      "relationship_type": "references",
+      "why": "The official DISA STIG content references CCI-000016.",
+      "source_locator": "U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml#V-100001",
+      "evidence_source": "disa-stig-srg-cci-references"
+    },
+    {
+      "source_catalog": "disa-srg",
+      "source_id": "V-200001",
+      "target_catalog": "disa-cci",
+      "target_id": "CCI-000213",
+      "relationship_type": "references",
+      "why": "The official DISA SRG content references CCI-000213.",
+      "source_locator": "U_STIG_Library/Application_SRG/Application_SRG_Benchmark.xml#V-200001",
+      "evidence_source": "disa-stig-srg-cci-references"
+    }
+  ]
+}

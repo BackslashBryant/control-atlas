@@ -1,14 +1,18 @@
 import { expect, test } from '@playwright/test';
 
+async function dismissOnboarding(page) {
+  const skipOnboarding = page.getByRole('button', { name: 'Skip', exact: true });
+  if (await skipOnboarding.isVisible()) {
+    await skipOnboarding.click();
+  }
+}
+
 test('control atlas staged shell exposes the epic 0 navigation and key journeys', async ({ page }) => {
   await page.goto('/');
   const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
 
   await expect(page).toHaveTitle(/Control Atlas/);
-  const skipOnboarding = page.getByRole('button', { name: 'Skip', exact: true });
-  if (await skipOnboarding.isVisible()) {
-    await skipOnboarding.click();
-  }
+  await dismissOnboarding(page);
   await expect(primaryNav.getByRole('button', { name: 'Library', exact: true })).toBeVisible();
   await expect(primaryNav.getByRole('button', { name: 'Crosswalks', exact: true })).toBeVisible();
   await expect(primaryNav.getByRole('button', { name: 'Patterns', exact: true })).toBeVisible();
@@ -36,4 +40,22 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByRole('heading', { name: 'Community CCI Research' })).toBeVisible();
   await expect(page.getByText('License/use')).toBeVisible();
   await expect(page.getByText('Deprecated or draft content needs extra review.')).toBeVisible();
+});
+
+test('library detail opens from a copied deep link', async ({ page }) => {
+  await page.goto('/?view=library-detail&node=nist-800-53%3AAC-2');
+  await dismissOnboarding(page);
+  await expect(page.getByRole('heading', { name: 'Account Management', exact: true })).toBeVisible();
+  await expect(page.locator('.item-id').filter({ hasText: 'AC-2' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy link' })).toBeVisible();
+});
+
+test('library filters narrow results without a page reload', async ({ page }) => {
+  await page.goto('/');
+  await dismissOnboarding(page);
+  await page.getByLabel('ID, title, or topic').fill('AC-2');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByLabel('Object type').selectOption('control');
+  await expect(page.locator('#library-results .item-card')).toHaveCount(1);
+  await expect(page.locator('#library-results')).toContainText('Account Management');
 });

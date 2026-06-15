@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "source_key": "disa-srg-library",
+  "source_artifact": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+  "source_version": "V2R3",
+  "snapshot_date": "2026-06-14",
+  "checksum": "sha256:sample_disa_srg_library_checksum",
+  "records": [
+    {
+      "id": "V-200001",
+      "type": "srg_requirement",
+      "title": "Enforce secure application logging",
+      "description": "Applications must log privileged events.",
+      "severity": "high",
+      "rule_id": "SV-200001r1_rule",
+      "vuln_id": "V-200001",
+      "stig_id": "APP-SR-000001",
+      "check_text": "Review the application logging configuration.",
+      "fix_text": "Configure the application to log privileged events.",
+      "references": [],
+      "source": {
+        "key": "disa-srg-library",
+        "snapshot_date": "2026-06-14",
+        "version": "V2R3",
+        "locator": "U_STIG_Library/Application_SRG/Application_SRG_Benchmark.xml#V-200001"
+      },
+      "metadata": {
+        "benchmark_id": "xccdf_mil.disa.srg_benchmark_Application_SRG",
+        "benchmark_title": "Application Security Requirements Guide",
+        "benchmark_description": "Public DISA Application SRG benchmark.",
+        "relationship_catalog": "disa-cci",
+        "relationships": []
+      }
+    }
+  ]
+}

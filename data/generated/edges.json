@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-14T07:40:44.284Z",
+  "generated_at": "2026-06-15T05:12:52.869Z",
   "edges": [
     {
       "id": "edge:800-53-to-csf:27",
@@ -64577,6 +64577,54 @@
       "warning": null,
       "inference_rule_id": null,
       "rationale": "The official CCI List references NIST SP 800-53 Revision 5 IA-13 (03) (f)."
+    },
+    {
+      "id": "edge:stig-srg-to-cci:1",
+      "source_node_id": "disa-stig:V-100001",
+      "target_node_id": "disa-cci:CCI-000015",
+      "relationship_type": "references",
+      "provenance_class": "federal_published",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:stig-srg-to-cci:1"
+      ],
+      "display_label": "disa-stig:V-100001 references disa-cci:CCI-000015",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "The official DISA STIG content references CCI-000015."
+    },
+    {
+      "id": "edge:stig-srg-to-cci:2",
+      "source_node_id": "disa-stig:V-100001",
+      "target_node_id": "disa-cci:CCI-000016",
+      "relationship_type": "references",
+      "provenance_class": "federal_published",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:stig-srg-to-cci:2"
+      ],
+      "display_label": "disa-stig:V-100001 references disa-cci:CCI-000016",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "The official DISA STIG content references CCI-000016."
+    },
+    {
+      "id": "edge:stig-srg-to-cci:3",
+      "source_node_id": "disa-srg:V-200001",
+      "target_node_id": "disa-cci:CCI-000213",
+      "relationship_type": "references",
+      "provenance_class": "federal_published",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:stig-srg-to-cci:3"
+      ],
+      "display_label": "disa-srg:V-200001 references disa-cci:CCI-000213",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "The official DISA SRG content references CCI-000213."
     },
     {
       "id": "edge:fips-199:selects:fips-199:FIPS-199-LOW:nist-800-53b:LOW",
