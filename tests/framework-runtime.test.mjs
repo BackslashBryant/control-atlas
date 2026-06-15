@@ -196,7 +196,15 @@ test('runtime composes issue 12 program and CUI context without implying a rev3 
 });
 
 test('view state preserves supported queries and identifies retired query types', () => {
-  assert.deepEqual(parseViewState('?q=AC-2'), { view: 'search', query: 'AC-2', filter: '' });
+  assert.deepEqual(parseViewState('?q=AC-2'), {
+    view: 'search',
+    query: 'AC-2',
+    filter: '',
+    objectType: '',
+    sourceClass: '',
+    controlFamily: '',
+    severity: '',
+  });
   assert.deepEqual(parseViewState('?q=ABC-2024-0001'), { view: 'retired', query: 'ABC-2024-0001', retired_type: 'retired identifier' });
   assert.equal(serializeViewState({ view: 'search', query: 'AC-2' }), '?view=search&q=AC-2');
   assert.deepEqual(parseViewState('?view=library-detail&node=nist-800-53%3AAC-2'), {

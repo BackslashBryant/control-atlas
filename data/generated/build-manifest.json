@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-15T04:49:52.454Z",
+  "generated_at": "2026-06-15T05:12:52.869Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -13,7 +13,8 @@
     "governance_artifacts": [
       "build-manifest.json",
       "source-manifests.json",
-      "graph-diff-summary.json"
+      "graph-diff-summary.json",
+      "library-search.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
