@@ -19,10 +19,14 @@ const controlBySelector = (selector) => /** @type {HTMLInputElement | HTMLSelect
 const buttonBySelector = (selector) => /** @type {HTMLButtonElement | null} */ (document.querySelector(selector));
 const elementBySelector = (selector) => /** @type {HTMLElement | null} */ (document.querySelector(selector));
 
-async function fetchCollection(path, collection) {
+async function fetchArtifact(path) {
   const response = await fetch(path);
-  if (!response.ok) throw new Error(`Unable to load ${collection}.`);
-  const artifact = await response.json();
+  if (!response.ok) throw new Error(`Unable to load ${path}.`);
+  return response.json();
+}
+
+async function fetchCollection(path, collection) {
+  const artifact = await fetchArtifact(path);
   if (artifact.schema_version !== '1.0' || !Array.isArray(artifact[collection])) {
     throw new Error(`Invalid ${collection} graph artifact.`);
   }
@@ -30,14 +34,25 @@ async function fetchCollection(path, collection) {
 }
 
 async function loadFederalGraph() {
-  const [sources, nodes, edges, evidence, findings] = await Promise.all([
+  const [sources, nodes, edges, evidence, findings, libraryArtifact] = await Promise.all([
     fetchCollection('./data/generated/sources.json?v=20260614-1', 'sources'),
     fetchCollection('./data/generated/nodes.json?v=20260614-1', 'nodes'),
     fetchCollection('./data/generated/edges.json?v=20260614-1', 'edges'),
     fetchCollection('./data/generated/evidence.json?v=20260614-1', 'evidence'),
     fetchCollection('./data/generated/graph-health.json?v=20260614-1', 'findings'),
+    fetchArtifact('./data/generated/library-search.json?v=20260615-1'),
   ]);
-  runtime = createFederalGraphRuntime({ sources, nodes, edges, evidence, findings });
+  if (libraryArtifact.schema_version !== '1.0' || !Array.isArray(libraryArtifact.library_search?.documents)) {
+    throw new Error('Invalid library search artifact.');
+  }
+  runtime = createFederalGraphRuntime({
+    sources,
+    nodes,
+    edges,
+    evidence,
+    findings,
+    librarySearch: libraryArtifact.library_search,
+  });
 }
 
 async function ensureGraph() {
@@ -192,76 +207,112 @@ function relationshipTable(edges, runtimeNodeLookupId) {
     </table>`;
 }
 
-function nodeCard(node) {
-  const edges = runtime.getEdgesForNode(node.id);
+function libraryResultCard(document) {
+  const source = runtime.getSource(document.source_id);
+  const node = runtime.getNode(document.id);
+  const edges = node ? runtime.getEdgesForNode(node.id) : [];
   const published = edges.filter((edge) => edge.publication_status === 'published').length;
-  const candidates = edges.filter((edge) => edge.publication_status === 'candidate').length;
   return `
     <article class="item-card workbench-card">
-      <div>
-        <h3 class="workbench-card-title">${escapeHtml(node.metadata.item_id)} - ${escapeHtml(node.metadata.title)}</h3>
-        <p class="workbench-card-meta">${escapeHtml(node.metadata.catalog_id)}  -  ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
-        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'}  -  ${candidates} inferred candidate${candidates === 1 ? '' : 's'}</p>
+      <div class="badge-row">
+        <span class="badge">${escapeHtml(document.object_type.replaceAll('_', ' '))}</span>
+        ${source ? sourceBadge(source.provenance_class) : ''}
       </div>
-      <button class="primary" type="button" data-open-node="${escapeHtml(node.id)}">Open mapped context</button>
+      <div>
+        <h3 class="workbench-card-title">${escapeHtml(document.item_id)} - ${escapeHtml(document.title)}</h3>
+        <p class="workbench-card-meta">Object type: ${escapeHtml(document.object_type.replaceAll('_', ' '))}</p>
+        <p class="workbench-card-meta">Defining source: ${escapeHtml(source?.name || document.source_id)}</p>
+        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'}  -  Catalog: ${escapeHtml(document.catalog_id || 'unknown')}</p>
+      </div>
+      <button class="primary" type="button" data-open-node="${escapeHtml(document.id)}">Open detail</button>
     </article>`;
 }
 
 function bindNodeButtons() {
   /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-open-node]')).forEach((button) => button.addEventListener('click', () => {
-    void renderDetail(button.dataset.openNode);
+    void setView('library-detail', { node: button.dataset.openNode });
   }));
 }
 
+function libraryFilterMarkup(state) {
+  const facets = runtime.getLibraryFacets();
+  return `
+    <div class="relationship-filter-grid">
+      <div class="field">
+        <label for="search-catalog">Catalog filter</label>
+        <select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(state.filter || '')}</select>
+      </div>
+      <div class="field">
+        <label for="library-object-type-filter">Object type</label>
+        <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', 'All object types')}</select>
+      </div>
+      <div class="field">
+        <label for="library-source-class-filter">Source class</label>
+        <select id="library-source-class-filter">${optionMarkup(facets.sourceClasses, state.sourceClass || '', 'All source classes')}</select>
+      </div>
+      <div class="field">
+        <label for="library-family-filter">Control family</label>
+        <select id="library-family-filter">${optionMarkup(facets.controlFamilies, state.controlFamily || '', 'All control families')}</select>
+      </div>
+      <div class="field">
+        <label for="library-severity-filter">Severity</label>
+        <select id="library-severity-filter">${optionMarkup(facets.severities, state.severity || '', 'All severities')}</select>
+      </div>
+    </div>`;
+}
+
 async function renderSearch(state) {
-  const query = state.query || '';
-  const filter = state.filter || '';
-  workspace.toggleAttribute('data-search-active', Boolean(query));
-
-  if (!query) {
-    app.innerHTML = `
-      <section class="panel" aria-labelledby="search-title">
-        <p class="eyebrow">Control Atlas library</p>
-        <h2 id="search-title">Find a control, STIG, CCI, or framework topic</h2>
-        <p>Search public controls, requirements, programs, and relationship evidence. The full map loads only after you search or browse.</p>
-        <form id="search-form" class="search-controls">
-          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" placeholder="AC-2, CCI-000225, account management"></div>
-          <button class="primary" type="submit">Search</button>
-        </form>
-        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-      </section>`;
-    bindSearchForm();
-    return;
-  }
-
   await withGraph(async () => {
-    const results = runtime.searchNodes(query, { catalog_id: filter || undefined });
+    const query = state.query || '';
+    const filters = {
+      catalog_id: state.filter || undefined,
+      object_type: state.objectType || undefined,
+      source_class: state.sourceClass || undefined,
+      control_family: state.controlFamily || undefined,
+      severity: state.severity || undefined,
+    };
+    const hasActiveFilters = Object.values(filters).some(Boolean);
+    const results = runtime.searchLibrary(query, filters);
+    workspace.toggleAttribute('data-search-active', Boolean(query || hasActiveFilters));
+
     app.innerHTML = `
       <section class="panel search-workbench" aria-labelledby="search-title">
-        <p class="eyebrow">Search</p><h2 id="search-title">Control Atlas results</h2>
+        <p class="eyebrow">Library</p>
+        <h2 id="search-title">Find a control, STIG, CCI, or framework topic</h2>
+        <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
         <form id="search-form" class="search-controls">
-          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}"></div>
-          <div class="field"><label for="search-catalog">Catalog filter</label><select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(filter)}</select></div>
+          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
           <button class="primary" type="submit">Search</button>
         </form>
-        <p class="muted">${results.length} matching node${results.length === 1 ? '' : 's'} found.</p>
+        ${libraryFilterMarkup(state)}
+        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+        <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
       </section>
-      <section class="results" aria-label="Search results">${results.length ? results.map(nodeCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or browse the catalogs.</p></div>'}</section>`;
+      <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
     bindSearchForm();
     bindNodeButtons();
   });
 }
 
 function bindSearchForm() {
+  const nextSearchState = () => ({
+    query: controlBySelector('#search-query')?.value.trim() || '',
+    filter: controlBySelector('#search-catalog')?.value || '',
+    objectType: controlBySelector('#library-object-type-filter')?.value || '',
+    sourceClass: controlBySelector('#library-source-class-filter')?.value || '',
+    controlFamily: controlBySelector('#library-family-filter')?.value || '',
+    severity: controlBySelector('#library-severity-filter')?.value || '',
+  });
+
   elementBySelector('#search-form')?.addEventListener('submit', (event) => {
     event.preventDefault();
-    void setView('search', {
-      query: controlBySelector('#search-query')?.value.trim() || '',
-      filter: controlBySelector('#search-catalog')?.value || '',
-    });
+    void setView('search', nextSearchState());
+  });
+  elementBySelector('.relationship-filter-grid')?.addEventListener('change', () => {
+    void setView('search', nextSearchState());
   });
   /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-example]')).forEach((button) => button.addEventListener('click', () => {
-    void setView('search', { query: button.dataset.example, filter: '' });
+    void setView('search', { ...nextSearchState(), query: button.dataset.example || '' });
   }));
 }
 
@@ -396,14 +447,19 @@ async function renderDetail(nodeId, filters = {}) {
       : additionalRelationshipCards || '<p class="notice">No additional displayable relationships are known.</p>';
 
     app.innerHTML = `
-      <button class="secondary" id="back-search" type="button">Back to search</button>
+      <button class="secondary" id="back-search" type="button">${filters.libraryMode ? 'Back to Library' : 'Back to search'}</button>
       <section class="detail-layout">
         <div class="detail-main">
           <article class="panel">
             <div class="badge-row"><span class="badge">${escapeHtml(node.node_type.replaceAll('_', ' '))}</span>${definingSource ? sourceBadge(definingSource.provenance_class) : ''}</div>
-            <h2 class="item-id" tabindex="-1">${escapeHtml(node.metadata.item_id)}</h2>
-            <h3>${escapeHtml(node.metadata.title)}</h3>
+            <p class="eyebrow">${filters.libraryMode ? 'Library detail' : 'Mapped context'}</p>
+            <h2 tabindex="-1">${escapeHtml(node.metadata.title)}</h2>
+            <p class="item-id">${escapeHtml(node.metadata.item_id)}</p>
+            <p class="workbench-card-meta">Object type: ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
+            <p class="workbench-card-meta">Defining source: ${escapeHtml(definingSource?.name || node.source_id)}  -  Version: ${escapeHtml(definingSource?.version || 'unknown')}</p>
             <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
+            ${definingSource?.artifact_url ? `<p><a href="${escapeHtml(definingSource.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></p>` : ''}
+            ${filters.libraryMode ? '<button class="secondary" id="copy-library-link" type="button">Copy link</button>' : ''}
             <details>
               <summary>Defining public source</summary>
               <p>${escapeHtml(definingSource?.name || node.source_id)}  -  Eligibility: ${escapeHtml(definingSource?.eligibility_status || 'unknown')}  -  Lifecycle: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p>
@@ -450,13 +506,29 @@ async function renderDetail(nodeId, filters = {}) {
           <ul aria-label="Relationship list">${visibleEdges.map((edge) => `<li>${escapeHtml(edge.display_label)}</li>`).join('') || '<li>No displayable relationships</li>'}</ul>
         </aside>
       </section>`;
-    buttonBySelector('#back-search')?.addEventListener('click', () => void renderState(currentState));
+    buttonBySelector('#back-search')?.addEventListener('click', () => void setView('search', {
+      query: currentState.query || '',
+      filter: currentState.filter || '',
+      objectType: currentState.objectType || '',
+      sourceClass: currentState.sourceClass || '',
+      controlFamily: currentState.controlFamily || '',
+      severity: currentState.severity || '',
+    }));
+    buttonBySelector('#copy-library-link')?.addEventListener('click', async () => {
+      const link = `${location.origin}${location.pathname}${serializeViewState({ view: 'library-detail', node: node.id, mode: currentState.mode })}`;
+      try {
+        await navigator.clipboard.writeText(link);
+      } catch {
+        // Clipboard access can fail in some browser contexts; keep the UI stable.
+      }
+    });
     const rerenderDetail = (relationshipView = filters.relationshipView || 'cards') => {
       void renderDetail(node.id, {
         relationshipType: controlBySelector('#relationship-type-filter')?.value || '',
         provenance: controlBySelector('#provenance-filter')?.value || '',
         confidence: controlBySelector('#confidence-filter')?.value || '',
         relationshipView,
+        libraryMode: filters.libraryMode,
       });
     };
     controlBySelector('#relationship-type-filter')?.addEventListener('change', () => rerenderDetail());
@@ -475,13 +547,26 @@ async function renderBrowse(state) {
     const catalogs = runtime.getCatalogs();
     const cards = catalogs.map((catalog) => `
       <article class="framework-card"><span class="badge badge-official">Public catalog</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} nodes  -  ${catalog.relationship_count} relationships</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse catalog</button></article>`).join('');
-    const selectedList = selected ? runtime.getNodes({ catalog_id: selected }) : [];
+    const selectedList = selected ? runtime.searchLibrary('', { catalog_id: selected }) : [];
     app.innerHTML = `
       <section class="panel"><p class="eyebrow">Library</p><h2>Public catalog coverage</h2><div class="grid">${cards}</div>
-      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(selected)}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} nodes.</p>${selectedList.slice(0, 200).map(nodeCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
+      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(selected)}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} objects.</p>${selectedList.slice(0, 200).map(libraryResultCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
     /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-browse-catalog]')).forEach((button) => button.addEventListener('click', () => void setView('browse', { framework: button.dataset.browseCatalog })));
     bindNodeButtons();
   });
+}
+
+async function renderLibraryDetail(state) {
+  if (!state.node) {
+    await setView('search');
+    return;
+  }
+  const node = runtime?.getNode(state.node) || runtime?.searchNodes(state.node)?.[0];
+  if (!node) {
+    await setView('search');
+    return;
+  }
+  await renderDetail(node.id, { libraryMode: true });
 }
 
 function renderSourceListCard(source) {
@@ -680,6 +765,7 @@ async function renderState(state) {
   currentState = state;
   navButtons.forEach((button) => button.toggleAttribute('aria-current', button.dataset.view === state.view));
   if (state.view === 'matrix') await renderMatrix(state);
+  else if (state.view === 'library-detail') await renderLibraryDetail(state);
   else if (state.view === 'browse') await renderBrowse(state);
   else if (state.view === 'patterns') renderPatterns();
   else if (state.view === 'templates') renderTemplates();
@@ -758,13 +844,6 @@ async function init() {
   const state = parseViewState(location.search);
   if (!('mode' in state) || !state.mode) showOnboardingOverlay();
   await renderState(state);
-  if ('query' in state && state.query) {
-    await ensureGraph();
-    const catalogId = 'filter' in state ? state.filter : undefined;
-    const exact = runtime.searchNodes(state.query, { catalog_id: catalogId || undefined })
-      .find((node) => node.metadata.item_id.toLowerCase() === state.query.toLowerCase());
-    if (exact) await renderDetail(exact.id);
-  }
 }
 
 init().catch((error) => {

@@ -370,7 +370,16 @@ export function parseViewState(searchParams) {
     access: params.get('access') || '',
   };
   if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
-  return { ...base, view: 'search', query, filter: params.get('filter') || '' };
+  return {
+    ...base,
+    view: 'search',
+    query,
+    filter: params.get('filter') || '',
+    objectType: params.get('objectType') || '',
+    sourceClass: params.get('sourceClass') || '',
+    controlFamily: params.get('controlFamily') || '',
+    severity: params.get('severity') || '',
+  };
 }
 
 export function normalizeViewState(view, state = {}) {
@@ -389,7 +398,16 @@ export function normalizeViewState(view, state = {}) {
     access: state.access || '',
   };
   if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
-  return { ...base, view: 'search', query: state.query || '', filter: state.filter || '' };
+  return {
+    ...base,
+    view: 'search',
+    query: state.query || '',
+    filter: state.filter || '',
+    objectType: state.objectType || '',
+    sourceClass: state.sourceClass || '',
+    controlFamily: state.controlFamily || '',
+    severity: state.severity || '',
+  };
 }
 
 export function serializeViewState(state) {
@@ -418,10 +436,14 @@ export function serializeViewState(state) {
     if (state.access) params.set('access', state.access);
   } else if (view === 'patterns' || view === 'templates' || view === 'start-here') {
     params.set('view', view);
-  } else if (state.query || state.filter) {
+  } else if (state.query || state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity) {
     params.set('view', 'search');
     if (state.query) params.set('q', state.query);
     if (state.filter) params.set('filter', state.filter);
+    if (state.objectType) params.set('objectType', state.objectType);
+    if (state.sourceClass) params.set('sourceClass', state.sourceClass);
+    if (state.controlFamily) params.set('controlFamily', state.controlFamily);
+    if (state.severity) params.set('severity', state.severity);
   }
   if (state.mode) params.set('mode', state.mode);
   const value = params.toString();
