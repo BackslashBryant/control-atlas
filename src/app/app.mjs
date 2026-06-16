@@ -747,6 +747,26 @@ function sourceRefList(sourceRefs) {
   return `<ul>${sourceRefs.map((ref) => `<li><strong>${escapeHtml(ref.source_name)}</strong> ${escapeHtml(ref.source_version ? `v${ref.source_version}` : '')}${ref.locator ? ` <span class="muted">@ ${escapeHtml(ref.locator)}</span>` : ''}${ref.evidence_quality ? ` <span class="badge">${escapeHtml(ref.evidence_quality)}</span>` : ''}</li>`).join('')}</ul>`;
 }
 
+function publicationStatusBadge(status) {
+  return status === 'candidate'
+    ? '<span class="badge badge-warning">candidate</span>'
+    : '<span class="badge badge-success">published</span>';
+}
+
+function baselineSourceSummary(label, baselineNode, sourceMeta) {
+  if (!baselineNode || !sourceMeta) return '';
+  const version = sourceMeta.version ? ` v${escapeHtml(sourceMeta.version)}` : '';
+  const itemId = baselineNode.metadata?.item_id || baselineNode.id;
+  const title = baselineNode.metadata?.title || baselineNode.label || itemId;
+  return `<p class="muted"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(itemId)} — ${escapeHtml(title)} · Defining source: ${escapeHtml(sourceMeta.name)}${version}</p>`;
+}
+
+function chainRelationshipItem(node, relationshipEdge, sourceRefs) {
+  const itemId = node.metadata?.item_id || node.id;
+  const title = node.metadata?.title || node.label || itemId;
+  return `<li><strong>${escapeHtml(itemId)}</strong> - ${escapeHtml(title)}<div class="badge-row">${publicationStatusBadge(relationshipEdge.publication_status)}</div>${sourceRefList(sourceRefs)}</li>`;
+}
+
 function exportButtonMarkup(disabled = false) {
   return `
     <div class="source-card-actions">
@@ -868,7 +888,7 @@ async function renderMatrix(state) {
           ? `<table class="matrix-table" aria-label="STIG chain summary"><thead><tr><th>Item</th><th>Benchmark</th><th>CCIs</th><th>NIST controls</th><th>Unmapped CCIs</th></tr></thead><tbody>${chainPayload.rows.map((row) => `<tr><td>${escapeHtml(row.item_id)} - ${escapeHtml(row.title)}</td><td>${escapeHtml(row.benchmark_title)}</td><td>${row.cci_count}</td><td>${row.nist_control_count}</td><td>${row.unmapped_cci_count}</td></tr>`).join('')}</tbody></table>`
           : '<p class="notice">No STIG or SRG items match this scope.</p>'}
         ${chainPayload.selected_chain
-          ? `<section class="panel more-mappings"><p class="eyebrow">Selected chain</p><h3>${escapeHtml(chainPayload.selected_chain.source_node.metadata?.title || chainPayload.selected_chain.source_node.label)}</h3><p class="muted">${escapeHtml(chainPayload.selected_chain.source_node.metadata?.item_id || chainPayload.selected_chain.source_node.id)}</p><div class="grid"><article class="framework-card"><h4>CCI links</h4><ul>${chainPayload.selected_chain.cci_entries.map((entry) => `<li><strong>${escapeHtml(entry.cciNode.metadata?.item_id || entry.cciNode.id)}</strong> - ${escapeHtml(entry.cciNode.metadata?.title || entry.cciNode.label)}${sourceRefList(entry.sourceRefs)}</li>`).join('') || '<li>No CCI links.</li>'}</ul></article><article class="framework-card"><h4>NIST controls</h4><ul>${chainPayload.selected_chain.nist_entries.map((entry) => `<li><strong>${escapeHtml(entry.nistNode.metadata?.item_id || entry.nistNode.id)}</strong> - ${escapeHtml(entry.nistNode.metadata?.title || entry.nistNode.label)}${sourceRefList(entry.sourceRefs)}</li>`).join('') || '<li>No NIST controls reached from this visible chain.</li>'}</ul></article><article class="framework-card"><h4>Unmapped CCIs</h4><ul>${chainPayload.selected_chain.unmapped_cci_nodes.map((node) => `<li>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || node.label)}</li>`).join('') || '<li>Every visible CCI has a visible NIST link.</li>'}</ul></article></div></section>`
+          ? `<section class="panel more-mappings"><p class="eyebrow">Selected chain</p><h3>${escapeHtml(chainPayload.selected_chain.source_node.metadata?.title || chainPayload.selected_chain.source_node.label)}</h3><p class="muted">${escapeHtml(chainPayload.selected_chain.source_node.metadata?.item_id || chainPayload.selected_chain.source_node.id)}</p><div class="grid"><article class="framework-card"><h4>CCI links</h4><ul>${chainPayload.selected_chain.cci_entries.map((entry) => chainRelationshipItem(entry.cciNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No CCI links.</li>'}</ul></article><article class="framework-card"><h4>NIST controls</h4><ul>${chainPayload.selected_chain.nist_entries.map((entry) => chainRelationshipItem(entry.nistNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No NIST controls reached from this visible chain.</li>'}</ul></article><article class="framework-card"><h4>Unmapped CCIs</h4><ul>${chainPayload.selected_chain.unmapped_cci_nodes.map((node) => `<li>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || node.label)}</li>`).join('') || '<li>Every visible CCI has a visible NIST link.</li>'}</ul></article></div></section>`
           : ''}`;
     } else {
       modeMarkup = `
@@ -879,7 +899,7 @@ async function renderMatrix(state) {
         </form>
         ${exportButtonMarkup(!baselineComparison)}
         ${baselineComparison
-          ? `<div class="grid"><article class="framework-card"><span class="badge">Shared controls</span><h3>${baselineComparison.shared.length}</h3><ul>${baselineComparison.shared.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No shared controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in A</span><h3>${baselineComparison.only_a.length}</h3><ul>${baselineComparison.only_a.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No A-only controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in B</span><h3>${baselineComparison.only_b.length}</h3><ul>${baselineComparison.only_b.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No B-only controls.</li>'}</ul></article></div>`
+          ? `${baselineSourceSummary('Baseline A', baselineComparison.baseline_a, baselineComparison.baseline_a_source)}${baselineSourceSummary('Baseline B', baselineComparison.baseline_b, baselineComparison.baseline_b_source)}<div class="grid"><article class="framework-card"><span class="badge">Shared controls</span><h3>${baselineComparison.shared.length}</h3><ul>${baselineComparison.shared.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No shared controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in A</span><h3>${baselineComparison.only_a.length}</h3><ul>${baselineComparison.only_a.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No A-only controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in B</span><h3>${baselineComparison.only_b.length}</h3><ul>${baselineComparison.only_b.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No B-only controls.</li>'}</ul></article></div>`
           : '<p class="notice">Choose two distinct public baselines to compare.</p>'}`;
     }
 

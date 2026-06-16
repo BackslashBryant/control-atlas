@@ -208,6 +208,22 @@ export function createFederalGraphRuntime(dataset) {
       unmapped_cci_nodes: cciEntries.filter((entry) => !mappedCciIds.has(entry.cciNode.id)).map((entry) => entry.cciNode),
     };
   };
+  const resolveSourceForNode = (node) => {
+    if (!node) return null;
+    const source = sourceById.get(node.source_id);
+    if (!source) return null;
+    return {
+      id: source.id,
+      name: source.name,
+      version: source.version || '',
+      retrieved_at: source.retrieved_at || '',
+    };
+  };
+  const formatBaselineHeaderLine = (label, baselineNode, sourceMeta) => {
+    const version = sourceMeta?.version ? ` v${sourceMeta.version}` : '';
+    const title = baselineNode ? `${itemIdFor(baselineNode)} — ${itemTitleFor(baselineNode)}` : '';
+    return `${label}: ${title} (${sourceMeta?.name || 'Unknown source'}${version})`;
+  };
   const baselineControlEntries = (baselineId) => uniqueBy(dataset.edges
     .filter((edge) =>
       edge.publication_status === 'published'
@@ -419,6 +435,8 @@ export function createFederalGraphRuntime(dataset) {
         request,
         baseline_a: baselineA,
         baseline_b: baselineB,
+        baseline_a_source: resolveSourceForNode(baselineA),
+        baseline_b_source: resolveSourceForNode(baselineB),
         shared: controlsA.filter((entry) => idsB.has(entry.control_node.id)),
         only_a: controlsA.filter((entry) => !idsB.has(entry.control_node.id)),
         only_b: controlsB.filter((entry) => !idsA.has(entry.control_node.id)),
@@ -430,20 +448,31 @@ export function createFederalGraphRuntime(dataset) {
         ...comparison.only_a.map((entry) => ({ section: 'Only in A', control_id: itemIdFor(entry.control_node), control_title: itemTitleFor(entry.control_node), source_refs: entry.source_refs.map(sourceRefLabel).join('; ') })),
         ...comparison.only_b.map((entry) => ({ section: 'Only in B', control_id: itemIdFor(entry.control_node), control_title: itemTitleFor(entry.control_node), source_refs: entry.source_refs.map(sourceRefLabel).join('; ') })),
       ];
+      const headerLines = [
+        formatBaselineHeaderLine('Baseline A', comparison.baseline_a, comparison.baseline_a_source),
+        formatBaselineHeaderLine('Baseline B', comparison.baseline_b, comparison.baseline_b_source),
+      ];
       if (format === 'json') {
         return exportJson({
           baseline_a: comparison.baseline_a?.id || '',
           baseline_b: comparison.baseline_b?.id || '',
+          baseline_a_source: comparison.baseline_a_source,
+          baseline_b_source: comparison.baseline_b_source,
           rows,
         });
       }
       if (format === 'markdown') {
-        return exportMarkdownTable(
+        return `${headerLines.map((line) => `${line}\n`).join('\n')}${exportMarkdownTable(
           ['Section', 'Control ID', 'Control title', 'Source references'],
           rows.map((row) => [row.section, row.control_id, row.control_title, row.source_refs]),
-        );
+        )}`;
       }
-      const csvRows = [['Section', 'Control ID', 'Control title', 'Source references']];
+      const csvRows = [
+        [headerLines[0]],
+        [headerLines[1]],
+        [],
+        ['Section', 'Control ID', 'Control title', 'Source references'],
+      ];
       for (const row of rows) {
         csvRows.push([row.section, row.control_id, row.control_title, row.source_refs]);
       }

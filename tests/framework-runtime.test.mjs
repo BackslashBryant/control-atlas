@@ -16,12 +16,12 @@ const fixture = {
     { id: 'disa-stig-library', name: 'DISA STIG Library', owner: 'DISA', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['disa-stig'] } },
     { id: 'disa-srg-library', name: 'DISA SRG Library', owner: 'DISA', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['disa-srg'] } },
     { id: 'disa-cci-list', name: 'DISA CCI List', owner: 'DISA', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['disa-cci'] } },
-    { id: 'nist-800-53b-baselines', name: 'NIST SP 800-53B Baseline Profiles', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-53b'] } },
+    { id: 'nist-800-53b-baselines', name: 'NIST SP 800-53B Baseline Profiles', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, version: '2026', metadata: { frameworks: ['nist-800-53b'] } },
     { id: 'nist-fips-199', name: 'FIPS 199', owner: 'NIST', provenance_class: 'mandated', graph_eligible: true, metadata: { frameworks: ['fips-199'] } },
     { id: 'nist-fips-200', name: 'FIPS 200', owner: 'NIST', provenance_class: 'mandated', graph_eligible: true, metadata: { frameworks: ['fips-200'] } },
     { id: 'nist-800-37-rev2', name: 'SP 800-37 Rev. 2', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-37'] } },
     { id: 'nist-800-53a-assessment-procedures', name: 'SP 800-53A Assessment Procedures', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-53a'] } },
-    { id: 'fedramp-rev5', name: 'FedRAMP Rev. 5 Baselines', owner: 'FedRAMP', provenance_class: 'federal_program', graph_eligible: true, metadata: { frameworks: ['fedramp-rev5'] } },
+    { id: 'fedramp-rev5', name: 'FedRAMP Rev. 5 Baselines', owner: 'FedRAMP', provenance_class: 'federal_program', graph_eligible: true, version: '2026', metadata: { frameworks: ['fedramp-rev5'] } },
     { id: 'dod-cmmc-rule', name: 'CMMC Program Rule', owner: 'DoD', provenance_class: 'federal_program', graph_eligible: true, metadata: { frameworks: ['cmmc-2'] } },
     { id: 'nist-800-171-rev2', name: 'SP 800-171 Rev. 2', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-171-rev2'] } },
     { id: 'nist-800-172-rev3', name: 'SP 800-172 Rev. 3', owner: 'NIST', provenance_class: 'federal_published', graph_eligible: true, metadata: { frameworks: ['nist-800-172'] } },
@@ -41,6 +41,7 @@ const fixture = {
     { id: 'disa-srg:V-200001', node_type: 'srg_requirement', label: 'V-200001 Sample SRG Requirement', source_id: 'disa-srg-library', metadata: { catalog_id: 'disa-srg', item_id: 'V-200001', title: 'Sample SRG Requirement', description: 'Sample SRG requirement.', severity: 'high', benchmark_id: 'app-srg', benchmark_title: 'Application SRG' } },
     { id: 'disa-cci:CCI-000015', node_type: 'requirement', label: 'CCI-000015 Sample CCI', source_id: 'disa-cci-list', metadata: { catalog_id: 'disa-cci', item_id: 'CCI-000015', title: 'Sample CCI 15', description: 'Sample CCI mapping.' } },
     { id: 'disa-cci:CCI-000016', node_type: 'requirement', label: 'CCI-000016 Sample CCI', source_id: 'disa-cci-list', metadata: { catalog_id: 'disa-cci', item_id: 'CCI-000016', title: 'Sample CCI 16', description: 'Second sample CCI.' } },
+    { id: 'disa-cci:CCI-000017', node_type: 'requirement', label: 'CCI-000017 Sample CCI', source_id: 'disa-cci-list', metadata: { catalog_id: 'disa-cci', item_id: 'CCI-000017', title: 'Sample CCI 17', description: 'Candidate sample CCI.' } },
     { id: 'disa-cci:CCI-000213', node_type: 'requirement', label: 'CCI-000213 Sample CCI', source_id: 'disa-cci-list', metadata: { catalog_id: 'disa-cci', item_id: 'CCI-000213', title: 'Sample CCI 213', description: 'SRG sample CCI.' } },
     { id: 'nist-800-53b:MODERATE', node_type: 'baseline', label: 'MODERATE Moderate Baseline', source_id: 'nist-800-53b-baselines', metadata: { catalog_id: 'nist-800-53b', item_id: 'MODERATE', title: 'Moderate Baseline', description: 'Moderate impact baseline.' } },
     { id: 'fips-199:FIPS-199-MODERATE', node_type: 'impact_category', label: 'FIPS-199-MODERATE Moderate Impact', source_id: 'nist-fips-199', metadata: { catalog_id: 'fips-199', item_id: 'FIPS-199-MODERATE', title: 'Moderate Impact', description: 'Moderate potential impact.' } },
@@ -70,6 +71,7 @@ const fixture = {
     { id: 'edge:fedramp-ac4', source_node_id: 'fedramp-rev5:MODERATE', target_node_id: 'nist-800-53:AC-4', relationship_type: 'includes', provenance_class: 'federal_program', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:fedramp-ac4'] },
     { id: 'edge:stig-cci-15', source_node_id: 'disa-stig:V-100001', target_node_id: 'disa-cci:CCI-000015', relationship_type: 'references', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:stig-cci-15'] },
     { id: 'edge:stig-cci-16', source_node_id: 'disa-stig:V-100001', target_node_id: 'disa-cci:CCI-000016', relationship_type: 'references', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:stig-cci-16'] },
+    { id: 'edge:stig-cci-17', source_node_id: 'disa-stig:V-100001', target_node_id: 'disa-cci:CCI-000017', relationship_type: 'references', provenance_class: 'federal_published', confidence: 'indirect', publication_status: 'candidate', evidence_ids: ['evidence:stig-cci-17'], warning: 'Candidate STIG CCI link', inference_rule_id: 'sample-stig-rule' },
     { id: 'edge:srg-cci-213', source_node_id: 'disa-srg:V-200001', target_node_id: 'disa-cci:CCI-000213', relationship_type: 'references', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:srg-cci-213'] },
     { id: 'edge:cci-ac2', source_node_id: 'disa-cci:CCI-000015', target_node_id: 'nist-800-53:AC-2', relationship_type: 'references', provenance_class: 'federal_published', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:cci-ac2'] },
     { id: 'edge:cmmc-level2-171r2', source_node_id: 'cmmc-2:LEVEL-2', target_node_id: 'nist-800-171-rev2:3.1.1', relationship_type: 'requires', provenance_class: 'federal_program', confidence: 'direct', publication_status: 'published', evidence_ids: ['evidence:cmmc-level2-171r2'] },
@@ -92,6 +94,7 @@ const fixture = {
     { id: 'evidence:fedramp-ac4', source_id: 'fedramp-rev5', source_version: '2026', locator: 'moderate:AC-4', evidence_quality: 'primary' },
     { id: 'evidence:stig-cci-15', source_id: 'disa-stig-library', source_version: '2026', locator: 'win11#V-100001', evidence_quality: 'primary' },
     { id: 'evidence:stig-cci-16', source_id: 'disa-stig-library', source_version: '2026', locator: 'win11#V-100001', evidence_quality: 'primary' },
+    { id: 'evidence:stig-cci-17', source_id: 'disa-stig-library', source_version: '2026', locator: 'win11#V-100001', evidence_quality: 'secondary' },
     { id: 'evidence:srg-cci-213', source_id: 'disa-srg-library', source_version: '2026', locator: 'app-srg#V-200001', evidence_quality: 'primary' },
     { id: 'evidence:cci-ac2', source_id: 'disa-cci-list', source_version: '2026', locator: 'CCI-000015', evidence_quality: 'primary' },
     { id: 'evidence:cmmc-level2-171r2', source_id: 'dod-cmmc-rule', source_version: '2026', locator: '32-CFR-170.14(c)(3)', evidence_quality: 'primary' },
@@ -228,6 +231,18 @@ test('runtime builds STIG to CCI to NIST chains for package and item scopes', ()
   assert.deepEqual(itemScope.selected_chain.cci_nodes.map((node) => node.id), ['disa-cci:CCI-000015', 'disa-cci:CCI-000016']);
   assert.deepEqual(itemScope.selected_chain.nist_nodes.map((node) => node.id), ['nist-800-53:AC-2']);
   assert.deepEqual(itemScope.selected_chain.unmapped_cci_nodes.map((node) => node.id), ['disa-cci:CCI-000016']);
+
+  const withCandidates = runtime.buildStigChain({
+    chain_catalog: 'disa-stig',
+    chain_item: 'disa-stig:V-100001',
+    include_candidates: true,
+  });
+  assert.deepEqual(withCandidates.selected_chain.cci_nodes.map((node) => node.id), [
+    'disa-cci:CCI-000015',
+    'disa-cci:CCI-000016',
+    'disa-cci:CCI-000017',
+  ]);
+  assert.equal(withCandidates.selected_chain.cci_entries.find((entry) => entry.cciNode.id === 'disa-cci:CCI-000017')?.relationshipEdge.publication_status, 'candidate');
 });
 
 test('runtime compares public baselines into shared and delta control sets', () => {
@@ -239,9 +254,21 @@ test('runtime compares public baselines into shared and delta control sets', () 
 
   assert.equal(comparison.baseline_a.id, 'nist-800-53b:MODERATE');
   assert.equal(comparison.baseline_b.id, 'fedramp-rev5:MODERATE');
+  assert.equal(comparison.baseline_a_source.name, 'NIST SP 800-53B Baseline Profiles');
+  assert.equal(comparison.baseline_a_source.version, '2026');
+  assert.equal(comparison.baseline_b_source.name, 'FedRAMP Rev. 5 Baselines');
+  assert.equal(comparison.baseline_b_source.version, '2026');
   assert.deepEqual(comparison.shared.map((entry) => entry.control_node.id), ['nist-800-53:AC-2']);
   assert.deepEqual(comparison.only_a.map((entry) => entry.control_node.id), ['nist-800-53:AC-3']);
   assert.deepEqual(comparison.only_b.map((entry) => entry.control_node.id), ['nist-800-53:AC-4']);
+
+  const markdown = runtime.exportBaselineComparison(comparison, 'markdown');
+  assert.match(markdown, /Baseline A: MODERATE — Moderate Baseline \(NIST SP 800-53B Baseline Profiles v2026\)/);
+  assert.match(markdown, /Baseline B: MODERATE — Moderate Baseline \(FedRAMP Rev\. 5 Baselines v2026\)/);
+
+  const parsed = JSON.parse(runtime.exportBaselineComparison(comparison, 'json'));
+  assert.equal(parsed.baseline_a_source.version, '2026');
+  assert.equal(parsed.baseline_b_source.version, '2026');
 });
 
 test('relationship exports mirror the current visible rows', () => {
