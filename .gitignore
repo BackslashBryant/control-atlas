@@ -42,6 +42,7 @@ scripts/*
 !scripts/fetch-ccis.mjs
 !scripts/fetch-olir-mappings.mjs
 !scripts/fetch-framework-catalogs.mjs
+!scripts/extract-dod-zt.mjs
 !scripts/fetch-stig-source-observations.mjs
 !scripts/refresh-data.mjs
 !scripts/static-smoke.mjs
@@ -63,6 +64,9 @@ scripts/security/*
 !data/
 data/*
 !data/*.json
+!data/curated/
+!data/curated/dod-zt/
+!data/curated/dod-zt/*.json
 data/tenable-sync-state.json
 !data/generated/
 !data/generated/*.json

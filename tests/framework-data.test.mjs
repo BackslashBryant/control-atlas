@@ -33,9 +33,9 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 35);
-  assert.ok(result.nodes > 6800);
-  assert.ok(result.edges > 4200);
+  assert.equal(result.sources, 40);
+  assert.ok(result.nodes > 8000);
+  assert.ok(result.edges > 9000);
   assert.equal(result.edges, result.evidence);
   assert.ok(result.findings > 0);
   assert.equal(generated('sources').generated_at, generatedAt);
@@ -207,4 +207,47 @@ test('epic 3 graph build emits a library search artifact with filter facets', ()
   assert.equal(ac2.object_type, 'control');
   assert.equal(ac2.source_class, 'federal_published');
   assert.equal(ac2.control_family, 'Access Control');
+});
+
+test('dod-zt graph build emits pillars, capabilities, and overlay crosswalk edges', () => {
+  buildFrameworkData();
+  const sources = generated('sources').sources;
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  const sourceIds = new Set(sources.map((source) => source.id));
+  for (const id of [
+    'dod-zt-reference-architecture-v2',
+    'dod-zt-strategy',
+    'dod-zt-overlays-2024',
+    'dod-zt-capabilities',
+    'dod-zt-execution-roadmap',
+  ]) {
+    assert.ok(sourceIds.has(id), `missing source ${id}`);
+  }
+
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  assert.ok(nodeIds.has('dod-zt:CATALOG'));
+  assert.ok(nodeIds.has('dod-zt:TENET-1'));
+  assert.ok(nodeIds.has('dod-zt:PILLAR-1'));
+  assert.ok(nodeIds.has('dod-zt:CAP-1-1'));
+  assert.ok(nodeIds.has('dod-zt:ACT-1-1-1'));
+
+  const ztNodes = nodes.filter((node) => node.metadata?.catalog_id === 'dod-zt');
+  assert.ok(ztNodes.filter((node) => node.node_type === 'zt_tenet').length >= 5);
+  assert.ok(ztNodes.filter((node) => node.node_type === 'zt_pillar').length >= 7);
+  assert.ok(ztNodes.filter((node) => node.node_type === 'zt_capability').length >= 40);
+
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'dod-zt:PILLAR-1'
+    && edge.target_node_id === 'dod-zt:CAP-1-1'
+    && edge.relationship_type === 'includes'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'nist-800-53:AC-2'
+    && edge.target_node_id.startsWith('dod-zt:CAP-')
+    && edge.relationship_type === 'supports'));
+  assert.ok(edges.some((edge) =>
+    edge.source_node_id === 'dod-zt:DOC-OVERLAYS'
+    && edge.target_node_id === 'dod-zt:DOC-RA'
+    && edge.relationship_type === 'references'));
 });
