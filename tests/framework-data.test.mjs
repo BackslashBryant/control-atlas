@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseCciXml } from '../tools/importers/cci-adapter.mjs';
-import { parseOlirCsv } from '../tools/relationship-builders/olir-adapter.mjs';
+import { parseOlirCsv, parseOlirExcel } from '../tools/relationship-builders/olir-adapter.mjs';
 import { buildFrameworkData } from '../scripts/build-framework-data.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
@@ -18,6 +18,15 @@ test('OLIR adapter preserves source and target identifiers', () => {
   const relationships = parseOlirCsv(readFileSync('tests/fixtures/olir/sample-crosswalk.csv', 'utf8'));
   assert.equal(relationships[0].source_id, 'nist-800-53:AC-2');
   assert.equal(relationships[0].target_id, 'csf-2:PR.AA-01');
+});
+
+test('OLIR adapter parses workbook rows from official-style crosswalk sheets', async () => {
+  const buffer = readFileSync('tests/fixtures/olir/sample-crosswalk.xlsx');
+  const relationships = await parseOlirExcel(buffer);
+  assert.equal(relationships.length, 1);
+  assert.equal(relationships[0].source_id, 'AC-2');
+  assert.equal(relationships[0].target_id, 'PR.AA-01');
+  assert.match(relationships[0].why, /Sample comment/);
 });
 
 test('federal graph build emits graph contract counts', () => {
