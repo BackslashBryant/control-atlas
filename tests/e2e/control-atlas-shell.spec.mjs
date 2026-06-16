@@ -87,4 +87,5 @@ test('crosswalk workbench compares public baselines', async ({ page }) => {
   await expect(page.getByText('Shared controls')).toBeVisible();
   await expect(page.getByText('Only in A')).toBeVisible();
   await expect(page.getByText('Only in B')).toBeVisible();
+  await expect(page.getByText(/Defining source:/)).toHaveCount(2);
 });

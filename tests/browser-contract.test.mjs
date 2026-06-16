@@ -133,6 +133,10 @@ test('crosswalk workbench exposes epic 4 modes, visible-only exports, and inferr
   assert.match(app, /Only in A/);
   assert.match(app, /Only in B/);
   assert.match(app, /Select a STIG or SRG item/);
+  assert.match(app, /publicationStatusBadge/);
+  assert.match(app, /chainRelationshipItem/);
+  assert.match(app, /baselineSourceSummary/);
+  assert.match(app, /Defining source:/);
 });
 
 test('source check view exposes source filters, detail views, and warning metadata', () => {
