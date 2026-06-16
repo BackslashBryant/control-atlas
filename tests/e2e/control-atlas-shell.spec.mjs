@@ -57,7 +57,7 @@ test('library filters narrow results without a page reload', async ({ page }) =>
   await page.goto('/');
   await dismissOnboarding(page);
   await page.getByLabel('ID, title, or topic').fill('AC-2');
-  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
   await page.getByLabel('Object type').selectOption('control');
   await expect(page.locator('#library-results .item-card')).toHaveCount(1);
   await expect(page.locator('#library-results')).toContainText('Account Management');

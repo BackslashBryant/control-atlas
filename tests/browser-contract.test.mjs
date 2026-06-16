@@ -89,9 +89,20 @@ test('onboarding and accessible relationship alternatives remain available', () 
 
 test('hero uses the Ctrl+Alt rotating line with reduced-motion fallback', () => {
   assert.match(html, /hero-rotating-word/);
-  assert.match(app, /Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize/);
+  assert.match(html, /hero-tagline/);
+  assert.match(html, /landing-support-template/);
+  assert.match(app, /Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize'/);
+  assert.match(app, /'Trace', 'Compare', 'Baseline'/);
+  assert.match(app, /mountLandingSupport/);
   assert.match(app, /matchMedia\('\(prefers-reduced-motion: reduce\)'\)/);
   assert.match(app, /Ctrl\+Alt\+/);
+});
+
+test('landing keeps hero visible until search is engaged', () => {
+  assert.match(app, /const searchEngaged = Boolean\(query \|\| hasActiveFilters\)/);
+  assert.match(app, /workspace\.toggleAttribute\('data-search-active', searchEngaged\)/);
+  assert.doesNotMatch(app, /landing \|\| Boolean\(query/);
+  assert.match(app, /if \(state\.view !== 'search'\) workspace\.removeAttribute\('data-search-active'\)/);
 });
 
 test('shell applies the PRD dark-atlas token system and CSP', () => {
