@@ -6,6 +6,7 @@ import {
   buildCmmcPublicCatalog,
   buildCuiPolicyCatalog,
   buildDodRaiPublicCatalog,
+  buildDodZeroTrustCatalog,
   buildFedrampPublicCatalog,
   buildFips199Catalog,
   buildFips200Catalog,
@@ -110,6 +111,7 @@ const PUBLIC_CATALOGS = [
   ['tasks-800-37.json', buildRmfCatalog],
   ['cui-policy.json', buildCuiPolicyCatalog],
   ['dod-rai.json', buildDodRaiPublicCatalog],
+  ['dod-zt.json', (snapshotDate) => buildDodZeroTrustCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'dod-zt'))],
 ];
 
 function writeCatalog(filename, document) {

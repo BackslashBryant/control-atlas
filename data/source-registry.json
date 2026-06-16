@@ -1049,6 +1049,143 @@
         ],
         "parser": "olir-xlsx"
       }
+    },
+    {
+      "id": "dod-zt-reference-architecture-v2",
+      "name": "DoD Zero Trust Reference Architecture Version 2.0",
+      "owner": "DoD",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2022-07",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "artifact_type": "publication",
+      "checksum": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "access_status": "public",
+      "license_or_use": "Distribution Statement A. Approved for public release.",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "dod-zt"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "dod-zt-strategy",
+      "name": "DoD Zero Trust Strategy",
+      "owner": "DoD",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2022-10",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_dod_zt_strategy_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DoD CIO Library Public Release",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "dod-zt"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "dod-zt-overlays-2024",
+      "name": "DoD Zero Trust Overlays",
+      "owner": "DoD",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2024-02",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "artifact_type": "publication",
+      "checksum": "sha256:196d381b7e74a2dc7b88e7d7705cf64e4389f35019282332b97d5a575f05f3fc",
+      "access_status": "public",
+      "license_or_use": "Distribution Statement A. Approved for public release.",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "dod-zt",
+          "nist-800-53"
+        ],
+        "parser": "manual-seed",
+        "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA."
+      }
+    },
+    {
+      "id": "dod-zt-capabilities",
+      "name": "DoD Zero Trust Capabilities and Activities",
+      "owner": "DoD",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2022-11",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_dod_zt_capabilities_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DoD CIO Library Public Release",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "dod-zt"
+        ],
+        "parser": "manual-seed"
+      }
+    },
+    {
+      "id": "dod-zt-execution-roadmap",
+      "name": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "owner": "DoD",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "DoD cybersecurity program"
+      ],
+      "version": "2024-11",
+      "retrieved_at": "2026-06-15",
+      "retrieval_method": "download",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "artifact_type": "publication",
+      "checksum": "sha256:catalog_dod_zt_execution_roadmap_placeholder_checksum",
+      "access_status": "public",
+      "license_or_use": "DoD CIO Library Public Release",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "dod-zt"
+        ],
+        "parser": "manual-seed"
+      }
     }
   ]
 }

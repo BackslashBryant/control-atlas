@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 const AI_RMF_SOURCE = 'nist-ai-rmf-playbook';
 const SSDF_SOURCE = 'nist-ssdf-oscal';
 const FEDRAMP_SOURCE = 'fedramp-rev5';
@@ -7,6 +10,9 @@ const NIST_800_37_SOURCE = 'nist-800-37-rev2';
 const NIST_800_53B_SOURCE = 'nist-800-53b-baselines';
 const CMMC_SOURCE = 'dod-cmmc-rule';
 const DOD_RAI_SOURCE = 'dod-rai-toolkit';
+const DOD_ZT_RA_SOURCE = 'dod-zt-reference-architecture-v2';
+const DOD_ZT_CAPABILITIES_SOURCE = 'dod-zt-capabilities';
+const DOD_ZT_OVERLAYS_SOURCE = 'dod-zt-overlays-2024';
 const ISOO_CUI_SOURCE = 'isoo-cui-regulation';
 const NARA_CUI_SOURCE = 'nara-cui-registry';
 
@@ -339,4 +345,139 @@ export function buildDodRaiPublicCatalog(snapshotDate) {
     { id: 'SHIELD-LOG', type: 'rai-shield-activity', framework: 'dod-rai', title: 'Log for Traceability', family: 'SHIELD Activities', description: 'Log responsible AI decisions and evidence for traceability.', locator: 'executive-summary#shield-log' },
     { id: 'SHIELD-DETECT', type: 'rai-shield-activity', framework: 'dod-rai', title: 'Detect via Continuous Monitoring', family: 'SHIELD Activities', description: 'Detect responsible AI concerns through continuous monitoring.', locator: 'executive-summary#shield-detect' },
   ]);
+}
+
+function capabilityRecordId(rawId) {
+  return `CAP-${String(rawId).replace('.', '-')}`;
+}
+
+function activityRecordId(rawId) {
+  return `ACT-${String(rawId).replace(/\./g, '-')}`;
+}
+
+export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
+  const readJson = (filename) => JSON.parse(readFileSync(join(curatedRoot, filename), 'utf8'));
+  const taxonomy = readJson('taxonomy.json');
+  const capabilitiesDoc = readJson('capabilities.json');
+  const activitiesDoc = readJson('activities.json');
+  const records = [];
+
+  records.push({
+    id: 'OVERLAYS-CATALOG',
+    type: 'zt-overlay-catalog',
+    framework: 'dod-zt',
+    title: 'DoD Zero Trust Overlays',
+    family: 'Control Overlays',
+    description: 'DoD control overlays on Zero Trust pillars (RMF overlay sense). Not overlay networks or ZTNA.',
+    locator: 'ZeroTrustOverlays-2024Feb.pdf#executive-summary',
+    source: source(DOD_ZT_OVERLAYS_SOURCE, snapshotDate, 'ZeroTrustOverlays-2024Feb.pdf#executive-summary'),
+    metadata: {
+      disambiguation: 'DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA.',
+    },
+  });
+
+  for (const tenet of taxonomy.tenets) {
+    records.push({
+      id: tenet.id,
+      type: 'zt_tenet',
+      framework: 'dod-zt',
+      title: tenet.title,
+      family: 'Zero Trust Tenets',
+      description: tenet.description,
+      locator: tenet.locator,
+      source: source(tenet.source_key || DOD_ZT_RA_SOURCE, snapshotDate, tenet.locator),
+    });
+  }
+
+  for (const pillar of taxonomy.pillars) {
+    records.push({
+      id: pillar.id,
+      type: 'zt_pillar',
+      framework: 'dod-zt',
+      title: pillar.title,
+      family: pillar.family || 'Zero Trust Pillars',
+      description: pillar.description,
+      locator: pillar.locator,
+      source: source(pillar.source_key || DOD_ZT_RA_SOURCE, snapshotDate, pillar.locator),
+      metadata: { pillar_number: pillar.number || null },
+    });
+  }
+
+  for (const section of taxonomy.overlay_sections) {
+    records.push({
+      id: section.id,
+      type: 'zt_overlay_section',
+      framework: 'dod-zt',
+      title: section.title,
+      family: 'Zero Trust Overlays',
+      description: `Overlay section for ${section.title}.`,
+      locator: section.locator,
+      source: source(section.source_key || DOD_ZT_OVERLAYS_SOURCE, snapshotDate, section.locator),
+      metadata: {
+        pillar_id: section.pillar_id,
+        appendix: section.appendix,
+        relationships: [{ target_catalog: 'dod-zt', target_id: section.pillar_id, relationship_type: 'references' }],
+      },
+    });
+  }
+
+  for (const doc of taxonomy.documents) {
+    records.push({
+      id: doc.id,
+      type: 'zt_document',
+      framework: 'dod-zt',
+      title: doc.title,
+      family: 'Zero Trust Documents',
+      description: doc.title,
+      locator: doc.locator,
+      source: source(doc.source_key, snapshotDate, doc.locator),
+      metadata: {
+        disambiguation: doc.disambiguation || null,
+        relationships: (doc.relationships || []).map((relationship) => ({
+          ...relationship,
+          rationale: `${doc.title} references ${relationship.target_id}.`,
+        })),
+      },
+    });
+  }
+
+  for (const capability of capabilitiesDoc.records) {
+    const id = capabilityRecordId(capability.id);
+    records.push({
+      id,
+      type: 'zt_capability',
+      framework: 'dod-zt',
+      title: `${capability.id} ${capability.title}`,
+      family: capability.pillar_name || capability.pillar_id,
+      description: [capability.description, capability.outcome, capability.impact].filter(Boolean).join(' '),
+      locator: capability.locator,
+      source: source(DOD_ZT_CAPABILITIES_SOURCE, snapshotDate, capability.locator),
+      metadata: {
+        capability_id: capability.id,
+        pillar_id: capability.pillar_id,
+        level: capability.level,
+      },
+    });
+  }
+
+  for (const activity of activitiesDoc.records) {
+    const capabilityId = capabilityRecordId(activity.capability_id);
+    records.push({
+      id: activityRecordId(activity.id),
+      type: 'zt_activity',
+      framework: 'dod-zt',
+      title: `${activity.id} ${activity.title}`,
+      family: 'Zero Trust Activities',
+      description: activity.title,
+      locator: activity.locator,
+      source: source(activity.source_key || DOD_ZT_OVERLAYS_SOURCE, snapshotDate, activity.locator),
+      metadata: {
+        activity_id: activity.id,
+        capability_id: capabilityId,
+        level: activity.level,
+      },
+    });
+  }
+
+  return { schema_version: '1.0', source_key: DOD_ZT_RA_SOURCE, records };
 }

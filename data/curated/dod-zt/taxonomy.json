@@ -1,0 +1,423 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-16T05:17:27.135Z",
+  "tenets": [
+    {
+      "id": "TENET-1",
+      "title": "Assume a Hostile Environment",
+      "description": "Operate without implicit trust in network location or asset ownership.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-1"
+    },
+    {
+      "id": "TENET-2",
+      "title": "Presume Breach",
+      "description": "Consciously operate and defend resources with the assumption that an adversary is present.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-2"
+    },
+    {
+      "id": "TENET-3",
+      "title": "Never Trust, Always Verify",
+      "description": "Require explicit verification for every access decision.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-3"
+    },
+    {
+      "id": "TENET-4",
+      "title": "Scrutinize Explicitly",
+      "description": "Apply explicit scrutiny to users, devices, applications, and data flows.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-4"
+    },
+    {
+      "id": "TENET-5",
+      "title": "Apply Unified Analytics",
+      "description": "Use unified analytics to inform authentication, authorization, and monitoring decisions.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-5"
+    }
+  ],
+  "pillars": [
+    {
+      "id": "PILLAR-1",
+      "number": 1,
+      "title": "User",
+      "family": "Zero Trust Pillars",
+      "description": "Continuously authenticate, access, and monitor user activity patterns to govern users' access and privileges.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-1"
+    },
+    {
+      "id": "PILLAR-2",
+      "number": 2,
+      "title": "Device",
+      "family": "Zero Trust Pillars",
+      "description": "Understand device health and status to inform risk decisions and real-time access.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-2"
+    },
+    {
+      "id": "PILLAR-3",
+      "number": 3,
+      "title": "Applications and Workload",
+      "family": "Zero Trust Pillars",
+      "description": "Secure applications, workloads, containers, virtual machines, and hypervisors.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-3"
+    },
+    {
+      "id": "PILLAR-4",
+      "number": 4,
+      "title": "Data",
+      "family": "Zero Trust Pillars",
+      "description": "Provide data transparency, visibility, encryption, and tagging across the enterprise.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-4"
+    },
+    {
+      "id": "PILLAR-5",
+      "number": 5,
+      "title": "Network and Environment",
+      "family": "Zero Trust Pillars",
+      "description": "Segment, isolate, and control the network environment with dynamic policy and access controls.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-5"
+    },
+    {
+      "id": "PILLAR-6",
+      "number": 6,
+      "title": "Automation and Orchestration",
+      "family": "Zero Trust Pillars",
+      "description": "Automate security response based on defined policies and orchestration.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-6"
+    },
+    {
+      "id": "PILLAR-7",
+      "number": 7,
+      "title": "Visibility and Analytics",
+      "family": "Zero Trust Pillars",
+      "description": "Maintain visibility and analytics across users, devices, networks, applications, and data.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-7"
+    },
+    {
+      "id": "PILLAR-ENABLER",
+      "number": 8,
+      "title": "Execution Enablers",
+      "family": "Zero Trust Enablers",
+      "description": "Cross-cutting, non-technical capabilities and activities that address culture, governance, and DOTmLPF-P elements.",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0#pillar-8"
+    }
+  ],
+  "overlay_sections": [
+    {
+      "id": "OVERLAY-USER",
+      "pillar_id": "PILLAR-1",
+      "title": "User Pillar Overlay",
+      "appendix": "C",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-C",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-DEVICE",
+      "pillar_id": "PILLAR-2",
+      "title": "Device Pillar Overlay",
+      "appendix": "D",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-D",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-APP",
+      "pillar_id": "PILLAR-3",
+      "title": "Application and Workload Pillar Overlay",
+      "appendix": "E",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-E",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-DATA",
+      "pillar_id": "PILLAR-4",
+      "title": "Data Pillar Overlay",
+      "appendix": "F",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-F",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-NET",
+      "pillar_id": "PILLAR-5",
+      "title": "Network and Environment Pillar Overlay",
+      "appendix": "G",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-G",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-AUTO",
+      "pillar_id": "PILLAR-6",
+      "title": "Automation and Orchestration Pillar Overlay",
+      "appendix": "H",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-H",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-VIS",
+      "pillar_id": "PILLAR-7",
+      "title": "Visibility and Analytics Pillar Overlay",
+      "appendix": "I",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-I",
+      "source_key": "dod-zt-overlays-2024"
+    },
+    {
+      "id": "OVERLAY-ENABLER",
+      "pillar_id": "PILLAR-ENABLER",
+      "title": "Execution Enabler Overlay",
+      "appendix": "B",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-B",
+      "source_key": "dod-zt-overlays-2024"
+    }
+  ],
+  "documents": [
+    {
+      "id": "DOC-RA",
+      "title": "DoD Zero Trust Reference Architecture v2.0",
+      "source_key": "dod-zt-reference-architecture-v2",
+      "locator": "ZT_RA_v2.0",
+      "relationships": [
+        {
+          "target_catalog": "dod-zt",
+          "target_id": "CATALOG",
+          "relationship_type": "defines"
+        }
+      ]
+    },
+    {
+      "id": "DOC-STRATEGY",
+      "title": "DoD Zero Trust Strategy",
+      "source_key": "dod-zt-strategy",
+      "locator": "DoD-ZTStrategy.pdf",
+      "relationships": [
+        {
+          "target_catalog": "dod-zt",
+          "target_id": "DOC-RA",
+          "relationship_type": "references"
+        }
+      ]
+    },
+    {
+      "id": "DOC-ROADMAP",
+      "title": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "source_key": "dod-zt-execution-roadmap",
+      "locator": "ZT-ExecutionRoadmap-v1.1.pdf",
+      "relationships": [
+        {
+          "target_catalog": "dod-zt",
+          "target_id": "DOC-STRATEGY",
+          "relationship_type": "references"
+        }
+      ]
+    },
+    {
+      "id": "DOC-OVERLAYS",
+      "title": "DoD Zero Trust Overlays",
+      "source_key": "dod-zt-overlays-2024",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf",
+      "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA.",
+      "relationships": [
+        {
+          "target_catalog": "dod-zt",
+          "target_id": "DOC-RA",
+          "relationship_type": "references"
+        },
+        {
+          "target_catalog": "dod-zt",
+          "target_id": "DOC-ROADMAP",
+          "relationship_type": "references"
+        }
+      ]
+    }
+  ],
+  "overlay_capability_titles": [
+    {
+      "id": "1.1",
+      "title": "User Inventory"
+    },
+    {
+      "id": "1.2",
+      "title": "Conditional User"
+    },
+    {
+      "id": "1.3",
+      "title": "MFA"
+    },
+    {
+      "id": "1.4",
+      "title": "PAM"
+    },
+    {
+      "id": "1.5",
+      "title": "Identity Federation and"
+    },
+    {
+      "id": "1.6",
+      "title": "Behavioral, Contextual ID,"
+    },
+    {
+      "id": "1.7",
+      "title": "Least Privilege Access"
+    },
+    {
+      "id": "1.8",
+      "title": "Continuous"
+    },
+    {
+      "id": "1.9",
+      "title": "Integrated ICAM Platform"
+    },
+    {
+      "id": "2.1",
+      "title": "Device Inventory"
+    },
+    {
+      "id": "2.2",
+      "title": "Device Detection and Compliance"
+    },
+    {
+      "id": "2.3",
+      "title": "Device"
+    },
+    {
+      "id": "2.4",
+      "title": "Remote Access"
+    },
+    {
+      "id": "2.5",
+      "title": "Partially and Fully Automated Asset,"
+    },
+    {
+      "id": "2.6",
+      "title": "Unified Endpoint Management"
+    },
+    {
+      "id": "2.7",
+      "title": "Endpoint and Extended"
+    },
+    {
+      "id": "3.1",
+      "title": "Application Inventory"
+    },
+    {
+      "id": "3.2",
+      "title": "Secure Software"
+    },
+    {
+      "id": "3.3",
+      "title": "Software Risk Management"
+    },
+    {
+      "id": "3.4",
+      "title": "Resource Authorization"
+    },
+    {
+      "id": "3.5",
+      "title": "Continuous Monitoring and"
+    },
+    {
+      "id": "4.1",
+      "title": "Data Catalog Risk Alignment"
+    },
+    {
+      "id": "4.2",
+      "title": "DoD Enterprise Data Governance"
+    },
+    {
+      "id": "4.3",
+      "title": "Data Labeling and"
+    },
+    {
+      "id": "4.4",
+      "title": "Data Monitoring and"
+    },
+    {
+      "id": "4.5",
+      "title": "Data Encryption & Rights"
+    },
+    {
+      "id": "4.6",
+      "title": "Data Loss Prevention"
+    },
+    {
+      "id": "4.7",
+      "title": "Data Access"
+    },
+    {
+      "id": "5.1",
+      "title": "Data Flow Mapping"
+    },
+    {
+      "id": "5.2",
+      "title": "Software Defined"
+    },
+    {
+      "id": "5.3",
+      "title": "Macro-segmentation"
+    },
+    {
+      "id": "5.4",
+      "title": "Micro-segmentation"
+    },
+    {
+      "id": "6.2",
+      "title": "Critical Process Automation"
+    },
+    {
+      "id": "6.3",
+      "title": "Machine Learning"
+    },
+    {
+      "id": "6.4",
+      "title": "Artificial Intelligence"
+    },
+    {
+      "id": "6.5",
+      "title": "Security Orchestration, Automation & Response"
+    },
+    {
+      "id": "6.6",
+      "title": "API Standardization"
+    },
+    {
+      "id": "6.7",
+      "title": "Security Operations"
+    },
+    {
+      "id": "7.1",
+      "title": "Log All Traffic (Network, Data, Apps,"
+    },
+    {
+      "id": "7.2",
+      "title": "Security Information and"
+    },
+    {
+      "id": "7.3",
+      "title": "Common Security and Risk Analytics"
+    },
+    {
+      "id": "7.4",
+      "title": "User and Entity Behavior"
+    },
+    {
+      "id": "7.5",
+      "title": "Threat Intelligence Integration"
+    },
+    {
+      "id": "7.6",
+      "title": "Automated Dynamic Policies"
+    },
+    {
+      "id": "6.1",
+      "title": "Policy Decision Point & Policy"
+    }
+  ]
+}

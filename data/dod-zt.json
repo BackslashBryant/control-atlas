@@ -1,0 +1,4354 @@
+{
+  "schema_version": "1.0",
+  "source_key": "dod-zt-reference-architecture-v2",
+  "records": [
+    {
+      "id": "OVERLAYS-CATALOG",
+      "type": "zt-overlay-catalog",
+      "framework": "dod-zt",
+      "title": "DoD Zero Trust Overlays",
+      "family": "Control Overlays",
+      "description": "DoD control overlays on Zero Trust pillars (RMF overlay sense). Not overlay networks or ZTNA.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#executive-summary",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#executive-summary"
+      },
+      "metadata": {
+        "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA."
+      }
+    },
+    {
+      "id": "TENET-1",
+      "type": "zt_tenet",
+      "framework": "dod-zt",
+      "title": "Assume a Hostile Environment",
+      "family": "Zero Trust Tenets",
+      "description": "Operate without implicit trust in network location or asset ownership.",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-1",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#section-2.2-TENET-1"
+      }
+    },
+    {
+      "id": "TENET-2",
+      "type": "zt_tenet",
+      "framework": "dod-zt",
+      "title": "Presume Breach",
+      "family": "Zero Trust Tenets",
+      "description": "Consciously operate and defend resources with the assumption that an adversary is present.",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-2",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#section-2.2-TENET-2"
+      }
+    },
+    {
+      "id": "TENET-3",
+      "type": "zt_tenet",
+      "framework": "dod-zt",
+      "title": "Never Trust, Always Verify",
+      "family": "Zero Trust Tenets",
+      "description": "Require explicit verification for every access decision.",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-3",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#section-2.2-TENET-3"
+      }
+    },
+    {
+      "id": "TENET-4",
+      "type": "zt_tenet",
+      "framework": "dod-zt",
+      "title": "Scrutinize Explicitly",
+      "family": "Zero Trust Tenets",
+      "description": "Apply explicit scrutiny to users, devices, applications, and data flows.",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-4",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#section-2.2-TENET-4"
+      }
+    },
+    {
+      "id": "TENET-5",
+      "type": "zt_tenet",
+      "framework": "dod-zt",
+      "title": "Apply Unified Analytics",
+      "family": "Zero Trust Tenets",
+      "description": "Use unified analytics to inform authentication, authorization, and monitoring decisions.",
+      "locator": "ZT_RA_v2.0#section-2.2-TENET-5",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#section-2.2-TENET-5"
+      }
+    },
+    {
+      "id": "PILLAR-1",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "User",
+      "family": "Zero Trust Pillars",
+      "description": "Continuously authenticate, access, and monitor user activity patterns to govern users' access and privileges.",
+      "locator": "ZT_RA_v2.0#pillar-1",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-1"
+      },
+      "metadata": {
+        "pillar_number": 1
+      }
+    },
+    {
+      "id": "PILLAR-2",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Device",
+      "family": "Zero Trust Pillars",
+      "description": "Understand device health and status to inform risk decisions and real-time access.",
+      "locator": "ZT_RA_v2.0#pillar-2",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-2"
+      },
+      "metadata": {
+        "pillar_number": 2
+      }
+    },
+    {
+      "id": "PILLAR-3",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Applications and Workload",
+      "family": "Zero Trust Pillars",
+      "description": "Secure applications, workloads, containers, virtual machines, and hypervisors.",
+      "locator": "ZT_RA_v2.0#pillar-3",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-3"
+      },
+      "metadata": {
+        "pillar_number": 3
+      }
+    },
+    {
+      "id": "PILLAR-4",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Data",
+      "family": "Zero Trust Pillars",
+      "description": "Provide data transparency, visibility, encryption, and tagging across the enterprise.",
+      "locator": "ZT_RA_v2.0#pillar-4",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-4"
+      },
+      "metadata": {
+        "pillar_number": 4
+      }
+    },
+    {
+      "id": "PILLAR-5",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Network and Environment",
+      "family": "Zero Trust Pillars",
+      "description": "Segment, isolate, and control the network environment with dynamic policy and access controls.",
+      "locator": "ZT_RA_v2.0#pillar-5",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-5"
+      },
+      "metadata": {
+        "pillar_number": 5
+      }
+    },
+    {
+      "id": "PILLAR-6",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Automation and Orchestration",
+      "family": "Zero Trust Pillars",
+      "description": "Automate security response based on defined policies and orchestration.",
+      "locator": "ZT_RA_v2.0#pillar-6",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-6"
+      },
+      "metadata": {
+        "pillar_number": 6
+      }
+    },
+    {
+      "id": "PILLAR-7",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Visibility and Analytics",
+      "family": "Zero Trust Pillars",
+      "description": "Maintain visibility and analytics across users, devices, networks, applications, and data.",
+      "locator": "ZT_RA_v2.0#pillar-7",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-7"
+      },
+      "metadata": {
+        "pillar_number": 7
+      }
+    },
+    {
+      "id": "PILLAR-ENABLER",
+      "type": "zt_pillar",
+      "framework": "dod-zt",
+      "title": "Execution Enablers",
+      "family": "Zero Trust Enablers",
+      "description": "Cross-cutting, non-technical capabilities and activities that address culture, governance, and DOTmLPF-P elements.",
+      "locator": "ZT_RA_v2.0#pillar-8",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0#pillar-8"
+      },
+      "metadata": {
+        "pillar_number": 8
+      }
+    },
+    {
+      "id": "OVERLAY-USER",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "User Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for User Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-C",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-C"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-1",
+        "appendix": "C",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-1",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-DEVICE",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Device Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Device Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-D",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-D"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-2",
+        "appendix": "D",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-2",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-APP",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Application and Workload Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Application and Workload Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-E",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-E"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-3",
+        "appendix": "E",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-3",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-DATA",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Data Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Data Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-F",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-F"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-4",
+        "appendix": "F",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-4",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-NET",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Network and Environment Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Network and Environment Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-G",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-G"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-5",
+        "appendix": "G",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-5",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-AUTO",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Automation and Orchestration Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Automation and Orchestration Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-H",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-H"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-6",
+        "appendix": "H",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-6",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-VIS",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Visibility and Analytics Pillar Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Visibility and Analytics Pillar Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-I",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-I"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-7",
+        "appendix": "I",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-7",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "OVERLAY-ENABLER",
+      "type": "zt_overlay_section",
+      "framework": "dod-zt",
+      "title": "Execution Enabler Overlay",
+      "family": "Zero Trust Overlays",
+      "description": "Overlay section for Execution Enabler Overlay.",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-B",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-B"
+      },
+      "metadata": {
+        "pillar_id": "PILLAR-ENABLER",
+        "appendix": "B",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "PILLAR-ENABLER",
+            "relationship_type": "references"
+          }
+        ]
+      }
+    },
+    {
+      "id": "DOC-RA",
+      "type": "zt_document",
+      "framework": "dod-zt",
+      "title": "DoD Zero Trust Reference Architecture v2.0",
+      "family": "Zero Trust Documents",
+      "description": "DoD Zero Trust Reference Architecture v2.0",
+      "locator": "ZT_RA_v2.0",
+      "source": {
+        "key": "dod-zt-reference-architecture-v2",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT_RA_v2.0"
+      },
+      "metadata": {
+        "disambiguation": null,
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "CATALOG",
+            "relationship_type": "defines",
+            "rationale": "DoD Zero Trust Reference Architecture v2.0 references CATALOG."
+          }
+        ]
+      }
+    },
+    {
+      "id": "DOC-STRATEGY",
+      "type": "zt_document",
+      "framework": "dod-zt",
+      "title": "DoD Zero Trust Strategy",
+      "family": "Zero Trust Documents",
+      "description": "DoD Zero Trust Strategy",
+      "locator": "DoD-ZTStrategy.pdf",
+      "source": {
+        "key": "dod-zt-strategy",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "DoD-ZTStrategy.pdf"
+      },
+      "metadata": {
+        "disambiguation": null,
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "DOC-RA",
+            "relationship_type": "references",
+            "rationale": "DoD Zero Trust Strategy references DOC-RA."
+          }
+        ]
+      }
+    },
+    {
+      "id": "DOC-ROADMAP",
+      "type": "zt_document",
+      "framework": "dod-zt",
+      "title": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "family": "Zero Trust Documents",
+      "description": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "locator": "ZT-ExecutionRoadmap-v1.1.pdf",
+      "source": {
+        "key": "dod-zt-execution-roadmap",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZT-ExecutionRoadmap-v1.1.pdf"
+      },
+      "metadata": {
+        "disambiguation": null,
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "DOC-STRATEGY",
+            "relationship_type": "references",
+            "rationale": "DoD Zero Trust Capability Execution Roadmap v1.1 references DOC-STRATEGY."
+          }
+        ]
+      }
+    },
+    {
+      "id": "DOC-OVERLAYS",
+      "type": "zt_document",
+      "framework": "dod-zt",
+      "title": "DoD Zero Trust Overlays",
+      "family": "Zero Trust Documents",
+      "description": "DoD Zero Trust Overlays",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf"
+      },
+      "metadata": {
+        "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA.",
+        "relationships": [
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "DOC-RA",
+            "relationship_type": "references",
+            "rationale": "DoD Zero Trust Overlays references DOC-RA."
+          },
+          {
+            "target_catalog": "dod-zt",
+            "target_id": "DOC-ROADMAP",
+            "relationship_type": "references",
+            "rationale": "DoD Zero Trust Overlays references DOC-ROADMAP."
+          }
+        ]
+      }
+    },
+    {
+      "id": "CAP-1-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.1 User Inventory",
+      "family": "PILLAR-1",
+      "description": "Regular and privileged users are identified and integrated into an inventory. System owners have control of all authorized users. Users not on the authorized user list will be denied access by policy.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.1"
+      },
+      "metadata": {
+        "capability_id": "1.1",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.2 Conditional User Access",
+      "family": "PILLAR-1",
+      "description": "Creates a dynamic level of access for users through phased maturity. Dynamic user, device, and NPE access through risk profiles. Unknown or high-risk users are denied access with greater accuracy.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.2"
+      },
+      "metadata": {
+        "capability_id": "1.2",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.3 Multi-Factor Authentication (MFA)",
+      "family": "PILLAR-1",
+      "description": "Centralize MFA and identity provider capabilities. Users authenticate with at least two authentication factors. Users without multiple authentication forms are denied access.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.3"
+      },
+      "metadata": {
+        "capability_id": "1.3",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.4 Privileged Access Management (PAM)",
+      "family": "PILLAR-1",
+      "description": "Remove permanent administrator privileges through PAM. Privileged identities are controlled, monitored, secured, and audited. Critical assets are secured through limits on admin access.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.4"
+      },
+      "metadata": {
+        "capability_id": "1.4",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.5 Identity Federation and User Credentialing",
+      "family": "PILLAR-1",
+      "description": "Standardize ILM and integrate with organizational IDP/IDM. Credentials are issued, managed, and revoked across trust domains. Users lacking sufficient credentials are denied access.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.5"
+      },
+      "metadata": {
+        "capability_id": "1.5",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-6",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.6 Behavioral, Contextual ID, and Biometrics",
+      "family": "PILLAR-1",
+      "description": "Enable UEBA with enterprise and organizational attributes. Behavioral, contextual, and biometric telemetry enhance access controls. Anomalous activity informs risk-based authentication.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.6",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.6"
+      },
+      "metadata": {
+        "capability_id": "1.6",
+        "pillar_id": "PILLAR-1",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-1-7",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.7 Least Privileged Access",
+      "family": "PILLAR-1",
+      "description": "Enforce least privilege across enterprise access. Access is limited to minimum necessary privileges. Excessive privileges are removed or denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.7",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.7"
+      },
+      "metadata": {
+        "capability_id": "1.7",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-1-8",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.8 Continuous Authentication",
+      "family": "PILLAR-1",
+      "description": "Continuously evaluate authentication context during sessions. Sessions are continuously evaluated for risk. High-risk sessions are terminated or re-authenticated.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.8",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.8"
+      },
+      "metadata": {
+        "capability_id": "1.8",
+        "pillar_id": "PILLAR-1",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-1-9",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "1.9 Integrated ICAM Platform",
+      "family": "PILLAR-1",
+      "description": "Integrate ICAM capabilities across the enterprise. Enterprise ICAM provides unified identity services. Fragmented identity tooling is reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#1.9",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#1.9"
+      },
+      "metadata": {
+        "capability_id": "1.9",
+        "pillar_id": "PILLAR-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.1 Device Inventory",
+      "family": "PILLAR-2",
+      "description": "Maintain an inventory of authorized devices. Device inventory supports authorization decisions. Unknown devices are denied or quarantined.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.1"
+      },
+      "metadata": {
+        "capability_id": "2.1",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.2 Device Detection and Compliance",
+      "family": "PILLAR-2",
+      "description": "Detect devices and assess compliance posture. Non-compliant devices are identified. Non-compliant devices are blocked or remediated.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.2"
+      },
+      "metadata": {
+        "capability_id": "2.2",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.3 Device Authorization with Real Time Inspection",
+      "family": "PILLAR-2",
+      "description": "Authorize devices using real-time inspection. Device health informs every access request. Unhealthy devices are denied access.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.3"
+      },
+      "metadata": {
+        "capability_id": "2.3",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.4 Remote Access",
+      "family": "PILLAR-2",
+      "description": "Secure remote access to enterprise resources. Remote sessions meet zero trust requirements. Untrusted remote access is denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.4"
+      },
+      "metadata": {
+        "capability_id": "2.4",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.5 Partially and Fully Automated Asset, Vulnerability, and Patch Management",
+      "family": "PILLAR-2",
+      "description": "Automate asset, vulnerability, and patch management. Assets are patched and vulnerabilities managed at scale. Unpatched assets are restricted.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.5"
+      },
+      "metadata": {
+        "capability_id": "2.5",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-6",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.6 Unified Endpoint Management and Mobile Device Management",
+      "family": "PILLAR-2",
+      "description": "Manage endpoints and mobile devices consistently. Enterprise endpoint management is unified. Unmanaged endpoints are denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.6",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.6"
+      },
+      "metadata": {
+        "capability_id": "2.6",
+        "pillar_id": "PILLAR-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-2-7",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "2.7 Endpoint and Extended Detection and Response",
+      "family": "PILLAR-2",
+      "description": "Deploy EDR/XDR across endpoints. Endpoint threats are detected and responded to centrally. Compromised endpoints are isolated.",
+      "locator": "ZTCapabilitiesActivities.pdf#2.7",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#2.7"
+      },
+      "metadata": {
+        "capability_id": "2.7",
+        "pillar_id": "PILLAR-2",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-3-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "3.1 Application Inventory",
+      "family": "PILLAR-3",
+      "description": "Inventory applications and workloads. Applications are visible and authorized. Unknown applications are blocked or removed.",
+      "locator": "ZTCapabilitiesActivities.pdf#3.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#3.1"
+      },
+      "metadata": {
+        "capability_id": "3.1",
+        "pillar_id": "PILLAR-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-3-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "3.2 Secure Software Development and Integration",
+      "family": "PILLAR-3",
+      "description": "Integrate secure development practices. Applications are developed and integrated securely. Insecure software is remediated before deployment.",
+      "locator": "ZTCapabilitiesActivities.pdf#3.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#3.2"
+      },
+      "metadata": {
+        "capability_id": "3.2",
+        "pillar_id": "PILLAR-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-3-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "3.3 Software Risk Management",
+      "family": "PILLAR-3",
+      "description": "Manage software supply chain and component risk. Software risk is assessed and tracked. High-risk software is blocked or mitigated.",
+      "locator": "ZTCapabilitiesActivities.pdf#3.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#3.3"
+      },
+      "metadata": {
+        "capability_id": "3.3",
+        "pillar_id": "PILLAR-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-3-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "3.4 Resource Authorization and Integration",
+      "family": "PILLAR-3",
+      "description": "Authorize application and workload resources. Resources are authorized before access is granted. Unauthorized resources are denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#3.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#3.4"
+      },
+      "metadata": {
+        "capability_id": "3.4",
+        "pillar_id": "PILLAR-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-3-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "3.5 Continuous Monitoring and Ongoing Authorizations",
+      "family": "PILLAR-3",
+      "description": "Continuously monitor applications for authorization. Ongoing authorization replaces point-in-time approvals. Drift from authorized state triggers response.",
+      "locator": "ZTCapabilitiesActivities.pdf#3.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#3.5"
+      },
+      "metadata": {
+        "capability_id": "3.5",
+        "pillar_id": "PILLAR-3",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-4-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.1 Data Catalog Risk Alignment",
+      "family": "PILLAR-4",
+      "description": "Align data catalogs with risk management. Data assets are cataloged with risk context. Uncataloged sensitive data is discovered and protected.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.1"
+      },
+      "metadata": {
+        "capability_id": "4.1",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.2 DoD Enterprise Data Governance",
+      "family": "PILLAR-4",
+      "description": "Govern data across the enterprise. Enterprise data governance is established. Ungoverned data flows are restricted.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.2"
+      },
+      "metadata": {
+        "capability_id": "4.2",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.3 Data Labeling and Tagging",
+      "family": "PILLAR-4",
+      "description": "Label and tag data for protection decisions. Data is labeled consistently. Unlabeled sensitive data is remediated.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.3"
+      },
+      "metadata": {
+        "capability_id": "4.3",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.4 Data Monitoring and Sensing",
+      "family": "PILLAR-4",
+      "description": "Monitor data access and movement. Data usage is visible in near real time. Anomalous data access triggers response.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.4"
+      },
+      "metadata": {
+        "capability_id": "4.4",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.5 Data Encryption and Rights Management",
+      "family": "PILLAR-4",
+      "description": "Encrypt data and enforce rights management. Sensitive data is encrypted and rights-managed. Unprotected sensitive data is blocked or encrypted.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.5"
+      },
+      "metadata": {
+        "capability_id": "4.5",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-6",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.6 Data Loss Prevention",
+      "family": "PILLAR-4",
+      "description": "Prevent unauthorized data exfiltration. DLP controls are deployed enterprise-wide. Data exfiltration attempts are blocked.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.6",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.6"
+      },
+      "metadata": {
+        "capability_id": "4.6",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-4-7",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "4.7 Data Access Control",
+      "family": "PILLAR-4",
+      "description": "Control access to data based on policy. Data access follows least privilege. Unauthorized data access is denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#4.7",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#4.7"
+      },
+      "metadata": {
+        "capability_id": "4.7",
+        "pillar_id": "PILLAR-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-5-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "5.1 Data Flow Mapping",
+      "family": "PILLAR-5",
+      "description": "Map data flows across the environment. Data flows are documented and monitored. Unknown flows are restricted.",
+      "locator": "ZTCapabilitiesActivities.pdf#5.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#5.1"
+      },
+      "metadata": {
+        "capability_id": "5.1",
+        "pillar_id": "PILLAR-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-5-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "5.2 Software Defined Networking",
+      "family": "PILLAR-5",
+      "description": "Use SDN for dynamic network policy. Network policy is software defined. Static overly permissive paths are removed.",
+      "locator": "ZTCapabilitiesActivities.pdf#5.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#5.2"
+      },
+      "metadata": {
+        "capability_id": "5.2",
+        "pillar_id": "PILLAR-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-5-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "5.3 Macro Segmentation",
+      "family": "PILLAR-5",
+      "description": "Segment the network at macro boundaries. Macro segments limit lateral movement. Cross-segment access requires authorization.",
+      "locator": "ZTCapabilitiesActivities.pdf#5.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#5.3"
+      },
+      "metadata": {
+        "capability_id": "5.3",
+        "pillar_id": "PILLAR-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-5-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "5.4 Micro Segmentation",
+      "family": "PILLAR-5",
+      "description": "Apply fine-grained network segmentation. Micro segments enforce least privilege network access. Unnecessary east-west traffic is denied.",
+      "locator": "ZTCapabilitiesActivities.pdf#5.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#5.4"
+      },
+      "metadata": {
+        "capability_id": "5.4",
+        "pillar_id": "PILLAR-5",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-6-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.1 API Standardization",
+      "family": "PILLAR-6",
+      "description": "Standardize APIs for security automation. Security tooling integrates through standard APIs. Non-standard integrations are reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.1"
+      },
+      "metadata": {
+        "capability_id": "6.1",
+        "pillar_id": "PILLAR-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-6-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.2 Critical Process Automation",
+      "family": "PILLAR-6",
+      "description": "Automate critical security processes. Key security processes are automated. Manual gaps in security response are reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.2"
+      },
+      "metadata": {
+        "capability_id": "6.2",
+        "pillar_id": "PILLAR-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-6-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.3 Machine Learning",
+      "family": "PILLAR-6",
+      "description": "Apply machine learning to security operations. ML augments detection and response. Anomalies are detected faster.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.3"
+      },
+      "metadata": {
+        "capability_id": "6.3",
+        "pillar_id": "PILLAR-6",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-6-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.4 Artificial Intelligence",
+      "family": "PILLAR-6",
+      "description": "Apply AI to security orchestration and response. AI-assisted response is integrated. Response latency is reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.4"
+      },
+      "metadata": {
+        "capability_id": "6.4",
+        "pillar_id": "PILLAR-6",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-6-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.5 Automated Decision Making",
+      "family": "PILLAR-6",
+      "description": "Automate policy-based security decisions. Decisions are automated within policy bounds. Manual policy enforcement gaps are reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.5"
+      },
+      "metadata": {
+        "capability_id": "6.5",
+        "pillar_id": "PILLAR-6",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-6-6",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.6 Security Orchestration, Automation, and Response (SOAR)",
+      "family": "PILLAR-6",
+      "description": "Orchestrate automated security response. SOAR integrates security tooling. Incident response is coordinated automatically.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.6",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.6"
+      },
+      "metadata": {
+        "capability_id": "6.6",
+        "pillar_id": "PILLAR-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-6-7",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "6.7 Security Operations Center (SOC) Optimization",
+      "family": "PILLAR-6",
+      "description": "Optimize SOC workflows for zero trust. SOC processes support zero trust operations. Operational blind spots are reduced.",
+      "locator": "ZTCapabilitiesActivities.pdf#6.7",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#6.7"
+      },
+      "metadata": {
+        "capability_id": "6.7",
+        "pillar_id": "PILLAR-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-7-1",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.1 Log All Traffic (Network, Data, Apps, User)",
+      "family": "PILLAR-7",
+      "description": "Log traffic across all zero trust pillars. Comprehensive logging is available for analysis. Unlogged critical traffic is remediated.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.1",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.1"
+      },
+      "metadata": {
+        "capability_id": "7.1",
+        "pillar_id": "PILLAR-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-7-2",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.2 Security Information and Event Management (SIEM)",
+      "family": "PILLAR-7",
+      "description": "Centralize security event management. Events are correlated in a SIEM. Uncorrelated critical events are escalated.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.2",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.2"
+      },
+      "metadata": {
+        "capability_id": "7.2",
+        "pillar_id": "PILLAR-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-7-3",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.3 Common Security and Risk Analytics",
+      "family": "PILLAR-7",
+      "description": "Share analytics across the enterprise. Risk analytics are common and reusable. Siloed analytics are integrated.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.3",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.3"
+      },
+      "metadata": {
+        "capability_id": "7.3",
+        "pillar_id": "PILLAR-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-7-4",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.4 User and Entity Behavior Analytics (UEBA)",
+      "family": "PILLAR-7",
+      "description": "Analyze user and entity behavior. Behavioral analytics inform access decisions. Anomalous behavior triggers response.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.4",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.4"
+      },
+      "metadata": {
+        "capability_id": "7.4",
+        "pillar_id": "PILLAR-7",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "CAP-7-5",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.5 Threat Intelligence Integration",
+      "family": "PILLAR-7",
+      "description": "Integrate threat intelligence into analytics. Threat intelligence enriches detections. Known threats are blocked faster.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.5",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.5"
+      },
+      "metadata": {
+        "capability_id": "7.5",
+        "pillar_id": "PILLAR-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "CAP-7-6",
+      "type": "zt_capability",
+      "framework": "dod-zt",
+      "title": "7.6 Automated Dynamic Policies",
+      "family": "PILLAR-7",
+      "description": "Dynamically update policies from analytics. Policies adapt based on analytics. Stale policies are automatically updated.",
+      "locator": "ZTCapabilitiesActivities.pdf#7.6",
+      "source": {
+        "key": "dod-zt-capabilities",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZTCapabilitiesActivities.pdf#7.6"
+      },
+      "metadata": {
+        "capability_id": "7.6",
+        "pillar_id": "PILLAR-7",
+        "level": "Advanced"
+      }
+    },
+    {
+      "id": "ACT-1-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.1 DoD’s Strategic Principles",
+      "family": "Zero Trust Activities",
+      "description": "DoD’s Strategic Principles",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.1"
+      },
+      "metadata": {
+        "activity_id": "1.5.1",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.2 Zero Trust Guiding Principles and Tenets",
+      "family": "Zero Trust Activities",
+      "description": "Zero Trust Guiding Principles and Tenets",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.2"
+      },
+      "metadata": {
+        "activity_id": "1.5.2",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.3 Implementation Fundamentals",
+      "family": "Zero Trust Activities",
+      "description": "Implementation Fundamentals",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.3"
+      },
+      "metadata": {
+        "activity_id": "1.5.3",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.4 Interoperability and Integration",
+      "family": "Zero Trust Activities",
+      "description": "Interoperability and Integration",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.4"
+      },
+      "metadata": {
+        "activity_id": "1.5.4",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.5 Pillars",
+      "family": "Zero Trust Activities",
+      "description": "Pillars",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.5"
+      },
+      "metadata": {
+        "activity_id": "1.5.5",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-6",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.6 Capabilities",
+      "family": "Zero Trust Activities",
+      "description": "Capabilities",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.6",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.6"
+      },
+      "metadata": {
+        "activity_id": "1.5.6",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-7",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.7 Phased Activities and Outcomes",
+      "family": "Zero Trust Activities",
+      "description": "Phased Activities and Outcomes",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.7",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.7"
+      },
+      "metadata": {
+        "activity_id": "1.5.7",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-5-8",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.5.8 Baselines and Overlay Controls",
+      "family": "Zero Trust Activities",
+      "description": "Baselines and Overlay Controls",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.8",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.8"
+      },
+      "metadata": {
+        "activity_id": "1.5.8",
+        "capability_id": "CAP-1-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.1.1 Inventory User",
+      "family": "Zero Trust Activities",
+      "description": "Inventory User",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.1.1"
+      },
+      "metadata": {
+        "activity_id": "1.1.1",
+        "capability_id": "CAP-1-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.2.1 Implement Application Based Permissions per Enterprise",
+      "family": "Zero Trust Activities",
+      "description": "Implement Application Based Permissions per Enterprise",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.1"
+      },
+      "metadata": {
+        "activity_id": "1.2.1",
+        "capability_id": "CAP-1-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.2.2 Rule Based Dynamic Access Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Rule Based Dynamic Access Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.2"
+      },
+      "metadata": {
+        "activity_id": "1.2.2",
+        "capability_id": "CAP-1-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.2.3 Rule Based Dynamic Access Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Rule Based Dynamic Access Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.3"
+      },
+      "metadata": {
+        "activity_id": "1.2.3",
+        "capability_id": "CAP-1-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-2-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.2.4 Enterprise Government Roles and Permissions Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Government Roles and Permissions Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.4"
+      },
+      "metadata": {
+        "activity_id": "1.2.4",
+        "capability_id": "CAP-1-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-2-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.2.5 Enterprise Government Roles and Permissions Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Government Roles and Permissions Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.5"
+      },
+      "metadata": {
+        "activity_id": "1.2.5",
+        "capability_id": "CAP-1-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-8-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.8.1 Single Authentication, Continuous Authentication Capability, User Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Single Authentication, Continuous Authentication Capability, User Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.1"
+      },
+      "metadata": {
+        "activity_id": "1.8.1",
+        "capability_id": "CAP-1-8",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.3 File Activity Monitoring Part 2, Data Monitoring and Sensing Capability, Data Pillar",
+      "family": "Zero Trust Activities",
+      "description": "File Activity Monitoring Part 2, Data Monitoring and Sensing Capability, Data Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.3"
+      },
+      "metadata": {
+        "activity_id": "4.4.3",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.3.1 Organizational MFA/IdP",
+      "family": "Zero Trust Activities",
+      "description": "Organizational MFA/IdP",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.1"
+      },
+      "metadata": {
+        "activity_id": "1.3.1",
+        "capability_id": "CAP-1-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.3.2 Alternative Flexible MFA Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Alternative Flexible MFA Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.2"
+      },
+      "metadata": {
+        "activity_id": "1.3.2",
+        "capability_id": "CAP-1-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-3-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.3.3 Alternative Flexible MFA Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Alternative Flexible MFA Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.3"
+      },
+      "metadata": {
+        "activity_id": "1.3.3",
+        "capability_id": "CAP-1-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.4.1 Implement System and Migrate Privileged Users Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Implement System and Migrate Privileged Users Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.1"
+      },
+      "metadata": {
+        "activity_id": "1.4.1",
+        "capability_id": "CAP-1-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.4.2 Implement System and Migrate Privileged Users Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Implement System and Migrate Privileged Users Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.2"
+      },
+      "metadata": {
+        "activity_id": "1.4.2",
+        "capability_id": "CAP-1-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.4.3 Real Time Approvals and Just-in-Time (JIT)/Just-Enough-Administration (JEA)",
+      "family": "Zero Trust Activities",
+      "description": "Real Time Approvals and Just-in-Time (JIT)/Just-Enough-Administration (JEA)",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.3"
+      },
+      "metadata": {
+        "activity_id": "1.4.3",
+        "capability_id": "CAP-1-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.4.4 Real Time Approvals and JIT/JEA Analytics Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Real Time Approvals and JIT/JEA Analytics Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.4"
+      },
+      "metadata": {
+        "activity_id": "1.4.4",
+        "capability_id": "CAP-1-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-6-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.6.1 Implement User, UEBA, and UAM Tooling",
+      "family": "Zero Trust Activities",
+      "description": "Implement User, UEBA, and UAM Tooling",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.1"
+      },
+      "metadata": {
+        "activity_id": "1.6.1",
+        "capability_id": "CAP-1-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-6-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.6.2 User Activity Monitoring Part 1",
+      "family": "Zero Trust Activities",
+      "description": "User Activity Monitoring Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.2"
+      },
+      "metadata": {
+        "activity_id": "1.6.2",
+        "capability_id": "CAP-1-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-6-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.6.3 User Activity Monitoring Part 2",
+      "family": "Zero Trust Activities",
+      "description": "User Activity Monitoring Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.3"
+      },
+      "metadata": {
+        "activity_id": "1.6.3",
+        "capability_id": "CAP-1-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.3.2 Establish User Baseline Behavior, Common Security and Risk Analytics Capability,",
+      "family": "Zero Trust Activities",
+      "description": "Establish User Baseline Behavior, Common Security and Risk Analytics Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.2"
+      },
+      "metadata": {
+        "activity_id": "7.3.2",
+        "capability_id": "CAP-7-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-2-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.2.5 User/Device Baselines, SIEM Capability, Visibility & Analytics Pillar",
+      "family": "Zero Trust Activities",
+      "description": "User/Device Baselines, SIEM Capability, Visibility & Analytics Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.5"
+      },
+      "metadata": {
+        "activity_id": "7.2.5",
+        "capability_id": "CAP-7-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.4.1 Baseline & Profiling Part 1, User and Entity Behavior Analytics Capability, Visibility &",
+      "family": "Zero Trust Activities",
+      "description": "Baseline & Profiling Part 1, User and Entity Behavior Analytics Capability, Visibility &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.1"
+      },
+      "metadata": {
+        "activity_id": "7.4.1",
+        "capability_id": "CAP-7-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-2-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.2.5 Real-Time Access Decisions, Software Defined Networking (SDN) Capability, Network &",
+      "family": "Zero Trust Activities",
+      "description": "Real-Time Access Decisions, Software Defined Networking (SDN) Capability, Network &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.5"
+      },
+      "metadata": {
+        "activity_id": "5.2.5",
+        "capability_id": "CAP-5-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.3 Enrich Attributes for Resource Authorization Part 1, Resource Authorization & Integration",
+      "family": "Zero Trust Activities",
+      "description": "Enrich Attributes for Resource Authorization Part 1, Resource Authorization & Integration",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.3"
+      },
+      "metadata": {
+        "activity_id": "3.4.3",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-7-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.7.1 Deny User by Default Policy",
+      "family": "Zero Trust Activities",
+      "description": "Deny User by Default Policy",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.7.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.7.1"
+      },
+      "metadata": {
+        "activity_id": "1.7.1",
+        "capability_id": "CAP-1-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-8-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.8.2 Periodic Authentication",
+      "family": "Zero Trust Activities",
+      "description": "Periodic Authentication",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.2"
+      },
+      "metadata": {
+        "activity_id": "1.8.2",
+        "capability_id": "CAP-1-8",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-8-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.8.3 Continuous Authentication Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Continuous Authentication Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.3"
+      },
+      "metadata": {
+        "activity_id": "1.8.3",
+        "capability_id": "CAP-1-8",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-8-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.8.4 Continuous Authentication Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Continuous Authentication Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.4"
+      },
+      "metadata": {
+        "activity_id": "1.8.4",
+        "capability_id": "CAP-1-8",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.1 Resource Authorization Part 1, Resource Authorization & Integration Capability,",
+      "family": "Zero Trust Activities",
+      "description": "Resource Authorization Part 1, Resource Authorization & Integration Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.1"
+      },
+      "metadata": {
+        "activity_id": "3.4.1",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-6",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.6 SDC Resource Authorization Part 1, Resource Authorization & Integration Capability,",
+      "family": "Zero Trust Activities",
+      "description": "SDC Resource Authorization Part 1, Resource Authorization & Integration Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.6",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.6"
+      },
+      "metadata": {
+        "activity_id": "3.4.6",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-6-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.6.1 AI-enabled Network Access, Automated Dynamic Policies Capability, Visibility &",
+      "family": "Zero Trust Activities",
+      "description": "AI-enabled Network Access, Automated Dynamic Policies Capability, Visibility &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.1"
+      },
+      "metadata": {
+        "activity_id": "7.6.1",
+        "capability_id": "CAP-7-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-6-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.6.2 AI-enabled Dynamic Access Control, Automated Dynamic Policies Capability, Visibility &",
+      "family": "Zero Trust Activities",
+      "description": "AI-enabled Dynamic Access Control, Automated Dynamic Policies Capability, Visibility &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.2"
+      },
+      "metadata": {
+        "activity_id": "7.6.2",
+        "capability_id": "CAP-7-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-9-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.9.1 Enterprise PKI/IdP Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise PKI/IdP Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.1"
+      },
+      "metadata": {
+        "activity_id": "1.9.1",
+        "capability_id": "CAP-1-9",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-9-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.9.2 Enterprise PKI/IdP Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise PKI/IdP Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.2"
+      },
+      "metadata": {
+        "activity_id": "1.9.2",
+        "capability_id": "CAP-1-9",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-1-9-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "1.9.3 Enterprise PKI/IdP Part 3",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise PKI/IdP Part 3",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.3"
+      },
+      "metadata": {
+        "activity_id": "1.9.3",
+        "capability_id": "CAP-1-9",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.1.1 Device Health Tool Gap Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Device Health Tool Gap Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.1"
+      },
+      "metadata": {
+        "activity_id": "2.1.1",
+        "capability_id": "CAP-2-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-1-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.1.2 NPE/PKI, Device under Management",
+      "family": "Zero Trust Activities",
+      "description": "NPE/PKI, Device under Management",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.2"
+      },
+      "metadata": {
+        "activity_id": "2.1.2",
+        "capability_id": "CAP-2-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-1-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.1.3 Enterprise IdP Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise IdP Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.3"
+      },
+      "metadata": {
+        "activity_id": "2.1.3",
+        "capability_id": "CAP-2-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-1-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.1.4 Enterprise IdP Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise IdP Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.4"
+      },
+      "metadata": {
+        "activity_id": "2.1.4",
+        "capability_id": "CAP-2-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-6-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.6.2 Enterprise Device Management Part 1, Unified Endpoint Management and Mobile Device",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Device Management Part 1, Unified Endpoint Management and Mobile Device",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.2"
+      },
+      "metadata": {
+        "activity_id": "2.6.2",
+        "capability_id": "CAP-2-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.4.1 Deny Device by Default Policy, Remote Access Capability, Device Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Deny Device by Default Policy, Remote Access Capability, Device Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.1"
+      },
+      "metadata": {
+        "activity_id": "2.4.1",
+        "capability_id": "CAP-2-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-6",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.6 Enterprise PKI Part 1, Device Authorization w/Real Time Inspection Capability, Device",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise PKI Part 1, Device Authorization w/Real Time Inspection Capability, Device",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.6",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.6"
+      },
+      "metadata": {
+        "activity_id": "2.3.6",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.2.1 Implement C2C/Compliance Based Network Authorization Part 1, Device Detection and",
+      "family": "Zero Trust Activities",
+      "description": "Implement C2C/Compliance Based Network Authorization Part 1, Device Detection and",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.1"
+      },
+      "metadata": {
+        "activity_id": "2.2.1",
+        "capability_id": "CAP-2-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.4 Integrate Solution(s) and Policy with Enterprise IDP Part 1, Data Access Control",
+      "family": "Zero Trust Activities",
+      "description": "Integrate Solution(s) and Policy with Enterprise IDP Part 1, Data Access Control",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.4"
+      },
+      "metadata": {
+        "activity_id": "4.7.4",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.2.2 Implement C2C/Compliance Based Network Authorization Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Implement C2C/Compliance Based Network Authorization Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.2"
+      },
+      "metadata": {
+        "activity_id": "2.2.2",
+        "capability_id": "CAP-2-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.4.2 Managed and Limited Bring Your Own Device (BYOD) & IoT Support, Remote Access",
+      "family": "Zero Trust Activities",
+      "description": "Managed and Limited Bring Your Own Device (BYOD) & IoT Support, Remote Access",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.2"
+      },
+      "metadata": {
+        "activity_id": "2.4.2",
+        "capability_id": "CAP-2-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.5.1 Implement Asset, Vulnerability and Patch Management Tools, Partially & Fully Automated",
+      "family": "Zero Trust Activities",
+      "description": "Implement Asset, Vulnerability and Patch Management Tools, Partially & Fully Automated",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.5.1"
+      },
+      "metadata": {
+        "activity_id": "2.5.1",
+        "capability_id": "CAP-2-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.5 Fully Integrate Device Security stack with C2C as Appropriate, Device Authorization",
+      "family": "Zero Trust Activities",
+      "description": "Fully Integrate Device Security stack with C2C as Appropriate, Device Authorization",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.5"
+      },
+      "metadata": {
+        "activity_id": "2.3.5",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.1 Entity Activity Monitoring Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Entity Activity Monitoring Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.1"
+      },
+      "metadata": {
+        "activity_id": "2.3.1",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.2 Entity Activity Monitoring Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Entity Activity Monitoring Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.2"
+      },
+      "metadata": {
+        "activity_id": "2.3.2",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.3 Implement Application Control and FIM Tools",
+      "family": "Zero Trust Activities",
+      "description": "Implement Application Control and FIM Tools",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.3"
+      },
+      "metadata": {
+        "activity_id": "2.3.3",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.4 Integrate NextGen AV Tools with C2C",
+      "family": "Zero Trust Activities",
+      "description": "Integrate NextGen AV Tools with C2C",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.4"
+      },
+      "metadata": {
+        "activity_id": "2.3.4",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-3-7",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.3.7 Enterprise PKI Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise PKI Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.7",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.7"
+      },
+      "metadata": {
+        "activity_id": "2.3.7",
+        "capability_id": "CAP-2-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-7-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.7.1 Implement Endpoint Detection & Response Tools and Integrate with C2C, Endpoint and",
+      "family": "Zero Trust Activities",
+      "description": "Implement Endpoint Detection & Response Tools and Integrate with C2C, Endpoint and",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.1"
+      },
+      "metadata": {
+        "activity_id": "2.7.1",
+        "capability_id": "CAP-2-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.4.4 Managed and Full BYOD & IOT Support Part 2, Remote Access Capability, Device Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Managed and Full BYOD & IOT Support Part 2, Remote Access Capability, Device Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.4"
+      },
+      "metadata": {
+        "activity_id": "2.4.4",
+        "capability_id": "CAP-2-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-6-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.6.1 Implement UEDM or equivalent Tools, Unified Endpoint Management and Mobile Device",
+      "family": "Zero Trust Activities",
+      "description": "Implement UEDM or equivalent Tools, Unified Endpoint Management and Mobile Device",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.1"
+      },
+      "metadata": {
+        "activity_id": "2.6.1",
+        "capability_id": "CAP-2-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.4.3 Managed and Full BYOD and IoT Support Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Managed and Full BYOD and IoT Support Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.3"
+      },
+      "metadata": {
+        "activity_id": "2.4.3",
+        "capability_id": "CAP-2-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.2.3 Automate Application Security & Code Remediation Part 1, Secure Software Development",
+      "family": "Zero Trust Activities",
+      "description": "Automate Application Security & Code Remediation Part 1, Secure Software Development",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.3"
+      },
+      "metadata": {
+        "activity_id": "3.2.3",
+        "capability_id": "CAP-3-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-6-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.6.3 Enterprise Device Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Device Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.3"
+      },
+      "metadata": {
+        "activity_id": "2.6.3",
+        "capability_id": "CAP-2-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-7-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.7.2 Implement XDR Tools and Integrate with C2C Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Implement XDR Tools and Integrate with C2C Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.2"
+      },
+      "metadata": {
+        "activity_id": "2.7.2",
+        "capability_id": "CAP-2-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-2-7-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "2.7.3 Implement XDR Tools and Integrate with C2C Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Implement XDR Tools and Integrate with C2C Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.3"
+      },
+      "metadata": {
+        "activity_id": "2.7.3",
+        "capability_id": "CAP-2-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.2.1 Threat Alerting Part 1, SIEM Capability, Visibility & Analytics Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Threat Alerting Part 1, SIEM Capability, Visibility & Analytics Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.1"
+      },
+      "metadata": {
+        "activity_id": "7.2.1",
+        "capability_id": "CAP-7-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.2.3 Threat Alerting Part 3, SIEM Capability, Visibility & Analytics Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Threat Alerting Part 3, SIEM Capability, Visibility & Analytics Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.3"
+      },
+      "metadata": {
+        "activity_id": "7.2.3",
+        "capability_id": "CAP-7-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.1.1 Application/Code Identification",
+      "family": "Zero Trust Activities",
+      "description": "Application/Code Identification",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.1.1"
+      },
+      "metadata": {
+        "activity_id": "3.1.1",
+        "capability_id": "CAP-3-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.2.1 Build DevSecOps Software Factory Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Build DevSecOps Software Factory Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.1"
+      },
+      "metadata": {
+        "activity_id": "3.2.1",
+        "capability_id": "CAP-3-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.2.2 Build DevSecOps Software Factory Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Build DevSecOps Software Factory Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.2"
+      },
+      "metadata": {
+        "activity_id": "3.2.2",
+        "capability_id": "CAP-3-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-2-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.2.4 Automate Application Security & Code Remediation Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Automate Application Security & Code Remediation Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.4"
+      },
+      "metadata": {
+        "activity_id": "3.2.4",
+        "capability_id": "CAP-3-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.5.1 cATO Part 1, Continuous Monitoring and Ongoing Authorizations Capability, Application",
+      "family": "Zero Trust Activities",
+      "description": "cATO Part 1, Continuous Monitoring and Ongoing Authorizations Capability, Application",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.1"
+      },
+      "metadata": {
+        "activity_id": "3.5.1",
+        "capability_id": "CAP-3-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-3-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.3.3 Vulnerability Management Program Part 2, Software Risk Management Capability,",
+      "family": "Zero Trust Activities",
+      "description": "Vulnerability Management Program Part 2, Software Risk Management Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.3"
+      },
+      "metadata": {
+        "activity_id": "3.3.3",
+        "capability_id": "CAP-3-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.5 REST API Micro-Segments, Resource Authorization & Integration Capability, Application",
+      "family": "Zero Trust Activities",
+      "description": "REST API Micro-Segments, Resource Authorization & Integration Capability, Application",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.5"
+      },
+      "metadata": {
+        "activity_id": "3.4.5",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.3.1 Approved Binaries/Code",
+      "family": "Zero Trust Activities",
+      "description": "Approved Binaries/Code",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.1"
+      },
+      "metadata": {
+        "activity_id": "3.3.1",
+        "capability_id": "CAP-3-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.3.2 Vulnerability Management Program Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Vulnerability Management Program Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.2"
+      },
+      "metadata": {
+        "activity_id": "3.3.2",
+        "capability_id": "CAP-3-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-3-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.3.4 Continual Validation",
+      "family": "Zero Trust Activities",
+      "description": "Continual Validation",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.4"
+      },
+      "metadata": {
+        "activity_id": "3.3.4",
+        "capability_id": "CAP-3-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.2 Resource Authorization Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Resource Authorization Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.2"
+      },
+      "metadata": {
+        "activity_id": "3.4.2",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.4 Enrich Attributes for Resource Authorization Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enrich Attributes for Resource Authorization Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.4"
+      },
+      "metadata": {
+        "activity_id": "3.4.4",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-4-7",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.4.7 SDC Resource Authorization Part 2",
+      "family": "Zero Trust Activities",
+      "description": "SDC Resource Authorization Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.7",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.7"
+      },
+      "metadata": {
+        "activity_id": "3.4.7",
+        "capability_id": "CAP-3-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.3.1 Datacenter Macro-segmentation, Macro-segmentation Capability, Network & Environment",
+      "family": "Zero Trust Activities",
+      "description": "Datacenter Macro-segmentation, Macro-segmentation Capability, Network & Environment",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.1"
+      },
+      "metadata": {
+        "activity_id": "5.3.1",
+        "capability_id": "CAP-5-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.4.2 Application & Device Micro-segmentation, Micro-segmentation Capability, Network &",
+      "family": "Zero Trust Activities",
+      "description": "Application & Device Micro-segmentation, Micro-segmentation Capability, Network &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.2"
+      },
+      "metadata": {
+        "activity_id": "5.4.2",
+        "capability_id": "CAP-5-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-3-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.3.3 Manual Data Tagging Part 2, Data Labeling and Tagging Capability, Data Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Manual Data Tagging Part 2, Data Labeling and Tagging Capability, Data Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.3"
+      },
+      "metadata": {
+        "activity_id": "4.3.3",
+        "capability_id": "CAP-4-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-6-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.6.3 DLP Enforcement via Data Tags and Analytics Part 2, DLP Capability, Data Pillar",
+      "family": "Zero Trust Activities",
+      "description": "DLP Enforcement via Data Tags and Analytics Part 2, DLP Capability, Data Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.3"
+      },
+      "metadata": {
+        "activity_id": "4.6.3",
+        "capability_id": "CAP-4-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-5-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.5.4 DRM Enforcement via Data Tags and Analytics Part 2, Data Encryption & Rights",
+      "family": "Zero Trust Activities",
+      "description": "DRM Enforcement via Data Tags and Analytics Part 2, Data Encryption & Rights",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.4"
+      },
+      "metadata": {
+        "activity_id": "4.5.4",
+        "capability_id": "CAP-4-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-3-5-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "3.5.2 cATO Part 2",
+      "family": "Zero Trust Activities",
+      "description": "cATO Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.2"
+      },
+      "metadata": {
+        "activity_id": "3.5.2",
+        "capability_id": "CAP-3-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.1.1 Policy Inventory & Development, Policy Decision Point (PDP) & Policy Orchestration",
+      "family": "Zero Trust Activities",
+      "description": "Policy Inventory & Development, Policy Decision Point (PDP) & Policy Orchestration",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.1"
+      },
+      "metadata": {
+        "activity_id": "6.1.1",
+        "capability_id": "CAP-6-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-7-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.7.4 Automated Workflow, SOC & IR Capability, Automation & Orchestration Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Automated Workflow, SOC & IR Capability, Automation & Orchestration Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.4"
+      },
+      "metadata": {
+        "activity_id": "6.7.4",
+        "capability_id": "CAP-6-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.1.1 Data Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Data Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.1.1"
+      },
+      "metadata": {
+        "activity_id": "4.1.1",
+        "capability_id": "CAP-4-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.2.1 Define Data Tagging Standards",
+      "family": "Zero Trust Activities",
+      "description": "Define Data Tagging Standards",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.1"
+      },
+      "metadata": {
+        "activity_id": "4.2.1",
+        "capability_id": "CAP-4-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.2.2 Interoperability Standards",
+      "family": "Zero Trust Activities",
+      "description": "Interoperability Standards",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.2"
+      },
+      "metadata": {
+        "activity_id": "4.2.2",
+        "capability_id": "CAP-4-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.2.3 Develop SDS Policy",
+      "family": "Zero Trust Activities",
+      "description": "Develop SDS Policy",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.3"
+      },
+      "metadata": {
+        "activity_id": "4.2.3",
+        "capability_id": "CAP-4-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.3.1 Implement Data Tagging & Classification Tools",
+      "family": "Zero Trust Activities",
+      "description": "Implement Data Tagging & Classification Tools",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.1"
+      },
+      "metadata": {
+        "activity_id": "4.3.1",
+        "capability_id": "CAP-4-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.3.2 Manual Data Tagging Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Manual Data Tagging Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.2"
+      },
+      "metadata": {
+        "activity_id": "4.3.2",
+        "capability_id": "CAP-4-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.3.1 Implement Data Tagging & Classification ML Tools",
+      "family": "Zero Trust Activities",
+      "description": "Implement Data Tagging & Classification ML Tools",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.3.1"
+      },
+      "metadata": {
+        "activity_id": "6.3.1",
+        "capability_id": "CAP-6-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.5.1 Implement DRM and Protection Tools Part 1, Data Encryption & Rights Management",
+      "family": "Zero Trust Activities",
+      "description": "Implement DRM and Protection Tools Part 1, Data Encryption & Rights Management",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.1"
+      },
+      "metadata": {
+        "activity_id": "4.5.1",
+        "capability_id": "CAP-4-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.1 Integrate DAAS Access with SDS Policy Part 1, Data Access Control Capability, Data",
+      "family": "Zero Trust Activities",
+      "description": "Integrate DAAS Access with SDS Policy Part 1, Data Access Control Capability, Data",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.1"
+      },
+      "metadata": {
+        "activity_id": "4.7.1",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-6",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.6 Implement SDS Tool and/or integrate with DRM Tool Part 1, Data Access Control",
+      "family": "Zero Trust Activities",
+      "description": "Implement SDS Tool and/or integrate with DRM Tool Part 1, Data Access Control",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.6",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.6"
+      },
+      "metadata": {
+        "activity_id": "4.7.6",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-3-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.3.4 Automated Data Tagging & Support Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Automated Data Tagging & Support Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.4"
+      },
+      "metadata": {
+        "activity_id": "4.3.4",
+        "capability_id": "CAP-4-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-3-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.3.5 Automated Data Tagging & Support Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Automated Data Tagging & Support Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.5"
+      },
+      "metadata": {
+        "activity_id": "4.3.5",
+        "capability_id": "CAP-4-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-6-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.6.1 Implement DLP Enforcement Points, DLP Capability, Data Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Implement DLP Enforcement Points, DLP Capability, Data Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.1"
+      },
+      "metadata": {
+        "activity_id": "4.6.1",
+        "capability_id": "CAP-4-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-5-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.5.3 DRM Enforcement via Data Tags and Analytics Part 1, Data Encryption & Rights",
+      "family": "Zero Trust Activities",
+      "description": "DRM Enforcement via Data Tags and Analytics Part 1, Data Encryption & Rights",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.3"
+      },
+      "metadata": {
+        "activity_id": "4.5.3",
+        "capability_id": "CAP-4-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-6-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.6.2 DLP Enforcement via Data Tags and Analytics Part 1, DLP Capability, Data Pillar",
+      "family": "Zero Trust Activities",
+      "description": "DLP Enforcement via Data Tags and Analytics Part 1, DLP Capability, Data Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.2"
+      },
+      "metadata": {
+        "activity_id": "4.6.2",
+        "capability_id": "CAP-4-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.1 DLP Enforcement Point Logging and Analysis",
+      "family": "Zero Trust Activities",
+      "description": "DLP Enforcement Point Logging and Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.1"
+      },
+      "metadata": {
+        "activity_id": "4.4.1",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.2 DRM Enforcement Point Logging and Analysis",
+      "family": "Zero Trust Activities",
+      "description": "DRM Enforcement Point Logging and Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.2"
+      },
+      "metadata": {
+        "activity_id": "4.4.2",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.4 File Activity Monitoring Part 2",
+      "family": "Zero Trust Activities",
+      "description": "File Activity Monitoring Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.4"
+      },
+      "metadata": {
+        "activity_id": "4.4.4",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.5 Database Activity Monitoring",
+      "family": "Zero Trust Activities",
+      "description": "Database Activity Monitoring",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.5"
+      },
+      "metadata": {
+        "activity_id": "4.4.5",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-4-6",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.4.6 Comprehensive Data Activity Monitoring",
+      "family": "Zero Trust Activities",
+      "description": "Comprehensive Data Activity Monitoring",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.6",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.6"
+      },
+      "metadata": {
+        "activity_id": "4.4.6",
+        "capability_id": "CAP-4-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-5-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.5.2 Implement DRM and Protection Tools Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Implement DRM and Protection Tools Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.2"
+      },
+      "metadata": {
+        "activity_id": "4.5.2",
+        "capability_id": "CAP-4-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-5-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.5.5 DRM Enforcement via Data Tags and Analytics Part 3",
+      "family": "Zero Trust Activities",
+      "description": "DRM Enforcement via Data Tags and Analytics Part 3",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.5"
+      },
+      "metadata": {
+        "activity_id": "4.5.5",
+        "capability_id": "CAP-4-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-6-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.6.4 DLP Enforcement via Data Tags and Analytics Part 3",
+      "family": "Zero Trust Activities",
+      "description": "DLP Enforcement via Data Tags and Analytics Part 3",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.4"
+      },
+      "metadata": {
+        "activity_id": "4.6.4",
+        "capability_id": "CAP-4-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.4.3 Process Micro-segmentation, Micro-segmentation Capability, Network & Environment",
+      "family": "Zero Trust Activities",
+      "description": "Process Micro-segmentation, Micro-segmentation Capability, Network & Environment",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.3"
+      },
+      "metadata": {
+        "activity_id": "5.4.3",
+        "capability_id": "CAP-5-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.2 Integrate DAAS Access with SDS Policy Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Integrate DAAS Access with SDS Policy Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.2"
+      },
+      "metadata": {
+        "activity_id": "4.7.2",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.3 Integrate DAAS Access with SDS Policy Part 3",
+      "family": "Zero Trust Activities",
+      "description": "Integrate DAAS Access with SDS Policy Part 3",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.3"
+      },
+      "metadata": {
+        "activity_id": "4.7.3",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-5",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.5 Integrate Solution(s) and Policy with Enterprise IdP Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Integrate Solution(s) and Policy with Enterprise IdP Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.5",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.5"
+      },
+      "metadata": {
+        "activity_id": "4.7.5",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-4-7-7",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "4.7.7 Implement SDS Tool and/or Integrate with DRM Tool Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Implement SDS Tool and/or Integrate with DRM Tool Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.7",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.7"
+      },
+      "metadata": {
+        "activity_id": "4.7.7",
+        "capability_id": "CAP-4-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.1.1 Define Granular Control Access Rules & Policies Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Define Granular Control Access Rules & Policies Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.1"
+      },
+      "metadata": {
+        "activity_id": "5.1.1",
+        "capability_id": "CAP-5-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-1-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.1.2 Define Granular Control Access Rules & Policies Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Define Granular Control Access Rules & Policies Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.2"
+      },
+      "metadata": {
+        "activity_id": "5.1.2",
+        "capability_id": "CAP-5-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.2.1 Define SDN APIs, SDN Capability, Network & Environment Pillar",
+      "family": "Zero Trust Activities",
+      "description": "Define SDN APIs, SDN Capability, Network & Environment Pillar",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.1"
+      },
+      "metadata": {
+        "activity_id": "5.2.1",
+        "capability_id": "CAP-5-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.2.2 Implement SDN Programable Infrastructure",
+      "family": "Zero Trust Activities",
+      "description": "Implement SDN Programable Infrastructure",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.2"
+      },
+      "metadata": {
+        "activity_id": "5.2.2",
+        "capability_id": "CAP-5-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.2.3 Segment Flows into Control, Management, and Data Planes",
+      "family": "Zero Trust Activities",
+      "description": "Segment Flows into Control, Management, and Data Planes",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.3"
+      },
+      "metadata": {
+        "activity_id": "5.2.3",
+        "capability_id": "CAP-5-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-2-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.2.4 Network Asset Discovery & Optimization",
+      "family": "Zero Trust Activities",
+      "description": "Network Asset Discovery & Optimization",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.4"
+      },
+      "metadata": {
+        "activity_id": "5.2.4",
+        "capability_id": "CAP-5-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-6-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.6.2 Standardized API Calls & Schemas Part 1, API Standardization Capability, Automation &",
+      "family": "Zero Trust Activities",
+      "description": "Standardized API Calls & Schemas Part 1, API Standardization Capability, Automation &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.2"
+      },
+      "metadata": {
+        "activity_id": "6.6.2",
+        "capability_id": "CAP-6-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-3-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.3.2 Base/Camp/Post/Station (B/C/P/S) Macro-segmentation, Macro-segmentation Capability,",
+      "family": "Zero Trust Activities",
+      "description": "Base/Camp/Post/Station (B/C/P/S) Macro-segmentation, Macro-segmentation Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.2"
+      },
+      "metadata": {
+        "activity_id": "5.3.2",
+        "capability_id": "CAP-5-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-1-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.1.4 Enterprise Security Profile Part 2, PDP & Policy Orchestration Capability, Automation &",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Security Profile Part 2, PDP & Policy Orchestration Capability, Automation &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.4"
+      },
+      "metadata": {
+        "activity_id": "6.1.4",
+        "capability_id": "CAP-6-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.4.1 Implement Micro-segmentation, Micro-segmentation Capability, Network & Environment",
+      "family": "Zero Trust Activities",
+      "description": "Implement Micro-segmentation, Micro-segmentation Capability, Network & Environment",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.1"
+      },
+      "metadata": {
+        "activity_id": "5.4.1",
+        "capability_id": "CAP-5-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-5-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "5.4.4 Protect Data in Transit",
+      "family": "Zero Trust Activities",
+      "description": "Protect Data in Transit",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.4"
+      },
+      "metadata": {
+        "activity_id": "5.4.4",
+        "capability_id": "CAP-5-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-1-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.1.2 Organization Access Profile",
+      "family": "Zero Trust Activities",
+      "description": "Organization Access Profile",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.2"
+      },
+      "metadata": {
+        "activity_id": "6.1.2",
+        "capability_id": "CAP-6-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-1-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.1.3 Enterprise Security Profile Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Security Profile Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.3"
+      },
+      "metadata": {
+        "activity_id": "6.1.3",
+        "capability_id": "CAP-6-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-2-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.2.1 Task Automation Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Task Automation Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.1"
+      },
+      "metadata": {
+        "activity_id": "6.2.1",
+        "capability_id": "CAP-6-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.2.2 Enterprise Integration & Workflow Provisioning Part 1",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Integration & Workflow Provisioning Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.2"
+      },
+      "metadata": {
+        "activity_id": "6.2.2",
+        "capability_id": "CAP-6-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-2-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.2.3 Enterprise Integration & Workflow Provisioning Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Enterprise Integration & Workflow Provisioning Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.3"
+      },
+      "metadata": {
+        "activity_id": "6.2.3",
+        "capability_id": "CAP-6-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-4-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.4.1 Implement AI Automation Tools",
+      "family": "Zero Trust Activities",
+      "description": "Implement AI Automation Tools",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.1"
+      },
+      "metadata": {
+        "activity_id": "6.4.1",
+        "capability_id": "CAP-6-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.4.2 AI Driven by Analytics Decides Automation and Orchestration Modifications",
+      "family": "Zero Trust Activities",
+      "description": "AI Driven by Analytics Decides Automation and Orchestration Modifications",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.2"
+      },
+      "metadata": {
+        "activity_id": "6.4.2",
+        "capability_id": "CAP-6-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.5.1 Response Automation Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Response Automation Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.1"
+      },
+      "metadata": {
+        "activity_id": "6.5.1",
+        "capability_id": "CAP-6-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-5-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.5.2 Implement SOAR Tools",
+      "family": "Zero Trust Activities",
+      "description": "Implement SOAR Tools",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.2"
+      },
+      "metadata": {
+        "activity_id": "6.5.2",
+        "capability_id": "CAP-6-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-5-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.5.3 Implement Playbooks",
+      "family": "Zero Trust Activities",
+      "description": "Implement Playbooks",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.3"
+      },
+      "metadata": {
+        "activity_id": "6.5.3",
+        "capability_id": "CAP-6-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-7-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.7.1 Workflow Enrichment Part 1, Security Operations Center (SOC) & Incident Response (IR)",
+      "family": "Zero Trust Activities",
+      "description": "Workflow Enrichment Part 1, Security Operations Center (SOC) & Incident Response (IR)",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.1"
+      },
+      "metadata": {
+        "activity_id": "6.7.1",
+        "capability_id": "CAP-6-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-6-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.6.1 Tool Compliance Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Tool Compliance Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.1"
+      },
+      "metadata": {
+        "activity_id": "6.6.1",
+        "capability_id": "CAP-6-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-6-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.6.3 Standardized API Calls & Schemas Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Standardized API Calls & Schemas Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.3"
+      },
+      "metadata": {
+        "activity_id": "6.6.3",
+        "capability_id": "CAP-6-6",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-7-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.7.2 Workflow Enrichment Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Workflow Enrichment Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.2"
+      },
+      "metadata": {
+        "activity_id": "6.7.2",
+        "capability_id": "CAP-6-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-6-7-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "6.7.3 Workflow Enrichment Part 3",
+      "family": "Zero Trust Activities",
+      "description": "Workflow Enrichment Part 3",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.3"
+      },
+      "metadata": {
+        "activity_id": "6.7.3",
+        "capability_id": "CAP-6-7",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-1-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.1.1 Scale Considerations",
+      "family": "Zero Trust Activities",
+      "description": "Scale Considerations",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.1"
+      },
+      "metadata": {
+        "activity_id": "7.1.1",
+        "capability_id": "CAP-7-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-1-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.1.2 Log Parsing Name",
+      "family": "Zero Trust Activities",
+      "description": "Log Parsing Name",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.2"
+      },
+      "metadata": {
+        "activity_id": "7.1.2",
+        "capability_id": "CAP-7-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-1-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.1.3 Log Analysis",
+      "family": "Zero Trust Activities",
+      "description": "Log Analysis",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.3"
+      },
+      "metadata": {
+        "activity_id": "7.1.3",
+        "capability_id": "CAP-7-1",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-2-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.2.4 Asset Identification (ID) & Alert Correlation, Security Information and Event Management",
+      "family": "Zero Trust Activities",
+      "description": "Asset Identification (ID) & Alert Correlation, Security Information and Event Management",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.4"
+      },
+      "metadata": {
+        "activity_id": "7.2.4",
+        "capability_id": "CAP-7-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-3-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.3.1 Implement Analytics Tools, Common Security and Risk Analytics Capability, Visibility &",
+      "family": "Zero Trust Activities",
+      "description": "Implement Analytics Tools, Common Security and Risk Analytics Capability, Visibility &",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.1"
+      },
+      "metadata": {
+        "activity_id": "7.3.1",
+        "capability_id": "CAP-7-3",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-2-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.2.2 Threat Alerting Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Threat Alerting Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.2"
+      },
+      "metadata": {
+        "activity_id": "7.2.2",
+        "capability_id": "CAP-7-2",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-5-1",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.5.1 Cyber Threat Intelligence Program Part 1, Threat Intelligence Integration Capability,",
+      "family": "Zero Trust Activities",
+      "description": "Cyber Threat Intelligence Program Part 1, Threat Intelligence Integration Capability,",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.1",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.1"
+      },
+      "metadata": {
+        "activity_id": "7.5.1",
+        "capability_id": "CAP-7-5",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-4-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.4.2 Baseline & Profiling Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Baseline & Profiling Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.2"
+      },
+      "metadata": {
+        "activity_id": "7.4.2",
+        "capability_id": "CAP-7-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-4-3",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.4.3 UEBA Baseline Support Part 1",
+      "family": "Zero Trust Activities",
+      "description": "UEBA Baseline Support Part 1",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.3",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.3"
+      },
+      "metadata": {
+        "activity_id": "7.4.3",
+        "capability_id": "CAP-7-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-4-4",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.4.4 UEBA Baseline Support Part 2",
+      "family": "Zero Trust Activities",
+      "description": "UEBA Baseline Support Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.4",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.4"
+      },
+      "metadata": {
+        "activity_id": "7.4.4",
+        "capability_id": "CAP-7-4",
+        "level": "Target"
+      }
+    },
+    {
+      "id": "ACT-7-5-2",
+      "type": "zt_activity",
+      "framework": "dod-zt",
+      "title": "7.5.2 Cyber Threat Intelligence Program Part 2",
+      "family": "Zero Trust Activities",
+      "description": "Cyber Threat Intelligence Program Part 2",
+      "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.2",
+      "source": {
+        "key": "dod-zt-overlays-2024",
+        "snapshot_date": "2026-06-16T05:20:57.479Z",
+        "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.2"
+      },
+      "metadata": {
+        "activity_id": "7.5.2",
+        "capability_id": "CAP-7-5",
+        "level": "Target"
+      }
+    }
+  ]
+}

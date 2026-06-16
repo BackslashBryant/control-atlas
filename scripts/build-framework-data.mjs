@@ -28,6 +28,7 @@ const CATALOGS = [
   ['ai-rmf.json', 'nist-ai-rmf', 'nist-ai-rmf-playbook', 'requirement'],
   ['ssdf.json', 'nist-ssdf', 'nist-ssdf-oscal', 'requirement'],
   ['dod-rai.json', 'dod-rai', 'dod-rai-toolkit', 'requirement'],
+  ['dod-zt.json', 'dod-zt', 'dod-zt-reference-architecture-v2', 'requirement'],
   ['stig-rules.json', 'disa-stig', 'disa-stig-library', 'stig_rule'],
   ['srg-requirements.json', 'disa-srg', 'disa-srg-library', 'srg_requirement'],
 ];
@@ -37,6 +38,7 @@ const MAPS = [
   ['800-53-to-800-171.json', 'nist-800-171', 'nist-800-53', 'nist-800-171-oscal-mappings'],
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'disa-cci-nist-references'],
   ['stig-srg-to-cci.json', 'disa-stig', 'disa-cci', 'disa-stig-srg-cci-references'],
+  ['800-53-to-dod-zt-overlays.json', 'nist-800-53', 'dod-zt', 'dod-zt-overlays-2024'],
 ];
 
 const CATALOG_SUMMARIES = new Map([
@@ -54,6 +56,11 @@ const CATALOG_SUMMARIES = new Map([
     sourceId: 'nist-800-172-rev3',
     title: 'SP 800-172 Rev. 3 Catalog',
     description: 'Catalog summary for NIST SP 800-172 Rev. 3 enhanced CUI security requirements.',
+  }],
+  ['dod-zt', {
+    sourceId: 'dod-zt-reference-architecture-v2',
+    title: 'DoD Zero Trust Catalog',
+    description: 'DoD Zero Trust tenets, pillars, capabilities, activities, and control overlays from official DoD CIO publications.',
   }],
 ]);
 
@@ -167,7 +174,7 @@ function buildNodes(registry) {
       const id = nodeId(catalogId, record.id);
       pushEligibleNode(state, registry, {
         id,
-        node_type: nodeType(defaultType, record.id),
+        node_type: record.type?.startsWith('zt_') ? record.type : nodeType(defaultType, record.id),
         label: record.title ? `${record.id} ${record.title}` : String(record.id),
         source_id: sourceId,
         lifecycle_status: record.status === 'deprecated' ? 'deprecated' : 'active',
@@ -437,6 +444,32 @@ function addCmmcProgramEdges(state, registry, nodeIds, nodes) {
   }
 }
 
+function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'dod-zt.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    if (record.type !== 'zt_capability' && record.type !== 'zt_activity') continue;
+    const parentId = record.type === 'zt_capability'
+      ? record.metadata?.pillar_id
+      : record.metadata?.capability_id;
+    if (!parentId) continue;
+    const sourceNodeId = nodeId('dod-zt', parentId);
+    const targetNodeId = nodeId('dod-zt', record.id);
+    const subjectId = relationshipId('dod-zt-hierarchy', sourceNodeId, targetNodeId, 'includes');
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId,
+      sourceId: record.source?.key || 'dod-zt-reference-architecture-v2',
+      sourceNodeId,
+      targetNodeId,
+      relationshipType: 'includes',
+      locator: record.source?.locator || `dod-zt.json#${record.id}`,
+      retrievedAt: record.source?.snapshot_date,
+      rationale: `${parentId} includes ${record.id} in the DoD Zero Trust model.`,
+    });
+  }
+}
+
 function addCuiPolicyEdges(state, registry, nodeIds) {
   const relationships = [
     {
@@ -506,6 +539,7 @@ function buildEdges(registry, nodes) {
   addFedrampMembershipEdges(state, registry, nodeIds);
   addAssessmentEdges(state, registry, nodeIds);
   addCmmcProgramEdges(state, registry, nodeIds, nodes);
+  addDodZeroTrustHierarchyEdges(state, registry, nodeIds);
   addCuiPolicyEdges(state, registry, nodeIds);
   return state;
 }
