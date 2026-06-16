@@ -273,23 +273,54 @@ async function renderSearch(state) {
       severity: state.severity || undefined,
     };
     const hasActiveFilters = Object.values(filters).some(Boolean);
-    const results = runtime.searchLibrary(query, filters);
-    workspace.toggleAttribute('data-search-active', Boolean(query || hasActiveFilters));
+    const landing = !query && !hasActiveFilters;
+    workspace.toggleAttribute('data-search-active', landing || Boolean(query || hasActiveFilters));
 
-    app.innerHTML = `
-      <section class="panel search-workbench" aria-labelledby="search-title">
-        <p class="eyebrow">Library</p>
-        <h2 id="search-title">Find a control, STIG, CCI, or framework topic</h2>
-        <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
-        <form id="search-form" class="search-controls">
-          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
-          <button class="primary" type="submit">Search</button>
-        </form>
-        ${libraryFilterMarkup(state)}
-        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-        <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
-      </section>
-      <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
+    const results = landing ? [] : runtime.searchLibrary(query, filters);
+
+    if (landing) {
+      app.innerHTML = `
+        <section class="panel search-workbench search-landing" aria-labelledby="search-title">
+          <p class="eyebrow">Library</p>
+          <h2 id="search-title">Search the public compliance map</h2>
+          <p>Type a control ID, CCI, baseline, or topic. We only show public matches backed by public sources.</p>
+          <form id="search-form" class="search-controls">
+            <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
+            <button class="primary" type="submit">Search</button>
+          </form>
+          <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+          <div class="learning-grid landing-walkthrough" aria-label="Quick walkthrough">
+            <p><strong>What this is</strong><br>Public workbench to map, trace, and template.</p>
+            <p><strong>Who it’s for</strong><br>Assessors, architects, and authorization teams.</p>
+            <p><strong>Library</strong><br>Search and open defining sources.</p>
+            <p><strong>Crosswalks</strong><br>Compare catalogs side-by-side.</p>
+            <p><strong>Sources</strong><br>Check evidence basis and public-use status.</p>
+            <p><strong>Templates</strong><br>Generate blank RMF/ATO planning surfaces.</p>
+          </div>
+        </section>
+        <section class="results" id="library-results" aria-label="Search results">
+          <div class="notice">
+            <h3>Start a search</h3>
+            <p>Try <code>AC-2</code>, <code>CCI-000225</code>, or <code>account management</code>.</p>
+          </div>
+        </section>`;
+    } else {
+      app.innerHTML = `
+        <section class="panel search-workbench" aria-labelledby="search-title">
+          <p class="eyebrow">Library</p>
+          <h2 id="search-title">Search the public compliance map</h2>
+          <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
+          <form id="search-form" class="search-controls">
+            <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
+            <button class="primary" type="submit">Search</button>
+          </form>
+          ${libraryFilterMarkup(state)}
+          <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+          <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
+        </section>
+        <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
+    }
+
     bindSearchForm();
     bindNodeButtons();
   });
