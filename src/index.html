@@ -38,15 +38,17 @@
   <main id="workspace" tabindex="-1">
     <section class="hero" aria-labelledby="page-title">
       <h1 id="page-title">Control Atlas</h1>
-      <p class="hero-rotating-line">Ctrl+Alt+<span id="hero-rotating-word" class="hero-rotating-word">Comply</span></p>
-      <p>The public map for federal cyber compliance.</p>
-      <p>Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.</p>
+      <p class="hero-rotating-line" role="status" aria-live="polite">Ctrl+Alt+<span id="hero-rotating-word" class="hero-rotating-word">Comply</span></p>
+      <p class="hero-tagline">The public map for federal cyber compliance.</p>
       <div class="hero-actions">
         <button type="button" class="primary" data-view-shortcut="start-here">Start Here</button>
         <button type="button" class="secondary" data-view-shortcut="search">Explore Library</button>
         <button type="button" class="secondary" data-view-shortcut="templates">Generate Template</button>
       </div>
     </section>
+    <template id="landing-support-template">
+      <p class="landing-support">Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.</p>
+    </template>
     <section id="app" aria-live="polite" aria-busy="true">
       <div class="loading-card">Loading Control Atlas...</div>
     </section>

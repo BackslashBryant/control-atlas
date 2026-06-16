@@ -48,6 +48,10 @@ The site should answer questions like:
 - Which mappings are official, public, community-sourced, or inferred?
 - Where do I even start given my system type and data sensitivity?
 
+### 2.1 Design principles
+
+Control Atlas must **build for translation, not documentation** — plain operational language first, traceable connections, and clear next steps for small teams. Canonical guidance: [`docs/DESIGN_PRINCIPLES.md`](DESIGN_PRINCIPLES.md).
+
 ---
 
 ## 3. Product Boundary

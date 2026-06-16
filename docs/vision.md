@@ -11,3 +11,7 @@ Control Atlas is a static, open-source, public-data-only reference workbench for
 Control Atlas is not a GRC system, evidence processor, scan parser, compliance scoring engine, package manager, eMASS replacement, or authorization decision tool. It has no backend and collects no user, organization, or system data.
 
 Success means users can navigate trustworthy public relationships, understand the provenance behind every displayed mapping, and export blank/public-reference materials without submitting operational data or confusing reference guidance with an official decision.
+
+## Design principles
+
+Control Atlas is built for **translation, not documentation** — reducing the distance between complex security guidance and practical action. See [`DESIGN_PRINCIPLES.md`](DESIGN_PRINCIPLES.md) for the canonical product and development principle.

@@ -9,7 +9,12 @@ let graphLoadPromise = null;
 let currentState = { view: 'search' };
 let noviceMode = true;
 const heroPrefix = 'Ctrl+Alt+';
-const heroWords = ['Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize'];
+const heroWords = [
+  'Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize',
+  'Trace', 'Compare', 'Baseline', 'Catalog', 'Validate', 'Document', 'Export', 'Discover',
+  'Reference', 'Scope', 'Review', 'Align', 'Implement', 'Monitor', 'Report', 'Template',
+  'Prioritize', 'Interpret', 'Decompose',
+];
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
@@ -274,36 +279,36 @@ async function renderSearch(state) {
     };
     const hasActiveFilters = Object.values(filters).some(Boolean);
     const landing = !query && !hasActiveFilters;
-    workspace.toggleAttribute('data-search-active', landing || Boolean(query || hasActiveFilters));
+    const searchEngaged = Boolean(query || hasActiveFilters);
+    workspace.toggleAttribute('data-search-active', searchEngaged);
 
     const results = landing ? [] : runtime.searchLibrary(query, filters);
 
     if (landing) {
       app.innerHTML = `
-        <section class="panel search-workbench search-landing" aria-labelledby="search-title">
+        <section class="panel search-workbench search-landing" aria-labelledby="search-region-label">
           <p class="eyebrow">Library</p>
-          <h2 id="search-title">Search the public compliance map</h2>
-          <p>Type a control ID, CCI, baseline, or topic. We only show public matches backed by public sources.</p>
+          <p id="search-region-label" class="visually-hidden">Search the public compliance library</p>
           <form id="search-form" class="search-controls">
             <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
             <button class="primary" type="submit">Search</button>
           </form>
           <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-          <div class="learning-grid landing-walkthrough" aria-label="Quick walkthrough">
-            <p><strong>What this is</strong><br>Public workbench to map, trace, and template.</p>
-            <p><strong>Who it’s for</strong><br>Assessors, architects, and authorization teams.</p>
-            <p><strong>Library</strong><br>Search and open defining sources.</p>
-            <p><strong>Crosswalks</strong><br>Compare catalogs side-by-side.</p>
-            <p><strong>Sources</strong><br>Check evidence basis and public-use status.</p>
-            <p><strong>Templates</strong><br>Generate blank RMF/ATO planning surfaces.</p>
-          </div>
-        </section>
-        <section class="results" id="library-results" aria-label="Search results">
-          <div class="notice">
-            <h3>Start a search</h3>
-            <p>Try <code>AC-2</code>, <code>CCI-000225</code>, or <code>account management</code>.</p>
-          </div>
+          <section class="landing-walkthrough" aria-labelledby="walkthrough-heading">
+            <h2 id="walkthrough-heading" class="visually-hidden">How to use Control Atlas</h2>
+            <div class="learning-grid">
+              <p><strong>What this is</strong><br>Turns complex public guidance into plain connections you can trace and act on.</p>
+              <p><strong>Who it&apos;s for</strong><br>Small assessor, architect, and authorization teams without a dedicated compliance desk.</p>
+              <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
+              <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare how frameworks relate with traceable sources. <span class="walkthrough-next">Open Crosswalks.</span></button>
+              <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Confirm which public source backs each mapping before you trust it. <span class="walkthrough-next">Open Sources.</span></button>
+              <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank RMF/ATO planning files locally — export only. <span class="walkthrough-next">Open Templates.</span></button>
+              <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization patterns as reference examples. <span class="walkthrough-next">Open Patterns.</span></button>
+              <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>New to the map? Get a guided first path for your role. <span class="walkthrough-next">Open Start Here.</span></button>
+            </div>
+          </section>
         </section>`;
+      mountLandingSupport();
     } else {
       app.innerHTML = `
         <section class="panel search-workbench" aria-labelledby="search-title">
@@ -323,6 +328,21 @@ async function renderSearch(state) {
 
     bindSearchForm();
     bindNodeButtons();
+    bindViewShortcuts(app);
+  });
+}
+
+function mountLandingSupport() {
+  app.querySelector('.landing-support')?.remove();
+  const template = /** @type {HTMLTemplateElement | null} */ (document.querySelector('#landing-support-template'));
+  const anchor = app.querySelector('.search-examples');
+  if (template && anchor) anchor.after(template.content.cloneNode(true));
+}
+
+/** @param {ParentNode} [root] */
+function bindViewShortcuts(root = document) {
+  /** @type {NodeListOf<HTMLButtonElement>} */ (root.querySelectorAll('[data-view-shortcut]')).forEach((button) => {
+    button.addEventListener('click', () => void setView(button.dataset.viewShortcut));
   });
 }
 
@@ -1005,6 +1025,7 @@ function renderRetired(state) {
 
 async function renderState(state) {
   currentState = state;
+  if (state.view !== 'search') workspace.removeAttribute('data-search-active');
   navButtons.forEach((button) => button.toggleAttribute('aria-current', button.dataset.view === state.view));
   if (state.view === 'matrix') await renderMatrix(state);
   else if (state.view === 'library-detail') await renderLibraryDetail(state);
@@ -1073,7 +1094,7 @@ function toggleHelp() {
 async function init() {
   initHeroRotation();
   navButtons.forEach((button) => button.addEventListener('click', () => void setView(button.dataset.view)));
-  /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-view-shortcut]')).forEach((button) => button.addEventListener('click', () => void setView(button.dataset.viewShortcut)));
+  bindViewShortcuts(document);
   buttonBySelector('#btn-toggle-mode')?.addEventListener('click', (event) => {
     noviceMode = !noviceMode;
     const toggleButton = /** @type {HTMLButtonElement} */ (event.currentTarget);
