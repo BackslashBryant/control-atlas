@@ -1,31 +1,35 @@
 import { createHash } from 'node:crypto';
-import { read, utils } from 'xlsx';
+import readXlsxFile from 'read-excel-file/node';
 import { normalize80053Id } from '../normalizers/oscal-normalize.mjs';
 
 export function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;
 }
 
-export function parseOlirExcel(buffer, options = {}) {
-  const workbook = read(buffer);
-  const sheetName = workbook.SheetNames.find((name) =>
-    ['relationships', 'olir', 'mapping', 'crosswalk'].some((k) => name.toLowerCase().includes(k))
-  ) || workbook.SheetNames[0];
+function normalizeCell(value) {
+  if (value == null) return '';
+  if (value instanceof Date) return value.toISOString();
+  return String(value);
+}
 
-  const sheet = workbook.Sheets[sheetName];
-  if (!sheet) throw new Error(`Relationships sheet not found in workbook: ${sheetName}`);
+export async function parseOlirExcel(buffer, options = {}) {
+  const sheets = await readXlsxFile(buffer);
+  const selected = sheets.find((entry) =>
+    ['relationships', 'olir', 'mapping', 'crosswalk'].some((keyword) => entry.sheet.toLowerCase().includes(keyword)),
+  ) || sheets[0];
+  if (!selected) throw new Error('Relationships sheet not found in workbook');
 
-  const rows = utils.sheet_to_json(sheet, { header: 1, defval: '' });
+  const rows = selected.data.map((row) => row.map(normalizeCell));
   const relationships = [];
   const seen = new Set();
 
   if (!rows.length) return [];
 
-  const headers = rows[0].map((h) => String(h).trim().replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').toLowerCase());
-  const focalIdx = headers.findIndex((h) => h.includes('focal'));
-  const referenceIdx = headers.findIndex((h) => h.includes('reference'));
-  const commentIdx = headers.findIndex((h) => h.includes('comment'));
-  const strengthIdx = headers.findIndex((h) => h.includes('strength') || h.includes('relationship'));
+  const headers = rows[0].map((header) => String(header).trim().replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').toLowerCase());
+  const focalIdx = headers.findIndex((header) => header.includes('focal'));
+  const referenceIdx = headers.findIndex((header) => header.includes('reference'));
+  const commentIdx = headers.findIndex((header) => header.includes('comment'));
+  const strengthIdx = headers.findIndex((header) => header.includes('strength') || header.includes('relationship'));
 
   if (focalIdx === -1 || referenceIdx === -1) {
     throw new Error('Focal or Reference columns not found in OLIR sheet');
@@ -37,8 +41,7 @@ export function parseOlirExcel(buffer, options = {}) {
     if (!focalCell || !referenceCell) continue;
 
     const focalId = focalCell.replace(/\r?\n/g, '').trim();
-    // Split references by comma, semicolon, or newline
-    const refIds = referenceCell.split(/[,;\n]/).map((r) => r.trim()).filter(Boolean);
+    const refIds = referenceCell.split(/[,;\n]/).map((ref) => ref.trim()).filter(Boolean);
 
     for (const rawRefId of refIds) {
       const refId = rawRefId.replace(/\r?\n/g, '').trim();
@@ -57,7 +60,7 @@ export function parseOlirExcel(buffer, options = {}) {
         target_id: focalId,
         relationship_type: strength.toLowerCase() === 'equivalent' ? 'equivalent_to' : 'maps_to',
         why: comment || `NIST OLIR concept crosswalk associates SP 800-53 ${controlId} with CSF 2.0 ${focalId}.`,
-        source_locator: `${sheetName}#${focalId}->${controlId}`,
+        source_locator: `${selected.sheet}#${focalId}->${controlId}`,
         olir_status: options.status || 'draft',
         owner_authority: options.ownerAuthority !== false,
         submitter: options.submitter || 'NIST',
@@ -65,7 +68,7 @@ export function parseOlirExcel(buffer, options = {}) {
     }
   }
 
-  return relationships.sort((a, b) => a.source_id.localeCompare(b.source_id) || a.target_id.localeCompare(b.target_id));
+  return relationships.sort((left, right) => left.source_id.localeCompare(right.source_id) || left.target_id.localeCompare(right.target_id));
 }
 
 export function parseOlirCsv(text) {
@@ -103,7 +106,7 @@ export async function build80053ToCsf20Map(options = {}) {
   const buffer = options.buffer || await fetchBuffer(url);
   const checksumValue = checksum(buffer);
 
-  const relationships = parseOlirExcel(buffer, {
+  const relationships = await parseOlirExcel(buffer, {
     status: 'draft',
     ownerAuthority: true,
     submitter: 'NIST',
