@@ -239,6 +239,7 @@ export function createFederalGraphRuntime(dataset) {
     .sort((left, right) => sortNodesByItemId(left.control_node, right.control_node)), (entry) => entry.control_node.id);
 
   return {
+    dataset,
     searchNodes(query, filters = {}) {
       const needle = normalize(query);
       if (!needle) return [];

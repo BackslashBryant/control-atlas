@@ -1,4 +1,5 @@
 import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs';
+import { generateTemplate } from './template-engine.mjs';
 
 const app = /** @type {HTMLElement} */ (document.querySelector('#app'));
 const navButtons = [.../** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('nav [data-view]'))];
@@ -750,12 +751,67 @@ function renderTemplates() {
     <section class="panel">
       <p class="eyebrow">Templates</p>
       <h2>Blank planning starters stay local to your browser</h2>
-      <div class="grid">
-        <article class="framework-card"><span class="badge">Security Plan Starter</span><h3>Blank SSP structure</h3><p>Start with public control context and fill in your environment outside this site.</p></article>
-        <article class="framework-card"><span class="badge">Evidence Matrix</span><h3>Evidence expectation matrix</h3><p>Use public sources to outline expected evidence types without uploading or storing package data.</p></article>
-        <article class="framework-card"><span class="badge">POA&amp;M Starter</span><h3>Blank remediation tracker</h3><p>Generate a local planning surface without any backend, account, or hidden persistence.</p></article>
-      </div>
+      <p>Generate public-reference templates without uploading any data. All generation happens locally in your browser.</p>
+      
+      <form id="template-factory-form" class="template-builder" style="margin-top: 1.5rem;">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="template-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Artifact Type</label>
+          <select id="template-type" name="templateType" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="security_plan_starter">Security Plan Starter</option>
+            <option value="implementation_statement_worksheet">Control Implementation Statement Worksheet</option>
+            <option value="evidence_expectation_matrix">Evidence Expectation Matrix</option>
+            <option value="stig_evidence_checklist">STIG Evidence Checklist</option>
+            <option value="inheritance_worksheet">Inheritance Worksheet</option>
+            <option value="reciprocity_checklist">Reciprocity Checklist</option>
+            <option value="poam_starter">POA&M Starter</option>
+            <option value="assessment_planning_worksheet">Assessment Planning Worksheet</option>
+            <option value="conmon_calendar">Continuous Monitoring Calendar</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="template-framework" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Framework Context (Optional)</label>
+          <select id="template-framework" name="framework" style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            ${optionObjectsMarkup(runtime.catalogs().map(c => ({ value: c.id, label: c.name })), '', 'None / Generic')}
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="template-environment" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Environment Archetype</label>
+          <select id="template-environment" name="environment" style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="Generic">Generic</option>
+            <option value="Cloud SaaS">Cloud SaaS</option>
+            <option value="Platform service">Platform service</option>
+            <option value="Enclave">Enclave</option>
+            <option value="On-premises system">On-premises system</option>
+            <option value="Hybrid system">Hybrid system</option>
+            <option value="Enterprise service">Enterprise service</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="template-format" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Output Format</label>
+          <select id="template-format" name="format" style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="markdown">Markdown</option>
+            <option value="csv">CSV</option>
+            <option value="json">JSON</option>
+            <option value="yaml">YAML</option>
+          </select>
+        </div>
+
+        <div class="form-actions" style="margin-top: 1.5rem;">
+          <button type="submit" class="primary">Generate Template</button>
+        </div>
+      </form>
     </section>`;
+
+  document.getElementById('template-factory-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(/** @type {HTMLFormElement} */ (e.target));
+    const options = Object.fromEntries(formData.entries());
+    const result = generateTemplate(options, runtime.dataset);
+    downloadTextFile(result.filename, result.content, result.mimeType);
+  });
 }
 
 function renderStartHere() {
