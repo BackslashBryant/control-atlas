@@ -24,13 +24,15 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByRole('heading', { name: 'Find the right public entry point before diving into the graph' })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible();
+  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByRole('button', { name: 'Relationship Table', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'STIG -> CCI -> NIST', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Baseline Compare', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Sources', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible();
+  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByLabel('Source type', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Use status', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Status', { exact: true })).toBeVisible();
