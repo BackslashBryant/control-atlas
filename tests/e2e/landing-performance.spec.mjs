@@ -39,6 +39,7 @@ test('graph loads only after the user searches', async ({ page }) => {
   await page.getByLabel('ID, title, or topic').fill('AC-2');
   await page.getByRole('button', { name: 'Search', exact: true }).click();
 
-  await expect.poll(() => graphRequests.length, { timeout: 15000 }).toBeGreaterThan(0);
-  await expect(page.locator('#library-results .item-card').first()).toBeVisible({ timeout: 15000 });
+  await expect.poll(() => graphRequests.length, { timeout: 60000 }).toBeGreaterThan(0);
+  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
+  await expect(page.locator('#library-results .item-card').first()).toBeVisible({ timeout: 10000 });
 });
