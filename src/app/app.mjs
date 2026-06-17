@@ -8,7 +8,6 @@ let runtime = null;
 let graphLoadPromise = null;
 let currentState = { view: 'search' };
 let noviceMode = true;
-const heroPrefix = 'Ctrl+Alt+';
 const heroWords = [
   'Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize',
   'Trace', 'Compare', 'Baseline', 'Catalog', 'Validate', 'Document', 'Export', 'Discover',
@@ -268,63 +267,67 @@ function libraryFilterMarkup(state) {
 }
 
 async function renderSearch(state) {
-  await withGraph(async () => {
-    const query = state.query || '';
-    const filters = {
-      catalog_id: state.filter || undefined,
-      object_type: state.objectType || undefined,
-      source_class: state.sourceClass || undefined,
-      control_family: state.controlFamily || undefined,
-      severity: state.severity || undefined,
-    };
-    const hasActiveFilters = Object.values(filters).some(Boolean);
-    const landing = !query && !hasActiveFilters;
-    const searchEngaged = Boolean(query || hasActiveFilters);
-    workspace.toggleAttribute('data-search-active', searchEngaged);
+  const query = state.query || '';
+  const filters = {
+    catalog_id: state.filter || undefined,
+    object_type: state.objectType || undefined,
+    source_class: state.sourceClass || undefined,
+    control_family: state.controlFamily || undefined,
+    severity: state.severity || undefined,
+  };
+  const hasActiveFilters = Object.values(filters).some(Boolean);
+  const landing = !query && !hasActiveFilters;
+  const searchEngaged = Boolean(query || hasActiveFilters);
+  workspace.toggleAttribute('data-search-active', searchEngaged);
 
-    const results = landing ? [] : runtime.searchLibrary(query, filters);
-
-    if (landing) {
-      app.innerHTML = `
-        <section class="panel search-workbench search-landing" aria-labelledby="search-region-label">
-          <p class="eyebrow">Library</p>
-          <p id="search-region-label" class="visually-hidden">Search the public compliance library</p>
-          <form id="search-form" class="search-controls">
-            <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
-            <button class="primary" type="submit">Search</button>
-          </form>
-          <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-          <section class="landing-walkthrough" aria-labelledby="walkthrough-heading">
-            <h2 id="walkthrough-heading" class="visually-hidden">How to use Control Atlas</h2>
-            <div class="learning-grid">
-              <p><strong>What this is</strong><br>Turns complex public guidance into plain connections you can trace and act on.</p>
-              <p><strong>Who it&apos;s for</strong><br>Small assessor, architect, and authorization teams without a dedicated compliance desk.</p>
-              <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
-              <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare how frameworks relate with traceable sources. <span class="walkthrough-next">Open Crosswalks.</span></button>
-              <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Confirm which public source backs each mapping before you trust it. <span class="walkthrough-next">Open Sources.</span></button>
-              <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank RMF/ATO planning files locally — export only. <span class="walkthrough-next">Open Templates.</span></button>
-              <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization patterns as reference examples. <span class="walkthrough-next">Open Patterns.</span></button>
-              <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>New to the map? Get a guided first path for your role. <span class="walkthrough-next">Open Start Here.</span></button>
-            </div>
-          </section>
-        </section>`;
-      mountLandingSupport();
-    } else {
-      app.innerHTML = `
-        <section class="panel search-workbench" aria-labelledby="search-title">
-          <p class="eyebrow">Library</p>
-          <h2 id="search-title">Search the public compliance map</h2>
-          <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
-          <form id="search-form" class="search-controls">
-            <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
-            <button class="primary" type="submit">Search</button>
-          </form>
-          ${libraryFilterMarkup(state)}
-          <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-          <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
+  if (landing) {
+    app.setAttribute('aria-busy', 'false');
+    app.innerHTML = `
+      <section class="panel search-workbench search-landing" aria-labelledby="search-region-label">
+        <p class="eyebrow">Library</p>
+        <p id="search-region-label" class="visually-hidden">Search the public compliance library</p>
+        <form id="search-form" class="search-controls">
+          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
+          <button class="primary" type="submit">Search</button>
+        </form>
+        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+        <section class="landing-walkthrough" aria-labelledby="walkthrough-heading">
+          <h2 id="walkthrough-heading" class="visually-hidden">How to use Control Atlas</h2>
+          <div class="learning-grid">
+            <p><strong>What this is</strong><br>Turns complex public guidance into plain connections you can trace and act on.</p>
+            <p><strong>Who it&apos;s for</strong><br>Small assessor, architect, and authorization teams without a dedicated compliance desk.</p>
+            <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare how frameworks relate with traceable sources. <span class="walkthrough-next">Open Crosswalks.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Confirm which public source backs each mapping before you trust it. <span class="walkthrough-next">Open Sources.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank RMF/ATO planning files locally — export only. <span class="walkthrough-next">Open Templates.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization patterns as reference examples. <span class="walkthrough-next">Open Patterns.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>New to the map? Get a guided first path for your role. <span class="walkthrough-next">Open Start Here.</span></button>
+          </div>
         </section>
-        <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
-    }
+      </section>`;
+    mountLandingSupport();
+    bindSearchForm();
+    bindViewShortcuts(app);
+    return;
+  }
+
+  await withGraph(async () => {
+    const results = runtime.searchLibrary(query, filters);
+
+    app.innerHTML = `
+      <section class="panel search-workbench" aria-labelledby="search-title">
+        <p class="eyebrow">Library</p>
+        <h2 id="search-title">Search the public compliance map</h2>
+        <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
+        <form id="search-form" class="search-controls">
+          <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
+          <button class="primary" type="submit">Search</button>
+        </form>
+        ${libraryFilterMarkup(state)}
+        <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
+        <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
+      </section>
+      <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
 
     bindSearchForm();
     bindNodeButtons();
@@ -1049,16 +1052,13 @@ function initHeroRotation() {
   const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
   if (reducedMotionQuery.matches) {
     heroRotatingWord.textContent = 'Comply';
-    heroRotatingWord.setAttribute('aria-label', `${heroPrefix}Comply`);
     return;
   }
   let index = 0;
   heroRotatingWord.textContent = heroWords[index];
-  heroRotatingWord.setAttribute('aria-label', `${heroPrefix}${heroWords[index]}`);
   setInterval(() => {
     index = (index + 1) % heroWords.length;
     heroRotatingWord.textContent = heroWords[index];
-    heroRotatingWord.setAttribute('aria-label', `${heroPrefix}${heroWords[index]}`);
   }, 1800);
 }
 
