@@ -1,5 +1,7 @@
 import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parseViewState, serializeViewState } from './runtime.mjs';
 import { generateTemplate } from './template-engine.mjs';
+import { glossaryData } from './glossary-data.mjs';
+import { patternsData } from './patterns-data.mjs';
 
 const app = /** @type {HTMLElement} */ (document.querySelector('#app'));
 const navButtons = [.../** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('nav [data-view]'))];
@@ -733,20 +735,111 @@ async function renderSources(state = currentState) {
   });
 }
 
-function renderPatterns() {
+function renderPatterns(state = currentState) {
+  if (state.pattern) {
+    const pattern = patternsData.find((p) => p.id === state.pattern);
+    if (!pattern) {
+      void setView('patterns', { pattern: '' });
+      return;
+    }
+    app.innerHTML = `
+      <section class="panel pattern-detail">
+        <button class="secondary" id="back-to-patterns" type="button">Back to Patterns</button>
+        <p class="eyebrow">Pattern Detail</p>
+        <h2 tabindex="-1" id="pattern-detail-title">${escapeHtml(pattern.title)}</h2>
+        <p class="pattern-summary"><strong>Summary:</strong> ${escapeHtml(pattern.summary)}</p>
+        
+        <div class="pattern-section" style="margin-top: 1.5rem;">
+          <h3>Explanation</h3>
+          <p>${escapeHtml(pattern.explanation)}</p>
+        </div>
+
+        <div class="pattern-section" style="margin-top: 1.5rem;">
+          <h3>Common Practitioner Friction</h3>
+          <p class="friction-text" style="font-style: italic; border-left: 3px solid var(--ca-secondary); padding-left: 1rem;">${escapeHtml(pattern.friction)}</p>
+        </div>
+
+        <div class="pattern-section" style="margin-top: 1.5rem;">
+          <h3>Do & Do Not Guidance</h3>
+          <div class="grid">
+            <div class="framework-card do-card" style="border-top: 4px solid #10B981;">
+              <h4 style="color: #10B981; margin-top: 0;">Do</h4>
+              <ul style="padding-left: 1.25rem;">${pattern.dos.map(doItem => `<li>${escapeHtml(doItem)}</li>`).join('')}</ul>
+            </div>
+            <div class="framework-card dont-card" style="border-top: 4px solid #EF4444;">
+              <h4 style="color: #EF4444; margin-top: 0;">Do Not</h4>
+              <ul style="padding-left: 1.25rem;">${pattern.donts.map(dontItem => `<li>${escapeHtml(dontItem)}</li>`).join('')}</ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="pattern-section" style="margin-top: 1.5rem;">
+          <h3>References and Links</h3>
+          <p><strong>Public source references:</strong> ${escapeHtml(pattern.sources.join(', '))}</p>
+          <div class="grid">
+            <div class="framework-card">
+              <h4>Related Controls</h4>
+              <div class="badge-row">
+                ${pattern.controls.map(control => `<button class="chip" data-open-node="${escapeHtml(runtime.getNode(control)?.id || control)}">${escapeHtml(control)}</button>`).join('') || '<span class="muted">None</span>'}
+              </div>
+            </div>
+            <div class="framework-card">
+              <h4>Related Templates</h4>
+              <div class="stack">
+                ${pattern.templates.map(tmpl => `<button class="primary" data-generate-pattern-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(tmpl.replaceAll('_', ' '))}</button>`).join('') || '<span class="muted">None</span>'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-warning" role="note" aria-label="Limitation" style="margin-top: 1.5rem;">
+          <strong>Limitations & Disclaimers</strong>
+          <p>${escapeHtml(pattern.limitations)}</p>
+        </div>
+      </section>`;
+    
+    buttonBySelector('#back-to-patterns')?.addEventListener('click', () => {
+      void setView('patterns', { pattern: '' });
+    });
+    
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-generate-pattern-template]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        void setView('templates', { templateType: button.dataset.generatePatternTemplate || '', framework: '' });
+      });
+    });
+
+    bindNodeButtons();
+    elementBySelector('#pattern-detail-title')?.focus();
+    return;
+  }
+
+  const cards = patternsData.map((pattern) => `
+    <article class="framework-card">
+      <span class="badge">Reference Pattern</span>
+      <h3>${escapeHtml(pattern.title)}</h3>
+      <p>${escapeHtml(pattern.summary)}</p>
+      <button class="secondary" data-open-pattern="${escapeHtml(pattern.id)}" type="button">Open pattern details</button>
+    </article>`).join('');
+
   app.innerHTML = `
     <section class="panel">
       <p class="eyebrow">Patterns</p>
       <h2>Reference patterns stay public, generic, and backed by public sources</h2>
-      <div class="grid">
-        <article class="framework-card"><span class="badge">RMF lifecycle</span><h3>Plan around public RMF stages</h3><p>Follow public baseline, assessment, and evidence expectations without implying an authorization outcome.</p></article>
-        <article class="framework-card"><span class="badge">Inheritance</span><h3>Map shared-control expectations</h3><p>Use public mappings to explain where a provider relationship begins and where local implementation still matters.</p></article>
-        <article class="framework-card"><span class="badge">Reciprocity</span><h3>Separate reuse from approval</h3><p>Use public reuse patterns and source notes, but keep official acceptance decisions with the program office.</p></article>
-      </div>
+      <p class="muted">Explore standard models for authorization, risk tracking, and assessment planning.</p>
+      <div class="grid">${cards}</div>
     </section>`;
+
+  /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-open-pattern]')).forEach((button) => {
+    button.addEventListener('click', () => {
+      void setView('patterns', { pattern: button.dataset.openPattern || '' });
+    });
+  });
 }
 
-function renderTemplates() {
+function renderTemplates(state = currentState) {
+  const selectedType = state.templateType || 'security_plan_starter';
+  const selectedFramework = state.framework || '';
+
   app.innerHTML = `
     <section class="panel">
       <p class="eyebrow">Templates</p>
@@ -757,22 +850,22 @@ function renderTemplates() {
         <div class="form-group" style="margin-bottom: 1rem;">
           <label for="template-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Artifact Type</label>
           <select id="template-type" name="templateType" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
-            <option value="security_plan_starter">Security Plan Starter</option>
-            <option value="implementation_statement_worksheet">Control Implementation Statement Worksheet</option>
-            <option value="evidence_expectation_matrix">Evidence Expectation Matrix</option>
-            <option value="stig_evidence_checklist">STIG Evidence Checklist</option>
-            <option value="inheritance_worksheet">Inheritance Worksheet</option>
-            <option value="reciprocity_checklist">Reciprocity Checklist</option>
-            <option value="poam_starter">POA&M Starter</option>
-            <option value="assessment_planning_worksheet">Assessment Planning Worksheet</option>
-            <option value="conmon_calendar">Continuous Monitoring Calendar</option>
+            <option value="security_plan_starter" ${selectedType === 'security_plan_starter' ? 'selected' : ''}>Security Plan Starter</option>
+            <option value="implementation_statement_worksheet" ${selectedType === 'implementation_statement_worksheet' ? 'selected' : ''}>Control Implementation Statement Worksheet</option>
+            <option value="evidence_expectation_matrix" ${selectedType === 'evidence_expectation_matrix' ? 'selected' : ''}>Evidence Expectation Matrix</option>
+            <option value="stig_evidence_checklist" ${selectedType === 'stig_evidence_checklist' ? 'selected' : ''}>STIG Evidence Checklist</option>
+            <option value="inheritance_worksheet" ${selectedType === 'inheritance_worksheet' ? 'selected' : ''}>Inheritance Worksheet</option>
+            <option value="reciprocity_checklist" ${selectedType === 'reciprocity_checklist' ? 'selected' : ''}>Reciprocity Checklist</option>
+            <option value="poam_starter" ${selectedType === 'poam_starter' ? 'selected' : ''}>POA&M Starter</option>
+            <option value="assessment_planning_worksheet" ${selectedType === 'assessment_planning_worksheet' ? 'selected' : ''}>Assessment Planning Worksheet</option>
+            <option value="conmon_calendar" ${selectedType === 'conmon_calendar' ? 'selected' : ''}>Continuous Monitoring Calendar</option>
           </select>
         </div>
         
         <div class="form-group" style="margin-bottom: 1rem;">
           <label for="template-framework" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Framework Context (Optional)</label>
           <select id="template-framework" name="framework" style="width: 100%; max-width: 400px; padding: 0.5rem;">
-            ${optionObjectsMarkup(runtime.catalogs().map(c => ({ value: c.id, label: c.name })), '', 'None / Generic')}
+            ${optionObjectsMarkup(runtime.getCatalogs().map(c => ({ value: c.id, label: c.name })), selectedFramework, 'None / Generic')}
           </select>
         </div>
 
@@ -789,7 +882,41 @@ function renderTemplates() {
           </select>
         </div>
 
-        <div class="form-group" style="margin-bottom: 1rem;">
+        <fieldset class="form-group" style="margin-top: 1rem; border: none; padding: 0;">
+          <legend style="font-weight: 600; margin-bottom: 0.5rem;">Include Options</legend>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeImplementationPrompts" value="true" checked>
+              Implementation Prompts
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeEvidenceExpectations" value="true" checked>
+              Evidence Expectations
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeInheritancePrompts" value="true" checked>
+              Inheritance Prompts
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeReciprocityPrompts" value="true" checked>
+              Reciprocity Prompts
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeStigReferences" value="true" checked>
+              STIG References
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includeSourceFootnotes" value="true" checked>
+              Source Footnotes
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+              <input type="checkbox" name="includePlaceholders" value="true" checked>
+              Placeholder Fields
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-group" style="margin-bottom: 1rem; margin-top: 1rem;">
           <label for="template-format" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Output Format</label>
           <select id="template-format" name="format" style="width: 100%; max-width: 400px; padding: 0.5rem;">
             <option value="markdown">Markdown</option>
@@ -807,25 +934,206 @@ function renderTemplates() {
 
   document.getElementById('template-factory-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const formData = new FormData(/** @type {HTMLFormElement} */ (e.target));
-    const options = Object.fromEntries(formData.entries());
+    const formElement = /** @type {HTMLFormElement} */ (e.target);
+    const options = {
+      templateType: formElement.templateType.value,
+      framework: formElement.framework.value,
+      environment: formElement.environment.value,
+      format: formElement.format.value,
+      includeImplementationPrompts: formElement.includeImplementationPrompts.checked,
+      includeEvidenceExpectations: formElement.includeEvidenceExpectations.checked,
+      includeInheritancePrompts: formElement.includeInheritancePrompts.checked,
+      includeReciprocityPrompts: formElement.includeReciprocityPrompts.checked,
+      includeStigReferences: formElement.includeStigReferences.checked,
+      includeSourceFootnotes: formElement.includeSourceFootnotes.checked,
+      includePlaceholders: formElement.includePlaceholders.checked,
+    };
     const result = generateTemplate(options, runtime.dataset);
     downloadTextFile(result.filename, result.content, result.mimeType);
   });
 }
 
-function renderStartHere() {
+function renderStartHere(state = currentState) {
+  const systemType = state.systemType || '';
+  const dataSensitivity = state.dataSensitivity || '';
+  const environment = state.environment || '';
+  const step = state.step || 'questions';
+
+  if (step === 'recommendation') {
+    const suggestedFrameworks = [];
+    const suggestedBaselines = [];
+    const suggestedPatterns = [];
+    const suggestedTemplates = [];
+
+    if (systemType === 'Cloud SaaS' || systemType === 'Platform service') {
+      suggestedPatterns.push('csp-inheritance', 'shared-responsibility');
+      suggestedTemplates.push('inheritance_worksheet');
+    } else if (systemType === 'Enclave' || systemType === 'Hybrid system' || systemType === 'Enterprise service') {
+      suggestedPatterns.push('enterprise-inheritance', 'boundary-patterns');
+      suggestedTemplates.push('inheritance_worksheet');
+    }
+
+    if (environment === 'CSP' || systemType === 'Cloud SaaS') {
+      suggestedFrameworks.push({ id: 'fedramp-rev5', name: 'FedRAMP Rev. 5 Baselines' });
+      if (dataSensitivity === 'Low') suggestedBaselines.push({ id: 'fedramp-rev5:LOW', name: 'FedRAMP Low Baseline' });
+      else if (dataSensitivity === 'Moderate') suggestedBaselines.push({ id: 'fedramp-rev5:MODERATE', name: 'FedRAMP Moderate Baseline' });
+      else if (dataSensitivity === 'High') suggestedBaselines.push({ id: 'fedramp-rev5:HIGH', name: 'FedRAMP High Baseline' });
+      suggestedPatterns.push('ato-vs-fedramp');
+    } else if (environment === 'DoD') {
+      suggestedFrameworks.push({ id: 'nist-800-53', name: 'NIST SP 800-53 Rev. 5' });
+      suggestedFrameworks.push({ id: 'disa-stig', name: 'DISA STIG / SRG' });
+      if (dataSensitivity === 'Low') suggestedBaselines.push({ id: 'nist-800-53b:LOW', name: 'NIST SP 800-53B Low Baseline' });
+      else if (dataSensitivity === 'Moderate') suggestedBaselines.push({ id: 'nist-800-53b:MODERATE', name: 'NIST SP 800-53B Moderate Baseline' });
+      else if (dataSensitivity === 'High') suggestedBaselines.push({ id: 'nist-800-53b:HIGH', name: 'NIST SP 800-53B High Baseline' });
+      suggestedPatterns.push('rmf-lifecycle', 'evidence-patterns');
+      suggestedTemplates.push('stig_evidence_checklist');
+    } else if (environment === 'Contractor' || dataSensitivity === 'Controlled Unclassified Information (CUI)') {
+      suggestedFrameworks.push({ id: 'nist-800-171-rev2', name: 'NIST SP 800-171 Rev. 2' });
+      suggestedPatterns.push('reciprocity-basics', 'poam-concepts');
+      suggestedTemplates.push('poam_starter');
+    } else {
+      suggestedFrameworks.push({ id: 'nist-800-53', name: 'NIST SP 800-53 Rev. 5' });
+      if (dataSensitivity === 'Low') suggestedBaselines.push({ id: 'nist-800-53b:LOW', name: 'NIST SP 800-53B Low Baseline' });
+      else if (dataSensitivity === 'Moderate') suggestedBaselines.push({ id: 'nist-800-53b:MODERATE', name: 'NIST SP 800-53B Moderate Baseline' });
+      else if (dataSensitivity === 'High') suggestedBaselines.push({ id: 'nist-800-53b:HIGH', name: 'NIST SP 800-53B High Baseline' });
+      else if (dataSensitivity === 'Privacy-sensitive') suggestedBaselines.push({ id: 'nist-800-53b:PRIVACY', name: 'NIST SP 800-53B Privacy Baseline' });
+      suggestedPatterns.push('rmf-lifecycle', 'control-inheritance');
+    }
+
+    if (suggestedTemplates.length === 0) {
+      suggestedTemplates.push('security_plan_starter');
+    }
+
+    const uniquePatterns = [...new Set(suggestedPatterns)].map(id => patternsData.find(p => p.id === id)).filter(Boolean);
+    const uniqueTemplates = [...new Set(suggestedTemplates)];
+
+    app.innerHTML = `
+      <section class="panel start-here-recommendation">
+        <button class="secondary" id="btn-restart-start-here" type="button">Restart questionnaire</button>
+        <p class="eyebrow">Recommendations</p>
+        <h2>Your public reference pathway</h2>
+        <p class="muted">Based on your system characteristics, we recommend exploring the following public resources.</p>
+        
+        <div class="grid" style="margin-top: 1.5rem;">
+          <div class="framework-card">
+            <h3>Suggested Frameworks & Baselines</h3>
+            <ul class="recommendation-list" style="line-height: 2;">
+              ${suggestedFrameworks.map(f => `<li><strong>${escapeHtml(f.name)}:</strong> <button class="chip" data-start-here-catalog="${escapeHtml(f.id)}">Explore catalog</button></li>`).join('')}
+              ${suggestedBaselines.map(b => `<li><strong>${escapeHtml(b.name)}:</strong> <button class="chip" data-open-node="${escapeHtml(b.id)}">View baseline detail</button></li>`).join('')}
+            </ul>
+          </div>
+          
+          <div class="framework-card">
+            <h3>Applicable Templates</h3>
+            <div class="stack">
+              ${uniqueTemplates.map(tmpl => `<button class="primary" data-start-here-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(tmpl.replaceAll('_', ' '))}</button>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="pattern-section" style="margin-top: 1.5rem;">
+          <h3>Relevant Reference Patterns</h3>
+          <div class="grid">
+            ${uniquePatterns.map(pattern => `
+              <div class="framework-card">
+                <h4>${escapeHtml(pattern.title)}</h4>
+                <p>${escapeHtml(pattern.summary)}</p>
+                <button class="secondary" data-open-pattern="${escapeHtml(pattern.id)}">Read pattern</button>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <div class="source-warning" role="note" aria-label="Disclaimer" style="margin-top: 1.5rem;">
+          <strong>Disclaimer</strong>
+          <p>This is a reference recommendation only — not a compliance or authorization determination. No user, system, or organization data is stored or transmitted.</p>
+        </div>
+      </section>`;
+
+    buttonBySelector('#btn-restart-start-here')?.addEventListener('click', () => {
+      void setView('start-here', { step: 'questions', systemType: '', dataSensitivity: '', environment: '' });
+    });
+
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-start-here-catalog]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        void setView('browse', { framework: button.dataset.startHereCatalog });
+      });
+    });
+
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-start-here-template]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        void setView('templates', { templateType: button.dataset.startHereTemplate || '', framework: '' });
+      });
+    });
+
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-open-pattern]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        void setView('patterns', { pattern: button.dataset.openPattern || '' });
+      });
+    });
+
+    bindNodeButtons();
+    return;
+  }
+
   app.innerHTML = `
-    <section class="panel">
+    <section class="panel start-here-flow">
       <p class="eyebrow">Start Here</p>
       <h2>Find the right public entry point before diving into the graph</h2>
-      <div class="grid">
-        <article class="framework-card"><span class="badge">1</span><h3>Know your problem</h3><p>Start in the library when you already have a control, CCI, baseline, or framework identifier.</p><button class="secondary" type="button" data-start-here-target="search">Open Library</button></article>
-        <article class="framework-card"><span class="badge">2</span><h3>Compare frameworks</h3><p>Use crosswalks when you need to see how two catalogs line up.</p><button class="secondary" type="button" data-start-here-target="matrix">Open Crosswalks</button></article>
-        <article class="framework-card"><span class="badge">3</span><h3>Check the source first</h3><p>Open Sources when you need to confirm why a match is shown and what source supports it.</p><button class="secondary" type="button" data-start-here-target="sources">Open Sources</button></article>
-      </div>
+      <p>Answer three questions to get reference recommendation links to relevant library objects, templates, and patterns. No data leaves your browser.</p>
+      
+      <form id="start-here-form" class="template-builder" style="margin-top: 1.5rem;">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="sh-system-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">1. System Type</label>
+          <select id="sh-system-type" name="systemType" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="">Select system type...</option>
+            <option value="Cloud SaaS" ${systemType === 'Cloud SaaS' ? 'selected' : ''}>Cloud SaaS</option>
+            <option value="Platform service" ${systemType === 'Platform service' ? 'selected' : ''}>Platform service</option>
+            <option value="Enclave" ${systemType === 'Enclave' ? 'selected' : ''}>Enclave</option>
+            <option value="On-premises system" ${systemType === 'On-premises system' ? 'selected' : ''}>On-premises system</option>
+            <option value="Hybrid system" ${systemType === 'Hybrid system' ? 'selected' : ''}>Hybrid system</option>
+            <option value="Enterprise service" ${systemType === 'Enterprise service' ? 'selected' : ''}>Enterprise service</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="sh-data-sensitivity" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">2. Data Sensitivity / Classification</label>
+          <select id="sh-data-sensitivity" name="dataSensitivity" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="">Select data sensitivity...</option>
+            <option value="Low" ${dataSensitivity === 'Low' ? 'selected' : ''}>Low impact</option>
+            <option value="Moderate" ${dataSensitivity === 'Moderate' ? 'selected' : ''}>Moderate impact</option>
+            <option value="High" ${dataSensitivity === 'High' ? 'selected' : ''}>High impact</option>
+            <option value="Privacy-sensitive" ${dataSensitivity === 'Privacy-sensitive' ? 'selected' : ''}>Privacy-sensitive</option>
+            <option value="Controlled Unclassified Information (CUI)" ${dataSensitivity === 'Controlled Unclassified Information (CUI)' ? 'selected' : ''}>Controlled Unclassified Information (CUI)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="sh-environment" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">3. Operational Environment</label>
+          <select id="sh-environment" name="environment" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
+            <option value="">Select operational environment...</option>
+            <option value="Federal Civilian" ${environment === 'Federal Civilian' ? 'selected' : ''}>Federal Civilian agency</option>
+            <option value="DoD" ${environment === 'DoD' ? 'selected' : ''}>Department of Defense (DoD)</option>
+            <option value="Contractor" ${environment === 'Contractor' ? 'selected' : ''}>Defense / Government Contractor</option>
+            <option value="CSP" ${environment === 'CSP' ? 'selected' : ''}>Cloud Service Provider (CSP)</option>
+          </select>
+        </div>
+
+        <div class="form-actions" style="margin-top: 1.5rem;">
+          <button type="submit" class="primary">Get Recommendations</button>
+        </div>
+      </form>
     </section>`;
-  /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-start-here-target]')).forEach((button) => button.addEventListener('click', () => void setView(button.dataset.startHereTarget)));
+
+  document.getElementById('start-here-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formElement = /** @type {HTMLFormElement} */ (e.target);
+    void setView('start-here', {
+      step: 'recommendation',
+      systemType: formElement.systemType.value,
+      dataSensitivity: formElement.dataSensitivity.value,
+      environment: formElement.environment.value,
+    });
+  });
 }
 
 function optionObjectsMarkup(options, selected, fallbackLabel) {
@@ -1089,10 +1397,10 @@ async function renderState(state) {
   if (state.view === 'matrix') await renderMatrix(state);
   else if (state.view === 'library-detail') await renderLibraryDetail(state);
   else if (state.view === 'browse') await renderBrowse(state);
-  else if (state.view === 'patterns') renderPatterns();
-  else if (state.view === 'templates') renderTemplates();
+  else if (state.view === 'patterns') renderPatterns(state);
+  else if (state.view === 'templates') renderTemplates(state);
   else if (state.view === 'sources') await renderSources();
-  else if (state.view === 'start-here') renderStartHere();
+  else if (state.view === 'start-here') renderStartHere(state);
   else if (state.view === 'retired') renderRetired(state);
   else await renderSearch(state);
 }
@@ -1142,9 +1450,76 @@ function toggleHelp() {
   const drawer = document.createElement('aside');
   drawer.id = 'glossary-drawer';
   drawer.className = 'glossary-drawer open';
-  drawer.innerHTML = `<button class="close-drawer" aria-label="Close help" type="button">x</button><h2>Control Atlas help</h2><dl class="glossary-list"><div class="glossary-item"><dt>Source basis</dt><dd>Why a source or relationship is allowed in the public map.</dd></div><div class="glossary-item"><dt>Confidence</dt><dd>How strong the support is for a relationship.</dd></div><div class="glossary-item"><dt>Evidence strength</dt><dd>How solid the source record is for a claim.</dd></div></dl>`;
+  
+  const renderTerms = (query = '') => {
+    const needle = query.trim().toLowerCase();
+    const filtered = glossaryData.filter(item => 
+      !needle || 
+      item.term.toLowerCase().includes(needle) || 
+      item.expansion.toLowerCase().includes(needle) || 
+      item.definition.toLowerCase().includes(needle)
+    );
+    
+    return filtered.map((item) => `
+      <div class="glossary-item" style="margin-bottom: 1rem;">
+        <dt><strong>${escapeHtml(item.term)}</strong> ${item.expansion ? `<span class="muted">(${escapeHtml(item.expansion)})</span>` : ''}</dt>
+        <dd style="margin-left: 0; margin-top: 0.25rem;">
+          <p style="margin: 0;">${escapeHtml(item.definition)}</p>
+          <p class="glossary-source" style="margin: 0.25rem 0 0 0;"><small class="muted">Source: ${escapeHtml(item.source)} ${item.consensus ? '<span class="badge badge-warning">consensus</span>' : '<span class="badge badge-success">official</span>'}</small></p>
+          <div class="badge-row" style="margin-top: 0.25rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            ${item.related_patterns.map(patternId => {
+              const pattern = patternsData.find(p => p.id === patternId);
+              return pattern ? `<button class="chip" data-open-pattern="${escapeHtml(patternId)}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; cursor: pointer;">Pattern: ${escapeHtml(pattern.title)}</button>` : '';
+            }).join('')}
+            ${item.related_controls.map(controlId => `<button class="chip" data-open-node="${escapeHtml(controlId)}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; cursor: pointer;">${escapeHtml(controlId)}</button>`).join('')}
+          </div>
+        </dd>
+      </div>`).join('') || '<p class="notice">No matching terms found.</p>';
+  };
+
+  drawer.innerHTML = `
+    <button class="close-drawer" aria-label="Close help" type="button">x</button>
+    <h2>Control Atlas Help & Glossary</h2>
+    <p class="muted">Searchable definitions for federal compliance terminology.</p>
+    <div class="field" style="margin-bottom: 1rem;">
+      <label for="glossary-search" class="visually-hidden">Search glossary</label>
+      <input type="search" id="glossary-search" placeholder="Search terms (e.g. ATO, RMF)" style="width: 100%; padding: 0.5rem;">
+    </div>
+    <dl class="glossary-list" id="glossary-items-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+      ${renderTerms()}
+    </dl>`;
+    
   document.body.appendChild(drawer);
-  /** @type {HTMLButtonElement | null} */ (drawer.querySelector('button'))?.addEventListener('click', () => drawer.remove());
+  
+  drawer.querySelector('button')?.addEventListener('click', () => drawer.remove());
+  
+  const searchInput = drawer.querySelector('#glossary-search');
+  const container = drawer.querySelector('#glossary-items-container');
+  
+  const bindGlossaryButtons = () => {
+    container.querySelectorAll('[data-open-pattern]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const patternId = button.getAttribute('data-open-pattern');
+        drawer.remove();
+        void setView('patterns', { pattern: patternId || '' });
+      });
+    });
+    container.querySelectorAll('[data-open-node]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const nodeId = button.getAttribute('data-open-node');
+        drawer.remove();
+        void setView('library-detail', { node: nodeId || '' });
+      });
+    });
+  };
+
+  searchInput?.addEventListener('input', (e) => {
+    const val = /** @type {HTMLInputElement} */ (e.target).value;
+    container.innerHTML = renderTerms(val);
+    bindGlossaryButtons();
+  });
+  
+  bindGlossaryButtons();
 }
 
 async function init() {

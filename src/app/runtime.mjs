@@ -728,7 +728,25 @@ export function parseViewState(searchParams) {
     lifecycle: params.get('lifecycle') || '',
     access: params.get('access') || '',
   };
-  if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
+  if (view === 'patterns') {
+    const pattern = params.get('pattern');
+    return {
+      ...base,
+      view,
+      ...(pattern !== null ? { pattern } : {})
+    };
+  }
+  if (view === 'templates') {
+    const templateType = params.get('templateType');
+    const framework = params.get('framework');
+    return {
+      ...base,
+      view,
+      ...(templateType !== null ? { templateType } : {}),
+      ...(framework !== null ? { framework } : {})
+    };
+  }
+  if (view === 'start-here') return { ...base, view };
   return {
     ...base,
     view: 'search',
@@ -779,7 +797,22 @@ export function normalizeViewState(view, state = {}) {
     lifecycle: state.lifecycle || '',
     access: state.access || '',
   };
-  if (view === 'patterns' || view === 'templates' || view === 'start-here') return { ...base, view };
+  if (view === 'patterns') {
+    return {
+      ...base,
+      view: 'patterns',
+      ...(state.pattern ? { pattern: state.pattern } : {})
+    };
+  }
+  if (view === 'templates') {
+    return {
+      ...base,
+      view: 'templates',
+      ...(state.templateType ? { templateType: state.templateType } : {}),
+      ...(state.framework ? { framework: state.framework } : {})
+    };
+  }
+  if (view === 'start-here') return { ...base, view };
   return {
     ...base,
     view: 'search',
@@ -826,7 +859,14 @@ export function serializeViewState(state) {
     if (state.eligibility) params.set('eligibility', state.eligibility);
     if (state.lifecycle) params.set('lifecycle', state.lifecycle);
     if (state.access) params.set('access', state.access);
-  } else if (view === 'patterns' || view === 'templates' || view === 'start-here') {
+  } else if (view === 'patterns') {
+    params.set('view', 'patterns');
+    if (state.pattern) params.set('pattern', state.pattern);
+  } else if (view === 'templates') {
+    params.set('view', 'templates');
+    if (state.templateType) params.set('templateType', state.templateType);
+    if (state.framework) params.set('framework', state.framework);
+  } else if (view === 'start-here') {
     params.set('view', view);
   } else if (state.query || state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity) {
     params.set('view', 'search');
