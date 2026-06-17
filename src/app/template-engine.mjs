@@ -1,166 +1,397 @@
+/**
+ * @typedef {Object} TextSection
+ * @property {"text"} type
+ * @property {string} heading
+ * @property {string} content
+ *
+ * @typedef {Object} TableSection
+ * @property {"table"} type
+ * @property {string} heading
+ * @property {string[]} headers
+ * @property {any[][]} rows
+ *
+ * @typedef {TextSection | TableSection} DocSection
+ *
+ * @typedef {Object} TemplateDocument
+ * @property {string} title
+ * @property {string} description
+ * @property {DocSection[]} sections
+ */
+
 const DISCLAIMER = "Control Atlas is an open-source reference tool. It is not an official government system and does not make compliance, authorization, or risk decisions. All mappings and templates are reference aids based on public sources. Official decisions remain with the applicable Authorizing Official, agency, or program office.";
 
+/**
+ * @param {any} options
+ * @param {any[]} controls
+ * @returns {TemplateDocument}
+ */
 function generateSecurityPlanStarter(options, controls) {
+  const headers = ["Control ID", "Control Title", "Implementation Status", "Responsible Role"];
+  if (options.includeImplementationPrompts) headers.push("Implementation Prompt");
+  if (options.includeEvidenceExpectations) headers.push("Evidence Expectation");
+  if (options.includeInheritancePrompts) headers.push("Inheritance Prompt");
+  if (options.includeReciprocityPrompts) headers.push("Reciprocity Prompt");
+  if (options.includeStigReferences) headers.push("STIG References");
+  headers.push("Notes");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const rows = controls.map(c => {
+    const row = [c.id, c.title, ph("[Status]"), ph("[Role]")];
+    if (options.includeImplementationPrompts) row.push(`How is ${c.id} implemented in the ${options.environment || 'system'} environment?`);
+    if (options.includeEvidenceExpectations) row.push(`Expected evidence for ${c.id} control implementation.`);
+    if (options.includeInheritancePrompts) row.push(`Is ${c.id} inherited from a parent common control provider?`);
+    if (options.includeReciprocityPrompts) row.push(`Can assessment results for ${c.id} be reused via reciprocity?`);
+    if (options.includeStigReferences) row.push(ph("[Related STIG/SRG Rules]"));
+    row.push(ph("[Notes]"));
+    return row;
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "text", heading: "System Overview", content: ph("[Insert system name and description here]") },
+    { type: "text", heading: "Authorization Boundary", content: ph("[Describe the authorization boundary here]") },
+    { type: "text", heading: "System Environment", content: `Archetype: ${options.environment || 'Generic'}` },
+    { type: "text", heading: "Data Types", content: ph("[List data types and sensitivity levels]") },
+    { type: "text", heading: "User Roles", content: ph("[List user roles and privileges]") },
+    { type: "text", heading: "Interconnections", content: ph("[List system interconnections]") },
+    { type: "table", heading: "Control Baseline", headers, rows },
+    { type: "text", heading: "Revision History", content: ph("[Version / Date / Author / Notes]") }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Information and Footnotes",
+      content: `Framework Context: ${options.framework || 'Generic NIST SP 800-53'}\nEnvironment Archetype: ${options.environment || 'Generic'}`
+    });
+  }
+
   return {
     title: "System Security Plan (SSP) Starter",
     description: "Blank planning structure for a system security plan.",
-    sections: [
-      { type: "text", heading: "System Overview", content: "[Insert system name and description here]" },
-      { type: "text", heading: "Authorization Boundary", content: "[Describe the authorization boundary here]" },
-      { type: "text", heading: "System Environment", content: `Archetype: ${options.environment || 'Generic'}` },
-      { type: "text", heading: "Data Types", content: "[List data types and sensitivity levels]" },
-      { type: "text", heading: "User Roles", content: "[List user roles and privileges]" },
-      { type: "text", heading: "Interconnections", content: "[List system interconnections]" },
-      { 
-        type: "table", 
-        heading: "Control Baseline", 
-        headers: ["Control ID", "Control Title", "Implementation Status", "Responsible Role", "Notes"],
-        rows: controls.map(c => [c.id, c.title, "[Status]", "[Role]", "[Notes]"])
-      },
-      { type: "text", heading: "Revision History", content: "[Version / Date / Author / Notes]" }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @param {any[]} controls
+ * @returns {TemplateDocument}
+ */
 function generateImplementationStatementWorksheet(options, controls) {
+  const headers = ["Control ID", "Control Title", "Implementation Statement", "Responsible Role"];
+  if (options.includeImplementationPrompts) headers.push("Implementation Prompt");
+  headers.push("Status");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const rows = controls.map(c => {
+    const row = [c.id, c.title, ph("[Draft statement here]"), ph("[Role]")];
+    if (options.includeImplementationPrompts) row.push(`Describe the technical controls, policies, or mechanisms implementing ${c.id}.`);
+    row.push(ph("[Status]"));
+    return row;
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "Implementation Statements", headers, rows }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: `Derived from framework: ${options.framework || 'Generic'} under environment: ${options.environment || 'Generic'}.`
+    });
+  }
+
   return {
     title: "Control Implementation Statement Worksheet",
     description: "Worksheet to draft control implementation statements.",
-    sections: [
-      {
-        type: "table",
-        heading: "Implementation Statements",
-        headers: ["Control ID", "Control Title", "Implementation Statement", "Responsible Role", "Status"],
-        rows: controls.map(c => [c.id, c.title, "[Draft statement here]", "[Role]", "[Status]"])
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @param {any[]} controls
+ * @returns {TemplateDocument}
+ */
 function generateEvidenceExpectationMatrix(options, controls) {
+  const headers = ["Control ID", "Control Title", "Control Family"];
+  if (options.includeStigReferences) headers.push("Related STIG/SRG");
+  if (options.includeEvidenceExpectations) headers.push("Evidence Type", "Example Artifacts");
+  headers.push("Owner Role", "Review Cadence", "Notes");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const rows = controls.map(c => {
+    const row = [c.id, c.title, c.family || ''];
+    if (options.includeStigReferences) row.push(ph("[STIG references]"));
+    if (options.includeEvidenceExpectations) row.push(ph("[Evidence type]"), ph("[Example artifacts]"));
+    row.push(ph("[Role]"), ph("[Cadence]"), ph("[Notes]"));
+    return row;
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "Evidence Expectations", headers, rows }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: `Generated evidence expectations under baseline: ${options.framework || 'Generic'}.`
+    });
+  }
+
   return {
     title: "Evidence Expectation Matrix",
     description: "Reference matrix for expected evidence types.",
-    sections: [
-      {
-        type: "table",
-        heading: "Evidence Expectations",
-        headers: ["Control ID", "Control Title", "Control Family", "Related STIG/SRG", "Related CCIs", "Evidence Type", "Example Artifacts", "Owner Role", "Review Cadence", "Notes"],
-        rows: controls.map(c => [
-          c.id, c.title, c.family || '', 
-          "[STIG references]", "[CCI references]", 
-          "[Evidence type]", "[Example artifacts]", "[Role]", "[Cadence]", "[Notes]"
-        ])
-      }
-    ]
+    sections
   };
 }
 
-function generateSTIGEvidenceChecklist(options, controls) {
-  // Normally we would pass STIG rules, for now we will use a generic placeholder table
+/**
+ * @param {any} options
+ * @returns {TemplateDocument}
+ */
+function generateSTIGEvidenceChecklist(options) {
+  const headers = ["STIG Title", "STIG ID", "Rule ID", "Severity", "Requirement"];
+  if (options.includeEvidenceExpectations) headers.push("Evidence Expectation");
+  headers.push("Validation Method", "NA Justification", "Deviation", "Notes");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const row = [ph("[STIG Title]"), ph("[STIG ID]"), ph("[Rule ID]"), ph("[Severity]"), ph("[Requirement title]")];
+  if (options.includeEvidenceExpectations) row.push(ph("[Expected evidence]"));
+  row.push(ph("[Method]"), ph("[If N/A]"), ph("[If Deviation]"), ph("[Notes]"));
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "STIG Rules", headers, rows: [row] }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: "STIG/SRG checklist generated from public DISA guidelines."
+    });
+  }
+
   return {
     title: "STIG Evidence Checklist",
     description: "Blank checklist for STIG rule compliance evidence.",
-    sections: [
-      {
-        type: "table",
-        heading: "STIG Rules",
-        headers: ["STIG Title", "STIG ID", "Rule ID", "Severity", "Requirement", "Evidence Expectation", "Validation Method", "NA Justification", "Deviation", "Notes"],
-        rows: [
-          ["[STIG Title]", "[STIG ID]", "[Rule ID]", "[Severity]", "[Requirement title]", "[Expected evidence]", "[Method]", "[If N/A]", "[If Deviation]", "[Notes]"]
-        ]
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @param {any[]} controls
+ * @returns {TemplateDocument}
+ */
 function generateInheritanceWorksheet(options, controls) {
+  const headers = ["Control ID", "Control Title", "Inheritance Type"];
+  if (options.includeInheritancePrompts) headers.push("Provider Responsibility", "Customer Responsibility");
+  headers.push("Evidence Dependency", "Local Review Needed", "Notes");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const rows = controls.map(c => {
+    const row = [c.id, c.title, ph("[Type]")];
+    if (options.includeInheritancePrompts) row.push(ph("[Provider resp]"), ph("[Customer resp]"));
+    row.push(ph("[Dependency]"), ph("[Yes/No]"), ph("[Notes]"));
+    return row;
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "Inheritance Plan", headers, rows }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: `Inheritance mapping for ${options.framework || 'selected baseline'}.`
+    });
+  }
+
   return {
     title: "Inheritance Worksheet",
     description: "Worksheet to plan control inheritance.",
-    sections: [
-      {
-        type: "table",
-        heading: "Inheritance Plan",
-        headers: ["Control ID", "Control Title", "Inheritance Type", "Common Control Provider", "Provider Responsibility", "Customer Responsibility", "Evidence Dependency", "Local Review Needed", "Notes"],
-        rows: controls.map(c => [
-          c.id, c.title, "[Type]", "[Provider]", "[Provider resp]", "[Customer resp]", "[Dependency]", "[Yes/No]", "[Notes]"
-        ])
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @returns {TemplateDocument}
+ */
 function generateReciprocityChecklist(options) {
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const headers = ["Item", "Status"];
+  if (options.includeReciprocityPrompts) headers.push("Reciprocity Guidance");
+  headers.push("Notes");
+
+  const rows = [
+    ["SSP", ph("[Status]")],
+    ["SAR", ph("[Status]")],
+    ["POA&M", ph("[Status]")],
+    ["Boundary Comparison", ph("[Status]")],
+    ["Risk Acceptance Review", ph("[Status]")],
+    ["Artifact Freshness", ph("[Status]")]
+  ];
+
+  if (options.includeReciprocityPrompts) {
+    rows[0].push("Verify the SSP matches the receiving agency's boundary requirements.");
+    rows[1].push("Confirm assessment results show adequate independent testing.");
+    rows[2].push("Assess open deficiencies and scheduled remediation dates.");
+    rows[3].push("Check if data flow and boundary align with the new deployment.");
+    rows[4].push("Ensure all accepted risks are signed off by the original AO.");
+    rows[5].push("Confirm artifacts are less than 1 year old or fit review cadence.");
+  }
+  rows.forEach(r => {
+    if (r.length < headers.length) {
+      r.push(ph("[Notes]"));
+    } else {
+      r.splice(headers.length - 1, 0, ph("[Notes]"));
+    }
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "text", heading: "Granting Authorization Reference", content: ph("[Reference ID/Name]") },
+    { type: "text", heading: "Receiving Organization", content: ph("[Organization Name]") },
+    { type: "table", heading: "Body of Evidence Checklist", headers, rows }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: "Reciprocity checklists are reference tools based on NIST SP 800-37 Rev. 2."
+    });
+  }
+
   return {
     title: "Reciprocity Checklist",
     description: "Checklist to review a package for reciprocity.",
-    sections: [
-      { type: "text", heading: "Granting Authorization Reference", content: "[Reference ID/Name]" },
-      { type: "text", heading: "Receiving Organization", content: "[Organization Name]" },
-      {
-        type: "table",
-        heading: "Body of Evidence Checklist",
-        headers: ["Item", "Status", "Notes"],
-        rows: [
-          ["SSP", "[Status]", "[Notes]"],
-          ["SAR", "[Status]", "[Notes]"],
-          ["POA&M", "[Status]", "[Notes]"],
-          ["Boundary Comparison", "[Status]", "[Notes]"],
-          ["Risk Acceptance Review", "[Status]", "[Notes]"],
-          ["Artifact Freshness", "[Status]", "[Notes]"]
-        ]
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @returns {TemplateDocument}
+ */
 function generatePOAMStarter(options) {
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const headers = ["Weakness ID", "Source", "Related Control", "Description", "Risk Statement", "Severity", "Planned Remediation"];
+  if (options.includeImplementationPrompts) headers.push("Milestone / Step");
+  headers.push("Scheduled Date", "Responsible Role", "Status", "Notes");
+
+  const row = [ph("[ID-1]"), ph("[Source]"), ph("[Control]"), ph("[Description]"), ph("[Risk]"), ph("[Severity]"), ph("[Remediation]")];
+  if (options.includeImplementationPrompts) row.push(ph("[Milestone]"));
+  row.push(ph("[Date]"), ph("[Role]"), ph("[Open/Closed]"), ph("[Notes]"));
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "POA&M Items", headers, rows: [row] }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: "POA&M starter table aligned with NIST SP 800-37 RMF requirements."
+    });
+  }
+
   return {
     title: "POA&M Starter",
     description: "Blank Plan of Action and Milestones tracker.",
-    sections: [
-      {
-        type: "table",
-        heading: "POA&M Items",
-        headers: ["Weakness ID", "Source", "Related Control", "Description", "Risk Statement", "Severity", "Planned Remediation", "Milestone", "Scheduled Date", "Responsible Role", "Status", "Notes"],
-        rows: [
-          ["[ID-1]", "[Source]", "[Control]", "[Description]", "[Risk]", "[Severity]", "[Remediation]", "[Milestone]", "[Date]", "[Role]", "[Open/Closed]", "[Notes]"]
-        ]
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @param {any[]} controls
+ * @returns {TemplateDocument}
+ */
 function generateAssessmentPlanningWorksheet(options, controls) {
+  const headers = ["Control ID", "Control Title"];
+  if (options.includeEvidenceExpectations) headers.push("Assessment Method");
+  headers.push("Assessor", "Target Date", "Status", "Observations");
+
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const rows = controls.map(c => {
+    const row = [c.id, c.title];
+    if (options.includeEvidenceExpectations) row.push(ph("[Test/Interview/Examine]"));
+    row.push(ph("[Assessor]"), ph("[Date]"), ph("[Status]"), ph("[Notes]"));
+    return row;
+  });
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "Assessment Plan", headers, rows }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: `Assessment worksheet generated for baseline: ${options.framework || 'Generic'}.`
+    });
+  }
+
   return {
     title: "Assessment Planning Worksheet",
     description: "Worksheet to plan control assessments.",
-    sections: [
-      {
-        type: "table",
-        heading: "Assessment Plan",
-        headers: ["Control ID", "Control Title", "Assessment Method", "Assessor", "Target Date", "Status", "Observations"],
-        rows: controls.map(c => [c.id, c.title, "[Test/Interview/Examine]", "[Assessor]", "[Date]", "[Status]", "[Notes]"])
-      }
-    ]
+    sections
   };
 }
 
+/**
+ * @param {any} options
+ * @returns {TemplateDocument}
+ */
 function generateConMonCalendar(options) {
+  const ph = (txt) => (options.includePlaceholders ? txt : "");
+
+  const headers = ["Activity/Artifact", "Control Reference", "Frequency"];
+  if (options.includeSourceFootnotes) headers.push("Source Basis Reference");
+  headers.push("Next Review Date", "Responsible Role", "Status");
+
+  const row = [ph("[Activity name]"), ph("[Controls]"), ph("[Annual/Monthly]")];
+  if (options.includeSourceFootnotes) row.push(ph("[NIST SP 800-137]"));
+  row.push(ph("[Date]"), ph("[Role]"), ph("[Status]"));
+
+  /** @type {DocSection[]} */
+  const sections = [
+    { type: "table", heading: "Monitoring Schedule", headers, rows: [row] }
+  ];
+
+  if (options.includeSourceFootnotes) {
+    sections.push({
+      type: "text",
+      heading: "Source Metadata",
+      content: "Continuous Monitoring schedule based on NIST SP 800-137 continuous monitoring guidelines."
+    });
+  }
+
   return {
     title: "Continuous Monitoring Calendar",
     description: "Calendar template for continuous monitoring activities.",
-    sections: [
-      {
-        type: "table",
-        heading: "Monitoring Schedule",
-        headers: ["Activity/Artifact", "Control Reference", "Frequency", "Next Review Date", "Responsible Role", "Status"],
-        rows: [
-          ["[Activity name]", "[Controls]", "[Annual/Monthly]", "[Date]", "[Role]", "[Status]"]
-        ]
-      }
-    ]
+    sections
   };
 }
 
@@ -192,7 +423,6 @@ function formatMarkdown(doc) {
 }
 
 function formatCsv(doc) {
-  // CSV can only effectively represent one table. We use the first table section or flatten.
   const table = doc.sections.find(s => s.type === 'table');
   let out = `# ${doc.title}\n# Disclaimer: ${DISCLAIMER.replace(/\n/g, ' ')}\n`;
   if (table) {
@@ -222,7 +452,6 @@ function formatJson(doc) {
 }
 
 function formatYaml(doc) {
-  // Very basic YAML formatter since we don't have a library
   let out = `title: "${doc.title.replace(/"/g, '\\"')}"\n`;
   out += `description: "${doc.description.replace(/"/g, '\\"')}"\n`;
   out += `disclaimer: "${DISCLAIMER.replace(/"/g, '\\"')}"\n`;
@@ -247,14 +476,13 @@ function formatYaml(doc) {
 }
 
 export function generateTemplate(options, dataset) {
-  // Find controls if a framework/baseline is selected
   let controls = [];
   if (options.framework) {
     controls = dataset.nodes
-      .filter(n => n.type === 'control' && n.id.startsWith(options.framework))
+      .filter(n => (n.node_type === 'control' || n.node_type === 'control_enhancement') && n.metadata?.catalog_id === options.framework)
       .map(n => ({
-        id: n.id,
-        title: n.title || n.id,
+        id: n.metadata?.item_id || n.id,
+        title: n.metadata?.title || n.label || n.id,
         family: n.metadata?.control_family || ''
       }));
   }
@@ -276,7 +504,7 @@ export function generateTemplate(options, dataset) {
       doc = generateEvidenceExpectationMatrix(options, controls);
       break;
     case 'stig_evidence_checklist':
-      doc = generateSTIGEvidenceChecklist(options, controls);
+      doc = generateSTIGEvidenceChecklist(options);
       break;
     case 'inheritance_worksheet':
       doc = generateInheritanceWorksheet(options, controls);
