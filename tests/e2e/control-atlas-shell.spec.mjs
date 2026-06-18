@@ -7,8 +7,13 @@ async function dismissOnboarding(page) {
   }
 }
 
+async function waitForAppReady(page) {
+  await expect(page.locator('#app')).toHaveAttribute('data-app-ready', 'true', { timeout: 60000 });
+}
+
 test('control atlas staged shell exposes the epic 0 navigation and key journeys', async ({ page }) => {
   await page.goto('/');
+  await waitForAppReady(page);
   const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
 
   await expect(page).toHaveTitle(/Control Atlas/);
@@ -55,6 +60,7 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
 
 test('library detail opens from a copied deep link', async ({ page }) => {
   await page.goto('/?view=library-detail&node=nist-800-53%3AAC-2');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Account Management', exact: true })).toBeVisible();
   await expect(page.locator('.item-id').filter({ hasText: 'AC-2' })).toBeVisible();
@@ -63,6 +69,7 @@ test('library detail opens from a copied deep link', async ({ page }) => {
 
 test('library filters narrow results without a page reload', async ({ page }) => {
   await page.goto('/');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByLabel('ID, title, or topic').fill('AC-2');
   await page.getByRole('button', { name: 'Search', exact: true }).click();
@@ -73,6 +80,7 @@ test('library filters narrow results without a page reload', async ({ page }) =>
 
 test('crosswalk workbench deep links into relationship mode with visible-only exports', async ({ page }) => {
   await page.goto('/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2&items=AC-10');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Compare frameworks' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Framework comparison', exact: true })).toHaveAttribute('aria-pressed', 'true');
@@ -86,6 +94,7 @@ test('crosswalk workbench deep links into relationship mode with visible-only ex
 
 test('crosswalk workbench compares public baselines', async ({ page }) => {
   await page.goto('/');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Crosswalks', exact: true }).click();
   await page.getByRole('button', { name: 'Baseline Compare', exact: true }).click();

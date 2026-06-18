@@ -32,8 +32,10 @@ test('shell identifies Control Atlas and preserves core journeys', () => {
 
 test('application loads only the five federal graph artifacts', () => {
   assert.match(html, /app\/app\.mjs\?v=20260618-1/);
+  assert.match(html, /id="app"[^>]*data-app-ready="false"/);
   assert.match(app, /from '\.\/runtime\.mjs'/);
   assert.match(app, /from '\.\.\/content\/pageIntros\.mjs'/);
+  assert.match(app, /dataset\.appReady/);
   assert.match(app, /template-registry\.json/);
   assert.match(app, /Plain labels/);
   assert.doesNotMatch(app, /Open related node/);
