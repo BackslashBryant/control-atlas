@@ -62,7 +62,7 @@ test('template factory implements all conditional include flags and bug fixes', 
     format: 'markdown',
     includePlaceholders: true,
   };
-  
+
   const resultFramework = generateTemplate(optionsWithFramework, dataset);
   assert.match(resultFramework.content, /AC-2/);
   assert.match(resultFramework.content, /Account Management/);
@@ -76,7 +76,7 @@ test('template factory implements all conditional include flags and bug fixes', 
     format: 'markdown',
     includePlaceholders: false,
   };
-  
+
   const resultNoPlaceholders = generateTemplate(optionsNoPlaceholders, dataset);
   assert.doesNotMatch(resultNoPlaceholders.content, /\[Status\]/);
   assert.doesNotMatch(resultNoPlaceholders.content, /\[Role\]/);
@@ -90,9 +90,9 @@ test('template factory implements all conditional include flags and bug fixes', 
     includeImplementationPrompts: true,
     includePlaceholders: true,
   };
-  
+
   const resultWithPrompts = generateTemplate(optionsWithPrompts, dataset);
-  assert.match(resultWithPrompts.content, /How is AC-2 implemented/);
+  assert.match(resultWithPrompts.content, /How is Account Management \(AC-2\) implemented/);
 
   // Test including source footnotes
   const optionsWithFootnotes = {
@@ -103,8 +103,9 @@ test('template factory implements all conditional include flags and bug fixes', 
     includeSourceFootnotes: true,
     includePlaceholders: true,
   };
-  
+
   const resultWithFootnotes = generateTemplate(optionsWithFootnotes, dataset);
   assert.match(resultWithFootnotes.content, /Source Information and Footnotes/);
-  assert.match(resultWithFootnotes.content, /Framework Context: nist-800-53/);
+  assert.match(resultWithFootnotes.content, /Framework context: nist-800-53/);
+  assert.match(resultWithFootnotes.content, /Environment type: Cloud SaaS/);
 });

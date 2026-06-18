@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="description" content="The public map for federal cyber compliance.">
+  <meta name="description" content="Search federal cyber controls, trace source-backed framework links, and download blank RMF planning templates.">
   <title>Control Atlas | The public map for federal cyber compliance</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
@@ -22,15 +22,15 @@
       <span><strong>Control Atlas</strong><small>Ctrl+Alt+Comply</small></span>
     </a>
     <nav aria-label="Primary navigation">
-      <button type="button" data-view="search">Library</button>
-      <button type="button" data-view="matrix">Crosswalks</button>
-      <button type="button" data-view="patterns">Patterns</button>
-      <button type="button" data-view="templates">Templates</button>
-      <button type="button" data-view="sources">Sources</button>
-      <button type="button" data-view="start-here">Start Here</button>
+      <button type="button" data-view="search" title="Search controls and browse frameworks">Library</button>
+      <button type="button" data-view="matrix" title="Compare frameworks with source-backed links">Crosswalks</button>
+      <button type="button" data-view="patterns" title="Learn common authorization and control patterns">Patterns</button>
+      <button type="button" data-view="templates" title="Download blank SSP, POA&amp;M, and assessment worksheets">Templates</button>
+      <button type="button" data-view="sources" title="Review catalog sources and data issues">Sources</button>
+      <button type="button" data-view="start-here" title="Answer a few questions for a starting path">Start Here</button>
     </nav>
     <div class="header-actions">
-      <button type="button" id="btn-toggle-mode" aria-pressed="true" title="Showing plain-language labels">Plain labels</button>
+      <button type="button" id="btn-toggle-mode" aria-pressed="true" title="Showing plain-language labels for filters and badges">Plain labels</button>
       <button type="button" id="btn-toggle-glossary">Help & Glossary</button>
     </div>
   </header>
@@ -39,18 +39,18 @@
     <section class="hero" aria-labelledby="page-title">
       <h1 id="page-title">Control Atlas</h1>
       <p class="hero-rotating-line" aria-hidden="true">Ctrl+Alt+<span id="hero-rotating-word" class="hero-rotating-word">Comply</span></p>
-      <p class="hero-tagline">The public map for federal cyber compliance.</p>
+      <p class="hero-tagline">Search controls, trace source-backed links, and download blank planning worksheets — no login required.</p>
       <div class="hero-actions">
         <button type="button" class="primary" data-view-shortcut="start-here">Start Here</button>
         <button type="button" class="secondary" data-view-shortcut="search">Explore Library</button>
-        <button type="button" class="secondary" data-view-shortcut="templates">Generate Template</button>
+        <button type="button" class="secondary" data-view-shortcut="templates">Download blank templates</button>
       </div>
     </section>
     <template id="landing-support-template">
       <p class="landing-support">Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.</p>
     </template>
     <section id="app" aria-live="polite" aria-busy="true">
-      <div class="loading-card">Loading Control Atlas...</div>
+      <div class="loading-card">Loading the library...</div>
     </section>
   </main>
 

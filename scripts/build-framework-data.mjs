@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
+import { generatePlainLanguageRationale, generatePlainLanguageSummary } from './lib/plain-language.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data', 'generated');
@@ -93,29 +94,6 @@ function assessmentNodeId(recordId) {
   return nodeId('nist-800-53a', recordId);
 }
 
-function generatePlainLanguageSummary(node) {
-  if (node.plain_language_summary) return node.plain_language_summary;
-  const title = node.metadata?.title || node.label || node.id;
-  const desc = node.metadata?.description || '';
-  if (!desc) {
-    return `Ensure compliance with the requirements of ${title}.`;
-  }
-  let summary = desc
-    .replace(/<[^>]+>/g, '')
-    .replace(/^The organization\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits)\s+/i, 'Ensure we ')
-    .replace(/^The information system\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits|enforces|uniquely identifies|authenticates|records|generates|protects|detects)\s+/i, 'The system must ')
-    .trim();
-  summary = summary.charAt(0).toUpperCase() + summary.slice(1);
-  const firstSentenceEnd = summary.indexOf('. ');
-  if (firstSentenceEnd !== -1) {
-    summary = summary.slice(0, firstSentenceEnd + 1);
-  }
-  if (summary.length > 200) {
-    summary = summary.slice(0, 197) + '...';
-  }
-  return summary || `Verify compliance requirements for ${title}`;
-}
-
 function pushEligibleNode(state, registry, node, sourceId) {
   const source = registry.byId.get(sourceId);
   if (!source?.graph_eligible) {
@@ -129,9 +107,7 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
-  if (!node.plain_language_summary) {
-    node.plain_language_summary = generatePlainLanguageSummary(node);
-  }
+  node.plain_language_summary = generatePlainLanguageSummary({ ...node, plain_language_summary: null });
   state.nodes.push(node);
 }
 
@@ -301,8 +277,8 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     }
   }
 
-  const plainLanguageRationale = payload.plainLanguageRationale || rationaleVal || `This connection maps ${payload.sourceNodeId.split(':').pop()} to ${payload.targetNodeId.split(':').pop()} based on public ${source.name} specifications.`;
-  
+  const plainLanguageRationale = generatePlainLanguageRationale(payload, source, rationaleVal);
+
   const sourceRefs = payload.sourceRefs || [
     {
       source_id: payload.sourceId,

@@ -3,6 +3,7 @@ import { generateTemplate } from './template-engine.mjs';
 import { glossaryData } from './glossary-data.mjs';
 import { patternsData } from './patterns-data.mjs';
 import { pageIntros } from '../content/pageIntros.mjs';
+import { contextSectionHeading, displayNameFor, userFacingLoadError } from './display-names.mjs';
 
 const app = /** @type {HTMLElement} */ (document.querySelector('#app'));
 const navButtons = [.../** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('nav [data-view]'))];
@@ -14,6 +15,7 @@ let currentState = { view: 'search' };
 let noviceMode = true;
 /** @type {Record<string, string>} */
 let templateDisplayNames = {};
+let templateDescriptions = {};
 const heroWords = [
   'Comply', 'Map', 'Trace', 'Compare', 'Navigate', 'Review', 'Plan', 'Export',
   'Discover', 'Align', 'Prioritize', 'Understand', 'Connect', 'Act',
@@ -27,7 +29,7 @@ const UI_LABELS = {
   locator: { plain: 'Where to find it', technical: 'Locator' },
   useStatus: { plain: 'Included in map', technical: 'Use status' },
   sourceClass: { plain: 'Source type', technical: 'Source class' },
-  relatedItem: { plain: 'Connected item', technical: 'Related node' },
+  relatedItem: { plain: 'Connected item', technical: 'Connected item' },
   officialRationale: { plain: 'Official wording', technical: 'Rationale' },
   plainRationale: { plain: 'What it means', technical: 'Plain-Language Rationale' },
 };
@@ -89,6 +91,9 @@ async function loadFederalGraph() {
   templateDisplayNames = Object.fromEntries(
     (templateRegistry.templates || []).map((template) => [template.name, template.display_name]),
   );
+  templateDescriptions = Object.fromEntries(
+    (templateRegistry.templates || []).map((template) => [template.name, template.description || '']),
+  );
   runtime = createFederalGraphRuntime({
     sources,
     nodes,
@@ -112,12 +117,13 @@ async function ensureGraph() {
 
 async function withGraph(render) {
   try {
-    if (!runtime) app.innerHTML = '<div class="loading-card">Loading the public compliance map...</div>';
+    if (!runtime) app.innerHTML = '<div class="loading-card">Loading the library...</div>';
     await ensureGraph();
     await render();
   } catch (error) {
     app.setAttribute('aria-busy', 'false');
-    app.innerHTML = `<section class="notice"><h2>Control Atlas map unavailable</h2><p>${escapeHtml(error.message)}</p><button class="primary" id="retry-load" type="button">Retry</button></section>`;
+    console.error(error);
+    app.innerHTML = `<section class="notice"><h2>Library data unavailable</h2><p>${escapeHtml(userFacingLoadError(error))}</p><button class="primary" id="retry-load" type="button">Retry</button></section>`;
     document.querySelector('#retry-load')?.addEventListener('click', () => void renderState(currentState));
   }
 }
@@ -157,7 +163,7 @@ function sourceStateBadge(label, tone = 'neutral') {
 function sourceWarningMessages(source) {
   const messages = [];
   if (source.access_status !== 'public' || !source.graph_eligible || source.eligibility_status === 'excluded') {
-    messages.push('Not used in the public map.');
+    messages.push('Not used in the public map because access, eligibility, or use rules exclude it.');
   }
   if (source.lifecycle_status === 'deprecated' || source.lifecycle_status === 'draft') {
     messages.push('Old or draft content. Check it carefully.');
@@ -187,19 +193,19 @@ function sourceFilterMarkup(sources, filters = {}) {
     <form id="source-filters" class="relationship-filter-grid">
       <div class="field">
         <label for="source-provenance-filter">Source type</label>
-        <select id="source-provenance-filter">${optionMarkup(provenances, filters.provenance, 'All source types')}</select>
+        <select id="source-provenance-filter">${optionMarkup(provenances, filters.provenance, 'All source types', 'provenance_class')}</select>
       </div>
       <div class="field">
         <label for="source-eligibility-filter">${uiLabel('useStatus')}</label>
-        <select id="source-eligibility-filter">${optionMarkup(eligibilities, filters.eligibility, 'All use statuses')}</select>
+        <select id="source-eligibility-filter">${optionMarkup(eligibilities, filters.eligibility, noviceMode ? 'Any inclusion status' : 'All use statuses', 'eligibility_status')}</select>
       </div>
       <div class="field">
         <label for="source-lifecycle-filter">Status</label>
-        <select id="source-lifecycle-filter">${optionMarkup(lifecycles, filters.lifecycle, 'All statuses')}</select>
+        <select id="source-lifecycle-filter">${optionMarkup(lifecycles, filters.lifecycle, 'All statuses', 'lifecycle_status')}</select>
       </div>
       <div class="field">
         <label for="source-access-filter">Access</label>
-        <select id="source-access-filter">${optionMarkup(accesses, filters.access, 'All access states')}</select>
+        <select id="source-access-filter">${optionMarkup(accesses, filters.access, 'All access states', 'access_status')}</select>
       </div>
     </form>`;
 }
@@ -216,10 +222,11 @@ function bindSourceButtons() {
   }));
 }
 
-function optionMarkup(values, selected, fallbackLabel) {
+function optionMarkup(values, selected, fallbackLabel, domain = '') {
   const options = [`<option value="">${escapeHtml(fallbackLabel)}</option>`];
   for (const value of values) {
-    options.push(`<option value="${escapeHtml(value)}" ${value === selected ? 'selected' : ''}>${escapeHtml(value.replaceAll('_', ' '))}</option>`);
+    const label = domain ? displayNameFor(domain, value) : value.replaceAll('_', ' ');
+    options.push(`<option value="${escapeHtml(value)}" ${value === selected ? 'selected' : ''}>${escapeHtml(label)}</option>`);
   }
   return options.join('');
 }
@@ -239,15 +246,15 @@ function relationshipFilterMarkup(edges, filters = {}) {
     <div class="relationship-filter-grid">
       <div class="field">
         <label for="relationship-type-filter">${uiLabel('relationshipType')}</label>
-        <select id="relationship-type-filter">${optionMarkup(relationshipTypes, filters.relationshipType, 'All relationship types')}</select>
+        <select id="relationship-type-filter">${optionMarkup(relationshipTypes, filters.relationshipType, noviceMode ? 'All connection types' : 'All relationship types', 'relationship_type')}</select>
       </div>
       <div class="field">
         <label for="provenance-filter">${uiLabel('sourceBasis')}</label>
-        <select id="provenance-filter">${optionMarkup(provenances, filters.provenance, 'All source basis types')}</select>
+        <select id="provenance-filter">${optionMarkup(provenances, filters.provenance, noviceMode ? 'All source types' : 'All source basis types', 'provenance_class')}</select>
       </div>
       <div class="field">
         <label for="confidence-filter">${uiLabel('confidence')}</label>
-        <select id="confidence-filter">${optionMarkup(confidences, filters.confidence, 'All confidence')}</select>
+        <select id="confidence-filter">${optionMarkup(confidences, filters.confidence, noviceMode ? 'Any match strength' : 'All confidence', 'confidence')}</select>
       </div>
     </div>
     <div class="relationship-view-toggle">
@@ -263,7 +270,7 @@ function relationshipTable(edges, runtimeNodeLookupId) {
       <tbody>${edges.map((edge) => {
         const counterpartId = edge.source_node_id === runtimeNodeLookupId ? edge.target_node_id : edge.source_node_id;
         const counterpart = runtime.getNode(counterpartId);
-        return `<tr><td>${escapeHtml(counterpart?.metadata?.item_id || counterpartId)}</td><td>${escapeHtml(edge.relationship_type)}</td><td>${escapeHtml(edge.provenance_class)}</td><td>${escapeHtml(edge.confidence)}</td></tr>`;
+        return `<tr><td>${escapeHtml(counterpart?.metadata?.item_id || 'Unknown item')}</td><td>${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</td><td>${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</td><td>${escapeHtml(displayNameFor('confidence', edge.confidence))}</td></tr>`;
       }).join('') || '<tr><td colspan="4">No displayable relationships</td></tr>'}</tbody>
     </table>`;
 }
@@ -276,14 +283,14 @@ function libraryResultCard(document) {
   return `
     <article class="item-card workbench-card">
       <div class="badge-row">
-        <span class="badge">${escapeHtml(document.object_type.replaceAll('_', ' '))}</span>
+        <span class="badge">${escapeHtml(displayNameFor('object_type', document.object_type))}</span>
         ${source ? sourceBadge(source.provenance_class) : ''}
       </div>
       <div>
         <h3 class="workbench-card-title">${escapeHtml(document.item_id)} - ${escapeHtml(document.title)}</h3>
-        <p class="workbench-card-meta">Object type: ${escapeHtml(document.object_type.replaceAll('_', ' '))}</p>
-        <p class="workbench-card-meta">Defining source: ${escapeHtml(source?.name || document.source_id)}</p>
-        <p class="workbench-card-counts">${published} published relationship${published === 1 ? '' : 's'}  -  Catalog: ${escapeHtml(document.catalog_id || 'unknown')}</p>
+        <p class="workbench-card-meta">Item kind: ${escapeHtml(displayNameFor('object_type', document.object_type))}</p>
+        <p class="workbench-card-meta">Defining source: ${escapeHtml(source?.name || 'Source name unavailable')}</p>
+        <p class="workbench-card-counts">${published} official link${published === 1 ? '' : 's'}  -  Framework: ${escapeHtml(catalogDisplayName(document.catalog_id || ''))}</p>
       </div>
       <button class="primary" type="button" data-open-node="${escapeHtml(document.id)}">Open detail</button>
     </article>`;
@@ -305,11 +312,11 @@ function libraryFilterMarkup(state) {
       </div>
       <div class="field">
         <label for="library-object-type-filter">Object type</label>
-        <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', 'All object types')}</select>
+        <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', noviceMode ? 'All item kinds' : 'All object types', 'object_type')}</select>
       </div>
       <div class="field">
         <label for="library-source-class-filter">${uiLabel('sourceClass')}</label>
-        <select id="library-source-class-filter">${optionMarkup(facets.sourceClasses, state.sourceClass || '', 'All source classes')}</select>
+        <select id="library-source-class-filter">${optionMarkup(facets.sourceClasses, state.sourceClass || '', noviceMode ? 'All source types' : 'All source classes', 'provenance_class')}</select>
       </div>
       <div class="field">
         <label for="library-family-filter">Control family</label>
@@ -381,7 +388,7 @@ async function renderSearch(state) {
         </form>
         ${libraryFilterMarkup(state)}
         <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
-        <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
+        <p class="muted">${results.length} result${results.length === 1 ? '' : 's'} found.</p>
       </section>
       <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : `<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p><p><button class="secondary" type="button" data-view-shortcut="sources">Check sources</button> <button class="secondary" type="button" data-view-shortcut="start-here">Start Here</button> if you&apos;re not sure where to begin.</p></div>`}</section>`;
 
@@ -433,19 +440,19 @@ function evidencePanel(edge) {
     <div class="evidence-summary-panel">
       <h4>Evidence summary</h4>
       <ul>
-        <li><strong>${uiLabel('evidenceStrength')}:</strong> ${escapeHtml(record.evidence_quality)}</li>
+        <li><strong>${uiLabel('evidenceStrength')}:</strong> ${escapeHtml(displayNameFor('evidence_quality', record.evidence_quality))}</li>
         <li><strong>Source:</strong> ${escapeHtml(record.source?.name || record.source_id)}</li>
         <li><strong>${uiLabel('locator')}:</strong> ${escapeHtml(record.locator)}</li>
         <li><strong>Retrieved:</strong> ${escapeHtml(record.retrieved_at)}</li>
       </ul>
-      ${record.source?.artifact_url ? `<a href="${escapeHtml(record.source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a>` : ''}
+      ${record.source?.artifact_url ? `<a href="${escapeHtml(record.source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open official source document</a>` : ''}
     </div>`).join('');
 }
 
 function renderContextCards(title, entries, renderEntry) {
   return `
     <section class="panel">
-      <p class="eyebrow">${escapeHtml(title)}</p>
+      <p class="eyebrow">${escapeHtml(contextSectionHeading(title))}</p>
       <div class="stack">
         ${entries.length ? entries.map(renderEntry).join('') : '<p class="notice">No source-backed context is currently available.</p>'}
       </div>
@@ -455,12 +462,12 @@ function renderContextCards(title, entries, renderEntry) {
 function contextCard(node, edge, extras = []) {
   return `
     <article class="mapping-card">
-      <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+      <div class="badge-row">${sourceBadge(edge.provenance_class)}${publicationStatusBadge(edge.publication_status)}</div>
       <h4>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || '')}</h4>
       <ul>
-        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
-        <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
-        <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
+        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
+        <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
+        <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
         ${extras.join('')}
       </ul>
       ${evidencePanel(edge)}
@@ -474,10 +481,10 @@ function assessmentProcedureCard(entry) {
   const objectGroups = entry.assessmentNode.metadata?.assessment_objects || [];
   return `
     <article class="mapping-card">
-      <div class="badge-row">${sourceBadge(entry.assessmentEdge.provenance_class)}<span class="badge">${escapeHtml(entry.assessmentEdge.publication_status)}</span></div>
+      <div class="badge-row">${sourceBadge(entry.assessmentEdge.provenance_class)}${publicationStatusBadge(entry.assessmentEdge.publication_status)}</div>
       <h4>${escapeHtml(entry.assessmentNode.metadata?.item_id || entry.assessmentNode.id)} - ${escapeHtml(entry.assessmentNode.metadata?.title || '')}</h4>
       <ul>
-        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(entry.assessmentEdge.relationship_type)}</li>
+        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', entry.assessmentEdge.relationship_type))}</li>
         <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
         <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
       </ul>
@@ -521,12 +528,12 @@ async function renderDetail(nodeId, filters = {}) {
       const counterpart = runtime.getNode(counterpartId);
       return `
         <article class="mapping-card">
-          <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+          <div class="badge-row">${sourceBadge(edge.provenance_class)}${publicationStatusBadge(edge.publication_status)}</div>
           <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
           <ul>
-            <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
-            <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
-            <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
+            <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
+            <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
+            <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
           </ul>
           ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
           ${evidencePanel(edge)}
@@ -540,12 +547,12 @@ async function renderDetail(nodeId, filters = {}) {
         const counterpart = runtime.getNode(counterpartId);
         return `
           <article class="mapping-card">
-            <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
+            <div class="badge-row">${sourceBadge(edge.provenance_class)}${publicationStatusBadge(edge.publication_status)}</div>
             <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
             <ul>
-              <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
-              <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
-              <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
+              <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
+              <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
+              <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
             </ul>
             ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
             ${evidencePanel(edge)}
@@ -579,7 +586,7 @@ async function renderDetail(nodeId, filters = {}) {
             ${filters.libraryMode ? '<button class="secondary" id="copy-library-link" type="button">Copy link</button>' : ''}
             <details>
               <summary>Main source</summary>
-              <p>${escapeHtml(definingSource?.name || node.source_id)}  -  Use status: ${escapeHtml(definingSource?.eligibility_status || 'unknown')}  -  Status: ${escapeHtml(definingSource?.lifecycle_status || 'unknown')}</p>
+              <p>${escapeHtml(definingSource?.name || 'Source name unavailable')}  -  ${uiLabel('useStatus')}: ${escapeHtml(displayNameFor('eligibility_status', definingSource?.eligibility_status || 'unknown'))}  -  Status: ${escapeHtml(displayNameFor('lifecycle_status', definingSource?.lifecycle_status || 'unknown'))}</p>
               ${definingSource ? `
                 <div class="source-trace-actions">
                   <button class="secondary" type="button" data-open-source="${escapeHtml(definingSource.id)}">Open source info</button>
@@ -603,7 +610,7 @@ async function renderDetail(nodeId, filters = {}) {
               ]))}
             ${renderContextCards('RMF lifecycle', federalContext.rmfLifecycle, (entry) =>
               contextCard(entry.stepNode, entry.contextEdge, [
-                `<li><strong>Through node:</strong> ${escapeHtml(entry.viaNode.metadata.item_id)} - ${escapeHtml(entry.viaNode.metadata.title)}</li>`,
+                `<li><strong>Connected through:</strong> ${escapeHtml(entry.viaNode.metadata.item_id)} - ${escapeHtml(entry.viaNode.metadata.title)}</li>`,
               ]))}
             ${renderContextCards('Assessment procedures', federalContext.assessmentContext, assessmentProcedureCard)}
             <section class="panel"><p class="eyebrow">Additional published relationships</p><h3>${visibleEdges.length} relationship${visibleEdges.length === 1 ? '' : 's'}</h3>${relationshipFilterMarkup(edges, filters)}<div class="stack">${additionalRelationshipMarkup}</div></section>
@@ -632,11 +639,17 @@ async function renderDetail(nodeId, filters = {}) {
       severity: currentState.severity || '',
     }));
     buttonBySelector('#copy-library-link')?.addEventListener('click', async () => {
+      const button = /** @type {HTMLButtonElement} */ (buttonBySelector('#copy-library-link'));
       const link = `${location.origin}${location.pathname}${serializeViewState({ view: 'library-detail', node: node.id, mode: currentState.mode })}`;
       try {
         await navigator.clipboard.writeText(link);
+        const original = button.textContent;
+        button.textContent = 'Link copied';
+        setTimeout(() => { button.textContent = original; }, 2000);
       } catch {
-        // Clipboard access can fail in some browser contexts; keep the UI stable.
+        const original = button.textContent;
+        button.textContent = 'Copy failed';
+        setTimeout(() => { button.textContent = original; }, 2000);
       }
     });
     const rerenderDetail = (relationshipView = filters.relationshipView || 'cards') => {
@@ -663,11 +676,11 @@ async function renderBrowse(state) {
     const selected = state.framework || '';
     const catalogs = runtime.getCatalogs();
     const cards = catalogs.map((catalog) => `
-      <article class="framework-card"><span class="badge badge-official">Public catalog</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} nodes  -  ${catalog.relationship_count} relationships</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse catalog</button></article>`).join('');
+      <article class="framework-card"><span class="badge badge-official">Public framework</span><h3>${escapeHtml(catalog.name)}</h3><p>${catalog.node_count} items  -  ${catalog.relationship_count} mapped links</p><button class="secondary" data-browse-catalog="${escapeHtml(catalog.id)}" type="button">Browse framework</button></article>`).join('');
     const selectedList = selected ? runtime.searchLibrary('', { catalog_id: selected }) : [];
     app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Library</p><h2>Public catalog coverage</h2><div class="grid">${cards}</div>
-      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(catalogDisplayName(selected))}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} objects.</p>${selectedList.slice(0, 200).map(libraryResultCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
+      <section class="panel"><p class="eyebrow">Library</p><h2>${escapeHtml(pageIntros.browse.title)}</h2><p class="muted">${escapeHtml(pageIntros.browse.description)}</p><div class="grid">${cards}</div>
+      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(catalogDisplayName(selected))}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} items.</p>${selectedList.slice(0, 200).map(libraryResultCard).join('') || '<p class="notice">No items in this framework match the public map rules.</p>'}</section>` : ''}</section>`;
     /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-browse-catalog]')).forEach((button) => button.addEventListener('click', () => void setView('browse', { framework: button.dataset.browseCatalog })));
     bindNodeButtons();
   });
@@ -692,11 +705,11 @@ function renderSourceListCard(source) {
     <article class="framework-card source-card">
       <div class="badge-row">
         ${sourceBadge(source.provenance_class)}
-        ${sourceStateBadge(source.eligibility_status, source.eligibility_status === 'eligible' ? 'success' : 'warning')}
-        ${sourceStateBadge(source.lifecycle_status, source.lifecycle_status === 'active' ? 'success' : 'warning')}
+        ${sourceStateBadge(displayNameFor('eligibility_status', source.eligibility_status), source.eligibility_status === 'eligible' ? 'success' : 'warning')}
+        ${sourceStateBadge(displayNameFor('lifecycle_status', source.lifecycle_status), source.lifecycle_status === 'active' ? 'success' : 'warning')}
       </div>
       <h3>${escapeHtml(source.name)}</h3>
-      <p>${escapeHtml(source.owner)}  -  Access: ${escapeHtml(source.access_status)}  -  Used in map: ${escapeHtml(source.graph_eligible ? 'yes' : 'no')}</p>
+      <p>${escapeHtml(source.owner)}  -  Access: ${escapeHtml(displayNameFor('access_status', source.access_status))}  -  Used in map: ${escapeHtml(source.graph_eligible ? 'yes' : 'no')}</p>
       <p class="muted">Version ${escapeHtml(source.version)}  -  Retrieved ${escapeHtml(source.retrieved_at)}  -  Use rules: ${escapeHtml(source.license_or_use)}</p>
       ${sourceWarningMarkup(source)}
       <div class="source-card-actions">
@@ -719,9 +732,9 @@ async function renderSourceDetail(state) {
       <h2 tabindex="-1" id="source-detail-title">${escapeHtml(source.name)}</h2>
       <div class="badge-row">
         ${sourceBadge(source.provenance_class)}
-        ${sourceStateBadge(source.eligibility_status, source.eligibility_status === 'eligible' ? 'success' : 'warning')}
-        ${sourceStateBadge(source.lifecycle_status, source.lifecycle_status === 'active' ? 'success' : 'warning')}
-        ${sourceStateBadge(source.access_status, source.access_status === 'public' ? 'success' : 'warning')}
+        ${sourceStateBadge(displayNameFor('eligibility_status', source.eligibility_status), source.eligibility_status === 'eligible' ? 'success' : 'warning')}
+        ${sourceStateBadge(displayNameFor('lifecycle_status', source.lifecycle_status), source.lifecycle_status === 'active' ? 'success' : 'warning')}
+        ${sourceStateBadge(displayNameFor('access_status', source.access_status), source.access_status === 'public' ? 'success' : 'warning')}
       </div>
       <p>${escapeHtml(source.owner)} keeps this public source record for Control Atlas review.</p>
       ${sourceWarningMarkup(source)}
@@ -731,11 +744,11 @@ async function renderSourceDetail(state) {
           <ul>
             <li><strong>Version:</strong> ${escapeHtml(source.version)}</li>
             <li><strong>Retrieved:</strong> ${escapeHtml(source.retrieved_at)}</li>
-            <li><strong>Retrieval method:</strong> ${escapeHtml(source.retrieval_method)}</li>
-            <li><strong>Artifact type:</strong> ${escapeHtml(source.artifact_type)}</li>
-            <li><strong>Use status:</strong> ${escapeHtml(source.eligibility_status)}</li>
-            <li><strong>Access:</strong> ${escapeHtml(source.access_status)}</li>
-            <li><strong>Status:</strong> ${escapeHtml(source.lifecycle_status)}</li>
+            <li><strong>Retrieval method:</strong> ${escapeHtml(displayNameFor('retrieval_method', source.retrieval_method))}</li>
+            <li><strong>Artifact type:</strong> ${escapeHtml(displayNameFor('artifact_type', source.artifact_type))}</li>
+            <li><strong>${uiLabel('useStatus')}:</strong> ${escapeHtml(displayNameFor('eligibility_status', source.eligibility_status))}</li>
+            <li><strong>Access:</strong> ${escapeHtml(displayNameFor('access_status', source.access_status))}</li>
+            <li><strong>Status:</strong> ${escapeHtml(displayNameFor('lifecycle_status', source.lifecycle_status))}</li>
             <li><strong>Used in map:</strong> ${escapeHtml(source.graph_eligible ? 'yes' : 'no')}</li>
           </ul>
         </div>
@@ -777,7 +790,7 @@ async function renderSources(state = currentState) {
         <p class="muted">${escapeHtml(pageIntros.sources.description)}</p>
         <div class="learning-grid"><p><strong>${uiLabel('sourceBasis')}</strong><br>Why this public source is included and what it supports.</p><p><strong>${uiLabel('useStatus')}</strong><br>Whether this source can add records to the public map.</p><p><strong>Status and access</strong><br>Old, draft, limited, or locked sources stay listed here with warnings.</p></div>
         <p class="muted">Not sure where to start? <button class="link-button" type="button" data-view-shortcut="start-here">Open Start Here</button> for a guided first path.</p>
-        <p class="muted">${findings.length} data issue${findings.length === 1 ? '' : 's'}.</p>
+        <p class="muted">${findings.length ? `${findings.length} catalog check${findings.length === 1 ? '' : 's'} flagged missing links or source issues — review the list below before relying on a match.` : 'No catalog data issues are flagged right now.'}</p>
         ${sourceFilterMarkup(runtime.getSources(), state)}
         <p class="muted">${sources.length} source record${sources.length === 1 ? '' : 's'} shown.</p>
         <div class="grid">${sources.map(renderSourceListCard).join('') || '<p class="notice">No sources match these filters.</p>'}</div>
@@ -905,22 +918,23 @@ function renderTemplates(state = currentState) {
     <section class="panel">
       <p class="eyebrow">Templates</p>
       <h2>Blank planning starters stay local to your browser</h2>
-      <p class="muted">Generate public-reference templates without uploading any data.</p>
+      <p class="muted">Generate public-reference templates without uploading any data. Pick a document type, optional framework context, and download a blank worksheet.</p>
 
       <form id="template-factory-form" class="template-builder" style="margin-top: 1.5rem;">
         <div class="form-group" style="margin-bottom: 1rem;">
-          <label for="template-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Artifact Type</label>
-          <select id="template-type" name="templateType" required style="width: 100%; max-width: 400px; padding: 0.5rem;">
-            <option value="security_plan_starter" ${selectedType === 'security_plan_starter' ? 'selected' : ''}>Security Plan Starter</option>
-            <option value="implementation_statement_worksheet" ${selectedType === 'implementation_statement_worksheet' ? 'selected' : ''}>Control Implementation Statement Worksheet</option>
-            <option value="evidence_expectation_matrix" ${selectedType === 'evidence_expectation_matrix' ? 'selected' : ''}>Evidence Expectation Matrix</option>
-            <option value="stig_evidence_checklist" ${selectedType === 'stig_evidence_checklist' ? 'selected' : ''}>STIG Evidence Checklist</option>
-            <option value="inheritance_worksheet" ${selectedType === 'inheritance_worksheet' ? 'selected' : ''}>Inheritance Worksheet</option>
-            <option value="reciprocity_checklist" ${selectedType === 'reciprocity_checklist' ? 'selected' : ''}>Reciprocity Checklist</option>
-            <option value="poam_starter" ${selectedType === 'poam_starter' ? 'selected' : ''}>POA&M Starter</option>
-            <option value="assessment_planning_worksheet" ${selectedType === 'assessment_planning_worksheet' ? 'selected' : ''}>Assessment Planning Worksheet</option>
-            <option value="conmon_calendar" ${selectedType === 'conmon_calendar' ? 'selected' : ''}>Continuous Monitoring Calendar</option>
+          <label for="template-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Document type</label>
+          <select id="template-type" name="templateType" required style="width: 100%; max-width: 400px; padding: 0.5rem;" aria-describedby="template-type-hint">
+            <option value="security_plan_starter" ${selectedType === 'security_plan_starter' ? 'selected' : ''}>System Security Plan (SSP) starter</option>
+            <option value="implementation_statement_worksheet" ${selectedType === 'implementation_statement_worksheet' ? 'selected' : ''}>Control implementation statement worksheet</option>
+            <option value="evidence_expectation_matrix" ${selectedType === 'evidence_expectation_matrix' ? 'selected' : ''}>Evidence expectation matrix</option>
+            <option value="stig_evidence_checklist" ${selectedType === 'stig_evidence_checklist' ? 'selected' : ''}>STIG evidence checklist</option>
+            <option value="inheritance_worksheet" ${selectedType === 'inheritance_worksheet' ? 'selected' : ''}>Inheritance worksheet</option>
+            <option value="reciprocity_checklist" ${selectedType === 'reciprocity_checklist' ? 'selected' : ''}>Reciprocity checklist</option>
+            <option value="poam_starter" ${selectedType === 'poam_starter' ? 'selected' : ''}>Plan of Action and Milestones (POA&amp;M) starter</option>
+            <option value="assessment_planning_worksheet" ${selectedType === 'assessment_planning_worksheet' ? 'selected' : ''}>Assessment planning worksheet</option>
+            <option value="conmon_calendar" ${selectedType === 'conmon_calendar' ? 'selected' : ''}>Continuous monitoring calendar</option>
           </select>
+          <p id="template-type-hint" class="muted" style="margin-top: 0.35rem;">${escapeHtml(templateDescriptions[selectedType] || 'Blank worksheet aligned to public RMF references.')}</p>
         </div>
 
         <div class="form-group" style="margin-bottom: 1rem;">
@@ -931,7 +945,7 @@ function renderTemplates(state = currentState) {
         </div>
 
         <div class="form-group" style="margin-bottom: 1rem;">
-          <label for="template-environment" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Environment Archetype</label>
+          <label for="template-environment" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Environment type</label>
           <select id="template-environment" name="environment" style="width: 100%; max-width: 400px; padding: 0.5rem;">
             <option value="Generic">Generic</option>
             <option value="Cloud SaaS">Cloud SaaS</option>
@@ -977,9 +991,9 @@ function renderTemplates(state = currentState) {
             <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
               <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
                 <input type="checkbox" name="includeStigReferences" value="true" checked>
-                STIG References
+                STIG and SRG references
               </div>
-              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Link applicable DISA STIGs and SRGs to specific requirements.</small>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Link applicable DISA Security Technical Implementation Guides (STIGs) and Security Requirements Guides (SRGs) to specific requirements.</small>
             </label>
             <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
               <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
@@ -1009,7 +1023,7 @@ function renderTemplates(state = currentState) {
         </div>
 
         <div class="form-actions" style="margin-top: 1.5rem;">
-          <button type="submit" class="primary">Generate Template</button>
+          <button type="submit" class="primary">Download blank template</button>
         </div>
       </form>
     </section>`;
@@ -1032,6 +1046,14 @@ function renderTemplates(state = currentState) {
     };
     const result = generateTemplate(options, runtime.dataset);
     downloadTextFile(result.filename, result.content, result.mimeType);
+  });
+
+  document.getElementById('template-type')?.addEventListener('change', (event) => {
+    const select = /** @type {HTMLSelectElement} */ (event.currentTarget);
+    const hint = document.getElementById('template-type-hint');
+    if (hint) {
+      hint.textContent = templateDescriptions[select.value] || 'Blank worksheet aligned to public RMF references.';
+    }
   });
 }
 
@@ -1160,7 +1182,7 @@ function renderStartHere(state = currentState) {
   app.innerHTML = `
     <section class="panel start-here-flow">
       <p class="eyebrow">Start Here</p>
-      <h2>Find the right public entry point before diving into the graph</h2>
+      <h2>Find your first path through the library</h2>
       <p>Answer three questions to get reference recommendation links to relevant library objects, templates, and patterns. No data leaves your browser.</p>
 
       <form id="start-here-form" class="template-builder" style="margin-top: 1.5rem;">
@@ -1271,13 +1293,13 @@ function downloadTextFile(filename, content, type) {
 
 function sourceRefList(sourceRefs) {
   if (!sourceRefs.length) return '<span class="muted">No public source references</span>';
-  return `<ul>${sourceRefs.map((ref) => `<li><strong>${escapeHtml(ref.source_name)}</strong> ${escapeHtml(ref.source_version ? `v${ref.source_version}` : '')}${ref.locator ? ` <span class="muted">@ ${escapeHtml(ref.locator)}</span>` : ''}${ref.evidence_quality ? ` <span class="badge">${escapeHtml(ref.evidence_quality)}</span>` : ''}</li>`).join('')}</ul>`;
+  return `<ul>${sourceRefs.map((ref) => `<li><strong>${escapeHtml(ref.source_name)}</strong> ${escapeHtml(ref.source_version ? `v${ref.source_version}` : '')}${ref.locator ? ` <span class="muted">@ ${escapeHtml(ref.locator)}</span>` : ''}${ref.evidence_quality ? ` <span class="badge">${escapeHtml(displayNameFor('evidence_quality', ref.evidence_quality))}</span>` : ''}</li>`).join('')}</ul>`;
 }
 
 function publicationStatusBadge(status) {
   return status === 'candidate'
-    ? '<span class="badge badge-warning">candidate</span>'
-    : '<span class="badge badge-success">published</span>';
+    ? '<span class="badge badge-warning">Inferred link</span>'
+    : '<span class="badge badge-success">Official link</span>';
 }
 
 function baselineSourceSummary(label, baselineNode, sourceMeta) {
@@ -1307,7 +1329,7 @@ function exportButtonMarkup(disabled = false) {
 function workbenchModeButtons(currentMode) {
   return `
     <div class="relationship-view-toggle" role="tablist" aria-label="Crosswalk modes">
-      <button class="secondary" type="button" data-workbench-mode="relationships" aria-pressed="${currentMode === 'relationships'}">Relationship Table</button>
+      <button class="secondary" type="button" data-workbench-mode="relationships" aria-pressed="${currentMode === 'relationships'}">Framework comparison</button>
       <button class="secondary" type="button" data-workbench-mode="stig-chain" aria-pressed="${currentMode === 'stig-chain'}">STIG -&gt; CCI -&gt; NIST</button>
       <button class="secondary" type="button" data-workbench-mode="baseline-compare" aria-pressed="${currentMode === 'baseline-compare'}">Baseline Compare</button>
     </div>`;
@@ -1371,7 +1393,7 @@ async function renderMatrix(state) {
       .sort((left, right) => (left.metadata?.catalog_id || '').localeCompare(right.metadata?.catalog_id || '') || (left.metadata?.item_id || '').localeCompare(right.metadata?.item_id || ''))
       .map((node) => ({
         value: node.id,
-        label: `${node.metadata?.catalog_id || node.id} - ${node.metadata?.title || node.label}`,
+        label: `${catalogDisplayName(node.metadata?.catalog_id || '')} — ${node.metadata?.title || node.label}`,
       }));
     const baselineA = state.baselineA || '';
     const baselineB = state.baselineB || '';
@@ -1388,17 +1410,17 @@ async function renderMatrix(state) {
         <form id="relationship-workbench-form" class="controls">
           <div class="field"><label for="matrix-source">Source catalog</label><select id="matrix-source">${catalogOptions(source)}</select></div>
           <div class="field"><label for="matrix-target">Target catalog</label><select id="matrix-target">${catalogOptions(target)}</select></div>
-          <div class="field"><label for="matrix-relationship-type">${uiLabel('relationshipType')}</label><select id="matrix-relationship-type">${optionMarkup(relationshipTypes, state.relationshipType || '', 'All relationship types')}</select></div>
-          <div class="field"><label for="matrix-provenance">${uiLabel('sourceBasis')}</label><select id="matrix-provenance">${optionMarkup(provenances, state.provenance || '', 'All source basis types')}</select></div>
-          <div class="field"><label for="matrix-confidence">${uiLabel('confidence')}</label><select id="matrix-confidence">${optionMarkup(confidences, state.confidence || '', 'All confidence')}</select></div>
-          <div class="field matrix-items-field"><label for="matrix-items">Optional source IDs</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
+          <div class="field"><label for="matrix-relationship-type">${uiLabel('relationshipType')}</label><select id="matrix-relationship-type">${optionMarkup(relationshipTypes, state.relationshipType || '', noviceMode ? 'All connection types' : 'All relationship types', 'relationship_type')}</select></div>
+          <div class="field"><label for="matrix-provenance">${uiLabel('sourceBasis')}</label><select id="matrix-provenance">${optionMarkup(provenances, state.provenance || '', noviceMode ? 'All source types' : 'All source basis types', 'provenance_class')}</select></div>
+          <div class="field"><label for="matrix-confidence">${uiLabel('confidence')}</label><select id="matrix-confidence">${optionMarkup(confidences, state.confidence || '', noviceMode ? 'Any match strength' : 'All confidence', 'confidence')}</select></div>
+          <div class="field matrix-items-field"><label for="matrix-items">Optional item IDs (e.g. AC-2)</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
           <div class="field"><label for="matrix-include-candidates">Show inferred mappings</label><input id="matrix-include-candidates" type="checkbox" ${state.includeCandidates === 'true' ? 'checked' : ''}></div>
           <button class="primary" type="submit">Apply filters</button>
         </form>
         <p class="muted">${relationshipRows.summary.visible} visible relationship${relationshipRows.summary.visible === 1 ? '' : 's'}${relationshipRows.summary.hidden_candidate_count ? ` - ${relationshipRows.summary.hidden_candidate_count} inferred mapping${relationshipRows.summary.hidden_candidate_count === 1 ? '' : 's'} hidden by default` : ''}</p>
         ${exportButtonMarkup(!relationshipRows.rows.length)}
         ${relationshipRows.rows.length
-          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>${uiLabel('relationshipType')}</th><th>${uiLabel('sourceBasis')}</th><th>${uiLabel('confidence')}</th><th>${uiLabel('officialRationale')}</th><th>${uiLabel('plainRationale')}</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${escapeHtml(row.plain_language_rationale || 'No plain-language rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
+          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>${uiLabel('relationshipType')}</th><th>${uiLabel('sourceBasis')}</th><th>${uiLabel('confidence')}</th><th>${uiLabel('officialRationale')}</th><th>${uiLabel('plainRationale')}</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(displayNameFor('relationship_type', row.relationship_type))}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${publicationStatusBadge(row.publication_status)}</div></td><td>${escapeHtml(displayNameFor('confidence', row.confidence))}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${escapeHtml(row.plain_language_rationale || 'No plain-language rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
           : '<p class="notice">No visible relationships match these filters.</p>'}`;
     } else if (workbench === 'stig-chain') {
       modeMarkup = `
@@ -1433,10 +1455,10 @@ async function renderMatrix(state) {
     app.innerHTML = `
       <section class="panel">
         <p class="eyebrow">Crosswalks</p>
-        <h2>Crosswalk Workbench</h2>
+        <h2>Compare frameworks</h2>
         <p class="muted"><strong>What this is:</strong> Compare how frameworks connect using public sources you can trace.</p>
         <p class="muted"><strong>Why it matters:</strong> Official mappings stay separate from inferred ones, so you can judge trust before you act.</p>
-        <p class="muted"><strong>Next step:</strong> Pick a mode below, apply filters, and export visible results with their source references. <span class="badge badge-success">published</span> = official link; <span class="badge badge-warning">candidate</span> = inferred link.</p>
+        <p class="muted"><strong>Next step:</strong> Pick a mode below, apply filters, and export visible results with their source references. <span class="badge badge-success">Official link</span> = published mapping; <span class="badge badge-warning">Inferred link</span> = candidate mapping.</p>
         ${workbenchModeButtons(workbench)}
         ${modeMarkup}
       </section>`;
@@ -1558,7 +1580,10 @@ function showOnboardingOverlay() {
     overlay.remove();
     void setView('start-here');
   });
-  buttonBySelector('#btn-onboarding-explore')?.addEventListener('click', close);
+  buttonBySelector('#btn-onboarding-explore')?.addEventListener('click', () => {
+    overlay.remove();
+    void setView('search');
+  });
   buttonBySelector('#btn-onboarding-skip')?.addEventListener('click', close);
   overlay.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') close();
@@ -1605,7 +1630,7 @@ function toggleHelp() {
   drawer.innerHTML = `
     <button class="close-drawer" aria-label="Close help" type="button">x</button>
     <h2>Control Atlas Help & Glossary</h2>
-    <p class="muted">Searchable definitions for federal compliance terminology.</p>
+    <p class="muted">Searchable definitions for federal compliance terminology. After a lookup, use Library or Crosswalks to see how a term connects to controls.</p>
     <div class="field" style="margin-bottom: 1rem;">
       <label for="glossary-search" class="visually-hidden">Search glossary</label>
       <input type="search" id="glossary-search" placeholder="Search terms (e.g. ATO, RMF)" style="width: 100%; padding: 0.5rem;">
@@ -1669,5 +1694,5 @@ async function init() {
 
 init().catch((error) => {
   app.setAttribute('aria-busy', 'false');
-  app.innerHTML = `<section class="notice"><h2>Control Atlas could not start</h2><p>${escapeHtml(error.message)}</p></section>`;
+  app.innerHTML = `<section class="notice"><h2>Control Atlas could not start</h2><p>${escapeHtml(userFacingLoadError(error))}</p></section>`;
 });

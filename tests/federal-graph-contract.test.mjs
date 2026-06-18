@@ -85,6 +85,41 @@ test('candidate edges are inferred and blocked relationships appear only in grap
   assert.ok(!edges.some((edge) => edge.publication_status === 'blocked'));
 });
 
+test('plain-language summaries and rationales avoid known generation defects', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  const badSummaryPatterns = [
+    /Ensure we an\b/i,
+    /\s+to\s+\./,
+    /\s+for each\s+to\s+/,
+    /\s+after\s+\./,
+  ];
+
+  let checkedSummaries = 0;
+  for (const node of nodes) {
+    if (!node.plain_language_summary) continue;
+    checkedSummaries += 1;
+    for (const pattern of badSummaryPatterns) {
+      assert.doesNotMatch(node.plain_language_summary, pattern, `bad summary for ${node.id}: ${node.plain_language_summary}`);
+    }
+    assert.ok(node.plain_language_summary.length >= 20, `summary too short for ${node.id}`);
+    assert.ok(!node.plain_language_summary.endsWith('...') || node.plain_language_summary.length > 100, `truncated mid-word for ${node.id}`);
+  }
+  assert.ok(checkedSummaries > 500, 'expected plain-language summaries on most nodes');
+
+  const olirBoilerplate = edges.filter((edge) =>
+    edge.plain_language_rationale && /^NIST OLIR concept crosswalk associates/i.test(edge.plain_language_rationale),
+  );
+  assert.equal(olirBoilerplate.length, 0, 'plain-language rationales should not echo OLIR boilerplate');
+
+  for (const edge of edges.slice(0, 500)) {
+    if (!edge.plain_language_rationale) continue;
+    assert.doesNotMatch(edge.plain_language_rationale, /^NIST OLIR concept crosswalk associates/i);
+    assert.match(edge.plain_language_rationale, /before|Compare|Review/i, `operational guidance missing for ${edge.id}`);
+  }
+});
+
 test('graph validation rejects duplicates, non-public leakage, missing edge evidence, inferred published edges, and blocked edges', () => {
   const artifacts = {
     sources: [{
