@@ -14,10 +14,11 @@ const COPY_PATHS = [
   ['src/favicon.svg', 'favicon.svg'],
   ['src/app', 'app'],
   ['src/content', 'content'],
+  ['src/lib', 'lib'],
   ['src/styles', 'styles'],
   ['data', 'data'],
   ['maps', 'maps'],
-  ['lib', 'lib'],
+  ['lib/d3.min.js', 'lib/d3.min.js'],
 ];
 
 function copyIntoDist(sourceRelativePath, destRelativePath) {

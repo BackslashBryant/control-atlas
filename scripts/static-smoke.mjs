@@ -7,6 +7,8 @@ const required = [
   'dist/site/index.html',
   'dist/site/app/app.mjs',
   'dist/site/app/runtime.mjs',
+  'dist/site/lib/minisearch.js',
+  'dist/site/lib/d3.min.js',
   'dist/site/styles/app.css',
   'dist/site/data/source-registry.json',
   'dist/site/data/generated/sources.json',
