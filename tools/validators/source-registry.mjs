@@ -25,6 +25,8 @@ export const SOURCE_TIERS = new Set(['gold', 'silver', 'bronze']);
 const REQUIRED_FIELDS = [
   'id',
   'name',
+  'display_name',
+  'display_group',
   'owner',
   'provenance_class',
   'mandate_basis',

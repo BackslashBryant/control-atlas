@@ -1,9 +1,14 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-17T23:34:30.821Z",
+  "generated_at": "2026-06-18T15:04:50.715Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-cci"
+      ],
       "owner": "Community",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -20,6 +25,12 @@
     },
     {
       "source_id": "cyber-mil-stig-compilations",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "DISA",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -36,6 +47,12 @@
     },
     {
       "source_id": "cyber-mil-stig-downloads",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "DISA",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -52,6 +69,11 @@
     },
     {
       "source_id": "cyber-mil-stig-gpo",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig"
+      ],
       "owner": "DISA",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -68,6 +90,11 @@
     },
     {
       "source_id": "disa-cci-list",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-cci"
+      ],
       "owner": "DISA",
       "version": "2025-01-23",
       "retrieved_at": "2025-01-23",
@@ -84,6 +111,12 @@
     },
     {
       "source_id": "disa-cci-nist-references",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-cci",
+        "nist-800-53"
+      ],
       "owner": "DISA",
       "version": "2025-01-23",
       "retrieved_at": "2025-01-23",
@@ -100,6 +133,11 @@
     },
     {
       "source_id": "disa-srg-library",
+      "display_name": "DISA SRG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-srg"
+      ],
       "owner": "DISA",
       "version": "2026-06-14",
       "retrieved_at": "2026-06-14",
@@ -116,6 +154,11 @@
     },
     {
       "source_id": "disa-stig-library",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig"
+      ],
       "owner": "DISA",
       "version": "2026-06-14",
       "retrieved_at": "2026-06-14",
@@ -132,6 +175,13 @@
     },
     {
       "source_id": "disa-stig-srg-cci-references",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg",
+        "disa-cci"
+      ],
       "owner": "DISA",
       "version": "2026-06-14",
       "retrieved_at": "2026-06-14",
@@ -148,6 +198,11 @@
     },
     {
       "source_id": "dod-cmmc-rule",
+      "display_name": "CMMC 2.0",
+      "display_group": "Other",
+      "frameworks": [
+        "cmmc-2"
+      ],
       "owner": "DoD",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -164,6 +219,11 @@
     },
     {
       "source_id": "dod-rai-toolkit",
+      "display_name": "DoD RAI",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-rai"
+      ],
       "owner": "DoD",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -180,6 +240,11 @@
     },
     {
       "source_id": "dod-zt-capabilities",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-zt"
+      ],
       "owner": "DoD",
       "version": "2022-11",
       "retrieved_at": "2026-06-15",
@@ -196,6 +261,11 @@
     },
     {
       "source_id": "dod-zt-execution-roadmap",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-zt"
+      ],
       "owner": "DoD",
       "version": "2024-11",
       "retrieved_at": "2026-06-15",
@@ -212,6 +282,12 @@
     },
     {
       "source_id": "dod-zt-overlays-2024",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-zt",
+        "nist-800-53"
+      ],
       "owner": "DoD",
       "version": "2024-02",
       "retrieved_at": "2026-06-15",
@@ -228,6 +304,11 @@
     },
     {
       "source_id": "dod-zt-reference-architecture-v2",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-zt"
+      ],
       "owner": "DoD",
       "version": "2022-07",
       "retrieved_at": "2026-06-15",
@@ -244,6 +325,11 @@
     },
     {
       "source_id": "dod-zt-strategy",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
+      "frameworks": [
+        "dod-zt"
+      ],
       "owner": "DoD",
       "version": "2022-10",
       "retrieved_at": "2026-06-15",
@@ -260,6 +346,12 @@
     },
     {
       "source_id": "fedramp-rev5",
+      "display_name": "FedRAMP Rev. 5",
+      "display_group": "Other",
+      "frameworks": [
+        "fedramp-rev5",
+        "nist-800-53"
+      ],
       "owner": "FedRAMP",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -276,6 +368,11 @@
     },
     {
       "source_id": "isoo-cui-regulation",
+      "display_name": "CUI Program",
+      "display_group": "Other",
+      "frameworks": [
+        "cui-policy"
+      ],
       "owner": "ISOO",
       "version": "current",
       "retrieved_at": "2026-06-13",
@@ -292,6 +389,11 @@
     },
     {
       "source_id": "mitre-cis-cci-mappings",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-cci"
+      ],
       "owner": "MITRE",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -308,6 +410,11 @@
     },
     {
       "source_id": "nara-cui-registry",
+      "display_name": "CUI Program",
+      "display_group": "Other",
+      "frameworks": [
+        "cui-policy"
+      ],
       "owner": "NARA",
       "version": "2026-06-13",
       "retrieved_at": "2026-06-13",
@@ -324,6 +431,12 @@
     },
     {
       "source_id": "nist-800-171-oscal-mappings",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53",
+        "nist-800-171"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -340,6 +453,11 @@
     },
     {
       "source_id": "nist-800-171-rev2",
+      "display_name": "SP 800-171 Rev. 2",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-171-rev2"
+      ],
       "owner": "NIST",
       "version": "2021-01",
       "retrieved_at": "2026-06-13",
@@ -356,6 +474,11 @@
     },
     {
       "source_id": "nist-800-172-rev3",
+      "display_name": "SP 800-172 Rev. 3",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-172"
+      ],
       "owner": "NIST",
       "version": "2026-05",
       "retrieved_at": "2026-06-13",
@@ -372,6 +495,11 @@
     },
     {
       "source_id": "nist-800-37-rev2",
+      "display_name": "SP 800-37 Rev. 2",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-37"
+      ],
       "owner": "NIST",
       "version": "2018-12",
       "retrieved_at": "2026-06-13",
@@ -388,6 +516,12 @@
     },
     {
       "source_id": "nist-800-53a-assessment-procedures",
+      "display_name": "SP 800-53A Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53a",
+        "nist-800-53"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-13",
@@ -404,6 +538,12 @@
     },
     {
       "source_id": "nist-800-53b-baselines",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53",
+        "nist-800-53b"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -420,6 +560,11 @@
     },
     {
       "source_id": "nist-ai-rmf-playbook",
+      "display_name": "AI RMF",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-ai-rmf"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -436,6 +581,12 @@
     },
     {
       "source_id": "nist-csf-53-supplemental",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53",
+        "csf-2"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -452,6 +603,11 @@
     },
     {
       "source_id": "nist-csf11-csf20-crosswalk",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
+      "frameworks": [
+        "csf-2"
+      ],
       "owner": "NIST",
       "version": "2024-02-20",
       "retrieved_at": "2024-02-20",
@@ -468,6 +624,11 @@
     },
     {
       "source_id": "nist-fips-199",
+      "display_name": "FIPS 199",
+      "display_group": "NIST",
+      "frameworks": [
+        "fips-199"
+      ],
       "owner": "NIST",
       "version": "2004-02",
       "retrieved_at": "2026-06-13",
@@ -484,6 +645,11 @@
     },
     {
       "source_id": "nist-fips-200",
+      "display_name": "FIPS 200",
+      "display_group": "NIST",
+      "frameworks": [
+        "fips-200"
+      ],
       "owner": "NIST",
       "version": "2006-03",
       "retrieved_at": "2026-06-13",
@@ -500,6 +666,12 @@
     },
     {
       "source_id": "nist-informative-references",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53",
+        "csf-2"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -516,6 +688,12 @@
     },
     {
       "source_id": "nist-olir-csf2-to-sp800-171",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
+      "frameworks": [
+        "csf-2",
+        "nist-800-171"
+      ],
       "owner": "NIST",
       "version": "2024-02-20",
       "retrieved_at": "2024-02-20",
@@ -532,6 +710,12 @@
     },
     {
       "source_id": "nist-olir-csf2-to-sp800-53",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
+      "frameworks": [
+        "csf-2",
+        "nist-800-53"
+      ],
       "owner": "NIST",
       "version": "2024-02-20",
       "retrieved_at": "2024-02-20",
@@ -548,6 +732,14 @@
     },
     {
       "source_id": "nist-oscal",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-800-53",
+        "nist-800-171",
+        "csf-2",
+        "nist-ssdf"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -564,6 +756,11 @@
     },
     {
       "source_id": "nist-ssdf-oscal",
+      "display_name": "SSDF",
+      "display_group": "NIST",
+      "frameworks": [
+        "nist-ssdf"
+      ],
       "owner": "NIST",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -580,6 +777,12 @@
     },
     {
       "source_id": "nuwcdivnpt-github-org",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "NUWCDIVNPT",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -596,6 +799,12 @@
     },
     {
       "source_id": "nuwcdivnpt-stig-manager",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "NUWCDIVNPT",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -612,6 +821,12 @@
     },
     {
       "source_id": "stigviewer-catalog",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "OpenControls.ai",
       "version": "2026-06-15",
       "retrieved_at": "2026-06-15",
@@ -628,6 +843,12 @@
     },
     {
       "source_id": "stigviewer-clkb-api",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
+      "frameworks": [
+        "disa-stig",
+        "disa-srg"
+      ],
       "owner": "OpenControls.ai",
       "version": "2026-03-16",
       "retrieved_at": "2026-06-15",

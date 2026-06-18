@@ -646,6 +646,9 @@ function buildSourceManifests(graph) {
 
   return graph.sources.map((source) => ({
     source_id: source.id,
+    display_name: source.display_name,
+    display_group: source.display_group,
+    frameworks: source.metadata?.frameworks || [],
     owner: source.owner,
     version: source.version,
     retrieved_at: source.retrieved_at,

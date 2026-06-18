@@ -95,11 +95,35 @@ export function createFederalGraphRuntime(dataset) {
       console.warn('Failed to load MiniSearch index:', err);
     }
   }
+  const CATALOG_DISPLAY_NAMES = {
+    'cmmc-2': { name: 'CMMC 2.0', group: 'Other' },
+    'csf-2': { name: 'NIST CSF 2.0', group: 'NIST' },
+    'cui-policy': { name: 'CUI Program', group: 'Other' },
+    'disa-cci': { name: 'DISA CCI', group: 'DISA' },
+    'disa-srg': { name: 'DISA SRG', group: 'DISA' },
+    'disa-stig': { name: 'DISA STIG', group: 'DISA' },
+    'dod-rai': { name: 'DoD RAI', group: 'DoD' },
+    'dod-zt': { name: 'DoD Zero Trust', group: 'DoD' },
+    'fedramp-rev5': { name: 'FedRAMP Rev. 5', group: 'Other' },
+    'fips-199': { name: 'FIPS 199', group: 'NIST' },
+    'fips-200': { name: 'FIPS 200', group: 'NIST' },
+    'nist-800-171': { name: 'SP 800-171 Rev. 3', group: 'NIST' },
+    'nist-800-171-rev2': { name: 'SP 800-171 Rev. 2', group: 'NIST' },
+    'nist-800-172': { name: 'SP 800-172 Rev. 3', group: 'NIST' },
+    'nist-800-37': { name: 'SP 800-37 Rev. 2', group: 'NIST' },
+    'nist-800-53': { name: 'SP 800-53 Rev. 5', group: 'NIST' },
+    'nist-800-53a': { name: 'SP 800-53A Rev. 5', group: 'NIST' },
+    'nist-800-53b': { name: 'SP 800-53B', group: 'NIST' },
+    'nist-ai-rmf': { name: 'AI RMF', group: 'NIST' },
+    'nist-ssdf': { name: 'SSDF', group: 'NIST' }
+  };
+
   const catalogs = [...new Set(dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean))]
     .sort()
     .map((id) => ({
       id,
-      name: id,
+      name: CATALOG_DISPLAY_NAMES[id]?.name || id,
+      display_group: CATALOG_DISPLAY_NAMES[id]?.group || 'Other',
       node_count: dataset.nodes.filter((node) => node.metadata?.catalog_id === id).length,
       relationship_count: dataset.edges.filter((edge) =>
         nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id

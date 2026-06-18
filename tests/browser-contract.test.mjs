@@ -32,6 +32,15 @@ test('shell identifies Control Atlas and preserves core journeys', () => {
 test('application loads only the five federal graph artifacts', () => {
   assert.match(html, /app\/app\.mjs\?v=20260614-1/);
   assert.match(app, /from '\.\/runtime\.mjs'/);
+  assert.match(app, /from '\.\.\/content\/pageIntros\.mjs'/);
+  assert.match(app, /template-registry\.json/);
+  assert.match(app, /Plain labels/);
+  assert.doesNotMatch(app, /Open related node/);
+  assert.doesNotMatch(app, /Novice Mode/);
+  assert.doesNotMatch(app, /outside the active public-map scope/);
+  assert.match(app, /How this connects/);
+  assert.match(app, /connectedItemButtonLabel/);
+  assert.match(app, /templateDisplayName/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
     assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260614-1`));
   }
@@ -81,8 +90,10 @@ test('federal trust dimensions remain visibly separate', () => {
 test('onboarding and accessible relationship alternatives remain available', () => {
   assert.match(app, /onboarding-overlay/);
   assert.match(app, /btn-onboarding-skip/);
+  assert.match(app, /btn-onboarding-start/);
+  assert.match(app, /Welcome to Control Atlas/);
   assert.match(app, /event\.key === 'Escape'/);
-  assert.match(app, /Relationship list/);
+  assert.match(app, /How this connects/);
   assert.match(app, /aria-label="Relationship list"/);
   assert.match(app, /aria-pressed/);
 });
@@ -93,8 +104,8 @@ test('hero uses the Ctrl+Alt rotating line with reduced-motion fallback', () => 
   assert.match(html, /landing-support-template/);
   assert.match(html, /Ctrl\+Alt\+/);
   assert.match(html, /hero-rotating-line" aria-hidden="true"/);
-  assert.match(app, /Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize'/);
-  assert.match(app, /'Trace', 'Compare', 'Baseline'/);
+  assert.match(app, /'Comply', 'Map', 'Trace', 'Compare', 'Navigate', 'Review', 'Plan', 'Export'/);
+  assert.match(app, /'Discover', 'Align', 'Prioritize', 'Understand', 'Connect', 'Act'/);
   assert.match(app, /mountLandingSupport/);
   assert.match(app, /matchMedia\('\(prefers-reduced-motion: reduce\)'\)/);
 });
@@ -197,6 +208,16 @@ test('staged build publishes the favicon asset', () => {
   assert.match(buildScript, /favicon\.ico/);
   assert.match(buildScript, /src\/favicon\.svg/);
   assert.match(buildScript, /favicon\.svg/);
+});
+
+test('translation principle copy avoids known anti-patterns', () => {
+  assert.match(html, /Plain labels/);
+  assert.doesNotMatch(app, /keeps meaning, source basis, confidence, and evidence strength separate/);
+  assert.doesNotMatch(app, /Official and inferred mappings stay separate\. Published relationships remain primary/);
+  assert.match(app, /What this is:/);
+  assert.match(app, /Why it matters:/);
+  assert.match(app, /Next step:/);
+  assert.match(app, /pageIntros/);
 });
 
 test('user-facing shell and runtime contain no encoding corruption', () => {

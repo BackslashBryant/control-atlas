@@ -1,10 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-17T23:34:30.821Z",
+  "generated_at": "2026-06-18T15:04:50.715Z",
   "sources": [
     {
       "id": "nist-oscal",
       "name": "NIST OSCAL Content",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -36,6 +38,8 @@
     {
       "id": "nist-800-171-rev2",
       "name": "NIST SP 800-171 Rev. 2 Security Requirements CSV",
+      "display_name": "SP 800-171 Rev. 2",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -64,6 +68,8 @@
     {
       "id": "nist-800-172-rev3",
       "name": "NIST SP 800-172 Rev. 3 OSCAL Catalog",
+      "display_name": "SP 800-172 Rev. 3",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -92,6 +98,8 @@
     {
       "id": "isoo-cui-regulation",
       "name": "32 CFR Part 2002 Controlled Unclassified Information",
+      "display_name": "CUI Program",
+      "display_group": "Other",
       "owner": "ISOO",
       "provenance_class": "mandated",
       "mandate_basis": [
@@ -120,6 +128,8 @@
     {
       "id": "nara-cui-registry",
       "name": "NARA CUI Registry",
+      "display_name": "CUI Program",
+      "display_group": "Other",
       "owner": "NARA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -148,6 +158,8 @@
     {
       "id": "disa-cci-list",
       "name": "DISA Control Correlation Identifier List",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -175,6 +187,8 @@
     {
       "id": "disa-stig-library",
       "name": "DISA Public STIG Library",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -207,6 +221,8 @@
     {
       "id": "disa-srg-library",
       "name": "DISA Public SRG Library",
+      "display_name": "DISA SRG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -239,6 +255,8 @@
     {
       "id": "disa-stig-srg-cci-references",
       "name": "DISA Public STIG and SRG CCI References",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -273,6 +291,8 @@
     {
       "id": "cyber-mil-stig-compilations",
       "name": "DISA STIG Compilations Landing Page",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -315,6 +335,8 @@
     {
       "id": "cyber-mil-stig-downloads",
       "name": "DISA STIG Downloads Landing Page",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -354,6 +376,8 @@
     {
       "id": "cyber-mil-stig-gpo",
       "name": "DISA STIG GPO Landing Page",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -390,6 +414,8 @@
     {
       "id": "stigviewer-catalog",
       "name": "STIG Viewer Public Catalog",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "OpenControls.ai",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -424,6 +450,8 @@
     {
       "id": "stigviewer-clkb-api",
       "name": "STIG Viewer CLKB API Announcement",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "OpenControls.ai",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -458,6 +486,8 @@
     {
       "id": "nuwcdivnpt-github-org",
       "name": "NUWCDIVNPT GitHub Organization",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "NUWCDIVNPT",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -491,6 +521,8 @@
     {
       "id": "nuwcdivnpt-stig-manager",
       "name": "NUWCDIVNPT STIG Manager",
+      "display_name": "DISA STIG",
+      "display_group": "DISA",
       "owner": "NUWCDIVNPT",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -525,6 +557,8 @@
     {
       "id": "nist-ai-rmf-playbook",
       "name": "NIST AI RMF Playbook",
+      "display_name": "AI RMF",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -553,6 +587,8 @@
     {
       "id": "nist-ssdf-oscal",
       "name": "NIST SSDF OSCAL Catalog",
+      "display_name": "SSDF",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -581,6 +617,8 @@
     {
       "id": "dod-cmmc-rule",
       "name": "CMMC Program Rule",
+      "display_name": "CMMC 2.0",
+      "display_group": "Other",
       "owner": "DoD",
       "provenance_class": "federal_program",
       "mandate_basis": [
@@ -608,6 +646,8 @@
     {
       "id": "fedramp-rev5",
       "name": "FedRAMP Rev. 5 Baselines",
+      "display_name": "FedRAMP Rev. 5",
+      "display_group": "Other",
       "owner": "FedRAMP",
       "provenance_class": "federal_program",
       "mandate_basis": [
@@ -636,6 +676,8 @@
     {
       "id": "dod-rai-toolkit",
       "name": "DoD Responsible AI Toolkit",
+      "display_name": "DoD RAI",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -663,6 +705,8 @@
     {
       "id": "nist-800-53b-baselines",
       "name": "NIST SP 800-53B Baseline Profiles",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -692,6 +736,8 @@
     {
       "id": "nist-fips-199",
       "name": "FIPS 199 Standards for Security Categorization of Federal Information and Information Systems",
+      "display_name": "FIPS 199",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "mandated",
       "mandate_basis": [
@@ -719,6 +765,8 @@
     {
       "id": "nist-fips-200",
       "name": "FIPS 200 Minimum Security Requirements for Federal Information and Information Systems",
+      "display_name": "FIPS 200",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "mandated",
       "mandate_basis": [
@@ -746,6 +794,8 @@
     {
       "id": "nist-800-37-rev2",
       "name": "NIST SP 800-37 Rev. 2 Risk Management Framework",
+      "display_name": "SP 800-37 Rev. 2",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -774,6 +824,8 @@
     {
       "id": "nist-800-53a-assessment-procedures",
       "name": "NIST SP 800-53A Assessment Procedures",
+      "display_name": "SP 800-53A Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -803,6 +855,8 @@
     {
       "id": "nist-csf-53-supplemental",
       "name": "NIST CSF 1.1 to SP 800-53 Supplemental Mapping",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -832,6 +886,8 @@
     {
       "id": "nist-csf11-csf20-crosswalk",
       "name": "NIST CSF 1.1 to CSF 2.0 OLIR Crosswalk",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -860,6 +916,8 @@
     {
       "id": "nist-800-171-oscal-mappings",
       "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -889,6 +947,8 @@
     {
       "id": "disa-cci-nist-references",
       "name": "DISA CCI NIST SP 800-53 Revision 5 References",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -917,6 +977,8 @@
     {
       "id": "nist-informative-references",
       "name": "NIST Informative References",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -946,6 +1008,8 @@
     {
       "id": "mitre-cis-cci-mappings",
       "name": "MITRE CIS/CCI Mappings",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
       "owner": "MITRE",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -971,6 +1035,8 @@
     {
       "id": "community-cci-research",
       "name": "Community CCI Research",
+      "display_name": "DISA CCI",
+      "display_group": "DISA",
       "owner": "Community",
       "provenance_class": "federal_referenced",
       "mandate_basis": [],
@@ -996,6 +1062,8 @@
     {
       "id": "nist-olir-csf2-to-sp800-53",
       "name": "NIST OLIR CSF 2.0 to SP 800-53 Rev. 5.2.0 Mapping",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1025,6 +1093,8 @@
     {
       "id": "nist-olir-csf2-to-sp800-171",
       "name": "NIST OLIR CSF 2.0 to SP 800-171 Rev. 3 Mapping",
+      "display_name": "NIST CSF 2.0",
+      "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1054,6 +1124,8 @@
     {
       "id": "dod-zt-reference-architecture-v2",
       "name": "DoD Zero Trust Reference Architecture Version 2.0",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1081,6 +1153,8 @@
     {
       "id": "dod-zt-strategy",
       "name": "DoD Zero Trust Strategy",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1108,6 +1182,8 @@
     {
       "id": "dod-zt-overlays-2024",
       "name": "DoD Zero Trust Overlays",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1137,6 +1213,8 @@
     {
       "id": "dod-zt-capabilities",
       "name": "DoD Zero Trust Capabilities and Activities",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
@@ -1164,6 +1242,8 @@
     {
       "id": "dod-zt-execution-roadmap",
       "name": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "display_name": "DoD Zero Trust",
+      "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
