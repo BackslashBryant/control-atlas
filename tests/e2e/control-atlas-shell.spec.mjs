@@ -21,7 +21,7 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(primaryNav.getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Find the right public entry point before diving into the graph' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Find your first path through the library' })).toBeVisible();
   await page.selectOption('#sh-system-type', 'Cloud SaaS');
   await page.selectOption('#sh-data-sensitivity', 'Moderate');
   await page.selectOption('#sh-environment', 'CSP');
@@ -30,15 +30,15 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByText('Suggested Frameworks & Baselines')).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
-  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
-  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible({ timeout: 10000 });
-  await expect(page.getByRole('button', { name: 'Relationship Table', exact: true })).toBeVisible();
+  await expect(page.getByText('Loading the library')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByRole('heading', { name: 'Compare frameworks' })).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole('button', { name: 'Framework comparison', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'STIG -> CCI -> NIST', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Baseline Compare', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Sources', exact: true }).click();
-  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
-  await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Loading the library')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByRole('heading', { name: 'Review sources before you rely on a match' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByLabel('Source type', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Included in map', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Status', { exact: true })).toBeVisible();
@@ -46,10 +46,10 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await page.getByLabel('Included in map', { exact: true }).selectOption('excluded');
   const communityCard = page.locator('.source-card').filter({ hasText: 'Community CCI Research' });
   await expect(communityCard).toBeVisible();
-  await expect(communityCard.getByText('Not used in the public map.')).toBeVisible();
+  await expect(communityCard.getByText(/Not used in the public map because/)).toBeVisible();
   await communityCard.getByRole('button', { name: 'View source details' }).click();
   await expect(page.getByRole('heading', { name: 'Community CCI Research' })).toBeVisible();
-  await expect(page.getByText('Use rules')).toBeVisible();
+  await expect(page.getByText('Use rules:', { exact: true })).toBeVisible();
   await expect(page.getByText('Old or draft content. Check it carefully.')).toBeVisible();
 });
 
@@ -74,8 +74,8 @@ test('library filters narrow results without a page reload', async ({ page }) =>
 test('crosswalk workbench deep links into relationship mode with visible-only exports', async ({ page }) => {
   await page.goto('/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2&items=AC-10');
   await dismissOnboarding(page);
-  await expect(page.getByRole('heading', { name: 'Crosswalk Workbench' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Relationship Table', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('heading', { name: 'Compare frameworks' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Framework comparison', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByLabel('Show inferred mappings')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();

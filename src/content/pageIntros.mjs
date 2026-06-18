@@ -1,31 +1,31 @@
 export const pageIntros = {
   home: {
-    title: "Trace the public compliance map.",
-    description: "Search a control ID or topic. Control Atlas shows public matches, source support, and places where no public match is known."
+    title: 'Search the public compliance library.',
+    description: 'What: browse controls, frameworks, and source-backed links. Why: see what is officially mapped before you plan or assess. Next: search a control ID or open Start Here for a guided path.',
   },
   search: {
-    title: "Search the public compliance map",
-    description: "Search by control ID, CCI, title, or plain-language topic."
+    title: 'Search the public compliance library',
+    description: 'Search by control ID, CCI, title, or plain-language topic. Results show defining sources and how each item connects.',
   },
   matrix: {
-    title: "Build a source-backed match table",
-    description: "Choose two frameworks. Control Atlas will show public matches, possible connections, and no known matches."
+    title: 'Compare frameworks with traceable sources',
+    description: 'What: side-by-side framework comparison. Why: official and inferred links stay separate so you can judge trust. Next: pick two frameworks, filter, and export visible rows.',
   },
   browse: {
-    title: "Library coverage and catalogs",
-    description: "Browse frameworks. Catalog available means you can read it; mappings available means some items connect to other frameworks."
+    title: 'Browse frameworks in the library',
+    description: 'What: see which frameworks are included and how many items and mapped links each has. Why: pick a framework before you search or compare. Next: open a framework card to review its items.',
   },
   sources: {
-    title: "Source check and data issues",
-    description: "Review source type, use status, access, and use rules before you rely on a public match."
+    title: 'Review sources before you rely on a match',
+    description: 'Check source type, use status, access, and use rules. Flagged issues mean a catalog link or source may be missing or limited.',
   },
   detail: {
-    description: "Review the public match and source support before using this reference in an assessment."
+    description: 'Review the public match and source support before using this reference in an assessment.',
   },
   detailZero: {
-    description: "No public matches are known for this item; you can assess it separately or contribute evidence."
+    description: 'No public matches are known for this item; you can assess it separately or contribute evidence.',
   },
   mapping: {
-    description: "Compare frameworks here. Use \"Open mapped item\" only when you need the matching control."
-  }
+    description: 'Compare frameworks here. Use "Open mapped item" only when you need the matching control.',
+  },
 };

@@ -21,6 +21,14 @@
 const DISCLAIMER = "Control Atlas is an open-source reference tool. It is not an official government system and does not make compliance, authorization, or risk decisions. All mappings and templates are reference aids based on public sources. Official decisions remain with the applicable Authorizing Official, agency, or program office.";
 
 /**
+ * @param {{ id: string, title?: string }} control
+ * @returns {string}
+ */
+function controlReference(control) {
+  return control.title ? `${control.title} (${control.id})` : control.id;
+}
+
+/**
  * @param {any} options
  * @param {any[]} controls
  * @returns {TemplateDocument}
@@ -38,10 +46,10 @@ function generateSecurityPlanStarter(options, controls) {
 
   const rows = controls.map(c => {
     const row = [c.id, c.title, ph("[Status]"), ph("[Role]")];
-    if (options.includeImplementationPrompts) row.push(`How is ${c.id} implemented in the ${options.environment || 'system'} environment?`);
-    if (options.includeEvidenceExpectations) row.push(`Expected evidence for ${c.id} control implementation.`);
-    if (options.includeInheritancePrompts) row.push(`Is ${c.id} inherited from a parent common control provider?`);
-    if (options.includeReciprocityPrompts) row.push(`Can assessment results for ${c.id} be reused via reciprocity?`);
+    if (options.includeImplementationPrompts) row.push(`How is ${controlReference(c)} implemented in the ${options.environment || 'system'} environment?`);
+    if (options.includeEvidenceExpectations) row.push(`Expected evidence for ${controlReference(c)}.`);
+    if (options.includeInheritancePrompts) row.push(`Is ${controlReference(c)} inherited from a parent common control provider?`);
+    if (options.includeReciprocityPrompts) row.push(`Can assessment results for ${controlReference(c)} be reused via reciprocity?`);
     if (options.includeStigReferences) row.push(ph("[Related STIG/SRG Rules]"));
     row.push(ph("[Notes]"));
     return row;
@@ -51,7 +59,7 @@ function generateSecurityPlanStarter(options, controls) {
   const sections = [
     { type: "text", heading: "System Overview", content: ph("[Insert system name and description here]") },
     { type: "text", heading: "Authorization Boundary", content: ph("[Describe the authorization boundary here]") },
-    { type: "text", heading: "System Environment", content: `Archetype: ${options.environment || 'Generic'}` },
+    { type: "text", heading: "System Environment", content: `Environment type: ${options.environment || 'Generic'}` },
     { type: "text", heading: "Data Types", content: ph("[List data types and sensitivity levels]") },
     { type: "text", heading: "User Roles", content: ph("[List user roles and privileges]") },
     { type: "text", heading: "Interconnections", content: ph("[List system interconnections]") },
@@ -63,7 +71,7 @@ function generateSecurityPlanStarter(options, controls) {
     sections.push({
       type: "text",
       heading: "Source Information and Footnotes",
-      content: `Framework Context: ${options.framework || 'Generic NIST SP 800-53'}\nEnvironment Archetype: ${options.environment || 'Generic'}`
+      content: `Framework context: ${options.framework || 'Generic NIST SP 800-53'}\nEnvironment type: ${options.environment || 'Generic'}`
     });
   }
 
@@ -88,7 +96,7 @@ function generateImplementationStatementWorksheet(options, controls) {
 
   const rows = controls.map(c => {
     const row = [c.id, c.title, ph("[Draft statement here]"), ph("[Role]")];
-    if (options.includeImplementationPrompts) row.push(`Describe the technical controls, policies, or mechanisms implementing ${c.id}.`);
+    if (options.includeImplementationPrompts) row.push(`Describe the technical controls, policies, or mechanisms implementing ${controlReference(c)}.`);
     row.push(ph("[Status]"));
     return row;
   });
@@ -240,18 +248,18 @@ function generateReciprocityChecklist(options) {
   headers.push("Notes");
 
   const rows = [
-    ["SSP", ph("[Status]")],
-    ["SAR", ph("[Status]")],
-    ["POA&M", ph("[Status]")],
+    ["SSP (System Security Plan)", ph("[Status]")],
+    ["SAR (Security Assessment Report)", ph("[Status]")],
+    ["POA&M (Plan of Action and Milestones)", ph("[Status]")],
     ["Boundary Comparison", ph("[Status]")],
     ["Risk Acceptance Review", ph("[Status]")],
     ["Artifact Freshness", ph("[Status]")]
   ];
 
   if (options.includeReciprocityPrompts) {
-    rows[0].push("Verify the SSP matches the receiving agency's boundary requirements.");
-    rows[1].push("Confirm assessment results show adequate independent testing.");
-    rows[2].push("Assess open deficiencies and scheduled remediation dates.");
+    rows[0].push("Verify the System Security Plan (SSP) matches the receiving agency's boundary requirements.");
+    rows[1].push("Confirm Security Assessment Report (SAR) results show adequate independent testing.");
+    rows[2].push("Assess open POA&M items and scheduled remediation dates.");
     rows[3].push("Check if data flow and boundary align with the new deployment.");
     rows[4].push("Ensure all accepted risks are signed off by the original AO.");
     rows[5].push("Confirm artifacts are less than 1 year old or fit review cadence.");
