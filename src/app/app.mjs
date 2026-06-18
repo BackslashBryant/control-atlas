@@ -603,7 +603,7 @@ async function renderDetail(nodeId, filters = {}) {
             
             ${node.plain_language_summary ? `
               <div class="summary-card">
-                <span class="summary-card-title">Plain-Language Summary</span>
+                <span class="summary-card-title">What this is</span>
                 <p>${escapeHtml(node.plain_language_summary)}</p>
               </div>
             ` : ''}
@@ -613,8 +613,6 @@ async function renderDetail(nodeId, filters = {}) {
                 <p>${escapeHtml(node.metadata.why_it_matters)}</p>
               </div>
             ` : ''}
-            <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
-            ${definingSource?.artifact_url ? `<p><a href="${escapeHtml(definingSource.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></p>` : ''}
             ${filters.libraryMode ? '<button class="secondary" id="copy-library-link" type="button">Copy link</button>' : ''}
             
             <details class="advanced-details" ${noviceMode ? '' : 'open'}>
@@ -661,6 +659,12 @@ async function renderDetail(nodeId, filters = {}) {
               contextCard(entry.relatedNode, entry.relationshipEdge))}
             <section class="panel"><p class="eyebrow">Additional published relationships</p><h3>${visibleEdges.length} relationship${visibleEdges.length === 1 ? '' : 's'}</h3>${relationshipFilterMarkup(edges, filters)}<div class="stack">${filters.relationshipView === 'table' ? relationshipTable(visibleEdges, node.id) : additionalRelationshipCards || relationshipCards || '<p class="notice">No displayable relationships are known.</p>'}</div></section>
           `}
+          
+          <article class="panel">
+            <h3>Official text / source excerpt</h3>
+            <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
+            ${definingSource?.artifact_url ? `<p><a href="${escapeHtml(definingSource.artifact_url)}" target="_blank" rel="noopener noreferrer">Open official source document</a></p>` : ''}
+          </article>
         </div>
         <aside class="detail-side panel">
           <h3>How this connects</h3>
