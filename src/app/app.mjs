@@ -592,6 +592,9 @@ async function renderDetail(nodeId, filters = {}) {
       : additionalRelationshipCards || '<p class="notice">No additional displayable relationships are known.</p>';
 
     app.innerHTML = `
+      <div style="margin-bottom: 1rem;">
+        <span class="muted" style="font-size: 0.9em;">Library / ${escapeHtml(definingSource?.name || 'Unknown')} / ${escapeHtml(node.metadata.item_id)} ${escapeHtml(node.metadata.title)}</span>
+      </div>
       <button class="secondary" id="back-search" type="button">${filters.libraryMode ? 'Back to Library' : 'Back to search'}</button>
       <section class="detail-layout">
         <div class="detail-main">
