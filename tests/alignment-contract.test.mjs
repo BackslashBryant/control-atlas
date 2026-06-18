@@ -46,25 +46,22 @@ test('core product docs state the canonical Control Atlas boundary', () => {
   }
 });
 
-test('roadmap contains the Phase 0 through Phase 8 Control Atlas epics', () => {
+test('roadmap contains the Phase 0 through Phase 6 Control Atlas epics', () => {
   const roadmap = readFileSync('docs/roadmap.md', 'utf8');
   for (const epic of [
-    'Epic 0: Control Atlas Full Rename and Phase 0 Baseline',
-    'Epic 1: Source / Provenance Registry',
-    'Epic 2: Data Normalization Pipeline',
-    'Epic 3: Library Browser',
-    'Epic 4: Crosswalk Workbench',
-    'Epic 5: Template Factory',
-    'Epic 6: Pattern Library',
-    'Epic 7: Start Here \\+ Glossary',
-    'Epic 8: QA, Accessibility, and Release Hardening',
+    'Epic 0: GovFrame → Control Atlas Migration',
+    'Epic 1: Data Backbone',
+    'Epic 2: Library \\+ Search',
+    'Epic 3: Crosswalks',
+    'Epic 4: Template Factory',
+    'Epic 5: Patterns \\+ Glossary \\+ Start Here',
+    'Epic 6: QA \\+ Accessibility \\+ Release',
   ]) {
     assert.match(roadmap, new RegExp(epic));
   }
-  assert.match(roadmap, /Repository\/package\/Pages rename and hosted cutover/i);
-  assert.match(roadmap, /staged static build from `src\/`/i);
-  assert.match(roadmap, /CI\/CD and SecDevOps hardening around the staged site/i);
-  assert.match(roadmap, /five-artifact runtime contract/i);
+  assert.match(roadmap, /Rename and rebrand/i);
+  assert.match(roadmap, /CI\/CD pipeline/i);
+  assert.match(roadmap, /five-artifact contract/i);
 });
 
 test('architecture and inventory docs reflect the adopted Phase 0 baseline', () => {

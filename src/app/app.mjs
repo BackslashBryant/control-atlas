@@ -92,9 +92,16 @@ function catalogOptions(selected = '') {
 }
 
 function sourceBadge(provenance) {
-  const label = provenance.replaceAll('_', ' ');
-  const cssClass = provenance === 'inferred' ? 'badge-research' : 'badge-official';
-  return `<span class="badge ${cssClass}">${escapeHtml(label)}</span>`;
+  const mapping = {
+    mandated: { icon: '🏛️', label: 'Mandated', css: 'badge-provenance-mandated' },
+    federal_published: { icon: '📜', label: 'Published', css: 'badge-provenance-federal_published' },
+    federal_program: { icon: '🛡️', label: 'Program', css: 'badge-provenance-federal_program' },
+    federal_utilized: { icon: '🔧', label: 'Utilized', css: 'badge-provenance-federal_utilized' },
+    federal_referenced: { icon: '🔗', label: 'Referenced', css: 'badge-provenance-federal_referenced' },
+    inferred: { icon: '🔍', label: 'Inferred', css: 'badge-provenance-inferred' }
+  };
+  const match = mapping[provenance] || { icon: '', label: provenance.replaceAll('_', ' '), css: 'badge-official' };
+  return `<span class="badge ${match.css}">${match.icon} ${escapeHtml(match.label)}</span>`;
 }
 
 function sourceStateBadge(label, tone = 'neutral') {
@@ -515,6 +522,12 @@ async function renderDetail(nodeId, filters = {}) {
             <p class="item-id">${escapeHtml(node.metadata.item_id)}</p>
             <p class="workbench-card-meta">Object type: ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
             <p class="workbench-card-meta">Defining source: ${escapeHtml(definingSource?.name || node.source_id)}  -  Version: ${escapeHtml(definingSource?.version || 'unknown')}</p>
+            ${node.plain_language_summary ? `
+              <div class="summary-card">
+                <span class="summary-card-title">Plain-Language Summary</span>
+                <p>${escapeHtml(node.plain_language_summary)}</p>
+              </div>
+            ` : ''}
             <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
             ${definingSource?.artifact_url ? `<p><a href="${escapeHtml(definingSource.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></p>` : ''}
             ${filters.libraryMode ? '<button class="secondary" id="copy-library-link" type="button">Copy link</button>' : ''}
@@ -1127,11 +1140,12 @@ function renderStartHere(state = currentState) {
   document.getElementById('start-here-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const formElement = /** @type {HTMLFormElement} */ (e.target);
+    const formData = new FormData(formElement);
     void setView('start-here', {
       step: 'recommendation',
-      systemType: formElement.systemType.value,
-      dataSensitivity: formElement.dataSensitivity.value,
-      environment: formElement.environment.value,
+      systemType: String(formData.get('systemType') || ''),
+      dataSensitivity: String(formData.get('dataSensitivity') || ''),
+      environment: String(formData.get('environment') || ''),
     });
   });
 }
@@ -1182,7 +1196,7 @@ function baselineSourceSummary(label, baselineNode, sourceMeta) {
 function chainRelationshipItem(node, relationshipEdge, sourceRefs) {
   const itemId = node.metadata?.item_id || node.id;
   const title = node.metadata?.title || node.label || itemId;
-  return `<li><strong>${escapeHtml(itemId)}</strong> - ${escapeHtml(title)}<div class="badge-row">${publicationStatusBadge(relationshipEdge.publication_status)}</div>${sourceRefList(sourceRefs)}</li>`;
+  return `<li><button class="link-button" data-open-node="${escapeHtml(node.id)}">${escapeHtml(itemId)}</button> - ${escapeHtml(title)}<div class="badge-row">${publicationStatusBadge(relationshipEdge.publication_status)}</div>${sourceRefList(sourceRefs)}</li>`;
 }
 
 function exportButtonMarkup(disabled = false) {
@@ -1289,7 +1303,7 @@ async function renderMatrix(state) {
         <p class="muted">${relationshipRows.summary.visible} visible relationship${relationshipRows.summary.visible === 1 ? '' : 's'}${relationshipRows.summary.hidden_candidate_count ? ` - ${relationshipRows.summary.hidden_candidate_count} inferred mapping${relationshipRows.summary.hidden_candidate_count === 1 ? '' : 's'} hidden by default` : ''}</p>
         ${exportButtonMarkup(!relationshipRows.rows.length)}
         ${relationshipRows.rows.length
-          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>Relationship type</th><th>Source basis</th><th>Confidence</th><th>Rationale</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
+          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>Relationship type</th><th>Source basis</th><th>Confidence</th><th>Rationale</th><th>Plain-Language Rationale</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${escapeHtml(row.plain_language_rationale || 'No plain-language rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
           : '<p class="notice">No visible relationships match these filters.</p>'}`;
     } else if (workbench === 'stig-chain') {
       modeMarkup = `
@@ -1303,10 +1317,10 @@ async function renderMatrix(state) {
         <p class="muted">${chainPayload.rows.length} visible item${chainPayload.rows.length === 1 ? '' : 's'} in this package scope.</p>
         ${exportButtonMarkup(!(chainPayload.rows.length || chainPayload.selected_chain))}
         ${chainPayload.rows.length
-          ? `<table class="matrix-table" aria-label="STIG chain summary"><thead><tr><th>Item</th><th>Benchmark</th><th>CCIs</th><th>NIST controls</th><th>Unmapped CCIs</th></tr></thead><tbody>${chainPayload.rows.map((row) => `<tr><td>${escapeHtml(row.item_id)} - ${escapeHtml(row.title)}</td><td>${escapeHtml(row.benchmark_title)}</td><td>${row.cci_count}</td><td>${row.nist_control_count}</td><td>${row.unmapped_cci_count}</td></tr>`).join('')}</tbody></table>`
+          ? `<table class="matrix-table" aria-label="STIG chain summary"><thead><tr><th>Item</th><th>Benchmark</th><th>CCIs</th><th>NIST controls</th><th>Unmapped CCIs</th></tr></thead><tbody>${chainPayload.rows.map((row) => `<tr><td><button class="link-button" data-trace-item="${escapeHtml(row.item_id)}">${escapeHtml(row.item_id)}</button> - ${escapeHtml(row.title)}</td><td>${escapeHtml(row.benchmark_title)}</td><td>${row.cci_count}</td><td>${row.nist_control_count}</td><td>${row.unmapped_cci_count}</td></tr>`).join('')}</tbody></table>`
           : '<p class="notice">No STIG or SRG items match this scope.</p>'}
         ${chainPayload.selected_chain
-          ? `<section class="panel more-mappings"><p class="eyebrow">Selected chain</p><h3>${escapeHtml(chainPayload.selected_chain.source_node.metadata?.title || chainPayload.selected_chain.source_node.label)}</h3><p class="muted">${escapeHtml(chainPayload.selected_chain.source_node.metadata?.item_id || chainPayload.selected_chain.source_node.id)}</p><div class="grid"><article class="framework-card"><h4>CCI links</h4><ul>${chainPayload.selected_chain.cci_entries.map((entry) => chainRelationshipItem(entry.cciNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No CCI links.</li>'}</ul></article><article class="framework-card"><h4>NIST controls</h4><ul>${chainPayload.selected_chain.nist_entries.map((entry) => chainRelationshipItem(entry.nistNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No NIST controls reached from this visible chain.</li>'}</ul></article><article class="framework-card"><h4>Unmapped CCIs</h4><ul>${chainPayload.selected_chain.unmapped_cci_nodes.map((node) => `<li>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || node.label)}</li>`).join('') || '<li>Every visible CCI has a visible NIST link.</li>'}</ul></article></div></section>`
+          ? `<section class="panel more-mappings"><p class="eyebrow">Selected chain</p><h3>${escapeHtml(chainPayload.selected_chain.source_node.metadata?.title || chainPayload.selected_chain.source_node.label)}</h3><p class="muted">${escapeHtml(chainPayload.selected_chain.source_node.metadata?.item_id || chainPayload.selected_chain.source_node.id)}</p><div class="grid"><article class="framework-card"><h4>CCI links</h4><ul>${chainPayload.selected_chain.cci_entries.map((entry) => chainRelationshipItem(entry.cciNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No CCI links.</li>'}</ul></article><article class="framework-card"><h4>NIST controls</h4><ul>${chainPayload.selected_chain.nist_entries.map((entry) => chainRelationshipItem(entry.nistNode, entry.relationshipEdge, entry.sourceRefs)).join('') || '<li>No NIST controls reached from this visible chain.</li>'}</ul></article><article class="framework-card"><h4>Unmapped CCIs</h4><ul>${chainPayload.selected_chain.unmapped_cci_nodes.map((node) => `<li><button class="link-button" data-open-node="${escapeHtml(node.id)}">${escapeHtml(node.metadata?.item_id || node.id)}</button> - ${escapeHtml(node.metadata?.title || node.label)}</li>`).join('') || '<li>Every visible CCI has a visible NIST link.</li>'}</ul></article></div></section>`
           : ''}`;
     } else {
       modeMarkup = `
@@ -1317,7 +1331,7 @@ async function renderMatrix(state) {
         </form>
         ${exportButtonMarkup(!baselineComparison)}
         ${baselineComparison
-          ? `${baselineSourceSummary('Baseline A', baselineComparison.baseline_a, baselineComparison.baseline_a_source)}${baselineSourceSummary('Baseline B', baselineComparison.baseline_b, baselineComparison.baseline_b_source)}<div class="grid"><article class="framework-card"><span class="badge">Shared controls</span><h3>${baselineComparison.shared.length}</h3><ul>${baselineComparison.shared.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No shared controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in A</span><h3>${baselineComparison.only_a.length}</h3><ul>${baselineComparison.only_a.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No A-only controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in B</span><h3>${baselineComparison.only_b.length}</h3><ul>${baselineComparison.only_b.map((entry) => `<li>${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)} - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No B-only controls.</li>'}</ul></article></div>`
+          ? `${baselineSourceSummary('Baseline A', baselineComparison.baseline_a, baselineComparison.baseline_a_source)}${baselineSourceSummary('Baseline B', baselineComparison.baseline_b, baselineComparison.baseline_b_source)}<div class="grid"><article class="framework-card"><span class="badge">Shared controls</span><h3>${baselineComparison.shared.length}</h3><ul>${baselineComparison.shared.map((entry) => `<li><button class="link-button" data-open-node="${escapeHtml(entry.control_node.id)}">${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)}</button> - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No shared controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in A</span><h3>${baselineComparison.only_a.length}</h3><ul>${baselineComparison.only_a.map((entry) => `<li><button class="link-button" data-open-node="${escapeHtml(entry.control_node.id)}">${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)}</button> - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No A-only controls.</li>'}</ul></article><article class="framework-card"><span class="badge">Only in B</span><h3>${baselineComparison.only_b.length}</h3><ul>${baselineComparison.only_b.map((entry) => `<li><button class="link-button" data-open-node="${escapeHtml(entry.control_node.id)}">${escapeHtml(entry.control_node.metadata?.item_id || entry.control_node.id)}</button> - ${escapeHtml(entry.control_node.metadata?.title || entry.control_node.label)}</li>`).join('') || '<li>No B-only controls.</li>'}</ul></article></div>`
           : '<p class="notice">Choose two distinct public baselines to compare.</p>'}`;
     }
 
@@ -1380,6 +1394,15 @@ async function renderMatrix(state) {
           const extension = format === 'markdown' ? 'md' : format;
           downloadTextFile(`Control-Atlas-${sanitizeDownloadSegment(baselineA)}-vs-${sanitizeDownloadSegment(baselineB)}.${extension}`, content, format === 'json' ? 'application/json' : 'text/plain');
         }
+      });
+    });
+    bindNodeButtons();
+    /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-trace-item]')).forEach((button) => {
+      button.addEventListener('click', () => {
+        void setView('matrix', {
+          ...state,
+          chainItem: button.dataset.traceItem,
+        });
       });
     });
   });

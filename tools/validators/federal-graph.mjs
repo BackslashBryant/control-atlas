@@ -40,6 +40,9 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
     else if (source.access_status !== 'public') {
       errors.push(`node ${node.id} defining source ${node.source_id} must remain public for displayable graph content`);
     }
+    if (typeof node.plain_language_summary !== 'string' || !node.plain_language_summary.trim()) {
+      errors.push(`node ${node.id} is missing required plain_language_summary`);
+    }
   }
 
   for (const entry of evidence) {
@@ -64,10 +67,32 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
       if (edge.provenance_class !== 'inferred') errors.push(`candidate edge ${edge.id} must be inferred`);
       if (!edge.confidence?.startsWith('inferred_')) errors.push(`candidate edge ${edge.id} must use inferred confidence`);
       if (!edge.warning || !edge.inference_rule_id) errors.push(`candidate edge ${edge.id} must include warning and inference_rule_id`);
+      if (typeof edge.rationale !== 'string' || !edge.rationale.trim()) {
+        errors.push(`candidate edge ${edge.id} must include non-empty rationale`);
+      }
     }
     if (edge.publication_status === 'published') {
       if (edge.provenance_class === 'inferred') errors.push(`published edge ${edge.id} cannot use inferred provenance_class`);
       if (edge.confidence?.startsWith('inferred_')) errors.push(`published edge ${edge.id} cannot use inferred confidence`);
+    }
+
+    if (typeof edge.plain_language_rationale !== 'string' || !edge.plain_language_rationale.trim()) {
+      errors.push(`edge ${edge.id} is missing required plain_language_rationale`);
+    }
+    if (!Array.isArray(edge.source_refs) || edge.source_refs.length === 0) {
+      errors.push(`edge ${edge.id} is missing required source_refs`);
+    } else {
+      for (const [idx, ref] of edge.source_refs.entries()) {
+        if (!ref.source_id || typeof ref.source_id !== 'string') {
+          errors.push(`edge ${edge.id} source_refs[${idx}] must have a valid string source_id`);
+        }
+        if (!ref.ref_type || typeof ref.ref_type !== 'string') {
+          errors.push(`edge ${edge.id} source_refs[${idx}] must have a valid string ref_type`);
+        }
+        if (ref.locator === undefined || typeof ref.locator !== 'string') {
+          errors.push(`edge ${edge.id} source_refs[${idx}] must have a valid string locator`);
+        }
+      }
     }
   }
   return errors;

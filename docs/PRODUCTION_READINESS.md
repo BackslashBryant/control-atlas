@@ -9,7 +9,7 @@
 
 ## Current Status
 
-The static public reference application is deployable and provides a reusable Control Atlas foundation. The full MVP is not production-ready until Epic 0 through Epic 8 are complete and the remaining security, accessibility, and release gates are closed.
+The static public reference application is deployable and provides a reusable Control Atlas foundation. The full MVP is not production-ready until Epic 0 through Epic 6 are complete and the remaining security, accessibility, and release gates are closed.
 
 ## Phase 0 Development Readiness
 

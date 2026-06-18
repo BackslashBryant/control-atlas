@@ -112,6 +112,7 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
       label: 'One',
       source_id: 'excluded-source',
       lifecycle_status: 'active',
+      plain_language_summary: 'Plain language summary for node one',
       metadata: {},
     }, {
       id: 'node:one',
@@ -119,6 +120,7 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
       label: 'Duplicate',
       source_id: 'restricted-source',
       lifecycle_status: 'active',
+      plain_language_summary: 'Plain language summary for duplicate node',
       metadata: {},
     }],
     edges: [{
@@ -133,6 +135,8 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
       display_label: 'Blocked',
       warning: null,
       inference_rule_id: null,
+      plain_language_rationale: 'Blocked relationship rationale',
+      source_refs: [{ source_id: 'excluded-source', ref_type: 'primary', locator: 'test' }],
     }, {
       id: 'edge:published-inferred',
       source_node_id: 'node:one',
@@ -145,6 +149,9 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
       display_label: 'Bad',
       warning: null,
       inference_rule_id: 'rule-1',
+      rationale: 'Inferred mapping rationale',
+      plain_language_rationale: 'Inferred plain rationale',
+      source_refs: [{ source_id: 'restricted-source', ref_type: 'primary', locator: 'test' }],
     }],
     evidence: [{
       id: 'evidence:restricted',
