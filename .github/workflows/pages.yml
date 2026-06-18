@@ -44,6 +44,15 @@ jobs:
         run: npx playwright install chromium
       - name: End-to-end verification
         run: npm run test:e2e
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-playwright-artifacts
+          path: |
+            test-results
+            playwright-report
+          if-no-files-found: ignore
       - name: Generate SBOM
         run: npm run sbom:generate
       - uses: actions/upload-artifact@v4

@@ -1,15 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from './support.mjs';
 
-async function dismissOnboarding(page) {
-  const skipOnboarding = page.getByRole('button', { name: 'Skip', exact: true });
-  if (await skipOnboarding.isVisible()) {
-    await skipOnboarding.click();
-  }
-}
-
-async function waitForAppReady(page) {
-  await expect(page.locator('#app')).toHaveAttribute('data-app-ready', 'true', { timeout: 60000 });
-}
+test.beforeEach(async ({ page }) => {
+  attachPageDiagnostics(page);
+});
 
 test('landing paints before graph artifacts load', async ({ page }) => {
   const graphRequests = [];
