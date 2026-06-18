@@ -8,6 +8,7 @@ const publicSyncTool = readFileSync('tools/sync-public.mjs', 'utf8');
 const domSmoke = readFileSync('scripts/dom-smoke.mjs', 'utf8');
 const staticSmoke = readFileSync('scripts/static-smoke.mjs', 'utf8');
 const runtimeTest = readFileSync('tests/framework-runtime.test.mjs', 'utf8');
+const playwrightConfig = readFileSync('playwright.config.mjs', 'utf8');
 
 test('control atlas source of truth moves into src and builds from a staged output', () => {
   for (const path of [
@@ -37,4 +38,11 @@ test('control atlas source of truth moves into src and builds from a staged outp
 test('staged build publishes the generated library search artifact', () => {
   const siteBuilder = readFileSync('tools/build-static-site.mjs', 'utf8');
   assert.match(siteBuilder, /library-search\.json/);
+});
+
+test('playwright e2e server stays on loopback for deterministic local browser access', () => {
+  assert.match(playwrightConfig, /baseURL:\s*'http:\/\/localhost:4317'/);
+  assert.match(playwrightConfig, /url:\s*'http:\/\/localhost:4317'/);
+  assert.doesNotMatch(playwrightConfig, /networkInterfaces/);
+  assert.match(readFileSync('tools/serve-static-site.mjs', 'utf8'), /listen\(PORT,\s*'localhost'/);
 });
