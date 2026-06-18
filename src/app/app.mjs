@@ -63,6 +63,10 @@ const checkboxBySelector = (selector) => /** @type {HTMLInputElement | null} */ 
 const buttonBySelector = (selector) => /** @type {HTMLButtonElement | null} */ (document.querySelector(selector));
 const elementBySelector = (selector) => /** @type {HTMLElement | null} */ (document.querySelector(selector));
 
+function setAppReady(status) {
+  app.dataset.appReady = status;
+}
+
 async function fetchArtifact(path) {
   const response = await fetch(path);
   if (!response.ok) throw new Error(`Unable to load ${path}.`);
@@ -1579,6 +1583,7 @@ function renderRetired(state) {
 }
 
 async function renderState(state) {
+  setAppReady('false');
   currentState = state;
   if (state.view !== 'search') workspace.removeAttribute('data-search-active');
   navButtons.forEach((button) => {
@@ -1600,6 +1605,7 @@ async function renderState(state) {
   else if (state.view === 'start-here') renderStartHere(state);
   else if (state.view === 'retired') renderRetired(state);
   else await renderSearch(state);
+  setAppReady('true');
 }
 
 async function setView(view, state = {}) {
@@ -1744,5 +1750,6 @@ async function init() {
 
 init().catch((error) => {
   app.setAttribute('aria-busy', 'false');
+  setAppReady('error');
   app.innerHTML = `<section class="notice"><h2>Control Atlas could not start</h2><p>${escapeHtml(userFacingLoadError(error))}</p></section>`;
 });

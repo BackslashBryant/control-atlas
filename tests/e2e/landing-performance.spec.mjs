@@ -7,6 +7,10 @@ async function dismissOnboarding(page) {
   }
 }
 
+async function waitForAppReady(page) {
+  await expect(page.locator('#app')).toHaveAttribute('data-app-ready', 'true', { timeout: 60000 });
+}
+
 test('landing paints before graph artifacts load', async ({ page }) => {
   const graphRequests = [];
   page.on('request', (request) => {
@@ -15,6 +19,7 @@ test('landing paints before graph artifacts load', async ({ page }) => {
   });
 
   await page.goto('/');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.locator('#page-title')).toBeVisible();
@@ -33,6 +38,7 @@ test('graph loads only after the user searches', async ({ page }) => {
   });
 
   await page.goto('/');
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   expect(graphRequests).toHaveLength(0);
 
