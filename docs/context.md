@@ -29,8 +29,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 ## Next Sequence
 
 1. Complete Epic 0 closeout with a fresh live Pages audit against the deployed shell.
-2. Extend the data normalization pipeline without changing the adopted runtime artifact contract.
-3. Extend the Library Browser and Crosswalk Workbench using current static bundles and browser runtime patterns.
-4. Add client-side blank template generation.
-5. Build Start Here, glossary, and pattern surfaces.
-6. Finish accessibility, release, and SecDevOps hardening.
+2. Extend the data normalization pipeline (Epic 1) without changing the adopted runtime artifact contract.
+3. Extend the Library Browser (Epic 2) and Crosswalk Workbench (Epic 3) using current static bundles and browser runtime patterns.
+4. Add client-side blank template generation (Epic 4).
+5. Build Start Here, glossary, and pattern surfaces (Epic 5).
+6. Finish QA, accessibility, release, and SecDevOps hardening (Epic 6).

@@ -70,6 +70,7 @@ test('DISA XCCDF parser normalizes STIG rules with required Epic 2 fields', () =
     type: 'stig_rule',
     title: 'Configure account management',
     description: 'Accounts must be managed.',
+    plain_language_summary: 'STIG Rule: Ensure accounts must be managed.',
     severity: 'medium',
     rule_id: 'SV-100001r1_rule',
     vuln_id: 'V-100001',

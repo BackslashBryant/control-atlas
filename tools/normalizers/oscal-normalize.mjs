@@ -7,6 +7,23 @@ const MAX_DESCRIPTION = 1200;
 const ASSESSMENT_SOURCE_KEY = 'nist-800-53a-assessment-procedures';
 const SUPPORTED_OSCAL_MODELS = ['catalog', 'profile', 'component-definition', 'assessment-plan'];
 
+function recordPlainLanguageSummary(title, description) {
+  const desc = description || title || '';
+  let summary = desc
+    .replace(/^The organization\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits)\s+/i, 'Ensure we ')
+    .replace(/^The information system\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits|enforces|uniquely identifies|authenticates|records|generates|protects|detects)\s+/i, 'The system must ')
+    .trim();
+  summary = summary.charAt(0).toUpperCase() + summary.slice(1);
+  const firstSentenceEnd = summary.indexOf('. ');
+  if (firstSentenceEnd !== -1) {
+    summary = summary.slice(0, firstSentenceEnd + 1);
+  }
+  if (summary.length > 200) {
+    summary = summary.slice(0, 197) + '...';
+  }
+  return summary || `Verify requirements for ${title}`;
+}
+
 function cleanText(value) {
   return String(value || '')
     .replace(/\{\{[^}]+\}\}/g, '')
@@ -135,13 +152,15 @@ function walk80053(nodes, familyTitle, records, sourceKey) {
     if (!node.id) continue;
     if (cls === 'SP800-53' || cls === 'SP800-53-enhancement') {
       const assessment = buildAssessmentMetadata(node);
+      const desc = descriptionFromControl(node);
       records.push({
         id: normalize80053Id(node.id),
         type: '800-53-control',
         framework: '800-53',
         title: node.title || normalize80053Id(node.id),
         family: family || 'General',
-        description: descriptionFromControl(node),
+        description: desc,
+        plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
         source: { key: sourceKey },
         metadata: assessment ? { assessment } : undefined,
       });
@@ -167,12 +186,14 @@ function walkCsf(nodes, records) {
     if (node.controls) walkCsf(node.controls, records);
     if (node.groups) walkCsf(node.groups, records);
     if (node.class === 'subcategory' && node.id) {
+      const desc = descriptionFromControl(node);
       records.push({
         id: node.id,
         type: 'csf-subcategory',
         framework: 'csf',
         title: node.title || node.id,
-        description: descriptionFromControl(node),
+        description: desc,
+        plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
       });
     }
   }
@@ -198,13 +219,15 @@ function walk800171(nodes, familyTitle, records) {
     if (node.groups) walk800171(node.groups, family, records);
     if (node.class === 'requirement' && node.id) {
       const id = normalize800171Id(node.id);
+      const desc = descriptionFromControl(node);
       records.push({
         id,
         type: '800-171-requirement',
         framework: '800-171',
         title: node.title || id,
         family: family || 'Requirements',
-        description: descriptionFromControl(node),
+        description: desc,
+        plain_language_summary: recordPlainLanguageSummary(node.title || id, desc),
       });
     }
   }
@@ -270,14 +293,19 @@ export function parse800171CsvCatalog(csvText, sourceKey) {
 
   const records = rows
     .filter((row) => row[identifierColumn])
-    .map((row) => ({
-      id: normalize800171Id(row[identifierColumn]),
-      type: '800-171-requirement',
-      framework: '800-171',
-      title: normalize800171Id(row[identifierColumn]),
-      family: cleanText(row[familyColumn]) || 'Requirements',
-      description: cleanText([row[requirementColumn], row[discussionColumn]].filter(Boolean).join(' ')),
-    }));
+    .map((row) => {
+      const desc = cleanText([row[requirementColumn], row[discussionColumn]].filter(Boolean).join(' '));
+      const id = normalize800171Id(row[identifierColumn]);
+      return {
+        id,
+        type: '800-171-requirement',
+        framework: '800-171',
+        title: id,
+        family: cleanText(row[familyColumn]) || 'Requirements',
+        description: desc,
+        plain_language_summary: recordPlainLanguageSummary(id, desc),
+      };
+    });
 
   return {
     schema_version: '1.0',
@@ -293,13 +321,15 @@ function walk800172(nodes, familyTitle, records) {
     if (node.groups) walk800172(node.groups, family, records);
     if (node.class === 'security_requirement' && node.id) {
       const id = normalize800172Id(node.id);
+      const desc = descriptionFromControl(node);
       records.push({
         id,
         type: '800-172-requirement',
         framework: '800-172',
         title: node.title || id,
         family: family || 'Requirements',
-        description: descriptionFromControl(node),
+        description: desc,
+        plain_language_summary: recordPlainLanguageSummary(node.title || id, desc),
       });
     }
   }

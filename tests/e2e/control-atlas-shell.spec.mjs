@@ -22,6 +22,12 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the right public entry point before diving into the graph' })).toBeVisible();
+  await page.selectOption('#sh-system-type', 'Cloud SaaS');
+  await page.selectOption('#sh-data-sensitivity', 'Moderate');
+  await page.selectOption('#sh-environment', 'CSP');
+  await page.getByRole('button', { name: 'Get Recommendations', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Your public reference pathway' })).toBeVisible();
+  await expect(page.getByText('Suggested Frameworks & Baselines')).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
   await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });

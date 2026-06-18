@@ -93,6 +93,29 @@ function assessmentNodeId(recordId) {
   return nodeId('nist-800-53a', recordId);
 }
 
+function generatePlainLanguageSummary(node) {
+  if (node.plain_language_summary) return node.plain_language_summary;
+  const title = node.metadata?.title || node.label || node.id;
+  const desc = node.metadata?.description || '';
+  if (!desc) {
+    return `Ensure compliance with the requirements of ${title}.`;
+  }
+  let summary = desc
+    .replace(/<[^>]+>/g, '')
+    .replace(/^The organization\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits)\s+/i, 'Ensure we ')
+    .replace(/^The information system\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits|enforces|uniquely identifies|authenticates|records|generates|protects|detects)\s+/i, 'The system must ')
+    .trim();
+  summary = summary.charAt(0).toUpperCase() + summary.slice(1);
+  const firstSentenceEnd = summary.indexOf('. ');
+  if (firstSentenceEnd !== -1) {
+    summary = summary.slice(0, firstSentenceEnd + 1);
+  }
+  if (summary.length > 200) {
+    summary = summary.slice(0, 197) + '...';
+  }
+  return summary || `Verify compliance requirements for ${title}`;
+}
+
 function pushEligibleNode(state, registry, node, sourceId) {
   const source = registry.byId.get(sourceId);
   if (!source?.graph_eligible) {
@@ -105,6 +128,9 @@ function pushEligibleNode(state, registry, node, sourceId) {
       message: `Node ${node.id} was not published because its defining source is not graph eligible.`,
     });
     return;
+  }
+  if (!node.plain_language_summary) {
+    node.plain_language_summary = generatePlainLanguageSummary(node);
   }
   state.nodes.push(node);
 }
@@ -178,6 +204,7 @@ function buildNodes(registry) {
         label: record.title ? `${record.id} ${record.title}` : String(record.id),
         source_id: sourceId,
         lifecycle_status: record.status === 'deprecated' ? 'deprecated' : 'active',
+        plain_language_summary: record.plain_language_summary || null,
         metadata: {
           catalog_id: catalogId,
           item_id: record.id,
@@ -259,6 +286,31 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
 
   const edgeId = `edge:${payload.subjectId}`;
   const evidenceId = `evidence:${payload.subjectId}`;
+  const publicationStatus = payload.publicationStatus || 'published';
+  const provenanceClass = payload.provenanceClass || source.provenance_class;
+
+  let rationaleVal = payload.rationale || '';
+  let warningVal = payload.warning || null;
+  let ruleIdVal = payload.inferenceRuleId || null;
+
+  if (publicationStatus === 'candidate' || provenanceClass === 'inferred') {
+    if (!ruleIdVal) ruleIdVal = 'inferred-mapping-rule';
+    if (!warningVal) warningVal = 'Candidate relationship inferred from adjacent metadata.';
+    if (!rationaleVal) {
+      rationaleVal = `Inferred relationship between ${payload.sourceNodeId} and ${payload.targetNodeId}.`;
+    }
+  }
+
+  const plainLanguageRationale = payload.plainLanguageRationale || rationaleVal || `This connection maps ${payload.sourceNodeId.split(':').pop()} to ${payload.targetNodeId.split(':').pop()} based on public ${source.name} specifications.`;
+  
+  const sourceRefs = payload.sourceRefs || [
+    {
+      source_id: payload.sourceId,
+      ref_type: payload.evidenceQuality || 'primary',
+      locator: payload.locator || `${payload.sourceId}#relationship`,
+    }
+  ];
+
   state.evidence.push({
     id: evidenceId,
     source_id: payload.sourceId,
@@ -268,19 +320,22 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     checksum: payload.checksum || source.checksum,
     evidence_quality: payload.evidenceQuality || 'primary',
   });
+
   state.edges.push({
     id: edgeId,
     source_node_id: payload.sourceNodeId,
     target_node_id: payload.targetNodeId,
     relationship_type: payload.relationshipType,
-    provenance_class: payload.provenanceClass || source.provenance_class,
-    confidence: payload.confidence || 'direct',
-    publication_status: payload.publicationStatus || 'published',
+    provenance_class: provenanceClass,
+    confidence: payload.confidence || (publicationStatus === 'candidate' ? 'inferred_high' : 'direct'),
+    publication_status: publicationStatus,
     evidence_ids: [evidenceId],
     display_label: payload.displayLabel || `${payload.sourceNodeId} ${payload.relationshipType} ${payload.targetNodeId}`,
-    warning: payload.warning || null,
-    inference_rule_id: payload.inferenceRuleId || null,
-    rationale: payload.rationale || '',
+    warning: warningVal,
+    inference_rule_id: ruleIdVal,
+    rationale: rationaleVal,
+    plain_language_rationale: plainLanguageRationale,
+    source_refs: sourceRefs,
   });
 }
 

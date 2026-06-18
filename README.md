@@ -2,21 +2,42 @@
 
 **Ctrl+Alt+Comply**
 
-**The public map for federal cyber compliance.**
+The public map for federal cyber compliance.
 
-Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.
+Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates. This is a public-data-only application.
 
-Control Atlas is a static, open-source, public-data-only reference workbench built on the adopted Control Atlas implementation baseline. It helps practitioners browse public federal and DoD compliance references, inspect provenance-aware relationships, compare frameworks and baselines, and prepare blank planning templates locally in the browser.
+Control Atlas translates federal security frameworks, controls, STIGs, and
+RMF artifacts into plain language — connecting what things mean, how they
+relate, and what to do next. Built for small teams without dedicated
+compliance staff.
 
-The repository and package identity now align with Control Atlas. Epic 0 preserves the current static runtime contract while removing the old GovFrame compatibility stance from active product surfaces.
+Uses public NIST, DISA, FedRAMP, MITRE, and CISA data only.
+No login. No evidence upload. No organizational data stored.
 
+## What it does
+
+- Translates controls, STIGs, and compliance terms into plain language
+- Shows how frameworks, baselines, and requirements connect
+- Traces every mapping back to its public source
+- Generates blank RMF/ATO planning templates in your browser
+- Guides you to the right starting point for your system type
+
+## What it does not do
+
+- Ingest evidence or process authorization packages
+- Store user, organization, or system data
+- Connect to eMASS, STIG Manager, or any operational system
+- Determine compliance status or recommend authorization decisions
+- Replace an assessor, ISSO, or AO
+
+## Not an official government system. All mappings and templates are reference aids based on public sources.
+
+This application has no backend.
+
+---
+
+## Live Site
 Live site target: https://backslashbryant.github.io/control-atlas/
-
-## Product Boundary
-
-Control Atlas may normalize public sources at build time, publish static public data bundles, surface provenance-aware mappings, and generate blank/public-reference outputs entirely in the browser.
-
-Control Atlas does not ingest evidence, accept user uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login. It has no backend.
 
 ## Current Reusable Foundation
 
@@ -41,7 +62,3 @@ npm run audit:coverage
 npm run verify:public
 npm run precommit
 ```
-
-## Disclaimer
-
-Control Atlas is an open-source reference tool. It is not an official government system and does not make authorization, compliance, assessment, or risk acceptance decisions. Mappings and templates are reference aids only. Official decisions remain with the applicable Authorizing Official, agency, or program office.

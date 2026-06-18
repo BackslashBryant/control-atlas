@@ -1,3 +1,5 @@
+import MiniSearch from '../lib/minisearch.js';
+
 function normalize(value) {
   return String(value || '').trim().toLowerCase();
 }
@@ -77,6 +79,22 @@ export function createFederalGraphRuntime(dataset) {
   const edgeById = new Map(dataset.edges.map((edge) => [edge.id, edge]));
   const libraryDocuments = dataset.librarySearch?.documents || [];
   const libraryDocumentById = new Map(libraryDocuments.map((entry) => [entry.id, entry]));
+
+  let miniSearch = null;
+  if (dataset.librarySearch?.serialized_index) {
+    try {
+      miniSearch = /** @type {any} */ (MiniSearch).loadJSON(dataset.librarySearch.serialized_index, {
+        fields: ['item_id', 'title', 'description'],
+        storeFields: ['id'],
+        searchOptions: {
+          prefix: true,
+          boost: { item_id: 5, title: 3, description: 1 },
+        },
+      });
+    } catch (err) {
+      console.warn('Failed to load MiniSearch index:', err);
+    }
+  }
   const catalogs = [...new Set(dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean))]
     .sort()
     .map((id) => ({
@@ -134,6 +152,7 @@ export function createFederalGraphRuntime(dataset) {
     confidence: edge.confidence,
     publication_status: edge.publication_status,
     rationale: edge.rationale || '',
+    plain_language_rationale: edge.plain_language_rationale || '',
     warning: edge.warning || '',
     inference_rule_id: edge.inference_rule_id || '',
     source_refs: resolveSourceRefs(edge),
@@ -243,9 +262,26 @@ export function createFederalGraphRuntime(dataset) {
     searchNodes(query, filters = {}) {
       const needle = normalize(query);
       if (!needle) return [];
+      const nodeMatchesFilter = (node) =>
+        (!filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
+        && (!filters.node_type || node.node_type === filters.node_type);
+
+      const exactMatches = dataset.nodes
+        .filter((node) => nodeMatchesFilter(node) && (normalize(node.metadata?.item_id) === needle || normalize(node.id) === needle));
+      if (exactMatches.length > 0) {
+        return exactMatches;
+      }
+
+      if (miniSearch) {
+        const results = miniSearch.search(query);
+        return results
+          .map((result) => nodeById.get(result.id))
+          .filter((node) => node && nodeMatchesFilter(node))
+          .slice(0, 100);
+      }
+
       return dataset.nodes
-        .filter((node) => !filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
-        .filter((node) => !filters.node_type || node.node_type === filters.node_type)
+        .filter(nodeMatchesFilter)
         .map((node) => {
           const itemId = normalize(node.metadata?.item_id);
           const label = normalize(node.label);
@@ -261,13 +297,21 @@ export function createFederalGraphRuntime(dataset) {
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
       const candidates = libraryDocuments.filter((document) => matchesLibraryFacet(document, filters));
-      const exactMatches = needle
-        ? candidates.filter((document) => normalize(document.item_id) === needle)
-        : [];
-      if (exactMatches.length) return exactMatches;
+      if (!needle) return candidates;
+
+      const exactMatches = candidates.filter((document) => normalize(document.item_id) === needle || normalize(document.id) === needle);
+      if (exactMatches.length > 0) return exactMatches;
+
+      if (miniSearch) {
+        const results = miniSearch.search(query);
+        return results
+          .map((result) => libraryDocumentById.get(result.id))
+          .filter((doc) => doc && matchesLibraryFacet(doc, filters))
+          .slice(0, 100);
+      }
+
       return candidates
         .map((document) => {
-          if (!needle) return { document, score: 0 };
           const itemId = normalize(document.item_id);
           const title = normalize(document.title);
           const description = normalize(document.description);
@@ -338,7 +382,7 @@ export function createFederalGraphRuntime(dataset) {
       if (format === 'json') return exportJson(rows);
       if (format === 'markdown') {
         return exportMarkdownTable(
-          ['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Source references'],
+          ['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Plain-Language Rationale', 'Source references'],
           rows.map((row) => [
             row.from_item_id,
             row.to_item_id,
@@ -346,11 +390,12 @@ export function createFederalGraphRuntime(dataset) {
             row.provenance_class,
             row.confidence,
             row.rationale,
+            row.plain_language_rationale,
             row.source_refs.map(sourceRefLabel).join('; '),
           ]),
         );
       }
-      const csvRows = [['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Source references']];
+      const csvRows = [['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Plain-Language Rationale', 'Source references']];
       for (const row of rows) {
         csvRows.push([
           row.from_item_id,
@@ -359,6 +404,7 @@ export function createFederalGraphRuntime(dataset) {
           row.provenance_class,
           row.confidence,
           row.rationale,
+          row.plain_language_rationale,
           row.source_refs.map(sourceRefLabel).join(' | '),
         ]);
       }
@@ -746,7 +792,20 @@ export function parseViewState(searchParams) {
       ...(framework !== null ? { framework } : {})
     };
   }
-  if (view === 'start-here') return { ...base, view };
+  if (view === 'start-here') {
+    const step = params.get('step');
+    const systemType = params.get('systemType');
+    const dataSensitivity = params.get('dataSensitivity');
+    const environment = params.get('environment');
+    return {
+      ...base,
+      view,
+      ...(step ? { step } : {}),
+      ...(systemType ? { systemType } : {}),
+      ...(dataSensitivity ? { dataSensitivity } : {}),
+      ...(environment ? { environment } : {}),
+    };
+  }
   return {
     ...base,
     view: 'search',
@@ -812,7 +871,16 @@ export function normalizeViewState(view, state = {}) {
       ...(state.framework ? { framework: state.framework } : {})
     };
   }
-  if (view === 'start-here') return { ...base, view };
+  if (view === 'start-here') {
+    return {
+      ...base,
+      view,
+      ...(state.step ? { step: state.step } : {}),
+      ...(state.systemType ? { systemType: state.systemType } : {}),
+      ...(state.dataSensitivity ? { dataSensitivity: state.dataSensitivity } : {}),
+      ...(state.environment ? { environment: state.environment } : {}),
+    };
+  }
   return {
     ...base,
     view: 'search',
@@ -868,6 +936,10 @@ export function serializeViewState(state) {
     if (state.framework) params.set('framework', state.framework);
   } else if (view === 'start-here') {
     params.set('view', view);
+    if (state.step) params.set('step', state.step);
+    if (state.systemType) params.set('systemType', state.systemType);
+    if (state.dataSensitivity) params.set('dataSensitivity', state.dataSensitivity);
+    if (state.environment) params.set('environment', state.environment);
   } else if (state.query || state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity) {
     params.set('view', 'search');
     if (state.query) params.set('q', state.query);

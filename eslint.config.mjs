@@ -12,6 +12,7 @@ export default [
       'docs/**',
       'maps/**',
       'lib/**',
+      'src/lib/**',
       'app/**',
       'styles/**',
     ],

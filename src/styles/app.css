@@ -426,6 +426,60 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   border: 1px solid rgba(20, 35, 31, 0.2);
 }
 
+.badge-provenance-mandated {
+  background: hsla(220, 90%, 60%, 0.12) !important;
+  color: hsl(220, 90%, 65%) !important;
+  border: 1px solid hsla(220, 90%, 60%, 0.3) !important;
+}
+.badge-provenance-federal_published {
+  background: hsla(180, 80%, 45%, 0.12) !important;
+  color: hsl(180, 80%, 50%) !important;
+  border: 1px solid hsla(180, 80%, 45%, 0.3) !important;
+}
+.badge-provenance-federal_program {
+  background: hsla(260, 70%, 60%, 0.12) !important;
+  color: hsl(260, 70%, 65%) !important;
+  border: 1px solid hsla(260, 70%, 60%, 0.3) !important;
+}
+.badge-provenance-federal_utilized {
+  background: hsla(140, 70%, 50%, 0.12) !important;
+  color: hsl(140, 70%, 50%) !important;
+  border: 1px solid hsla(140, 70%, 50%, 0.3) !important;
+}
+.badge-provenance-federal_referenced {
+  background: hsla(200, 60%, 50%, 0.12) !important;
+  color: hsl(200, 60%, 55%) !important;
+  border: 1px solid hsla(200, 60%, 50%, 0.3) !important;
+}
+.badge-provenance-inferred {
+  background: hsla(35, 90%, 50%, 0.1) !important;
+  color: hsl(35, 90%, 55%) !important;
+  border: 1px solid hsla(35, 90%, 50%, 0.3) !important;
+}
+
+.summary-card {
+  margin: 1.25rem 0;
+  padding: 1.25rem;
+  background: rgba(34, 211, 238, 0.06);
+  border-left: 4px solid var(--ca-secondary);
+  border-radius: 4px;
+}
+.summary-card-title {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ca-secondary);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.summary-card p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+
 /* Header buttons */
 .header-actions {
   display: flex;
