@@ -4,6 +4,8 @@ import { glossaryData } from './glossary-data.mjs';
 import { patternsData } from './patterns-data.mjs';
 import { pageIntros } from '../content/pageIntros.mjs';
 import { contextSectionHeading, displayNameFor, userFacingLoadError } from './display-names.mjs';
+import { relationshipLabelMap, trustLabelMap, evidenceLabelMap, trustDescriptionMap, evidenceDescriptionMap } from '../content/copy.mjs';
+import { groupRelationships } from './relationship-groups.mjs';
 
 const app = /** @type {HTMLElement} */ (document.querySelector('#app'));
 const navButtons = [.../** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('nav [data-view]'))];
@@ -22,11 +24,11 @@ const heroWords = [
 ];
 
 const UI_LABELS = {
-  sourceBasis: { plain: 'How we know', technical: 'Source basis' },
-  relationshipType: { plain: 'Connection type', technical: 'Relationship type' },
-  confidence: { plain: 'Match strength', technical: 'Confidence' },
-  evidenceStrength: { plain: 'Source quality', technical: 'Evidence strength' },
-  locator: { plain: 'Where to find it', technical: 'Locator' },
+  sourceBasis: { plain: 'Source basis', technical: 'Source basis' },
+  relationshipType: { plain: 'Connection', technical: 'Relationship type' },
+  confidence: { plain: 'Trust level', technical: 'Confidence' },
+  evidenceStrength: { plain: 'Source support', technical: 'Evidence strength' },
+  locator: { plain: 'Source location', technical: 'Locator' },
   useStatus: { plain: 'Included in map', technical: 'Use status' },
   sourceClass: { plain: 'Source type', technical: 'Source class' },
   relatedItem: { plain: 'Connected item', technical: 'Connected item' },
@@ -117,7 +119,7 @@ async function ensureGraph() {
 
 async function withGraph(render) {
   try {
-    if (!runtime) app.innerHTML = '<div class="loading-card">Loading the library...</div>';
+    if (!runtime) app.innerHTML = '<div class="loading-card">Loading public mappings. This may take a few seconds...</div>';
     await ensureGraph();
     await render();
   } catch (error) {
@@ -307,15 +309,17 @@ function libraryFilterMarkup(state) {
   return `
     <div class="relationship-filter-grid">
       <div class="field">
-        <label for="search-catalog">Catalog filter</label>
+        <label for="search-catalog">Catalog</label>
         <select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(state.filter || '')}</select>
       </div>
       <div class="field">
-        <label for="library-object-type-filter">Object type</label>
-        <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', noviceMode ? 'All item kinds' : 'All object types', 'object_type')}</select>
+        <label for="library-object-type-filter">Item type</label>
+        <p class="field-hint muted" style="font-size: 0.85em; margin: 0 0 4px 0;">Filter by controls, procedures, mappings, baselines, or other reference items.</p>
+        <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', noviceMode ? 'All item types' : 'All object types', 'object_type')}</select>
       </div>
       <div class="field">
-        <label for="library-source-class-filter">${uiLabel('sourceClass')}</label>
+        <label for="library-source-class-filter">${noviceMode ? 'Source type' : uiLabel('sourceClass')}</label>
+        <p class="field-hint muted" style="font-size: 0.85em; margin: 0 0 4px 0;">Filter by the kind of public source behind the item.</p>
         <select id="library-source-class-filter">${optionMarkup(facets.sourceClasses, state.sourceClass || '', noviceMode ? 'All source types' : 'All source classes', 'provenance_class')}</select>
       </div>
       <div class="field">
@@ -357,14 +361,14 @@ async function renderSearch(state) {
         <section class="landing-walkthrough" aria-labelledby="walkthrough-heading">
           <h2 id="walkthrough-heading" class="visually-hidden">How to use Control Atlas</h2>
           <div class="learning-grid">
-            <p><strong>What this is</strong><br>Turns complex public guidance into plain connections you can trace and act on.</p>
-            <p><strong>Who it&apos;s for</strong><br>Small assessor, architect, and authorization teams without a dedicated compliance desk.</p>
-            <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare how frameworks relate with traceable sources. <span class="walkthrough-next">Open Crosswalks.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Confirm which public source backs each mapping before you trust it. <span class="walkthrough-next">Open Sources.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank RMF/ATO planning files locally — export only. <span class="walkthrough-next">Open Templates.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization patterns as reference examples. <span class="walkthrough-next">Open Patterns.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>New to the map? Get a guided first path for your role. <span class="walkthrough-next">Open Start Here.</span></button>
+            <p><strong>What this is</strong><br>Turn complex public cyber guidance into plain connections you can trace and act on.</p>
+            <p><strong>Who it&apos;s for</strong><br>Security, compliance, engineering, and assessment teams that need clarity without another compliance desk.</p>
+            <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, STIG, baseline, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare frameworks and see which requirements overlap. <span class="walkthrough-next">Open Crosswalks.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Check which public source supports a mapping before you rely on it. <span class="walkthrough-next">Open Sources.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank planning files for RMF, ATO, assessment, and ConMon work. <span class="walkthrough-next">Open Templates.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization and compliance patterns with practical examples. <span class="walkthrough-next">Open Patterns.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>Answer a few questions and get a recommended place to begin. <span class="walkthrough-next">Open Start Here.</span></button>
           </div>
         </section>
       </section>`;
@@ -438,12 +442,12 @@ function evidencePanel(edge) {
   const records = runtime.getEvidenceForEdge(edge.id);
   return records.map((record) => `
     <div class="evidence-summary-panel">
-      <h4>Evidence summary</h4>
+      <h4>Source support</h4>
       <ul>
-        <li><strong>${uiLabel('evidenceStrength')}:</strong> ${escapeHtml(displayNameFor('evidence_quality', record.evidence_quality))}</li>
+        <li><strong>Source support:</strong> ${escapeHtml(evidenceLabelMap[record.evidence_quality] || displayNameFor('evidence_quality', record.evidence_quality))}</li>
         <li><strong>Source:</strong> ${escapeHtml(record.source?.name || record.source_id)}</li>
-        <li><strong>${uiLabel('locator')}:</strong> ${escapeHtml(record.locator)}</li>
-        <li><strong>Retrieved:</strong> ${escapeHtml(record.retrieved_at)}</li>
+        <li><strong>Source location:</strong> ${escapeHtml(record.locator)}</li>
+        <li><strong>Checked on:</strong> ${escapeHtml(record.retrieved_at)}</li>
       </ul>
       ${record.source?.artifact_url ? `<a href="${escapeHtml(record.source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open official source document</a>` : ''}
     </div>`).join('');
@@ -460,17 +464,28 @@ function renderContextCards(title, entries, renderEntry) {
 }
 
 function contextCard(node, edge, extras = []) {
+  const connectionStr = relationshipLabelMap[edge.relationship_type] || 'Connected to';
+  const trustStr = trustDescriptionMap[edge.confidence] || 'The connection comes from a public mapping.';
+  const evidence = runtime.getEvidenceForEdge(edge.id)?.[0];
+  const checkedOn = evidence?.retrieved_at || 'unknown';
   return `
     <article class="mapping-card">
       <div class="badge-row">${sourceBadge(edge.provenance_class)}${publicationStatusBadge(edge.publication_status)}</div>
       <h4>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || '')}</h4>
-      <ul>
-        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
-        <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
-        <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
-        ${extras.join('')}
-      </ul>
-      ${evidencePanel(edge)}
+      ${noviceMode ? `
+        <p>${escapeHtml(connectionStr)} ${escapeHtml(node.metadata?.item_id || node.id)}. ${escapeHtml(trustStr)} Source checked on ${escapeHtml(checkedOn)}.</p>
+        ${extras.length ? `<ul>${extras.join('')}</ul>` : ''}
+      ` : ''}
+      <details class="advanced-details" ${noviceMode ? '' : 'open'}>
+        <summary>Advanced details</summary>
+        <ul>
+          <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
+          <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
+          <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
+          ${!noviceMode && extras.length ? extras.join('') : ''}
+        </ul>
+        ${evidencePanel(edge)}
+      </details>
       <button class="secondary" type="button" data-open-node="${escapeHtml(node.id)}">${connectedItemButtonLabel()}</button>
     </article>`;
 }
@@ -479,15 +494,27 @@ function assessmentProcedureCard(entry) {
   const objectives = entry.assessmentNode.metadata?.assessment_objectives || [];
   const methodDetails = entry.assessmentNode.metadata?.assessment_method_details || [];
   const objectGroups = entry.assessmentNode.metadata?.assessment_objects || [];
+  const connectionStr = relationshipLabelMap[entry.assessmentEdge.relationship_type] || 'Connected to';
+  const trustStr = trustDescriptionMap[entry.assessmentEdge.confidence] || 'The connection comes from a public mapping.';
+  const evidence = runtime.getEvidenceForEdge(entry.assessmentEdge.id)?.[0];
+  const checkedOn = evidence?.retrieved_at || 'unknown';
   return `
     <article class="mapping-card">
       <div class="badge-row">${sourceBadge(entry.assessmentEdge.provenance_class)}${publicationStatusBadge(entry.assessmentEdge.publication_status)}</div>
       <h4>${escapeHtml(entry.assessmentNode.metadata?.item_id || entry.assessmentNode.id)} - ${escapeHtml(entry.assessmentNode.metadata?.title || '')}</h4>
-      <ul>
-        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', entry.assessmentEdge.relationship_type))}</li>
-        <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
-        <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
-      </ul>
+      ${noviceMode ? `
+        <p>${escapeHtml(connectionStr)} ${escapeHtml(entry.assessmentNode.metadata?.item_id || entry.assessmentNode.id)}. ${escapeHtml(trustStr)} Source checked on ${escapeHtml(checkedOn)}.</p>
+        <ul>
+          <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
+          <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
+        </ul>
+      ` : `
+        <ul>
+          <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', entry.assessmentEdge.relationship_type))}</li>
+          <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
+          <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
+        </ul>
+      `}
       <details>
         <summary>Assessment objectives</summary>
         <ul>${objectives.map((objective) => `<li><strong>${escapeHtml(objective.label || objective.id || 'Objective')}</strong>: ${escapeHtml(objective.prose || '')}</li>`).join('') || '<li>No source-backed objectives available.</li>'}</ul>
@@ -500,7 +527,15 @@ function assessmentProcedureCard(entry) {
         <summary>Procedure text</summary>
         <p>${escapeHtml(entry.assessmentNode.metadata?.procedure_text || 'No source-backed procedure text available.')}</p>
       </details>
-      ${evidencePanel(entry.assessmentEdge)}
+      <details class="advanced-details" ${noviceMode ? '' : 'open'}>
+        <summary>Advanced mapping details</summary>
+        <ul>
+          <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', entry.assessmentEdge.relationship_type))}</li>
+          <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', entry.assessmentEdge.provenance_class))}</li>
+          <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', entry.assessmentEdge.confidence))}</li>
+        </ul>
+        ${evidencePanel(entry.assessmentEdge)}
+      </details>
       <button class="secondary" type="button" data-open-node="${escapeHtml(entry.assessmentNode.id)}">${connectedItemButtonLabel()}</button>
     </article>`;
 }
@@ -540,28 +575,20 @@ async function renderDetail(nodeId, filters = {}) {
           <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">${connectedItemButtonLabel()}</button>
         </article>`;
     }).join('');
-    const additionalRelationshipCards = visibleEdges
-      .filter((edge) => !consumedEdgeIds.has(edge.id))
-      .map((edge) => {
-        const counterpartId = edge.source_node_id === node.id ? edge.target_node_id : edge.source_node_id;
-        const counterpart = runtime.getNode(counterpartId);
-        return `
-          <article class="mapping-card">
-            <div class="badge-row">${sourceBadge(edge.provenance_class)}${publicationStatusBadge(edge.publication_status)}</div>
-            <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
-            <ul>
-              <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(displayNameFor('relationship_type', edge.relationship_type))}</li>
-              <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(displayNameFor('provenance_class', edge.provenance_class))}</li>
-              <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(displayNameFor('confidence', edge.confidence))}</li>
-            </ul>
-            ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
-            ${evidencePanel(edge)}
-            <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">${connectedItemButtonLabel()}</button>
-          </article>`;
-      }).join('');
+    const unconsumedEdges = visibleEdges.filter((edge) => !consumedEdgeIds.has(edge.id));
+    const groupedRelationships = groupRelationships(unconsumedEdges, node.id, runtime);
+    const additionalRelationshipCards = groupedRelationships.map(group => `
+      <details class="relationship-group" open>
+        <summary>${escapeHtml(group.label)} <span class="badge">${group.items.length}</span></summary>
+        <p class="muted" style="margin: 4px 0 16px 0; font-size: 0.9em;">${escapeHtml(group.description)}</p>
+        <div class="stack">
+          ${group.items.map(({edge, counterpart}) => contextCard(counterpart, edge)).join('')}
+        </div>
+      </details>
+    `).join('');
 
     const additionalRelationshipMarkup = filters.relationshipView === 'table'
-      ? relationshipTable(visibleEdges.filter((edge) => !consumedEdgeIds.has(edge.id)), node.id)
+      ? relationshipTable(unconsumedEdges, node.id)
       : additionalRelationshipCards || '<p class="notice">No additional displayable relationships are known.</p>';
 
     app.innerHTML = `
@@ -573,26 +600,37 @@ async function renderDetail(nodeId, filters = {}) {
             <p class="eyebrow">${filters.libraryMode ? (noviceMode ? 'What this is' : 'Item detail') : (noviceMode ? 'How this connects' : 'Mapped context')}</p>
             <h2 tabindex="-1">${escapeHtml(node.metadata.title)}</h2>
             <p class="item-id">${escapeHtml(node.metadata.item_id)}</p>
-            <p class="workbench-card-meta">Object type: ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
-            <p class="workbench-card-meta">Defining source: ${escapeHtml(definingSource?.name || node.source_id)}  -  Version: ${escapeHtml(definingSource?.version || 'unknown')}</p>
+            
             ${node.plain_language_summary ? `
               <div class="summary-card">
                 <span class="summary-card-title">Plain-Language Summary</span>
                 <p>${escapeHtml(node.plain_language_summary)}</p>
               </div>
             ` : ''}
+            ${node.metadata.why_it_matters ? `
+              <div class="summary-card">
+                <span class="summary-card-title">Why it matters</span>
+                <p>${escapeHtml(node.metadata.why_it_matters)}</p>
+              </div>
+            ` : ''}
             <p>${escapeHtml(node.metadata.description || 'No public description available.')}</p>
             ${definingSource?.artifact_url ? `<p><a href="${escapeHtml(definingSource.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a></p>` : ''}
             ${filters.libraryMode ? '<button class="secondary" id="copy-library-link" type="button">Copy link</button>' : ''}
-            <details>
-              <summary>Main source</summary>
-              <p>${escapeHtml(definingSource?.name || 'Source name unavailable')}  -  ${uiLabel('useStatus')}: ${escapeHtml(displayNameFor('eligibility_status', definingSource?.eligibility_status || 'unknown'))}  -  Status: ${escapeHtml(displayNameFor('lifecycle_status', definingSource?.lifecycle_status || 'unknown'))}</p>
-              ${definingSource ? `
-                <div class="source-trace-actions">
-                  <button class="secondary" type="button" data-open-source="${escapeHtml(definingSource.id)}">Open source info</button>
-                </div>
-                ${sourceWarningMarkup(definingSource)}
-              ` : ''}
+            
+            <details class="advanced-details" ${noviceMode ? '' : 'open'}>
+              <summary>Advanced details</summary>
+              <p class="workbench-card-meta">Object type: ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
+              <p class="workbench-card-meta">Defining source: ${escapeHtml(definingSource?.name || node.source_id)}  -  Version: ${escapeHtml(definingSource?.version || 'unknown')}</p>
+              <details>
+                <summary>Main source</summary>
+                <p>${escapeHtml(definingSource?.name || 'Source name unavailable')}  -  ${uiLabel('useStatus')}: ${escapeHtml(displayNameFor('eligibility_status', definingSource?.eligibility_status || 'unknown'))}  -  Status: ${escapeHtml(displayNameFor('lifecycle_status', definingSource?.lifecycle_status || 'unknown'))}</p>
+                ${definingSource ? `
+                  <div class="source-trace-actions">
+                    <button class="secondary" type="button" data-open-source="${escapeHtml(definingSource.id)}">Open source info</button>
+                  </div>
+                  ${sourceWarningMarkup(definingSource)}
+                ` : ''}
+              </details>
             </details>
           </article>
           ${isControl ? `
@@ -1182,8 +1220,8 @@ function renderStartHere(state = currentState) {
   app.innerHTML = `
     <section class="panel start-here-flow">
       <p class="eyebrow">Start Here</p>
-      <h2>Find your first path through the library</h2>
-      <p>Answer three questions to get reference recommendation links to relevant library objects, templates, and patterns. No data leaves your browser.</p>
+      <h2>Find the best place to start</h2>
+      <p>Answer three questions to get a recommended place to begin navigating the library, patterns, and templates. No data leaves your browser.</p>
 
       <form id="start-here-form" class="template-builder" style="margin-top: 1.5rem;">
         <div class="form-group" style="margin-bottom: 1rem;">
@@ -1536,7 +1574,16 @@ function renderRetired(state) {
 async function renderState(state) {
   currentState = state;
   if (state.view !== 'search') workspace.removeAttribute('data-search-active');
-  navButtons.forEach((button) => button.toggleAttribute('aria-current', button.dataset.view === state.view));
+  navButtons.forEach((button) => {
+    const isActive = button.dataset.view === state.view;
+    if (isActive) {
+      button.setAttribute('aria-current', 'page');
+      button.classList.add('active');
+    } else {
+      button.removeAttribute('aria-current');
+      button.classList.remove('active');
+    }
+  });
   if (state.view === 'matrix') await renderMatrix(state);
   else if (state.view === 'library-detail') await renderLibraryDetail(state);
   else if (state.view === 'browse') await renderBrowse(state);
@@ -1573,13 +1620,9 @@ function showOnboardingOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboarding-overlay';
-  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Welcome to Control Atlas</h2><p>We translate public security guidance into plain connections you can trace and act on — without storing your data.</p><p class="muted">New here? Start with a guided path for your system type.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start Here</button><button class="secondary" id="btn-onboarding-explore" type="button">Explore the library</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
+  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">See how public security guidance connects</h2><p>Control Atlas maps controls, frameworks, STIGs, baselines, and public guidance so you can see what connects, where the connection came from, and how strongly it is supported.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-explore" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
-  buttonBySelector('#btn-onboarding-start')?.addEventListener('click', () => {
-    overlay.remove();
-    void setView('start-here');
-  });
   buttonBySelector('#btn-onboarding-explore')?.addEventListener('click', () => {
     overlay.remove();
     void setView('search');
@@ -1588,7 +1631,7 @@ function showOnboardingOverlay() {
   overlay.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') close();
   });
-  buttonBySelector('#btn-onboarding-start')?.focus();
+  buttonBySelector('#btn-onboarding-explore')?.focus();
 }
 
 function toggleHelp() {

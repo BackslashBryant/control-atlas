@@ -4,8 +4,8 @@ export const pageIntros = {
     description: 'What: browse controls, frameworks, and source-backed links. Why: see what is officially mapped before you plan or assess. Next: search a control ID or open Start Here for a guided path.',
   },
   search: {
-    title: 'Search the public compliance library',
-    description: 'Search by control ID, CCI, title, or plain-language topic. Results show defining sources and how each item connects.',
+    title: 'Search the public reference library',
+    description: 'Find a control, CCI, STIG, baseline, assessment procedure, or topic. Results show what it connects to and where the information came from.',
   },
   matrix: {
     title: 'Compare frameworks with traceable sources',

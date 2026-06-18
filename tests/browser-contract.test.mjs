@@ -12,8 +12,8 @@ test('shell identifies Control Atlas and preserves core journeys', () => {
   assert.match(html, /The public map for federal cyber compliance/);
   assert.match(html, /Search controls, trace source-backed links/);
   assert.match(html, /Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF\/ATO templates/i);
-  assert.match(html, /does not make authorization, compliance, assessment, or risk acceptance decisions/i);
-  assert.match(html, /Official decisions remain with the applicable Authorizing Official, agency, or program office/i);
+  assert.match(html, /does not make compliance or authorization decisions/i);
+  assert.match(html, /Official decisions remain with your Authorizing Official/i);
   assert.match(html, /data-view="search"/);
   assert.match(html, /data-view="matrix"/);
   assert.match(html, /data-view="patterns"/);
@@ -45,7 +45,7 @@ test('application loads only the five federal graph artifacts', () => {
   assert.match(app, /displayNameFor/);
   assert.match(app, /templateDisplayName/);
   assert.match(app, /userFacingLoadError/);
-  assert.match(app, /Loading the library/);
+  assert.match(app, /Loading public mappings/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
     assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260614-1`));
   }
@@ -96,8 +96,8 @@ test('onboarding and accessible relationship alternatives remain available', () 
   assert.match(app, /onboarding-overlay/);
   assert.match(app, /btn-onboarding-skip/);
   assert.match(app, /setView\('search'\)/);
-  assert.match(app, /btn-onboarding-start/);
-  assert.match(app, /Welcome to Control Atlas/);
+  assert.match(app, /btn-onboarding-explore/);
+  assert.match(app, /See how public security guidance connects/);
   assert.match(app, /event\.key === 'Escape'/);
   assert.match(app, /How this connects/);
   assert.match(app, /aria-label="Relationship list"/);
@@ -222,8 +222,8 @@ test('translation principle copy avoids known anti-patterns', () => {
   assert.match(html, /Plain labels/);
   assert.doesNotMatch(app, /keeps meaning, source basis, confidence, and evidence strength separate/);
   assert.doesNotMatch(app, /Official and inferred mappings stay separate\. Published relationships remain primary/);
-  assert.match(app, /What this is:/);
-  assert.match(app, /Why it matters:/);
+  assert.match(app, /What this is/);
+  assert.match(app, /Why it matters/);
   assert.match(app, /Next step:/);
   assert.match(app, /pageIntros/);
 });
