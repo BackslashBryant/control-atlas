@@ -2,6 +2,7 @@ import { createFederalGraphRuntime, getFederalContext, normalizeViewState, parse
 import { generateTemplate } from './template-engine.mjs';
 import { glossaryData } from './glossary-data.mjs';
 import { patternsData } from './patterns-data.mjs';
+import { pageIntros } from '../content/pageIntros.mjs';
 
 const app = /** @type {HTMLElement} */ (document.querySelector('#app'));
 const navButtons = [.../** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('nav [data-view]'))];
@@ -11,12 +12,43 @@ let runtime = null;
 let graphLoadPromise = null;
 let currentState = { view: 'search' };
 let noviceMode = true;
+/** @type {Record<string, string>} */
+let templateDisplayNames = {};
 const heroWords = [
-  'Comply', 'Map', 'Assess', 'Crosswalk', 'Navigate', 'Inherit', 'Audit', 'Authorize',
-  'Trace', 'Compare', 'Baseline', 'Catalog', 'Validate', 'Document', 'Export', 'Discover',
-  'Reference', 'Scope', 'Review', 'Align', 'Implement', 'Monitor', 'Report', 'Template',
-  'Prioritize', 'Interpret', 'Decompose',
+  'Comply', 'Map', 'Trace', 'Compare', 'Navigate', 'Review', 'Plan', 'Export',
+  'Discover', 'Align', 'Prioritize', 'Understand', 'Connect', 'Act',
 ];
+
+const UI_LABELS = {
+  sourceBasis: { plain: 'How we know', technical: 'Source basis' },
+  relationshipType: { plain: 'Connection type', technical: 'Relationship type' },
+  confidence: { plain: 'Match strength', technical: 'Confidence' },
+  evidenceStrength: { plain: 'Source quality', technical: 'Evidence strength' },
+  locator: { plain: 'Where to find it', technical: 'Locator' },
+  useStatus: { plain: 'Included in map', technical: 'Use status' },
+  sourceClass: { plain: 'Source type', technical: 'Source class' },
+  relatedItem: { plain: 'Connected item', technical: 'Related node' },
+  officialRationale: { plain: 'Official wording', technical: 'Rationale' },
+  plainRationale: { plain: 'What it means', technical: 'Plain-Language Rationale' },
+};
+
+/** @param {keyof typeof UI_LABELS} key */
+function uiLabel(key) {
+  const entry = UI_LABELS[key];
+  return noviceMode ? entry.plain : entry.technical;
+}
+
+function connectedItemButtonLabel() {
+  return noviceMode ? 'View connected item' : 'Open connected item';
+}
+
+function templateDisplayName(templateId) {
+  return templateDisplayNames[templateId] || templateId.replaceAll('_', ' ');
+}
+
+function catalogDisplayName(catalogId) {
+  return runtime?.getCatalogs().find((catalog) => catalog.id === catalogId)?.name || catalogId;
+}
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
@@ -42,17 +74,21 @@ async function fetchCollection(path, collection) {
 }
 
 async function loadFederalGraph() {
-  const [sources, nodes, edges, evidence, findings, libraryArtifact] = await Promise.all([
+  const [sources, nodes, edges, evidence, findings, libraryArtifact, templateRegistry] = await Promise.all([
     fetchCollection('./data/generated/sources.json?v=20260614-1', 'sources'),
     fetchCollection('./data/generated/nodes.json?v=20260614-1', 'nodes'),
     fetchCollection('./data/generated/edges.json?v=20260614-1', 'edges'),
     fetchCollection('./data/generated/evidence.json?v=20260614-1', 'evidence'),
     fetchCollection('./data/generated/graph-health.json?v=20260614-1', 'findings'),
     fetchArtifact('./data/generated/library-search.json?v=20260615-1'),
+    fetchArtifact('./data/template-registry.json'),
   ]);
   if (libraryArtifact.schema_version !== '1.0' || !Array.isArray(libraryArtifact.library_search?.documents)) {
     throw new Error('Invalid library search artifact.');
   }
+  templateDisplayNames = Object.fromEntries(
+    (templateRegistry.templates || []).map((template) => [template.name, template.display_name]),
+  );
   runtime = createFederalGraphRuntime({
     sources,
     nodes,
@@ -87,8 +123,18 @@ async function withGraph(render) {
 }
 
 function catalogOptions(selected = '') {
-  return runtime.getCatalogs().map((catalog) =>
-    `<option value="${escapeHtml(catalog.id)}" ${catalog.id === selected ? 'selected' : ''}>${escapeHtml(catalog.name)}</option>`).join('');
+  // We don't include the fallback label here because callers often prepend their own `<option value="">`
+  // We'll pass an empty fallback and slice it out or let callers pass the fallback.
+  // Actually, wait, let's look at callers:
+  // `<select id="search-catalog"><option value="">All catalogs</option>${catalogOptions(state.filter || '')}</select>`
+  // `<select id="matrix-source">${catalogOptions(source)}</select>`
+  // Wait, optionObjectsMarkup automatically prepends `<option value="">fallbackLabel</option>`.
+  // I should just change `catalogOptions` to return the options without a fallback, or update the callers.
+  // The simplest way to get just the optgroups/options is to remove the fallback.
+  const options = runtime.getCatalogs().map(c => ({ value: c.id, label: c.name, group: c.display_group }));
+  const markup = optionObjectsMarkup(options, selected, '');
+  // Remove the empty fallback option that optionObjectsMarkup prepends: `<option value=""></option>`
+  return markup.replace('<option value=""></option>', '');
 }
 
 function sourceBadge(provenance) {
@@ -144,7 +190,7 @@ function sourceFilterMarkup(sources, filters = {}) {
         <select id="source-provenance-filter">${optionMarkup(provenances, filters.provenance, 'All source types')}</select>
       </div>
       <div class="field">
-        <label for="source-eligibility-filter">Use status</label>
+        <label for="source-eligibility-filter">${uiLabel('useStatus')}</label>
         <select id="source-eligibility-filter">${optionMarkup(eligibilities, filters.eligibility, 'All use statuses')}</select>
       </div>
       <div class="field">
@@ -192,15 +238,15 @@ function relationshipFilterMarkup(edges, filters = {}) {
   return `
     <div class="relationship-filter-grid">
       <div class="field">
-        <label for="relationship-type-filter">Relationship type</label>
+        <label for="relationship-type-filter">${uiLabel('relationshipType')}</label>
         <select id="relationship-type-filter">${optionMarkup(relationshipTypes, filters.relationshipType, 'All relationship types')}</select>
       </div>
       <div class="field">
-        <label for="provenance-filter">Source basis</label>
+        <label for="provenance-filter">${uiLabel('sourceBasis')}</label>
         <select id="provenance-filter">${optionMarkup(provenances, filters.provenance, 'All source basis types')}</select>
       </div>
       <div class="field">
-        <label for="confidence-filter">Confidence</label>
+        <label for="confidence-filter">${uiLabel('confidence')}</label>
         <select id="confidence-filter">${optionMarkup(confidences, filters.confidence, 'All confidence')}</select>
       </div>
     </div>
@@ -213,7 +259,7 @@ function relationshipFilterMarkup(edges, filters = {}) {
 function relationshipTable(edges, runtimeNodeLookupId) {
   return `
     <table class="relationship-table" aria-label="Table view">
-      <thead><tr><th>Related node</th><th>Relationship type</th><th>Source basis</th><th>Confidence</th></tr></thead>
+      <thead><tr><th>${uiLabel('relatedItem')}</th><th>${uiLabel('relationshipType')}</th><th>${uiLabel('sourceBasis')}</th><th>${uiLabel('confidence')}</th></tr></thead>
       <tbody>${edges.map((edge) => {
         const counterpartId = edge.source_node_id === runtimeNodeLookupId ? edge.target_node_id : edge.source_node_id;
         const counterpart = runtime.getNode(counterpartId);
@@ -262,7 +308,7 @@ function libraryFilterMarkup(state) {
         <select id="library-object-type-filter">${optionMarkup(facets.objectTypes, state.objectType || '', 'All object types')}</select>
       </div>
       <div class="field">
-        <label for="library-source-class-filter">Source class</label>
+        <label for="library-source-class-filter">${uiLabel('sourceClass')}</label>
         <select id="library-source-class-filter">${optionMarkup(facets.sourceClasses, state.sourceClass || '', 'All source classes')}</select>
       </div>
       <div class="field">
@@ -327,8 +373,8 @@ async function renderSearch(state) {
     app.innerHTML = `
       <section class="panel search-workbench" aria-labelledby="search-title">
         <p class="eyebrow">Library</p>
-        <h2 id="search-title">Search the public compliance map</h2>
-        <p>Search the public reference library by identifier, keyword, object type, source class, family, severity, or catalog.</p>
+        <h2 id="search-title">${escapeHtml(pageIntros.search.title)}</h2>
+        <p>${escapeHtml(pageIntros.search.description)}</p>
         <form id="search-form" class="search-controls">
           <div class="field"><label for="search-query">ID, title, or topic</label><input id="search-query" type="search" value="${escapeHtml(query)}" placeholder="AC-2, CCI-000225, account management"></div>
           <button class="primary" type="submit">Search</button>
@@ -337,7 +383,7 @@ async function renderSearch(state) {
         <div class="search-examples"><span class="label">Examples:</span><button class="chip" data-example="AC-2" type="button">AC-2</button><button class="chip" data-example="CCI-000225" type="button">CCI-000225</button></div>
         <p class="muted">${results.length} matching object${results.length === 1 ? '' : 's'} found.</p>
       </section>
-      <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : '<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p></div>'}</section>`;
+      <section class="results" id="library-results" aria-label="Search results">${results.length ? results.map(libraryResultCard).join('') : `<div class="notice"><h3>No results</h3><p>Try another identifier or adjust the filters.</p><p><button class="secondary" type="button" data-view-shortcut="sources">Check sources</button> <button class="secondary" type="button" data-view-shortcut="start-here">Start Here</button> if you&apos;re not sure where to begin.</p></div>`}</section>`;
 
     bindSearchForm();
     bindNodeButtons();
@@ -387,9 +433,9 @@ function evidencePanel(edge) {
     <div class="evidence-summary-panel">
       <h4>Evidence summary</h4>
       <ul>
-        <li><strong>Evidence strength:</strong> ${escapeHtml(record.evidence_quality)}</li>
+        <li><strong>${uiLabel('evidenceStrength')}:</strong> ${escapeHtml(record.evidence_quality)}</li>
         <li><strong>Source:</strong> ${escapeHtml(record.source?.name || record.source_id)}</li>
-        <li><strong>Locator:</strong> ${escapeHtml(record.locator)}</li>
+        <li><strong>${uiLabel('locator')}:</strong> ${escapeHtml(record.locator)}</li>
         <li><strong>Retrieved:</strong> ${escapeHtml(record.retrieved_at)}</li>
       </ul>
       ${record.source?.artifact_url ? `<a href="${escapeHtml(record.source.artifact_url)}" target="_blank" rel="noopener noreferrer">Open source artifact</a>` : ''}
@@ -412,13 +458,13 @@ function contextCard(node, edge, extras = []) {
       <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
       <h4>${escapeHtml(node.metadata?.item_id || node.id)} - ${escapeHtml(node.metadata?.title || '')}</h4>
       <ul>
-        <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-        <li><strong>Source basis:</strong> ${escapeHtml(edge.provenance_class)}</li>
-        <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
+        <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
+        <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
         ${extras.join('')}
       </ul>
       ${evidencePanel(edge)}
-      <button class="secondary" type="button" data-open-node="${escapeHtml(node.id)}">Open related node</button>
+      <button class="secondary" type="button" data-open-node="${escapeHtml(node.id)}">${connectedItemButtonLabel()}</button>
     </article>`;
 }
 
@@ -431,7 +477,7 @@ function assessmentProcedureCard(entry) {
       <div class="badge-row">${sourceBadge(entry.assessmentEdge.provenance_class)}<span class="badge">${escapeHtml(entry.assessmentEdge.publication_status)}</span></div>
       <h4>${escapeHtml(entry.assessmentNode.metadata?.item_id || entry.assessmentNode.id)} - ${escapeHtml(entry.assessmentNode.metadata?.title || '')}</h4>
       <ul>
-        <li><strong>Relationship type:</strong> ${escapeHtml(entry.assessmentEdge.relationship_type)}</li>
+        <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(entry.assessmentEdge.relationship_type)}</li>
         <li><strong>Assessment methods:</strong> ${escapeHtml((entry.assessmentNode.metadata?.assessment_methods || []).join(', ') || 'None listed')}</li>
         <li><strong>Assessment objects:</strong> ${escapeHtml(objectGroups.flat().join('; ') || 'None listed')}</li>
       </ul>
@@ -448,7 +494,7 @@ function assessmentProcedureCard(entry) {
         <p>${escapeHtml(entry.assessmentNode.metadata?.procedure_text || 'No source-backed procedure text available.')}</p>
       </details>
       ${evidencePanel(entry.assessmentEdge)}
-      <button class="secondary" type="button" data-open-node="${escapeHtml(entry.assessmentNode.id)}">Open related node</button>
+      <button class="secondary" type="button" data-open-node="${escapeHtml(entry.assessmentNode.id)}">${connectedItemButtonLabel()}</button>
     </article>`;
 }
 
@@ -478,13 +524,13 @@ async function renderDetail(nodeId, filters = {}) {
           <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
           <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
           <ul>
-            <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-            <li><strong>Source basis:</strong> ${escapeHtml(edge.provenance_class)}</li>
-            <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+            <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
+            <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
+            <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
           </ul>
           ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
           ${evidencePanel(edge)}
-          <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">Open related node</button>
+          <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">${connectedItemButtonLabel()}</button>
         </article>`;
     }).join('');
     const additionalRelationshipCards = visibleEdges
@@ -497,13 +543,13 @@ async function renderDetail(nodeId, filters = {}) {
             <div class="badge-row">${sourceBadge(edge.provenance_class)}<span class="badge">${escapeHtml(edge.publication_status)}</span></div>
             <h4>${escapeHtml(counterpart?.metadata.item_id || counterpartId)} - ${escapeHtml(counterpart?.metadata.title || '')}</h4>
             <ul>
-              <li><strong>Relationship type:</strong> ${escapeHtml(edge.relationship_type)}</li>
-              <li><strong>Source basis:</strong> ${escapeHtml(edge.provenance_class)}</li>
-              <li><strong>Confidence:</strong> ${escapeHtml(edge.confidence)}</li>
+              <li><strong>${uiLabel('relationshipType')}:</strong> ${escapeHtml(edge.relationship_type)}</li>
+              <li><strong>${uiLabel('sourceBasis')}:</strong> ${escapeHtml(edge.provenance_class)}</li>
+              <li><strong>${uiLabel('confidence')}:</strong> ${escapeHtml(edge.confidence)}</li>
             </ul>
             ${edge.warning ? `<p class="notice">${escapeHtml(edge.warning)}</p>` : ''}
             ${evidencePanel(edge)}
-            <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">Open related node</button>
+            <button class="secondary" type="button" data-open-node="${escapeHtml(counterpartId)}">${connectedItemButtonLabel()}</button>
           </article>`;
       }).join('');
 
@@ -517,7 +563,7 @@ async function renderDetail(nodeId, filters = {}) {
         <div class="detail-main">
           <article class="panel">
             <div class="badge-row"><span class="badge">${escapeHtml(node.node_type.replaceAll('_', ' '))}</span>${definingSource ? sourceBadge(definingSource.provenance_class) : ''}</div>
-            <p class="eyebrow">${filters.libraryMode ? 'Library detail' : 'Mapped context'}</p>
+            <p class="eyebrow">${filters.libraryMode ? (noviceMode ? 'What this is' : 'Item detail') : (noviceMode ? 'How this connects' : 'Mapped context')}</p>
             <h2 tabindex="-1">${escapeHtml(node.metadata.title)}</h2>
             <p class="item-id">${escapeHtml(node.metadata.item_id)}</p>
             <p class="workbench-card-meta">Object type: ${escapeHtml(node.node_type.replaceAll('_', ' '))}</p>
@@ -572,8 +618,8 @@ async function renderDetail(nodeId, filters = {}) {
           `}
         </div>
         <aside class="detail-side panel">
-          <h3>Accessible alternative</h3>
-          <p>Relationship list</p>
+          <h3>How this connects</h3>
+          <p class="muted">Plain list of related items when the relationship map is hard to scan.</p>
           <ul aria-label="Relationship list">${visibleEdges.map((edge) => `<li>${escapeHtml(edge.display_label)}</li>`).join('') || '<li>No displayable relationships</li>'}</ul>
         </aside>
       </section>`;
@@ -621,7 +667,7 @@ async function renderBrowse(state) {
     const selectedList = selected ? runtime.searchLibrary('', { catalog_id: selected }) : [];
     app.innerHTML = `
       <section class="panel"><p class="eyebrow">Library</p><h2>Public catalog coverage</h2><div class="grid">${cards}</div>
-      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(selected)}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} objects.</p>${selectedList.slice(0, 200).map(libraryResultCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
+      ${selected ? `<section class="results" id="catalog-list"><h3>${escapeHtml(catalogDisplayName(selected))}</h3><p class="muted">Showing ${Math.min(selectedList.length, 200)} of ${selectedList.length} objects.</p>${selectedList.slice(0, 200).map(libraryResultCard).join('') || '<p class="notice">No eligible nodes in this catalog.</p>'}</section>` : ''}</section>`;
     /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-browse-catalog]')).forEach((button) => button.addEventListener('click', () => void setView('browse', { framework: button.dataset.browseCatalog })));
     bindNodeButtons();
   });
@@ -727,9 +773,10 @@ async function renderSources(state = currentState) {
     };
     const sources = runtime.getSources(filters);
     app.innerHTML = `
-      <section class="panel"><p class="eyebrow">Sources</p><h2>Source check and data issues</h2>
-        <div class="learning-grid"><p><strong>Source basis</strong><br>Why this public source is included and what it supports.</p><p><strong>Use status</strong><br>Whether this source can add records to the public map.</p><p><strong>Status and access</strong><br>Old, draft, limited, or locked sources stay listed here with warnings.</p></div>
-        <p class="muted">These sources cover baselines, RMF, assessments, CMMC, CUI, and program links while keeping the same static file setup.</p>
+      <section class="panel"><p class="eyebrow">Sources</p><h2>${escapeHtml(pageIntros.sources.title)}</h2>
+        <p class="muted">${escapeHtml(pageIntros.sources.description)}</p>
+        <div class="learning-grid"><p><strong>${uiLabel('sourceBasis')}</strong><br>Why this public source is included and what it supports.</p><p><strong>${uiLabel('useStatus')}</strong><br>Whether this source can add records to the public map.</p><p><strong>Status and access</strong><br>Old, draft, limited, or locked sources stay listed here with warnings.</p></div>
+        <p class="muted">Not sure where to start? <button class="link-button" type="button" data-view-shortcut="start-here">Open Start Here</button> for a guided first path.</p>
         <p class="muted">${findings.length} data issue${findings.length === 1 ? '' : 's'}.</p>
         ${sourceFilterMarkup(runtime.getSources(), state)}
         <p class="muted">${sources.length} source record${sources.length === 1 ? '' : 's'} shown.</p>
@@ -745,6 +792,7 @@ async function renderSources(state = currentState) {
       });
     });
     bindSourceButtons();
+    bindViewShortcuts(app);
   });
 }
 
@@ -761,7 +809,7 @@ function renderPatterns(state = currentState) {
         <p class="eyebrow">Pattern Detail</p>
         <h2 tabindex="-1" id="pattern-detail-title">${escapeHtml(pattern.title)}</h2>
         <p class="pattern-summary"><strong>Summary:</strong> ${escapeHtml(pattern.summary)}</p>
-        
+
         <div class="pattern-section" style="margin-top: 1.5rem;">
           <h3>Explanation</h3>
           <p>${escapeHtml(pattern.explanation)}</p>
@@ -799,7 +847,7 @@ function renderPatterns(state = currentState) {
             <div class="framework-card">
               <h4>Related Templates</h4>
               <div class="stack">
-                ${pattern.templates.map(tmpl => `<button class="primary" data-generate-pattern-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(tmpl.replaceAll('_', ' '))}</button>`).join('') || '<span class="muted">None</span>'}
+                ${pattern.templates.map(tmpl => `<button class="primary" data-generate-pattern-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(templateDisplayName(tmpl))}</button>`).join('') || '<span class="muted">None</span>'}
               </div>
             </div>
           </div>
@@ -810,11 +858,11 @@ function renderPatterns(state = currentState) {
           <p>${escapeHtml(pattern.limitations)}</p>
         </div>
       </section>`;
-    
+
     buttonBySelector('#back-to-patterns')?.addEventListener('click', () => {
       void setView('patterns', { pattern: '' });
     });
-    
+
     /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('[data-generate-pattern-template]')).forEach((button) => {
       button.addEventListener('click', () => {
         void setView('templates', { templateType: button.dataset.generatePatternTemplate || '', framework: '' });
@@ -857,8 +905,8 @@ function renderTemplates(state = currentState) {
     <section class="panel">
       <p class="eyebrow">Templates</p>
       <h2>Blank planning starters stay local to your browser</h2>
-      <p>Generate public-reference templates without uploading any data. All generation happens locally in your browser.</p>
-      
+      <p class="muted">Generate public-reference templates without uploading any data.</p>
+
       <form id="template-factory-form" class="template-builder" style="margin-top: 1.5rem;">
         <div class="form-group" style="margin-bottom: 1rem;">
           <label for="template-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Artifact Type</label>
@@ -874,11 +922,11 @@ function renderTemplates(state = currentState) {
             <option value="conmon_calendar" ${selectedType === 'conmon_calendar' ? 'selected' : ''}>Continuous Monitoring Calendar</option>
           </select>
         </div>
-        
+
         <div class="form-group" style="margin-bottom: 1rem;">
           <label for="template-framework" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Framework Context (Optional)</label>
           <select id="template-framework" name="framework" style="width: 100%; max-width: 400px; padding: 0.5rem;">
-            ${optionObjectsMarkup(runtime.getCatalogs().map(c => ({ value: c.id, label: c.name })), selectedFramework, 'None / Generic')}
+            ${optionObjectsMarkup(runtime.getCatalogs().map(c => ({ value: c.id, label: c.name, group: c.display_group })), selectedFramework, 'None / Generic')}
           </select>
         </div>
 
@@ -897,34 +945,55 @@ function renderTemplates(state = currentState) {
 
         <fieldset class="form-group" style="margin-top: 1rem; border: none; padding: 0;">
           <legend style="font-weight: 600; margin-bottom: 0.5rem;">Include Options</legend>
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.5rem;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeImplementationPrompts" value="true" checked>
-              Implementation Prompts
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeImplementationPrompts" value="true" checked>
+                Implementation Prompts
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Include plain-language starter text for drafting control implementations.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeEvidenceExpectations" value="true" checked>
-              Evidence Expectations
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeEvidenceExpectations" value="true" checked>
+                Evidence Expectations
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">List expected artifacts and assessment objectives.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeInheritancePrompts" value="true" checked>
-              Inheritance Prompts
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeInheritancePrompts" value="true" checked>
+                Inheritance Prompts
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Add sections for capturing shared or inherited responsibilities.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeReciprocityPrompts" value="true" checked>
-              Reciprocity Prompts
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeReciprocityPrompts" value="true" checked>
+                Reciprocity Prompts
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Map equivalent controls from other frameworks to reduce duplicate work.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeStigReferences" value="true" checked>
-              STIG References
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeStigReferences" value="true" checked>
+                STIG References
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Link applicable DISA STIGs and SRGs to specific requirements.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includeSourceFootnotes" value="true" checked>
-              Source Footnotes
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includeSourceFootnotes" value="true" checked>
+                Source Footnotes
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Automatically generate footnotes tracing text back to official sources.</small>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-              <input type="checkbox" name="includePlaceholders" value="true" checked>
-              Placeholder Fields
+            <label style="display: flex; flex-direction: column; gap: 0.25rem; font-weight: normal; cursor: pointer; padding: 0.75rem; background: var(--ca-surface-1, #f8f9fa); border-radius: 4px; border: 1px solid var(--ca-border, #dee2e6);">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <input type="checkbox" name="includePlaceholders" value="true" checked>
+                Placeholder Fields
+              </div>
+              <small style="color: var(--ca-text-muted, #6c757d); padding-left: 1.5rem; display: block; line-height: 1.3;">Insert visual brackets [LIKE THIS] to highlight where manual input is needed.</small>
             </label>
           </div>
         </fieldset>
@@ -1026,7 +1095,7 @@ function renderStartHere(state = currentState) {
         <p class="eyebrow">Recommendations</p>
         <h2>Your public reference pathway</h2>
         <p class="muted">Based on your system characteristics, we recommend exploring the following public resources.</p>
-        
+
         <div class="grid" style="margin-top: 1.5rem;">
           <div class="framework-card">
             <h3>Suggested Frameworks & Baselines</h3>
@@ -1035,11 +1104,11 @@ function renderStartHere(state = currentState) {
               ${suggestedBaselines.map(b => `<li><strong>${escapeHtml(b.name)}:</strong> <button class="chip" data-open-node="${escapeHtml(b.id)}">View baseline detail</button></li>`).join('')}
             </ul>
           </div>
-          
+
           <div class="framework-card">
             <h3>Applicable Templates</h3>
             <div class="stack">
-              ${uniqueTemplates.map(tmpl => `<button class="primary" data-start-here-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(tmpl.replaceAll('_', ' '))}</button>`).join('')}
+              ${uniqueTemplates.map(tmpl => `<button class="primary" data-start-here-template="${escapeHtml(tmpl)}">Generate ${escapeHtml(templateDisplayName(tmpl))}</button>`).join('')}
             </div>
           </div>
         </div>
@@ -1093,7 +1162,7 @@ function renderStartHere(state = currentState) {
       <p class="eyebrow">Start Here</p>
       <h2>Find the right public entry point before diving into the graph</h2>
       <p>Answer three questions to get reference recommendation links to relevant library objects, templates, and patterns. No data leaves your browser.</p>
-      
+
       <form id="start-here-form" class="template-builder" style="margin-top: 1.5rem;">
         <div class="form-group" style="margin-bottom: 1rem;">
           <label for="sh-system-type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">1. System Type</label>
@@ -1152,8 +1221,34 @@ function renderStartHere(state = currentState) {
 
 function optionObjectsMarkup(options, selected, fallbackLabel) {
   const values = [`<option value="">${escapeHtml(fallbackLabel)}</option>`];
-  for (const option of options) {
-    values.push(`<option value="${escapeHtml(option.value)}" ${option.value === selected ? 'selected' : ''}>${escapeHtml(option.label)}</option>`);
+
+  const hasGroups = options.some(opt => opt.group);
+  if (hasGroups) {
+    const groups = {};
+    for (const option of options) {
+      const g = option.group || 'Other';
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(option);
+    }
+
+    const groupOrder = ['NIST', 'DISA', 'DoD', 'Other'];
+    const sortedGroupKeys = Object.keys(groups).sort((a, b) => {
+      const aIdx = groupOrder.indexOf(a);
+      const bIdx = groupOrder.indexOf(b);
+      return (aIdx > -1 ? aIdx : 99) - (bIdx > -1 ? bIdx : 99);
+    });
+
+    for (const groupName of sortedGroupKeys) {
+      values.push(`<optgroup label="${escapeHtml(groupName)}">`);
+      for (const option of groups[groupName]) {
+        values.push(`<option value="${escapeHtml(option.value)}" ${option.value === selected ? 'selected' : ''}>${escapeHtml(option.label)}</option>`);
+      }
+      values.push(`</optgroup>`);
+    }
+  } else {
+    for (const option of options) {
+      values.push(`<option value="${escapeHtml(option.value)}" ${option.value === selected ? 'selected' : ''}>${escapeHtml(option.label)}</option>`);
+    }
   }
   return values.join('');
 }
@@ -1293,9 +1388,9 @@ async function renderMatrix(state) {
         <form id="relationship-workbench-form" class="controls">
           <div class="field"><label for="matrix-source">Source catalog</label><select id="matrix-source">${catalogOptions(source)}</select></div>
           <div class="field"><label for="matrix-target">Target catalog</label><select id="matrix-target">${catalogOptions(target)}</select></div>
-          <div class="field"><label for="matrix-relationship-type">Relationship type</label><select id="matrix-relationship-type">${optionMarkup(relationshipTypes, state.relationshipType || '', 'All relationship types')}</select></div>
-          <div class="field"><label for="matrix-provenance">Source basis</label><select id="matrix-provenance">${optionMarkup(provenances, state.provenance || '', 'All source basis types')}</select></div>
-          <div class="field"><label for="matrix-confidence">Confidence</label><select id="matrix-confidence">${optionMarkup(confidences, state.confidence || '', 'All confidence')}</select></div>
+          <div class="field"><label for="matrix-relationship-type">${uiLabel('relationshipType')}</label><select id="matrix-relationship-type">${optionMarkup(relationshipTypes, state.relationshipType || '', 'All relationship types')}</select></div>
+          <div class="field"><label for="matrix-provenance">${uiLabel('sourceBasis')}</label><select id="matrix-provenance">${optionMarkup(provenances, state.provenance || '', 'All source basis types')}</select></div>
+          <div class="field"><label for="matrix-confidence">${uiLabel('confidence')}</label><select id="matrix-confidence">${optionMarkup(confidences, state.confidence || '', 'All confidence')}</select></div>
           <div class="field matrix-items-field"><label for="matrix-items">Optional source IDs</label><textarea id="matrix-items">${escapeHtml(itemText)}</textarea></div>
           <div class="field"><label for="matrix-include-candidates">Show inferred mappings</label><input id="matrix-include-candidates" type="checkbox" ${state.includeCandidates === 'true' ? 'checked' : ''}></div>
           <button class="primary" type="submit">Apply filters</button>
@@ -1303,7 +1398,7 @@ async function renderMatrix(state) {
         <p class="muted">${relationshipRows.summary.visible} visible relationship${relationshipRows.summary.visible === 1 ? '' : 's'}${relationshipRows.summary.hidden_candidate_count ? ` - ${relationshipRows.summary.hidden_candidate_count} inferred mapping${relationshipRows.summary.hidden_candidate_count === 1 ? '' : 's'} hidden by default` : ''}</p>
         ${exportButtonMarkup(!relationshipRows.rows.length)}
         ${relationshipRows.rows.length
-          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>Relationship type</th><th>Source basis</th><th>Confidence</th><th>Rationale</th><th>Plain-Language Rationale</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${escapeHtml(row.plain_language_rationale || 'No plain-language rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
+          ? `<table class="matrix-table" aria-label="Relationship Table"><thead><tr><th>From ID</th><th>To ID</th><th>${uiLabel('relationshipType')}</th><th>${uiLabel('sourceBasis')}</th><th>${uiLabel('confidence')}</th><th>${uiLabel('officialRationale')}</th><th>${uiLabel('plainRationale')}</th><th>Source references</th></tr></thead><tbody>${relationshipRows.rows.map((row) => `<tr><td><strong>${escapeHtml(row.from_item_id)}</strong><br><span class="muted">${escapeHtml(row.from_title)}</span></td><td><strong>${escapeHtml(row.to_item_id)}</strong><br><span class="muted">${escapeHtml(row.to_title)}</span></td><td>${escapeHtml(row.relationship_type)}</td><td>${sourceBadge(row.provenance_class)}<div class="badge-row">${row.publication_status === 'candidate' ? '<span class="badge badge-warning">candidate</span>' : '<span class="badge badge-success">published</span>'}</div></td><td>${escapeHtml(row.confidence)}</td><td>${escapeHtml(row.rationale || 'No public rationale recorded.')}</td><td>${escapeHtml(row.plain_language_rationale || 'No plain-language rationale recorded.')}</td><td>${sourceRefList(row.source_refs)}</td></tr>`).join('')}</tbody></table>`
           : '<p class="notice">No visible relationships match these filters.</p>'}`;
     } else if (workbench === 'stig-chain') {
       modeMarkup = `
@@ -1339,7 +1434,9 @@ async function renderMatrix(state) {
       <section class="panel">
         <p class="eyebrow">Crosswalks</p>
         <h2>Crosswalk Workbench</h2>
-        <p class="muted">Official and inferred mappings stay separate. Published relationships remain primary, and visible crosswalks export with their public source references.</p>
+        <p class="muted"><strong>What this is:</strong> Compare how frameworks connect using public sources you can trace.</p>
+        <p class="muted"><strong>Why it matters:</strong> Official mappings stay separate from inferred ones, so you can judge trust before you act.</p>
+        <p class="muted"><strong>Next step:</strong> Pick a mode below, apply filters, and export visible results with their source references. <span class="badge badge-success">published</span> = official link; <span class="badge badge-warning">candidate</span> = inferred link.</p>
         ${workbenchModeButtons(workbench)}
         ${modeMarkup}
       </section>`;
@@ -1409,8 +1506,9 @@ async function renderMatrix(state) {
 }
 
 function renderRetired(state) {
-  app.innerHTML = `<section class="notice"><h2>${escapeHtml(state.query)} is outside the active public-map scope.</h2><button class="primary" id="retired-search" type="button">Search the library</button></section>`;
+  app.innerHTML = `<section class="notice"><h2>We don&apos;t have a public map entry for &quot;${escapeHtml(state.query)}&quot;</h2><p>Control Atlas covers public NIST, DISA STIG, FedRAMP, and related frameworks. Try searching the library or use Start Here if you&apos;re new.</p><div class="source-card-actions"><button class="primary" id="retired-search" type="button">Search the library</button><button class="secondary" id="retired-start-here" type="button">Start Here</button></div></section>`;
   buttonBySelector('#retired-search')?.addEventListener('click', () => void setView('search'));
+  buttonBySelector('#retired-start-here')?.addEventListener('click', () => void setView('start-here'));
 }
 
 async function renderState(state) {
@@ -1453,10 +1551,14 @@ function showOnboardingOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboarding-overlay';
-  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Explore public security relationships</h2><p>Control Atlas keeps meaning, source basis, confidence, and evidence strength separate.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start exploring</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
+  overlay.innerHTML = `<div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title"><h2 id="onboarding-title">Welcome to Control Atlas</h2><p>We translate public security guidance into plain connections you can trace and act on — without storing your data.</p><p class="muted">New here? Start with a guided path for your system type.</p><div class="onboarding-choices"><button class="primary" id="btn-onboarding-start" type="button">Start Here</button><button class="secondary" id="btn-onboarding-explore" type="button">Explore the library</button><button class="secondary" id="btn-onboarding-skip" type="button">Skip</button></div></div>`;
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
-  buttonBySelector('#btn-onboarding-start')?.addEventListener('click', close);
+  buttonBySelector('#btn-onboarding-start')?.addEventListener('click', () => {
+    overlay.remove();
+    void setView('start-here');
+  });
+  buttonBySelector('#btn-onboarding-explore')?.addEventListener('click', close);
   buttonBySelector('#btn-onboarding-skip')?.addEventListener('click', close);
   overlay.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') close();
@@ -1473,16 +1575,16 @@ function toggleHelp() {
   const drawer = document.createElement('aside');
   drawer.id = 'glossary-drawer';
   drawer.className = 'glossary-drawer open';
-  
+
   const renderTerms = (query = '') => {
     const needle = query.trim().toLowerCase();
-    const filtered = glossaryData.filter(item => 
-      !needle || 
-      item.term.toLowerCase().includes(needle) || 
-      item.expansion.toLowerCase().includes(needle) || 
+    const filtered = glossaryData.filter(item =>
+      !needle ||
+      item.term.toLowerCase().includes(needle) ||
+      item.expansion.toLowerCase().includes(needle) ||
       item.definition.toLowerCase().includes(needle)
     );
-    
+
     return filtered.map((item) => `
       <div class="glossary-item" style="margin-bottom: 1rem;">
         <dt><strong>${escapeHtml(item.term)}</strong> ${item.expansion ? `<span class="muted">(${escapeHtml(item.expansion)})</span>` : ''}</dt>
@@ -1511,14 +1613,14 @@ function toggleHelp() {
     <dl class="glossary-list" id="glossary-items-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
       ${renderTerms()}
     </dl>`;
-    
+
   document.body.appendChild(drawer);
-  
+
   drawer.querySelector('button')?.addEventListener('click', () => drawer.remove());
-  
+
   const searchInput = drawer.querySelector('#glossary-search');
   const container = drawer.querySelector('#glossary-items-container');
-  
+
   const bindGlossaryButtons = () => {
     container.querySelectorAll('[data-open-pattern]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -1541,7 +1643,7 @@ function toggleHelp() {
     container.innerHTML = renderTerms(val);
     bindGlossaryButtons();
   });
-  
+
   bindGlossaryButtons();
 }
 
@@ -1553,7 +1655,9 @@ async function init() {
     noviceMode = !noviceMode;
     const toggleButton = /** @type {HTMLButtonElement} */ (event.currentTarget);
     toggleButton.setAttribute('aria-pressed', String(noviceMode));
-    toggleButton.textContent = noviceMode ? 'Novice Mode' : 'Expert Mode';
+    toggleButton.textContent = noviceMode ? 'Plain labels' : 'Technical labels';
+    toggleButton.title = noviceMode ? 'Showing plain-language labels' : 'Showing technical schema labels';
+    void renderState(currentState);
   });
   buttonBySelector('#btn-toggle-mode')?.setAttribute('aria-pressed', 'true');
   buttonBySelector('#btn-toggle-glossary')?.addEventListener('click', toggleHelp);

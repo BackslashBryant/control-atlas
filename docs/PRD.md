@@ -1,4 +1,4 @@
-﻿# Control Atlas — Product Requirements Document
+# Control Atlas — Product Requirements Document
 
 **Version:** 3.0
 **Status:** Active
@@ -21,13 +21,14 @@ It does this using public data only, with no login, no evidence upload, and no o
 
 ## Design Principle
 
-**Build for translation, not documentation.**
+**Build for translation, not complexity.**
 
 Every feature should reduce the distance between complex security guidance and practical action. The product connects frameworks, controls, mappings, STIGs, MITRE techniques, and RMF artifacts into a shared plain-language model that small teams can understand, trust, and act on.
 
 In practice this means:
 
 - Plain operational language first. Formal source language second.
+- No raw identifier in user-facing copy. Every `source_id`, `canonical_id`, or schema enum value rendered in a dropdown, filter, label, or selector must resolve through a `display_name` field.
 - Show how things connect, not just that they exist.
 - Every crosswalk traces back to an authoritative source.
 - Mappings are decision support, not automation.
@@ -396,6 +397,8 @@ control_atlas_edge:
 control_atlas_source:
   source_id: string
   name: string
+  display_name: string
+  display_group: string
   owner: string
   source_class: string
   source_url: string
@@ -419,6 +422,7 @@ control_atlas_source:
 control_atlas_template:
   template_id: string
   name: string
+  display_name: string
   artifact_type: security_plan_starter | implementation_statement_worksheet | evidence_expectation_matrix | stig_evidence_checklist | inheritance_worksheet | reciprocity_checklist | poam_starter | assessment_planning_worksheet | conmon_calendar
   supported_formats: [markdown | csv | json | yaml]
   input_options: [framework | baseline | control_family | selected_controls | selected_stigs | environment_archetype]
@@ -831,6 +835,7 @@ The MVP is done when:
 13. FedRAMP provenance color is teal, not blue.
 14. Graph has accessible table fallback.
 15. CI/CD green. No high/critical vulnerabilities. Accessibility checks pass.
+16. No raw identifiers in UI text. Every schema enum, framework ID, or catalog slug resolves through a `display_name` mapping.
 
 ---
 

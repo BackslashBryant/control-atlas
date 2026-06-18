@@ -14,4 +14,4 @@ Success means users can navigate trustworthy public relationships, understand th
 
 ## Design principles
 
-Control Atlas is built for **translation, not documentation** — reducing the distance between complex security guidance and practical action. See [`DESIGN_PRINCIPLES.md`](DESIGN_PRINCIPLES.md) for the canonical product and development principle.
+Control Atlas is built for **translation, not complexity** — reducing the distance between complex security guidance and practical action. See [`DESIGN_PRINCIPLES.md`](DESIGN_PRINCIPLES.md) for the canonical product and development principle.

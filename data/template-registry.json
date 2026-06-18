@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "templates": [
+    {
+      "template_id": "tpl-ssp-starter",
+      "name": "security_plan_starter",
+      "display_name": "Security Plan Starter",
+      "artifact_type": "security_plan_starter",
+      "supported_formats": ["markdown", "csv"],
+      "input_options": ["framework", "baseline", "control_family", "environment_archetype"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-impl-stmt",
+      "name": "implementation_statement_worksheet",
+      "display_name": "Implementation Statement Worksheet",
+      "artifact_type": "implementation_statement_worksheet",
+      "supported_formats": ["csv", "json"],
+      "input_options": ["framework", "selected_controls"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-evid-exp",
+      "name": "evidence_expectation_matrix",
+      "display_name": "Evidence Expectation Matrix",
+      "artifact_type": "evidence_expectation_matrix",
+      "supported_formats": ["csv"],
+      "input_options": ["framework", "baseline"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-stig-chk",
+      "name": "stig_evidence_checklist",
+      "display_name": "STIG Evidence Checklist",
+      "artifact_type": "stig_evidence_checklist",
+      "supported_formats": ["csv"],
+      "input_options": ["selected_stigs"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-inherit-wksh",
+      "name": "inheritance_worksheet",
+      "display_name": "Inheritance Worksheet",
+      "artifact_type": "inheritance_worksheet",
+      "supported_formats": ["csv", "markdown"],
+      "input_options": ["framework"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-reciprocity",
+      "name": "reciprocity_checklist",
+      "display_name": "Reciprocity Checklist",
+      "artifact_type": "reciprocity_checklist",
+      "supported_formats": ["csv"],
+      "input_options": ["framework", "baseline"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-poam",
+      "name": "poam_starter",
+      "display_name": "POA&M Starter",
+      "artifact_type": "poam_starter",
+      "supported_formats": ["csv"],
+      "input_options": ["framework", "selected_controls"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-assess-plan",
+      "name": "assessment_planning_worksheet",
+      "display_name": "Assessment Planning Worksheet",
+      "artifact_type": "assessment_planning_worksheet",
+      "supported_formats": ["csv", "markdown"],
+      "input_options": ["framework", "baseline"],
+      "source_refs": [],
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-conmon",
+      "name": "conmon_calendar",
+      "display_name": "ConMon Calendar",
+      "artifact_type": "conmon_calendar",
+      "supported_formats": ["csv", "markdown"],
+      "input_options": ["framework"],
+      "source_refs": [],
+      "disclaimer_required": true
+    }
+  ]
+}

@@ -40,10 +40,10 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
   await expect(page.getByRole('heading', { name: 'Source check and data issues' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByLabel('Source type', { exact: true })).toBeVisible();
-  await expect(page.getByLabel('Use status', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Included in map', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Status', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Access', { exact: true })).toBeVisible();
-  await page.getByLabel('Use status', { exact: true }).selectOption('excluded');
+  await page.getByLabel('Included in map', { exact: true }).selectOption('excluded');
   const communityCard = page.locator('.source-card').filter({ hasText: 'Community CCI Research' });
   await expect(communityCard).toBeVisible();
   await expect(communityCard.getByText('Not used in the public map.')).toBeVisible();
