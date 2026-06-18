@@ -79,12 +79,12 @@ async function fetchCollection(path, collection) {
 
 async function loadFederalGraph() {
   const [sources, nodes, edges, evidence, findings, libraryArtifact, templateRegistry] = await Promise.all([
-    fetchCollection('./data/generated/sources.json?v=20260614-1', 'sources'),
-    fetchCollection('./data/generated/nodes.json?v=20260614-1', 'nodes'),
-    fetchCollection('./data/generated/edges.json?v=20260614-1', 'edges'),
-    fetchCollection('./data/generated/evidence.json?v=20260614-1', 'evidence'),
-    fetchCollection('./data/generated/graph-health.json?v=20260614-1', 'findings'),
-    fetchArtifact('./data/generated/library-search.json?v=20260615-1'),
+    fetchCollection('./data/generated/sources.json?v=20260618-1', 'sources'),
+    fetchCollection('./data/generated/nodes.json?v=20260618-1', 'nodes'),
+    fetchCollection('./data/generated/edges.json?v=20260618-1', 'edges'),
+    fetchCollection('./data/generated/evidence.json?v=20260618-1', 'evidence'),
+    fetchCollection('./data/generated/graph-health.json?v=20260618-1', 'findings'),
+    fetchArtifact('./data/generated/library-search.json?v=20260618-1'),
     fetchArtifact('./data/template-registry.json'),
   ]);
   if (libraryArtifact.schema_version !== '1.0' || !Array.isArray(libraryArtifact.library_search?.documents)) {
