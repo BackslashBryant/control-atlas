@@ -31,7 +31,7 @@ test('shell identifies Control Atlas and preserves core journeys', () => {
 });
 
 test('application loads only the five federal graph artifacts', () => {
-  assert.match(html, /app\/app\.mjs\?v=20260614-1/);
+  assert.match(html, /app\/app\.mjs\?v=20260618-1/);
   assert.match(app, /from '\.\/runtime\.mjs'/);
   assert.match(app, /from '\.\.\/content\/pageIntros\.mjs'/);
   assert.match(app, /template-registry\.json/);
@@ -47,7 +47,7 @@ test('application loads only the five federal graph artifacts', () => {
   assert.match(app, /userFacingLoadError/);
   assert.match(app, /Loading public mappings/);
   for (const artifact of ['sources', 'nodes', 'edges', 'evidence', 'graph-health']) {
-    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260614-1`));
+    assert.match(app, new RegExp(`data/generated/${artifact}\\.json\\?v=20260618-1`));
   }
   assert.doesNotMatch(app, /bootstrap\.json|catalog\.json|coverage\.json|mappings\.json|paths\.json|candidates\.json|source-health\.json/);
   assert.doesNotMatch(app, /build-manifest\.json|source-manifests\.json|graph-diff-summary\.json/);
