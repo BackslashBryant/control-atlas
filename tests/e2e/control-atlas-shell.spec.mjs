@@ -21,7 +21,7 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(primaryNav.getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Find your first path through the library' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.selectOption('#sh-system-type', 'Cloud SaaS');
   await page.selectOption('#sh-data-sensitivity', 'Moderate');
   await page.selectOption('#sh-environment', 'CSP');
@@ -30,14 +30,14 @@ test('control atlas staged shell exposes the epic 0 navigation and key journeys'
   await expect(page.getByText('Suggested Frameworks & Baselines')).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Crosswalks', exact: true }).click();
-  await expect(page.getByText('Loading the library')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByText('Loading public mappings')).toBeHidden({ timeout: 60000 });
   await expect(page.getByRole('heading', { name: 'Compare frameworks' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByRole('button', { name: 'Framework comparison', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'STIG -> CCI -> NIST', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Baseline Compare', exact: true })).toBeVisible();
 
   await primaryNav.getByRole('button', { name: 'Sources', exact: true }).click();
-  await expect(page.getByText('Loading the library')).toBeHidden({ timeout: 60000 });
+  await expect(page.getByText('Loading public mappings')).toBeHidden({ timeout: 60000 });
   await expect(page.getByRole('heading', { name: 'Review sources before you rely on a match' })).toBeVisible({ timeout: 10000 });
   await expect(page.getByLabel('Source type', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Included in map', { exact: true })).toBeVisible();
@@ -66,7 +66,7 @@ test('library filters narrow results without a page reload', async ({ page }) =>
   await dismissOnboarding(page);
   await page.getByLabel('ID, title, or topic').fill('AC-2');
   await page.getByRole('button', { name: 'Search', exact: true }).click();
-  await page.getByLabel('Object type').selectOption('control');
+  await page.getByLabel('Item type').selectOption('control');
   await expect(page.locator('#library-results .item-card')).toHaveCount(1);
   await expect(page.locator('#library-results')).toContainText('Account Management');
 });
