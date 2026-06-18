@@ -16,6 +16,7 @@ test('control atlas source of truth moves into src and builds from a staged outp
     'src/app/app.mjs',
     'src/app/runtime.mjs',
     'src/content/pageIntros.mjs',
+    'src/lib/minisearch.js',
     'src/styles/app.css',
     'tools/build-static-site.mjs',
   ]) {
@@ -32,12 +33,16 @@ test('control atlas source of truth moves into src and builds from a staged outp
   assert.match(domSmoke, /src\/index\.html/);
   assert.match(staticSmoke, /dist\/site\/index\.html/);
   assert.match(staticSmoke, /dist\/site\/app\/app\.mjs/);
+  assert.match(staticSmoke, /dist\/site\/lib\/minisearch\.js/);
+  assert.match(staticSmoke, /dist\/site\/lib\/d3\.min\.js/);
   assert.match(runtimeTest, /\.\.\/src\/app\/runtime\.mjs/);
 });
 
 test('staged build publishes the generated library search artifact', () => {
   const siteBuilder = readFileSync('tools/build-static-site.mjs', 'utf8');
   assert.match(siteBuilder, /library-search\.json/);
+  assert.match(siteBuilder, /src\/lib/);
+  assert.match(siteBuilder, /lib\/d3\.min\.js/);
 });
 
 test('playwright e2e server stays on loopback for deterministic local browser access', () => {
