@@ -19,12 +19,12 @@ async function fetchCollection(path: string, key: string) {
 export async function loadRuntimeDataset() {
   const [sources, nodes, edges, evidence, findings, libraryArtifact, templateRegistry] =
     await Promise.all([
-      fetchCollection('./data/generated/sources.json?v=20260618-1', 'sources'),
-      fetchCollection('./data/generated/nodes.json?v=20260618-1', 'nodes'),
-      fetchCollection('./data/generated/edges.json?v=20260618-1', 'edges'),
-      fetchCollection('./data/generated/evidence.json?v=20260618-1', 'evidence'),
-      fetchCollection('./data/generated/graph-health.json?v=20260618-1', 'findings'),
-      fetchArtifact('./data/generated/library-search.json?v=20260618-1'),
+      fetchCollection('./data/generated/sources.json?v=20260619-1', 'sources'),
+      fetchCollection('./data/generated/nodes.json?v=20260619-1', 'nodes'),
+      fetchCollection('./data/generated/edges.json?v=20260619-1', 'edges'),
+      fetchCollection('./data/generated/evidence.json?v=20260619-1', 'evidence'),
+      fetchCollection('./data/generated/graph-health.json?v=20260619-1', 'findings'),
+      fetchArtifact('./data/generated/library-search.json?v=20260619-1'),
       fetchArtifact('./data/template-registry.json'),
     ]);
 

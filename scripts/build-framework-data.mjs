@@ -32,6 +32,9 @@ const CATALOGS = [
   ['dod-zt.json', 'dod-zt', 'dod-zt-reference-architecture-v2', 'requirement'],
   ['stig-rules.json', 'disa-stig', 'disa-stig-library', 'stig_rule'],
   ['srg-requirements.json', 'disa-srg', 'disa-srg-library', 'srg_requirement'],
+  ['attack-techniques-enterprise.json', 'mitre-attack', 'mitre-attack-enterprise', 'attack_technique'],
+  ['attack-techniques-ics.json', 'mitre-attack-ics', 'mitre-attack-ics', 'attack_technique'],
+  ['d3fend-countermeasures.json', 'mitre-d3fend', 'mitre-d3fend-ontology', 'defend_countermeasure'],
 ];
 
 const MAPS = [
@@ -40,6 +43,8 @@ const MAPS = [
   ['cci-to-800-53.json', 'disa-cci', 'nist-800-53', 'disa-cci-nist-references'],
   ['stig-srg-to-cci.json', 'disa-stig', 'disa-cci', 'disa-stig-srg-cci-references'],
   ['800-53-to-dod-zt-overlays.json', 'nist-800-53', 'dod-zt', 'dod-zt-overlays-2024'],
+  ['attack-to-d3fend.json', 'mitre-attack', 'mitre-d3fend', 'mitre-d3fend-mappings'],
+  ['d3fend-to-800-53.json', 'mitre-d3fend', 'nist-800-53', 'mitre-d3fend-mappings'],
 ];
 
 const CATALOG_SUMMARIES = new Map([

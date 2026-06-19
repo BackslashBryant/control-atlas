@@ -102,6 +102,36 @@ test("critical path: STIG chain summary table is labeled for screen readers", as
   ).toBeVisible();
 });
 
+test("critical path: MITRE library search returns technique with plain-language summary", async ({
+  page,
+}) => {
+  await page.goto("/?view=search&q=T1033");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByRole("button", { name: "Open detail" }).first().click();
+  await expect(page).toHaveURL(/view=library-detail/);
+  await expect(page.getByText("What this is")).toBeVisible();
+  await expect(page.getByText("Threat context")).toBeVisible();
+});
+
+test("critical path: threat chain summary table is labeled for screen readers", async ({
+  page,
+}) => {
+  await page.goto(
+    "/?view=matrix&workbench=threat-chain&chainCatalog=mitre-attack",
+  );
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(
+    page.getByRole("table", { name: "Threat chain summary" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Official link = MITRE published mapping"),
+  ).toBeVisible();
+});
+
 test("critical path: baseline compare surfaces delta controls with export actions", async ({
   page,
 }) => {

@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**Epic 7 shipped** on branch `agent/muse/epic-7-platform-trust` (June 19, 2026). MVP remains at tag `v1.0.0-rc.1`; Epic 7 adds About/trust surface and release hardening playbooks.
+Post-MVP maintenance and optional `v1.0.0` promotion. Epic 8 MITRE Threat Lens shipped on `main`.
 
-**Active sprint:** None — Epic 9 shipped June 19, 2026. Next build when scoped: Epic 8 (MITRE Threat Lens).
+**Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -23,6 +23,7 @@
 - Epic 5: Start Here actionable recommendations (Library, Compare, Patterns, Templates deep links); header glossary search; inline glossary on library detail and pattern pages
 - Epic 6: Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit evidence, RC tag
 - Epic 7: About/trust page (`/?view=about`), manual a11y checklist, live Pages audit template, SecDevOps docs (branch protection policy; action pinning ADR deferral)
+- Epic 8: MITRE Threat Lens — ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain ([`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md))
 - Epic 9: Interactive relationship map in Library detail — provenance filters, lazy canvas graph, accessible table fallback ([`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md))
 
 ## Adopted Baseline
@@ -38,11 +39,11 @@ Control Atlas is public-data-only and has no backend. It may normalize public so
 
 It must not ingest evidence, accept uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login.
 
-## Next (post–Epic 9)
+## Next
 
-1. Epic 8 (MITRE Threat Lens) when scoped in Plan.md
-2. Maintenance CI and dependency gates
-3. Optional RC promotion to `v1.0.0`
+1. Merge Epic 8 branch to `main` and verify CI/Pages deploy
+2. Maintenance CI and optional RC promotion to `v1.0.0`
+3. Epic 10 when spec'd
 
 ## Status Docs
 

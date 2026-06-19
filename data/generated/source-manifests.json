@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-19T07:57:42.061Z",
+  "generated_at": "2026-06-19T22:47:46.082Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -388,6 +388,48 @@
       "finding_count": 0
     },
     {
+      "source_id": "mitre-attack-enterprise",
+      "display_name": "ATT&CK Enterprise",
+      "display_group": "MITRE",
+      "frameworks": [
+        "mitre-attack"
+      ],
+      "owner": "MITRE",
+      "version": "2026-05-12",
+      "retrieved_at": "2026-06-19",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+      "artifact_type": "stix",
+      "checksum": "sha256:c7714f4a636b16c39d8db759b60135040ceb75d3c1d93f78a39fcef212e8ed9e",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 697,
+      "relationship_count": 0,
+      "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
+      "source_id": "mitre-attack-ics",
+      "display_name": "ATT&CK for ICS",
+      "display_group": "MITRE",
+      "frameworks": [
+        "mitre-attack-ics"
+      ],
+      "owner": "MITRE",
+      "version": "2026-05-12",
+      "retrieved_at": "2026-06-19",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+      "artifact_type": "stix",
+      "checksum": "sha256:c4d304f9736247390287f54d761a13c8ead2ebf14ee68adea4e012a6dce35192",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 97,
+      "relationship_count": 0,
+      "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
       "source_id": "mitre-cis-cci-mappings",
       "display_name": "DISA CCI",
       "display_group": "DISA",
@@ -404,6 +446,50 @@
       "lifecycle_status": "active",
       "graph_eligible": false,
       "node_count": 0,
+      "relationship_count": 0,
+      "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
+      "source_id": "mitre-d3fend-mappings",
+      "display_name": "D3FEND mappings",
+      "display_group": "MITRE",
+      "frameworks": [
+        "mitre-attack",
+        "mitre-d3fend",
+        "nist-800-53"
+      ],
+      "owner": "MITRE",
+      "version": "2026-06-19",
+      "retrieved_at": "2026-06-19",
+      "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+      "artifact_type": "api",
+      "checksum": "sha256:f4c3845b39f14a3ac6f8badeebc1d81be68f0b9eebcd12cc8bd550e212724b9f",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 0,
+      "relationship_count": 3163,
+      "evidence_count": 3163,
+      "finding_count": 0
+    },
+    {
+      "source_id": "mitre-d3fend-ontology",
+      "display_name": "D3FEND",
+      "display_group": "MITRE",
+      "frameworks": [
+        "mitre-d3fend"
+      ],
+      "owner": "MITRE",
+      "version": "4",
+      "retrieved_at": "2026-06-19",
+      "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
+      "artifact_type": "api",
+      "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 271,
       "relationship_count": 0,
       "evidence_count": 0,
       "finding_count": 0

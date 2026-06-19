@@ -42,6 +42,14 @@ const ROUTES = [
     path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
   },
   { label: "compare hub", path: "/?view=matrix" },
+  {
+    label: "compare threat chain",
+    path: "/?view=matrix&workbench=threat-chain&chainCatalog=mitre-attack&chainItem=mitre-attack%3AT1033",
+  },
+  {
+    label: "library mitre detail",
+    path: "/?view=library-detail&node=mitre-attack%3AT1033",
+  },
   { label: "sources registry", path: "/?view=sources" },
   { label: "templates hub", path: "/?view=templates" },
   {
@@ -58,6 +66,9 @@ for (const route of ROUTES) {
   test(`a11y: ${route.label} has no serious or critical violations`, async ({
     page,
   }) => {
+    if (route.label === "compare threat chain") {
+      test.setTimeout(60_000);
+    }
     await page.goto(route.path);
     await waitForAppReady(page);
     await dismissOnboarding(page);

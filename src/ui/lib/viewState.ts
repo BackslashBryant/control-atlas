@@ -14,7 +14,8 @@ export type CompareWorkbench =
   | "intent"
   | "relationships"
   | "stig-chain"
-  | "baseline-compare";
+  | "baseline-compare"
+  | "threat-chain";
 
 export type ViewState =
   | {

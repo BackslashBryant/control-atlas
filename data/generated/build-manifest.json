@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-19T07:57:42.061Z",
+  "generated_at": "2026-06-19T22:47:46.082Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -19,10 +19,10 @@
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
     "counts": {
-      "sources": 40,
-      "nodes": 8306,
-      "edges": 9266,
-      "evidence": 9266,
+      "sources": 44,
+      "nodes": 9371,
+      "edges": 12429,
+      "evidence": 12429,
       "findings": 707
     }
   }

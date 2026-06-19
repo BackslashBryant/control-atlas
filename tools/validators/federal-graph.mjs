@@ -4,6 +4,7 @@ const PROVENANCE_CLASSES = new Set([
   'federal_program',
   'federal_utilized',
   'federal_referenced',
+  'mitre_published',
   'inferred',
 ]);
 const CONFIDENCE_VALUES = new Set(['direct', 'derived', 'inferred_high', 'inferred_medium', 'inferred_low']);
