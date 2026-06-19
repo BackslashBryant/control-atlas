@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**Active sprint: Epic 6 — QA, accessibility hardening, and release candidate.**
+**MVP release candidate shipped:** tag `v1.0.0-rc.1` (June 19, 2026). Epics 0–6 complete on `main`.
 
-Expand E2E critical-path coverage, complete content review, and cut a versioned release tag.
+Enter maintenance mode unless scope changes. Optional next: promote to `v1.0.0` after RC feedback.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -21,6 +21,7 @@ Expand E2E critical-path coverage, complete content review, and cut a versioned 
 - Epic 3: Compare workbenches (relationships, STIG chain, baseline delta, provenance exports)
 - Epic 4: Template Factory — nine PRD-aligned templates, artifact-first UI, export contract tests, generation E2E
 - Epic 5: Start Here actionable recommendations (Library, Compare, Patterns, Templates deep links); header glossary search; inline glossary on library detail and pattern pages
+- Epic 6: Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit evidence, RC tag
 
 ## Adopted Baseline
 
@@ -35,9 +36,11 @@ Control Atlas is public-data-only and has no backend. It may normalize public so
 
 It must not ingest evidence, accept uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login.
 
-## Next After Epic 6
+## Next (post-RC)
 
-1. Release candidate tag and launch checklist closeout
+1. Maintenance CI and dependency gates
+2. Optional `v1.0.0` promotion after RC validation
+3. Graph UI migration only if explicitly scoped (Epic 0 residual)
 
 ## Status Docs
 

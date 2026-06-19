@@ -21,15 +21,9 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**Epic 6: QA + Accessibility + Release**
+**None — MVP release candidate `v1.0.0-rc.1` shipped June 19, 2026.**
 
-**Goal:** Expand E2E critical-path coverage, harden accessibility, complete content review, and cut a versioned release candidate.
-
-**Open gaps:** See [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md) Epic 6.
-
-**Branch pattern:** `agent/pixel/epic-6-qa-release`
-
-**Exit checks:** `npm run precommit`; full critical-path E2E matrix; release tag candidate.
+Post-RC work: maintenance mode, optional `v1.0.0` promotion after feedback, graph UI migration deferred (Epic 0 residual).
 
 ## Epic Status (June 19, 2026)
 
@@ -41,13 +35,13 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 3 — Compare | **Shipped** | Relationship table with provenance, STIG→CCI→NIST trace, baseline delta, exports (`81daf6d`). |
 | 4 — Template Factory | **Shipped** | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage. |
 | 5 — Patterns + Glossary + Start Here | **Shipped** | Start Here actionable deep links (Library, Compare, Patterns, Templates) with plain-language rationale; header glossary search; inline glossary on detail and pattern pages. |
-| 6 — QA + Release | **Active** | Partial Playwright/a11y coverage; release candidate and content review remain. |
+| 6 — QA + Release | **Shipped** | Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md), tag `v1.0.0-rc.1`. Graph UI remains Epic 0 residual. |
 
 ## Active Direction
 
 `docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines epics 0–6.
 
-As of June 19, 2026, `main` and the public GitHub Pages shell (`https://backslashbryant.github.io/control-atlas/`) are in parity for the translation-first React shell through Epic 4.
+As of June 19, 2026, `main` ships the translation-first React shell through Epic 6 with release candidate tag `v1.0.0-rc.1`.
 
 ## Translation-First Product Standard
 
@@ -87,11 +81,12 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 3 Compare shipped
 - [x] Epic 4 Template Factory QA complete
 - [x] Epic 5 Start Here deep links and PRD alignment complete
-- [ ] Epic 6 release candidate
+- [x] Epic 6 release candidate (`v1.0.0-rc.1`)
 
-## Recommended Sequence (after Epic 4)
+## Recommended Sequence (post-MVP)
 
-1. **Epic 6 (active)** — E2E expansion, a11y hardening, content review, release tag
+1. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
+2. **Optional** — promote `v1.0.0` after RC feedback; graph UI migration if scoped
 
 ## Historical Delivery Records
 

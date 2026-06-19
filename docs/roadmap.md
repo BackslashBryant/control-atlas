@@ -89,7 +89,7 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 
 ## Recommended Next Sequence
 
-1. **Epic 6 (active):** E2E expansion, a11y hardening, content review, release tag.
-2. **Epic 6:** Release hardening, full E2E, accessibility, content review, release tag.
+1. **Maintenance** — CI-driven dependency, security, and smoke gates
+2. **Optional** — promote `v1.0.0` after RC feedback; graph UI if scoped
 
-Epics 0–1 are closed for MVP (residual items documented in [`docs/Plan.md`](Plan.md)). Epics 2–4 are shipped.
+Epics 0–6 are shipped for MVP. Epic 0 graph UI remains residual in legacy shell only.
