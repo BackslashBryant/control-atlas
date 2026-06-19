@@ -56,6 +56,8 @@ async function main() {
 
   const taskBranch = git(['rev-parse', '--abbrev-ref', 'HEAD']);
   const commitSha = resolveCommitSha('HEAD');
+  const ciBranch =
+    taskBranch === 'main' ? `ship/ci-${commitSha.slice(0, 7)}` : taskBranch;
 
   if (!skipLocal) {
     console.log('[ship] Running local precommit gate...');
@@ -64,8 +66,12 @@ async function main() {
     console.log('[ship] Skipping local precommit (--skip-local).');
   }
 
-  console.log(`[ship] Pushing task branch ${taskBranch} to trigger remote checks...`);
-  run('node', ['tools/git-push-with-retry.mjs', taskBranch]);
+  console.log(`[ship] Pushing ${ciBranch} to trigger remote checks...`);
+  if (taskBranch === 'main') {
+    run('git', ['push', '-u', 'origin', `HEAD:${ciBranch}`]);
+  } else {
+    run('node', ['tools/git-push-with-retry.mjs', taskBranch]);
+  }
 
   if (!noWait) {
     console.log(`[ship] Waiting for Public Repo Checks on ${commitSha.slice(0, 7)}...`);
