@@ -11,7 +11,7 @@
 
 `docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines the active backlog through Epic 0 to Epic 6. Epic 0 baseline and live Pages audit evidence are now in place, and Epic 1 Provenance Registry behavior is deployed on the adopted static runtime baseline.
 
-As of June 19, 2026, the verified `main` branch is ahead of the public GitHub Pages shell. Translation-first React UI changes are shipped in the repository, but live deploy parity must be reverified before claiming the public site matches the current shell.
+As of June 19, 2026, the verified `main` branch and the public GitHub Pages shell are back in parity. Translation-first React UI changes are now shipped in both the repository and the live public site.
 
 ## Translation-First Product Standard
 
@@ -51,7 +51,7 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Provenance-facing renderer updates executed
 - [x] Epic 1 Provenance filtering, source detail views, lifecycle warnings, and source traceability executed
 - [x] Missing CI/CD and SecDevOps controls closed or explicitly deferred
-- [ ] Current GitHub Pages deploy matches the shipped translation-first shell
+- [x] Current GitHub Pages deploy matches the shipped translation-first shell
 
 ## Historical Delivery Records
 
