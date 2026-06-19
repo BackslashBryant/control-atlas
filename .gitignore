@@ -9,6 +9,7 @@
 !eslint.config.mjs
 !playwright.config.mjs
 !tsconfig.json
+!tsconfig.app.json
 !src/
 !src/**
 !tests/

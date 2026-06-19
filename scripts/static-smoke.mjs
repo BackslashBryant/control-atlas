@@ -38,7 +38,8 @@ assert.ok(nodes.some((node) => node.id === 'nist-800-53a:AC-2'), 'assessment pro
 assert.ok(edges.some((edge) => edge.relationship_type === 'assesses'), 'assessment edges must be present');
 assert.ok(buildManifest.governance_artifacts.includes('build-manifest.json'));
 assert.ok(sourceManifests.some((entry) => entry.source_id === 'nist-800-53a-assessment-procedures'));
-assert.match(indexHtml, /assets\//);
+assert.match(indexHtml, /\.\/assets\//);
+assert.doesNotMatch(indexHtml, /(?:src|href)="\/assets\//);
 assert.ok(assets.some((asset) => asset.endsWith('.js')), 'built JavaScript asset must exist');
 assert.ok(assets.some((asset) => asset.endsWith('.css')), 'built CSS asset must exist');
 
