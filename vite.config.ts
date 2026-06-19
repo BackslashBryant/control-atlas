@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
+  base: './',
   root: resolve(rootDir, 'src'),
   plugins: [react()],
   build: {

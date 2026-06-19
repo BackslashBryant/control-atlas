@@ -20,6 +20,7 @@ test('control atlas source of truth builds through Vite into the staged static o
     'src/ui/App.tsx',
     'src/ui/lib/viewState.ts',
     'src/styles/app.css',
+    'tsconfig.app.json',
     'vite.config.ts',
     'tools/build-static-site.mjs',
   ]) {
@@ -32,6 +33,7 @@ test('control atlas source of truth builds through Vite into the staged static o
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(pagesWorkflow, /npm run build:site/);
   assert.match(pagesWorkflow, /path:\s*'dist\/site'/);
+  assert.match(readFileSync('vite.config.ts', 'utf8'), /base:\s*'\.\/'/);
   assert.match(publicSyncTool, /dist-public/);
   assert.match(publicSyncTool, /dist\/site/);
 });

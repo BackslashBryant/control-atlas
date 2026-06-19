@@ -49,6 +49,8 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.match(packageJson.scripts.precommit, /npm run typecheck/);
   assert.match(packageJson.scripts.precommit, /npm run license:check/);
   assert.match(packageJson.scripts.precommit, /npm run test:a11y/);
+  assert.ok(existsSync('tsconfig.app.json'));
+  assert.match(packageJson.scripts.typecheck, /tsconfig\.app\.json/);
 });
 
 test('translation-first frontend foundation adds React, Vite, and targeted Radix support', () => {
