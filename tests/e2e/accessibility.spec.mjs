@@ -2,41 +2,58 @@ import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from './support.mjs';
 
-const ROUTES = [
-  '/',
-  '/?view=search&q=AC-2',
-  '/?view=library-detail&node=nist-800-53%3AAC-2',
-  '/?view=matrix',
-  '/?view=sources',
-  '/?view=templates',
-  '/?view=templates&templateType=security_plan_starter',
-  '/?view=patterns',
-  '/?view=start-here',
-];
+async function assertNoBlockingViolations(page, contextLabel) {
+  const results = await new AxeBuilder({ page })
+    .include('#workspace')
+    .withTags(['wcag2a', 'wcag2aa'])
+    .analyze();
+
+  const blocking = results.violations.filter((violation) =>
+    ['serious', 'critical'].includes(violation.impact || ''),
+  );
+
+  expect(
+    blocking,
+    `Accessibility violations on ${contextLabel}: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(', ')}`,
+  ).toEqual([]);
+}
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test('primary translation-first surfaces have no serious or critical accessibility violations', async ({ page }) => {
-  test.setTimeout(120000);
-  for (const route of ROUTES) {
-    await page.goto(route);
+const ROUTES = [
+  { label: 'landing', path: '/' },
+  { label: 'library search', path: '/?view=search&q=AC-2' },
+  { label: 'library detail', path: '/?view=library-detail&node=nist-800-53%3AAC-2' },
+  { label: 'compare hub', path: '/?view=matrix' },
+  { label: 'sources registry', path: '/?view=sources' },
+  { label: 'templates hub', path: '/?view=templates' },
+  { label: 'template detail', path: '/?view=templates&templateType=security_plan_starter' },
+  { label: 'patterns hub', path: '/?view=patterns' },
+  { label: 'pattern detail', path: '/?view=patterns&pattern=rmf-lifecycle' },
+  { label: 'start here', path: '/?view=start-here' },
+];
+
+for (const route of ROUTES) {
+  test(`a11y: ${route.label} has no serious or critical violations`, async ({ page }) => {
+    await page.goto(route.path);
     await waitForAppReady(page);
     await dismissOnboarding(page);
+    await assertNoBlockingViolations(page, route.path);
+  });
+}
 
-    const results = await new AxeBuilder({ page })
-      .include('#workspace')
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
+test('a11y: compare detailed mappings table has no serious or critical violations', async ({ page }) => {
+  await page.goto('/?view=matrix');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
 
-    const blocking = results.violations.filter((violation) =>
-      ['serious', 'critical'].includes(violation.impact || ''),
-    );
+  await page.locator('.intent-card', { hasText: 'Framework to framework' }).getByRole('button', { name: 'Use this path' }).click();
+  await page.getByLabel('Framework A').selectOption('nist-800-53');
+  await page.getByLabel('Framework B').selectOption('csf-2');
+  await page.getByRole('button', { name: 'Detailed mappings' }).click();
+  await expect(page.getByRole('table', { name: 'Relationship mappings' })).toBeVisible();
 
-    expect(
-      blocking,
-      `Accessibility violations on ${route}: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(', ')}`,
-    ).toEqual([]);
-  }
+  await assertNoBlockingViolations(page, 'compare detailed mappings');
 });

@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** June 19, 2026 (after Epic 5 Patterns + Glossary + Start Here ship)
+**Last synced:** June 19, 2026 (after Epic 6 QA + Release ship — tag `v1.0.0-rc.1`)
 
 ## Epic 0: GovFrame → Control Atlas Migration
 
@@ -14,28 +14,9 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 * **Status:** Closed for MVP. Residual only.
 * **Residual:** Continued importer and plain-language quality tuning is maintenance, not a blocking backlog item. Contract tests in `tests/federal-graph-contract.test.mjs` enforce the adopted schema.
 
-## Epic 2: Library + Search
+## Epics 2–6
 
-* **Status:** Shipped.
-
-## Epic 3: Compare
-
-* **Status:** Shipped. React Compare workspace in `src/ui/App.tsx` with relationship provenance table, STIG→CCI→NIST trace, baseline delta lists, and exports.
-
-## Epic 4: Template Factory
-
-* **Status:** Shipped.
-
-## Epic 5: Patterns + Glossary + Start Here
-
-* **Status:** Shipped.
-
-## Epic 6: QA + Accessibility + Release
-
-* **Status:** Active sprint.
-* **E2E gap:** Graph/table fallback and full critical-path matrix still open. Template generation E2E shipped in Epic 4. Start Here navigation E2E shipped in Epic 5.
-* **A11y:** Playwright a11y suite exists; occasional timeout flake under full `precommit`.
-* **Release:** No versioned release candidate tag yet.
+* **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).
 
 ---
 

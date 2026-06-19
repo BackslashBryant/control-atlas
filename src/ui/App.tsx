@@ -1374,7 +1374,7 @@ function ComparePage(props: {
                   <CompareExportButtons onExport={exportRows} />
                   <Accordion.Root className="accordion-root" collapsible type="single">
                     <DisclosurePanel title="Detailed mappings" value="rows">
-                      <table className="detail-table">
+                      <table aria-label="Relationship mappings" className="detail-table">
                         <thead>
                           <tr>
                             <th>From</th>

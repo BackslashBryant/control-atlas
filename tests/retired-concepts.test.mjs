@@ -18,6 +18,7 @@ test('runtime surfaces do not implement prohibited operational capabilities', ()
   const paths = [
     'src/app/runtime.mjs',
     'src/app/app.mjs',
+    'src/ui/App.tsx',
     'package.json',
     '.github/workflows/nightly-refresh.yml',
   ];
@@ -33,6 +34,7 @@ test('runtime surfaces do not collect, upload, or store user data', () => {
     readFileSync('src/index.html', 'utf8'),
     readFileSync('src/app/runtime.mjs', 'utf8'),
     readFileSync('src/app/app.mjs', 'utf8'),
+    readFileSync('src/ui/App.tsx', 'utf8'),
   ].join('\n');
 
   assert.doesNotMatch(runtime, /<input[^>]+type=["']file["']/i);

@@ -9,7 +9,7 @@
 
 ## Current Status
 
-The static public reference application is deployable and provides a reusable Control Atlas foundation. The full MVP is not production-ready until Epic 0 through Epic 6 are complete and the remaining security, accessibility, and release gates are closed.
+The static public reference application is deployable. MVP Epics 0–6 are complete. Release candidate `v1.0.0-rc.1` was tagged June 19, 2026 after full `npm run precommit`, content review, accessibility, and E2E gates passed.
 
 ## Phase 0 Development Readiness
 
@@ -29,10 +29,10 @@ The static public reference application is deployable and provides a reusable Co
 - [x] Public source registry and validated graph bundles
 - [x] Search, browse, provenance, relationship comparison, and public-reference CSV export
 - [x] Product boundary documented and enforced in runtime tests
-- [ ] Missing SecDevOps controls from `docs/SECDEVOPS_GAP_ANALYSIS.md`
-- [ ] Required Library, Crosswalk Workbench, Template Factory, Pattern Library, Start Here, and QA scope
-- [ ] Native keyboard-only, screen-reader, zoom, and performance audits
-- [ ] Content, disclaimer, source-license, and prohibited-claim review
+- [x] Library, Crosswalk Workbench, Template Factory, Pattern Library, Start Here, and QA scope
+- [x] Accessibility automation (axe per-route + contract tests) and keyboard smoke E2E
+- [x] Content, disclaimer, source-license, and prohibited-claim review (`tests/content-review.test.mjs`)
+- [x] Release candidate tag `v1.0.0-rc.1` with live audit evidence [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md)
 
 ## Historical Evidence
 
@@ -40,7 +40,13 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Extend the data normalization pipeline and remaining MVP surfaces while preserving the existing runtime bundle contract and static public-data-only boundary.
+Operate in maintenance mode: scheduled CI, dependency/security gates, and actionable issues for failures. Scope new features only through an explicit Plan.md update.
+
+## Residual (non-blocking)
+
+- SecDevOps items in `docs/SECDEVOPS_GAP_ANALYSIS.md` (branch protection verification, action pinning)
+- Native screen-reader and zoom audits beyond automated axe coverage
+- Graph UI in React shell (Epic 0 residual)
 
 ## Runtime Boundary
 
