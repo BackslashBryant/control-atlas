@@ -24,3 +24,7 @@ Documentation may name prohibited concepts to explain the boundary. Tests must r
 ## Release Audit
 
 Automated marker tests are not enough for release completion. Runtime/public-shell changes require a fresh live GitHub Pages audit. MVP release also requires native keyboard-only, screen-reader, responsive, zoom, performance, and accessibility verification.
+
+**Manual a11y playbook:** [`docs/audits/a11y-manual-checklist.md`](../audits/a11y-manual-checklist.md) — complete before public-shell release; cite completion in the live audit doc.
+
+**Live Pages audit template:** [`docs/audits/live-pages-audit-template.md`](../audits/live-pages-audit-template.md) — copy for each release or epic closeout.

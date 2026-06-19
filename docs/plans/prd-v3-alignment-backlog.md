@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** June 19, 2026 (after Epic 6 QA + Release ship — tag `v1.0.0-rc.1`)
+**Last synced:** June 19, 2026 (Epic 7 Platform Trust & Hardening shipped)
 
 ## Epic 0: GovFrame → Control Atlas Migration
 
@@ -14,7 +14,15 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 * **Status:** Closed for MVP. Residual only.
 * **Residual:** Continued importer and plain-language quality tuning is maintenance, not a blocking backlog item. Contract tests in `tests/federal-graph-contract.test.mjs` enforce the adopted schema.
 
-## Epics 2–6
+## Epic 2: Library + Search
+
+* **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).
+
+## Epic 3: Compare
+
+* **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).
+
+## Epics 4–6
 
 * **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).
 

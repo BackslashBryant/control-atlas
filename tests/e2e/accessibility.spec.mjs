@@ -33,6 +33,7 @@ const ROUTES = [
   { label: 'patterns hub', path: '/?view=patterns' },
   { label: 'pattern detail', path: '/?view=patterns&pattern=rmf-lifecycle' },
   { label: 'start here', path: '/?view=start-here' },
+  { label: 'about', path: '/?view=about' },
 ];
 
 for (const route of ROUTES) {

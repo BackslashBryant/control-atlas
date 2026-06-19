@@ -508,4 +508,7 @@ test('view state preserves epic 0 navigation-only surfaces', () => {
   assert.deepEqual(parseViewState('?view=templates&mode=expert'), { mode: 'expert', view: 'templates' });
   assert.deepEqual(normalizeViewState('start-here', { query: 'AC-2', mode: 'expert' }), { mode: 'expert', view: 'start-here' });
   assert.equal(serializeViewState({ view: 'patterns' }), '?view=patterns');
+  assert.deepEqual(parseViewState('?view=about'), { view: 'about' });
+  assert.equal(serializeViewState({ view: 'about' }), '?view=about');
+  assert.deepEqual(normalizeViewState('about', { query: 'AC-2' }), { view: 'about' });
 });

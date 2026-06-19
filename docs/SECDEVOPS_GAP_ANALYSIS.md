@@ -1,6 +1,7 @@
 # SecDevOps Gap Analysis
 
 Analysis date: 2026-06-14
+**Epic 7 update:** 2026-06-19
 
 ## Workflow Baseline
 
@@ -30,26 +31,29 @@ Analysis date: 2026-06-14
 | License check | `npm run license:check` in local, CI, Pages, nightly, and precommit flows |
 | GitHub secret scanning and push protection | Enabled at the repository settings level after the hosted rename |
 | GitHub Pages deployment | `pages.yml` |
+| Accessibility automation | `npm run test:a11y` per-route axe in CI and precommit |
+| Manual a11y release playbook | [`docs/audits/a11y-manual-checklist.md`](audits/a11y-manual-checklist.md) |
+| Live Pages audit template | [`docs/audits/live-pages-audit-template.md`](audits/live-pages-audit-template.md) |
 
 ## Partially Present
 
 | Required control | Current evidence | Missing next |
 | --- | --- | --- |
-| Accessibility smoke tests | `smoke:dom` plus browser/shell marker tests | Add explicit accessibility automation and keep manual release audit |
-| Secret scanning | `secret-scan.yml` runs gitleaks and GitHub secret scanning plus push protection are enabled | Keep release evidence that hosted settings remain enabled after future admin changes |
+| Secret scanning | `secret-scan.yml` runs gitleaks and GitHub secret scanning plus push protection are enabled | Re-verify hosted settings after admin changes |
 | Static build gate | CI, Pages, nightly, and precommit all run `npm run build:site` before verification | Keep the staged-output contract covered as repo layout evolves |
-| Release audit coverage | Browser contract tests and historical live audits exist | Add repeatable Control Atlas live Pages audit checklist for every public-shell change |
+| Branch protection verification | Policy documented in [`docs/audits/branch-protection-verification-2026-06-19.md`](audits/branch-protection-verification-2026-06-19.md) | Paste authenticated `gh api` JSON when credentials available |
 
-## Missing Next
+## Closed or Deferred (Epic 7)
 
-| Required control | Recommended implementation |
-| --- | --- |
-| Branch protection verification | Document and enforce protected `main` gates outside repo contents |
-| Action pinning | Review tag-based GitHub Actions usage and decide on SHA pinning |
+| Required control | Status | Evidence |
+| --- | --- | --- |
+| Release audit coverage | **Closed** | Repeatable template + Epic 7 live audit |
+| Accessibility manual audit | **Closed** | Checklist + release gate in PRODUCTION_READINESS |
+| Action pinning | **Deferred** | [`docs/adr/0012-defer-github-actions-sha-pinning.md`](adr/0012-defer-github-actions-sha-pinning.md) — major-version tags + Dependabot |
 
-## Priority Order
+## Priority Order (post–Epic 7)
 
-1. Accessibility automation plus repeatable live Pages audit evidence.
-2. Branch protection verification and action pinning.
+1. Authenticated branch protection API verification when `gh` is available.
+2. Revisit SHA pinning when org policy or authenticated SHA resolution is available.
 
 Existing workflows should be extended, not replaced blindly. Security automation must not introduce a backend, telemetry, or any production patching bot behavior.

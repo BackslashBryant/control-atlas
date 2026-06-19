@@ -6,6 +6,7 @@ export type AppView =
   | 'templates'
   | 'sources'
   | 'start-here'
+  | 'about'
   | 'retired'
   | 'browse';
 
@@ -68,6 +69,9 @@ export type ViewState =
       systemType: string;
       dataSensitivity: string;
       environment: string;
+    }
+  | {
+      view: 'about';
     }
   | {
       view: 'retired';
@@ -184,6 +188,10 @@ export function parseViewState(search: string): ViewState {
     };
   }
 
+  if (view === 'about') {
+    return { view: 'about' };
+  }
+
   if (view === 'browse') {
     return {
       view,
@@ -260,6 +268,10 @@ export function normalizeViewState(view: AppView, state: Partial<ViewState> = {}
       dataSensitivity: incoming.dataSensitivity || '',
       environment: incoming.environment || '',
     };
+  }
+
+  if (view === 'about') {
+    return { view: 'about' };
   }
 
   if (view === 'retired') {
@@ -344,6 +356,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, 'systemType', state.systemType);
     setIfValue(params, 'dataSensitivity', state.dataSensitivity);
     setIfValue(params, 'environment', state.environment);
+  } else if (state.view === 'about') {
+    params.set('view', state.view);
   } else if (state.view === 'retired') {
     params.set('view', state.view);
     setIfValue(params, 'q', state.query);

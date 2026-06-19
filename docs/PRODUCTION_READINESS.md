@@ -34,6 +34,11 @@ The static public reference application is deployable. MVP Epics 0–6 are compl
 - [x] Content, disclaimer, source-license, and prohibited-claim review (`tests/content-review.test.mjs`)
 - [x] Release candidate tag `v1.0.0-rc.1` with live audit evidence [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md)
 
+## Public-shell release gate (Epic 7+)
+
+- [ ] Manual a11y checklist completed — [`docs/audits/a11y-manual-checklist.md`](audits/a11y-manual-checklist.md)
+- [ ] Live Pages audit filed from [`docs/audits/live-pages-audit-template.md`](audits/live-pages-audit-template.md)
+
 ## Historical Evidence
 
 Dated files under `docs/audits/` remain historical evidence for prior GovFrame-era deployments. New runtime changes require new Control Atlas audit evidence rather than rewriting old records.
@@ -44,9 +49,9 @@ Operate in maintenance mode: scheduled CI, dependency/security gates, and action
 
 ## Residual (non-blocking)
 
-- SecDevOps items in `docs/SECDEVOPS_GAP_ANALYSIS.md` (branch protection verification, action pinning)
-- Native screen-reader and zoom audits beyond automated axe coverage
-- Graph UI in React shell (Epic 0 residual)
+- Graph UI in React shell (Epic 0 residual; Epic 9 planned)
+- Branch protection API verification pending authenticated `gh` session — policy documented in [`docs/audits/branch-protection-verification-2026-06-19.md`](audits/branch-protection-verification-2026-06-19.md)
+- Action SHA pinning deferred per [`docs/adr/0012-defer-github-actions-sha-pinning.md`](adr/0012-defer-github-actions-sha-pinning.md)
 
 ## Runtime Boundary
 
