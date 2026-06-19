@@ -8,7 +8,7 @@
     "build:data": "node ./scripts/build-framework-data.mjs",
     "build:xref": "npm run build:data",
     "audit:deps": "node ./scripts/security/npm-audit.mjs",
-    "lint": "eslint src tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/framework-runtime.test.mjs tests/package-scripts.test.mjs tests/e2e/control-atlas-shell.spec.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/check-licenses.mjs tools/serve-static-site.mjs tools/sync-public.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
+    "lint": "eslint src tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/framework-runtime.test.mjs tests/package-scripts.test.mjs tests/e2e/control-atlas-shell.spec.mjs tests/e2e/landing-performance.spec.mjs tests/e2e/accessibility.spec.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/check-licenses.mjs tools/serve-static-site.mjs tools/sync-public.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
     "fetch:disa-stigs": "node ./scripts/fetch-disa-stigs.mjs",
@@ -22,18 +22,20 @@
     "test": "npm run test:data && npm run test:runtime",
     "test:data": "node --test --test-concurrency=1 ./tests/source-registry.test.mjs ./tests/template-registry.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/dod-zt-extract.test.mjs ./tests/oscal-normalize.test.mjs ./tests/disa-stig-importer.test.mjs ./tests/stig-source-observer.test.mjs ./tests/retired-concepts.test.mjs ./tests/alignment-contract.test.mjs ./tests/package-scripts.test.mjs ./tests/prd-alignment.test.mjs",
     "test:e2e": "npm run build:site && playwright test",
+    "test:a11y": "npm run build:site && playwright test tests/e2e/accessibility.spec.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
     "smoke:dom": "node ./scripts/dom-smoke.mjs",
     "audit:coverage": "node ./scripts/audit-coverage.mjs",
     "typecheck": "tsc --project tsconfig.json --noEmit && tsc --project tsconfig.app.json --noEmit",
     "verify:public": "npm run check:data-size && npm run smoke:static && npm run audit:coverage",
-    "precommit": "npm run build:site && npm run lint && npm run typecheck && npm run license:check && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public && npm run test:e2e"
+    "precommit": "npm run build:site && npm run lint && npm run typecheck && npm run license:check && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public && npm run test:a11y && npm run test:e2e"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@cyclonedx/cyclonedx-npm": "^4.2.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
@@ -43,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
     "@vitejs/plugin-react": "^6.0.2",
+    "axe-core": "^4.11.0",
     "eslint": "^10.5.0",
     "fast-xml-parser": "^5.2.5",
     "fflate": "^0.8.3",

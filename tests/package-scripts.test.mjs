@@ -42,11 +42,13 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.equal(typeof packageJson.scripts.lint, 'string');
   assert.equal(typeof packageJson.scripts.typecheck, 'string');
   assert.equal(typeof packageJson.scripts['license:check'], 'string');
+  assert.equal(typeof packageJson.scripts['test:a11y'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e'], 'string');
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(packageJson.scripts.precommit, /npm run lint/);
   assert.match(packageJson.scripts.precommit, /npm run typecheck/);
   assert.match(packageJson.scripts.precommit, /npm run license:check/);
+  assert.match(packageJson.scripts.precommit, /npm run test:a11y/);
 });
 
 test('translation-first frontend foundation adds React, Vite, and targeted Radix support', () => {
@@ -72,12 +74,15 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(ciWorkflow, /npm run lint/);
   assert.match(ciWorkflow, /npm run typecheck/);
   assert.match(ciWorkflow, /npm run license:check/);
+  assert.match(ciWorkflow, /npm run test:a11y/);
   assert.match(ciWorkflow, /npm run test:e2e/);
   assert.match(pagesWorkflow, /npm run lint/);
   assert.match(pagesWorkflow, /npm run typecheck/);
+  assert.match(pagesWorkflow, /npm run test:a11y/);
   assert.match(pagesWorkflow, /npm run test:e2e/);
   assert.match(nightlyWorkflow, /npm run build:site/);
   assert.match(nightlyWorkflow, /npm run license:check/);
+  assert.match(nightlyWorkflow, /npm run test:a11y/);
 });
 
 test('dependency review and dependabot automation exist', () => {
