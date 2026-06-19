@@ -31,6 +31,12 @@ import { patternsData } from '../app/patterns-data.mjs';
 import { displayNameFor, userFacingLoadError } from '../app/display-names.mjs';
 import { groupRelationships } from '../app/relationship-groups.mjs';
 import { generateTemplate } from '../app/template-engine.mjs';
+import {
+  ChainRelationshipItem,
+  parseCatalogItemIds,
+  ProvenanceBadge,
+  SourceRefList,
+} from './lib/compareHelpers';
 import { loadRuntimeDataset } from './lib/runtimeLoader';
 import {
   normalizeViewState,
@@ -919,6 +925,56 @@ function DetailPage(props: {
   );
 }
 
+function CompareExportButtons(props: {
+  disabled?: boolean;
+  onExport: (format: 'csv' | 'markdown' | 'json') => void;
+}) {
+  return (
+    <div className="card-actions">
+      <button className="secondary" disabled={props.disabled} onClick={() => props.onExport('csv')} type="button">
+        Export CSV
+      </button>
+      <button className="secondary" disabled={props.disabled} onClick={() => props.onExport('markdown')} type="button">
+        Export Markdown
+      </button>
+      <button className="secondary" disabled={props.disabled} onClick={() => props.onExport('json')} type="button">
+        Export JSON
+      </button>
+    </div>
+  );
+}
+
+function BaselineControlSection(props: {
+  controls: Array<{ control_node: any; source_refs?: Array<Record<string, string>> }>;
+  onOpenNode: (nodeId: string) => void;
+  title: string;
+}) {
+  return (
+    <SummaryCard title={props.title}>
+      <p>{props.controls.length} control{props.controls.length === 1 ? '' : 's'}</p>
+      {props.controls.length ? (
+        <ul className="source-ref-list">
+          {props.controls.map((entry) => {
+            const control = entry.control_node;
+            const itemId = control.metadata?.item_id || control.id;
+            const title = control.metadata?.title || control.label || itemId;
+            return (
+              <li key={control.id}>
+                <button className="link-action" onClick={() => props.onOpenNode(control.id)} type="button">
+                  <strong>{itemId}</strong> — {title}
+                </button>
+                <SourceRefList refs={entry.source_refs} />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="muted">No controls in this section.</p>
+      )}
+    </SummaryCard>
+  );
+}
+
 function ComparePage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: 'matrix' }>;
@@ -928,6 +984,10 @@ function ComparePage(props: {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const catalogs = bundle.runtime.getCatalogs();
   const workbench = state.workbench || 'intent';
+  const relationshipNodeIds = useMemo(
+    () => parseCatalogItemIds(state.items, state.source),
+    [state.items, state.source],
+  );
   const relationshipRows =
     workbench === 'relationships'
       ? bundle.runtime.buildRelationshipRows({
@@ -937,13 +997,45 @@ function ComparePage(props: {
           provenance_class: state.provenance,
           confidence: state.confidence,
           include_candidates: state.includeCandidates === 'true',
-          node_ids: [],
+          node_ids: relationshipNodeIds,
         })
       : null;
+  const relationshipFilterOptions = useMemo(() => {
+    if (!state.source || !state.target) {
+      return { types: [] as string[], provenances: [] as string[], confidences: [] as string[] };
+    }
+    const optionRows = bundle.runtime.buildRelationshipRows({
+      source_catalog: state.source,
+      target_catalog: state.target,
+      include_candidates: true,
+      node_ids: relationshipNodeIds,
+    }).rows;
+    return {
+      types: [...new Set(optionRows.map((row: any) => row.relationship_type).filter(Boolean))].sort() as string[],
+      provenances: [...new Set(optionRows.map((row: any) => row.provenance_class).filter(Boolean))].sort() as string[],
+      confidences: [...new Set(optionRows.map((row: any) => row.confidence).filter(Boolean))].sort() as string[],
+    };
+  }, [bundle, relationshipNodeIds, state.source, state.target]);
+  const chainCatalogId = state.chainCatalog || 'disa-stig';
+  const chainCatalogNodes = useMemo(
+    () => bundle.runtime
+      .getNodes({ catalog_id: chainCatalogId })
+      .sort((left: any, right: any) =>
+        (left.metadata?.item_id || '').localeCompare(right.metadata?.item_id || '') || left.id.localeCompare(right.id)),
+    [bundle, chainCatalogId],
+  );
+  const chainBenchmarkOptions = useMemo(
+    () => [...new Map(chainCatalogNodes.map((node: any) => {
+      const value = node.metadata?.benchmark_id || node.source_id;
+      const label = node.metadata?.benchmark_title || bundle.runtime.getSource(node.source_id)?.name || value;
+      return [value, { value, label }];
+    })).values()] as Array<{ value: string; label: string }>,
+    [bundle, chainCatalogNodes],
+  );
   const chainPayload =
     workbench === 'stig-chain'
       ? bundle.runtime.buildStigChain({
-          chain_catalog: state.chainCatalog || 'disa-stig',
+          chain_catalog: chainCatalogId,
           chain_benchmark: state.chainBenchmark,
           chain_item: state.chainItem,
           include_candidates: state.includeCandidates === 'true',
@@ -957,6 +1049,7 @@ function ComparePage(props: {
     workbench === 'baseline-compare' && state.baselineA && state.baselineB && state.baselineA !== state.baselineB
       ? bundle.runtime.buildBaselineComparison({ baseline_a: state.baselineA, baseline_b: state.baselineB })
       : null;
+  const selectedChain = chainPayload?.selected_chain;
 
   const comparisonCards: Array<{ title: string; body: string; workbench: CompareWorkbench }> = [
     {
@@ -1058,6 +1151,61 @@ function ComparePage(props: {
                   />
                 </Field>
               </div>
+              {state.source && state.target ? (
+                <Accordion.Root className="accordion-root" collapsible type="single">
+                  <DisclosurePanel title="Refine comparison" value="refine">
+                    <div className="filter-grid">
+                      <SelectField
+                        emptyLabel="All connection types"
+                        label="Connection type"
+                        onChange={(value) => onNavigate('matrix', { ...state, workbench, relationshipType: value })}
+                        options={relationshipFilterOptions.types.map((value) => ({
+                          value,
+                          label: displayNameFor('relationship_type', value),
+                        }))}
+                        value={state.relationshipType}
+                      />
+                      <SelectField
+                        emptyLabel="All source bases"
+                        label="Source basis"
+                        onChange={(value) => onNavigate('matrix', { ...state, workbench, provenance: value })}
+                        options={relationshipFilterOptions.provenances.map((value) => ({
+                          value,
+                          label: displayNameFor('provenance_class', value),
+                        }))}
+                        value={state.provenance}
+                      />
+                      <SelectField
+                        emptyLabel="All trust levels"
+                        label="Trust level"
+                        onChange={(value) => onNavigate('matrix', { ...state, workbench, confidence: value })}
+                        options={relationshipFilterOptions.confidences.map((value) => ({
+                          value,
+                          label: displayNameFor('confidence', value),
+                        }))}
+                        value={state.confidence}
+                      />
+                      <Field label="Show inferred mappings">
+                        <label className="checkbox-field">
+                          <input
+                            checked={state.includeCandidates === 'true'}
+                            onChange={(event) => onNavigate('matrix', {
+                              ...state,
+                              workbench,
+                              includeCandidates: event.target.checked ? 'true' : '',
+                            })}
+                            type="checkbox"
+                          />
+                          <span>Include candidate and inferred links</span>
+                        </label>
+                      </Field>
+                    </div>
+                    <p className="compare-legend">
+                      Official link = published mapping. Inferred link = candidate mapping that still needs review.
+                    </p>
+                  </DisclosurePanel>
+                </Accordion.Root>
+              ) : null}
               {relationshipRows?.rows?.length ? (
                 <>
                   <div className="summary-grid">
@@ -1071,17 +1219,7 @@ function ComparePage(props: {
                       <p>Review the summary first, then open detailed mappings only if you need the exact row-level trace.</p>
                     </SummaryCard>
                   </div>
-                  <div className="card-actions">
-                    <button className="secondary" onClick={() => exportRows('csv')} type="button">
-                      Export CSV
-                    </button>
-                    <button className="secondary" onClick={() => exportRows('markdown')} type="button">
-                      Export Markdown
-                    </button>
-                    <button className="secondary" onClick={() => exportRows('json')} type="button">
-                      Export JSON
-                    </button>
-                  </div>
+                  <CompareExportButtons onExport={exportRows} />
                   <Accordion.Root className="accordion-root" collapsible type="single">
                     <DisclosurePanel title="Detailed mappings" value="rows">
                       <table className="detail-table">
@@ -1090,18 +1228,39 @@ function ComparePage(props: {
                             <th>From</th>
                             <th>To</th>
                             <th>Connection</th>
-                            <th>Source type</th>
+                            <th>Source basis</th>
                             <th>Trust level</th>
+                            <th>Official rationale</th>
+                            <th>Plain-language rationale</th>
+                            <th>Source references</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {relationshipRows.rows.slice(0, 30).map((row: any) => (
+                          {relationshipRows.rows.map((row: any) => (
                             <tr key={row.edge_id}>
-                              <td>{row.from_item_id}</td>
-                              <td>{row.to_item_id}</td>
+                              <td>
+                                <strong>{row.from_item_id}</strong>
+                                <br />
+                                <span className="muted">{row.from_title}</span>
+                              </td>
+                              <td>
+                                <strong>{row.to_item_id}</strong>
+                                <br />
+                                <span className="muted">{row.to_title}</span>
+                              </td>
                               <td>{displayNameFor('relationship_type', row.relationship_type)}</td>
-                              <td>{displayNameFor('provenance_class', row.provenance_class)}</td>
+                              <td>
+                                <ProvenanceBadge
+                                  provenanceClass={row.provenance_class}
+                                  publicationStatus={row.publication_status}
+                                />
+                              </td>
                               <td>{displayNameFor('confidence', row.confidence)}</td>
+                              <td>{row.rationale || 'No public rationale recorded.'}</td>
+                              <td>{row.plain_language_rationale || 'No plain-language rationale recorded.'}</td>
+                              <td>
+                                <SourceRefList refs={row.source_refs} />
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -1124,44 +1283,151 @@ function ComparePage(props: {
               <div className="filter-grid">
                 <SelectField
                   label="Catalog"
-                  onChange={(value) => onNavigate('matrix', { ...state, workbench, chainCatalog: value })}
+                  onChange={(value) => onNavigate('matrix', {
+                    ...state,
+                    workbench,
+                    chainCatalog: value,
+                    chainBenchmark: '',
+                    chainItem: '',
+                  })}
                   options={[
                     { value: 'disa-stig', label: 'DISA STIG' },
                     { value: 'disa-srg', label: 'DISA SRG' },
                   ]}
-                  value={state.chainCatalog || 'disa-stig'}
+                  value={chainCatalogId}
                 />
-                <Field label="Item ID (optional)">
-                  <input
-                    onChange={(event) => onNavigate('matrix', { ...state, workbench, chainItem: event.target.value })}
-                    placeholder="V-220708"
-                    value={state.chainItem}
-                  />
+                <SelectField
+                  emptyLabel="All benchmarks"
+                  label="Benchmark scope"
+                  onChange={(value) => onNavigate('matrix', { ...state, workbench, chainBenchmark: value, chainItem: '' })}
+                  options={chainBenchmarkOptions}
+                  value={state.chainBenchmark}
+                />
+                <SelectField
+                  emptyLabel="All visible items"
+                  label="STIG or SRG item"
+                  onChange={(value) => onNavigate('matrix', { ...state, workbench, chainItem: value })}
+                  options={chainCatalogNodes
+                    .filter((node: any) => !state.chainBenchmark
+                      || node.metadata?.benchmark_id === state.chainBenchmark
+                      || node.source_id === state.chainBenchmark)
+                    .map((node: any) => ({
+                      value: node.id,
+                      label: `${node.metadata?.item_id || node.id} - ${node.metadata?.title || node.label}`,
+                    }))}
+                  value={state.chainItem}
+                />
+                <Field label="Show inferred mappings">
+                  <label className="checkbox-field">
+                    <input
+                      checked={state.includeCandidates === 'true'}
+                      onChange={(event) => onNavigate('matrix', {
+                        ...state,
+                        workbench,
+                        includeCandidates: event.target.checked ? 'true' : '',
+                      })}
+                      type="checkbox"
+                    />
+                    <span>Include candidate and inferred links</span>
+                  </label>
                 </Field>
               </div>
+              <p className="compare-legend">
+                Official link = published mapping. Inferred link = candidate mapping. Pick a STIG rule, review CCI connections, then open the related NIST control.
+              </p>
               {chainPayload?.rows?.length ? (
                 <div className="stack">
                   <SummaryCard title="What this is">
                     <p>{chainPayload.rows.length} STIG or SRG items are visible in the current chain scope.</p>
                   </SummaryCard>
-                  <div className="stack compact">
-                    {chainPayload.rows.slice(0, 20).map((row: any) => (
-                      <article className="result-card compact" key={row.node_id}>
-                        <div className="result-card-header">
-                          <div>
-                            <p className="result-meta">{row.item_id}</p>
-                            <h3>{row.title}</h3>
-                          </div>
-                          <Badge tone="info">{row.nist_control_count} related controls</Badge>
-                        </div>
-                        <div className="card-actions">
-                          <button className="primary" onClick={() => onOpenNode(row.node_id)} type="button">
-                            Open detail
-                          </button>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
+                  <CompareExportButtons
+                    disabled={!(chainPayload.rows.length || selectedChain)}
+                    onExport={exportRows}
+                  />
+                  <table className="detail-table" aria-label="STIG chain summary">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Benchmark</th>
+                        <th>CCIs</th>
+                        <th>NIST controls</th>
+                        <th>Unmapped CCIs</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {chainPayload.rows.map((row: any) => (
+                        <tr className={state.chainItem === row.node_id || state.chainItem === row.item_id ? 'active-row' : ''} key={row.node_id}>
+                          <td>
+                            <strong>{row.item_id}</strong>
+                            <br />
+                            <span className="muted">{row.title}</span>
+                          </td>
+                          <td>{row.benchmark_title}</td>
+                          <td>{row.cci_count}</td>
+                          <td>{row.nist_control_count}</td>
+                          <td>{row.unmapped_cci_count}</td>
+                          <td>
+                            <button
+                              className="secondary"
+                              onClick={() => onNavigate('matrix', { ...state, workbench, chainItem: row.node_id })}
+                              type="button"
+                            >
+                              Trace this item
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {selectedChain ? (
+                    <section className="stack">
+                      <PageHeader
+                        eyebrow="Selected chain"
+                        summary="Follow the public links from the DISA item through CCI to NIST controls."
+                        title={`${selectedChain.source_node.metadata?.item_id || selectedChain.source_node.id} — ${selectedChain.source_node.metadata?.title || selectedChain.source_node.label}`}
+                      />
+                      <div className="chain-grid">
+                        <SummaryCard title="CCI links">
+                          <ul className="source-ref-list">
+                            {selectedChain.cci_entries.length ? selectedChain.cci_entries.map((entry: any) => (
+                              <ChainRelationshipItem
+                                key={entry.cciNode.id}
+                                node={entry.cciNode}
+                                onOpenNode={onOpenNode}
+                                relationshipEdge={entry.relationshipEdge}
+                                sourceRefs={entry.sourceRefs}
+                              />
+                            )) : <li>No CCI links.</li>}
+                          </ul>
+                        </SummaryCard>
+                        <SummaryCard title="NIST controls">
+                          <ul className="source-ref-list">
+                            {selectedChain.nist_entries.length ? selectedChain.nist_entries.map((entry: any) => (
+                              <ChainRelationshipItem
+                                key={entry.nistNode.id}
+                                node={entry.nistNode}
+                                onOpenNode={onOpenNode}
+                                relationshipEdge={entry.relationshipEdge}
+                                sourceRefs={entry.sourceRefs}
+                              />
+                            )) : <li>No NIST controls reached from this visible chain.</li>}
+                          </ul>
+                        </SummaryCard>
+                        <SummaryCard title="Unmapped CCIs">
+                          <ul className="source-ref-list">
+                            {selectedChain.unmapped_cci_nodes.length ? selectedChain.unmapped_cci_nodes.map((node: any) => (
+                              <li className="chain-link-item" key={node.id}>
+                                <button className="link-action" onClick={() => onOpenNode(node.id)} type="button">
+                                  <strong>{node.metadata?.item_id || node.id}</strong> — {node.metadata?.title || node.label}
+                                </button>
+                              </li>
+                            )) : <li>Every visible CCI has a visible NIST link.</li>}
+                          </ul>
+                        </SummaryCard>
+                      </div>
+                    </section>
+                  ) : null}
                 </div>
               ) : (
                 <section className="empty-state">
@@ -1189,17 +1455,59 @@ function ComparePage(props: {
                 />
               </div>
               {baselineComparison ? (
-                <div className="summary-grid">
-                  <SummaryCard title="Shared controls">
-                    <p>{baselineComparison.shared.length}</p>
-                  </SummaryCard>
-                  <SummaryCard title="Only in A">
-                    <p>{baselineComparison.only_a.length}</p>
-                  </SummaryCard>
-                  <SummaryCard title="Only in B">
-                    <p>{baselineComparison.only_b.length}</p>
-                  </SummaryCard>
-                </div>
+                <>
+                  {baselineComparison.baseline_a_source ? (
+                    <p className="baseline-source-summary">
+                      Baseline A: {baselineComparison.baseline_a?.metadata?.item_id || baselineComparison.baseline_a?.id}
+                      {' — '}
+                      {baselineComparison.baseline_a?.metadata?.title || baselineComparison.baseline_a?.label}
+                      {' ('}
+                      {baselineComparison.baseline_a_source.name}
+                      {baselineComparison.baseline_a_source.version ? ` v${baselineComparison.baseline_a_source.version}` : ''}
+                      )
+                    </p>
+                  ) : null}
+                  {baselineComparison.baseline_b_source ? (
+                    <p className="baseline-source-summary">
+                      Baseline B: {baselineComparison.baseline_b?.metadata?.item_id || baselineComparison.baseline_b?.id}
+                      {' — '}
+                      {baselineComparison.baseline_b?.metadata?.title || baselineComparison.baseline_b?.label}
+                      {' ('}
+                      {baselineComparison.baseline_b_source.name}
+                      {baselineComparison.baseline_b_source.version ? ` v${baselineComparison.baseline_b_source.version}` : ''}
+                      )
+                    </p>
+                  ) : null}
+                  <div className="summary-grid">
+                    <SummaryCard title="Shared controls">
+                      <p>{baselineComparison.shared.length}</p>
+                    </SummaryCard>
+                    <SummaryCard title="Only in A">
+                      <p>{baselineComparison.only_a.length}</p>
+                    </SummaryCard>
+                    <SummaryCard title="Only in B">
+                      <p>{baselineComparison.only_b.length}</p>
+                    </SummaryCard>
+                  </div>
+                  <CompareExportButtons onExport={exportRows} />
+                  <div className="chain-grid">
+                    <BaselineControlSection
+                      controls={baselineComparison.shared}
+                      onOpenNode={onOpenNode}
+                      title="Shared controls"
+                    />
+                    <BaselineControlSection
+                      controls={baselineComparison.only_a}
+                      onOpenNode={onOpenNode}
+                      title="Only in A"
+                    />
+                    <BaselineControlSection
+                      controls={baselineComparison.only_b}
+                      onOpenNode={onOpenNode}
+                      title="Only in B"
+                    />
+                  </div>
+                </>
               ) : (
                 <section className="empty-state">
                   <h2>Choose two distinct baselines</h2>
@@ -1750,6 +2058,7 @@ function Field(props: { label: string; children: ReactNode }) {
 }
 
 function SelectField(props: {
+  emptyLabel?: string;
   label: string;
   value: string;
   options: Array<{ value: string; label: string }>;
@@ -1759,7 +2068,7 @@ function SelectField(props: {
     <label className="field">
       <span>{props.label}</span>
       <select onChange={(event) => props.onChange(event.target.value)} value={props.value}>
-        <option value="">All</option>
+        <option value="">{props.emptyLabel || 'All'}</option>
         {props.options.map((option) => (
           <option key={`${props.label}-${option.value}`} value={option.value}>
             {option.label}
