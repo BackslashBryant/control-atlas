@@ -38,6 +38,19 @@ In practice this means:
 
 This principle governs every feature, every content decision, and every UX pattern in this document. When in doubt, ask: *does this reduce the distance between the guidance and the action, or does it add friction?*
 
+## Translation-First Product Standard
+
+Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+
+Future work must preserve this order:
+
+1. User intent
+2. Plain-language meaning
+3. Visible relationships
+4. Source trust
+5. Recommended next action
+6. Raw technical detail only on demand
+
 ---
 
 ## What This Is Not
@@ -89,10 +102,10 @@ Six sections. Each one answers a practitioner question.
 |---|---|
 | **Start Here** | Where do I begin? |
 | **Library** | What does this control / STIG / term mean and what connects to it? |
-| **Crosswalks** | How do these frameworks relate to each other? |
+| **Compare** | What do these frameworks share, and where do they differ? |
 | **Patterns** | How does this part of the process actually work? |
 | **Templates** | What do I need to produce, and what should it look like? |
-| **Provenance** | Why should I trust this mapping? |
+| **Sources** | Why should I trust this mapping? |
 
 Navigation order reflects practitioner workflow, not alphabetical or architectural logic.
 
@@ -102,7 +115,7 @@ A short client-side question flow — system type, data sensitivity, operational
 ### Library
 Searchable public reference objects: NIST controls, FedRAMP baselines, DISA STIGs/SRGs, CCIs, MITRE ATT&CK techniques, D3FEND countermeasures, and the compliance glossary. Every object page leads with a plain-language summary before showing formal source text. Related objects, applicable templates, and "what to do next" actions are surfaced on every detail page.
 
-### Crosswalks
+### Compare
 How frameworks map to each other: NIST ↔ FedRAMP, STIG → CCI → NIST, ATT&CK → D3FEND → control, baseline-to-baseline comparisons. Every mapping shows relationship type, provenance class, and confidence. Inferred mappings are clearly labeled. Export to CSV/Markdown/JSON.
 
 ### Patterns
@@ -111,7 +124,7 @@ Plain-language explanations of the authorization and audit concepts practitioner
 ### Templates
 Blank planning templates generated locally in the browser. The selector leads with artifact type — practitioners arrive knowing what they need to produce, not which framework to invoke. Every generated template includes source metadata, a disclaimer, and plain-language prompts that explain what goes in each section and why.
 
-### Provenance
+### Sources
 The trust register for every source in Control Atlas: source class, owner, version, last checked date, parser status, and license notes. Answers "why should I trust this mapping?" — not just "where did it come from?"
 
 ---
@@ -713,7 +726,7 @@ Complete before any new feature work.
 
 ---
 
-### Epic 3: Crosswalks
+### Epic 3: Compare
 
 **Story 3.1 — Relationship table**
 - Displays all edge fields including `plain_language_rationale`
@@ -809,7 +822,7 @@ Each template story acceptance criteria: correct columns/sections per spec, plai
 | 0 | Migration, schema extension, CI | 1 |
 | 1 | Data backbone, importers, normalization | 2–3 |
 | 2 | Library, search, object pages | 2 |
-| 3 | Crosswalks, baseline comparator, export | 2 |
+| 3 | Compare, baseline comparator, export | 2 |
 | 4 | Template Factory (all MVP templates) | 2–3 |
 | 5 | Patterns, Glossary, Start Here | 2 |
 | 6 | QA, accessibility, hardening, launch | 1 |

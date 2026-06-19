@@ -14,6 +14,19 @@ compliance staff.
 Uses public NIST, DISA, FedRAMP, MITRE, and CISA data only.
 No login. No evidence upload. No organizational data stored.
 
+## Translation-First Product Standard
+
+Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+
+Future work must preserve this order:
+
+1. User intent
+2. Plain-language meaning
+3. Visible relationships
+4. Source trust
+5. Recommended next action
+6. Raw technical detail only on demand
+
 ## What it does
 
 - Translates controls, STIGs, and compliance terms into plain language
@@ -41,7 +54,7 @@ Live site target: https://backslashbryant.github.io/control-atlas/
 
 ## Current Reusable Foundation
 
-- Static JavaScript shell already deployed to GitHub Pages
+- Static GitHub Pages deployment with a React + Vite translation-first shell
 - Build-time public-data importers, normalizers, and validators under `scripts/`
 - Stable public runtime bundles: `sources`, `nodes`, `edges`, `evidence`, and `graph-health`
 - Browser-only search, browse, comparison, source inspection, and CSV export behavior

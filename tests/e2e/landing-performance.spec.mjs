@@ -1,45 +1,38 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from './support.mjs';
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test('landing paints before graph artifacts load', async ({ page }) => {
-  const graphRequests = [];
-  page.on('request', (request) => {
-    const url = request.url();
-    if (url.includes('/data/generated/')) graphRequests.push(url);
-  });
-
+test('landing presents the translation-first hero and primary entry paths', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.locator('#page-title')).toBeVisible();
-  await expect(page.locator('#hero-rotating-word')).toBeVisible();
-  await expect(page.getByLabel('ID, title, or topic')).toBeVisible();
-  await expect(page.locator('.landing-walkthrough')).toBeVisible();
-
-  expect(graphRequests).toHaveLength(0);
+  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
+  await expect(page.getByText('Start with meaning')).toBeVisible();
+  await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
+  await expect(page.locator('.hero-actions').getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open glossary support', exact: true })).toBeVisible();
+  await expect(page.locator('.intent-card').filter({ hasText: 'Library' })).toBeVisible();
+  await expect(page.locator('.intent-card').filter({ hasText: 'Compare' })).toBeVisible();
+  await expect(page.locator('.intent-card').filter({ hasText: 'Templates' })).toBeVisible();
 });
 
-test('graph loads only after the user searches', async ({ page }) => {
-  const graphRequests = [];
-  page.on('request', (request) => {
-    const url = request.url();
-    if (url.includes('/data/generated/')) graphRequests.push(url);
-  });
-
+test('landing search and brand-home flow work without legacy onboarding surfaces', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  expect(graphRequests).toHaveLength(0);
 
-  await page.getByLabel('ID, title, or topic').fill('AC-2');
-  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await page.locator('.intent-card', { hasText: 'Library' }).getByRole('button', { name: 'Search AC-2' }).click();
+  await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible();
+  await expect(page.locator('#library-results .result-card').first()).toBeVisible();
+  await expect(page.locator('#library-results')).toContainText('Account Management');
 
-  await expect.poll(() => graphRequests.length, { timeout: 60000 }).toBeGreaterThan(0);
-  await expect(page.getByText('Loading the public compliance map')).toBeHidden({ timeout: 60000 });
-  await expect(page.locator('#library-results .item-card').first()).toBeVisible({ timeout: 10000 });
+  await page.getByRole('button', { name: /Control Atlas/ }).click();
+  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
+  await expect(page.getByText('Start with meaning')).toBeVisible();
+  await expect(page.getByText('Novice Mode')).toHaveCount(0);
+  await expect(page.getByText('Expert Mode')).toHaveCount(0);
 });

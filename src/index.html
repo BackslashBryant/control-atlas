@@ -4,60 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
+  <meta name="application-name" content="Control Atlas | Ctrl+Alt+Comply">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="description" content="Search federal cyber controls, trace source-backed framework links, and download blank RMF planning templates.">
+  <meta name="description" content="Search controls, trace source-backed links, and download blank RMF planning templates.">
   <title>Control Atlas | The public map for federal cyber compliance</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Public+Sans:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/app.css?v=20260618-1">
 </head>
 <body>
-  <a class="skip-link" href="#workspace">Skip to workspace</a>
-  <header class="site-header">
-    <a class="brand" href="./">
-      <span class="brand-mark" aria-hidden="true">CA</span>
-      <span><strong>Control Atlas</strong><small>Ctrl+Alt+Comply</small></span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <button type="button" data-view="search" title="Search controls and browse frameworks">Library</button>
-      <button type="button" data-view="matrix" title="Compare frameworks with source-backed links">Crosswalks</button>
-      <button type="button" data-view="patterns" title="Learn common authorization and control patterns">Patterns</button>
-      <button type="button" data-view="templates" title="Download blank SSP, POA&amp;M, and assessment worksheets">Templates</button>
-      <button type="button" data-view="sources" title="Review catalog sources and data issues">Sources</button>
-      <button type="button" data-view="start-here" title="Answer a few questions for a starting path">Start Here</button>
-    </nav>
-    <div class="header-actions">
-      <button type="button" id="btn-toggle-mode" aria-pressed="true" title="Showing plain-language labels for filters and badges">Plain labels</button>
-      <button type="button" id="btn-toggle-glossary">Help & Glossary</button>
-    </div>
-  </header>
-
-  <main id="workspace" tabindex="-1">
-    <section class="hero" aria-labelledby="page-title">
-      <h1 id="page-title">Control Atlas</h1>
-      <p class="hero-rotating-line" aria-hidden="true">Ctrl+Alt+<span id="hero-rotating-word" class="hero-rotating-word">Comply</span></p>
-      <p class="hero-tagline">Search controls, trace source-backed links, and download blank planning worksheets — no login required.</p>
-      <div class="hero-actions">
-        <button type="button" class="primary" data-view-shortcut="start-here">Start Here</button>
-        <button type="button" class="secondary" data-view-shortcut="search">Explore Library</button>
-        <button type="button" class="secondary" data-view-shortcut="templates">Download blank templates</button>
-      </div>
-    </section>
-    <template id="landing-support-template">
-      <p class="landing-support">Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.</p>
-    </template>
-    <section id="app" aria-live="polite" aria-busy="true" data-app-ready="false">
-      <div class="loading-card">Loading the library...</div>
-    </section>
-  </main>
-
-  <footer>
-    <p>Control Atlas is an open-source reference tool. It does not make compliance or authorization decisions. Official decisions remain with your Authorizing Official.</p>
-    <p>Static, public, and browser-only. No accounts, tracking, backend, or user-data storage.</p>
-  </footer>
-  <script type="module" src="./app/app.mjs?v=20260618-1"></script>
+  <div id="root"></div>
+  <noscript>Control Atlas needs JavaScript to load the public compliance workspace.</noscript>
+  <script type="module" src="./main.tsx"></script>
 </body>
 </html>

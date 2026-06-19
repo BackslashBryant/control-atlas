@@ -2,6 +2,21 @@
 
 The v3.0 PRD defines the active product direction. Existing working components are reused wherever practical, and Epic 0 comes first so the repo, shell, runtime contract, and delivery process are aligned before deeper feature work begins.
 
+## Translation-First Product Standard
+
+Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+
+Future work must preserve this order:
+
+1. User intent
+2. Plain-language meaning
+3. Visible relationships
+4. Source trust
+5. Recommended next action
+6. Raw technical detail only on demand
+
+No roadmap item may be accepted unless it identifies the user confusion it reduces and the action it enables.
+
 ## Epic 0: GovFrame → Control Atlas Migration
 
 **Goal:** Complete the Control Atlas rename, shift the app to a `src/` source tree with staged static deployment, and harden the public runtime without breaking the adopted five-artifact contract.
@@ -32,7 +47,7 @@ The v3.0 PRD defines the active product direction. Existing working components a
 
 **Dependencies:** Epic 1.
 
-## Epic 3: Crosswalks
+## Epic 3: Compare
 
 **Goal:** Expose public relationships, baseline comparisons, and provenance-aware exports.
 
@@ -76,6 +91,6 @@ The v3.0 PRD defines the active product direction. Existing working components a
 
 1. Complete Epic 0 closeout with a fresh live Pages audit against `https://backslashbryant.github.io/control-atlas/`.
 2. Extend the data normalization pipeline (Epic 1) using the adopted runtime contract.
-3. Expand Library Browser (Epic 2) and Crosswalk Workbench (Epic 3).
+3. Expand Library Browser (Epic 2) and the Compare workspace (Epic 3).
 4. Add Template Factory (Epic 4), then Patterns, Glossary, and Start Here (Epic 5).
 5. Finish Epic 6 release hardening and live audits.

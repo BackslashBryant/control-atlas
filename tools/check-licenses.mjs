@@ -12,6 +12,8 @@ const ALLOWED_LICENSES = new Set([
   'BlueOak-1.0.0',
   'CC0-1.0',
   'CC-BY-3.0',
+  'MPL-2.0',
+  '0BSD',
   'Python-2.0',
   '(MIT OR WTFPL)',
   '(BSD-2-Clause OR MIT OR Apache-2.0)',

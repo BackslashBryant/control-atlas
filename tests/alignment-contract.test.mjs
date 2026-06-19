@@ -8,6 +8,9 @@ const requiredDocs = [
   'docs/inventory/repository-inventory.md',
   'docs/inventory/out-of-scope.md',
   'docs/SECDEVOPS_GAP_ANALYSIS.md',
+  'docs/design/translation-first-design.md',
+  'docs/design/content-style-guide.md',
+  'docs/design/design-system.md',
   'docs/adr/0001-static-first-github-pages.md',
   'docs/adr/0002-public-data-only-boundary.md',
   'docs/adr/0003-no-user-org-system-data.md',
@@ -19,6 +22,7 @@ const requiredDocs = [
   'docs/adr/0009-provenance-registry-naming.md',
   'docs/adr/0010-d3-phase-0-baseline.md',
   'docs/adr/0011-defer-risky-renames.md',
+  'docs/adr/ADR-translation-first-user-experience-boundary.md',
 ];
 
 test('alignment deliverables exist', () => {
@@ -49,10 +53,10 @@ test('core product docs state the canonical Control Atlas boundary', () => {
 test('roadmap contains the Phase 0 through Phase 6 Control Atlas epics', () => {
   const roadmap = readFileSync('docs/roadmap.md', 'utf8');
   for (const epic of [
-    'Epic 0: GovFrame → Control Atlas Migration',
+    'Epic 0: GovFrame .+ Control Atlas Migration',
     'Epic 1: Data Backbone',
     'Epic 2: Library \\+ Search',
-    'Epic 3: Crosswalks',
+    'Epic 3: Compare',
     'Epic 4: Template Factory',
     'Epic 5: Patterns \\+ Glossary \\+ Start Here',
     'Epic 6: QA \\+ Accessibility \\+ Release',
@@ -86,4 +90,40 @@ test('architecture and inventory docs reflect the adopted Phase 0 baseline', () 
   assert.match(scope, /eMASS/i);
   assert.match(scope, /ServiceNow GRC/i);
   assert.match(scope, /No login/i);
+});
+
+test('translation-first governance docs and templates enforce clarity and action rules', () => {
+  for (const path of [
+    'docs/PRD.md',
+    'docs/Plan.md',
+    'docs/roadmap.md',
+    'docs/DESIGN_PRINCIPLES.md',
+    'docs/design/translation-first-design.md',
+    'docs/design/content-style-guide.md',
+    'docs/design/design-system.md',
+  ]) {
+    const content = readFileSync(path, 'utf8');
+    assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard)/i, `${path} must carry the translation-first doctrine`);
+  }
+
+  const designPrinciples = readFileSync('docs/DESIGN_PRINCIPLES.md', 'utf8');
+  assert.match(designPrinciples, /What is this\? Why does it matter\? What should I do with it\?/i);
+
+  const prd = readFileSync('docs/PRD.md', 'utf8');
+  assert.match(prd, /\| \*\*Compare\*\* \|/);
+  assert.match(prd, /\| \*\*Sources\*\* \|/);
+
+  const prTemplate = readFileSync('.github/pull_request_template.md', 'utf8');
+  assert.match(prTemplate, /reduces user confusion or improves a clear user action/i);
+  assert.match(prTemplate, /No novice\/expert mode or split-personality UX was introduced/i);
+
+  for (const path of [
+    '.github/ISSUE_TEMPLATE/0-spec.md',
+    '.github/ISSUE_TEMPLATE/1-plan.md',
+    '.github/ISSUE_TEMPLATE/2-build.md',
+  ]) {
+    const content = readFileSync(path, 'utf8');
+    assert.match(content, /What user confusion does this reduce\?/i);
+    assert.match(content, /What action does this help the user take\?/i);
+  }
 });
