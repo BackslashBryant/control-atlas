@@ -42,14 +42,15 @@ Product / UX / Design System / Documentation Governance / Frontend Refactor
 
 ## Status
 
-Implemented in `main`; live Pages deploy parity pending re-verification
+Implemented in `main` and verified live on GitHub Pages
 
 ## Verification Status
 
 - Local translation-first shell implementation is shipped in `main`.
 - Local verification passed the full `npm run precommit` gate.
-- Live GitHub Pages verification on June 19, 2026 found the public site still serving the older shell with `Crosswalks`, `Plain labels`, and `app/app.mjs`.
-- Treat the epic as implemented in the repository and partially complete in public deployment until Pages serves the current shell.
+- GitHub Pages deployment root cause was fixed by restoring tracked frontend type-check config and Pages-safe relative asset paths.
+- Live GitHub Pages verification on June 19, 2026 confirmed the public site is serving the translation-first React shell with `./assets/...` bundle paths instead of the older `app/app.mjs` shell.
+- Treat this epic as implemented and publicly deployed.
 
 ## Primary Goal
 

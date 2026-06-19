@@ -121,8 +121,9 @@ test('translation-first governance docs and templates enforce clarity and action
   assert.match(prTemplate, /No novice\/expert mode or split-personality UX was introduced/i);
 
   const epic = readFileSync('docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md', 'utf8');
-  assert.match(epic, /Implemented in `main`; live Pages deploy parity pending re-verification/i);
+  assert.match(epic, /Implemented in `main` and verified live on GitHub Pages/i);
   assert.match(epic, /Local verification passed the full `npm run precommit` gate/i);
+  assert.match(epic, /Treat this epic as implemented and publicly deployed/i);
 
   for (const path of [
     '.github/ISSUE_TEMPLATE/0-spec.md',
