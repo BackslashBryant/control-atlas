@@ -11,6 +11,7 @@ const requiredDocs = [
   'docs/design/translation-first-design.md',
   'docs/design/content-style-guide.md',
   'docs/design/design-system.md',
+  'docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md',
   'docs/adr/0001-static-first-github-pages.md',
   'docs/adr/0002-public-data-only-boundary.md',
   'docs/adr/0003-no-user-org-system-data.md',
@@ -94,6 +95,7 @@ test('architecture and inventory docs reflect the adopted Phase 0 baseline', () 
 
 test('translation-first governance docs and templates enforce clarity and action rules', () => {
   for (const path of [
+    'CONTRIBUTING.md',
     'docs/PRD.md',
     'docs/Plan.md',
     'docs/roadmap.md',
@@ -101,6 +103,7 @@ test('translation-first governance docs and templates enforce clarity and action
     'docs/design/translation-first-design.md',
     'docs/design/content-style-guide.md',
     'docs/design/design-system.md',
+    'docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md',
   ]) {
     const content = readFileSync(path, 'utf8');
     assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard)/i, `${path} must carry the translation-first doctrine`);
@@ -116,6 +119,10 @@ test('translation-first governance docs and templates enforce clarity and action
   const prTemplate = readFileSync('.github/pull_request_template.md', 'utf8');
   assert.match(prTemplate, /reduces user confusion or improves a clear user action/i);
   assert.match(prTemplate, /No novice\/expert mode or split-personality UX was introduced/i);
+
+  const epic = readFileSync('docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md', 'utf8');
+  assert.match(epic, /Implemented in `main`; live Pages deploy parity pending re-verification/i);
+  assert.match(epic, /Local verification passed the full `npm run precommit` gate/i);
 
   for (const path of [
     '.github/ISSUE_TEMPLATE/0-spec.md',
