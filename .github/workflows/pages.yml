@@ -48,7 +48,7 @@ jobs:
         run: npm run test:e2e
       - name: Upload Playwright failure artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pages-playwright-artifacts
           path: |
@@ -57,7 +57,7 @@ jobs:
           if-no-files-found: ignore
       - name: Generate SBOM
         run: npm run sbom:generate
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: pages-sbom-cdx-json
           path: artifacts/sbom.cdx.json
