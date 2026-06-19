@@ -1,16 +1,17 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-18T15:59:09.007Z",
+  "generated_at": "2026-06-19T07:57:42.061Z",
   "graph_diff_summary": {
     "kind": "graph_diff_summary",
     "previous_generated_at": "2026-06-18T15:59:09.007Z",
-    "current_generated_at": "2026-06-18T15:59:09.007Z",
-    "changed_runtime_artifacts": [],
+    "current_generated_at": "2026-06-19T07:57:42.061Z",
+    "changed_runtime_artifacts": [
+      "evidence"
+    ],
     "unchanged_runtime_artifacts": [
       "sources",
       "nodes",
       "edges",
-      "evidence",
       "graph-health"
     ]
   }
