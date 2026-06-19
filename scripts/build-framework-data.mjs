@@ -667,6 +667,7 @@ function buildLibrarySearch(graph) {
       item_id: node.metadata?.item_id || node.id,
       title: node.metadata?.title || node.label,
       description: node.metadata?.description || '',
+      plain_language_summary: node.plain_language_summary || '',
       object_type: node.node_type,
       source_id: node.source_id,
       source_class: source?.provenance_class || '',
@@ -677,11 +678,11 @@ function buildLibrarySearch(graph) {
   });
 
   const index = new MiniSearch({
-    fields: ['item_id', 'title', 'description'],
+    fields: ['item_id', 'title', 'plain_language_summary', 'description'],
     storeFields: ['id'],
     searchOptions: {
       prefix: true,
-      boost: { item_id: 5, title: 3, description: 1 },
+      boost: { item_id: 5, title: 3, plain_language_summary: 2, description: 1 },
     },
   });
   index.addAll(documents);

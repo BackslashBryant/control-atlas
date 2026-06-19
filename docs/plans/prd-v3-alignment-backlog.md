@@ -12,9 +12,9 @@ This backlog captures all misaligned or unimplemented deliverables from Epics 0 
 * **Relationship Builder Gaps**: The relationship builder does not enforce or generate the `rationale` and `plain_language_rationale` fields required for inferred mappings.
 
 ## Epic 2: Library + Search
-* **MiniSearch Integration**: `minisearch` is added to dependencies and used in data scripts, but full UI integration (field-weighted search for IDs vs plain language) is incomplete in the browser runtime (`app.mjs`).
-* **Object Detail UI**: Object detail pages do not yet lead with the `plain_language_summary` before the formal source text, as the field does not yet exist.
-* **Library Filters**: Need to verify and finalize comprehensive filtering by object type, source class, family, and severity without requiring page reloads.
+* **Status:** Shipped. `library-search.json` is generated at build time with field-weighted MiniSearch over `item_id`, `title`, `plain_language_summary`, and `description`.
+* **React Library UI:** `src/ui/App.tsx` powers search results, facet filters without reload, stable `library-detail` deep links, copyable ID/link actions, plain-language-first detail content, and a "What to do next" section.
+* **Runtime:** `src/app/runtime.mjs` exposes `searchLibrary`, facet helpers, and `library-detail` URL state consumed by the React shell.
 
 ## Epic 3: Crosswalks
 * **Relationship Table Missing Fields**: The relationship table UI needs to be updated to display the `plain_language_rationale`.
