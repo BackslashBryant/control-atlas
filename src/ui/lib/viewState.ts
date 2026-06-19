@@ -1,0 +1,353 @@
+export type AppView =
+  | 'search'
+  | 'library-detail'
+  | 'matrix'
+  | 'patterns'
+  | 'templates'
+  | 'sources'
+  | 'start-here'
+  | 'retired'
+  | 'browse';
+
+export type CompareWorkbench = 'intent' | 'relationships' | 'stig-chain' | 'baseline-compare';
+
+export type ViewState =
+  | {
+      view: 'search';
+      query: string;
+      filter: string;
+      objectType: string;
+      sourceClass: string;
+      controlFamily: string;
+      severity: string;
+    }
+  | {
+      view: 'library-detail';
+      node: string;
+      from?: string;
+    }
+  | {
+      view: 'matrix';
+      workbench: CompareWorkbench;
+      source: string;
+      target: string;
+      items: string;
+      relationshipType: string;
+      provenance: string;
+      confidence: string;
+      includeCandidates: string;
+      chainCatalog: string;
+      chainBenchmark: string;
+      chainItem: string;
+      baselineA: string;
+      baselineB: string;
+      intent: string;
+    }
+  | {
+      view: 'patterns';
+      pattern: string;
+    }
+  | {
+      view: 'templates';
+      templateType: string;
+      framework: string;
+      format: string;
+    }
+  | {
+      view: 'sources';
+      source: string;
+      provenance: string;
+      eligibility: string;
+      lifecycle: string;
+      access: string;
+    }
+  | {
+      view: 'start-here';
+      step: string;
+      systemType: string;
+      dataSensitivity: string;
+      environment: string;
+    }
+  | {
+      view: 'retired';
+      query: string;
+    }
+  | {
+      view: 'browse';
+      framework: string;
+    };
+
+function searchState(): ViewState {
+  return {
+    view: 'search',
+    query: '',
+    filter: '',
+    objectType: '',
+    sourceClass: '',
+    controlFamily: '',
+    severity: '',
+  };
+}
+
+function compareState(): Extract<ViewState, { view: 'matrix' }> {
+  return {
+    view: 'matrix',
+    workbench: 'intent',
+    source: '',
+    target: '',
+    items: '',
+    relationshipType: '',
+    provenance: '',
+    confidence: '',
+    includeCandidates: '',
+    chainCatalog: '',
+    chainBenchmark: '',
+    chainItem: '',
+    baselineA: '',
+    baselineB: '',
+    intent: '',
+  };
+}
+
+export function parseViewState(search: string): ViewState {
+  const params = new URLSearchParams(search);
+  const query = params.get('q') || '';
+
+  if (/^[A-Z]{3}-\d{4}-\d+$/i.test(query) || /^\d{4,}$/.test(query)) {
+    return { view: 'retired', query };
+  }
+
+  const view = (params.get('view') || 'search') as AppView;
+
+  if (view === 'library-detail') {
+    return {
+      view,
+      node: params.get('node') || '',
+      from: params.get('from') || '',
+    };
+  }
+
+  if (view === 'matrix') {
+    const state = compareState();
+    return {
+      ...state,
+      workbench: (params.get('workbench') as CompareWorkbench) || 'intent',
+      source: params.get('source') || '',
+      target: params.get('target') || '',
+      items: params.get('items') || '',
+      relationshipType: params.get('relationshipType') || '',
+      provenance: params.get('provenance') || '',
+      confidence: params.get('confidence') || '',
+      includeCandidates: params.get('includeCandidates') || '',
+      chainCatalog: params.get('chainCatalog') || '',
+      chainBenchmark: params.get('chainBenchmark') || '',
+      chainItem: params.get('chainItem') || '',
+      baselineA: params.get('baselineA') || '',
+      baselineB: params.get('baselineB') || '',
+      intent: params.get('intent') || '',
+    };
+  }
+
+  if (view === 'patterns') {
+    return { view, pattern: params.get('pattern') || '' };
+  }
+
+  if (view === 'templates') {
+    return {
+      view,
+      templateType: params.get('templateType') || '',
+      framework: params.get('framework') || '',
+      format: params.get('format') || 'markdown',
+    };
+  }
+
+  if (view === 'sources') {
+    return {
+      view,
+      source: params.get('source') || '',
+      provenance: params.get('provenance') || '',
+      eligibility: params.get('eligibility') || '',
+      lifecycle: params.get('lifecycle') || '',
+      access: params.get('access') || '',
+    };
+  }
+
+  if (view === 'start-here') {
+    return {
+      view,
+      step: params.get('step') || '',
+      systemType: params.get('systemType') || '',
+      dataSensitivity: params.get('dataSensitivity') || '',
+      environment: params.get('environment') || '',
+    };
+  }
+
+  if (view === 'browse') {
+    return {
+      view,
+      framework: params.get('framework') || '',
+    };
+  }
+
+  return {
+    view: 'search',
+    query,
+    filter: params.get('filter') || '',
+    objectType: params.get('objectType') || '',
+    sourceClass: params.get('sourceClass') || '',
+    controlFamily: params.get('controlFamily') || '',
+    severity: params.get('severity') || '',
+  };
+}
+
+export function normalizeViewState(view: AppView, state: Partial<ViewState> = {}): ViewState {
+  if (view === 'library-detail') {
+    return {
+      view,
+      node: (state as Extract<ViewState, { view: 'library-detail' }>).node || '',
+      from: (state as Extract<ViewState, { view: 'library-detail' }>).from || '',
+    };
+  }
+
+  if (view === 'matrix') {
+    const incoming = state as Extract<ViewState, { view: 'matrix' }>;
+    return {
+      ...compareState(),
+      ...incoming,
+      view,
+      workbench: incoming.workbench || 'intent',
+    };
+  }
+
+  if (view === 'patterns') {
+    return {
+      view,
+      pattern: (state as Extract<ViewState, { view: 'patterns' }>).pattern || '',
+    };
+  }
+
+  if (view === 'templates') {
+    const incoming = state as Extract<ViewState, { view: 'templates' }>;
+    return {
+      view,
+      templateType: incoming.templateType || '',
+      framework: incoming.framework || '',
+      format: incoming.format || 'markdown',
+    };
+  }
+
+  if (view === 'sources') {
+    const incoming = state as Extract<ViewState, { view: 'sources' }>;
+    return {
+      view,
+      source: incoming.source || '',
+      provenance: incoming.provenance || '',
+      eligibility: incoming.eligibility || '',
+      lifecycle: incoming.lifecycle || '',
+      access: incoming.access || '',
+    };
+  }
+
+  if (view === 'start-here') {
+    const incoming = state as Extract<ViewState, { view: 'start-here' }>;
+    return {
+      view,
+      step: incoming.step || '',
+      systemType: incoming.systemType || '',
+      dataSensitivity: incoming.dataSensitivity || '',
+      environment: incoming.environment || '',
+    };
+  }
+
+  if (view === 'retired') {
+    return {
+      view,
+      query: (state as Extract<ViewState, { view: 'retired' }>).query || '',
+    };
+  }
+
+  if (view === 'browse') {
+    return {
+      view,
+      framework: (state as Extract<ViewState, { view: 'browse' }>).framework || '',
+    };
+  }
+
+  const base = searchState();
+  const incoming = state as Extract<ViewState, { view: 'search' }>;
+  return {
+    ...base,
+    ...incoming,
+    view: 'search',
+  };
+}
+
+function setIfValue(params: URLSearchParams, key: string, value: string) {
+  if (value) {
+    params.set(key, value);
+  }
+}
+
+export function serializeViewState(state: ViewState): string {
+  const params = new URLSearchParams();
+
+  if (state.view === 'search') {
+    setIfValue(params, 'view', 'search');
+    setIfValue(params, 'q', state.query);
+    setIfValue(params, 'filter', state.filter);
+    setIfValue(params, 'objectType', state.objectType);
+    setIfValue(params, 'sourceClass', state.sourceClass);
+    setIfValue(params, 'controlFamily', state.controlFamily);
+    setIfValue(params, 'severity', state.severity);
+  } else if (state.view === 'library-detail') {
+    params.set('view', state.view);
+    setIfValue(params, 'node', state.node);
+    setIfValue(params, 'from', state.from || '');
+  } else if (state.view === 'matrix') {
+    params.set('view', state.view);
+    setIfValue(params, 'workbench', state.workbench);
+    setIfValue(params, 'source', state.source);
+    setIfValue(params, 'target', state.target);
+    setIfValue(params, 'items', state.items);
+    setIfValue(params, 'relationshipType', state.relationshipType);
+    setIfValue(params, 'provenance', state.provenance);
+    setIfValue(params, 'confidence', state.confidence);
+    setIfValue(params, 'includeCandidates', state.includeCandidates);
+    setIfValue(params, 'chainCatalog', state.chainCatalog);
+    setIfValue(params, 'chainBenchmark', state.chainBenchmark);
+    setIfValue(params, 'chainItem', state.chainItem);
+    setIfValue(params, 'baselineA', state.baselineA);
+    setIfValue(params, 'baselineB', state.baselineB);
+    setIfValue(params, 'intent', state.intent);
+  } else if (state.view === 'patterns') {
+    params.set('view', state.view);
+    setIfValue(params, 'pattern', state.pattern);
+  } else if (state.view === 'templates') {
+    params.set('view', state.view);
+    setIfValue(params, 'templateType', state.templateType);
+    setIfValue(params, 'framework', state.framework);
+    setIfValue(params, 'format', state.format);
+  } else if (state.view === 'sources') {
+    params.set('view', state.view);
+    setIfValue(params, 'source', state.source);
+    setIfValue(params, 'provenance', state.provenance);
+    setIfValue(params, 'eligibility', state.eligibility);
+    setIfValue(params, 'lifecycle', state.lifecycle);
+    setIfValue(params, 'access', state.access);
+  } else if (state.view === 'start-here') {
+    params.set('view', state.view);
+    setIfValue(params, 'step', state.step);
+    setIfValue(params, 'systemType', state.systemType);
+    setIfValue(params, 'dataSensitivity', state.dataSensitivity);
+    setIfValue(params, 'environment', state.environment);
+  } else if (state.view === 'retired') {
+    params.set('view', state.view);
+    setIfValue(params, 'q', state.query);
+  } else if (state.view === 'browse') {
+    params.set('view', state.view);
+    setIfValue(params, 'framework', state.framework);
+  }
+
+  const serialized = params.toString();
+  return serialized ? `?${serialized}` : '';
+}

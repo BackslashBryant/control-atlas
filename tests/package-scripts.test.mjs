@@ -49,6 +49,18 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.match(packageJson.scripts.precommit, /npm run license:check/);
 });
 
+test('translation-first frontend foundation adds React, Vite, and targeted Radix support', () => {
+  assert.equal(typeof packageJson.dependencies.react, 'string');
+  assert.equal(typeof packageJson.dependencies['react-dom'], 'string');
+  assert.equal(typeof packageJson.dependencies['@radix-ui/react-accordion'], 'string');
+  assert.equal(typeof packageJson.devDependencies.vite, 'string');
+  assert.equal(typeof packageJson.devDependencies['@vitejs/plugin-react'], 'string');
+  assert.equal(typeof packageJson.devDependencies['@types/react'], 'string');
+  assert.equal(typeof packageJson.devDependencies['@types/react-dom'], 'string');
+  assert.equal(typeof packageJson.devDependencies['@typescript-eslint/eslint-plugin'], 'string');
+  assert.equal(typeof packageJson.devDependencies['@typescript-eslint/parser'], 'string');
+});
+
 test('Epic 2 data refresh includes official DISA STIG and SRG ingestion', () => {
   assert.equal(typeof packageJson.scripts['refresh:data'], 'string');
   assert.ok(existsSync('scripts/fetch-disa-stigs.mjs'));

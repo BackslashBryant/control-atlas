@@ -11,6 +11,23 @@
 
 `docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines the active backlog through Epic 0 to Epic 6. Epic 0 baseline and live Pages audit evidence are now in place, and Epic 1 Provenance Registry behavior is deployed on the adopted static runtime baseline.
 
+## Translation-First Product Standard
+
+Build for translation, not complexity.
+
+Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+
+Future work must preserve this order:
+
+1. User intent
+2. Plain-language meaning
+3. Visible relationships
+4. Source trust
+5. Recommended next action
+6. Raw technical detail only on demand
+
+No roadmap item may be accepted unless it identifies the user confusion it reduces and the action it enables.
+
 No backend or user, organization, or system data is part of this product direction.
 
 ## Current Baseline
@@ -41,7 +58,7 @@ Plans for Issues 8-12, older source-hardening proposals, and dated browser audit
 ## Recommended Next Implementation Sequence
 
 1. Extend the data normalization pipeline (Epic 1) using the adopted runtime contract.
-2. Expand Library Browser (Epic 2) and Crosswalk Workbench (Epic 3).
+2. Expand Library Browser (Epic 2) and the Compare workspace (Epic 3).
 3. Add Template Factory (Epic 4), then Patterns, Glossary, and Start Here (Epic 5).
 4. Finish release hardening and live audits (Epic 6).
 

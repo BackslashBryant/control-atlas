@@ -7,9 +7,9 @@
 - Tagline: **The public map for federal cyber compliance.**
 - Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.
 
-## Adopted Phase 0 Architecture
+## Adopted Architecture
 
-Control Atlas adopts a `src/`-based static JavaScript application and staged static deployment as its public-data-only baseline. The repository does not need a framework migration, backend, database, or authentication layer to continue product delivery.
+Control Atlas adopts a `src/`-based React + Vite static application and staged static deployment as its public-data-only baseline. The repository does not need a backend, database, or authentication layer to continue product delivery.
 
 ```text
 Public Sources
@@ -30,6 +30,19 @@ Public Sources
 - No backend, database, authentication, login, telemetry, or user, organization, or system data exists.
 - No user uploads, evidence ingestion, runtime scan parsing, operational-system connections, or server-side template generation are allowed.
 - Generated templates must remain local to the browser and must not be transmitted or stored.
+
+## Translation-First Product Standard
+
+Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+
+Future work must preserve this order:
+
+1. User intent
+2. Plain-language meaning
+3. Visible relationships
+4. Source trust
+5. Recommended next action
+6. Raw technical detail only on demand
 
 ## Adopted Contracts
 
@@ -55,7 +68,8 @@ Blocked relationships remain graph-health findings and never become displayable 
 ## Technology Baseline
 
 - `src/` is the source-of-truth application tree and `tools/build-static-site.mjs` stages the deployable site into `dist/site`.
-- Existing D3 graph engine is reused for Phase 0.
+- React + Vite render the translation-first UI while existing runtime/data contracts remain reusable.
+- Existing D3 graph engine is reused for Phase 0 artifacts and later roadmap work.
 - Cytoscape.js may be evaluated later if graph complexity demands it, but no graph-library migration is part of this pass.
 - GitHub Pages remains the deployment target.
 - MiniSearch is the target search pattern.
@@ -64,7 +78,8 @@ Blocked relationships remain graph-health findings and never become displayable 
 
 ## Component Boundaries
 
-- `src/app/`, `src/content/`, and `src/styles/`: static public interface and runtime shell source.
+- `src/ui/`: translation-first page shell, reusable components, and query-state adapters.
+- `src/app/`, `src/content/`, and `src/styles/`: reusable runtime/data helpers, shared content, and tokens.
 - `scripts/`: fetch and orchestrate public-data refresh/build flows.
 - `tools/importers/`, `tools/normalizers/`, `tools/validators/`, and `tools/relationship-builders/`: product pipeline modules for public data ingestion, normalization, validation, and relationship assembly.
 - `data/source-registry.json`: canonical source registry file retained under the new public-facing Provenance Registry naming.
