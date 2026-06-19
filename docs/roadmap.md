@@ -89,8 +89,8 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 
 ## Recommended Next Sequence
 
-1. Complete Epic 0 closeout with a fresh live Pages audit against `https://backslashbryant.github.io/control-atlas/`.
-2. Extend the data normalization pipeline (Epic 1) using the adopted runtime contract.
-3. Expand Library Browser (Epic 2) and the Compare workspace (Epic 3).
-4. Add Template Factory (Epic 4), then Patterns, Glossary, and Start Here (Epic 5).
-5. Finish Epic 6 release hardening and live audits.
+1. **Epic 4 (active):** Template Factory QA — plain-language prompts, export metadata, generation verification.
+2. **Epic 5:** Start Here deep links and any remaining pattern/glossary alignment.
+3. **Epic 6:** Release hardening, full E2E, accessibility, content review, release tag.
+
+Epics 0–1 are closed for MVP (residual items documented in [`docs/Plan.md`](Plan.md)). Epics 2–3 are shipped.

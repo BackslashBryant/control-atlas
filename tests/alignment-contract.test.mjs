@@ -109,6 +109,20 @@ test('translation-first governance docs and templates enforce clarity and action
     assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard)/i, `${path} must carry the translation-first doctrine`);
   }
 
+  const plan = readFileSync('docs/Plan.md', 'utf8');
+  assert.match(plan, /## Active Sprint/);
+  assert.match(plan, /## Epic Status/);
+  assert.match(plan, /Epic 4.*Template Factory/i);
+
+  const backlog = readFileSync('docs/plans/prd-v3-alignment-backlog.md', 'utf8');
+  assert.match(backlog, /## Epic 2:[\s\S]*\*\*Status:\*\* Shipped/);
+  assert.match(backlog, /## Epic 3:[\s\S]*\*\*Status:\*\* Shipped/);
+  assert.doesNotMatch(backlog, /entirely unimplemented/i);
+
+  const context = readFileSync('docs/context.md', 'utf8');
+  assert.match(context, /Epic 4/i);
+  assert.doesNotMatch(context, /Epic 2 is active/i);
+
   const designPrinciples = readFileSync('docs/DESIGN_PRINCIPLES.md', 'utf8');
   assert.match(designPrinciples, /What is this\? Why does it matter\? What should I do with it\?/i);
 
