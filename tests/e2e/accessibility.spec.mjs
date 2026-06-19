@@ -9,6 +9,7 @@ const ROUTES = [
   '/?view=matrix',
   '/?view=sources',
   '/?view=templates',
+  '/?view=templates&templateType=security_plan_starter',
   '/?view=patterns',
   '/?view=start-here',
 ];
@@ -18,6 +19,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('primary translation-first surfaces have no serious or critical accessibility violations', async ({ page }) => {
+  test.setTimeout(120000);
   for (const route of ROUTES) {
     await page.goto(route);
     await waitForAppReady(page);

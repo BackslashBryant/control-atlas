@@ -1629,6 +1629,16 @@ function TemplatesPage(props: {
   const templates = bundle.templateRegistry.templates || [];
   const selectedTemplate = templates.find((template: any) => template.name === state.templateType) || null;
   const catalogOptions = bundle.runtime.getCatalogs().map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
+  const formatLabels: Record<string, string> = {
+    markdown: 'Markdown',
+    csv: 'CSV',
+    json: 'JSON',
+    yaml: 'YAML',
+  };
+  const supportedFormats = selectedTemplate?.supported_formats || ['markdown'];
+  const activeFormat = supportedFormats.includes(state.format || 'markdown')
+    ? state.format || supportedFormats[0]
+    : supportedFormats[0];
 
   function createTemplate() {
     if (!selectedTemplate) {
@@ -1638,14 +1648,17 @@ function TemplatesPage(props: {
       {
         templateType: selectedTemplate.name,
         framework: state.framework || 'nist-800-53',
-        format: state.format || 'markdown',
-        environment: 'Generic',
+        format: activeFormat,
+        environment: state.environment || 'Generic',
         includePlaceholders: true,
         includeImplementationPrompts: true,
         includeEvidenceExpectations: true,
         includeInheritancePrompts: true,
         includeReciprocityPrompts: true,
         includeSourceFootnotes: true,
+        includeStigReferences: true,
+        sourceRefs: selectedTemplate.source_refs || [],
+        sources: bundle.runtime.dataset?.sources || [],
       },
       bundle.runtime.dataset,
     );
@@ -1668,7 +1681,14 @@ function TemplatesPage(props: {
             body={template.description}
             icon={<IconFileDescription size={20} stroke={1.8} />}
             key={template.name}
-            onClick={() => onNavigate('templates', { templateType: template.name, framework: state.framework || '', format: state.format || 'markdown' })}
+            onClick={() =>
+              onNavigate('templates', {
+                templateType: template.name,
+                framework: state.framework || '',
+                format: template.supported_formats?.[0] || 'markdown',
+                environment: state.environment || 'Generic',
+              })
+            }
             title={template.display_name}
           />
         ))}
@@ -1699,15 +1719,27 @@ function TemplatesPage(props: {
                   value={state.framework}
                 />
                 <SelectField
+                  label="Environment"
+                  onChange={(value) => onNavigate('templates', { ...state, environment: value })}
+                  options={[
+                    { value: 'Generic', label: 'Generic' },
+                    { value: 'Cloud SaaS', label: 'Cloud SaaS' },
+                    { value: 'Platform service', label: 'Platform service' },
+                    { value: 'Enclave', label: 'Enclave' },
+                    { value: 'On-premises', label: 'On-premises' },
+                    { value: 'Hybrid', label: 'Hybrid' },
+                    { value: 'Enterprise service', label: 'Enterprise service' },
+                  ]}
+                  value={state.environment || 'Generic'}
+                />
+                <SelectField
                   label="Format"
                   onChange={(value) => onNavigate('templates', { ...state, format: value })}
-                  options={[
-                    { value: 'markdown', label: 'Markdown' },
-                    { value: 'csv', label: 'CSV' },
-                    { value: 'json', label: 'JSON' },
-                    { value: 'yaml', label: 'YAML' },
-                  ]}
-                  value={state.format || 'markdown'}
+                  options={supportedFormats.map((format: string) => ({
+                    value: format,
+                    label: formatLabels[format] || format,
+                  }))}
+                  value={activeFormat}
                 />
               </div>
             </DisclosurePanel>
