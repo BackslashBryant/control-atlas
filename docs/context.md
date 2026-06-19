@@ -10,15 +10,22 @@
 
 ## Current Objective
 
-Carry the repository from the Phase 0 baseline into the next roadmap slice. The static runtime, renamed shell, and Provenance Registry behavior are in place; the remaining near-term gap is live Pages audit evidence before broader feature expansion.
+**Active sprint: Epic 4 — Template Factory ship and align.**
+
+Verify all nine templates and the Templates UI against PRD v3.0: plain-language prompts, zero org data, disclaimer and source metadata on every export.
+
+## Shipped on `main` (do not re-plan)
+
+- Epics 0–1 baseline: React shell, schema/provenance on generated bundles, Sources registry, CI/Pages parity
+- Epic 2: Library search, facets, detail pages, deep links
+- Epic 3: Compare workbenches (relationships, STIG chain, baseline delta, provenance exports)
 
 ## Adopted Baseline
 
-- The existing static JavaScript app, now migrated into the Control Atlas `src/` source tree, is the implementation baseline.
-- The current build-time public-data importers, source registry schema `4.0`, and generated graph artifacts stay in place.
-- The current D3 graph engine is reused for Phase 0; graph-library migration is deferred.
-- Control Atlas is now the active repository, package, and deployment identity; only historical evidence retains GovFrame-era references.
-- Historical Issue 8-12 plans and dated audits remain delivery evidence, not the active roadmap.
+- React shell in `src/ui/App.tsx` is the active UI; legacy `src/app/app.mjs` is not mounted
+- Build-time importers and `data/generated/*` bundles are the runtime contract
+- D3 graph renderer remains legacy-only; graph-library migration deferred
+- Control Atlas is the active repo and deployment identity
 
 ## Product Boundary
 
@@ -26,11 +33,11 @@ Control Atlas is public-data-only and has no backend. It may normalize public so
 
 It must not ingest evidence, accept uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login.
 
-## Next Sequence
+## Next After Epic 4
 
-1. Complete Epic 0 closeout with a fresh live Pages audit against the deployed shell.
-2. Extend the data normalization pipeline (Epic 1) without changing the adopted runtime artifact contract.
-3. Extend the Library Browser (Epic 2) and Compare workspace (Epic 3) using current static bundles and browser runtime patterns.
-4. Add client-side blank template generation (Epic 4).
-5. Build Start Here, glossary, and pattern surfaces (Epic 5).
-6. Finish QA, accessibility, release, and SecDevOps hardening (Epic 6).
+1. Epic 5 — Start Here deep links to Library, Compare, Patterns, and Templates; close any remaining pattern/glossary gaps
+2. Epic 6 — release hardening, full E2E, content review, version tag
+
+## Status Docs
+
+Canonical delivery state lives in [`docs/Plan.md`](Plan.md). Open PRD gaps only in [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md).
