@@ -29,17 +29,25 @@ Pages deploy runs on push to `main` after merge; it is not typically a merge gat
 **Command:**
 
 ```text
-gh api repos/backslashbryant/control-atlas/branches/main/protection
-```
-
-**Result (2026-06-19):** `401 Bad credentials` — local `gh` session not authenticated in the agent environment.
-
-**Re-run when authenticated:**
-
-```text
+# Unset invalid GITHUB_TOKEN if present so gh uses keyring credentials
+Remove-Item Env:GITHUB_TOKEN -ErrorAction SilentlyContinue
 gh auth status
-gh api repos/backslashbryant/control-atlas/branches/main/protection
+gh api repos/BackslashBryant/control-atlas/branches/main/protection
 ```
+
+**Result (2026-06-19, post–Epic 7 merge):** Authenticated as `BackslashBryant` (keyring). **`main` is not protected.**
+
+```json
+{
+  "message": "Branch not protected",
+  "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+  "status": "404"
+}
+```
+
+**Gap:** No branch protection rule is configured. Apply remediation steps below.
+
+**Note:** An invalid `GITHUB_TOKEN` environment variable overrides keyring auth and returns `401 Bad credentials`. Clear it before running `gh api`.
 
 Alternatively: GitHub → Settings → Branches → `main` rule → export or screenshot required checks.
 
@@ -70,5 +78,11 @@ This project ships directly to `main` without mandatory PR review. Branch protec
 ### API output (paste after authenticated run)
 
 ```json
-(pending authenticated verification)
+{
+  "message": "Branch not protected",
+  "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+  "status": "404"
+}
 ```
+
+Verified 2026-06-19 after Epic 7 merge to `main` (commit `1c010d2`).

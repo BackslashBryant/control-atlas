@@ -45,7 +45,7 @@ Manual a11y checklist: [`a11y-manual-checklist.md`](a11y-manual-checklist.md) �
 
 - **Branch protection API:** `gh api` returned 401 — paste JSON when authenticated ([`branch-protection-verification-2026-06-19.md`](branch-protection-verification-2026-06-19.md))
 - **Action SHA pinning:** deferred per [`docs/adr/0012-defer-github-actions-sha-pinning.md`](../adr/0012-defer-github-actions-sha-pinning.md)
-- **Live Pages post-merge:** re-spot-check About route on production URL after deploy
+- **Live Pages post-merge:** Spot-check pass — `https://backslashbryant.github.io/control-atlas/?view=about` shows About heading and full disclaimer (Playwright, 2026-06-19).
 - **Graph UI:** Epic 0 residual unchanged
 
 ---
