@@ -64,13 +64,23 @@ Alternatively: GitHub → Settings → Branches → `main` rule → export or sc
 
 ## Solo-ship exception
 
-This project ships directly to `main` without mandatory PR review. The `main-ship-gate` ruleset requires the **`checks`** status (Public Repo Checks workflow) to pass on the commit you push — **not** a pull request. Direct ship flow:
+This project ships directly to `main` without mandatory PR review. The `main-ship-gate` ruleset requires the **`checks`** status (Public Repo Checks workflow) to pass on the commit you push — **not** a pull request.
 
-1. Push your task branch (or run CI via push to any branch on that commit).
-2. Confirm **`checks`** is green on GitHub Actions for that commit SHA.
-3. Fast-forward `main` locally and `git push origin main`.
+**Preferred command:**
 
-If push is rejected with `Required status check "checks" is failing`, CI failed on that commit — fix the failure and push again. Disabling the ruleset is not required for direct ship.
+```text
+npm run ship:main
+```
+
+Manual direct ship flow:
+
+1. Push your task branch (`npm run git:push -- <branch>`) so CI runs on that commit SHA.
+2. Wait for **`checks`** green (`npm run checks:wait -- <sha>`).
+3. Fast-forward `main` locally and push (`npm run git:push -- main`).
+
+If push is rejected with `Required status check "checks" is expected`, CI has not finished or failed on that commit — fix the failure or wait, then push again. Do not open a PR unless the user explicitly asks.
+
+Unset invalid `GITHUB_TOKEN` before `gh` commands so the CLI uses keyring credentials.
 
 ---
 

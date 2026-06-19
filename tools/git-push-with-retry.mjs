@@ -16,6 +16,12 @@
 import { execSync } from 'node:child_process';
 import { platform } from 'node:os';
 
+if (process.env.GITHUB_TOKEN) {
+  console.log(
+    '[warn] GITHUB_TOKEN is set. Unset it so gh uses keyring credentials (see docs/audits/branch-protection-verification-2026-06-19.md).',
+  );
+}
+
 const branch = process.argv[2] || execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
 const maxRetries = 3;
 const retryDelays = [2000, 5000, 10000]; // ms
