@@ -89,7 +89,7 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 
 ## Recommended Next Sequence
 
-1. **Epic 5 (active):** Start Here deep links and any remaining pattern/glossary alignment.
+1. **Epic 6 (active):** E2E expansion, a11y hardening, content review, release tag.
 2. **Epic 6:** Release hardening, full E2E, accessibility, content review, release tag.
 
 Epics 0–1 are closed for MVP (residual items documented in [`docs/Plan.md`](Plan.md)). Epics 2–4 are shipped.

@@ -37,7 +37,15 @@ import {
   ProvenanceBadge,
   SourceRefList,
 } from './lib/compareHelpers';
+import {
+  glossaryTermsForDocument,
+  glossaryTermsForPattern,
+  searchGlossary,
+  templatesForPatterns,
+} from './lib/glossarySearch.mjs';
 import { loadRuntimeDataset } from './lib/runtimeLoader';
+import { buildStartHereRecommendations } from './lib/startHereRecommendations.mjs';
+import type { StartHereCompareLink, StartHereLibraryLink, StartHereRecommendations } from './lib/startHereRecommendations.d.ts';
 import {
   normalizeViewState,
   parseViewState,
@@ -238,6 +246,10 @@ export function App() {
   const [loadError, setLoadError] = useState<string>('');
   const [heroWordIndex, setHeroWordIndex] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [glossaryFocusTermId, setGlossaryFocusTermId] = useState('');
+  const [headerSearchDraft, setHeaderSearchDraft] = useState(() =>
+    viewState.view === 'search' ? viewState.query : '',
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -311,6 +323,17 @@ export function App() {
     }
   }
 
+  function openGlossary(termId = '') {
+    setGlossaryFocusTermId(termId);
+    setHelpOpen(true);
+  }
+
+  useEffect(() => {
+    if (viewState.view === 'search') {
+      setHeaderSearchDraft(viewState.query);
+    }
+  }, [viewState]);
+
   const readyState = loadError ? 'error' : bundle ? 'true' : 'false';
 
   return (
@@ -360,7 +383,36 @@ export function App() {
           })}
         </nav>
         <div className="header-actions">
-          <button className="secondary quiet" onClick={() => setHelpOpen(true)} type="button">
+          <form
+            className="header-search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              navigate('search', {
+                query: headerSearchDraft.trim(),
+                filter: '',
+                objectType: '',
+                sourceClass: '',
+                controlFamily: '',
+                severity: '',
+              });
+            }}
+          >
+            <label className="visually-hidden" htmlFor="header-search">
+              Search library and glossary
+            </label>
+            <div className="search-input">
+              <IconSearch aria-hidden="true" size={18} stroke={1.8} />
+              <input
+                aria-label="Search library and glossary"
+                id="header-search"
+                onChange={(event) => setHeaderSearchDraft(event.target.value)}
+                placeholder="Search library or glossary"
+                type="search"
+                value={headerSearchDraft}
+              />
+            </div>
+          </form>
+          <button className="secondary quiet" onClick={() => openGlossary()} type="button">
             Help &amp; Glossary
           </button>
         </div>
@@ -378,6 +430,7 @@ export function App() {
               bundle={bundle}
               heroWord={HERO_WORDS[heroWordIndex]}
               onNavigate={navigate}
+              onOpenGlossary={openGlossary}
               onOpenNode={openNode}
               onOpenNodeByItemId={openNodeByItemId}
               setHelpOpen={setHelpOpen}
@@ -403,10 +456,16 @@ export function App() {
 
       <GlossaryDrawer
         bundle={bundle}
+        focusTermId={glossaryFocusTermId}
         onNavigate={navigate}
         onOpenNode={openNode}
         open={helpOpen}
-        setOpen={setHelpOpen}
+        setOpen={(open) => {
+          setHelpOpen(open);
+          if (!open) {
+            setGlossaryFocusTermId('');
+          }
+        }}
       />
     </>
   );
@@ -419,12 +478,21 @@ function AppContent(props: {
   onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
+  onOpenGlossary: (termId?: string) => void;
   setHelpOpen: (open: boolean) => void;
 }) {
-  const { bundle, state, heroWord, onNavigate, onOpenNode, onOpenNodeByItemId, setHelpOpen } = props;
+  const { bundle, state, heroWord, onNavigate, onOpenNode, onOpenNodeByItemId, onOpenGlossary, setHelpOpen } = props;
 
   if (state.view === 'library-detail') {
-    return <DetailPage bundle={bundle} onNavigate={onNavigate} onOpenNode={onOpenNode} state={state} />;
+    return (
+      <DetailPage
+        bundle={bundle}
+        onNavigate={onNavigate}
+        onOpenGlossary={onOpenGlossary}
+        onOpenNode={onOpenNode}
+        state={state}
+      />
+    );
   }
 
   if (state.view === 'matrix') {
@@ -440,7 +508,15 @@ function AppContent(props: {
   }
 
   if (state.view === 'patterns') {
-    return <PatternsPage onNavigate={onNavigate} onOpenNodeByItemId={onOpenNodeByItemId} setHelpOpen={setHelpOpen} state={state} />;
+    return (
+      <PatternsPage
+        onNavigate={onNavigate}
+        onOpenGlossary={onOpenGlossary}
+        onOpenNodeByItemId={onOpenNodeByItemId}
+        setHelpOpen={setHelpOpen}
+        state={state}
+      />
+    );
   }
 
   if (state.view === 'start-here') {
@@ -469,6 +545,7 @@ function AppContent(props: {
       bundle={bundle}
       heroWord={heroWord}
       onNavigate={onNavigate}
+      onOpenGlossary={onOpenGlossary}
       onOpenNode={onOpenNode}
       setHelpOpen={setHelpOpen}
       state={state.view === 'browse' ? { view: 'search', query: '', filter: state.framework, objectType: '', sourceClass: '', controlFamily: '', severity: '' } : state}
@@ -482,9 +559,10 @@ function LibraryPage(props: {
   heroWord: string;
   onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenGlossary: (termId?: string) => void;
   setHelpOpen: (open: boolean) => void;
 }) {
-  const { bundle, state, heroWord, onNavigate, onOpenNode, setHelpOpen } = props;
+  const { bundle, state, heroWord, onNavigate, onOpenNode, onOpenGlossary, setHelpOpen } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
   const deferredQuery = useDeferredValue(queryDraft);
 
@@ -509,6 +587,10 @@ function LibraryPage(props: {
     }
     return bundle.runtime.searchLibrary(state.query, filters);
   }, [bundle.runtime, landing, state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity]);
+
+  const glossaryMatches = useMemo(() => searchGlossary(state.query), [state.query]);
+  const hasQuery = Boolean(state.query.trim());
+  const hasResults = documents.length > 0 || glossaryMatches.length > 0;
 
   const groupedDocuments = useMemo<Record<string, any[]>>(() => {
     return /** @type {any[]} */ (documents).reduce((groups: Record<string, any[]>, document: any) => {
@@ -641,8 +723,62 @@ function LibraryPage(props: {
           </DisclosurePanel>
         </Accordion.Root>
 
-        {documents.length ? (
+        {hasResults ? (
           <div className="stack" id="library-results">
+            {glossaryMatches.length ? (
+              <section className="result-group">
+                <div className="result-group-header">
+                  <h2>Glossary</h2>
+                  <Badge>{glossaryMatches.length} results</Badge>
+                </div>
+                <div className="stack">
+                  {glossaryMatches.map((entry) => (
+                    <article className="result-card" key={entry.id}>
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">Glossary term</p>
+                          <h3>
+                            {entry.term}
+                            {entry.expansion ? ` · ${entry.expansion}` : ''}
+                          </h3>
+                        </div>
+                        <Badge tone={entry.consensus ? 'warning' : 'success'}>
+                          {entry.consensus ? 'Practitioner consensus' : 'Official source'}
+                        </Badge>
+                      </div>
+                      <p className="result-summary">{entry.definition}</p>
+                      <div className="chip-row">
+                        {entry.related_patterns.map((patternId) => (
+                          <button
+                            className="chip"
+                            key={patternId}
+                            onClick={() => onNavigate('patterns', { pattern: patternId })}
+                            type="button"
+                          >
+                            {PATTERN_RENAMES[patternId] || patternId}
+                          </button>
+                        ))}
+                        {entry.relatedTemplateIds.map((templateId) => (
+                          <button
+                            className="chip"
+                            key={templateId}
+                            onClick={() => onNavigate('templates', { templateType: templateId })}
+                            type="button"
+                          >
+                            {templateId.replaceAll('_', ' ')}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="card-actions">
+                        <button className="primary" onClick={() => onOpenGlossary(entry.id)} type="button">
+                          Open term details
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
             {Object.entries(groupedDocuments as Record<string, any[]>).map(([group, entries]) => (
               <section className="result-group" key={group}>
                 <div className="result-group-header">
@@ -689,7 +825,7 @@ function LibraryPage(props: {
               </section>
             ))}
           </div>
-        ) : !landing ? (
+        ) : !landing && hasQuery ? (
           <section className="empty-state">
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
             <h2>No public matches found</h2>
@@ -716,9 +852,10 @@ function DetailPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: 'library-detail' }>;
   onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
+  onOpenGlossary: (termId?: string) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
 }) {
-  const { bundle, state, onNavigate, onOpenNode } = props;
+  const { bundle, state, onNavigate, onOpenGlossary, onOpenNode } = props;
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
   const source = document ? bundle.runtime.getSource(document.source_id) : bundle.runtime.getSource(node?.source_id);
@@ -743,6 +880,8 @@ function DetailPage(props: {
     ...((federalContext?.baselineMembership || []).map((entry: any) => entry.baselineNode?.metadata?.item_id) || []),
     ...((federalContext?.fedrampBaselineContext || []).map((entry: any) => entry.baselineNode?.metadata?.item_id) || []),
   ].filter(Boolean);
+
+  const relatedGlossaryTerms = glossaryTermsForDocument(document);
 
   return (
     <section className="detail-page">
@@ -876,6 +1015,19 @@ function DetailPage(props: {
               </button>
             </div>
           </SummaryCard>
+
+          {relatedGlossaryTerms.length ? (
+            <SummaryCard title="Related terms">
+              <p>Plain-language definitions for terms that often appear around this item.</p>
+              <div className="chip-row">
+                {relatedGlossaryTerms.map((entry) => (
+                  <button className="chip" key={entry.id} onClick={() => onOpenGlossary(entry.id)} type="button">
+                    {entry.term}
+                  </button>
+                ))}
+              </div>
+            </SummaryCard>
+          ) : null}
 
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="Advanced details" value="advanced">
@@ -1754,10 +1906,12 @@ function PatternsPage(props: {
   state: Extract<ViewState, { view: 'patterns' }>;
   onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
   onOpenNodeByItemId: (itemId: string) => void;
+  onOpenGlossary: (termId?: string) => void;
   setHelpOpen: (open: boolean) => void;
 }) {
-  const { state, onNavigate, onOpenNodeByItemId, setHelpOpen } = props;
+  const { state, onNavigate, onOpenNodeByItemId, onOpenGlossary, setHelpOpen } = props;
   const selectedPattern = patternsData.find((pattern) => pattern.id === state.pattern) || null;
+  const patternGlossaryTerms = selectedPattern ? glossaryTermsForPattern(selectedPattern.id) : [];
 
   if (!selectedPattern) {
     return (
@@ -1800,6 +1954,17 @@ function PatternsPage(props: {
           <SummaryCard title="What this helps with" tone="trust">
             <p>{selectedPattern.summary}</p>
           </SummaryCard>
+          {patternGlossaryTerms.length ? (
+            <SummaryCard title="Related glossary terms">
+              <div className="chip-row">
+                {patternGlossaryTerms.map((entry) => (
+                  <button className="chip" key={entry.id} onClick={() => onOpenGlossary(entry.id)} type="button">
+                    {entry.term}
+                  </button>
+                ))}
+              </div>
+            </SummaryCard>
+          ) : null}
           <SummaryCard title="When to use it">
             <p>{selectedPattern.friction}</p>
           </SummaryCard>
@@ -1862,32 +2027,38 @@ function StartHerePage(props: {
   const { state, onNavigate } = props;
   const ready = Boolean(state.systemType && state.dataSensitivity && state.environment);
 
-  const recommendations = useMemo(() => {
-    if (!ready) {
-      return null;
+  const recommendations = useMemo(
+    () => buildStartHereRecommendations({
+      systemType: state.systemType,
+      dataSensitivity: state.dataSensitivity,
+      environment: state.environment,
+    }) as StartHereRecommendations | null,
+    [state.dataSensitivity, state.environment, state.systemType],
+  );
+
+  function followLibraryLink(link: StartHereLibraryLink) {
+    if (link.kind === 'library-catalog') {
+      onNavigate('browse', { framework: link.catalogId });
+      return;
     }
+    onNavigate('library-detail', { node: link.nodeId, from: 'start-here' });
+  }
 
-    const frameworks = ['NIST SP 800-53'];
-    const templates = ['Security Plan Starter', 'Assessment Planning Worksheet'];
-    const patterns = ['Defining the Right Authorization Boundary', 'Keeping Authorization Evidence Current'];
+  function followCompareLink(link: StartHereCompareLink) {
+    onNavigate('matrix', {
+      workbench: link.workbench,
+      ...link.patch,
+    });
+  }
 
-    if (state.environment === 'CSP') {
-      frameworks.unshift('FedRAMP Rev. 5');
-      templates.unshift('Inheritance Worksheet');
-      patterns.unshift('Using FedRAMP Inheritance');
-    }
-
-    if (state.dataSensitivity === 'Moderate' || state.dataSensitivity === 'High') {
-      frameworks.push('Moderate or High baseline review');
-      templates.push('POA&M Starter');
-    }
-
-    if (state.systemType === 'Cloud SaaS') {
-      patterns.unshift('What Your Cloud Provider Owns vs What You Own');
-    }
-
-    return { frameworks, templates, patterns };
-  }, [ready, state.dataSensitivity, state.environment, state.systemType]);
+  function restartQuestionnaire() {
+    onNavigate('start-here', {
+      step: '',
+      systemType: '',
+      dataSensitivity: '',
+      environment: '',
+    });
+  }
 
   return (
     <section className="panel">
@@ -1935,27 +2106,98 @@ function StartHerePage(props: {
       </div>
 
       {recommendations ? (
-        <div className="summary-grid">
-          <SummaryCard title="What this is" tone="trust">
-            <p>This is a reference recommendation. It is not a compliance determination.</p>
-          </SummaryCard>
-          <SummaryCard title="Suggested frameworks and baselines">
-            <ul className="list">
-              {recommendations.frameworks.map((entry) => (
-                <li key={entry}>{entry}</li>
+        <div className="stack">
+          <div className="card-actions">
+            <button className="secondary" onClick={restartQuestionnaire} type="button">
+              Restart questionnaire
+            </button>
+          </div>
+
+          <div className="summary-grid">
+            <SummaryCard title="What this is" tone="trust">
+              <p>This is a reference recommendation. It is not a compliance determination.</p>
+            </SummaryCard>
+          </div>
+
+          <section className="stack">
+            <div className="section-header">
+              <h2>Library</h2>
+              <p>Framework catalogs and baselines to open first.</p>
+            </div>
+            <div className="stack compact">
+              {recommendations.library.map((link) => (
+                <article className="relationship-card" key={`${link.kind}-${link.kind === 'library-catalog' ? link.catalogId : link.nodeId}`}>
+                  <div>
+                    <strong>{link.label}</strong>
+                    <p>{link.rationale}</p>
+                  </div>
+                  <button className="secondary" onClick={() => followLibraryLink(link)} type="button">
+                    Open in Library
+                  </button>
+                </article>
               ))}
-            </ul>
-          </SummaryCard>
-          <SummaryCard title="What to do next">
-            <ul className="list">
-              {recommendations.templates.map((entry) => (
-                <li key={entry}>{entry}</li>
+            </div>
+          </section>
+
+          <section className="stack">
+            <div className="section-header">
+              <h2>Compare</h2>
+              <p>Pre-filled comparison paths based on your answers.</p>
+            </div>
+            <div className="stack compact">
+              {recommendations.compare.map((link) => (
+                <article className="relationship-card" key={`compare-${link.workbench}-${link.label}`}>
+                  <div>
+                    <strong>{link.label}</strong>
+                    <p>{link.rationale}</p>
+                  </div>
+                  <button className="secondary" onClick={() => followCompareLink(link)} type="button">
+                    Open Compare
+                  </button>
+                </article>
               ))}
-              {recommendations.patterns.map((entry) => (
-                <li key={entry}>{entry}</li>
+            </div>
+          </section>
+
+          <section className="stack">
+            <div className="section-header">
+              <h2>Patterns</h2>
+              <p>Plain-language guides for concepts that often block progress.</p>
+            </div>
+            <div className="stack compact">
+              {recommendations.patterns.map((link) => (
+                <article className="relationship-card" key={link.patternId}>
+                  <div>
+                    <strong>{link.label}</strong>
+                    <p>{link.rationale}</p>
+                  </div>
+                  <button className="secondary" onClick={() => onNavigate('patterns', { pattern: link.patternId })} type="button">
+                    Read pattern
+                  </button>
+                </article>
               ))}
-            </ul>
-          </SummaryCard>
+            </div>
+          </section>
+
+          <section className="stack">
+            <div className="section-header">
+              <h2>Templates</h2>
+              <p>Blank artifacts you can generate locally in your browser.</p>
+            </div>
+            <div className="stack compact">
+              {recommendations.templates.map((link) => (
+                <article className="relationship-card" key={link.templateType}>
+                  <div>
+                    <strong>{link.label}</strong>
+                    <p>{link.rationale}</p>
+                  </div>
+                  <button className="primary" onClick={() => onNavigate('templates', { templateType: link.templateType })} type="button">
+                    Generate {link.label}
+                  </button>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
       ) : (
         <section className="empty-state">
@@ -1970,11 +2212,12 @@ function StartHerePage(props: {
 function GlossaryDrawer(props: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  focusTermId?: string;
   bundle: RuntimeBundle | null;
   onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
 }) {
-  const { open, setOpen, bundle, onNavigate, onOpenNode } = props;
+  const { open, setOpen, focusTermId = '', bundle, onNavigate, onOpenNode } = props;
   const [query, setQuery] = useState('');
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -1985,6 +2228,28 @@ function GlossaryDrawer(props: {
       return [entry.term, entry.expansion, entry.definition, entry.source].join(' ').toLowerCase().includes(needle);
     });
   }, [query]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    if (focusTermId) {
+      const entry = glossaryData.find((item) => item.id === focusTermId);
+      if (entry) {
+        setQuery(entry.term);
+      }
+    } else {
+      setQuery('');
+    }
+  }, [focusTermId, open]);
+
+  useEffect(() => {
+    if (!open || !focusTermId) {
+      return;
+    }
+    const target = document.getElementById(`glossary-term-${focusTermId}`);
+    target?.scrollIntoView({ block: 'nearest' });
+  }, [filtered, focusTermId, open]);
 
   function openFirstControl(controlId: string) {
     if (!bundle) {
@@ -2025,12 +2290,23 @@ function GlossaryDrawer(props: {
           </label>
 
           <div className="drawer-list">
-            {filtered.map((entry) => (
-              <article className="drawer-item" key={entry.id}>
-                <h3>
-                  {entry.term}
-                  {entry.expansion ? <span className="drawer-expansion"> · {entry.expansion}</span> : null}
-                </h3>
+            {filtered.map((entry) => {
+              const relatedTemplateIds = templatesForPatterns(entry.related_patterns);
+              return (
+              <article
+                className={focusTermId === entry.id ? 'drawer-item drawer-item-focused' : 'drawer-item'}
+                id={`glossary-term-${entry.id}`}
+                key={entry.id}
+              >
+                <div className="result-card-header">
+                  <h3>
+                    {entry.term}
+                    {entry.expansion ? <span className="drawer-expansion"> · {entry.expansion}</span> : null}
+                  </h3>
+                  <Badge tone={entry.consensus ? 'warning' : 'success'}>
+                    {entry.consensus ? 'Practitioner consensus' : 'Official source'}
+                  </Badge>
+                </div>
                 <p>{entry.definition}</p>
                 <p className="drawer-support">
                   Why it matters: use this term to understand the surrounding control, pattern, or template before you act on it.
@@ -2046,7 +2322,20 @@ function GlossaryDrawer(props: {
                       }}
                       type="button"
                     >
-                      Pattern
+                      {PATTERN_RENAMES[patternId] || patternId}
+                    </button>
+                  ))}
+                  {relatedTemplateIds.map((templateId) => (
+                    <button
+                      className="chip"
+                      key={templateId}
+                      onClick={() => {
+                        setOpen(false);
+                        onNavigate('templates', { templateType: templateId });
+                      }}
+                      type="button"
+                    >
+                      {templateId.replaceAll('_', ' ')}
                     </button>
                   ))}
                   {entry.related_controls.map((controlId) => (
@@ -2055,11 +2344,10 @@ function GlossaryDrawer(props: {
                     </button>
                   ))}
                 </div>
-                <a className="drawer-link" href="#" onClick={(event) => event.preventDefault()}>
-                  Official source: {entry.source}
-                </a>
+                <p className="drawer-link">Official source: {entry.source}</p>
               </article>
-            ))}
+            );
+            })}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

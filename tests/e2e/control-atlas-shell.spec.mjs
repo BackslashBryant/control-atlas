@@ -25,9 +25,10 @@ test('control atlas staged shell exposes the translation-first nav order and gui
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
   await page.getByLabel('Operational environment').selectOption('CSP');
-  await expect(page.getByText('Suggested frameworks and baselines')).toBeVisible();
-  await expect(page.getByText('What to do next')).toBeVisible();
-  await expect(page.getByText('FedRAMP Rev. 5')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Library', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
+  await expect(page.getByText('FedRAMP Rev. 5 Baselines')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true })).toBeVisible();
 });
 
 test('library detail deep links stay compatible and keep advanced details collapsed by default', async ({ page }) => {

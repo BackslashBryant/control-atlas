@@ -21,15 +21,15 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**Epic 5: Patterns + Glossary + Start Here — deep links and polish**
+**Epic 6: QA + Accessibility + Release**
 
-**Goal:** Start Here recommendations need plain-language rationale plus direct navigable links to Library, Compare, Patterns, and Templates.
+**Goal:** Expand E2E critical-path coverage, harden accessibility, complete content review, and cut a versioned release candidate.
 
-**Open gaps:** See [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md) Epic 5.
+**Open gaps:** See [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md) Epic 6.
 
-**Branch pattern:** `agent/forge/epic-5-start-here-links`
+**Branch pattern:** `agent/pixel/epic-6-qa-release`
 
-**Exit checks:** `npm run precommit`; Start Here E2E or targeted navigation tests.
+**Exit checks:** `npm run precommit`; full critical-path E2E matrix; release tag candidate.
 
 ## Epic Status (June 19, 2026)
 
@@ -40,8 +40,8 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 2 — Library + Search | **Shipped** | MiniSearch index, facets, library detail, deep links, "What to do next". |
 | 3 — Compare | **Shipped** | Relationship table with provenance, STIG→CCI→NIST trace, baseline delta, exports (`81daf6d`). |
 | 4 — Template Factory | **Shipped** | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage. |
-| 5 — Patterns + Glossary + Start Here | **Active** | Fifteen patterns, glossary drawer, and three-question Start Here exist. Start Here output is text-only — needs deep links and plain-language rationale per PRD 5.8. |
-| 6 — QA + Release | **Not started** | Partial Playwright/a11y coverage; release candidate and content review remain. |
+| 5 — Patterns + Glossary + Start Here | **Shipped** | Start Here actionable deep links (Library, Compare, Patterns, Templates) with plain-language rationale; header glossary search; inline glossary on detail and pattern pages. |
+| 6 — QA + Release | **Active** | Partial Playwright/a11y coverage; release candidate and content review remain. |
 
 ## Active Direction
 
@@ -86,13 +86,12 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 2 Library + Search shipped
 - [x] Epic 3 Compare shipped
 - [x] Epic 4 Template Factory QA complete
-- [ ] Epic 5 Start Here deep links and PRD alignment complete
+- [x] Epic 5 Start Here deep links and PRD alignment complete
 - [ ] Epic 6 release candidate
 
 ## Recommended Sequence (after Epic 4)
 
-1. **Epic 5 (active)** — Start Here actionable deep links; pattern/glossary polish if gaps remain
-2. **Epic 6** — E2E expansion, a11y hardening, content review, release tag
+1. **Epic 6 (active)** — E2E expansion, a11y hardening, content review, release tag
 
 ## Historical Delivery Records
 
