@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 
 const CHECK_WORKFLOW = 'Public Repo Checks';
 const DEFAULT_TIMEOUT_MS = 20 * 60 * 1000;
@@ -76,7 +77,12 @@ async function main() {
   console.log(`[ok] ${CHECK_WORKFLOW} passed: ${run.url}`);
 }
 
-main().catch((error) => {
-  console.error(`[error] ${error.message}`);
-  process.exit(1);
-});
+const isCli = process.argv[1]
+  && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isCli) {
+  main().catch((error) => {
+    console.error(`[error] ${error.message}`);
+    process.exit(1);
+  });
+}
