@@ -87,6 +87,16 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(nightlyWorkflow, /npm run test:a11y/);
 });
 
+test('direct ship scripts cover push retry, remote checks wait, and main ship flow', () => {
+  assert.equal(typeof packageJson.scripts['git:push'], 'string');
+  assert.equal(typeof packageJson.scripts['checks:wait'], 'string');
+  assert.equal(typeof packageJson.scripts['ship:main'], 'string');
+  assert.ok(existsSync('tools/git-push-with-retry.mjs'));
+  assert.ok(existsSync('tools/wait-for-checks.mjs'));
+  assert.ok(existsSync('tools/ship-to-main.mjs'));
+  assert.ok(existsSync('.gitleaks.toml'));
+});
+
 test('dependency review and dependabot automation exist', () => {
   assert.ok(existsSync(dependencyReviewWorkflowPath));
   assert.ok(existsSync(dependabotPath));
