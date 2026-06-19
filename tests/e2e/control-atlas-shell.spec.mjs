@@ -80,6 +80,37 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Detailed mappings' }).click();
   await expect(page.locator('table')).toContainText('AC-2');
+  await expect(page.locator('table')).toContainText('Plain-language rationale');
+});
+
+test('compare stig chain traces DISA items through CCI to NIST controls', async ({ page }) => {
+  await page.goto('/?view=matrix');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await page.locator('.intent-card', { hasText: 'STIG/SRG to controls' }).getByRole('button', { name: 'Use this path' }).click();
+  await expect(page.getByLabel('Catalog')).toBeVisible();
+  await page.getByRole('button', { name: 'Trace this item' }).first().click();
+  await expect(page.getByText('Selected chain')).toBeVisible();
+  const chainPanel = page.locator('.chain-grid');
+  await expect(chainPanel.getByText('CCI links', { exact: true })).toBeVisible();
+  await expect(chainPanel.getByText('NIST controls', { exact: true })).toBeVisible();
+  await expect(chainPanel.getByText('Official link').first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
+});
+
+test('compare baselines shows delta controls and source versions', async ({ page }) => {
+  await page.goto('/?view=matrix&workbench=baseline-compare');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await page.getByLabel('Baseline A').selectOption('nist-800-53b:LOW');
+  await page.getByLabel('Baseline B').selectOption('nist-800-53b:MODERATE');
+  await expect(page.getByText('Baseline A:').first()).toBeVisible();
+  await expect(page.getByText('Baseline B:').first()).toBeVisible();
+  await expect(page.getByText('Shared controls').first()).toBeVisible();
+  await expect(page.getByText('Only in B', { exact: true }).first()).toBeVisible();
+  await expect(page.locator('.chain-grid')).toContainText('AC-');
+  await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
 });
 
 test('sources, templates, and patterns follow trust-first, artifact-first, and outcome-first flows', async ({ page }) => {

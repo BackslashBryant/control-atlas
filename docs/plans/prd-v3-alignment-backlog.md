@@ -1,6 +1,6 @@
 # Control Atlas Backlog: PRD v3.0 Alignment
 
-This backlog captures all misaligned or unimplemented deliverables from Epics 0 through 5 based on the requirements defined in the **PRD v3.0**. 
+This backlog captures all misaligned or unimplemented deliverables from Epics 0 through 5 based on the requirements defined in the **PRD v3.0**.
 
 ## Epic 0: GovFrame → Control Atlas Migration
 * **Missing Schema Extensions (Nodes)**: The node schema has not been updated to include the required `plain_language_summary` field.
@@ -17,12 +17,10 @@ This backlog captures all misaligned or unimplemented deliverables from Epics 0 
 * **Runtime:** `src/app/runtime.mjs` exposes `searchLibrary`, facet helpers, and `library-detail` URL state consumed by the React shell.
 
 ## Epic 3: Crosswalks
-* **Relationship Table Missing Fields**: The relationship table UI needs to be updated to display the `plain_language_rationale`.
-* **Crosswalk Workflows**: The specific 3-click trace workflow from a STIG rule → CCI → NIST control is not explicitly built out.
-* **Baseline Comparator**: The baseline comparator UI (comparing NIST Low/Moderate/High vs. FedRAMP Low/Moderate/High) with a clear delta view is entirely unimplemented.
+* **Status:** Shipped in React Compare workspace (`src/ui/App.tsx`). Relationship table shows `plain_language_rationale`, provenance badges, source references, and refine filters. STIG → CCI → NIST chain uses three-click trace with export. Baseline comparator shows shared/only-in-A/only-in-B control lists, source versions, and export.
 
 ## Epic 4: Template Factory
-* *Largely aligned.* The template engine exists and all 9 templates are registered. 
+* *Largely aligned.* The template engine exists and all 9 templates are registered.
 * **QA Need**: Conduct a review to guarantee that all templates strictly use plain-language prompts for all fields and enforce the rule of requiring zero organizational data.
 
 ## Epic 5: Patterns + Glossary + Start Here
@@ -30,5 +28,5 @@ This backlog captures all misaligned or unimplemented deliverables from Epics 0 
 
 ---
 
-> [!NOTE]  
+> [!NOTE]
 > All deliverables listed here represent deviations from the PRD v3.0. They should be prioritized and resolved to bring the current baseline up to date with the canonical product direction.

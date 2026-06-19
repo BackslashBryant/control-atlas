@@ -475,6 +475,42 @@ li {
   color: #bbf7d0;
 }
 
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.source-ref-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.chain-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.chain-link-item {
+  margin-bottom: 0.75rem;
+}
+
+.compare-legend {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0.5rem 0 0;
+}
+
+.baseline-source-summary {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0.25rem 0;
+}
+
 .intent-card {
   display: grid;
   gap: var(--space-3);
