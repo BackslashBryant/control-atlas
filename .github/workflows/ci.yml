@@ -33,7 +33,7 @@ jobs:
         run: npm run test:e2e:smoke
       - name: Upload Playwright failure artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ci-playwright-artifacts
           path: |
@@ -53,7 +53,7 @@ jobs:
       - run: npm run test:visual
       - name: Upload visual failure artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: approved-layout-visual-diffs
           path: test-results
@@ -74,7 +74,7 @@ jobs:
         run: npm run test:performance
       - name: Upload Lighthouse reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse-ci-reports
           path: artifacts/lighthouse-ci
