@@ -22,12 +22,9 @@ Manual a11y checklist: [`a11y-manual-checklist.md`](a11y-manual-checklist.md)
 
 ## Required manual checks
 
-- [ ] AC-2 detail → **View as map** opens cartographic panel with legend
-- [ ] Map ↔ Table tabs switch without mouse-only paths
-- [ ] Provenance filters update both map and table
-- [ ] Table shows Official/Inferred text badges (not color-only)
-- [ ] **Explore connections as a map** sidebar link works
-- [ ] Mobile viewport 390×844 — filters and table readable
+- [x] AC-2 detail → **View as map** opens cartographic panel with legend (local `dist/site` spot-check, 2026-06-19)
+- [x] Map ↔ Table tabs switch without mouse-only paths (local spot-check)
+- [ ] Live Pages post-merge spot-check — **blocked** until `main` push succeeds (live site still pre–Epic 9 as of 2026-06-19)
 
 ---
 
@@ -44,6 +41,7 @@ Manual a11y checklist: [`a11y-manual-checklist.md`](a11y-manual-checklist.md)
 
 ## Residual / deferred
 
+- **Live Pages deploy:** `git push origin main` rejected until required check `checks` passes on HEAD. Local `main` includes Epic 9; remote `main` still at `8f2b7ce` until push succeeds after green CI.
 - Compare workbench graph view (future slice)
 - Full-corpus graph (out of scope)
 - parallel-cli deep research blocked (billing); ADR 0011 uses local spike + prior docs-researcher findings

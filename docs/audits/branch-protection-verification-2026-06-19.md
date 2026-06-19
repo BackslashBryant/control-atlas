@@ -64,7 +64,13 @@ Alternatively: GitHub → Settings → Branches → `main` rule → export or sc
 
 ## Solo-ship exception
 
-This project ships directly to `main` without mandatory PR review. Branch protection should still require **status checks** and **block force pushes**. PR reviews are optional per [`AGENTS.md`](../../AGENTS.md) direct ship flow.
+This project ships directly to `main` without mandatory PR review. The `main-ship-gate` ruleset requires the **`checks`** status (Public Repo Checks workflow) to pass on the commit you push — **not** a pull request. Direct ship flow:
+
+1. Push your task branch (or run CI via push to any branch on that commit).
+2. Confirm **`checks`** is green on GitHub Actions for that commit SHA.
+3. Fast-forward `main` locally and `git push origin main`.
+
+If push is rejected with `Required status check "checks" is failing`, CI failed on that commit — fix the failure and push again. Disabling the ruleset is not required for direct ship.
 
 ---
 
