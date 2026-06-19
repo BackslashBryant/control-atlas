@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**Active sprint: Epic 5 — Start Here deep links and pattern/glossary polish.**
+**Active sprint: Epic 6 — QA, accessibility hardening, and release candidate.**
 
-Start Here recommendations need plain-language rationale plus direct navigable links to Library, Compare, Patterns, and Templates.
+Expand E2E critical-path coverage, complete content review, and cut a versioned release tag.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -20,6 +20,7 @@ Start Here recommendations need plain-language rationale plus direct navigable l
 - Epic 2: Library search, facets, detail pages, deep links
 - Epic 3: Compare workbenches (relationships, STIG chain, baseline delta, provenance exports)
 - Epic 4: Template Factory — nine PRD-aligned templates, artifact-first UI, export contract tests, generation E2E
+- Epic 5: Start Here actionable recommendations (Library, Compare, Patterns, Templates deep links); header glossary search; inline glossary on library detail and pattern pages
 
 ## Adopted Baseline
 
@@ -34,9 +35,9 @@ Control Atlas is public-data-only and has no backend. It may normalize public so
 
 It must not ingest evidence, accept uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login.
 
-## Next After Epic 5
+## Next After Epic 6
 
-1. Epic 6 — release hardening, full E2E critical-path matrix, content review, version tag
+1. Release candidate tag and launch checklist closeout
 
 ## Status Docs
 

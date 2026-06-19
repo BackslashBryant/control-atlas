@@ -185,6 +185,31 @@ a {
   gap: var(--space-2);
 }
 
+.header-search {
+  min-width: min(280px, 28vw);
+}
+
+.header-search .search-input input {
+  min-width: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.drawer-item-focused {
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.25);
+}
+
 .primary {
   color: white;
   background: linear-gradient(135deg, var(--ca-primary), var(--ca-provenance-fedramp));
