@@ -52,6 +52,7 @@ export type ViewState =
       templateType: string;
       framework: string;
       format: string;
+      environment: string;
     }
   | {
       view: 'sources';
@@ -158,6 +159,7 @@ export function parseViewState(search: string): ViewState {
       templateType: params.get('templateType') || '',
       framework: params.get('framework') || '',
       format: params.get('format') || 'markdown',
+      environment: params.get('environment') || 'Generic',
     };
   }
 
@@ -233,6 +235,7 @@ export function normalizeViewState(view: AppView, state: Partial<ViewState> = {}
       templateType: incoming.templateType || '',
       framework: incoming.framework || '',
       format: incoming.format || 'markdown',
+      environment: incoming.environment || 'Generic',
     };
   }
 
@@ -327,6 +330,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, 'templateType', state.templateType);
     setIfValue(params, 'framework', state.framework);
     setIfValue(params, 'format', state.format);
+    setIfValue(params, 'environment', state.environment);
   } else if (state.view === 'sources') {
     params.set('view', state.view);
     setIfValue(params, 'source', state.source);

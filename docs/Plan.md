@@ -21,15 +21,15 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**Epic 4: Template Factory — ship and align**
+**Epic 5: Patterns + Glossary + Start Here — deep links and polish**
 
-**Goal:** Verify and harden all nine client-side templates so every output uses plain-language prompts, requires zero organizational data, and includes disclaimer plus source metadata.
+**Goal:** Start Here recommendations need plain-language rationale plus direct navigable links to Library, Compare, Patterns, and Templates.
 
-**Open gaps:** See [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md) Epic 4.
+**Open gaps:** See [`docs/plans/prd-v3-alignment-backlog.md`](plans/prd-v3-alignment-backlog.md) Epic 5.
 
-**Branch pattern:** `agent/forge/epic-4-template-qa`
+**Branch pattern:** `agent/forge/epic-5-start-here-links`
 
-**Exit checks:** `npm run precommit`; template E2E or targeted template-generation tests; Muse copy pass on prompts.
+**Exit checks:** `npm run precommit`; Start Here E2E or targeted navigation tests.
 
 ## Epic Status (June 19, 2026)
 
@@ -39,15 +39,15 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 1 — Data Backbone | **Closed (residual)** | Build pipeline emits `plain_language_summary`, edge provenance fields, and registry-backed sources. Contract tests enforce quality; ongoing importer tuning is maintenance, not a blocker. |
 | 2 — Library + Search | **Shipped** | MiniSearch index, facets, library detail, deep links, "What to do next". |
 | 3 — Compare | **Shipped** | Relationship table with provenance, STIG→CCI→NIST trace, baseline delta, exports (`81daf6d`). |
-| 4 — Template Factory | **Active** | Engine + nine templates + React Templates UI exist; full plain-language QA and generation E2E still open. |
-| 5 — Patterns + Glossary + Start Here | **Partial** | Fifteen patterns, glossary drawer, and three-question Start Here exist. Start Here output is text-only — needs deep links and plain-language rationale per PRD 5.8. |
+| 4 — Template Factory | **Shipped** | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage. |
+| 5 — Patterns + Glossary + Start Here | **Active** | Fifteen patterns, glossary drawer, and three-question Start Here exist. Start Here output is text-only — needs deep links and plain-language rationale per PRD 5.8. |
 | 6 — QA + Release | **Not started** | Partial Playwright/a11y coverage; release candidate and content review remain. |
 
 ## Active Direction
 
 `docs/PRD.md` is the canonical source of truth. `docs/roadmap.md` defines epics 0–6.
 
-As of June 19, 2026, `main` and the public GitHub Pages shell (`https://backslashbryant.github.io/control-atlas/`) are in parity for the translation-first React shell through Epic 3.
+As of June 19, 2026, `main` and the public GitHub Pages shell (`https://backslashbryant.github.io/control-atlas/`) are in parity for the translation-first React shell through Epic 4.
 
 ## Translation-First Product Standard
 
@@ -85,15 +85,14 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 1 provenance registry and graph contract on generated bundles
 - [x] Epic 2 Library + Search shipped
 - [x] Epic 3 Compare shipped
-- [ ] Epic 4 Template Factory QA complete
+- [x] Epic 4 Template Factory QA complete
 - [ ] Epic 5 Start Here deep links and PRD alignment complete
 - [ ] Epic 6 release candidate
 
 ## Recommended Sequence (after Epic 4)
 
-1. **Epic 4** — Template Factory QA and generation verification (active sprint)
-2. **Epic 5** — Start Here actionable deep links; pattern/glossary polish if gaps remain
-3. **Epic 6** — E2E expansion, a11y hardening, content review, release tag
+1. **Epic 5 (active)** — Start Here actionable deep links; pattern/glossary polish if gaps remain
+2. **Epic 6** — E2E expansion, a11y hardening, content review, release tag
 
 ## Historical Delivery Records
 

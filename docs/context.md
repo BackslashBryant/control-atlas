@@ -10,15 +10,16 @@
 
 ## Current Objective
 
-**Active sprint: Epic 4 — Template Factory ship and align.**
+**Active sprint: Epic 5 — Start Here deep links and pattern/glossary polish.**
 
-Verify all nine templates and the Templates UI against PRD v3.0: plain-language prompts, zero org data, disclaimer and source metadata on every export.
+Start Here recommendations need plain-language rationale plus direct navigable links to Library, Compare, Patterns, and Templates.
 
 ## Shipped on `main` (do not re-plan)
 
 - Epics 0–1 baseline: React shell, schema/provenance on generated bundles, Sources registry, CI/Pages parity
 - Epic 2: Library search, facets, detail pages, deep links
 - Epic 3: Compare workbenches (relationships, STIG chain, baseline delta, provenance exports)
+- Epic 4: Template Factory — nine PRD-aligned templates, artifact-first UI, export contract tests, generation E2E
 
 ## Adopted Baseline
 
@@ -33,10 +34,9 @@ Control Atlas is public-data-only and has no backend. It may normalize public so
 
 It must not ingest evidence, accept uploads, connect to operational systems, store user, organization, or system data, score compliance, track real assets or packages, or require login.
 
-## Next After Epic 4
+## Next After Epic 5
 
-1. Epic 5 — Start Here deep links to Library, Compare, Patterns, and Templates; close any remaining pattern/glossary gaps
-2. Epic 6 — release hardening, full E2E, content review, version tag
+1. Epic 6 — release hardening, full E2E critical-path matrix, content review, version tag
 
 ## Status Docs
 

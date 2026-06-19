@@ -105,7 +105,7 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultWithFootnotes = generateTemplate(optionsWithFootnotes, dataset);
-  assert.match(resultWithFootnotes.content, /Source Information and Footnotes/);
+  assert.match(resultWithFootnotes.content, /Source Metadata/);
   assert.match(resultWithFootnotes.content, /Framework context: nist-800-53/);
-  assert.match(resultWithFootnotes.content, /Environment type: Cloud SaaS/);
+  assert.match(resultWithFootnotes.content, /Environment archetype: Cloud SaaS/);
 });
