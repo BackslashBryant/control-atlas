@@ -23,6 +23,9 @@
 
 !.github/
 !.github/dependabot.yml
+!.github/pull_request_template.md
+!.github/ISSUE_TEMPLATE/
+!.github/ISSUE_TEMPLATE/**
 !.github/workflows/
 !.github/workflows/ci.yml
 !.github/workflows/codeql.yml
