@@ -33,9 +33,9 @@ test('federal graph build emits graph contract counts', () => {
   const result = buildFrameworkData();
   const generatedAt = generated('sources').generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 40);
-  assert.ok(result.nodes > 8000);
-  assert.ok(result.edges > 9000);
+  assert.equal(result.sources, 44);
+  assert.ok(result.nodes > 9000);
+  assert.ok(result.edges > 12000);
   assert.equal(result.edges, result.evidence);
   assert.ok(result.findings > 0);
   assert.equal(generated('sources').generated_at, generatedAt);

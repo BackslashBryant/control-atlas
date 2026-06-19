@@ -1263,9 +1263,28 @@ function DetailPage(props: {
             <p>
               {locationSummary.length
                 ? `This item appears in ${locationSummary.join(", ")}.`
-                : "This item does not have a published baseline placement summary yet."}
+                : node.node_type === "attack_technique" ||
+                    node.node_type === "defend_countermeasure"
+                  ? "This MITRE item connects through the public threat lens rather than a baseline membership list."
+                  : "This item does not have a published baseline placement summary yet."}
             </p>
           </SummaryCard>
+          {node.node_type === "attack_technique" ? (
+            <SummaryCard title="Threat context">
+              <p>
+                Domain:{" "}
+                {node.metadata?.attack_domain === "ics"
+                  ? "ICS ATT&CK"
+                  : "Enterprise ATT&CK"}
+              </p>
+              {node.metadata?.tactics?.length ? (
+                <p>Tactics: {node.metadata.tactics.join(", ")}</p>
+              ) : null}
+              {node.metadata?.platforms?.length ? (
+                <p>Platforms: {node.metadata.platforms.join(", ")}</p>
+              ) : null}
+            </SummaryCard>
+          ) : null}
 
           <section className="panel">
             <div className="section-header">
@@ -1434,6 +1453,22 @@ function DetailPage(props: {
                 >
                   <IconLink aria-hidden="true" size={16} stroke={1.8} />
                   <span>Explore connections as a map</span>
+                </button>
+              ) : null}
+              {node.node_type === "attack_technique" ? (
+                <button
+                  className="link-action"
+                  onClick={() =>
+                    onNavigate("matrix", {
+                      workbench: "threat-chain",
+                      chainCatalog: node.metadata?.catalog_id || "",
+                      chainItem: node.id,
+                    })
+                  }
+                  type="button"
+                >
+                  <IconGitCompare aria-hidden="true" size={16} stroke={1.8} />
+                  <span>Trace this technique to D3FEND and NIST controls</span>
                 </button>
               ) : null}
               <button
@@ -1672,18 +1707,34 @@ function ComparePage(props: {
       ].sort() as string[],
     };
   }, [bundle, relationshipNodeIds, state.source, state.target]);
-  const chainCatalogId = state.chainCatalog || "disa-stig";
+  const chainCatalogId =
+    state.chainCatalog ||
+    (workbench === "threat-chain" ? "mitre-attack" : "disa-stig");
   const chainCatalogNodes = useMemo(
     () =>
-      bundle.runtime
-        .getNodes({ catalog_id: chainCatalogId })
-        .sort(
-          (left: any, right: any) =>
-            (left.metadata?.item_id || "").localeCompare(
-              right.metadata?.item_id || "",
-            ) || left.id.localeCompare(right.id),
-        ),
-    [bundle, chainCatalogId],
+      workbench === "threat-chain"
+        ? bundle.runtime
+            .getNodes({ node_type: "attack_technique" })
+            .filter(
+              (node: any) =>
+                !state.chainCatalog ||
+                node.metadata?.catalog_id === state.chainCatalog,
+            )
+            .sort(
+              (left: any, right: any) =>
+                (left.metadata?.item_id || "").localeCompare(
+                  right.metadata?.item_id || "",
+                ) || left.id.localeCompare(right.id),
+            )
+        : bundle.runtime
+            .getNodes({ catalog_id: chainCatalogId })
+            .sort(
+              (left: any, right: any) =>
+                (left.metadata?.item_id || "").localeCompare(
+                  right.metadata?.item_id || "",
+                ) || left.id.localeCompare(right.id),
+            ),
+    [bundle, chainCatalogId, state.chainCatalog, workbench],
   );
   const chainBenchmarkOptions = useMemo(
     () =>
@@ -1710,6 +1761,14 @@ function ComparePage(props: {
           include_candidates: state.includeCandidates === "true",
         })
       : null;
+  const threatChainPayload =
+    workbench === "threat-chain"
+      ? bundle.runtime.buildThreatChain({
+          chain_catalog: state.chainCatalog || "mitre-attack",
+          chain_item: state.chainItem,
+          include_candidates: state.includeCandidates === "true",
+        })
+      : null;
   const baselineOptions = bundle.runtime
     .getNodes({ node_type: "baseline" })
     .map((node: any) => ({
@@ -1727,6 +1786,7 @@ function ComparePage(props: {
         })
       : null;
   const selectedChain = chainPayload?.selected_chain;
+  const selectedThreatChain = threatChainPayload?.selected_chain;
 
   const comparisonCards: Array<{
     title: string;
@@ -1742,6 +1802,11 @@ function ComparePage(props: {
       title: "STIG/SRG to controls",
       body: "Trace DISA items through CCI links to the related controls and see where the chain stops.",
       workbench: "stig-chain",
+    },
+    {
+      title: "Threat to controls",
+      body: "Trace an ATT&CK technique through D3FEND countermeasures to related NIST controls.",
+      workbench: "threat-chain",
     },
     {
       title: "Baseline to baseline",
@@ -1773,6 +1838,18 @@ function ComparePage(props: {
       const extension = format === "markdown" ? "md" : format;
       downloadTextFile(
         `control-atlas-stig-chain.${extension}`,
+        content,
+        format === "json" ? "application/json" : "text/plain",
+      );
+    }
+    if (workbench === "threat-chain" && threatChainPayload) {
+      const content = bundle.runtime.exportThreatChain(
+        threatChainPayload,
+        format,
+      );
+      const extension = format === "markdown" ? "md" : format;
+      downloadTextFile(
+        `control-atlas-threat-chain.${extension}`,
         content,
         format === "json" ? "application/json" : "text/plain",
       );
@@ -2295,6 +2372,229 @@ function ComparePage(props: {
                   <p>
                     Try a different catalog or remove the item filter to widen
                     the visible chain.
+                  </p>
+                </section>
+              )}
+            </>
+          ) : null}
+
+          {workbench === "threat-chain" ? (
+            <>
+              <div className="filter-grid">
+                <SelectField
+                  emptyLabel="All ATT&CK domains"
+                  label="ATT&CK domain"
+                  onChange={(value) =>
+                    onNavigate("matrix", {
+                      ...state,
+                      workbench,
+                      chainCatalog: value,
+                      chainItem: "",
+                    })
+                  }
+                  options={[
+                    { value: "mitre-attack", label: "Enterprise ATT&CK" },
+                    { value: "mitre-attack-ics", label: "ICS ATT&CK" },
+                  ]}
+                  value={state.chainCatalog}
+                />
+                <SelectField
+                  emptyLabel="All visible techniques"
+                  label="ATT&CK technique"
+                  onChange={(value) =>
+                    onNavigate("matrix", {
+                      ...state,
+                      workbench,
+                      chainItem: value,
+                    })
+                  }
+                  options={chainCatalogNodes.map((node: any) => ({
+                    value: node.id,
+                    label: `${node.metadata?.item_id || node.id} - ${node.metadata?.title || node.label}`,
+                  }))}
+                  value={state.chainItem}
+                />
+                <Field label="Show inferred mappings">
+                  <label className="checkbox-field">
+                    <input
+                      checked={state.includeCandidates === "true"}
+                      onChange={(event) =>
+                        onNavigate("matrix", {
+                          ...state,
+                          workbench,
+                          includeCandidates: event.target.checked ? "true" : "",
+                        })
+                      }
+                      type="checkbox"
+                    />
+                    <span>Include candidate and inferred links</span>
+                  </label>
+                </Field>
+              </div>
+              <p className="compare-legend">
+                Official link = MITRE published mapping. Pick a technique, review
+                D3FEND countermeasures, then open the related NIST controls.
+              </p>
+              {threatChainPayload?.rows?.length ? (
+                <div className="stack">
+                  <SummaryCard title="What this is">
+                    <p>
+                      {threatChainPayload.rows.length} ATT&CK techniques are
+                      visible in the current threat chain scope.
+                    </p>
+                  </SummaryCard>
+                  <CompareExportButtons
+                    disabled={
+                      !(
+                        threatChainPayload.rows.length || selectedThreatChain
+                      )
+                    }
+                    onExport={exportRows}
+                  />
+                  {!selectedThreatChain ? (
+                  <table
+                    className="detail-table"
+                    aria-label="Threat chain summary"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Technique</th>
+                        <th>Domain</th>
+                        <th>D3FEND countermeasures</th>
+                        <th>NIST controls</th>
+                        <th>Unmapped D3FEND</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {threatChainPayload.rows.map((row: any) => (
+                        <tr
+                          className={
+                            state.chainItem === row.node_id ||
+                            state.chainItem === row.item_id
+                              ? "active-row"
+                              : ""
+                          }
+                          key={row.node_id}
+                        >
+                          <td>
+                            <strong>{row.item_id}</strong>
+                            <br />
+                            <span className="muted">{row.title}</span>
+                          </td>
+                          <td>{row.domain}</td>
+                          <td>{row.d3fend_count}</td>
+                          <td>{row.nist_control_count}</td>
+                          <td>{row.unmapped_d3fend_count}</td>
+                          <td>
+                            <button
+                              className="secondary"
+                              onClick={() =>
+                                onNavigate("matrix", {
+                                  ...state,
+                                  workbench,
+                                  chainItem: row.node_id,
+                                })
+                              }
+                              type="button"
+                            >
+                              Trace this technique
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  ) : null}
+                  {selectedThreatChain ? (
+                    <section className="stack">
+                      <PageHeader
+                        eyebrow="Selected threat chain"
+                        summary="Follow the public links from the ATT&CK technique through D3FEND countermeasures to NIST controls."
+                        title={`${selectedThreatChain.source_node.metadata?.item_id || selectedThreatChain.source_node.id} — ${selectedThreatChain.source_node.metadata?.title || selectedThreatChain.source_node.label}`}
+                      />
+                      <div className="chain-grid">
+                        <SummaryCard title="D3FEND countermeasures">
+                          <ul className="source-ref-list">
+                            {selectedThreatChain.d3fend_entries.length ? (
+                              selectedThreatChain.d3fend_entries.map(
+                                (entry: any) => (
+                                  <ChainRelationshipItem
+                                    key={entry.d3fendNode.id}
+                                    node={entry.d3fendNode}
+                                    onOpenNode={onOpenNode}
+                                    relationshipEdge={entry.relationshipEdge}
+                                    sourceRefs={entry.sourceRefs}
+                                  />
+                                ),
+                              )
+                            ) : (
+                              <li>
+                                No D3FEND countermeasures linked to this
+                                technique yet.
+                              </li>
+                            )}
+                          </ul>
+                        </SummaryCard>
+                        <SummaryCard title="NIST controls">
+                          <ul className="source-ref-list">
+                            {selectedThreatChain.nist_entries.length ? (
+                              selectedThreatChain.nist_entries.map(
+                                (entry: any) => (
+                                  <ChainRelationshipItem
+                                    key={entry.nistNode.id}
+                                    node={entry.nistNode}
+                                    onOpenNode={onOpenNode}
+                                    relationshipEdge={entry.relationshipEdge}
+                                    sourceRefs={entry.sourceRefs}
+                                  />
+                                ),
+                              )
+                            ) : (
+                              <li>
+                                No NIST controls reached from the visible D3FEND
+                                links.
+                              </li>
+                            )}
+                          </ul>
+                        </SummaryCard>
+                        <SummaryCard title="Unmapped D3FEND countermeasures">
+                          <ul className="source-ref-list">
+                            {selectedThreatChain.unmapped_d3fend_nodes.length ? (
+                              selectedThreatChain.unmapped_d3fend_nodes.map(
+                                (node: any) => (
+                                  <li className="chain-link-item" key={node.id}>
+                                    <button
+                                      className="link-action"
+                                      onClick={() => onOpenNode(node.id)}
+                                      type="button"
+                                    >
+                                      <strong>
+                                        {node.metadata?.item_id || node.id}
+                                      </strong>{" "}
+                                      — {node.metadata?.title || node.label}
+                                    </button>
+                                  </li>
+                                ),
+                              )
+                            ) : (
+                              <li>
+                                Every visible D3FEND countermeasure has a
+                                visible NIST link.
+                              </li>
+                            )}
+                          </ul>
+                        </SummaryCard>
+                      </div>
+                    </section>
+                  ) : null}
+                </div>
+              ) : (
+                <section className="empty-state">
+                  <h2>No public threat chain results yet</h2>
+                  <p>
+                    Try a different ATT&CK domain or remove the technique filter
+                    to widen the visible chain.
                   </p>
                 </section>
               )}

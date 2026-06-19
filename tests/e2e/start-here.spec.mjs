@@ -21,7 +21,9 @@ test('start here recommendations navigate to templates, patterns, library, and c
 
   await page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true }).click();
   await expect(page).toHaveURL(/view=templates&templateType=inheritance_worksheet/);
-  await expect(page.getByText('Inheritance Worksheet')).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Inheritance Worksheet" }),
+  ).toBeVisible();
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP');
   await waitForAppReady(page);

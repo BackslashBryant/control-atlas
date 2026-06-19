@@ -4,6 +4,7 @@ export const PROVENANCE_CLASSES = new Set([
   'federal_program',
   'federal_utilized',
   'federal_referenced',
+  'mitre_published',
 ]);
 
 export const ELIGIBILITY_STATUSES = new Set(['eligible', 'limited', 'excluded', 'pending_review']);

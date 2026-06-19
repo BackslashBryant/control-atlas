@@ -1,0 +1,371 @@
+{
+  "schema_version": "2.0",
+  "source_key": "mitre-d3fend-mappings",
+  "source_artifact": "https://d3fend.mitre.org/ontologies/d3fend.json",
+  "source_version": "4",
+  "snapshot_date": "2026-06-19",
+  "checksum": "sha256:a68b7f55e3c54077bb0f902de007eddc8c63c23d42a4fae43d19c516b28300a3",
+  "provenance": "MITRE D3FEND NIST SP 800-53 Rev. 5 control to defensive technique mappings",
+  "relationships": [
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-AL",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-2.13",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-AL to NIST SP 800-53 Rev. 5 control AC-2(13).",
+      "source_locator": "d3fend.json#AC-2(13):D3-AL",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-AL",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-7.3",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-AL to NIST SP 800-53 Rev. 5 control AC-7(3).",
+      "source_locator": "d3fend.json#AC-7(3):D3-AL",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-DTP",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-4.17",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-DTP to NIST SP 800-53 Rev. 5 control AC-4(17).",
+      "source_locator": "d3fend.json#AC-4(17):D3-DTP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-EI",
+      "target_catalog": "nist-800-53",
+      "target_id": "SC-3.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-EI to NIST SP 800-53 Rev. 5 control SC-3(1).",
+      "source_locator": "d3fend.json#SC-3(1):D3-EI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-FCR",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-4.26",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-FCR to NIST SP 800-53 Rev. 5 control AC-4(26).",
+      "source_locator": "d3fend.json#AC-4(26):D3-FCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-HBPI",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-6.4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-HBPI to NIST SP 800-53 Rev. 5 control AC-6(4).",
+      "source_locator": "d3fend.json#AC-6(4):D3-HBPI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "AU-14.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control AU-14(2).",
+      "source_locator": "d3fend.json#AU-14(2):D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "AU-15",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control AU-15.",
+      "source_locator": "d3fend.json#AU-15:D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "AU-4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control AU-4.",
+      "source_locator": "d3fend.json#AU-4:D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "CM-5.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control CM-5(1).",
+      "source_locator": "d3fend.json#CM-5(1):D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "IA-2.4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control IA-2(4).",
+      "source_locator": "d3fend.json#IA-2(4):D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-LAM",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-4.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-LAM to NIST SP 800-53 Rev. 5 control MA-4(1).",
+      "source_locator": "d3fend.json#MA-4(1):D3-LAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-MFA",
+      "target_catalog": "nist-800-53",
+      "target_id": "IA-2.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-MFA to NIST SP 800-53 Rev. 5 control IA-2(1).",
+      "source_locator": "d3fend.json#IA-2(1):D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-MFA",
+      "target_catalog": "nist-800-53",
+      "target_id": "IA-2.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-MFA to NIST SP 800-53 Rev. 5 control IA-2(2).",
+      "source_locator": "d3fend.json#IA-2(2):D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-MFA",
+      "target_catalog": "nist-800-53",
+      "target_id": "IA-2.6",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-MFA to NIST SP 800-53 Rev. 5 control IA-2(6).",
+      "source_locator": "d3fend.json#IA-2(6):D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-NTA",
+      "target_catalog": "nist-800-53",
+      "target_id": "RA-5.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-NTA to NIST SP 800-53 Rev. 5 control RA-5(2).",
+      "source_locator": "d3fend.json#RA-5(2):D3-NTA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-NTA",
+      "target_catalog": "nist-800-53",
+      "target_id": "RA-5.3",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-NTA to NIST SP 800-53 Rev. 5 control RA-5(3).",
+      "source_locator": "d3fend.json#RA-5(3):D3-NTA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-NTA",
+      "target_catalog": "nist-800-53",
+      "target_id": "SI-4.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-NTA to NIST SP 800-53 Rev. 5 control SI-4(2).",
+      "source_locator": "d3fend.json#SI-4(2):D3-NTA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-NTA",
+      "target_catalog": "nist-800-53",
+      "target_id": "SI-4.4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-NTA to NIST SP 800-53 Rev. 5 control SI-4(4).",
+      "source_locator": "d3fend.json#SI-4(4):D3-NTA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-PH",
+      "target_catalog": "nist-800-53",
+      "target_id": "RA-5.5",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-PH to NIST SP 800-53 Rev. 5 control RA-5(5).",
+      "source_locator": "d3fend.json#RA-5(5):D3-PH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-PH",
+      "target_catalog": "nist-800-53",
+      "target_id": "RA-5.6",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-PH to NIST SP 800-53 Rev. 5 control RA-5(6).",
+      "source_locator": "d3fend.json#RA-5(6):D3-PH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SCF",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-3.8",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SCF to NIST SP 800-53 Rev. 5 control AC-3(8).",
+      "source_locator": "d3fend.json#AC-3(8):D3-SCF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-3.6",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control MA-3(6).",
+      "source_locator": "d3fend.json#MA-3(6):D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-6",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control MA-6.",
+      "source_locator": "d3fend.json#MA-6:D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-6.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control MA-6(1).",
+      "source_locator": "d3fend.json#MA-6(1):D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-6.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control MA-6(2).",
+      "source_locator": "d3fend.json#MA-6(2):D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-6.3",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control MA-6(3).",
+      "source_locator": "d3fend.json#MA-6(3):D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-SU",
+      "target_catalog": "nist-800-53",
+      "target_id": "SI-2.4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-SU to NIST SP 800-53 Rev. 5 control SI-2(4).",
+      "source_locator": "d3fend.json#SI-2(4):D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-2.7",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control AC-2(7).",
+      "source_locator": "d3fend.json#AC-2(7):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-2.9",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control AC-2(9).",
+      "source_locator": "d3fend.json#AC-2(9):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-24.1",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control AC-24(1).",
+      "source_locator": "d3fend.json#AC-24(1):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "AC-24.2",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control AC-24(2).",
+      "source_locator": "d3fend.json#AC-24(2):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-3.3",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control MA-3(3).",
+      "source_locator": "d3fend.json#MA-3(3):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-3.4",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control MA-3(4).",
+      "source_locator": "d3fend.json#MA-3(4):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UAP",
+      "target_catalog": "nist-800-53",
+      "target_id": "MA-3.5",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UAP to NIST SP 800-53 Rev. 5 control MA-3(5).",
+      "source_locator": "d3fend.json#MA-3(5):D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-d3fend",
+      "source_id": "D3-UBA",
+      "target_catalog": "nist-800-53",
+      "target_id": "SI-3.8",
+      "relationship_type": "supports",
+      "why": "MITRE D3FEND maps defensive technique D3-UBA to NIST SP 800-53 Rev. 5 control SI-3(8).",
+      "source_locator": "d3fend.json#SI-3(8):D3-UBA",
+      "evidence_source": "mitre-d3fend-mappings"
+    }
+  ]
+}

@@ -31,6 +31,7 @@ const PROVENANCE_COLORS: Record<string, string> = {
   federal_published: "#22D3EE",
   federal_program: "#0D9488",
   federal_referenced: "#64748B",
+  mitre_published: "#7C3AED",
   inferred: "#F59E0B",
   deprecated: "#DC2626",
 };
@@ -45,6 +46,7 @@ export function provenanceCssVar(provenanceClass: string): string {
     federal_published: "var(--ca-provenance-nist)",
     federal_program: "var(--ca-provenance-fedramp)",
     federal_referenced: "var(--ca-provenance-community)",
+    mitre_published: "var(--ca-provenance-mitre)",
     inferred: "var(--ca-provenance-inferred)",
     deprecated: "var(--ca-provenance-deprecated)",
   };

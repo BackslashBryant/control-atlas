@@ -46,6 +46,7 @@ const DISPLAY_NAMES = {
     requires: 'Requires',
     depends_on: 'Depends on',
     protects: 'Protects',
+    mitigates: 'Mitigates',
   },
   confidence: {
     direct: 'Direct match',
@@ -78,6 +79,8 @@ const DISPLAY_NAMES = {
     capability: 'Capability',
     pillar: 'Pillar',
     program_requirement: 'Program requirement',
+    attack_technique: 'ATT&CK technique',
+    defend_countermeasure: 'D3FEND countermeasure',
   },
   retrieval_method: {
     download: 'Downloaded copy',
@@ -100,6 +103,8 @@ const DISPLAY_NAMES = {
     baseline: 'Baseline',
     catalog: 'Catalog',
     family: 'Control family',
+    attack_technique: 'ATT&CK technique',
+    defend_countermeasure: 'D3FEND countermeasure',
   },
 };
 

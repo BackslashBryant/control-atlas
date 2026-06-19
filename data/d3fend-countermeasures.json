@@ -1,0 +1,4955 @@
+{
+  "schema_version": "2.0",
+  "source_key": "mitre-d3fend-ontology",
+  "source_artifact": "https://d3fend.mitre.org/api/technique/all.json",
+  "source_version": "4",
+  "snapshot_date": "2026-06-19",
+  "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
+  "provenance": "MITRE D3FEND defensive technique catalog",
+  "records": [
+    {
+      "id": "D3-AA",
+      "type": "defend_countermeasure",
+      "title": "D3-AA Agent Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AgentAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AA"
+      }
+    },
+    {
+      "id": "D3-ABPI",
+      "type": "defend_countermeasure",
+      "title": "D3-ABPI Application-based Process Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Application-basedProcessIsolation",
+        "synonym": [
+          "Sandbox",
+          "Remote Browser Isolation",
+          "Browser-based Process Isolation"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ABPI"
+      }
+    },
+    {
+      "id": "D3-ACA",
+      "type": "defend_countermeasure",
+      "title": "D3-ACA Active Certificate Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ActiveCertificateAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ACA"
+      }
+    },
+    {
+      "id": "D3-ACH",
+      "type": "defend_countermeasure",
+      "title": "D3-ACH Application Configuration Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ApplicationConfigurationHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ACH"
+      }
+    },
+    {
+      "id": "D3-AEM",
+      "type": "defend_countermeasure",
+      "title": "D3-AEM Application Exception Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ApplicationExceptionMonitoring",
+        "synonym": "Application Failure Monitoring"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AEM"
+      }
+    },
+    {
+      "id": "D3-AH",
+      "type": "defend_countermeasure",
+      "title": "D3-AH Application Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ApplicationHardening",
+        "synonym": "Process Hardening"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AH"
+      }
+    },
+    {
+      "id": "D3-AI",
+      "type": "defend_countermeasure",
+      "title": "D3-AI Asset Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AssetInventory",
+        "synonym": [
+          "Asset Discovery",
+          "Asset Inventorying"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AI"
+      }
+    },
+    {
+      "id": "D3-AL",
+      "type": "defend_countermeasure",
+      "title": "D3-AL Account Locking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AccountLocking",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AL"
+      }
+    },
+    {
+      "id": "D3-ALLM",
+      "type": "defend_countermeasure",
+      "title": "D3-ALLM Active Logical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ActiveLogicalLinkMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ALLM"
+      }
+    },
+    {
+      "id": "D3-AM",
+      "type": "defend_countermeasure",
+      "title": "D3-AM Access Modeling",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AccessModeling",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AM"
+      }
+    },
+    {
+      "id": "D3-AMED",
+      "type": "defend_countermeasure",
+      "title": "D3-AMED Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AccessMediation",
+        "synonym": "Access Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AMED"
+      }
+    },
+    {
+      "id": "D3-ANAA",
+      "type": "defend_countermeasure",
+      "title": "D3-ANAA Administrative Network Activity Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AdministrativeNetworkActivityAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ANAA"
+      }
+    },
+    {
+      "id": "D3-ANCI",
+      "type": "defend_countermeasure",
+      "title": "D3-ANCI Authentication Cache Invalidation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AuthenticationCacheInvalidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ANCI"
+      }
+    },
+    {
+      "id": "D3-ANET",
+      "type": "defend_countermeasure",
+      "title": "D3-ANET Authentication Event Thresholding",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AuthenticationEventThresholding",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ANET"
+      }
+    },
+    {
+      "id": "D3-APA",
+      "type": "defend_countermeasure",
+      "title": "D3-APA Access Policy Administration",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AccessPolicyAdministration",
+        "synonym": "Access Control Administration"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-APA"
+      }
+    },
+    {
+      "id": "D3-APCA",
+      "type": "defend_countermeasure",
+      "title": "D3-APCA Application Protocol Command Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ApplicationProtocolCommandAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-APCA"
+      }
+    },
+    {
+      "id": "D3-APLM",
+      "type": "defend_countermeasure",
+      "title": "D3-APLM Active Physical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ActivePhysicalLinkMapping",
+        "synonym": "Active Physical Layer Mapping"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-APLM"
+      }
+    },
+    {
+      "id": "D3-APM",
+      "type": "defend_countermeasure",
+      "title": "D3-APM Application Performance Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ApplicationPerformanceMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-APM"
+      }
+    },
+    {
+      "id": "D3-AVE",
+      "type": "defend_countermeasure",
+      "title": "D3-AVE Asset Vulnerability Enumeration",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AssetVulnerabilityEnumeration",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AVE"
+      }
+    },
+    {
+      "id": "D3-AZET",
+      "type": "defend_countermeasure",
+      "title": "D3-AZET Authorization Event Thresholding",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "AuthorizationEventThresholding",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-AZET"
+      }
+    },
+    {
+      "id": "D3-BA",
+      "type": "defend_countermeasure",
+      "title": "D3-BA Bootloader Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "BootloaderAuthentication",
+        "synonym": "Secure Boot"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-BA"
+      }
+    },
+    {
+      "id": "D3-BAN",
+      "type": "defend_countermeasure",
+      "title": "D3-BAN Biometric Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "BiometricAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-BAN"
+      }
+    },
+    {
+      "id": "D3-BDI",
+      "type": "defend_countermeasure",
+      "title": "D3-BDI Broadcast Domain Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "BroadcastDomainIsolation",
+        "synonym": "Network Segmentation"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-BDI"
+      }
+    },
+    {
+      "id": "D3-BMA",
+      "type": "defend_countermeasure",
+      "title": "D3-BMA Bus Message Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "BusMessageAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-BMA"
+      }
+    },
+    {
+      "id": "D3-BSE",
+      "type": "defend_countermeasure",
+      "title": "D3-BSE Byte Sequence Emulation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ByteSequenceEmulation",
+        "synonym": "Shellcode Transmission Detection"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-BSE"
+      }
+    },
+    {
+      "id": "D3-CA",
+      "type": "defend_countermeasure",
+      "title": "D3-CA Certificate Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CertificateAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CA"
+      }
+    },
+    {
+      "id": "D3-CAA",
+      "type": "defend_countermeasure",
+      "title": "D3-CAA Connection Attempt Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ConnectionAttemptAnalysis",
+        "synonym": "Network Scan Detection"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CAA"
+      }
+    },
+    {
+      "id": "D3-CBAN",
+      "type": "defend_countermeasure",
+      "title": "D3-CBAN Certificate-based Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Certificate-basedAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CBAN"
+      }
+    },
+    {
+      "id": "D3-CCSA",
+      "type": "defend_countermeasure",
+      "title": "D3-CCSA Credential Compromise Scope Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialCompromiseScopeAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CCSA"
+      }
+    },
+    {
+      "id": "D3-CDP",
+      "type": "defend_countermeasure",
+      "title": "D3-CDP Change Default Password",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ChangeDefaultPassword",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CDP"
+      }
+    },
+    {
+      "id": "D3-CE",
+      "type": "defend_countermeasure",
+      "title": "D3-CE Credential Eviction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialEviction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CE"
+      }
+    },
+    {
+      "id": "D3-CERO",
+      "type": "defend_countermeasure",
+      "title": "D3-CERO Certificate Rotation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CertificateRotation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CERO"
+      }
+    },
+    {
+      "id": "D3-CF",
+      "type": "defend_countermeasure",
+      "title": "D3-CF Content Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentFiltering",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CF"
+      }
+    },
+    {
+      "id": "D3-CFC",
+      "type": "defend_countermeasure",
+      "title": "D3-CFC Content Format Conversion",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentFormatConversion",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CFC"
+      }
+    },
+    {
+      "id": "D3-CFI",
+      "type": "defend_countermeasure",
+      "title": "D3-CFI Control Flow Integrity",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ControlFlowIntegrity",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CFI"
+      }
+    },
+    {
+      "id": "D3-CH",
+      "type": "defend_countermeasure",
+      "title": "D3-CH Credential Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CH"
+      }
+    },
+    {
+      "id": "D3-CHN",
+      "type": "defend_countermeasure",
+      "title": "D3-CHN Connected Honeynet",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ConnectedHoneynet",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CHN"
+      }
+    },
+    {
+      "id": "D3-CI",
+      "type": "defend_countermeasure",
+      "title": "D3-CI Configuration Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ConfigurationInventory",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CI"
+      }
+    },
+    {
+      "id": "D3-CIA",
+      "type": "defend_countermeasure",
+      "title": "D3-CIA Container Image Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContainerImageAnalysis",
+        "synonym": "Container Image Scanning"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CIA"
+      }
+    },
+    {
+      "id": "D3-CM",
+      "type": "defend_countermeasure",
+      "title": "D3-CM Content Modification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentModification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CM"
+      }
+    },
+    {
+      "id": "D3-CNE",
+      "type": "defend_countermeasure",
+      "title": "D3-CNE Content Excision",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentExcision",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CNE"
+      }
+    },
+    {
+      "id": "D3-CNR",
+      "type": "defend_countermeasure",
+      "title": "D3-CNR Content Rebuild",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentRebuild",
+        "synonym": "Content Reconstruction"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CNR"
+      }
+    },
+    {
+      "id": "D3-CNS",
+      "type": "defend_countermeasure",
+      "title": "D3-CNS Content Substitution",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentSubstitution",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CNS"
+      }
+    },
+    {
+      "id": "D3-CP",
+      "type": "defend_countermeasure",
+      "title": "D3-CP Certificate Pinning",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CertificatePinning",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CP"
+      }
+    },
+    {
+      "id": "D3-CQ",
+      "type": "defend_countermeasure",
+      "title": "D3-CQ Content Quarantine",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentQuarantine",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CQ"
+      }
+    },
+    {
+      "id": "D3-CR",
+      "type": "defend_countermeasure",
+      "title": "D3-CR Credential Revocation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialRevocation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CR"
+      }
+    },
+    {
+      "id": "D3-CRO",
+      "type": "defend_countermeasure",
+      "title": "D3-CRO Credential Rotation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialRotation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CRO"
+      }
+    },
+    {
+      "id": "D3-CS",
+      "type": "defend_countermeasure",
+      "title": "D3-CS Credential Scrubbing",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialScrubbing",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CS"
+      }
+    },
+    {
+      "id": "D3-CSPP",
+      "type": "defend_countermeasure",
+      "title": "D3-CSPP Client-server Payload Profiling",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Client-serverPayloadProfiling",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CSPP"
+      }
+    },
+    {
+      "id": "D3-CTS",
+      "type": "defend_countermeasure",
+      "title": "D3-CTS Credential Transmission Scoping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "CredentialTransmissionScoping",
+        "synonym": "Phishing Resistant Authentication"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CTS"
+      }
+    },
+    {
+      "id": "D3-CV",
+      "type": "defend_countermeasure",
+      "title": "D3-CV Content Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ContentValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-CV"
+      }
+    },
+    {
+      "id": "D3-DA",
+      "type": "defend_countermeasure",
+      "title": "D3-DA Dynamic Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DynamicAnalysis",
+        "synonym": [
+          "Malware Sandbox",
+          "Malware Detonation"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DA"
+      }
+    },
+    {
+      "id": "D3-DAM",
+      "type": "defend_countermeasure",
+      "title": "D3-DAM Domain Account Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DomainAccountMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DAM"
+      }
+    },
+    {
+      "id": "D3-DCE",
+      "type": "defend_countermeasure",
+      "title": "D3-DCE Dead Code Elimination",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DeadCodeElimination",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DCE"
+      }
+    },
+    {
+      "id": "D3-DE",
+      "type": "defend_countermeasure",
+      "title": "D3-DE Decoy Environment",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyEnvironment",
+        "synonym": "Honeypot"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DE"
+      }
+    },
+    {
+      "id": "D3-DEM",
+      "type": "defend_countermeasure",
+      "title": "D3-DEM Data Exchange Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DataExchangeMapping",
+        "synonym": [
+          "Data Flow Mapping",
+          "Information Exchange Mapping"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DEM"
+      }
+    },
+    {
+      "id": "D3-DENCR",
+      "type": "defend_countermeasure",
+      "title": "D3-DENCR Disk Encryption",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DiskEncryption",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DENCR"
+      }
+    },
+    {
+      "id": "D3-DF",
+      "type": "defend_countermeasure",
+      "title": "D3-DF Decoy File",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyFile",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DF"
+      }
+    },
+    {
+      "id": "D3-DI",
+      "type": "defend_countermeasure",
+      "title": "D3-DI Data Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DataInventory",
+        "synonym": [
+          "Data Discovery",
+          "Data Inventorying"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DI"
+      }
+    },
+    {
+      "id": "D3-DKE",
+      "type": "defend_countermeasure",
+      "title": "D3-DKE Disk Erasure",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DiskErasure",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DKE"
+      }
+    },
+    {
+      "id": "D3-DKF",
+      "type": "defend_countermeasure",
+      "title": "D3-DKF Disk Formatting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DiskFormatting",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DKF"
+      }
+    },
+    {
+      "id": "D3-DKP",
+      "type": "defend_countermeasure",
+      "title": "D3-DKP Disk Partitioning",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DiskPartitioning",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DKP"
+      }
+    },
+    {
+      "id": "D3-DLIC",
+      "type": "defend_countermeasure",
+      "title": "D3-DLIC Driver Load Integrity Checking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DriverLoadIntegrityChecking",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DLIC"
+      }
+    },
+    {
+      "id": "D3-DLV",
+      "type": "defend_countermeasure",
+      "title": "D3-DLV Domain Logic Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DomainLogicValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DLV"
+      }
+    },
+    {
+      "id": "D3-DNL",
+      "type": "defend_countermeasure",
+      "title": "D3-DNL Directional Network Link",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DirectionalNetworkLink",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNL"
+      }
+    },
+    {
+      "id": "D3-DNR",
+      "type": "defend_countermeasure",
+      "title": "D3-DNR Decoy Network Resource",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyNetworkResource",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNR"
+      }
+    },
+    {
+      "id": "D3-DNRA",
+      "type": "defend_countermeasure",
+      "title": "D3-DNRA Domain Name Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DomainNameReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNRA"
+      }
+    },
+    {
+      "id": "D3-DNSAL",
+      "type": "defend_countermeasure",
+      "title": "D3-DNSAL DNS Allowlisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DNSAllowlisting",
+        "synonym": "DNS Whitelisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNSAL"
+      }
+    },
+    {
+      "id": "D3-DNSCE",
+      "type": "defend_countermeasure",
+      "title": "D3-DNSCE DNS Cache Eviction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DNSCacheEviction",
+        "synonym": "Flush DNS Cache"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNSCE"
+      }
+    },
+    {
+      "id": "D3-DNSDL",
+      "type": "defend_countermeasure",
+      "title": "D3-DNSDL DNS Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DNSDenylisting",
+        "synonym": "DNS Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNSDL"
+      }
+    },
+    {
+      "id": "D3-DNSTA",
+      "type": "defend_countermeasure",
+      "title": "D3-DNSTA DNS Traffic Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DNSTrafficAnalysis",
+        "synonym": "Domain Name Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DNSTA"
+      }
+    },
+    {
+      "id": "D3-DO",
+      "type": "defend_countermeasure",
+      "title": "D3-DO Decoy Object",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyObject",
+        "synonym": "Lure"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DO"
+      }
+    },
+    {
+      "id": "D3-DP",
+      "type": "defend_countermeasure",
+      "title": "D3-DP Decoy Persona",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyPersona",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DP"
+      }
+    },
+    {
+      "id": "D3-DPLM",
+      "type": "defend_countermeasure",
+      "title": "D3-DPLM Direct Physical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DirectPhysicalLinkMapping",
+        "synonym": "Manual Physical Link Mapping"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DPLM"
+      }
+    },
+    {
+      "id": "D3-DPR",
+      "type": "defend_countermeasure",
+      "title": "D3-DPR Decoy Public Release",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyPublicRelease",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DPR"
+      }
+    },
+    {
+      "id": "D3-DQSA",
+      "type": "defend_countermeasure",
+      "title": "D3-DQSA Database Query String Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DatabaseQueryStringAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DQSA"
+      }
+    },
+    {
+      "id": "D3-DRA",
+      "type": "defend_countermeasure",
+      "title": "D3-DRA Disable Remote Access",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DisableRemoteAccess",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DRA"
+      }
+    },
+    {
+      "id": "D3-DRT",
+      "type": "defend_countermeasure",
+      "title": "D3-DRT Domain Registration Takedown",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DomainRegistrationTakedown",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DRT"
+      }
+    },
+    {
+      "id": "D3-DST",
+      "type": "defend_countermeasure",
+      "title": "D3-DST Decoy Session Token",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoySessionToken",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DST"
+      }
+    },
+    {
+      "id": "D3-DTP",
+      "type": "defend_countermeasure",
+      "title": "D3-DTP Domain Trust Policy",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DomainTrustPolicy",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DTP"
+      }
+    },
+    {
+      "id": "D3-DUC",
+      "type": "defend_countermeasure",
+      "title": "D3-DUC Decoy User Credential",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "DecoyUserCredential",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-DUC"
+      }
+    },
+    {
+      "id": "D3-EAL",
+      "type": "defend_countermeasure",
+      "title": "D3-EAL Executable Allowlisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ExecutableAllowlisting",
+        "synonym": "File Signature Authentication"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EAL"
+      }
+    },
+    {
+      "id": "D3-EBWSAM",
+      "type": "defend_countermeasure",
+      "title": "D3-EBWSAM Endpoint-based Web Server Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Endpoint-basedWebServerAccessMediation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EBWSAM"
+      }
+    },
+    {
+      "id": "D3-EDL",
+      "type": "defend_countermeasure",
+      "title": "D3-EDL Executable Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ExecutableDenylisting",
+        "synonym": "Executable Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EDL"
+      }
+    },
+    {
+      "id": "D3-EF",
+      "type": "defend_countermeasure",
+      "title": "D3-EF Email Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "EmailFiltering",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EF"
+      }
+    },
+    {
+      "id": "D3-EFA",
+      "type": "defend_countermeasure",
+      "title": "D3-EFA Emulated File Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "EmulatedFileAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EFA"
+      }
+    },
+    {
+      "id": "D3-EHB",
+      "type": "defend_countermeasure",
+      "title": "D3-EHB Endpoint Health Beacon",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "EndpointHealthBeacon",
+        "synonym": "Endpoint Health Telemetry"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EHB"
+      }
+    },
+    {
+      "id": "D3-EHPV",
+      "type": "defend_countermeasure",
+      "title": "D3-EHPV Exception Handler Pointer Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ExceptionHandlerPointerValidation",
+        "synonym": "Exception Handler Validation"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EHPV"
+      }
+    },
+    {
+      "id": "D3-EI",
+      "type": "defend_countermeasure",
+      "title": "D3-EI Execution Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ExecutionIsolation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EI"
+      }
+    },
+    {
+      "id": "D3-ELM",
+      "type": "defend_countermeasure",
+      "title": "D3-ELM Electronic Lock Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ElectronicLockMonitoring",
+        "synonym": [
+          "Door Lock Monitoring",
+          "Lock State Monitoring"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ELM"
+      }
+    },
+    {
+      "id": "D3-EMH",
+      "type": "defend_countermeasure",
+      "title": "D3-EMH Electromagnetic Radiation Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ElectromagneticRadiationHardening",
+        "synonym": "EM Hardening"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EMH"
+      }
+    },
+    {
+      "id": "D3-EPL",
+      "type": "defend_countermeasure",
+      "title": "D3-EPL Physical Locking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PhysicalLocking",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-EPL"
+      }
+    },
+    {
+      "id": "D3-ER",
+      "type": "defend_countermeasure",
+      "title": "D3-ER Email Removal",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "EmailRemoval",
+        "synonym": "Email Deletion"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ER"
+      }
+    },
+    {
+      "id": "D3-ET",
+      "type": "defend_countermeasure",
+      "title": "D3-ET Encrypted Tunnels",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "EncryptedTunnels",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ET"
+      }
+    },
+    {
+      "id": "D3-FA",
+      "type": "defend_countermeasure",
+      "title": "D3-FA File Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FA"
+      }
+    },
+    {
+      "id": "D3-FAPA",
+      "type": "defend_countermeasure",
+      "title": "D3-FAPA File Access Pattern Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileAccessPatternAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FAPA"
+      }
+    },
+    {
+      "id": "D3-FBA",
+      "type": "defend_countermeasure",
+      "title": "D3-FBA Firmware Behavior Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FirmwareBehaviorAnalysis",
+        "synonym": "Firmware Timing Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FBA"
+      }
+    },
+    {
+      "id": "D3-FC",
+      "type": "defend_countermeasure",
+      "title": "D3-FC File Carving",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileCarving",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FC"
+      }
+    },
+    {
+      "id": "D3-FCA",
+      "type": "defend_countermeasure",
+      "title": "D3-FCA File Creation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileCreationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FCA"
+      }
+    },
+    {
+      "id": "D3-FCDC",
+      "type": "defend_countermeasure",
+      "title": "D3-FCDC File Content Decompression Checking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileContentDecompressionChecking",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FCDC"
+      }
+    },
+    {
+      "id": "D3-FCOA",
+      "type": "defend_countermeasure",
+      "title": "D3-FCOA File Content Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileContentAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FCOA"
+      }
+    },
+    {
+      "id": "D3-FCR",
+      "type": "defend_countermeasure",
+      "title": "D3-FCR File Content Rules",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileContentRules",
+        "synonym": [
+          "File Signatures",
+          "File Content Signatures"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FCR"
+      }
+    },
+    {
+      "id": "D3-FE",
+      "type": "defend_countermeasure",
+      "title": "D3-FE File Encryption",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileEncryption",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FE"
+      }
+    },
+    {
+      "id": "D3-FEMC",
+      "type": "defend_countermeasure",
+      "title": "D3-FEMC Firmware Embedded Monitoring Code",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FirmwareEmbeddedMonitoringCode",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FEMC"
+      }
+    },
+    {
+      "id": "D3-FEV",
+      "type": "defend_countermeasure",
+      "title": "D3-FEV File Eviction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileEviction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FEV"
+      }
+    },
+    {
+      "id": "D3-FFV",
+      "type": "defend_countermeasure",
+      "title": "D3-FFV File Format Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileFormatVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FFV"
+      }
+    },
+    {
+      "id": "D3-FH",
+      "type": "defend_countermeasure",
+      "title": "D3-FH File Hashing",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileHashing",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FH"
+      }
+    },
+    {
+      "id": "D3-FHRA",
+      "type": "defend_countermeasure",
+      "title": "D3-FHRA File Hash Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileHashReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FHRA"
+      }
+    },
+    {
+      "id": "D3-FIM",
+      "type": "defend_countermeasure",
+      "title": "D3-FIM File Integrity Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileIntegrityMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FIM"
+      }
+    },
+    {
+      "id": "D3-FISV",
+      "type": "defend_countermeasure",
+      "title": "D3-FISV File Internal Structure Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileInternalStructureVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FISV"
+      }
+    },
+    {
+      "id": "D3-FMBV",
+      "type": "defend_countermeasure",
+      "title": "D3-FMBV File Magic Byte Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileMagicByteVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FMBV"
+      }
+    },
+    {
+      "id": "D3-FMCV",
+      "type": "defend_countermeasure",
+      "title": "D3-FMCV File Metadata Consistency Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileMetadataConsistencyValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FMCV"
+      }
+    },
+    {
+      "id": "D3-FMVV",
+      "type": "defend_countermeasure",
+      "title": "D3-FMVV File Metadata Value Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FileMetadataValueVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FMVV"
+      }
+    },
+    {
+      "id": "D3-FRDDL",
+      "type": "defend_countermeasure",
+      "title": "D3-FRDDL Forward Resolution Domain Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ForwardResolutionDomainDenylisting",
+        "synonym": "Forward Resolution Domain Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FRDDL"
+      }
+    },
+    {
+      "id": "D3-FRIDL",
+      "type": "defend_countermeasure",
+      "title": "D3-FRIDL Forward Resolution IP Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ForwardResolutionIPDenylisting",
+        "synonym": "Forward Resolution IP Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FRIDL"
+      }
+    },
+    {
+      "id": "D3-FV",
+      "type": "defend_countermeasure",
+      "title": "D3-FV Firmware Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "FirmwareVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-FV"
+      }
+    },
+    {
+      "id": "D3-HBPI",
+      "type": "defend_countermeasure",
+      "title": "D3-HBPI Hardware-based Process Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Hardware-basedProcessIsolation",
+        "synonym": "Virtualization"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HBPI"
+      }
+    },
+    {
+      "id": "D3-HBWP",
+      "type": "defend_countermeasure",
+      "title": "D3-HBWP Hardware-based Write Protection",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Hardware-basedWriteProtection",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HBWP"
+      }
+    },
+    {
+      "id": "D3-HCI",
+      "type": "defend_countermeasure",
+      "title": "D3-HCI Hardware Component Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HardwareComponentInventory",
+        "synonym": [
+          "Hardware Component Inventorying",
+          "Hardware Component Discovery"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HCI"
+      }
+    },
+    {
+      "id": "D3-HD",
+      "type": "defend_countermeasure",
+      "title": "D3-HD Homoglyph Detection",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HomoglyphDetection",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HD"
+      }
+    },
+    {
+      "id": "D3-HDDL",
+      "type": "defend_countermeasure",
+      "title": "D3-HDDL Hierarchical Domain Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HierarchicalDomainDenylisting",
+        "synonym": "Hierarchical Domain Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HDDL"
+      }
+    },
+    {
+      "id": "D3-HDL",
+      "type": "defend_countermeasure",
+      "title": "D3-HDL Homoglyph Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HomoglyphDenylisting",
+        "synonym": "Homoglyph Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HDL"
+      }
+    },
+    {
+      "id": "D3-HR",
+      "type": "defend_countermeasure",
+      "title": "D3-HR Host Reboot",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HostReboot",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HR"
+      }
+    },
+    {
+      "id": "D3-HS",
+      "type": "defend_countermeasure",
+      "title": "D3-HS Host Shutdown",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "HostShutdown",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-HS"
+      }
+    },
+    {
+      "id": "D3-IAA",
+      "type": "defend_countermeasure",
+      "title": "D3-IAA Identifier Activity Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IdentifierActivityAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IAA"
+      }
+    },
+    {
+      "id": "D3-IBCA",
+      "type": "defend_countermeasure",
+      "title": "D3-IBCA Indirect Branch Call Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IndirectBranchCallAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IBCA"
+      }
+    },
+    {
+      "id": "D3-ID",
+      "type": "defend_countermeasure",
+      "title": "D3-ID Identifier Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IdentifierAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ID"
+      }
+    },
+    {
+      "id": "D3-IDA",
+      "type": "defend_countermeasure",
+      "title": "D3-IDA Input Device Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "InputDeviceAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IDA"
+      }
+    },
+    {
+      "id": "D3-IHN",
+      "type": "defend_countermeasure",
+      "title": "D3-IHN Integrated Honeynet",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IntegratedHoneynet",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IHN"
+      }
+    },
+    {
+      "id": "D3-IOPR",
+      "type": "defend_countermeasure",
+      "title": "D3-IOPR IO Port Restriction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IOPortRestriction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IOPR"
+      }
+    },
+    {
+      "id": "D3-IPCTA",
+      "type": "defend_countermeasure",
+      "title": "D3-IPCTA IPC Traffic Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IPCTrafficAnalysis",
+        "synonym": "IPC Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IPCTA"
+      }
+    },
+    {
+      "id": "D3-IPRA",
+      "type": "defend_countermeasure",
+      "title": "D3-IPRA IP Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IPReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IPRA"
+      }
+    },
+    {
+      "id": "D3-IRA",
+      "type": "defend_countermeasure",
+      "title": "D3-IRA Identifier Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IdentifierReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IRA"
+      }
+    },
+    {
+      "id": "D3-IRV",
+      "type": "defend_countermeasure",
+      "title": "D3-IRV Integer Range Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "IntegerRangeValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-IRV"
+      }
+    },
+    {
+      "id": "D3-ISVA",
+      "type": "defend_countermeasure",
+      "title": "D3-ISVA Inbound Session Volume Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "InboundSessionVolumeAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ISVA"
+      }
+    },
+    {
+      "id": "D3-ITF",
+      "type": "defend_countermeasure",
+      "title": "D3-ITF Inbound Traffic Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "InboundTrafficFiltering",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ITF"
+      }
+    },
+    {
+      "id": "D3-JFAPA",
+      "type": "defend_countermeasure",
+      "title": "D3-JFAPA Job Function Access Pattern Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "JobFunctionAccessPatternAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-JFAPA"
+      }
+    },
+    {
+      "id": "D3-KBPI",
+      "type": "defend_countermeasure",
+      "title": "D3-KBPI Kernel-based Process Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Kernel-basedProcessIsolation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-KBPI"
+      }
+    },
+    {
+      "id": "D3-LAM",
+      "type": "defend_countermeasure",
+      "title": "D3-LAM Local Account Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "LocalAccountMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-LAM"
+      }
+    },
+    {
+      "id": "D3-LAMED",
+      "type": "defend_countermeasure",
+      "title": "D3-LAMED LAN Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "LANAccessMediation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-LAMED"
+      }
+    },
+    {
+      "id": "D3-LFAM",
+      "type": "defend_countermeasure",
+      "title": "D3-LFAM Local File Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "LocalFileAccessMediation",
+        "synonym": "Local File Access Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-LFAM"
+      }
+    },
+    {
+      "id": "D3-LFP",
+      "type": "defend_countermeasure",
+      "title": "D3-LFP Local File Permissions",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "LocalFilePermissions",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-LFP"
+      }
+    },
+    {
+      "id": "D3-LLM",
+      "type": "defend_countermeasure",
+      "title": "D3-LLM Logical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "LogicalLinkMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-LLM"
+      }
+    },
+    {
+      "id": "D3-MA",
+      "type": "defend_countermeasure",
+      "title": "D3-MA Message Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MessageAnalysis",
+        "synonym": [
+          "Email Or Messaging Analysis",
+          "Electronic Message Analysis"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MA"
+      }
+    },
+    {
+      "id": "D3-MAN",
+      "type": "defend_countermeasure",
+      "title": "D3-MAN Message Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MessageAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MAN"
+      }
+    },
+    {
+      "id": "D3-MBSV",
+      "type": "defend_countermeasure",
+      "title": "D3-MBSV Memory Block Start Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MemoryBlockStartValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MBSV"
+      }
+    },
+    {
+      "id": "D3-MBT",
+      "type": "defend_countermeasure",
+      "title": "D3-MBT Memory Boundary Tracking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MemoryBoundaryTracking",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MBT"
+      }
+    },
+    {
+      "id": "D3-MENCR",
+      "type": "defend_countermeasure",
+      "title": "D3-MENCR Message Encryption",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MessageEncryption",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MENCR"
+      }
+    },
+    {
+      "id": "D3-MFA",
+      "type": "defend_countermeasure",
+      "title": "D3-MFA Multi-factor Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Multi-factorAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MFA"
+      }
+    },
+    {
+      "id": "D3-MH",
+      "type": "defend_countermeasure",
+      "title": "D3-MH Message Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MessageHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MH"
+      }
+    },
+    {
+      "id": "D3-MSM",
+      "type": "defend_countermeasure",
+      "title": "D3-MSM Motion Sensor Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "MotionSensorMonitoring",
+        "synonym": [
+          "Motion Alarm Monitoring",
+          "Motion Detector Monitoring"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-MSM"
+      }
+    },
+    {
+      "id": "D3-NAM",
+      "type": "defend_countermeasure",
+      "title": "D3-NAM Network Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkAccessMediation",
+        "synonym": "Network Access Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NAM"
+      }
+    },
+    {
+      "id": "D3-NI",
+      "type": "defend_countermeasure",
+      "title": "D3-NI Network Isolation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkIsolation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NI"
+      }
+    },
+    {
+      "id": "D3-NM",
+      "type": "defend_countermeasure",
+      "title": "D3-NM Network Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NM"
+      }
+    },
+    {
+      "id": "D3-NNI",
+      "type": "defend_countermeasure",
+      "title": "D3-NNI Network Node Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkNodeInventory",
+        "synonym": [
+          "System Inventorying",
+          "System Discovery"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NNI"
+      }
+    },
+    {
+      "id": "D3-NPC",
+      "type": "defend_countermeasure",
+      "title": "D3-NPC Null Pointer Checking",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NullPointerChecking",
+        "synonym": "Nil Pointer Checking"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NPC"
+      }
+    },
+    {
+      "id": "D3-NRAM",
+      "type": "defend_countermeasure",
+      "title": "D3-NRAM Network Resource Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkResourceAccessMediation",
+        "synonym": "Remote Access Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NRAM"
+      }
+    },
+    {
+      "id": "D3-NTA",
+      "type": "defend_countermeasure",
+      "title": "D3-NTA Network Traffic Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkTrafficAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NTA"
+      }
+    },
+    {
+      "id": "D3-NTCD",
+      "type": "defend_countermeasure",
+      "title": "D3-NTCD Network Traffic Community Deviation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkTrafficCommunityDeviation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NTCD"
+      }
+    },
+    {
+      "id": "D3-NTF",
+      "type": "defend_countermeasure",
+      "title": "D3-NTF Network Traffic Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkTrafficFiltering",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NTF"
+      }
+    },
+    {
+      "id": "D3-NTPM",
+      "type": "defend_countermeasure",
+      "title": "D3-NTPM Network Traffic Policy Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkTrafficPolicyMapping",
+        "synonym": [
+          "IPS Policy Mapping",
+          "Web Security Gateway Policy Mapping",
+          "Firewall Mapping",
+          "DLP Policy Mapping"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NTPM"
+      }
+    },
+    {
+      "id": "D3-NTSA",
+      "type": "defend_countermeasure",
+      "title": "D3-NTSA Network Traffic Signature Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkTrafficSignatureAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NTSA"
+      }
+    },
+    {
+      "id": "D3-NVA",
+      "type": "defend_countermeasure",
+      "title": "D3-NVA Network Vulnerability Assessment",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "NetworkVulnerabilityAssessment",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-NVA"
+      }
+    },
+    {
+      "id": "D3-OAM",
+      "type": "defend_countermeasure",
+      "title": "D3-OAM Operational Activity Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperationalActivityMapping",
+        "synonym": "Mission Mapping"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OAM"
+      }
+    },
+    {
+      "id": "D3-ODM",
+      "type": "defend_countermeasure",
+      "title": "D3-ODM Operational Dependency Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperationalDependencyMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ODM"
+      }
+    },
+    {
+      "id": "D3-OE",
+      "type": "defend_countermeasure",
+      "title": "D3-OE Object Eviction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ObjectEviction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OE"
+      }
+    },
+    {
+      "id": "D3-OLV",
+      "type": "defend_countermeasure",
+      "title": "D3-OLV Operational Logic Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperationalLogicValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OLV"
+      }
+    },
+    {
+      "id": "D3-OM",
+      "type": "defend_countermeasure",
+      "title": "D3-OM Organization Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OrganizationMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OM"
+      }
+    },
+    {
+      "id": "D3-OMM",
+      "type": "defend_countermeasure",
+      "title": "D3-OMM Operating Mode Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperatingModeMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OMM"
+      }
+    },
+    {
+      "id": "D3-OPM",
+      "type": "defend_countermeasure",
+      "title": "D3-OPM Operational Process Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperationalProcessMonitoring",
+        "synonym": "Supervisory Control Monitoring"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OPM"
+      }
+    },
+    {
+      "id": "D3-OPR",
+      "type": "defend_countermeasure",
+      "title": "D3-OPR Operating Mode Restriction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperatingModeRestriction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OPR"
+      }
+    },
+    {
+      "id": "D3-ORA",
+      "type": "defend_countermeasure",
+      "title": "D3-ORA Operational Risk Assessment",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperationalRiskAssessment",
+        "synonym": "Mission Risk Assessment"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ORA"
+      }
+    },
+    {
+      "id": "D3-OSM",
+      "type": "defend_countermeasure",
+      "title": "D3-OSM Operating System Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OperatingSystemMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OSM"
+      }
+    },
+    {
+      "id": "D3-OTF",
+      "type": "defend_countermeasure",
+      "title": "D3-OTF Outbound Traffic Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OutboundTrafficFiltering",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OTF"
+      }
+    },
+    {
+      "id": "D3-OTP",
+      "type": "defend_countermeasure",
+      "title": "D3-OTP One-time Password",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "One-timePassword",
+        "synonym": "OTP"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OTP"
+      }
+    },
+    {
+      "id": "D3-OVAR",
+      "type": "defend_countermeasure",
+      "title": "D3-OVAR OT Variable Access Restriction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "OTVariableAccessRestriction",
+        "synonym": "OT Variable Access Policy"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-OVAR"
+      }
+    },
+    {
+      "id": "D3-PA",
+      "type": "defend_countermeasure",
+      "title": "D3-PA Process Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PA"
+      }
+    },
+    {
+      "id": "D3-PAM",
+      "type": "defend_countermeasure",
+      "title": "D3-PAM Physical Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PhysicalAccessMediation",
+        "synonym": "Physical Access Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PAM"
+      }
+    },
+    {
+      "id": "D3-PAN",
+      "type": "defend_countermeasure",
+      "title": "D3-PAN Pointer Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PointerAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PAN"
+      }
+    },
+    {
+      "id": "D3-PBWSAM",
+      "type": "defend_countermeasure",
+      "title": "D3-PBWSAM Proxy-based Web Server Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Proxy-basedWebServerAccessMediation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PBWSAM"
+      }
+    },
+    {
+      "id": "D3-PCA",
+      "type": "defend_countermeasure",
+      "title": "D3-PCA Passive Certificate Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PassiveCertificateAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PCA"
+      }
+    },
+    {
+      "id": "D3-PCSV",
+      "type": "defend_countermeasure",
+      "title": "D3-PCSV Process Code Segment Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessCodeSegmentVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PCSV"
+      }
+    },
+    {
+      "id": "D3-PE",
+      "type": "defend_countermeasure",
+      "title": "D3-PE Process Eviction",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessEviction",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PE"
+      }
+    },
+    {
+      "id": "D3-PEH",
+      "type": "defend_countermeasure",
+      "title": "D3-PEH Physical Enclosure Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PhysicalEnclosureHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PEH"
+      }
+    },
+    {
+      "id": "D3-PFV",
+      "type": "defend_countermeasure",
+      "title": "D3-PFV Peripheral Firmware Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PeripheralFirmwareVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PFV"
+      }
+    },
+    {
+      "id": "D3-PH",
+      "type": "defend_countermeasure",
+      "title": "D3-PH Platform Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PlatformHardening",
+        "synonym": [
+          "System Hardening",
+          "Endpoint Hardening"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PH"
+      }
+    },
+    {
+      "id": "D3-PHAM",
+      "type": "defend_countermeasure",
+      "title": "D3-PHAM Physical Access Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PhysicalAccessMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PHAM"
+      }
+    },
+    {
+      "id": "D3-PHDURA",
+      "type": "defend_countermeasure",
+      "title": "D3-PHDURA Per Host Download-Upload Ratio Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PerHostDownload-UploadRatioAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PHDURA"
+      }
+    },
+    {
+      "id": "D3-PLA",
+      "type": "defend_countermeasure",
+      "title": "D3-PLA Process Lineage Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessLineageAnalysis",
+        "synonym": "Process Tree Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PLA"
+      }
+    },
+    {
+      "id": "D3-PLLM",
+      "type": "defend_countermeasure",
+      "title": "D3-PLLM Passive Logical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PassiveLogicalLinkMapping",
+        "synonym": "Passive Logical Layer Mapping"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PLLM"
+      }
+    },
+    {
+      "id": "D3-PLM",
+      "type": "defend_countermeasure",
+      "title": "D3-PLM Physical Link Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PhysicalLinkMapping",
+        "synonym": "Layer 1 Mapping"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PLM"
+      }
+    },
+    {
+      "id": "D3-PM",
+      "type": "defend_countermeasure",
+      "title": "D3-PM Platform Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PlatformMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PM"
+      }
+    },
+    {
+      "id": "D3-PMAD",
+      "type": "defend_countermeasure",
+      "title": "D3-PMAD Protocol Metadata Anomaly Detection",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProtocolMetadataAnomalyDetection",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PMAD"
+      }
+    },
+    {
+      "id": "D3-PR",
+      "type": "defend_countermeasure",
+      "title": "D3-PR Password Rotation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PasswordRotation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PR"
+      }
+    },
+    {
+      "id": "D3-PS",
+      "type": "defend_countermeasure",
+      "title": "D3-PS Process Suspension",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessSuspension",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PS"
+      }
+    },
+    {
+      "id": "D3-PSA",
+      "type": "defend_countermeasure",
+      "title": "D3-PSA Process Spawn Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessSpawnAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PSA"
+      }
+    },
+    {
+      "id": "D3-PSEP",
+      "type": "defend_countermeasure",
+      "title": "D3-PSEP Process Segment Execution Prevention",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessSegmentExecutionPrevention",
+        "synonym": [
+          "Execute Disable",
+          "No Execute"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PSEP"
+      }
+    },
+    {
+      "id": "D3-PSM",
+      "type": "defend_countermeasure",
+      "title": "D3-PSM Proximity Sensor Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProximitySensorMonitoring",
+        "synonym": [
+          "RFID Reader Monitoring",
+          "Proximity Reader Monitoring"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PSM"
+      }
+    },
+    {
+      "id": "D3-PSMD",
+      "type": "defend_countermeasure",
+      "title": "D3-PSMD Process Self-Modification Detection",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessSelf-ModificationDetection",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PSMD"
+      }
+    },
+    {
+      "id": "D3-PT",
+      "type": "defend_countermeasure",
+      "title": "D3-PT Process Termination",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ProcessTermination",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PT"
+      }
+    },
+    {
+      "id": "D3-PUM",
+      "type": "defend_countermeasure",
+      "title": "D3-PUM Platform Uptime Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PlatformUptimeMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PUM"
+      }
+    },
+    {
+      "id": "D3-PV",
+      "type": "defend_countermeasure",
+      "title": "D3-PV Pointer Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PointerValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PV"
+      }
+    },
+    {
+      "id": "D3-PWA",
+      "type": "defend_countermeasure",
+      "title": "D3-PWA Password Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "PasswordAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-PWA"
+      }
+    },
+    {
+      "id": "D3-RA",
+      "type": "defend_countermeasure",
+      "title": "D3-RA Restore Access",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreAccess",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RA"
+      }
+    },
+    {
+      "id": "D3-RAM",
+      "type": "defend_countermeasure",
+      "title": "D3-RAM Routing Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RoutingAccessMediation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RAM"
+      }
+    },
+    {
+      "id": "D3-RAPA",
+      "type": "defend_countermeasure",
+      "title": "D3-RAPA Resource Access Pattern Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ResourceAccessPatternAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RAPA"
+      }
+    },
+    {
+      "id": "D3-RC",
+      "type": "defend_countermeasure",
+      "title": "D3-RC Restore Configuration",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreConfiguration",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RC"
+      }
+    },
+    {
+      "id": "D3-RD",
+      "type": "defend_countermeasure",
+      "title": "D3-RD Restore Database",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreDatabase",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RD"
+      }
+    },
+    {
+      "id": "D3-RDI",
+      "type": "defend_countermeasure",
+      "title": "D3-RDI Restore Disk Image",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreDiskImage",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RDI"
+      }
+    },
+    {
+      "id": "D3-RE",
+      "type": "defend_countermeasure",
+      "title": "D3-RE Restore Email",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreEmail",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RE"
+      }
+    },
+    {
+      "id": "D3-RF",
+      "type": "defend_countermeasure",
+      "title": "D3-RF Restore File",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreFile",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RF"
+      }
+    },
+    {
+      "id": "D3-RFAM",
+      "type": "defend_countermeasure",
+      "title": "D3-RFAM Remote File Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RemoteFileAccessMediation",
+        "synonym": "File Share Access Mediation"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RFAM"
+      }
+    },
+    {
+      "id": "D3-RFS",
+      "type": "defend_countermeasure",
+      "title": "D3-RFS RF Shielding",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RFShielding",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RFS"
+      }
+    },
+    {
+      "id": "D3-RFUM",
+      "type": "defend_countermeasure",
+      "title": "D3-RFUM Remote Firmware Update Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RemoteFirmwareUpdateMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RFUM"
+      }
+    },
+    {
+      "id": "D3-RH",
+      "type": "defend_countermeasure",
+      "title": "D3-RH Radiation Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RadiationHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RH"
+      }
+    },
+    {
+      "id": "D3-RIC",
+      "type": "defend_countermeasure",
+      "title": "D3-RIC Reissue Credential",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ReissueCredential",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RIC"
+      }
+    },
+    {
+      "id": "D3-RKD",
+      "type": "defend_countermeasure",
+      "title": "D3-RKD Registry Key Deletion",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RegistryKeyDeletion",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RKD"
+      }
+    },
+    {
+      "id": "D3-RN",
+      "type": "defend_countermeasure",
+      "title": "D3-RN Reference Nullification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ReferenceNullification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RN"
+      }
+    },
+    {
+      "id": "D3-RNA",
+      "type": "defend_countermeasure",
+      "title": "D3-RNA Restore Network Access",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreNetworkAccess",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RNA"
+      }
+    },
+    {
+      "id": "D3-RO",
+      "type": "defend_countermeasure",
+      "title": "D3-RO Restore Object",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreObject",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RO"
+      }
+    },
+    {
+      "id": "D3-RPA",
+      "type": "defend_countermeasure",
+      "title": "D3-RPA Relay Pattern Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RelayPatternAnalysis",
+        "synonym": "Relay Network Detection"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RPA"
+      }
+    },
+    {
+      "id": "D3-RRID",
+      "type": "defend_countermeasure",
+      "title": "D3-RRID Reverse Resolution IP Denylisting",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ReverseResolutionIPDenylisting",
+        "synonym": "Reverse Resolution IP Blacklisting"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RRID"
+      }
+    },
+    {
+      "id": "D3-RS",
+      "type": "defend_countermeasure",
+      "title": "D3-RS Restore Software",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreSoftware",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RS"
+      }
+    },
+    {
+      "id": "D3-RTA",
+      "type": "defend_countermeasure",
+      "title": "D3-RTA RPC Traffic Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RPCTrafficAnalysis",
+        "synonym": "RPC Protocol Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RTA"
+      }
+    },
+    {
+      "id": "D3-RTSD",
+      "type": "defend_countermeasure",
+      "title": "D3-RTSD Remote Terminal Session Detection",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RemoteTerminalSessionDetection",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RTSD"
+      }
+    },
+    {
+      "id": "D3-RUAA",
+      "type": "defend_countermeasure",
+      "title": "D3-RUAA Restore User Account Access",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "RestoreUserAccountAccess",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-RUAA"
+      }
+    },
+    {
+      "id": "D3-SAOR",
+      "type": "defend_countermeasure",
+      "title": "D3-SAOR Segment Address Offset Randomization",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SegmentAddressOffsetRandomization",
+        "synonym": [
+          "ASLR",
+          "Address Space Layout Randomization"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SAOR"
+      }
+    },
+    {
+      "id": "D3-SBV",
+      "type": "defend_countermeasure",
+      "title": "D3-SBV Service Binary Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ServiceBinaryVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SBV"
+      }
+    },
+    {
+      "id": "D3-SCA",
+      "type": "defend_countermeasure",
+      "title": "D3-SCA System Call Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemCallAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SCA"
+      }
+    },
+    {
+      "id": "D3-SCF",
+      "type": "defend_countermeasure",
+      "title": "D3-SCF System Call Filtering",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemCallFiltering",
+        "synonym": "System Call Control"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SCF"
+      }
+    },
+    {
+      "id": "D3-SCH",
+      "type": "defend_countermeasure",
+      "title": "D3-SCH Source Code Hardening",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SourceCodeHardening",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SCH"
+      }
+    },
+    {
+      "id": "D3-SCP",
+      "type": "defend_countermeasure",
+      "title": "D3-SCP System Configuration Permissions",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemConfigurationPermissions",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SCP"
+      }
+    },
+    {
+      "id": "D3-SDA",
+      "type": "defend_countermeasure",
+      "title": "D3-SDA Session Duration Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SessionDurationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SDA"
+      }
+    },
+    {
+      "id": "D3-SDM",
+      "type": "defend_countermeasure",
+      "title": "D3-SDM System Daemon Monitoring",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemDaemonMonitoring",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SDM"
+      }
+    },
+    {
+      "id": "D3-SEA",
+      "type": "defend_countermeasure",
+      "title": "D3-SEA Script Execution Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ScriptExecutionAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SEA"
+      }
+    },
+    {
+      "id": "D3-SFA",
+      "type": "defend_countermeasure",
+      "title": "D3-SFA System File Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemFileAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SFA"
+      }
+    },
+    {
+      "id": "D3-SFCV",
+      "type": "defend_countermeasure",
+      "title": "D3-SFCV Stack Frame Canary Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "StackFrameCanaryValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SFCV"
+      }
+    },
+    {
+      "id": "D3-SFV",
+      "type": "defend_countermeasure",
+      "title": "D3-SFV System Firmware Verification",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemFirmwareVerification",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SFV"
+      }
+    },
+    {
+      "id": "D3-SHN",
+      "type": "defend_countermeasure",
+      "title": "D3-SHN Standalone Honeynet",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "StandaloneHoneynet",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SHN"
+      }
+    },
+    {
+      "id": "D3-SICA",
+      "type": "defend_countermeasure",
+      "title": "D3-SICA System Init Config Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemInitConfigAnalysis",
+        "synonym": [
+          "Startup Analysis",
+          "Autorun Analysis"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SICA"
+      }
+    },
+    {
+      "id": "D3-SJA",
+      "type": "defend_countermeasure",
+      "title": "D3-SJA Scheduled Job Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ScheduledJobAnalysis",
+        "synonym": "Scheduled Job Execution"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SJA"
+      }
+    },
+    {
+      "id": "D3-SMRA",
+      "type": "defend_countermeasure",
+      "title": "D3-SMRA Sender MTA Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SenderMTAReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SMRA"
+      }
+    },
+    {
+      "id": "D3-SPP",
+      "type": "defend_countermeasure",
+      "title": "D3-SPP Strong Password Policy",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "StrongPasswordPolicy",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SPP"
+      }
+    },
+    {
+      "id": "D3-SRA",
+      "type": "defend_countermeasure",
+      "title": "D3-SRA Sender Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SenderReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SRA"
+      }
+    },
+    {
+      "id": "D3-SSC",
+      "type": "defend_countermeasure",
+      "title": "D3-SSC Shadow Stack Comparisons",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ShadowStackComparisons",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SSC"
+      }
+    },
+    {
+      "id": "D3-ST",
+      "type": "defend_countermeasure",
+      "title": "D3-ST Session Termination",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SessionTermination",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ST"
+      }
+    },
+    {
+      "id": "D3-SU",
+      "type": "defend_countermeasure",
+      "title": "D3-SU Software Update",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SoftwareUpdate",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SU"
+      }
+    },
+    {
+      "id": "D3-SVCDM",
+      "type": "defend_countermeasure",
+      "title": "D3-SVCDM Service Dependency Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "ServiceDependencyMapping",
+        "synonym": "Distributed Tracing"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SVCDM"
+      }
+    },
+    {
+      "id": "D3-SWI",
+      "type": "defend_countermeasure",
+      "title": "D3-SWI Software Inventory",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SoftwareInventory",
+        "synonym": [
+          "Software Discovery",
+          "Software Inventorying"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SWI"
+      }
+    },
+    {
+      "id": "D3-SYSDM",
+      "type": "defend_countermeasure",
+      "title": "D3-SYSDM System Dependency Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemDependencyMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SYSDM"
+      }
+    },
+    {
+      "id": "D3-SYSM",
+      "type": "defend_countermeasure",
+      "title": "D3-SYSM System Mapping",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemMapping",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SYSM"
+      }
+    },
+    {
+      "id": "D3-SYSVA",
+      "type": "defend_countermeasure",
+      "title": "D3-SYSVA System Vulnerability Assessment",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "SystemVulnerabilityAssessment",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-SYSVA"
+      }
+    },
+    {
+      "id": "D3-TAAN",
+      "type": "defend_countermeasure",
+      "title": "D3-TAAN Transfer Agent Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "TransferAgentAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-TAAN"
+      }
+    },
+    {
+      "id": "D3-TB",
+      "type": "defend_countermeasure",
+      "title": "D3-TB Token Binding",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "TokenBinding",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-TB"
+      }
+    },
+    {
+      "id": "D3-TBA",
+      "type": "defend_countermeasure",
+      "title": "D3-TBA Token-based Authentication",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "Token-basedAuthentication",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-TBA"
+      }
+    },
+    {
+      "id": "D3-TBI",
+      "type": "defend_countermeasure",
+      "title": "D3-TBI TPM Boot Integrity",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "TPMBootIntegrity",
+        "synonym": [
+          "STRM",
+          "Static Root of Trust Measurement"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-TBI"
+      }
+    },
+    {
+      "id": "D3-TL",
+      "type": "defend_countermeasure",
+      "title": "D3-TL Trusted Library",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "TrustedLibrary",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-TL"
+      }
+    },
+    {
+      "id": "D3-UA",
+      "type": "defend_countermeasure",
+      "title": "D3-UA URL Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "URLAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-UA"
+      }
+    },
+    {
+      "id": "D3-UAP",
+      "type": "defend_countermeasure",
+      "title": "D3-UAP User Account Permissions",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserAccountPermissions",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-UAP"
+      }
+    },
+    {
+      "id": "D3-UBA",
+      "type": "defend_countermeasure",
+      "title": "D3-UBA User Behavior Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserBehaviorAnalysis",
+        "synonym": [
+          "UBA",
+          "Credential Monitoring"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-UBA"
+      }
+    },
+    {
+      "id": "D3-UDTA",
+      "type": "defend_countermeasure",
+      "title": "D3-UDTA User Data Transfer Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserDataTransferAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-UDTA"
+      }
+    },
+    {
+      "id": "D3-UGLPA",
+      "type": "defend_countermeasure",
+      "title": "D3-UGLPA User Geolocation Logon Pattern Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserGeolocationLogonPatternAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-UGLPA"
+      }
+    },
+    {
+      "id": "D3-ULA",
+      "type": "defend_countermeasure",
+      "title": "D3-ULA Unlock Account",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UnlockAccount",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-ULA"
+      }
+    },
+    {
+      "id": "D3-URA",
+      "type": "defend_countermeasure",
+      "title": "D3-URA URL Reputation Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "URLReputationAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-URA"
+      }
+    },
+    {
+      "id": "D3-USICA",
+      "type": "defend_countermeasure",
+      "title": "D3-USICA User Session Init Config Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserSessionInitConfigAnalysis",
+        "synonym": "User Startup Config Analysis"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-USICA"
+      }
+    },
+    {
+      "id": "D3-VI",
+      "type": "defend_countermeasure",
+      "title": "D3-VI Variable Initialization",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "VariableInitialization",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-VI"
+      }
+    },
+    {
+      "id": "D3-VS",
+      "type": "defend_countermeasure",
+      "title": "D3-VS Video Surveillance",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "VideoSurveillance",
+        "synonym": [
+          "Video Monitoring",
+          "CCTV Surveillance"
+        ]
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-VS"
+      }
+    },
+    {
+      "id": "D3-VTV",
+      "type": "defend_countermeasure",
+      "title": "D3-VTV Variable Type Validation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "VariableTypeValidation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-VTV"
+      }
+    },
+    {
+      "id": "D3-WSAA",
+      "type": "defend_countermeasure",
+      "title": "D3-WSAA Web Session Activity Analysis",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "WebSessionActivityAnalysis",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-WSAA"
+      }
+    },
+    {
+      "id": "D3-WSAM",
+      "type": "defend_countermeasure",
+      "title": "D3-WSAM Web Session Access Mediation",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "WebSessionAccessMediation",
+        "synonym": null
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3-WSAM"
+      }
+    },
+    {
+      "id": "D3F-UGPH",
+      "type": "defend_countermeasure",
+      "title": "D3F-UGPH User Group Permissions",
+      "description": "",
+      "status": "active",
+      "family": "",
+      "metadata": {
+        "technique_slug": "UserGroupPermissions",
+        "synonym": "Role Based Access Controls"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-06-19",
+        "version": "4",
+        "locator": "technique/all.json#D3F-UGPH"
+      }
+    }
+  ]
+}

@@ -89,6 +89,12 @@ export function createFederalGraphRuntime(dataset) {
     dataset.evidence.map((entry) => [entry.id, entry]),
   );
   const edgeById = new Map(dataset.edges.map((edge) => [edge.id, edge]));
+  const edgesBySource = new Map();
+  for (const edge of dataset.edges) {
+    const existing = edgesBySource.get(edge.source_node_id);
+    if (existing) existing.push(edge);
+    else edgesBySource.set(edge.source_node_id, [edge]);
+  }
   const libraryDocuments = dataset.librarySearch?.documents || [];
   const libraryDocumentById = new Map(
     libraryDocuments.map((entry) => [entry.id, entry]),
@@ -340,6 +346,96 @@ export function createFederalGraphRuntime(dataset) {
       unmapped_cci_nodes: cciEntries
         .filter((entry) => !mappedCciIds.has(entry.cciNode.id))
         .map((entry) => entry.cciNode),
+    };
+  };
+  const attackCatalogNodes = (chainCatalog) =>
+    dataset.nodes
+      .filter((node) => node.node_type === "attack_technique")
+      .filter(
+        (node) =>
+          !chainCatalog || node.metadata?.catalog_id === chainCatalog,
+      )
+      .sort(sortNodesByItemId);
+  const d3fendLinksForAttack = (nodeId, includeCandidates = false) =>
+    (edgesBySource.get(nodeId) || [])
+      .filter(
+        (edge) =>
+          nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+            "mitre-d3fend" &&
+          (includeCandidates || edge.publication_status === "published"),
+      )
+      .map((edge) => ({
+        d3fendNode: nodeById.get(edge.target_node_id),
+        relationshipEdge: edge,
+        sourceRefs: resolveSourceRefs(edge),
+      }))
+      .filter((entry) => entry.d3fendNode)
+      .sort((left, right) =>
+        sortNodesByItemId(left.d3fendNode, right.d3fendNode),
+      );
+  const nistLinksForD3fend = (d3fendId, includeCandidates = false) =>
+    (edgesBySource.get(d3fendId) || [])
+      .filter(
+        (edge) =>
+          nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+            "nist-800-53" &&
+          (includeCandidates || edge.publication_status === "published"),
+      )
+      .map((edge) => ({
+        nistNode: nodeById.get(edge.target_node_id),
+        relationshipEdge: edge,
+        sourceRefs: resolveSourceRefs(edge),
+      }))
+      .filter((entry) => entry.nistNode)
+      .sort((left, right) => sortNodesByItemId(left.nistNode, right.nistNode));
+  const countThreatChainRow = (node, includeCandidates = false) => {
+    const d3fendEdges = (edgesBySource.get(node.id) || []).filter(
+      (edge) =>
+        nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+          "mitre-d3fend" &&
+        (includeCandidates || edge.publication_status === "published"),
+    );
+    const nistIds = new Set();
+    let mappedD3fend = 0;
+    for (const edge of d3fendEdges) {
+      const nistEdges = (edgesBySource.get(edge.target_node_id) || []).filter(
+        (nistEdge) =>
+          nodeById.get(nistEdge.target_node_id)?.metadata?.catalog_id ===
+            "nist-800-53" &&
+          (includeCandidates || nistEdge.publication_status === "published"),
+      );
+      if (nistEdges.length) mappedD3fend += 1;
+      for (const nistEdge of nistEdges) {
+        nistIds.add(nistEdge.target_node_id);
+      }
+    }
+    return {
+      d3fend_count: d3fendEdges.length,
+      nist_control_count: nistIds.size,
+      unmapped_d3fend_count: d3fendEdges.length - mappedD3fend,
+    };
+  };
+  const threatChainRowCache = new Map();
+  const buildThreatChainDetail = (node, includeCandidates = false) => {
+    const d3fendEntries = d3fendLinksForAttack(node.id, includeCandidates);
+    const nistEntries = uniqueBy(
+      d3fendEntries.flatMap((entry) =>
+        nistLinksForD3fend(entry.d3fendNode.id, includeCandidates),
+      ),
+      (entry) => entry.nistNode.id,
+    );
+    const mappedD3fendIds = new Set(
+      nistEntries.map((entry) => entry.relationshipEdge.source_node_id),
+    );
+    return {
+      source_node: node,
+      d3fend_entries: d3fendEntries,
+      d3fend_nodes: d3fendEntries.map((entry) => entry.d3fendNode),
+      nist_entries: nistEntries,
+      nist_nodes: nistEntries.map((entry) => entry.nistNode),
+      unmapped_d3fend_nodes: d3fendEntries
+        .filter((entry) => !mappedD3fendIds.has(entry.d3fendNode.id))
+        .map((entry) => entry.d3fendNode),
     };
   };
   const resolveSourceForNode = (node) => {
@@ -882,6 +978,144 @@ export function createFederalGraphRuntime(dataset) {
               row.nist_control_count,
               row.unmapped_cci_count,
               row.benchmark_title,
+            ]),
+          ];
+      return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
+    },
+    buildThreatChain(request = {}) {
+      const includeCandidates = request.include_candidates || false;
+      const cacheKey = `${request.chain_catalog || ""}:${includeCandidates}`;
+      let rows = threatChainRowCache.get(cacheKey);
+      if (!rows) {
+        rows = attackCatalogNodes(request.chain_catalog).map((node) => ({
+          node_id: node.id,
+          item_id: itemIdFor(node),
+          title: itemTitleFor(node),
+          domain:
+            node.metadata?.attack_domain || node.metadata?.catalog_id || "",
+          ...countThreatChainRow(node, includeCandidates),
+        }));
+        threatChainRowCache.set(cacheKey, rows);
+      }
+      const selectedNode = request.chain_item
+        ? nodeById.get(request.chain_item) ||
+          rows.find((row) => row.item_id === request.chain_item)
+        : null;
+      const selectedChainNode = selectedNode
+        ? nodeById.get(selectedNode.id || selectedNode.node_id)
+        : nodeById.get(request.chain_item || "");
+      return {
+        request,
+        rows,
+        selected_chain: selectedChainNode
+          ? buildThreatChainDetail(selectedChainNode, includeCandidates)
+          : null,
+      };
+    },
+    exportThreatChain(payload, format = "csv") {
+      const rows = payload.selected_chain
+        ? payload.selected_chain.d3fend_entries.flatMap((entry) => {
+            const relatedNist = payload.selected_chain.nist_entries.filter(
+              (nistEntry) =>
+                nistEntry.relationshipEdge.source_node_id ===
+                entry.d3fendNode.id,
+            );
+            if (relatedNist.length === 0) {
+              return [
+                {
+                  source_item_id: itemIdFor(payload.selected_chain.source_node),
+                  d3fend_item_id: itemIdFor(entry.d3fendNode),
+                  d3fend_title: itemTitleFor(entry.d3fendNode),
+                  nist_item_ids: "",
+                  source_refs: entry.sourceRefs.map(sourceRefLabel).join("; "),
+                },
+              ];
+            }
+            return relatedNist.map((nistEntry) => ({
+              source_item_id: itemIdFor(payload.selected_chain.source_node),
+              d3fend_item_id: itemIdFor(entry.d3fendNode),
+              d3fend_title: itemTitleFor(entry.d3fendNode),
+              nist_item_ids: itemIdFor(nistEntry.nistNode),
+              source_refs: [
+                ...entry.sourceRefs,
+                ...nistEntry.sourceRefs,
+              ]
+                .map(sourceRefLabel)
+                .join("; "),
+            }));
+          })
+        : payload.rows.map((row) => ({
+            source_item_id: row.item_id,
+            d3fend_count: row.d3fend_count,
+            nist_control_count: row.nist_control_count,
+            unmapped_d3fend_count: row.unmapped_d3fend_count,
+            domain: row.domain,
+          }));
+      if (format === "json") return exportJson(rows);
+      if (format === "markdown") {
+        const headers = payload.selected_chain
+          ? [
+              "ATT&CK technique",
+              "D3FEND countermeasure",
+              "Countermeasure title",
+              "NIST control IDs",
+              "Source references",
+            ]
+          : [
+              "ATT&CK technique",
+              "D3FEND count",
+              "NIST control count",
+              "Unmapped D3FEND count",
+              "Domain",
+            ];
+        const markdownRows = payload.selected_chain
+          ? rows.map((row) => [
+              row.source_item_id,
+              row.d3fend_item_id,
+              row.d3fend_title,
+              row.nist_item_ids,
+              row.source_refs,
+            ])
+          : rows.map((row) => [
+              row.source_item_id,
+              row.d3fend_count,
+              row.nist_control_count,
+              row.unmapped_d3fend_count,
+              row.domain,
+            ]);
+        return exportMarkdownTable(headers, markdownRows);
+      }
+      const csvRows = payload.selected_chain
+        ? [
+            [
+              "ATT&CK technique",
+              "D3FEND countermeasure",
+              "Countermeasure title",
+              "NIST control IDs",
+              "Source references",
+            ],
+            ...rows.map((row) => [
+              row.source_item_id,
+              row.d3fend_item_id,
+              row.d3fend_title,
+              row.nist_item_ids,
+              row.source_refs,
+            ]),
+          ]
+        : [
+            [
+              "ATT&CK technique",
+              "D3FEND count",
+              "NIST control count",
+              "Unmapped D3FEND count",
+              "Domain",
+            ],
+            ...rows.map((row) => [
+              row.source_item_id,
+              row.d3fend_count,
+              row.nist_control_count,
+              row.unmapped_d3fend_count,
+              row.domain,
             ]),
           ];
       return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
