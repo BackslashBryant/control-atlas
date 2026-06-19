@@ -338,12 +338,14 @@ export function createFederalGraphRuntime(dataset) {
         .map((document) => {
           const itemId = normalize(document.item_id);
           const title = normalize(document.title);
+          const plainLanguage = normalize(document.plain_language_summary || '');
           const description = normalize(document.description);
           const score = itemId === needle ? 0
             : itemId.startsWith(needle) ? 1
               : title.includes(needle) ? 2
-                : description.includes(needle) ? 3
-                  : 99;
+                : plainLanguage.includes(needle) ? 3
+                  : description.includes(needle) ? 4
+                    : 99;
           return { document, score };
         })
         .filter((entry) => entry.score < 99)

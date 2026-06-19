@@ -661,7 +661,9 @@ function LibraryPage(props: {
                           </div>
                           <Badge tone="info">{relationshipCount} public connections</Badge>
                         </div>
-                        <p className="result-summary">{document.description}</p>
+                        <p className="result-summary">
+                          {document.plain_language_summary || node?.plain_language_summary || document.description}
+                        </p>
                         <div className="result-support">
                           <span>Primary source: {source?.display_name || source?.name || 'Source unavailable'}</span>
                           <span>{sourceTrustSummary(source)}</span>
@@ -756,6 +758,15 @@ function DetailPage(props: {
             <button
               className="secondary"
               onClick={() => {
+                void copyText(document.item_id);
+              }}
+              type="button"
+            >
+              Copy ID
+            </button>
+            <button
+              className="secondary"
+              onClick={() => {
                 void copyText(`${window.location.origin}${window.location.pathname}${serializeViewState(state)}`);
               }}
               type="button"
@@ -771,7 +782,7 @@ function DetailPage(props: {
       <div className="detail-grid">
         <section className="stack">
           <SummaryCard title="What this is" tone="trust">
-            <p>{document.description}</p>
+            <p>{node.plain_language_summary || document.plain_language_summary || document.description}</p>
           </SummaryCard>
           <SummaryCard title="Why it matters">
             <p>
@@ -823,6 +834,17 @@ function DetailPage(props: {
               ))}
             </div>
           </section>
+
+          <SummaryCard title="Official text / source excerpt">
+            <p>{document.description || 'No public description available.'}</p>
+            {source?.artifact_url ? (
+              <p>
+                <a href={source.artifact_url} rel="noopener noreferrer" target="_blank">
+                  Open official source document
+                </a>
+              </p>
+            ) : null}
+          </SummaryCard>
         </section>
 
         <aside className="stack">
@@ -836,7 +858,7 @@ function DetailPage(props: {
             </div>
           </SummaryCard>
 
-          <SummaryCard title="Next actions">
+          <SummaryCard title="What to do next">
             <div className="stack compact">
               <button className="link-action" onClick={() => onNavigate('matrix', { workbench: 'relationships', items: document.item_id })} type="button">
                 <IconGitCompare aria-hidden="true" size={16} stroke={1.8} />

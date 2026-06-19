@@ -1,56 +1,52 @@
-# Epic 3 Library Browser Design
+# Epic 2: Library + Search — Design
 
 **Date:** 2026-06-15
 **Lead persona:** Vector
-**Status:** Approved for spec drafting, pending user review of written spec
-**Epic:** Epic 3 - Library Browser
+**Status:** Shipped on `main` (Epic 2 completion pass)
+**Epic:** Epic 2 - Library + Search
 
 ## Goal
 
-Deliver the full Epic 3 Library Browser for Control Atlas so users can search public reference objects, open stable deep-linked detail views, and filter library results without a page reload.
+Deliver the full Epic 2 Library + Search experience for Control Atlas so users can search public reference objects, open stable deep-linked detail views, and filter library results without a page reload.
 
 ## Scope
 
-Epic 3 includes Story 3.1 through Story 3.3 from the active PRD and roadmap:
+Epic 2 includes Story 2.1 through Story 2.3 from the active PRD and roadmap:
 
-- Story 3.1 - Search Index (MiniSearch)
-- Story 3.2 - Object Detail Pages
-- Story 3.3 - Library Filters
+- Story 2.1 - MiniSearch index
+- Story 2.2 - Object detail pages
+- Story 2.3 - Library filters
 
 Adjacent work is in scope only when it is required to make those stories ship cleanly on the current static runtime.
 
 ## Existing Baseline
 
-The current shell already contains partial Library Browser behavior:
+The shipped Epic 2 implementation includes:
 
-- `src/app/app.mjs` renders search, browse, and object detail surfaces.
-- `src/app/runtime.mjs` provides in-memory search, URL state helpers, and object lookup helpers.
-- The static runtime contract remains the five generated public artifacts:
+- `src/ui/App.tsx` as the live React shell for Library search and detail pages.
+- `src/app/runtime.mjs` for MiniSearch-backed `searchLibrary`, facet filters, and `library-detail` URL state.
+- `scripts/build-framework-data.mjs` generating additive `library-search.json` with `plain_language_summary` in documents and index fields.
+- The static runtime contract remains the five generated public graph artifacts plus the additive library search artifact:
   - `sources.json`
   - `nodes.json`
   - `edges.json`
   - `evidence.json`
   - `graph-health.json`
-
-The current implementation does not yet satisfy Epic 3 because:
-
-- search is still a linear in-memory scan rather than a generated MiniSearch index,
-- detail pages are opened imperatively instead of from a stable routeable object state,
-- filters do not yet cover object type, source class, and family or severity.
+  - `library-search.json` (additive)
 
 ## Requirements
 
-### Story 3.1 - Search Index
+### Story 2.1 - Search Index
 
 The Library Browser must:
 
 - generate a static MiniSearch index at build time,
 - support exact identifier matches and keyword matches,
-- use field weighting so identifier, title, and description do not rank equally,
+- use field weighting so identifier, plain language, title, and description do not rank equally,
 - return enough metadata to render object type and defining source in result cards,
 - remain fully static with no backend and no runtime ingestion.
 
-### Story 3.2 - Object Detail Pages
+### Story 2.2 - Object Detail Pages
 
 Each object page must:
 
@@ -61,7 +57,7 @@ Each object page must:
 - make control pages show related baselines, STIGs, and CCIs where present,
 - make STIG or SRG pages show related CCIs and controls where present.
 
-### Story 3.3 - Library Filters
+### Story 2.3 - Library Filters
 
 Library filtering must:
 
@@ -76,7 +72,7 @@ Library filtering must:
 
 Use the existing static shell and URL-state model, then extend it rather than replacing it.
 
-This keeps Epic 3 aligned with the current repository structure, limits regression risk, and avoids turning Library Browser delivery into a broader routing or framework rewrite.
+This keeps Epic 2 aligned with the current repository structure, limits regression risk, and avoids turning Library Browser delivery into a broader routing or framework rewrite.
 
 ## Architecture
 
@@ -107,7 +103,7 @@ The URL contract should support:
 - Library browse state,
 - direct object detail state by object ID,
 - filter persistence in Library views where useful,
-- backward compatibility for the current shell views that are outside Epic 3.
+- backward compatibility for the current shell views that are outside Epic 2.
 
 Direct object links must load the required graph data and detail content without requiring the current "search then exact-match auto-open" fallback.
 
@@ -127,7 +123,7 @@ The library surface should stop behaving like separate partial features.
 
 ### 4. Detail Page Hierarchy
 
-Object detail pages should prioritize Epic 3 contract data first:
+Object detail pages should prioritize Epic 2 contract data first:
 
 1. title and stable object ID,
 2. source and version,
@@ -159,9 +155,9 @@ The filter model should be derived from already normalized public data.
 
 ## Non-Goals
 
-Epic 3 does not include:
+Epic 2 does not include:
 
-- Crosswalk export expansion beyond the existing Epic 4 surfaces,
+- Crosswalk export expansion beyond the existing Epic 3 Compare surfaces,
 - template generation changes,
 - pattern-library delivery,
 - Start Here flow delivery,
@@ -180,7 +176,7 @@ Epic 3 does not include:
 
 ## Verification Strategy
 
-Epic 3 is not complete until the following are true:
+Epic 2 is not complete until the following are true:
 
 - build-time generation of the library search artifact is covered by tests,
 - runtime and URL-state tests prove deep-link detail behavior,
@@ -205,32 +201,32 @@ Extend the current state helpers instead of replacing them, and keep explicit te
 Control:
 Normalize optional facet values in the generated artifact and treat absent facets as empty rather than exceptional.
 
-### Risk: scope creep into Epic 4 routing or export work
+### Risk: scope creep into Epic 3 Compare routing or export work
 
 Control:
-Keep Epic 3 focused on search, detail, and filtering contracts only.
+Keep Epic 2 focused on search, detail, and filtering contracts only.
 
 ## Acceptance Mapping
 
-### Story 3.1
+### Story 2.1
 
 - MiniSearch index exists as a generated static artifact.
 - Search supports identifiers and keywords.
 - Results show object type and source.
 - Library search is reachable from the shell.
 
-### Story 3.2
+### Story 2.2
 
 - Every object has a stable deep-link state.
 - Detail pages render required source-backed fields.
 - Control detail pages show related baselines, STIGs, and CCIs when present.
 - STIG or SRG detail pages show related CCIs and controls when present.
 
-### Story 3.3
+### Story 2.3
 
 - Filters cover object type, source class, and family or severity.
 - Results update without page reload.
 
 ## Implementation Handoff
 
-The next step after user review of this spec is to write a detailed implementation plan for Epic 3, then execute on an Epic 3 implementation branch with full verification gates.
+The next step after user review of this spec is to write a detailed implementation plan for Epic 2, then execute on an Epic 2 implementation branch with full verification gates.

@@ -1,8 +1,8 @@
-# Epic 3 Library Browser Implementation Plan
+# Epic 2: Library + Search — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Deliver Epic 3 completely by adding a generated MiniSearch-backed library index, stable deep-link object detail state, and live library filters for object type, source class, and family or severity.
+**Goal:** Deliver Epic 2 completely by adding a generated MiniSearch-backed library index, stable deep-link object detail state, and live library filters for object type, source class, and family or severity.
 
 **Architecture:** Extend the existing static shell instead of replacing it. Generate a new additive library search artifact from the same normalized graph inputs, load it in the client runtime for library search and filtering, and promote object detail views to first-class URL state while preserving the five-artifact graph runtime contract for context, evidence, and provenance.
 
@@ -10,7 +10,7 @@
 
 ---
 
-### Task 1: Add failing contract tests for the Epic 3 artifact and URL state
+### Task 1: Add failing contract tests for the Epic 2 artifact and URL state
 
 **Files:**
 - Modify: `tests/framework-data.test.mjs`
@@ -23,7 +23,7 @@
 - [ ] **Step 1: Write the failing data-build contract test for the library artifact**
 
 ```javascript
-test('epic 3 graph build emits a library search artifact with filter facets', () => {
+test('epic 2 graph build emits a library search artifact with filter facets', () => {
   buildFrameworkData();
   const library = generated('library-search');
 
@@ -94,7 +94,7 @@ Expected: FAIL because `library-detail` state and `searchLibrary` do not exist.
 - [ ] **Step 5: Write the failing browser-contract assertions for the new Library Browser controls**
 
 ```javascript
-test('library browser exposes epic 3 filter controls and deep-link detail actions', () => {
+test('library browser exposes epic 2 filter controls and deep-link detail actions', () => {
   assert.match(app, /library-object-type-filter/);
   assert.match(app, /library-source-class-filter/);
   assert.match(app, /library-family-filter/);
@@ -113,10 +113,10 @@ Expected: FAIL because the new filter controls and `library-detail` surface are 
 
 ```bash
 git add tests/framework-data.test.mjs tests/framework-runtime.test.mjs tests/browser-contract.test.mjs
-git commit -m "test: define epic 3 library browser contracts"
+git commit -m "test: define epic 2 library browser contracts"
 ```
 
-### Task 2: Generate and publish the Epic 3 library search artifact
+### Task 2: Generate and publish the Epic 2 library search artifact
 
 **Files:**
 - Modify: `package.json`
@@ -427,7 +427,7 @@ Expected: PASS, including filter IDs, `library-detail`, and result metadata labe
 
 ```bash
 git add src/app/app.mjs src/styles/app.css tests/browser-contract.test.mjs
-git commit -m "feat: ship epic 3 library browser UI"
+git commit -m "feat: ship epic 2 library browser UI"
 ```
 
 ### Task 5: Prove direct-link and end-to-end Library Browser behavior
@@ -474,7 +474,7 @@ Expected: PASS for deep-link and filter flows.
 
 ```bash
 git add tests/e2e/control-atlas-shell.spec.mjs tests/browser-contract.test.mjs
-git commit -m "test: cover epic 3 library browser flows"
+git commit -m "test: cover epic 2 library browser flows"
 ```
 
 ### Task 6: Run the full verification gate and prepare branch completion
@@ -496,13 +496,13 @@ Expected: PASS, including build, lint, typecheck, runtime tests, browser tests, 
 - [ ] **Step 3: Inspect the working tree for the final diff**
 
 Run: `git status --short --branch`
-Expected: only Epic 3 implementation files are modified or staged.
+Expected: only Epic 2 implementation files are modified or staged.
 
 - [ ] **Step 4: Commit the final verification adjustments if needed**
 
 ```bash
 git add src/app/app.mjs src/app/runtime.mjs src/styles/app.css scripts/build-framework-data.mjs tools/build-static-site.mjs tests/framework-data.test.mjs tests/framework-runtime.test.mjs tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/e2e/control-atlas-shell.spec.mjs
-git commit -m "feat: complete epic 3 library browser"
+git commit -m "feat: complete epic 2 library browser"
 ```
 
 - [ ] **Step 5: Hand off to development-branch completion workflow**

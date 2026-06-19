@@ -194,7 +194,7 @@ test('epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
     && edge.target_node_id === 'nist-800-53:AC-2'));
 });
 
-test('epic 3 graph build emits a library search artifact with filter facets', () => {
+test('epic 2 graph build emits a library search artifact with filter facets', () => {
   buildFrameworkData();
   const library = generated('library-search');
 
@@ -207,6 +207,7 @@ test('epic 3 graph build emits a library search artifact with filter facets', ()
   assert.equal(ac2.object_type, 'control');
   assert.equal(ac2.source_class, 'federal_published');
   assert.equal(ac2.control_family, 'Access Control');
+  assert.ok(ac2.plain_language_summary?.trim(), 'AC-2 library document must include plain_language_summary');
 });
 
 test('dod-zt graph build emits pillars, capabilities, and overlay crosswalk edges', () => {
