@@ -536,8 +536,7 @@ export function App() {
 
       <footer className="site-footer">
         <p>
-          Control Atlas is an open-source reference tool. It does not make
-          compliance or authorization decisions. Official decisions remain with
+          Control Atlas is an open-source reference tool. It does not make compliance or authorization decisions. Official decisions remain with
           your Authorizing Official.{" "}
           <button
             className="link-action"
