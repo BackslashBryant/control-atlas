@@ -143,3 +143,15 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await expect(page.getByText('Common mistakes', { exact: true })).toBeVisible();
   await expect(page.getByText('Next action', { exact: true })).toBeVisible();
 });
+
+test('footer about link opens the trust page with full disclaimer', async ({ page }) => {
+  await page.goto('/');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await page.getByRole('button', { name: 'About & trust' }).click();
+  await expect(page).toHaveURL(/view=about/);
+  await expect(page.getByRole('heading', { name: 'What Control Atlas is — and is not' })).toBeVisible();
+  await expect(page.getByText('not an official government system')).toBeVisible();
+  await expect(page.getByText('reference aids based on public sources')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Review the Sources registry' })).toBeVisible();
+});

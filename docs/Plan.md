@@ -21,9 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None — MVP release candidate `v1.0.0-rc.1` shipped June 19, 2026.**
-
-Post-RC work: maintenance mode, optional `v1.0.0` promotion after feedback, graph UI migration deferred (Epic 0 residual).
+**None — Epic 7 shipped June 19, 2026. Next build when scoped: Epic 9 (Relationship Graph) per post-MVP sequence.**
 
 ## Epic Status (June 19, 2026)
 
@@ -36,6 +34,7 @@ Post-RC work: maintenance mode, optional `v1.0.0` promotion after feedback, grap
 | 4 — Template Factory | **Shipped** | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage. |
 | 5 — Patterns + Glossary + Start Here | **Shipped** | Start Here actionable deep links (Library, Compare, Patterns, Templates) with plain-language rationale; header glossary search; inline glossary on detail and pattern pages. |
 | 6 — QA + Release | **Shipped** | Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md), tag `v1.0.0-rc.1`. Graph UI remains Epic 0 residual. |
+| 7 — Platform Trust & Hardening | **Shipped** | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md). |
 
 ## Active Direction
 
@@ -82,11 +81,13 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 4 Template Factory QA complete
 - [x] Epic 5 Start Here deep links and PRD alignment complete
 - [x] Epic 6 release candidate (`v1.0.0-rc.1`)
+- [x] Epic 7 platform trust & hardening (About page, a11y playbook, SecDevOps docs)
 
 ## Recommended Sequence (post-MVP)
 
-1. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
-2. **Optional** — promote `v1.0.0` after RC feedback; graph UI migration if scoped
+1. **Epic 9 (planned)** — Relationship graph in React shell when scoped
+2. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
+3. **Optional** — promote `v1.0.0` after RC feedback
 
 ## Historical Delivery Records
 

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { patternsData } from '../src/app/patterns-data.mjs';
 import { generateTemplate } from '../src/app/template-engine.mjs';
+import { PRODUCT_DISCLAIMER } from '../src/shared/disclaimer.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const registry = JSON.parse(readFileSync(join(__dirname, '../data/template-registry.json'), 'utf8'));
@@ -99,4 +100,11 @@ test('generated templates use plain-language prompts without raw schema slugs', 
 test('react shell footer states no compliance or authorization decisions', () => {
   assert.match(appShell, /does not make compliance or authorization decisions/i);
   assert.match(appShell, /Authorizing Official/i);
+});
+
+test('about page includes full product disclaimer', () => {
+  assert.match(appShell, /About &amp; trust/);
+  assert.match(appShell, /\{PRODUCT_DISCLAIMER\}/);
+  assert.match(PRODUCT_DISCLAIMER, /not an official government system/i);
+  assert.match(PRODUCT_DISCLAIMER, /reference aids based on public sources/i);
 });

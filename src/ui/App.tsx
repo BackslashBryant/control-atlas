@@ -31,6 +31,7 @@ import { patternsData } from '../app/patterns-data.mjs';
 import { displayNameFor, userFacingLoadError } from '../app/display-names.mjs';
 import { groupRelationships } from '../app/relationship-groups.mjs';
 import { generateTemplate } from '../app/template-engine.mjs';
+import { PRODUCT_DISCLAIMER } from '../shared/disclaimer.mjs';
 import {
   ChainRelationshipItem,
   parseCatalogItemIds,
@@ -449,7 +450,10 @@ export function App() {
       <footer className="site-footer">
         <p>
           Control Atlas is an open-source reference tool. It does not make compliance or authorization decisions.
-          Official decisions remain with your Authorizing Official.
+          Official decisions remain with your Authorizing Official.{' '}
+          <button className="link-action" onClick={() => navigate('about')} type="button">
+            About &amp; trust
+          </button>
         </p>
         <p>Static, public, and browser-only. No accounts, tracking, backend, or user-data storage.</p>
       </footer>
@@ -521,6 +525,10 @@ function AppContent(props: {
 
   if (state.view === 'start-here') {
     return <StartHerePage onNavigate={onNavigate} state={state} />;
+  }
+
+  if (state.view === 'about') {
+    return <AboutPage onNavigate={onNavigate} />;
   }
 
   if (state.view === 'retired') {
@@ -2015,6 +2023,65 @@ function PatternsPage(props: {
             </div>
           </SummaryCard>
         </aside>
+      </div>
+    </section>
+  );
+}
+
+function AboutPage(props: {
+  onNavigate: (view: ViewState['view'], patch?: Partial<ViewState>) => void;
+}) {
+  const { onNavigate } = props;
+
+  return (
+    <section className="panel">
+      <PageHeader
+        eyebrow="About & trust"
+        summary="Control Atlas is a public reference workbench. It helps you map federal cyber guidance and generate blank planning templates — without storing your data or making official decisions."
+        title="What Control Atlas is — and is not"
+      />
+
+      <div className="stack">
+        <SummaryCard title="What this is" tone="trust">
+          <p>
+            An open-source reference workbench that maps public federal cyber guidance — controls, frameworks,
+            STIGs, and patterns — into plain language you can trace back to sources.
+          </p>
+          <p>
+            Everything runs in your browser. There are no accounts, no file uploads, and no organizational data
+            storage.
+          </p>
+        </SummaryCard>
+
+        <SummaryCard title="What this is not">
+          <ul className="list">
+            <li>Not an official U.S. government system or endorsement.</li>
+            <li>Not a GRC tool, evidence processor, compliance scorer, or authorization workflow.</li>
+            <li>Does not determine compliance status or recommend authorization decisions.</li>
+          </ul>
+        </SummaryCard>
+
+        <SummaryCard title="Disclaimer" tone="warning">
+          <p>{PRODUCT_DISCLAIMER}</p>
+        </SummaryCard>
+
+        <section className="stack">
+          <div className="section-header">
+            <h2>What to do next</h2>
+            <p>Verify source trust, then pick a starting path for your work.</p>
+          </div>
+          <div className="card-actions">
+            <button className="primary" onClick={() => onNavigate('sources')} type="button">
+              Review the Sources registry
+            </button>
+            <button className="secondary" onClick={() => onNavigate('start-here')} type="button">
+              Start Here
+            </button>
+            <button className="secondary" onClick={() => onNavigate('templates')} type="button">
+              Browse templates
+            </button>
+          </div>
+        </section>
       </div>
     </section>
   );

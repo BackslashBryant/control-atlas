@@ -832,6 +832,9 @@ export function parseViewState(searchParams) {
       ...(environment ? { environment } : {}),
     };
   }
+  if (view === 'about') {
+    return { ...base, view: 'about' };
+  }
   return {
     ...base,
     view: 'search',
@@ -907,6 +910,9 @@ export function normalizeViewState(view, state = {}) {
       ...(state.environment ? { environment: state.environment } : {}),
     };
   }
+  if (view === 'about') {
+    return { ...base, view: 'about' };
+  }
   return {
     ...base,
     view: 'search',
@@ -966,6 +972,8 @@ export function serializeViewState(state) {
     if (state.systemType) params.set('systemType', state.systemType);
     if (state.dataSensitivity) params.set('dataSensitivity', state.dataSensitivity);
     if (state.environment) params.set('environment', state.environment);
+  } else if (view === 'about') {
+    params.set('view', 'about');
   } else if (state.query || state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity) {
     params.set('view', 'search');
     if (state.query) params.set('q', state.query);
