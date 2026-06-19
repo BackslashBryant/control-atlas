@@ -1,20 +1,24 @@
-import { AxeBuilder } from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
-import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from './support.mjs';
+import { AxeBuilder } from "@axe-core/playwright";
+import { expect, test } from "@playwright/test";
+import {
+  attachPageDiagnostics,
+  dismissOnboarding,
+  waitForAppReady,
+} from "./support.mjs";
 
 async function assertNoBlockingViolations(page, contextLabel) {
   const results = await new AxeBuilder({ page })
-    .include('#workspace')
-    .withTags(['wcag2a', 'wcag2aa'])
+    .include("#workspace")
+    .withTags(["wcag2a", "wcag2aa"])
     .analyze();
 
   const blocking = results.violations.filter((violation) =>
-    ['serious', 'critical'].includes(violation.impact || ''),
+    ["serious", "critical"].includes(violation.impact || ""),
   );
 
   expect(
     blocking,
-    `Accessibility violations on ${contextLabel}: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(', ')}`,
+    `Accessibility violations on ${contextLabel}: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(", ")}`,
   ).toEqual([]);
 }
 
@@ -23,21 +27,37 @@ test.beforeEach(async ({ page }) => {
 });
 
 const ROUTES = [
-  { label: 'landing', path: '/' },
-  { label: 'library search', path: '/?view=search&q=AC-2' },
-  { label: 'library detail', path: '/?view=library-detail&node=nist-800-53%3AAC-2' },
-  { label: 'compare hub', path: '/?view=matrix' },
-  { label: 'sources registry', path: '/?view=sources' },
-  { label: 'templates hub', path: '/?view=templates' },
-  { label: 'template detail', path: '/?view=templates&templateType=security_plan_starter' },
-  { label: 'patterns hub', path: '/?view=patterns' },
-  { label: 'pattern detail', path: '/?view=patterns&pattern=rmf-lifecycle' },
-  { label: 'start here', path: '/?view=start-here' },
-  { label: 'about', path: '/?view=about' },
+  { label: "landing", path: "/" },
+  { label: "library search", path: "/?view=search&q=AC-2" },
+  {
+    label: "library detail",
+    path: "/?view=library-detail&node=nist-800-53%3AAC-2",
+  },
+  {
+    label: "library detail graph map",
+    path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=map",
+  },
+  {
+    label: "library detail graph table",
+    path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
+  },
+  { label: "compare hub", path: "/?view=matrix" },
+  { label: "sources registry", path: "/?view=sources" },
+  { label: "templates hub", path: "/?view=templates" },
+  {
+    label: "template detail",
+    path: "/?view=templates&templateType=security_plan_starter",
+  },
+  { label: "patterns hub", path: "/?view=patterns" },
+  { label: "pattern detail", path: "/?view=patterns&pattern=rmf-lifecycle" },
+  { label: "start here", path: "/?view=start-here" },
+  { label: "about", path: "/?view=about" },
 ];
 
 for (const route of ROUTES) {
-  test(`a11y: ${route.label} has no serious or critical violations`, async ({ page }) => {
+  test(`a11y: ${route.label} has no serious or critical violations`, async ({
+    page,
+  }) => {
     await page.goto(route.path);
     await waitForAppReady(page);
     await dismissOnboarding(page);
@@ -45,16 +65,38 @@ for (const route of ROUTES) {
   });
 }
 
-test('a11y: compare detailed mappings table has no serious or critical violations', async ({ page }) => {
-  await page.goto('/?view=matrix');
+test("a11y: compare detailed mappings table has no serious or critical violations", async ({
+  page,
+}) => {
+  await page.goto("/?view=matrix");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.locator('.intent-card', { hasText: 'Framework to framework' }).getByRole('button', { name: 'Use this path' }).click();
-  await page.getByLabel('Framework A').selectOption('nist-800-53');
-  await page.getByLabel('Framework B').selectOption('csf-2');
-  await page.getByRole('button', { name: 'Detailed mappings' }).click();
-  await expect(page.getByRole('table', { name: 'Relationship mappings' })).toBeVisible();
+  await page
+    .locator(".intent-card", { hasText: "Framework to framework" })
+    .getByRole("button", { name: "Use this path" })
+    .click();
+  await page.getByLabel("Framework A").selectOption("nist-800-53");
+  await page.getByLabel("Framework B").selectOption("csf-2");
+  await page.getByRole("button", { name: "Detailed mappings" }).click();
+  await expect(
+    page.getByRole("table", { name: "Relationship mappings" }),
+  ).toBeVisible();
 
-  await assertNoBlockingViolations(page, 'compare detailed mappings');
+  await assertNoBlockingViolations(page, "compare detailed mappings");
+});
+
+test("a11y: library detail relationship table has no serious or critical violations", async ({
+  page,
+}) => {
+  await page.goto(
+    "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
+  );
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(
+    page.getByRole("table", { name: "Relationship table" }),
+  ).toBeVisible();
+  await assertNoBlockingViolations(page, "library detail relationship table");
 });

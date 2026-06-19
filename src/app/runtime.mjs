@@ -1,11 +1,13 @@
-import MiniSearch from '../lib/minisearch.js';
+import MiniSearch from "../lib/minisearch.js";
 
 function normalize(value) {
-  return String(value || '').trim().toLowerCase();
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 }
 
 function csvCell(value) {
-  return `"${String(value ?? '').replaceAll('"', '""')}"`;
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
 }
 
 function uniqueBy(items, keyFn) {
@@ -19,15 +21,18 @@ function uniqueBy(items, keyFn) {
 }
 
 function matchesLibraryFacet(document, filters = {}) {
-  return (!filters.object_type || document.object_type === filters.object_type)
-    && (!filters.source_class || document.source_class === filters.source_class)
-    && (!filters.control_family || document.control_family === filters.control_family)
-    && (!filters.severity || document.severity === filters.severity)
-    && (!filters.catalog_id || document.catalog_id === filters.catalog_id);
+  return (
+    (!filters.object_type || document.object_type === filters.object_type) &&
+    (!filters.source_class || document.source_class === filters.source_class) &&
+    (!filters.control_family ||
+      document.control_family === filters.control_family) &&
+    (!filters.severity || document.severity === filters.severity) &&
+    (!filters.catalog_id || document.catalog_id === filters.catalog_id)
+  );
 }
 
 function itemIdFor(node) {
-  return node?.metadata?.item_id || node?.id || '';
+  return node?.metadata?.item_id || node?.id || "";
 }
 
 function itemTitleFor(node) {
@@ -35,9 +40,9 @@ function itemTitleFor(node) {
 }
 
 function sourceRefLabel(ref) {
-  const version = ref.source_version ? ` v${ref.source_version}` : '';
-  const locator = ref.locator ? ` @ ${ref.locator}` : '';
-  const quality = ref.evidence_quality ? ` [${ref.evidence_quality}]` : '';
+  const version = ref.source_version ? ` v${ref.source_version}` : "";
+  const locator = ref.locator ? ` @ ${ref.locator}` : "";
+  const quality = ref.evidence_quality ? ` [${ref.evidence_quality}]` : "";
   return `${ref.source_name}${version}${locator}${quality}`;
 }
 
@@ -46,117 +51,154 @@ function exportJson(value) {
 }
 
 function exportMarkdownTable(headers, rows) {
-  const headerRow = `| ${headers.join(' | ')} |`;
-  const divider = `| ${headers.map(() => '---').join(' | ')} |`;
-  const body = rows.map((row) => `| ${row.map((cell) => String(cell ?? '').replaceAll('\n', '<br>')).join(' | ')} |`);
-  return `${[headerRow, divider, ...body].join('\n')}\n`;
+  const headerRow = `| ${headers.join(" | ")} |`;
+  const divider = `| ${headers.map(() => "---").join(" | ")} |`;
+  const body = rows.map(
+    (row) =>
+      `| ${row.map((cell) => String(cell ?? "").replaceAll("\n", "<br>")).join(" | ")} |`,
+  );
+  return `${[headerRow, divider, ...body].join("\n")}\n`;
 }
 
 function baselineState(base = {}) {
   return {
     ...base,
-    view: 'matrix',
-    workbench: 'relationships',
-    source: '',
-    target: '',
-    items: '',
-    relationshipType: '',
-    provenance: '',
-    confidence: '',
-    includeCandidates: '',
-    chainCatalog: '',
-    chainBenchmark: '',
-    chainItem: '',
-    baselineA: '',
-    baselineB: '',
+    view: "matrix",
+    workbench: "relationships",
+    source: "",
+    target: "",
+    items: "",
+    relationshipType: "",
+    provenance: "",
+    confidence: "",
+    includeCandidates: "",
+    chainCatalog: "",
+    chainBenchmark: "",
+    chainItem: "",
+    baselineA: "",
+    baselineB: "",
   };
 }
 
 export function createFederalGraphRuntime(dataset) {
   const nodeById = new Map(dataset.nodes.map((node) => [node.id, node]));
-  const sourceById = new Map(dataset.sources.map((source) => [source.id, source]));
-  const evidenceById = new Map(dataset.evidence.map((entry) => [entry.id, entry]));
+  const sourceById = new Map(
+    dataset.sources.map((source) => [source.id, source]),
+  );
+  const evidenceById = new Map(
+    dataset.evidence.map((entry) => [entry.id, entry]),
+  );
   const edgeById = new Map(dataset.edges.map((edge) => [edge.id, edge]));
   const libraryDocuments = dataset.librarySearch?.documents || [];
-  const libraryDocumentById = new Map(libraryDocuments.map((entry) => [entry.id, entry]));
+  const libraryDocumentById = new Map(
+    libraryDocuments.map((entry) => [entry.id, entry]),
+  );
 
   let miniSearch = null;
   if (dataset.librarySearch?.serialized_index) {
     try {
-      miniSearch = /** @type {any} */ (MiniSearch).loadJSON(dataset.librarySearch.serialized_index, {
-        fields: ['item_id', 'title', 'description'],
-        storeFields: ['id'],
-        searchOptions: {
-          prefix: true,
-          boost: { item_id: 5, title: 3, description: 1 },
+      miniSearch = /** @type {any} */ (MiniSearch).loadJSON(
+        dataset.librarySearch.serialized_index,
+        {
+          fields: ["item_id", "title", "description"],
+          storeFields: ["id"],
+          searchOptions: {
+            prefix: true,
+            boost: { item_id: 5, title: 3, description: 1 },
+          },
         },
-      });
+      );
     } catch (err) {
-      console.warn('Failed to load MiniSearch index:', err);
+      console.warn("Failed to load MiniSearch index:", err);
     }
   }
   const CATALOG_DISPLAY_NAMES = {
-    'cmmc-2': { name: 'CMMC 2.0', group: 'Other' },
-    'csf-2': { name: 'NIST CSF 2.0', group: 'NIST' },
-    'cui-policy': { name: 'CUI Program', group: 'Other' },
-    'disa-cci': { name: 'DISA CCI', group: 'DISA' },
-    'disa-srg': { name: 'DISA SRG', group: 'DISA' },
-    'disa-stig': { name: 'DISA STIG', group: 'DISA' },
-    'dod-rai': { name: 'DoD RAI', group: 'DoD' },
-    'dod-zt': { name: 'DoD Zero Trust', group: 'DoD' },
-    'fedramp-rev5': { name: 'FedRAMP Rev. 5', group: 'Other' },
-    'fips-199': { name: 'FIPS 199', group: 'NIST' },
-    'fips-200': { name: 'FIPS 200', group: 'NIST' },
-    'nist-800-171': { name: 'SP 800-171 Rev. 3', group: 'NIST' },
-    'nist-800-171-rev2': { name: 'SP 800-171 Rev. 2', group: 'NIST' },
-    'nist-800-172': { name: 'SP 800-172 Rev. 3', group: 'NIST' },
-    'nist-800-37': { name: 'SP 800-37 Rev. 2', group: 'NIST' },
-    'nist-800-53': { name: 'SP 800-53 Rev. 5', group: 'NIST' },
-    'nist-800-53a': { name: 'SP 800-53A Rev. 5', group: 'NIST' },
-    'nist-800-53b': { name: 'SP 800-53B', group: 'NIST' },
-    'nist-ai-rmf': { name: 'AI RMF', group: 'NIST' },
-    'nist-ssdf': { name: 'SSDF', group: 'NIST' }
+    "cmmc-2": { name: "CMMC 2.0", group: "Other" },
+    "csf-2": { name: "NIST CSF 2.0", group: "NIST" },
+    "cui-policy": { name: "CUI Program", group: "Other" },
+    "disa-cci": { name: "DISA CCI", group: "DISA" },
+    "disa-srg": { name: "DISA SRG", group: "DISA" },
+    "disa-stig": { name: "DISA STIG", group: "DISA" },
+    "dod-rai": { name: "DoD RAI", group: "DoD" },
+    "dod-zt": { name: "DoD Zero Trust", group: "DoD" },
+    "fedramp-rev5": { name: "FedRAMP Rev. 5", group: "Other" },
+    "fips-199": { name: "FIPS 199", group: "NIST" },
+    "fips-200": { name: "FIPS 200", group: "NIST" },
+    "nist-800-171": { name: "SP 800-171 Rev. 3", group: "NIST" },
+    "nist-800-171-rev2": { name: "SP 800-171 Rev. 2", group: "NIST" },
+    "nist-800-172": { name: "SP 800-172 Rev. 3", group: "NIST" },
+    "nist-800-37": { name: "SP 800-37 Rev. 2", group: "NIST" },
+    "nist-800-53": { name: "SP 800-53 Rev. 5", group: "NIST" },
+    "nist-800-53a": { name: "SP 800-53A Rev. 5", group: "NIST" },
+    "nist-800-53b": { name: "SP 800-53B", group: "NIST" },
+    "nist-ai-rmf": { name: "AI RMF", group: "NIST" },
+    "nist-ssdf": { name: "SSDF", group: "NIST" },
   };
 
-  const catalogs = [...new Set(dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean))]
+  const catalogs = [
+    ...new Set(
+      dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean),
+    ),
+  ]
     .sort()
     .map((id) => ({
       id,
       name: CATALOG_DISPLAY_NAMES[id]?.name || id,
-      display_group: CATALOG_DISPLAY_NAMES[id]?.group || 'Other',
-      node_count: dataset.nodes.filter((node) => node.metadata?.catalog_id === id).length,
-      relationship_count: dataset.edges.filter((edge) =>
-        nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id
-        || nodeById.get(edge.target_node_id)?.metadata?.catalog_id === id).length,
+      display_group: CATALOG_DISPLAY_NAMES[id]?.group || "Other",
+      node_count: dataset.nodes.filter(
+        (node) => node.metadata?.catalog_id === id,
+      ).length,
+      relationship_count: dataset.edges.filter(
+        (edge) =>
+          nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id ||
+          nodeById.get(edge.target_node_id)?.metadata?.catalog_id === id,
+      ).length,
     }));
-  const sortNodesByItemId = (left, right) => itemIdFor(left).localeCompare(itemIdFor(right)) || left.id.localeCompare(right.id);
-  const sortRowsByIds = (left, right) => left.from_item_id.localeCompare(right.from_item_id) || left.to_item_id.localeCompare(right.to_item_id);
-  const resolveSourceRefs = (edge) => (edge?.evidence_ids || []).map((id) => {
-    const entry = evidenceById.get(id);
-    const source = sourceById.get(entry?.source_id);
-    if (!entry) return null;
-    return {
-      source_id: entry.source_id,
-      source_name: source?.name || entry.source_id,
-      source_version: entry.source_version || '',
-      locator: entry.locator || '',
-      evidence_quality: entry.evidence_quality || '',
-    };
-  }).filter(Boolean);
+  const sortNodesByItemId = (left, right) =>
+    itemIdFor(left).localeCompare(itemIdFor(right)) ||
+    left.id.localeCompare(right.id);
+  const sortRowsByIds = (left, right) =>
+    left.from_item_id.localeCompare(right.from_item_id) ||
+    left.to_item_id.localeCompare(right.to_item_id);
+  const resolveSourceRefs = (edge) =>
+    (edge?.evidence_ids || [])
+      .map((id) => {
+        const entry = evidenceById.get(id);
+        const source = sourceById.get(entry?.source_id);
+        if (!entry) return null;
+        return {
+          source_id: entry.source_id,
+          source_name: source?.name || entry.source_id,
+          source_version: entry.source_version || "",
+          locator: entry.locator || "",
+          evidence_quality: entry.evidence_quality || "",
+        };
+      })
+      .filter(Boolean);
   const relationshipOrientation = (edge, sourceCatalog, targetCatalog) => {
     const sourceNode = nodeById.get(edge.source_node_id);
     const targetNode = nodeById.get(edge.target_node_id);
     if (!sourceNode || !targetNode) return null;
-    const sourceCatalogId = sourceNode.metadata?.catalog_id || '';
-    const targetCatalogId = targetNode.metadata?.catalog_id || '';
+    const sourceCatalogId = sourceNode.metadata?.catalog_id || "";
+    const targetCatalogId = targetNode.metadata?.catalog_id || "";
     if (sourceCatalog && targetCatalog) {
-      if (sourceCatalogId === sourceCatalog && targetCatalogId === targetCatalog) return { fromNode: sourceNode, toNode: targetNode };
-      if (targetCatalogId === sourceCatalog && sourceCatalogId === targetCatalog) return { fromNode: targetNode, toNode: sourceNode };
+      if (
+        sourceCatalogId === sourceCatalog &&
+        targetCatalogId === targetCatalog
+      )
+        return { fromNode: sourceNode, toNode: targetNode };
+      if (
+        targetCatalogId === sourceCatalog &&
+        sourceCatalogId === targetCatalog
+      )
+        return { fromNode: targetNode, toNode: sourceNode };
       return null;
     }
     if (sourceCatalog) {
-      if (sourceCatalogId === sourceCatalog) return { fromNode: sourceNode, toNode: targetNode };
-      if (targetCatalogId === sourceCatalog) return { fromNode: targetNode, toNode: sourceNode };
+      if (sourceCatalogId === sourceCatalog)
+        return { fromNode: sourceNode, toNode: targetNode };
+      if (targetCatalogId === sourceCatalog)
+        return { fromNode: targetNode, toNode: sourceNode };
       return null;
     }
     return { fromNode: sourceNode, toNode: targetNode };
@@ -166,38 +208,66 @@ export function createFederalGraphRuntime(dataset) {
     from_id: fromNode.id,
     from_item_id: itemIdFor(fromNode),
     from_title: itemTitleFor(fromNode),
-    from_catalog_id: fromNode.metadata?.catalog_id || '',
+    from_catalog_id: fromNode.metadata?.catalog_id || "",
     to_id: toNode.id,
     to_item_id: itemIdFor(toNode),
     to_title: itemTitleFor(toNode),
-    to_catalog_id: toNode.metadata?.catalog_id || '',
+    to_catalog_id: toNode.metadata?.catalog_id || "",
     relationship_type: edge.relationship_type,
     provenance_class: edge.provenance_class,
     confidence: edge.confidence,
     publication_status: edge.publication_status,
-    rationale: edge.rationale || '',
-    plain_language_rationale: edge.plain_language_rationale || '',
-    warning: edge.warning || '',
-    inference_rule_id: edge.inference_rule_id || '',
+    rationale: edge.rationale || "",
+    plain_language_rationale: edge.plain_language_rationale || "",
+    warning: edge.warning || "",
+    inference_rule_id: edge.inference_rule_id || "",
     source_refs: resolveSourceRefs(edge),
   });
   const visibleRelationshipRows = (request = {}) => {
     const requestedNodeIds = new Set(request.node_ids || []);
     const matchedEdges = dataset.edges
       .map((edge) => {
-        const orientation = relationshipOrientation(edge, request.source_catalog, request.target_catalog);
+        const orientation = relationshipOrientation(
+          edge,
+          request.source_catalog,
+          request.target_catalog,
+        );
         if (!orientation) return null;
-        if (requestedNodeIds.size && !requestedNodeIds.has(orientation.fromNode.id)) return null;
-        if (request.relationship_type && edge.relationship_type !== request.relationship_type) return null;
-        if (request.provenance_class && edge.provenance_class !== request.provenance_class) return null;
-        if (request.confidence && edge.confidence !== request.confidence) return null;
-        return buildRelationshipRow(edge, orientation.fromNode, orientation.toNode);
+        if (
+          requestedNodeIds.size &&
+          !requestedNodeIds.has(orientation.fromNode.id)
+        )
+          return null;
+        if (
+          request.relationship_type &&
+          edge.relationship_type !== request.relationship_type
+        )
+          return null;
+        if (
+          request.provenance_class &&
+          edge.provenance_class !== request.provenance_class
+        )
+          return null;
+        if (request.confidence && edge.confidence !== request.confidence)
+          return null;
+        return buildRelationshipRow(
+          edge,
+          orientation.fromNode,
+          orientation.toNode,
+        );
       })
       .filter(Boolean);
     const visibleRows = matchedEdges
-      .filter((row) => request.include_candidates || row.publication_status === 'published')
+      .filter(
+        (row) =>
+          request.include_candidates || row.publication_status === "published",
+      )
       .sort(sortRowsByIds);
-    const hiddenCandidateCount = matchedEdges.filter((row) => row.publication_status === 'candidate').length - visibleRows.filter((row) => row.publication_status === 'candidate').length;
+    const hiddenCandidateCount =
+      matchedEdges.filter((row) => row.publication_status === "candidate")
+        .length -
+      visibleRows.filter((row) => row.publication_status === "candidate")
+        .length;
     return {
       request,
       rows: visibleRows,
@@ -208,47 +278,68 @@ export function createFederalGraphRuntime(dataset) {
       },
     };
   };
-  const stigCatalogNodes = (chainCatalog, chainBenchmark) => dataset.nodes
-    .filter((node) => node.metadata?.catalog_id === chainCatalog)
-    .filter((node) => !chainBenchmark
-      || node.metadata?.benchmark_id === chainBenchmark
-      || node.source_id === chainBenchmark)
-    .sort(sortNodesByItemId);
-  const cciLinksForNode = (nodeId, includeCandidates = false) => dataset.edges
-    .filter((edge) =>
-      edge.source_node_id === nodeId
-      && nodeById.get(edge.target_node_id)?.metadata?.catalog_id === 'disa-cci'
-      && (includeCandidates || edge.publication_status === 'published'))
-    .map((edge) => ({
-      cciNode: nodeById.get(edge.target_node_id),
-      relationshipEdge: edge,
-      sourceRefs: resolveSourceRefs(edge),
-    }))
-    .filter((entry) => entry.cciNode)
-    .sort((left, right) => sortNodesByItemId(left.cciNode, right.cciNode));
-  const nistLinksForCci = (cciId, includeCandidates = false) => dataset.edges
-    .filter((edge) =>
-      edge.source_node_id === cciId
-      && nodeById.get(edge.target_node_id)?.metadata?.catalog_id === 'nist-800-53'
-      && (includeCandidates || edge.publication_status === 'published'))
-    .map((edge) => ({
-      nistNode: nodeById.get(edge.target_node_id),
-      relationshipEdge: edge,
-      sourceRefs: resolveSourceRefs(edge),
-    }))
-    .filter((entry) => entry.nistNode)
-    .sort((left, right) => sortNodesByItemId(left.nistNode, right.nistNode));
+  const stigCatalogNodes = (chainCatalog, chainBenchmark) =>
+    dataset.nodes
+      .filter((node) => node.metadata?.catalog_id === chainCatalog)
+      .filter(
+        (node) =>
+          !chainBenchmark ||
+          node.metadata?.benchmark_id === chainBenchmark ||
+          node.source_id === chainBenchmark,
+      )
+      .sort(sortNodesByItemId);
+  const cciLinksForNode = (nodeId, includeCandidates = false) =>
+    dataset.edges
+      .filter(
+        (edge) =>
+          edge.source_node_id === nodeId &&
+          nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+            "disa-cci" &&
+          (includeCandidates || edge.publication_status === "published"),
+      )
+      .map((edge) => ({
+        cciNode: nodeById.get(edge.target_node_id),
+        relationshipEdge: edge,
+        sourceRefs: resolveSourceRefs(edge),
+      }))
+      .filter((entry) => entry.cciNode)
+      .sort((left, right) => sortNodesByItemId(left.cciNode, right.cciNode));
+  const nistLinksForCci = (cciId, includeCandidates = false) =>
+    dataset.edges
+      .filter(
+        (edge) =>
+          edge.source_node_id === cciId &&
+          nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+            "nist-800-53" &&
+          (includeCandidates || edge.publication_status === "published"),
+      )
+      .map((edge) => ({
+        nistNode: nodeById.get(edge.target_node_id),
+        relationshipEdge: edge,
+        sourceRefs: resolveSourceRefs(edge),
+      }))
+      .filter((entry) => entry.nistNode)
+      .sort((left, right) => sortNodesByItemId(left.nistNode, right.nistNode));
   const buildChainDetail = (node, includeCandidates = false) => {
     const cciEntries = cciLinksForNode(node.id, includeCandidates);
-    const nistEntries = uniqueBy(cciEntries.flatMap((entry) => nistLinksForCci(entry.cciNode.id, includeCandidates)), (entry) => entry.nistNode.id);
-    const mappedCciIds = new Set(nistEntries.map((entry) => entry.relationshipEdge.source_node_id));
+    const nistEntries = uniqueBy(
+      cciEntries.flatMap((entry) =>
+        nistLinksForCci(entry.cciNode.id, includeCandidates),
+      ),
+      (entry) => entry.nistNode.id,
+    );
+    const mappedCciIds = new Set(
+      nistEntries.map((entry) => entry.relationshipEdge.source_node_id),
+    );
     return {
       source_node: node,
       cci_entries: cciEntries,
       cci_nodes: cciEntries.map((entry) => entry.cciNode),
       nist_entries: nistEntries,
       nist_nodes: nistEntries.map((entry) => entry.nistNode),
-      unmapped_cci_nodes: cciEntries.filter((entry) => !mappedCciIds.has(entry.cciNode.id)).map((entry) => entry.cciNode),
+      unmapped_cci_nodes: cciEntries
+        .filter((entry) => !mappedCciIds.has(entry.cciNode.id))
+        .map((entry) => entry.cciNode),
     };
   };
   const resolveSourceForNode = (node) => {
@@ -258,28 +349,170 @@ export function createFederalGraphRuntime(dataset) {
     return {
       id: source.id,
       name: source.name,
-      version: source.version || '',
-      retrieved_at: source.retrieved_at || '',
+      version: source.version || "",
+      retrieved_at: source.retrieved_at || "",
     };
   };
   const formatBaselineHeaderLine = (label, baselineNode, sourceMeta) => {
-    const version = sourceMeta?.version ? ` v${sourceMeta.version}` : '';
-    const title = baselineNode ? `${itemIdFor(baselineNode)} — ${itemTitleFor(baselineNode)}` : '';
-    return `${label}: ${title} (${sourceMeta?.name || 'Unknown source'}${version})`;
+    const version = sourceMeta?.version ? ` v${sourceMeta.version}` : "";
+    const title = baselineNode
+      ? `${itemIdFor(baselineNode)} — ${itemTitleFor(baselineNode)}`
+      : "";
+    return `${label}: ${title} (${sourceMeta?.name || "Unknown source"}${version})`;
   };
-  const baselineControlEntries = (baselineId) => uniqueBy(dataset.edges
-    .filter((edge) =>
-      edge.publication_status === 'published'
-      && edge.relationship_type === 'includes'
-      && edge.source_node_id === baselineId
-      && nodeById.get(edge.target_node_id)?.metadata?.catalog_id === 'nist-800-53')
-    .map((edge) => ({
-      control_node: nodeById.get(edge.target_node_id),
-      relationship_edge: edge,
-      source_refs: resolveSourceRefs(edge),
-    }))
-    .filter((entry) => entry.control_node)
-    .sort((left, right) => sortNodesByItemId(left.control_node, right.control_node)), (entry) => entry.control_node.id);
+  const baselineControlEntries = (baselineId) =>
+    uniqueBy(
+      dataset.edges
+        .filter(
+          (edge) =>
+            edge.publication_status === "published" &&
+            edge.relationship_type === "includes" &&
+            edge.source_node_id === baselineId &&
+            nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
+              "nist-800-53",
+        )
+        .map((edge) => ({
+          control_node: nodeById.get(edge.target_node_id),
+          relationship_edge: edge,
+          source_refs: resolveSourceRefs(edge),
+        }))
+        .filter((entry) => entry.control_node)
+        .sort((left, right) =>
+          sortNodesByItemId(left.control_node, right.control_node),
+        ),
+      (entry) => entry.control_node.id,
+    );
+
+  const edgeMatchesNeighborhoodFilters = (edge, filters = {}) => {
+    if (
+      filters.relationship_type &&
+      edge.relationship_type !== filters.relationship_type
+    )
+      return false;
+    if (
+      filters.provenance_class &&
+      edge.provenance_class !== filters.provenance_class
+    )
+      return false;
+    if (filters.confidence && edge.confidence !== filters.confidence)
+      return false;
+    if (!filters.include_candidates && edge.publication_status !== "published")
+      return false;
+    return true;
+  };
+
+  const buildNeighborhood = (centerNodeId, options = {}) => {
+    const {
+      hops = 1,
+      relationship_type: relationshipType,
+      provenance_class: provenanceClass,
+      confidence,
+      node_type: nodeType,
+      include_candidates: includeCandidates = false,
+      maxNodes = 200,
+    } = options;
+
+    const centerNode = nodeById.get(centerNodeId);
+    if (!centerNode) {
+      return {
+        centerNode: null,
+        nodes: [],
+        edges: [],
+        stats: { total: 0, filtered: 0, truncated: false, nodeCount: 0 },
+      };
+    }
+
+    const filterOpts = {
+      relationship_type: relationshipType,
+      provenance_class: provenanceClass,
+      confidence,
+      include_candidates: includeCandidates,
+    };
+
+    const visitedNodeIds = new Set([centerNodeId]);
+    let frontier = [centerNodeId];
+    const collectedEdges = [];
+
+    for (let hop = 0; hop < hops; hop += 1) {
+      const nextFrontier = [];
+      for (const nodeId of frontier) {
+        for (const edge of dataset.edges) {
+          if (edge.source_node_id !== nodeId && edge.target_node_id !== nodeId)
+            continue;
+          collectedEdges.push(edge);
+          const neighborId =
+            edge.source_node_id === nodeId
+              ? edge.target_node_id
+              : edge.source_node_id;
+          if (!visitedNodeIds.has(neighborId)) {
+            visitedNodeIds.add(neighborId);
+            nextFrontier.push(neighborId);
+          }
+        }
+      }
+      frontier = nextFrontier;
+    }
+
+    const uniqueEdges = uniqueBy(collectedEdges, (edge) => edge.id);
+    const filteredEdges = uniqueEdges.filter((edge) =>
+      edgeMatchesNeighborhoodFilters(edge, filterOpts),
+    );
+
+    let nodeIds = new Set([centerNodeId]);
+    for (const edge of filteredEdges) {
+      nodeIds.add(edge.source_node_id);
+      nodeIds.add(edge.target_node_id);
+    }
+
+    if (nodeType) {
+      const typeFiltered = new Set([centerNodeId]);
+      for (const id of nodeIds) {
+        if (id === centerNodeId) continue;
+        const entry = nodeById.get(id);
+        if (entry?.node_type === nodeType) typeFiltered.add(id);
+      }
+      nodeIds = typeFiltered;
+    }
+
+    let truncated = false;
+    if (nodeIds.size > maxNodes) {
+      truncated = true;
+      const scores = new Map();
+      for (const id of nodeIds) {
+        if (id === centerNodeId) continue;
+        const score = filteredEdges.filter(
+          (edge) => edge.source_node_id === id || edge.target_node_id === id,
+        ).length;
+        scores.set(id, score);
+      }
+      const keepIds = [...scores.entries()]
+        .sort(
+          (left, right) =>
+            right[1] - left[1] || left[0].localeCompare(right[0]),
+        )
+        .slice(0, maxNodes - 1)
+        .map(([id]) => id);
+      nodeIds = new Set([centerNodeId, ...keepIds]);
+    }
+
+    const finalEdges = filteredEdges.filter(
+      (edge) =>
+        nodeIds.has(edge.source_node_id) && nodeIds.has(edge.target_node_id),
+    );
+    const nodes = [...nodeIds].map((id) => nodeById.get(id)).filter(Boolean);
+
+    return {
+      centerNode,
+      nodes,
+      edges: finalEdges,
+      stats: {
+        total: uniqueEdges.length,
+        filtered: finalEdges.length,
+        truncated,
+        nodeCount: nodes.length,
+      },
+    };
+  };
 
   return {
     dataset,
@@ -287,11 +520,16 @@ export function createFederalGraphRuntime(dataset) {
       const needle = normalize(query);
       if (!needle) return [];
       const nodeMatchesFilter = (node) =>
-        (!filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
-        && (!filters.node_type || node.node_type === filters.node_type);
+        (!filters.catalog_id ||
+          node.metadata?.catalog_id === filters.catalog_id) &&
+        (!filters.node_type || node.node_type === filters.node_type);
 
-      const exactMatches = dataset.nodes
-        .filter((node) => nodeMatchesFilter(node) && (normalize(node.metadata?.item_id) === needle || normalize(node.id) === needle));
+      const exactMatches = dataset.nodes.filter(
+        (node) =>
+          nodeMatchesFilter(node) &&
+          (normalize(node.metadata?.item_id) === needle ||
+            normalize(node.id) === needle),
+      );
       if (exactMatches.length > 0) {
         return exactMatches;
       }
@@ -310,7 +548,16 @@ export function createFederalGraphRuntime(dataset) {
           const itemId = normalize(node.metadata?.item_id);
           const label = normalize(node.label);
           const description = normalize(node.metadata?.description);
-          const score = itemId === needle ? 0 : itemId.startsWith(needle) ? 1 : label.includes(needle) ? 2 : description.includes(needle) ? 3 : 99;
+          const score =
+            itemId === needle
+              ? 0
+              : itemId.startsWith(needle)
+                ? 1
+                : label.includes(needle)
+                  ? 2
+                  : description.includes(needle)
+                    ? 3
+                    : 99;
           return { node, score };
         })
         .filter((entry) => entry.score < 99)
@@ -320,10 +567,16 @@ export function createFederalGraphRuntime(dataset) {
     },
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
-      const candidates = libraryDocuments.filter((document) => matchesLibraryFacet(document, filters));
+      const candidates = libraryDocuments.filter((document) =>
+        matchesLibraryFacet(document, filters),
+      );
       if (!needle) return candidates;
 
-      const exactMatches = candidates.filter((document) => normalize(document.item_id) === needle || normalize(document.id) === needle);
+      const exactMatches = candidates.filter(
+        (document) =>
+          normalize(document.item_id) === needle ||
+          normalize(document.id) === needle,
+      );
       if (exactMatches.length > 0) return exactMatches;
 
       if (miniSearch) {
@@ -338,18 +591,29 @@ export function createFederalGraphRuntime(dataset) {
         .map((document) => {
           const itemId = normalize(document.item_id);
           const title = normalize(document.title);
-          const plainLanguage = normalize(document.plain_language_summary || '');
+          const plainLanguage = normalize(
+            document.plain_language_summary || "",
+          );
           const description = normalize(document.description);
-          const score = itemId === needle ? 0
-            : itemId.startsWith(needle) ? 1
-              : title.includes(needle) ? 2
-                : plainLanguage.includes(needle) ? 3
-                  : description.includes(needle) ? 4
-                    : 99;
+          const score =
+            itemId === needle
+              ? 0
+              : itemId.startsWith(needle)
+                ? 1
+                : title.includes(needle)
+                  ? 2
+                  : plainLanguage.includes(needle)
+                    ? 3
+                    : description.includes(needle)
+                      ? 4
+                      : 99;
           return { document, score };
         })
         .filter((entry) => entry.score < 99)
-        .sort((a, b) => a.score - b.score || a.document.id.localeCompare(b.document.id))
+        .sort(
+          (a, b) =>
+            a.score - b.score || a.document.id.localeCompare(b.document.id),
+        )
         .slice(0, 100)
         .map((entry) => entry.document);
     },
@@ -360,32 +624,52 @@ export function createFederalGraphRuntime(dataset) {
       return libraryDocumentById.get(id) || null;
     },
     getNodes(filters = {}) {
-      return dataset.nodes.filter((node) =>
-        (!filters.catalog_id || node.metadata?.catalog_id === filters.catalog_id)
-        && (!filters.node_type || node.node_type === filters.node_type));
+      return dataset.nodes.filter(
+        (node) =>
+          (!filters.catalog_id ||
+            node.metadata?.catalog_id === filters.catalog_id) &&
+          (!filters.node_type || node.node_type === filters.node_type),
+      );
     },
     getEdgesForNode(id, options = {}) {
-      return dataset.edges.filter((edge) =>
-        (edge.source_node_id === id || edge.target_node_id === id)
-        && (!options.publication_status || edge.publication_status === options.publication_status));
+      return dataset.edges.filter(
+        (edge) =>
+          (edge.source_node_id === id || edge.target_node_id === id) &&
+          (!options.publication_status ||
+            edge.publication_status === options.publication_status),
+      );
+    },
+    buildNeighborhood(centerNodeId, options = {}) {
+      return buildNeighborhood(centerNodeId, options);
     },
     getEvidenceForEdge(edgeId) {
       const edge = edgeById.get(edgeId);
-      return (edge?.evidence_ids || []).map((id) => {
-        const entry = evidenceById.get(id);
-        return entry ? { ...entry, source: sourceById.get(entry.source_id) || null } : null;
-      }).filter(Boolean);
+      return (edge?.evidence_ids || [])
+        .map((id) => {
+          const entry = evidenceById.get(id);
+          return entry
+            ? { ...entry, source: sourceById.get(entry.source_id) || null }
+            : null;
+        })
+        .filter(Boolean);
     },
     getSource(id) {
       return sourceById.get(id) || null;
     },
     getSources(filters = {}) {
-      return dataset.sources.filter((source) =>
-        (!filters.provenance_class || source.provenance_class === filters.provenance_class)
-        && (!filters.eligibility_status || source.eligibility_status === filters.eligibility_status)
-        && (!filters.lifecycle_status || source.lifecycle_status === filters.lifecycle_status)
-        && (!filters.access_status || source.access_status === filters.access_status)
-        && (filters.graph_eligible === undefined || source.graph_eligible === filters.graph_eligible));
+      return dataset.sources.filter(
+        (source) =>
+          (!filters.provenance_class ||
+            source.provenance_class === filters.provenance_class) &&
+          (!filters.eligibility_status ||
+            source.eligibility_status === filters.eligibility_status) &&
+          (!filters.lifecycle_status ||
+            source.lifecycle_status === filters.lifecycle_status) &&
+          (!filters.access_status ||
+            source.access_status === filters.access_status) &&
+          (filters.graph_eligible === undefined ||
+            source.graph_eligible === filters.graph_eligible),
+      );
     },
     getGraphHealth() {
       return dataset.findings;
@@ -395,20 +679,47 @@ export function createFederalGraphRuntime(dataset) {
     },
     getLibraryFacets() {
       return {
-        objectTypes: [...new Set(libraryDocuments.map((entry) => entry.object_type).filter(Boolean))].sort(),
-        sourceClasses: [...new Set(libraryDocuments.map((entry) => entry.source_class).filter(Boolean))].sort(),
-        controlFamilies: [...new Set(libraryDocuments.map((entry) => entry.control_family).filter(Boolean))].sort(),
-        severities: [...new Set(libraryDocuments.map((entry) => entry.severity).filter(Boolean))].sort(),
+        objectTypes: [
+          ...new Set(
+            libraryDocuments.map((entry) => entry.object_type).filter(Boolean),
+          ),
+        ].sort(),
+        sourceClasses: [
+          ...new Set(
+            libraryDocuments.map((entry) => entry.source_class).filter(Boolean),
+          ),
+        ].sort(),
+        controlFamilies: [
+          ...new Set(
+            libraryDocuments
+              .map((entry) => entry.control_family)
+              .filter(Boolean),
+          ),
+        ].sort(),
+        severities: [
+          ...new Set(
+            libraryDocuments.map((entry) => entry.severity).filter(Boolean),
+          ),
+        ].sort(),
       };
     },
     buildRelationshipRows(request = {}) {
       return visibleRelationshipRows(request);
     },
-    exportRelationshipRows(rows, format = 'csv') {
-      if (format === 'json') return exportJson(rows);
-      if (format === 'markdown') {
+    exportRelationshipRows(rows, format = "csv") {
+      if (format === "json") return exportJson(rows);
+      if (format === "markdown") {
         return exportMarkdownTable(
-          ['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Plain-Language Rationale', 'Source references'],
+          [
+            "From ID",
+            "To ID",
+            "Relationship type",
+            "Source basis",
+            "Confidence",
+            "Rationale",
+            "Plain-Language Rationale",
+            "Source references",
+          ],
           rows.map((row) => [
             row.from_item_id,
             row.to_item_id,
@@ -417,11 +728,22 @@ export function createFederalGraphRuntime(dataset) {
             row.confidence,
             row.rationale,
             row.plain_language_rationale,
-            row.source_refs.map(sourceRefLabel).join('; '),
+            row.source_refs.map(sourceRefLabel).join("; "),
           ]),
         );
       }
-      const csvRows = [['From ID', 'To ID', 'Relationship type', 'Source basis', 'Confidence', 'Rationale', 'Plain-Language Rationale', 'Source references']];
+      const csvRows = [
+        [
+          "From ID",
+          "To ID",
+          "Relationship type",
+          "Source basis",
+          "Confidence",
+          "Rationale",
+          "Plain-Language Rationale",
+          "Source references",
+        ],
+      ];
       for (const row of rows) {
         csvRows.push([
           row.from_item_id,
@@ -431,71 +753,138 @@ export function createFederalGraphRuntime(dataset) {
           row.confidence,
           row.rationale,
           row.plain_language_rationale,
-          row.source_refs.map(sourceRefLabel).join(' | '),
+          row.source_refs.map(sourceRefLabel).join(" | "),
         ]);
       }
-      return csvRows.map((row) => row.map(csvCell).join(',')).join('\n');
+      return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
     },
     buildStigChain(request = {}) {
       const includeCandidates = request.include_candidates || false;
-      const rows = stigCatalogNodes(request.chain_catalog, request.chain_benchmark).map((node) => {
+      const rows = stigCatalogNodes(
+        request.chain_catalog,
+        request.chain_benchmark,
+      ).map((node) => {
         const detail = buildChainDetail(node, includeCandidates);
         return {
           node_id: node.id,
           item_id: itemIdFor(node),
           title: itemTitleFor(node),
           benchmark_id: node.metadata?.benchmark_id || node.source_id,
-          benchmark_title: node.metadata?.benchmark_title || sourceById.get(node.source_id)?.name || '',
+          benchmark_title:
+            node.metadata?.benchmark_title ||
+            sourceById.get(node.source_id)?.name ||
+            "",
           cci_count: detail.cci_nodes.length,
           nist_control_count: detail.nist_nodes.length,
           unmapped_cci_count: detail.unmapped_cci_nodes.length,
         };
       });
       const selectedNode = request.chain_item
-        ? nodeById.get(request.chain_item) || rows.find((row) => row.item_id === request.chain_item)
+        ? nodeById.get(request.chain_item) ||
+          rows.find((row) => row.item_id === request.chain_item)
         : null;
       const selectedChainNode = selectedNode
         ? nodeById.get(selectedNode.id || selectedNode.node_id)
-        : nodeById.get(request.chain_item || '');
+        : nodeById.get(request.chain_item || "");
       return {
         request,
         rows,
-        selected_chain: selectedChainNode ? buildChainDetail(selectedChainNode, includeCandidates) : null,
+        selected_chain: selectedChainNode
+          ? buildChainDetail(selectedChainNode, includeCandidates)
+          : null,
       };
     },
-    exportStigChain(payload, format = 'csv') {
+    exportStigChain(payload, format = "csv") {
       const rows = payload.selected_chain
         ? payload.selected_chain.cci_entries.map((entry) => ({
-          source_item_id: itemIdFor(payload.selected_chain.source_node),
-          cci_item_id: itemIdFor(entry.cciNode),
-          cci_title: itemTitleFor(entry.cciNode),
-          nist_item_ids: payload.selected_chain.nist_entries
-            .filter((nistEntry) => nistEntry.relationshipEdge.source_node_id === entry.cciNode.id)
-            .map((nistEntry) => itemIdFor(nistEntry.nistNode))
-            .join('|'),
-          source_refs: entry.sourceRefs.map(sourceRefLabel).join('; '),
-        }))
+            source_item_id: itemIdFor(payload.selected_chain.source_node),
+            cci_item_id: itemIdFor(entry.cciNode),
+            cci_title: itemTitleFor(entry.cciNode),
+            nist_item_ids: payload.selected_chain.nist_entries
+              .filter(
+                (nistEntry) =>
+                  nistEntry.relationshipEdge.source_node_id ===
+                  entry.cciNode.id,
+              )
+              .map((nistEntry) => itemIdFor(nistEntry.nistNode))
+              .join("|"),
+            source_refs: entry.sourceRefs.map(sourceRefLabel).join("; "),
+          }))
         : payload.rows.map((row) => ({
-          source_item_id: row.item_id,
-          cci_count: row.cci_count,
-          nist_control_count: row.nist_control_count,
-          unmapped_cci_count: row.unmapped_cci_count,
-          benchmark_title: row.benchmark_title,
-        }));
-      if (format === 'json') return exportJson(rows);
-      if (format === 'markdown') {
+            source_item_id: row.item_id,
+            cci_count: row.cci_count,
+            nist_control_count: row.nist_control_count,
+            unmapped_cci_count: row.unmapped_cci_count,
+            benchmark_title: row.benchmark_title,
+          }));
+      if (format === "json") return exportJson(rows);
+      if (format === "markdown") {
         const headers = payload.selected_chain
-          ? ['Source item', 'CCI item', 'CCI title', 'NIST control IDs', 'Source references']
-          : ['Source item', 'CCI count', 'NIST control count', 'Unmapped CCI count', 'Benchmark'];
+          ? [
+              "Source item",
+              "CCI item",
+              "CCI title",
+              "NIST control IDs",
+              "Source references",
+            ]
+          : [
+              "Source item",
+              "CCI count",
+              "NIST control count",
+              "Unmapped CCI count",
+              "Benchmark",
+            ];
         const markdownRows = payload.selected_chain
-          ? rows.map((row) => [row.source_item_id, row.cci_item_id, row.cci_title, row.nist_item_ids, row.source_refs])
-          : rows.map((row) => [row.source_item_id, row.cci_count, row.nist_control_count, row.unmapped_cci_count, row.benchmark_title]);
+          ? rows.map((row) => [
+              row.source_item_id,
+              row.cci_item_id,
+              row.cci_title,
+              row.nist_item_ids,
+              row.source_refs,
+            ])
+          : rows.map((row) => [
+              row.source_item_id,
+              row.cci_count,
+              row.nist_control_count,
+              row.unmapped_cci_count,
+              row.benchmark_title,
+            ]);
         return exportMarkdownTable(headers, markdownRows);
       }
       const csvRows = payload.selected_chain
-        ? [['Source item', 'CCI item', 'CCI title', 'NIST control IDs', 'Source references'], ...rows.map((row) => [row.source_item_id, row.cci_item_id, row.cci_title, row.nist_item_ids, row.source_refs])]
-        : [['Source item', 'CCI count', 'NIST control count', 'Unmapped CCI count', 'Benchmark'], ...rows.map((row) => [row.source_item_id, row.cci_count, row.nist_control_count, row.unmapped_cci_count, row.benchmark_title])];
-      return csvRows.map((row) => row.map(csvCell).join(',')).join('\n');
+        ? [
+            [
+              "Source item",
+              "CCI item",
+              "CCI title",
+              "NIST control IDs",
+              "Source references",
+            ],
+            ...rows.map((row) => [
+              row.source_item_id,
+              row.cci_item_id,
+              row.cci_title,
+              row.nist_item_ids,
+              row.source_refs,
+            ]),
+          ]
+        : [
+            [
+              "Source item",
+              "CCI count",
+              "NIST control count",
+              "Unmapped CCI count",
+              "Benchmark",
+            ],
+            ...rows.map((row) => [
+              row.source_item_id,
+              row.cci_count,
+              row.nist_control_count,
+              row.unmapped_cci_count,
+              row.benchmark_title,
+            ]),
+          ];
+      return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
     },
     buildBaselineComparison(request = {}) {
       const baselineA = nodeById.get(request.baseline_a) || null;
@@ -515,62 +904,104 @@ export function createFederalGraphRuntime(dataset) {
         only_b: controlsB.filter((entry) => !idsA.has(entry.control_node.id)),
       };
     },
-    exportBaselineComparison(comparison, format = 'csv') {
+    exportBaselineComparison(comparison, format = "csv") {
       const rows = [
-        ...comparison.shared.map((entry) => ({ section: 'Shared controls', control_id: itemIdFor(entry.control_node), control_title: itemTitleFor(entry.control_node), source_refs: entry.source_refs.map(sourceRefLabel).join('; ') })),
-        ...comparison.only_a.map((entry) => ({ section: 'Only in A', control_id: itemIdFor(entry.control_node), control_title: itemTitleFor(entry.control_node), source_refs: entry.source_refs.map(sourceRefLabel).join('; ') })),
-        ...comparison.only_b.map((entry) => ({ section: 'Only in B', control_id: itemIdFor(entry.control_node), control_title: itemTitleFor(entry.control_node), source_refs: entry.source_refs.map(sourceRefLabel).join('; ') })),
+        ...comparison.shared.map((entry) => ({
+          section: "Shared controls",
+          control_id: itemIdFor(entry.control_node),
+          control_title: itemTitleFor(entry.control_node),
+          source_refs: entry.source_refs.map(sourceRefLabel).join("; "),
+        })),
+        ...comparison.only_a.map((entry) => ({
+          section: "Only in A",
+          control_id: itemIdFor(entry.control_node),
+          control_title: itemTitleFor(entry.control_node),
+          source_refs: entry.source_refs.map(sourceRefLabel).join("; "),
+        })),
+        ...comparison.only_b.map((entry) => ({
+          section: "Only in B",
+          control_id: itemIdFor(entry.control_node),
+          control_title: itemTitleFor(entry.control_node),
+          source_refs: entry.source_refs.map(sourceRefLabel).join("; "),
+        })),
       ];
       const headerLines = [
-        formatBaselineHeaderLine('Baseline A', comparison.baseline_a, comparison.baseline_a_source),
-        formatBaselineHeaderLine('Baseline B', comparison.baseline_b, comparison.baseline_b_source),
+        formatBaselineHeaderLine(
+          "Baseline A",
+          comparison.baseline_a,
+          comparison.baseline_a_source,
+        ),
+        formatBaselineHeaderLine(
+          "Baseline B",
+          comparison.baseline_b,
+          comparison.baseline_b_source,
+        ),
       ];
-      if (format === 'json') {
+      if (format === "json") {
         return exportJson({
-          baseline_a: comparison.baseline_a?.id || '',
-          baseline_b: comparison.baseline_b?.id || '',
+          baseline_a: comparison.baseline_a?.id || "",
+          baseline_b: comparison.baseline_b?.id || "",
           baseline_a_source: comparison.baseline_a_source,
           baseline_b_source: comparison.baseline_b_source,
           rows,
         });
       }
-      if (format === 'markdown') {
-        return `${headerLines.map((line) => `${line}\n`).join('\n')}${exportMarkdownTable(
-          ['Section', 'Control ID', 'Control title', 'Source references'],
-          rows.map((row) => [row.section, row.control_id, row.control_title, row.source_refs]),
+      if (format === "markdown") {
+        return `${headerLines.map((line) => `${line}\n`).join("\n")}${exportMarkdownTable(
+          ["Section", "Control ID", "Control title", "Source references"],
+          rows.map((row) => [
+            row.section,
+            row.control_id,
+            row.control_title,
+            row.source_refs,
+          ]),
         )}`;
       }
       const csvRows = [
         [headerLines[0]],
         [headerLines[1]],
         [],
-        ['Section', 'Control ID', 'Control title', 'Source references'],
+        ["Section", "Control ID", "Control title", "Source references"],
       ];
       for (const row of rows) {
-        csvRows.push([row.section, row.control_id, row.control_title, row.source_refs]);
+        csvRows.push([
+          row.section,
+          row.control_id,
+          row.control_title,
+          row.source_refs,
+        ]);
       }
-      return csvRows.map((row) => row.map(csvCell).join(',')).join('\n');
+      return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
     },
     buildRelationshipMatrix(request) {
-      const sourceNodes = dataset.nodes.filter((node) =>
-        node.metadata?.catalog_id === request.source_catalog
-        && (!request.node_ids?.length || request.node_ids.includes(node.id)));
+      const sourceNodes = dataset.nodes.filter(
+        (node) =>
+          node.metadata?.catalog_id === request.source_catalog &&
+          (!request.node_ids?.length || request.node_ids.includes(node.id)),
+      );
       const rows = sourceNodes.map((node) => {
         const edges = dataset.edges.filter((edge) => {
-          const counterpartId = edge.source_node_id === node.id
-            ? edge.target_node_id
-            : edge.target_node_id === node.id
-              ? edge.source_node_id
-              : null;
-          return counterpartId && nodeById.get(counterpartId)?.metadata?.catalog_id === request.target_catalog;
+          const counterpartId =
+            edge.source_node_id === node.id
+              ? edge.target_node_id
+              : edge.target_node_id === node.id
+                ? edge.source_node_id
+                : null;
+          return (
+            counterpartId &&
+            nodeById.get(counterpartId)?.metadata?.catalog_id ===
+              request.target_catalog
+          );
         });
         return {
-        source_node_id: node.id,
-        classification: edges.some((edge) => edge.publication_status === 'published')
-          ? 'published'
-          : edges.some((edge) => edge.publication_status === 'candidate')
-              ? 'candidate'
-              : 'unmapped',
+          source_node_id: node.id,
+          classification: edges.some(
+            (edge) => edge.publication_status === "published",
+          )
+            ? "published"
+            : edges.some((edge) => edge.publication_status === "candidate")
+              ? "candidate"
+              : "unmapped",
           edges,
         };
       });
@@ -579,26 +1010,39 @@ export function createFederalGraphRuntime(dataset) {
         rows,
         summary: {
           total: rows.length,
-          published: rows.filter((row) => row.classification === 'published').length,
-          candidate: rows.filter((row) => row.classification === 'candidate').length,
-          unmapped: rows.filter((row) => row.classification === 'unmapped').length,
+          published: rows.filter((row) => row.classification === "published")
+            .length,
+          candidate: rows.filter((row) => row.classification === "candidate")
+            .length,
+          unmapped: rows.filter((row) => row.classification === "unmapped")
+            .length,
         },
       };
     },
     buildRelationshipCsv(matrix) {
-      const rows = [['Source ID', 'Relationship status', 'Target IDs', 'Evidence IDs']];
+      const rows = [
+        ["Source ID", "Relationship status", "Target IDs", "Evidence IDs"],
+      ];
       for (const row of matrix.rows) {
         rows.push([
-          nodeById.get(row.source_node_id)?.metadata?.item_id || row.source_node_id,
+          nodeById.get(row.source_node_id)?.metadata?.item_id ||
+            row.source_node_id,
           row.classification,
-          row.edges.map((edge) => {
-            const counterpartId = edge.source_node_id === row.source_node_id ? edge.target_node_id : edge.source_node_id;
-            return nodeById.get(counterpartId)?.metadata?.item_id || counterpartId;
-          }).join('|'),
-          row.edges.flatMap((edge) => edge.evidence_ids || []).join('|'),
+          row.edges
+            .map((edge) => {
+              const counterpartId =
+                edge.source_node_id === row.source_node_id
+                  ? edge.target_node_id
+                  : edge.source_node_id;
+              return (
+                nodeById.get(counterpartId)?.metadata?.item_id || counterpartId
+              );
+            })
+            .join("|"),
+          row.edges.flatMap((edge) => edge.evidence_ids || []).join("|"),
         ]);
       }
-      return rows.map((row) => row.map(csvCell).join(',')).join('\n');
+      return rows.map((row) => row.map(csvCell).join(",")).join("\n");
     },
     getFederalContext(nodeId) {
       const node = nodeById.get(nodeId);
@@ -616,130 +1060,212 @@ export function createFederalGraphRuntime(dataset) {
         };
       }
 
-      const directEdges = dataset.edges.filter((edge) =>
-        edge.publication_status === 'published'
-        && (edge.source_node_id === nodeId || edge.target_node_id === nodeId));
-      const counterpartFor = (edge, currentId) => nodeById.get(edge.source_node_id === currentId ? edge.target_node_id : edge.source_node_id) || null;
+      const directEdges = dataset.edges.filter(
+        (edge) =>
+          edge.publication_status === "published" &&
+          (edge.source_node_id === nodeId || edge.target_node_id === nodeId),
+      );
+      const counterpartFor = (edge, currentId) =>
+        nodeById.get(
+          edge.source_node_id === currentId
+            ? edge.target_node_id
+            : edge.source_node_id,
+        ) || null;
 
-      const baselineMembership = uniqueBy(directEdges
-        .filter((edge) => edge.relationship_type === 'includes')
-        .map((membershipEdge) => ({
-          baselineNode: counterpartFor(membershipEdge, nodeId),
-          membershipEdge,
-        }))
-        .filter((entry) => entry.baselineNode?.node_type === 'baseline' && entry.baselineNode?.metadata?.catalog_id === 'nist-800-53b'), (entry) => entry.baselineNode.id);
-
-      const fedrampBaselineContext = uniqueBy(directEdges
-        .filter((edge) => edge.relationship_type === 'includes')
-        .map((membershipEdge) => ({
-          baselineNode: counterpartFor(membershipEdge, nodeId),
-          membershipEdge,
-        }))
-        .filter((entry) => entry.baselineNode?.node_type === 'baseline' && entry.baselineNode?.metadata?.catalog_id === 'fedramp-rev5'), (entry) => entry.baselineNode.id);
-
-      const familyMembership = uniqueBy(directEdges
-        .filter((edge) => edge.relationship_type === 'includes')
-        .map((familyEdge) => ({
-          familyNode: counterpartFor(familyEdge, nodeId),
-          familyEdge,
-        }))
-        .filter((entry) => entry.familyNode?.node_type === 'family'), (entry) => entry.familyNode.id);
-
-      const categorizationContext = uniqueBy(baselineMembership.flatMap((entry) =>
-        dataset.edges
-          .filter((edge) => edge.publication_status === 'published'
-            && (edge.source_node_id === entry.baselineNode.id || edge.target_node_id === entry.baselineNode.id))
-          .map((categoryEdge) => ({
-            categoryNode: counterpartFor(categoryEdge, entry.baselineNode.id),
-            baselineNode: entry.baselineNode,
-            categoryEdge,
-            membershipEdge: entry.membershipEdge,
+      const baselineMembership = uniqueBy(
+        directEdges
+          .filter((edge) => edge.relationship_type === "includes")
+          .map((membershipEdge) => ({
+            baselineNode: counterpartFor(membershipEdge, nodeId),
+            membershipEdge,
           }))
-          .filter((item) => item.categoryNode?.node_type === 'impact_category')), (entry) => `${entry.categoryNode.id}:${entry.baselineNode.id}`);
+          .filter(
+            (entry) =>
+              entry.baselineNode?.node_type === "baseline" &&
+              entry.baselineNode?.metadata?.catalog_id === "nist-800-53b",
+          ),
+        (entry) => entry.baselineNode.id,
+      );
 
-      const minimumSecurityRequirements = uniqueBy(familyMembership.flatMap((entry) =>
-        dataset.edges
-          .filter((edge) => edge.publication_status === 'published'
-            && (edge.source_node_id === entry.familyNode.id || edge.target_node_id === entry.familyNode.id))
-          .map((requirementEdge) => ({
-            requirementNode: counterpartFor(requirementEdge, entry.familyNode.id),
-            familyNode: entry.familyNode,
-            requirementEdge,
-            familyEdge: entry.familyEdge,
+      const fedrampBaselineContext = uniqueBy(
+        directEdges
+          .filter((edge) => edge.relationship_type === "includes")
+          .map((membershipEdge) => ({
+            baselineNode: counterpartFor(membershipEdge, nodeId),
+            membershipEdge,
           }))
-          .filter((item) => item.requirementNode?.metadata?.catalog_id === 'fips-200')), (entry) => `${entry.requirementNode.id}:${entry.familyNode.id}`);
+          .filter(
+            (entry) =>
+              entry.baselineNode?.node_type === "baseline" &&
+              entry.baselineNode?.metadata?.catalog_id === "fedramp-rev5",
+          ),
+        (entry) => entry.baselineNode.id,
+      );
 
-      const rmfLifecycle = uniqueBy([...baselineMembership.flatMap((entry) =>
-        dataset.edges
-          .filter((edge) => edge.publication_status === 'published'
-            && (edge.source_node_id === entry.baselineNode.id || edge.target_node_id === entry.baselineNode.id))
-          .map((contextEdge) => ({
-            stepNode: counterpartFor(contextEdge, entry.baselineNode.id),
-            viaNode: entry.baselineNode,
-            contextEdge,
-            supportingEdge: entry.membershipEdge,
+      const familyMembership = uniqueBy(
+        directEdges
+          .filter((edge) => edge.relationship_type === "includes")
+          .map((familyEdge) => ({
+            familyNode: counterpartFor(familyEdge, nodeId),
+            familyEdge,
           }))
-          .filter((item) => item.stepNode?.node_type === 'rmf_step')),
-      ...familyMembership.flatMap((entry) =>
-        dataset.edges
-          .filter((edge) => edge.publication_status === 'published'
-            && (edge.source_node_id === entry.familyNode.id || edge.target_node_id === entry.familyNode.id))
-          .map((contextEdge) => ({
-            stepNode: counterpartFor(contextEdge, entry.familyNode.id),
-            viaNode: entry.familyNode,
-            contextEdge,
-            supportingEdge: entry.familyEdge,
+          .filter((entry) => entry.familyNode?.node_type === "family"),
+        (entry) => entry.familyNode.id,
+      );
+
+      const categorizationContext = uniqueBy(
+        baselineMembership.flatMap((entry) =>
+          dataset.edges
+            .filter(
+              (edge) =>
+                edge.publication_status === "published" &&
+                (edge.source_node_id === entry.baselineNode.id ||
+                  edge.target_node_id === entry.baselineNode.id),
+            )
+            .map((categoryEdge) => ({
+              categoryNode: counterpartFor(categoryEdge, entry.baselineNode.id),
+              baselineNode: entry.baselineNode,
+              categoryEdge,
+              membershipEdge: entry.membershipEdge,
+            }))
+            .filter(
+              (item) => item.categoryNode?.node_type === "impact_category",
+            ),
+        ),
+        (entry) => `${entry.categoryNode.id}:${entry.baselineNode.id}`,
+      );
+
+      const minimumSecurityRequirements = uniqueBy(
+        familyMembership.flatMap((entry) =>
+          dataset.edges
+            .filter(
+              (edge) =>
+                edge.publication_status === "published" &&
+                (edge.source_node_id === entry.familyNode.id ||
+                  edge.target_node_id === entry.familyNode.id),
+            )
+            .map((requirementEdge) => ({
+              requirementNode: counterpartFor(
+                requirementEdge,
+                entry.familyNode.id,
+              ),
+              familyNode: entry.familyNode,
+              requirementEdge,
+              familyEdge: entry.familyEdge,
+            }))
+            .filter(
+              (item) =>
+                item.requirementNode?.metadata?.catalog_id === "fips-200",
+            ),
+        ),
+        (entry) => `${entry.requirementNode.id}:${entry.familyNode.id}`,
+      );
+
+      const rmfLifecycle = uniqueBy(
+        [
+          ...baselineMembership.flatMap((entry) =>
+            dataset.edges
+              .filter(
+                (edge) =>
+                  edge.publication_status === "published" &&
+                  (edge.source_node_id === entry.baselineNode.id ||
+                    edge.target_node_id === entry.baselineNode.id),
+              )
+              .map((contextEdge) => ({
+                stepNode: counterpartFor(contextEdge, entry.baselineNode.id),
+                viaNode: entry.baselineNode,
+                contextEdge,
+                supportingEdge: entry.membershipEdge,
+              }))
+              .filter((item) => item.stepNode?.node_type === "rmf_step"),
+          ),
+          ...familyMembership.flatMap((entry) =>
+            dataset.edges
+              .filter(
+                (edge) =>
+                  edge.publication_status === "published" &&
+                  (edge.source_node_id === entry.familyNode.id ||
+                    edge.target_node_id === entry.familyNode.id),
+              )
+              .map((contextEdge) => ({
+                stepNode: counterpartFor(contextEdge, entry.familyNode.id),
+                viaNode: entry.familyNode,
+                contextEdge,
+                supportingEdge: entry.familyEdge,
+              }))
+              .filter((item) => item.stepNode?.node_type === "rmf_step"),
+          ),
+        ],
+        (entry) => `${entry.stepNode.id}:${entry.viaNode.id}`,
+      );
+
+      const assessmentContext = uniqueBy(
+        directEdges
+          .filter((edge) => edge.relationship_type === "assesses")
+          .map((assessmentEdge) => ({
+            assessmentNode: counterpartFor(assessmentEdge, nodeId),
+            assessmentEdge,
           }))
-          .filter((item) => item.stepNode?.node_type === 'rmf_step'))], (entry) => `${entry.stepNode.id}:${entry.viaNode.id}`);
+          .filter(
+            (entry) =>
+              entry.assessmentNode?.node_type === "assessment_procedure",
+          ),
+        (entry) => entry.assessmentNode.id,
+      );
 
-      const assessmentContext = uniqueBy(directEdges
-        .filter((edge) => edge.relationship_type === 'assesses')
-        .map((assessmentEdge) => ({
-          assessmentNode: counterpartFor(assessmentEdge, nodeId),
-          assessmentEdge,
-        }))
-        .filter((entry) => entry.assessmentNode?.node_type === 'assessment_procedure'), (entry) => entry.assessmentNode.id);
-
-      const programCatalogs = new Set(['nist-800-171-rev2', 'nist-800-171', 'nist-800-172']);
+      const programCatalogs = new Set([
+        "nist-800-171-rev2",
+        "nist-800-171",
+        "nist-800-172",
+      ]);
       const programRequirementContext = uniqueBy(
         programCatalogs.has(node.metadata?.catalog_id)
           ? directEdges
-            .map((relationshipEdge) => ({
-              relatedNode: counterpartFor(relationshipEdge, nodeId),
-              relationshipEdge,
-            }))
-            .filter((entry) => entry.relatedNode?.metadata?.catalog_id === 'cmmc-2')
+              .map((relationshipEdge) => ({
+                relatedNode: counterpartFor(relationshipEdge, nodeId),
+                relationshipEdge,
+              }))
+              .filter(
+                (entry) => entry.relatedNode?.metadata?.catalog_id === "cmmc-2",
+              )
           : [],
         (entry) => entry.relatedNode.id,
       );
 
       const cmmcProgramContext = uniqueBy(
-        node.metadata?.catalog_id === 'cmmc-2'
+        node.metadata?.catalog_id === "cmmc-2"
           ? directEdges
-            .map((relationshipEdge) => ({
-              relatedNode: counterpartFor(relationshipEdge, nodeId),
-              relationshipEdge,
-            }))
-            .filter((entry) => programCatalogs.has(entry.relatedNode?.metadata?.catalog_id))
+              .map((relationshipEdge) => ({
+                relatedNode: counterpartFor(relationshipEdge, nodeId),
+                relationshipEdge,
+              }))
+              .filter((entry) =>
+                programCatalogs.has(entry.relatedNode?.metadata?.catalog_id),
+              )
           : [],
         (entry) => entry.relatedNode.id,
       );
 
       const cuiPolicyContext = uniqueBy(
-        node.metadata?.catalog_id === 'cui-policy'
+        node.metadata?.catalog_id === "cui-policy"
           ? directEdges
-            .map((relationshipEdge) => ({
-              relatedNode: counterpartFor(relationshipEdge, nodeId),
-              relationshipEdge,
-            }))
-            .filter((entry) => programCatalogs.has(entry.relatedNode?.metadata?.catalog_id))
-          : programCatalogs.has(node.metadata?.catalog_id)
-            ? directEdges
               .map((relationshipEdge) => ({
                 relatedNode: counterpartFor(relationshipEdge, nodeId),
                 relationshipEdge,
               }))
-              .filter((entry) => entry.relatedNode?.metadata?.catalog_id === 'cui-policy')
+              .filter((entry) =>
+                programCatalogs.has(entry.relatedNode?.metadata?.catalog_id),
+              )
+          : programCatalogs.has(node.metadata?.catalog_id)
+            ? directEdges
+                .map((relationshipEdge) => ({
+                  relatedNode: counterpartFor(relationshipEdge, nodeId),
+                  relationshipEdge,
+                }))
+                .filter(
+                  (entry) =>
+                    entry.relatedNode?.metadata?.catalog_id === "cui-policy",
+                )
             : [],
         (entry) => entry.relatedNode.id,
       );
@@ -765,64 +1291,80 @@ export function getFederalContext(runtime, nodeId) {
 
 export function parseViewState(searchParams) {
   const params = new URLSearchParams(searchParams);
-  const query = params.get('q') || '';
+  const query = params.get("q") || "";
   if (/^[A-Z]{3}-\d{4}-\d+$/i.test(query) || /^\d{4,}$/.test(query)) {
-    return { view: 'retired', query, retired_type: 'retired identifier' };
+    return { view: "retired", query, retired_type: "retired identifier" };
   }
-  const view = params.get('view') || 'search';
-  const mode = params.get('mode');
+  const view = params.get("view") || "search";
+  const mode = params.get("mode");
   const base = mode ? { mode } : {};
-  if (view === 'matrix') {
+  if (view === "matrix") {
     const state = baselineState(base);
-    state.workbench = params.get('workbench') || 'relationships';
-    state.source = params.get('source') || '';
-    state.target = params.get('target') || '';
-    state.items = params.get('items') || '';
-    state.relationshipType = params.get('relationshipType') || '';
-    state.provenance = params.get('provenance') || '';
-    state.confidence = params.get('confidence') || '';
-    state.includeCandidates = params.get('includeCandidates') || '';
-    state.chainCatalog = params.get('chainCatalog') || '';
-    state.chainBenchmark = params.get('chainBenchmark') || '';
-    state.chainItem = params.get('chainItem') || '';
-    state.baselineA = params.get('baselineA') || '';
-    state.baselineB = params.get('baselineB') || '';
+    state.workbench = params.get("workbench") || "relationships";
+    state.source = params.get("source") || "";
+    state.target = params.get("target") || "";
+    state.items = params.get("items") || "";
+    state.relationshipType = params.get("relationshipType") || "";
+    state.provenance = params.get("provenance") || "";
+    state.confidence = params.get("confidence") || "";
+    state.includeCandidates = params.get("includeCandidates") || "";
+    state.chainCatalog = params.get("chainCatalog") || "";
+    state.chainBenchmark = params.get("chainBenchmark") || "";
+    state.chainItem = params.get("chainItem") || "";
+    state.baselineA = params.get("baselineA") || "";
+    state.baselineB = params.get("baselineB") || "";
     return state;
   }
-  if (view === 'library-detail') return { ...base, view, node: params.get('node') || '' };
-  if (view === 'browse') return { ...base, view, framework: params.get('framework') || '' };
-  if (view === 'sources') return {
-    ...base,
-    view,
-    source: params.get('source') || '',
-    provenance: params.get('provenance') || '',
-    eligibility: params.get('eligibility') || '',
-    lifecycle: params.get('lifecycle') || '',
-    access: params.get('access') || '',
-  };
-  if (view === 'patterns') {
-    const pattern = params.get('pattern');
+  if (view === "library-detail") {
     return {
       ...base,
       view,
-      ...(pattern !== null ? { pattern } : {})
+      node: params.get("node") || "",
+      from: params.get("from") || "",
+      relationshipView: params.get("relationshipView") || "",
+      relationshipType: params.get("relationshipType") || "",
+      provenance: params.get("provenance") || "",
+      confidence: params.get("confidence") || "",
+      nodeType: params.get("nodeType") || "",
+      includeCandidates: params.get("includeCandidates") || "",
+      relationshipSearch: params.get("relationshipSearch") || "",
     };
   }
-  if (view === 'templates') {
-    const templateType = params.get('templateType');
-    const framework = params.get('framework');
+  if (view === "browse")
+    return { ...base, view, framework: params.get("framework") || "" };
+  if (view === "sources")
+    return {
+      ...base,
+      view,
+      source: params.get("source") || "",
+      provenance: params.get("provenance") || "",
+      eligibility: params.get("eligibility") || "",
+      lifecycle: params.get("lifecycle") || "",
+      access: params.get("access") || "",
+    };
+  if (view === "patterns") {
+    const pattern = params.get("pattern");
+    return {
+      ...base,
+      view,
+      ...(pattern !== null ? { pattern } : {}),
+    };
+  }
+  if (view === "templates") {
+    const templateType = params.get("templateType");
+    const framework = params.get("framework");
     return {
       ...base,
       view,
       ...(templateType !== null ? { templateType } : {}),
-      ...(framework !== null ? { framework } : {})
+      ...(framework !== null ? { framework } : {}),
     };
   }
-  if (view === 'start-here') {
-    const step = params.get('step');
-    const systemType = params.get('systemType');
-    const dataSensitivity = params.get('dataSensitivity');
-    const environment = params.get('environment');
+  if (view === "start-here") {
+    const step = params.get("step");
+    const systemType = params.get("systemType");
+    const dataSensitivity = params.get("dataSensitivity");
+    const environment = params.get("environment");
     return {
       ...base,
       view,
@@ -832,158 +1374,200 @@ export function parseViewState(searchParams) {
       ...(environment ? { environment } : {}),
     };
   }
-  if (view === 'about') {
-    return { ...base, view: 'about' };
+  if (view === "about") {
+    return { ...base, view: "about" };
   }
   return {
     ...base,
-    view: 'search',
+    view: "search",
     query,
-    filter: params.get('filter') || '',
-    objectType: params.get('objectType') || '',
-    sourceClass: params.get('sourceClass') || '',
-    controlFamily: params.get('controlFamily') || '',
-    severity: params.get('severity') || '',
+    filter: params.get("filter") || "",
+    objectType: params.get("objectType") || "",
+    sourceClass: params.get("sourceClass") || "",
+    controlFamily: params.get("controlFamily") || "",
+    severity: params.get("severity") || "",
   };
 }
 
 export function normalizeViewState(view, state = {}) {
   const base = state.mode ? { mode: state.mode } : {};
-  if (view === 'retired') return { ...base, view: 'retired', query: state.query || '' };
-  if (view === 'matrix') {
+  if (view === "retired")
+    return { ...base, view: "retired", query: state.query || "" };
+  if (view === "matrix") {
     const matrixState = baselineState(base);
-    matrixState.workbench = state.workbench || 'relationships';
-    if (matrixState.workbench === 'relationships') {
-      matrixState.source = state.source || '';
-      matrixState.target = state.target || '';
-      matrixState.items = state.items || '';
-      matrixState.relationshipType = state.relationshipType || '';
-      matrixState.provenance = state.provenance || '';
-      matrixState.confidence = state.confidence || '';
-      matrixState.includeCandidates = state.includeCandidates || '';
-    } else if (matrixState.workbench === 'stig-chain') {
-      matrixState.chainCatalog = state.chainCatalog || '';
-      matrixState.chainBenchmark = state.chainBenchmark || '';
-      matrixState.chainItem = state.chainItem || '';
-      matrixState.provenance = state.provenance || '';
-      matrixState.confidence = state.confidence || '';
-      matrixState.includeCandidates = state.includeCandidates || '';
-    } else if (matrixState.workbench === 'baseline-compare') {
-      matrixState.baselineA = state.baselineA || '';
-      matrixState.baselineB = state.baselineB || '';
+    matrixState.workbench = state.workbench || "relationships";
+    if (matrixState.workbench === "relationships") {
+      matrixState.source = state.source || "";
+      matrixState.target = state.target || "";
+      matrixState.items = state.items || "";
+      matrixState.relationshipType = state.relationshipType || "";
+      matrixState.provenance = state.provenance || "";
+      matrixState.confidence = state.confidence || "";
+      matrixState.includeCandidates = state.includeCandidates || "";
+    } else if (matrixState.workbench === "stig-chain") {
+      matrixState.chainCatalog = state.chainCatalog || "";
+      matrixState.chainBenchmark = state.chainBenchmark || "";
+      matrixState.chainItem = state.chainItem || "";
+      matrixState.provenance = state.provenance || "";
+      matrixState.confidence = state.confidence || "";
+      matrixState.includeCandidates = state.includeCandidates || "";
+    } else if (matrixState.workbench === "baseline-compare") {
+      matrixState.baselineA = state.baselineA || "";
+      matrixState.baselineB = state.baselineB || "";
     }
     return matrixState;
   }
-  if (view === 'library-detail') return { ...base, view: 'library-detail', node: state.node || '' };
-  if (view === 'browse') return { ...base, view: 'browse', framework: state.framework || '' };
-  if (view === 'sources') return {
-    ...base,
-    view: 'sources',
-    source: state.source || '',
-    provenance: state.provenance || '',
-    eligibility: state.eligibility || '',
-    lifecycle: state.lifecycle || '',
-    access: state.access || '',
-  };
-  if (view === 'patterns') {
+  if (view === "library-detail") {
     return {
       ...base,
-      view: 'patterns',
-      ...(state.pattern ? { pattern: state.pattern } : {})
+      view: "library-detail",
+      node: state.node || "",
+      from: state.from || "",
+      relationshipView: state.relationshipView || "",
+      relationshipType: state.relationshipType || "",
+      provenance: state.provenance || "",
+      confidence: state.confidence || "",
+      nodeType: state.nodeType || "",
+      includeCandidates: state.includeCandidates || "",
+      relationshipSearch: state.relationshipSearch || "",
     };
   }
-  if (view === 'templates') {
+  if (view === "browse")
+    return { ...base, view: "browse", framework: state.framework || "" };
+  if (view === "sources")
     return {
       ...base,
-      view: 'templates',
+      view: "sources",
+      source: state.source || "",
+      provenance: state.provenance || "",
+      eligibility: state.eligibility || "",
+      lifecycle: state.lifecycle || "",
+      access: state.access || "",
+    };
+  if (view === "patterns") {
+    return {
+      ...base,
+      view: "patterns",
+      ...(state.pattern ? { pattern: state.pattern } : {}),
+    };
+  }
+  if (view === "templates") {
+    return {
+      ...base,
+      view: "templates",
       ...(state.templateType ? { templateType: state.templateType } : {}),
-      ...(state.framework ? { framework: state.framework } : {})
+      ...(state.framework ? { framework: state.framework } : {}),
     };
   }
-  if (view === 'start-here') {
+  if (view === "start-here") {
     return {
       ...base,
       view,
       ...(state.step ? { step: state.step } : {}),
       ...(state.systemType ? { systemType: state.systemType } : {}),
-      ...(state.dataSensitivity ? { dataSensitivity: state.dataSensitivity } : {}),
+      ...(state.dataSensitivity
+        ? { dataSensitivity: state.dataSensitivity }
+        : {}),
       ...(state.environment ? { environment: state.environment } : {}),
     };
   }
-  if (view === 'about') {
-    return { ...base, view: 'about' };
+  if (view === "about") {
+    return { ...base, view: "about" };
   }
   return {
     ...base,
-    view: 'search',
-    query: state.query || '',
-    filter: state.filter || '',
-    objectType: state.objectType || '',
-    sourceClass: state.sourceClass || '',
-    controlFamily: state.controlFamily || '',
-    severity: state.severity || '',
+    view: "search",
+    query: state.query || "",
+    filter: state.filter || "",
+    objectType: state.objectType || "",
+    sourceClass: state.sourceClass || "",
+    controlFamily: state.controlFamily || "",
+    severity: state.severity || "",
   };
 }
 
 export function serializeViewState(state) {
   const params = new URLSearchParams();
-  const view = state.view || 'search';
-  if (view === 'retired') {
-    params.set('view', 'retired');
-    if (state.query) params.set('q', state.query);
-  } else if (view === 'matrix') {
-    params.set('view', 'matrix');
-    params.set('workbench', state.workbench || 'relationships');
-    if (state.source) params.set('source', state.source);
-    if (state.target) params.set('target', state.target);
-    if (state.items) params.set('items', state.items);
-    if (state.relationshipType) params.set('relationshipType', state.relationshipType);
-    if (state.provenance) params.set('provenance', state.provenance);
-    if (state.confidence) params.set('confidence', state.confidence);
-    if (state.includeCandidates) params.set('includeCandidates', state.includeCandidates);
-    if (state.chainCatalog) params.set('chainCatalog', state.chainCatalog);
-    if (state.chainBenchmark) params.set('chainBenchmark', state.chainBenchmark);
-    if (state.chainItem) params.set('chainItem', state.chainItem);
-    if (state.baselineA) params.set('baselineA', state.baselineA);
-    if (state.baselineB) params.set('baselineB', state.baselineB);
-  } else if (view === 'library-detail') {
-    params.set('view', 'library-detail');
-    if (state.node) params.set('node', state.node);
-  } else if (view === 'browse') {
-    params.set('view', 'browse');
-    if (state.framework) params.set('framework', state.framework);
-  } else if (view === 'sources') {
-    params.set('view', 'sources');
-    if (state.source) params.set('source', state.source);
-    if (state.provenance) params.set('provenance', state.provenance);
-    if (state.eligibility) params.set('eligibility', state.eligibility);
-    if (state.lifecycle) params.set('lifecycle', state.lifecycle);
-    if (state.access) params.set('access', state.access);
-  } else if (view === 'patterns') {
-    params.set('view', 'patterns');
-    if (state.pattern) params.set('pattern', state.pattern);
-  } else if (view === 'templates') {
-    params.set('view', 'templates');
-    if (state.templateType) params.set('templateType', state.templateType);
-    if (state.framework) params.set('framework', state.framework);
-  } else if (view === 'start-here') {
-    params.set('view', view);
-    if (state.step) params.set('step', state.step);
-    if (state.systemType) params.set('systemType', state.systemType);
-    if (state.dataSensitivity) params.set('dataSensitivity', state.dataSensitivity);
-    if (state.environment) params.set('environment', state.environment);
-  } else if (view === 'about') {
-    params.set('view', 'about');
-  } else if (state.query || state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity) {
-    params.set('view', 'search');
-    if (state.query) params.set('q', state.query);
-    if (state.filter) params.set('filter', state.filter);
-    if (state.objectType) params.set('objectType', state.objectType);
-    if (state.sourceClass) params.set('sourceClass', state.sourceClass);
-    if (state.controlFamily) params.set('controlFamily', state.controlFamily);
-    if (state.severity) params.set('severity', state.severity);
+  const view = state.view || "search";
+  if (view === "retired") {
+    params.set("view", "retired");
+    if (state.query) params.set("q", state.query);
+  } else if (view === "matrix") {
+    params.set("view", "matrix");
+    params.set("workbench", state.workbench || "relationships");
+    if (state.source) params.set("source", state.source);
+    if (state.target) params.set("target", state.target);
+    if (state.items) params.set("items", state.items);
+    if (state.relationshipType)
+      params.set("relationshipType", state.relationshipType);
+    if (state.provenance) params.set("provenance", state.provenance);
+    if (state.confidence) params.set("confidence", state.confidence);
+    if (state.includeCandidates)
+      params.set("includeCandidates", state.includeCandidates);
+    if (state.chainCatalog) params.set("chainCatalog", state.chainCatalog);
+    if (state.chainBenchmark)
+      params.set("chainBenchmark", state.chainBenchmark);
+    if (state.chainItem) params.set("chainItem", state.chainItem);
+    if (state.baselineA) params.set("baselineA", state.baselineA);
+    if (state.baselineB) params.set("baselineB", state.baselineB);
+  } else if (view === "library-detail") {
+    params.set("view", "library-detail");
+    if (state.node) params.set("node", state.node);
+    if (state.from) params.set("from", state.from);
+    if (state.relationshipView)
+      params.set("relationshipView", state.relationshipView);
+    if (state.relationshipType)
+      params.set("relationshipType", state.relationshipType);
+    if (state.provenance) params.set("provenance", state.provenance);
+    if (state.confidence) params.set("confidence", state.confidence);
+    if (state.nodeType) params.set("nodeType", state.nodeType);
+    if (state.includeCandidates)
+      params.set("includeCandidates", state.includeCandidates);
+    if (state.relationshipSearch)
+      params.set("relationshipSearch", state.relationshipSearch);
+  } else if (view === "browse") {
+    params.set("view", "browse");
+    if (state.framework) params.set("framework", state.framework);
+  } else if (view === "sources") {
+    params.set("view", "sources");
+    if (state.source) params.set("source", state.source);
+    if (state.provenance) params.set("provenance", state.provenance);
+    if (state.eligibility) params.set("eligibility", state.eligibility);
+    if (state.lifecycle) params.set("lifecycle", state.lifecycle);
+    if (state.access) params.set("access", state.access);
+  } else if (view === "patterns") {
+    params.set("view", "patterns");
+    if (state.pattern) params.set("pattern", state.pattern);
+  } else if (view === "templates") {
+    params.set("view", "templates");
+    if (state.templateType) params.set("templateType", state.templateType);
+    if (state.framework) params.set("framework", state.framework);
+  } else if (view === "start-here") {
+    params.set("view", view);
+    if (state.step) params.set("step", state.step);
+    if (state.systemType) params.set("systemType", state.systemType);
+    if (state.dataSensitivity)
+      params.set("dataSensitivity", state.dataSensitivity);
+    if (state.environment) params.set("environment", state.environment);
+  } else if (view === "about") {
+    params.set("view", "about");
+  } else if (
+    state.query ||
+    state.filter ||
+    state.objectType ||
+    state.sourceClass ||
+    state.controlFamily ||
+    state.severity
+  ) {
+    params.set("view", "search");
+    if (state.query) params.set("q", state.query);
+    if (state.filter) params.set("filter", state.filter);
+    if (state.objectType) params.set("objectType", state.objectType);
+    if (state.sourceClass) params.set("sourceClass", state.sourceClass);
+    if (state.controlFamily) params.set("controlFamily", state.controlFamily);
+    if (state.severity) params.set("severity", state.severity);
   }
-  if (state.mode) params.set('mode', state.mode);
+  if (state.mode) params.set("mode", state.mode);
   const value = params.toString();
-  return value ? `?${value}` : '';
+  return value ? `?${value}` : "";
 }

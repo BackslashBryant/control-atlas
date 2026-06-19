@@ -21,20 +21,21 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None — Epic 7 shipped June 19, 2026. Next build when scoped: Epic 9 (Relationship Graph) per post-MVP sequence.**
+**None — Epic 9 shipped June 19, 2026. Next build when scoped: Epic 8 (MITRE Threat Lens) per post-MVP sequence.**
 
 ## Epic Status (June 19, 2026)
 
-| Epic | Status | Notes |
-| --- | --- | --- |
-| 0 — Migration | **Closed (residual)** | React shell, schema extensions, CI/Pages parity shipped. D3 graph provenance coloring remains in legacy `app.mjs` only; React shell does not mount the graph view. |
-| 1 — Data Backbone | **Closed (residual)** | Build pipeline emits `plain_language_summary`, edge provenance fields, and registry-backed sources. Contract tests enforce quality; ongoing importer tuning is maintenance, not a blocker. |
-| 2 — Library + Search | **Shipped** | MiniSearch index, facets, library detail, deep links, "What to do next". |
-| 3 — Compare | **Shipped** | Relationship table with provenance, STIG→CCI→NIST trace, baseline delta, exports (`81daf6d`). |
-| 4 — Template Factory | **Shipped** | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage. |
-| 5 — Patterns + Glossary + Start Here | **Shipped** | Start Here actionable deep links (Library, Compare, Patterns, Templates) with plain-language rationale; header glossary search; inline glossary on detail and pattern pages. |
-| 6 — QA + Release | **Shipped** | Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md), tag `v1.0.0-rc.1`. Graph UI remains Epic 0 residual. |
-| 7 — Platform Trust & Hardening | **Shipped** | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md). |
+| Epic                                 | Status                | Notes                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 — Migration                        | **Closed (residual)** | React shell, schema extensions, CI/Pages parity shipped. Relationship map now ships in React Library detail (Epic 9); legacy `app.mjs` remains unmounted.                                                                                                                                                                                      |
+| 1 — Data Backbone                    | **Closed (residual)** | Build pipeline emits `plain_language_summary`, edge provenance fields, and registry-backed sources. Contract tests enforce quality; ongoing importer tuning is maintenance, not a blocker.                                                                                                                                                     |
+| 2 — Library + Search                 | **Shipped**           | MiniSearch index, facets, library detail, deep links, "What to do next".                                                                                                                                                                                                                                                                       |
+| 3 — Compare                          | **Shipped**           | Relationship table with provenance, STIG→CCI→NIST trace, baseline delta, exports (`81daf6d`).                                                                                                                                                                                                                                                  |
+| 4 — Template Factory                 | **Shipped**           | Nine PRD-aligned templates, artifact-first UI, disclaimer + source metadata on all exports, unit + E2E generation coverage.                                                                                                                                                                                                                    |
+| 5 — Patterns + Glossary + Start Here | **Shipped**           | Start Here actionable deep links (Library, Compare, Patterns, Templates) with plain-language rationale; header glossary search; inline glossary on detail and pattern pages.                                                                                                                                                                   |
+| 6 — QA + Release                     | **Shipped**           | Critical-path E2E matrix, per-route a11y, content-review contracts, `npm run precommit` green, live audit [`docs/audits/live-browser-audit-2026-06-19-epic-6.md`](audits/live-browser-audit-2026-06-19-epic-6.md), tag `v1.0.0-rc.1`. Graph UI shipped in Epic 9.                                                                              |
+| 7 — Platform Trust & Hardening       | **Shipped**           | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md).                                                      |
+| 9 — Interactive Relationship Graph   | **Shipped**           | Object-local map in Library detail, provenance filters, lazy `react-force-graph-2d`, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md). |
 
 ## Active Direction
 
@@ -85,7 +86,7 @@ No backend or user, organization, or system data is part of this product directi
 
 ## Recommended Sequence (post-MVP)
 
-1. **Epic 9 (planned)** — Relationship graph in React shell when scoped
+1. **Epic 8 (planned)** — MITRE Threat Lens when scoped
 2. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
 3. **Optional** — promote `v1.0.0` after RC feedback
 
