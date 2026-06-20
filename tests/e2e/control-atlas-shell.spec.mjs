@@ -15,16 +15,24 @@ test('control atlas staged shell exposes the translation-first nav order and gui
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
   await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
 
-  const navLabels = await primaryNav.locator('button, summary').evaluateAll((nodes) =>
+  const navLabels = await primaryNav.getByRole('button').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(navLabels.slice(0, 4)).toEqual(['Start Here', 'Library', 'Compare', 'More']);
+  expect(navLabels).toEqual([
+    'Start Here',
+    'Library',
+    'Compare',
+    'Patterns',
+    'Templates',
+    'Sources',
+  ]);
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
   await page.getByLabel('Operational environment').selectOption('CSP');
+  await page.getByRole('button', { name: 'Show recommendation' }).click();
   await expect(page.getByRole('heading', { name: 'Library', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
   await expect(page.getByText('FedRAMP Rev. 5 Baselines')).toBeVisible();
@@ -40,6 +48,10 @@ test('library detail deep links stay compatible and keep advanced details collap
   await expect(page.getByText('Why it matters')).toBeVisible();
   await expect(page.getByText('Where it appears')).toBeVisible();
   await expect(page.getByText('What it connects to')).toBeVisible();
+  await expect(page.getByText('Connection summary', { exact: true })).toBeVisible();
+  await expect(page.locator('.relationship-card')).toHaveCount(0);
+  await page.locator('.relationship-group-trigger').first().click();
+  await expect(page.locator('.relationship-card').first()).toBeVisible();
   await expect(page.getByText('Source support', { exact: true })).toBeVisible();
   await expect(page.getByText('What to do next', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy link' })).toBeVisible();
@@ -76,10 +88,11 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByText('What this is')).toBeVisible();
   await expect(page.getByText('Why it matters')).toBeVisible();
   await expect(page.getByText('What to do next')).toBeVisible();
+  await page.locator('details.export-disclosure summary').click();
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Detailed mappings table' }).click();
+  await page.getByRole('button', { name: 'View detailed mappings' }).click();
   await expect(page.locator('table')).toContainText('AC-2');
   await expect(page.locator('table')).toContainText('Plain-language rationale');
 });
@@ -96,6 +109,7 @@ test('compare stig chain traces DISA items through CCI to NIST controls', async 
   await expect(chainPanel.getByText('CCI links', { exact: true })).toBeVisible();
   await expect(chainPanel.getByText('NIST controls', { exact: true })).toBeVisible();
   await expect(chainPanel.getByText('Official link').first()).toBeVisible();
+  await page.locator('details.export-disclosure summary').click();
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
 });
@@ -111,6 +125,7 @@ test('compare baselines shows delta controls and source versions', async ({ page
   await expect(page.getByText('Shared controls').first()).toBeVisible();
   await expect(page.getByText('Only in B', { exact: true }).first()).toBeVisible();
   await expect(page.locator('.chain-grid')).toContainText('AC-');
+  await page.locator('details.export-disclosure summary').click();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
 });
 
@@ -141,7 +156,7 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await waitForAppReady(page);
   await expect(page.getByRole('heading', { name: 'Patterns organized around user outcomes' })).toBeVisible();
   await page.locator('.intent-card').first().click();
-  await expect(page.getByText('What this helps with')).toBeVisible();
+  await expect(page.getByText('Purpose')).toBeVisible();
   await expect(page.getByText('Common mistakes', { exact: true })).toBeVisible();
   await expect(page.getByText('Next action', { exact: true })).toBeVisible();
 });

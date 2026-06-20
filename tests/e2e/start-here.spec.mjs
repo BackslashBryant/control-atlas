@@ -13,6 +13,7 @@ test('start here recommendations navigate to templates, patterns, library, and c
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
   await page.getByLabel('Operational environment').selectOption('CSP');
+  await page.getByRole('button', { name: 'Show recommendation' }).click();
 
   await expect(page.getByRole('heading', { name: 'Library', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Compare', exact: true })).toBeVisible();
@@ -25,19 +26,19 @@ test('start here recommendations navigate to templates, patterns, library, and c
     page.getByRole("heading", { name: "Inheritance Worksheet" }),
   ).toBeVisible();
 
-  await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP');
+  await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Read pattern', exact: true }).first().click();
   await expect(page).toHaveURL(/view=patterns&pattern=/);
 
-  await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP');
+  await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Open in Library', exact: true }).first().click();
   await expect(page).toHaveURL(/view=browse&framework=fedramp-rev5|view=search&filter=fedramp-rev5/);
 
-  await page.goto('/?view=start-here&systemType=Hybrid&dataSensitivity=High&environment=DoD');
+  await page.goto('/?view=start-here&systemType=Hybrid&dataSensitivity=High&environment=DoD&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Open Compare', exact: true }).first().click();

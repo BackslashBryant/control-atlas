@@ -33,15 +33,24 @@ import {
   QuickIntentCard,
 } from "./components/QuickIntentCard";
 import {
+  ExpandableChipList,
+  ExpandableControlList,
+  RelationshipGroupsSection,
+} from "./components/ExpandableRelationshipGroup";
+import {
+  CompareExportDisclosure,
   DataPendingNotice,
   LoadErrorPanel,
   LoadingStatusPanel,
   OfflineFallbackActions,
 } from "./components/LoadStatusPanel";
+import { DetailConnectionsSkeleton, LibrarySkeleton } from "./components/LibrarySkeleton";
+import { StickyDetailBar } from "./components/StickyDetailBar";
 import {
   filterByCategoryAndQuery,
   groupItemsByCategory,
   PATTERN_CATEGORIES,
+  RECOMMENDED_PATTERN_IDS,
   TEMPLATE_CATEGORIES,
 } from "./lib/catalogGroups.mjs";
 import { glossaryData } from "../app/glossary-data.mjs";
@@ -67,7 +76,10 @@ import {
   searchGlossary,
   templatesForPatterns,
 } from "./lib/glossarySearch.mjs";
-import { loadRuntimeDataset } from "./lib/runtimeLoader";
+import {
+  loadRuntimeDatasetStaged,
+  type RuntimeBundle,
+} from "./lib/runtimeLoader";
 import { buildStartHereRecommendations } from "./lib/startHereRecommendations.mjs";
 import type {
   StartHereCompareLink,
@@ -82,7 +94,6 @@ import {
   type ViewState,
 } from "./lib/viewState";
 
-type RuntimeBundle = Awaited<ReturnType<typeof loadRuntimeDataset>>;
 
 const HERO_WORDS = [
   "Comply",
@@ -95,20 +106,16 @@ const HERO_WORDS = [
   "Connect",
 ];
 
+type HelpTab = "guide" | "glossary";
+
 const PRIMARY_NAV_ITEMS = [
   { label: "Start Here", view: "start-here", icon: IconCompass },
   { label: "Library", view: "search", icon: IconLibrary },
   { label: "Compare", view: "matrix", icon: IconGitCompare },
-] as const;
-
-const MORE_NAV_ITEMS = [
   { label: "Patterns", view: "patterns", icon: IconBook2 },
   { label: "Templates", view: "templates", icon: IconClipboardList },
   { label: "Sources", view: "sources", icon: IconSourceCode },
-  { label: "About & trust", view: "about", icon: IconShieldCheck },
 ] as const;
-
-const MORE_NAV_VIEWS = new Set<string>(MORE_NAV_ITEMS.map((item) => item.view));
 
 const PATTERN_RENAMES: Record<string, string> = {
   "csp-inheritance": "Using FedRAMP Inheritance",
@@ -130,12 +137,24 @@ function activeNavForState(state: ViewState) {
   return state.view;
 }
 
-function isMoreNavActive(state: ViewState) {
-  return MORE_NAV_VIEWS.has(state.view);
+function isStaticViewWithoutBundle(view: ViewState["view"]) {
+  return (
+    view === "about" ||
+    view === "patterns" ||
+    view === "start-here" ||
+    view === "search"
+  );
 }
 
-function isStaticViewWithoutBundle(view: ViewState["view"]) {
-  return view === "about" || view === "patterns" || view === "start-here";
+function requiresFullGraph(view: ViewState["view"]) {
+  return (
+    view === "library-detail" ||
+    view === "matrix" ||
+    view === "sources" ||
+    view === "templates" ||
+    view === "browse" ||
+    view === "retired"
+  );
 }
 
 function copyText(value: string) {
@@ -346,9 +365,9 @@ export function App() {
   const [loadError, setLoadError] = useState<string>("");
   const [loadSlow, setLoadSlow] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
-  const [moreNavOpen, setMoreNavOpen] = useState(false);
   const [heroWordIndex, setHeroWordIndex] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [helpTab, setHelpTab] = useState<HelpTab>("glossary");
   const [glossaryFocusTermId, setGlossaryFocusTermId] = useState("");
   const [headerSearchDraft, setHeaderSearchDraft] = useState(() =>
     viewState.view === "search" ? viewState.query : "",
@@ -373,19 +392,29 @@ export function App() {
       }
     }, 10000);
 
-    loadRuntimeDataset()
-      .then((result) => {
+    loadRuntimeDatasetStaged({
+      onSearchReady: (result) => {
         if (!cancelled) {
           setBundle(result);
           setLoadError("");
         }
-      })
-      .catch((error) => {
+      },
+      onFullReady: (result) => {
         if (!cancelled) {
-          setLoadError(userFacingLoadError(error));
+          setBundle(result);
+          setLoadError("");
         }
-      })
-      .finally(() => {
+      },
+      onError: (error) => {
+        if (!cancelled) {
+          setLoadError(
+            userFacingLoadError(
+              error instanceof Error ? error : new Error(String(error)),
+            ),
+          );
+        }
+      },
+    }).finally(() => {
         if (!cancelled) {
           window.clearTimeout(slowTimer);
           window.clearTimeout(timeoutTimer);
@@ -444,9 +473,6 @@ export function App() {
     startTransition(() => {
       setViewState(nextState);
     });
-    if (MORE_NAV_VIEWS.has(nextView)) {
-      setMoreNavOpen(false);
-    }
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
@@ -470,6 +496,13 @@ export function App() {
 
   function openGlossary(termId = "") {
     setGlossaryFocusTermId(termId);
+    setHelpTab("glossary");
+    setHelpOpen(true);
+  }
+
+  function openHelp() {
+    setGlossaryFocusTermId("");
+    setHelpTab("guide");
     setHelpOpen(true);
   }
 
@@ -479,9 +512,10 @@ export function App() {
     }
   }, [viewState]);
 
-  const readyState = loadError ? "error" : bundle ? "true" : "false";
+  const readyState = loadError ? "error" : bundle?.graphReady ? "true" : bundle ? "partial" : "false";
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
-  const showWorkspaceContent = Boolean(bundle) || canRenderWithoutBundle;
+  const showWorkspaceContent =
+    Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
 
   return (
     <>
@@ -518,7 +552,7 @@ export function App() {
             return (
               <button
                 aria-current={active ? "page" : undefined}
-                className={active ? "active" : ""}
+                className={active ? "active nav-active" : ""}
                 key={item.label}
                 onClick={() => navigate(item.view)}
                 type="button"
@@ -528,39 +562,6 @@ export function App() {
               </button>
             );
           })}
-          <details
-            className={`nav-more${isMoreNavActive(viewState) ? " active" : ""}`}
-            onToggle={(event) =>
-              setMoreNavOpen((event.currentTarget as HTMLDetailsElement).open)
-            }
-            open={moreNavOpen || isMoreNavActive(viewState)}
-          >
-            <summary
-              aria-current={isMoreNavActive(viewState) ? "page" : undefined}
-              className="nav-more-trigger"
-            >
-              More
-            </summary>
-            <div className="nav-more-menu" role="menu">
-              {MORE_NAV_ITEMS.map((item) => {
-                const Icon = item.icon;
-                const active = viewState.view === item.view;
-                return (
-                  <button
-                    aria-current={active ? "page" : undefined}
-                    className={active ? "active" : ""}
-                    key={item.label}
-                    onClick={() => navigate(item.view)}
-                    role="menuitem"
-                    type="button"
-                  >
-                    <Icon aria-hidden="true" size={16} stroke={1.8} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </details>
         </nav>
         <div className="header-actions">
           <form
@@ -591,23 +592,39 @@ export function App() {
                 disabled={!bundle}
                 id="header-search"
                 onChange={(event) => setHeaderSearchDraft(event.target.value)}
-                placeholder="Search library or glossary"
+                placeholder={
+                  bundle?.graphReady
+                    ? "Search library or glossary"
+                    : "Search available — detail views load shortly"
+                }
                 type="search"
                 value={headerSearchDraft}
               />
             </div>
             {!bundle ? (
               <p className="field-hint" id="header-search-hint">
-                Library search is available after data loads.
+                Library search opens once public records finish loading.
+              </p>
+            ) : !bundle.graphReady ? (
+              <p className="field-hint" id="header-search-hint">
+                Search works now. Detail pages unlock when connections finish
+                loading.
               </p>
             ) : null}
           </form>
           <button
             className="secondary quiet"
+            onClick={() => openHelp()}
+            type="button"
+          >
+            Help
+          </button>
+          <button
+            className="secondary quiet"
             onClick={() => openGlossary()}
             type="button"
           >
-            Help &amp; Glossary
+            Glossary
           </button>
         </div>
       </header>
@@ -624,8 +641,10 @@ export function App() {
             <AppContent
               bundle={bundle}
               heroWord={HERO_WORDS[heroWordIndex]}
+              loadError={loadError}
               onNavigate={navigate}
               onOpenGlossary={openGlossary}
+              onOpenHelp={openHelp}
               onOpenNode={openNode}
               onOpenNodeByItemId={openNodeByItemId}
               onRetryLoad={retryLoad}
@@ -665,8 +684,10 @@ export function App() {
       <GlossaryDrawer
         bundle={bundle}
         focusTermId={glossaryFocusTermId}
+        helpTab={helpTab}
         onNavigate={navigate}
         onOpenNode={openNode}
+        onTabChange={setHelpTab}
         open={helpOpen}
         setOpen={(open) => {
           setHelpOpen(open);
@@ -681,29 +702,58 @@ export function App() {
 
 function AppContent(props: {
   bundle: RuntimeBundle | null;
+  loadError: string;
   state: ViewState;
   heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
   onOpenGlossary: (termId?: string) => void;
+  onOpenHelp: () => void;
   onRetryLoad: () => void;
   setHelpOpen: (open: boolean) => void;
 }) {
   const {
     bundle,
+    loadError,
     state,
     heroWord,
     onNavigate,
     onOpenNode,
     onOpenNodeByItemId,
     onOpenGlossary,
+    onOpenHelp,
     onRetryLoad,
     setHelpOpen,
   } = props;
 
+  const graphReady = Boolean(bundle?.graphReady);
+
+  if (!bundle && state.view === "search") {
+    if (loadError) {
+      return (
+        <LoadErrorPanel message={loadError} onRetry={onRetryLoad}>
+          <OfflineFallbackActions onNavigate={(view) => onNavigate(view)} />
+        </LoadErrorPanel>
+      );
+    }
+    return <LibrarySkeleton />;
+  }
+
   if (!bundle && !isStaticViewWithoutBundle(state.view)) {
     return <DataPendingNotice onRetry={onRetryLoad} />;
+  }
+
+  if (bundle && !graphReady && requiresFullGraph(state.view)) {
+    if (state.view === "library-detail") {
+      return <DetailConnectionsSkeleton />;
+    }
+    return (
+      <DataPendingNotice
+        onRetry={onRetryLoad}
+        title="Loading connections and compare data"
+      />
+    );
   }
 
   if (state.view === "library-detail") {
@@ -810,10 +860,12 @@ function AppContent(props: {
 
   return (
     <LibraryPage
-      bundle={bundle}
+      bundle={bundle!}
+      graphReady={graphReady}
       heroWord={heroWord}
       onNavigate={onNavigate}
       onOpenGlossary={onOpenGlossary}
+      onOpenHelp={onOpenHelp}
       onOpenNode={onOpenNode}
       setHelpOpen={setHelpOpen}
       state={
@@ -835,20 +887,24 @@ function AppContent(props: {
 
 function LibraryPage(props: {
   bundle: RuntimeBundle;
+  graphReady: boolean;
   state: Extract<ViewState, { view: "search" }>;
   heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenGlossary: (termId?: string) => void;
+  onOpenHelp: () => void;
   setHelpOpen: (open: boolean) => void;
 }) {
   const {
     bundle,
+    graphReady,
     state,
     heroWord,
     onNavigate,
     onOpenNode,
     onOpenGlossary,
+    onOpenHelp,
     setHelpOpen,
   } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
@@ -935,10 +991,10 @@ function LibraryPage(props: {
             </button>
             <button
               className="secondary"
-              onClick={() => setHelpOpen(true)}
+              onClick={() => onOpenGlossary()}
               type="button"
             >
-              Open glossary support
+              Open glossary
             </button>
           </div>
           <section className="intent-grid">
@@ -982,6 +1038,13 @@ function LibraryPage(props: {
           summary="Search by ID or topic, review what the item means, see where it connects, and open the next best reference."
           title="Search the public reference library"
         />
+
+        {!graphReady ? (
+          <p className="notice-inline" role="status">
+            Search is ready. Detail pages and comparisons unlock when
+            connection data finishes loading.
+          </p>
+        ) : null}
 
         <form
           className="search-form"
@@ -1193,13 +1256,20 @@ function LibraryPage(props: {
                           <div className="card-actions">
                             <button
                               className="primary"
+                              disabled={!graphReady}
                               onClick={() => onOpenNode(document.id, "search")}
+                              title={
+                                graphReady
+                                  ? undefined
+                                  : "Detail views unlock when connections finish loading"
+                              }
                               type="button"
                             >
                               Open detail
                             </button>
                             <button
                               className="secondary"
+                              disabled={!graphReady}
                               onClick={() =>
                                 onNavigate("matrix", {
                                   workbench: "relationships",
@@ -1330,6 +1400,13 @@ function DetailPage(props: {
 
   return (
     <section className="detail-page">
+      <StickyDetailBar
+        enabled={Boolean(state.from)}
+        itemLabel={document.item_id}
+        onBack={() =>
+          onNavigate("search", { query: state.from || document.item_id })
+        }
+      />
       <div className="breadcrumbs">
         <button onClick={() => onNavigate("search")} type="button">
           Library
@@ -1433,7 +1510,7 @@ function DetailPage(props: {
               <div className="section-header-actions">
                 {edges.length ? (
                   <button
-                    className="secondary"
+                    className="primary"
                     onClick={() =>
                       onNavigate("library-detail", {
                         node: state.node,
@@ -1450,7 +1527,7 @@ function DetailPage(props: {
                     {state.relationshipView === "map" ||
                     state.relationshipView === "table"
                       ? "Hide map"
-                      : "View as map"}
+                      : "View connections as a visual map"}
                   </button>
                 ) : null}
                 <Badge tone="info">{edges.length} published links</Badge>
@@ -1494,46 +1571,13 @@ function DetailPage(props: {
               />
             ) : null}
 
-            <div className="stack">
-              {grouped.map((group: any) => (
-                <section className="relationship-group" key={group.id}>
-                  <div className="section-header">
-                    <div>
-                      <h3>{group.label}</h3>
-                      <p>{group.description}</p>
-                    </div>
-                    <Badge>{group.items.length}</Badge>
-                  </div>
-                  <div className="stack compact">
-                    {group.items.map((item: any) => (
-                      <button
-                        className="relationship-card"
-                        key={`${group.id}-${item.counterpart.id}`}
-                        onClick={() =>
-                          onOpenNode(item.counterpart.id, "search")
-                        }
-                        type="button"
-                      >
-                        <div>
-                          <strong>
-                            {item.counterpart.metadata?.item_id ||
-                              item.counterpart.id}
-                          </strong>
-                          <p>
-                            {item.counterpart.metadata?.title ||
-                              item.counterpart.label}
-                          </p>
-                        </div>
-                        <div className="relationship-meta">
-                          <span>{formatRelationshipLabel(item.edge)}</span>
-                          <span>{sourceTrustSummary(source)}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
+            <RelationshipGroupsSection
+              formatRelationshipLabel={formatRelationshipLabel}
+              groups={grouped}
+              onOpenNode={(nodeId) => onOpenNode(nodeId, state.from || "search")}
+              source={source}
+              sourceTrustSummary={sourceTrustSummary}
+            />
           </section>
 
           <SummaryCard title="Official text / source excerpt">
@@ -1552,7 +1596,43 @@ function DetailPage(props: {
           </SummaryCard>
         </section>
 
-        <aside className="stack">
+        <aside className="stack detail-sidebar">
+          <SummaryCard title="Connection summary" tone="trust">
+            <p>
+              {edges.length
+                ? `${edges.length} published links across ${grouped.length} group${grouped.length === 1 ? "" : "s"}.`
+                : "No published connections yet."}
+            </p>
+            {edges.length ? (
+              <div className="card-actions">
+                <button
+                  className="primary"
+                  onClick={() =>
+                    onNavigate("library-detail", {
+                      node: state.node,
+                      from: state.from,
+                      relationshipView: "map",
+                    })
+                  }
+                  type="button"
+                >
+                  View connections as a visual map
+                </button>
+                <button
+                  className="secondary"
+                  onClick={() =>
+                    onNavigate("matrix", {
+                      workbench: "relationships",
+                      items: document.item_id,
+                    })
+                  }
+                  type="button"
+                >
+                  Compare this item
+                </button>
+              </div>
+            ) : null}
+          </SummaryCard>
           <SummaryCard title="Source support" tone="trust">
             <p>{sourceTrustSummary(source)}</p>
             <p className="support-meta">
@@ -1567,7 +1647,7 @@ function DetailPage(props: {
                 }
                 type="button"
               >
-                Open source details
+                View data sources
               </button>
             </div>
           </SummaryCard>
@@ -1587,7 +1667,7 @@ function DetailPage(props: {
                   type="button"
                 >
                   <IconLink aria-hidden="true" size={16} stroke={1.8} />
-                  <span>Explore connections as a map</span>
+                  <span>View connections as a visual map</span>
                 </button>
               ) : null}
               {node.node_type === "attack_technique" ? (
@@ -1625,7 +1705,7 @@ function DetailPage(props: {
                 type="button"
               >
                 <IconClipboardList aria-hidden="true" size={16} stroke={1.8} />
-                <span>Open starter templates for planning or assessment</span>
+                <span>Open starter template</span>
               </button>
             </div>
           </SummaryCard>
@@ -1636,18 +1716,10 @@ function DetailPage(props: {
                 Plain-language definitions for terms that often appear around
                 this item.
               </p>
-              <div className="chip-row">
-                {relatedGlossaryTerms.map((entry) => (
-                  <button
-                    className="chip"
-                    key={entry.id}
-                    onClick={() => onOpenGlossary(entry.id)}
-                    type="button"
-                  >
-                    {entry.term}
-                  </button>
-                ))}
-              </div>
+              <ExpandableChipList
+                items={relatedGlossaryTerms}
+                onSelect={(id) => onOpenGlossary(id)}
+              />
             </SummaryCard>
           ) : null}
 
@@ -1711,40 +1783,6 @@ function DetailPage(props: {
   );
 }
 
-function CompareExportButtons(props: {
-  disabled?: boolean;
-  onExport: (format: "csv" | "markdown" | "json") => void;
-}) {
-  return (
-    <div className="card-actions">
-      <button
-        className="secondary"
-        disabled={props.disabled}
-        onClick={() => props.onExport("csv")}
-        type="button"
-      >
-        Export CSV
-      </button>
-      <button
-        className="secondary"
-        disabled={props.disabled}
-        onClick={() => props.onExport("markdown")}
-        type="button"
-      >
-        Export Markdown
-      </button>
-      <button
-        className="secondary"
-        disabled={props.disabled}
-        onClick={() => props.onExport("json")}
-        type="button"
-      >
-        Export JSON
-      </button>
-    </div>
-  );
-}
-
 function BaselineControlSection(props: {
   controls: Array<{
     control_node: any;
@@ -1758,29 +1796,11 @@ function BaselineControlSection(props: {
       <p>
         {props.controls.length} control{props.controls.length === 1 ? "" : "s"}
       </p>
-      {props.controls.length ? (
-        <ul className="source-ref-list">
-          {props.controls.map((entry) => {
-            const control = entry.control_node;
-            const itemId = control.metadata?.item_id || control.id;
-            const title = control.metadata?.title || control.label || itemId;
-            return (
-              <li key={control.id}>
-                <button
-                  className="link-action"
-                  onClick={() => props.onOpenNode(control.id)}
-                  type="button"
-                >
-                  <strong>{itemId}</strong> — {title}
-                </button>
-                <SourceRefList refs={entry.source_refs} />
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="muted">No controls in this section.</p>
-      )}
+      <ExpandableControlList
+        controls={props.controls}
+        onOpenNode={props.onOpenNode}
+        sourceRefList={(refs) => <SourceRefList refs={refs} />}
+      />
     </SummaryCard>
   );
 }
@@ -2097,28 +2117,34 @@ function ComparePage(props: {
           {workbench === "relationships" ? (
             <>
               <div className="filter-grid">
-                <SelectField
-                  label="Framework A"
-                  onChange={(value) =>
-                    onNavigate("matrix", { ...state, workbench, source: value })
-                  }
-                  options={catalogs.map((catalog: any) => ({
-                    value: catalog.id,
-                    label: catalog.name,
-                  }))}
-                  value={state.source}
-                />
-                <SelectField
-                  label="Framework B"
-                  onChange={(value) =>
-                    onNavigate("matrix", { ...state, workbench, target: value })
-                  }
-                  options={catalogs.map((catalog: any) => ({
-                    value: catalog.id,
-                    label: catalog.name,
-                  }))}
-                  value={state.target}
-                />
+                <div className="field-stack">
+                  <SelectField
+                    hint="The first framework or catalog you want to compare from."
+                    label="Framework A"
+                    onChange={(value) =>
+                      onNavigate("matrix", { ...state, workbench, source: value })
+                    }
+                    options={catalogs.map((catalog: any) => ({
+                      value: catalog.id,
+                      label: catalog.name,
+                    }))}
+                    value={state.source}
+                  />
+                </div>
+                <div className="field-stack">
+                  <SelectField
+                    hint="The second framework or catalog you want to compare against."
+                    label="Framework B"
+                    onChange={(value) =>
+                      onNavigate("matrix", { ...state, workbench, target: value })
+                    }
+                    options={catalogs.map((catalog: any) => ({
+                      value: catalog.id,
+                      label: catalog.name,
+                    }))}
+                    value={state.target}
+                  />
+                </div>
                 <Field label="Specific item (optional)">
                   <input
                     onChange={(event) =>
@@ -2128,9 +2154,12 @@ function ComparePage(props: {
                         items: event.target.value,
                       })
                     }
-                    placeholder="AC-2"
+                    placeholder="Leave blank to compare all visible items"
                     value={state.items}
                   />
+                  <p className="field-hint">
+                    Optional. Narrow the comparison to one control or rule ID.
+                  </p>
                 </Field>
               </div>
               {state.source && state.target ? (
@@ -2228,7 +2257,7 @@ function ComparePage(props: {
                     onClick={scrollToCompareResults}
                     type="button"
                   >
-                    View comparison
+                    Review results
                   </button>
                 </div>
               ) : null}
@@ -2255,10 +2284,10 @@ function ComparePage(props: {
                       </p>
                     </SummaryCard>
                   </div>
-                  <CompareExportButtons onExport={exportRows} />
+                  <CompareExportDisclosure onExport={exportRows} />
                   <div className="card-actions">
                     <button
-                      className="secondary"
+                      className="primary"
                       onClick={() => setDetailedMappingsOpen("rows")}
                       type="button"
                     >
@@ -2470,7 +2499,7 @@ function ComparePage(props: {
                       in the current chain scope.
                     </p>
                   </SummaryCard>
-                  <CompareExportButtons
+                  <CompareExportDisclosure
                     disabled={!(chainPayload.rows.length || selectedChain)}
                     onExport={exportRows}
                   />
@@ -2679,7 +2708,7 @@ function ComparePage(props: {
                       visible in the current threat chain scope.
                     </p>
                   </SummaryCard>
-                  <CompareExportButtons
+                  <CompareExportDisclosure
                     disabled={
                       !(
                         threatChainPayload.rows.length || selectedThreatChain
@@ -2910,7 +2939,7 @@ function ComparePage(props: {
                       <p>{baselineComparison.only_b.length}</p>
                     </SummaryCard>
                   </div>
-                  <CompareExportButtons onExport={exportRows} />
+                  <CompareExportDisclosure onExport={exportRows} />
                   <div className="chain-grid">
                     <BaselineControlSection
                       controls={baselineComparison.shared}
@@ -3139,7 +3168,14 @@ function TemplatesPage(props: {
   const [queryFilter, setQueryFilter] = useState("");
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
-  const templates = bundle.templateRegistry.templates || [];
+  const templates = (bundle.templateRegistry.templates || []) as Array<{
+    name: string;
+    display_name: string;
+    description: string;
+    supported_formats: string[];
+    input_options: string[];
+    source_refs?: Array<Record<string, string>>;
+  }>;
   const filteredTemplates = useMemo(
     () =>
       filterByCategoryAndQuery(
@@ -3396,6 +3432,10 @@ function PatternsPage(props: {
   );
 
   if (!selectedPattern) {
+    const recommendedPatterns = patternsData.filter((pattern) =>
+      RECOMMENDED_PATTERN_IDS.includes(pattern.id),
+    );
+
     return (
       <section className="panel">
         <PageHeader
@@ -3412,6 +3452,24 @@ function PatternsPage(props: {
           query={queryFilter}
           queryPlaceholder="Search patterns by outcome or topic"
         />
+        <section className="catalog-group recommended-patterns">
+          <h2 className="catalog-group-title">Recommended for new users</h2>
+          <p className="field-hint">
+            Start with these three if you are new to federal compliance mapping.
+          </p>
+          <div className="intent-grid">
+            {recommendedPatterns.map((pattern) => (
+              <QuickIntentCard
+                actionLabel="Open this pattern"
+                body={pattern.summary}
+                icon={<IconBook2 size={20} stroke={1.8} />}
+                key={pattern.id}
+                onClick={() => onNavigate("patterns", { pattern: pattern.id })}
+                title={PATTERN_RENAMES[pattern.id] || pattern.title}
+              />
+            ))}
+          </div>
+        </section>
         {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => (
           <section className="catalog-group" key={category}>
             <h2 className="catalog-group-title">{category}</h2>
@@ -3451,7 +3509,7 @@ function PatternsPage(props: {
       />
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard title="What this helps with" tone="trust">
+          <SummaryCard title="Purpose" tone="trust">
             <p>{selectedPattern.summary}</p>
           </SummaryCard>
           {patternGlossaryTerms.length ? (
@@ -3535,7 +3593,7 @@ function PatternsPage(props: {
                   }
                   type="button"
                 >
-                  Open related template starter
+                  Open starter template
                 </button>
               ) : null}
               <button
@@ -3643,18 +3701,23 @@ function StartHerePage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { state, onNavigate } = props;
-  const ready = Boolean(
-    state.systemType && state.dataSensitivity && state.environment,
-  );
+  const showResults = state.step === "results";
 
   const recommendations = useMemo(
     () =>
-      buildStartHereRecommendations({
-        systemType: state.systemType,
-        dataSensitivity: state.dataSensitivity,
-        environment: state.environment,
-      }) as StartHereRecommendations | null,
-    [state.dataSensitivity, state.environment, state.systemType],
+      showResults
+        ? (buildStartHereRecommendations({
+            systemType: state.systemType,
+            dataSensitivity: state.dataSensitivity,
+            environment: state.environment,
+          }) as StartHereRecommendations | null)
+        : null,
+    [
+      showResults,
+      state.dataSensitivity,
+      state.environment,
+      state.systemType,
+    ],
   );
 
   function followLibraryLink(link: StartHereLibraryLink) {
@@ -3691,9 +3754,11 @@ function StartHerePage(props: {
 
       <div className="filter-grid">
         <SelectField
+          emptyLabel="Any system type"
+          hint="What kind of system you are authorizing or assessing."
           label="System type"
           onChange={(value) =>
-            onNavigate("start-here", { ...state, systemType: value })
+            onNavigate("start-here", { ...state, systemType: value, step: "" })
           }
           options={[
             { value: "Cloud SaaS", label: "Cloud SaaS" },
@@ -3705,9 +3770,15 @@ function StartHerePage(props: {
           value={state.systemType}
         />
         <SelectField
+          emptyLabel="Any sensitivity level"
+          hint="How sensitive the data handled by the system is."
           label="Data sensitivity"
           onChange={(value) =>
-            onNavigate("start-here", { ...state, dataSensitivity: value })
+            onNavigate("start-here", {
+              ...state,
+              dataSensitivity: value,
+              step: "",
+            })
           }
           options={[
             { value: "Low", label: "Low" },
@@ -3718,9 +3789,11 @@ function StartHerePage(props: {
           value={state.dataSensitivity}
         />
         <SelectField
+          emptyLabel="Any environment"
+          hint="Who operates the system and under which federal context."
           label="Operational environment"
           onChange={(value) =>
-            onNavigate("start-here", { ...state, environment: value })
+            onNavigate("start-here", { ...state, environment: value, step: "" })
           }
           options={[
             { value: "Federal civilian", label: "Federal civilian" },
@@ -3731,6 +3804,20 @@ function StartHerePage(props: {
           value={state.environment}
         />
       </div>
+
+      {!showResults ? (
+        <div className="card-actions">
+          <button
+            className="primary"
+            onClick={() =>
+              onNavigate("start-here", { ...state, step: "results" })
+            }
+            type="button"
+          >
+            Show recommendation
+          </button>
+        </div>
+      ) : null}
 
       {recommendations ? (
         <div className="stack">
@@ -3863,15 +3950,16 @@ function StartHerePage(props: {
             </div>
           </section>
         </div>
-      ) : (
+      ) : !showResults ? (
         <section className="empty-state">
-          <h2>Answer the three questions above</h2>
+          <h2>Choose your context, then show a recommendation</h2>
           <p>
-            Control Atlas will suggest the first framework, template, and
-            pattern pages to open next.
+            Pick the options that best match your system. Use &quot;Any&quot;
+            when you are not sure yet. Click Show recommendation when you are
+            ready for the next step.
           </p>
         </section>
-      )}
+      ) : null}
     </section>
   );
 }
@@ -3880,6 +3968,8 @@ function GlossaryDrawer(props: {
   open: boolean;
   setOpen: (open: boolean) => void;
   focusTermId?: string;
+  helpTab: HelpTab;
+  onTabChange: (tab: HelpTab) => void;
   bundle: RuntimeBundle | null;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
@@ -3888,6 +3978,8 @@ function GlossaryDrawer(props: {
     open,
     setOpen,
     focusTermId = "",
+    helpTab,
+    onTabChange,
     bundle,
     onNavigate,
     onOpenNode,
@@ -3950,10 +4042,13 @@ function GlossaryDrawer(props: {
         <Dialog.Content className="drawer-content">
           <div className="drawer-header">
             <div>
-              <Dialog.Title>Help &amp; Glossary</Dialog.Title>
+              <Dialog.Title>
+                {helpTab === "guide" ? "Help" : "Glossary"}
+              </Dialog.Title>
               <Dialog.Description>
-                Short definitions, why they matter, and quick links back into
-                the library or pattern pages.
+                {helpTab === "guide"
+                  ? "How to use Control Atlas: start with intent, search the library, then compare or generate artifacts."
+                  : "Short definitions, why they matter, and quick links back into the library or pattern pages."}
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
@@ -3963,6 +4058,82 @@ function GlossaryDrawer(props: {
             </Dialog.Close>
           </div>
 
+          <div className="drawer-tabs" role="tablist">
+            <button
+              aria-selected={helpTab === "guide"}
+              className={helpTab === "guide" ? "drawer-tab active" : "drawer-tab"}
+              onClick={() => onTabChange("guide")}
+              role="tab"
+              type="button"
+            >
+              Help
+            </button>
+            <button
+              aria-selected={helpTab === "glossary"}
+              className={
+                helpTab === "glossary" ? "drawer-tab active" : "drawer-tab"
+              }
+              onClick={() => onTabChange("glossary")}
+              role="tab"
+              type="button"
+            >
+              Glossary
+            </button>
+          </div>
+
+          {helpTab === "guide" ? (
+            <div className="drawer-guide stack">
+              <SummaryCard title="Start Here">
+                <p>
+                  Answer three short questions, then open the recommended
+                  library, compare, pattern, and template links.
+                </p>
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    setOpen(false);
+                    onNavigate("start-here");
+                  }}
+                  type="button"
+                >
+                  Open Start Here
+                </button>
+              </SummaryCard>
+              <SummaryCard title="Library">
+                <p>
+                  Search by control ID or topic. Open detail pages to see
+                  grouped connections and source support.
+                </p>
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    setOpen(false);
+                    onNavigate("search");
+                  }}
+                  type="button"
+                >
+                  Open Library
+                </button>
+              </SummaryCard>
+              <SummaryCard title="Compare">
+                <p>
+                  Pick a comparison intent first, set frameworks, then review
+                  results before exporting or opening detailed mappings.
+                </p>
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    setOpen(false);
+                    onNavigate("matrix");
+                  }}
+                  type="button"
+                >
+                  Open Compare
+                </button>
+              </SummaryCard>
+            </div>
+          ) : (
+            <>
           <label className="field" htmlFor="glossary-search">
             <span>Search glossary</span>
             <div className="search-input">
@@ -4055,6 +4226,8 @@ function GlossaryDrawer(props: {
               );
             })}
           </div>
+            </>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -4072,15 +4245,19 @@ function Field(props: { label: string; children: ReactNode }) {
 
 function SelectField(props: {
   emptyLabel?: string;
+  hint?: string;
   label: string;
   value: string;
   options: Array<{ value: string; label: string }>;
   onChange: (value: string) => void;
 }) {
+  const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
+
   return (
-    <label className="field">
+    <label className="field" htmlFor={fieldId}>
       <span>{props.label}</span>
       <select
+        id={fieldId}
         onChange={(event) => props.onChange(event.target.value)}
         value={props.value}
       >
@@ -4091,6 +4268,7 @@ function SelectField(props: {
           </option>
         ))}
       </select>
+      {props.hint ? <p className="field-hint">{props.hint}</p> : null}
     </label>
   );
 }

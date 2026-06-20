@@ -14,7 +14,7 @@ test('landing presents the translation-first hero and primary entry paths', asyn
   await expect(page.getByText('Start with meaning')).toBeVisible();
   await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
   await expect(page.locator('.hero-actions').getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Open glossary support', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open glossary', exact: true })).toBeVisible();
   await expect(page.locator('.intent-card').filter({ hasText: 'Library' })).toBeVisible();
   await expect(page.locator('.intent-card').filter({ hasText: 'Compare' })).toBeVisible();
   await expect(page.locator('.intent-card').filter({ hasText: 'Templates' })).toBeVisible();

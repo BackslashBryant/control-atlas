@@ -1,5 +1,17 @@
 import { createFederalGraphRuntime } from '../../app/runtime.mjs';
 
+const CACHE_VERSION = '20260619-3';
+
+export type TemplateRegistry = {
+  templates?: Array<Record<string, unknown>>;
+};
+
+export type RuntimeBundle = {
+  runtime: ReturnType<typeof createFederalGraphRuntime>;
+  templateRegistry: TemplateRegistry;
+  graphReady: boolean;
+};
+
 export async function fetchArtifact(path: string) {
   const response = await fetch(path);
   if (!response.ok) {
@@ -16,17 +28,44 @@ async function fetchCollection(path: string, key: string) {
   return artifact[key];
 }
 
-export async function loadRuntimeDataset() {
-  const [sources, nodes, edges, evidence, findings, libraryArtifact, templateRegistry] =
-    await Promise.all([
-      fetchCollection('./data/generated/sources.json?v=20260619-2', 'sources'),
-      fetchCollection('./data/generated/nodes.json?v=20260619-2', 'nodes'),
-      fetchCollection('./data/generated/edges.json?v=20260619-2', 'edges'),
-      fetchCollection('./data/generated/evidence.json?v=20260619-2', 'evidence'),
-      fetchCollection('./data/generated/graph-health.json?v=20260619-2', 'findings'),
-      fetchArtifact('./data/generated/library-search.json?v=20260619-2'),
-      fetchArtifact('./data/template-registry.json'),
-    ]);
+function artifactPath(name: string) {
+  return `./data/generated/${name}?v=${CACHE_VERSION}`;
+}
+
+export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
+  const [libraryArtifact, templateRegistryRaw] = await Promise.all([
+    fetchArtifact(artifactPath('library-search.json')),
+    fetchArtifact('./data/template-registry.json'),
+  ]);
+  const templateRegistry = templateRegistryRaw as TemplateRegistry;
+
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    nodes: [],
+    edges: [],
+    evidence: [],
+    findings: [],
+    librarySearch: libraryArtifact.library_search,
+  });
+
+  return {
+    runtime,
+    templateRegistry,
+    graphReady: false,
+  };
+}
+
+export async function loadFullGraphPhase(
+  libraryArtifact: Awaited<ReturnType<typeof fetchArtifact>>,
+  templateRegistry: TemplateRegistry,
+): Promise<RuntimeBundle> {
+  const [sources, nodes, edges, evidence, findings] = await Promise.all([
+    fetchCollection(artifactPath('sources.json'), 'sources'),
+    fetchCollection(artifactPath('nodes.json'), 'nodes'),
+    fetchCollection(artifactPath('edges.json'), 'edges'),
+    fetchCollection(artifactPath('evidence.json'), 'evidence'),
+    fetchCollection(artifactPath('graph-health.json'), 'findings'),
+  ]);
 
   const runtime = createFederalGraphRuntime({
     sources,
@@ -40,5 +79,48 @@ export async function loadRuntimeDataset() {
   return {
     runtime,
     templateRegistry,
+    graphReady: true,
   };
+}
+
+export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
+  const [libraryArtifact, templateRegistryRaw] = await Promise.all([
+    fetchArtifact(artifactPath('library-search.json')),
+    fetchArtifact('./data/template-registry.json'),
+  ]);
+
+  return loadFullGraphPhase(
+    libraryArtifact,
+    templateRegistryRaw as TemplateRegistry,
+  );
+}
+
+export async function loadRuntimeDatasetStaged(handlers: {
+  onSearchReady: (bundle: RuntimeBundle) => void;
+  onFullReady: (bundle: RuntimeBundle) => void;
+  onError: (error: unknown) => void;
+}) {
+  try {
+    const libraryArtifact = await fetchArtifact(artifactPath('library-search.json'));
+    const templateRegistry = (await fetchArtifact(
+      './data/template-registry.json',
+    )) as TemplateRegistry;
+    const searchRuntime = createFederalGraphRuntime({
+      sources: [],
+      nodes: [],
+      edges: [],
+      evidence: [],
+      findings: [],
+      librarySearch: libraryArtifact.library_search,
+    });
+    handlers.onSearchReady({
+      runtime: searchRuntime,
+      templateRegistry,
+      graphReady: false,
+    });
+    const fullBundle = await loadFullGraphPhase(libraryArtifact, templateRegistry);
+    handlers.onFullReady(fullBundle);
+  } catch (error) {
+    handlers.onError(error);
+  }
 }

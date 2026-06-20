@@ -8,10 +8,10 @@ export function LoadingStatusPanel(props: {
     <section aria-live="polite" className="loading-card" role="status">
       <div aria-hidden="true" className="load-progress" />
       <p className="eyebrow">Loading</p>
-      <h2>Preparing library data</h2>
+      <h2>Loading library</h2>
       <p>
-        Control Atlas is loading the public library, source records, and
-        comparison views.
+        Please wait a moment while we load the public records, source registry,
+        and comparison views.
       </p>
       {props.slow ? (
         <p className="load-slow-hint">
@@ -20,8 +20,8 @@ export function LoadingStatusPanel(props: {
         </p>
       ) : null}
       <p className="load-slow-hint">
-        You can still open Patterns or About while data loads using the links
-        below.
+        You can browse Patterns, Templates, or About while the library finishes
+        loading.
       </p>
       {props.children}
     </section>
@@ -52,30 +52,41 @@ export function LoadErrorPanel(props: {
 }
 
 export function OfflineFallbackActions(props: {
-  onNavigate: (view: "patterns" | "templates" | "about") => void;
+  onNavigate: (view: "patterns" | "templates" | "about" | "start-here") => void;
 }) {
   return (
-    <div className="card-actions offline-fallback-actions">
+    <div className="offline-fallback-grid">
       <button
-        className="secondary"
+        className="offline-fallback-card"
         onClick={() => props.onNavigate("patterns")}
         type="button"
       >
-        Explore Patterns
+        <strong>Explore Patterns</strong>
+        <span>Outcome-based guides you can read without the full library.</span>
       </button>
       <button
-        className="secondary"
+        className="offline-fallback-card"
         onClick={() => props.onNavigate("templates")}
         type="button"
       >
-        Browse templates
+        <strong>Browse templates</strong>
+        <span>Blank planning and assessment starters.</span>
       </button>
       <button
-        className="secondary"
+        className="offline-fallback-card"
+        onClick={() => props.onNavigate("start-here")}
+        type="button"
+      >
+        <strong>Start Here</strong>
+        <span>Answer three questions for a tailored path.</span>
+      </button>
+      <button
+        className="offline-fallback-card"
         onClick={() => props.onNavigate("about")}
         type="button"
       >
-        About &amp; trust
+        <strong>About &amp; trust</strong>
+        <span>How Control Atlas sources and limits its advice.</span>
       </button>
     </div>
   );
@@ -98,5 +109,42 @@ export function DataPendingNotice(props: {
         </button>
       ) : null}
     </section>
+  );
+}
+
+export function CompareExportDisclosure(props: {
+  disabled?: boolean;
+  onExport: (format: "csv" | "markdown" | "json") => void;
+}) {
+  return (
+    <details className="export-disclosure">
+      <summary>Export results</summary>
+      <div className="card-actions">
+        <button
+          className="secondary"
+          disabled={props.disabled}
+          onClick={() => props.onExport("csv")}
+          type="button"
+        >
+          Export CSV
+        </button>
+        <button
+          className="secondary"
+          disabled={props.disabled}
+          onClick={() => props.onExport("markdown")}
+          type="button"
+        >
+          Export Markdown
+        </button>
+        <button
+          className="secondary"
+          disabled={props.disabled}
+          onClick={() => props.onExport("json")}
+          type="button"
+        >
+          Export JSON
+        </button>
+      </div>
+    </details>
   );
 }

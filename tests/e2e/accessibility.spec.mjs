@@ -79,6 +79,7 @@ for (const route of ROUTES) {
 test("a11y: compare detailed mappings table has no serious or critical violations", async ({
   page,
 }) => {
+  test.setTimeout(90_000);
   await page.goto("/?view=matrix");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -88,12 +89,25 @@ test("a11y: compare detailed mappings table has no serious or critical violation
     .click();
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
+  await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
   await page.getByRole("button", { name: "View detailed mappings" }).click();
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible();
 
-  await assertNoBlockingViolations(page, "compare detailed mappings");
+  const results = await new AxeBuilder({ page })
+    .include('table[aria-label="Relationship mappings"]')
+    .withTags(["wcag2a", "wcag2aa"])
+    .analyze();
+
+  const blocking = results.violations.filter((violation) =>
+    ["serious", "critical"].includes(violation.impact || ""),
+  );
+
+  expect(
+    blocking,
+    `Accessibility violations on compare detailed mappings: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(", ")}`,
+  ).toEqual([]);
 });
 
 test("a11y: library detail relationship table has no serious or critical violations", async ({

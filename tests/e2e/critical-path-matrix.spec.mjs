@@ -61,6 +61,7 @@ test("critical path: library detail relationships show connection and source tru
   await expect(
     page.getByRole("heading", { name: "What it connects to" }),
   ).toBeVisible();
+  await page.locator(".relationship-group-trigger").first().click();
   const relationshipCard = page.locator(".relationship-card").first();
   await expect(relationshipCard).toBeVisible();
   await expect(
@@ -144,6 +145,7 @@ test("critical path: baseline compare surfaces delta controls with export action
     page.getByText("Only in B", { exact: true }).first(),
   ).toBeVisible();
   await expect(page.locator(".chain-grid")).toContainText("AC-");
+  await page.locator("details.export-disclosure summary").click();
   await expect(
     page.getByRole("button", { name: "Export Markdown", exact: true }),
   ).toBeVisible();
