@@ -25,7 +25,7 @@ test('landing search and brand-home flow work without legacy onboarding surfaces
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.locator('.intent-card', { hasText: 'Library' }).getByRole('button', { name: 'Search AC-2' }).click();
+  await page.locator('.intent-card', { hasText: 'Library' }).click();
   await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible();
   await expect(page.locator('#library-results .result-card').first()).toBeVisible();
   await expect(page.locator('#library-results')).toContainText('Account Management');

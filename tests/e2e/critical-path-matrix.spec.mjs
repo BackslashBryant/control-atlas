@@ -40,11 +40,10 @@ test("critical path: compare detailed mappings expose text provenance labels", a
 
   await page
     .locator(".intent-card", { hasText: "Framework to framework" })
-    .getByRole("button", { name: "Use this path" })
     .click();
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
-  await page.getByRole("button", { name: "Detailed mappings" }).click();
+  await page.getByRole("button", { name: "View detailed mappings" }).click();
 
   const table = page.getByRole("table", { name: "Relationship mappings" });
   await expect(table).toBeVisible();

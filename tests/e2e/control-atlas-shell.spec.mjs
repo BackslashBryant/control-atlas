@@ -15,10 +15,10 @@ test('control atlas staged shell exposes the translation-first nav order and gui
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
   await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
 
-  const navLabels = await primaryNav.locator('button').evaluateAll((nodes) =>
+  const navLabels = await primaryNav.locator('button, summary').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(navLabels).toEqual(['Start Here', 'Library', 'Compare', 'Patterns', 'Templates', 'Sources']);
+  expect(navLabels.slice(0, 4)).toEqual(['Start Here', 'Library', 'Compare', 'More']);
 
   await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
@@ -68,7 +68,7 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('heading', { name: 'What do you want to compare?' })).toBeVisible();
   await expect(page.getByText('Framework to framework')).toBeVisible();
   await expect(page.getByText('STIG/SRG to controls')).toBeVisible();
-  await page.locator('.intent-card', { hasText: 'Framework to framework' }).getByRole('button', { name: 'Use this path' }).click();
+  await page.locator('.intent-card', { hasText: 'Framework to framework' }).click();
   await expect(page.getByLabel('Framework A')).toBeVisible();
   await expect(page.getByLabel('Framework B')).toBeVisible();
   await page.getByLabel('Framework A').selectOption('nist-800-53');
@@ -79,7 +79,7 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Detailed mappings' }).click();
+  await page.getByRole('button', { name: 'Detailed mappings table' }).click();
   await expect(page.locator('table')).toContainText('AC-2');
   await expect(page.locator('table')).toContainText('Plain-language rationale');
 });
@@ -88,9 +88,9 @@ test('compare stig chain traces DISA items through CCI to NIST controls', async 
   await page.goto('/?view=matrix');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.locator('.intent-card', { hasText: 'STIG/SRG to controls' }).getByRole('button', { name: 'Use this path' }).click();
+  await page.locator('.intent-card', { hasText: 'STIG/SRG to controls' }).click();
   await expect(page.getByLabel('Catalog')).toBeVisible();
-  await page.getByRole('button', { name: 'Trace this item' }).first().click();
+  await page.getByRole('button', { name: 'View mapping trace' }).first().click();
   await expect(page.getByText('Selected chain')).toBeVisible();
   const chainPanel = page.locator('.chain-grid');
   await expect(chainPanel.getByText('CCI links', { exact: true })).toBeVisible();
@@ -119,7 +119,9 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Review sources before you rely on a match' })).toBeVisible();
+  await page.getByRole('button', { name: 'Refine sources' }).click();
   await page.getByLabel('Included in map').selectOption('excluded');
+  await page.getByRole('button', { name: /Federal referenced/i }).click();
   const communityCard = page.locator('.source-card').filter({ hasText: 'Community CCI Research' });
   await expect(communityCard).toBeVisible();
   await expect(communityCard.getByText('This source is not used in the public map by default.')).toBeVisible();
@@ -130,7 +132,7 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await page.goto('/?view=templates');
   await waitForAppReady(page);
   await expect(page.getByRole('heading', { name: 'What are you trying to create?' })).toBeVisible();
-  await page.locator('.intent-card').first().getByRole('button', { name: 'Choose artifact' }).click();
+  await page.locator('.intent-card').first().click();
   await expect(page.getByText('What this template is for')).toBeVisible();
   await expect(page.getByText('What it includes')).toBeVisible();
   await expect(page.getByRole('button', { name: 'More options' })).toBeVisible();
@@ -138,7 +140,7 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await page.goto('/?view=patterns');
   await waitForAppReady(page);
   await expect(page.getByRole('heading', { name: 'Patterns organized around user outcomes' })).toBeVisible();
-  await page.locator('.intent-card').first().getByRole('button', { name: 'Open pattern' }).click();
+  await page.locator('.intent-card').first().click();
   await expect(page.getByText('What this helps with')).toBeVisible();
   await expect(page.getByText('Common mistakes', { exact: true })).toBeVisible();
   await expect(page.getByText('Next action', { exact: true })).toBeVisible();

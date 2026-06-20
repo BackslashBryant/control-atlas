@@ -23,9 +23,27 @@ import {
   useDeferredValue,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
+import {
+  CatalogFilterBar,
+  CompareStepIndicator,
+  QuickIntentCard,
+} from "./components/QuickIntentCard";
+import {
+  DataPendingNotice,
+  LoadErrorPanel,
+  LoadingStatusPanel,
+  OfflineFallbackActions,
+} from "./components/LoadStatusPanel";
+import {
+  filterByCategoryAndQuery,
+  groupItemsByCategory,
+  PATTERN_CATEGORIES,
+  TEMPLATE_CATEGORIES,
+} from "./lib/catalogGroups.mjs";
 import { glossaryData } from "../app/glossary-data.mjs";
 import { patternsData } from "../app/patterns-data.mjs";
 import {
@@ -77,14 +95,20 @@ const HERO_WORDS = [
   "Connect",
 ];
 
-const NAV_ITEMS = [
+const PRIMARY_NAV_ITEMS = [
   { label: "Start Here", view: "start-here", icon: IconCompass },
   { label: "Library", view: "search", icon: IconLibrary },
   { label: "Compare", view: "matrix", icon: IconGitCompare },
+] as const;
+
+const MORE_NAV_ITEMS = [
   { label: "Patterns", view: "patterns", icon: IconBook2 },
   { label: "Templates", view: "templates", icon: IconClipboardList },
   { label: "Sources", view: "sources", icon: IconSourceCode },
+  { label: "About & trust", view: "about", icon: IconShieldCheck },
 ] as const;
+
+const MORE_NAV_VIEWS = new Set<string>(MORE_NAV_ITEMS.map((item) => item.view));
 
 const PATTERN_RENAMES: Record<string, string> = {
   "csp-inheritance": "Using FedRAMP Inheritance",
@@ -104,6 +128,14 @@ function activeNavForState(state: ViewState) {
     return "search";
   }
   return state.view;
+}
+
+function isMoreNavActive(state: ViewState) {
+  return MORE_NAV_VIEWS.has(state.view);
+}
+
+function isStaticViewWithoutBundle(view: ViewState["view"]) {
+  return view === "about" || view === "patterns" || view === "start-here";
 }
 
 function copyText(value: string) {
@@ -312,6 +344,9 @@ export function App() {
   );
   const [bundle, setBundle] = useState<RuntimeBundle | null>(null);
   const [loadError, setLoadError] = useState<string>("");
+  const [loadSlow, setLoadSlow] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [moreNavOpen, setMoreNavOpen] = useState(false);
   const [heroWordIndex, setHeroWordIndex] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
   const [glossaryFocusTermId, setGlossaryFocusTermId] = useState("");
@@ -321,23 +356,55 @@ export function App() {
 
   useEffect(() => {
     let cancelled = false;
+    setLoadSlow(false);
+    setLoadError("");
+
+    const slowTimer = window.setTimeout(() => {
+      if (!cancelled) {
+        setLoadSlow(true);
+      }
+    }, 3000);
+
+    const timeoutTimer = window.setTimeout(() => {
+      if (!cancelled) {
+        setLoadError(
+          "Library data took too long to load. Check your connection and try again.",
+        );
+      }
+    }, 10000);
 
     loadRuntimeDataset()
       .then((result) => {
         if (!cancelled) {
           setBundle(result);
+          setLoadError("");
         }
       })
       .catch((error) => {
         if (!cancelled) {
           setLoadError(userFacingLoadError(error));
         }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          window.clearTimeout(slowTimer);
+          window.clearTimeout(timeoutTimer);
+        }
       });
 
     return () => {
       cancelled = true;
+      window.clearTimeout(slowTimer);
+      window.clearTimeout(timeoutTimer);
     };
-  }, []);
+  }, [loadAttempt]);
+
+  function retryLoad() {
+    setBundle(null);
+    setLoadError("");
+    setLoadSlow(false);
+    setLoadAttempt((current) => current + 1);
+  }
 
   useEffect(() => {
     const onPopState = () => {
@@ -377,6 +444,9 @@ export function App() {
     startTransition(() => {
       setViewState(nextState);
     });
+    if (MORE_NAV_VIEWS.has(nextView)) {
+      setMoreNavOpen(false);
+    }
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
@@ -410,6 +480,8 @@ export function App() {
   }, [viewState]);
 
   const readyState = loadError ? "error" : bundle ? "true" : "false";
+  const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
+  const showWorkspaceContent = Boolean(bundle) || canRenderWithoutBundle;
 
   return (
     <>
@@ -440,7 +512,7 @@ export function App() {
           </span>
         </button>
         <nav aria-label="Primary navigation" className="primary-nav">
-          {NAV_ITEMS.map((item) => {
+          {PRIMARY_NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const active = activeNavForState(viewState) === item.view;
             return (
@@ -456,12 +528,48 @@ export function App() {
               </button>
             );
           })}
+          <details
+            className={`nav-more${isMoreNavActive(viewState) ? " active" : ""}`}
+            onToggle={(event) =>
+              setMoreNavOpen((event.currentTarget as HTMLDetailsElement).open)
+            }
+            open={moreNavOpen || isMoreNavActive(viewState)}
+          >
+            <summary
+              aria-current={isMoreNavActive(viewState) ? "page" : undefined}
+              className="nav-more-trigger"
+            >
+              More
+            </summary>
+            <div className="nav-more-menu" role="menu">
+              {MORE_NAV_ITEMS.map((item) => {
+                const Icon = item.icon;
+                const active = viewState.view === item.view;
+                return (
+                  <button
+                    aria-current={active ? "page" : undefined}
+                    className={active ? "active" : ""}
+                    key={item.label}
+                    onClick={() => navigate(item.view)}
+                    role="menuitem"
+                    type="button"
+                  >
+                    <Icon aria-hidden="true" size={16} stroke={1.8} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </details>
         </nav>
         <div className="header-actions">
           <form
             className="header-search"
             onSubmit={(event) => {
               event.preventDefault();
+              if (!bundle) {
+                return;
+              }
               navigate("search", {
                 query: headerSearchDraft.trim(),
                 filter: "",
@@ -478,7 +586,9 @@ export function App() {
             <div className="search-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
+                aria-describedby={bundle ? undefined : "header-search-hint"}
                 aria-label="Search library and glossary"
+                disabled={!bundle}
                 id="header-search"
                 onChange={(event) => setHeaderSearchDraft(event.target.value)}
                 placeholder="Search library or glossary"
@@ -486,6 +596,11 @@ export function App() {
                 value={headerSearchDraft}
               />
             </div>
+            {!bundle ? (
+              <p className="field-hint" id="header-search-hint">
+                Library search is available after data loads.
+              </p>
+            ) : null}
           </form>
           <button
             className="secondary quiet"
@@ -505,12 +620,7 @@ export function App() {
           data-app-ready={readyState}
           id="app"
         >
-          {loadError ? (
-            <section className="notice">
-              <h2>Library data unavailable</h2>
-              <p>{loadError}</p>
-            </section>
-          ) : bundle ? (
+          {showWorkspaceContent ? (
             <AppContent
               bundle={bundle}
               heroWord={HERO_WORDS[heroWordIndex]}
@@ -518,18 +628,18 @@ export function App() {
               onOpenGlossary={openGlossary}
               onOpenNode={openNode}
               onOpenNodeByItemId={openNodeByItemId}
+              onRetryLoad={retryLoad}
               setHelpOpen={setHelpOpen}
               state={viewState}
             />
+          ) : loadError ? (
+            <LoadErrorPanel message={loadError} onRetry={retryLoad}>
+              <OfflineFallbackActions onNavigate={(view) => navigate(view)} />
+            </LoadErrorPanel>
           ) : (
-            <section className="loading-card">
-              <p className="eyebrow">Loading</p>
-              <h2>Loading public mappings</h2>
-              <p>
-                Control Atlas is preparing the public library, source records,
-                and comparison views.
-              </p>
-            </section>
+            <LoadingStatusPanel slow={loadSlow}>
+              <OfflineFallbackActions onNavigate={(view) => navigate(view)} />
+            </LoadingStatusPanel>
           )}
         </section>
       </main>
@@ -570,13 +680,14 @@ export function App() {
 }
 
 function AppContent(props: {
-  bundle: RuntimeBundle;
+  bundle: RuntimeBundle | null;
   state: ViewState;
   heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
   onOpenGlossary: (termId?: string) => void;
+  onRetryLoad: () => void;
   setHelpOpen: (open: boolean) => void;
 }) {
   const {
@@ -587,10 +698,18 @@ function AppContent(props: {
     onOpenNode,
     onOpenNodeByItemId,
     onOpenGlossary,
+    onRetryLoad,
     setHelpOpen,
   } = props;
 
+  if (!bundle && !isStaticViewWithoutBundle(state.view)) {
+    return <DataPendingNotice onRetry={onRetryLoad} />;
+  }
+
   if (state.view === "library-detail") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} />;
+    }
     return (
       <DetailPage
         bundle={bundle}
@@ -603,6 +722,9 @@ function AppContent(props: {
   }
 
   if (state.view === "matrix") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} />;
+    }
     return (
       <ComparePage
         bundle={bundle}
@@ -614,12 +736,18 @@ function AppContent(props: {
   }
 
   if (state.view === "sources") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} />;
+    }
     return (
       <SourcesPage bundle={bundle} onNavigate={onNavigate} state={state} />
     );
   }
 
   if (state.view === "templates") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} />;
+    }
     return (
       <TemplatesPage bundle={bundle} onNavigate={onNavigate} state={state} />
     );
@@ -646,6 +774,9 @@ function AppContent(props: {
   }
 
   if (state.view === "retired") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} />;
+    }
     return (
       <section className="notice">
         <h2>We do not have a public map entry for "{state.query}"</h2>
@@ -671,6 +802,10 @@ function AppContent(props: {
         </div>
       </section>
     );
+  }
+
+  if (!bundle) {
+    return <DataPendingNotice onRetry={onRetryLoad} />;
   }
 
   return (
@@ -1657,6 +1792,9 @@ function ComparePage(props: {
   onOpenNode: (nodeId: string, from?: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
+  const compareResultsRef = useRef<HTMLElement | null>(null);
+  const [showComparisonPicker, setShowComparisonPicker] = useState(false);
+  const [detailedMappingsOpen, setDetailedMappingsOpen] = useState("");
   const catalogs = bundle.runtime.getCatalogs();
   const workbench = state.workbench || "intent";
   const relationshipNodeIds = useMemo(
@@ -1800,7 +1938,7 @@ function ComparePage(props: {
     },
     {
       title: "STIG/SRG to controls",
-      body: "Trace DISA items through CCI links to the related controls and see where the chain stops.",
+      body: "Trace Security Technical Implementation Guide (STIG) and Security Requirements Guide (SRG) items through CCI links to related NIST controls.",
       workbench: "stig-chain",
     },
     {
@@ -1868,6 +2006,23 @@ function ComparePage(props: {
     }
   }
 
+  const compareStep: 1 | 2 | 3 =
+    workbench === "intent"
+      ? 1
+      : workbench === "relationships" && relationshipRows?.rows?.length
+        ? 3
+        : workbench === "baseline-compare" && baselineComparison
+          ? 3
+          : workbench === "stig-chain" && selectedChain
+            ? 3
+            : workbench === "threat-chain" && selectedThreatChain
+              ? 3
+              : 2;
+
+  function scrollToCompareResults() {
+    compareResultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <section className="panel">
       <PageHeader
@@ -1876,11 +2031,13 @@ function ComparePage(props: {
         title="What do you want to compare?"
       />
 
+      <CompareStepIndicator label="Compare progress" step={compareStep} />
+
       {workbench === "intent" ? (
         <div className="intent-grid">
           {comparisonCards.map((card) => (
             <QuickIntentCard
-              actionLabel="Use this path"
+              actionLabel="Start this comparison"
               body={card.body}
               icon={<IconGitCompare size={20} stroke={1.8} />}
               key={card.title}
@@ -1897,23 +2054,44 @@ function ComparePage(props: {
         </div>
       ) : (
         <>
-          <div className="workbench-toggle">
-            {comparisonCards.map((card) => (
+          <div className="compare-workbench-header">
+            <button
+              className="link-action"
+              onClick={() =>
+                onNavigate("matrix", { ...state, workbench: "intent" })
+              }
+              type="button"
+            >
+              Change comparison type
+            </button>
+            {showComparisonPicker ? (
+              <div className="workbench-toggle">
+                {comparisonCards.map((card) => (
+                  <button
+                    className={card.workbench === workbench ? "active" : ""}
+                    key={card.title}
+                    onClick={() =>
+                      onNavigate("matrix", {
+                        ...state,
+                        workbench: card.workbench,
+                        intent: card.title,
+                      })
+                    }
+                    type="button"
+                  >
+                    {card.title}
+                  </button>
+                ))}
+              </div>
+            ) : (
               <button
-                className={card.workbench === workbench ? "active" : ""}
-                key={card.title}
-                onClick={() =>
-                  onNavigate("matrix", {
-                    ...state,
-                    workbench: card.workbench,
-                    intent: card.title,
-                  })
-                }
+                className="secondary quiet"
+                onClick={() => setShowComparisonPicker(true)}
                 type="button"
               >
-                {card.title}
+                Show all comparison types
               </button>
-            ))}
+            )}
           </div>
 
           {workbench === "relationships" ? (
@@ -2043,8 +2221,20 @@ function ComparePage(props: {
                   </DisclosurePanel>
                 </Accordion.Root>
               ) : null}
+              {state.source && state.target ? (
+                <div className="card-actions">
+                  <button
+                    className="primary"
+                    onClick={scrollToCompareResults}
+                    type="button"
+                  >
+                    View comparison
+                  </button>
+                </div>
+              ) : null}
               {relationshipRows?.rows?.length ? (
                 <>
+                  <section className="compare-results" id="compare-results" ref={compareResultsRef}>
                   <div className="summary-grid">
                     <SummaryCard title="What this is">
                       <p>
@@ -2066,12 +2256,23 @@ function ComparePage(props: {
                     </SummaryCard>
                   </div>
                   <CompareExportButtons onExport={exportRows} />
+                  <div className="card-actions">
+                    <button
+                      className="secondary"
+                      onClick={() => setDetailedMappingsOpen("rows")}
+                      type="button"
+                    >
+                      View detailed mappings
+                    </button>
+                  </div>
                   <Accordion.Root
                     className="accordion-root"
                     collapsible
+                    onValueChange={setDetailedMappingsOpen}
                     type="single"
+                    value={detailedMappingsOpen}
                   >
-                    <DisclosurePanel title="Detailed mappings" value="rows">
+                    <DisclosurePanel title="Detailed mappings table" value="rows">
                       <table
                         aria-label="Relationship mappings"
                         className="detail-table"
@@ -2133,8 +2334,9 @@ function ComparePage(props: {
                       </table>
                     </DisclosurePanel>
                   </Accordion.Root>
+                  </section>
                 </>
-              ) : (
+              ) : state.source && state.target ? (
                 <section className="empty-state">
                   <IconFilter aria-hidden="true" size={24} stroke={1.8} />
                   <h2>No public connections found for this comparison.</h2>
@@ -2142,8 +2344,42 @@ function ComparePage(props: {
                     Try changing one catalog, removing filters, or searching for
                     a specific control identifier.
                   </p>
+                  <div className="card-actions">
+                    <button
+                      className="primary"
+                      onClick={() =>
+                        onNavigate("matrix", {
+                          ...state,
+                          workbench,
+                          relationshipType: "",
+                          provenance: "",
+                          confidence: "",
+                          includeCandidates: "",
+                        })
+                      }
+                      type="button"
+                    >
+                      Reset filters
+                    </button>
+                    <button
+                      className="secondary"
+                      onClick={() => onNavigate("sources")}
+                      type="button"
+                    >
+                      Review sources
+                    </button>
+                    <button
+                      className="secondary"
+                      onClick={() =>
+                        onNavigate("matrix", { ...state, workbench: "intent" })
+                      }
+                      type="button"
+                    >
+                      Choose another comparison
+                    </button>
+                  </div>
                 </section>
-              )}
+              ) : null}
             </>
           ) : null}
 
@@ -2284,7 +2520,7 @@ function ComparePage(props: {
                               }
                               type="button"
                             >
-                              Trace this item
+                              View mapping trace
                             </button>
                           </td>
                         </tr>
@@ -2732,6 +2968,19 @@ function SourcesPage(props: {
       ),
     ] as string[];
 
+  const groupedSources = useMemo(() => {
+    const groups = new Map<string, any[]>();
+    for (const source of sources) {
+      const key = displayNameFor("provenance_class", source.provenance_class);
+      const bucket = groups.get(key) || [];
+      bucket.push(source);
+      groups.set(key, bucket);
+    }
+    return [...groups.entries()].sort(([left], [right]) =>
+      left.localeCompare(right),
+    );
+  }, [sources]);
+
   return (
     <section className="panel">
       <PageHeader
@@ -2740,52 +2989,70 @@ function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
-      <div className="filter-grid">
-        <SelectField
-          label="Source type"
-          onChange={(value) =>
-            onNavigate("sources", { ...state, provenance: value })
-          }
-          options={distinct("provenance_class").map((value) => ({
-            value,
-            label: displayNameFor("provenance_class", value),
-          }))}
-          value={state.provenance}
-        />
-        <SelectField
-          label="Included in map"
-          onChange={(value) =>
-            onNavigate("sources", { ...state, eligibility: value })
-          }
-          options={distinct("eligibility_status").map((value) => ({
-            value,
-            label: displayNameFor("eligibility_status", value),
-          }))}
-          value={state.eligibility}
-        />
-        <SelectField
-          label="Status"
-          onChange={(value) =>
-            onNavigate("sources", { ...state, lifecycle: value })
-          }
-          options={distinct("lifecycle_status").map((value) => ({
-            value,
-            label: displayNameFor("lifecycle_status", value),
-          }))}
-          value={state.lifecycle}
-        />
-        <SelectField
-          label="Access"
-          onChange={(value) =>
-            onNavigate("sources", { ...state, access: value })
-          }
-          options={distinct("access_status").map((value) => ({
-            value,
-            label: displayNameFor("access_status", value),
-          }))}
-          value={state.access}
-        />
-      </div>
+      <SummaryCard title="How to read this page" tone="trust">
+        <p>
+          <strong>Included in map</strong> shows whether Control Atlas uses this
+          source in public relationship views. <strong>Status</strong> reflects
+          whether the source is current or deprecated. <strong>Access</strong>{" "}
+          notes whether the artifact is publicly reachable.{" "}
+          <strong>Source type</strong> describes where the data came from.
+        </p>
+      </SummaryCard>
+
+      <Accordion.Root className="accordion-root" collapsible type="single">
+        <DisclosurePanel title="Refine sources" value="filters">
+          <div className="filter-grid">
+            <SelectField
+              emptyLabel="All source types"
+              label="Source type"
+              onChange={(value) =>
+                onNavigate("sources", { ...state, provenance: value })
+              }
+              options={distinct("provenance_class").map((value) => ({
+                value,
+                label: displayNameFor("provenance_class", value),
+              }))}
+              value={state.provenance}
+            />
+            <SelectField
+              emptyLabel="All map inclusion states"
+              label="Included in map"
+              onChange={(value) =>
+                onNavigate("sources", { ...state, eligibility: value })
+              }
+              options={distinct("eligibility_status").map((value) => ({
+                value,
+                label: displayNameFor("eligibility_status", value),
+              }))}
+              value={state.eligibility}
+            />
+            <SelectField
+              emptyLabel="All statuses"
+              label="Status"
+              onChange={(value) =>
+                onNavigate("sources", { ...state, lifecycle: value })
+              }
+              options={distinct("lifecycle_status").map((value) => ({
+                value,
+                label: displayNameFor("lifecycle_status", value),
+              }))}
+              value={state.lifecycle}
+            />
+            <SelectField
+              emptyLabel="All access levels"
+              label="Access"
+              onChange={(value) =>
+                onNavigate("sources", { ...state, access: value })
+              }
+              options={distinct("access_status").map((value) => ({
+                value,
+                label: displayNameFor("access_status", value),
+              }))}
+              value={state.access}
+            />
+          </div>
+        </DisclosurePanel>
+      </Accordion.Root>
 
       {selectedSource ? (
         <section className="stack">
@@ -2829,17 +3096,32 @@ function SourcesPage(props: {
           </Accordion.Root>
         </section>
       ) : (
-        <div className="stack">
-          {sources.map((source: any) => (
-            <SourceSummaryCard
-              key={source.id}
-              onOpen={() =>
-                onNavigate("sources", { ...state, source: source.id })
-              }
-              source={source}
-            />
+        <Accordion.Root
+          className="accordion-root source-groups"
+          collapsible
+          defaultValue={groupedSources[0]?.[0] || ""}
+          type="single"
+        >
+          {groupedSources.map(([groupLabel, groupSources]) => (
+            <DisclosurePanel
+              key={groupLabel}
+              title={`${groupLabel} (${groupSources.length})`}
+              value={groupLabel}
+            >
+              <div className="stack">
+                {groupSources.map((source: any) => (
+                  <SourceSummaryCard
+                    key={source.id}
+                    onOpen={() =>
+                      onNavigate("sources", { ...state, source: source.id })
+                    }
+                    source={source}
+                  />
+                ))}
+              </div>
+            </DisclosurePanel>
           ))}
-        </div>
+        </Accordion.Root>
       )}
     </section>
   );
@@ -2851,7 +3133,34 @@ function TemplatesPage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { bundle, state, onNavigate } = props;
+  const generationRef = useRef<HTMLElement | null>(null);
+  const generateButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [queryFilter, setQueryFilter] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [generationStatus, setGenerationStatus] = useState("");
   const templates = bundle.templateRegistry.templates || [];
+  const filteredTemplates = useMemo(
+    () =>
+      filterByCategoryAndQuery(
+        templates,
+        TEMPLATE_CATEGORIES,
+        (template: any) => template.name,
+        (template: any) =>
+          `${template.display_name} ${template.description} ${template.name}`,
+        { category: categoryFilter, query: queryFilter },
+      ),
+    [categoryFilter, queryFilter, templates],
+  );
+  const groupedTemplates = useMemo(
+    () =>
+      groupItemsByCategory(
+        filteredTemplates,
+        TEMPLATE_CATEGORIES,
+        (template: any) => template.name,
+      ),
+    [filteredTemplates],
+  );
   const selectedTemplate =
     templates.find((template: any) => template.name === state.templateType) ||
     null;
@@ -2869,30 +3178,47 @@ function TemplatesPage(props: {
     ? state.format || supportedFormats[0]
     : supportedFormats[0];
 
-  function createTemplate() {
+  useEffect(() => {
     if (!selectedTemplate) {
       return;
     }
-    const generated = generateTemplate(
-      {
-        templateType: selectedTemplate.name,
-        framework: state.framework || "nist-800-53",
-        format: activeFormat,
-        environment: state.environment || "Generic",
-        includePlaceholders: true,
-        includeImplementationPrompts: true,
-        includeEvidenceExpectations: true,
-        includeInheritancePrompts: true,
-        includeReciprocityPrompts: true,
-        includeSourceFootnotes: true,
-        includeStigReferences: true,
-        sourceRefs: selectedTemplate.source_refs || [],
-        sources: bundle.runtime.dataset?.sources || [],
-      },
-      bundle.runtime.dataset,
-    );
+    generationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    generateButtonRef.current?.focus();
+  }, [selectedTemplate?.name]);
 
-    downloadTextFile(generated.filename, generated.content, generated.mimeType);
+  function createTemplate() {
+    if (!selectedTemplate || generating) {
+      return;
+    }
+    setGenerating(true);
+    setGenerationStatus("");
+    try {
+      const generated = generateTemplate(
+        {
+          templateType: selectedTemplate.name,
+          framework: state.framework || "nist-800-53",
+          format: activeFormat,
+          environment: state.environment || "Generic",
+          includePlaceholders: true,
+          includeImplementationPrompts: true,
+          includeEvidenceExpectations: true,
+          includeInheritancePrompts: true,
+          includeReciprocityPrompts: true,
+          includeSourceFootnotes: true,
+          includeStigReferences: true,
+          sourceRefs: selectedTemplate.source_refs || [],
+          sources: bundle.runtime.dataset?.sources || [],
+        },
+        bundle.runtime.dataset,
+      );
+
+      downloadTextFile(generated.filename, generated.content, generated.mimeType);
+      setGenerationStatus(
+        `Download started for ${generated.filename}. Check your downloads folder.`,
+      );
+    } finally {
+      setGenerating(false);
+    }
   }
 
   return (
@@ -2903,28 +3229,43 @@ function TemplatesPage(props: {
         title="What are you trying to create?"
       />
 
-      <div className="intent-grid">
-        {templates.map((template: any) => (
-          <QuickIntentCard
-            actionLabel="Choose artifact"
-            body={template.description}
-            icon={<IconFileDescription size={20} stroke={1.8} />}
-            key={template.name}
-            onClick={() =>
-              onNavigate("templates", {
-                templateType: template.name,
-                framework: state.framework || "",
-                format: template.supported_formats?.[0] || "markdown",
-                environment: state.environment || "Generic",
-              })
-            }
-            title={template.display_name}
-          />
-        ))}
-      </div>
+      <CatalogFilterBar
+        category={categoryFilter}
+        categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
+        countLabel={`${filteredTemplates.length} template${filteredTemplates.length === 1 ? "" : "s"} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+        onCategoryChange={setCategoryFilter}
+        onQueryChange={setQueryFilter}
+        query={queryFilter}
+        queryPlaceholder="Search templates by name or purpose"
+      />
+
+      {[...groupedTemplates.entries()].map(([category, categoryTemplates]) => (
+        <section className="catalog-group" key={category}>
+          <h2 className="catalog-group-title">{category}</h2>
+          <div className="intent-grid">
+            {categoryTemplates.map((template: any) => (
+              <QuickIntentCard
+                actionLabel="Select this template"
+                body={template.description}
+                icon={<IconFileDescription size={20} stroke={1.8} />}
+                key={template.name}
+                onClick={() =>
+                  onNavigate("templates", {
+                    templateType: template.name,
+                    framework: state.framework || "nist-800-53",
+                    format: template.supported_formats?.[0] || "markdown",
+                    environment: state.environment || "Generic",
+                  })
+                }
+                title={template.display_name}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
 
       {selectedTemplate ? (
-        <section className="stack">
+        <section className="stack" ref={generationRef}>
           <SummaryCard title="What this template is for" tone="trust">
             <p>{selectedTemplate.description}</p>
           </SummaryCard>
@@ -2934,12 +3275,30 @@ function TemplatesPage(props: {
               . Inputs: {selectedTemplate.input_options.join(", ")}.
             </p>
           </SummaryCard>
+          {generationStatus ? (
+            <p className="generation-status" role="status">
+              {generationStatus}
+            </p>
+          ) : null}
           <div className="card-actions">
-            <button className="primary" onClick={createTemplate} type="button">
-              Generate template
+            <button
+              className="primary"
+              disabled={generating}
+              onClick={createTemplate}
+              ref={generateButtonRef}
+              type="button"
+            >
+              {generating
+                ? "Generating…"
+                : `Generate ${selectedTemplate.display_name}`}
             </button>
           </div>
-          <Accordion.Root className="accordion-root" collapsible type="single">
+          <Accordion.Root
+            className="accordion-root"
+            collapsible
+            defaultValue="options"
+            type="single"
+          >
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">
                 <SelectField
@@ -2948,8 +3307,11 @@ function TemplatesPage(props: {
                     onNavigate("templates", { ...state, framework: value })
                   }
                   options={catalogOptions}
-                  value={state.framework}
+                  value={state.framework || "nist-800-53"}
                 />
+                <p className="field-hint" id="template-framework-hint">
+                  Which control catalog the template should reference.
+                </p>
                 <SelectField
                   label="Environment"
                   onChange={(value) =>
@@ -2969,6 +3331,9 @@ function TemplatesPage(props: {
                   ]}
                   value={state.environment || "Generic"}
                 />
+                <p className="field-hint">
+                  Where the system runs — cloud, on-premises, or hybrid.
+                </p>
                 <SelectField
                   label="Format"
                   onChange={(value) =>
@@ -2980,6 +3345,9 @@ function TemplatesPage(props: {
                   }))}
                   value={activeFormat}
                 />
+                <p className="field-hint">
+                  File type for download: Markdown, CSV, or JSON.
+                </p>
               </div>
             </DisclosurePanel>
           </Accordion.Root>
@@ -2998,11 +3366,34 @@ function PatternsPage(props: {
 }) {
   const { state, onNavigate, onOpenNodeByItemId, onOpenGlossary, setHelpOpen } =
     props;
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [queryFilter, setQueryFilter] = useState("");
   const selectedPattern =
     patternsData.find((pattern) => pattern.id === state.pattern) || null;
   const patternGlossaryTerms = selectedPattern
     ? glossaryTermsForPattern(selectedPattern.id)
     : [];
+  const filteredPatterns = useMemo(
+    () =>
+      filterByCategoryAndQuery(
+        patternsData,
+        PATTERN_CATEGORIES,
+        (pattern) => pattern.id,
+        (pattern) =>
+          `${PATTERN_RENAMES[pattern.id] || pattern.title} ${pattern.summary}`,
+        { category: categoryFilter, query: queryFilter },
+      ),
+    [categoryFilter, queryFilter],
+  );
+  const groupedPatterns = useMemo(
+    () =>
+      groupItemsByCategory(
+        filteredPatterns,
+        PATTERN_CATEGORIES,
+        (pattern) => pattern.id,
+      ),
+    [filteredPatterns],
+  );
 
   if (!selectedPattern) {
     return (
@@ -3012,18 +3403,32 @@ function PatternsPage(props: {
           summary="Open the outcome you are trying to solve, then review when it helps, how it works, common mistakes, and the related controls or templates."
           title="Patterns organized around user outcomes"
         />
-        <div className="intent-grid">
-          {patternsData.map((pattern) => (
-            <QuickIntentCard
-              actionLabel="Open pattern"
-              body={pattern.summary}
-              icon={<IconBook2 size={20} stroke={1.8} />}
-              key={pattern.id}
-              onClick={() => onNavigate("patterns", { pattern: pattern.id })}
-              title={PATTERN_RENAMES[pattern.id] || pattern.title}
-            />
-          ))}
-        </div>
+        <CatalogFilterBar
+          category={categoryFilter}
+          categoryOptions={[...Object.keys(PATTERN_CATEGORIES), "Other"]}
+          countLabel={`${filteredPatterns.length} pattern${filteredPatterns.length === 1 ? "" : "s"} in ${groupedPatterns.size} categor${groupedPatterns.size === 1 ? "y" : "ies"}`}
+          onCategoryChange={setCategoryFilter}
+          onQueryChange={setQueryFilter}
+          query={queryFilter}
+          queryPlaceholder="Search patterns by outcome or topic"
+        />
+        {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => (
+          <section className="catalog-group" key={category}>
+            <h2 className="catalog-group-title">{category}</h2>
+            <div className="intent-grid">
+              {categoryPatterns.map((pattern) => (
+                <QuickIntentCard
+                  actionLabel="Open this pattern"
+                  body={pattern.summary}
+                  icon={<IconBook2 size={20} stroke={1.8} />}
+                  key={pattern.id}
+                  onClick={() => onNavigate("patterns", { pattern: pattern.id })}
+                  title={PATTERN_RENAMES[pattern.id] || pattern.title}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
       </section>
     );
   }
@@ -3120,21 +3525,32 @@ function PatternsPage(props: {
           </SummaryCard>
           <SummaryCard title="Next action">
             <div className="stack compact">
+              {selectedPattern.templates[0] ? (
+                <button
+                  className="primary"
+                  onClick={() =>
+                    onNavigate("templates", {
+                      templateType: selectedPattern.templates[0],
+                    })
+                  }
+                  type="button"
+                >
+                  Open related template starter
+                </button>
+              ) : null}
               <button
-                className="link-action"
+                className="secondary"
                 onClick={() => onNavigate("templates")}
                 type="button"
               >
-                <IconClipboardList aria-hidden="true" size={16} stroke={1.8} />
-                <span>Open a related template starter</span>
+                Browse all templates
               </button>
               <button
-                className="link-action"
+                className="secondary quiet"
                 onClick={() => setHelpOpen(true)}
                 type="button"
               >
-                <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
-                <span>Open glossary support</span>
+                Open glossary support
               </button>
             </div>
           </SummaryCard>
@@ -3642,25 +4058,6 @@ function GlossaryDrawer(props: {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-  );
-}
-
-function QuickIntentCard(props: {
-  title: string;
-  body: string;
-  icon: ReactNode;
-  actionLabel: string;
-  onClick: () => void;
-}) {
-  return (
-    <article className="intent-card">
-      <div className="intent-icon">{props.icon}</div>
-      <h2>{props.title}</h2>
-      <p>{props.body}</p>
-      <button className="secondary" onClick={props.onClick} type="button">
-        {props.actionLabel}
-      </button>
-    </article>
   );
 }
 
