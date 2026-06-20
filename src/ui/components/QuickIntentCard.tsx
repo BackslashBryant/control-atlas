@@ -66,51 +66,42 @@ export function CatalogFilterBar(props: {
     <div className="catalog-filter-bar">
       <p className="catalog-filter-summary">{props.countLabel}</p>
       <div className="catalog-filter-controls">
-        <label className="field grow">
+        <label className="field grow catalog-search-field">
           <span>Search</span>
           <input
+            className="catalog-search-input"
             onChange={(event) => props.onQueryChange(event.target.value)}
             placeholder={props.queryPlaceholder}
             type="search"
             value={props.query}
           />
         </label>
-        <SelectFieldInline
-          label="Category"
-          onChange={props.onCategoryChange}
-          options={[
-            { value: "", label: "All categories" },
-            ...props.categoryOptions.map((option) => ({
-              value: option,
-              label: option,
-            })),
-          ]}
-          value={props.category}
-        />
+      </div>
+      <div
+        aria-label="Filter by category"
+        className="category-chip-row"
+        role="group"
+      >
+        <button
+          className={props.category ? "chip chip-filter" : "chip chip-filter active"}
+          onClick={() => props.onCategoryChange("")}
+          type="button"
+        >
+          All categories
+        </button>
+        {props.categoryOptions.map((option) => (
+          <button
+            className={
+              props.category === option ? "chip chip-filter active" : "chip chip-filter"
+            }
+            key={option}
+            onClick={() => props.onCategoryChange(option)}
+            type="button"
+          >
+            {option}
+          </button>
+        ))}
       </div>
     </div>
-  );
-}
-
-function SelectFieldInline(props: {
-  label: string;
-  value: string;
-  options: Array<{ value: string; label: string }>;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="field">
-      <span>{props.label}</span>
-      <select
-        onChange={(event) => props.onChange(event.target.value)}
-        value={props.value}
-      >
-        {props.options.map((option) => (
-          <option key={`${props.label}-${option.value}`} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
   );
 }

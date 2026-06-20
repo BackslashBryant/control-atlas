@@ -16,7 +16,10 @@ test("relationship graph: open from AC-2 detail, filter, table fallback, and nav
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "View as map" }).click();
+  await page
+    .getByRole("button", { name: "View connections as a visual map" })
+    .first()
+    .click();
   await expect(
     page.getByRole("heading", { name: "Relationship map" }),
   ).toBeVisible();
@@ -45,7 +48,8 @@ test("relationship graph: sidebar link opens map view", async ({ page }) => {
   await dismissOnboarding(page);
 
   await page
-    .getByRole("button", { name: "Explore connections as a map" })
+    .getByRole("button", { name: "View connections as a visual map" })
+    .first()
     .click();
   await expect(
     page.getByRole("heading", { name: "Relationship map" }),

@@ -1,5 +1,12 @@
 /** Derived UI categories for patterns and templates (no schema migration). */
 
+/** Curated patterns for new users (UI-only). */
+export const RECOMMENDED_PATTERN_IDS = [
+  "rmf-lifecycle",
+  "shared-responsibility",
+  "reciprocity-basics",
+];
+
 export const PATTERN_CATEGORIES = {
   Authorization: [
     "rmf-lifecycle",

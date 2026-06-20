@@ -1,20 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { attachPageDiagnostics, waitForAppReady } from './support.mjs';
+import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from './support.mjs';
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test('load resilience shows slow hint and allows offline navigation', async ({ page }) => {
-  await page.route('**/data/generated/**', async (route) => {
+test('load resilience shows library skeleton and allows offline navigation', async ({ page }) => {
+  test.setTimeout(60000);
+  await page.route('**/library-search.json**', async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 3500));
     await route.continue();
   });
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Preparing library data' })).toBeVisible();
-  await expect(page.getByText('longer than usual')).toBeVisible({ timeout: 5000 });
-  await page.getByRole('button', { name: 'Explore Patterns' }).click();
+  await expect(page.locator('.skeleton-card').first()).toBeVisible();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('button', { name: 'Patterns', exact: true }).click();
   await expect(page).toHaveURL(/view=patterns/);
   await expect(page.getByRole('heading', { name: 'Patterns organized around user outcomes' })).toBeVisible();
 });
@@ -30,4 +30,31 @@ test('load resilience surfaces retry after timeout', async ({ page }) => {
     timeout: 15000,
   });
   await expect(page.getByText('Library data unavailable')).toBeVisible();
+});
+
+test('staged library search enables results before detail pages', async ({ page }) => {
+  let graphRequests = 0;
+  await page.route('**/data/generated/**', async (route) => {
+    const url = route.request().url();
+    if (url.includes('nodes.json') || url.includes('edges.json')) {
+      graphRequests += 1;
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+    }
+    await route.continue();
+  });
+
+  await page.goto('/?view=search&q=AC-2');
+  await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible({
+    timeout: 15000,
+  });
+  await expect(page.locator('#library-results .result-card').first()).toBeVisible({
+    timeout: 15000,
+  });
+  const openDetail = page.getByRole('button', { name: 'Open detail' }).first();
+  if (graphRequests === 0) {
+    await expect(openDetail).toBeDisabled();
+  }
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(openDetail).toBeEnabled();
 });
