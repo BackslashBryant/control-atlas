@@ -20,12 +20,12 @@ for (const template of registry.templates) {
     await dismissOnboarding(page);
 
     const card = page.locator('.intent-card').filter({ hasText: template.display_name });
-    await card.getByRole('button', { name: 'Choose artifact' }).click();
+    await card.click();
     await expect(page.getByText('What this template is for')).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`templateType=${template.name}`));
 
     const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('button', { name: 'Generate template' }).click();
+    await page.getByRole('button', { name: new RegExp(`Generate ${template.display_name}`) }).click();
     const download = await downloadPromise;
 
     expect(download.suggestedFilename()).toMatch(new RegExp(`${template.name.replace(/_/g, '-')}-\\d{4}-\\d{2}-\\d{2}\\.`));
@@ -42,7 +42,7 @@ test('deep link pre-selects security plan starter', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByText('What this template is for')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Generate template' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Generate Security Plan Starter' })).toBeVisible();
 });
 
 test('format change updates download extension', async ({ page }) => {
@@ -50,11 +50,10 @@ test('format change updates download extension', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByLabel('Format').selectOption('csv');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Generate template' }).click();
+  await page.getByRole('button', { name: 'Generate Inheritance Worksheet' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.csv$/);
 });

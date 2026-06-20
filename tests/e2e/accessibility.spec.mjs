@@ -85,11 +85,10 @@ test("a11y: compare detailed mappings table has no serious or critical violation
 
   await page
     .locator(".intent-card", { hasText: "Framework to framework" })
-    .getByRole("button", { name: "Use this path" })
     .click();
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
-  await page.getByRole("button", { name: "Detailed mappings" }).click();
+  await page.getByRole("button", { name: "View detailed mappings" }).click();
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible();
