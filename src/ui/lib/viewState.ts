@@ -1,4 +1,6 @@
 export type AppView =
+  | "home"
+  | "atlas-map"
   | "search"
   | "library-detail"
   | "matrix"
@@ -17,7 +19,21 @@ export type CompareWorkbench =
   | "baseline-compare"
   | "threat-chain";
 
+export type RelationshipViewMode = "map" | "list";
+
 export type ViewState =
+  | { view: "home" }
+  | {
+      view: "atlas-map";
+      node: string;
+      relationshipView: string;
+      relationshipType: string;
+      provenance: string;
+      confidence: string;
+      nodeType: string;
+      includeCandidates: string;
+      relationshipSearch: string;
+    }
   | {
       view: "search";
       query: string;
@@ -106,6 +122,20 @@ function searchState(): ViewState {
   };
 }
 
+function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
+  return {
+    view: "atlas-map",
+    node: "",
+    relationshipView: "",
+    relationshipType: "",
+    provenance: "",
+    confidence: "",
+    nodeType: "",
+    includeCandidates: "",
+    relationshipSearch: "",
+  };
+}
+
 function compareState(): Extract<ViewState, { view: "matrix" }> {
   return {
     view: "matrix",
@@ -126,6 +156,18 @@ function compareState(): Extract<ViewState, { view: "matrix" }> {
   };
 }
 
+function normalizeRelationshipView(value: string): RelationshipViewMode | "" {
+  if (value === "list" || value === "table") return "list";
+  if (value === "map") return "map";
+  return "";
+}
+
+function canonicalViewParam(view: string): AppView {
+  if (view === "explore") return "search";
+  if (view === "playbooks") return "patterns";
+  return view as AppView;
+}
+
 export function parseViewState(search: string): ViewState {
   const params = new URLSearchParams(search);
   const query = params.get("q") || "";
@@ -134,7 +176,27 @@ export function parseViewState(search: string): ViewState {
     return { view: "retired", query };
   }
 
-  const view = (params.get("view") || "search") as AppView;
+  const rawView = params.get("view");
+  const view = rawView ? canonicalViewParam(rawView) : "home";
+
+  if (view === "home") {
+    return { view: "home" };
+  }
+
+  if (view === "atlas-map") {
+    return {
+      view,
+      node: params.get("node") || "",
+      relationshipView:
+        normalizeRelationshipView(params.get("relationshipView") || "") || "",
+      relationshipType: params.get("relationshipType") || "",
+      provenance: params.get("provenance") || "",
+      confidence: params.get("confidence") || "",
+      nodeType: params.get("type") || params.get("nodeType") || "",
+      includeCandidates: params.get("includeCandidates") || "",
+      relationshipSearch: params.get("relationshipSearch") || "",
+    };
+  }
 
   if (view === "library-detail") {
     return {
@@ -233,6 +295,19 @@ export function normalizeViewState(
   view: AppView,
   state: Partial<ViewState> = {},
 ): ViewState {
+  if (view === "home") {
+    return { view: "home" };
+  }
+
+  if (view === "atlas-map") {
+    const incoming = state as Extract<ViewState, { view: "atlas-map" }>;
+    return {
+      ...atlasMapState(),
+      ...incoming,
+      view,
+    };
+  }
+
   if (view === "library-detail") {
     return {
       view,
@@ -353,8 +428,24 @@ function setIfValue(params: URLSearchParams, key: string, value: string) {
 export function serializeViewState(state: ViewState): string {
   const params = new URLSearchParams();
 
-  if (state.view === "search") {
-    setIfValue(params, "view", "search");
+  if (state.view === "home") {
+    setIfValue(params, "view", "home");
+  } else if (state.view === "atlas-map") {
+    params.set("view", "atlas-map");
+    setIfValue(params, "node", state.node);
+    if (state.relationshipView === "map") {
+      params.set("relationshipView", "map");
+    } else if (state.relationshipView === "list") {
+      params.set("relationshipView", "list");
+    }
+    setIfValue(params, "relationshipType", state.relationshipType);
+    setIfValue(params, "provenance", state.provenance);
+    setIfValue(params, "confidence", state.confidence);
+    setIfValue(params, "type", state.nodeType);
+    setIfValue(params, "includeCandidates", state.includeCandidates);
+    setIfValue(params, "relationshipSearch", state.relationshipSearch);
+  } else if (state.view === "search") {
+    setIfValue(params, "view", "explore");
     setIfValue(params, "q", state.query);
     setIfValue(params, "filter", state.filter);
     setIfValue(params, "objectType", state.objectType);
@@ -365,7 +456,14 @@ export function serializeViewState(state: ViewState): string {
     params.set("view", state.view);
     setIfValue(params, "node", state.node);
     setIfValue(params, "from", state.from || "");
-    setIfValue(params, "relationshipView", state.relationshipView || "");
+    if (state.relationshipView === "map") {
+      params.set("relationshipView", "map");
+    } else if (
+      state.relationshipView === "list" ||
+      state.relationshipView === "table"
+    ) {
+      params.set("relationshipView", "list");
+    }
     setIfValue(params, "relationshipType", state.relationshipType || "");
     setIfValue(params, "provenance", state.provenance || "");
     setIfValue(params, "confidence", state.confidence || "");
@@ -389,7 +487,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "baselineB", state.baselineB);
     setIfValue(params, "intent", state.intent);
   } else if (state.view === "patterns") {
-    params.set("view", state.view);
+    params.set("view", "playbooks");
     setIfValue(params, "pattern", state.pattern);
   } else if (state.view === "templates") {
     params.set("view", state.view);
@@ -422,4 +520,42 @@ export function serializeViewState(state: ViewState): string {
 
   const serialized = params.toString();
   return serialized ? `?${serialized}` : "";
+}
+
+export type AtlasMapUrlOptions = {
+  node?: string;
+  relationshipView?: RelationshipViewMode;
+  relationshipType?: string;
+  provenance?: string;
+  confidence?: string;
+  nodeType?: string;
+  includeCandidates?: boolean;
+  relationshipSearch?: string;
+};
+
+export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
+  const state = normalizeViewState("atlas-map", {
+    view: "atlas-map",
+    node: options.node || "",
+    relationshipView: options.relationshipView || "",
+    relationshipType: options.relationshipType || "",
+    provenance: options.provenance || "",
+    confidence: options.confidence || "",
+    nodeType: options.nodeType || "",
+    includeCandidates: options.includeCandidates ? "true" : "",
+    relationshipSearch: options.relationshipSearch || "",
+  }) as Extract<ViewState, { view: "atlas-map" }>;
+  return serializeViewState(state);
+}
+
+export function nodeIdFromItemId(
+  runtime: { searchLibrary: (query: string) => Array<{ id: string; item_id?: string }> },
+  itemId: string,
+): string | null {
+  const match =
+    runtime
+      .searchLibrary(itemId)
+      .find((entry) => entry.item_id === itemId) ||
+    runtime.searchLibrary(itemId)[0];
+  return match?.id ?? null;
 }

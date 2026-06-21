@@ -610,6 +610,83 @@ export function createFederalGraphRuntime(dataset) {
     };
   };
 
+  const STARTER_GROUPS = [
+    { key: "controls", label: "Controls", nodeTypes: ["control", "control_enhancement"] },
+    { key: "baselines", label: "Baselines", nodeTypes: ["baseline", "baseline_profile"] },
+    { key: "disa-ccis", label: "DISA CCIs", prefix: "disa-cci" },
+    { key: "stig-srg", label: "STIG/SRG", match: (id) => id.includes("stig") || id.includes("srg") },
+    { key: "templates", label: "Templates", nodeTypes: ["template"] },
+    { key: "playbooks", label: "Playbooks", nodeTypes: ["pattern"] },
+    { key: "sources", label: "Sources", nodeTypes: ["source"] },
+  ];
+
+  const buildStarterMap = () => {
+    const hub = {
+      id: "starter:hub",
+      node_type: "starter_hub",
+      label: "Control landscape",
+      metadata: {
+        item_id: "Control landscape",
+        title: "Control landscape",
+      },
+    };
+
+    const nodes = [hub];
+    const edges = [];
+
+    for (const group of STARTER_GROUPS) {
+      let count = 0;
+      if (group.nodeTypes) {
+        count = dataset.nodes.filter((node) =>
+          group.nodeTypes.includes(node.node_type),
+        ).length;
+      } else if (group.prefix) {
+        count = dataset.nodes.filter((node) =>
+          node.id.startsWith(group.prefix),
+        ).length;
+      } else if (group.match) {
+        count = dataset.nodes.filter((node) => group.match(node.id)).length;
+      }
+
+      const groupNode = {
+        id: `starter:${group.key}`,
+        node_type: "starter_group",
+        label: group.label,
+        metadata: {
+          item_id: `${group.label} (${count})`,
+          title: group.label,
+          count,
+          starterKey: group.key,
+        },
+      };
+
+      nodes.push(groupNode);
+      edges.push({
+        id: `starter-edge:${group.key}`,
+        source_node_id: hub.id,
+        target_node_id: groupNode.id,
+        relationship_type: "related_to",
+        provenance_class: "federal_published",
+        publication_status: "published",
+        confidence: "high",
+        plain_language_rationale: "Starter group in the Atlas Map.",
+      });
+    }
+
+    return {
+      centerNode: hub,
+      centerNodeId: hub.id,
+      nodes,
+      edges,
+      stats: {
+        total: edges.length,
+        filtered: edges.length,
+        truncated: false,
+        nodeCount: nodes.length,
+      },
+    };
+  };
+
   return {
     dataset,
     searchNodes(query, filters = {}) {
@@ -737,6 +814,9 @@ export function createFederalGraphRuntime(dataset) {
     },
     buildNeighborhood(centerNodeId, options = {}) {
       return buildNeighborhood(centerNodeId, options);
+    },
+    buildStarterMap() {
+      return buildStarterMap();
     },
     getEvidenceForEdge(edgeId) {
       const edge = edgeById.get(edgeId);

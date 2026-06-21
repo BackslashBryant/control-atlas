@@ -44,9 +44,11 @@ export async function dismissOnboarding(page) {
   }
 }
 
-export async function waitForAppReady(page) {
+export async function waitForAppReady(page, options = {}) {
+  const { allowPartial = false } = options;
+  const readyPattern = allowPartial ? /^(true|partial)$/ : /^true$/;
   try {
-    await expect(page.locator('#app')).toHaveAttribute('data-app-ready', 'true', { timeout: 60000 });
+    await expect(page.locator('#app')).toHaveAttribute('data-app-ready', readyPattern, { timeout: 60000 });
   } catch (error) {
     const startupSnapshot = await page.evaluate(() => {
       const app = document.querySelector('#app');

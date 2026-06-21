@@ -27,8 +27,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 const ROUTES = [
-  { label: "landing", path: "/" },
-  { label: "library search", path: "/?view=search&q=AC-2" },
+  { label: "home", path: "/" },
+  { label: "atlas map", path: "/?view=atlas-map" },
+  { label: "explore search", path: "/?view=explore&q=AC-2" },
   {
     label: "library detail",
     path: "/?view=library-detail&node=nist-800-53%3AAC-2",
@@ -38,8 +39,8 @@ const ROUTES = [
     path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=map",
   },
   {
-    label: "library detail graph table",
-    path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
+    label: "library detail graph list",
+    path: "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=list",
   },
   { label: "compare hub", path: "/?view=matrix" },
   {
@@ -56,8 +57,8 @@ const ROUTES = [
     label: "template detail",
     path: "/?view=templates&templateType=security_plan_starter",
   },
-  { label: "patterns hub", path: "/?view=patterns" },
-  { label: "pattern detail", path: "/?view=patterns&pattern=rmf-lifecycle" },
+  { label: "playbooks hub", path: "/?view=playbooks" },
+  { label: "playbook detail", path: "/?view=playbooks&pattern=rmf-lifecycle" },
   { label: "start here", path: "/?view=start-here" },
   { label: "about", path: "/?view=about" },
 ];
@@ -90,7 +91,7 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
-  await page.getByRole("button", { name: "View detailed mappings" }).click();
+  await page.getByRole("button", { name: "View detailed list" }).click();
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible();

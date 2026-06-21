@@ -1,25 +1,72 @@
-import { lazy, Suspense, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
-import { displayNameFor } from "../../app/display-names.mjs";
-import { ProvenanceBadge } from "../lib/compareHelpers";
-import { PROVENANCE_LEGEND, provenanceCssVar } from "../lib/graphTheme";
+import type { ClusterNodeMeta } from "../lib/graphClustering";
+import {
+  ITEM_TYPE_LEGEND,
+  PROVENANCE_LEGEND,
+  provenanceCssVar,
+} from "../lib/graphTheme";
 import {
   useRelationshipFilters,
   type RelationshipFilterState,
 } from "../lib/useRelationshipFilters";
 import { RelationshipGraphTable } from "./RelationshipGraphTable";
+import { RelationshipGraphWithHandle } from "./RelationshipGraph";
 
-const RelationshipGraph = lazy(() => import("./RelationshipGraph"));
+export type RelationshipGraphHandle = {
+  fitToScreen: () => void;
+  resetView: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+};
+
+type StaticGraph = {
+  nodes: Array<{
+    id: string;
+    node_type?: string;
+    label?: string;
+    metadata?: { item_id?: string; title?: string };
+  }>;
+  edges: Array<{
+    id: string;
+    source_node_id: string;
+    target_node_id: string;
+    relationship_type: string;
+    provenance_class: string;
+    publication_status: string;
+    confidence: string;
+    plain_language_rationale?: string;
+  }>;
+  stats: {
+    nodeCount: number;
+    filtered: number;
+    truncated: boolean;
+  };
+};
 
 type RelationshipExplorerProps = {
   runtime: Parameters<typeof useRelationshipFilters>[0];
   centerNodeId: string;
   centerItemId: string;
-  relationshipView: "map" | "table";
+  relationshipView: "map" | "list";
   filters: RelationshipFilterState;
   onFilterChange: (patch: Partial<RelationshipFilterState>) => void;
-  onViewChange: (view: "map" | "table") => void;
+  onViewChange: (view: "map" | "list") => void;
   onOpenNode: (nodeId: string) => void;
+  heading?: string;
+  introCopy?: string;
+  listLabel?: string;
+  mapControls?: boolean;
+  onCopyMapLink?: () => void;
+  onOpenCompare?: (itemId: string) => void;
+  onOpenRecord?: (nodeId: string) => void;
+  onSelectNode?: (nodeId: string) => void;
+  selectedNodeId?: string | null;
+  staticGraph?: StaticGraph;
+  clusterMeta?: Map<string, ClusterNodeMeta>;
+  expandedClusters?: Set<string>;
+  onClusterExpand?: (clusterKey: string) => void;
+  showEmptyState?: boolean;
 };
 
 function FilterSelect(props: {
@@ -58,21 +105,44 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     onFilterChange,
     onViewChange,
     onOpenNode,
+    heading = "Atlas Map",
+    introCopy,
+    listLabel = "List",
+    mapControls = false,
+    onCopyMapLink,
+    onOpenCompare,
+    onOpenRecord,
+    onSelectNode,
+    selectedNodeId: controlledSelectedNodeId,
+    staticGraph,
+    clusterMeta,
+    onClusterExpand,
+    showEmptyState,
   } = props;
 
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
-    centerNodeId,
-  );
+  const graphRef = useRef<RelationshipGraphHandle>(null);
+  const [internalSelectedNodeId, setInternalSelectedNodeId] = useState<
+    string | null
+  >(centerNodeId);
+  const selectedNodeId =
+    controlledSelectedNodeId !== undefined
+      ? controlledSelectedNodeId
+      : internalSelectedNodeId;
+
+  const setSelectedNodeId = (nodeId: string) => {
+    if (onSelectNode) onSelectNode(nodeId);
+    else setInternalSelectedNodeId(nodeId);
+  };
+
   const reducedMotion = useMemo(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     [],
   );
 
-  const { neighborhood, filterOptions, tableRows } = useRelationshipFilters(
-    runtime,
-    centerNodeId,
-    filters,
-  );
+  const filtered = useRelationshipFilters(runtime, centerNodeId, filters);
+  const neighborhood = staticGraph || filtered.neighborhood;
+  const filterOptions = filtered.filterOptions;
+  const tableRows = filtered.tableRows;
 
   const searchHighlightIds = useMemo(() => {
     if (!filters.search.trim()) return new Set<string>();
@@ -81,7 +151,23 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
 
   const selectedNode =
     neighborhood.nodes.find((node) => node.id === selectedNodeId) || null;
+  const selectedHasRecord =
+    selectedNode &&
+    selectedNode.id !== centerNodeId &&
+    !selectedNode.id.startsWith("cluster:") &&
+    !selectedNode.id.startsWith("starter:");
   const summaryId = "relationship-map-summary";
+
+  if (showEmptyState) {
+    return (
+      <section className="relationship-map-panel">
+        <p className="muted">
+          No connections found for this item. Try searching for another record,
+          turning on inferred links, or opening the source record.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -89,16 +175,16 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
       className="relationship-map-panel"
     >
       <div className="relationship-map-intro">
-        <h3 id="relationship-map-heading">Relationship map</h3>
+        <h3 id="relationship-map-heading">{heading}</h3>
         <p id={summaryId}>
-          This map shows published connections around {centerItemId}.{" "}
+          {introCopy ||
+            `This map shows connections around ${centerItemId}.`}{" "}
           {neighborhood.stats.nodeCount} items and {neighborhood.stats.filtered}{" "}
           links are visible
           {neighborhood.stats.truncated
             ? " (view truncated for performance)"
             : ""}
-          . Use the table view for full screen-reader access to every
-          connection.
+          . Use the list view for full screen-reader access to every connection.
         </p>
       </div>
 
@@ -150,7 +236,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           Include inferred links
         </label>
         <label className="field-label" htmlFor="graph-filter-search">
-          Search connections
+          Search map
           <input
             id="graph-filter-search"
             onChange={(event) => onFilterChange({ search: event.target.value })}
@@ -160,6 +246,62 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           />
         </label>
       </div>
+
+      {mapControls ? (
+        <div aria-label="Map controls" className="relationship-map-controls" role="group">
+          <button
+            className="secondary quiet"
+            onClick={() => graphRef.current?.fitToScreen()}
+            type="button"
+          >
+            Fit to screen
+          </button>
+          <button
+            className="secondary quiet"
+            onClick={() => graphRef.current?.resetView()}
+            type="button"
+          >
+            Reset view
+          </button>
+          <button
+            className="secondary quiet"
+            onClick={() => graphRef.current?.zoomIn()}
+            type="button"
+          >
+            Zoom in
+          </button>
+          <button
+            className="secondary quiet"
+            onClick={() => graphRef.current?.zoomOut()}
+            type="button"
+          >
+            Zoom out
+          </button>
+          {selectedHasRecord && onOpenRecord ? (
+            <button
+              className="secondary"
+              onClick={() => onOpenRecord(selectedNode!.id)}
+              type="button"
+            >
+              Open selected record
+            </button>
+          ) : null}
+          {selectedHasRecord && onOpenCompare && selectedNode?.metadata?.item_id ? (
+            <button
+              className="secondary"
+              onClick={() => onOpenCompare(selectedNode.metadata!.item_id!)}
+              type="button"
+            >
+              Compare selected item
+            </button>
+          ) : null}
+          {onCopyMapLink ? (
+            <button className="secondary quiet" onClick={onCopyMapLink} type="button">
+              Copy map link
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       <div
         aria-label="Relationship views"
@@ -176,21 +318,27 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           Map
         </button>
         <button
-          aria-selected={relationshipView === "table"}
-          className={relationshipView === "table" ? "tab active" : "tab"}
-          onClick={() => onViewChange("table")}
+          aria-selected={relationshipView === "list"}
+          className={relationshipView === "list" ? "tab active" : "tab"}
+          onClick={() => onViewChange("list")}
           role="tab"
           type="button"
         >
-          Table
+          {listLabel}
         </button>
       </div>
 
       <div
         className="relationship-map-legend"
         role="list"
-        aria-label="Provenance legend"
+        aria-label="Map legend"
       >
+        {ITEM_TYPE_LEGEND.map((entry) => (
+          <span className="legend-item" key={entry.key} role="listitem">
+            <span aria-hidden="true" className={`legend-shape legend-shape-${entry.shape}`} />
+            {entry.label}
+          </span>
+        ))}
         {PROVENANCE_LEGEND.map((entry) => (
           <span className="legend-item" key={entry.key} role="listitem">
             <span
@@ -216,20 +364,24 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           className="relationship-map-body"
           role="tabpanel"
         >
-          <Suspense
-            fallback={<p className="muted">Loading relationship map…</p>}
-          >
-            <RelationshipGraph
+          <RelationshipGraphWithHandle
               centerNodeId={centerNodeId}
+              clusterMeta={clusterMeta}
               edges={neighborhood.edges}
               nodes={neighborhood.nodes}
-              onSelectNode={setSelectedNodeId}
+              onClusterClick={onClusterExpand}
+              onSelectNode={(nodeId) => {
+                if (nodeId.startsWith("cluster:") && onClusterExpand) {
+                  onClusterExpand(nodeId.replace("cluster:", ""));
+                }
+                setSelectedNodeId(nodeId);
+              }}
               reducedMotion={reducedMotion}
+              ref={graphRef}
               searchHighlightIds={searchHighlightIds}
               selectedNodeId={selectedNodeId}
-            />
-          </Suspense>
-          {selectedNode ? (
+          />
+          {!mapControls && selectedNode ? (
             <aside className="relationship-map-selection">
               <p className="eyebrow">Selected item</p>
               <strong>
@@ -246,7 +398,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
                   onClick={() => onOpenNode(selectedNode.id)}
                   type="button"
                 >
-                  Open detail
+                  Open record
                 </button>
               ) : (
                 <p className="muted">Center of this map.</p>

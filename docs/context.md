@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-Post-MVP maintenance and optional `v1.0.0` promotion. Epic 8 MITRE Threat Lens shipped on `main`.
+Post-MVP maintenance and optional `v1.0.0` promotion. Epic 10 Atlas Map-First UX shipped on `main`.
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -25,6 +25,7 @@ Post-MVP maintenance and optional `v1.0.0` promotion. Epic 8 MITRE Threat Lens s
 - Epic 7: About/trust page (`/?view=about`), manual a11y checklist, live Pages audit template, SecDevOps docs (branch protection policy; action pinning ADR deferral)
 - Epic 8: MITRE Threat Lens — ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain ([`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md))
 - Epic 9: Interactive relationship map in Library detail — provenance filters, lazy canvas graph, accessible table fallback ([`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md))
+- Epic 10: Atlas Map-first UX — homepage, standalone Atlas Map, Explore/Playbooks rename, map entry points and clustering ([`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md))
 
 ## Adopted Baseline
 
@@ -41,9 +42,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Merge Epic 8 branch to `main` and verify CI/Pages deploy
-2. Maintenance CI and optional RC promotion to `v1.0.0`
-3. Epic 10 when spec'd
+1. Maintenance CI and optional RC promotion to `v1.0.0`
+2. Epic 10 residuals (compare-map overlay, ExplorePage extraction) when scoped
 
 ## Status Docs
 

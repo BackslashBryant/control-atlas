@@ -17,17 +17,19 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Control Atlas", exact: true }),
-  ).toBeVisible();
-  await expect(page.getByText("Start with meaning")).toBeVisible();
-  await expect(
-    page.locator(".intent-card").filter({ hasText: "Library" }),
-  ).toBeVisible();
-  await expect(
-    page.locator(".intent-card").filter({ hasText: "Compare" }),
+    page.getByRole("heading", {
+      name: "Navigate federal cyber compliance.",
+      exact: true,
+    }),
   ).toBeVisible();
   await expect(
-    page.locator(".intent-card").filter({ hasText: "Templates" }),
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas Map" }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "Compare Frameworks" }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".home-card-grid").getByRole("button", { name: /^Templates\b/ }),
   ).toBeVisible();
 });
 
@@ -43,7 +45,7 @@ test("critical path: compare detailed mappings expose text provenance labels", a
     .click();
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
-  await page.getByRole("button", { name: "View detailed mappings" }).click();
+  await page.getByRole("button", { name: "View detailed list" }).click();
 
   const table = page.getByRole("table", { name: "Relationship mappings" });
   await expect(table).toBeVisible();
@@ -59,7 +61,7 @@ test("critical path: library detail relationships show connection and source tru
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "What it connects to" }),
+    page.getByRole("heading", { name: "Connections" }).first(),
   ).toBeVisible();
   await page.locator(".relationship-group-trigger").first().click();
   const relationshipCard = page.locator(".relationship-card").first();
@@ -76,7 +78,7 @@ test("critical path: library detail relationship map exposes table fallback", as
   page,
 }) => {
   await page.goto(
-    "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
+    "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=list",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -109,7 +111,7 @@ test("critical path: MITRE library search returns technique with plain-language 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "Open detail" }).first().click();
+  await page.getByRole("button", { name: "Open record" }).first().click();
   await expect(page).toHaveURL(/view=library-detail/);
   await expect(page.getByText("What this is")).toBeVisible();
   await expect(page.getByText("Threat context")).toBeVisible();
@@ -162,7 +164,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
     name: "Primary navigation",
   });
   const startHere = primaryNav.getByRole("button", {
-    name: "Start Here",
+    name: "Start",
     exact: true,
   });
   await startHere.focus();
@@ -172,7 +174,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
     page.getByRole("heading", { name: "Find the best place to start" }),
   ).toBeVisible();
 
-  const search = page.getByLabel("Search library and glossary");
+  const search = page.getByLabel("Search records and glossary");
   await search.focus();
   await expect(search).toBeFocused();
 });

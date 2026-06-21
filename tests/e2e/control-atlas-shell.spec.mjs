@@ -5,35 +5,39 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test('control atlas staged shell exposes the translation-first nav order and guided start path', async ({ page }) => {
+test('control atlas map-first shell exposes navigation and guided start path', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
   const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
 
   await expect(page).toHaveTitle(/Control Atlas/);
   await dismissOnboarding(page);
-  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Navigate federal cyber compliance.', exact: true })).toBeVisible();
+  await expect(page.getByText('Find a requirement, see how it connects, and open the next step with source-backed context.')).toBeVisible();
 
   const navLabels = await primaryNav.getByRole('button').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
   expect(navLabels).toEqual([
-    'Start Here',
-    'Library',
+    'Start',
+    'Atlas Map',
+    'Explore',
     'Compare',
-    'Patterns',
+    'Playbooks',
     'Templates',
     'Sources',
   ]);
 
-  await primaryNav.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await page.getByRole('button', { name: 'Control Atlas' }).click();
+  await expect(page).toHaveURL(/\?view=home|\/$/);
+
+  await primaryNav.getByRole('button', { name: 'Start', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
   await page.getByLabel('Operational environment').selectOption('CSP');
   await page.getByRole('button', { name: 'Show recommendation' }).click();
-  await expect(page.getByRole('heading', { name: 'Library', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
   await expect(page.getByText('FedRAMP Rev. 5 Baselines')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true })).toBeVisible();
@@ -47,26 +51,25 @@ test('library detail deep links stay compatible and keep advanced details collap
   await expect(page.getByText('What this is')).toBeVisible();
   await expect(page.getByText('Why it matters')).toBeVisible();
   await expect(page.getByText('Where it appears')).toBeVisible();
-  await expect(page.getByText('What it connects to')).toBeVisible();
-  await expect(page.getByText('Connection summary', { exact: true })).toBeVisible();
+  await expect(page.getByText('Connections', { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open in Atlas Map' }).first()).toBeVisible();
   await expect(page.locator('.relationship-card')).toHaveCount(0);
   await page.locator('.relationship-group-trigger').first().click();
   await expect(page.locator('.relationship-card').first()).toBeVisible();
   await expect(page.getByText('Source support', { exact: true })).toBeVisible();
   await expect(page.getByText('What to do next', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy link' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Copy ID' })).toBeVisible();
   await expect(page.getByText('Official text / source excerpt')).toBeVisible();
   await expect(page.getByText('Source location')).not.toBeVisible();
   await page.getByRole('button', { name: 'Advanced details' }).click();
   await expect(page.getByText('Source location')).toBeVisible();
 });
 
-test('library filters narrow results without a page reload', async ({ page }) => {
-  await page.goto('/?view=search&q=AC-2');
+test('explore filters narrow results without a page reload', async ({ page }) => {
+  await page.goto('/?view=explore&q=AC-2');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Explore the control landscape' })).toBeVisible();
   await page.getByRole('button', { name: 'Refine results' }).click();
   await page.getByLabel('Item type').selectOption('control');
   await expect(page.locator('#library-results .result-card')).toHaveCount(1);
@@ -92,7 +95,7 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'View detailed mappings' }).click();
+  await page.getByRole('button', { name: 'View detailed list' }).click();
   await expect(page.locator('table')).toContainText('AC-2');
   await expect(page.locator('table')).toContainText('Plain-language rationale');
 });
@@ -129,7 +132,7 @@ test('compare baselines shows delta controls and source versions', async ({ page
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
 });
 
-test('sources, templates, and patterns follow trust-first, artifact-first, and outcome-first flows', async ({ page }) => {
+test('sources, templates, and playbooks follow trust-first, artifact-first, and outcome-first flows', async ({ page }) => {
   await page.goto('/?view=sources');
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -152,9 +155,9 @@ test('sources, templates, and patterns follow trust-first, artifact-first, and o
   await expect(page.getByText('What it includes')).toBeVisible();
   await expect(page.getByRole('button', { name: 'More options' })).toBeVisible();
 
-  await page.goto('/?view=patterns');
+  await page.goto('/?view=playbooks');
   await waitForAppReady(page);
-  await expect(page.getByRole('heading', { name: 'Patterns organized around user outcomes' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Compliance playbooks' })).toBeVisible();
   await page.locator('.intent-card').first().click();
   await expect(page.getByText('Purpose')).toBeVisible();
   await expect(page.getByText('Common mistakes', { exact: true })).toBeVisible();
