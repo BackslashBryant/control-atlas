@@ -21,6 +21,8 @@ export type CompareWorkbench =
 
 export type RelationshipViewMode = "map" | "list";
 
+export type CompareViewMode = "map" | "list";
+
 export type ViewState =
   | { view: "home" }
   | {
@@ -71,6 +73,7 @@ export type ViewState =
       baselineA: string;
       baselineB: string;
       intent: string;
+      compareView: string;
     }
   | {
       view: "patterns";
@@ -153,7 +156,14 @@ function compareState(): Extract<ViewState, { view: "matrix" }> {
     baselineA: "",
     baselineB: "",
     intent: "",
+    compareView: "list",
   };
+}
+
+function normalizeCompareView(value: string): CompareViewMode | "" {
+  if (value === "map") return "map";
+  if (value === "list") return "list";
+  return "";
 }
 
 function normalizeRelationshipView(value: string): RelationshipViewMode | "" {
@@ -231,6 +241,8 @@ export function parseViewState(search: string): ViewState {
       baselineA: params.get("baselineA") || "",
       baselineB: params.get("baselineB") || "",
       intent: params.get("intent") || "",
+      compareView:
+        normalizeCompareView(params.get("compareView") || "") || "list",
     };
   }
 
@@ -486,6 +498,9 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "baselineA", state.baselineA);
     setIfValue(params, "baselineB", state.baselineB);
     setIfValue(params, "intent", state.intent);
+    if (state.compareView === "map") {
+      params.set("compareView", "map");
+    }
   } else if (state.view === "patterns") {
     params.set("view", "playbooks");
     setIfValue(params, "pattern", state.pattern);
@@ -532,6 +547,22 @@ export type AtlasMapUrlOptions = {
   includeCandidates?: boolean;
   relationshipSearch?: string;
 };
+
+export type CompareUrlOptions = Partial<
+  Extract<ViewState, { view: "matrix" }>
+> & {
+  compareView?: CompareViewMode;
+};
+
+export function buildCompareUrl(options: CompareUrlOptions = {}): string {
+  const state = normalizeViewState("matrix", {
+    ...compareState(),
+    ...options,
+    view: "matrix",
+    compareView: options.compareView || "list",
+  }) as Extract<ViewState, { view: "matrix" }>;
+  return serializeViewState(state);
+}
 
 export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
   const state = normalizeViewState("atlas-map", {

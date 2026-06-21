@@ -29,6 +29,7 @@ type RelationshipGraphProps = {
     node_type?: string;
     label?: string;
     metadata?: { item_id?: string; title?: string };
+    compareRole?: import("../lib/graphTheme").CompareRole;
   }>;
   edges: Array<{
     id: string;

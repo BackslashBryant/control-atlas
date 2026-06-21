@@ -6,7 +6,7 @@
 
 **User confusion reduced:** “Where do I start?” and “How do things connect?” — map and connections are primary, not buried in library detail.
 
-**Branch:** `agent/forge/epic-10-atlas-map-ux`
+**Branch:** `agent/forge/epic-10-atlas-map-ux` (residual closeout: `agent/forge/epic-10-residual-closeout`)
 
 **Dependencies:** Epic 9 relationship graph stack (`RelationshipExplorer`, `buildNeighborhood`, provenance filters).
 
@@ -38,25 +38,18 @@
 - Connections section rework; Copy ID demoted
 - `StickyDetailBar`: Back, Open in Atlas Map, Compare
 
-### Phase 5 — Integrations
-- Compare: Open in Atlas Map + summary actions
-- Templates, playbooks, sources: related map links
-- Provenance label standardization in graph legend and badges
+### Phase 5 — Integrations (complete)
+- Compare map/list toggle on all workbenches (relationships, baseline, STIG chain, threat chain)
+- Shared/unique/provenance compare summary + `buildCompareGraph.ts`
+- `ComparePage.tsx` and `ExplorePage.tsx` extracted from `App.tsx`
+- `ProvenanceTerm` tooltips on badges, legends, explore, detail, sources, and compare surfaces
 
 ---
 
 ## Verification
 
-- `npm run precommit` — pass (60 E2E + unit/type/lint/build)
-- Updated specs: `control-atlas-shell`, `relationship-graph`, `landing-performance`, `critical-path-matrix`, `accessibility`, `load-resilience`, `start-here`, `a11y-contract`
-
----
-
-## Residual (non-blocking)
-
-- **Compare-map mode** — dedicated shared/unique edge visualization on Compare (table + Open in Atlas Map link shipped; map overlay deferred)
-- **Provenance tooltips** — legend and badges standardized; not every surface has hover tooltips yet
-- **ExplorePage extraction** — search UI remains in `App.tsx`; `HomePage` and `AtlasMapPage` extracted only
+- `npm run precommit` — pass (E2E includes `compare-map.spec.mjs`)
+- Updated specs: `control-atlas-shell`, `relationship-graph`, `compare-map`, `landing-performance`, `critical-path-matrix`, `accessibility`, `load-resilience`, `start-here`, `a11y-contract`, `browser-contract`
 
 ---
 
@@ -65,6 +58,8 @@
 | Area | Path |
 |------|------|
 | Routing | `src/ui/lib/viewState.ts`, `src/ui/lib/navigation.ts` |
-| Pages | `src/ui/pages/HomePage.tsx`, `src/ui/pages/AtlasMapPage.tsx` |
+| Pages | `src/ui/pages/HomePage.tsx`, `AtlasMapPage.tsx`, `ExplorePage.tsx`, `ComparePage.tsx` |
+| Compare map | `src/ui/lib/buildCompareGraph.ts`, `src/ui/components/CompareResultsPanel.tsx` |
+| Provenance UX | `src/ui/components/ProvenanceTerm.tsx`, `src/content/copy.mjs` |
 | Graph | `src/ui/components/RelationshipExplorer.tsx`, `src/ui/lib/graphClustering.ts` |
 | Runtime | `src/app/runtime.mjs` (`buildStarterMap`) |

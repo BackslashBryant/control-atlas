@@ -6,11 +6,16 @@ const compareHelpers = readFileSync("src/ui/lib/compareHelpers.tsx", "utf8");
 const css = readFileSync("src/styles/app.css", "utf8");
 
 test("provenance badges always render text labels alongside tone classes", () => {
+  const provenanceTerm = readFileSync(
+    "src/ui/components/ProvenanceTerm.tsx",
+    "utf8",
+  );
   assert.match(compareHelpers, /function PublicationStatusBadge/);
   assert.match(compareHelpers, /Inferred link/);
   assert.match(compareHelpers, /Official link/);
   assert.match(compareHelpers, /function ProvenanceBadge/);
-  assert.match(compareHelpers, /displayNameFor\('provenance_class'/);
+  assert.match(compareHelpers, /ProvenanceTerm/);
+  assert.match(provenanceTerm, /displayNameFor\("provenance_class"/);
 });
 
 test("fedramp provenance token uses teal, not primary blueprint blue", () => {
@@ -33,6 +38,17 @@ test("relationship graph surfaces include accessible table fallback and provenan
   assert.match(explorer, /Map legend/);
   assert.match(table, /aria-label="Relationship table"/);
   assert.match(table, /ProvenanceBadge/);
+});
+
+test("compare view state and provenance term support accessible descriptions", () => {
+  const viewState = readFileSync("src/ui/lib/viewState.ts", "utf8");
+  const provenanceTerm = readFileSync(
+    "src/ui/components/ProvenanceTerm.tsx",
+    "utf8",
+  );
+  assert.match(viewState, /compareView/);
+  assert.match(provenanceTerm, /aria-describedby/);
+  assert.match(provenanceTerm, /visually-hidden/);
 });
 
 test("full PRD provenance color tokens are defined", () => {

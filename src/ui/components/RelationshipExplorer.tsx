@@ -2,10 +2,12 @@ import { useMemo, useRef, useState } from "react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
+  COMPARE_ROLE_LEGEND,
   ITEM_TYPE_LEGEND,
   PROVENANCE_LEGEND,
   provenanceCssVar,
 } from "../lib/graphTheme";
+import { ProvenanceTerm } from "./ProvenanceTerm";
 import {
   useRelationshipFilters,
   type RelationshipFilterState,
@@ -63,10 +65,24 @@ type RelationshipExplorerProps = {
   onSelectNode?: (nodeId: string) => void;
   selectedNodeId?: string | null;
   staticGraph?: StaticGraph;
+  staticTableRows?: Array<{
+    edge: {
+      relationship_type: string;
+      provenance_class: string;
+      publication_status: string;
+      confidence: string;
+      plain_language_rationale?: string;
+    };
+    counterpart: { id: string };
+    itemId: string;
+    title: string;
+  }>;
   clusterMeta?: Map<string, ClusterNodeMeta>;
   expandedClusters?: Set<string>;
   onClusterExpand?: (clusterKey: string) => void;
   showEmptyState?: boolean;
+  showFilters?: boolean;
+  compareLegend?: boolean;
 };
 
 function FilterSelect(props: {
@@ -115,9 +131,12 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     onSelectNode,
     selectedNodeId: controlledSelectedNodeId,
     staticGraph,
+    staticTableRows,
     clusterMeta,
     onClusterExpand,
     showEmptyState,
+    showFilters = true,
+    compareLegend = false,
   } = props;
 
   const graphRef = useRef<RelationshipGraphHandle>(null);
@@ -142,7 +161,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
   const filtered = useRelationshipFilters(runtime, centerNodeId, filters);
   const neighborhood = staticGraph || filtered.neighborhood;
   const filterOptions = filtered.filterOptions;
-  const tableRows = filtered.tableRows;
+  const tableRows = staticTableRows || filtered.tableRows;
 
   const searchHighlightIds = useMemo(() => {
     if (!filters.search.trim()) return new Set<string>();
@@ -188,6 +207,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         </p>
       </div>
 
+      {showFilters ? (
       <div
         aria-label="Relationship filters"
         className="relationship-map-filters"
@@ -246,6 +266,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           />
         </label>
       </div>
+      ) : null}
 
       {mapControls ? (
         <div aria-label="Map controls" className="relationship-map-controls" role="group">
@@ -333,15 +354,30 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         role="list"
         aria-label="Map legend"
       >
-        {ITEM_TYPE_LEGEND.map((entry) => (
-          <span className="legend-item" key={entry.key} role="listitem">
-            <span aria-hidden="true" className={`legend-shape legend-shape-${entry.shape}`} />
-            {entry.label}
-          </span>
-        ))}
+        {compareLegend
+          ? COMPARE_ROLE_LEGEND.map((entry) => (
+              <span className="legend-item" key={entry.key} role="listitem">
+                <span
+                  aria-hidden="true"
+                  className="legend-swatch"
+                  style={{ backgroundColor: entry.color }}
+                />
+                {entry.label}
+              </span>
+            ))
+          : ITEM_TYPE_LEGEND.map((entry) => (
+              <span className="legend-item" key={entry.key} role="listitem">
+                <span
+                  aria-hidden="true"
+                  className={`legend-shape legend-shape-${entry.shape}`}
+                />
+                {entry.label}
+              </span>
+            ))}
         {PROVENANCE_LEGEND.map((entry) => (
           <span className="legend-item" key={entry.key} role="listitem">
             <span
+              aria-hidden="true"
               className="legend-swatch"
               style={{
                 backgroundColor: provenanceCssVar(entry.key),
@@ -353,7 +389,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
                       : "solid",
               }}
             />
-            {entry.label}
+            <ProvenanceTerm kind="provenance" label={entry.label} value={entry.key} />
           </span>
         ))}
       </div>

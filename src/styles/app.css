@@ -559,6 +559,23 @@ li {
   margin: 0.5rem 0 0;
 }
 
+.compare-summary-grid {
+  margin-bottom: var(--space-4);
+}
+
+.compare-map-unavailable {
+  margin-top: var(--space-4);
+}
+
+.provenance-term {
+  display: inline;
+}
+
+.provenance-term-label {
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
 .baseline-source-summary {
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);

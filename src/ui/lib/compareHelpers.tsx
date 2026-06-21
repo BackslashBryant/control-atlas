@@ -1,4 +1,4 @@
-import { displayNameFor } from '../../app/display-names.mjs';
+import { ProvenanceTerm } from '../components/ProvenanceTerm';
 
 export function parseCatalogItemIds(value: string, catalogId: string): string[] {
   return [
@@ -31,7 +31,11 @@ export function PublicationStatusBadge(props: { publicationStatus?: string; prov
   const inferred = isInferredLink(props.publicationStatus, props.provenanceClass);
   return (
     <span className={`badge tone-${inferred ? 'warning' : 'success'}`}>
-      {inferred ? 'Inferred link' : 'Official link'}
+      <ProvenanceTerm
+        kind="publication"
+        label={inferred ? 'Inferred link' : 'Official link'}
+        value={inferred ? 'candidate' : 'published'}
+      />
     </span>
   );
 }
@@ -41,7 +45,10 @@ export function ProvenanceBadge(props: { provenanceClass?: string; publicationSt
   return (
     <div className="badge-row">
       <span className={`badge tone-${inferred ? 'warning' : 'success'}`}>
-        {displayNameFor('provenance_class', props.provenanceClass || '')}
+        <ProvenanceTerm
+          kind="provenance"
+          value={props.provenanceClass || ''}
+        />
       </span>
       <PublicationStatusBadge
         provenanceClass={props.provenanceClass}
