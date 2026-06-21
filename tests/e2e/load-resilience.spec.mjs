@@ -12,11 +12,11 @@ test('load resilience shows library skeleton and allows offline navigation', asy
     await route.continue();
   });
 
-  await page.goto('/');
+  await page.goto('/?view=explore');
   await expect(page.locator('.skeleton-card').first()).toBeVisible();
-  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('button', { name: 'Patterns', exact: true }).click();
-  await expect(page).toHaveURL(/view=patterns/);
-  await expect(page.getByRole('heading', { name: 'Patterns organized around user outcomes' })).toBeVisible();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('button', { name: 'Playbooks', exact: true }).click();
+  await expect(page).toHaveURL(/view=playbooks/);
+  await expect(page.getByRole('heading', { name: 'Compliance playbooks' })).toBeVisible();
 });
 
 test('load resilience surfaces retry after timeout', async ({ page }) => {
@@ -25,11 +25,11 @@ test('load resilience surfaces retry after timeout', async ({ page }) => {
     await route.continue();
   });
 
-  await page.goto('/');
+  await page.goto('/?view=explore');
   await expect(page.getByRole('button', { name: 'Retry loading' })).toBeVisible({
     timeout: 15000,
   });
-  await expect(page.getByText('Library data unavailable')).toBeVisible();
+  await expect(page.getByText('Record data unavailable')).toBeVisible();
 });
 
 test('staged library search enables results before detail pages', async ({ page }) => {
@@ -43,14 +43,14 @@ test('staged library search enables results before detail pages', async ({ page 
     await route.continue();
   });
 
-  await page.goto('/?view=search&q=AC-2');
-  await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible({
+  await page.goto('/?view=explore&q=AC-2');
+  await expect(page.getByRole('heading', { name: 'Explore the control landscape' })).toBeVisible({
     timeout: 15000,
   });
   await expect(page.locator('#library-results .result-card').first()).toBeVisible({
     timeout: 15000,
   });
-  const openDetail = page.getByRole('button', { name: 'Open detail' }).first();
+  const openDetail = page.getByRole('button', { name: 'Open record' }).first();
   if (graphRequests === 0) {
     await expect(openDetail).toBeDisabled();
   }

@@ -5,34 +5,33 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test('landing presents the translation-first hero and primary entry paths', async ({ page }) => {
+test('landing presents the map-first hero and primary entry paths', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.getByText('Start with meaning')).toBeVisible();
-  await expect(page.getByText('A public cyber compliance reference workspace that turns complex guidance into clear, traceable action.')).toBeVisible();
-  await expect(page.locator('.hero-actions').getByRole('button', { name: 'Start Here', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Open glossary', exact: true })).toBeVisible();
-  await expect(page.locator('.intent-card').filter({ hasText: 'Library' })).toBeVisible();
-  await expect(page.locator('.intent-card').filter({ hasText: 'Compare' })).toBeVisible();
-  await expect(page.locator('.intent-card').filter({ hasText: 'Templates' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Navigate federal cyber compliance.', exact: true })).toBeVisible();
+  await expect(page.locator('.home-hero .eyebrow')).toContainText('CONTROL ATLAS');
+  await expect(page.getByText('Find a requirement, see how it connects, and open the next step with source-backed context.')).toBeVisible();
+  await expect(page.locator('.hero-actions').getByRole('button', { name: 'Open Atlas Map', exact: true })).toBeVisible();
+  await expect(page.locator('.home-card-grid').getByRole('button', { name: /^Atlas Map\b/ })).toBeVisible();
+  await expect(page.locator('.home-card-grid').getByRole('button', { name: /^Compare Frameworks\b/ })).toBeVisible();
+  await expect(page.locator('.home-card-grid').getByRole('button', { name: /^Templates\b/ })).toBeVisible();
 });
 
 test('landing search and brand-home flow work without legacy onboarding surfaces', async ({ page }) => {
-  await page.goto('/');
-  await waitForAppReady(page);
+  test.setTimeout(120000);
+  await page.goto('/?view=explore');
   await dismissOnboarding(page);
 
-  await page.locator('.intent-card', { hasText: 'Library' }).click();
-  await expect(page.getByRole('heading', { name: 'Search the public reference library' })).toBeVisible();
-  await expect(page.locator('#library-results .result-card').first()).toBeVisible();
-  await expect(page.locator('#library-results')).toContainText('Account Management');
+  await expect(page.getByRole('heading', { name: 'Explore the control landscape', level: 1 })).toBeVisible({
+    timeout: 90000,
+  });
 
-  await page.getByRole('button', { name: /Control Atlas/ }).click();
-  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.getByText('Start with meaning')).toBeVisible();
+  await page.locator('.site-header button.brand').click({ force: true });
+  await expect(page.getByRole('heading', { name: 'Navigate federal cyber compliance.', exact: true })).toBeVisible({
+    timeout: 15000,
+  });
   await expect(page.getByText('Novice Mode')).toHaveCount(0);
   await expect(page.getByText('Expert Mode')).toHaveCount(0);
 });

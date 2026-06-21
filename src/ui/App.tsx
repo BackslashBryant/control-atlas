@@ -10,8 +10,8 @@ import {
   IconFileDescription,
   IconGitCompare,
   IconInfoCircle,
-  IconLibrary,
   IconLink,
+  IconMap,
   IconSearch,
   IconShieldCheck,
   IconSourceCode,
@@ -86,10 +86,20 @@ import type {
   StartHereLibraryLink,
   StartHereRecommendations,
 } from "./lib/startHereRecommendations.d.ts";
+import { AtlasMapPage } from "./pages/AtlasMapPage";
+import { HomePage } from "./pages/HomePage";
+import {
+  activeNavForState,
+  isStaticViewWithoutBundle,
+  PRIMARY_NAV_ITEMS,
+  requiresFullGraph,
+} from "./lib/navigation";
 import {
   normalizeViewState,
   parseViewState,
   serializeViewState,
+  buildAtlasMapUrl,
+  nodeIdFromItemId,
   type CompareWorkbench,
   type ViewState,
 } from "./lib/viewState";
@@ -108,15 +118,6 @@ const HERO_WORDS = [
 
 type HelpTab = "guide" | "glossary";
 
-const PRIMARY_NAV_ITEMS = [
-  { label: "Start Here", view: "start-here", icon: IconCompass },
-  { label: "Library", view: "search", icon: IconLibrary },
-  { label: "Compare", view: "matrix", icon: IconGitCompare },
-  { label: "Patterns", view: "patterns", icon: IconBook2 },
-  { label: "Templates", view: "templates", icon: IconClipboardList },
-  { label: "Sources", view: "sources", icon: IconSourceCode },
-] as const;
-
 const PATTERN_RENAMES: Record<string, string> = {
   "csp-inheritance": "Using FedRAMP Inheritance",
   "shared-responsibility": "What Your Cloud Provider Owns vs What You Own",
@@ -126,35 +127,11 @@ const PATTERN_RENAMES: Record<string, string> = {
   "boe-reuse": "Packaging Evidence for Reuse",
 };
 
-function activeNavForState(state: ViewState) {
-  if (
-    state.view === "library-detail" ||
-    state.view === "browse" ||
-    state.view === "retired"
-  ) {
-    return "search";
-  }
-  return state.view;
-}
-
-function isStaticViewWithoutBundle(view: ViewState["view"]) {
-  return (
-    view === "about" ||
-    view === "patterns" ||
-    view === "start-here" ||
-    view === "search"
-  );
-}
-
-function requiresFullGraph(view: ViewState["view"]) {
-  return (
-    view === "library-detail" ||
-    view === "matrix" ||
-    view === "sources" ||
-    view === "templates" ||
-    view === "browse" ||
-    view === "retired"
-  );
+function openAtlasMapForNode(
+  navigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void,
+  nodeId: string,
+) {
+  navigate("atlas-map", { node: nodeId });
 }
 
 function copyText(value: string) {
@@ -193,12 +170,12 @@ function sourceTrustSummary(source: any) {
     source.provenance_class === "federal_published" ||
     source.provenance_class === "official"
   ) {
-    return "Direct from official source.";
+    return "Official source.";
   }
   if (source.provenance_class?.includes("published")) {
-    return "Derived from a published public source.";
+    return "Source-backed.";
   }
-  return "Suggested by public data.";
+  return "Source-backed.";
 }
 
 function sourceUsageSummary(source: any) {
@@ -525,16 +502,7 @@ export function App() {
       <header className="site-header">
         <button
           className="brand"
-          onClick={() =>
-            navigate("search", {
-              query: "",
-              filter: "",
-              objectType: "",
-              sourceClass: "",
-              controlFamily: "",
-              severity: "",
-            })
-          }
+          onClick={() => navigate("home")}
           type="button"
         >
           <span className="brand-mark" aria-hidden="true">
@@ -548,7 +516,8 @@ export function App() {
         <nav aria-label="Primary navigation" className="primary-nav">
           {PRIMARY_NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const active = activeNavForState(viewState) === item.view;
+            const activeNav = activeNavForState(viewState);
+            const active = activeNav === item.view;
             return (
               <button
                 aria-current={active ? "page" : undefined}
@@ -582,19 +551,19 @@ export function App() {
             }}
           >
             <label className="visually-hidden" htmlFor="header-search">
-              Search library and glossary
+              Search records and glossary
             </label>
             <div className="search-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
                 aria-describedby={bundle ? undefined : "header-search-hint"}
-                aria-label="Search library and glossary"
+                aria-label="Search records and glossary"
                 disabled={!bundle}
                 id="header-search"
                 onChange={(event) => setHeaderSearchDraft(event.target.value)}
                 placeholder={
                   bundle?.graphReady
-                    ? "Search library or glossary"
+                    ? "Search records or glossary"
                     : "Search available — detail views load shortly"
                 }
                 type="search"
@@ -603,7 +572,7 @@ export function App() {
             </div>
             {!bundle ? (
               <p className="field-hint" id="header-search-hint">
-                Library search opens once public records finish loading.
+                Record search opens once public data finishes loading.
               </p>
             ) : !bundle.graphReady ? (
               <p className="field-hint" id="header-search-hint">
@@ -756,6 +725,26 @@ function AppContent(props: {
     );
   }
 
+  if (state.view === "home") {
+    return <HomePage onNavigate={onNavigate} />;
+  }
+
+  if (state.view === "atlas-map") {
+    if (!bundle) {
+      return (
+        <DataPendingNotice onRetry={onRetryLoad} title="Loading Atlas Map" />
+      );
+    }
+    return (
+      <AtlasMapPage
+        bundle={bundle}
+        onNavigate={onNavigate}
+        onOpenNode={onOpenNode}
+        state={state}
+      />
+    );
+  }
+
   if (state.view === "library-detail") {
     if (!bundle) {
       return <DataPendingNotice onRetry={onRetryLoad} />;
@@ -831,8 +820,7 @@ function AppContent(props: {
       <section className="notice">
         <h2>We do not have a public map entry for "{state.query}"</h2>
         <p>
-          Try the Library search or Start Here to find the closest public
-          reference path.
+          Try Explore search or Start to find the closest path.
         </p>
         <div className="card-actions">
           <button
@@ -840,14 +828,14 @@ function AppContent(props: {
             onClick={() => onNavigate("search", { query: state.query })}
             type="button"
           >
-            Search the library
+            Search records
           </button>
           <button
             className="secondary"
             onClick={() => onNavigate("start-here")}
             type="button"
           >
-            Start Here
+            Start guided path
           </button>
         </div>
       </section>
@@ -929,16 +917,11 @@ function LibraryPage(props: {
     state.controlFamily ||
     state.severity,
   );
-  const landing = !state.query && !hasFilters;
 
   const documents = useMemo(() => {
-    if (landing) {
-      return [];
-    }
     return bundle.runtime.searchLibrary(state.query, filters);
   }, [
     bundle.runtime,
-    landing,
     state.query,
     state.filter,
     state.objectType,
@@ -970,73 +953,20 @@ function LibraryPage(props: {
 
   return (
     <>
-      {landing ? (
-        <section className="hero">
-          <p className="eyebrow">Start with meaning</p>
-          <h1>Control Atlas</h1>
-          <p className="hero-rotating-line" aria-hidden="true">
-            Ctrl+Alt+<span className="hero-rotating-word">{heroWord}</span>
-          </p>
-          <p className="hero-tagline">
-            A public cyber compliance reference workspace that turns complex
-            guidance into clear, traceable action.
-          </p>
-          <div className="hero-actions">
-            <button
-              className="primary"
-              onClick={() => onNavigate("start-here")}
-              type="button"
-            >
-              Start Here
-            </button>
-            <button
-              className="secondary"
-              onClick={() => onOpenGlossary()}
-              type="button"
-            >
-              Open glossary
-            </button>
-          </div>
-          <section className="intent-grid">
-            <QuickIntentCard
-              actionLabel="Search AC-2"
-              body="Find a control, CCI, STIG, baseline, or topic and see what it connects to."
-              icon={<IconSearch size={20} stroke={1.8} />}
-              onClick={() => onNavigate("search", { query: "AC-2" })}
-              title="Library"
-            />
-            <QuickIntentCard
-              actionLabel="Compare frameworks"
-              body="Start with an intent, then review source-backed mappings without filter clutter."
-              icon={<IconGitCompare size={20} stroke={1.8} />}
-              onClick={() => onNavigate("matrix")}
-              title="Compare"
-            />
-            <QuickIntentCard
-              actionLabel="Pick a starter"
-              body="Choose the artifact you need first, then reveal extra options only if they help."
-              icon={<IconFileDescription size={20} stroke={1.8} />}
-              onClick={() => onNavigate("templates")}
-              title="Templates"
-            />
-          </section>
-        </section>
-      ) : null}
-
       <section className="panel search-panel">
         <PageHeader
-          eyebrow="Library"
+          eyebrow="Explore"
           action={
             <button
               className="secondary"
               onClick={() => onNavigate("start-here")}
               type="button"
             >
-              Guided path
+              Start guided path
             </button>
           }
-          summary="Search by ID or topic, review what the item means, see where it connects, and open the next best reference."
-          title="Search the public reference library"
+          summary="Search controls, baselines, CCIs, STIGs, terms, templates, playbooks, and sources. Open a record to see what it means and how it connects."
+          title="Explore the control landscape"
         />
 
         {!graphReady ? (
@@ -1054,13 +984,13 @@ function LibraryPage(props: {
           }}
         >
           <label className="field grow" htmlFor="search-query">
-            <span>ID, title, or topic</span>
+            <span>Search by ID, title, or topic</span>
             <div className="search-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
                 id="search-query"
                 onChange={(event) => setQueryDraft(event.target.value)}
-                placeholder="AC-2, account management, CCI-000225"
+                placeholder="AC-2, account management, FedRAMP High, CCI-000225"
                 type="search"
                 value={queryDraft}
               />
@@ -1236,7 +1166,7 @@ function LibraryPage(props: {
                               </h3>
                             </div>
                             <Badge tone="info">
-                              {relationshipCount} public connections
+                              {relationshipCount} connections
                             </Badge>
                           </div>
                           <p className="result-summary">
@@ -1246,7 +1176,7 @@ function LibraryPage(props: {
                           </p>
                           <div className="result-support">
                             <span>
-                              Primary source:{" "}
+                              Source:{" "}
                               {source?.display_name ||
                                 source?.name ||
                                 "Source unavailable"}
@@ -1265,8 +1195,20 @@ function LibraryPage(props: {
                               }
                               type="button"
                             >
-                              Open detail
+                              Open record
                             </button>
+                            {relationshipCount > 0 ? (
+                              <button
+                                className="secondary"
+                                disabled={!graphReady}
+                                onClick={() =>
+                                  openAtlasMapForNode(onNavigate, document.id)
+                                }
+                                type="button"
+                              >
+                                Open in Atlas Map
+                              </button>
+                            ) : null}
                             <button
                               className="secondary"
                               disabled={!graphReady}
@@ -1278,7 +1220,7 @@ function LibraryPage(props: {
                               }
                               type="button"
                             >
-                              Compare connections
+                              Compare
                             </button>
                           </div>
                         </article>
@@ -1289,20 +1231,19 @@ function LibraryPage(props: {
               ),
             )}
           </div>
-        ) : !landing && hasQuery ? (
+        ) : hasQuery || hasFilters ? (
           <section className="empty-state">
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
-            <h2>No public matches found</h2>
+            <h2>No matching records found.</h2>
             <p>
-              Try a known identifier, a shorter phrase, or Start Here if you
-              need help finding the right artifact first.
+              Try searching by control ID, topic, baseline, CCI, or source.
             </p>
             <div className="card-actions">
               <button
                 className="secondary"
                 onClick={() =>
                   onNavigate("search", {
-                    query: "AC-2",
+                    query: "",
                     filter: "",
                     objectType: "",
                     sourceClass: "",
@@ -1312,34 +1253,31 @@ function LibraryPage(props: {
                 }
                 type="button"
               >
-                Try AC-2
+                Clear search
               </button>
               <button
                 className="secondary"
-                onClick={() =>
-                  onNavigate("search", {
-                    query: "account management",
-                    filter: "",
-                    objectType: "",
-                    sourceClass: "",
-                    controlFamily: "",
-                    severity: "",
-                  })
-                }
+                onClick={() => onNavigate("atlas-map")}
                 type="button"
               >
-                Try account management
+                Open Atlas Map
               </button>
               <button
                 className="primary"
                 onClick={() => onNavigate("start-here")}
                 type="button"
               >
-                Start Here
+                Start guided path
               </button>
             </div>
           </section>
-        ) : null}
+        ) : (
+          <section className="empty-state subtle">
+            <p className="muted">
+              Try AC-2, FedRAMP High, CCI-000225, or account management.
+            </p>
+          </section>
+        )}
       </section>
     </>
   );
@@ -1381,7 +1319,7 @@ function DetailPage(props: {
           onClick={() => onNavigate("search")}
           type="button"
         >
-          Back to Library
+          Back to Explore
         </button>
       </section>
     );
@@ -1406,10 +1344,17 @@ function DetailPage(props: {
         onBack={() =>
           onNavigate("search", { query: state.from || document.item_id })
         }
+        onCompare={() =>
+          onNavigate("matrix", {
+            workbench: "relationships",
+            items: document.item_id,
+          })
+        }
+        onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
       />
       <div className="breadcrumbs">
         <button onClick={() => onNavigate("search")} type="button">
-          Library
+          Explore
         </button>
         <span>/</span>
         <span>{document.item_id}</span>
@@ -1428,17 +1373,29 @@ function DetailPage(props: {
             >
               Back to results
             </button>
+            {edges.length ? (
+              <button
+                className="primary"
+                onClick={() => openAtlasMapForNode(onNavigate, state.node)}
+                type="button"
+              >
+                Open in Atlas Map
+              </button>
+            ) : null}
             <button
               className="secondary"
-              onClick={() => {
-                void copyText(document.item_id);
-              }}
+              onClick={() =>
+                onNavigate("matrix", {
+                  workbench: "relationships",
+                  items: document.item_id,
+                })
+              }
               type="button"
             >
-              Copy ID
+              Compare
             </button>
             <button
-              className="secondary"
+              className="secondary quiet"
               onClick={() => {
                 void copyText(
                   `${window.location.origin}${window.location.pathname}${serializeViewState(state)}`,
@@ -1501,45 +1458,72 @@ function DetailPage(props: {
           <section className="panel">
             <div className="section-header">
               <div>
-                <h2>What it connects to</h2>
-                <p>
-                  Related items are grouped by how a practitioner is likely to
-                  use them.
-                </p>
+                <h2>Connections</h2>
+                <p>Grouped relationships for this record.</p>
+                {edges.length ? (
+                  <p className="support-meta">
+                    {edges.length} connections across {grouped.length} group
+                    {grouped.length === 1 ? "" : "s"}:{" "}
+                    {grouped
+                      .map(
+                        (group) =>
+                          `${group.items.length} ${group.label.toLowerCase()}`,
+                      )
+                      .join(", ")}
+                    .
+                  </p>
+                ) : null}
               </div>
               <div className="section-header-actions">
                 {edges.length ? (
-                  <button
-                    className="primary"
-                    onClick={() =>
-                      onNavigate("library-detail", {
-                        node: state.node,
-                        from: state.from,
-                        relationshipView:
-                          state.relationshipView === "map" ||
-                          state.relationshipView === "table"
-                            ? ""
-                            : "map",
-                      })
-                    }
-                    type="button"
-                  >
-                    {state.relationshipView === "map" ||
-                    state.relationshipView === "table"
-                      ? "Hide map"
-                      : "View connections as a visual map"}
-                  </button>
+                  <>
+                    <button
+                      className="primary"
+                      onClick={() => openAtlasMapForNode(onNavigate, state.node)}
+                      type="button"
+                    >
+                      Open in Atlas Map
+                    </button>
+                    <button
+                      className="secondary"
+                      onClick={() =>
+                        onNavigate("library-detail", {
+                          node: state.node,
+                          from: state.from,
+                          relationshipView: "list",
+                        })
+                      }
+                      type="button"
+                    >
+                      View as list
+                    </button>
+                    <button
+                      className="secondary"
+                      onClick={() =>
+                        onNavigate("matrix", {
+                          workbench: "relationships",
+                          items: document.item_id,
+                        })
+                      }
+                      type="button"
+                    >
+                      Compare
+                    </button>
+                  </>
                 ) : null}
-                <Badge tone="info">{edges.length} published links</Badge>
+                <Badge tone="info">{edges.length} connections</Badge>
               </div>
             </div>
 
             {state.relationshipView === "map" ||
+            state.relationshipView === "list" ||
             state.relationshipView === "table" ? (
               <RelationshipExplorer
                 centerItemId={document.item_id}
                 centerNodeId={node.id}
                 filters={relationshipFiltersFromState(state)}
+                heading="Atlas Map"
+                introCopy={`Connections around ${document.item_id}.`}
                 onFilterChange={(patch) =>
                   onNavigate("library-detail", {
                     node: state.node,
@@ -1565,7 +1549,7 @@ function DetailPage(props: {
                   })
                 }
                 relationshipView={
-                  state.relationshipView === "table" ? "table" : "map"
+                  state.relationshipView === "map" ? "map" : "list"
                 }
                 runtime={bundle.runtime}
               />
@@ -1597,26 +1581,20 @@ function DetailPage(props: {
         </section>
 
         <aside className="stack detail-sidebar">
-          <SummaryCard title="Connection summary" tone="trust">
+          <SummaryCard title="Connections" tone="trust">
             <p>
               {edges.length
-                ? `${edges.length} published links across ${grouped.length} group${grouped.length === 1 ? "" : "s"}.`
-                : "No published connections yet."}
+                ? `${edges.length} connections across ${grouped.length} group${grouped.length === 1 ? "" : "s"}.`
+                : "No connections yet."}
             </p>
             {edges.length ? (
               <div className="card-actions">
                 <button
                   className="primary"
-                  onClick={() =>
-                    onNavigate("library-detail", {
-                      node: state.node,
-                      from: state.from,
-                      relationshipView: "map",
-                    })
-                  }
+                  onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                   type="button"
                 >
-                  View connections as a visual map
+                  Open in Atlas Map
                 </button>
                 <button
                   className="secondary"
@@ -1628,7 +1606,7 @@ function DetailPage(props: {
                   }
                   type="button"
                 >
-                  Compare this item
+                  Compare
                 </button>
               </div>
             ) : null}
@@ -1657,17 +1635,11 @@ function DetailPage(props: {
               {edges.length ? (
                 <button
                   className="link-action"
-                  onClick={() =>
-                    onNavigate("library-detail", {
-                      node: state.node,
-                      from: state.from,
-                      relationshipView: "map",
-                    })
-                  }
+                  onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                   type="button"
                 >
-                  <IconLink aria-hidden="true" size={16} stroke={1.8} />
-                  <span>View connections as a visual map</span>
+                  <IconMap aria-hidden="true" size={16} stroke={1.8} />
+                  <span>Open in Atlas Map</span>
                 </button>
               ) : null}
               {node.node_type === "attack_technique" ? (
@@ -2284,16 +2256,27 @@ function ComparePage(props: {
                       </p>
                     </SummaryCard>
                   </div>
-                  <CompareExportDisclosure onExport={exportRows} />
                   <div className="card-actions">
+                    {state.items ? (
+                      <button
+                        className="primary"
+                        onClick={() =>
+                          onNavigate("atlas-map", { node: state.items })
+                        }
+                        type="button"
+                      >
+                        Open in Atlas Map
+                      </button>
+                    ) : null}
                     <button
-                      className="primary"
+                      className="secondary"
                       onClick={() => setDetailedMappingsOpen("rows")}
                       type="button"
                     >
-                      View detailed mappings
+                      View detailed list
                     </button>
                   </div>
+                  <CompareExportDisclosure onExport={exportRows} />
                   <Accordion.Root
                     className="accordion-root"
                     collapsible
@@ -3086,6 +3069,15 @@ function SourcesPage(props: {
       {selectedSource ? (
         <section className="stack">
           <SourceSummaryCard source={selectedSource} />
+          <div className="card-actions">
+            <button
+              className="primary"
+              onClick={() => onNavigate("atlas-map")}
+              type="button"
+            >
+              View in Atlas Map
+            </button>
+          </div>
           <SummaryCard title="What this source is" tone="trust">
             <p>{selectedSource.name}</p>
           </SummaryCard>
@@ -3328,6 +3320,13 @@ function TemplatesPage(props: {
                 ? "Generating…"
                 : `Generate ${selectedTemplate.display_name}`}
             </button>
+            <button
+              className="secondary"
+              onClick={() => onNavigate("atlas-map")}
+              type="button"
+            >
+              View related map
+            </button>
           </div>
           <Accordion.Root
             className="accordion-root"
@@ -3439,18 +3438,18 @@ function PatternsPage(props: {
     return (
       <section className="panel">
         <PageHeader
-          eyebrow="Patterns"
-          summary="Open the outcome you are trying to solve, then review when it helps, how it works, common mistakes, and the related controls or templates."
-          title="Patterns organized around user outcomes"
+          eyebrow="Playbooks"
+          summary="Use task-focused guidance to understand what to do, what to avoid, and which records or templates to open next."
+          title="Compliance playbooks"
         />
         <CatalogFilterBar
           category={categoryFilter}
           categoryOptions={[...Object.keys(PATTERN_CATEGORIES), "Other"]}
-          countLabel={`${filteredPatterns.length} pattern${filteredPatterns.length === 1 ? "" : "s"} in ${groupedPatterns.size} categor${groupedPatterns.size === 1 ? "y" : "ies"}`}
+          countLabel={`${filteredPatterns.length} playbook${filteredPatterns.length === 1 ? "" : "s"} in ${groupedPatterns.size} categor${groupedPatterns.size === 1 ? "y" : "ies"}`}
           onCategoryChange={setCategoryFilter}
           onQueryChange={setQueryFilter}
           query={queryFilter}
-          queryPlaceholder="Search patterns by outcome or topic"
+          queryPlaceholder="Search playbooks by outcome or topic"
         />
         <section className="catalog-group recommended-patterns">
           <h2 className="catalog-group-title">Recommended for new users</h2>
@@ -3494,17 +3493,17 @@ function PatternsPage(props: {
   return (
     <section className="panel">
       <PageHeader
-        eyebrow="Pattern"
         action={
           <button
             className="secondary"
             onClick={() => onNavigate("patterns", { pattern: "" })}
             type="button"
           >
-            Back to patterns
+            Back to playbooks
           </button>
         }
-        summary="Pattern pages lead with the problem they solve, when to use them, how they work, common mistakes, and the next action to take."
+        eyebrow="Playbooks"
+        summary="Use task-focused guidance to understand what to do, what to avoid, and which records or templates to open next."
         title={PATTERN_RENAMES[selectedPattern.id] || selectedPattern.title}
       />
       <div className="detail-grid">
@@ -3583,9 +3582,22 @@ function PatternsPage(props: {
           </SummaryCard>
           <SummaryCard title="Next action">
             <div className="stack compact">
-              {selectedPattern.templates[0] ? (
+              {selectedPattern.controls[0] ? (
                 <button
                   className="primary"
+                  onClick={() =>
+                    onNavigate("atlas-map", {
+                      node: selectedPattern.controls[0],
+                    })
+                  }
+                  type="button"
+                >
+                  Open related map
+                </button>
+              ) : null}
+              {selectedPattern.templates[0] ? (
+                <button
+                  className="secondary"
                   onClick={() =>
                     onNavigate("templates", {
                       templateType: selectedPattern.templates[0],
@@ -3593,7 +3605,7 @@ function PatternsPage(props: {
                   }
                   type="button"
                 >
-                  Open starter template
+                  Open related templates
                 </button>
               ) : null}
               <button
@@ -3680,7 +3692,7 @@ function AboutPage(props: {
               onClick={() => onNavigate("start-here")}
               type="button"
             >
-              Start Here
+              Start guided path
             </button>
             <button
               className="secondary"
@@ -3842,7 +3854,7 @@ function StartHerePage(props: {
 
           <section className="stack">
             <div className="section-header">
-              <h2>Library</h2>
+              <h2>Explore</h2>
               <p>Framework catalogs and baselines to open first.</p>
             </div>
             <div className="stack compact">
@@ -3860,7 +3872,7 @@ function StartHerePage(props: {
                     onClick={() => followLibraryLink(link)}
                     type="button"
                   >
-                    Open in Library
+                    Open in Explore
                   </button>
                 </article>
               ))}
@@ -3896,7 +3908,7 @@ function StartHerePage(props: {
 
           <section className="stack">
             <div className="section-header">
-              <h2>Patterns</h2>
+              <h2>Playbooks</h2>
               <p>
                 Plain-language guides for concepts that often block progress.
               </p>
@@ -4099,9 +4111,9 @@ function GlossaryDrawer(props: {
                   Open Start Here
                 </button>
               </SummaryCard>
-              <SummaryCard title="Library">
+              <SummaryCard title="Explore">
                 <p>
-                  Search by control ID or topic. Open detail pages to see
+                  Search by control ID or topic. Open records to see
                   grouped connections and source support.
                 </p>
                 <button
@@ -4112,7 +4124,7 @@ function GlossaryDrawer(props: {
                   }}
                   type="button"
                 >
-                  Open Library
+                  Open Explore
                 </button>
               </SummaryCard>
               <SummaryCard title="Compare">

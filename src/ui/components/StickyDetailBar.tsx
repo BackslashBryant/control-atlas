@@ -4,6 +4,8 @@ export function StickyDetailBar(props: {
   enabled: boolean;
   itemLabel: string;
   onBack: () => void;
+  onOpenAtlasMap?: () => void;
+  onCompare?: () => void;
 }) {
   const [visible, setVisible] = useState(false);
 
@@ -32,10 +34,20 @@ export function StickyDetailBar(props: {
       className="sticky-detail-bar"
       role="navigation"
     >
-      <button className="primary" onClick={props.onBack} type="button">
+      <span className="sticky-detail-label">{props.itemLabel}</span>
+      <button className="secondary" onClick={props.onBack} type="button">
         Back to results
       </button>
-      <span className="sticky-detail-label">{props.itemLabel}</span>
+      {props.onOpenAtlasMap ? (
+        <button className="primary" onClick={props.onOpenAtlasMap} type="button">
+          Open in Atlas Map
+        </button>
+      ) : null}
+      {props.onCompare ? (
+        <button className="secondary" onClick={props.onCompare} type="button">
+          Compare
+        </button>
+      ) : null}
     </div>
   );
 }

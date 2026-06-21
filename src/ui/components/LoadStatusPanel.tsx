@@ -8,7 +8,7 @@ export function LoadingStatusPanel(props: {
     <section aria-live="polite" className="loading-card" role="status">
       <div aria-hidden="true" className="load-progress" />
       <p className="eyebrow">Loading</p>
-      <h2>Loading library</h2>
+      <h2>Loading records</h2>
       <p>
         Please wait a moment while we load the public records, source registry,
         and comparison views.
@@ -20,7 +20,7 @@ export function LoadingStatusPanel(props: {
         </p>
       ) : null}
       <p className="load-slow-hint">
-        You can browse Patterns, Templates, or About while the library finishes
+        You can browse Playbooks, Templates, or About while records finish
         loading.
       </p>
       {props.children}
@@ -35,11 +35,11 @@ export function LoadErrorPanel(props: {
 }) {
   return (
     <section className="notice load-error-panel">
-      <h2>Library data unavailable</h2>
+      <h2>Record data unavailable</h2>
       <p>{props.message}</p>
       <p>
-        Check your connection, then retry. You can still browse Patterns and
-        About without the full library.
+        Check your connection, then retry. You can still browse Playbooks and
+        About without the full map data.
       </p>
       <div className="card-actions">
         <button className="primary" onClick={props.onRetry} type="button">
@@ -61,8 +61,8 @@ export function OfflineFallbackActions(props: {
         onClick={() => props.onNavigate("patterns")}
         type="button"
       >
-        <strong>Explore Patterns</strong>
-        <span>Outcome-based guides you can read without the full library.</span>
+        <strong>Explore playbooks</strong>
+        <span>Task-focused guides you can read without the full map.</span>
       </button>
       <button
         className="offline-fallback-card"
@@ -77,8 +77,8 @@ export function OfflineFallbackActions(props: {
         onClick={() => props.onNavigate("start-here")}
         type="button"
       >
-        <strong>Start Here</strong>
-        <span>Answer three questions for a tailored path.</span>
+        <strong>Start</strong>
+        <span>Answer a few questions for a tailored path.</span>
       </button>
       <button
         className="offline-fallback-card"
@@ -98,7 +98,7 @@ export function DataPendingNotice(props: {
 }) {
   return (
     <section className="notice">
-      <h2>{props.title || "Library data is still loading"}</h2>
+      <h2>{props.title || "Connection data is still loading"}</h2>
       <p>
         This page needs the public mapping data. Wait a moment or retry if
         loading failed.

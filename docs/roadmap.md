@@ -90,6 +90,7 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 ## Recommended Next Sequence
 
 1. **Maintenance** — CI-driven dependency, security, and smoke gates
-2. **Optional** — promote `v1.0.0` after RC feedback; graph UI if scoped
+2. **Optional** — promote `v1.0.0` after RC feedback
+3. **Residual** — Epic 10 compare-map overlay and ExplorePage extraction when scoped
 
-Epics 0–6 are shipped for MVP. Epic 0 graph UI remains residual in legacy shell only.
+Epics 0–10 are shipped or closed for MVP. Epic 10 residuals are documented in [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md).

@@ -1,16 +1,27 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
   buildGraphData,
   linkDashPattern,
   nodeColor,
+  nodeShapeRadius,
   provenanceColor,
   type GraphData,
   type GraphLink,
   type GraphNode,
 } from "../lib/graphTheme";
+import type { RelationshipGraphHandle } from "./RelationshipExplorer";
 
 type RelationshipGraphProps = {
   nodes: Array<{
@@ -34,9 +45,14 @@ type RelationshipGraphProps = {
   searchHighlightIds: Set<string>;
   onSelectNode: (nodeId: string) => void;
   reducedMotion: boolean;
+  clusterMeta?: Map<string, ClusterNodeMeta>;
+  onClusterClick?: (clusterKey: string) => void;
 };
 
-export function RelationshipGraph(props: RelationshipGraphProps) {
+export const RelationshipGraphWithHandle = forwardRef<
+  RelationshipGraphHandle,
+  RelationshipGraphProps
+>(function RelationshipGraphWithHandle(props, ref) {
   const {
     nodes,
     edges,
@@ -45,17 +61,38 @@ export function RelationshipGraph(props: RelationshipGraphProps) {
     searchHighlightIds,
     onSelectNode,
     reducedMotion,
+    clusterMeta,
+    onClusterClick,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const [dimensions, setDimensions] = useState({ width: 640, height: 420 });
   const [hoverNodeId, setHoverNodeId] = useState<string | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   const graphData: GraphData = useMemo(
-    () => buildGraphData(nodes, edges, centerNodeId),
-    [nodes, edges, centerNodeId],
+    () => buildGraphData(nodes, edges, centerNodeId, clusterMeta),
+    [nodes, edges, centerNodeId, clusterMeta],
   );
+
+  useImperativeHandle(ref, () => ({
+    fitToScreen() {
+      graphRef.current?.zoomToFit(400, 48);
+    },
+    resetView() {
+      graphRef.current?.zoomToFit(400, 48);
+      graphRef.current?.d3ReheatSimulation?.();
+    },
+    zoomIn() {
+      const current = graphRef.current?.zoom?.() ?? 1;
+      graphRef.current?.zoom(current * 1.2, 300);
+    },
+    zoomOut() {
+      const current = graphRef.current?.zoom?.() ?? 1;
+      graphRef.current?.zoom(current / 1.2, 300);
+    },
+  }));
 
   const highlightIds = useMemo(() => {
     const focusId = hoverNodeId || selectedNodeId;
@@ -108,14 +145,38 @@ export function RelationshipGraph(props: RelationshipGraphProps) {
     return () => window.clearTimeout(timer);
   }, [graphData, reducedMotion]);
 
+  const shouldShowLabel = useCallback(
+    (node: GraphNode, globalScale: number) => {
+      if (node.isCenter || node.id === selectedNodeId || node.isCluster) {
+        return true;
+      }
+      if (globalScale > 1.35) return true;
+      if (highlightIds.has(node.id)) return true;
+      return false;
+    },
+    [highlightIds, selectedNodeId],
+  );
+
   const paintNode = useCallback(
     (node: GraphNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
-      const radius = node.isCenter ? 8 : 6;
+      setZoomLevel(globalScale);
+      const radius = nodeShapeRadius(node);
       const color = nodeColor(node, selectedNodeId, highlightIds);
       const dimmed = highlightIds.size > 0 && !highlightIds.has(node.id);
+      const x = node.x ?? 0;
+      const y = node.y ?? 0;
 
       ctx.beginPath();
-      ctx.arc(node.x ?? 0, node.y ?? 0, radius, 0, 2 * Math.PI, false);
+      if (node.isCluster) {
+        ctx.rect(x - radius, y - radius, radius * 2, radius * 2);
+      } else if (node.nodeType === "baseline") {
+        ctx.moveTo(x, y - radius);
+        ctx.lineTo(x + radius, y + radius);
+        ctx.lineTo(x - radius, y + radius);
+        ctx.closePath();
+      } else {
+        ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+      }
       ctx.fillStyle = dimmed ? "rgba(148, 163, 184, 0.35)" : color;
       ctx.fill();
       ctx.strokeStyle = node.id === selectedNodeId ? "#22D3EE" : "#334155";
@@ -123,14 +184,14 @@ export function RelationshipGraph(props: RelationshipGraphProps) {
         node.id === selectedNodeId ? 2 / globalScale : 1 / globalScale;
       ctx.stroke();
 
-      if (globalScale > 1.2 || node.isCenter || node.id === selectedNodeId) {
+      if (shouldShowLabel(node, globalScale)) {
         const label = node.itemId;
         ctx.font = `${10 / globalScale}px var(--ca-font-mono)`;
         ctx.fillStyle = dimmed ? "rgba(203, 213, 225, 0.5)" : "#F8FAFC";
-        ctx.fillText(label, (node.x ?? 0) + radius + 2, (node.y ?? 0) + 3);
+        ctx.fillText(label, x + radius + 2, y + 3);
       }
     },
-    [highlightIds, selectedNodeId],
+    [highlightIds, selectedNodeId, shouldShowLabel],
   );
 
   const paintLink = useCallback(
@@ -205,15 +266,24 @@ export function RelationshipGraph(props: RelationshipGraphProps) {
           onEngineStop={() => {
             if (reducedMotion) graphRef.current?.zoomToFit(0, 48);
           }}
-          onNodeClick={(node: GraphNode) => onSelectNode(node.id)}
+          onNodeClick={(node: GraphNode) => {
+            if (node.isCluster && onClusterClick) {
+              onClusterClick(node.id.replace("cluster:", ""));
+            }
+            onSelectNode(node.id);
+          }}
           onNodeHover={(node: GraphNode | null) =>
             setHoverNodeId(node?.id ?? null)
           }
+          onZoom={(transform: { k: number }) => setZoomLevel(transform.k)}
           width={dimensions.width}
         />
       </div>
+      <p className="visually-hidden" role="status">
+        Map zoom level {zoomLevel.toFixed(1)}x
+      </p>
     </div>
   );
-}
+});
 
-export default RelationshipGraph;
+export default RelationshipGraphWithHandle;

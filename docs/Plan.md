@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — Epic 8 shipped on `agent/forge/epic-8-mitre-threat-lens`. Next build work awaits Epic 10 spec or explicit scope change. See [`docs/plans/epic-8-mitre-threat-lens.md`](plans/epic-8-mitre-threat-lens.md) and audit [`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md).
+**None** — Epic 10 Atlas Map-First UX shipped on `agent/forge/epic-10-atlas-map-ux`. See [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md).
 
 ## Epic Status (June 19, 2026)
 
@@ -37,6 +37,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 7 — Platform Trust & Hardening       | **Shipped**           | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md).                                                      |
 | 8 — MITRE Threat Lens                | **Shipped**           | ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain — [`docs/plans/epic-8-mitre-threat-lens.md`](plans/epic-8-mitre-threat-lens.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md). |
 | 9 — Interactive Relationship Graph   | **Shipped**           | Object-local map in Library detail, provenance filters, lazy `react-force-graph-2d`, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md). |
+| 10 — Atlas Map-First UX              | **Closed (residual)** | Map-first homepage, standalone Atlas Map route, nav/copy rename, clustering and map controls — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md). Residual: compare-map overlay, full provenance tooltips, `ExplorePage` extraction from `App.tsx`. |
 
 ## Active Direction
 
@@ -89,7 +90,7 @@ No backend or user, organization, or system data is part of this product directi
 
 1. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
 2. **Optional** — promote `v1.0.0` after RC feedback
-3. **Epic 10** — when spec'd and scoped
+3. **Residual** — Epic 10 compare-map overlay and ExplorePage extraction when scoped
 
 ## Historical Delivery Records
 
