@@ -1,5 +1,7 @@
 import type { ClusterNodeMeta } from "./graphClustering";
 
+export type CompareRole = "shared" | "uniqueA" | "uniqueB" | "neutral";
+
 export type GraphNode = {
   id: string;
   label: string;
@@ -7,6 +9,7 @@ export type GraphNode = {
   nodeType: string;
   isCenter?: boolean;
   isCluster?: boolean;
+  compareRole?: CompareRole;
   x?: number;
   y?: number;
   fx?: number;
@@ -69,11 +72,22 @@ export function linkDashPattern(
   return undefined;
 }
 
+export function compareNodeColor(role: CompareRole): string {
+  const map: Record<CompareRole, string> = {
+    shared: "#22C55E",
+    uniqueA: "#2563EB",
+    uniqueB: "#F97316",
+    neutral: "#94A3B8",
+  };
+  return map[role];
+}
+
 export function nodeColor(
   node: GraphNode,
   selectedId: string | null,
   highlightIds: Set<string>,
 ): string {
+  if (node.compareRole) return compareNodeColor(node.compareRole);
   if (node.isCluster) return "#6366F1";
   if (node.id === selectedId) return "#22D3EE";
   if (node.isCenter) return "#2563EB";
@@ -97,6 +111,7 @@ export function buildGraphData(
     node_type?: string;
     label?: string;
     metadata?: { item_id?: string; title?: string };
+    compareRole?: CompareRole;
   }>,
   edges: Array<{
     id: string;
@@ -119,6 +134,7 @@ export function buildGraphData(
       nodeType: node.node_type || "",
       isCenter: node.id === centerNodeId,
       isCluster: clusterMeta?.has(node.id) || node.node_type === "cluster",
+      compareRole: node.compareRole,
     })),
     links: edges.map((edge) => ({
       id: edge.id,
@@ -149,4 +165,10 @@ export const PROVENANCE_LEGEND = [
   { key: "federal_program", label: "Source-backed", pattern: "solid" },
   { key: "inferred", label: "Inferred", pattern: "dashed" },
   { key: "deprecated", label: "Deprecated", pattern: "dotted" },
+] as const;
+
+export const COMPARE_ROLE_LEGEND = [
+  { key: "shared", label: "Shared", color: "#22C55E" },
+  { key: "uniqueA", label: "Only in A", color: "#2563EB" },
+  { key: "uniqueB", label: "Only in B", color: "#F97316" },
 ] as const;

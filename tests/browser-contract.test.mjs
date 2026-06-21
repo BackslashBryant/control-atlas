@@ -29,10 +29,10 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
-  assert.match(reactApp, /Start Here/);
-  assert.match(reactApp, /Library/);
+  assert.match(reactApp, /Start/);
+  assert.match(reactApp, /Explore/);
   assert.match(reactApp, /Compare/);
-  assert.match(reactApp, /Patterns/);
+  assert.match(reactApp, /Playbooks/);
   assert.match(reactApp, /Templates/);
   assert.match(reactApp, /Sources/);
   assert.doesNotMatch(reactApp, /Crosswalks/);

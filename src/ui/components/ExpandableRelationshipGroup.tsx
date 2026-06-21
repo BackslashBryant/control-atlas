@@ -3,6 +3,8 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { IconArrowRight } from "@tabler/icons-react";
 import { useState } from "react";
 
+import { ProvenanceTerm } from "./ProvenanceTerm";
+
 const PAGE_SIZE = 10;
 
 export function formatConnectionRollup(
@@ -127,7 +129,10 @@ function RelationshipGroupItem(props: {
               </div>
               <div className="relationship-meta">
                 <span>{props.formatRelationshipLabel(item.edge)}</span>
-                <span>{props.sourceTrustSummary(props.source)}</span>
+                <ProvenanceTerm
+                  kind="provenance"
+                  value={(props.source as { provenance_class?: string })?.provenance_class || "federal_published"}
+                />
               </div>
             </button>
           ))}
