@@ -41,6 +41,9 @@ function main() {
 
   let found = false;
   for (const line of lines) {
+    if (process.platform === 'win32' && !line.includes('LISTENING')) {
+      continue;
+    }
     for (const port of ports) {
       if (line.includes(`:${port}`)) {
         console.log(line.trim());
