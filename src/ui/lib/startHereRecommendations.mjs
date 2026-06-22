@@ -61,9 +61,15 @@ function uniqueTemplateIds(ids) {
   return [...new Set(ids)];
 }
 
+export function hasCompleteStartHereContext(answers) {
+  return Boolean(
+    answers.systemType && answers.dataSensitivity && answers.environment,
+  );
+}
+
 export function buildStartHereRecommendations(answers) {
   const { systemType, dataSensitivity, environment } = answers;
-  if (!systemType || !dataSensitivity || !environment) {
+  if (!hasCompleteStartHereContext(answers)) {
     return null;
   }
 

@@ -97,6 +97,12 @@ test('direct ship scripts cover push retry, remote checks wait, and main ship fl
   assert.ok(existsSync('.gitleaks.toml'));
 });
 
+test('documented port status command checks the Playwright site port', () => {
+  assert.equal(typeof packageJson.scripts['ports:status'], 'string');
+  const portStatus = readFileSync('tools/ports-status.mjs', 'utf8');
+  assert.match(portStatus, /4317/);
+});
+
 test('dependency review and dependabot automation exist', () => {
   assert.ok(existsSync(dependencyReviewWorkflowPath));
   assert.ok(existsSync(dependabotPath));

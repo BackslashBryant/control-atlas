@@ -2,6 +2,7 @@
 import { spawnSync } from 'node:child_process';
 
 const ports = [
+  process.env.PLAYWRIGHT_PORT || '4317',
   process.env.HTTP_PORT || '3000',
   process.env.API_PORT || '3001',
   process.env.WS_PORT || '3002',

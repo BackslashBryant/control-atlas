@@ -31,9 +31,9 @@ export function SearchOverlay(props: SearchOverlayProps) {
     return bundle.runtime.searchLibrary(query.trim()).slice(0, 12);
   }, [bundle, query]);
 
-  function openResult(nodeId: string, itemId: string) {
+  function openResult(nodeId: string) {
     onOpenChange(false);
-    onOpenNode(nodeId, itemId);
+    onOpenNode(nodeId, "search");
   }
 
   function openExplore() {
@@ -53,6 +53,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <div className="search-input search-overlay-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
+                aria-label="Search records and glossary"
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
@@ -90,7 +91,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                   <li key={document.id}>
                     <button
                       className="search-overlay-result"
-                      onClick={() => openResult(document.id, document.item_id)}
+                      onClick={() => openResult(document.id)}
                       type="button"
                     >
                       <span className="search-overlay-result-title">

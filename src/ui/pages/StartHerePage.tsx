@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 
-import { buildStartHereRecommendations } from "../lib/startHereRecommendations.mjs";
+import {
+  buildStartHereRecommendations,
+  hasCompleteStartHereContext,
+} from "../lib/startHereRecommendations.mjs";
 import type {
   StartHereCompareLink,
   StartHereLibraryLink,
@@ -15,7 +18,8 @@ export function StartHerePage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { state, onNavigate } = props;
-  const showResults = state.step === "results";
+  const hasCompleteContext = hasCompleteStartHereContext(state);
+  const showResults = state.step === "results" && hasCompleteContext;
 
   const recommendations = useMemo(
     () =>
@@ -68,7 +72,7 @@ export function StartHerePage(props: {
 
       <div className="filter-grid">
         <SelectField
-          emptyLabel="Any system type"
+          emptyLabel="Choose a system type"
           hint="What kind of system you are authorizing or assessing."
           label="System type"
           onChange={(value) =>
@@ -84,7 +88,7 @@ export function StartHerePage(props: {
           value={state.systemType}
         />
         <SelectField
-          emptyLabel="Any sensitivity level"
+          emptyLabel="Choose a sensitivity level"
           hint="How sensitive the data handled by the system is."
           label="Data sensitivity"
           onChange={(value) =>
@@ -103,7 +107,7 @@ export function StartHerePage(props: {
           value={state.dataSensitivity}
         />
         <SelectField
-          emptyLabel="Any environment"
+          emptyLabel="Choose an environment"
           hint="Who operates the system and under which federal context."
           label="Operational environment"
           onChange={(value) =>
@@ -122,7 +126,11 @@ export function StartHerePage(props: {
       {!showResults ? (
         <div className="card-actions">
           <button
+            aria-describedby={
+              hasCompleteContext ? undefined : "start-here-submit-hint"
+            }
             className="primary"
+            disabled={!hasCompleteContext}
             onClick={() =>
               onNavigate("start-here", { ...state, step: "results" })
             }
@@ -130,6 +138,11 @@ export function StartHerePage(props: {
           >
             Show recommendation
           </button>
+          {!hasCompleteContext ? (
+            <p className="field-hint" id="start-here-submit-hint" role="status">
+              Select all three answers to continue.
+            </p>
+          ) : null}
         </div>
       ) : null}
 
@@ -145,13 +158,11 @@ export function StartHerePage(props: {
         <section className="empty-state">
           <h2>Choose your context, then show a recommendation</h2>
           <p>
-            Pick the options that best match your system. Use &quot;Any&quot;
-            when you are not sure yet. Click Show recommendation when you are
-            ready for the next step.
+            Pick the options that best match your system. Click Show
+            recommendation when you are ready for the next step.
           </p>
         </section>
       ) : null}
     </section>
   );
 }
-

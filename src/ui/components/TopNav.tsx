@@ -98,12 +98,14 @@ export function TopNav(props: TopNavProps) {
           <div className="search-input">
             <IconSearch aria-hidden="true" size={18} stroke={1.8} />
             <input
-              aria-describedby={bundle ? undefined : "header-search-hint"}
+              aria-describedby={
+                !bundle || !bundle.graphReady ? "header-search-hint" : undefined
+              }
               aria-label="Search records and glossary"
               disabled={!bundle}
-                id="header-search"
-                onChange={(event) => onHeaderSearchDraftChange(event.target.value)}
-                placeholder={
+              id="header-search"
+              onChange={(event) => onHeaderSearchDraftChange(event.target.value)}
+              placeholder={
                 bundle?.graphReady
                   ? "Search records or glossary"
                   : "Search available — detail views load shortly"
@@ -123,6 +125,15 @@ export function TopNav(props: TopNavProps) {
             </p>
           ) : null}
         </form>
+        <button
+          aria-label="Open search"
+          className="secondary quiet header-search-trigger"
+          onClick={onOpenSearch}
+          type="button"
+        >
+          <IconSearch aria-hidden="true" size={18} stroke={1.8} />
+          <span>Search</span>
+        </button>
         <button
           className="secondary quiet"
           onClick={onOpenHelp}

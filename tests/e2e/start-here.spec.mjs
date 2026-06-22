@@ -5,6 +5,21 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
+test('start here requires all three answers before showing a recommendation', async ({ page }) => {
+  await page.goto('/?view=start-here');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const submit = page.getByRole('button', { name: 'Show recommendation' });
+  await expect(submit).toBeDisabled();
+  await expect(page.getByText('Select all three answers to continue.')).toBeVisible();
+
+  await page.getByLabel('System type').selectOption('Cloud SaaS');
+  await page.getByLabel('Data sensitivity').selectOption('Moderate');
+  await page.getByLabel('Operational environment').selectOption('CSP');
+  await expect(submit).toBeEnabled();
+});
+
 test('start here recommendations navigate to templates, playbooks, explore, and compare', async ({ page }) => {
   await page.goto('/?view=start-here');
   await waitForAppReady(page);

@@ -5,6 +5,8 @@ import test from "node:test";
 const compareHelpers = readFileSync("src/ui/lib/compareHelpers.tsx", "utf8");
 const tokens = readFileSync("styles/tokens.css", "utf8");
 const baseCss = readFileSync("styles/base.css", "utf8");
+const componentsCss = readFileSync("styles/components.css", "utf8");
+const surfacesCss = readFileSync("styles/surfaces.css", "utf8");
 const provenanceBadge = readFileSync(
   "src/ui/components/ProvenanceBadge.tsx",
   "utf8",
@@ -83,4 +85,84 @@ test("hash router shim redirects legacy view query params", () => {
   const hashRoutes = readFileSync("src/ui/lib/hashRoutes.ts", "utf8");
   assert.match(hashRoutes, /applyLegacyQueryRedirect/);
   assert.match(hashRoutes, /serializeHashLocation/);
+});
+
+function hexToRgb(hex) {
+  const normalized = hex.replace("#", "");
+  return [0, 2, 4].map((offset) =>
+    Number.parseInt(normalized.slice(offset, offset + 2), 16),
+  );
+}
+
+function relativeLuminance(hex) {
+  const channels = hexToRgb(hex).map((channel) => {
+    const value = channel / 255;
+    return value <= 0.03928
+      ? value / 12.92
+      : ((value + 0.055) / 1.055) ** 2.4;
+  });
+  return (
+    0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+  );
+}
+
+function contrastRatio(foreground, background) {
+  const values = [
+    relativeLuminance(foreground),
+    relativeLuminance(background),
+  ].sort((left, right) => right - left);
+  return (values[0] + 0.05) / (values[1] + 0.05);
+}
+
+function tokenValue(name) {
+  const match = tokens.match(new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, "i"));
+  assert.ok(match, `Missing ${name}`);
+  return match[1];
+}
+
+test("secondary text and provenance badge text meet WCAG AA contrast", () => {
+  const surface = tokenValue("--ca-surface");
+  assert.ok(
+    contrastRatio(tokenValue("--ca-text-subtle"), surface) >= 4.5,
+    "Secondary text must meet 4.5:1 on cards",
+  );
+
+  for (const token of [
+    "--ca-prov-official-text",
+    "--ca-prov-dod-text",
+    "--ca-prov-nist-text",
+    "--ca-prov-disa-text",
+    "--ca-prov-fedramp-text",
+    "--ca-prov-mitre-text",
+    "--ca-prov-community-text",
+    "--ca-prov-inferred-text",
+    "--ca-prov-deprecated-text",
+    "--ca-prov-active-text",
+  ]) {
+    assert.ok(
+      contrastRatio(tokenValue(token), surface) >= 4.5,
+      `${token} must meet 4.5:1 on cards`,
+    );
+    assert.match(componentsCss, new RegExp(`color:\\s*var\\(${token}\\)`));
+  }
+});
+
+test("search and glossary dialogs expose accessible control names", () => {
+  const searchOverlay = readFileSync(
+    "src/ui/components/SearchOverlay.tsx",
+    "utf8",
+  );
+  const glossaryDrawer = readFileSync(
+    "src/ui/components/GlossaryDrawer.tsx",
+    "utf8",
+  );
+  assert.match(searchOverlay, /aria-label="Search records and glossary"/);
+  assert.match(glossaryDrawer, /aria-label="Close help and glossary"/);
+});
+
+test("compact icon and chip controls retain 44 pixel touch targets", () => {
+  const block = surfacesCss.match(/\.icon-button,\s*\.chip\s*\{([^}]*)\}/);
+  assert.ok(block, "Missing shared icon and chip control rule");
+  assert.match(block[1], /min-height:\s*44px;/);
+  assert.match(block[1], /min-width:\s*44px;/);
 });

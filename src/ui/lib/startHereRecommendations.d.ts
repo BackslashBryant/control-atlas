@@ -42,3 +42,7 @@ export type StartHereRecommendations = {
 export declare function buildStartHereRecommendations(
   answers: StartHereAnswers,
 ): StartHereRecommendations | null;
+
+export declare function hasCompleteStartHereContext(
+  answers: StartHereAnswers,
+): boolean;

@@ -14,8 +14,8 @@ export function QuickIntentCard(props: {
       type="button"
     >
       <div className="intent-icon">{props.icon}</div>
-      <h2>{props.title}</h2>
-      <p>{props.body}</p>
+      <span className="intent-card-title">{props.title}</span>
+      <span className="intent-card-body">{props.body}</span>
       {props.actionLabel ? (
         <span className="intent-card-action-hint">{props.actionLabel}</span>
       ) : null}
