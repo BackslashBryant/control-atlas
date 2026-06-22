@@ -8,6 +8,7 @@ import {
   compareGraphTableRows,
   type CompareGraphResult,
 } from "../lib/buildCompareGraph";
+import { useClusteredGraph } from "../lib/useClusteredGraph";
 import type { CompareViewMode, ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 
@@ -36,6 +37,22 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
 
   const staticTableRows = useMemo(() => compareGraphTableRows(graph), [graph]);
   const compareViewMode = compareView === "map" ? "map" : "list";
+
+  const {
+    nodes: clusteredNodes,
+    edges: clusteredEdges,
+    clusterMeta,
+    expandedClusters,
+    expandedClusterLabels,
+    onClusterExpand,
+    onClusterCollapse,
+  } = useClusteredGraph({
+    runtime: bundle.runtime,
+    centerNodeId: graph.centerNodeId,
+    nodes: graph.nodes,
+    edges: graph.edges,
+    enabled: compareView === "map" && graph.mapAvailable,
+  });
 
   const setCompareView = (view: CompareViewMode) => {
     onNavigate("matrix", { compareView: view, workbench: matrixWorkbench });
@@ -132,7 +149,10 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
         <RelationshipExplorer
           centerItemId={graph.atlasMapNode}
           centerNodeId={graph.centerNodeId}
+          clusterMeta={clusterMeta}
           compareLegend
+          expandedClusterLabels={expandedClusterLabels}
+          expandedClusters={expandedClusters}
           filters={{
             relationshipType: "",
             provenance: "",
@@ -145,6 +165,8 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           introCopy={`Showing ${graph.stats.filtered} of ${graph.stats.nodeCount} items in this comparison.`}
           listLabel="List"
           mapControls
+          onClusterCollapse={onClusterCollapse}
+          onClusterExpand={onClusterExpand}
           onFilterChange={() => {}}
           onOpenNode={onOpenNode}
           onViewChange={(view) => setCompareView(view)}
@@ -152,8 +174,8 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           runtime={bundle.runtime}
           showFilters={false}
           staticGraph={{
-            nodes: graph.nodes,
-            edges: graph.edges,
+            nodes: clusteredNodes,
+            edges: clusteredEdges,
             stats: graph.stats,
           }}
           staticTableRows={staticTableRows}

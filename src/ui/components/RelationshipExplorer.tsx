@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
@@ -8,6 +8,7 @@ import {
   provenanceCssVar,
 } from "../lib/graphTheme";
 import { ProvenanceTerm } from "./ProvenanceTerm";
+import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
   useRelationshipFilters,
   type RelationshipFilterState,
@@ -79,7 +80,10 @@ type RelationshipExplorerProps = {
   }>;
   clusterMeta?: Map<string, ClusterNodeMeta>;
   expandedClusters?: Set<string>;
+  expandedClusterLabels?: Map<string, string>;
   onClusterExpand?: (clusterKey: string) => void;
+  onClusterCollapse?: (clusterKey: string) => void;
+  clusteringEnabled?: boolean;
   showEmptyState?: boolean;
   showFilters?: boolean;
   compareLegend?: boolean;
@@ -133,13 +137,18 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     staticGraph,
     staticTableRows,
     clusterMeta,
+    expandedClusters,
+    expandedClusterLabels,
     onClusterExpand,
+    onClusterCollapse,
+    clusteringEnabled = true,
     showEmptyState,
     showFilters = true,
     compareLegend = false,
   } = props;
 
   const graphRef = useRef<RelationshipGraphHandle>(null);
+  const [layoutRunning, setLayoutRunning] = useState(false);
   const [internalSelectedNodeId, setInternalSelectedNodeId] = useState<
     string | null
   >(centerNodeId);
@@ -148,10 +157,13 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
       ? controlledSelectedNodeId
       : internalSelectedNodeId;
 
-  const setSelectedNodeId = (nodeId: string) => {
-    if (onSelectNode) onSelectNode(nodeId);
-    else setInternalSelectedNodeId(nodeId);
-  };
+  const setSelectedNodeId = useCallback(
+    (nodeId: string) => {
+      if (onSelectNode) onSelectNode(nodeId);
+      else setInternalSelectedNodeId(nodeId);
+    },
+    [onSelectNode],
+  );
 
   const reducedMotion = useMemo(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -159,7 +171,55 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
   );
 
   const filtered = useRelationshipFilters(runtime, centerNodeId, filters);
-  const neighborhood = staticGraph || filtered.neighborhood;
+  const sourceNeighborhood = staticGraph || filtered.neighborhood;
+  const isStarter = sourceNeighborhood.nodes.some((node) =>
+    node.id.startsWith("starter:"),
+  );
+
+  const internalClustering = useClusteredGraph({
+    runtime,
+    centerNodeId,
+    nodes: sourceNeighborhood.nodes,
+    edges: sourceNeighborhood.edges,
+    enabled: !staticGraph && clusteringEnabled && !isStarter,
+  });
+
+  const usesExternalClustering = Boolean(staticGraph);
+
+  const neighborhood = usesExternalClustering
+    ? sourceNeighborhood
+    : {
+        ...sourceNeighborhood,
+        nodes: internalClustering.nodes,
+        edges: internalClustering.edges,
+      };
+
+  const effectiveClusterMeta = usesExternalClustering
+    ? clusterMeta
+    : internalClustering.clusterMeta;
+  const effectiveExpandedClusters = usesExternalClustering
+    ? expandedClusters
+    : internalClustering.expandedClusters;
+  const effectiveExpandedClusterLabels = usesExternalClustering
+    ? expandedClusterLabels
+    : internalClustering.expandedClusterLabels;
+  const effectiveOnClusterExpand = usesExternalClustering
+    ? onClusterExpand
+    : internalClustering.onClusterExpand;
+  const effectiveOnClusterCollapse = usesExternalClustering
+    ? onClusterCollapse
+    : internalClustering.onClusterCollapse;
+
+  const handleGraphSelectNode = useCallback(
+    (nodeId: string) => {
+      if (nodeId.startsWith("cluster:") && effectiveOnClusterExpand) {
+        effectiveOnClusterExpand(nodeId.replace("cluster:", ""));
+      }
+      setSelectedNodeId(nodeId);
+    },
+    [effectiveOnClusterExpand, setSelectedNodeId],
+  );
+
   const filterOptions = filtered.filterOptions;
   const tableRows = staticTableRows || filtered.tableRows;
 
@@ -176,6 +236,16 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     !selectedNode.id.startsWith("cluster:") &&
     !selectedNode.id.startsWith("starter:");
   const summaryId = "relationship-map-summary";
+
+  const collapseLabels = useMemo(() => {
+    if (!effectiveExpandedClusters?.size) {
+      return [];
+    }
+    return [...effectiveExpandedClusters].map((clusterKey) => ({
+      clusterKey,
+      label: effectiveExpandedClusterLabels?.get(clusterKey) ?? clusterKey,
+    }));
+  }, [effectiveExpandedClusterLabels, effectiveExpandedClusters]);
 
   if (showEmptyState) {
     return (
@@ -272,6 +342,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         <div aria-label="Map controls" className="relationship-map-controls" role="group">
           <button
             className="secondary quiet"
+            disabled={layoutRunning}
             onClick={() => graphRef.current?.fitToScreen()}
             type="button"
           >
@@ -279,6 +350,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           </button>
           <button
             className="secondary quiet"
+            disabled={layoutRunning}
             onClick={() => graphRef.current?.resetView()}
             type="button"
           >
@@ -286,6 +358,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           </button>
           <button
             className="secondary quiet"
+            disabled={layoutRunning}
             onClick={() => graphRef.current?.zoomIn()}
             type="button"
           >
@@ -293,6 +366,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           </button>
           <button
             className="secondary quiet"
+            disabled={layoutRunning}
             onClick={() => graphRef.current?.zoomOut()}
             type="button"
           >
@@ -321,6 +395,26 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
               Copy map link
             </button>
           ) : null}
+        </div>
+      ) : null}
+
+      {collapseLabels.length > 0 && effectiveOnClusterCollapse ? (
+        <div
+          aria-label="Expanded connection groups"
+          className="cluster-collapse-row"
+          role="group"
+        >
+          {collapseLabels.map(({ clusterKey, label }) => (
+            <button
+              className="secondary quiet"
+              disabled={layoutRunning}
+              key={clusterKey}
+              onClick={() => effectiveOnClusterCollapse(clusterKey)}
+              type="button"
+            >
+              Collapse {label}
+            </button>
+          ))}
         </div>
       ) : null}
 
@@ -411,16 +505,12 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           >
             <RelationshipGraphWithHandle
               centerNodeId={centerNodeId}
-              clusterMeta={clusterMeta}
+              clusterMeta={effectiveClusterMeta}
               edges={neighborhood.edges}
               nodes={neighborhood.nodes}
-              onClusterClick={onClusterExpand}
-              onSelectNode={(nodeId) => {
-                if (nodeId.startsWith("cluster:") && onClusterExpand) {
-                  onClusterExpand(nodeId.replace("cluster:", ""));
-                }
-                setSelectedNodeId(nodeId);
-              }}
+              onClusterClick={effectiveOnClusterExpand}
+              onLayoutRunningChange={setLayoutRunning}
+              onSelectNode={handleGraphSelectNode}
               reducedMotion={reducedMotion}
               ref={graphRef}
               searchHighlightIds={searchHighlightIds}
