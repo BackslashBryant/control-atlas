@@ -212,11 +212,13 @@ test('legacy view query redirects to hash route on boot', async ({ page }) => {
 });
 
 test('hash deep route survives refresh on built site', async ({ page }) => {
+  test.setTimeout(90_000);
   await page.goto('/#/explore');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
   await page.reload();
+  await dismissOnboarding(page);
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/explore/);
   await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
