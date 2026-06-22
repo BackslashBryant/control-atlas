@@ -1,5 +1,7 @@
 import {
+  lazy,
   startTransition,
+  Suspense,
   useEffect,
   useMemo,
   useState,
@@ -25,16 +27,7 @@ import {
   loadRuntimeDatasetStaged,
   type RuntimeBundle,
 } from "./lib/runtimeLoader";
-import { AtlasMapPage } from "./pages/AtlasMapPage";
-import { ComparePage } from "./pages/ComparePage";
-import { ExplorePage } from "./pages/ExplorePage";
 import { HomePage } from "./pages/HomePage";
-import { ObjectDetailPage } from "./pages/ObjectDetailPage";
-import { SourcesPage } from "./pages/SourcesPage";
-import { TemplatesPage } from "./pages/TemplatesPage";
-import { PlaybooksPage } from "./pages/PlaybooksPage";
-import { AboutPage } from "./pages/AboutPage";
-import { StartHerePage } from "./pages/StartHerePage";
 import {
   activeNavForState,
   isStaticViewWithoutBundle,
@@ -48,6 +41,52 @@ import {
   parseHashLocation,
   serializeHashLocation,
 } from "./lib/hashRoutes";
+
+const AboutPage = lazy(() =>
+  import("./pages/AboutPage").then((module) => ({
+    default: module.AboutPage,
+  })),
+);
+const AtlasMapPage = lazy(() =>
+  import("./pages/AtlasMapPage").then((module) => ({
+    default: module.AtlasMapPage,
+  })),
+);
+const ComparePage = lazy(() =>
+  import("./pages/ComparePage").then((module) => ({
+    default: module.ComparePage,
+  })),
+);
+const ExplorePage = lazy(() =>
+  import("./pages/ExplorePage").then((module) => ({
+    default: module.ExplorePage,
+  })),
+);
+const ObjectDetailPage = lazy(() =>
+  import("./pages/ObjectDetailPage").then((module) => ({
+    default: module.ObjectDetailPage,
+  })),
+);
+const PlaybooksPage = lazy(() =>
+  import("./pages/PlaybooksPage").then((module) => ({
+    default: module.PlaybooksPage,
+  })),
+);
+const SourcesPage = lazy(() =>
+  import("./pages/SourcesPage").then((module) => ({
+    default: module.SourcesPage,
+  })),
+);
+const StartHerePage = lazy(() =>
+  import("./pages/StartHerePage").then((module) => ({
+    default: module.StartHerePage,
+  })),
+);
+const TemplatesPage = lazy(() =>
+  import("./pages/TemplatesPage").then((module) => ({
+    default: module.TemplatesPage,
+  })),
+);
 
 const HERO_WORDS = [
   "Comply",
@@ -276,19 +315,21 @@ export function App() {
           id="app"
         >
           {showWorkspaceContent ? (
-            <AppContent
-              bundle={bundle}
-              heroWord={heroWord}
-              loadError={loadError}
-              onNavigate={navigate}
-              onOpenGlossary={openGlossary}
-              onOpenHelp={openHelp}
-              onOpenNode={openNode}
-              onOpenNodeByItemId={openNodeByItemId}
-              onRetryLoad={retryLoad}
-              setHelpOpen={setHelpOpen}
-              state={viewState}
-            />
+            <Suspense fallback={<LoadingStatusPanel slow={false} />}>
+              <AppContent
+                bundle={bundle}
+                heroWord={heroWord}
+                loadError={loadError}
+                onNavigate={navigate}
+                onOpenGlossary={openGlossary}
+                onOpenHelp={openHelp}
+                onOpenNode={openNode}
+                onOpenNodeByItemId={openNodeByItemId}
+                onRetryLoad={retryLoad}
+                setHelpOpen={setHelpOpen}
+                state={viewState}
+              />
+            </Suspense>
           ) : loadError ? (
             <LoadErrorPanel message={loadError} onRetry={retryLoad}>
               <OfflineFallbackActions onNavigate={(view) => navigate(view)} />

@@ -15,6 +15,7 @@ import {
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
+import { serializeHashUrl } from "../lib/hashRoutes";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -174,7 +175,6 @@ export function ExplorePage(props: {
     [state.query],
   );
   const hasQuery = Boolean(state.query.trim());
-  const hasResults = documents.length > 0 || glossaryMatches.length > 0;
 
   const documentRows = useMemo(
     () =>
@@ -213,6 +213,8 @@ export function ExplorePage(props: {
       {},
     );
   }, [visibleDocumentRows]);
+  const hasVisibleResults =
+    visibleDocumentRows.length > 0 || glossaryMatches.length > 0;
 
   const facets = bundle.runtime.getLibraryFacets();
 
@@ -340,7 +342,7 @@ export function ExplorePage(props: {
           Show only items with connections
         </label>
 
-        {hasResults ? (
+        {hasVisibleResults ? (
           <Accordion.Root
             className="accordion-root search-result-groups"
             collapsible
@@ -515,7 +517,11 @@ export function ExplorePage(props: {
                                   className="secondary"
                                   onClick={() =>
                                     navigator.clipboard?.writeText(
-                                      `${window.location.origin}${window.location.pathname}?view=library-detail&node=${encodeURIComponent(document.id)}`,
+                                      `${window.location.origin}${window.location.pathname}${serializeHashUrl({
+                                        view: "library-detail",
+                                        node: document.id,
+                                        from: "search",
+                                      })}`,
                                     )
                                   }
                                   type="button"
@@ -533,6 +539,22 @@ export function ExplorePage(props: {
               ),
             )}
           </Accordion.Root>
+        ) : connectionsOnly && documents.length > 0 ? (
+          <section className="empty-state">
+            <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
+            <h2>No matching connected records found.</h2>
+            <p>
+              Matching records exist, but none have published connections in
+              the current data.
+            </p>
+            <button
+              className="secondary"
+              onClick={() => setConnectionsOnly(false)}
+              type="button"
+            >
+              Show all matching records
+            </button>
+          </section>
         ) : hasQuery || hasFilters ? (
           <section className="empty-state">
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />

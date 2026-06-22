@@ -102,7 +102,11 @@ export function GlossaryDrawer(props: {
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
-              <button className="icon-button" type="button">
+              <button
+                aria-label="Close help and glossary"
+                className="icon-button"
+                type="button"
+              >
                 <IconX aria-hidden="true" size={18} stroke={1.8} />
               </button>
             </Dialog.Close>
@@ -110,21 +114,39 @@ export function GlossaryDrawer(props: {
 
           <div className="drawer-tabs" role="tablist">
             <button
+              aria-controls="help-drawer-panel"
               aria-selected={helpTab === "guide"}
               className={helpTab === "guide" ? "drawer-tab active" : "drawer-tab"}
+              id="help-drawer-tab"
               onClick={() => onTabChange("guide")}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                  event.preventDefault();
+                  onTabChange("glossary");
+                }
+              }}
               role="tab"
+              tabIndex={helpTab === "guide" ? 0 : -1}
               type="button"
             >
               Help
             </button>
             <button
+              aria-controls="glossary-drawer-panel"
               aria-selected={helpTab === "glossary"}
               className={
                 helpTab === "glossary" ? "drawer-tab active" : "drawer-tab"
               }
+              id="glossary-drawer-tab"
               onClick={() => onTabChange("glossary")}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                  event.preventDefault();
+                  onTabChange("guide");
+                }
+              }}
               role="tab"
+              tabIndex={helpTab === "glossary" ? 0 : -1}
               type="button"
             >
               Glossary
@@ -132,7 +154,12 @@ export function GlossaryDrawer(props: {
           </div>
 
           {helpTab === "guide" ? (
-            <div className="drawer-guide stack">
+            <div
+              aria-labelledby="help-drawer-tab"
+              className="drawer-guide stack"
+              id="help-drawer-panel"
+              role="tabpanel"
+            >
               <SummaryCard title="Start Here">
                 <p>
                   Answer three short questions, then open the recommended
@@ -183,7 +210,12 @@ export function GlossaryDrawer(props: {
               </SummaryCard>
             </div>
           ) : (
-            <>
+            <div
+              aria-labelledby="glossary-drawer-tab"
+              className="drawer-glossary"
+              id="glossary-drawer-panel"
+              role="tabpanel"
+            >
           <label className="field" htmlFor="glossary-search">
             <span>Search glossary</span>
             <div className="search-input">
@@ -276,7 +308,7 @@ export function GlossaryDrawer(props: {
               );
             })}
           </div>
-            </>
+            </div>
           )}
         </Dialog.Content>
       </Dialog.Portal>

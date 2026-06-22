@@ -134,7 +134,13 @@ export function TemplatesPage(props: {
     if (!selectedTemplate) {
       return;
     }
-    generationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    generationRef.current?.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
     generateButtonRef.current?.focus();
   }, [selectedTemplate?.name]);
 
@@ -255,12 +261,12 @@ export function TemplatesPage(props: {
           <Accordion.Root
             className="accordion-root"
             collapsible
-            defaultValue="options"
             type="single"
           >
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">
                 <SelectField
+                  hint="Which control catalog the template should reference."
                   label="Framework"
                   onChange={(value) =>
                     onNavigate("templates", { ...state, framework: value })
@@ -268,10 +274,8 @@ export function TemplatesPage(props: {
                   options={catalogOptions}
                   value={state.framework || "nist-800-53"}
                 />
-                <p className="field-hint" id="template-framework-hint">
-                  Which control catalog the template should reference.
-                </p>
                 <SelectField
+                  hint="Where the system runs — cloud, on-premises, or hybrid."
                   label="Environment"
                   onChange={(value) =>
                     onNavigate("templates", { ...state, environment: value })
@@ -290,10 +294,8 @@ export function TemplatesPage(props: {
                   ]}
                   value={state.environment || "Generic"}
                 />
-                <p className="field-hint">
-                  Where the system runs — cloud, on-premises, or hybrid.
-                </p>
                 <SelectField
+                  hint="File type for download: Markdown, CSV, or JSON."
                   label="Format"
                   onChange={(value) =>
                     onNavigate("templates", { ...state, format: value })
@@ -304,9 +306,6 @@ export function TemplatesPage(props: {
                   }))}
                   value={activeFormat}
                 />
-                <p className="field-hint">
-                  File type for download: Markdown, CSV, or JSON.
-                </p>
               </div>
             </DisclosurePanel>
           </Accordion.Root>
@@ -315,4 +314,3 @@ export function TemplatesPage(props: {
     </section>
   );
 }
-

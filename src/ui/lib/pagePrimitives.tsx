@@ -194,7 +194,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
           rel="noreferrer"
           target="_blank"
         >
-          Open official source
+          Open source artifact
         </a>
       </div>
     </article>
@@ -258,4 +258,3 @@ export function SelectField(props: {
     </label>
   );
 }
-

@@ -129,16 +129,16 @@
   white-space: nowrap;
 }
 
-.ca-badge--official   { color: var(--ca-prov-official);   background: color-mix(in srgb, var(--ca-prov-official) 15%, transparent); }
-.ca-badge--dod        { color: var(--ca-prov-dod);        background: color-mix(in srgb, var(--ca-prov-dod) 15%, transparent); }
-.ca-badge--nist       { color: var(--ca-prov-nist);       background: color-mix(in srgb, var(--ca-prov-nist) 15%, transparent); }
-.ca-badge--disa       { color: var(--ca-prov-disa);       background: color-mix(in srgb, var(--ca-prov-disa) 15%, transparent); }
-.ca-badge--fedramp    { color: var(--ca-prov-fedramp);    background: color-mix(in srgb, var(--ca-prov-fedramp) 15%, transparent); }
-.ca-badge--mitre      { color: var(--ca-prov-mitre);      background: color-mix(in srgb, var(--ca-prov-mitre) 15%, transparent); }
-.ca-badge--community  { color: var(--ca-prov-community);  background: color-mix(in srgb, var(--ca-prov-community) 15%, transparent); }
-.ca-badge--inferred   { color: var(--ca-prov-inferred);   background: color-mix(in srgb, var(--ca-prov-inferred) 15%, transparent); }
-.ca-badge--deprecated { color: var(--ca-prov-deprecated); background: color-mix(in srgb, var(--ca-prov-deprecated) 15%, transparent); }
-.ca-badge--active     { color: var(--ca-prov-active);     background: color-mix(in srgb, var(--ca-prov-active) 15%, transparent); }
+.ca-badge--official   { color: var(--ca-prov-official-text);   background: color-mix(in srgb, var(--ca-prov-official) 15%, transparent); }
+.ca-badge--dod        { color: var(--ca-prov-dod-text);        background: color-mix(in srgb, var(--ca-prov-dod) 15%, transparent); }
+.ca-badge--nist       { color: var(--ca-prov-nist-text);       background: color-mix(in srgb, var(--ca-prov-nist) 15%, transparent); }
+.ca-badge--disa       { color: var(--ca-prov-disa-text);       background: color-mix(in srgb, var(--ca-prov-disa) 15%, transparent); }
+.ca-badge--fedramp    { color: var(--ca-prov-fedramp-text);    background: color-mix(in srgb, var(--ca-prov-fedramp) 15%, transparent); }
+.ca-badge--mitre      { color: var(--ca-prov-mitre-text);      background: color-mix(in srgb, var(--ca-prov-mitre) 15%, transparent); }
+.ca-badge--community  { color: var(--ca-prov-community-text);  background: color-mix(in srgb, var(--ca-prov-community) 15%, transparent); }
+.ca-badge--inferred   { color: var(--ca-prov-inferred-text);   background: color-mix(in srgb, var(--ca-prov-inferred) 15%, transparent); }
+.ca-badge--deprecated { color: var(--ca-prov-deprecated-text); background: color-mix(in srgb, var(--ca-prov-deprecated) 15%, transparent); }
+.ca-badge--active     { color: var(--ca-prov-active-text);     background: color-mix(in srgb, var(--ca-prov-active) 15%, transparent); }
 
 .ca-badge--type {
   color: var(--ca-text-muted);
@@ -222,6 +222,12 @@
 .ca-copy-wrap:hover .ca-copy-btn,
 .ca-copy-btn:focus-visible { opacity: 1; }
 .ca-copy-btn.ca-copy-btn--copied { color: var(--ca-success); opacity: 1; }
+
+@media (hover: none) {
+  .ca-copy-btn {
+    opacity: 1;
+  }
+}
 
 /* ── Step indicator ── */
 .ca-steps {

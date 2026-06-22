@@ -126,6 +126,14 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     center?.centerNodeId ?? null,
   );
 
+  useEffect(() => {
+    setSelectedNodeId(center?.centerNodeId ?? null);
+  }, [center?.centerNodeId]);
+
+  useEffect(() => {
+    setMapSearchDraft(state.relationshipSearch || "");
+  }, [state.relationshipSearch]);
+
   if (!center || !neighborhood) {
     return (
       <section className="panel atlas-map-page">

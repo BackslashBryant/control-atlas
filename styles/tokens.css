@@ -9,7 +9,7 @@
   /* ── Text ── */
   --ca-text: #f8fafc;
   --ca-text-muted: #cbd5e1;
-  --ca-text-subtle: #64748b;
+  --ca-text-subtle: #94a3b8;
 
   /* ── Interactive ── */
   --ca-primary: #2563eb;
@@ -28,6 +28,18 @@
   --ca-prov-inferred: #f59e0b;
   --ca-prov-deprecated: #dc2626;
   --ca-prov-active: #16a34a;
+
+  /* Accessible text colors for provenance badges on dark surfaces */
+  --ca-prov-official-text: #60a5fa;
+  --ca-prov-dod-text: #a5b4fc;
+  --ca-prov-nist-text: #67e8f9;
+  --ca-prov-disa-text: #93c5fd;
+  --ca-prov-fedramp-text: #5eead4;
+  --ca-prov-mitre-text: #d8b4fe;
+  --ca-prov-community-text: #cbd5e1;
+  --ca-prov-inferred-text: #fbbf24;
+  --ca-prov-deprecated-text: #fca5a5;
+  --ca-prov-active-text: #86efac;
 
   /* ── Semantic ── */
   --ca-success: #16a34a;

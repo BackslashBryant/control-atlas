@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildStartHereRecommendations } from '../src/ui/lib/startHereRecommendations.mjs';
+import {
+  buildStartHereRecommendations,
+  hasCompleteStartHereContext,
+} from '../src/ui/lib/startHereRecommendations.mjs';
 
 function allRationales(recommendations) {
   return [
@@ -50,5 +53,24 @@ test('incomplete answers return null recommendations', () => {
       environment: 'CSP',
     }),
     null,
+  );
+});
+
+test('start here only enables recommendations after all three answers are selected', () => {
+  assert.equal(
+    hasCompleteStartHereContext({
+      systemType: 'Cloud SaaS',
+      dataSensitivity: '',
+      environment: 'CSP',
+    }),
+    false,
+  );
+  assert.equal(
+    hasCompleteStartHereContext({
+      systemType: 'Cloud SaaS',
+      dataSensitivity: 'Moderate',
+      environment: 'CSP',
+    }),
+    true,
   );
 });

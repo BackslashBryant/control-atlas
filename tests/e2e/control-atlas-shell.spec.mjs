@@ -65,6 +65,17 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   await expect(page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true })).toBeVisible();
 });
 
+test('visible search trigger opens the global search dialog', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByRole('button', { name: 'Open search' }).click();
+  await expect(page.getByRole('dialog', { name: 'Search records' })).toBeVisible();
+  await expect(page.getByLabel('Search records and glossary')).toBeFocused();
+});
+
 test('library detail deep links stay compatible and keep advanced details collapsed by default', async ({ page }) => {
   await page.goto('/?view=library-detail&node=nist-800-53%3AAC-2&mode=expert');
   await waitForAppReady(page);
@@ -110,6 +121,28 @@ test('explore groups results and filters out records without connections', async
   const firstCard = page.locator('#library-results .result-card').first();
   await expect(firstCard.getByRole('button', { name: 'Open record' })).toBeVisible();
   await expect(firstCard.getByRole('button', { name: 'More actions' })).toBeVisible();
+});
+
+test('explore explains when the connections-only filter removes every record', async ({ page }) => {
+  await page.goto('/?view=explore&q=CMMC+Level+1');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByLabel('Show only items with connections').check();
+  await expect(
+    page.getByRole('heading', { name: 'No matching connected records found.' }),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Show all matching records' })).toBeVisible();
+});
+
+test('template advanced options stay collapsed until requested', async ({ page }) => {
+  await page.goto('/?view=templates&templateType=security_plan_starter');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByLabel('Framework')).not.toBeVisible();
+  await page.getByRole('button', { name: 'More options' }).click();
+  await expect(page.getByLabel('Framework')).toBeVisible();
 });
 
 test('compare starts with intent cards and opens summary-first framework results', async ({ page }) => {

@@ -95,6 +95,14 @@ test('static artifact loading caches requests in memory', () => {
   assert.match(reactApp, /requiresFullGraph\(viewState\.view\)/);
 });
 
+test('secondary route pages are lazy loaded behind a suspense fallback', () => {
+  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/AtlasMapPage"\)/);
+  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/ComparePage"\)/);
+  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/ObjectDetailPage"\)/);
+  assert.match(reactApp, /<Suspense/);
+  assert.match(reactApp, /fallback=\{<LoadingStatusPanel/);
+});
+
 test('persistent footer uses the approved short disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   assert.match(
@@ -120,4 +128,31 @@ test('dark atlas visual system remains active in the shared stylesheet', () => {
   assert.match(css, /Space Grotesk/);
   assert.match(css, /Public Sans/);
   assert.match(css, /JetBrains Mono/);
+});
+
+test('shared shell exposes visible search access and valid intent-card markup', () => {
+  const topNav = readFileSync('src/ui/components/TopNav.tsx', 'utf8');
+  const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
+  assert.match(topNav, /onClick=\{onOpenSearch\}/);
+  assert.match(topNav, /aria-label="Open search"/);
+  assert.doesNotMatch(intentCard, /<h[1-6]>/);
+});
+
+test('route interactions keep canonical context and synchronize visible state', () => {
+  const searchOverlay = readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8');
+  const atlasMap = readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8');
+  const explore = readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8');
+  assert.match(searchOverlay, /onOpenNode\(nodeId,\s*"search"\)/);
+  assert.match(atlasMap, /setSelectedNodeId\(center\?\.centerNodeId \?\? null\)/);
+  assert.match(atlasMap, /setMapSearchDraft\(state\.relationshipSearch \|\| ""\)/);
+  assert.match(explore, /visibleDocumentRows\.length > 0/);
+  assert.match(explore, /No matching connected records found/);
+});
+
+test('template options use collapsed progressive disclosure and associated hints', () => {
+  const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
+  assert.doesNotMatch(templatesPage, /defaultValue="options"/);
+  assert.match(templatesPage, /hint="Which control catalog/);
+  assert.match(templatesPage, /hint="Where the system runs/);
+  assert.match(templatesPage, /hint="File type for download/);
 });
