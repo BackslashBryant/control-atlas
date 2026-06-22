@@ -5,7 +5,7 @@ import test from "node:test";
 import {
   resolveLayoutMode,
   topologyFingerprint,
-} from "../src/ui/lib/graphLayout.ts";
+} from "../src/ui/lib/graphLayoutCore.mjs";
 
 test("topologyFingerprint is stable for the same graph", () => {
   const fingerprint = topologyFingerprint(
