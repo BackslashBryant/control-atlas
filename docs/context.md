@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-**Maintenance** — Frontend Overhaul merged to `main` (`85a37c9`). Optional next: RC promotion, Dependabot PR review (Nexus).
+**Maintenance** — Frontend Full Review remediation completed June 22, 2026 with the complete local release gate green. Optional next: RC promotion, Dependabot PR review (Nexus).
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -27,6 +27,7 @@
 - Epic 9: Interactive relationship map in Library detail — provenance filters, lazy canvas graph, accessible table fallback ([`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md))
 - Epic 10: Atlas Map-first UX + **Frontend Overhaul** — HashRouter (`#/…` routes + legacy `?view=` shim), split `styles/` design system, `TopNav`/`SearchOverlay`/`SiteFooter`/`BrandEntranceOverlay`, extracted pages (`ObjectDetailPage`, `SourcesPage`, `TemplatesPage`, `PlaybooksPage`, `AboutPage`, `StartHerePage`), dagre layout for STIG/threat compare maps, map stabilization (controlled fCoSE, user fit-to-screen)
 - UI and Brand Correction v2.2: first-run entrance, fCoSE graph, route-aware cached loading, and Explore card/accordion hierarchy
+- Frontend Full Review: mobile search access, named dialogs and complete glossary tabs, Start Here completion safeguards, canonical copied links, template form improvements, WCAG AA text contrast, 44-pixel touch targets, responsive route coverage, secondary-route code splitting, and repaired port status reporting ([`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md))
 
 ## Adopted Baseline
 

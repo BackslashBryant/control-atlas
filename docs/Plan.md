@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — Frontend Overhaul shipped on `main` (`85a37c9`): HashRouter, design-system split, shell components, page extraction, Atlas Map stabilization, dagre compare chains. Residual: optional `<Routes>` wiring in `AppRoutes.tsx` (metadata only today); Dependabot PR review (Nexus).
+**None** — Frontend Full Review remediation completed June 22, 2026: responsive navigation and route coverage, accessible search and glossary controls, Start Here completion safeguards, canonical copied links, template form improvements, WCAG AA text contrast, 44-pixel touch targets, route-level code splitting, and port guard repair. Verification record: [`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md). Residual: optional `<Routes>` wiring in `AppRoutes.tsx` (metadata only today); Dependabot PR review (Nexus).
 
 ## Epic Status (June 22, 2026)
 
@@ -37,7 +37,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 7 — Platform Trust & Hardening       | **Shipped**           | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md).                                                      |
 | 8 — MITRE Threat Lens                | **Shipped**           | ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain — [`docs/plans/epic-8-mitre-threat-lens.md`](plans/epic-8-mitre-threat-lens.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md). |
 | 9 — Interactive Relationship Graph   | **Shipped**           | Object-local map in Library detail, provenance filters, lazy `react-force-graph-2d`, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md). |
-| 10 — Atlas Map-First UX              | **Shipped**           | v2.2 + stability pass + **Frontend Overhaul** (HashRouter, `styles/` tokens, shell components, page extraction, map stabilization, dagre STIG/threat chains) — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md). |
+| 10 — Atlas Map-First UX              | **Shipped**           | v2.2 + stability pass + **Frontend Overhaul** + **Frontend Full Review remediation** (HashRouter, `styles/` tokens, shell components, page extraction, map stabilization, responsive/a11y fixes, route splitting, dagre STIG/threat chains) — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md), [`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md). |
 
 ## Active Direction
 

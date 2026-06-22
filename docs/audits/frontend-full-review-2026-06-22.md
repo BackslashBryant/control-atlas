@@ -16,7 +16,7 @@ The review covers Home, Start, Atlas Map, Explore, record detail, Compare, Playb
 
 No unresolved critical or high-severity code findings remain after remediation.
 
-Final browser, accessibility, responsive, and end-to-end execution remains the release gate because it launches the repository-configured static test server on port 4317.
+The repository's complete release gate passed, including accessibility, responsive, and end-to-end browser execution against the production static build.
 
 ## Confirmed findings and resolutions
 
@@ -40,19 +40,19 @@ Final browser, accessibility, responsive, and end-to-end execution remains the r
 
 | Surface | Purpose and next action | Trust/source separation | Keyboard and names | Responsive contract | State handling |
 | --- | --- | --- | --- | --- | --- |
-| Home | Pass | Pass | Pass | Browser gate pending | Pass |
-| Start | Remediated | Pass | Remediated | Browser gate pending | Remediated |
-| Atlas Map | Pass | Pass | Pass | Browser gate pending | Remediated |
-| Explore | Pass | Pass | Remediated | Browser gate pending | Remediated |
-| Record detail | Pass | Pass | Pass | Browser gate pending | Pass |
-| Compare | Pass | Pass | Pass | Browser gate pending | Pass |
-| Playbooks | Pass | Pass | Pass | Browser gate pending | Pass |
-| Templates | Remediated | Pass | Remediated | Browser gate pending | Remediated |
-| Sources | Pass | Pass | Pass | Browser gate pending | Pass |
-| About | Pass | Pass | Pass | Browser gate pending | Pass |
-| Search overlay | Remediated | Pass | Remediated | Browser gate pending | Pass |
-| Help and glossary | Pass | Pass | Remediated | Browser gate pending | Pass |
-| Loading, error, empty, retired | Pass | Pass | Pass | Browser gate pending | Remediated |
+| Home | Pass | Pass | Pass | Pass | Pass |
+| Start | Remediated | Pass | Remediated | Pass | Remediated |
+| Atlas Map | Pass | Pass | Pass | Pass | Remediated |
+| Explore | Pass | Pass | Remediated | Pass | Remediated |
+| Record detail | Pass | Pass | Pass | Pass | Pass |
+| Compare | Pass | Pass | Pass | Pass | Pass |
+| Playbooks | Pass | Pass | Pass | Pass | Pass |
+| Templates | Remediated | Pass | Remediated | Pass | Remediated |
+| Sources | Pass | Pass | Pass | Pass | Pass |
+| About | Pass | Pass | Pass | Pass | Pass |
+| Search overlay | Remediated | Pass | Remediated | Pass | Pass |
+| Help and glossary | Pass | Pass | Remediated | Pass | Pass |
+| Loading, error, empty, retired | Pass | Pass | Pass | Pass | Remediated |
 
 ## Verification evidence
 
@@ -67,13 +67,11 @@ Completed:
 - `npm run test:browser` — 12 tests passed
 - `npm run smoke:dom` — pass
 - `npm run verify:public` — pass
+- `npm run test:a11y` — pass
+- `npm run test:e2e` — 80 tests passed
+- `npm run precommit` — pass
 
-Pending release gate:
-
-- `npm run test:a11y`
-- `npm run test:e2e`
-- `npm run precommit`
-- merged-`main` rerun and remote checks
+The same complete gate is required again on merged `main`, followed by remote checks and live Pages verification.
 
 ## Performance note
 
