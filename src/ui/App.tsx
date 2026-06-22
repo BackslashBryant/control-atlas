@@ -417,6 +417,10 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    if (viewState.view !== "home") {
+      return undefined;
+    }
+
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (media.matches) {
       return undefined;
@@ -427,7 +431,7 @@ export function App() {
     }, 2200);
 
     return () => window.clearInterval(interval);
-  }, []);
+  }, [viewState.view]);
 
   function navigate(
     nextView: ViewState["view"],

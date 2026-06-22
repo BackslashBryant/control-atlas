@@ -80,7 +80,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ? (state.relationshipView === "map" ? "map" : "list")
       : "map";
 
-  const filters = relationshipFiltersFromState(state);
+  const filters = useMemo(
+    () => relationshipFiltersFromState(state),
+    [
+      state.relationshipType,
+      state.provenance,
+      state.confidence,
+      state.nodeType,
+      state.includeCandidates,
+      state.relationshipSearch,
+    ],
+  );
 
   const neighborhood = useMemo(() => {
     if (!center) return null;
