@@ -1,5 +1,10 @@
 import type cytoscape from "cytoscape";
 
+import {
+  resolveLayoutMode as resolveLayoutModeCore,
+  topologyFingerprint as topologyFingerprintCore,
+} from "./graphLayoutCore.mjs";
+
 export type LayoutMode = "full" | "incremental" | "reset" | "none";
 
 export function topologyFingerprint(
@@ -7,9 +12,7 @@ export function topologyFingerprint(
   nodeIds: string[],
   edgeIds: string[],
 ): string {
-  const nodes = [...nodeIds].sort().join(",");
-  const edges = [...edgeIds].sort().join(",");
-  return `${centerNodeId}|${nodes}|${edges}`;
+  return topologyFingerprintCore(centerNodeId, nodeIds, edgeIds);
 }
 
 export function resolveLayoutMode(
@@ -18,29 +21,12 @@ export function resolveLayoutMode(
   prevNodeIds: Set<string>,
   nextNodeIds: Set<string>,
 ): LayoutMode {
-  if (prevFingerprint === null) {
-    return "full";
-  }
-  if (prevFingerprint === nextFingerprint) {
-    return "none";
-  }
-
-  const added = [...nextNodeIds].filter((id) => !prevNodeIds.has(id));
-  const removed = [...prevNodeIds].filter((id) => !nextNodeIds.has(id));
-
-  const removedClusters =
-    removed.length > 0 && removed.every((id) => id.startsWith("cluster:"));
-  const addedClusters =
-    added.length > 0 && added.every((id) => id.startsWith("cluster:"));
-  const expand =
-    removedClusters && added.length > 0 && !added.every((id) => id.startsWith("cluster:"));
-  const collapse =
-    addedClusters && removed.length > 0 && !removed.every((id) => id.startsWith("cluster:"));
-
-  if (expand || collapse) {
-    return "incremental";
-  }
-  return "full";
+  return resolveLayoutModeCore(
+    prevFingerprint,
+    nextFingerprint,
+    prevNodeIds,
+    nextNodeIds,
+  );
 }
 
 export function buildFcoseOptions(

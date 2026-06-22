@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { applyRelationshipClustering } from "../src/ui/lib/graphClustering.ts";
+import { applyRelationshipClustering } from "../src/ui/lib/graphClustering.mjs";
 import { groupRelationships } from "../src/app/relationship-groups.mjs";
 
 function mockRuntime(nodes) {
