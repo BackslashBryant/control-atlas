@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-**Maintenance** — Frontend Overhaul complete on branch `agent/forge/frontend-overhaul`. Next: merge to `main` when checks green, optional RC promotion.
+**Maintenance** — Frontend Overhaul merged to `main` (`85a37c9`). Optional next: RC promotion, Dependabot PR review (Nexus).
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
