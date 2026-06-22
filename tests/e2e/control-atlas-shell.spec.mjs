@@ -72,8 +72,11 @@ test('visible search trigger opens the global search dialog', async ({ page }) =
   await dismissOnboarding(page);
 
   await page.getByRole('button', { name: 'Open search' }).click();
-  await expect(page.getByRole('dialog', { name: 'Search records' })).toBeVisible();
-  await expect(page.getByLabel('Search records and glossary')).toBeFocused();
+  const dialog = page.getByRole('dialog', { name: 'Search records' });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByRole('searchbox', { name: 'Search records and glossary' }),
+  ).toBeFocused();
 });
 
 test('library detail deep links stay compatible and keep advanced details collapsed by default', async ({ page }) => {
@@ -124,7 +127,7 @@ test('explore groups results and filters out records without connections', async
 });
 
 test('explore explains when the connections-only filter removes every record', async ({ page }) => {
-  await page.goto('/?view=explore&q=CMMC+Level+1');
+  await page.goto('/?view=explore&q=LEVEL-1');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

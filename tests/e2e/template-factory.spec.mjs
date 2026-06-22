@@ -50,6 +50,7 @@ test('format change updates download extension', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByLabel('Format').selectOption('csv');
 
   const downloadPromise = page.waitForEvent('download');
