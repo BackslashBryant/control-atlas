@@ -158,6 +158,8 @@ test("search and glossary dialogs expose accessible control names", () => {
   );
   assert.match(searchOverlay, /aria-label="Search records and glossary"/);
   assert.match(glossaryDrawer, /aria-label="Close help and glossary"/);
+  assert.match(glossaryDrawer, /glossaryTabRef\.current\?\.focus\(\)/);
+  assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
 test("compact icon and chip controls retain 44 pixel touch targets", () => {

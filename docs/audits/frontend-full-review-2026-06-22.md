@@ -78,4 +78,3 @@ Pending release gate:
 ## Performance note
 
 Secondary route splitting reduced the initial application chunk by about 26%. The remaining build warning is isolated to the lazy-loaded interactive graph chunk, which contains Cytoscape and its layout extensions and is not part of the initial route payload.
-

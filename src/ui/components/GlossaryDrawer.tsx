@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { glossaryData } from "../../app/glossary-data.mjs";
 import { templatesForPatterns } from "../lib/glossarySearch.mjs";
@@ -35,6 +35,8 @@ export function GlossaryDrawer(props: {
     onOpenNode,
   } = props;
   const [query, setQuery] = useState("");
+  const helpTabRef = useRef<HTMLButtonElement>(null);
+  const glossaryTabRef = useRef<HTMLButtonElement>(null);
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return glossaryData.filter((entry) => {
@@ -123,8 +125,12 @@ export function GlossaryDrawer(props: {
                 if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
                   event.preventDefault();
                   onTabChange("glossary");
+                  window.requestAnimationFrame(() =>
+                    glossaryTabRef.current?.focus(),
+                  );
                 }
               }}
+              ref={helpTabRef}
               role="tab"
               tabIndex={helpTab === "guide" ? 0 : -1}
               type="button"
@@ -143,8 +149,12 @@ export function GlossaryDrawer(props: {
                 if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
                   event.preventDefault();
                   onTabChange("guide");
+                  window.requestAnimationFrame(() =>
+                    helpTabRef.current?.focus(),
+                  );
                 }
               }}
+              ref={glossaryTabRef}
               role="tab"
               tabIndex={helpTab === "glossary" ? 0 : -1}
               type="button"
