@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — Frontend Overhaul shipped on `agent/forge/frontend-overhaul` (HashRouter, design-system split, shell components, page extraction, Atlas Map stabilization, dagre compare chains). Residual: optional `<Routes>` wiring in `AppRoutes.tsx` (metadata only today); Dependabot PR review (Nexus).
+**None** — Frontend Overhaul shipped on `main` (`85a37c9`): HashRouter, design-system split, shell components, page extraction, Atlas Map stabilization, dagre compare chains. Residual: optional `<Routes>` wiring in `AppRoutes.tsx` (metadata only today); Dependabot PR review (Nexus).
 
 ## Epic Status (June 22, 2026)
 
