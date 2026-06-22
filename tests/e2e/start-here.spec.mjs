@@ -54,7 +54,7 @@ test('header search surfaces glossary results from any page', async ({ page }) =
   await page.getByLabel('Search records and glossary').press('Enter');
 
   await expect(page).toHaveURL(/view=explore&q=reciprocity/);
-  await expect(page.getByRole('heading', { name: 'Glossary', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Glossary \(\d+\)$/ })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Open term details', exact: true }).first()).toBeVisible();
 });
 

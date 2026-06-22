@@ -47,6 +47,7 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 export function requiresFullGraph(view: ViewState["view"]) {
   return (
     view === "atlas-map" ||
+    view === "search" ||
     view === "library-detail" ||
     view === "matrix" ||
     view === "sources" ||

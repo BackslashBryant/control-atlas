@@ -5,6 +5,28 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
+test('brand entrance appears once, is dismissible, and hides navigation while visible', async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem('ca_intro_seen'));
+  await page.goto('/');
+  const entrance = page.getByRole('dialog', { name: 'Control Atlas introduction' });
+  await expect(entrance).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
+  await entrance.press('Escape');
+  await expect(entrance).toBeHidden();
+  await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
+  await page.reload();
+  await expect(entrance).toHaveCount(0);
+});
+
+test('reduced motion bypasses the brand entrance without an artificial hold', async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.addInitScript(() => localStorage.removeItem('ca_intro_seen'));
+  await page.goto('/');
+  await expect(page.getByRole('dialog', { name: 'Control Atlas introduction' })).toHaveCount(0);
+  await context.close();
+});
+
 test('control atlas map-first shell exposes navigation and guided start path', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
@@ -74,6 +96,19 @@ test('explore filters narrow results without a page reload', async ({ page }) =>
   await page.getByLabel('Item type').selectOption('control');
   await expect(page.locator('#library-results .result-card')).toHaveCount(1);
   await expect(page.locator('#library-results')).toContainText('Account Management');
+});
+
+test('explore groups results and filters out records without connections', async ({ page }) => {
+  await page.goto('/?view=explore&q=account');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.getByLabel('Show only items with connections')).toBeVisible();
+  await expect(page.locator('#library-results .accordion-trigger').first()).toBeVisible();
+  await page.getByLabel('Show only items with connections').check();
+  await expect(page.getByText('No connections yet', { exact: true })).toHaveCount(0);
+  const firstCard = page.locator('#library-results .result-card').first();
+  await expect(firstCard.getByRole('button', { name: 'Open record' })).toBeVisible();
+  await expect(firstCard.getByRole('button', { name: 'More actions' })).toBeVisible();
 });
 
 test('compare starts with intent cards and opens summary-first framework results', async ({ page }) => {

@@ -1,27 +1,25 @@
+import cytoscape, { type Core, type ElementDefinition } from "cytoscape";
+import fcose from "cytoscape-fcose";
 import {
   forwardRef,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
-import ForceGraph2D from "react-force-graph-2d";
 
-import { displayNameFor } from "../../app/display-names.mjs";
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
   buildGraphData,
   linkDashPattern,
   nodeColor,
-  nodeShapeRadius,
   provenanceColor,
-  type GraphData,
-  type GraphLink,
   type GraphNode,
 } from "../lib/graphTheme";
 import type { RelationshipGraphHandle } from "./RelationshipExplorer";
+
+cytoscape.use(fcose);
 
 type RelationshipGraphProps = {
   nodes: Array<{
@@ -50,6 +48,14 @@ type RelationshipGraphProps = {
   onClusterClick?: (clusterKey: string) => void;
 };
 
+function nodeShape(node: GraphNode) {
+  if (node.isCluster) return "round-rectangle";
+  if (node.nodeType === "baseline") return "triangle";
+  if (node.nodeType === "template") return "diamond";
+  if (node.nodeType === "source") return "hexagon";
+  return "ellipse";
+}
+
 export const RelationshipGraphWithHandle = forwardRef<
   RelationshipGraphHandle,
   RelationshipGraphProps
@@ -65,223 +71,226 @@ export const RelationshipGraphWithHandle = forwardRef<
     clusterMeta,
     onClusterClick,
   } = props;
-
   const containerRef = useRef<HTMLDivElement>(null);
-  const graphRef = useRef<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 640, height: 420 });
-  const [hoverNodeId, setHoverNodeId] = useState<string | null>(null);
+  const graphRef = useRef<Core | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const graphData: GraphData = useMemo(
+  const graphData = useMemo(
     () => buildGraphData(nodes, edges, centerNodeId, clusterMeta),
-    [nodes, edges, centerNodeId, clusterMeta],
+    [centerNodeId, clusterMeta, edges, nodes],
   );
+
+  const elements = useMemo<ElementDefinition[]>(() => {
+    const nodeElements = graphData.nodes.map((node) => ({
+      data: {
+        id: node.id,
+        label: node.itemId,
+        title: node.label,
+        nodeType: node.nodeType,
+        isCluster: Boolean(node.isCluster),
+        color: nodeColor(node, selectedNodeId, searchHighlightIds),
+        shape: nodeShape(node),
+      },
+      classes: [
+        node.isCenter ? "center-node" : "",
+        node.isCluster ? "cluster-node" : "",
+        node.id === selectedNodeId ? "selected-node" : "",
+        searchHighlightIds.has(node.id) ? "search-match" : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
+    }));
+    const edgeElements = graphData.links.map((edge) => ({
+      data: {
+        id: edge.id,
+        source:
+          typeof edge.source === "string" ? edge.source : edge.source.id,
+        target:
+          typeof edge.target === "string" ? edge.target : edge.target.id,
+        label: edge.relationshipType,
+        color: provenanceColor(edge.provenanceClass),
+        lineStyle: linkDashPattern(
+          edge.provenanceClass,
+          edge.publicationStatus,
+        )
+          ? "dashed"
+          : "solid",
+      },
+    }));
+    return [...nodeElements, ...edgeElements];
+  }, [graphData, searchHighlightIds, selectedNodeId]);
+
+  function runLayout(graph: Core) {
+    graph
+      .layout({
+        name: "fcose",
+        nodeDimensionsIncludeLabels: true,
+        quality: "default",
+        packComponents: true,
+        animate: !reducedMotion,
+        animationDuration: 400,
+        fit: true,
+        padding: 48,
+        randomize: true,
+      } as cytoscape.LayoutOptions)
+      .run();
+  }
 
   useImperativeHandle(ref, () => ({
     fitToScreen() {
-      graphRef.current?.zoomToFit(400, 48);
+      graphRef.current?.fit(undefined, 48);
     },
     resetView() {
-      graphRef.current?.zoomToFit(400, 48);
-      graphRef.current?.d3ReheatSimulation?.();
+      const graph = graphRef.current;
+      if (graph) runLayout(graph);
     },
     zoomIn() {
-      const current = graphRef.current?.zoom?.() ?? 1;
-      graphRef.current?.zoom(current * 1.2, 300);
+      const graph = graphRef.current;
+      if (graph) graph.zoom(graph.zoom() * 1.2);
     },
     zoomOut() {
-      const current = graphRef.current?.zoom?.() ?? 1;
-      graphRef.current?.zoom(current / 1.2, 300);
+      const graph = graphRef.current;
+      if (graph) graph.zoom(graph.zoom() / 1.2);
     },
   }));
 
-  const highlightIds = useMemo(() => {
-    const focusId = hoverNodeId || selectedNodeId;
-    if (!focusId) return searchHighlightIds;
-    const ids = new Set<string>([focusId]);
-    if (searchHighlightIds.size) {
-      for (const id of searchHighlightIds) ids.add(id);
-    }
-    for (const link of graphData.links) {
-      if (link.source === focusId || link.target === focusId) {
-        ids.add(
-          typeof link.source === "string"
-            ? link.source
-            : (link.source as GraphNode).id,
-        );
-        ids.add(
-          typeof link.target === "string"
-            ? link.target
-            : (link.target as GraphNode).id,
-        );
-      }
-    }
-    return ids;
-  }, [hoverNodeId, selectedNodeId, searchHighlightIds, graphData.links]);
-
   useEffect(() => {
-    const element = containerRef.current;
-    if (!element) return undefined;
+    if (!containerRef.current || !elements.length) {
+      return undefined;
+    }
 
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (!entry) return;
-      setDimensions({
-        width: Math.max(320, Math.floor(entry.contentRect.width)),
-        height: Math.max(320, Math.floor(entry.contentRect.height)),
-      });
+    const graph = cytoscape({
+      container: containerRef.current,
+      elements,
+      minZoom: 0.25,
+      maxZoom: 3,
+      style: [
+        {
+          selector: "node",
+          style: {
+            "background-color": "data(color)",
+            "border-color": "#334155",
+            "border-width": 1,
+            height: 22,
+            label: "",
+            shape: "data(shape)",
+            width: 22,
+          },
+        },
+        {
+          selector: "node.center-node, node.cluster-node, node.selected-node",
+          style: {
+            label: "data(label)",
+            "font-size": 10,
+            color: "#F8FAFC",
+            "text-background-color": "#0B1020",
+            "text-background-opacity": 0.88,
+            "text-background-padding": 3,
+            "text-margin-y": -18,
+          },
+        },
+        {
+          selector: "node.selected-node",
+          style: {
+            "border-color": "#22D3EE",
+            "border-width": 4,
+            height: 32,
+            width: 32,
+          },
+        },
+        {
+          selector: "node.cluster-node",
+          style: {
+            height: 34,
+            width: 34,
+          },
+        },
+        {
+          selector: "node.hover-label, node.zoom-label, node.search-match",
+          style: {
+            label: "data(label)",
+            "font-size": 10,
+            color: "#F8FAFC",
+            "text-background-color": "#0B1020",
+            "text-background-opacity": 0.88,
+            "text-background-padding": 3,
+            "text-margin-y": -16,
+          },
+        },
+        {
+          selector: "edge",
+          style: {
+            "curve-style": "bezier",
+            "line-color": "data(color)",
+            "line-style": "data(lineStyle)",
+            opacity: 0.72,
+            "target-arrow-color": "data(color)",
+            "target-arrow-shape": "triangle",
+            width: 1.5,
+          },
+        },
+      ] as cytoscape.StylesheetJson,
     });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+    graphRef.current = graph;
+    runLayout(graph);
 
-  useEffect(() => {
-    if (!graphRef.current || !graphData.nodes.length) return;
-    const timer = window.setTimeout(
-      () => {
-        graphRef.current?.zoomToFit(400, 48);
-      },
-      reducedMotion ? 0 : 600,
-    );
-    return () => window.clearTimeout(timer);
-  }, [graphData, reducedMotion]);
-
-  const shouldShowLabel = useCallback(
-    (node: GraphNode, globalScale: number) => {
-      if (node.isCenter || node.id === selectedNodeId || node.isCluster) {
-        return true;
+    graph.on("tap", "node", (event) => {
+      const nodeId = event.target.id();
+      if (nodeId.startsWith("cluster:") && onClusterClick) {
+        onClusterClick(nodeId.replace("cluster:", ""));
       }
-      if (globalScale > 1.35) return true;
-      if (highlightIds.has(node.id)) return true;
-      return false;
-    },
-    [highlightIds, selectedNodeId],
-  );
+      onSelectNode(nodeId);
+    });
+    graph.on("mouseover", "node", (event) => {
+      event.target.addClass("hover-label");
+    });
+    graph.on("mouseout", "node", (event) => {
+      event.target.removeClass("hover-label");
+    });
+    graph.on("zoom", () => {
+      const zoom = graph.zoom();
+      setZoomLevel(zoom);
+      graph.nodes().toggleClass("zoom-label", zoom > 1.5);
+    });
 
-  const paintNode = useCallback(
-    (node: GraphNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
-      setZoomLevel(globalScale);
-      const radius = nodeShapeRadius(node);
-      const color = nodeColor(node, selectedNodeId, highlightIds);
-      const dimmed = highlightIds.size > 0 && !highlightIds.has(node.id);
-      const x = node.x ?? 0;
-      const y = node.y ?? 0;
-
-      ctx.beginPath();
-      if (node.isCluster) {
-        ctx.rect(x - radius, y - radius, radius * 2, radius * 2);
-      } else if (node.nodeType === "baseline") {
-        ctx.moveTo(x, y - radius);
-        ctx.lineTo(x + radius, y + radius);
-        ctx.lineTo(x - radius, y + radius);
-        ctx.closePath();
-      } else {
-        ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-      }
-      ctx.fillStyle = dimmed ? "rgba(148, 163, 184, 0.35)" : color;
-      ctx.fill();
-      ctx.strokeStyle = node.id === selectedNodeId ? "#22D3EE" : "#334155";
-      ctx.lineWidth =
-        node.id === selectedNodeId ? 2 / globalScale : 1 / globalScale;
-      ctx.stroke();
-
-      if (shouldShowLabel(node, globalScale)) {
-        const label = node.itemId;
-        ctx.font = `${10 / globalScale}px var(--ca-font-mono)`;
-        ctx.fillStyle = dimmed ? "rgba(203, 213, 225, 0.5)" : "#F8FAFC";
-        ctx.fillText(label, x + radius + 2, y + 3);
-      }
-    },
-    [highlightIds, selectedNodeId, shouldShowLabel],
-  );
-
-  const paintLink = useCallback(
-    (link: GraphLink, ctx: CanvasRenderingContext2D, globalScale: number) => {
-      const source = (
-        typeof link.source === "object" ? link.source : null
-      ) as GraphNode | null;
-      const target = (
-        typeof link.target === "object" ? link.target : null
-      ) as GraphNode | null;
-      if (
-        !source ||
-        !target ||
-        source.x == null ||
-        source.y == null ||
-        target.x == null ||
-        target.y == null
-      )
-        return;
-
-      const highlighted =
-        highlightIds.size === 0 ||
-        (highlightIds.has(source.id) && highlightIds.has(target.id));
-
-      ctx.beginPath();
-      ctx.moveTo(source.x, source.y);
-      ctx.lineTo(target.x, target.y);
-      ctx.strokeStyle = highlighted
-        ? provenanceColor(link.provenanceClass)
-        : "rgba(148, 163, 184, 0.25)";
-      ctx.lineWidth = highlighted ? 1.5 / globalScale : 0.5 / globalScale;
-      const dash = linkDashPattern(
-        link.provenanceClass,
-        link.publicationStatus,
-      );
-      ctx.setLineDash(dash ? dash.map((value) => value / globalScale) : []);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    },
-    [highlightIds],
-  );
+    return () => {
+      graph.destroy();
+      graphRef.current = null;
+    };
+  }, [elements, onClusterClick, onSelectNode, reducedMotion]);
 
   if (!graphData.nodes.length) {
-    return (
-      <p className="muted">
-        No graph nodes to display with the current filters.
-      </p>
-    );
+    return <p className="muted">No graph nodes to display with the current filters.</p>;
   }
 
   return (
-    <div className="relationship-graph-canvas-wrap" ref={containerRef}>
-      <div aria-hidden="true" className="relationship-graph-canvas">
-        <ForceGraph2D
-          ref={graphRef}
-          backgroundColor="transparent"
-          cooldownTicks={reducedMotion ? 0 : 80}
-          d3AlphaDecay={reducedMotion ? 1 : 0.02}
-          d3VelocityDecay={reducedMotion ? 1 : 0.3}
-          graphData={graphData}
-          height={dimensions.height}
-          linkCanvasObject={paintLink}
-          linkCanvasObjectMode={() => "replace"}
-          linkDirectionalArrowLength={3}
-          linkDirectionalArrowRelPos={1}
-          linkLabel={(link: GraphLink) =>
-            displayNameFor("relationship_type", link.relationshipType)
-          }
-          nodeCanvasObject={paintNode}
-          nodeCanvasObjectMode={() => "replace"}
-          nodeLabel={(node: GraphNode) => `${node.itemId} — ${node.label}`}
-          onEngineStop={() => {
-            if (reducedMotion) graphRef.current?.zoomToFit(0, 48);
-          }}
-          onNodeClick={(node: GraphNode) => {
-            if (node.isCluster && onClusterClick) {
-              onClusterClick(node.id.replace("cluster:", ""));
-            }
-            onSelectNode(node.id);
-          }}
-          onNodeHover={(node: GraphNode | null) =>
-            setHoverNodeId(node?.id ?? null)
-          }
-          onZoom={(transform: { k: number }) => setZoomLevel(transform.k)}
-          width={dimensions.width}
-        />
+    <div className="relationship-graph-canvas-wrap">
+      <div
+        aria-label="Interactive relationship map"
+        className="relationship-graph-canvas"
+        ref={containerRef}
+        role="img"
+      />
+      <div className="graph-node-shortcuts" aria-label="Map nodes">
+        {graphData.nodes.map((node) => (
+          <button
+            className={node.id === selectedNodeId ? "selected" : ""}
+            key={node.id}
+            onClick={() => {
+              if (node.isCluster && onClusterClick) {
+                onClusterClick(node.id.replace("cluster:", ""));
+              }
+              onSelectNode(node.id);
+            }}
+            type="button"
+          >
+            {node.itemId}
+          </button>
+        ))}
       </div>
-      <p className="visually-hidden" role="status">
-        Map zoom level {zoomLevel.toFixed(1)}x
+      <p aria-live="polite" className="visually-hidden">
+        Map loaded: {graphData.nodes.length} nodes / {graphData.links.length} edges.
+        Map zoom level {zoomLevel.toFixed(1)}x.
       </p>
     </div>
   );

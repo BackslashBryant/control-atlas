@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-Post-MVP maintenance and optional `v1.0.0` promotion. Epic 10 Atlas Map-First UX shipped on `main`.
+Post-MVP maintenance and optional `v1.0.0` promotion. UI and Brand Correction v2.2 is shipped.
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -26,12 +26,13 @@ Post-MVP maintenance and optional `v1.0.0` promotion. Epic 10 Atlas Map-First UX
 - Epic 8: MITRE Threat Lens — ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain ([`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md))
 - Epic 9: Interactive relationship map in Library detail — provenance filters, lazy canvas graph, accessible table fallback ([`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md))
 - Epic 10: Atlas Map-first UX — homepage, standalone Atlas Map, compare-map on all workbenches, provenance tooltips, Explore/Compare page extraction ([`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md))
+- UI and Brand Correction v2.2: first-run entrance, fCoSE graph, route-aware cached loading, and Explore card/accordion hierarchy
 
 ## Adopted Baseline
 
 - React shell in `src/ui/App.tsx` is the active UI; legacy `src/app/app.mjs` is not mounted
 - Build-time importers and `data/generated/*` bundles are the runtime contract
-- D3 graph renderer ships in React Library detail (Epic 9); legacy `src/app/app.mjs` is not mounted
+- Cytoscape fCoSE graph renderer is lazy-loaded for Atlas Map surfaces; legacy `src/app/app.mjs` is not mounted
 - Control Atlas is the active repo and deployment identity
 
 ## Product Boundary

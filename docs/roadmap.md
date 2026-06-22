@@ -92,4 +92,4 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 1. **Maintenance** — CI-driven dependency, security, and smoke gates
 2. **Optional** — promote `v1.0.0` after RC feedback
 
-Epics 0–10 are shipped for MVP.
+Epics 0–10 and the UI and Brand Correction v2.2 pass are shipped for MVP.

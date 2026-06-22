@@ -38,6 +38,10 @@ export function attachPageDiagnostics(page) {
 }
 
 export async function dismissOnboarding(page) {
+  const brandEntrance = page.getByRole('dialog', { name: 'Control Atlas introduction' });
+  if (await brandEntrance.isVisible()) {
+    await brandEntrance.press('Escape');
+  }
   const skipOnboarding = page.getByRole('button', { name: 'Skip', exact: true });
   if (await skipOnboarding.isVisible()) {
     await skipOnboarding.click();
