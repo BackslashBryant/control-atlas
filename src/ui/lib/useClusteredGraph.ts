@@ -65,44 +65,6 @@ export function useClusteredGraph(options: UseClusteredGraphOptions) {
     [expandedClusters, onExpandedClustersChange],
   );
 
-  const onClusterExpand = useCallback(
-    (clusterKey: string) => {
-      const clusterId = `cluster:${clusterKey}`;
-      const label =
-        applyRelationshipClustering({
-          centerNodeId,
-          nodes,
-          edges,
-          runtime,
-          expandedClusters,
-        }).clusterMeta.get(clusterId)?.clusterLabel ?? clusterKey;
-
-      setExpandedClusterLabels((current) => {
-        const next = new Map(current);
-        next.set(clusterKey, label);
-        return next;
-      });
-      setExpandedClusters((current) => new Set(current).add(clusterKey));
-    },
-    [centerNodeId, edges, expandedClusters, nodes, runtime, setExpandedClusters],
-  );
-
-  const onClusterCollapse = useCallback(
-    (clusterKey: string) => {
-      setExpandedClusterLabels((current) => {
-        const next = new Map(current);
-        next.delete(clusterKey);
-        return next;
-      });
-      setExpandedClusters((current) => {
-        const next = new Set(current);
-        next.delete(clusterKey);
-        return next;
-      });
-    },
-    [setExpandedClusters],
-  );
-
   const clustered = useMemo(() => {
     if (!enabled) {
       return {
@@ -120,6 +82,38 @@ export function useClusteredGraph(options: UseClusteredGraphOptions) {
       expandedClusters,
     });
   }, [centerNodeId, edges, enabled, expandedClusters, nodes, runtime]);
+
+  const onClusterExpand = useCallback(
+    (clusterKey: string) => {
+      const clusterId = `cluster:${clusterKey}`;
+      const label =
+        clustered.clusterMeta.get(clusterId)?.clusterLabel ?? clusterKey;
+
+      setExpandedClusterLabels((current) => {
+        const next = new Map(current);
+        next.set(clusterKey, label);
+        return next;
+      });
+      setExpandedClusters((current) => new Set(current).add(clusterKey));
+    },
+    [clustered.clusterMeta, setExpandedClusters],
+  );
+
+  const onClusterCollapse = useCallback(
+    (clusterKey: string) => {
+      setExpandedClusterLabels((current) => {
+        const next = new Map(current);
+        next.delete(clusterKey);
+        return next;
+      });
+      setExpandedClusters((current) => {
+        const next = new Set(current);
+        next.delete(clusterKey);
+        return next;
+      });
+    },
+    [setExpandedClusters],
+  );
 
   useEffect(() => {
     if (controlledExpanded !== undefined) {

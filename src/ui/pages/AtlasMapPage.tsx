@@ -66,7 +66,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
-  const [loadError, setLoadError] = useState(false);
 
   const center = useMemo(
     () => resolveCenterNode(bundle.runtime, state.node),
@@ -173,42 +172,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
               type="button"
             >
               Search records
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <section className="panel atlas-map-page">
-        <PageHeader
-          summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-          title="Atlas Map"
-        />
-        <div className="notice">
-          <h2>The Atlas Map could not load.</h2>
-          <p>You can still view this item as a list.</p>
-          <div className="card-actions">
-            <button
-              className="primary"
-              onClick={() => setLoadError(false)}
-              type="button"
-            >
-              Retry
-            </button>
-            <button
-              className="secondary"
-              onClick={() =>
-                onNavigate("atlas-map", {
-                  ...state,
-                  relationshipView: "list",
-                })
-              }
-              type="button"
-            >
-              View list
             </button>
           </div>
         </div>

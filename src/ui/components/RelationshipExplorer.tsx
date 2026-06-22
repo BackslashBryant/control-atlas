@@ -194,31 +194,21 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         edges: internalClustering.edges,
       };
 
-  const effectiveClusterMeta = usesExternalClustering
-    ? clusterMeta
-    : internalClustering.clusterMeta;
-  const effectiveExpandedClusters = usesExternalClustering
-    ? expandedClusters
-    : internalClustering.expandedClusters;
-  const effectiveExpandedClusterLabels = usesExternalClustering
-    ? expandedClusterLabels
-    : internalClustering.expandedClusterLabels;
-  const effectiveOnClusterExpand = usesExternalClustering
-    ? onClusterExpand
-    : internalClustering.onClusterExpand;
-  const effectiveOnClusterCollapse = usesExternalClustering
-    ? onClusterCollapse
-    : internalClustering.onClusterCollapse;
-
-  const handleGraphSelectNode = useCallback(
-    (nodeId: string) => {
-      if (nodeId.startsWith("cluster:") && effectiveOnClusterExpand) {
-        effectiveOnClusterExpand(nodeId.replace("cluster:", ""));
+  const clustering = usesExternalClustering
+    ? {
+        clusterMeta,
+        expandedClusters,
+        expandedClusterLabels,
+        onClusterExpand,
+        onClusterCollapse,
       }
-      setSelectedNodeId(nodeId);
-    },
-    [effectiveOnClusterExpand, setSelectedNodeId],
-  );
+    : {
+        clusterMeta: internalClustering.clusterMeta,
+        expandedClusters: internalClustering.expandedClusters,
+        expandedClusterLabels: internalClustering.expandedClusterLabels,
+        onClusterExpand: internalClustering.onClusterExpand,
+        onClusterCollapse: internalClustering.onClusterCollapse,
+      };
 
   const filterOptions = filtered.filterOptions;
   const tableRows = staticTableRows || filtered.tableRows;
@@ -238,14 +228,14 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
   const summaryId = "relationship-map-summary";
 
   const collapseLabels = useMemo(() => {
-    if (!effectiveExpandedClusters?.size) {
+    if (!clustering.expandedClusters?.size) {
       return [];
     }
-    return [...effectiveExpandedClusters].map((clusterKey) => ({
+    return [...clustering.expandedClusters].map((clusterKey) => ({
       clusterKey,
-      label: effectiveExpandedClusterLabels?.get(clusterKey) ?? clusterKey,
+      label: clustering.expandedClusterLabels?.get(clusterKey) ?? clusterKey,
     }));
-  }, [effectiveExpandedClusterLabels, effectiveExpandedClusters]);
+  }, [clustering.expandedClusterLabels, clustering.expandedClusters]);
 
   if (showEmptyState) {
     return (
@@ -398,7 +388,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         </div>
       ) : null}
 
-      {collapseLabels.length > 0 && effectiveOnClusterCollapse ? (
+      {collapseLabels.length > 0 && clustering.onClusterCollapse ? (
         <div
           aria-label="Expanded connection groups"
           className="cluster-collapse-row"
@@ -409,7 +399,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
               className="secondary quiet"
               disabled={layoutRunning}
               key={clusterKey}
-              onClick={() => effectiveOnClusterCollapse(clusterKey)}
+              onClick={() => clustering.onClusterCollapse?.(clusterKey)}
               type="button"
             >
               Collapse {label}
@@ -505,12 +495,12 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           >
             <RelationshipGraphWithHandle
               centerNodeId={centerNodeId}
-              clusterMeta={effectiveClusterMeta}
+              clusterMeta={clustering.clusterMeta}
               edges={neighborhood.edges}
               nodes={neighborhood.nodes}
-              onClusterClick={effectiveOnClusterExpand}
+              onClusterClick={clustering.onClusterExpand}
               onLayoutRunningChange={setLayoutRunning}
-              onSelectNode={handleGraphSelectNode}
+              onSelectNode={setSelectedNodeId}
               reducedMotion={reducedMotion}
               ref={graphRef}
               searchHighlightIds={searchHighlightIds}
