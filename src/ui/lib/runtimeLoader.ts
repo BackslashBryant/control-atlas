@@ -1,6 +1,7 @@
 import { createFederalGraphRuntime } from '../../app/runtime.mjs';
 
 const CACHE_VERSION = '20260619-3';
+const artifactCache = new Map<string, Promise<unknown>>();
 
 export type TemplateRegistry = {
   templates?: Array<Record<string, unknown>>;
@@ -13,11 +14,25 @@ export type RuntimeBundle = {
 };
 
 export async function fetchArtifact(path: string) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Unable to load ${path}.`);
+  const cached = artifactCache.get(path);
+  if (cached) {
+    return cached;
   }
-  return response.json();
+
+  const request = fetch(path).then((response) => {
+    if (!response.ok) {
+      throw new Error(`Unable to load ${path}.`);
+    }
+    return response.json();
+  });
+  artifactCache.set(path, request);
+
+  try {
+    return await request;
+  } catch (error) {
+    artifactCache.delete(path);
+    throw error;
+  }
 }
 
 async function fetchCollection(path: string, key: string) {
@@ -99,6 +114,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
   onSearchReady: (bundle: RuntimeBundle) => void;
   onFullReady: (bundle: RuntimeBundle) => void;
   onError: (error: unknown) => void;
+  includeFullGraph: boolean;
 }) {
   try {
     const libraryArtifact = await fetchArtifact(artifactPath('library-search.json'));
@@ -118,6 +134,9 @@ export async function loadRuntimeDatasetStaged(handlers: {
       templateRegistry,
       graphReady: false,
     });
+    if (!handlers.includeFullGraph) {
+      return;
+    }
     const fullBundle = await loadFullGraphPhase(libraryArtifact, templateRegistry);
     handlers.onFullReady(fullBundle);
   } catch (error) {

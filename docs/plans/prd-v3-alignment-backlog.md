@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** June 21, 2026 (Epic 10 residual closeout shipped)
+**Last synced:** June 21, 2026 (UI and Brand Correction v2.2 shipped)
 
 ## Epic 0: GovFrame → Control Atlas Migration
 

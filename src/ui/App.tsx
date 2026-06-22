@@ -42,6 +42,10 @@ import { DetailConnectionsSkeleton, LibrarySkeleton } from "./components/Library
 import { StickyDetailBar } from "./components/StickyDetailBar";
 import { ProvenanceTerm } from "./components/ProvenanceTerm";
 import {
+  BrandEntrance,
+  shouldShowBrandEntrance,
+} from "./components/BrandEntrance";
+import {
   filterByCategoryAndQuery,
   groupItemsByCategory,
   PATTERN_CATEGORIES,
@@ -149,7 +153,7 @@ function downloadTextFile(filename: string, content: string, mimeType: string) {
 
 function sourceTrustSummary(source: any) {
   if (!source) {
-    return "No public source record is attached yet.";
+    return "Source pending.";
   }
   if (source.provenance_class === "inferred") {
     return "Needs review before relying on it.";
@@ -336,6 +340,7 @@ export function App() {
   const [headerSearchDraft, setHeaderSearchDraft] = useState(() =>
     viewState.view === "search" ? viewState.query : "",
   );
+  const [introVisible, setIntroVisible] = useState(shouldShowBrandEntrance);
 
   useEffect(() => {
     let cancelled = false;
@@ -357,9 +362,10 @@ export function App() {
     }, 10000);
 
     loadRuntimeDatasetStaged({
+      includeFullGraph: requiresFullGraph(viewState.view),
       onSearchReady: (result) => {
         if (!cancelled) {
-          setBundle(result);
+          setBundle((current) => (current?.graphReady ? current : result));
           setLoadError("");
         }
       },
@@ -390,7 +396,7 @@ export function App() {
       window.clearTimeout(slowTimer);
       window.clearTimeout(timeoutTimer);
     };
-  }, [loadAttempt]);
+  }, [loadAttempt, viewState.view]);
 
   function retryLoad() {
     setBundle(null);
@@ -476,17 +482,31 @@ export function App() {
     }
   }, [viewState]);
 
-  const readyState = loadError ? "error" : bundle?.graphReady ? "true" : bundle ? "partial" : "false";
+  const readyState = loadError
+    ? "error"
+    : bundle?.graphReady || (bundle && !requiresFullGraph(viewState.view))
+      ? "true"
+      : bundle
+        ? "partial"
+        : "false";
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const showWorkspaceContent =
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
 
   return (
     <>
+      <BrandEntrance
+        onDismiss={() => setIntroVisible(false)}
+        visible={introVisible}
+      />
       <a className="skip-link" href="#workspace">
         Skip to workspace
       </a>
-      <header className="site-header">
+      <header
+        aria-hidden={introVisible || undefined}
+        className="site-header"
+        hidden={introVisible}
+      >
         <button
           className="brand"
           onClick={() => navigate("home")}
@@ -621,8 +641,7 @@ export function App() {
 
       <footer className="site-footer">
         <p>
-          Control Atlas is an open-source reference tool. It does not make compliance or authorization decisions. Official decisions remain with
-          your Authorizing Official.{" "}
+          Control Atlas is an open-source reference tool. It does not replace official guidance.{" "}
           <button
             className="link-action"
             onClick={() => navigate("about")}
@@ -630,10 +649,6 @@ export function App() {
           >
             About &amp; trust
           </button>
-        </p>
-        <p>
-          Static, public, and browser-only. No accounts, tracking, backend, or
-          user-data storage.
         </p>
       </footer>
 

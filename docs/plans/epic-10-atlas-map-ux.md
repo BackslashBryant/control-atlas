@@ -14,6 +14,20 @@
 
 ---
 
+## UI and Brand Correction v2.2
+
+The post-ship correction pass closes the approved v2.2 residuals:
+
+- First-run Ctrl + Alt brand entrance overlay with reduced-motion bypass and `ca_intro_seen`
+- Cytoscape fCoSE map layout with label-aware node dimensions and lazy loading
+- In-memory static artifact cache and route-aware full-graph loading
+- Counted Explore accordions, connections-only filtering, one primary card action, and non-interactive zero-connection text
+- Approved persistent footer disclaimer
+
+Implementation plan: [`ui-brand-correction-v2-2.md`](ui-brand-correction-v2-2.md).
+
+---
+
 ## Shipped scope
 
 ### Phase 1 — Navigation and branding
@@ -31,6 +45,7 @@
 
 ### Phase 3 — Map readability
 - `graphClustering.ts` group collapse thresholds
+- Cytoscape fCoSE layout with label-aware node dimensions, packed components, and 400 ms motion
 - Zoom-aware labels; fit/reset/zoom controls
 - Item-type legend shapes + provenance color legend
 

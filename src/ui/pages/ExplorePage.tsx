@@ -134,6 +134,7 @@ export function ExplorePage(props: {
     onOpenGlossary,
   } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
+  const [connectionsOnly, setConnectionsOnly] = useState(false);
   const deferredQuery = useDeferredValue(queryDraft);
 
   useEffect(() => {
@@ -175,17 +176,43 @@ export function ExplorePage(props: {
   const hasQuery = Boolean(state.query.trim());
   const hasResults = documents.length > 0 || glossaryMatches.length > 0;
 
-  const groupedDocuments = useMemo<Record<string, any[]>>(() => {
-    return /** @type {any[]} */ documents.reduce(
+  const documentRows = useMemo(
+    () =>
+      documents.map((document: any) => {
+        const source = bundle.runtime.getSource(document.source_id);
+        const node = bundle.runtime.getNode(document.id);
+        const relationshipCount = node
+          ? bundle.runtime.getEdgesForNode(node.id, {
+              publication_status: "published",
+            }).length
+          : 0;
+        return { document, node, relationshipCount, source };
+      }),
+    [bundle.runtime, documents],
+  );
+
+  const visibleDocumentRows = useMemo(
+    () =>
+      connectionsOnly
+        ? documentRows.filter((row) => row.relationshipCount > 0)
+        : documentRows,
+    [connectionsOnly, documentRows],
+  );
+
+  const groupedDocuments = useMemo<Record<string, typeof documentRows>>(() => {
+    return visibleDocumentRows.reduce(
       (groups: Record<string, any[]>, document: any) => {
-        const key = displayNameFor("object_type", document.object_type);
+        const key = displayNameFor(
+          "object_type",
+          document.document.object_type,
+        );
         groups[key] ||= [];
         groups[key].push(document);
         return groups;
       },
       {},
     );
-  }, [documents]);
+  }, [visibleDocumentRows]);
 
   const facets = bundle.runtime.getLibraryFacets();
 
@@ -303,14 +330,33 @@ export function ExplorePage(props: {
           </DisclosurePanel>
         </Accordion.Root>
 
+        <label className="connections-only-filter" htmlFor="connections-only">
+          <input
+            checked={connectionsOnly}
+            id="connections-only"
+            onChange={(event) => setConnectionsOnly(event.target.checked)}
+            type="checkbox"
+          />
+          Show only items with connections
+        </label>
+
         {hasResults ? (
-          <div className="stack" id="library-results">
+          <Accordion.Root
+            className="accordion-root search-result-groups"
+            collapsible
+            defaultValue={
+              glossaryMatches.length
+                ? "Glossary"
+                : Object.keys(groupedDocuments)[0]
+            }
+            id="library-results"
+            type="single"
+          >
             {glossaryMatches.length ? (
-              <section className="result-group">
-                <div className="result-group-header">
-                  <h2>Glossary</h2>
-                  <Badge>{glossaryMatches.length} results</Badge>
-                </div>
+              <DisclosurePanel
+                title={`Glossary (${glossaryMatches.length})`}
+                value="Glossary"
+              >
                 <div className="stack">
                   {glossaryMatches.map((entry) => (
                     <article className="result-card" key={entry.id}>
@@ -369,26 +415,17 @@ export function ExplorePage(props: {
                     </article>
                   ))}
                 </div>
-              </section>
+              </DisclosurePanel>
             ) : null}
             {Object.entries(groupedDocuments as Record<string, any[]>).map(
               ([group, entries]) => (
-                <section className="result-group" key={group}>
-                  <div className="result-group-header">
-                    <h2>{group}</h2>
-                    <Badge>{entries.length} results</Badge>
-                  </div>
+                <DisclosurePanel
+                  key={group}
+                  title={`${group} (${entries.length})`}
+                  value={group}
+                >
                   <div className="stack">
-                    {entries.map((document) => {
-                      const source = bundle.runtime.getSource(
-                        document.source_id,
-                      );
-                      const node = bundle.runtime.getNode(document.id);
-                      const relationshipCount = node
-                        ? bundle.runtime.getEdgesForNode(node.id, {
-                            publication_status: "published",
-                          }).length
-                        : 0;
+                    {entries.map(({ document, node, relationshipCount, source }) => {
                       return (
                         <article className="result-card" key={document.id}>
                           <div className="result-card-header">
@@ -403,9 +440,15 @@ export function ExplorePage(props: {
                                 {document.item_id} - {document.title}
                               </h3>
                             </div>
-                            <Badge tone="info">
-                              {relationshipCount} connections
-                            </Badge>
+                            {relationshipCount > 0 ? (
+                              <Badge tone="info">
+                                {relationshipCount} connections
+                              </Badge>
+                            ) : (
+                              <span className="no-connections">
+                                No connections yet
+                              </span>
+                            )}
                           </div>
                           <p className="result-summary">
                             {document.plain_language_summary ||
@@ -424,11 +467,7 @@ export function ExplorePage(props: {
                                 kind="provenance"
                                 value={source.provenance_class}
                               />
-                            ) : (
-                              <span>
-                                No public source record is attached yet.
-                              </span>
-                            )}
+                            ) : null}
                           </div>
                           <div className="card-actions">
                             <button
@@ -444,40 +483,56 @@ export function ExplorePage(props: {
                             >
                               Open record
                             </button>
-                            {relationshipCount > 0 ? (
-                              <button
-                                className="secondary"
-                                disabled={!graphReady}
-                                onClick={() =>
-                                  openAtlasMapForNode(onNavigate, document.id)
-                                }
-                                type="button"
-                              >
-                                Open in Atlas Map
-                              </button>
-                            ) : null}
-                            <button
-                              className="secondary"
-                              disabled={!graphReady}
-                              onClick={() =>
-                                onNavigate("matrix", {
-                                  workbench: "relationships",
-                                  items: document.item_id,
-                                })
-                              }
-                              type="button"
-                            >
-                              Compare
-                            </button>
+                            <details className="result-actions-menu">
+                              <summary role="button">More actions</summary>
+                              <div className="result-actions-popover">
+                                {relationshipCount > 0 ? (
+                                  <button
+                                    className="secondary"
+                                    disabled={!graphReady}
+                                    onClick={() =>
+                                      openAtlasMapForNode(onNavigate, document.id)
+                                    }
+                                    type="button"
+                                  >
+                                    Open in Atlas Map
+                                  </button>
+                                ) : null}
+                                <button
+                                  className="secondary"
+                                  disabled={!graphReady}
+                                  onClick={() =>
+                                    onNavigate("matrix", {
+                                      workbench: "relationships",
+                                      items: document.item_id,
+                                    })
+                                  }
+                                  type="button"
+                                >
+                                  Compare
+                                </button>
+                                <button
+                                  className="secondary"
+                                  onClick={() =>
+                                    navigator.clipboard?.writeText(
+                                      `${window.location.origin}${window.location.pathname}?view=library-detail&node=${encodeURIComponent(document.id)}`,
+                                    )
+                                  }
+                                  type="button"
+                                >
+                                  Copy link
+                                </button>
+                              </div>
+                            </details>
                           </div>
                         </article>
                       );
                     })}
                   </div>
-                </section>
+                </DisclosurePanel>
               ),
             )}
-          </div>
+          </Accordion.Root>
         ) : hasQuery || hasFilters ? (
           <section className="empty-state">
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />

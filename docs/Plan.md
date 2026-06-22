@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — Epic 10 Atlas Map-First UX shipped (zero residuals) on `agent/forge/epic-10-residual-closeout`. See [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md).
+**None** — UI and Brand Correction v2.2 shipped on `agent/forge/ui-brand-correction-v2-2`. See [`docs/plans/ui-brand-correction-v2-2.md`](plans/ui-brand-correction-v2-2.md).
 
 ## Epic Status (June 19, 2026)
 
@@ -37,7 +37,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 | 7 — Platform Trust & Hardening       | **Shipped**           | About/trust page, manual a11y playbook, SecDevOps docs, live audit template — [`docs/plans/epic-7-platform-trust-hardening.md`](plans/epic-7-platform-trust-hardening.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-7.md`](audits/live-browser-audit-2026-06-19-epic-7.md).                                                      |
 | 8 — MITRE Threat Lens                | **Shipped**           | ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain — [`docs/plans/epic-8-mitre-threat-lens.md`](plans/epic-8-mitre-threat-lens.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md). |
 | 9 — Interactive Relationship Graph   | **Shipped**           | Object-local map in Library detail, provenance filters, lazy `react-force-graph-2d`, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md). |
-| 10 — Atlas Map-First UX              | **Shipped**           | Map-first homepage, standalone Atlas Map, nav/copy rename, clustering, compare-map on all workbenches, provenance tooltips, page extraction — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md). |
+| 10 — Atlas Map-First UX              | **Shipped**           | Map-first homepage, standalone Atlas Map, compare-map workbenches, plus the v2.2 entrance, fCoSE, cached loading, and Explore corrections — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md). |
 
 ## Active Direction
 

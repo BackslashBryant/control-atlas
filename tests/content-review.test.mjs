@@ -97,9 +97,11 @@ test('generated templates use plain-language prompts without raw schema slugs', 
   }
 });
 
-test('react shell footer states no compliance or authorization decisions', () => {
-  assert.match(appShell, /does not make compliance or authorization decisions/i);
-  assert.match(appShell, /Authorizing Official/i);
+test('react shell footer uses the approved open-source guidance disclaimer', () => {
+  assert.match(
+    appShell,
+    /Control Atlas is an open-source reference tool\. It does not replace official guidance\./,
+  );
 });
 
 test('about page includes full product disclaimer', () => {

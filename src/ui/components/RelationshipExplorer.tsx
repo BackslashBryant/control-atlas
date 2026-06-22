@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useMemo, useRef, useState } from "react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
@@ -13,7 +13,7 @@ import {
   type RelationshipFilterState,
 } from "../lib/useRelationshipFilters";
 import { RelationshipGraphTable } from "./RelationshipGraphTable";
-import { RelationshipGraphWithHandle } from "./RelationshipGraph";
+const RelationshipGraphWithHandle = lazy(() => import("./RelationshipGraph"));
 
 export type RelationshipGraphHandle = {
   fitToScreen: () => void;
@@ -400,7 +400,16 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           className="relationship-map-body"
           role="tabpanel"
         >
-          <RelationshipGraphWithHandle
+          <Suspense
+            fallback={
+              <div aria-live="polite" className="relationship-map-loading" role="status">
+                <div aria-hidden="true" className="skeleton-map-canvas" />
+                Loading {neighborhood.nodes.length} nodes /{" "}
+                {neighborhood.edges.length} edges…
+              </div>
+            }
+          >
+            <RelationshipGraphWithHandle
               centerNodeId={centerNodeId}
               clusterMeta={clusterMeta}
               edges={neighborhood.edges}
@@ -416,7 +425,8 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
               ref={graphRef}
               searchHighlightIds={searchHighlightIds}
               selectedNodeId={selectedNodeId}
-          />
+            />
+          </Suspense>
           {!mapControls && selectedNode ? (
             <aside className="relationship-map-selection">
               <p className="eyebrow">Selected item</p>
