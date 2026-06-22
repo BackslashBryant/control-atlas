@@ -223,6 +223,7 @@ export const RelationshipGraphWithHandle = forwardRef<
   const onClusterClickRef = useRef(onClusterClick);
   const onLayoutRunningChangeRef = useRef(onLayoutRunningChange);
   const reducedMotionRef = useRef(reducedMotion);
+  const applyNodeStylesRef = useRef<(graph: Core) => void>(() => {});
   const layoutShowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -313,6 +314,8 @@ export const RelationshipGraphWithHandle = forwardRef<
     [graphData.nodes, neighborIds, searchHighlightIds, selectedNodeId],
   );
 
+  applyNodeStylesRef.current = applyNodeStyles;
+
   const runLayout = useCallback(
     (graph: Core, mode: Exclude<LayoutMode, "none">, preserveViewport = false) => {
       layoutRef.current?.stop();
@@ -400,7 +403,7 @@ export const RelationshipGraphWithHandle = forwardRef<
     graph.on("zoom", () => {
       const zoom = graph.zoom();
       setZoomLevel(zoom);
-      applyNodeStyles(graph);
+      applyNodeStylesRef.current(graph);
     });
 
     return () => {
@@ -409,7 +412,7 @@ export const RelationshipGraphWithHandle = forwardRef<
       graphRef.current = null;
       topologyRef.current = { fingerprint: null, nodeIds: new Set() };
     };
-  }, [applyNodeStyles]);
+  }, []);
 
   useEffect(() => {
     const graph = graphRef.current;
@@ -493,13 +496,7 @@ export const RelationshipGraphWithHandle = forwardRef<
     };
 
     runLayout(graph, layoutMode, layoutMode === "incremental");
-  }, [
-    applyNodeStyles,
-    graphData.nodes,
-    runLayout,
-    topologyElements,
-    topologyKey,
-  ]);
+  }, [applyNodeStyles, runLayout, topologyElements, topologyKey]);
 
   useEffect(() => {
     const graph = graphRef.current;

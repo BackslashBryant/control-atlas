@@ -79,6 +79,8 @@ test('approved v2.2 brand entrance and fCoSE graph contracts are present', () =>
   assert.match(relationshipExplorer, /lazy\(\(\) => import\(/);
   assert.match(relationshipExplorer, /useClusteredGraph/);
   assert.match(relationshipGraph, /resolveLayoutMode/);
+  assert.match(relationshipGraph, /applyNodeStylesRef/);
+  assert.match(relationshipGraph, /graph\.destroy\(\)[\s\S]*\}, \[\]\);/);
 });
 
 test('static artifact loading caches requests in memory', () => {

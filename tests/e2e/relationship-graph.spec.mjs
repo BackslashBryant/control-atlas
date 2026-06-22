@@ -104,6 +104,32 @@ test("atlas map: library detail map clusters large groups", async ({ page }) => 
   });
 });
 
+test("atlas map: does not re-layout while idle on unrelated app updates", async ({
+  page,
+}) => {
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached({
+    timeout: 15000,
+  });
+  await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0, {
+    timeout: 15000,
+  });
+
+  const arrangingCountBefore = await page
+    .getByText(/Arranging \d+ nodes/i)
+    .count();
+
+  await page.waitForTimeout(5500);
+
+  await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0);
+  await expect(page.getByText(/Arranging \d+ nodes/i)).toHaveCount(
+    arrangingCountBefore,
+  );
+});
+
 test("atlas map: shows arranging status while layout runs", async ({ page }) => {
   await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
