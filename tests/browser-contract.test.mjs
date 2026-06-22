@@ -152,6 +152,7 @@ test('route interactions keep canonical context and synchronize visible state', 
 test('template options use collapsed progressive disclosure and associated hints', () => {
   const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   assert.doesNotMatch(templatesPage, /defaultValue="options"/);
+  assert.match(templatesPage, /<h2>\{selectedTemplate\.display_name\}<\/h2>/);
   assert.match(templatesPage, /hint="Which control catalog/);
   assert.match(templatesPage, /hint="Where the system runs/);
   assert.match(templatesPage, /hint="File type for download/);

@@ -224,6 +224,12 @@ export function TemplatesPage(props: {
 
       {selectedTemplate ? (
         <section className="stack" ref={generationRef}>
+          <div className="section-header">
+            <div>
+              <p className="eyebrow">Selected template</p>
+              <h2>{selectedTemplate.display_name}</h2>
+            </div>
+          </div>
           <SummaryCard title="What this template is for" tone="trust">
             <p>{selectedTemplate.description}</p>
           </SummaryCard>
