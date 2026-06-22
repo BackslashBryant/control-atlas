@@ -288,9 +288,12 @@ export const RelationshipGraphWithHandle = forwardRef<
       const zoom = graph.zoom();
       const showSearchLabels = zoom > 1.5 && zoom <= 2;
       const showNeighborLabels = zoom > 2;
+      const nodesById = new Map(
+        graphData.nodes.map((entry) => [entry.id, entry]),
+      );
 
       graph.nodes().forEach((node) => {
-        const graphNode = graphData.nodes.find((entry) => entry.id === node.id());
+        const graphNode = nodesById.get(node.id());
         if (!graphNode) {
           return;
         }
@@ -478,8 +481,12 @@ export const RelationshipGraphWithHandle = forwardRef<
     });
 
     for (const [nodeId, position] of positions) {
-      if (nextNodeIds.has(nodeId) && graph.getElementById(nodeId).nonempty()) {
-        graph.getElementById(nodeId).position(position);
+      if (!nextNodeIds.has(nodeId)) {
+        continue;
+      }
+      const element = graph.getElementById(nodeId);
+      if (element.nonempty()) {
+        element.position(position);
       }
     }
 
