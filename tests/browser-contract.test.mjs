@@ -18,6 +18,9 @@ const relationshipExplorer = existsSync('src/ui/components/RelationshipExplorer.
 const relationshipGraph = existsSync('src/ui/components/RelationshipGraph.tsx')
   ? readFileSync('src/ui/components/RelationshipGraph.tsx', 'utf8')
   : '';
+const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
+  ? readFileSync('src/ui/lib/graphLayout.ts', 'utf8')
+  : '';
 
 test('shell identifies Control Atlas and boots a React root', () => {
   assert.match(html, /Control Atlas/);
@@ -69,11 +72,13 @@ test('approved v2.2 brand entrance and fCoSE graph contracts are present', () =>
   assert.equal(typeof packageJson.dependencies.cytoscape, 'string');
   assert.equal(typeof packageJson.dependencies['cytoscape-fcose'], 'string');
   assert.equal(packageJson.dependencies['react-force-graph-2d'], undefined);
-  assert.match(relationshipGraph, /nodeDimensionsIncludeLabels:\s*true/);
-  assert.match(relationshipGraph, /quality:\s*["']default["']/);
-  assert.match(relationshipGraph, /packComponents:\s*true/);
-  assert.match(relationshipGraph, /animationDuration:\s*400/);
+  assert.match(graphLayout, /nodeDimensionsIncludeLabels:\s*true/);
+  assert.match(graphLayout, /quality:\s*["']default["']/);
+  assert.match(graphLayout, /packComponents:\s*true/);
+  assert.match(graphLayout, /animationDuration:\s*400/);
   assert.match(relationshipExplorer, /lazy\(\(\) => import\(/);
+  assert.match(relationshipExplorer, /useClusteredGraph/);
+  assert.match(relationshipGraph, /resolveLayoutMode/);
 });
 
 test('static artifact loading caches requests in memory', () => {

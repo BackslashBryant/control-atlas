@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** June 21, 2026 (UI and Brand Correction v2.2 shipped)
+**Last synced:** June 21, 2026 (Epic 10 stability pass shipped)
 
 ## Epic 0: GovFrame → Control Atlas Migration
 
@@ -25,7 +25,6 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
 - **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).
 
----
+## Epics 7–10
 
-> [!NOTE]
-> When an item ships, remove it from this file and update the Epic Status table in [`docs/Plan.md`](../Plan.md) in the **same commit**.
+- **Status:** Shipped. See Epic Status table in [`docs/Plan.md`](../Plan.md).

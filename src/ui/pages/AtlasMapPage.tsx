@@ -1,14 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { displayNameFor } from "../../app/display-names.mjs";
 import {
   RelationshipExplorer,
   relationshipFiltersFromState,
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { SelectedItemPanel } from "../components/SelectedItemPanel";
-import { applyRelationshipClustering } from "../lib/graphClustering";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
   buildAtlasMapUrl,
   nodeIdFromItemId,
@@ -59,6 +58,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   const [expandedClusters, setExpandedClusters] = useState<Set<string>>(
     () => new Set(),
   );
+
+  useEffect(() => {
+    setExpandedClusters(new Set());
+  }, [state.node]);
+
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
@@ -92,29 +96,28 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     });
   }, [bundle.runtime, center, filters, state.node]);
 
-  const clustered = useMemo(() => {
-    if (!center || !neighborhood) return null;
-    if (!state.node.trim()) {
-      return {
-        nodes: neighborhood.nodes,
-        edges: neighborhood.edges,
-        clusterMeta: new Map(),
-      };
-    }
-    return applyRelationshipClustering({
-      centerNodeId: center.centerNodeId,
-      nodes: neighborhood.nodes,
-      edges: neighborhood.edges,
-      runtime: bundle.runtime,
-      expandedClusters,
-    });
-  }, [bundle.runtime, center, expandedClusters, neighborhood, state.node]);
+  const {
+    nodes: clusteredNodes,
+    edges: clusteredEdges,
+    clusterMeta,
+    expandedClusterLabels,
+    onClusterExpand,
+    onClusterCollapse,
+  } = useClusteredGraph({
+    runtime: bundle.runtime,
+    centerNodeId: center?.centerNodeId ?? "",
+    nodes: neighborhood?.nodes ?? [],
+    edges: neighborhood?.edges ?? [],
+    enabled: Boolean(center && neighborhood && state.node.trim()),
+    expandedClusters,
+    onExpandedClustersChange: setExpandedClusters,
+  });
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
     center?.centerNodeId ?? null,
   );
 
-  if (!center || !neighborhood || !clustered) {
+  if (!center || !neighborhood) {
     return (
       <section className="panel atlas-map-page">
         <PageHeader
@@ -205,6 +208,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
   const isStarter = !state.node.trim();
   const connectionCount = neighborhood.stats.filtered;
+  const displayNodes = isStarter ? neighborhood.nodes : clusteredNodes;
+  const displayEdges = isStarter ? neighborhood.edges : clusteredEdges;
 
   function patchFilters(patch: Partial<typeof filters>) {
     onNavigate("atlas-map", {
@@ -264,7 +269,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           <RelationshipExplorer
             centerItemId={center.centerItemId}
             centerNodeId={center.centerNodeId}
-            clusterMeta={clustered.clusterMeta}
+            clusterMeta={clusterMeta}
+            expandedClusterLabels={expandedClusterLabels}
             expandedClusters={expandedClusters}
             filters={filters}
             heading="Atlas Map"
@@ -275,9 +281,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             }
             listLabel="List"
             mapControls
-            onClusterExpand={(clusterKey) => {
-              setExpandedClusters((current) => new Set(current).add(clusterKey));
-            }}
+            onClusterCollapse={onClusterCollapse}
+            onClusterExpand={onClusterExpand}
             onCopyMapLink={copyMapLink}
             onFilterChange={patchFilters}
             onOpenCompare={(itemId) =>
@@ -301,8 +306,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
                 return;
               }
               if (nodeId.startsWith("cluster:")) {
-                const clusterKey = nodeId.replace("cluster:", "");
-                setExpandedClusters((current) => new Set(current).add(clusterKey));
+                onClusterExpand(nodeId.replace("cluster:", ""));
                 return;
               }
               onNavigate("atlas-map", { ...state, node: nodeId });
@@ -319,10 +323,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             relationshipView={relationshipView}
             runtime={bundle.runtime}
             selectedNodeId={selectedNodeId}
-            showEmptyState={!clustered.nodes.length}
+            showEmptyState={!displayNodes.length}
             staticGraph={{
-              edges: clustered.edges,
-              nodes: clustered.nodes,
+              edges: displayEdges,
+              nodes: displayNodes,
               stats: neighborhood.stats,
             }}
           />

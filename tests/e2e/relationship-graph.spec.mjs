@@ -53,6 +53,67 @@ test("relationship graph: detail page opens list view", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("atlas map: AC-2 clusters DISA CCIs and selection does not relayout", async ({
+  page,
+}) => {
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.locator('[data-is-cluster="true"]').first()).toBeVisible({
+    timeout: 15000,
+  });
+  await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0, {
+    timeout: 15000,
+  });
+
+  const shortcuts = page
+    .getByRole("group", { name: "Map nodes" })
+    .getByRole("button");
+  await expect(shortcuts.first()).toBeVisible();
+  const shortcutCount = await shortcuts.count();
+  const targetIndex = shortcutCount > 1 ? 1 : 0;
+  await shortcuts.nth(targetIndex).click();
+
+  await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0);
+});
+
+test("atlas map: expanding a cluster preserves the view without forced refit", async ({
+  page,
+}) => {
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const clusterButton = page.locator('[data-is-cluster="true"]').first();
+  await expect(clusterButton).toBeVisible({ timeout: 15000 });
+  await clusterButton.click();
+
+  await expect(
+    page.getByRole("button", { name: /Collapse/i }),
+  ).toBeVisible({ timeout: 15000 });
+});
+
+test("atlas map: library detail map clusters large groups", async ({ page }) => {
+  await page.goto("/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=map");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.locator('[data-is-cluster="true"]').first()).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+test("atlas map: shows arranging status while layout runs", async ({ page }) => {
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached({
+    timeout: 15000,
+  });
+});
+
 test("relationship graph: open in atlas map from detail header", async ({
   page,
 }) => {
