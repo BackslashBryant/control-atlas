@@ -101,6 +101,7 @@ test('documented port status command checks the Playwright site port', () => {
   assert.equal(typeof packageJson.scripts['ports:status'], 'string');
   const portStatus = readFileSync('tools/ports-status.mjs', 'utf8');
   assert.match(portStatus, /4317/);
+  assert.match(portStatus, /LISTENING/);
 });
 
 test('dependency review and dependabot automation exist', () => {
