@@ -87,6 +87,7 @@ type RelationshipExplorerProps = {
   showEmptyState?: boolean;
   showFilters?: boolean;
   compareLegend?: boolean;
+  layoutEngine?: "fcose" | "dagre";
 };
 
 function FilterSelect(props: {
@@ -145,6 +146,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     showEmptyState,
     showFilters = true,
     compareLegend = false,
+    layoutEngine = "fcose",
   } = props;
 
   const graphRef = useRef<RelationshipGraphHandle>(null);
@@ -497,6 +499,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
               centerNodeId={centerNodeId}
               clusterMeta={clustering.clusterMeta}
               edges={neighborhood.edges}
+              layoutEngine={layoutEngine}
               nodes={neighborhood.nodes}
               onClusterClick={clustering.onClusterExpand}
               onLayoutRunningChange={setLayoutRunning}

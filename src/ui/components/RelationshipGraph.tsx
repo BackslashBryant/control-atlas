@@ -1,4 +1,5 @@
 import cytoscape, { type Core, type ElementDefinition } from "cytoscape";
+import dagre from "cytoscape-dagre";
 import fcose from "cytoscape-fcose";
 import {
   forwardRef,
@@ -13,6 +14,7 @@ import {
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
+  buildDagreOptions,
   buildFcoseOptions,
   placeNewNodesNearAnchor,
   resolveLayoutMode,
@@ -30,74 +32,95 @@ import {
 import type { RelationshipGraphHandle } from "./RelationshipExplorer";
 
 cytoscape.use(fcose);
+cytoscape.use(dagre);
 
-const GRAPH_STYLESHEET = [
-  {
-    selector: "node",
-    style: {
-      "background-color": "data(color)",
-      "border-color": "#334155",
-      "border-width": 1,
-      height: 22,
-      label: "",
-      shape: "data(shape)",
-      width: 22,
+function cssVar(name: string, fallback: string): string {
+  if (typeof document === "undefined") {
+    return fallback;
+  }
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
+    fallback
+  );
+}
+
+function buildGraphStylesheet(): cytoscape.StylesheetJson {
+  const border = cssVar("--ca-border", "#334155");
+  const text = cssVar("--ca-text", "#F8FAFC");
+  const bg = cssVar("--ca-bg", "#0B1020");
+  const selected = cssVar("--ca-secondary", "#22D3EE");
+
+  return [
+    {
+      selector: "node",
+      style: {
+        "background-color": "data(color)",
+        "border-color": border,
+        "border-width": 1,
+        height: 22,
+        label: "",
+        shape: "data(shape)",
+        width: 22,
+      },
     },
-  },
-  {
-    selector: "node.center-node, node.cluster-node, node.selected-node",
-    style: {
-      label: "data(label)",
-      "font-size": 10,
-      color: "#F8FAFC",
-      "text-background-color": "#0B1020",
-      "text-background-opacity": 0.88,
-      "text-background-padding": 3,
-      "text-margin-y": -18,
+    {
+      selector:
+        "node.center-node, node.cluster-node, node.selected-node, node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match",
+      style: {
+        label: "data(label)",
+        "font-size": 10,
+        color: text,
+        "text-background-color": bg,
+        "text-background-opacity": 0.88,
+        "text-background-padding": 3,
+        "text-margin-y": -18,
+      },
     },
-  },
-  {
-    selector: "node.selected-node",
-    style: {
-      "border-color": "#22D3EE",
-      "border-width": 4,
-      height: 32,
-      width: 32,
+    {
+      selector: "node.selected-node",
+      style: {
+        "border-color": selected,
+        "border-width": 4,
+        height: 32,
+        width: 32,
+      },
     },
-  },
-  {
-    selector: "node.cluster-node",
-    style: {
-      height: 34,
-      width: 34,
+    {
+      selector: "node.cluster-node",
+      style: {
+        height: 34,
+        width: 34,
+      },
     },
-  },
-  {
-    selector:
-      "node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match",
-    style: {
-      label: "data(label)",
-      "font-size": 10,
-      color: "#F8FAFC",
-      "text-background-color": "#0B1020",
-      "text-background-opacity": 0.88,
-      "text-background-padding": 3,
-      "text-margin-y": -16,
+    {
+      selector:
+        "node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match",
+      style: {
+        label: "data(label)",
+        "font-size": 10,
+        color: text,
+        "text-background-color": bg,
+        "text-background-opacity": 0.88,
+        "text-background-padding": 3,
+        "text-margin-y": -16,
+      },
     },
-  },
-  {
-    selector: "edge",
-    style: {
-      "curve-style": "bezier",
-      "line-color": "data(color)",
-      "line-style": "data(lineStyle)",
-      opacity: 0.72,
-      "target-arrow-color": "data(color)",
-      "target-arrow-shape": "triangle",
-      width: 1.5,
+    {
+      selector: "edge",
+      style: {
+        "curve-style": "bezier",
+        "line-color": "data(color)",
+        "line-style": "data(lineStyle)",
+        opacity: 0.72,
+        "target-arrow-color": "data(color)",
+        "target-arrow-shape": "triangle",
+        width: 1.5,
+      },
     },
-  },
-] as cytoscape.StylesheetJson;
+  ] as cytoscape.StylesheetJson;
+}
+
+const GRAPH_STYLESHEET = buildGraphStylesheet();
 
 type RelationshipGraphProps = {
   nodes: Array<{
@@ -125,6 +148,7 @@ type RelationshipGraphProps = {
   clusterMeta?: Map<string, ClusterNodeMeta>;
   onClusterClick?: (clusterKey: string) => void;
   onLayoutRunningChange?: (running: boolean) => void;
+  layoutEngine?: "fcose" | "dagre";
 };
 
 function nodeShape(node: GraphNode) {
@@ -210,6 +234,7 @@ export const RelationshipGraphWithHandle = forwardRef<
     clusterMeta,
     onClusterClick,
     onLayoutRunningChange,
+    layoutEngine = "fcose",
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -303,6 +328,9 @@ export const RelationshipGraphWithHandle = forwardRef<
           nodeColor(graphNode, selectedNodeId, searchHighlightIds),
         );
         node.toggleClass("selected-node", node.id() === selectedNodeId);
+        if (node.id() === selectedNodeId) {
+          node.addClass("center-node");
+        }
         node.toggleClass("search-match", searchHighlightIds.has(node.id()));
         node.toggleClass(
           "zoom-label-search",
@@ -327,15 +355,17 @@ export const RelationshipGraphWithHandle = forwardRef<
         ? { pan: graph.pan(), zoom: graph.zoom() }
         : null;
 
-      const layout = graph.layout(
-        buildFcoseOptions(mode, reducedMotionRef.current),
-      );
+      const layoutOptions =
+        layoutEngine === "dagre"
+          ? buildDagreOptions(reducedMotionRef.current)
+          : buildFcoseOptions(mode, reducedMotionRef.current);
+      const layout = graph.layout(layoutOptions);
       layoutRef.current = layout;
 
       layout.on("layoutstart", () => {
         setLayoutRunningState(true);
         setLiveMessage(
-          `Arranging ${graphData.nodes.length} nodes / ${graphData.links.length} links…`,
+          `Loading ${graphData.nodes.length} nodes / ${graphData.links.length} edges…`,
         );
       });
 
@@ -353,7 +383,12 @@ export const RelationshipGraphWithHandle = forwardRef<
 
       layout.run();
     },
-    [graphData.links.length, graphData.nodes.length, setLayoutRunningState],
+    [
+      graphData.links.length,
+      graphData.nodes.length,
+      layoutEngine,
+      setLayoutRunningState,
+    ],
   );
 
   useImperativeHandle(ref, () => ({

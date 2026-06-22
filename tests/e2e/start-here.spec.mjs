@@ -21,7 +21,7 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
 
   await page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true }).click();
-  await expect(page).toHaveURL(/view=templates&templateType=inheritance_worksheet/);
+  await expect(page).toHaveURL(/#\/templates\?.*templateType=inheritance_worksheet|view=templates&templateType=inheritance_worksheet/);
   await expect(
     page.getByRole("heading", { name: "Inheritance Worksheet" }),
   ).toBeVisible();
@@ -30,19 +30,19 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Read pattern', exact: true }).first().click();
-  await expect(page).toHaveURL(/view=playbooks&pattern=/);
+  await expect(page).toHaveURL(/#\/playbooks\?.*pattern=|view=playbooks&pattern=/);
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Open in Explore', exact: true }).first().click();
-  await expect(page).toHaveURL(/view=browse&framework=fedramp-rev5|view=explore&filter=fedramp-rev5/);
+  await expect(page).toHaveURL(/#\/explore\?.*(filter=|framework=)fedramp-rev5|view=browse&framework=fedramp-rev5|view=explore&filter=fedramp-rev5/);
 
   await page.goto('/?view=start-here&systemType=Hybrid&dataSensitivity=High&environment=DoD&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'Open Compare', exact: true }).first().click();
-  await expect(page).toHaveURL(/view=matrix&workbench=stig-chain/);
+  await expect(page).toHaveURL(/#\/compare\?.*workbench=stig-chain|view=matrix&workbench=stig-chain/);
 });
 
 test('header search surfaces glossary results from any page', async ({ page }) => {
@@ -53,7 +53,7 @@ test('header search surfaces glossary results from any page', async ({ page }) =
   await page.getByLabel('Search records and glossary').fill('reciprocity');
   await page.getByLabel('Search records and glossary').press('Enter');
 
-  await expect(page).toHaveURL(/view=explore&q=reciprocity/);
+  await expect(page).toHaveURL(/#\/explore\?.*q=reciprocity|view=explore&q=reciprocity/);
   await expect(page.getByRole('button', { name: /^Glossary \(\d+\)$/ })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Open term details', exact: true }).first()).toBeVisible();
 });

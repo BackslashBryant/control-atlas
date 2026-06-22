@@ -174,7 +174,8 @@ export function createFederalGraphRuntime(dataset) {
         if (!entry) return null;
         return {
           source_id: entry.source_id,
-          source_name: source?.name || entry.source_id,
+          source_name:
+            source?.display_name || source?.name || entry.source_id,
           source_version: entry.source_version || "",
           locator: entry.locator || "",
           evidence_quality: entry.evidence_quality || "",

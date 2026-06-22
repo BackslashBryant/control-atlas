@@ -59,6 +59,12 @@ scripts/*
 !scripts/security/
 scripts/security/*
 !scripts/security/npm-audit.mjs
+!styles/
+styles/*
+!styles/tokens.css
+!styles/base.css
+!styles/components.css
+!styles/surfaces.css
 !tools/
 !tools/*.mjs
 !tools/importers/

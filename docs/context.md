@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-Maintenance mode — scheduled CI, dependency/security gates, optional `v1.0.0` promotion after RC feedback.
+**Maintenance** — Frontend Overhaul complete on branch `agent/forge/frontend-overhaul`. Next: merge to `main` when checks green, optional RC promotion.
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -25,7 +25,7 @@ Maintenance mode — scheduled CI, dependency/security gates, optional `v1.0.0` 
 - Epic 7: About/trust page (`/?view=about`), manual a11y checklist, live Pages audit template, SecDevOps docs (branch protection policy; action pinning ADR deferral)
 - Epic 8: MITRE Threat Lens — ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain ([`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md))
 - Epic 9: Interactive relationship map in Library detail — provenance filters, lazy canvas graph, accessible table fallback ([`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md))
-- Epic 10: Atlas Map-first UX — homepage, standalone Atlas Map, compare-map on all workbenches, provenance tooltips, Explore/Compare page extraction; stability pass (persistent Cytoscape, incremental cluster layout, all-surface clustering) ([`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md))
+- Epic 10: Atlas Map-first UX + **Frontend Overhaul** — HashRouter (`#/…` routes + legacy `?view=` shim), split `styles/` design system, `TopNav`/`SearchOverlay`/`SiteFooter`/`BrandEntranceOverlay`, extracted pages (`ObjectDetailPage`, `SourcesPage`, `TemplatesPage`, `PlaybooksPage`, `AboutPage`, `StartHerePage`), dagre layout for STIG/threat compare maps, map stabilization (controlled fCoSE, user fit-to-screen)
 - UI and Brand Correction v2.2: first-run entrance, fCoSE graph, route-aware cached loading, and Explore card/accordion hierarchy
 
 ## Adopted Baseline

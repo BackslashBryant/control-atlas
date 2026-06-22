@@ -1,103 +1,126 @@
 import {
   IconBook2,
-  IconClipboardList,
   IconCompass,
   IconFileDescription,
   IconGitCompare,
   IconMap,
   IconSearch,
+  IconSourceCode,
 } from "@tabler/icons-react";
 
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
+  heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
 const HOME_CARDS = [
   {
-    title: "Atlas Map",
-    body: "See how controls, baselines, CCIs, STIGs, templates, sources, and playbooks connect.",
-    actionLabel: "Open map",
-    icon: IconMap,
-    view: "atlas-map" as const,
-  },
-  {
-    title: "Start Guided Path",
-    body: "Answer a few questions and get the best starting point for your context.",
-    actionLabel: "Start here",
+    title: "Where do I begin?",
+    body: "Answer three questions and get a plain-language starting point.",
+    actionLabel: "Start",
     icon: IconCompass,
     view: "start-here" as const,
   },
   {
-    title: "Explore Records",
-    body: "Find a control, CCI, baseline, STIG, term, template, source, or playbook.",
-    actionLabel: "Search records",
+    title: "What does this control mean?",
+    body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
+    actionLabel: "Explore",
     icon: IconSearch,
     view: "search" as const,
   },
   {
-    title: "Compare Frameworks",
-    body: "Compare public mappings and see what overlaps, differs, or needs review.",
+    title: "How do these frameworks relate?",
+    body: "Compare public mappings and see what overlaps or needs review.",
     actionLabel: "Compare",
     icon: IconGitCompare,
     view: "matrix" as const,
   },
   {
-    title: "Playbooks",
-    body: "Use task-focused guidance for common compliance problems.",
-    actionLabel: "View playbooks",
+    title: "How does this process work?",
+    body: "Use task-focused playbooks for common compliance problems.",
+    actionLabel: "Playbooks",
     icon: IconBook2,
     view: "patterns" as const,
   },
   {
-    title: "Templates",
-    body: "Start an artifact with the right context already attached.",
-    actionLabel: "Open templates",
+    title: "What do I need to produce?",
+    body: "Generate blank RMF/ATO templates without uploading data.",
+    actionLabel: "Templates",
     icon: IconFileDescription,
     view: "templates" as const,
+  },
+  {
+    title: "Why trust this mapping?",
+    body: "Review sources, versions, and provenance for every link.",
+    actionLabel: "Sources",
+    icon: IconSourceCode,
+    view: "sources" as const,
   },
 ] as const;
 
 export function HomePage(props: HomePageProps) {
-  const { onNavigate } = props;
+  const { heroWord, onNavigate } = props;
 
   return (
     <>
       <section className="hero home-hero">
-        <p className="eyebrow">CONTROL ATLAS</p>
-        <h1>Navigate federal cyber compliance.</h1>
-        <p className="hero-tagline">
-          Find a requirement, see how it connects, and open the next step with
-          source-backed context.
+        <h1>Control Atlas</h1>
+        <div
+          aria-label="Ctrl Alt Comply"
+          className="ca-hero-tagline hero-tagline"
+        >
+          <span className="ca-hero-prefix">Ctrl+Alt+</span>
+          <span aria-hidden="true" className="ca-hero-word">
+            {heroWord}
+          </span>
+        </div>
+        <p className="ca-hero-sub">
+          The public map for federal cyber compliance.
+        </p>
+        <p className="ca-hero-body">
+          Explore public controls, baselines, STIGs, and compliance patterns —
+          and generate blank RMF/ATO templates without uploading data or creating
+          an account.
         </p>
         <div className="hero-actions">
           <button
-            className="primary"
+            className="ca-btn ca-btn--primary primary"
             onClick={() => onNavigate("atlas-map")}
             type="button"
           >
-            Open Atlas Map
+            Atlas Map →
           </button>
           <button
-            className="secondary"
+            className="ca-btn ca-btn--ghost secondary"
             onClick={() => onNavigate("start-here")}
             type="button"
           >
-            Start guided path
+            Start
           </button>
           <button
-            className="secondary quiet"
+            className="ca-btn ca-btn--ghost secondary quiet"
             onClick={() => onNavigate("search")}
             type="button"
           >
-            Search records
+            Explore
           </button>
         </div>
       </section>
 
-      <section aria-label="Explore Control Atlas" className="intent-grid home-card-grid">
+      <section
+        aria-label="Explore Control Atlas"
+        className="intent-grid home-card-grid"
+      >
+        <QuickIntentCard
+          actionLabel="Open map"
+          body="See how controls, baselines, CCIs, STIGs, templates, sources, and playbooks connect."
+          icon={<IconMap aria-hidden="true" size={20} stroke={1.8} />}
+          onClick={() => onNavigate("atlas-map")}
+          title="Atlas Map"
+        />
         {HOME_CARDS.map((card) => {
           const Icon = card.icon;
           return (

@@ -237,9 +237,11 @@ export function ComparePage(props: {
         ...new Map(
           chainCatalogNodes.map((node: any) => {
             const value = node.metadata?.benchmark_id || node.source_id;
+            const source = bundle.runtime.getSource(node.source_id);
             const label =
               node.metadata?.benchmark_title ||
-              bundle.runtime.getSource(node.source_id)?.name ||
+              source?.display_name ||
+              source?.name ||
               value;
             return [value, { value, label }];
           }),
@@ -1285,7 +1287,8 @@ export function ComparePage(props: {
                       {baselineComparison.baseline_a?.metadata?.title ||
                         baselineComparison.baseline_a?.label}
                       {" ("}
-                      {baselineComparison.baseline_a_source.name}
+                      {baselineComparison.baseline_a_source.display_name ||
+                        baselineComparison.baseline_a_source.name}
                       {baselineComparison.baseline_a_source.version
                         ? ` v${baselineComparison.baseline_a_source.version}`
                         : ""}
@@ -1301,7 +1304,8 @@ export function ComparePage(props: {
                       {baselineComparison.baseline_b?.metadata?.title ||
                         baselineComparison.baseline_b?.label}
                       {" ("}
-                      {baselineComparison.baseline_b_source.name}
+                      {baselineComparison.baseline_b_source.display_name ||
+                        baselineComparison.baseline_b_source.name}
                       {baselineComparison.baseline_b_source.version
                         ? ` v${baselineComparison.baseline_b_source.version}`
                         : ""}

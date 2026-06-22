@@ -11,13 +11,18 @@ import {
 import type { ViewState } from "./viewState";
 
 export const PRIMARY_NAV_ITEMS = [
-  { label: "Start", view: "start-here", icon: IconCompass },
-  { label: "Atlas Map", view: "atlas-map", icon: IconMap },
-  { label: "Explore", view: "search", icon: IconSearch },
-  { label: "Compare", view: "matrix", icon: IconGitCompare },
-  { label: "Playbooks", view: "patterns", icon: IconBook2 },
-  { label: "Templates", view: "templates", icon: IconClipboardList },
-  { label: "Sources", view: "sources", icon: IconSourceCode },
+  { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
+  { label: "Atlas Map", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+  { label: "Explore", view: "search", path: "/explore", icon: IconSearch },
+  { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
+  { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
+  {
+    label: "Templates",
+    view: "templates",
+    path: "/templates",
+    icon: IconClipboardList,
+  },
+  { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
 ] as const;
 
 export function activeNavForState(state: ViewState): ViewState["view"] | null {

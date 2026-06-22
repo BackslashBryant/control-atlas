@@ -63,6 +63,9 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
     onNavigate("atlas-map", { node: graph.atlasMapNode });
   };
 
+  const compareUsesDagre =
+    matrixWorkbench === "stig-chain" || matrixWorkbench === "threat-chain";
+
   return (
     <section className="compare-results-panel">
       <div className="compare-summary-grid summary-grid">
@@ -163,6 +166,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           }}
           heading="Compare map"
           introCopy={`Showing ${graph.stats.filtered} of ${graph.stats.nodeCount} items in this comparison.`}
+          layoutEngine={compareUsesDagre ? "dagre" : "fcose"}
           listLabel="List"
           mapControls
           onClusterCollapse={onClusterCollapse}

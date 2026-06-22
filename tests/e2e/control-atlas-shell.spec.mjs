@@ -34,8 +34,8 @@ test('control atlas map-first shell exposes navigation and guided start path', a
 
   await expect(page).toHaveTitle(/Control Atlas/);
   await dismissOnboarding(page);
-  await expect(page.getByRole('heading', { name: 'Navigate federal cyber compliance.', exact: true })).toBeVisible();
-  await expect(page.getByText('Find a requirement, see how it connects, and open the next step with source-backed context.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
+  await expect(page.locator('.home-hero').getByText('The public map for federal cyber compliance.')).toBeVisible();
 
   const navLabels = await primaryNav.getByRole('button').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
@@ -51,7 +51,7 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   ]);
 
   await page.getByRole('button', { name: 'Control Atlas' }).click();
-  await expect(page).toHaveURL(/\?view=home|\/$/);
+  await expect(page).toHaveURL(/#\/?$|\/$/);
 
   await primaryNav.getByRole('button', { name: 'Start', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
@@ -69,6 +69,7 @@ test('library detail deep links stay compatible and keep advanced details collap
   await page.goto('/?view=library-detail&node=nist-800-53%3AAC-2&mode=expert');
   await waitForAppReady(page);
   await dismissOnboarding(page);
+  await expect(page).toHaveURL(/record\/nist-800-53\/AC-2|library-detail/);
   await expect(page.getByRole('heading', { name: 'Account Management', exact: true })).toBeVisible();
   await expect(page.getByText('What this is')).toBeVisible();
   await expect(page.getByText('Why it matters')).toBeVisible();
@@ -132,8 +133,10 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Detailed mappings table" }).click();
-  await expect(page.locator('table')).toContainText('AC-2');
-  await expect(page.locator('table')).toContainText('Plain-language rationale');
+  const mappingsTable = page.getByRole("table", { name: "Relationship mappings" });
+  await expect(mappingsTable).toBeVisible({ timeout: 15000 });
+  await expect(mappingsTable).toContainText("AC-2");
+  await expect(mappingsTable).toContainText("Plain-language rationale");
 });
 
 test('compare stig chain traces DISA items through CCI to NIST controls', async ({ page }) => {
@@ -200,14 +203,33 @@ test('sources, templates, and playbooks follow trust-first, artifact-first, and 
   await expect(page.getByText('Next action', { exact: true })).toBeVisible();
 });
 
+test('legacy view query redirects to hash route on boot', async ({ page }) => {
+  await page.goto('/?view=atlas-map');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page).toHaveURL(/#\/atlas-map/);
+  await expect(page.locator("main").getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
+});
+
+test('hash deep route survives refresh on built site', async ({ page }) => {
+  await page.goto('/#/explore');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
+  await page.reload();
+  await waitForAppReady(page);
+  await expect(page).toHaveURL(/#\/explore/);
+  await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
+});
+
 test('footer about link opens the trust page with full disclaimer', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.getByRole('button', { name: 'About & trust' }).click();
-  await expect(page).toHaveURL(/view=about/);
+  await page.getByRole('link', { name: 'About & trust' }).click();
+  await expect(page).toHaveURL(/\/about/);
   await expect(page.getByRole('heading', { name: 'What Control Atlas is — and is not' })).toBeVisible();
-  await expect(page.getByText('not an official government system')).toBeVisible();
-  await expect(page.getByText('reference aids based on public sources')).toBeVisible();
+  await expect(page.locator('main').getByText('not an official government system')).toBeVisible();
+  await expect(page.locator('main').getByText('reference aids based on public sources')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Review the Sources registry' })).toBeVisible();
 });

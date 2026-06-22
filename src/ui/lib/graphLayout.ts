@@ -29,6 +29,21 @@ export function resolveLayoutMode(
   );
 }
 
+export function buildDagreOptions(
+  reducedMotion: boolean,
+): cytoscape.LayoutOptions {
+  return {
+    name: "dagre",
+    rankDir: "LR",
+    nodeSep: 48,
+    rankSep: 72,
+    fit: false,
+    animate: !reducedMotion,
+    animationDuration: 400,
+    padding: 48,
+  } as cytoscape.LayoutOptions;
+}
+
 export function buildFcoseOptions(
   mode: Exclude<LayoutMode, "none">,
   reducedMotion: boolean,
@@ -56,9 +71,9 @@ export function buildFcoseOptions(
     packComponents: true,
     animate,
     animationDuration: 400,
-    fit: true,
+    fit: false,
     padding: 64,
-    randomize: true,
+    randomize: mode === "reset",
   } as cytoscape.LayoutOptions;
 }
 

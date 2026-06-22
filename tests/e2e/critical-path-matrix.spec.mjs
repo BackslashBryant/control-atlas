@@ -17,19 +17,18 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", {
-      name: "Navigate federal cyber compliance.",
-      exact: true,
-    }),
+    page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
   await expect(
     page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas Map" }),
   ).toBeVisible();
   await expect(
-    page.locator(".home-card-grid .intent-card").filter({ hasText: "Compare Frameworks" }),
+    page.locator(".home-card-grid .intent-card").filter({
+      hasText: "How do these frameworks relate?",
+    }),
   ).toBeVisible();
   await expect(
-    page.locator(".home-card-grid").getByRole("button", { name: /^Templates\b/ }),
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "What do I need to produce?" }),
   ).toBeVisible();
 });
 
@@ -113,7 +112,7 @@ test("critical path: MITRE library search returns technique with plain-language 
   await dismissOnboarding(page);
 
   await page.getByRole("button", { name: "Open record" }).first().click();
-  await expect(page).toHaveURL(/view=library-detail/);
+  await expect(page).toHaveURL(/record\/mitre-attack|library-detail/);
   await expect(page.getByText("What this is")).toBeVisible();
   await expect(page.getByText("Threat context")).toBeVisible();
 });
@@ -176,6 +175,6 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   ).toBeVisible();
 
   const search = page.getByLabel("Search records and glossary");
-  await search.focus();
+  await search.click();
   await expect(search).toBeFocused();
 });
