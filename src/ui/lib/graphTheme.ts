@@ -32,31 +32,45 @@ export type GraphData = {
   links: GraphLink[];
 };
 
-const PROVENANCE_COLORS: Record<string, string> = {
-  mandated: "#2563EB",
-  federal_published: "#22D3EE",
-  federal_program: "#0D9488",
-  federal_referenced: "#64748B",
-  mitre_published: "#7C3AED",
-  inferred: "#F59E0B",
-  deprecated: "#DC2626",
-};
+function readToken(name: string, fallback: string): string {
+  if (typeof document === "undefined") {
+    return fallback;
+  }
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  return value || fallback;
+}
 
 export function provenanceColor(provenanceClass: string): string {
-  return PROVENANCE_COLORS[provenanceClass] || "#64748B";
+  const map: Record<string, string> = {
+    mandated: "--ca-prov-official",
+    federal_published: "--ca-prov-nist",
+    federal_program: "--ca-prov-fedramp",
+    federal_referenced: "--ca-prov-community",
+    mitre_published: "--ca-prov-mitre",
+    inferred: "--ca-prov-inferred",
+    deprecated: "--ca-prov-deprecated",
+    official: "--ca-prov-official",
+    dod_published: "--ca-prov-dod",
+    nist_published: "--ca-prov-nist",
+    disa_published: "--ca-prov-disa",
+    fedramp_published: "--ca-prov-fedramp",
+  };
+  return readToken(map[provenanceClass] ?? "--ca-prov-community", "#64748B");
 }
 
 export function provenanceCssVar(provenanceClass: string): string {
   const map: Record<string, string> = {
-    mandated: "var(--ca-provenance-official)",
-    federal_published: "var(--ca-provenance-nist)",
-    federal_program: "var(--ca-provenance-fedramp)",
-    federal_referenced: "var(--ca-provenance-community)",
-    mitre_published: "var(--ca-provenance-mitre)",
-    inferred: "var(--ca-provenance-inferred)",
-    deprecated: "var(--ca-provenance-deprecated)",
+    mandated: "var(--ca-prov-official)",
+    federal_published: "var(--ca-prov-nist)",
+    federal_program: "var(--ca-prov-fedramp)",
+    federal_referenced: "var(--ca-prov-community)",
+    mitre_published: "var(--ca-prov-mitre)",
+    inferred: "var(--ca-prov-inferred)",
+    deprecated: "var(--ca-prov-deprecated)",
   };
-  return map[provenanceClass] || "var(--ca-provenance-community)";
+  return map[provenanceClass] || "var(--ca-prov-community)";
 }
 
 export function linkDashPattern(
@@ -74,10 +88,10 @@ export function linkDashPattern(
 
 export function compareNodeColor(role: CompareRole): string {
   const map: Record<CompareRole, string> = {
-    shared: "#22C55E",
-    uniqueA: "#2563EB",
-    uniqueB: "#F97316",
-    neutral: "#94A3B8",
+    shared: readToken("--ca-graph-shared", "#22C55E"),
+    uniqueA: readToken("--ca-graph-unique-a", "#2563EB"),
+    uniqueB: readToken("--ca-graph-unique-b", "#F97316"),
+    neutral: readToken("--ca-graph-neutral", "#94A3B8"),
   };
   return map[role];
 }
@@ -88,15 +102,16 @@ export function nodeColor(
   highlightIds: Set<string>,
 ): string {
   if (node.compareRole) return compareNodeColor(node.compareRole);
-  if (node.isCluster) return "#6366F1";
-  if (node.id === selectedId) return "#22D3EE";
-  if (node.isCenter) return "#2563EB";
-  if (highlightIds.size && !highlightIds.has(node.id))
-    return "rgba(148, 163, 184, 0.35)";
-  if (node.nodeType === "source") return "#14B8A6";
-  if (node.nodeType === "template") return "#A855F7";
-  if (node.nodeType === "pattern") return "#F97316";
-  return "#F8FAFC";
+  if (node.isCluster) return readToken("--ca-graph-cluster", "#6366F1");
+  if (node.id === selectedId) return readToken("--ca-graph-selected", "#22D3EE");
+  if (node.isCenter) return readToken("--ca-graph-center", "#2563EB");
+  if (highlightIds.size && !highlightIds.has(node.id)) {
+    return readToken("--ca-graph-dim", "rgba(148, 163, 184, 0.35)");
+  }
+  if (node.nodeType === "source") return readToken("--ca-prov-fedramp", "#0D9488");
+  if (node.nodeType === "template") return readToken("--ca-prov-mitre", "#7C3AED");
+  if (node.nodeType === "pattern") return readToken("--ca-graph-unique-b", "#F97316");
+  return readToken("--ca-text", "#F8FAFC");
 }
 
 export function nodeShapeRadius(node: GraphNode): number {
@@ -124,7 +139,7 @@ export function buildGraphData(
     plain_language_rationale?: string;
   }>,
   centerNodeId: string,
-  clusterMeta?: Map<string, ClusterNodeMeta>,
+  clusterMeta?: Map<string, import("./graphClustering").ClusterNodeMeta>,
 ): GraphData {
   return {
     nodes: nodes.map((node) => ({
@@ -168,7 +183,7 @@ export const PROVENANCE_LEGEND = [
 ] as const;
 
 export const COMPARE_ROLE_LEGEND = [
-  { key: "shared", label: "Shared", color: "#22C55E" },
-  { key: "uniqueA", label: "Only in A", color: "#2563EB" },
-  { key: "uniqueB", label: "Only in B", color: "#F97316" },
+  { key: "shared", label: "Shared", color: "var(--ca-graph-shared)" },
+  { key: "uniqueA", label: "Only in A", color: "var(--ca-graph-unique-a)" },
+  { key: "uniqueB", label: "Only in B", color: "var(--ca-graph-unique-b)" },
 ] as const;

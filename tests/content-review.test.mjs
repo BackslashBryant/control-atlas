@@ -98,15 +98,18 @@ test('generated templates use plain-language prompts without raw schema slugs', 
 });
 
 test('react shell footer uses the approved open-source guidance disclaimer', () => {
+  const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   assert.match(
-    appShell,
+    footer,
     /Control Atlas is an open-source reference tool\. It does not replace official guidance\./,
   );
 });
 
 test('about page includes full product disclaimer', () => {
-  assert.match(appShell, /About &amp; trust/);
-  assert.match(appShell, /\{PRODUCT_DISCLAIMER\}/);
+  const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
+  assert.match(appShell, /AboutPage/);
+  assert.match(aboutPage, /About & trust/);
+  assert.match(aboutPage, /PRODUCT_DISCLAIMER/);
   assert.match(PRODUCT_DISCLAIMER, /not an official government system/i);
   assert.match(PRODUCT_DISCLAIMER, /reference aids based on public sources/i);
 });

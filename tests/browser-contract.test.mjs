@@ -3,12 +3,16 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const html = readFileSync('src/index.html', 'utf8');
-const css = readFileSync('src/styles/app.css', 'utf8');
+const css = readFileSync('styles/tokens.css', 'utf8');
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 
 const mainEntrypoint = existsSync('src/main.tsx') ? readFileSync('src/main.tsx', 'utf8') : '';
 const reactApp = existsSync('src/ui/App.tsx') ? readFileSync('src/ui/App.tsx', 'utf8') : '';
-const router = existsSync('src/ui/lib/viewState.ts') ? readFileSync('src/ui/lib/viewState.ts', 'utf8') : '';
+const router = existsSync('src/ui/lib/hashRoutes.ts')
+  ? readFileSync('src/ui/lib/hashRoutes.ts', 'utf8')
+  : existsSync('src/ui/lib/viewState.ts')
+    ? readFileSync('src/ui/lib/viewState.ts', 'utf8')
+    : '';
 const runtimeLoader = existsSync('src/ui/lib/runtimeLoader.ts')
   ? readFileSync('src/ui/lib/runtimeLoader.ts', 'utf8')
   : '';
@@ -40,14 +44,14 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
-  assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
-  assert.match(reactApp, /Start/);
-  assert.match(reactApp, /Explore/);
-  assert.match(reactApp, /Compare/);
-  assert.match(reactApp, /Playbooks/);
-  assert.match(reactApp, /Templates/);
-  assert.match(reactApp, /Sources/);
-  assert.doesNotMatch(reactApp, /Crosswalks/);
+  const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
+  assert.match(navigation, /Start/);
+  assert.match(navigation, /Explore/);
+  assert.match(navigation, /Compare/);
+  assert.match(navigation, /Playbooks/);
+  assert.match(navigation, /Templates/);
+  assert.match(navigation, /Sources/);
+  assert.doesNotMatch(navigation, /Crosswalks/);
 });
 
 test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', () => {
@@ -62,10 +66,10 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
 
 test('approved v2.2 brand entrance and fCoSE graph contracts are present', () => {
   assert.ok(
-    existsSync('src/ui/components/BrandEntrance.tsx'),
-    'BrandEntrance component must exist',
+    existsSync('src/ui/components/BrandEntranceOverlay.tsx'),
+    'BrandEntranceOverlay component must exist',
   );
-  const entrance = readFileSync('src/ui/components/BrandEntrance.tsx', 'utf8');
+  const entrance = readFileSync('src/ui/components/BrandEntranceOverlay.tsx', 'utf8');
   assert.match(entrance, /ca_intro_seen/);
   assert.match(entrance, /prefers-reduced-motion/);
   assert.match(entrance, /Ctrl \+ Alt \+ Comply/);
@@ -92,18 +96,19 @@ test('static artifact loading caches requests in memory', () => {
 });
 
 test('persistent footer uses the approved short disclaimer', () => {
+  const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   assert.match(
-    reactApp,
+    footer,
     /Control Atlas is an open-source reference tool\. It does not replace official guidance\./,
   );
 });
 
 test('query-string deep link compatibility moves into typed React adapters', () => {
-  assert.ok(existsSync('src/ui/lib/viewState.ts'), 'src/ui/lib/viewState.ts must exist');
+  assert.ok(existsSync('src/ui/lib/hashRoutes.ts'), 'src/ui/lib/hashRoutes.ts must exist');
   assert.match(router, /parseViewState/);
-  assert.match(router, /serializeViewState/);
-  assert.match(router, /normalizeViewState/);
-  assert.doesNotMatch(router, /mode/);
+  assert.match(router, /serializeHashLocation/);
+  assert.match(router, /serializeHashUrl/);
+  assert.match(router, /applyLegacyQueryRedirect/);
 });
 
 test('dark atlas visual system remains active in the shared stylesheet', () => {

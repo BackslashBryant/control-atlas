@@ -64,9 +64,11 @@
     "@radix-ui/react-dialog": "^1.1.17",
     "@tabler/icons-react": "^3.44.0",
     "cytoscape": "^3.34.0",
+    "cytoscape-dagre": "^4.0.0",
     "cytoscape-fcose": "^2.2.0",
     "minisearch": "^7.2.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.0"
   }
 }

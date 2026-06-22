@@ -1,0 +1,115 @@
+:root {
+  /* ── Backgrounds ── */
+  --ca-bg: #0b1020;
+  --ca-surface: #111827;
+  --ca-surface-raised: #1e293b;
+  --ca-border: #334155;
+  --ca-border-subtle: #1e293b;
+
+  /* ── Text ── */
+  --ca-text: #f8fafc;
+  --ca-text-muted: #cbd5e1;
+  --ca-text-subtle: #64748b;
+
+  /* ── Interactive ── */
+  --ca-primary: #2563eb;
+  --ca-primary-hover: #1d4ed8;
+  --ca-secondary: #22d3ee;
+  --ca-secondary-hover: #06b6d4;
+
+  /* ── Provenance (always pair with text label) ── */
+  --ca-prov-official: #2563eb;
+  --ca-prov-dod: #4f46e5;
+  --ca-prov-nist: #22d3ee;
+  --ca-prov-disa: #1e40af;
+  --ca-prov-fedramp: #0d9488;
+  --ca-prov-mitre: #7c3aed;
+  --ca-prov-community: #64748b;
+  --ca-prov-inferred: #f59e0b;
+  --ca-prov-deprecated: #dc2626;
+  --ca-prov-active: #16a34a;
+
+  /* ── Semantic ── */
+  --ca-success: #16a34a;
+  --ca-warning: #f59e0b;
+  --ca-danger: #dc2626;
+
+  /* ── Graph compare roles ── */
+  --ca-graph-shared: #22c55e;
+  --ca-graph-unique-a: #2563eb;
+  --ca-graph-unique-b: #f97316;
+  --ca-graph-neutral: #94a3b8;
+  --ca-graph-cluster: #6366f1;
+  --ca-graph-selected: #22d3ee;
+  --ca-graph-center: #2563eb;
+  --ca-graph-dim: color-mix(in srgb, var(--ca-graph-neutral) 35%, transparent);
+
+  /* ── Spacing ── */
+  --ca-space-1: 0.25rem;
+  --ca-space-2: 0.5rem;
+  --ca-space-3: 0.75rem;
+  --ca-space-4: 1rem;
+  --ca-space-6: 1.5rem;
+  --ca-space-8: 2rem;
+  --ca-space-12: 3rem;
+  --ca-space-16: 4rem;
+
+  /* ── Radii ── */
+  --ca-radius-sm: 4px;
+  --ca-radius-md: 8px;
+  --ca-radius-lg: 12px;
+
+  /* ── Type ── */
+  --ca-font-display: "Space Grotesk", system-ui, sans-serif;
+  --ca-font-body: "Public Sans", system-ui, sans-serif;
+  --ca-font-mono: "JetBrains Mono", monospace;
+
+  --ca-text-xs: 0.75rem;
+  --ca-text-sm: 0.875rem;
+  --ca-text-base: 1rem;
+  --ca-text-lg: 1.125rem;
+  --ca-text-xl: 1.25rem;
+  --ca-text-2xl: 1.5rem;
+  --ca-text-3xl: 1.875rem;
+  --ca-text-4xl: 2.25rem;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  color-scheme: dark;
+
+  /* Legacy aliases (surfaces.css) */
+  --ca-provenance-official: var(--ca-prov-official);
+  --ca-provenance-dod: var(--ca-prov-dod);
+  --ca-provenance-nist: var(--ca-prov-nist);
+  --ca-provenance-disa: var(--ca-prov-disa);
+  --ca-provenance-fedramp: var(--ca-prov-fedramp);
+  --ca-provenance-mitre: var(--ca-prov-mitre);
+  --ca-provenance-community: var(--ca-prov-community);
+  --ca-provenance-inferred: var(--ca-prov-inferred);
+  --ca-provenance-deprecated: var(--ca-prov-deprecated);
+  --ca-provenance-active: var(--ca-prov-active);
+
+  --space-1: var(--ca-space-1);
+  --space-2: var(--ca-space-2);
+  --space-3: var(--ca-space-3);
+  --space-4: var(--ca-space-4);
+  --space-5: var(--ca-space-6);
+  --space-6: var(--ca-space-8);
+  --space-7: var(--ca-space-12);
+
+  --radius-sm: var(--ca-radius-sm);
+  --radius-md: var(--ca-radius-md);
+  --radius-lg: var(--ca-radius-lg);
+  --radius-xl: var(--ca-radius-lg);
+
+  --font-size-xs: var(--ca-text-xs);
+  --font-size-sm: var(--ca-text-sm);
+  --font-size-md: var(--ca-text-base);
+  --font-size-lg: var(--ca-text-xl);
+  --font-size-xl: var(--ca-text-2xl);
+  --font-size-2xl: var(--ca-text-3xl);
+}

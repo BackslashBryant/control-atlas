@@ -119,13 +119,13 @@ test("atlas map: does not re-layout while idle on unrelated app updates", async 
   });
 
   const arrangingCountBefore = await page
-    .getByText(/Arranging \d+ nodes/i)
+    .getByText(/Loading \d+ nodes/i)
     .count();
 
   await page.waitForTimeout(5500);
 
   await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0);
-  await expect(page.getByText(/Arranging \d+ nodes/i)).toHaveCount(
+  await expect(page.getByText(/Loading \d+ nodes/i)).toHaveCount(
     arrangingCountBefore,
   );
 });
@@ -148,6 +148,6 @@ test("relationship graph: open in atlas map from detail header", async ({
   await dismissOnboarding(page);
 
   await page.getByRole("button", { name: "Open in Atlas Map" }).first().click();
-  await expect(page).toHaveURL(/view=atlas-map/);
+  await expect(page).toHaveURL(/atlas-map/);
   await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
 });
