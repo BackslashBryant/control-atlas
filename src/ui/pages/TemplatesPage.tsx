@@ -71,6 +71,21 @@ import {
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
 
+const FORMAT_LABELS: Record<string, string> = {
+  markdown: "Markdown",
+  csv: "CSV",
+  json: "JSON",
+  yaml: "YAML",
+};
+
+const INPUT_LABELS: Record<string, string> = {
+  framework: "Framework context",
+  baseline: "Baseline selection",
+  control_family: "Control family filter",
+  selected_controls: "Specific controls",
+  selected_stigs: "STIG references",
+  environment_archetype: "Environment type",
+};
 
 export function TemplatesPage(props: {
   bundle: RuntimeBundle;
@@ -119,12 +134,6 @@ export function TemplatesPage(props: {
   const catalogOptions = bundle.runtime
     .getCatalogs()
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
-  const formatLabels: Record<string, string> = {
-    markdown: "Markdown",
-    csv: "CSV",
-    json: "JSON",
-    yaml: "YAML",
-  };
   const supportedFormats = selectedTemplate?.supported_formats || ["markdown"];
   const activeFormat = supportedFormats.includes(state.format || "markdown")
     ? state.format || supportedFormats[0]
@@ -235,15 +244,35 @@ export function TemplatesPage(props: {
           </SummaryCard>
           <SummaryCard title="What it includes">
             <p>
-              Supported formats: {selectedTemplate.supported_formats.join(", ")}
-              . Inputs: {selectedTemplate.input_options.join(", ")}.
+              Download formats:{" "}
+              {selectedTemplate.supported_formats
+                .map((format: string) => FORMAT_LABELS[format] || format)
+                .join(", ")}
+              .
             </p>
+            {selectedTemplate.input_options.length > 0 ? (
+              <p>
+                Optional inputs:{" "}
+                {selectedTemplate.input_options
+                  .map((input: string) => INPUT_LABELS[input] || input)
+                  .join(", ")}
+                .
+              </p>
+            ) : null}
           </SummaryCard>
           {generationStatus ? (
             <p className="generation-status" role="status">
               {generationStatus}
             </p>
           ) : null}
+          <div className="notice" role="note">
+            <p
+              className="ca-text-subtle"
+              style={{ fontSize: "var(--ca-text-xs)" }}
+            >
+              {PRODUCT_DISCLAIMER}
+            </p>
+          </div>
           <div className="card-actions">
             <button
               className="primary"
@@ -308,7 +337,7 @@ export function TemplatesPage(props: {
                   }
                   options={supportedFormats.map((format: string) => ({
                     value: format,
-                    label: formatLabels[format] || format,
+                    label: FORMAT_LABELS[format] || format,
                   }))}
                   value={activeFormat}
                 />

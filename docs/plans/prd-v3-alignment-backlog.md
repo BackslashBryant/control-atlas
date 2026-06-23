@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** June 22, 2026 (Frontend Full Review remediated; no new PRD gaps)
+**Last synced:** June 22, 2026 (Frontend Full Review and Frontend Overhaul correction pass completed; no new PRD gaps)
 
 ## Epic 0: GovFrame → Control Atlas Migration
 

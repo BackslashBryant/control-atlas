@@ -21,14 +21,14 @@ export function ObjectCard(props: ObjectCardProps) {
     provenanceClass,
     onOpen,
   } = props;
-  const missingSummary = !summary;
-
   return (
     <article className="result-card object-card">
       <div className="result-card-header">
-        <div>
-          <p className="result-meta">{displayNameFor("object_type", objectType)}</p>
-          <h3>{title}</h3>
+        <div className="object-card-meta">
+          <span className="result-meta">
+            {displayNameFor("object_type", objectType)}
+          </span>
+          <code className="object-card-id">{itemId}</code>
         </div>
         {typeof connectionCount === "number" ? (
           <span className="badge tone-info">
@@ -36,24 +36,22 @@ export function ObjectCard(props: ObjectCardProps) {
           </span>
         ) : null}
       </div>
+      <h3>{title}</h3>
       <p className="result-summary">
         {summary ||
-          "Plain-language summary missing — open the record to review source text."}
+          "No plain-language summary available — open to review source text."}
       </p>
-      {missingSummary ? (
+      {!summary ? (
         <p className="warning-inline">Plain-language summary missing.</p>
       ) : null}
       <div className="card-actions">
         {provenanceClass ? (
           <ProvenanceTerm kind="provenance" value={provenanceClass} />
         ) : null}
-        <button className="primary" onClick={onOpen} type="button">
+        <button className="secondary" onClick={onOpen} type="button">
           Open record
         </button>
       </div>
-      <p className="support-meta">
-        <code>{itemId}</code>
-      </p>
     </article>
   );
 }

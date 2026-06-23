@@ -35,44 +35,6 @@
   border-width: 2px;
 }
 
-/* ── Buttons ── */
-.ca-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  font-family: var(--ca-font-body);
-  font-size: var(--ca-text-sm);
-  font-weight: 500;
-  padding: 10px 20px;
-  border-radius: var(--ca-radius-sm);
-  border: none;
-  cursor: pointer;
-  transition: background 150ms ease, border-color 150ms ease;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.ca-btn--primary {
-  background: var(--ca-primary);
-  color: white;
-}
-.ca-btn--primary:hover { background: var(--ca-primary-hover); }
-
-.ca-btn--ghost {
-  background: transparent;
-  border: 1px solid var(--ca-border);
-  color: var(--ca-text);
-}
-.ca-btn--ghost:hover {
-  background: var(--ca-surface-raised);
-  border-color: var(--ca-secondary);
-}
-
-.ca-btn--sm {
-  font-size: var(--ca-text-xs);
-  padding: 6px 12px;
-}
-
 /* ── Form controls ── */
 .ca-input,
 .ca-select {
