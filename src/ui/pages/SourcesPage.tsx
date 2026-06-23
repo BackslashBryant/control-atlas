@@ -21,6 +21,7 @@ import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
+import { sourceLinkFor } from "../graph/sourceLinks.ts";
 import {
   ExpandableChipList,
   RelationshipGroupsSection,
@@ -127,6 +128,35 @@ export function SourcesPage(props: {
           <strong>Source type</strong> describes where the data came from.
         </p>
       </SummaryCard>
+
+      <section className="canonical-source-links" aria-labelledby="canonical-source-links-heading">
+        <h2 id="canonical-source-links-heading">Canonical source links</h2>
+        <p>
+          Open the official source before relying on a control, mapping, threat
+          technique, or defensive reference.
+        </p>
+        <ul>
+          {[
+            "fisma-44-usc-3551",
+            "nist-sp-800-53-r5",
+            "mitre-attack-enterprise",
+            "mitre-d3fend",
+          ].map((sourceId) => {
+            const source = sourceLinkFor(sourceId);
+            return (
+              <li key={source.sourceId}>
+                <a
+                  href={source.canonicalUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {source.displayName}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
 
       <Accordion.Root className="accordion-root" collapsible type="single">
         <DisclosurePanel title="Refine sources" value="filters">
@@ -269,4 +299,3 @@ export function SourcesPage(props: {
     </section>
   );
 }
-

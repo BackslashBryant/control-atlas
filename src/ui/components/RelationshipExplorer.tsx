@@ -29,6 +29,7 @@ type StaticGraph = {
     node_type?: string;
     label?: string;
     metadata?: { item_id?: string; title?: string };
+    graphRole?: string;
   }>;
   edges: Array<{
     id: string;
@@ -87,7 +88,7 @@ type RelationshipExplorerProps = {
   showEmptyState?: boolean;
   showFilters?: boolean;
   compareLegend?: boolean;
-  layoutEngine?: "fcose" | "dagre";
+  layoutEngine?: "fcose" | "dagre" | "concentric";
 };
 
 function FilterSelect(props: {
