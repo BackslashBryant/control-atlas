@@ -236,6 +236,7 @@ export function SelectField(props: {
   value: string;
   options: Array<{ value: string; label: string }>;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }) {
   const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
 
@@ -243,6 +244,7 @@ export function SelectField(props: {
     <label className="field" htmlFor={fieldId}>
       <span>{props.label}</span>
       <select
+        disabled={props.disabled}
         id={fieldId}
         onChange={(event) => props.onChange(event.target.value)}
         value={props.value}

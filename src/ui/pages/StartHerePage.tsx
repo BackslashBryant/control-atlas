@@ -20,6 +20,11 @@ export function StartHerePage(props: {
   const { state, onNavigate } = props;
   const hasCompleteContext = hasCompleteStartHereContext(state);
   const showResults = state.step === "results" && hasCompleteContext;
+  const activeStep = !state.systemType
+    ? 1
+    : !state.dataSensitivity
+      ? 2
+      : 3;
 
   const recommendations = useMemo(
     () =>
@@ -70,6 +75,29 @@ export function StartHerePage(props: {
         title="Find the best place to start"
       />
 
+      <div className="start-here-steps" aria-label="Start Here progress">
+        <div
+          className={`start-here-step ${activeStep >= 1 ? "active" : ""} ${state.systemType ? "done" : ""}`}
+        >
+          <span className="start-here-step-num">1</span>
+          <span>System type</span>
+        </div>
+        <span className="start-here-step-connector" aria-hidden="true" />
+        <div
+          className={`start-here-step ${activeStep >= 2 ? "active" : ""} ${state.dataSensitivity ? "done" : ""}`}
+        >
+          <span className="start-here-step-num">2</span>
+          <span>Data sensitivity</span>
+        </div>
+        <span className="start-here-step-connector" aria-hidden="true" />
+        <div
+          className={`start-here-step ${activeStep >= 3 ? "active" : ""} ${state.environment ? "done" : ""}`}
+        >
+          <span className="start-here-step-num">3</span>
+          <span>Environment</span>
+        </div>
+      </div>
+
       <div className="filter-grid">
         <SelectField
           emptyLabel="Choose a system type"
@@ -88,6 +116,7 @@ export function StartHerePage(props: {
           value={state.systemType}
         />
         <SelectField
+          disabled={!state.systemType}
           emptyLabel="Choose a sensitivity level"
           hint="How sensitive the data handled by the system is."
           label="Data sensitivity"
@@ -107,6 +136,7 @@ export function StartHerePage(props: {
           value={state.dataSensitivity}
         />
         <SelectField
+          disabled={!state.dataSensitivity}
           emptyLabel="Choose an environment"
           hint="Who operates the system and under which federal context."
           label="Operational environment"

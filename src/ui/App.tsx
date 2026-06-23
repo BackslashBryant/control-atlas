@@ -342,7 +342,7 @@ export function App() {
         </section>
       </main>
 
-      <SiteFooter />
+      <SiteFooter onNavigate={navigate} />
 
       <SearchOverlay
         bundle={bundle}

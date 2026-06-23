@@ -1,15 +1,10 @@
 import * as Accordion from "@radix-ui/react-accordion";
-import {
-  IconArrowRight,
-  IconSearch,
-  IconSparkles,
-} from "@tabler/icons-react";
+import { IconSearch, IconSparkles } from "@tabler/icons-react";
 import {
   useDeferredValue,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
@@ -18,102 +13,14 @@ import { searchGlossary } from "../lib/glossarySearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-
-const PATTERN_RENAMES: Record<string, string> = {
-  "csp-inheritance": "Using FedRAMP Inheritance",
-  "shared-responsibility": "What Your Cloud Provider Owns vs What You Own",
-  "reciprocity-basics": "Reusing Prior Authorization Work",
-  "conmon-cadence": "Keeping Authorization Evidence Current",
-  "boundary-patterns": "Defining the Right Authorization Boundary",
-  "boe-reuse": "Packaging Evidence for Reuse",
-};
-
-function openAtlasMapForNode(
-  navigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void,
-  nodeId: string,
-) {
-  navigate("atlas-map", { node: nodeId });
-}
-
-function PageHeader(props: {
-  eyebrow?: string;
-  title: string;
-  summary: string;
-  action?: ReactNode;
-}) {
-  return (
-    <header className="page-header">
-      {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
-      <div className="page-header-row">
-        <div>
-          <h1>{props.title}</h1>
-          <p className="page-summary">{props.summary}</p>
-        </div>
-        {props.action ? (
-          <div className="page-header-action">{props.action}</div>
-        ) : null}
-      </div>
-    </header>
-  );
-}
-
-function Badge(props: {
-  children: ReactNode;
-  tone?: "default" | "info" | "warning" | "success";
-}) {
-  return (
-    <span className={`badge tone-${props.tone || "default"}`}>
-      {props.children}
-    </span>
-  );
-}
-
-function DisclosurePanel(props: {
-  value: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <Accordion.Item className="accordion-item" value={props.value}>
-      <Accordion.Header>
-        <Accordion.Trigger className="accordion-trigger">
-          <span>{props.title}</span>
-          <IconArrowRight size={18} stroke={1.8} />
-        </Accordion.Trigger>
-      </Accordion.Header>
-      <Accordion.Content className="accordion-content">
-        {props.children}
-      </Accordion.Content>
-    </Accordion.Item>
-  );
-}
-
-function SelectField(props: {
-  label: string;
-  value: string;
-  options: Array<{ value: string; label: string }>;
-  onChange: (value: string) => void;
-}) {
-  const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
-
-  return (
-    <label className="field" htmlFor={fieldId}>
-      <span>{props.label}</span>
-      <select
-        id={fieldId}
-        onChange={(event) => props.onChange(event.target.value)}
-        value={props.value}
-      >
-        <option value="">All</option>
-        {props.options.map((option) => (
-          <option key={`${props.label}-${option.value}`} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
+import {
+  Badge,
+  DisclosurePanel,
+  PageHeader,
+  PATTERN_RENAMES,
+  SelectField,
+  openAtlasMapForNode,
+} from "../lib/pagePrimitives";
 
 export function ExplorePage(props: {
   bundle: RuntimeBundle;

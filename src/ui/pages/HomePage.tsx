@@ -68,10 +68,7 @@ export function HomePage(props: HomePageProps) {
     <>
       <section className="hero home-hero">
         <h1>Control Atlas</h1>
-        <div
-          aria-label="Ctrl Alt Comply"
-          className="ca-hero-tagline hero-tagline"
-        >
+        <div aria-label="Ctrl Alt Comply" className="ca-hero-tagline">
           <span className="ca-hero-prefix">Ctrl+Alt+</span>
           <span aria-hidden="true" className="ca-hero-word">
             {heroWord}
@@ -87,21 +84,21 @@ export function HomePage(props: HomePageProps) {
         </p>
         <div className="hero-actions">
           <button
-            className="ca-btn ca-btn--primary primary"
+            className="primary"
             onClick={() => onNavigate("atlas-map")}
             type="button"
           >
             Atlas Map →
           </button>
           <button
-            className="ca-btn ca-btn--ghost secondary"
+            className="secondary"
             onClick={() => onNavigate("start-here")}
             type="button"
           >
             Start
           </button>
           <button
-            className="ca-btn ca-btn--ghost secondary quiet"
+            className="secondary quiet"
             onClick={() => onNavigate("search")}
             type="button"
           >

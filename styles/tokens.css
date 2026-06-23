@@ -45,6 +45,10 @@
   --ca-success: #16a34a;
   --ca-warning: #f59e0b;
   --ca-danger: #dc2626;
+  --ca-badge-info-text: #d4f6fc;
+  --ca-badge-warning-text: #fef3c7;
+  --ca-badge-success-text: #dcfce7;
+  --ca-nav-active-text: #f8fafc;
 
   /* ── Graph compare roles ── */
   --ca-graph-shared: #22c55e;
