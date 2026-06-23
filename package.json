@@ -27,7 +27,7 @@
     "test:e2e": "npm run build:site && playwright test",
     "test:a11y": "npm run build:site && playwright test tests/e2e/accessibility.spec.mjs",
     "test:runtime": "node --test ./tests/framework-runtime.test.mjs ./tests/graph-layout.test.mjs ./tests/graph-clustering.test.mjs",
-    "test:graph": "node --test ./tests/graph/sourceManifest.test.ts ./tests/graph/sourceLinks.test.ts ./tests/graph/defaultMapFilter.test.ts ./tests/graph/sourceToGraphRole.test.ts ./tests/graph/sourceHierarchyEdges.test.ts ./tests/graph/buildFocusedControlRings.test.ts",
+    "test:graph": "tsx --test ./tests/graph/sourceManifest.test.ts ./tests/graph/sourceLinks.test.ts ./tests/graph/defaultMapFilter.test.ts ./tests/graph/sourceToGraphRole.test.ts ./tests/graph/sourceHierarchyEdges.test.ts ./tests/graph/buildFocusedControlRings.test.ts",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
     "smoke:dom": "node ./scripts/dom-smoke.mjs",
     "audit:coverage": "node ./scripts/audit-coverage.mjs",
@@ -59,6 +59,7 @@
     "globals": "^17.6.0",
     "pdf-parse": "^1.1.1",
     "read-excel-file": "^9.2.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.16"
   },
