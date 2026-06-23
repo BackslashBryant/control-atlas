@@ -53,6 +53,24 @@ export default [
     },
   },
   {
+    files: ['tests/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: globals.node,
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  {
     files: ['scripts/**/*.mjs', 'tests/**/*.mjs', 'tools/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',

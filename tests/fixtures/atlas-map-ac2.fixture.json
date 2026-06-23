@@ -1,0 +1,48 @@
+{
+  "selectedControl": {
+    "id": "nist-800-53:AC-2",
+    "itemId": "AC-2",
+    "title": "Account Management"
+  },
+  "catalogContext": [
+    { "id": "source:nist-sp-800-53-r5", "label": "SP 800-53 Rev. 5" },
+    { "id": "family:access-control", "label": "Access Control family" }
+  ],
+  "baselineContext": [
+    { "id": "source:nist-sp-800-53b", "label": "SP 800-53B" },
+    { "id": "baseline:fedramp-low", "label": "FedRAMP Low" },
+    { "id": "baseline:fedramp-moderate", "label": "FedRAMP Moderate" },
+    { "id": "baseline:fedramp-high", "label": "FedRAMP High" }
+  ],
+  "assessmentContext": [
+    { "id": "source:nist-sp-800-53a-r5", "label": "SP 800-53A" },
+    {
+      "id": "cluster:disa-stig-srg",
+      "label": "STIG/SRG cluster",
+      "children": 12
+    },
+    {
+      "id": "cluster:cmmc-assessment-scoping",
+      "label": "CMMC assessment/scoping cluster",
+      "children": 4
+    }
+  ],
+  "mappingContext": [
+    {
+      "id": "cluster:disa-ccis",
+      "label": "DISA CCIs cluster",
+      "children": 35
+    },
+    { "id": "cluster:csf-mappings", "label": "CSF mapping cluster", "children": 8 },
+    {
+      "id": "cluster:attack-d3fend",
+      "label": "ATT&CK/D3FEND cluster",
+      "children": 9
+    }
+  ],
+  "resourceContext": [
+    { "id": "cluster:templates", "label": "Templates cluster", "children": 3 },
+    { "id": "cluster:playbooks", "label": "Playbooks cluster", "children": 2 },
+    { "id": "cluster:sources", "label": "Sources cluster", "children": 5 }
+  ]
+}
