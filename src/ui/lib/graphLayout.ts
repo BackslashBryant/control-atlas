@@ -77,6 +77,34 @@ export function buildFcoseOptions(
   } as cytoscape.LayoutOptions;
 }
 
+export function buildConcentricOptions(
+  reducedMotion: boolean,
+): cytoscape.LayoutOptions {
+  return {
+    name: "concentric",
+    fit: false,
+    animate: !reducedMotion,
+    animationDuration: 400,
+    padding: 64,
+    minNodeSpacing: 56,
+    concentric(node: cytoscape.NodeSingular) {
+      const role = String(node.data("graphRole") || "");
+      if (role === "nist-control") return 100;
+      if (role === "control-catalog") return 80;
+      if (role === "baseline-overlay-profile") return 60;
+      if (
+        role === "assessment-scoping" ||
+        role === "implementation-standard"
+      ) {
+        return 40;
+      }
+      if (role === "mapping-crosswalk" || role === "threat-defense") return 20;
+      return 0;
+    },
+    levelWidth: () => 1,
+  } as cytoscape.LayoutOptions;
+}
+
 export function placeNewNodesNearAnchor(
   graph: cytoscape.Core,
   newNodeIds: string[],

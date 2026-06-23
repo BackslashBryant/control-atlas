@@ -44,11 +44,13 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.equal(typeof packageJson.scripts['license:check'], 'string');
   assert.equal(typeof packageJson.scripts['test:a11y'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e'], 'string');
+  assert.equal(typeof packageJson.scripts['test:graph'], 'string');
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(packageJson.scripts.precommit, /npm run lint/);
   assert.match(packageJson.scripts.precommit, /npm run typecheck/);
   assert.match(packageJson.scripts.precommit, /npm run license:check/);
   assert.match(packageJson.scripts.precommit, /npm run test:a11y/);
+  assert.match(packageJson.scripts.test, /test:graph/);
   assert.ok(existsSync('tsconfig.app.json'));
   assert.match(packageJson.scripts.typecheck, /tsconfig\.app\.json/);
 });

@@ -84,7 +84,63 @@ test('approved v2.2 brand entrance and fCoSE graph contracts are present', () =>
   assert.match(relationshipExplorer, /useClusteredGraph/);
   assert.match(relationshipGraph, /resolveLayoutMode/);
   assert.match(relationshipGraph, /applyNodeStylesRef/);
+  assert.match(relationshipGraph, /from "cytoscape-popper"/);
+  assert.match(relationshipGraph, /from "tippy\.js"/);
+  assert.match(relationshipGraph, /cytoscape\.use\(popper\(tippyFactory\)\)/);
   assert.match(relationshipGraph, /graph\.destroy\(\)[\s\S]*\}, \[\]\);/);
+});
+
+test('map foundation uses the exact approved free Cytoscape stack', () => {
+  for (const dependency of [
+    'cytoscape',
+    'cytoscape-fcose',
+    'cytoscape-dagre',
+    'cytoscape-popper',
+    '@popperjs/core',
+    'tippy.js',
+  ]) {
+    assert.equal(
+      typeof packageJson.dependencies[dependency],
+      'string',
+      `${dependency} must be installed`,
+    );
+  }
+
+  for (const prohibited of [
+    'yfiles',
+    'cytoscape-navigator',
+    'cytoscape-expand-collapse',
+    'cytoscape-cola',
+    'cytoscape-cose-bilkent',
+    'cytoscape-elk',
+    'cytoscape-automove',
+    'cytoscape-cxtmenu',
+  ]) {
+    assert.equal(packageJson.dependencies[prohibited], undefined);
+    assert.equal(packageJson.devDependencies[prohibited], undefined);
+  }
+});
+
+test('graph implementation references are documented', () => {
+  assert.ok(existsSync('src/ui/graph/GRAPH_REFERENCES.md'));
+  const references = readFileSync('src/ui/graph/GRAPH_REFERENCES.md', 'utf8');
+  for (const link of [
+    'https://js.cytoscape.org/',
+    'https://js.cytoscape.org/#demos',
+    'https://github.com/iVis-at-Bilkent/cytoscape.js-fcose',
+    'https://github.com/cytoscape/cytoscape.js-dagre',
+    'https://github.com/cytoscape/cytoscape.js-popper',
+    'https://atomiks.github.io/tippyjs/',
+    'https://attack.mitre.org/',
+    'https://github.com/mitre-attack/attack-stix-data',
+    'https://d3fend.mitre.org/',
+    'https://d3fend.mitre.org/resources/',
+    'https://github.com/usnistgov/oscal-content',
+    'https://www.nist.gov/cyberframework',
+    'https://csrc.nist.gov/projects/olir',
+  ]) {
+    assert.match(references, new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
 });
 
 test('static artifact loading caches requests in memory', () => {

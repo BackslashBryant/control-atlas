@@ -10,6 +10,7 @@ export type GraphNode = {
   isCenter?: boolean;
   isCluster?: boolean;
   compareRole?: CompareRole;
+  graphRole?: string;
   x?: number;
   y?: number;
   fx?: number;
@@ -127,6 +128,7 @@ export function buildGraphData(
     label?: string;
     metadata?: { item_id?: string; title?: string };
     compareRole?: CompareRole;
+    graphRole?: string;
   }>,
   edges: Array<{
     id: string;
@@ -150,6 +152,7 @@ export function buildGraphData(
       isCenter: node.id === centerNodeId,
       isCluster: clusterMeta?.has(node.id) || node.node_type === "cluster",
       compareRole: node.compareRole,
+      graphRole: node.graphRole,
     })),
     links: edges.map((edge) => ({
       id: edge.id,

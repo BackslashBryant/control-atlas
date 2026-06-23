@@ -6,6 +6,14 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { SelectedItemPanel } from "../components/SelectedItemPanel";
+import {
+  DEFAULT_MAP_WARNINGS,
+} from "../graph/defaultMapFilter.ts";
+import { expandFocusedControlCluster } from "../graph/buildFocusedControlRings.ts";
+import {
+  buildVisibleRelationshipModel,
+  type SourceVisibilityFilters,
+} from "../graph/buildVisibleRelationshipModel.ts";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
@@ -54,6 +62,350 @@ function resolveCenterNode(
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
+  const node = props.state.node.trim();
+  if (!node || node === "AC-2" || node === "nist-800-53:AC-2") {
+    return <FoundationAtlasMapPage {...props} />;
+  }
+  return <RuntimeAtlasMapPage {...props} />;
+}
+
+function FoundationAtlasMapPage(props: AtlasMapPageProps) {
+  const { state, onNavigate } = props;
+  const focused = Boolean(state.node.trim());
+  const routeVisibilityFilters: SourceVisibilityFilters = {
+    showSupportingReferences: state.showSupportingReferences === "true",
+    showDraftOrLegacy: state.showDraftOrLegacy === "true",
+    showRegistryOnly: state.showRegistryOnly === "true",
+  };
+  const [visibilityFilters, setVisibilityFilters] =
+    useState<SourceVisibilityFilters>(routeVisibilityFilters);
+  const [foundationExpandedClusters, setFoundationExpandedClusters] = useState<
+    Set<string>
+  >(() => new Set());
+
+  useEffect(() => {
+    setVisibilityFilters(routeVisibilityFilters);
+  }, [
+    state.showDraftOrLegacy,
+    state.showRegistryOnly,
+    state.showSupportingReferences,
+  ]);
+
+  const model = useMemo(
+    () => {
+      let nextModel = buildVisibleRelationshipModel({
+        nodeId: state.node,
+        filters: visibilityFilters,
+      });
+      for (const clusterKey of foundationExpandedClusters) {
+        nextModel = expandFocusedControlCluster(nextModel, clusterKey);
+      }
+      return nextModel;
+    },
+    [
+      foundationExpandedClusters,
+      state.node,
+      visibilityFilters.showDraftOrLegacy,
+      visibilityFilters.showRegistryOnly,
+      visibilityFilters.showSupportingReferences,
+    ],
+  );
+  const [selectedNodeId, setSelectedNodeId] = useState(model.centerNodeId);
+
+  useEffect(() => {
+    setSelectedNodeId(model.centerNodeId);
+  }, [model.centerNodeId]);
+
+  useEffect(() => {
+    setFoundationExpandedClusters(new Set());
+  }, [state.node]);
+
+  const foundationRuntime = useMemo(
+    () => ({
+      buildNeighborhood: () => ({
+        centerNode:
+          model.nodes.find((node) => node.id === model.centerNodeId) ?? null,
+        nodes: model.nodes,
+        edges: model.edges,
+        stats: {
+          total: model.edges.length,
+          filtered: model.edges.length,
+          truncated: false,
+          nodeCount: model.nodes.length,
+        },
+      }),
+    }),
+    [model],
+  );
+  const relationshipView =
+    state.relationshipView === "list" || state.relationshipView === "table"
+      ? "list"
+      : "map";
+  const emptyRelationshipFilters = {
+    relationshipType: "",
+    provenance: "",
+    confidence: "",
+    nodeType: "",
+    includeCandidates: false,
+    search: "",
+  };
+
+  function patchVisibility(key: keyof SourceVisibilityFilters, value: boolean) {
+    const stateKey = {
+      showSupportingReferences: "showSupportingReferences",
+      showDraftOrLegacy: "showDraftOrLegacy",
+      showRegistryOnly: "showRegistryOnly",
+    }[key];
+    setVisibilityFilters((current) => ({ ...current, [key]: value }));
+    onNavigate("atlas-map", {
+      ...state,
+      [stateKey]: value ? "true" : "",
+    });
+  }
+
+  function copyMapLink() {
+    const url = `${window.location.origin}${window.location.pathname}${serializeViewState(state)}`;
+    void navigator.clipboard?.writeText(url);
+  }
+
+  return (
+    <section className="panel atlas-map-page">
+      <PageHeader
+        summary={
+          focused
+            ? "See the control in context without losing the source hierarchy behind it."
+            : "The map starts with source categories so you can understand where requirements come from before drilling into controls, baselines, assessments, implementation guidance, mappings, and supporting references."
+        }
+        title="Atlas Map"
+      />
+
+      {!focused ? (
+        <>
+          <div className="atlas-foundation-intro">
+            <h2>Explore the compliance ecosystem.</h2>
+            <p>
+              The map starts with source categories so you can understand where
+              requirements come from before drilling into controls, baselines,
+              assessments, implementation guidance, mappings, and supporting
+              references.
+            </p>
+          </div>
+          <div
+            aria-label="Source visibility filters"
+            className="atlas-source-filters"
+            role="group"
+          >
+            <label>
+              <input
+                checked={visibilityFilters.showSupportingReferences}
+                onChange={(event) =>
+                  patchVisibility(
+                    "showSupportingReferences",
+                    event.target.checked,
+                  )
+                }
+                type="checkbox"
+              />
+              Show supporting references
+            </label>
+            <label>
+              <input
+                checked={visibilityFilters.showDraftOrLegacy}
+                onChange={(event) =>
+                  patchVisibility("showDraftOrLegacy", event.target.checked)
+                }
+                type="checkbox"
+              />
+              Show draft / legacy sources
+            </label>
+            <label>
+              <input
+                checked={visibilityFilters.showRegistryOnly}
+                onChange={(event) =>
+                  patchVisibility("showRegistryOnly", event.target.checked)
+                }
+                type="checkbox"
+              />
+              Show registry-only entries
+            </label>
+          </div>
+          <div aria-live="polite" className="atlas-source-warnings">
+            {visibilityFilters.showSupportingReferences ? (
+              <p>{DEFAULT_MAP_WARNINGS.supportingReferences}</p>
+            ) : null}
+            {visibilityFilters.showDraftOrLegacy ? (
+              <p>{DEFAULT_MAP_WARNINGS.draftOrLegacy}</p>
+            ) : null}
+            {visibilityFilters.showRegistryOnly ? (
+              <p>{DEFAULT_MAP_WARNINGS.registryOnly}</p>
+            ) : null}
+          </div>
+        </>
+      ) : null}
+
+      <div className="atlas-map-layout">
+        <div className="atlas-map-main">
+          <RelationshipExplorer
+            centerItemId={focused ? "AC-2" : "Control Catalog / Requirement Set"}
+            centerNodeId={model.centerNodeId}
+            filters={emptyRelationshipFilters}
+            expandedClusterLabels={
+              new Map(
+                [...foundationExpandedClusters].map((clusterKey) => [
+                  clusterKey,
+                  `${clusterKey.replaceAll("-", " ")} cluster`,
+                ]),
+              )
+            }
+            expandedClusters={foundationExpandedClusters}
+            heading={focused ? "AC-2 focused map" : "Source hierarchy"}
+            introCopy={
+              focused
+                ? "AC-2 stays central while dense implementation and mapping details remain clustered."
+                : "Authority flows left-to-right through governance, controls, baselines, assessment, implementation, mappings, threat context, and supporting references."
+            }
+            layoutEngine={model.layoutEngine}
+            mapControls
+            onCopyMapLink={copyMapLink}
+            onFilterChange={() => undefined}
+            onClusterCollapse={(clusterKey) =>
+              setFoundationExpandedClusters((current) => {
+                const next = new Set(current);
+                next.delete(clusterKey);
+                return next;
+              })
+            }
+            onClusterExpand={(clusterKey) =>
+              setFoundationExpandedClusters((current) => {
+                const next = new Set(current);
+                next.add(clusterKey);
+                return next;
+              })
+            }
+            onOpenNode={setSelectedNodeId}
+            onSelectNode={setSelectedNodeId}
+            onViewChange={(view) =>
+              onNavigate("atlas-map", { ...state, relationshipView: view })
+            }
+            relationshipView={relationshipView}
+            runtime={foundationRuntime}
+            selectedNodeId={selectedNodeId}
+            showFilters={false}
+            staticGraph={{
+              nodes: model.nodes,
+              edges: model.edges,
+              stats: {
+                nodeCount: model.nodes.length,
+                filtered: model.edges.length,
+                truncated: false,
+              },
+            }}
+          />
+        </div>
+        <FoundationSidePanel
+          focused={focused}
+          onNavigate={onNavigate}
+          selectedNodeId={selectedNodeId}
+        />
+      </div>
+    </section>
+  );
+}
+
+function FoundationSidePanel(props: {
+  focused: boolean;
+  selectedNodeId: string;
+  onNavigate: AtlasMapPageProps["onNavigate"];
+}) {
+  if (props.focused) {
+    return (
+      <aside aria-label="Selected item" className="atlas-selected-panel">
+        <h2>AC-2</h2>
+        <p className="atlas-control-title">Account Management</p>
+        <p>Type: NIST Control</p>
+        <p>Catalog: SP 800-53 Rev. 5</p>
+        <p>Family: Access Control</p>
+        <h3>Connected context:</h3>
+        <ul>
+          <li>Baselines</li>
+          <li>Assessment procedures</li>
+          <li>Implementation standards</li>
+          <li>Mappings</li>
+          <li>Templates</li>
+          <li>Playbooks</li>
+          <li>Sources</li>
+        </ul>
+      </aside>
+    );
+  }
+
+  const isControlCatalog =
+    props.selectedNodeId === "hierarchy:control-catalog-requirement-set";
+  if (!isControlCatalog) {
+    const label =
+      props.selectedNodeId.replace("hierarchy:", "").replaceAll("-", " ") ||
+      "Source category";
+    return (
+      <aside aria-label="Selected item" className="atlas-selected-panel">
+        <h2 className="capitalize">{label}</h2>
+        <p>
+          Select a source category to understand what it contributes and what
+          to explore next.
+        </p>
+      </aside>
+    );
+  }
+
+  return (
+    <aside aria-label="Selected item" className="atlas-selected-panel">
+      <h2>Control Catalog / Requirement Set</h2>
+      <p>
+        Primary requirement sources that define controls or security
+        requirements.
+      </p>
+      <p>Examples:</p>
+      <ul>
+        <li>NIST SP 800-53 Rev. 5</li>
+        <li>NIST SP 800-171 Rev. 3</li>
+        <li>NIST SP 800-172 Rev. 3</li>
+        <li>NIST SSDF</li>
+      </ul>
+      <div className="card-actions">
+        <button
+          className="primary"
+          onClick={() => props.onNavigate("sources")}
+          type="button"
+        >
+          Explore sources
+        </button>
+        <button
+          className="secondary"
+          onClick={() =>
+            props.onNavigate("atlas-map", { relationshipView: "list" })
+          }
+          type="button"
+        >
+          View as list
+        </button>
+        <button
+          className="secondary"
+          onClick={() =>
+            props.onNavigate("search", {
+              objectType: "control",
+              query: "",
+              filter: "",
+            })
+          }
+          type="button"
+        >
+          Open related controls
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const [expandedClusters, setExpandedClusters] = useState<Set<string>>(
     () => new Set(),
