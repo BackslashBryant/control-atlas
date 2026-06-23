@@ -1,6 +1,9 @@
 import cytoscape, { type Core, type ElementDefinition } from "cytoscape";
 import dagre from "cytoscape-dagre";
 import fcose from "cytoscape-fcose";
+import popper from "cytoscape-popper";
+import tippy, { type Instance as TippyInstance } from "tippy.js";
+import "tippy.js/dist/tippy.css";
 import {
   forwardRef,
   useCallback,
@@ -14,6 +17,7 @@ import {
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
+  buildConcentricOptions,
   buildDagreOptions,
   buildFcoseOptions,
   placeNewNodesNearAnchor,
@@ -33,6 +37,21 @@ import type { RelationshipGraphHandle } from "./RelationshipExplorer";
 
 cytoscape.use(fcose);
 cytoscape.use(dagre);
+
+function tippyFactory(
+  reference: Pick<Element, "getBoundingClientRect">,
+  content: HTMLElement,
+): TippyInstance {
+  const anchor = document.createElement("div");
+  return tippy(anchor, {
+    appendTo: () => document.body,
+    content,
+    getReferenceClientRect: reference.getBoundingClientRect,
+    trigger: "manual",
+  });
+}
+
+cytoscape.use(popper(tippyFactory));
 
 function cssVar(name: string, fallback: string): string {
   if (typeof document === "undefined") {
@@ -93,6 +112,23 @@ function buildGraphStylesheet(): cytoscape.StylesheetJson {
       },
     },
     {
+      selector: "node.role-nist-control",
+      style: {
+        "border-color": selected,
+        "border-width": 5,
+        height: 56,
+        width: 56,
+        "font-size": 14,
+        "font-weight": 700,
+      },
+    },
+    {
+      selector: "node.role-supporting-reference",
+      style: {
+        opacity: 0.46,
+      },
+    },
+    {
       selector:
         "node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match",
       style: {
@@ -129,6 +165,7 @@ type RelationshipGraphProps = {
     label?: string;
     metadata?: { item_id?: string; title?: string };
     compareRole?: import("../lib/graphTheme").CompareRole;
+    graphRole?: string;
   }>;
   edges: Array<{
     id: string;
@@ -148,7 +185,7 @@ type RelationshipGraphProps = {
   clusterMeta?: Map<string, ClusterNodeMeta>;
   onClusterClick?: (clusterKey: string) => void;
   onLayoutRunningChange?: (running: boolean) => void;
-  layoutEngine?: "fcose" | "dagre";
+  layoutEngine?: "fcose" | "dagre" | "concentric";
 };
 
 function nodeShape(node: GraphNode) {
@@ -169,11 +206,13 @@ function buildTopologyElements(
       title: node.label,
       nodeType: node.nodeType,
       isCluster: Boolean(node.isCluster),
+      graphRole: node.graphRole || "",
       shape: nodeShape(node),
     },
     classes: [
       node.isCenter ? "center-node" : "",
       node.isCluster ? "cluster-node" : "",
+      node.graphRole ? `role-${node.graphRole}` : "",
     ]
       .filter(Boolean)
       .join(" "),
@@ -358,6 +397,8 @@ export const RelationshipGraphWithHandle = forwardRef<
       const layoutOptions =
         layoutEngine === "dagre"
           ? buildDagreOptions(reducedMotionRef.current)
+          : layoutEngine === "concentric"
+            ? buildConcentricOptions(reducedMotionRef.current)
           : buildFcoseOptions(mode, reducedMotionRef.current);
       const layout = graph.layout(layoutOptions);
       layoutRef.current = layout;
@@ -434,9 +475,23 @@ export const RelationshipGraphWithHandle = forwardRef<
     });
     graph.on("mouseover", "node", (event) => {
       event.target.addClass("hover-label");
+      const content = document.createElement("div");
+      content.textContent = String(
+        event.target.data("title") || event.target.data("label"),
+      );
+      const tooltip = event.target.popper({
+        content: () => content,
+      }) as TippyInstance;
+      tooltip.show();
+      event.target.scratch("_atlasTooltip", tooltip);
     });
     graph.on("mouseout", "node", (event) => {
       event.target.removeClass("hover-label");
+      const tooltip = event.target.scratch("_atlasTooltip") as
+        | TippyInstance
+        | undefined;
+      tooltip?.destroy();
+      event.target.removeScratch("_atlasTooltip");
     });
     graph.on("zoom", () => {
       const zoom = graph.zoom();
@@ -643,6 +698,11 @@ export const RelationshipGraphWithHandle = forwardRef<
           <button
             className={node.id === selectedNodeId ? "selected" : ""}
             data-graph-shortcut={node.id}
+            data-graph-role={node.graphRole || "other"}
+            data-layout-rank={graphRoleRank(node.graphRole)}
+            data-deemphasized={
+              node.graphRole === "supporting-reference" ? "true" : undefined
+            }
             data-is-cluster={node.isCluster ? "true" : undefined}
             key={node.id}
             onClick={() => {
@@ -668,5 +728,22 @@ export const RelationshipGraphWithHandle = forwardRef<
     </div>
   );
 });
+
+function graphRoleRank(role?: string): number {
+  const ranks: Record<string, number> = {
+    authority: 0,
+    "governance-framework": 1,
+    "control-catalog": 2,
+    "requirement-set": 2,
+    "baseline-overlay-profile": 3,
+    "assessment-scoping": 4,
+    "implementation-standard": 5,
+    "mapping-crosswalk": 6,
+    "threat-defense": 7,
+    "supporting-reference": 8,
+    "nist-control": 0,
+  };
+  return ranks[role || ""] ?? 9;
+}
 
 export default RelationshipGraphWithHandle;

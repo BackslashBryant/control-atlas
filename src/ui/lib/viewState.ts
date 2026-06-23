@@ -35,6 +35,9 @@ export type ViewState =
       nodeType: string;
       includeCandidates: string;
       relationshipSearch: string;
+      showSupportingReferences: string;
+      showDraftOrLegacy: string;
+      showRegistryOnly: string;
     }
   | {
       view: "search";
@@ -136,6 +139,9 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     nodeType: "",
     includeCandidates: "",
     relationshipSearch: "",
+    showSupportingReferences: "",
+    showDraftOrLegacy: "",
+    showRegistryOnly: "",
   };
 }
 
@@ -205,6 +211,9 @@ export function parseViewState(search: string): ViewState {
       nodeType: params.get("type") || params.get("nodeType") || "",
       includeCandidates: params.get("includeCandidates") || "",
       relationshipSearch: params.get("relationshipSearch") || "",
+      showSupportingReferences: params.get("showSupportingReferences") || "",
+      showDraftOrLegacy: params.get("showDraftOrLegacy") || "",
+      showRegistryOnly: params.get("showRegistryOnly") || "",
     };
   }
 
@@ -456,6 +465,13 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "type", state.nodeType);
     setIfValue(params, "includeCandidates", state.includeCandidates);
     setIfValue(params, "relationshipSearch", state.relationshipSearch);
+    setIfValue(
+      params,
+      "showSupportingReferences",
+      state.showSupportingReferences,
+    );
+    setIfValue(params, "showDraftOrLegacy", state.showDraftOrLegacy);
+    setIfValue(params, "showRegistryOnly", state.showRegistryOnly);
   } else if (state.view === "search") {
     setIfValue(params, "view", "explore");
     setIfValue(params, "q", state.query);

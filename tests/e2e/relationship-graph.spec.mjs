@@ -16,7 +16,7 @@ test("atlas map: standalone route with list fallback", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
   await expect(
-    page.getByText(/Explore how controls, baselines, CCIs, STIGs/i),
+    page.getByText(/See the control in context/i),
   ).toBeVisible();
 
   await page.getByRole("tab", { name: "List" }).click();
@@ -34,7 +34,7 @@ test("atlas map: default starter state without selected node", async ({
 
   await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
   await expect(
-    page.getByText(/Search for an item or select a group/i),
+    page.getByText(/Explore the compliance ecosystem/i),
   ).toBeVisible();
 });
 
@@ -118,16 +118,10 @@ test("atlas map: does not re-layout while idle on unrelated app updates", async 
     timeout: 15000,
   });
 
-  const arrangingCountBefore = await page
-    .getByText(/Loading \d+ nodes/i)
-    .count();
-
   await page.waitForTimeout(5500);
 
   await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0);
-  await expect(page.getByText(/Loading \d+ nodes/i)).toHaveCount(
-    arrangingCountBefore,
-  );
+  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached();
 });
 
 test("atlas map: shows arranging status while layout runs", async ({ page }) => {

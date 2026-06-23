@@ -1,0 +1,35 @@
+[
+  { "sourceId": "fips-199", "hierarchyTier": "authority" },
+  {
+    "sourceId": "nist-sp-800-37-r2",
+    "hierarchyTier": "governance-risk-framework"
+  },
+  {
+    "sourceId": "nist-sp-800-53-r5",
+    "hierarchyTier": "control-catalog-requirement-set"
+  },
+  {
+    "sourceId": "nist-sp-800-53b",
+    "hierarchyTier": "baseline-overlay-program-profile"
+  },
+  {
+    "sourceId": "nist-sp-800-53a-r5",
+    "hierarchyTier": "assessment-scoping-procedure"
+  },
+  {
+    "sourceId": "disa-stig-library",
+    "hierarchyTier": "implementation-configuration-standard"
+  },
+  {
+    "sourceId": "disa-cci-list",
+    "hierarchyTier": "control-mapping-crosswalk"
+  },
+  {
+    "sourceId": "mitre-attack-enterprise",
+    "hierarchyTier": "threat-defensive-mapping"
+  },
+  {
+    "sourceId": "nara-cui-registry",
+    "hierarchyTier": "supporting-reference"
+  }
+]

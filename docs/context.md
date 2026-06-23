@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-**Maintenance** — Frontend Full Review remediation and the follow-up Frontend Overhaul correction pass completed June 22, 2026. The correction pass repaired footer view-state navigation, removed unused route metadata, added guided Start Here progression, translated template option labels, consolidated shared Explore primitives, and completed the missing responsive surface styles. Optional next: RC promotion, Dependabot PR review (Nexus).
+**Maintenance** — Map Foundation Source Manifest v4.0 completed June 22, 2026. Atlas Map now starts from a nine-tier compliance source hierarchy, gates optional sources by disposition, centralizes canonical source links, and uses a controlled AC-2 focused model before Cytoscape layout. Optional next: RC promotion, Dependabot PR review (Nexus).
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -29,12 +29,13 @@
 - UI and Brand Correction v2.2: first-run entrance, fCoSE graph, route-aware cached loading, and Explore card/accordion hierarchy
 - Frontend Full Review: mobile search access, named dialogs and complete glossary tabs, Start Here completion safeguards, canonical copied links, template form improvements, WCAG AA text contrast, 44-pixel touch targets, responsive route coverage, secondary-route code splitting, and repaired port status reporting ([`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md))
 - Frontend Overhaul correction pass: view-state footer navigation, three-column responsive footer, hero and detail surface completion, sequential Start Here steps, normalized card hierarchy, translated template labels, shared Explore primitives, tokenized badge colors, and removal of unused `AppRoutes.tsx`
+- Map Foundation Source Manifest v4.0: stable source IDs, canonical links, nine hierarchy tiers, source dispositions and warnings, graph roles/ranks, nine-node dagre starter map, twelve-node AC-2 concentric focus, fCoSE cluster expansion, and Cytoscape Popper/Tippy tooltips
 
 ## Adopted Baseline
 
 - React shell in `src/ui/App.tsx` is the active UI; legacy `src/app/app.mjs` is not mounted
 - Build-time importers and `data/generated/*` bundles are the runtime contract
-- Cytoscape fCoSE graph renderer is lazy-loaded for Atlas Map surfaces; legacy `src/app/app.mjs` is not mounted
+- Cytoscape is lazy-loaded for Atlas Map surfaces: dagre renders hierarchy and chains, concentric renders focused maps, fCoSE renders expanded dense clusters, and Popper/Tippy positions tooltips
 - Control Atlas is the active repo and deployment identity
 
 ## Product Boundary
