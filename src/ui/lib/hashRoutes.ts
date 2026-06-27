@@ -40,11 +40,19 @@ function parseNodeIdFromPath(pathname: string): {
   basePath: string;
   nodeId: string;
 } {
-  const recordMatch = pathname.match(/^\/record\/([^/]+)\/(.+)$/);
+  const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
   if (recordMatch) {
     return {
       basePath: "/record",
       nodeId: `${decodeURIComponent(recordMatch[1])}:${decodeURIComponent(recordMatch[2])}`,
+    };
+  }
+  // Fallback for flat /object/ID without catalog (legacy)
+  const legacyObjectMatch = pathname.match(/^\/object\/(.+)$/);
+  if (legacyObjectMatch) {
+    return {
+      basePath: "/record",
+      nodeId: decodeURIComponent(legacyObjectMatch[1]),
     };
   }
   return { basePath: pathname, nodeId: "" };

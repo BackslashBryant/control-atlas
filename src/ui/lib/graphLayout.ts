@@ -31,10 +31,11 @@ export function resolveLayoutMode(
 
 export function buildDagreOptions(
   reducedMotion: boolean,
+  direction: "LR" | "TB" = "LR",
 ): cytoscape.LayoutOptions {
   return {
     name: "dagre",
-    rankDir: "LR",
+    rankDir: direction,
     nodeSep: 48,
     rankSep: 72,
     fit: false,

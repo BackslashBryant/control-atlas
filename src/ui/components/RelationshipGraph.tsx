@@ -84,7 +84,7 @@ function buildGraphStylesheet(): cytoscape.StylesheetJson {
     },
     {
       selector:
-        "node.center-node, node.cluster-node, node.selected-node, node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match",
+        "node.center-node, node.cluster-node, node.selected-node, node.hover-label, node.zoom-label-search, node.zoom-label-neighbor, node.search-match, node.always-label",
       style: {
         label: "data(label)",
         "font-size": 10,
@@ -126,6 +126,22 @@ function buildGraphStylesheet(): cytoscape.StylesheetJson {
       selector: "node.role-supporting-reference",
       style: {
         opacity: 0.46,
+        height: 16,
+        width: 16,
+      },
+    },
+    {
+      selector: "node.role-authority, node.role-governance-framework",
+      style: {
+        height: 30,
+        width: 30,
+      },
+    },
+    {
+      selector: "node.role-control-catalog, node.role-requirement-set",
+      style: {
+        height: 26,
+        width: 26,
       },
     },
     {
@@ -142,6 +158,23 @@ function buildGraphStylesheet(): cytoscape.StylesheetJson {
       },
     },
     {
+      selector: ":parent",
+      style: {
+        "background-color": bg,
+        "background-opacity": 0.33,
+        "border-color": border,
+        "border-width": 2,
+        "border-style": "dashed",
+        shape: "round-rectangle",
+        label: "data(label)",
+        "text-valign": "top",
+        "text-halign": "center",
+        "font-size": 12,
+        color: text,
+        "text-margin-y": -6,
+      },
+    },
+    {
       selector: "edge",
       style: {
         "curve-style": "bezier",
@@ -150,7 +183,7 @@ function buildGraphStylesheet(): cytoscape.StylesheetJson {
         opacity: 0.72,
         "target-arrow-color": "data(color)",
         "target-arrow-shape": "triangle",
-        width: 1.5,
+        width: 2,
       },
     },
   ] as cytoscape.StylesheetJson;
@@ -186,6 +219,7 @@ type RelationshipGraphProps = {
   onClusterClick?: (clusterKey: string) => void;
   onLayoutRunningChange?: (running: boolean) => void;
   layoutEngine?: "fcose" | "dagre" | "concentric";
+  canvasOverlay?: React.ReactNode;
 };
 
 function nodeShape(node: GraphNode) {
@@ -196,9 +230,17 @@ function nodeShape(node: GraphNode) {
   return "ellipse";
 }
 
+// When a map is small enough, every node label fits without overlapping, so
+// we show them all by default instead of gating labels behind hover/zoom.
+// Above this count the canvas gets too dense and labels are revealed on
+// hover, zoom, or selection instead.
+const ALWAYS_LABEL_MAX_NODES = 28;
+
 function buildTopologyElements(
   graphData: ReturnType<typeof buildGraphData>,
 ): ElementDefinition[] {
+  const showAllLabels = graphData.nodes.length <= ALWAYS_LABEL_MAX_NODES;
+
   const nodeElements = graphData.nodes.map((node) => ({
     data: {
       id: node.id,
@@ -208,11 +250,13 @@ function buildTopologyElements(
       isCluster: Boolean(node.isCluster),
       graphRole: node.graphRole || "",
       shape: nodeShape(node),
+      parent: node.parent,
     },
     classes: [
       node.isCenter ? "center-node" : "",
       node.isCluster ? "cluster-node" : "",
       node.graphRole ? `role-${node.graphRole}` : "",
+      showAllLabels ? "always-label" : "",
     ]
       .filter(Boolean)
       .join(" "),
@@ -274,6 +318,7 @@ export const RelationshipGraphWithHandle = forwardRef<
     onClusterClick,
     onLayoutRunningChange,
     layoutEngine = "fcose",
+    canvasOverlay,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -289,6 +334,9 @@ export const RelationshipGraphWithHandle = forwardRef<
   const reducedMotionRef = useRef(reducedMotion);
   const applyNodeStylesRef = useRef<(graph: Core) => void>(() => {});
   const layoutShowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mobileLayoutRef = useRef(
+    typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches,
+  );
 
   const [zoomLevel, setZoomLevel] = useState(1);
   const [layoutRunning, setLayoutRunning] = useState(false);
@@ -396,7 +444,7 @@ export const RelationshipGraphWithHandle = forwardRef<
 
       const layoutOptions =
         layoutEngine === "dagre"
-          ? buildDagreOptions(reducedMotionRef.current)
+          ? buildDagreOptions(reducedMotionRef.current, mobileLayoutRef.current ? "TB" : "LR")
           : layoutEngine === "concentric"
             ? buildConcentricOptions(reducedMotionRef.current)
           : buildFcoseOptions(mode, reducedMotionRef.current);
@@ -414,6 +462,8 @@ export const RelationshipGraphWithHandle = forwardRef<
         if (preserveViewport && viewport) {
           graph.pan(viewport.pan);
           graph.zoom(viewport.zoom);
+        } else {
+          graph.fit(undefined, 64);
         }
         setLayoutRunningState(false);
         setLiveMessage(
@@ -612,6 +662,26 @@ export const RelationshipGraphWithHandle = forwardRef<
   }, []);
 
   useEffect(() => {
+    if (layoutEngine !== "dagre") return;
+    const mq = window.matchMedia("(max-width: 700px)");
+    mobileLayoutRef.current = mq.matches;
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const handler = (e: MediaQueryListEvent) => {
+      mobileLayoutRef.current = e.matches;
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const graph = graphRef.current;
+        if (graph) runLayout(graph, "full");
+      }, 300);
+    };
+    mq.addEventListener("change", handler);
+    return () => {
+      mq.removeEventListener("change", handler);
+      if (debounceTimer) clearTimeout(debounceTimer);
+    };
+  }, [layoutEngine, runLayout]);
+
+  useEffect(() => {
     if (focusedShortcutIndex >= graphData.nodes.length) {
       setFocusedShortcutIndex(0);
     }
@@ -688,6 +758,7 @@ export const RelationshipGraphWithHandle = forwardRef<
             links…
           </div>
         ) : null}
+        {canvasOverlay}
       </div>
       <div
         aria-label="Map nodes"

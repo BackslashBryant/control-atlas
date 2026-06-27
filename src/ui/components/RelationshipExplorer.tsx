@@ -1,4 +1,11 @@
-import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  IconLink,
+  IconMaximize,
+  IconMinus,
+  IconPlus,
+  IconRefresh,
+} from "@tabler/icons-react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import {
@@ -89,6 +96,7 @@ type RelationshipExplorerProps = {
   showFilters?: boolean;
   compareLegend?: boolean;
   layoutEngine?: "fcose" | "dagre" | "concentric";
+  hideHeading?: boolean;
 };
 
 function FilterSelect(props: {
@@ -148,9 +156,11 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     showFilters = true,
     compareLegend = false,
     layoutEngine = "fcose",
+    hideHeading = false,
   } = props;
 
   const graphRef = useRef<RelationshipGraphHandle>(null);
+  const legendRef = useRef<HTMLDetailsElement>(null);
   const [layoutRunning, setLayoutRunning] = useState(false);
   const [internalSelectedNodeId, setInternalSelectedNodeId] = useState<
     string | null
@@ -172,6 +182,25 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     [],
   );
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (legendRef.current && !legendRef.current.contains(e.target as Node)) {
+        legendRef.current.removeAttribute("open");
+      }
+    }
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        legendRef.current?.removeAttribute("open");
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
 
   const filtered = useRelationshipFilters(runtime, centerNodeId, filters);
   const sourceNeighborhood = staticGraph || filtered.neighborhood;
@@ -257,7 +286,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
       className="relationship-map-panel"
     >
       <div className="relationship-map-intro">
-        <h3 id="relationship-map-heading">{heading}</h3>
+        <h3 className={hideHeading ? "visually-hidden" : undefined} id="relationship-map-heading">{heading}</h3>
         <p id={summaryId}>
           {introCopy ||
             `This map shows connections around ${centerItemId}.`}{" "}
@@ -331,86 +360,6 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
       </div>
       ) : null}
 
-      {mapControls ? (
-        <div aria-label="Map controls" className="relationship-map-controls" role="group">
-          <button
-            className="secondary quiet"
-            disabled={layoutRunning}
-            onClick={() => graphRef.current?.fitToScreen()}
-            type="button"
-          >
-            Fit to screen
-          </button>
-          <button
-            className="secondary quiet"
-            disabled={layoutRunning}
-            onClick={() => graphRef.current?.resetView()}
-            type="button"
-          >
-            Reset view
-          </button>
-          <button
-            className="secondary quiet"
-            disabled={layoutRunning}
-            onClick={() => graphRef.current?.zoomIn()}
-            type="button"
-          >
-            Zoom in
-          </button>
-          <button
-            className="secondary quiet"
-            disabled={layoutRunning}
-            onClick={() => graphRef.current?.zoomOut()}
-            type="button"
-          >
-            Zoom out
-          </button>
-          {selectedHasRecord && onOpenRecord ? (
-            <button
-              className="secondary"
-              onClick={() => onOpenRecord(selectedNode!.id)}
-              type="button"
-            >
-              Open selected record
-            </button>
-          ) : null}
-          {selectedHasRecord && onOpenCompare && selectedNode?.metadata?.item_id ? (
-            <button
-              className="secondary"
-              onClick={() => onOpenCompare(selectedNode.metadata!.item_id!)}
-              type="button"
-            >
-              Compare selected item
-            </button>
-          ) : null}
-          {onCopyMapLink ? (
-            <button className="secondary quiet" onClick={onCopyMapLink} type="button">
-              Copy map link
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-
-      {collapseLabels.length > 0 && clustering.onClusterCollapse ? (
-        <div
-          aria-label="Expanded connection groups"
-          className="cluster-collapse-row"
-          role="group"
-        >
-          {collapseLabels.map(({ clusterKey, label }) => (
-            <button
-              className="secondary quiet"
-              disabled={layoutRunning}
-              key={clusterKey}
-              onClick={() => clustering.onClusterCollapse?.(clusterKey)}
-              type="button"
-            >
-              Collapse {label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-
       <div
         aria-label="Relationship views"
         className="relationship-view-tabs"
@@ -436,50 +385,25 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         </button>
       </div>
 
-      <div
-        className="relationship-map-legend"
-        role="list"
-        aria-label="Map legend"
-      >
-        {compareLegend
-          ? COMPARE_ROLE_LEGEND.map((entry) => (
-              <span className="legend-item" key={entry.key} role="listitem">
-                <span
-                  aria-hidden="true"
-                  className="legend-swatch"
-                  style={{ backgroundColor: entry.color }}
-                />
-                {entry.label}
-              </span>
-            ))
-          : ITEM_TYPE_LEGEND.map((entry) => (
-              <span className="legend-item" key={entry.key} role="listitem">
-                <span
-                  aria-hidden="true"
-                  className={`legend-shape legend-shape-${entry.shape}`}
-                />
-                {entry.label}
-              </span>
-            ))}
-        {PROVENANCE_LEGEND.map((entry) => (
-          <span className="legend-item" key={entry.key} role="listitem">
-            <span
-              aria-hidden="true"
-              className="legend-swatch"
-              style={{
-                backgroundColor: provenanceCssVar(entry.key),
-                borderStyle:
-                  entry.pattern === "dashed"
-                    ? "dashed"
-                    : entry.pattern === "dotted"
-                      ? "dotted"
-                      : "solid",
-              }}
-            />
-            <ProvenanceTerm kind="provenance" label={entry.label} value={entry.key} />
-          </span>
-        ))}
-      </div>
+      {collapseLabels.length > 0 && clustering.onClusterCollapse ? (
+        <div
+          aria-label="Expanded connection groups"
+          className="cluster-collapse-row"
+          role="group"
+        >
+          {collapseLabels.map(({ clusterKey, label }) => (
+            <button
+              className="secondary quiet"
+              disabled={layoutRunning}
+              key={clusterKey}
+              onClick={() => clustering.onClusterCollapse?.(clusterKey)}
+              type="button"
+            >
+              Collapse {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {relationshipView === "map" ? (
         <div
@@ -487,30 +411,138 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           className="relationship-map-body"
           role="tabpanel"
         >
-          <Suspense
-            fallback={
-              <div aria-live="polite" className="relationship-map-loading" role="status">
-                <div aria-hidden="true" className="skeleton-map-canvas" />
-                Loading {neighborhood.nodes.length} nodes /{" "}
-                {neighborhood.edges.length} edges…
-              </div>
-            }
-          >
-            <RelationshipGraphWithHandle
-              centerNodeId={centerNodeId}
-              clusterMeta={clustering.clusterMeta}
-              edges={neighborhood.edges}
-              layoutEngine={layoutEngine}
-              nodes={neighborhood.nodes}
-              onClusterClick={clustering.onClusterExpand}
-              onLayoutRunningChange={setLayoutRunning}
-              onSelectNode={setSelectedNodeId}
-              reducedMotion={reducedMotion}
-              ref={graphRef}
-              searchHighlightIds={searchHighlightIds}
-              selectedNodeId={selectedNodeId}
-            />
-          </Suspense>
+          <div className="ca-canvas-container">
+            <Suspense
+              fallback={
+                <div aria-live="polite" className="relationship-map-loading" role="status">
+                  <div aria-hidden="true" className="skeleton-map-canvas" />
+                  Loading {neighborhood.nodes.length} nodes /{" "}
+                  {neighborhood.edges.length} edges…
+                </div>
+              }
+            >
+              <RelationshipGraphWithHandle
+                canvasOverlay={
+                  mapControls ? (
+                    <div aria-label="Map controls" className="ca-map-toolbar" role="group">
+                      <button
+                        aria-label="Fit to screen"
+                        className="ca-map-toolbar-btn"
+                        disabled={layoutRunning}
+                        onClick={() => graphRef.current?.fitToScreen()}
+                        title="Fit to screen"
+                        type="button"
+                      >
+                        <IconMaximize aria-hidden="true" size={16} stroke={1.8} />
+                      </button>
+                      <button
+                        aria-label="Reset view"
+                        className="ca-map-toolbar-btn"
+                        disabled={layoutRunning}
+                        onClick={() => graphRef.current?.resetView()}
+                        title="Reset view"
+                        type="button"
+                      >
+                        <IconRefresh aria-hidden="true" size={16} stroke={1.8} />
+                      </button>
+                      <button
+                        aria-label="Zoom in"
+                        className="ca-map-toolbar-btn"
+                        disabled={layoutRunning}
+                        onClick={() => graphRef.current?.zoomIn()}
+                        title="Zoom in"
+                        type="button"
+                      >
+                        <IconPlus aria-hidden="true" size={16} stroke={1.8} />
+                      </button>
+                      <button
+                        aria-label="Zoom out"
+                        className="ca-map-toolbar-btn"
+                        disabled={layoutRunning}
+                        onClick={() => graphRef.current?.zoomOut()}
+                        title="Zoom out"
+                        type="button"
+                      >
+                        <IconMinus aria-hidden="true" size={16} stroke={1.8} />
+                      </button>
+                      {onCopyMapLink ? (
+                        <button
+                          aria-label="Copy map link"
+                          className="ca-map-toolbar-btn"
+                          onClick={onCopyMapLink}
+                          title="Copy map link"
+                          type="button"
+                        >
+                          <IconLink aria-hidden="true" size={16} stroke={1.8} />
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null
+                }
+                centerNodeId={centerNodeId}
+                clusterMeta={clustering.clusterMeta}
+                edges={neighborhood.edges}
+                layoutEngine={layoutEngine}
+                nodes={neighborhood.nodes}
+                onClusterClick={clustering.onClusterExpand}
+                onLayoutRunningChange={setLayoutRunning}
+                onSelectNode={setSelectedNodeId}
+                reducedMotion={reducedMotion}
+                ref={graphRef}
+                searchHighlightIds={searchHighlightIds}
+                selectedNodeId={selectedNodeId}
+              />
+            </Suspense>
+
+            {mapControls ? (
+              <details className="ca-legend-popover" ref={legendRef}>
+                <summary aria-label="Map legend" className="ca-legend-trigger">
+                  Legend ▾
+                </summary>
+                <div aria-label="Map legend" className="ca-legend-panel" role="list">
+                  {compareLegend
+                    ? COMPARE_ROLE_LEGEND.map((entry) => (
+                        <span className="legend-item" key={entry.key} role="listitem">
+                          <span
+                            aria-hidden="true"
+                            className="legend-swatch"
+                            style={{ backgroundColor: entry.color }}
+                          />
+                          {entry.label}
+                        </span>
+                      ))
+                    : ITEM_TYPE_LEGEND.map((entry) => (
+                        <span className="legend-item" key={entry.key} role="listitem">
+                          <span
+                            aria-hidden="true"
+                            className={`legend-shape legend-shape-${entry.shape}`}
+                          />
+                          {entry.label}
+                        </span>
+                      ))}
+                  {PROVENANCE_LEGEND.map((entry) => (
+                    <span className="legend-item" key={entry.key} role="listitem">
+                      <span
+                        aria-hidden="true"
+                        className="legend-swatch"
+                        style={{
+                          backgroundColor: provenanceCssVar(entry.key),
+                          borderStyle:
+                            entry.pattern === "dashed"
+                              ? "dashed"
+                              : entry.pattern === "dotted"
+                                ? "dotted"
+                                : "solid",
+                        }}
+                      />
+                      <ProvenanceTerm kind="provenance" label={entry.label} value={entry.key} />
+                    </span>
+                  ))}
+                </div>
+              </details>
+            ) : null}
+          </div>
+
           {!mapControls && selectedNode ? (
             <aside className="relationship-map-selection">
               <p className="eyebrow">Selected item</p>
