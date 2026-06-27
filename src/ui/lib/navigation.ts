@@ -13,7 +13,7 @@ import type { ViewState } from "./viewState";
 
 export const PRIMARY_NAV_ITEMS = [
   { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
-  { label: "Atlas Map", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+  { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
   { label: "Explore", view: "search", path: "/explore", icon: IconSearch },
   { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
 ] as const;

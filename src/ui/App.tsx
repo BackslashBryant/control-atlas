@@ -15,6 +15,7 @@ import {
 import { DetailConnectionsSkeleton, LibrarySkeleton } from "./components/LibrarySkeleton";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
+import { AtlasPullTab } from "./components/AtlasPullTab";
 import { SearchOverlay } from "./components/SearchOverlay";
 import {
   BrandEntranceOverlay,
@@ -86,6 +87,16 @@ const TemplatesPage = lazy(() =>
     default: module.TemplatesPage,
   })),
 );
+
+function deriveAtlasContext(state: ViewState): string | null {
+  if (state.view === "library-detail") {
+    return state.node || null;
+  }
+  if (state.view === "matrix") {
+    return state.items ? state.items.split(",")[0] : null;
+  }
+  return null;
+}
 
 export function App() {
   const location = useLocation();
@@ -300,6 +311,13 @@ export function App() {
           )}
         </section>
       </main>
+
+      <AtlasPullTab
+        bundle={bundle}
+        contextNodeId={deriveAtlasContext(viewState)}
+        onNavigate={navigate}
+        view={viewState.view}
+      />
 
       <SiteFooter onNavigate={navigate} />
 

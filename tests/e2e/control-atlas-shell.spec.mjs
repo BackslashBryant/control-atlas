@@ -42,7 +42,7 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   );
   expect(navLabels).toEqual([
     'Start',
-    'Atlas Map',
+    'Atlas',
     'Explore',
     'Compare',
     'More',
@@ -255,7 +255,7 @@ test('legacy view query redirects to hash route on boot', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/atlas-map/);
-  await expect(page.locator("main").getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
+  await expect(page.locator("main").getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
 });
 
 test('hash deep route survives refresh on built site', async ({ page }) => {

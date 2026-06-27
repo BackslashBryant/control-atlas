@@ -90,7 +90,7 @@ export function HomePage(props: HomePageProps) {
             onClick={() => onNavigate("atlas-map")}
             type="button"
           >
-            Atlas Map →
+            Atlas →
           </button>
         </div>
       </section>
@@ -104,7 +104,7 @@ export function HomePage(props: HomePageProps) {
           body="See how controls, baselines, CCIs, STIGs, templates, sources, and playbooks connect."
           icon={<IconMap aria-hidden="true" size={20} stroke={1.8} />}
           onClick={() => onNavigate("atlas-map")}
-          title="Atlas Map"
+          title="Atlas"
         />
         {HOME_CARDS.map((card) => {
           const Icon = card.icon;

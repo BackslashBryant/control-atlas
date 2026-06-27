@@ -14,7 +14,7 @@ test("atlas map: standalone route with list fallback", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(
     page.getByText(/See the control in context/i),
   ).toBeVisible();
@@ -32,7 +32,7 @@ test("atlas map: default starter state without selected node", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(
     page.getByText(/Explore the compliance ecosystem/i),
   ).toBeVisible();
@@ -143,5 +143,5 @@ test("relationship graph: open in atlas map from detail header", async ({
 
   await page.getByRole("button", { name: "Open in Atlas Map" }).first().click();
   await expect(page).toHaveURL(/atlas-map/);
-  await expect(page.getByRole("heading", { name: "Atlas Map", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
 });
