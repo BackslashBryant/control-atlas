@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   RelationshipExplorer,
@@ -69,6 +69,55 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   return <RuntimeAtlasMapPage {...props} />;
 }
 
+// Plain-language descriptions for each of the 9 source categories.
+const CATEGORY_DESCRIPTIONS: Record<string, { label: string; tagline: string; detail: string }> = {
+  "authority": {
+    label: "Authority",
+    tagline: "Laws and directives that mandate cybersecurity requirements.",
+    detail: "FISMA, EO 14028, and OMB memos set the legal floor. Every other layer derives authority from here.",
+  },
+  "governance-risk-framework": {
+    label: "Governance / Risk Framework",
+    tagline: "Processes that structure how agencies manage risk end-to-end.",
+    detail: "RMF and NIST CSF translate law into repeatable steps — categorize, select, implement, assess, authorize, monitor.",
+  },
+  "control-catalog-requirement-set": {
+    label: "Control Catalog / Requirement Set",
+    tagline: "The numbered security requirements you will implement.",
+    detail: "NIST 800-53, CMMC, and similar catalogs list the specific controls. This is the menu you pick from.",
+  },
+  "baseline-overlay-program-profile": {
+    label: "Baseline / Overlay / Program Profile",
+    tagline: "Pre-selected control sets for specific contexts.",
+    detail: "FedRAMP High, DoD IL5, and CMMC Level 2 profiles tell you which controls from the catalog apply to your system.",
+  },
+  "assessment-scoping-procedure": {
+    label: "Assessment / Scoping Procedure",
+    tagline: "How you prove your controls are working.",
+    detail: "NIST 800-53A and DISA STIGs define what an assessor will check. They turn 'implement this' into 'verify this.'",
+  },
+  "implementation-configuration-standard": {
+    label: "Implementation / Configuration Standard",
+    tagline: "Step-by-step technical guidance on what to configure.",
+    detail: "CIS Benchmarks, DISA SRGs, and SCAP content tell you exactly which settings to change and how.",
+  },
+  "control-mapping-crosswalk": {
+    label: "Control Mapping / Crosswalk",
+    tagline: "Translation tables between frameworks.",
+    detail: "NIST-to-CCIs, CSF-to-800-53, and similar crosswalks show which controls in one framework equal controls in another.",
+  },
+  "threat-defensive-mapping": {
+    label: "Threat / Defensive Mapping",
+    tagline: "Links controls to attacker techniques and defensive countermeasures.",
+    detail: "MITRE ATT&CK and D3FEND connect compliance controls to real-world threats so you know what you are defending against.",
+  },
+  "supporting-reference": {
+    label: "Supporting Reference",
+    tagline: "Context resources that inform but do not drive authoritative mappings.",
+    detail: "CISA KEV, SCAP content, and similar references add useful background. They are not authoritative sources for your ATO.",
+  },
+};
+
 function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const { state, onNavigate } = props;
   const focused = Boolean(state.node.trim());
@@ -82,6 +131,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const [foundationExpandedClusters, setFoundationExpandedClusters] = useState<
     Set<string>
   >(() => new Set());
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     setVisibilityFilters(routeVisibilityFilters);
@@ -114,11 +164,17 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
 
   useEffect(() => {
     setSelectedNodeId(model.centerNodeId);
+    setHasInteracted(false);
   }, [model.centerNodeId]);
 
   useEffect(() => {
     setFoundationExpandedClusters(new Set());
   }, [state.node]);
+
+  const handleSelectNode = useCallback((nodeId: string) => {
+    setSelectedNodeId(nodeId);
+    setHasInteracted(true);
+  }, []);
 
   const foundationRuntime = useMemo(
     () => ({
@@ -171,58 +227,48 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   return (
     <section className="panel atlas-map-page">
       <PageHeader
+        eyebrow="ATLAS MAP"
         summary={
           focused
-            ? "See the control in context without losing the source hierarchy behind it."
-            : "The map starts with source categories so you can understand where requirements come from before drilling into controls, baselines, assessments, implementation guidance, mappings, and supporting references."
+            ? "See the control in context and explore its connections to baselines, assessments, implementation standards, and mappings."
+            : "Explore the compliance ecosystem."
         }
         title="Atlas Map"
       />
 
       {!focused ? (
         <>
-          <div className="atlas-foundation-intro">
-            <h2>Explore the compliance ecosystem.</h2>
-            <p>
-              The map starts with source categories so you can understand where
-              requirements come from before drilling into controls, baselines,
-              assessments, implementation guidance, mappings, and supporting
-              references.
-            </p>
-          </div>
           <div
             aria-label="Source visibility filters"
-            className="atlas-source-filters"
+            className="ca-source-filter-group atlas-source-filters"
             role="group"
           >
-            <label>
+            <span className="atlas-source-filters-label">Show:</span>
+            <label className="ca-source-filter-label">
               <input
                 checked={visibilityFilters.showSupportingReferences}
-                onChange={(event) =>
-                  patchVisibility(
-                    "showSupportingReferences",
-                    event.target.checked,
-                  )
+                onChange={(e) =>
+                  patchVisibility("showSupportingReferences", e.target.checked)
                 }
                 type="checkbox"
               />
               Show supporting references
             </label>
-            <label>
+            <label className="ca-source-filter-label">
               <input
                 checked={visibilityFilters.showDraftOrLegacy}
-                onChange={(event) =>
-                  patchVisibility("showDraftOrLegacy", event.target.checked)
+                onChange={(e) =>
+                  patchVisibility("showDraftOrLegacy", e.target.checked)
                 }
                 type="checkbox"
               />
               Show draft / legacy sources
             </label>
-            <label>
+            <label className="ca-source-filter-label">
               <input
                 checked={visibilityFilters.showRegistryOnly}
-                onChange={(event) =>
-                  patchVisibility("showRegistryOnly", event.target.checked)
+                onChange={(e) =>
+                  patchVisibility("showRegistryOnly", e.target.checked)
                 }
                 type="checkbox"
               />
@@ -259,10 +305,11 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
             }
             expandedClusters={foundationExpandedClusters}
             heading={focused ? "AC-2 focused map" : "Source hierarchy"}
+            hideHeading
             introCopy={
               focused
                 ? "AC-2 stays central while dense implementation and mapping details remain clustered."
-                : "Authority flows left-to-right through governance, controls, baselines, assessment, implementation, mappings, threat context, and supporting references."
+                : "Each node is a category of compliance source. Select one to see what it contributes and where to go next."
             }
             layoutEngine={model.layoutEngine}
             mapControls
@@ -282,8 +329,8 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
                 return next;
               })
             }
-            onOpenNode={setSelectedNodeId}
-            onSelectNode={setSelectedNodeId}
+            onOpenNode={handleSelectNode}
+            onSelectNode={handleSelectNode}
             onViewChange={(view) =>
               onNavigate("atlas-map", { ...state, relationshipView: view })
             }
@@ -304,6 +351,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
         </div>
         <FoundationSidePanel
           focused={focused}
+          hasInteracted={hasInteracted}
           onNavigate={onNavigate}
           selectedNodeId={selectedNodeId}
         />
@@ -314,6 +362,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
 
 function FoundationSidePanel(props: {
   focused: boolean;
+  hasInteracted: boolean;
   selectedNodeId: string;
   onNavigate: AtlasMapPageProps["onNavigate"];
 }) {
@@ -339,66 +388,112 @@ function FoundationSidePanel(props: {
     );
   }
 
-  const isControlCatalog =
-    props.selectedNodeId === "hierarchy:control-catalog-requirement-set";
-  if (!isControlCatalog) {
-    const label =
-      props.selectedNodeId.replace("hierarchy:", "").replaceAll("-", " ") ||
-      "Source category";
+  // Before the user clicks, show the full beginner explainer for all 9 categories.
+  if (!props.hasInteracted) {
+    return (
+      <aside aria-label="How federal compliance fits together" className="atlas-selected-panel">
+        <div className="ca-category-explainer">
+          <p className="ca-category-explainer-title">How federal compliance fits together</p>
+          {Object.values(CATEGORY_DESCRIPTIONS).map((cat) => (
+            <div className="ca-category-item" key={cat.label}>
+              <span className="ca-category-item-name">{cat.label}</span>
+              <span className="ca-category-item-desc">{cat.tagline}</span>
+            </div>
+          ))}
+          <div className="ca-start-here-cta">
+            <button
+              className="secondary"
+              onClick={() => props.onNavigate("start-here")}
+              type="button"
+            >
+              New here? Start with the guided path →
+            </button>
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  const tierKey = props.selectedNodeId.replace("hierarchy:", "");
+  const category = CATEGORY_DESCRIPTIONS[tierKey];
+
+  if (!category) {
+    // Fallback for unexpected node IDs
+    const label = tierKey.replaceAll("-", " ") || "Source category";
     return (
       <aside aria-label="Selected item" className="atlas-selected-panel">
         <h2 className="capitalize">{label}</h2>
+        <p>Select a source category to understand what it contributes and where to go next.</p>
+      </aside>
+    );
+  }
+
+  const isControlCatalog = tierKey === "control-catalog-requirement-set";
+
+  if (isControlCatalog) {
+    return (
+      <aside aria-label="Selected item" className="atlas-selected-panel">
+        <h2>Control Catalog / Requirement Set</h2>
         <p>
-          Select a source category to understand what it contributes and what
-          to explore next.
+          Primary requirement sources that define controls or security
+          requirements.
         </p>
+        <p>Examples:</p>
+        <ul>
+          <li>NIST SP 800-53 Rev. 5</li>
+          <li>NIST SP 800-171 Rev. 3</li>
+          <li>NIST SP 800-172 Rev. 3</li>
+          <li>NIST SSDF</li>
+        </ul>
+        <div className="card-actions">
+          <button
+            className="primary"
+            onClick={() => props.onNavigate("sources")}
+            type="button"
+          >
+            Explore sources
+          </button>
+          <button
+            className="secondary"
+            onClick={() =>
+              props.onNavigate("atlas-map", { relationshipView: "list" })
+            }
+            type="button"
+          >
+            View as list
+          </button>
+          <button
+            className="secondary"
+            onClick={() =>
+              props.onNavigate("search", {
+                objectType: "control",
+                query: "",
+                filter: "",
+              })
+            }
+            type="button"
+          >
+            Open related controls
+          </button>
+        </div>
       </aside>
     );
   }
 
   return (
     <aside aria-label="Selected item" className="atlas-selected-panel">
-      <h2>Control Catalog / Requirement Set</h2>
-      <p>
-        Primary requirement sources that define controls or security
-        requirements.
+      <h2>{category.label}</h2>
+      <p>{category.tagline}</p>
+      <p className="muted" style={{ fontSize: "var(--ca-text-sm)", marginTop: "var(--ca-space-2)" }}>
+        {category.detail}
       </p>
-      <p>Examples:</p>
-      <ul>
-        <li>NIST SP 800-53 Rev. 5</li>
-        <li>NIST SP 800-171 Rev. 3</li>
-        <li>NIST SP 800-172 Rev. 3</li>
-        <li>NIST SSDF</li>
-      </ul>
-      <div className="card-actions">
-        <button
-          className="primary"
-          onClick={() => props.onNavigate("sources")}
-          type="button"
-        >
-          Explore sources
-        </button>
+      <div className="ca-start-here-cta">
         <button
           className="secondary"
-          onClick={() =>
-            props.onNavigate("atlas-map", { relationshipView: "list" })
-          }
+          onClick={() => props.onNavigate("start-here")}
           type="button"
         >
-          View as list
-        </button>
-        <button
-          className="secondary"
-          onClick={() =>
-            props.onNavigate("search", {
-              objectType: "control",
-              query: "",
-              filter: "",
-            })
-          }
-          type="button"
-        >
-          Open related controls
+          New here? Start with the guided path →
         </button>
       </div>
     </aside>
@@ -490,8 +585,9 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
     return (
       <section className="panel atlas-map-page">
         <PageHeader
+          eyebrow="ATLAS MAP"
           summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-          title="Atlas Map"
+          title="No connections found"
         />
         <div className="notice">
           <h2>No connections found for this item.</h2>
@@ -559,8 +655,9 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
   return (
     <section className="panel atlas-map-page">
       <PageHeader
+        eyebrow="ATLAS MAP"
         summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-        title="Atlas Map"
+        title={isStarter ? "Atlas Map" : center.centerItemId}
       />
 
       {isStarter ? (
@@ -716,13 +813,15 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
 function PageHeader(props: {
   title: string;
   summary: string;
+  eyebrow?: string;
 }) {
   return (
     <header className="page-header">
-      <div>
-        <h1>{props.title}</h1>
-        <p>{props.summary}</p>
-      </div>
+      {props.eyebrow ? (
+        <p className="eyebrow">{props.eyebrow}</p>
+      ) : null}
+      <h1>{props.title}</h1>
+      <p className="page-summary">{props.summary}</p>
     </header>
   );
 }

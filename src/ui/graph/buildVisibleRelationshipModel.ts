@@ -82,6 +82,7 @@ export function buildSourceHierarchyModel(
       label: source.displayName,
       node_type: "source",
       graphRole: sourceToGraphRole(source),
+      parent: `hierarchy:${source.hierarchyTier}`,
       metadata: {
         item_id: source.displayName,
         title: source.displayName,
@@ -94,23 +95,13 @@ export function buildSourceHierarchyModel(
               : DEFAULT_MAP_WARNINGS.registryOnly,
       },
     });
-    edges.push({
-      id: `source:${source.sourceId}->${source.hierarchyTier}`,
-      source_node_id: `hierarchy:${source.hierarchyTier}`,
-      target_node_id: `source:${source.sourceId}`,
-      relationship_type: "contains_source",
-      provenance_class:
-        source.sourceBasis === "inferred" ? "inferred" : "federal_referenced",
-      publication_status:
-        source.disposition === "draft-gated" ? "candidate" : "published",
-      confidence: source.isAuthoritative ? "high" : "medium",
-      plain_language_rationale: source.defaultMapReason,
-    });
+    // We remove the explicit edge because the compound node relationship naturally shows the hierarchy
+    // without cluttering the graph with lines.
   }
 
   return {
     centerNodeId: "hierarchy:control-catalog-requirement-set",
-    layoutEngine: "dagre",
+    layoutEngine: optionalSources.length > 0 ? "fcose" : "dagre",
     nodes,
     edges,
     stats: { total: edges.length, filtered: edges.length },
