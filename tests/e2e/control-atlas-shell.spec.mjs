@@ -265,10 +265,16 @@ test('hash deep route survives refresh on built site', async ({ page }) => {
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
   await page.reload();
-  await dismissOnboarding(page);
+  // Mirror the pre-reload order: wait for the app to finish booting (the
+  // explore route requires the full graph chunk, which is slow to reload on a
+  // cold CI runner) before interacting or asserting. Doing this in the reverse
+  // order races the cold load and intermittently blocks the Pages deploy.
   await waitForAppReady(page);
+  await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/explore/);
-  await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Explore' })).toBeVisible({
+    timeout: 15000,
+  });
 });
 
 test('footer about link opens the trust page with full disclaimer', async ({ page }) => {
