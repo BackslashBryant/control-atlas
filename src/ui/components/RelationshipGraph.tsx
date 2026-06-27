@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
@@ -219,7 +220,7 @@ type RelationshipGraphProps = {
   onClusterClick?: (clusterKey: string) => void;
   onLayoutRunningChange?: (running: boolean) => void;
   layoutEngine?: "fcose" | "dagre" | "concentric";
-  canvasOverlay?: React.ReactNode;
+  canvasOverlay?: ReactNode;
 };
 
 function nodeShape(node: GraphNode) {
