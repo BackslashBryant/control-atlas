@@ -31,9 +31,8 @@ test("AC-2 opens a controlled focused map with clustered context", async ({
     }),
   ).toBeVisible();
 
-  await expect(page.getByRole("heading", { name: "AC-2", level: 2 })).toBeVisible();
-  await expect(page.getByText("Account Management", { exact: true })).toBeVisible();
-  await expect(page.getByText("Type: NIST Control", { exact: true })).toBeVisible();
-  await expect(page.getByText("Catalog: SP 800-53 Rev. 5", { exact: true })).toBeVisible();
-  await expect(page.getByText("Family: Access Control", { exact: true })).toBeVisible();
+  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
+  await expect(matrix).toBeVisible();
+  await expect(matrix).toContainText("AC-2");
+  await expect(matrix).toContainText("SP 800-53 Rev. 5");
 });

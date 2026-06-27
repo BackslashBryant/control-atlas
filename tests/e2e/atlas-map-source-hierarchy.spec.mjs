@@ -79,11 +79,12 @@ test("Atlas Map search opens a focused control map from the default route", asyn
   await page.getByRole("button", { name: "Open map" }).click();
 
   await expect(page).toHaveURL(/node=(AC-2|nist-800-53%3AAC-2|nist-800-53:AC-2)/);
-  await expect(page.getByRole("heading", { name: "AC-2", level: 2 })).toBeVisible();
-  await expect(page.getByText("Account Management", { exact: true })).toBeVisible();
+  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
+  await expect(matrix).toBeVisible();
+  await expect(matrix).toContainText("AC-2");
 });
 
-test("selecting the control catalog category shows translation-first guidance", async ({
+test("selecting a source category links the graph node to the coverage matrix", async ({
   page,
 }) => {
   await page.goto("/#/atlas-map");
@@ -97,18 +98,8 @@ test("selecting the control catalog category shows translation-first guidance", 
     })
     .click();
 
-  await expect(
-    page.getByRole("heading", {
-      name: "Control Catalog / Requirement Set",
-      level: 2,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByText(
-      "Primary requirement sources that define controls or security requirements.",
-    ),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Explore sources" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "View as list" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Open related controls" })).toBeVisible();
+  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
+  await expect(matrix).toBeVisible();
+  const selectedRow = matrix.locator('tbody tr[aria-selected="true"]');
+  await expect(selectedRow).toContainText("Control Catalog / Requirement Set");
 });

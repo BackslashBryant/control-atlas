@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
 
 import {
@@ -9,6 +9,8 @@ import {
 } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+
+const BRAND_WORDS = ["Comply", "Map", "Navigate", "Audit"];
 
 type TopNavProps = {
   bundle: RuntimeBundle | null;
@@ -39,6 +41,29 @@ export function TopNav(props: TopNavProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const MoreIcon = MORE_NAV_ITEM.icon;
 
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [wordIdx, setWordIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    let swapTimer: number | undefined;
+    const interval = window.setInterval(() => {
+      setFading(true);
+      swapTimer = window.setTimeout(() => {
+        setWordIdx((i) => (i + 1) % BRAND_WORDS.length);
+        setFading(false);
+      }, 200);
+    }, 2500);
+    return () => {
+      window.clearInterval(interval);
+      if (swapTimer !== undefined) window.clearTimeout(swapTimer);
+    };
+  }, [prefersReducedMotion]);
+  const rotatingWord = BRAND_WORDS[wordIdx];
+
   function navigateFromMenu(view: ViewState["view"]) {
     setMoreOpen(false);
     onNavigate(view);
@@ -51,17 +76,23 @@ export function TopNav(props: TopNavProps) {
       hidden={introVisible}
     >
       <button
+        aria-label="Control Atlas — home"
         className="brand"
         onClick={() => onNavigate("home")}
         type="button"
       >
-        <span className="brand-mark" aria-hidden="true">
-          CA
+        <span className="brand-kbd" aria-hidden="true">
+          <span className="brand-key">Ctrl</span>
+          <span className="brand-plus">+</span>
+          <span className="brand-key">Alt</span>
+          <span className="brand-plus">+</span>
+          <span className="brand-key brand-key--active">
+            <span className={`brand-key-word${fading ? " fading" : ""}`}>
+              {rotatingWord}
+            </span>
+          </span>
         </span>
-        <span>
-          <strong>Control Atlas</strong>
-          <small>Ctrl+Alt+Comply</small>
-        </span>
+        <span className="brand-sub">Control Atlas</span>
       </button>
       <nav aria-label="Primary navigation" className="primary-nav">
         {PRIMARY_NAV_ITEMS.map((item) => {
@@ -71,6 +102,7 @@ export function TopNav(props: TopNavProps) {
             <button
               aria-current={active ? "page" : undefined}
               className={active ? "active nav-active" : ""}
+              data-atlas={item.view === "atlas-map" ? "" : undefined}
               key={item.label}
               onClick={() => onNavigate(item.view)}
               type="button"
