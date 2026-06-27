@@ -1,4 +1,4 @@
-import { PRIMARY_NAV_ITEMS } from "../lib/navigation";
+import { ALL_NAV_ITEMS } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 
 export function SiteFooter(props: {
@@ -17,7 +17,7 @@ export function SiteFooter(props: {
         <div className="site-footer-nav">
           <strong>Navigate</strong>
           <ul className="site-footer-links">
-            {PRIMARY_NAV_ITEMS.map((item) => (
+            {ALL_NAV_ITEMS.map((item) => (
               <li key={item.view}>
                 <button
                   className="footer-nav-link"

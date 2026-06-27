@@ -73,8 +73,8 @@ test('architecture and inventory docs reflect the adopted Phase 0 baseline', () 
   const architecture = readFileSync('docs/architecture/ARCHITECTURE.md', 'utf8');
   assert.match(architecture, /Build-Time Importers/);
   assert.match(architecture, /Client-Side Search \/ Template Generation \/ Export/);
-  assert.match(architecture, /D3 graph engine is reused for Phase 0/i);
-  assert.match(architecture, /Cytoscape\.js may be evaluated later/i);
+  assert.match(architecture, /React Flow \+ ELK/i);
+  assert.match(architecture, /bounded relationship diagrams/i);
   assert.match(architecture, /MiniSearch/i);
   assert.match(architecture, /Zod \+ JSON Schema/i);
   assert.match(architecture, /JSON\/JSONL runtime bundles and YAML curated registry/i);

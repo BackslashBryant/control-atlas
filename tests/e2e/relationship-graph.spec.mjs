@@ -111,7 +111,7 @@ test("atlas map: does not re-layout while idle on unrelated app updates", async 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached({
+  await expect(page.getByText(/Diagram ready:|Diagram loaded:/i)).toBeAttached({
     timeout: 15000,
   });
   await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0, {
@@ -121,7 +121,7 @@ test("atlas map: does not re-layout while idle on unrelated app updates", async 
   await page.waitForTimeout(5500);
 
   await expect(page.locator(".relationship-map-layout-overlay")).toHaveCount(0);
-  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached();
+  await expect(page.getByText(/Diagram ready:|Diagram loaded:/i)).toBeAttached();
 });
 
 test("atlas map: shows arranging status while layout runs", async ({ page }) => {
@@ -129,7 +129,7 @@ test("atlas map: shows arranging status while layout runs", async ({ page }) => 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByText(/Map ready:|Map loaded:/i)).toBeAttached({
+  await expect(page.getByText(/Diagram ready:|Diagram loaded:/i)).toBeAttached({
     timeout: 15000,
   });
 });

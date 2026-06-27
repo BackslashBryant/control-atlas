@@ -67,3 +67,14 @@ Rationale:
 - `cytoscape-popper` + `tippy.js` provides tooltip support without custom paint loops.
 
 The D3-force physics path from ADR 0010/0011 is closed. Do not re-introduce `react-force-graph-2d` or raw `d3-force` for the Atlas Map.
+
+---
+
+## Superseded 2026-06 - Now React Flow + ELK.js
+
+The Cytoscape migration is now superseded. Control Atlas needs bounded, guided relationship diagrams rather than an open-ended graph/network analysis surface, so the app now uses **React Flow + ELK.js** for the interactive map. React Flow owns the node-based UI, selection model, minimap, pan, and zoom behavior. ELK.js owns automatic layout for hierarchy, focus, and expanded relationship modes.
+
+Current direction:
+- Keep tables, search, filters, and curated pathways as the main user journey.
+- Use diagrams only for bounded relationship views, such as a focused control, a selected comparison path, or a selected Atlas Map slice.
+- Do not re-introduce Cytoscape, fCoSE, dagre, raw D3-force, or a single giant graph canvas for the main product experience.

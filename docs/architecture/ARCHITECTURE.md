@@ -69,8 +69,8 @@ Blocked relationships remain graph-health findings and never become displayable 
 
 - `src/` is the source-of-truth application tree and `tools/build-static-site.mjs` stages the deployable site into `dist/site`.
 - React + Vite render the translation-first UI while existing runtime/data contracts remain reusable.
-- Existing D3 graph engine is reused for Phase 0 artifacts and later roadmap work.
-- Cytoscape.js may be evaluated later if graph complexity demands it, but no graph-library migration is part of this pass.
+- React Flow + ELK render bounded relationship diagrams for source hierarchy, focused controls, and selected comparison slices.
+- Tables, search, filters, and detail pages remain the primary browsing model; the graph is supporting context, not primary navigation.
 - GitHub Pages remains the deployment target.
 - MiniSearch is the target search pattern.
 - Zod + JSON Schema is the target validation pattern.

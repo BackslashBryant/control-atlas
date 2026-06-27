@@ -45,6 +45,18 @@ test('control atlas map-first shell exposes navigation and guided start path', a
     'Atlas Map',
     'Explore',
     'Compare',
+    'More',
+  ]);
+
+  await primaryNav.getByRole('button', { name: 'More' }).click();
+  await expect(primaryNav.getByRole('menuitem', { name: 'Playbooks' })).toBeVisible();
+  await expect(primaryNav.getByRole('menuitem', { name: 'Templates' })).toBeVisible();
+  await expect(primaryNav.getByRole('menuitem', { name: 'Sources' })).toBeVisible();
+
+  const expandedNavLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
+    nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
+  );
+  expect(expandedNavLabels).toEqual([
     'Playbooks',
     'Templates',
     'Sources',

@@ -19,26 +19,17 @@
 | **Webflow Showcase**                  | Modern landing/product page layout inspiration                                           |
 | **WCAG 2.2 AA**                       | Keyboard access, contrast, focus states, non-color-only meaning, reduced motion          |
 
-## Cytoscape / graph implementation resources
+## React Flow / ELK graph implementation resources
 
-| Resource                                      | Link                                                                                                           | Use                                                              |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| **Cytoscape.js docs**                         | [https://js.cytoscape.org/](https://js.cytoscape.org/)                                                         | Core graph API, styling, selectors, events, layouts, performance |
-| **Cytoscape.js demos**                        | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Working implementation examples                                  |
-| **Cytoscape.js fCoSE**                        | [https://github.com/iVis-at-Bilkent/cytoscape.js-fcose](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose) | Expanded dense cluster layout only                               |
-| **Cytoscape.js Dagre**                        | [https://github.com/cytoscape/cytoscape.js-dagre](https://github.com/cytoscape/cytoscape.js-dagre)             | Left-to-right hierarchy and chain graphs                         |
-| **Cytoscape.js Popper**                       | [https://github.com/cytoscape/cytoscape.js-popper](https://github.com/cytoscape/cytoscape.js-popper)           | Tooltip/popover positioning                                      |
-| **Tippy.js**                                  | [https://atomiks.github.io/tippyjs/](https://atomiks.github.io/tippyjs/)                                       | Tooltip UI wrapper                                               |
-| **Cytoscape.js Labels demo**                  | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Label behavior and zoom-aware label ideas                        |
-| **Cytoscape.js Node Types demo**              | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Shape/type visual language                                       |
-| **Cytoscape.js Edge Types demo**              | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Edge styling conventions                                         |
-| **Cytoscape.js Compound Nodes demo**          | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Grouping/cluster visual reference                                |
-| **Cytoscape.js Popper/Tippy demo**            | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | On-demand node previews                                          |
-| **Cytoscape.js Dagre demo**                   | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Directional layout example                                       |
-| **Cytoscape.js fCoSE demo**                   | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Dense graph layout example                                       |
-| **Cytoscape.js Tokyo Railways demo**          | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Real-world network map inspiration                               |
-| **Cytoscape.js Wine & Cheese demo**           | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Relationship exploration inspiration                             |
-| **Cytoscape.js PathwayCommons/SBGN examples** | [https://js.cytoscape.org/#demos](https://js.cytoscape.org/#demos)                                             | Dense scientific graph styling inspiration                       |
+| Resource                    | Link                                                                                 | Use                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| **React Flow docs**         | [https://reactflow.dev/](https://reactflow.dev/)                                     | Interactive node-link diagram API, controls, minimap, custom React nodes      |
+| **React Flow learning docs** | [https://reactflow.dev/learn](https://reactflow.dev/learn)                           | Implementation patterns for nodes, edges, viewport behavior, and accessibility |
+| **React Flow repository**   | [https://github.com/xyflow/xyflow](https://github.com/xyflow/xyflow)                 | Package source and release context                                            |
+| **ELK.js repository**       | [https://github.com/kieler/elkjs](https://github.com/kieler/elkjs)                   | Automatic layout for directed node-link diagrams                              |
+| **ELK reference examples**  | [https://github.com/kieler/elkjs/tree/master/test](https://github.com/kieler/elkjs/tree/master/test) | Layout graph shape and option examples                                        |
+
+Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK for automatic layout. Tables, search, filters, and detail pages remain the primary way to browse large crosswalks. Do not rebuild the product around one giant graph canvas.
 
 ## Useful graph/data visualization references
 
@@ -59,10 +50,10 @@
 | -------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------- |
 | **yFiles Layout Algorithms for Cytoscape desktop** | Reference only    | Useful layout inspiration, but it is for desktop Cytoscape, not the browser app    |
 | **yFiles for HTML**                                | Rejected          | Good fit technically, but not free                                                 |
-| **cytoscape-navigator**                            | Not for this pass | Only add later if users need minimap orientation                                   |
-| **cytoscape-expand-collapse**                      | Do not use        | Useful conceptually, but not needed and should not become another dependency       |
-| **cytoscape-cola / cose-bilkent / elk**            | Do not use        | Adds layout decision sprawl; current plan already has concentric, Dagre, and fCoSE |
-| **custom force layout / web worker layout**        | Do not use now    | Premature. Fix graph model and layout triggers first                               |
+| **Cytoscape.js**                                   | Replaced          | Better for open-ended graph/network analysis than guided relationship diagrams     |
+| **Sigma.js / Graphology**                          | Reference only    | Better for a future large graph explorer, not current bounded relationship paths    |
+| **D3-force**                                       | Do not use now    | Too custom for the current product and agent-maintained implementation             |
+| **Mermaid / Graphviz**                             | Docs only         | Useful for static generated diagrams, not the interactive workbench                |
 
 ## Control Atlas source hierarchy/reference set
 

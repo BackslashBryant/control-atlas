@@ -209,6 +209,7 @@ a {
 }
 
 .primary-nav {
+  position: relative;
   display: flex;
   flex-wrap: nowrap;
   gap: var(--space-1);
@@ -235,6 +236,26 @@ a {
 .primary-nav button {
   background: transparent;
   color: inherit;
+}
+
+.nav-more-menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 35;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 12rem;
+  padding: var(--space-2);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.98);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+}
+
+.nav-more-menu button {
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .primary-nav button.active,
@@ -1567,6 +1588,17 @@ a:focus-visible {
   border-radius: var(--radius-md);
 }
 
+.atlas-map-command {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: end;
+  padding: var(--space-3);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.52);
+}
+
 .atlas-map-search-form {
   display: flex;
   flex-wrap: wrap;
@@ -1998,4 +2030,100 @@ a:focus-visible {
 .graph-node-shortcuts button.selected {
   border-color: var(--ca-secondary);
   color: var(--ca-text);
+}
+
+.ca-flow-wrap .react-flow {
+  background:
+    linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    rgba(11, 16, 32, 0.64);
+  background-size: 24px 24px;
+}
+
+.ca-flow-node {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  gap: 0.25rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--ca-flow-node-color) 58%, var(--ca-border));
+  border-left: 5px solid var(--ca-flow-node-color);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  color: var(--ca-text);
+}
+
+.ca-flow-node--center {
+  border-width: 2px;
+  border-left-width: 6px;
+  background: color-mix(in srgb, var(--ca-primary) 20%, rgba(15, 23, 42, 0.94));
+}
+
+.ca-flow-node--cluster {
+  border-style: dashed;
+}
+
+.ca-flow-node--selected {
+  outline: 3px solid rgba(34, 211, 238, 0.65);
+  outline-offset: 3px;
+}
+
+.ca-flow-node--dimmed {
+  opacity: 0.42;
+}
+
+.ca-flow-node-label {
+  display: block;
+  overflow: hidden;
+  color: var(--ca-text);
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ca-flow-node-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ca-flow-handle {
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(248, 250, 252, 0.62);
+  background: var(--ca-flow-node-color);
+}
+
+.react-flow__edge-path {
+  stroke-linecap: round;
+}
+
+.react-flow__edge-text {
+  fill: var(--ca-text-muted);
+  font-size: 10px;
+}
+
+.react-flow__controls,
+.react-flow__minimap {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.94);
+}
+
+.react-flow__controls-button {
+  border-bottom-color: rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.94);
+  color: var(--ca-text);
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(37, 99, 235, 0.24);
 }
