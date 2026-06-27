@@ -26,7 +26,6 @@ export function ExplorePage(props: {
   bundle: RuntimeBundle;
   graphReady: boolean;
   state: Extract<ViewState, { view: "search" }>;
-  heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenGlossary: (termId?: string) => void;

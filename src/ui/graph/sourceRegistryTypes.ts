@@ -9,6 +9,7 @@ export type VisibleGraphNode = {
   label: string;
   node_type: string;
   graphRole: string;
+  parent?: string;
   metadata: {
     item_id: string;
     title: string;
