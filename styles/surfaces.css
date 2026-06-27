@@ -695,6 +695,42 @@ li {
   margin-top: var(--space-4);
 }
 
+.compare-mappings {
+  margin-top: var(--space-2);
+}
+
+.compare-mappings-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+}
+
+.compare-mappings-count {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+.compare-table-scroll {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+}
+
+.compare-table-scroll .detail-table {
+  margin: 0;
+}
+
+.compare-table-scroll .detail-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--ca-surface);
+}
+
 .provenance-term {
   display: inline;
 }

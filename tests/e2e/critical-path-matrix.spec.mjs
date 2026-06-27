@@ -45,7 +45,6 @@ test("critical path: compare detailed mappings expose text provenance labels", a
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
-  await page.getByRole("button", { name: "Detailed mappings table" }).click();
 
   const table = page.getByRole("table", { name: "Relationship mappings" });
   await expect(table).toBeVisible();

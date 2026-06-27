@@ -180,7 +180,6 @@ test('compare starts with intent cards and opens summary-first framework results
   await expect(page.getByRole('button', { name: 'Export CSV', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export Markdown', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Export JSON', exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Detailed mappings table" }).click();
   const mappingsTable = page.getByRole("table", { name: "Relationship mappings" });
   await expect(mappingsTable).toBeVisible({ timeout: 15000 });
   await expect(mappingsTable).toContainText("AC-2");

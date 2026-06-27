@@ -151,7 +151,6 @@ export function ComparePage(props: {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const compareResultsRef = useRef<HTMLElement | null>(null);
   const [showComparisonPicker, setShowComparisonPicker] = useState(false);
-  const [detailedMappingsOpen, setDetailedMappingsOpen] = useState("");
   const catalogs = bundle.runtime.getCatalogs();
   const workbench = state.workbench || "intent";
   const relationshipNodeIds = useMemo(
@@ -623,7 +622,7 @@ export function ComparePage(props: {
                   </button>
                 </div>
               ) : null}
-              {relationshipRows?.rows?.length ? (
+              {state.source && state.target && relationshipRows?.rows?.length ? (
                 <section
                   className="compare-results"
                   id="compare-results"
@@ -634,17 +633,15 @@ export function ComparePage(props: {
                     compareView={compareView}
                     graph={compareGraph}
                     listContent={
-                      <Accordion.Root
-                        className="accordion-root"
-                        collapsible
-                        onValueChange={setDetailedMappingsOpen}
-                        type="single"
-                        value={detailedMappingsOpen}
-                      >
-                        <DisclosurePanel
-                          title="Detailed mappings table"
-                          value="rows"
-                        >
+                      <section className="stack compare-mappings">
+                        <h3 className="compare-mappings-title">
+                          Mapping details
+                          <span className="compare-mappings-count">
+                            {relationshipRows.rows.length} row
+                            {relationshipRows.rows.length === 1 ? "" : "s"}
+                          </span>
+                        </h3>
+                        <div className="compare-table-scroll">
                           <table
                             aria-label="Relationship mappings"
                             className="detail-table"
@@ -709,8 +706,8 @@ export function ComparePage(props: {
                               ))}
                             </tbody>
                           </table>
-                        </DisclosurePanel>
-                      </Accordion.Root>
+                        </div>
+                      </section>
                     }
                     matrixWorkbench={workbench}
                     onExport={exportRows}
