@@ -12,49 +12,59 @@ import { QuickIntentCard } from "../components/QuickIntentCard";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
-  heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
+const HERO_WORDS = [
+  "Comply",
+  "Map",
+  "Assess",
+  "Crosswalk",
+  "Navigate",
+  "Inherit",
+  "Audit",
+  "Authorize",
+];
+
 const HOME_CARDS = [
   {
-    title: "Where do I begin?",
-    body: "Answer three questions and get a plain-language starting point.",
+    title: "Start here",
+    body: "Answer three questions and get a plain-language starting point for your situation.",
     actionLabel: "Start",
     icon: IconCompass,
     view: "start-here" as const,
   },
   {
-    title: "What does this control mean?",
-    body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
+    title: "Explore controls",
+    body: "Look up a control, CCI, baseline, STIG, or term and see what it means and how it connects.",
     actionLabel: "Explore",
     icon: IconSearch,
     view: "search" as const,
   },
   {
-    title: "How do these frameworks relate?",
-    body: "Compare public mappings and see what overlaps or needs review.",
+    title: "Compare frameworks",
+    body: "Map two public catalogs side-by-side and see what overlaps, diverges, or needs review.",
     actionLabel: "Compare",
     icon: IconGitCompare,
     view: "matrix" as const,
   },
   {
-    title: "How does this process work?",
-    body: "Use task-focused playbooks for common compliance problems.",
+    title: "Playbooks",
+    body: "Task-focused guidance for common compliance problems — RMF, inheritance, POA&M, and more.",
     actionLabel: "Playbooks",
     icon: IconBook2,
     view: "patterns" as const,
   },
   {
-    title: "What do I need to produce?",
-    body: "Generate blank RMF/ATO templates without uploading data.",
+    title: "Templates",
+    body: "Generate blank RMF and ATO artifacts without uploading data or creating an account.",
     actionLabel: "Templates",
     icon: IconFileDescription,
     view: "templates" as const,
   },
   {
-    title: "Why trust this mapping?",
-    body: "Review sources, versions, and provenance for every link.",
+    title: "Sources",
+    body: "Review what source is behind every mapping and how much weight to give it.",
     actionLabel: "Sources",
     icon: IconSourceCode,
     view: "sources" as const,
@@ -62,21 +72,23 @@ const HOME_CARDS = [
 ] as const;
 
 export function HomePage(props: HomePageProps) {
-  const { heroWord, onNavigate } = props;
+  const { onNavigate } = props;
 
   return (
     <>
       <section className="hero home-hero">
-        <h1>Control Atlas</h1>
+        <p className="eyebrow">Control Atlas</p>
+        <h1>The public map for federal cyber compliance.</h1>
         <div aria-label="Ctrl Alt Comply" className="ca-hero-tagline">
           <span className="ca-hero-prefix">Ctrl+Alt+</span>
-          <span aria-hidden="true" className="ca-hero-word">
-            {heroWord}
+          <span className="ca-hero-word-wrap" aria-hidden="true">
+            <span className="ca-hero-word-track">
+              {HERO_WORDS.map((word) => (
+                <span className="ca-hero-word-item" key={word}>{word}</span>
+              ))}
+            </span>
           </span>
         </div>
-        <p className="ca-hero-sub">
-          The public map for federal cyber compliance.
-        </p>
         <p className="ca-hero-body">
           Explore public controls, baselines, STIGs, and compliance patterns —
           and generate blank RMF/ATO templates without uploading data or creating
@@ -85,30 +97,23 @@ export function HomePage(props: HomePageProps) {
         <div className="hero-actions">
           <button
             className="primary"
+            onClick={() => onNavigate("start-here")}
+            type="button"
+          >
+            Start here
+          </button>
+          <button
+            className="secondary"
             onClick={() => onNavigate("atlas-map")}
             type="button"
           >
             Atlas Map →
           </button>
-          <button
-            className="secondary"
-            onClick={() => onNavigate("start-here")}
-            type="button"
-          >
-            Start
-          </button>
-          <button
-            className="secondary quiet"
-            onClick={() => onNavigate("search")}
-            type="button"
-          >
-            Explore
-          </button>
         </div>
       </section>
 
       <section
-        aria-label="Explore Control Atlas"
+        aria-label="What do you want to do?"
         className="intent-grid home-card-grid"
       >
         <QuickIntentCard

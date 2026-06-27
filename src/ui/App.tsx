@@ -3,7 +3,6 @@ import {
   startTransition,
   Suspense,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -88,17 +87,6 @@ const TemplatesPage = lazy(() =>
   })),
 );
 
-const HERO_WORDS = [
-  "Comply",
-  "Map",
-  "Assess",
-  "Crosswalk",
-  "Navigate",
-  "Inherit",
-  "Audit",
-  "Authorize",
-];
-
 export function App() {
   const location = useLocation();
   const routerNavigate = useNavigate();
@@ -109,7 +97,6 @@ export function App() {
   const [loadError, setLoadError] = useState<string>("");
   const [loadSlow, setLoadSlow] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
-  const [heroWordIndex, setHeroWordIndex] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
   const [helpTab, setHelpTab] = useState<HelpTab>("glossary");
   const [glossaryFocusTermId, setGlossaryFocusTermId] = useState("");
@@ -118,16 +105,6 @@ export function App() {
   );
   const [introVisible, setIntroVisible] = useState(shouldShowBrandEntrance);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
-
-  const heroWord = useMemo(() => {
-    if (
-      viewState.view === "home" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return "Comply";
-    }
-    return HERO_WORDS[heroWordIndex] ?? "Comply";
-  }, [heroWordIndex, viewState.view]);
 
   useEffect(() => {
     let cancelled = false;
@@ -197,23 +174,6 @@ export function App() {
       setViewState(parseHashLocation(location.pathname, location.search));
     });
   }, [location.pathname, location.search]);
-
-  useEffect(() => {
-    if (viewState.view !== "home") {
-      return undefined;
-    }
-
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (media.matches) {
-      return undefined;
-    }
-
-    const interval = window.setInterval(() => {
-      setHeroWordIndex((current) => (current + 1) % HERO_WORDS.length);
-    }, 2500);
-
-    return () => window.clearInterval(interval);
-  }, [viewState.view]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -318,7 +278,6 @@ export function App() {
             <Suspense fallback={<LoadingStatusPanel slow={false} />}>
               <AppContent
                 bundle={bundle}
-                heroWord={heroWord}
                 loadError={loadError}
                 onNavigate={navigate}
                 onOpenGlossary={openGlossary}
@@ -375,7 +334,6 @@ function AppContent(props: {
   bundle: RuntimeBundle | null;
   loadError: string;
   state: ViewState;
-  heroWord: string;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
@@ -388,7 +346,6 @@ function AppContent(props: {
     bundle,
     loadError,
     state,
-    heroWord,
     onNavigate,
     onOpenNode,
     onOpenNodeByItemId,
@@ -428,7 +385,7 @@ function AppContent(props: {
   }
 
   if (state.view === "home") {
-    return <HomePage heroWord={heroWord} onNavigate={onNavigate} />;
+    return <HomePage onNavigate={onNavigate} />;
   }
 
   if (state.view === "atlas-map") {
@@ -552,7 +509,6 @@ function AppContent(props: {
     <ExplorePage
       bundle={bundle!}
       graphReady={graphReady}
-      heroWord={heroWord}
       onNavigate={onNavigate}
       onOpenGlossary={onOpenGlossary}
       onOpenHelp={onOpenHelp}

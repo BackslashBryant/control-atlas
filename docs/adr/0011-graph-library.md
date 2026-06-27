@@ -1,6 +1,6 @@
 # ADR 0011: Relationship Graph Library — react-force-graph-2d
 
-**Status:** Accepted
+**Status:** Superseded — see section "Superseded 2026-06" below.
 
 **Date:** June 19, 2026
 
@@ -51,3 +51,19 @@ Rationale:
 ## Rollback
 
 Remove `react-force-graph-2d`, replace `RelationshipGraph.tsx` with pure D3 canvas via `useRef`/`useEffect` using the same `buildNeighborhood()` runtime API. Table fallback and filters unchanged.
+
+---
+
+## Superseded 2026-06 — Now Cytoscape.js
+
+**`react-force-graph-2d` was never shipped.** Before Epic 9 landed, the Atlas Map scope expanded to a full-corpus relationship graph (hundreds of nodes, 9-category source hierarchy, cluster expansion, multi-layout support). That scale, combined with native dagre/fCoSE layout plugins and built-in a11y event hooks, made `react-force-graph-2d` the wrong fit.
+
+The app migrated to **Cytoscape.js** (`cytoscape` + `cytoscape-dagre` + `cytoscape-fcose` + `cytoscape-popper`/`tippy.js`). See `src/ui/graph/GRAPH_REFERENCES.md` for the canonical graph documentation and layout constraints.
+
+Rationale:
+- Full-corpus graph requires pre-computed layout positions and efficient batch DOM updates — Cytoscape handles both via its internal model.
+- Built-in `dagre` (LR/TB hierarchy) and `fCoSE` (force-directed clusters) cover all Atlas Map use cases without extra dependencies.
+- Cytoscape's stylesheet system supports provenance-colored edges, role-based node sizing, and cluster compound nodes natively.
+- `cytoscape-popper` + `tippy.js` provides tooltip support without custom paint loops.
+
+The D3-force physics path from ADR 0010/0011 is closed. Do not re-introduce `react-force-graph-2d` or raw `d3-force` for the Atlas Map.

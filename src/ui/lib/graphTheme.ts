@@ -11,6 +11,7 @@ export type GraphNode = {
   isCluster?: boolean;
   compareRole?: CompareRole;
   graphRole?: string;
+  parent?: string;
   x?: number;
   y?: number;
   fx?: number;
@@ -129,6 +130,7 @@ export function buildGraphData(
     metadata?: { item_id?: string; title?: string };
     compareRole?: CompareRole;
     graphRole?: string;
+    parent?: string;
   }>,
   edges: Array<{
     id: string;
@@ -153,6 +155,7 @@ export function buildGraphData(
       isCluster: clusterMeta?.has(node.id) || node.node_type === "cluster",
       compareRole: node.compareRole,
       graphRole: node.graphRole,
+      parent: node.parent,
     })),
     links: edges.map((edge) => ({
       id: edge.id,
@@ -180,7 +183,7 @@ export const ITEM_TYPE_LEGEND = [
 export const PROVENANCE_LEGEND = [
   { key: "mandated", label: "Official source", pattern: "solid" },
   { key: "federal_published", label: "Source-backed", pattern: "solid" },
-  { key: "federal_program", label: "Source-backed", pattern: "solid" },
+  { key: "federal_program", label: "Program-backed", pattern: "solid" },
   { key: "inferred", label: "Inferred", pattern: "dashed" },
   { key: "deprecated", label: "Deprecated", pattern: "dotted" },
 ] as const;
