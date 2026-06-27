@@ -28,43 +28,43 @@ const HERO_WORDS = [
 
 const HOME_CARDS = [
   {
-    title: "Start here",
-    body: "Answer three questions and get a plain-language starting point for your situation.",
+    title: "Where do I begin?",
+    body: "Answer three questions and get a plain-language starting point.",
     actionLabel: "Start",
     icon: IconCompass,
     view: "start-here" as const,
   },
   {
-    title: "Explore controls",
-    body: "Look up a control, CCI, baseline, STIG, or term and see what it means and how it connects.",
+    title: "What does this control mean?",
+    body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
     actionLabel: "Explore",
     icon: IconSearch,
     view: "search" as const,
   },
   {
-    title: "Compare frameworks",
-    body: "Map two public catalogs side-by-side and see what overlaps, diverges, or needs review.",
+    title: "How do these frameworks relate?",
+    body: "Compare public mappings and see what overlaps or needs review.",
     actionLabel: "Compare",
     icon: IconGitCompare,
     view: "matrix" as const,
   },
   {
-    title: "Playbooks",
-    body: "Task-focused guidance for common compliance problems — RMF, inheritance, POA&M, and more.",
+    title: "How does this process work?",
+    body: "Use task-focused playbooks for common compliance problems.",
     actionLabel: "Playbooks",
     icon: IconBook2,
     view: "patterns" as const,
   },
   {
-    title: "Templates",
-    body: "Generate blank RMF and ATO artifacts without uploading data or creating an account.",
+    title: "What do I need to produce?",
+    body: "Generate blank RMF/ATO templates without uploading data.",
     actionLabel: "Templates",
     icon: IconFileDescription,
     view: "templates" as const,
   },
   {
-    title: "Sources",
-    body: "Review what source is behind every mapping and how much weight to give it.",
+    title: "Why trust this mapping?",
+    body: "Review sources, versions, and provenance for every link.",
     actionLabel: "Sources",
     icon: IconSourceCode,
     view: "sources" as const,
@@ -77,11 +77,11 @@ export function HomePage(props: HomePageProps) {
   return (
     <>
       <section className="hero home-hero">
-        <p className="eyebrow">Control Atlas</p>
-        <h1>The public map for federal cyber compliance.</h1>
+        <h1>Control Atlas</h1>
+        <p>The public map for federal cyber compliance.</p>
         <div aria-label="Ctrl Alt Comply" className="ca-hero-tagline">
           <span className="ca-hero-prefix">Ctrl+Alt+</span>
-          <span className="ca-hero-word-wrap" aria-hidden="true">
+          <span aria-hidden="true" className="ca-hero-word-wrap">
             <span className="ca-hero-word-track">
               {HERO_WORDS.map((word) => (
                 <span className="ca-hero-word-item" key={word}>{word}</span>
