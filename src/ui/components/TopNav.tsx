@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
 
 import {
   activeNavForState,
+  MORE_NAV_ITEM,
   PRIMARY_NAV_ITEMS,
+  SECONDARY_NAV_ITEMS,
 } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -33,6 +36,13 @@ export function TopNav(props: TopNavProps) {
   } = props;
 
   const activeNav = activeNavForState(viewState);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const MoreIcon = MORE_NAV_ITEM.icon;
+
+  function navigateFromMenu(view: ViewState["view"]) {
+    setMoreOpen(false);
+    onNavigate(view);
+  }
 
   return (
     <header
@@ -70,6 +80,37 @@ export function TopNav(props: TopNavProps) {
             </button>
           );
         })}
+        <button
+          aria-expanded={moreOpen}
+          aria-haspopup="menu"
+          className={SECONDARY_NAV_ITEMS.some((item) => item.view === activeNav) ? "active nav-active" : ""}
+          onClick={() => setMoreOpen((current) => !current)}
+          type="button"
+        >
+          <MoreIcon aria-hidden="true" size={16} stroke={1.8} />
+          <span>{MORE_NAV_ITEM.label}</span>
+        </button>
+        {moreOpen ? (
+          <div className="nav-more-menu" role="menu">
+            {SECONDARY_NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const active = activeNav === item.view;
+              return (
+                <button
+                  aria-current={active ? "page" : undefined}
+                  className={active ? "active nav-active" : ""}
+                  key={item.label}
+                  onClick={() => navigateFromMenu(item.view)}
+                  role="menuitem"
+                  type="button"
+                >
+                  <Icon aria-hidden="true" size={16} stroke={1.8} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
       </nav>
       <div className="header-actions">
         {bundle ? (

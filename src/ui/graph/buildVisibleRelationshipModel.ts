@@ -101,7 +101,7 @@ export function buildSourceHierarchyModel(
 
   return {
     centerNodeId: "hierarchy:control-catalog-requirement-set",
-    layoutEngine: optionalSources.length > 0 ? "fcose" : "dagre",
+    layoutMode: optionalSources.length > 0 ? "expanded" : "hierarchy",
     nodes,
     edges,
     stats: { total: edges.length, filtered: edges.length },

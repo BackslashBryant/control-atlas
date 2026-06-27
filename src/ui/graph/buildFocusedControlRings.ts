@@ -161,7 +161,7 @@ export function buildFocusedControlRings(
 
   return {
     centerNodeId,
-    layoutEngine: "concentric",
+    layoutMode: "focus",
     nodes,
     edges,
     stats: { total: edges.length, filtered: edges.length },
@@ -198,7 +198,7 @@ export function expandFocusedControlCluster(
 
   return {
     ...model,
-    layoutEngine: "fcose",
+    layoutMode: "expanded",
     nodes: [...retainedNodes, ...children],
     edges: [...retainedEdges, ...childEdges],
     stats: {

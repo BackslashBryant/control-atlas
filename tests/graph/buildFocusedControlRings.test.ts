@@ -22,10 +22,10 @@ test("focused control rings use the required order", () => {
   ]);
 });
 
-test("expanded focused clusters use fCoSE and expose their children", () => {
+test("expanded focused clusters use the expanded layout mode and expose their children", () => {
   const focused = buildFocusedControlRings("AC-2");
   const expanded = expandFocusedControlCluster(focused, "disa-ccis");
-  assert.equal(expanded.layoutEngine, "fcose");
+  assert.equal(expanded.layoutMode, "expanded");
   assert.equal(
     expanded.nodes.some((node) => node.id === "cluster:disa-ccis"),
     false,
@@ -39,7 +39,7 @@ test("expanded focused clusters use fCoSE and expose their children", () => {
 test("AC-2 focused model keeps the control dominant and clusters dense groups", () => {
   const model = buildFocusedControlRings("AC-2");
   assert.equal(model.centerNodeId, "nist-800-53:AC-2");
-  assert.equal(model.layoutEngine, "concentric");
+  assert.equal(model.layoutMode, "focus");
   assert.ok(model.nodes.length <= 12);
   assert.equal(
     model.nodes.find((node) => node.id === "nist-800-53:AC-2")?.graphRole,
@@ -57,7 +57,7 @@ test("AC-2 focused model keeps the control dominant and clusters dense groups", 
 
 test("default visible relationship model is the nine-tier hierarchy", () => {
   const model = buildSourceHierarchyModel();
-  assert.equal(model.layoutEngine, "dagre");
+  assert.equal(model.layoutMode, "hierarchy");
   assert.equal(model.nodes.length, 9);
   assert.equal(model.edges.length, 8);
   assert.equal(model.nodes.some((node) => node.id.startsWith("source:")), false);

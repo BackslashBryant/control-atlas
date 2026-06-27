@@ -551,8 +551,8 @@ FedRAMP uses `#0D9488` (Teal), not blue, to avoid collision with `--ca-primary`.
 
 | Layer | Decision | Rationale |
 |---|---|---|
-| Base | GovFrame Navigator static JS | Repurpose-first; no framework migration before MVP |
-| Graph | Cytoscape.js (extended from GovFrame D3) | Better filter/export/accessibility than raw D3 at scale |
+| Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
+| Graph | React Flow + ELK.js | Better fit for bounded, guided relationship diagrams than an open-ended network canvas |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |
 | Data format | JSON/JSONL runtime, YAML for curated registry | Performance vs. human-readability split |

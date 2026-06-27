@@ -119,8 +119,9 @@ const CATEGORY_DESCRIPTIONS: Record<string, { label: string; tagline: string; de
 };
 
 function FoundationAtlasMapPage(props: AtlasMapPageProps) {
-  const { state, onNavigate } = props;
+  const { bundle, state, onNavigate } = props;
   const focused = Boolean(state.node.trim());
+  const [mapSearchDraft, setMapSearchDraft] = useState("");
   const routeVisibilityFilters: SourceVisibilityFilters = {
     showSupportingReferences: state.showSupportingReferences === "true",
     showDraftOrLegacy: state.showDraftOrLegacy === "true",
@@ -236,6 +237,36 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
         title="Atlas Map"
       />
 
+      <form
+        className="atlas-map-command"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const query = mapSearchDraft.trim();
+          if (!query) return;
+          const resolved = nodeIdFromItemId(bundle.runtime, query);
+          if (resolved) {
+            onNavigate("atlas-map", { ...state, node: resolved });
+            return;
+          }
+          onNavigate("search", { query });
+        }}
+      >
+        <label className="field grow" htmlFor="foundation-atlas-map-search">
+          <span>Find a control, CCI, baseline, STIG, or source.</span>
+          <input
+            aria-label="Search Atlas Map"
+            id="foundation-atlas-map-search"
+            onChange={(event) => setMapSearchDraft(event.target.value)}
+            placeholder="AC-2, CCI-000225, FedRAMP High"
+            type="search"
+            value={mapSearchDraft}
+          />
+        </label>
+        <button className="primary" type="submit">
+          Open map
+        </button>
+      </form>
+
       {!focused ? (
         <>
           <div
@@ -311,7 +342,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
                 ? "AC-2 stays central while dense implementation and mapping details remain clustered."
                 : "Each node is a category of compliance source. Select one to see what it contributes and where to go next."
             }
-            layoutEngine={model.layoutEngine}
+            layoutMode={model.layoutMode}
             mapControls
             onCopyMapLink={copyMapLink}
             onFilterChange={() => undefined}

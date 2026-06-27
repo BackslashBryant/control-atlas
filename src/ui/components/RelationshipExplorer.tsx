@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 
 import type { ClusterNodeMeta } from "../lib/graphClustering";
+import type { RelationshipLayoutMode } from "../graph/sourceRegistryTypes";
 import {
   COMPARE_ROLE_LEGEND,
   ITEM_TYPE_LEGEND,
@@ -95,7 +96,7 @@ type RelationshipExplorerProps = {
   showEmptyState?: boolean;
   showFilters?: boolean;
   compareLegend?: boolean;
-  layoutEngine?: "fcose" | "dagre" | "concentric";
+  layoutMode?: RelationshipLayoutMode;
   hideHeading?: boolean;
 };
 
@@ -155,7 +156,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     showEmptyState,
     showFilters = true,
     compareLegend = false,
-    layoutEngine = "fcose",
+    layoutMode = "expanded",
     hideHeading = false,
   } = props;
 
@@ -482,7 +483,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
                 centerNodeId={centerNodeId}
                 clusterMeta={clustering.clusterMeta}
                 edges={neighborhood.edges}
-                layoutEngine={layoutEngine}
+                layoutMode={layoutMode}
                 nodes={neighborhood.nodes}
                 onClusterClick={clustering.onClusterExpand}
                 onLayoutRunningChange={setLayoutRunning}

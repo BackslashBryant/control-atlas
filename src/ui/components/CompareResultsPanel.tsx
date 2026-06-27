@@ -63,7 +63,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
     onNavigate("atlas-map", { node: graph.atlasMapNode });
   };
 
-  const compareUsesDagre =
+  const compareUsesPathLayout =
     matrixWorkbench === "stig-chain" || matrixWorkbench === "threat-chain";
 
   return (
@@ -166,7 +166,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           }}
           heading="Compare map"
           introCopy={`Showing ${graph.stats.filtered} of ${graph.stats.nodeCount} items in this comparison.`}
-          layoutEngine={compareUsesDagre ? "dagre" : "fcose"}
+          layoutMode={compareUsesPathLayout ? "hierarchy" : "expanded"}
           listLabel="List"
           mapControls
           onClusterCollapse={onClusterCollapse}

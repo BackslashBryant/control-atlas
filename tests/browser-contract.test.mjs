@@ -64,7 +64,7 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
   assert.ok(existsSync('src/ui/lib/viewState.ts'), 'src/ui/lib/viewState.ts must exist');
 });
 
-test('approved v2.2 brand entrance and fCoSE graph contracts are present', () => {
+test('approved brand entrance and bounded diagram graph contracts are present', () => {
   assert.ok(
     existsSync('src/ui/components/BrandEntranceOverlay.tsx'),
     'BrandEntranceOverlay component must exist',
@@ -73,31 +73,24 @@ test('approved v2.2 brand entrance and fCoSE graph contracts are present', () =>
   assert.match(entrance, /ca_intro_seen/);
   assert.match(entrance, /prefers-reduced-motion/);
   assert.match(entrance, /Ctrl \+ Alt \+ Comply/);
-  assert.equal(typeof packageJson.dependencies.cytoscape, 'string');
-  assert.equal(typeof packageJson.dependencies['cytoscape-fcose'], 'string');
+  assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
+  assert.equal(typeof packageJson.dependencies.elkjs, 'string');
+  assert.equal(packageJson.dependencies.cytoscape, undefined);
   assert.equal(packageJson.dependencies['react-force-graph-2d'], undefined);
-  assert.match(graphLayout, /nodeDimensionsIncludeLabels:\s*true/);
-  assert.match(graphLayout, /quality:\s*["']default["']/);
-  assert.match(graphLayout, /packComponents:\s*true/);
-  assert.match(graphLayout, /animationDuration:\s*400/);
   assert.match(relationshipExplorer, /lazy\(\(\) => import\(/);
   assert.match(relationshipExplorer, /useClusteredGraph/);
-  assert.match(relationshipGraph, /resolveLayoutMode/);
-  assert.match(relationshipGraph, /applyNodeStylesRef/);
-  assert.match(relationshipGraph, /from "cytoscape-popper"/);
-  assert.match(relationshipGraph, /from "tippy\.js"/);
-  assert.match(relationshipGraph, /cytoscape\.use\(popper\(tippyFactory\)\)/);
-  assert.match(relationshipGraph, /graph\.destroy\(\)[\s\S]*\}, \[\]\);/);
+  assert.match(relationshipGraph, /from "@xyflow\/react"/);
+  assert.match(relationshipGraph, /from "elkjs\/lib\/elk\.bundled\.js"/);
+  assert.match(relationshipGraph, /<ReactFlow/);
+  assert.match(relationshipGraph, /<MiniMap/);
+  assert.match(relationshipGraph, /<Controls/);
+  assert.match(relationshipGraph, /elk\s*\.\s*layout/);
 });
 
-test('map foundation uses the exact approved free Cytoscape stack', () => {
+test('map foundation uses the approved React Flow and ELK stack', () => {
   for (const dependency of [
-    'cytoscape',
-    'cytoscape-fcose',
-    'cytoscape-dagre',
-    'cytoscape-popper',
-    '@popperjs/core',
-    'tippy.js',
+    '@xyflow/react',
+    'elkjs',
   ]) {
     assert.equal(
       typeof packageJson.dependencies[dependency],
@@ -107,7 +100,14 @@ test('map foundation uses the exact approved free Cytoscape stack', () => {
   }
 
   for (const prohibited of [
+    'cytoscape',
+    'cytoscape-fcose',
+    'cytoscape-dagre',
+    'cytoscape-popper',
     'yfiles',
+    'react-force-graph-2d',
+    '@popperjs/core',
+    'tippy.js',
     'cytoscape-navigator',
     'cytoscape-expand-collapse',
     'cytoscape-cola',
@@ -125,12 +125,10 @@ test('graph implementation references are documented', () => {
   assert.ok(existsSync('src/ui/graph/GRAPH_REFERENCES.md'));
   const references = readFileSync('src/ui/graph/GRAPH_REFERENCES.md', 'utf8');
   for (const link of [
-    'https://js.cytoscape.org/',
-    'https://js.cytoscape.org/#demos',
-    'https://github.com/iVis-at-Bilkent/cytoscape.js-fcose',
-    'https://github.com/cytoscape/cytoscape.js-dagre',
-    'https://github.com/cytoscape/cytoscape.js-popper',
-    'https://atomiks.github.io/tippyjs/',
+    'https://reactflow.dev/',
+    'https://reactflow.dev/learn',
+    'https://github.com/xyflow/xyflow',
+    'https://github.com/kieler/elkjs',
     'https://attack.mitre.org/',
     'https://github.com/mitre-attack/attack-stix-data',
     'https://d3fend.mitre.org/',

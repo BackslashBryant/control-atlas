@@ -45,18 +45,20 @@ test("resolveLayoutMode skips layout when topology is unchanged", () => {
   assert.equal(resolveLayoutMode(fingerprint, fingerprint, ids, ids), "none");
 });
 
-test("graph layout source keeps required fCoSE contract options", () => {
+test("graph layout source keeps required React Flow and ELK contract", () => {
   const graphLayout = readFileSync("src/ui/lib/graphLayout.ts", "utf8");
   const relationshipGraph = readFileSync(
     "src/ui/components/RelationshipGraph.tsx",
     "utf8",
   );
 
-  assert.match(graphLayout, /nodeDimensionsIncludeLabels:\s*true/);
-  assert.match(graphLayout, /quality:\s*"default"/);
-  assert.match(graphLayout, /packComponents:\s*true/);
-  assert.match(graphLayout, /animationDuration:\s*400/);
-  assert.match(relationshipGraph, /resolveLayoutMode/);
-  assert.match(relationshipGraph, /onSelectNodeRef/);
+  assert.match(graphLayout, /topologyFingerprint/);
+  assert.match(graphLayout, /truncateCanvasLabel/);
+  assert.match(relationshipGraph, /from "@xyflow\/react"/);
+  assert.match(relationshipGraph, /from "elkjs\/lib\/elk\.bundled\.js"/);
+  assert.match(relationshipGraph, /elk\s*\.\s*layout/);
+  assert.match(relationshipGraph, /<ReactFlow/);
+  assert.match(relationshipGraph, /<MiniMap/);
+  assert.match(relationshipGraph, /<Controls/);
   assert.match(relationshipGraph, /Arranging/);
 });

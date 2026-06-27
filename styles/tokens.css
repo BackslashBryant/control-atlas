@@ -1,4 +1,6 @@
 :root {
+  color-scheme: dark;
+
   /* ── Backgrounds ── */
   --ca-bg: #0b1020;
   --ca-surface: #111827;

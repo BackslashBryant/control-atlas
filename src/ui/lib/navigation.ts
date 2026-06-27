@@ -2,6 +2,7 @@ import {
   IconBook2,
   IconClipboardList,
   IconCompass,
+  IconDots,
   IconGitCompare,
   IconMap,
   IconSearch,
@@ -15,6 +16,9 @@ export const PRIMARY_NAV_ITEMS = [
   { label: "Atlas Map", view: "atlas-map", path: "/atlas-map", icon: IconMap },
   { label: "Explore", view: "search", path: "/explore", icon: IconSearch },
   { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
+] as const;
+
+export const SECONDARY_NAV_ITEMS = [
   { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
   {
     label: "Templates",
@@ -23,6 +27,17 @@ export const PRIMARY_NAV_ITEMS = [
     icon: IconClipboardList,
   },
   { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
+] as const;
+
+export const MORE_NAV_ITEM = {
+  label: "More",
+  view: "more",
+  icon: IconDots,
+} as const;
+
+export const ALL_NAV_ITEMS = [
+  ...PRIMARY_NAV_ITEMS,
+  ...SECONDARY_NAV_ITEMS,
 ] as const;
 
 export function activeNavForState(state: ViewState): ViewState["view"] | null {
