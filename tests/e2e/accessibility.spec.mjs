@@ -91,7 +91,6 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
-  await page.getByRole("button", { name: "Detailed mappings table" }).click();
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible();
