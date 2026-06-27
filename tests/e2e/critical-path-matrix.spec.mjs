@@ -20,7 +20,7 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
   await expect(
-    page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas Map" }),
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas" }),
   ).toBeVisible();
   await expect(
     page.locator(".home-card-grid .intent-card").filter({
@@ -30,6 +30,18 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await expect(
     page.locator(".home-card-grid .intent-card").filter({ hasText: "What do I need to produce?" }),
   ).toBeVisible();
+});
+
+test("critical path: Atlas matrix table links to graph node", async ({ page }) => {
+  await page.goto("/?view=atlas-map");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
+  await expect(matrix).toBeVisible();
+  const firstRow = matrix.locator("tbody tr").first();
+  await firstRow.click();
+  await expect(firstRow).toHaveAttribute("aria-selected", "true");
 });
 
 test("critical path: compare detailed mappings expose text provenance labels", async ({
