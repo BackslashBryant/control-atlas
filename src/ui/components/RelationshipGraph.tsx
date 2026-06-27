@@ -173,15 +173,28 @@ function buildElkGraph(
   graphEdges: ReturnType<typeof buildGraphData>["links"],
   layoutMode: RelationshipGraphProps["layoutMode"],
 ): ElkGraph {
+  const isFocus = layoutMode === "focus";
+  // The default overview is a long, mostly-linear chain of category nodes.
+  // Laid out as a single row it fits to a microscopic zoom in a square-ish
+  // canvas, so wrap it into a balanced snake that fills the viewport with
+  // readable nodes. Wrapping only applies to the layered (non-focus) layout.
+  const wrappingOptions: Record<string, string> = isFocus
+    ? {}
+    : {
+        "elk.layered.wrapping.strategy": "SINGLE_EDGE",
+        "elk.layered.wrapping.correctionFactor": "1.4",
+        "elk.aspectRatio": "1.3",
+      };
   return {
     id: "control-atlas-relationship-diagram",
     layoutOptions: {
-      "elk.algorithm": layoutMode === "focus" ? "mrtree" : "layered",
+      "elk.algorithm": isFocus ? "mrtree" : "layered",
       "elk.direction": resolveDirection(layoutMode),
       "elk.edgeRouting": "ORTHOGONAL",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "96",
-      "elk.spacing.nodeNode": "48",
-      "elk.padding": "[top=48,left=48,bottom=48,right=48]",
+      "elk.layered.spacing.nodeNodeBetweenLayers": "80",
+      "elk.spacing.nodeNode": "44",
+      "elk.padding": "[top=40,left=40,bottom=40,right=40]",
+      ...wrappingOptions,
     },
     children: graphNodes.map((node) => ({
       id: node.id,
@@ -501,17 +514,19 @@ const RelationshipGraphInner = forwardRef<
         >
           <Background color="rgba(148, 163, 184, 0.18)" gap={24} />
           <Controls showInteractive={false} />
-          <MiniMap
-            ariaLabel="Relationship diagram overview"
-            maskColor="rgba(2, 6, 23, 0.72)"
-            nodeColor={(node) =>
-              typeof node.data.color === "string"
-                ? node.data.color
-                : "var(--ca-text-muted)"
-            }
-            pannable
-            zoomable
-          />
+          {graphData.nodes.length > 14 ? (
+            <MiniMap
+              ariaLabel="Relationship diagram overview"
+              maskColor="rgba(2, 6, 23, 0.72)"
+              nodeColor={(node) =>
+                typeof node.data.color === "string"
+                  ? node.data.color
+                  : "var(--ca-text-muted)"
+              }
+              pannable
+              zoomable
+            />
+          ) : null}
         </ReactFlow>
         {layoutVisible ? (
           <div
