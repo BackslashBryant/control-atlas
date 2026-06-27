@@ -15,17 +15,6 @@ type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
-const HERO_WORDS = [
-  "Comply",
-  "Map",
-  "Assess",
-  "Crosswalk",
-  "Navigate",
-  "Inherit",
-  "Audit",
-  "Authorize",
-];
-
 const HOME_CARDS = [
   {
     title: "Where do I begin?",
@@ -79,15 +68,9 @@ export function HomePage(props: HomePageProps) {
       <section className="hero home-hero">
         <h1>Control Atlas</h1>
         <p>The public map for federal cyber compliance.</p>
-        <div aria-label="Ctrl Alt Comply" className="ca-hero-tagline">
+        <div className="ca-hero-tagline">
           <span className="ca-hero-prefix">Ctrl+Alt+</span>
-          <span aria-hidden="true" className="ca-hero-word-wrap">
-            <span className="ca-hero-word-track">
-              {HERO_WORDS.map((word) => (
-                <span className="ca-hero-word-item" key={word}>{word}</span>
-              ))}
-            </span>
-          </span>
+          <span className="ca-hero-word">Comply</span>
         </div>
         <p className="ca-hero-body">
           Explore public controls, baselines, STIGs, and compliance patterns —

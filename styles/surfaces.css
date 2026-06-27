@@ -695,6 +695,42 @@ li {
   margin-top: var(--space-4);
 }
 
+.compare-mappings {
+  margin-top: var(--space-2);
+}
+
+.compare-mappings-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+}
+
+.compare-mappings-count {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+.compare-table-scroll {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+}
+
+.compare-table-scroll .detail-table {
+  margin: 0;
+}
+
+.compare-table-scroll .detail-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--ca-surface);
+}
+
 .provenance-term {
   display: inline;
 }
@@ -1283,9 +1319,29 @@ a:focus-visible {
     width: min(100% - 1rem, 1240px);
   }
 
+  .site-header {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+  }
+
+  .brand {
+    flex: 1 1 auto;
+  }
+
+  .header-actions {
+    flex: 0 1 auto;
+  }
+
   .primary-nav {
+    order: 3;
+    flex: 1 1 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .primary-nav button {
+    justify-content: flex-start;
   }
 
   .header-actions > button {
@@ -1420,7 +1476,7 @@ a:focus-visible {
 }
 
 .relationship-graph-canvas-wrap {
-  min-height: clamp(28rem, 62vh, 46rem);
+  min-height: clamp(24rem, 54vh, 40rem);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1429,12 +1485,12 @@ a:focus-visible {
 
 .relationship-graph-stage {
   position: relative;
-  min-height: clamp(28rem, 62vh, 46rem);
+  min-height: clamp(24rem, 54vh, 40rem);
 }
 
 .relationship-graph-canvas {
   width: 100%;
-  min-height: clamp(28rem, 62vh, 46rem);
+  min-height: clamp(24rem, 54vh, 40rem);
 }
 
 .relationship-map-layout-overlay {
@@ -1456,7 +1512,7 @@ a:focus-visible {
 }
 
 .skeleton-map-canvas {
-  min-height: clamp(28rem, 62vh, 46rem);
+  min-height: clamp(24rem, 54vh, 40rem);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background:
