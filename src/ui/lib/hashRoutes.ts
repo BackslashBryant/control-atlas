@@ -20,6 +20,7 @@ const VIEW_TO_PATH: Record<AppView, string> = {
   about: "/about",
   retired: "/retired",
   browse: "/explore",
+  "not-found": "/not-found",
 };
 
 const PATH_TO_VIEW: Record<string, AppView> = {
@@ -34,6 +35,7 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/sources": "sources",
   "/about": "about",
   "/retired": "retired",
+  "/not-found": "not-found",
 };
 
 function parseNodeIdFromPath(pathname: string): {
@@ -59,9 +61,17 @@ function parseNodeIdFromPath(pathname: string): {
 }
 
 export function parseHashLocation(pathname: string, search: string): ViewState {
-  const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  let normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  // Tolerate a trailing slash on interior routes (e.g. "/atlas-map/") so they
+  // resolve instead of falling through to the not-found view.
+  if (normalizedPath.length > 1) {
+    normalizedPath = normalizedPath.replace(/\/+$/, "");
+  }
   const { basePath, nodeId } = parseNodeIdFromPath(normalizedPath);
-  const view = PATH_TO_VIEW[basePath] ?? "home";
+  // Root resolves to home; any other unrecognized path is an honest not-found
+  // rather than silently rendering home.
+  const view =
+    PATH_TO_VIEW[basePath] ?? (basePath === "/" ? "home" : "not-found");
 
   const params = new URLSearchParams(search.replace(/^\?/, ""));
 

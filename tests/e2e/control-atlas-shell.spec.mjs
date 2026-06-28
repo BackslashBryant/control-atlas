@@ -276,6 +276,35 @@ test('hash deep route survives refresh on built site', async ({ page }) => {
   });
 });
 
+test('unknown hash routes render an honest not-found view with recovery actions', async ({ page }) => {
+  await page.goto('/#/total-nonsense-xyz');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Go to Home' })).toBeVisible();
+  await page.getByRole('button', { name: 'Start here' }).click();
+  await expect(page).toHaveURL(/#\/start/);
+  await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
+});
+
+test('explore search is route-derived and survives refresh', async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto('/#/explore');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  const input = page.getByRole('searchbox', { name: 'Search by ID, title, or topic' });
+  await input.fill('account management');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/[?&]q=account/);
+  await page.reload();
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page).toHaveURL(/[?&]q=account/);
+  await expect(
+    page.getByRole('searchbox', { name: 'Search by ID, title, or topic' }),
+  ).toHaveValue('account management');
+});
+
 test('footer about link opens the trust page with full disclaimer', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);

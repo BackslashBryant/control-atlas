@@ -10,7 +10,8 @@ export type AppView =
   | "start-here"
   | "about"
   | "retired"
-  | "browse";
+  | "browse"
+  | "not-found";
 
 export type CompareWorkbench =
   | "intent"
@@ -114,6 +115,9 @@ export type ViewState =
   | {
       view: "browse";
       framework: string;
+    }
+  | {
+      view: "not-found";
     };
 
 function searchState(): ViewState {
@@ -294,6 +298,10 @@ export function parseViewState(search: string): ViewState {
     return { view: "about" };
   }
 
+  if (view === "not-found") {
+    return { view: "not-found" };
+  }
+
   if (view === "browse") {
     return {
       view,
@@ -414,6 +422,10 @@ export function normalizeViewState(
 
   if (view === "about") {
     return { view: "about" };
+  }
+
+  if (view === "not-found") {
+    return { view: "not-found" };
   }
 
   if (view === "retired") {
