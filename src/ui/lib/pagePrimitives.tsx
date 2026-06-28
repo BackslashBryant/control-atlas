@@ -107,7 +107,7 @@ export function formatConfidence(value: string) {
 export function PageHeader(props: {
   eyebrow?: string;
   title: string;
-  summary: string;
+  summary?: string;
   action?: ReactNode;
 }) {
   return (
@@ -116,7 +116,9 @@ export function PageHeader(props: {
       <div className="page-header-row">
         <div>
           <h1>{props.title}</h1>
-          <p className="page-summary">{props.summary}</p>
+          {props.summary ? (
+            <p className="page-summary">{props.summary}</p>
+          ) : null}
         </div>
         {props.action ? (
           <div className="page-header-action">{props.action}</div>
@@ -164,11 +166,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
         </Badge>
       </div>
       <p className="result-summary">
-        {source.name} is maintained by {source.owner}.{" "}
-        <ProvenanceTerm
-          kind="provenance"
-          value={source.provenance_class || "federal_published"}
-        />
+        {source.name} is maintained by {source.owner}.
       </p>
       <div className="source-summary-grid">
         <ProvenanceTerm kind="provenance" value={source.provenance_class || ""} />

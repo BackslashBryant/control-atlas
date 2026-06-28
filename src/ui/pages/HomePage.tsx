@@ -68,10 +68,6 @@ export function HomePage(props: HomePageProps) {
       <section className="hero home-hero">
         <h1>Control Atlas</h1>
         <p>The public map for federal cyber compliance.</p>
-        <div className="ca-hero-tagline">
-          <span className="ca-hero-prefix">Ctrl+Alt+</span>
-          <span className="ca-hero-word">Comply</span>
-        </div>
         <p className="ca-hero-body">
           Explore public controls, baselines, STIGs, and compliance patterns —
           and generate blank RMF/ATO templates without uploading data or creating

@@ -119,16 +119,6 @@ export function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
-      <SummaryCard title="How to read this page" tone="trust">
-        <p>
-          <strong>Included in map</strong> shows whether Control Atlas uses this
-          source in public relationship views. <strong>Status</strong> reflects
-          whether the source is current or deprecated. <strong>Access</strong>{" "}
-          notes whether the artifact is publicly reachable.{" "}
-          <strong>Source type</strong> describes where the data came from.
-        </p>
-      </SummaryCard>
-
       <section className="canonical-source-links" aria-labelledby="canonical-source-links-heading">
         <h2 id="canonical-source-links-heading">Canonical source links</h2>
         <p>
