@@ -1,7 +1,6 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { IconSearch, IconSparkles } from "@tabler/icons-react";
 import {
-  useDeferredValue,
   useEffect,
   useMemo,
   useState,
@@ -42,7 +41,6 @@ export function ExplorePage(props: {
   } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
   const [connectionsOnly, setConnectionsOnly] = useState(false);
-  const deferredQuery = useDeferredValue(queryDraft);
 
   useEffect(() => {
     setQueryDraft(state.query);
@@ -153,7 +151,7 @@ export function ExplorePage(props: {
           className="search-form"
           onSubmit={(event) => {
             event.preventDefault();
-            onNavigate("search", { ...state, query: deferredQuery.trim() });
+            onNavigate("search", { ...state, query: queryDraft.trim() });
           }}
         >
           <label className="field grow" htmlFor="search-query">

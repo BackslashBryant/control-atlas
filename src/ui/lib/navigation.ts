@@ -60,7 +60,8 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
     view === "home" ||
     view === "patterns" ||
     view === "start-here" ||
-    view === "search"
+    view === "search" ||
+    view === "not-found"
   );
 }
 

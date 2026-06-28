@@ -406,6 +406,41 @@ function AppContent(props: {
     return <HomePage onNavigate={onNavigate} />;
   }
 
+  if (state.view === "not-found") {
+    return (
+      <section className="notice">
+        <h2>Page not found</h2>
+        <p>
+          We could not find that page. The link may be incorrect or the page may
+          have moved.
+        </p>
+        <div className="card-actions">
+          <button
+            className="primary"
+            onClick={() => onNavigate("home")}
+            type="button"
+          >
+            Go to Home
+          </button>
+          <button
+            className="secondary"
+            onClick={() => onNavigate("start-here")}
+            type="button"
+          >
+            Start here
+          </button>
+          <button
+            className="secondary"
+            onClick={() => onNavigate("search")}
+            type="button"
+          >
+            Search records
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   if (state.view === "atlas-map") {
     if (!bundle) {
       return (
