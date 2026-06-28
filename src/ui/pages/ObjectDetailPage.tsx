@@ -116,13 +116,17 @@ export function ObjectDetailPage(props: {
   }
 
   const locationSummary = [
-    ...((federalContext?.baselineMembership || []).map(
-      (entry: any) => entry.baselineNode?.metadata?.item_id,
-    ) || []),
-    ...((federalContext?.fedrampBaselineContext || []).map(
-      (entry: any) => entry.baselineNode?.metadata?.item_id,
-    ) || []),
-  ].filter(Boolean);
+    ...new Set(
+      [
+        ...((federalContext?.baselineMembership || []).map(
+          (entry: any) => entry.baselineNode?.metadata?.item_id,
+        ) || []),
+        ...((federalContext?.fedrampBaselineContext || []).map(
+          (entry: any) => entry.baselineNode?.metadata?.item_id,
+        ) || []),
+      ].filter(Boolean),
+    ),
+  ];
 
   const relatedGlossaryTerms = glossaryTermsForDocument(document);
 
@@ -197,7 +201,6 @@ export function ObjectDetailPage(props: {
             </button>
           </div>
         }
-        summary="Open with meaning first, review where this item appears, then use the grouped relationships and source support to decide what to do next."
         title={document.title}
       />
 
@@ -208,14 +211,6 @@ export function ObjectDetailPage(props: {
               {node.plain_language_summary ||
                 document.plain_language_summary ||
                 document.description}
-            </p>
-          </SummaryCard>
-          <SummaryCard title="Why it matters">
-            <p>
-              {document.item_id} is part of the public compliance library. Use
-              it to understand the requirement, see the public connections
-              around it, and decide which comparison or planning artifact to
-              open next.
             </p>
           </SummaryCard>
           <SummaryCard title="Where it appears">

@@ -63,6 +63,10 @@ export function TopNav(props: TopNavProps) {
     };
   }, [prefersReducedMotion]);
   const rotatingWord = BRAND_WORDS[wordIdx];
+  const longestBrandWord = BRAND_WORDS.reduce(
+    (longest, word) => (word.length > longest.length ? word : longest),
+    "",
+  );
 
   function navigateFromMenu(view: ViewState["view"]) {
     setMoreOpen(false);
@@ -87,12 +91,14 @@ export function TopNav(props: TopNavProps) {
           <span className="brand-key">Alt</span>
           <span className="brand-plus">+</span>
           <span className="brand-key brand-key--active">
+            <span aria-hidden="true" className="brand-key-sizer">
+              {longestBrandWord}
+            </span>
             <span className={`brand-key-word${fading ? " fading" : ""}`}>
               {rotatingWord}
             </span>
           </span>
         </span>
-        <span className="brand-sub">Control Atlas</span>
       </button>
       <nav aria-label="Primary navigation" className="primary-nav">
         {PRIMARY_NAV_ITEMS.map((item) => {

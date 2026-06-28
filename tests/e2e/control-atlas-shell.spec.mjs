@@ -98,7 +98,6 @@ test('library detail deep links stay compatible and keep advanced details collap
   await expect(page).toHaveURL(/record\/nist-800-53\/AC-2|library-detail/);
   await expect(page.getByRole('heading', { name: 'Account Management', exact: true })).toBeVisible();
   await expect(page.getByText('What this is')).toBeVisible();
-  await expect(page.getByText('Why it matters')).toBeVisible();
   await expect(page.getByText('Where it appears')).toBeVisible();
   await expect(page.getByText('Connections', { exact: true }).first()).toBeVisible();
   await expect(page.getByRole('button', { name: 'Open in Atlas Map' }).first()).toBeVisible();

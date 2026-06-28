@@ -213,7 +213,19 @@ a {
   border-color: color-mix(in srgb, var(--ca-primary) 70%, #000);
   border-bottom-color: color-mix(in srgb, var(--ca-primary) 50%, #000);
   color: #fff;
-  min-width: 8ch;
+  /* Overlay the visible word on a hidden sizer set to the longest word, so
+     swapping words never changes the pill width or shifts the nav. */
+  display: inline-grid;
+  justify-items: center;
+}
+.brand-key--active > .brand-key-sizer,
+.brand-key--active > .brand-key-word {
+  grid-row: 1;
+  grid-column: 1;
+}
+.brand-key-sizer {
+  visibility: hidden;
+  pointer-events: none;
 }
 .brand-key-word {
   display: inline-block;
@@ -228,13 +240,6 @@ a {
   font-size: var(--font-size-sm);
   padding: 0 1px;
 }
-.brand-sub {
-  font-size: var(--font-size-xs);
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-body);
-  white-space: nowrap;
-}
-
 .primary-nav {
   position: relative;
   display: flex;
@@ -390,9 +395,12 @@ h1 {
   letter-spacing: -0.04em;
 }
 
-/* Interior pages: panel h1 should never be hero-sized */
-.panel h1 {
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
+/* Interior pages: headings should never be hero-sized.
+   The display clamp (above) is reserved for the Home hero only. */
+.panel h1,
+.page-header h1,
+.detail-page h1 {
+  font-size: clamp(1.5rem, 2.5vw, 1.875rem);
   letter-spacing: -0.02em;
 }
 
