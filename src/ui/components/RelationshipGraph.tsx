@@ -153,9 +153,34 @@ function ControlAtlasNode(props: NodeProps<DiagramNode>) {
   );
 }
 
-function resolveDirection(layoutMode: RelationshipGraphProps["layoutMode"]) {
+function resolveDirection(
+  layoutMode: RelationshipGraphProps["layoutMode"],
+  narrowViewport: boolean,
+) {
+  // Narrow screens read top-to-bottom; the left-to-right authority flow only
+  // works with horizontal room.
+  if (narrowViewport) return "DOWN";
   if (layoutMode === "focus") return "DOWN";
+  // Drill views fan a handful of sources off one category; stacking them to
+  // the right keeps every node full-size in a tall canvas.
   return "RIGHT";
+}
+
+const NARROW_VIEWPORT_QUERY = "(max-width: 700px)";
+
+function useNarrowViewport(): boolean {
+  const [narrow, setNarrow] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia(NARROW_VIEWPORT_QUERY).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(NARROW_VIEWPORT_QUERY);
+    const onChange = (event: MediaQueryListEvent) => setNarrow(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+  return narrow;
 }
 
 function nodeDimensions(node: GraphNode) {
@@ -172,24 +197,28 @@ function buildElkGraph(
   graphNodes: GraphNode[],
   graphEdges: ReturnType<typeof buildGraphData>["links"],
   layoutMode: RelationshipGraphProps["layoutMode"],
+  narrowViewport: boolean,
 ): ElkGraph {
-  const isFocus = layoutMode === "focus";
+  const isFocus = layoutMode === "focus" || layoutMode === "drill";
+  const direction = resolveDirection(layoutMode, narrowViewport);
   // The default overview is a long, mostly-linear chain of category nodes.
   // Laid out as a single row it fits to a microscopic zoom in a square-ish
   // canvas, so wrap it into a balanced snake that fills the viewport with
-  // readable nodes. Wrapping only applies to the layered (non-focus) layout.
-  const wrappingOptions: Record<string, string> = isFocus
-    ? {}
-    : {
-        "elk.layered.wrapping.strategy": "SINGLE_EDGE",
-        "elk.layered.wrapping.correctionFactor": "1.4",
-        "elk.aspectRatio": "1.3",
-      };
+  // readable nodes. Wrapping only applies to the horizontal layered layout;
+  // a vertical chain on narrow screens scrolls naturally.
+  const wrappingOptions: Record<string, string> =
+    isFocus || direction === "DOWN"
+      ? {}
+      : {
+          "elk.layered.wrapping.strategy": "SINGLE_EDGE",
+          "elk.layered.wrapping.correctionFactor": "1.4",
+          "elk.aspectRatio": "1.3",
+        };
   return {
     id: "control-atlas-relationship-diagram",
     layoutOptions: {
       "elk.algorithm": isFocus ? "mrtree" : "layered",
-      "elk.direction": resolveDirection(layoutMode),
+      "elk.direction": direction,
       "elk.edgeRouting": "ORTHOGONAL",
       "elk.layered.spacing.nodeNodeBetweenLayers": "80",
       "elk.spacing.nodeNode": "44",
@@ -299,6 +328,7 @@ const RelationshipGraphInner = forwardRef<
   const [liveMessage, setLiveMessage] = useState("");
   const [focusedShortcutIndex, setFocusedShortcutIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const narrowViewport = useNarrowViewport();
 
   const graphData = useMemo(
     () => buildGraphData(nodes, edges, centerNodeId, clusterMeta),
@@ -381,7 +411,9 @@ const RelationshipGraphInner = forwardRef<
     );
 
     elk
-      .layout(buildElkGraph(graphData.nodes, graphData.links, layoutMode))
+      .layout(
+        buildElkGraph(graphData.nodes, graphData.links, layoutMode, narrowViewport),
+      )
       .then((nextLayout) => {
         if (layoutRunRef.current !== runId) return;
         setLayout(nextLayout as ElkGraph);
@@ -410,6 +442,7 @@ const RelationshipGraphInner = forwardRef<
     graphData.links,
     graphData.nodes,
     layoutMode,
+    narrowViewport,
     reactFlow,
     reducedMotion,
     setLayoutRunningState,

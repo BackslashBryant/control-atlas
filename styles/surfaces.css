@@ -1763,9 +1763,8 @@ a:focus-visible {
   .atlas-map-layout {
     grid-template-columns: minmax(0, 1fr);
   }
-  .atlas-map-main {
-    height: 45vh;
-  }
+  /* The map column must grow with its content (intro, tabs, canvas,
+     shortcuts); a fixed height makes it overflow into the matrix below. */
   .atlas-matrix {
     max-height: 40vh;
   }

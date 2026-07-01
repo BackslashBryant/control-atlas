@@ -10,6 +10,10 @@ import {
   DEFAULT_MAP_WARNINGS,
 } from "../graph/defaultMapFilter.ts";
 import { expandFocusedControlCluster } from "../graph/buildFocusedControlRings.ts";
+import { SOURCE_HIERARCHY_LABELS } from "../graph/sourceHierarchy.ts";
+import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors.ts";
+import { SOURCE_SEED_MANIFEST } from "../graph/sourceSeedManifest.ts";
+import type { SourceHierarchyTier } from "../graph/sourceManifest.ts";
 import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
@@ -63,7 +67,12 @@ function resolveCenterNode(
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
   const node = props.state.node.trim();
-  if (!node || node === "AC-2" || node === "nist-800-53:AC-2") {
+  if (
+    !node ||
+    node === "AC-2" ||
+    node === "nist-800-53:AC-2" ||
+    node.startsWith("hierarchy:")
+  ) {
     return <FoundationAtlasMapPage {...props} />;
   }
   return <RuntimeAtlasMapPage {...props} />;
@@ -71,7 +80,14 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
 function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const { bundle, state, onNavigate } = props;
-  const focused = Boolean(state.node.trim());
+  const trimmedNode = state.node.trim();
+  const drillTier = trimmedNode.startsWith("hierarchy:")
+    ? trimmedNode.slice("hierarchy:".length)
+    : null;
+  const drillLabel = drillTier
+    ? (SOURCE_HIERARCHY_LABELS[drillTier as SourceHierarchyTier] ?? drillTier)
+    : null;
+  const focused = Boolean(trimmedNode) && !drillTier;
   const [mapSearchDraft, setMapSearchDraft] = useState("");
   const routeVisibilityFilters: SourceVisibilityFilters = {
     showSupportingReferences: state.showSupportingReferences === "true",
@@ -121,9 +137,35 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
     setFoundationExpandedClusters(new Set());
   }, [state.node]);
 
-  const handleSelectNode = useCallback((nodeId: string) => {
-    setSelectedNodeId(nodeId);
-  }, []);
+  const handleSelectNode = useCallback(
+    (nodeId: string) => {
+      // On the overview, choosing a category drills into it — the map opens
+      // that layer and shows the sources inside. Everything else selects.
+      if (!drillTier && !focused && nodeId.startsWith("hierarchy:")) {
+        onNavigate("atlas-map", { ...state, node: nodeId });
+        return;
+      }
+      setSelectedNodeId(nodeId);
+    },
+    [drillTier, focused, onNavigate, state],
+  );
+
+  const selectedSource = selectedNodeId?.startsWith("source:")
+    ? SOURCE_SEED_MANIFEST.find(
+        (source) => `source:${source.sourceId}` === selectedNodeId,
+      )
+    : null;
+  const selectedSourceAnchor = selectedSource
+    ? SOURCE_RUNTIME_ANCHORS[selectedSource.sourceId]
+    : undefined;
+  const anchorAvailable = useMemo(() => {
+    if (!selectedSourceAnchor) return false;
+    try {
+      return Boolean(bundle.runtime.getNode(selectedSourceAnchor));
+    } catch {
+      return false;
+    }
+  }, [bundle.runtime, selectedSourceAnchor]);
 
   const foundationRuntime = useMemo(
     () => ({
@@ -180,10 +222,24 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
         summary={
           focused
             ? "See the control in context and explore its connections to baselines, assessments, implementation standards, and mappings."
-            : "Explore the compliance ecosystem."
+            : drillLabel
+              ? `Inside ${drillLabel}. Select a source to see who publishes it and what it covers.`
+              : "Nine layers make up federal cyber compliance. Select a layer to open it and see the sources inside."
         }
-        title="Atlas"
+        title={drillLabel ?? "Atlas"}
       />
+
+      {drillTier ? (
+        <nav aria-label="Atlas breadcrumb" className="ca-atlas-drill-bar">
+          <button
+            className="secondary quiet"
+            onClick={() => onNavigate("atlas-map", { ...state, node: "" })}
+            type="button"
+          >
+            ← All layers
+          </button>
+        </nav>
+      ) : null}
 
       <form
         className="atlas-map-command"
@@ -271,7 +327,9 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
       <div className="atlas-map-layout">
         <div className="atlas-map-main">
           <RelationshipExplorer
-            centerItemId={focused ? "AC-2" : "Control Catalog / Requirement Set"}
+            centerItemId={
+              focused ? "AC-2" : (drillLabel ?? "Control landscape")
+            }
             centerNodeId={model.centerNodeId}
             filters={emptyRelationshipFilters}
             expandedClusterLabels={
@@ -283,12 +341,20 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
               )
             }
             expandedClusters={foundationExpandedClusters}
-            heading={focused ? "AC-2 focused map" : "Source hierarchy"}
+            heading={
+              focused
+                ? "AC-2 focused map"
+                : drillLabel
+                  ? `${drillLabel} sources`
+                  : "Source hierarchy"
+            }
             hideHeading
             introCopy={
               focused
                 ? "AC-2 stays central while dense implementation and mapping details remain clustered."
-                : "Each node is a category of compliance source. Select one to see what it contributes and where to go next."
+                : drillLabel
+                  ? `These are the sources inside the ${drillLabel} layer. Select one for a plain-language summary.`
+                  : "Each node is a layer of the compliance ecosystem. Select a layer to open it and see the sources inside."
             }
             layoutMode={model.layoutMode}
             mapControls
@@ -327,6 +393,45 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
               },
             }}
           />
+
+          {selectedSource ? (
+            <aside aria-label="Selected source" className="ca-source-detail">
+              <p className="eyebrow">Selected source</p>
+              <strong>{selectedSource.displayName}</strong>
+              <p className="muted">
+                {selectedSource.publisher} · {selectedSource.subcategory}
+              </p>
+              {selectedSource.defaultMapReason ? (
+                <p>{selectedSource.defaultMapReason}</p>
+              ) : null}
+              <div className="card-actions">
+                {anchorAvailable && selectedSourceAnchor ? (
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      onNavigate("atlas-map", {
+                        ...state,
+                        node: selectedSourceAnchor,
+                      })
+                    }
+                    type="button"
+                  >
+                    Explore its records
+                  </button>
+                ) : null}
+                {selectedSource.canonicalUrl.startsWith("http") ? (
+                  <a
+                    className="link-action"
+                    href={selectedSource.canonicalUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Open official source ↗
+                  </a>
+                ) : null}
+              </div>
+            </aside>
+          ) : null}
         </div>
         <AtlasMatrix
           edges={model.edges}
