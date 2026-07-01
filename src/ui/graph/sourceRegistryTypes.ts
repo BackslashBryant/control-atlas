@@ -30,7 +30,11 @@ export type VisibleGraphEdge = {
   plain_language_rationale: string;
 };
 
-export type RelationshipLayoutMode = "hierarchy" | "focus" | "expanded";
+export type RelationshipLayoutMode =
+  | "hierarchy"
+  | "focus"
+  | "drill"
+  | "expanded";
 
 export type VisibleRelationshipModel = {
   centerNodeId: string;

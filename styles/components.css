@@ -688,6 +688,34 @@
   height: 14px;
 }
 
+/* ── Atlas drill-down breadcrumb ── */
+.ca-atlas-drill-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-3);
+}
+
+/* ── Selected source detail (Atlas drill-down) ── */
+.ca-source-detail {
+  display: grid;
+  gap: var(--ca-space-2);
+  margin-top: var(--ca-space-3);
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-md);
+  background: color-mix(in srgb, var(--ca-surface-raised) 96%, transparent);
+}
+
+.ca-source-detail p {
+  margin: 0;
+  font-size: var(--ca-text-sm);
+}
+
+.ca-source-detail .card-actions {
+  margin-top: var(--ca-space-2);
+}
+
 /* ── Beginner category explainer (Atlas Map side panel) ── */
 .ca-category-explainer {
   display: flex;

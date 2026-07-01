@@ -21,11 +21,18 @@ const DEFAULT_FILTERS: SourceVisibilityFilters = {
   showRegistryOnly: false,
 };
 
+function tierMemberCount(hierarchyTier: string): number {
+  return SOURCE_SEED_MANIFEST.filter(
+    (source) => source.hierarchyTier === hierarchyTier,
+  ).length;
+}
+
 function hierarchyNode(
   hierarchyTier: string,
   displayName: string,
   graphRole: string,
 ): VisibleGraphNode {
+  const count = tierMemberCount(hierarchyTier);
   return {
     id: `hierarchy:${hierarchyTier}`,
     label: displayName,
@@ -33,8 +40,26 @@ function hierarchyNode(
     graphRole,
     metadata: {
       item_id: displayName,
-      title: displayName,
+      title: `${count} source${count === 1 ? "" : "s"} inside — select to open`,
       hierarchyTier,
+      childCount: count,
+    },
+  };
+}
+
+function sourceNode(
+  source: (typeof SOURCE_SEED_MANIFEST)[number],
+): VisibleGraphNode {
+  return {
+    id: `source:${source.sourceId}`,
+    label: source.displayName,
+    node_type: "source",
+    graphRole: sourceToGraphRole(source),
+    metadata: {
+      item_id: source.displayName,
+      title: `${source.publisher} · ${source.subcategory}`,
+      hierarchyTier: source.hierarchyTier,
+      description: source.defaultMapReason,
     },
   };
 }
@@ -108,6 +133,56 @@ export function buildSourceHierarchyModel(
   };
 }
 
+/**
+ * Drill-down view for one hierarchy tier: the category sits at the center and
+ * its member sources fan out below it. Optional (gated) sources appear only
+ * when the matching visibility filter is on.
+ */
+export function buildTierDrillModel(
+  hierarchyTier: string,
+  filters: SourceVisibilityFilters = DEFAULT_FILTERS,
+): VisibleRelationshipModel {
+  const entry = SOURCE_HIERARCHY_NODES.find(
+    (candidate) => candidate.hierarchyTier === hierarchyTier,
+  );
+  if (!entry) {
+    return buildSourceHierarchyModel(filters);
+  }
+
+  const members = SOURCE_SEED_MANIFEST.filter(
+    (source) =>
+      source.hierarchyTier === hierarchyTier &&
+      isVisibleWithOptionalFilters(source, filters),
+  );
+  const representative = SOURCE_SEED_MANIFEST.find(
+    (source) => source.hierarchyTier === hierarchyTier,
+  );
+  const center = hierarchyNode(
+    entry.hierarchyTier,
+    entry.displayName,
+    representative ? sourceToGraphRole(representative) : "other",
+  );
+  const nodes = [center, ...members.map(sourceNode)];
+  const edges = members.map((source) => ({
+    id: `drill:${hierarchyTier}->${source.sourceId}`,
+    source_node_id: center.id,
+    target_node_id: `source:${source.sourceId}`,
+    relationship_type: "includes",
+    provenance_class: "official",
+    publication_status: "published",
+    confidence: "high",
+    plain_language_rationale: `${source.displayName} is one of the sources that make up the ${entry.displayName} layer.`,
+  }));
+
+  return {
+    centerNodeId: center.id,
+    layoutMode: "drill",
+    nodes,
+    edges,
+    stats: { total: edges.length, filtered: edges.length },
+  };
+}
+
 export function buildVisibleRelationshipModel(options: {
   nodeId: string;
   filters?: SourceVisibilityFilters;
@@ -117,6 +192,12 @@ export function buildVisibleRelationshipModel(options: {
     options.nodeId === "nist-800-53:AC-2"
   ) {
     return buildFocusedControlRings(options.nodeId);
+  }
+  if (options.nodeId.startsWith("hierarchy:")) {
+    return buildTierDrillModel(
+      options.nodeId.slice("hierarchy:".length),
+      options.filters,
+    );
   }
   return buildSourceHierarchyModel(options.filters);
 }

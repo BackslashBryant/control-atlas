@@ -15,7 +15,9 @@ test("Atlas Map starts with nine ordered source categories", async ({ page }) =>
   await dismissOnboarding(page);
 
   await expect(
-    page.getByText("Explore the compliance ecosystem."),
+    page.getByText(
+      "Nine layers make up federal cyber compliance. Select a layer to open it and see the sources inside.",
+    ),
   ).toBeVisible();
   await expect(
     page.getByText("Find a control, CCI, baseline, STIG, or source."),
@@ -84,7 +86,7 @@ test("Atlas Map search opens a focused control map from the default route", asyn
   await expect(matrix).toContainText("AC-2");
 });
 
-test("selecting a source category links the graph node to the coverage matrix", async ({
+test("selecting a layer drills into its sources and back", async ({
   page,
 }) => {
   await page.goto("/#/atlas-map");
@@ -92,14 +94,62 @@ test("selecting a source category links the graph node to the coverage matrix", 
   await dismissOnboarding(page);
 
   await page
+    .getByRole("group", { name: "Map nodes" })
     .getByRole("button", {
       name: "Control Catalog / Requirement Set",
       exact: true,
     })
     .click();
 
-  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
-  await expect(matrix).toBeVisible();
-  const selectedRow = matrix.locator('tbody tr[aria-selected="true"]');
-  await expect(selectedRow).toContainText("Control Catalog / Requirement Set");
+  // Drill view: the layer is the center, its member sources fan out.
+  await expect(page).toHaveURL(/node=hierarchy(%3A|:)control-catalog-requirement-set/);
+  await expect(
+    page.getByRole("heading", {
+      name: "Control Catalog / Requirement Set",
+      level: 1,
+    }),
+  ).toBeVisible();
+  const drillNodes = page
+    .getByRole("group", { name: "Map nodes" })
+    .getByRole("button");
+  await expect(
+    drillNodes.filter({ hasText: "NIST SP 800-53 Rev. 5" }).first(),
+  ).toBeVisible();
+
+  // Selecting a source shows its plain-language detail card.
+  await drillNodes.filter({ hasText: "NIST SP 800-53 Rev. 5" }).first().click();
+  const detail = page.getByRole("complementary", { name: "Selected source" });
+  await expect(detail).toBeVisible();
+  await expect(detail).toContainText("NIST");
+  await expect(
+    detail.getByRole("link", { name: /Open official source/ }),
+  ).toBeVisible();
+
+  // Breadcrumb returns to the nine-layer overview.
+  await page.getByRole("button", { name: "← All layers" }).click();
+  await expect(
+    page.getByRole("group", { name: "Map nodes" }).getByRole("button"),
+  ).toHaveCount(9);
+});
+
+test("drilling into a mapped source continues to its runtime records", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas-map?node=hierarchy%3Abaseline-overlay-program-profile");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const drillNodes = page
+    .getByRole("group", { name: "Map nodes" })
+    .getByRole("button");
+  await drillNodes
+    .filter({ hasText: "FedRAMP Rev. 5 Baselines" })
+    .first()
+    .click();
+
+  const detail = page.getByRole("complementary", { name: "Selected source" });
+  await expect(detail).toBeVisible();
+  await detail.getByRole("button", { name: "Explore its records" }).click();
+
+  await expect(page).toHaveURL(/node=fedramp-rev5(%3A|:)HIGH/);
 });
