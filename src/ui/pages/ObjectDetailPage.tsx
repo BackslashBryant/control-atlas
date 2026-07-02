@@ -52,6 +52,7 @@ import type {
   StartHereRecommendations,
 } from "../lib/startHereRecommendations.d.ts";
 import { serializeHashUrl } from "../lib/hashRoutes";
+import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -98,6 +99,13 @@ export function ObjectDetailPage(props: {
     ? bundle.runtime.getFederalContext(node.id)
     : null;
   const advancedRelationships = edges.slice(0, 25);
+  const impact = useMemo(
+    () =>
+      node
+        ? buildImpactBreakdown(node.id, edges, (id) => bundle.runtime.getNode(id))
+        : { total: 0, byType: [] },
+    [bundle.runtime, edges, node],
+  );
 
   if (!node || !document) {
     return (
@@ -201,7 +209,7 @@ export function ObjectDetailPage(props: {
             </button>
           </div>
         }
-        title={document.title}
+        title={recordDisplayTitle(node) || document.title}
       />
 
       <div className="detail-grid">
@@ -366,12 +374,34 @@ export function ObjectDetailPage(props: {
         </section>
 
         <aside className="stack detail-sidebar">
-          <SummaryCard title="Connections" tone="trust">
-            <p>
-              {edges.length
-                ? `${edges.length} connections across ${grouped.length} group${grouped.length === 1 ? "" : "s"}.`
-                : "No connections yet."}
-            </p>
+          <SummaryCard title="One stone, how many birds?" tone="trust">
+            {impact.total ? (
+              <>
+                <p>
+                  Working on this touches{" "}
+                  <strong>{impact.total} related item{impact.total === 1 ? "" : "s"}</strong>{" "}
+                  across the frameworks you get assessed on:
+                </p>
+                <ul className="impact-breakdown">
+                  {impact.byType.slice(0, 6).map((entry) => (
+                    <li key={entry.nodeType}>
+                      <strong>{entry.count}</strong> {entry.label}
+                    </li>
+                  ))}
+                  {impact.byType.length > 6 ? (
+                    <li>
+                      …and{" "}
+                      {impact.byType
+                        .slice(6)
+                        .reduce((sum, entry) => sum + entry.count, 0)}{" "}
+                      more
+                    </li>
+                  ) : null}
+                </ul>
+              </>
+            ) : (
+              <p>No published connections yet.</p>
+            )}
             {edges.length ? (
               <div className="card-actions">
                 <button

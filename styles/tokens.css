@@ -5,8 +5,11 @@
   --ca-bg: #0b1020;
   --ca-surface: #111827;
   --ca-surface-raised: #1e293b;
-  --ca-border: #334155;
-  --ca-border-subtle: #1e293b;
+  /* Calm-dark: translucent borders read softer than solid slate on the
+     varied panel backgrounds, and hairlines recede instead of boxing
+     everything in. */
+  --ca-border: rgba(148, 163, 184, 0.22);
+  --ca-border-subtle: rgba(148, 163, 184, 0.11);
 
   /* ── Text ── */
   --ca-text: #f8fafc;
@@ -73,9 +76,9 @@
   --ca-space-16: 4rem;
 
   /* ── Radii ── */
-  --ca-radius-sm: 4px;
-  --ca-radius-md: 8px;
-  --ca-radius-lg: 12px;
+  --ca-radius-sm: 6px;
+  --ca-radius-md: 10px;
+  --ca-radius-lg: 14px;
 
   /* ── Type ── */
   --ca-font-display: "Space Grotesk", system-ui, sans-serif;

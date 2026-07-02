@@ -10,6 +10,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
+import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -119,6 +120,18 @@ export function ExplorePage(props: {
   }, [visibleDocumentRows]);
   const hasVisibleResults =
     visibleDocumentRows.length > 0 || glossaryMatches.length > 0;
+
+  // Bound the DOM: an empty query matches the whole library (9k+ records).
+  // Open every group only for small result sets; always cap the cards
+  // rendered per group so browsing stays responsive.
+  const GROUP_RENDER_CAP = 30;
+  const openAllGroups = visibleDocumentRows.length <= 60;
+  const defaultOpenGroups = [
+    ...(glossaryMatches.length ? ["Glossary"] : []),
+    ...(openAllGroups
+      ? Object.keys(groupedDocuments)
+      : Object.keys(groupedDocuments).slice(0, 1)),
+  ];
 
   const facets = bundle.runtime.getLibraryFacets();
 
@@ -249,14 +262,10 @@ export function ExplorePage(props: {
         {hasVisibleResults ? (
           <Accordion.Root
             className="accordion-root search-result-groups"
-            collapsible
-            defaultValue={
-              glossaryMatches.length
-                ? "Glossary"
-                : Object.keys(groupedDocuments)[0]
-            }
+            defaultValue={defaultOpenGroups}
             id="library-results"
-            type="single"
+            key={`${state.query}|${Object.keys(groupedDocuments).join(",")}`}
+            type="multiple"
           >
             {glossaryMatches.length ? (
               <DisclosurePanel
@@ -331,7 +340,7 @@ export function ExplorePage(props: {
                   value={group}
                 >
                   <div className="stack">
-                    {entries.map(({ document, node, relationshipCount, source }) => {
+                    {entries.slice(0, GROUP_RENDER_CAP).map(({ document, node, relationshipCount, source }) => {
                       return (
                         <article className="result-card" key={document.id}>
                           <div className="result-card-header">
@@ -343,7 +352,16 @@ export function ExplorePage(props: {
                                 )}
                               </p>
                               <h3>
-                                {document.item_id} - {document.title}
+                                {recordDisplayTitle(
+                                  node ?? {
+                                    id: document.id,
+                                    node_type: document.object_type,
+                                    metadata: {
+                                      item_id: document.item_id,
+                                      title: document.title,
+                                    },
+                                  },
+                                )}
                               </h3>
                             </div>
                             {relationshipCount > 0 ? (
@@ -438,6 +456,13 @@ export function ExplorePage(props: {
                         </article>
                       );
                     })}
+                    {entries.length > GROUP_RENDER_CAP ? (
+                      <p className="muted">
+                        Showing the first {GROUP_RENDER_CAP} of{" "}
+                        {entries.length}. Search or use “Refine results” to
+                        narrow this list.
+                      </p>
+                    ) : null}
                   </div>
                 </DisclosurePanel>
               ),

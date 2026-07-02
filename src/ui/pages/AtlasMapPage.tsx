@@ -18,6 +18,7 @@ import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
 } from "../graph/buildVisibleRelationshipModel.ts";
+import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
@@ -600,7 +601,12 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
       <PageHeader
         eyebrow="ATLAS"
         summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-        title={isStarter ? "Atlas" : center.centerItemId}
+        title={
+          isStarter
+            ? "Atlas"
+            : recordDisplayTitle(bundle.runtime.getNode(center.centerNodeId)) ||
+              center.centerItemId
+        }
       />
 
       {isStarter ? (

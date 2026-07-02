@@ -7,6 +7,7 @@ import {
   IconSearch,
   IconSourceCode,
 } from "@tabler/icons-react";
+import { useState } from "react";
 
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import type { ViewState } from "../lib/viewState";
@@ -62,17 +63,35 @@ const HOME_CARDS = [
 
 export function HomePage(props: HomePageProps) {
   const { onNavigate } = props;
+  const [searchDraft, setSearchDraft] = useState("");
 
   return (
     <>
       <section className="hero home-hero">
         <h1>Control Atlas</h1>
         <p>The public map for federal cyber compliance.</p>
-        <p className="ca-hero-body">
-          Explore public controls, baselines, STIGs, and compliance patterns —
-          and generate blank RMF/ATO templates without uploading data or creating
-          an account.
-        </p>
+        <form
+          className="home-search"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const query = searchDraft.trim();
+            if (!query) return;
+            onNavigate("search", { query });
+          }}
+          role="search"
+        >
+          <IconSearch aria-hidden="true" className="home-search-icon" size={20} stroke={1.8} />
+          <input
+            aria-label="Search controls, baselines, CCIs, STIGs, and terms"
+            onChange={(event) => setSearchDraft(event.target.value)}
+            placeholder="Search anything — AC-2, FedRAMP High, CCI-000225, Zero Trust…"
+            type="search"
+            value={searchDraft}
+          />
+          <button className="primary" type="submit">
+            Search
+          </button>
+        </form>
         <div className="hero-actions">
           <button
             className="primary"
