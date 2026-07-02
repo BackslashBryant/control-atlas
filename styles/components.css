@@ -329,7 +329,6 @@
 .ca-hero-prefix { color: var(--ca-text-muted); }
 .ca-hero-word { color: var(--ca-secondary); font-family: var(--ca-font-mono); display: inline-block; min-width: 9ch; text-align: left; }
 .ca-hero-sub { color: var(--ca-text-muted); }
-.ca-hero-body { color: var(--ca-text-muted); max-width: 42rem; }
 .ca-text-muted { color: var(--ca-text-muted); }
 .ca-text-subtle { color: var(--ca-text-subtle); }
 
@@ -714,6 +713,64 @@
 
 .ca-source-detail .card-actions {
   margin-top: var(--ca-space-2);
+}
+
+/* ── Home hero search launchpad ── */
+.home-search {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  width: min(44rem, 100%);
+  margin: var(--ca-space-4) auto;
+  padding: var(--ca-space-2) var(--ca-space-2) var(--ca-space-2) var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ca-surface-raised) 92%, transparent);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.home-search:focus-within {
+  border-color: var(--ca-secondary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ca-secondary) 18%, transparent);
+}
+
+.home-search-icon {
+  flex: none;
+  color: var(--ca-text-muted);
+}
+
+.home-search input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--ca-text);
+  font-size: var(--ca-text-base);
+  padding: var(--ca-space-2) 0;
+}
+
+.home-search input[type="search"]:focus {
+  outline: none;
+}
+
+.home-search button {
+  flex: none;
+  border-radius: 999px;
+}
+
+/* ── Impact breakdown (birds-per-stone leverage list) ── */
+.impact-breakdown {
+  list-style: none;
+  margin: var(--ca-space-2) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--ca-space-1);
+  font-size: var(--ca-text-sm);
+}
+
+.impact-breakdown li strong {
+  color: var(--ca-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Beginner category explainer (Atlas Map side panel) ── */

@@ -2173,13 +2173,6 @@ a:focus-visible {
   max-width: 32rem;
 }
 
-.ca-hero-body {
-  max-width: 42rem;
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-base);
-  line-height: var(--line-height-relaxed);
-}
-
 .detail-page {
   display: grid;
   gap: var(--ca-space-6);

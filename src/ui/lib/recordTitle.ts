@@ -1,0 +1,109 @@
+/**
+ * Human-first display names for runtime records.
+ *
+ * Rule (user-locked): lead with the official name + ID the way the source
+ * publishes it ("AC-2 — Account Management"), and never surface internal
+ * scaffold ids (FAMILY-AC, DOC-STRATEGY, HIGH) as titles on their own.
+ */
+
+type TitledNode = {
+  id: string;
+  node_type?: string;
+  label?: string;
+  metadata?: { item_id?: string; title?: string };
+};
+
+// Node types whose item_id is an internal scaffold id, not an official
+// designation — for these the title alone is the official name.
+const INTERNAL_ID_TYPES = new Set([
+  "family",
+  "baseline",
+  "program",
+  "policy",
+  "impact_category",
+  "zt_document",
+  "zt_pillar",
+  "zt_tenet",
+  "rmf_step",
+  "catalog",
+]);
+
+export function recordDisplayTitle(node: TitledNode | null | undefined): string {
+  if (!node) return "";
+  const itemId = node.metadata?.item_id ?? "";
+  const title = node.metadata?.title ?? "";
+  if (!title) return node.label || itemId || node.id;
+  if (!itemId || title === itemId) return title;
+  if (node.node_type === "family") {
+    const familyCode = itemId.replace(/^FAMILY-/, "");
+    return `${title} (${familyCode}) family`;
+  }
+  if (INTERNAL_ID_TYPES.has(node.node_type ?? "")) {
+    return title;
+  }
+  if (title.startsWith(itemId)) return title;
+  return `${itemId} — ${title}`;
+}
+
+// Friendly plural names for connection-impact summaries, keyed by node_type.
+const TYPE_PLURALS: Record<string, [string, string]> = {
+  control: ["NIST control", "NIST controls"],
+  control_enhancement: ["control enhancement", "control enhancements"],
+  requirement: ["CCI / requirement", "CCIs / requirements"],
+  stig_rule: ["STIG rule", "STIG rules"],
+  srg_requirement: ["SRG requirement", "SRG requirements"],
+  baseline: ["baseline", "baselines"],
+  program: ["program level", "program levels"],
+  assessment_procedure: ["assessment procedure", "assessment procedures"],
+  attack_technique: ["ATT&CK technique", "ATT&CK techniques"],
+  defend_countermeasure: ["D3FEND countermeasure", "D3FEND countermeasures"],
+  zt_activity: ["Zero Trust activity", "Zero Trust activities"],
+  zt_capability: ["Zero Trust capability", "Zero Trust capabilities"],
+  family: ["control family", "control families"],
+  rmf_step: ["RMF step", "RMF steps"],
+  impact_category: ["impact level", "impact levels"],
+};
+
+export function friendlyTypePlural(nodeType: string, count: number): string {
+  const entry = TYPE_PLURALS[nodeType];
+  if (entry) return count === 1 ? entry[0] : entry[1];
+  const pretty = nodeType.replaceAll("_", " ");
+  return count === 1 ? pretty : `${pretty}s`;
+}
+
+export type ImpactBreakdown = {
+  total: number;
+  byType: Array<{ nodeType: string; label: string; count: number }>;
+};
+
+/**
+ * The "birds per stone" summary: how many related requirements this record
+ * touches, broken down by kind, largest groups first.
+ */
+export function buildImpactBreakdown(
+  centerNodeId: string,
+  edges: Array<{ source_node_id: string; target_node_id: string }>,
+  getNode: (id: string) => TitledNode | null | undefined,
+): ImpactBreakdown {
+  const counts = new Map<string, number>();
+  const seen = new Set<string>();
+  for (const edge of edges) {
+    const counterpartId =
+      edge.source_node_id === centerNodeId
+        ? edge.target_node_id
+        : edge.source_node_id;
+    if (seen.has(counterpartId)) continue;
+    seen.add(counterpartId);
+    const counterpart = getNode(counterpartId);
+    const nodeType = counterpart?.node_type || "other";
+    counts.set(nodeType, (counts.get(nodeType) ?? 0) + 1);
+  }
+  const byType = [...counts.entries()]
+    .map(([nodeType, count]) => ({
+      nodeType,
+      count,
+      label: friendlyTypePlural(nodeType, count),
+    }))
+    .sort((a, b) => b.count - a.count);
+  return { total: seen.size, byType };
+}
