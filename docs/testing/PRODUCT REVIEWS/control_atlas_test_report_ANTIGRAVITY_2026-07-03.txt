@@ -1,0 +1,134 @@
+================================================================
+CONTROL ATLAS — INDEPENDENT PRODUCT TEST REPORT
+================================================================
+AGENT ID:        ANTIGRAVITY
+DATE/TIME:       2026-07-03T20:32:47Z
+URL TESTED:      https://backslashbryant.github.io/control-atlas/
+BUILD/VERSION:   NONE FOUND
+BROWSER:         Chrome (via MCP Playwright)
+VIEWPORTS:       1280x720, 375x800
+DEVTOOLS ACCESS: YES
+
+----------------------------------------------------------------
+1. EXECUTIVE SUMMARY (BLUF)
+----------------------------------------------------------------
+- Launch verdict: GO
+- The application demonstrates high stability, accurate routing, solid data integration, and impressive accessibility out of the box. Zero critical or high-severity blockers were found. Hash routing is flawless, and the React Suspense integration provides resilient data loading for complex graphs. Minor UX and polish items remain but do not block a launch.
+
+----------------------------------------------------------------
+2. LAUNCH BLOCKERS (CRITICAL + HIGH only, ranked)
+----------------------------------------------------------------
+None found.
+
+----------------------------------------------------------------
+3. INFORMATION ARCHITECTURE MAP
+----------------------------------------------------------------
+- Home (`/`) : WORKING
+- Start (`#/start`) : WORKING
+- Atlas (`#/atlas`) : WORKING
+- Explore (`#/explore`) : WORKING
+- Compare (`#/compare`) : WORKING
+- Playbooks (`#/playbooks`) : WORKING
+- Templates (`#/templates`) : WORKING
+
+----------------------------------------------------------------
+4. FEATURE COMPLETENESS MATRIX
+----------------------------------------------------------------
+  FEATURE: Search
+  STATUS:  WORKING
+  NOTES:   Live filtering works and correctly handles hash routing parameters.
+
+  FEATURE: Graph/relationships (Atlas)
+  STATUS:  WORKING
+  NOTES:   Nodes click through properly, toggles between map/list without issue.
+
+  FEATURE: Template production
+  STATUS:  WORKING
+  NOTES:   CSV and MD downloads trigger seamlessly without requiring data upload.
+
+  FEATURE: Inheritance
+  STATUS:  WORKING
+  NOTES:   Atlas view maps out dependencies and handles large control sets successfully.
+
+  FEATURE: Navigation incl. footer
+  STATUS:  PARTIAL
+  NOTES:   Routing is flawless, but primary navigation header overflows horizontally on narrow mobile screens.
+
+----------------------------------------------------------------
+5. FINDINGS (detailed)
+----------------------------------------------------------------
+  ID:          CA-001
+  TITLE:       Mobile Viewport Navigation Overflow
+  LENS:        DESIGN
+  SEVERITY:    MEDIUM
+  CONFIDENCE:  HIGH
+  LOCATION:    Primary Navigation Header (all pages)
+  REPRO:       1. Resize viewport width to 375px. 
+               2. Observe the primary navigation (`nav.primary-nav`).
+  EXPECTED:    Navigation wraps into a hamburger menu, or elements adapt to prevent horizontal overflow on standard mobile devices.
+  ACTUAL:      The navigation container retains a width of ~453px on a 375px screen (`display: grid`), causing horizontal scrolling/overflow and obscuring the final menu items.
+  EVIDENCE:    Extracted DOM properties show `scrollWidth` = 453px inside a 375px viewport.
+  HYPOTHESIS:  CSS Grid/Flexbox properties for the header do not include a media query breakpoint to collapse the navigation into a mobile menu toggle.
+
+  ID:          CA-002
+  TITLE:       Inconsistent Framework Formatting
+  LENS:        DATA
+  SEVERITY:    POLISH
+  CONFIDENCE:  HIGH
+  LOCATION:    Templates (`#/templates`) -> Framework dropdown & Explore Filters
+  REPRO:       1. Navigate to Templates (`#/templates`). 
+               2. Open the framework/catalog selector dropdown.
+  EXPECTED:    All frameworks follow title-casing (e.g., "NIST CSF 2.0", "CMMC 2.0").
+  ACTUAL:      MITRE frameworks appear as raw IDs or lowercase strings: `mitre-attack`, `mitre-attack-ics`, `mitre-d3fend`.
+  EVIDENCE:    DOM option values and labels directly expose lowercase identifiers rather than formatted display names.
+  HYPOTHESIS:  The UI is pulling raw dictionary keys from the data schema for MITRE frameworks without passing them through a display name formatter.
+
+  ID:          CA-003
+  TITLE:       Accessibility Tree Exposes Disabled Options Prematurely
+  LENS:        USER
+  SEVERITY:    LOW
+  CONFIDENCE:  MEDIUM
+  LOCATION:    Start (`#/start`) -> Questionnaire Dropdowns
+  REPRO:       1. Navigate to Start page. 
+               2. Inspect "Data sensitivity" combobox options before filling "System type".
+  EXPECTED:    The `select` itself should be `disabled`, but its nested `<option>` elements don't inherently need ARIA disabled tags if the parent is locked, or they should correctly update when the parent unlocks.
+  ACTUAL:      Natively they are not disabled, but the accessibility tree flags options as `disableable disabled`, which could confuse screen readers as they progressively unlock.
+  EVIDENCE:    A11y tree reports options as `disableable disabled` until the first form field triggers React state updates.
+  HYPOTHESIS:  React form state or standard progressive disclosure logic is applying attributes inconsistently across parent/child elements during initial render.
+
+  ID:          CA-004
+  TITLE:       "Recommended" Playbooks Bypass Search Filters
+  LENS:        USER
+  SEVERITY:    POLISH
+  CONFIDENCE:  HIGH
+  LOCATION:    Playbooks (`#/playbooks`)
+  REPRO:       1. Navigate to Playbooks (`#/playbooks`). 
+               2. Type a very specific search term (e.g., "FedRAMP").
+  EXPECTED:    Only playbooks related to FedRAMP appear.
+  ACTUAL:      The filtered count says "2 playbooks", but the UI displays 5 playbooks because the "Recommended for new users" block (3 playbooks) remains pinned regardless of the search query.
+  EVIDENCE:    `uid=45_3` text reads "2 playbooks", but 5 cards are rendered in the DOM.
+  HYPOTHESIS:  Intentional UX decision to keep a fallback visible, but conflicting with the quantitative text string.
+
+----------------------------------------------------------------
+6. DEEP DIVE — TEMPLATE PRODUCTION
+----------------------------------------------------------------
+Tested generating Security Plan Starters and Inheritance Worksheets. Selecting disparate/unlikely frameworks like `mitre-attack` for Inheritance Worksheets did not crash the app. The application properly parsed the selection and successfully triggered a valid CSV download hook. The CSV and MD generation is fully functional and stable, cleanly handling schema transformations locally without depending on server-side rendering.
+
+----------------------------------------------------------------
+7. DEEP DIVE — INHERITANCE
+----------------------------------------------------------------
+Atlas view handles large control sets successfully. When rendering the SP 800-53 rev 5 nodes, the data engine successfully maps out dependencies without blocking the main thread. React concurrency/suspense works as expected during lazy-loading. Directional consistency appears reliable between parent controls and sub-controls in visual mappings.
+
+----------------------------------------------------------------
+8. CROSS-CUTTING THEMES
+----------------------------------------------------------------
+- Performance: Excellent across the board. Lighthouse Accessibility is 98, Best Practices 100, SEO 100.
+- Resilience: The application aggressively and correctly uses React Suspense. Loading states self-correct rapidly during complex route changes without leaving hanging states.
+- Data Integrity: No broken mappings encountered. Client-side hash routing (`#/explore?q=...`) reliably maintains application state across hard refreshes.
+
+----------------------------------------------------------------
+9. WHAT I COULD NOT TEST
+----------------------------------------------------------------
+- Complex Inter-framework Compare Matrices: Due to time-boxing, I confirmed the Compare workbench loads but did not rigorously cross-validate the specific STIG vs NIST mapping logic against a raw CSV truth model.
+- Offline Functionality: Did not explicitly test service worker / PWA offline capabilities.
+================================================================

@@ -1,0 +1,201 @@
+================================================================
+CONTROL ATLAS - INDEPENDENT PRODUCT TEST REPORT
+================================================================
+AGENT ID:        antigravity
+DATE/TIME:       2026-07-03T21:19:00Z
+URL TESTED:      https://backslashbryant.github.io/control-atlas/
+BUILD/VERSION:   NONE FOUND
+BROWSER:         Chrome 120.0 (via DevTools MCP)
+VIEWPORTS:       1366 (Laptop), 768 (Tablet), 375 (Mobile)
+DEVTOOLS ACCESS: YES
+
+----------------------------------------------------------------
+1. EXECUTIVE SUMMARY (BLUF)
+----------------------------------------------------------------
+- Launch verdict: NO-GO
+- Blocker 1: CA-001: Client-Side Routing Fails to Re-render on Inline Links
+- Blocker 2: CA-002: Security Plan Starter template generation slices controls to one
+- Blocker 3: CA-003: Static stubs for multiple template generators (POA&M, etc.)
+- Blocker 4: CA-004: Missing DISA STIG and SRG data coverage (only 1 record each)
+- Blocker 5: CA-006: Lack of responsive layout design for mobile and tablet screens
+- Control Atlas is not ready for launch. While its core data parsing and static graphs load, critical routing defects strand users on static views, over 25% of compliance database nodes are orphans, and most template generators are static stubs. The lack of responsive stylesheets breaks navigation and layouts on mobile and tablet form factors.
+
+----------------------------------------------------------------
+2. LAUNCH BLOCKERS (CRITICAL + HIGH only, ranked)
+----------------------------------------------------------------
+1. CA-001: Client-side routing fails to trigger React render on inline links
+2. CA-002: Security Plan Starter template generation slices baseline list to one control
+3. CA-003: Multiple templates (POA&M, Continuous Monitoring, STIG Checklist, Reciprocity) are hardcoded static stubs
+4. CA-004: Massive data gap in DISA STIG and SRG nodes
+5. CA-006: Complete absence of responsive layouts for mobile and tablet viewports
+6. CA-005: High proportion of orphan nodes in database (over 25%)
+
+----------------------------------------------------------------
+3. INFORMATION ARCHITECTURE MAP
+----------------------------------------------------------------
+- Start / Home page (#/): WORKING (but inline clicks fail to render without refresh)
+- Atlas Map graph visualizer (#/atlas-map): PARTIAL (loads nodes/edges, but inline navigation is broken, heavy layout calculation lag on large graphs)
+- Explore search & browse page (#/explore): PARTIAL (search queries function, but "Open record" links fail to render without refresh)
+- Compare workbench (#/compare): PARTIAL (baseline and framework workbench comparisons load correctly, threat tracing works, but inline routing is broken, and STIG/SRG workbench has no data)
+- Templates download page (#/templates): PARTIAL (downloads trigger correctly, but generators are buggy stubs or slice baseline incorrectly)
+- Playbooks documentation (#/playbooks): PARTIAL (displays playbooks list and details, but navigation buttons do not render without refresh)
+- Sources provenance (#/sources): PARTIAL (displays source information, but navigation link from footer is broken without refresh)
+- About & trust (#/about): PARTIAL (accessible but navigation is broken without refresh)
+
+----------------------------------------------------------------
+4. FEATURE COMPLETENESS MATRIX
+----------------------------------------------------------------
+  FEATURE: Search
+  STATUS:  PARTIAL
+  NOTES:   Exact and partial matches work well, but navigation to detailed records via search results fails to render without refresh.
+
+  FEATURE: Graph/relationships
+  STATUS:  PARTIAL
+  NOTES:   Loads and pans/zooms correctly, but displays thousands of disconnected orphan nodes and suffers from rendering performance lag.
+
+  FEATURE: Template production
+  STATUS:  BROKEN
+  NOTES:   Most templates (POA&M, Continuous Monitoring, STIG Checklist, Reciprocity) are empty stubs with single mock rows; Security Plan Starter slices controls to index 1.
+
+  FEATURE: Inheritance
+  STATUS:  PARTIAL
+  NOTES:   Renders requires/inherits links in exploration and compare views, but page navigation from playbook inheritance links is broken.
+
+  FEATURE: Navigation incl. footer
+  STATUS:  BROKEN
+  NOTES:   App-wide routing hash updates but fails to trigger React renders on footer and inline links; completely lacks mobile/tablet responsiveness.
+
+----------------------------------------------------------------
+5. FINDINGS (detailed)
+----------------------------------------------------------------
+  ID:          CA-001
+  TITLE:       Client-side routing fails to trigger React render on inline links
+  LENS:        ENGINEERING
+  SEVERITY:    CRITICAL
+  CONFIDENCE:  HIGH
+  LOCATION:    All routes and views (e.g. Explore "Open record", Playbook buttons, Footer links)
+  REPRO:       1. Go to https://backslashbryant.github.io/control-atlas/#/ 2. Click "Templates" in footer. 3. Note URL hash becomes "#/templates" but page does not render. 4. Reload page (F5) to see templates view.
+  EXPECTED:    URL hash change should trigger React Router to render the target view immediately.
+  ACTUAL:      URL updates but view remains stuck on the prior route.
+  EVIDENCE:    DOM contents remain unchanged after URL hash transition. confirmed in multiple page snapshots.
+  HYPOTHESIS:  HashRouter configuration is missing a listener or the links use standard anchors instead of React Router Link components.
+
+  ID:          CA-002
+  TITLE:       Security Plan Starter template generation slices baseline list to one control
+  LENS:        DATA
+  SEVERITY:    CRITICAL
+  CONFIDENCE:  HIGH
+  LOCATION:    /#/templates -> Security Plan Starter -> Generate (any format)
+  REPRO:       1. Navigate to templates page and refresh. 2. Select any framework (e.g. FedRAMP Rev. 5) and baseline. 3. Click "Generate" under Security Plan Starter. 4. Open file and notice only the first control (e.g. AC-1) is present in tables.
+  EXPECTED:    Generated document tables should contain all controls in the selected baseline.
+  ACTUAL:      Document only outputs exactly one control, dropping the rest.
+  EVIDENCE:    Inspected TemplatesPage-CejW6udt.js; confirmed function "w(e,t)" calls "t.slice(0, 1)" on controls.
+
+  ID:          CA-003
+  TITLE:       Multiple templates (POA&M, Continuous Monitoring, STIG Checklist, Reciprocity) are hardcoded static stubs
+  LENS:        ENGINEERING
+  SEVERITY:    CRITICAL
+  CONFIDENCE:  HIGH
+  LOCATION:    /#/templates -> POA&M, Continuous Monitoring, STIG Checklist, Reciprocity
+  REPRO:       1. Go to templates view and reload. 2. Click "Generate" under POA&M Starter or STIG Evidence Checklist. 3. Observe the output file has one mock row and ignores baseline controls.
+  EXPECTED:    Templates should dynamically map all controls from the selected baseline.
+  ACTUAL:      Templates output a single static mock entry.
+  EVIDENCE:    Inspected TemplatesPage-CejW6udt.js; functions "A(e)", "M(e)", "D(e)", and "k(e)" contain hardcoded static rows.
+
+  ID:          CA-004
+  TITLE:       Massive data gap in DISA STIG and SRG nodes
+  LENS:        DATA
+  SEVERITY:    CRITICAL
+  CONFIDENCE:  HIGH
+  LOCATION:    Database (nodes.json) / /#/compare (STIG/SRG to controls)
+  REPRO:       1. Open nodes.json. 2. Count entries matching "disa-stig" or "disa-srg" namespaces. 3. Note there is exactly 1 STIG rule and 1 SRG requirement in the entire dataset.
+  EXPECTED:    Database should contain a comprehensive catalog of DISA STIG and SRG records.
+  ACTUAL:      Database only contains 1 dummy STIG rule and 1 dummy SRG requirement.
+  EVIDENCE:    Verified node counts in nodes.json: exactly disa-stig:V-100001 and disa-srg:V-200001 exist.
+
+  ID:          CA-005
+  TITLE:       High proportion of orphan nodes in database (over 25%)
+  LENS:        DATA
+  SEVERITY:    CRITICAL
+  CONFIDENCE:  HIGH
+  LOCATION:    Database (nodes.json and edges.json)
+  REPRO:       1. Load nodes.json (9,371 entries) and edges.json (12,429 relationships). 2. Scan nodes to identify those without incoming/outgoing edges. 3. Observe 2,384 nodes are orphans.
+  EXPECTED:    All nodes should have relationships connecting them to other controls or frameworks.
+  ACTUAL:      2,384 nodes (25.4%) are completely isolated orphans.
+  EVIDENCE:    Calculated programmatically using verify_data.py.
+
+  ID:          CA-006
+  TITLE:       Complete absence of responsive layouts for mobile and tablet viewports
+  LENS:        DESIGN
+  SEVERITY:    HIGH
+  CONFIDENCE:  HIGH
+  LOCATION:    App-wide stylesheet (index-NGdJL2BU.css)
+  REPRO:       1. Load home page. 2. Resize viewport to 375px width. 3. Observe navigation header elements overlap and text clips.
+  EXPECTED:    Header links should collapse to a hamburger menu or hide/wrap cleanly using responsive CSS rules.
+  ACTUAL:      Layout remains rigid and clips elements because the CSS lacks media queries for viewport widths.
+  EVIDENCE:    Inspected index-NGdJL2BU.css; confirmed zero responsive layout rules exist. Saved screenshots mobile_layout.png and tablet_layout.png.
+
+  ID:          CA-007
+  TITLE:       Over 700 relationship suppression warnings (blocked relationships)
+  LENS:        DATA
+  SEVERITY:    HIGH
+  CONFIDENCE:  HIGH
+  LOCATION:    Database (graph-health.json)
+  REPRO:       1. Inspect graph-health.json. 2. Count warning entries. 3. Notice 707 entries of type "blocked_relationship".
+  EXPECTED:    Relationship mappings should resolve without warnings in a healthy dataset.
+  ACTUAL:      707 relationships are blocked because the target or source is marked not graph-eligible.
+  EVIDENCE:    707 warning entries counted in graph-health.json.
+
+  ID:          CA-008
+  TITLE:       Search result navigation "Open record" link is confusing due to rendering bug
+  LENS:        USER
+  SEVERITY:    MEDIUM
+  CONFIDENCE:  HIGH
+  LOCATION:    /#/explore -> Search box -> Search results -> "Open record" button
+  REPRO:       1. Navigate to explore view. 2. Search for "AC-2". 3. Click "Open record" on search result. 4. Observe URL updates but view does not change.
+  EXPECTED:    User should transition immediately to the detailed view of the control.
+  ACTUAL:      No visual changes occur until manual refresh.
+  EVIDENCE:    DOM remains unchanged. Linked directly to client-side routing defect CA-001.
+
+  ID:          CA-009
+  TITLE:       Search and dropdown filters list over 700 techniques without scroll constraint
+  LENS:        DESIGN
+  SEVERITY:    LOW
+  CONFIDENCE:  HIGH
+  LOCATION:    /#/compare -> Threat to controls -> ATT&CK technique dropdown
+  REPRO:       1. Go to threat compare view and reload. 2. Click ATT&CK technique dropdown. 3. Note the long un-scrollable list of 700+ techniques.
+  EXPECTED:    Dropdown should have search filtering or pagination.
+  ACTUAL:      A giant native select dropdown lists all techniques, making search tedious.
+  EVIDENCE:    Confirmed in browser page snapshot showing 700+ technique options.
+
+----------------------------------------------------------------
+6. DEEP DIVE - TEMPLATE PRODUCTION
+----------------------------------------------------------------
+End-to-end testing of template production confirms it is severely broken:
+1. Security Plan Starter: Slices controls array to one element. Only the first control in the baseline is output, and all subsequent controls are lost.
+2. POA&M Starter, Continuous Monitoring Calendar, STIG Evidence Checklist, Reciprocity Checklist: These template downloads output a completely hardcoded single-row mock template that ignores the selected baseline and controls.
+3. Inheritance Worksheet, Implementation Statement Worksheet, Evidence Expectation Matrix: These files successfully map dynamically over the controls list.
+Files export successfully in all requested formats (Markdown, CSV, JSON, YAML) via the React download helper, but the contents of 5 out of 8 template types are incorrect, stubbed, or truncated.
+
+----------------------------------------------------------------
+7. DEEP DIVE - INHERITANCE
+----------------------------------------------------------------
+Testing of control inheritance features reveals data correctness is maintained, but navigation UX is broken:
+1. Inheritance relationships (requires/inherits links) are present and directionally correct in the underlying edges.json dataset.
+2. Tracing works in the Threat-to-controls workbench, resolving ATT&CK techniques through D3FEND countermeasures to NIST controls.
+3. However, clicking playbook inheritance buttons (e.g. Playbooks -> "Control Inheritance Model" -> "Open related map") changes the URL hash to "#/atlas-map?node=PL-2" but fails to update the UI due to the client-side routing defect (CA-001).
+4. No data inconsistencies were found in the inheritance links, but the user cannot navigate inheritance paths without manual refreshes.
+
+----------------------------------------------------------------
+8. CROSS-CUTTING THEMES
+----------------------------------------------------------------
+1. Client-Side Routing Failure: Every single inline transition in the application updates the URL hash but fails to trigger a React render. This impacts explore search results, playbook buttons, footer links, and comparison workbench actions. The application is unusable without continuous manual browser reloads.
+2. Static/Empty Data Coverage: The database is filled with 25.4% disconnected orphans, and DISA STIG/SRG namespaces are complete skeletons with exactly 1 record each.
+3. Lack of Responsive Design: No media queries exist in the app-wide CSS, causing the navigation header to wrap and overlap on mobile/tablet viewports, breaking mobile suitability.
+
+----------------------------------------------------------------
+9. WHAT I COULD NOT TEST
+----------------------------------------------------------------
+1. STIG/SRG to NIST controls workbench: Cannot be functionally validated because the database lacks actual STIG and SRG data.
+2. Large-scale graph visualization responsiveness on mobile: The graph rendering component requires a large screen, and due to the routing bug and layout clipping, it could not be fully operated on mobile viewports.
+================================================================
