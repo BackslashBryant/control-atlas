@@ -112,7 +112,13 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
-  node.plain_language_summary = generatePlainLanguageSummary({ ...node, plain_language_summary: null });
+  // Curated plain-language overrides (see loadCuratedPlainLanguage) are hand-authored
+  // and should win outright. Everything else is regenerated from metadata.description
+  // so pre-baked record.plain_language_summary values (which can carry truncation
+  // artifacts from upstream normalizers) never leak through uncorrected.
+  node.plain_language_summary = node.curated_plain_language_summary
+    || generatePlainLanguageSummary({ ...node, plain_language_summary: null });
+  delete node.curated_plain_language_summary;
   state.nodes.push(node);
 }
 
@@ -169,6 +175,34 @@ function nodeSeverity(record) {
   return record.severity || record.cat || record.metadata?.severity || null;
 }
 
+export function lifecycleStatus(record) {
+  if (record.status === 'withdrawn') return 'withdrawn';
+  if (record.status === 'deprecated') return 'deprecated';
+  return 'active';
+}
+
+let curatedPlainLanguageCache;
+
+function loadCuratedPlainLanguage() {
+  if (curatedPlainLanguageCache !== undefined) return curatedPlainLanguageCache;
+  const path = join(ROOT, 'data', 'curated', 'plain-language', 'controls-800-53.json');
+  if (!existsSync(path)) {
+    curatedPlainLanguageCache = null;
+    return curatedPlainLanguageCache;
+  }
+  try {
+    curatedPlainLanguageCache = readJson(path);
+  } catch {
+    curatedPlainLanguageCache = null;
+  }
+  return curatedPlainLanguageCache;
+}
+
+function curatedEntryFor(itemId) {
+  const curated = loadCuratedPlainLanguage();
+  return curated?.entries?.[itemId] || null;
+}
+
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
   const familyNodes = new Map();
@@ -179,13 +213,15 @@ function buildNodes(registry) {
     for (const record of document.records || []) {
       const sourceId = record.source?.key || defaultSourceId;
       const id = nodeId(catalogId, record.id);
+      const curatedEntry = catalogId === 'nist-800-53' ? curatedEntryFor(record.id) : null;
       pushEligibleNode(state, registry, {
         id,
         node_type: record.type?.startsWith('zt_') ? record.type : nodeType(defaultType, record.id),
         label: record.title ? `${record.id} ${record.title}` : String(record.id),
         source_id: sourceId,
-        lifecycle_status: record.status === 'deprecated' ? 'deprecated' : 'active',
+        lifecycle_status: lifecycleStatus(record),
         plain_language_summary: record.plain_language_summary || null,
+        curated_plain_language_summary: curatedEntry?.plain_language_summary || null,
         metadata: {
           catalog_id: catalogId,
           item_id: record.id,
@@ -198,6 +234,8 @@ function buildNodes(registry) {
           nist_control: record.nist_control || null,
           type: record.type || null,
           references: record.references || null,
+          superseded_by: record.metadata?.superseded_by || null,
+          ...(curatedEntry?.plain_action ? { plain_action: curatedEntry.plain_action } : {}),
         },
       }, sourceId);
 
@@ -364,6 +402,40 @@ function addFamilyMembershipEdges(state, registry, nodeIds) {
       locator: record.source?.locator || `controls-800-53.json#${record.id}`,
       retrievedAt: record.source?.snapshot_date,
       rationale: `${record.id} is part of the ${record.family} family in NIST SP 800-53 Rev. 5.`,
+    });
+  }
+}
+
+function baseControlIdFromEnhancementId(recordId) {
+  const id = String(recordId || '');
+  const dotIndex = id.indexOf('.');
+  return dotIndex === -1 ? null : id.slice(0, dotIndex);
+}
+
+function addEnhancementMembershipEdges(state, registry, nodeIds) {
+  const path = join(ROOT, 'data', 'controls-800-53.json');
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  const recordIds = new Set((document.records || []).map((record) => record.id));
+  const existingEdgeIds = new Set(state.edges.map((edge) => edge.id));
+  for (const record of document.records || []) {
+    if (!String(record.id).includes('.')) continue;
+    const baseId = baseControlIdFromEnhancementId(record.id);
+    if (!baseId || !recordIds.has(baseId)) continue;
+    const sourceNodeId = nodeId('nist-800-53', baseId);
+    const targetNodeId = nodeId('nist-800-53', record.id);
+    const subjectId = relationshipId('800-53-enhancement-membership', sourceNodeId, targetNodeId, 'includes');
+    if (existingEdgeIds.has(`edge:${subjectId}`)) continue;
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId,
+      sourceId: record.source?.key || 'nist-oscal',
+      sourceNodeId,
+      targetNodeId,
+      relationshipType: 'includes',
+      confidence: 'derived',
+      locator: record.source?.locator || `controls-800-53.json#${record.id}`,
+      retrievedAt: record.source?.snapshot_date,
+      rationale: `${record.id} is a control enhancement of ${baseId} in SP 800-53 Rev. 5.`,
     });
   }
 }
@@ -571,6 +643,7 @@ function buildEdges(registry, nodes) {
   }
   addDocumentRelationshipEdges(state, registry, nodeIds);
   addFamilyMembershipEdges(state, registry, nodeIds);
+  addEnhancementMembershipEdges(state, registry, nodeIds);
   addBaselineMembershipEdges(state, registry, nodeIds);
   addFedrampMembershipEdges(state, registry, nodeIds);
   addAssessmentEdges(state, registry, nodeIds);

@@ -91,3 +91,191 @@ test('registry templates have non-empty source_refs', () => {
     assert.ok(template.source_refs.length > 0, `${template.name} has empty source_refs`);
   }
 });
+
+// ---------------------------------------------------------------------------
+// Task 1: withdrawn controls must be excluded from the shared control-
+// collection path used by every template.
+// ---------------------------------------------------------------------------
+
+const withdrawnDataset = {
+  nodes: [
+    {
+      id: 'nist-800-53:AC-2',
+      node_type: 'control',
+      label: 'AC-2 Account Management',
+      lifecycle_status: 'active',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-2',
+        title: 'Account Management',
+        control_family: 'Access Control',
+      },
+    },
+    {
+      id: 'nist-800-53:AC-13',
+      node_type: 'control',
+      label: 'AC-13 Supervision and Review',
+      lifecycle_status: 'withdrawn',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-13',
+        title: 'Supervision and Review',
+        control_family: 'Access Control',
+      },
+    },
+  ],
+  sources: dataset.sources,
+};
+
+test('withdrawn controls are excluded from generated template output', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'security_plan_starter',
+      framework: 'nist-800-53',
+      environment: 'Generic',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal'],
+      sources: withdrawnDataset.sources,
+    },
+    withdrawnDataset,
+  );
+
+  assert.match(result.content, /AC-2/, 'Expected active control AC-2 present');
+  assert.doesNotMatch(result.content, /AC-13\b/, 'Withdrawn control AC-13 must not appear in output');
+});
+
+// ---------------------------------------------------------------------------
+// Task 2: fedramp-rev5 (or any catalog with only `baseline` nodes) must
+// resolve member controls via baseline-membership edges instead of emitting
+// a placeholder row.
+// ---------------------------------------------------------------------------
+
+const fedrampDataset = {
+  nodes: [
+    {
+      id: 'fedramp-rev5:LOW',
+      node_type: 'baseline',
+      label: 'LOW Low Baseline',
+      lifecycle_status: 'active',
+      metadata: {
+        catalog_id: 'fedramp-rev5',
+        item_id: 'LOW',
+        title: 'Low Baseline',
+      },
+    },
+    {
+      id: 'nist-800-53:AC-2',
+      node_type: 'control',
+      label: 'AC-2 Account Management',
+      lifecycle_status: 'active',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-2',
+        title: 'Account Management',
+        control_family: 'Access Control',
+      },
+    },
+    {
+      id: 'nist-800-53:AC-1',
+      node_type: 'control',
+      label: 'AC-1 Policy and Procedures',
+      lifecycle_status: 'active',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-1',
+        title: 'Policy and Procedures',
+        control_family: 'Access Control',
+      },
+    },
+    {
+      id: 'nist-800-53:AC-13',
+      node_type: 'control',
+      label: 'AC-13 Supervision and Review',
+      lifecycle_status: 'withdrawn',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-13',
+        title: 'Supervision and Review',
+        control_family: 'Access Control',
+      },
+    },
+  ],
+  edges: [
+    {
+      id: 'edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:AC-2',
+      source_node_id: 'fedramp-rev5:LOW',
+      target_node_id: 'nist-800-53:AC-2',
+      relationship_type: 'includes',
+    },
+    {
+      id: 'edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:AC-1',
+      source_node_id: 'fedramp-rev5:LOW',
+      target_node_id: 'nist-800-53:AC-1',
+      relationship_type: 'includes',
+    },
+    {
+      id: 'edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:AC-13',
+      source_node_id: 'fedramp-rev5:LOW',
+      target_node_id: 'nist-800-53:AC-13',
+      relationship_type: 'includes',
+    },
+  ],
+  sources: dataset.sources,
+};
+
+test('fedramp-rev5 resolves member controls via baseline edges instead of a placeholder row', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'security_plan_starter',
+      framework: 'fedramp-rev5',
+      environment: 'Generic',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal'],
+      sources: fedrampDataset.sources,
+    },
+    fedrampDataset,
+  );
+
+  assert.match(result.content, /AC-1\b/, 'Expected AC-1 resolved via baseline membership edge');
+  assert.match(result.content, /AC-2\b/, 'Expected AC-2 resolved via baseline membership edge');
+  assert.doesNotMatch(result.content, /AC-13\b/, 'Withdrawn AC-13 must be excluded even when resolved via edges');
+  assert.doesNotMatch(result.content, /\[Control ID\]/, 'Should not fall back to placeholder row when resolution succeeds');
+  assert.equal(result.frameworkResolutionError, null);
+
+  // Natural/sorted order: AC-1 before AC-2.
+  const ac1Index = result.content.indexOf('AC-1');
+  const ac2Index = result.content.indexOf('AC-2');
+  assert.ok(ac1Index >= 0 && ac2Index >= 0 && ac1Index < ac2Index, 'Expected sorted natural order AC-1 before AC-2');
+});
+
+test('framework with zero resolvable controls emits an honest notice and flags the error', () => {
+  const emptyDataset = {
+    nodes: [
+      {
+        id: 'fedramp-rev5:LOW',
+        node_type: 'baseline',
+        label: 'LOW Low Baseline',
+        lifecycle_status: 'active',
+        metadata: { catalog_id: 'fedramp-rev5', item_id: 'LOW', title: 'Low Baseline' },
+      },
+    ],
+    edges: [],
+    sources: dataset.sources,
+  };
+
+  const result = generateTemplate(
+    {
+      templateType: 'security_plan_starter',
+      framework: 'fedramp-rev5',
+      environment: 'Generic',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal'],
+      sources: emptyDataset.sources,
+    },
+    emptyDataset,
+  );
+
+  assert.match(result.content, /No control data is ingested for fedramp-rev5 yet — generation unavailable\./);
+  assert.ok(result.frameworkResolutionError, 'Expected frameworkResolutionError to be set');
+  assert.match(result.frameworkResolutionError, /No control data is ingested for fedramp-rev5/);
+});

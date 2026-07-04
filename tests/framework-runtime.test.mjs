@@ -8,6 +8,7 @@ import {
   parseViewState,
   serializeViewState,
 } from "../src/app/runtime.mjs";
+import { groupRelationships } from "../src/app/relationship-groups.mjs";
 
 const fixture = {
   sources: [
@@ -1016,6 +1017,54 @@ test("runtime searches graph nodes by exact ID before text", () => {
   );
 });
 
+test("runtime resolves practitioner paren notation to dot-notation enhancements", () => {
+  // Self-contained dataset: base control + its enhancement, so the alias is
+  // exercised without perturbing the shared fixture's node/matrix counts.
+  const notationNode = (id, itemId, type) => ({
+    id,
+    node_type: type,
+    label: `${itemId} label`,
+    metadata: { catalog_id: "nist-800-53", item_id: itemId, title: itemId },
+  });
+  const notationDoc = (id, itemId, type) => ({
+    id,
+    item_id: itemId,
+    title: `${itemId} title`,
+    description: "",
+    object_type: type,
+    source_id: "nist-oscal",
+    source_class: "federal_published",
+    catalog_id: "nist-800-53",
+    control_family: "Access Control",
+    severity: "",
+  });
+  const runtime = createFederalGraphRuntime({
+    nodes: [
+      notationNode("nist-800-53:AC-2", "AC-2", "control"),
+      notationNode("nist-800-53:AC-2.1", "AC-2.1", "control_enhancement"),
+    ],
+    edges: [],
+    evidence: [],
+    sources: [],
+    graphHealth: [],
+    librarySearch: {
+      serialized_index: "",
+      documents: [
+        notationDoc("nist-800-53:AC-2", "AC-2", "control"),
+        notationDoc("nist-800-53:AC-2.1", "AC-2.1", "control_enhancement"),
+      ],
+    },
+  });
+  // searchNodes: "AC-2(1)" and "AC-2 (1)" both reach the AC-2.1 enhancement.
+  assert.equal(runtime.searchNodes("AC-2(1)")[0].id, "nist-800-53:AC-2.1");
+  assert.equal(runtime.searchNodes("AC-2 (1)")[0].id, "nist-800-53:AC-2.1");
+  // Plain "AC-2" still resolves to the base control, not the enhancement.
+  assert.equal(runtime.searchNodes("AC-2")[0].id, "nist-800-53:AC-2");
+  // searchLibrary (the Explore surface) applies the same alias.
+  assert.equal(runtime.searchLibrary("AC-2(1)")[0].id, "nist-800-53:AC-2.1");
+  assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
+});
+
 test("runtime exposes source-backed edges, evidence, sources, and graph health", () => {
   const runtime = createFederalGraphRuntime(fixture);
   assert.equal(runtime.getNode("csf-2:PR.AA-01").metadata.item_id, "PR.AA-01");
@@ -1615,4 +1664,111 @@ test("view state preserves epic 0 navigation-only surfaces", () => {
   assert.deepEqual(normalizeViewState("about", { query: "AC-2" }), {
     view: "about",
   });
+});
+
+// ---------------------------------------------------------------------------
+// Relationship grouping: enhancements / baseControl groups (Task 3)
+// ---------------------------------------------------------------------------
+
+function makeRelationshipGroupsFixtureRuntime() {
+  const nodesById = new Map([
+    [
+      "nist-800-53:AC-2",
+      {
+        id: "nist-800-53:AC-2",
+        node_type: "control",
+        label: "AC-2 Account Management",
+        metadata: { catalog_id: "nist-800-53", item_id: "AC-2", title: "Account Management" },
+      },
+    ],
+    [
+      "nist-800-53:AC-2.1",
+      {
+        id: "nist-800-53:AC-2.1",
+        node_type: "control_enhancement",
+        label: "AC-2(1) Automated System Account Management",
+        metadata: { catalog_id: "nist-800-53", item_id: "AC-2.1", title: "Automated System Account Management" },
+      },
+    ],
+    [
+      "nist-800-53:AC-2.2",
+      {
+        id: "nist-800-53:AC-2.2",
+        node_type: "control_enhancement",
+        label: "AC-2(2) Automated Temporary and Emergency Account Management",
+        metadata: { catalog_id: "nist-800-53", item_id: "AC-2.2", title: "Automated Temporary and Emergency Account Management" },
+      },
+    ],
+    [
+      "nist-800-53:AC-3",
+      {
+        id: "nist-800-53:AC-3",
+        node_type: "control",
+        label: "AC-3 Access Enforcement",
+        metadata: { catalog_id: "nist-800-53", item_id: "AC-3", title: "Access Enforcement" },
+      },
+    ],
+  ]);
+  return { getNode: (id) => nodesById.get(id) || null };
+}
+
+test("groupRelationships routes a control's own enhancement counterparts into the enhancements group", () => {
+  const runtime = makeRelationshipGroupsFixtureRuntime();
+  const edges = [
+    {
+      id: "edge:ac2-ac2.1",
+      source_node_id: "nist-800-53:AC-2",
+      target_node_id: "nist-800-53:AC-2.1",
+      relationship_type: "includes",
+    },
+    {
+      id: "edge:ac2-ac2.2",
+      source_node_id: "nist-800-53:AC-2",
+      target_node_id: "nist-800-53:AC-2.2",
+      relationship_type: "includes",
+    },
+    {
+      id: "edge:ac2-ac3",
+      source_node_id: "nist-800-53:AC-2",
+      target_node_id: "nist-800-53:AC-3",
+      relationship_type: "related_to",
+    },
+  ];
+
+  const grouped = groupRelationships(edges, "nist-800-53:AC-2", runtime);
+  const enhancementsGroup = grouped.find((g) => g.id === "enhancements");
+  const nistControlGroup = grouped.find((g) => g.id === "nistControl");
+
+  assert.ok(enhancementsGroup, "Expected an enhancements group");
+  assert.equal(enhancementsGroup.label, "Enhancements");
+  assert.equal(enhancementsGroup.items.length, 2);
+  assert.deepEqual(
+    enhancementsGroup.items.map((item) => item.counterpart.id).sort(),
+    ["nist-800-53:AC-2.1", "nist-800-53:AC-2.2"],
+  );
+
+  // Unrelated control (AC-3) stays in the generic nistControl group, not enhancements.
+  assert.ok(nistControlGroup, "Expected AC-3 to remain in nistControl group");
+  assert.equal(nistControlGroup.items.length, 1);
+  assert.equal(nistControlGroup.items[0].counterpart.id, "nist-800-53:AC-3");
+});
+
+test("groupRelationships routes an enhancement's base control counterpart into the baseControl group", () => {
+  const runtime = makeRelationshipGroupsFixtureRuntime();
+  const edges = [
+    {
+      id: "edge:ac2.1-ac2",
+      source_node_id: "nist-800-53:AC-2.1",
+      target_node_id: "nist-800-53:AC-2",
+      relationship_type: "includes",
+    },
+  ];
+
+  const grouped = groupRelationships(edges, "nist-800-53:AC-2.1", runtime);
+  const baseControlGroup = grouped.find((g) => g.id === "baseControl");
+
+  assert.ok(baseControlGroup, "Expected a baseControl group");
+  assert.equal(baseControlGroup.label, "Base control");
+  assert.equal(baseControlGroup.items.length, 1);
+  assert.equal(baseControlGroup.items[0].counterpart.id, "nist-800-53:AC-2");
 });

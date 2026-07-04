@@ -179,6 +179,11 @@ export function TemplatesPage(props: {
         bundle.runtime.dataset,
       );
 
+      if (generated.frameworkResolutionError) {
+        setGenerationStatus(generated.frameworkResolutionError);
+        return;
+      }
+
       downloadTextFile(generated.filename, generated.content, generated.mimeType);
       setGenerationStatus(
         `Download started for ${generated.filename}. Check your downloads folder.`,

@@ -707,8 +707,83 @@ function formatYaml(doc) {
 }
 
 /**
+ * Central control-collection path shared by ALL templates. Filters to
+ * control/control_enhancement nodes for the requested catalog and excludes
+ * withdrawn controls (SP 800-53 lifecycle_status: 'withdrawn') so retired
+ * control IDs (AC-13, SA-12, SA-13, ...) never appear in generated artifacts.
+ *
+ * @param {any[]} nodes
+ * @param {string} catalogId
+ * @returns {any[]}
+ */
+function collectCatalogControls(nodes, catalogId) {
+  return (nodes || []).filter(
+    (n) =>
+      (n.node_type === "control" || n.node_type === "control_enhancement") &&
+      n.metadata?.catalog_id === catalogId &&
+      n.lifecycle_status !== "withdrawn",
+  );
+}
+
+/**
+ * When a selected framework catalog has no control/control_enhancement nodes
+ * of its own (e.g. FedRAMP Rev. 5, whose catalog only carries `baseline`
+ * nodes), resolve the member NIST 800-53 controls via the catalog's
+ * baseline-membership edges instead of emitting a placeholder row.
+ *
+ * Edge shape observed in data/generated/edges.json: baseline nodes are
+ * `${catalogId}:${baselineItemId}` (e.g. "fedramp-rev5:LOW"); each has an
+ * `includes` edge with `source_node_id` = the baseline node and
+ * `target_node_id` = the member `nist-800-53:<CONTROL_ID>` control node.
+ * Membership is unioned across every baseline node in the catalog.
+ *
+ * @param {any} dataset
+ * @param {string} catalogId
+ * @returns {any[]}
+ */
+function resolveControlsViaBaselineEdges(dataset, catalogId) {
+  const nodes = dataset?.nodes || [];
+  const edges = dataset?.edges || [];
+  const nodeById = new Map(nodes.map((n) => [n.id, n]));
+
+  const baselineNodeIds = new Set(
+    nodes
+      .filter((n) => n.node_type === "baseline" && n.metadata?.catalog_id === catalogId)
+      .map((n) => n.id),
+  );
+  if (baselineNodeIds.size === 0) return [];
+
+  const memberNodeIds = new Set();
+  for (const edge of edges) {
+    if (edge.relationship_type !== "includes") continue;
+    if (baselineNodeIds.has(edge.source_node_id)) {
+      memberNodeIds.add(edge.target_node_id);
+    } else if (baselineNodeIds.has(edge.target_node_id)) {
+      memberNodeIds.add(edge.source_node_id);
+    }
+  }
+
+  const memberControls = [...memberNodeIds]
+    .map((id) => nodeById.get(id))
+    .filter(
+      (n) =>
+        n &&
+        (n.node_type === "control" || n.node_type === "control_enhancement") &&
+        n.lifecycle_status !== "withdrawn",
+    );
+
+  memberControls.sort((a, b) => {
+    const aId = a.metadata?.item_id || a.id;
+    const bId = b.metadata?.item_id || b.id;
+    return aId.localeCompare(bId, undefined, { numeric: true, sensitivity: "base" });
+  });
+
+  return memberControls;
+}
+
+/**
  * @param {any} options
- * @param {{ nodes?: any[], sources?: { sources?: any[] } }} dataset
+ * @param {{ nodes?: any[], edges?: any[], sources?: { sources?: any[] } }} dataset
  */
 export function generateTemplate(options, dataset) {
   const normalized = {
@@ -726,20 +801,38 @@ export function generateTemplate(options, dataset) {
   };
 
   let controls = [];
+  let unresolvedFramework = false;
   if (normalized.framework) {
-    controls = dataset.nodes
-      .filter(
-        (n) =>
-          (n.node_type === "control" || n.node_type === "control_enhancement") &&
-          n.metadata?.catalog_id === normalized.framework,
-      )
-      .map((n) => ({
+    const directControls = collectCatalogControls(dataset.nodes, normalized.framework);
+    if (directControls.length > 0) {
+      controls = directControls.map((n) => ({
         id: n.metadata?.item_id || n.id,
         title: n.metadata?.title || n.label || n.id,
         family: n.metadata?.control_family || "",
       }));
+    } else {
+      // Catalog yielded zero control nodes directly (e.g. fedramp-rev5 only
+      // has `baseline` nodes) — try resolving membership via baseline edges.
+      const resolved = resolveControlsViaBaselineEdges(dataset, normalized.framework);
+      if (resolved.length > 0) {
+        controls = resolved.map((n) => ({
+          id: n.metadata?.item_id || n.id,
+          title: n.metadata?.title || n.label || n.id,
+          family: n.metadata?.control_family || "",
+        }));
+      } else {
+        unresolvedFramework = true;
+      }
+    }
   }
-  if (controls.length === 0) {
+  if (controls.length === 0 && !unresolvedFramework) {
+    controls = [{ id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
+  }
+
+  const frameworkNoticeText = unresolvedFramework
+    ? `No control data is ingested for ${normalized.framework} yet — generation unavailable.`
+    : null;
+  if (unresolvedFramework) {
     controls = [{ id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
   }
 
@@ -776,6 +869,14 @@ export function generateTemplate(options, dataset) {
       doc = generateSecurityPlanStarter(normalized, controls);
   }
 
+  if (frameworkNoticeText) {
+    doc.sections.unshift({
+      type: "text",
+      heading: "Framework Data Notice",
+      content: frameworkNoticeText,
+    });
+  }
+
   let content;
   let extension;
   let mimeType;
@@ -805,5 +906,10 @@ export function generateTemplate(options, dataset) {
   }
 
   const filename = `${normalized.templateType.replace(/_/g, "-")}-${new Date().toISOString().split("T")[0]}.${extension}`;
-  return { content, filename, mimeType };
+  return {
+    content,
+    filename,
+    mimeType,
+    frameworkResolutionError: unresolvedFramework ? frameworkNoticeText : null,
+  };
 }

@@ -24,28 +24,85 @@ function recordPlainLanguageSummary(title, description) {
   return summary || `Verify requirements for ${title}`;
 }
 
-function cleanText(value) {
-  return String(value || '')
-    .replace(/\{\{[^}]+\}\}/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+const ASSESSMENT_PART_NAMES = new Set(['assessment-objective', 'assessment-method', 'assessment-objects', 'objective']);
+const INSERT_PATTERN = /\{\{\s*insert:\s*param,\s*([\w.-]+)\s*\}\}/g;
+const UNRESOLVED_ASSIGNMENT = '[Assignment: organization-defined value]';
+
+/**
+ * Build a resolver function that substitutes `{{ insert: param, <id> }}` moustaches
+ * with human-readable Assignment/Selection brackets, given one or more OSCAL
+ * `params` arrays to look the referenced param up in (control's own params first,
+ * then parent-control params for enhancements, then any additional pools supplied).
+ */
+function createParamResolver(...paramSources) {
+  const paramIndex = new Map();
+  for (const source of paramSources) {
+    for (const param of source || []) {
+      if (param?.id && !paramIndex.has(param.id)) paramIndex.set(param.id, param);
+    }
+  }
+
+  function resolveParam(paramId, seen) {
+    const param = paramIndex.get(paramId);
+    if (!param) return UNRESOLVED_ASSIGNMENT;
+    if (seen.has(paramId)) return UNRESOLVED_ASSIGNMENT;
+    seen.add(paramId);
+    if (param.select) {
+      const select = param.select;
+      const choices = (select.choice || []).map((choice) => resolveText(String(choice || ''), seen));
+      const label = select['how-many'] === 'one-or-more' ? 'Selection (one or more): ' : 'Selection: ';
+      return `[${label}${choices.join('; ')}]`;
+    }
+    if (param.label) {
+      return `[Assignment: ${resolveText(String(param.label), seen)}]`;
+    }
+    return UNRESOLVED_ASSIGNMENT;
+  }
+
+  function resolveText(text, seen = new Set()) {
+    return String(text || '').replace(INSERT_PATTERN, (_match, paramId) => resolveParam(paramId, new Set(seen)));
+  }
+
+  return resolveText;
 }
 
-function collectProse(parts, out) {
+function cleanText(value, resolveInserts) {
+  const text = resolveInserts ? resolveInserts(String(value || '')) : String(value || '').replace(/\{\{[^}]+\}\}/g, '');
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+function collectProse(parts, out, resolveInserts) {
   for (const part of parts || []) {
-    const prose = cleanText(part.prose);
+    if (ASSESSMENT_PART_NAMES.has(part.name)) continue;
+    const prose = cleanText(part.prose, resolveInserts);
     if (prose) out.push(prose);
-    if (part.parts) collectProse(part.parts, out);
+    if (part.parts) collectProse(part.parts, out, resolveInserts);
   }
 }
 
-function descriptionFromControl(control) {
+function truncateAtBracket(text) {
+  if (text.length <= MAX_DESCRIPTION) return text;
+  const truncated = text.slice(0, MAX_DESCRIPTION);
+  const lastCloseBracket = truncated.lastIndexOf(']');
+  const lastOpenBracket = truncated.lastIndexOf('[');
+  let cut;
+  if (lastOpenBracket > lastCloseBracket) {
+    // Mid-bracket: cut before the open bracket instead of splitting it.
+    cut = lastOpenBracket;
+  } else {
+    const lastSentenceEnd = Math.max(truncated.lastIndexOf('. '), lastCloseBracket + 1);
+    cut = lastSentenceEnd > 0 ? lastSentenceEnd : truncated.length;
+  }
+  return `${truncated.slice(0, cut).trim()}...`;
+}
+
+function descriptionFromControl(control, resolveInserts) {
   const chunks = [];
-  collectProse(control.parts, chunks);
+  collectProse(control.parts, chunks, resolveInserts);
   if (!chunks.length && control.title) chunks.push(control.title);
   const text = chunks.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
   if (!text) return control.title || control.id;
-  return text.length > MAX_DESCRIPTION ? `${text.slice(0, MAX_DESCRIPTION)}...` : text;
+  return truncateAtBracket(text);
 }
 
 function propValue(props, name) {
@@ -59,17 +116,17 @@ function assessmentLinks(part) {
     .map((entry) => entry.replace(/^#/, ''));
 }
 
-function splitAssessmentObjects(value) {
+function splitAssessmentObjects(value, resolveInserts) {
   return String(value || '')
     .split(/\n\s*\n/g)
-    .map((entry) => cleanText(entry))
+    .map((entry) => cleanText(entry, resolveInserts))
     .filter(Boolean);
 }
 
-function flattenAssessmentObjectives(parts, entries = []) {
+function flattenAssessmentObjectives(parts, resolveInserts, entries = []) {
   for (const part of parts || []) {
     if (part.name !== 'assessment-objective') continue;
-    const prose = cleanText(part.prose);
+    const prose = cleanText(part.prose, resolveInserts);
     if (prose) {
       entries.push({
         id: part.id || '',
@@ -78,12 +135,12 @@ function flattenAssessmentObjectives(parts, entries = []) {
         statement_refs: assessmentLinks(part),
       });
     }
-    flattenAssessmentObjectives(part.parts, entries);
+    flattenAssessmentObjectives(part.parts, resolveInserts, entries);
   }
   return entries;
 }
 
-function collectAssessmentMethods(parts) {
+function collectAssessmentMethods(parts, resolveInserts) {
   return (parts || [])
     .filter((part) => part.name === 'assessment-method')
     .map((part) => ({
@@ -92,14 +149,14 @@ function collectAssessmentMethods(parts) {
       method: propValue(part.props, 'method') || '',
       objects: (part.parts || [])
         .filter((child) => child.name === 'assessment-objects')
-        .flatMap((child) => splitAssessmentObjects(child.prose)),
+        .flatMap((child) => splitAssessmentObjects(child.prose, resolveInserts)),
     }))
     .filter((entry) => entry.method || entry.objects.length);
 }
 
-function buildAssessmentMetadata(control) {
-  const objectives = flattenAssessmentObjectives(control.parts);
-  const methods = collectAssessmentMethods(control.parts);
+function buildAssessmentMetadata(control, resolveInserts) {
+  const objectives = flattenAssessmentObjectives(control.parts, resolveInserts);
+  const methods = collectAssessmentMethods(control.parts, resolveInserts);
   if (!objectives.length && !methods.length) return null;
   return {
     source_key: ASSESSMENT_SOURCE_KEY,
@@ -142,28 +199,62 @@ export function normalize800172Id(oscalId) {
   return `${Number(match[1])}.${Number(match[2])}.${Number(match[3])}${match[4]?.toUpperCase() || ''}`;
 }
 
-function walk80053(nodes, familyTitle, records, sourceKey) {
+function isWithdrawn(node) {
+  return propValue(node.props, 'status') === 'withdrawn';
+}
+
+function supersededByIds(node) {
+  return (node.links || [])
+    .filter((link) => link.rel === 'incorporated-into')
+    .map((link) => normalize80053Id(String(link.href || '').replace(/^#/, '')))
+    .filter(Boolean);
+}
+
+function buildControlRecord(node, family, sourceKey, resolveInserts) {
+  const withdrawn = isWithdrawn(node);
+  const assessment = withdrawn ? null : buildAssessmentMetadata(node, resolveInserts);
+  const desc = withdrawn
+    ? (node.title || normalize80053Id(node.id))
+    : descriptionFromControl(node, resolveInserts);
+  const supersededBy = withdrawn ? supersededByIds(node) : [];
+  const metadata = {
+    ...(assessment ? { assessment } : {}),
+    ...(supersededBy.length ? { superseded_by: supersededBy } : {}),
+  };
+  return {
+    id: normalize80053Id(node.id),
+    type: '800-53-control',
+    framework: '800-53',
+    title: node.title || normalize80053Id(node.id),
+    family: family || 'General',
+    description: desc,
+    plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
+    source: { key: sourceKey },
+    status: withdrawn ? 'withdrawn' : undefined,
+    metadata: Object.keys(metadata).length ? metadata : undefined,
+  };
+}
+
+function walk80053(nodes, familyTitle, records, sourceKey, parentParams) {
   for (const node of nodes || []) {
     const family = node.class === 'family' ? node.title : familyTitle;
-    if (node.controls) walk80053(node.controls, family, records, sourceKey);
-    if (node.groups) walk80053(node.groups, family, records, sourceKey);
-
     const cls = node.class || '';
+
+    if (cls === 'SP800-53' && node.controls) {
+      // Base control: build a sibling pool of enhancement params so cross-references
+      // between enhancements under the same base (e.g. SC-42(2) -> SC-42(1) params)
+      // resolve without a control needing every param defined on itself.
+      const siblingEnhancementParams = node.controls.flatMap((enhancement) => enhancement.params || []);
+      walk80053(node.controls, family, records, sourceKey, [...(node.params || []), ...siblingEnhancementParams]);
+    } else if (node.controls) {
+      walk80053(node.controls, family, records, sourceKey, parentParams);
+    }
+    if (node.groups) walk80053(node.groups, family, records, sourceKey, parentParams);
+
     if (!node.id) continue;
     if (cls === 'SP800-53' || cls === 'SP800-53-enhancement') {
-      const assessment = buildAssessmentMetadata(node);
-      const desc = descriptionFromControl(node);
-      records.push({
-        id: normalize80053Id(node.id),
-        type: '800-53-control',
-        framework: '800-53',
-        title: node.title || normalize80053Id(node.id),
-        family: family || 'General',
-        description: desc,
-        plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
-        source: { key: sourceKey },
-        metadata: assessment ? { assessment } : undefined,
-      });
+      const resolveInserts = createParamResolver(node.params, parentParams);
+      records.push(buildControlRecord(node, family, sourceKey, resolveInserts));
     }
   }
 }
