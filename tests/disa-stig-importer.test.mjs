@@ -169,3 +169,104 @@ test('official DISA compilation discovery prefers the public U_ library ZIP', ()
     'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip',
   );
 });
+
+const numericVersionSrgXml = `<?xml version="1.0" encoding="UTF-8"?>
+<Benchmark id="Database_Generic" xmlns="http://checklists.nist.gov/xccdf/1.2">
+  <status date="2026-02-26">accepted</status>
+  <title>Database Security Requirements Guide</title>
+  <description>Public DISA Database SRG benchmark.</description>
+  <version>4</version>
+  <plain-text id="release-info">Release: 5 Benchmark Date: 01 Apr 2026</plain-text>
+  <Group id="V-300001">
+    <title>SRG-APP-DB-000001</title>
+    <Rule id="SV-300001r1_rule" severity="medium" weight="10.0">
+      <title>Enforce database access control</title>
+      <version>SRG-APP-DB-000001</version>
+      <description>&lt;VulnDiscussion&gt;Databases must enforce access control.&lt;/VulnDiscussion&gt;</description>
+      <ident system="http://cyber.mil/cci">CCI-000015</ident>
+      <fixtext>Configure the database access control policy.</fixtext>
+      <check system="C-1_chk">
+        <check-content>Review the database access control configuration.</check-content>
+      </check>
+    </Rule>
+  </Group>
+</Benchmark>`;
+
+test('DISA XCCDF parser composes a V{major}R{release} version from real single-benchmark zips', () => {
+  const result = parseDisaXccdf(numericVersionSrgXml, {
+    sourceKey: 'disa-srg-library',
+    artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Database_V4R5_SRG.zip',
+    entryPath: 'U_Database_V4R5_Manual_SRG/U_Database_SRG_V4R5_Manual-xccdf.xml',
+  });
+
+  assert.equal(result.catalogKind, 'srg');
+  assert.equal(result.source_version, 'V4R5');
+  assert.equal(result.records[0].source.version, 'V4R5');
+});
+
+test('DISA XCCDF parser detects catalog kind from spelled-out SRG/STIG titles without srg/stig substrings', () => {
+  const vpnXml = numericVersionSrgXml
+    .replace('Database_Generic', 'VPN')
+    .replace('Database Security Requirements Guide', 'Virtual Private Network (VPN) Security Requirements Guide');
+
+  const result = parseDisaXccdf(vpnXml, {
+    sourceKey: 'disa-srg-library',
+    artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VPN_V3R4_SRG.zip',
+    entryPath: 'U_VPN_V3R4_Manual_SRG/U_VPN_SRG_V3R4_Manual-xccdf.xml',
+  });
+
+  assert.equal(result.catalogKind, 'srg');
+});
+
+test('DISA XCCDF parser falls back to an explicit hintKind when no SRG/STIG signal exists in id or title', () => {
+  const checklistXml = numericVersionSrgXml
+    .replace('Database_Generic', 'Traditional_Security_Checklist')
+    .replace('Database Security Requirements Guide', 'Traditional Security Checklist');
+
+  assert.throws(
+    () => parseDisaXccdf(checklistXml, {
+      sourceKey: 'disa-stig-library',
+      artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Traditional_Security_Checklist_V2R8.zip',
+      entryPath: 'U_Traditional_Security_Manual_Checklist_V2R8/U_Traditional_Security_Checklist_V2R8_Manual-xccdf.xml',
+    }),
+    /missing benchmark metadata/i,
+    'without a hint, an ambiguous title should still fail validation',
+  );
+
+  const result = parseDisaXccdf(checklistXml, {
+    sourceKey: 'disa-stig-library',
+    artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Traditional_Security_Checklist_V2R8.zip',
+    entryPath: 'U_Traditional_Security_Manual_Checklist_V2R8/U_Traditional_Security_Checklist_V2R8_Manual-xccdf.xml',
+    hintKind: 'stig',
+  });
+
+  assert.equal(result.catalogKind, 'stig');
+  assert.equal(result.records[0].type, 'stig_rule');
+});
+
+test('DISA XCCDF parser truncates oversized prose fields to the 500-char size budget', () => {
+  const longDiscussion = 'A'.repeat(600);
+  const longFix = 'B'.repeat(600);
+  const longCheck = 'C'.repeat(600);
+  const oversizedXml = numericVersionSrgXml
+    .replace(
+      '&lt;VulnDiscussion&gt;Databases must enforce access control.&lt;/VulnDiscussion&gt;',
+      `&lt;VulnDiscussion&gt;${longDiscussion}&lt;/VulnDiscussion&gt;`,
+    )
+    .replace('Configure the database access control policy.', longFix)
+    .replace('Review the database access control configuration.', longCheck);
+
+  const result = parseDisaXccdf(oversizedXml, {
+    sourceKey: 'disa-srg-library',
+    artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Database_V4R5_SRG.zip',
+    entryPath: 'U_Database_V4R5_Manual_SRG/U_Database_SRG_V4R5_Manual-xccdf.xml',
+  });
+
+  const record = result.records[0];
+  assert.equal(record.description.length, 500);
+  assert.ok(record.description.endsWith('...'));
+  assert.equal(record.fix_text.length, 500);
+  assert.ok(record.fix_text.endsWith('...'));
+  assert.equal(record.check_text.length, 500);
+  assert.ok(record.check_text.endsWith('...'));
+});

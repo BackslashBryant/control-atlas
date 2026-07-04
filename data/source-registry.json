@@ -193,12 +193,12 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
+      "version": "multiple (see metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:catalog_disa_stig_library_placeholder_checksum",
+      "checksum": "sha256:bfb08c034a319f41c5fefb820f53a6ac4a432063c0026cc12427ce80be2bea5b",
       "access_status": "public",
       "license_or_use": "DISA STIG Terms of Use",
       "lifecycle_status": "active",
@@ -214,7 +214,13 @@
           "tier": "gold",
           "resolved_from": "gold",
           "fallbacks": []
-        }
+        },
+        "artifacts": [
+          { "name": "Application Security and Development STIG", "version": "V6R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_ASD_V6R4_STIG.zip", "checksum": "sha256:3361a742c58ba7cc3f86bc1fa6aa6b0d9a588824c017a90c9b6786df8ffdd681" },
+          { "name": "Network Infrastructure Policy STIG", "version": "V10R7", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Network_Infrastructure_Policy_V10R7_STIG.zip", "checksum": "sha256:e9b68e30e49725a3d16242318e7398ed03cab1840513acb064be50332d8a4e97" },
+          { "name": "Network WLAN STIG (AP/Bridge/Controller Mgmt+Platform; covers WLAN Policy, Access Point, Controller)", "version": "Y23M10", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Network_WLAN_Y23M10_STIG.zip", "checksum": "sha256:6641d372dd2fcea2f800065f60af94f4e2fb173507b1f70bc3aa493254601e0c" },
+          { "name": "Traditional Security Checklist", "version": "V2R8", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Traditional_Security_Checklist_V2R8.zip", "checksum": "sha256:7553bc92c09fdd53a32270f5b69971924725d478fb8ddf5ded430bc88f5b93b5" }
+        ]
       }
     },
     {
@@ -227,12 +233,12 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
+      "version": "multiple (see metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:catalog_disa_srg_library_placeholder_checksum",
+      "checksum": "sha256:4a22b3cb4acde21396cb045db0672e3105fc8b61fc19f9ec3478cf2e01bf9f5a",
       "access_status": "public",
       "license_or_use": "DISA STIG Terms of Use",
       "lifecycle_status": "active",
@@ -248,7 +254,23 @@
           "tier": "gold",
           "resolved_from": "gold",
           "fallbacks": []
-        }
+        },
+        "artifacts": [
+          { "name": "Network Firewall SRG", "version": "V3R3", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Firewall_V3R3_SRG.zip", "checksum": "sha256:31117998f9b19da9333733e043ac94cbceb05c4201977743ec76a343318d0390" },
+          { "name": "Network Device Management SRG", "version": "V5R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_NDM_V5R4_SRG.zip", "checksum": "sha256:70f015facceea07a7a89b549487356320d48fa3d83cdca058ac85cf2af9abc7e" },
+          { "name": "Network Layer 2 Switch SRG", "version": "V3R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Layer_2_Switch_V3R4_SRG.zip", "checksum": "sha256:5d2344c9d0c3adea2ec506570953620a4ef17f9982910ba64bd8fedb4bb6fce5" },
+          { "name": "Network Router SRG", "version": "V5R2", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Router_V5R2_SRG.zip", "checksum": "sha256:a36e6c3d38e69520bc669fc8fef5e583e3595b00b329c8fa13dbb0b9dda25331" },
+          { "name": "Web Server SRG", "version": "V4R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Web_Server_V4R4_SRG.zip", "checksum": "sha256:83642deab5ea6d540b35513c9bc8a9397ec922d096fa51f80943412905c46797" },
+          { "name": "Intrusion Detection and Prevention System SRG (Wireless IDPS)", "version": "V3R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_IDPS_V3R4_SRG.zip", "checksum": "sha256:7bb97638efac2c35c9247ecd086b1c2623f47250f92b0c8b12adf3a8f93452c6" },
+          { "name": "Enterprise Voice, Video, and Messaging SRG (covers Voice Video Services Policy, VVS Session Manager/Local Session Controller, VVS Endpoint)", "version": "Y26M01", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_EVVM_Y26M01_SRG.zip", "checksum": "sha256:7ba5f4436a1a0b4d53d16144f050c7e06ce158ff5716a2689d6135d8ea3eb361" },
+          { "name": "Unified Endpoint Management SRG (covers Mobile Device Management Server)", "version": "Y25M10", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_UEM_Y25M10_SRG.zip", "checksum": "sha256:6d65f11f72924b16991fc40f2461515e4d7f92dfeae0c976a57f64c010607990" },
+          { "name": "Application Server SRG", "version": "V4R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Application_Server_V4R4_SRG.zip", "checksum": "sha256:15cc2ea01528cd72b2812c912471d3d50631935168a0973cc2346bf142916e7b" },
+          { "name": "Database SRG", "version": "V4R5", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Database_V4R5_SRG.zip", "checksum": "sha256:c604242fe07c4f4d04d5723d559cfa621b3313ce3bf44809b71f2bc0f94f20b9" },
+          { "name": "Domain Name System SRG", "version": "V4R2", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Domain_Name_System_V4R2_SRG.zip", "checksum": "sha256:473c2827947ab1dd42c9971aaa46baba31d6f180a63fdff8d9064758206a9bc8" },
+          { "name": "General Purpose Operating System SRG", "version": "V3R3", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_GPOS_V3R3_SRG.zip", "checksum": "sha256:97026655bce18d91e12c9c0a9fd54288989f0b483d3b92ec615e2dc0544e6f24" },
+          { "name": "VPN SRG", "version": "V3R4", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VPN_V3R4_SRG.zip", "checksum": "sha256:1f5887116931e775c8011098fb89f1d87a99d35c10b4088283533267afff2bfb" },
+          { "name": "Cloud Computing SRG (Mission Owner Network/OS)", "version": "Y26M06", "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Cloud_Computing_Y26M06_SRG.zip", "checksum": "sha256:9470b9caadd3ff44b90e608c524012fa719c9b3541b3f0bb027b38b5b9e67971" }
+        ]
       }
     },
     {
@@ -261,12 +283,12 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
+      "version": "multiple (see disa-stig-library and disa-srg-library metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:mapping_disa_stig_srg_cci_placeholder_checksum",
+      "checksum": "sha256:d4086166ad7a122ee659deb1b9c08734e23230dfa2df66b7524c9c191b43dc6b",
       "access_status": "public",
       "license_or_use": "DISA STIG Terms of Use",
       "lifecycle_status": "active",
