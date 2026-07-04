@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-19T22:47:46.082Z",
+  "generated_at": "2026-07-04T20:58:46.209Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -139,15 +139,15 @@
         "disa-srg"
       ],
       "owner": "DISA",
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "version": "multiple (see metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:catalog_disa_srg_library_placeholder_checksum",
+      "checksum": "sha256:4a22b3cb4acde21396cb045db0672e3105fc8b61fc19f9ec3478cf2e01bf9f5a",
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1,
+      "node_count": 1514,
       "relationship_count": 0,
       "evidence_count": 0,
       "finding_count": 0
@@ -160,15 +160,15 @@
         "disa-stig"
       ],
       "owner": "DISA",
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "version": "multiple (see metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:catalog_disa_stig_library_placeholder_checksum",
+      "checksum": "sha256:bfb08c034a319f41c5fefb820f53a6ac4a432063c0026cc12427ce80be2bea5b",
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1,
+      "node_count": 603,
       "relationship_count": 0,
       "evidence_count": 0,
       "finding_count": 0
@@ -183,17 +183,17 @@
         "disa-cci"
       ],
       "owner": "DISA",
-      "version": "2026-06-14",
-      "retrieved_at": "2026-06-14",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip",
+      "version": "multiple (see disa-stig-library and disa-srg-library metadata.artifacts)",
+      "retrieved_at": "2026-07-04",
+      "artifact_url": "https://public.cyber.mil/stigs/downloads/",
       "artifact_type": "xccdf",
-      "checksum": "sha256:mapping_disa_stig_srg_cci_placeholder_checksum",
+      "checksum": "sha256:d4086166ad7a122ee659deb1b9c08734e23230dfa2df66b7524c9c191b43dc6b",
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 0,
-      "relationship_count": 3,
-      "evidence_count": 3,
+      "relationship_count": 2123,
+      "evidence_count": 2123,
       "finding_count": 0
     },
     {
@@ -836,8 +836,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 1532,
-      "relationship_count": 1197,
-      "evidence_count": 1197,
+      "relationship_count": 2069,
+      "evidence_count": 2069,
       "finding_count": 0
     },
     {

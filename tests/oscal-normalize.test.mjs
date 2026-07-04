@@ -53,6 +53,137 @@ test('800-171 Rev. 2 CSV normalization preserves requirement identifiers and dis
   });
 });
 
+test('800-53 catalog normalization substitutes assignment and selection ODP moustaches', () => {
+  const catalog = {
+    catalog: {
+      groups: [{
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [{
+          id: 'ac-2',
+          class: 'SP800-53',
+          title: 'Account Management',
+          params: [
+            { id: 'ac-02_odp.03', label: 'personnel or roles' },
+            {
+              id: 'ac-02_odp.10',
+              select: { 'how-many': 'one-or-more', choice: ['monthly', 'quarterly', 'annually'] },
+            },
+          ],
+          parts: [{
+            id: 'ac-2_smt',
+            name: 'statement',
+            parts: [
+              { id: 'ac-2_smt.e', name: 'item', prose: 'Require approvals by {{ insert: param, ac-02_odp.03 }} for requests to create accounts;' },
+              { id: 'ac-2_smt.j', name: 'item', prose: 'Review accounts {{ insert: param, ac-02_odp.10 }};' },
+            ],
+          }],
+        }],
+      }],
+    },
+  };
+  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const record = result.records.find((item) => item.id === 'AC-2');
+  assert.match(record.description, /\[Assignment: personnel or roles\]/);
+  assert.match(record.description, /\[Selection \(one or more\): monthly; quarterly; annually\]/);
+  assert.doesNotMatch(record.description, / by for /);
+});
+
+test('800-53 catalog normalization resolves nested selection choices and falls back for unresolved refs', () => {
+  const catalog = {
+    catalog: {
+      groups: [{
+        id: 'sc',
+        class: 'family',
+        title: 'System and Communications Protection',
+        controls: [{
+          id: 'sc-30',
+          class: 'SP800-53',
+          title: 'Concealment and Misdirection',
+          controls: [{
+            id: 'sc-30.3',
+            class: 'SP800-53-enhancement',
+            title: 'Change Processing and Storage Locations',
+            params: [
+              { id: 'sc-30.03_odp.01', label: 'processing and/or storage' },
+              {
+                id: 'sc-30.03_odp.02',
+                select: { choice: ['{{ insert: param, sc-30.03_odp.03 }}', 'random time intervals'] },
+              },
+              { id: 'sc-30.03_odp.03', label: 'time frequency' },
+            ],
+            parts: [{
+              id: 'sc-30.3_smt',
+              name: 'statement',
+              prose: 'Change the location of {{ insert: param, sc-30.03_odp.01 }} {{ insert: param, sc-30.03_odp.02 }}.',
+            }],
+          }],
+        }],
+      }],
+    },
+  };
+  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const record = result.records.find((item) => item.id === 'SC-30.3');
+  assert.match(record.description, /\[Selection: \[Assignment: time frequency\]; random time intervals\]/);
+
+  const missingParamCatalog = {
+    catalog: {
+      groups: [{
+        id: 'xx',
+        class: 'family',
+        title: 'Test Family',
+        controls: [{
+          id: 'xx-1',
+          class: 'SP800-53',
+          title: 'Test Control',
+          params: [],
+          parts: [{ id: 'xx-1_smt', name: 'statement', prose: 'Do the thing within {{ insert: param, xx-01_odp.missing }}.' }],
+        }],
+      }],
+    },
+  };
+  const missingResult = parse80053Catalog(missingParamCatalog, 'nist-oscal');
+  const missingRecord = missingResult.records.find((item) => item.id === 'XX-1');
+  assert.match(missingRecord.description, /\[Assignment: organization-defined value\]/);
+});
+
+test('800-53 catalog normalization excludes assessment-objective and assessment-method prose from description', () => {
+  const result = parse80053Catalog(sample80053Assessment, 'nist-oscal');
+  const record = result.records.find((item) => item.id === 'AC-2');
+  assert.match(record.description, /Define account types allowed for the system/);
+  assert.doesNotMatch(record.description, /account types allowed for use within the system are defined and documented/);
+  assert.doesNotMatch(record.description, /account managers are assigned/);
+  assert.doesNotMatch(record.description, /Access control policy/);
+  assert.doesNotMatch(record.description, /System owners/);
+});
+
+test('800-53 catalog normalization marks withdrawn controls and captures superseded_by', () => {
+  const catalog = {
+    catalog: {
+      groups: [{
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [{
+          id: 'ac-13',
+          class: 'SP800-53',
+          title: 'Supervision and Review — Access Control',
+          props: [{ name: 'status', value: 'withdrawn' }],
+          links: [
+            { href: '#ac-2', rel: 'incorporated-into' },
+            { href: '#au-6', rel: 'incorporated-into' },
+          ],
+        }],
+      }],
+    },
+  };
+  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const record = result.records.find((item) => item.id === 'AC-13');
+  assert.equal(record.status, 'withdrawn');
+  assert.deepEqual(record.metadata.superseded_by, ['AC-2', 'AU-6']);
+});
+
 test('800-172 catalog normalization preserves enhanced requirement identifiers', () => {
   const catalog = {
     catalog: {

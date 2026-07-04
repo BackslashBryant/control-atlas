@@ -14,7 +14,7 @@ import {
   IconShieldCheck,
   IconSourceCode,
 } from "@tabler/icons-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { Fragment, useMemo, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
@@ -73,6 +73,56 @@ import {
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
 
+const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
+
+/**
+ * Split text on ODP bracket markers (e.g. "[Assignment: organization-defined
+ * parameter]") and wrap each match in a muted-highlight span. Uses safe
+ * React split-render — never dangerouslySetInnerHTML.
+ */
+function renderOdpText(text: string): ReactNode {
+  if (!text) return text;
+  const parts = text.split(ODP_PATTERN);
+  const matches = text.match(ODP_PATTERN) || [];
+  if (matches.length === 0) return text;
+
+  const nodes: ReactNode[] = [];
+  parts.forEach((part, index) => {
+    if (part) nodes.push(<Fragment key={`t-${index}`}>{part}</Fragment>);
+    if (index < matches.length) {
+      nodes.push(
+        <span className="odp-param" key={`m-${index}`}>
+          {matches[index]}
+        </span>,
+      );
+    }
+  });
+  return nodes;
+}
+
+function normalizeForCompare(text: string): string {
+  return text.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+/**
+ * A curated/derived plain-language summary is worth showing only when it
+ * exists and is meaningfully different from the official description — not
+ * merely a whitespace-normalized prefix of it (a sign the summary is just a
+ * mechanically truncated copy of the description).
+ */
+function isMeaningfullyDifferentSummary(
+  summary: string | undefined | null,
+  description: string | undefined | null,
+): summary is string {
+  if (!summary) return false;
+  const normalizedSummary = normalizeForCompare(summary);
+  const normalizedDescription = normalizeForCompare(description || "");
+  if (!normalizedSummary) return false;
+  if (normalizedSummary === normalizedDescription) return false;
+  if (normalizedDescription.startsWith(normalizedSummary)) return false;
+  if (normalizedSummary.startsWith(normalizedDescription) && normalizedDescription) return false;
+  return true;
+}
 
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
@@ -106,6 +156,35 @@ export function ObjectDetailPage(props: {
         : { total: 0, byType: [] },
     [bundle.runtime, edges, node],
   );
+
+  const isWithdrawn = node?.lifecycle_status === "withdrawn";
+  const supersededByIds: string[] = Array.isArray(node?.metadata?.superseded_by)
+    ? node.metadata.superseded_by
+    : [];
+  const supersededByNodes = supersededByIds
+    .map((id: string) => {
+      const catalogId = node?.metadata?.catalog_id;
+      const candidateNodeId = catalogId ? `${catalogId}:${id}` : id;
+      return bundle.runtime.getNode(candidateNodeId) || bundle.runtime.getNode(id);
+    })
+    .filter(Boolean) as Array<{ id: string; metadata?: { item_id?: string } }>;
+
+  const recordItemId: string = node?.metadata?.item_id || "";
+  const isEnhancement = node?.node_type === "control_enhancement";
+  const baseItemId = isEnhancement && recordItemId.includes(".")
+    ? recordItemId.slice(0, recordItemId.lastIndexOf("."))
+    : "";
+  const baseControlNode = baseItemId && node?.metadata?.catalog_id
+    ? bundle.runtime.getNode(`${node.metadata.catalog_id}:${baseItemId}`)
+    : null;
+
+  const rawSummary: string | undefined =
+    node?.plain_language_summary || document?.plain_language_summary;
+  const showSummary = isMeaningfullyDifferentSummary(
+    rawSummary,
+    document?.description,
+  );
+  const plainAction: string | undefined = node?.metadata?.plain_action;
 
   if (!node || !document) {
     return (
@@ -212,14 +291,55 @@ export function ObjectDetailPage(props: {
         title={recordDisplayTitle(node) || document.title}
       />
 
+      {isEnhancement && baseControlNode ? (
+        <p className="record-parent-link">
+          <button
+            className="link-action quiet"
+            onClick={() => onOpenNode(baseControlNode.id, state.from || "search")}
+            type="button"
+          >
+            Part of {baseItemId}
+          </button>
+        </p>
+      ) : null}
+
+      {isWithdrawn ? (
+        <div className="badge-row record-lifecycle-badges">
+          <Badge tone="warning">Withdrawn from SP 800-53 Rev. 5</Badge>
+          {supersededByNodes.length ? (
+            <span className="record-superseded-by">
+              — superseded by{" "}
+              {supersededByNodes.map((supersededNode, index) => (
+                <Fragment key={supersededNode.id}>
+                  {index > 0 ? ", " : ""}
+                  <button
+                    className="link-action quiet"
+                    onClick={() =>
+                      onOpenNode(supersededNode.id, state.from || "search")
+                    }
+                    type="button"
+                  >
+                    {supersededNode.metadata?.item_id || supersededNode.id}
+                  </button>
+                </Fragment>
+              ))}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="detail-grid">
         <section className="stack">
           <SummaryCard title="What this is" tone="trust">
-            <p>
-              {node.plain_language_summary ||
-                document.plain_language_summary ||
-                document.description}
-            </p>
+            {showSummary ? <p>{rawSummary}</p> : null}
+            {plainAction ? (
+              <p>
+                <strong>What to do:</strong> {plainAction}
+              </p>
+            ) : null}
+            {!showSummary && !plainAction ? (
+              <p>{document.description}</p>
+            ) : null}
           </SummaryCard>
           <SummaryCard title="Where it appears">
             <p>
@@ -358,7 +478,11 @@ export function ObjectDetailPage(props: {
           </section>
 
           <SummaryCard title="Official text / source excerpt">
-            <p>{document.description || "No public description available."}</p>
+            <p>
+              {document.description
+                ? renderOdpText(document.description)
+                : "No public description available."}
+            </p>
             {source?.artifact_url ? (
               <p>
                 <a

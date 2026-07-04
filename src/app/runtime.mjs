@@ -6,6 +6,24 @@ function normalize(value) {
     .toLowerCase();
 }
 
+// Practitioner notation for control enhancements uses parentheses, e.g.
+// "AC-2(1)" or "AC-2 (1) (a)", but the underlying data (item_id) stores
+// enhancements with dot notation, e.g. "AC-2.1". This converts an already
+// normalize()'d query from paren notation to dot notation on a best-effort
+// basis (multi-level parens collapse to the first numeric level) so search
+// queries reach the right node without requiring the data or index to
+// change. Queries that are already in dot notation (or aren't control IDs
+// at all) pass through unchanged.
+function normalizeControlNotation(needle) {
+  if (!needle) return needle;
+  // Collapse "ac-2 (1)" -> "ac-2(1)" so the paren regex matches consistently
+  // regardless of stray whitespace before the parenthesis.
+  const tightened = needle.replace(/\s+\(/g, "(");
+  const match = tightened.match(/^([a-z]{2,3}-\d+)\s*\(\s*(\d+)\s*\)/i);
+  if (!match) return needle;
+  return `${match[1]}.${match[2]}`;
+}
+
 function csvCell(value) {
   return `"${String(value ?? "").replaceAll('"', '""')}"`;
 }
@@ -693,23 +711,31 @@ export function createFederalGraphRuntime(dataset) {
     searchNodes(query, filters = {}) {
       const needle = normalize(query);
       if (!needle) return [];
+      const aliasNeedle = normalizeControlNotation(needle);
       const nodeMatchesFilter = (node) =>
         (!filters.catalog_id ||
           node.metadata?.catalog_id === filters.catalog_id) &&
         (!filters.node_type || node.node_type === filters.node_type);
 
-      const exactMatches = dataset.nodes.filter(
-        (node) =>
-          nodeMatchesFilter(node) &&
-          (normalize(node.metadata?.item_id) === needle ||
-            normalize(node.id) === needle),
-      );
+      const exactMatches = dataset.nodes.filter((node) => {
+        if (!nodeMatchesFilter(node)) return false;
+        const itemId = normalize(node.metadata?.item_id);
+        const id = normalize(node.id);
+        return (
+          itemId === needle ||
+          id === needle ||
+          itemId === aliasNeedle ||
+          id === aliasNeedle
+        );
+      });
       if (exactMatches.length > 0) {
         return exactMatches;
       }
 
       if (miniSearch) {
-        const results = miniSearch.search(query);
+        const results = miniSearch.search(
+          aliasNeedle !== needle ? aliasNeedle : query,
+        );
         return results
           .map((result) => nodeById.get(result.id))
           .filter((node) => node && nodeMatchesFilter(node))
@@ -723,9 +749,9 @@ export function createFederalGraphRuntime(dataset) {
           const label = normalize(node.label);
           const description = normalize(node.metadata?.description);
           const score =
-            itemId === needle
+            itemId === needle || itemId === aliasNeedle
               ? 0
-              : itemId.startsWith(needle)
+              : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
                 ? 1
                 : label.includes(needle)
                   ? 2
@@ -741,20 +767,28 @@ export function createFederalGraphRuntime(dataset) {
     },
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
+      const aliasNeedle = normalizeControlNotation(needle);
       const candidates = libraryDocuments.filter((document) =>
         matchesLibraryFacet(document, filters),
       );
       if (!needle) return candidates;
 
-      const exactMatches = candidates.filter(
-        (document) =>
-          normalize(document.item_id) === needle ||
-          normalize(document.id) === needle,
-      );
+      const exactMatches = candidates.filter((document) => {
+        const itemId = normalize(document.item_id);
+        const id = normalize(document.id);
+        return (
+          itemId === needle ||
+          id === needle ||
+          itemId === aliasNeedle ||
+          id === aliasNeedle
+        );
+      });
       if (exactMatches.length > 0) return exactMatches;
 
       if (miniSearch) {
-        const results = miniSearch.search(query);
+        const results = miniSearch.search(
+          aliasNeedle !== needle ? aliasNeedle : query,
+        );
         return results
           .map((result) => libraryDocumentById.get(result.id))
           .filter((doc) => doc && matchesLibraryFacet(doc, filters))
@@ -770,9 +804,9 @@ export function createFederalGraphRuntime(dataset) {
           );
           const description = normalize(document.description);
           const score =
-            itemId === needle
+            itemId === needle || itemId === aliasNeedle
               ? 0
-              : itemId.startsWith(needle)
+              : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
                 ? 1
                 : title.includes(needle)
                   ? 2
