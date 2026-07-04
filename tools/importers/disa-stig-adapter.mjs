@@ -70,14 +70,34 @@ function getCheckText(rule) {
   return stripMarkup(content);
 }
 
-function detectCatalogKind(benchmark) {
+function detectCatalogKind(benchmark, hintKind) {
   const probe = `${benchmark.id || ''} ${textValue(benchmark.title)}`.toLowerCase();
+  if (probe.includes('security requirements guide')) return 'srg';
+  if (probe.includes('security technical implementation guide')) return 'stig';
   if (probe.includes('srg')) return 'srg';
   if (probe.includes('stig')) return 'stig';
+  if (hintKind === 'srg' || hintKind === 'stig') return hintKind;
   return null;
 }
 
-export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath }) {
+function truncateProse(value = '', maxLength = 500) {
+  const text = String(value || '');
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 3)}...`;
+}
+
+function composeVersion(benchmark) {
+  const majorVersion = textValue(benchmark?.version);
+  if (/^V\d+R\d+$/i.test(majorVersion)) return majorVersion;
+  const releaseInfo = asArray(benchmark?.['plain-text'])
+    .map((entry) => (typeof entry === 'object' ? textValue(entry['#text']) : textValue(entry)))
+    .find((text) => /Release:\s*\d+/i.test(text));
+  const release = releaseInfo?.match(/Release:\s*(\d+)/i)?.[1];
+  if (majorVersion && release) return `V${majorVersion}R${release}`;
+  return majorVersion;
+}
+
+export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKind }) {
   const validation = XMLValidator.validate(xml);
   if (validation !== true) {
     throw new Error(`Invalid DISA XCCDF structure: ${validation.err?.msg || 'malformed XML'}`);
@@ -85,9 +105,9 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath }) {
 
   const parsed = parser.parse(xml);
   const benchmark = parsed.Benchmark || parsed['cdf:Benchmark'];
-  const catalogKind = benchmark ? detectCatalogKind(benchmark) : null;
+  const catalogKind = benchmark ? detectCatalogKind(benchmark, hintKind) : null;
   const snapshotDate = benchmark?.status?.date || '';
-  const version = textValue(benchmark?.version);
+  const version = benchmark ? composeVersion(benchmark) : '';
   const benchmarkTitle = textValue(benchmark?.title);
 
   if (!benchmark || !catalogKind || !benchmark.id || !snapshotDate || !version || !benchmarkTitle) {
@@ -121,14 +141,14 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath }) {
         id: vulnId,
         type: catalogKind === 'stig' ? 'stig_rule' : 'srg_requirement',
         title: titleVal,
-        description: discussionVal,
+        description: truncateProse(discussionVal),
         plain_language_summary: plSummary,
         severity: rule.severity || '',
         rule_id: rule.id || '',
         vuln_id: vulnId,
         stig_id: textValue(rule.version) || textValue(group.title),
-        check_text: getCheckText(rule),
-        fix_text: stripMarkup(textValue(rule.fixtext)),
+        check_text: truncateProse(getCheckText(rule)),
+        fix_text: truncateProse(stripMarkup(textValue(rule.fixtext))),
         references: parseReferences(rule),
         source: {
           key: sourceKey,
@@ -223,17 +243,20 @@ function walkArchiveEntries(archive, parentPath = '') {
   return results;
 }
 
-export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys }) {
+export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
   const parsed = { stig: [], srg: [] };
 
   for (const entry of walkArchiveEntries(archive)) {
     if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
     const xml = strFromU8(entry.value);
+    const pathLower = entry.entryPath.toLowerCase();
+    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
     const document = parseDisaXccdf(xml, {
-      sourceKey: entry.entryPath.toLowerCase().includes('srg') ? sourceKeys.srg : sourceKeys.stig,
+      sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
       artifactUrl,
       entryPath: entry.entryPath,
+      hintKind: pathHint,
     });
     parsed[document.catalogKind].push(document);
   }
