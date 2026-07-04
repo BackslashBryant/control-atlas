@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0",
+  "source_note": "Human-authored plain-language summaries. Not official NIST text.",
+  "entries": {
+    "AC-2": {
+      "plain_language_summary": "Keep track of every account on the system: who gets one, who approves it, and when it gets disabled. Most audit findings start with an account nobody remembered to turn off.",
+      "plain_action": "Write down your account request/approval workflow and set a review cadence for disabling stale accounts."
+    },
+    "AC-16": {
+      "plain_language_summary": "Tag data and users with labels the system can act on, like a clearance level or a 'releasable to' marking, so access decisions can be made automatically instead of by hand. This is the machinery behind marking data as sensitive.",
+      "plain_action": "Decide which attributes (classification, need-to-know, releasability) your system needs to bind to data and identities, and document the allowed values."
+    },
+    "AU-12": {
+      "plain_language_summary": "Make sure the system components you care about are actually capable of producing log records, and that someone selected which events they emit. This is the plumbing that makes all your other logging controls possible.",
+      "plain_action": "Confirm each in-scope component can generate audit records and enable log generation for the events you defined in AU-2."
+    },
+    "AU-2": {
+      "plain_language_summary": "Decide up front which events are worth logging, from logons to privilege changes, so you capture what matters and aren't drowning in noise. If you didn't choose to log it, you can't investigate it later.",
+      "plain_action": "Produce a list of auditable events, coordinated with the people who review logs, and get agreement on what gets captured."
+    },
+    "AU-9": {
+      "plain_language_summary": "Protect your logs from being deleted, altered, or read by the wrong people, because an attacker's first move is often to cover their tracks. Logs that can be tampered with prove nothing.",
+      "plain_action": "Restrict who can modify or delete audit records and forward logs to storage that admins on the monitored system can't reach."
+    },
+    "AU-3": {
+      "plain_language_summary": "Make each log entry actually useful by capturing the who, what, when, where, and outcome, not just that 'something happened.' A log missing the source or the user is a log you can't act on.",
+      "plain_action": "Verify your log format records event type, timestamp, source, outcome, and the identity involved."
+    },
+    "AU-8": {
+      "plain_language_summary": "Stamp every log record with an accurate, consistent time so events across systems can be lined up during an investigation. If two servers disagree on the time, you can't reconstruct what happened.",
+      "plain_action": "Confirm audit records use a defined time source and format, and check that clocks are synced (see SC-45)."
+    },
+    "SI-4": {
+      "plain_language_summary": "Watch the system in real time for attacks and unusual behavior, and route the alerts to someone who will act on them. Logging records what happened; monitoring is how you notice while it's happening.",
+      "plain_action": "Deploy detection at your boundaries and internally, and define who receives alerts and how fast they respond."
+    },
+    "CP-2": {
+      "plain_language_summary": "Write the plan for keeping the mission running and recovering the system when something takes it down, from a bad patch to a datacenter fire. The plan only helps if it's written before you need it.",
+      "plain_action": "Document recovery roles, essential functions, and restoration steps, then distribute the plan to the people who'd execute it."
+    },
+    "IA-5": {
+      "plain_language_summary": "Manage the secrets that prove identity, passwords, certificates, tokens, from issuing them through rotating and revoking them. A strong login means nothing if the password was never changed from the default.",
+      "plain_action": "Set rules for initial issuance, strength, rotation, and revocation of each authenticator type, and change all vendor defaults."
+    },
+    "PL-2": {
+      "plain_language_summary": "The System Security Plan is the single document that describes what the system is, where its boundary sits, and which controls apply. It's the map an assessor reads first and the anchor for everything else.",
+      "plain_action": "Draft or update the SSP so it describes the system boundary, environment, and how each control is implemented."
+    },
+    "AU-10": {
+      "plain_language_summary": "Make sure a user can't later deny they took an action, by tying the action to them with something like a digital signature. This matters most for high-stakes actions like approving a transaction or releasing data.",
+      "plain_action": "Identify the actions that need non-repudiation and bind them to a verified identity (for example, signed audit records)."
+    },
+    "PM-31": {
+      "plain_language_summary": "Set the organization-wide strategy for how you keep watching controls, risk, and the system over time, rather than checking once a year and forgetting. This is the umbrella that ties CA-7 and RA-5 together.",
+      "plain_action": "Define what gets monitored, how often, and how results roll up to risk decisions across the organization."
+    },
+    "RA-3": {
+      "plain_language_summary": "Figure out what could go wrong, how likely it is, and how bad it would be, so security spending goes where the real risk is. Every other control decision should trace back to this.",
+      "plain_action": "Produce a risk assessment that identifies threats, vulnerabilities, likelihood, and impact, and record the results."
+    },
+    "SA-15": {
+      "plain_language_summary": "Require the people building your software to follow a defined, secure development process with real standards and tools, not ad-hoc coding. You can't bolt security on later if it was never built in.",
+      "plain_action": "Get the developer to document their development process and the security standards and tools they use, and review it."
+    },
+    "CM-1": {
+      "plain_language_summary": "Set the ground rules for configuration management: how system changes get proposed, approved, and recorded so nothing changes without a paper trail. This is the family that keeps 'who changed what' from being a mystery.",
+      "plain_action": "Write the configuration management policy and assign an owner for keeping it current."
+    },
+    "IA-1": {
+      "plain_language_summary": "Set the ground rules for how the system proves who someone is and how identities and credentials are managed. This family answers 'how do we know you are who you say you are.'",
+      "plain_action": "Write the identification and authentication policy and name who maintains it."
+    },
+    "SC-12": {
+      "plain_language_summary": "Manage the full life of cryptographic keys, generating, distributing, storing, and destroying them safely. Encryption is only as strong as the way its keys are handled.",
+      "plain_action": "Document how keys are generated, distributed, stored, rotated, and destroyed for each system that uses crypto."
+    },
+    "AC-1": {
+      "plain_language_summary": "Set the ground rules for access control: who decides who gets in, on what basis, and how those decisions are reviewed. This family governs the front door and every door behind it.",
+      "plain_action": "Write the access control policy and assign someone to keep it reviewed and current."
+    },
+    "AU-1": {
+      "plain_language_summary": "Commit on paper to what you log and who reviews it, so logging isn't left to each admin's discretion. This family is where you decide accountability actually matters.",
+      "plain_action": "Write the audit and accountability policy, naming what gets logged and who reviews the records."
+    },
+    "CP-1": {
+      "plain_language_summary": "Set the ground rules for staying operational and recovering after disruption, before the disruption happens. This family governs backups, failover, and the plans that keep the mission alive.",
+      "plain_action": "Write the contingency planning policy and assign an owner to keep it current."
+    },
+    "IR-8": {
+      "plain_language_summary": "Write the playbook for handling a security incident: who does what, in what order, and who gets called. In an actual breach, nobody has time to invent the process.",
+      "plain_action": "Draft the incident response plan with roles, escalation paths, and reporting steps, and distribute it to responders."
+    },
+    "RA-1": {
+      "plain_language_summary": "Set the ground rules for how the organization identifies and judges risk, so risk assessments are consistent instead of one-off guesses. This family defines how you decide what's dangerous.",
+      "plain_action": "Write the risk assessment policy and name who owns keeping it current."
+    },
+    "SA-1": {
+      "plain_language_summary": "Set the ground rules for buying and building systems securely, so security is a requirement in acquisition, not an afterthought. This family governs how security rides along with procurement and development.",
+      "plain_action": "Write the system and services acquisition policy and assign an owner to maintain it."
+    },
+    "CA-1": {
+      "plain_language_summary": "Set the ground rules for assessing controls, authorizing systems to operate, and monitoring them over time. This family governs the assessment-and-authorization process itself.",
+      "plain_action": "Write the assessment, authorization, and monitoring policy and name who keeps it current."
+    },
+    "CA-7": {
+      "plain_language_summary": "Keep watching your controls and risk continuously instead of only at authorization time, so you catch drift as it happens. An ATO is a snapshot; continuous monitoring keeps it honest.",
+      "plain_action": "Define your continuous monitoring plan: what metrics you track, how often, and how findings feed risk decisions."
+    },
+    "PS-1": {
+      "plain_language_summary": "Set the ground rules for the people side of security: screening, agreements, and what happens when someone is hired, transferred, or leaves. Most systems are compromised through people, not just code.",
+      "plain_action": "Write the personnel security policy and assign an owner to keep it current."
+    },
+    "RA-5": {
+      "plain_language_summary": "Scan systems regularly for known vulnerabilities and fix what you find on a schedule tied to how severe it is. Attackers scan you constantly; this is you scanning first.",
+      "plain_action": "Set a scan cadence, define remediation timelines by severity, and route findings to the people who patch."
+    },
+    "SC-1": {
+      "plain_language_summary": "Set the ground rules for protecting systems and the data moving between them, covering boundaries, encryption, and network defenses. This family governs how information is guarded in transit and at the edges.",
+      "plain_action": "Write the system and communications protection policy and name who maintains it."
+    },
+    "SC-45": {
+      "plain_language_summary": "Keep every system's clock synced to an authoritative time source so timestamps line up across the environment. Without this, correlating logs during an incident becomes guesswork.",
+      "plain_action": "Point systems at a defined authoritative time source and verify they stay in sync."
+    },
+    "SI-1": {
+      "plain_language_summary": "Set the ground rules for keeping systems and data trustworthy: patching flaws, catching malware, and monitoring for tampering. This family governs how you keep the system from quietly going bad.",
+      "plain_action": "Write the system and information integrity policy and assign an owner to keep it current."
+    },
+    "PE-1": {
+      "plain_language_summary": "Set the ground rules for physical security: who can get near the hardware, and how the facility protects it from theft, tampering, and environmental damage. Logical controls don't help if someone can walk out with the server.",
+      "plain_action": "Write the physical and environmental protection policy and name who maintains it."
+    },
+    "PE-3": {
+      "plain_language_summary": "Control who can physically get to the equipment, with badges, locks, and logs at the doors that matter. Physical access usually means total access, so the front door counts as a security boundary.",
+      "plain_action": "Define your physical access list, enforce it at entry points, and log who enters sensitive areas."
+    },
+    "AU-6": {
+      "plain_language_summary": "Actually read and analyze the logs you collect, looking for signs of trouble, and report what you find. Logs nobody reviews are just storage costs; the review is where accountability happens.",
+      "plain_action": "Assign someone to review audit records on a set cadence and define what they escalate and to whom."
+    },
+    "AU-7": {
+      "plain_language_summary": "Give reviewers tools to filter and summarize huge volumes of log data so they can find the signal without altering the original records. Nobody investigates a million raw lines by hand.",
+      "plain_action": "Provide log reduction and reporting tooling that supports on-demand analysis without changing the source records."
+    },
+    "IR-1": {
+      "plain_language_summary": "Set the ground rules for how the organization detects, reports, and responds to security incidents. This family defines what counts as an incident and who owns the response.",
+      "plain_action": "Write the incident response policy and assign an owner to keep it current."
+    },
+    "MA-2": {
+      "plain_language_summary": "Control and record maintenance on your systems, whether it's a patch, a repair, or a technician on site, so maintenance can't become an unmonitored way in. Approved work still needs a paper trail.",
+      "plain_action": "Require approval and logging for maintenance activities, and supervise anyone doing maintenance who isn't cleared."
+    },
+    "MP-1": {
+      "plain_language_summary": "Set the ground rules for handling storage media, drives, USB sticks, backups, from labeling and storage through sanitizing and destroying them. Data outlives the device it's stored on.",
+      "plain_action": "Write the media protection policy and assign an owner to keep it current."
+    },
+    "PM-18": {
+      "plain_language_summary": "Maintain an organization-wide plan for the privacy program that describes how personal data is governed and protected across systems. This is privacy's counterpart to the security program plan.",
+      "plain_action": "Document the privacy program plan: roles, scope, and how privacy risk is managed organization-wide."
+    },
+    "CM-6": {
+      "plain_language_summary": "Lock in secure settings for your systems from an agreed baseline, and flag when something drifts from it. A default install is rarely a secure install, and unmanaged settings creep over time.",
+      "plain_action": "Establish configuration baselines (for example, a hardening benchmark) and monitor systems for deviations."
+    },
+    "IR-4": {
+      "plain_language_summary": "Actually run the incident response: contain it, eradicate it, recover, and learn from it, not just have a plan on a shelf. The plan is IR-8; this is doing it when the alarm goes off.",
+      "plain_action": "Stand up the response capability and make sure lessons from each incident feed back into your controls."
+    },
+    "MA-1": {
+      "plain_language_summary": "Set the ground rules for system maintenance, so repairs, patching, and technician access happen under control instead of off the books. This family keeps maintenance from becoming a backdoor.",
+      "plain_action": "Write the maintenance policy and assign an owner to keep it current."
+    },
+    "SA-4": {
+      "plain_language_summary": "Bake security requirements into contracts before you buy, so vendors have to deliver what you need instead of you retrofitting it later. What's not in the contract is not something you can demand later.",
+      "plain_action": "Add explicit security and documentation requirements to acquisition contracts and statements of work."
+    },
+    "SI-2": {
+      "plain_language_summary": "Find and fix software flaws, patching, on a defined timeline tied to severity, and test the fixes before rolling them out. Unpatched known flaws are the most common way systems get breached.",
+      "plain_action": "Set patch timelines by severity, track flaws to closure, and test updates before deployment."
+    },
+    "CA-2": {
+      "plain_language_summary": "Have someone assess whether your controls are actually implemented and working, and write down the results. Believing a control works and proving it works are different things.",
+      "plain_action": "Plan and conduct a control assessment against a defined scope and document the findings."
+    },
+    "CM-9": {
+      "plain_language_summary": "Write the plan for how configuration management runs on this system: what's under control, who's on the change board, and how baselines are maintained. It turns the CM policy into a concrete process for one system.",
+      "plain_action": "Document the configuration management plan, including scope, roles, and how the change board operates."
+    },
+    "SA-11": {
+      "plain_language_summary": "Require developers to security-test their own code, static analysis, dynamic testing, and fix what they find before delivery. Catching a flaw in development is far cheaper than catching it in production.",
+      "plain_action": "Require the developer to run security testing, share results, and remediate findings before acceptance."
+    },
+    "SC-16": {
+      "plain_language_summary": "When data moves between systems, carry its security labels along with it so the receiving system enforces the same rules. A 'sensitive' marking is worthless if it's dropped in transit.",
+      "plain_action": "Ensure security attributes stay bound to data as it's transmitted, and that receivers honor them."
+    },
+    "AT-1": {
+      "plain_language_summary": "Set the ground rules for security awareness and role-based training, so people know their responsibilities before they touch the system. Trained users are a control; untrained ones are an exposure.",
+      "plain_action": "Write the awareness and training policy and assign an owner to keep it current."
+    },
+    "PL-1": {
+      "plain_language_summary": "Set the ground rules for security planning, including how System Security Plans get written and maintained. This family governs the planning documents that anchor the whole control set.",
+      "plain_action": "Write the planning policy and assign an owner to keep it current."
+    },
+    "PL-8": {
+      "plain_language_summary": "Describe how security is built into the system's architecture, where the boundaries and trust zones are, so protection is designed in rather than patched on. This is the blueprint, not the wiring.",
+      "plain_action": "Document the security architecture showing boundaries, trust zones, and how controls are positioned."
+    },
+    "SA-5": {
+      "plain_language_summary": "Get and keep the documentation for your systems, admin guides, configuration references, security features, so operators can run and secure them correctly. You can't securely operate what you have no manual for.",
+      "plain_action": "Obtain and retain administrator and security documentation for each system, and make it available to operators."
+    },
+    "SR-1": {
+      "plain_language_summary": "Set the ground rules for supply chain risk: vetting where your hardware, software, and services come from so you're not trusting a compromised vendor. Your security is only as strong as your weakest supplier.",
+      "plain_action": "Write the supply chain risk management policy and assign an owner to keep it current."
+    },
+    "AC-17": {
+      "plain_language_summary": "Control how people connect from outside the network, VPNs, remote admin, so remote access is authorized, encrypted, and monitored. Every remote path is a door an attacker would love to find open.",
+      "plain_action": "Define allowed remote access methods, require encryption and authorization, and monitor remote sessions."
+    },
+    "AC-3": {
+      "plain_language_summary": "Actually enforce your access rules at the system level, so a user can only reach what they're authorized for. Policy on paper means nothing if the system doesn't enforce it in practice.",
+      "plain_action": "Configure the system to enforce approved permissions so access decisions match your authorization rules."
+    },
+    "CM-10": {
+      "plain_language_summary": "Control what software is allowed to run and stay within license terms, so unapproved or pirated software doesn't sneak onto systems. Unmanaged software is both a legal and a security liability.",
+      "plain_action": "Define allowed software and license terms, and enforce restrictions on what can be installed and run."
+    },
+    "CM-3": {
+      "plain_language_summary": "Route system changes through a defined approval process, so nothing changes production without review, testing, and a record. Most outages and misconfigurations trace back to an unreviewed change.",
+      "plain_action": "Establish a change control board and require proposed changes to be approved, tested, and logged before deployment."
+    },
+    "IA-4": {
+      "plain_language_summary": "Manage the identifiers you assign, usernames, device IDs, so each one maps to a real, unique entity and old ones don't get reused carelessly. Reused or orphaned identifiers muddle accountability.",
+      "plain_action": "Define how identifiers are issued, kept unique, and retired, and prevent premature reuse."
+    },
+    "PM-14": {
+      "plain_language_summary": "Run an organization-wide program that keeps security testing, training, and monitoring active and coordinated, not siloed per system. It's the program-level glue that makes those activities consistent.",
+      "plain_action": "Establish and maintain an organization-wide process to coordinate security testing, training, and monitoring."
+    },
+    "SA-3": {
+      "plain_language_summary": "Build security into every phase of a system's life, from design through disposal, instead of treating it as a final gate. Security decisions made early are cheaper and harder to skip.",
+      "plain_action": "Define security roles and activities for each phase of your system development life cycle."
+    }
+  }
+}

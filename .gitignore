@@ -82,6 +82,8 @@ data/*
 !data/curated/
 !data/curated/dod-zt/
 !data/curated/dod-zt/*.json
+!data/curated/plain-language/
+!data/curated/plain-language/*.json
 data/tenable-sync-state.json
 !data/generated/
 !data/generated/*.json
