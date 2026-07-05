@@ -89,6 +89,8 @@ export type ViewState =
       framework: string;
       format: string;
       environment: string;
+      baseline: string;
+      controlFamily: string;
     }
   | {
       view: "sources";
@@ -270,6 +272,8 @@ export function parseViewState(search: string): ViewState {
       framework: params.get("framework") || "",
       format: params.get("format") || "markdown",
       environment: params.get("environment") || "Generic",
+      baseline: params.get("baseline") || "",
+      controlFamily: params.get("controlFamily") || "",
     };
   }
 
@@ -394,6 +398,8 @@ export function normalizeViewState(
       framework: incoming.framework || "",
       format: incoming.format || "markdown",
       environment: incoming.environment || "Generic",
+      baseline: incoming.baseline || "",
+      controlFamily: incoming.controlFamily || "",
     };
   }
 
@@ -538,6 +544,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "framework", state.framework);
     setIfValue(params, "format", state.format);
     setIfValue(params, "environment", state.environment);
+    setIfValue(params, "baseline", state.baseline);
+    setIfValue(params, "controlFamily", state.controlFamily);
   } else if (state.view === "sources") {
     params.set("view", state.view);
     setIfValue(params, "source", state.source);

@@ -117,9 +117,10 @@ function appendSourceMetadata(doc, options) {
 /**
  * @param {any} options
  * @param {any[]} controls
+ * @param {ReturnType<typeof buildControlCrossRefIndex> | null} [crossRef]
  * @returns {TemplateDocument}
  */
-function generateSecurityPlanStarter(options, controls) {
+function generateSecurityPlanStarter(options, controls, crossRef) {
   const ph = placeholder(options);
   const env = options.environment || "Generic";
 
@@ -146,14 +147,19 @@ function generateSecurityPlanStarter(options, controls) {
       row.push(`Can assessment results for ${controlReference(c)} be reused at another agency? Note gaps or caveats.`);
     }
     if (options.includeStigReferences !== false) {
-      row.push(ph("[Related STIG/SRG rules — list rule IDs or N/A]"));
+      const refs = crossRef && c.nodeId ? crossRefForControl(crossRef, c.nodeId) : null;
+      if (refs && refs.stigIds.length) {
+        row.push(refs.stigIds.join("; "));
+      } else {
+        row.push(ph("[Related STIG/SRG rules — list rule IDs or N/A]"));
+      }
     }
     row.push(ph("[Notes]"));
     return row;
   });
 
   const inheritanceHeaders = ["Control ID", "Inheritance Type", "Provider", "Customer Responsibility", "Notes"];
-  const inheritanceRows = controls.slice(0, 1).map((c) => [
+  const inheritanceRows = controls.map((c) => [
     c.id,
     ph("[Fully inherited | Hybrid | Not inherited]"),
     ph("[Provider name or N/A]"),
@@ -162,7 +168,7 @@ function generateSecurityPlanStarter(options, controls) {
   ]);
 
   const evidenceHeaders = ["Control ID", "Evidence Type", "Example Artifacts", "Review Cadence", "Notes"];
-  const evidenceRows = controls.slice(0, 1).map((c) => [
+  const evidenceRows = controls.map((c) => [
     c.id,
     ph(`[${EVIDENCE_TYPE_HINT}]`),
     ph("[Name specific files, reports, or records]"),
@@ -275,9 +281,10 @@ function generateImplementationStatementWorksheet(options, controls) {
 /**
  * @param {any} options
  * @param {any[]} controls
+ * @param {ReturnType<typeof buildControlCrossRefIndex> | null} [crossRef]
  * @returns {TemplateDocument}
  */
-function generateEvidenceExpectationMatrix(options, controls) {
+function generateEvidenceExpectationMatrix(options, controls, crossRef) {
   const ph = placeholder(options);
   const headers = [
     "Control ID",
@@ -294,20 +301,29 @@ function generateEvidenceExpectationMatrix(options, controls) {
     "Confidence",
   ];
 
-  const rows = controls.map((c) => [
-    c.id,
-    c.title,
-    c.family || "",
-    ph("[STIG/SRG rule IDs or N/A]"),
-    ph("[CCI numbers or N/A]"),
-    ph(`[${EVIDENCE_TYPE_HINT}]`),
-    ph("[Specific file names, report titles, or record types]"),
-    ph("[Role who maintains evidence]"),
-    ph("[Annual | Quarterly | Continuous]"),
-    ph("[Notes]"),
-    ph("[Catalog or assessment source]"),
-    ph("[High | Medium | Low — your confidence this evidence is sufficient]"),
-  ]);
+  const rows = controls.map((c) => {
+    const refs = crossRef && c.nodeId ? crossRefForControl(crossRef, c.nodeId) : null;
+    const stigCell = refs && refs.stigIds.length
+      ? refs.stigIds.join("; ")
+      : ph("[STIG/SRG rule IDs or N/A]");
+    const cciCell = refs && refs.cciIds.length
+      ? refs.cciIds.join("; ")
+      : ph("[CCI numbers or N/A]");
+    return [
+      c.id,
+      c.title,
+      c.family || "",
+      stigCell,
+      cciCell,
+      ph(`[${EVIDENCE_TYPE_HINT}]`),
+      ph("[Specific file names, report titles, or record types]"),
+      ph("[Role who maintains evidence]"),
+      ph("[Annual | Quarterly | Continuous]"),
+      ph("[Notes]"),
+      ph("[Catalog or assessment source]"),
+      ph("[High | Medium | Low — your confidence this evidence is sufficient]"),
+    ];
+  });
 
   /** @type {DocSection[]} */
   const sections = [{ type: "table", heading: "Evidence Expectations", headers, rows }];
@@ -491,18 +507,26 @@ function generateReciprocityChecklist(options) {
  */
 function generatePOAMStarter(options) {
   const ph = placeholder(options);
+  // Column set aligns with the eMASS and FedRAMP POA&M presets so an export can
+  // be mapped into either workflow: severity category (CAT I/II/III), original
+  // detection date, resources required, and a named point of contact sit
+  // alongside the core weakness/remediation fields.
   const headers = [
-    "Weakness ID",
-    "Discovery Source",
-    "Related Control",
+    "POA&M ID",
+    "Detection Source",
+    "Related Control (CCI)",
     "Related STIG/SRG",
     "Weakness Description",
     "Risk Statement",
     "Severity",
+    "Severity Category (CAT)",
+    "Point of Contact (POC)",
+    "Resources Required",
     "Planned Remediation",
-    "Milestone",
-    "Completion Date",
-    "Responsible Role",
+    "Milestones with Completion Dates",
+    "Original Detection Date",
+    "Scheduled Completion Date",
+    "Responsible Office/Role",
     "Status",
     "Deviation Reference",
     "Risk Acceptance Reference",
@@ -511,18 +535,22 @@ function generatePOAMStarter(options) {
   ];
 
   const row = [
-    ph("[Weakness ID]"),
+    ph("[POA&M ID]"),
     ph("[Scan | Assessment | Audit | Incident — how was this found?]"),
-    ph("[Control ID]"),
+    ph("[Control ID and/or CCI number]"),
     ph("[STIG/SRG rule or N/A]"),
     ph("[Describe the weakness in plain language]"),
     ph("[What could go wrong if not fixed?]"),
     ph("[High | Medium | Low]"),
+    ph("[CAT I = high | CAT II = medium | CAT III = low]"),
+    ph("[Name/role accountable for remediation — POC]"),
+    ph("[Funding, staff, or tools needed to remediate]"),
     ph("[Planned fix or compensating control]"),
-    ph("[Next milestone or step]"),
+    ph("[Milestone description | target date; one per line]"),
+    ph("[Date the weakness was first identified]"),
     ph("[Target completion date]"),
-    ph("[Role responsible]"),
-    ph("[Open | In progress | Closed]"),
+    ph("[Responsible office or role]"),
+    ph("[Open | Ongoing | Risk Accepted | Completed]"),
     ph("[Deviation or exception ID if applicable]"),
     ph("[Risk acceptance memo ID if risk is accepted]"),
     ph("[Evidence required before closing this item]"),
@@ -650,7 +678,10 @@ function formatMarkdown(doc) {
 
 function formatCsv(doc) {
   const table = doc.sections.find((s) => s.type === "table");
-  let out = `# ${doc.title}\n# Disclaimer: ${DISCLAIMER.replace(/\n/g, " ")}\n`;
+  // Data first: column headers land on row 1 so the export imports cleanly into
+  // a spreadsheet without a manual header-row fix. Title, disclaimer, and the
+  // text/metadata sections follow as `#`-prefixed footer comment lines.
+  let out = "";
   if (table) {
     out += `${table.headers.map(escapeCsv).join(",")}\n`;
     for (const row of table.rows) {
@@ -664,6 +695,8 @@ function formatCsv(doc) {
       }
     }
   }
+  out += `# ${doc.title}\n`;
+  out += `# Disclaimer: ${DISCLAIMER.replace(/\n/g, " ")}\n`;
   for (const sec of doc.sections) {
     if (sec.type === "text") {
       out += `# ${sec.heading}: ${String(sec.content).replace(/\n/g, " ")}\n`;
@@ -782,6 +815,148 @@ function resolveControlsViaBaselineEdges(dataset, catalogId) {
 }
 
 /**
+ * Build a control → CCI → STIG/SRG cross-reference index from the graph edges.
+ *
+ * The bridge is the DISA CCI list (STIG scope memory): a NIST 800-53 control
+ * `maps_to` one or more `disa-cci:*` requirement nodes, and each STIG rule /
+ * SRG requirement `references` the CCIs it satisfies. Walking control → CCI →
+ * STIG lets a template cite the real rule IDs and CCI numbers instead of
+ * leaving placeholder cells.
+ *
+ * @param {{ nodes?: any[], edges?: any[] }} dataset
+ * @returns {{ controlToCci: Map<string, Set<string>>, cciToStig: Map<string, Set<string>>, byId: Map<string, any> }}
+ */
+function buildControlCrossRefIndex(dataset) {
+  const nodes = dataset?.nodes || [];
+  const edges = dataset?.edges || [];
+  const byId = new Map(nodes.map((n) => [n.id, n]));
+  const isCci = (id) => typeof id === "string" && id.startsWith("disa-cci:");
+  const isStigNode = (n) =>
+    n && (n.node_type === "stig_rule" || n.node_type === "srg_requirement");
+
+  /** @type {Map<string, Set<string>>} */
+  const controlToCci = new Map();
+  /** @type {Map<string, Set<string>>} */
+  const cciToStig = new Map();
+
+  for (const edge of edges) {
+    if (edge.relationship_type === "maps_to") {
+      const { source_node_id: s, target_node_id: t } = edge;
+      let cci;
+      let ctrl;
+      if (isCci(s)) {
+        cci = s;
+        ctrl = t;
+      } else if (isCci(t)) {
+        cci = t;
+        ctrl = s;
+      }
+      if (cci && ctrl) {
+        if (!controlToCci.has(ctrl)) controlToCci.set(ctrl, new Set());
+        controlToCci.get(ctrl).add(cci);
+      }
+    } else if (edge.relationship_type === "references") {
+      const { source_node_id: s, target_node_id: t } = edge;
+      let cci;
+      let stig;
+      if (isCci(s) && isStigNode(byId.get(t))) {
+        cci = s;
+        stig = t;
+      } else if (isCci(t) && isStigNode(byId.get(s))) {
+        cci = t;
+        stig = s;
+      }
+      if (cci && stig) {
+        if (!cciToStig.has(cci)) cciToStig.set(cci, new Set());
+        cciToStig.get(cci).add(stig);
+      }
+    }
+  }
+
+  return { controlToCci, cciToStig, byId };
+}
+
+/**
+ * Resolve the real CCI numbers and STIG/SRG rule IDs cross-referenced by a
+ * control node, using the index from {@link buildControlCrossRefIndex}.
+ *
+ * @param {ReturnType<typeof buildControlCrossRefIndex>} index
+ * @param {string} controlNodeId
+ * @returns {{ cciIds: string[], stigIds: string[] }}
+ */
+function crossRefForControl(index, controlNodeId) {
+  const idOf = (nodeId) => index.byId.get(nodeId)?.metadata?.item_id || nodeId;
+  const cciNodeIds = [...(index.controlToCci.get(controlNodeId) || [])];
+  const stigNodeIds = new Set();
+  for (const cci of cciNodeIds) {
+    for (const stig of index.cciToStig.get(cci) || []) stigNodeIds.add(stig);
+  }
+  const sortIds = (arr) =>
+    arr.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
+  return {
+    cciIds: sortIds(cciNodeIds.map(idOf)),
+    stigIds: sortIds([...stigNodeIds].map(idOf)),
+  };
+}
+
+/**
+ * Collect the control node IDs that belong to a named baseline (Low / Moderate
+ * / High / Privacy / LI-SaaS). Baseline membership lives in `baseline` nodes
+ * (e.g. `nist-800-53b:LOW`, `fedramp-rev5:MODERATE`) linked to their member
+ * controls with `includes` edges. Baseline nodes are matched by item_id,
+ * preferring the catalog that fits the selected framework so a NIST 800-53
+ * template scopes to 800-53B membership rather than FedRAMP's.
+ *
+ * @param {{ nodes?: any[], edges?: any[] }} dataset
+ * @param {string} baselineItemId
+ * @param {string} frameworkCatalogId
+ * @returns {Set<string>}
+ */
+function collectBaselineMemberIds(dataset, baselineItemId, frameworkCatalogId) {
+  const nodes = dataset?.nodes || [];
+  const edges = dataset?.edges || [];
+  const target = String(baselineItemId).toUpperCase();
+
+  const baselineNodes = nodes.filter(
+    (n) =>
+      n.node_type === "baseline" &&
+      String(n.metadata?.item_id || "").toUpperCase() === target,
+  );
+  if (baselineNodes.length === 0) return new Set();
+
+  // Prefer baseline nodes from the framework's own catalog; otherwise fall back
+  // to the canonical NIST SP 800-53B baselines.
+  const sameCatalog = baselineNodes.filter(
+    (n) => n.metadata?.catalog_id === frameworkCatalogId,
+  );
+  const nist80053b = baselineNodes.filter(
+    (n) => n.metadata?.catalog_id === "nist-800-53b",
+  );
+  const scoped =
+    sameCatalog.length > 0 ? sameCatalog : nist80053b.length > 0 ? nist80053b : baselineNodes;
+  const baselineNodeIds = new Set(scoped.map((n) => n.id));
+
+  const members = new Set();
+  for (const edge of edges) {
+    if (edge.relationship_type !== "includes") continue;
+    if (baselineNodeIds.has(edge.source_node_id)) {
+      members.add(edge.target_node_id);
+    } else if (baselineNodeIds.has(edge.target_node_id)) {
+      members.add(edge.source_node_id);
+    }
+  }
+  return members;
+}
+
+/**
+ * @param {any} node
+ * @returns {string}
+ */
+function familyOf(node) {
+  return node?.metadata?.family || node?.metadata?.control_family || "";
+}
+
+/**
  * @param {any} options
  * @param {{ nodes?: any[], edges?: any[], sources?: { sources?: any[] } }} dataset
  */
@@ -803,30 +978,54 @@ export function generateTemplate(options, dataset) {
   let controls = [];
   let unresolvedFramework = false;
   if (normalized.framework) {
-    const directControls = collectCatalogControls(dataset.nodes, normalized.framework);
-    if (directControls.length > 0) {
-      controls = directControls.map((n) => ({
+    // Resolve the raw control nodes for the framework, either directly or (for
+    // catalogs that only carry `baseline` nodes, e.g. fedramp-rev5) via
+    // baseline-membership edges.
+    let controlNodes = collectCatalogControls(dataset.nodes, normalized.framework);
+    if (controlNodes.length === 0) {
+      controlNodes = resolveControlsViaBaselineEdges(dataset, normalized.framework);
+    }
+
+    if (controlNodes.length === 0) {
+      unresolvedFramework = true;
+    } else {
+      // Optional baseline filter (Low / Moderate / High / ...).
+      if (normalized.baseline) {
+        const memberIds = collectBaselineMemberIds(
+          dataset,
+          normalized.baseline,
+          normalized.framework,
+        );
+        if (memberIds.size > 0) {
+          controlNodes = controlNodes.filter((n) => memberIds.has(n.id));
+        }
+      }
+      // Optional control-family filter (matched case-insensitively against the
+      // family name or the control ID prefix, e.g. "Access Control" or "AC").
+      if (normalized.controlFamily) {
+        const wanted = String(normalized.controlFamily).toLowerCase();
+        controlNodes = controlNodes.filter((n) => {
+          const fam = familyOf(n).toLowerCase();
+          const prefix = String(n.metadata?.item_id || n.id)
+            .split("-")[0]
+            .toLowerCase();
+          return fam === wanted || prefix === wanted || fam.includes(wanted);
+        });
+      }
+
+      // A framework that resolved control nodes but whose baseline/family
+      // filter excluded them all falls through to the placeholder row below —
+      // the framework itself is not "unresolved".
+      controls = controlNodes.map((n) => ({
+        nodeId: n.id,
         id: n.metadata?.item_id || n.id,
         title: n.metadata?.title || n.label || n.id,
-        family: n.metadata?.control_family || "",
+        family: familyOf(n),
       }));
-    } else {
-      // Catalog yielded zero control nodes directly (e.g. fedramp-rev5 only
-      // has `baseline` nodes) — try resolving membership via baseline edges.
-      const resolved = resolveControlsViaBaselineEdges(dataset, normalized.framework);
-      if (resolved.length > 0) {
-        controls = resolved.map((n) => ({
-          id: n.metadata?.item_id || n.id,
-          title: n.metadata?.title || n.label || n.id,
-          family: n.metadata?.control_family || "",
-        }));
-      } else {
-        unresolvedFramework = true;
-      }
     }
   }
   if (controls.length === 0 && !unresolvedFramework) {
-    controls = [{ id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
+    controls = [{ nodeId: null, id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
   }
 
   const frameworkNoticeText = unresolvedFramework
@@ -836,16 +1035,24 @@ export function generateTemplate(options, dataset) {
     controls = [{ id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
   }
 
+  // Cross-reference index (control → CCI → STIG/SRG) is only needed by the two
+  // templates that cite real rule/CCI IDs; build it lazily to avoid the edge
+  // scan for the other seven.
+  const needsCrossRef =
+    normalized.templateType === "evidence_expectation_matrix" ||
+    normalized.templateType === "security_plan_starter";
+  const crossRef = needsCrossRef ? buildControlCrossRefIndex(dataset) : null;
+
   let doc;
   switch (normalized.templateType) {
     case "security_plan_starter":
-      doc = generateSecurityPlanStarter(normalized, controls);
+      doc = generateSecurityPlanStarter(normalized, controls, crossRef);
       break;
     case "implementation_statement_worksheet":
       doc = generateImplementationStatementWorksheet(normalized, controls);
       break;
     case "evidence_expectation_matrix":
-      doc = generateEvidenceExpectationMatrix(normalized, controls);
+      doc = generateEvidenceExpectationMatrix(normalized, controls, crossRef);
       break;
     case "stig_evidence_checklist":
       doc = generateSTIGEvidenceChecklist(normalized);
@@ -866,7 +1073,7 @@ export function generateTemplate(options, dataset) {
       doc = generateConMonCalendar(normalized);
       break;
     default:
-      doc = generateSecurityPlanStarter(normalized, controls);
+      doc = generateSecurityPlanStarter(normalized, controls, crossRef);
   }
 
   if (frameworkNoticeText) {

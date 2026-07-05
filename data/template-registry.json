@@ -5,11 +5,15 @@
       "template_id": "tpl-ssp-starter",
       "name": "security_plan_starter",
       "display_name": "Security Plan Starter",
-      "description": "Blank System Security Plan (SSP) outline with control baseline table and implementation prompts.",
+      "description": "Baseline worksheet that lists your framework's controls with implementation, evidence, and inheritance prompts — a starting point for an SSP, not a finished plan.",
       "artifact_type": "security_plan_starter",
       "supported_formats": ["markdown", "csv"],
       "input_options": ["framework", "baseline", "control_family", "environment_archetype"],
       "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "official_alternative": {
+        "label": "FedRAMP System Security Plan (SSP) template",
+        "url": "https://www.fedramp.gov/documents-templates/"
+      },
       "disclaimer_required": true
     },
     {
@@ -21,17 +25,25 @@
       "supported_formats": ["csv", "json"],
       "input_options": ["framework", "selected_controls"],
       "source_refs": ["nist-oscal"],
+      "official_alternative": {
+        "label": "NIST OSCAL SSP implementation model",
+        "url": "https://pages.nist.gov/OSCAL/learn/concepts/layer/implementation/ssp/"
+      },
       "disclaimer_required": true
     },
     {
       "template_id": "tpl-evid-exp",
       "name": "evidence_expectation_matrix",
       "display_name": "Evidence Expectation Matrix",
-      "description": "Matrix listing expected evidence types and example artifacts per control.",
+      "description": "Matrix listing expected evidence types and example artifacts per control, cross-referenced to STIG/SRG rules and CCIs.",
       "artifact_type": "evidence_expectation_matrix",
       "supported_formats": ["csv"],
       "input_options": ["framework", "baseline"],
       "source_refs": ["nist-oscal", "disa-stig-library", "disa-cci-list"],
+      "official_alternative": {
+        "label": "NIST SP 800-53A Rev. 5 assessment procedures",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final"
+      },
       "disclaimer_required": true
     },
     {
@@ -43,6 +55,10 @@
       "supported_formats": ["csv"],
       "input_options": ["selected_stigs"],
       "source_refs": ["disa-stig-library", "disa-cci-list"],
+      "official_alternative": {
+        "label": "DISA STIG Viewer and SRG/STIG tools",
+        "url": "https://public.cyber.mil/stigs/srg-stig-tools/"
+      },
       "disclaimer_required": true
     },
     {
@@ -54,6 +70,10 @@
       "supported_formats": ["csv", "markdown"],
       "input_options": ["framework"],
       "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "official_alternative": {
+        "label": "FedRAMP Customer Responsibility Matrix (CRM) templates",
+        "url": "https://www.fedramp.gov/documents-templates/"
+      },
       "disclaimer_required": true
     },
     {
@@ -65,17 +85,25 @@
       "supported_formats": ["csv"],
       "input_options": ["framework", "baseline"],
       "source_refs": ["nist-800-37-rev2"],
+      "official_alternative": {
+        "label": "NIST SP 800-37 Rev. 2 (RMF, reciprocity)",
+        "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final"
+      },
       "disclaimer_required": true
     },
     {
       "template_id": "tpl-poam",
       "name": "poam_starter",
       "display_name": "POA&M Starter",
-      "description": "Blank Plan of Action and Milestones (POA&M) tracker for open weaknesses and remediation dates.",
+      "description": "Blank Plan of Action and Milestones (POA&M) tracker with eMASS/FedRAMP columns for open weaknesses and remediation dates.",
       "artifact_type": "poam_starter",
       "supported_formats": ["csv"],
       "input_options": ["framework", "selected_controls"],
       "source_refs": ["nist-800-37-rev2", "nist-oscal"],
+      "official_alternative": {
+        "label": "FedRAMP POA&M template",
+        "url": "https://www.fedramp.gov/documents-templates/"
+      },
       "disclaimer_required": true
     },
     {
@@ -87,6 +115,10 @@
       "supported_formats": ["csv", "markdown"],
       "input_options": ["framework", "baseline"],
       "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "official_alternative": {
+        "label": "NIST SP 800-53A Rev. 5 assessment procedures",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final"
+      },
       "disclaimer_required": true
     },
     {
@@ -98,6 +130,10 @@
       "supported_formats": ["csv", "markdown"],
       "input_options": ["framework"],
       "source_refs": ["nist-sp-800-137", "nist-800-37-rev2"],
+      "official_alternative": {
+        "label": "NIST SP 800-137 (Information Security Continuous Monitoring)",
+        "url": "https://csrc.nist.gov/pubs/sp/800/137/final"
+      },
       "disclaimer_required": true
     }
   ]
