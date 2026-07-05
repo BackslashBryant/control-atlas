@@ -78,9 +78,11 @@ test("Atlas Map search opens a focused control map from the default route", asyn
   await dismissOnboarding(page);
 
   await page.getByRole("searchbox", { name: "Search Atlas Map" }).fill("AC-2");
-  await page.getByRole("button", { name: "Open map" }).click();
+  await page.getByRole("button", { name: "Search", exact: true }).click();
 
   await expect(page).toHaveURL(/node=(AC-2|nist-800-53%3AAC-2|nist-800-53:AC-2)/);
+  // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
+  await page.getByText("Coverage matrix", { exact: true }).click();
   const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
   await expect(matrix).toBeVisible();
   await expect(matrix).toContainText("AC-2");

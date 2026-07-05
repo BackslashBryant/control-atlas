@@ -16,6 +16,9 @@ test("optional source filters expose gated records with warnings", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Source-visibility filters now live in a "Display options" disclosure.
+  await page.getByText("Display options", { exact: true }).click();
+
   const supporting = page.getByRole("checkbox", {
     name: "Show supporting references",
   });

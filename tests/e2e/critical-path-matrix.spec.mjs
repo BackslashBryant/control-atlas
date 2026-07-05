@@ -37,6 +37,8 @@ test("critical path: Atlas matrix table links to graph node", async ({ page }) =
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
+  await page.getByText("Coverage matrix", { exact: true }).click();
   const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
   await expect(matrix).toBeVisible();
   const firstRow = matrix.locator("tbody tr").first();

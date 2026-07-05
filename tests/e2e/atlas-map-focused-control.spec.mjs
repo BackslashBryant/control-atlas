@@ -31,6 +31,8 @@ test("AC-2 opens a controlled focused map with clustered context", async ({
     }),
   ).toBeVisible();
 
+  // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
+  await page.getByText("Coverage matrix", { exact: true }).click();
   const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
   await expect(matrix).toBeVisible();
   await expect(matrix).toContainText("AC-2");

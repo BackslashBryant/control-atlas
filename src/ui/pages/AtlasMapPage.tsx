@@ -66,6 +66,33 @@ function resolveCenterNode(
   };
 }
 
+/**
+ * Resolve the active relationship view (CATL-57): an explicit choice wins;
+ * otherwise the graph is the default on desktop and the list on narrow
+ * viewports, where the canvas is hard to read.
+ */
+function resolveRelationshipView(
+  raw: string | undefined,
+  narrow: boolean,
+): "map" | "list" {
+  if (raw === "list" || raw === "table") return "list";
+  if (raw === "map") return "map";
+  return narrow ? "list" : "map";
+}
+
+function useIsNarrowViewport(query = "(max-width: 768px)"): boolean {
+  const [narrow, setNarrow] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const onChange = (event: MediaQueryListEvent) => setNarrow(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, [query]);
+  return narrow;
+}
+
 export function AtlasMapPage(props: AtlasMapPageProps) {
   const node = props.state.node.trim();
   if (
@@ -185,10 +212,11 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
     }),
     [model],
   );
-  const relationshipView =
-    state.relationshipView === "list" || state.relationshipView === "table"
-      ? "list"
-      : "map";
+  const narrowViewport = useIsNarrowViewport();
+  const relationshipView = resolveRelationshipView(
+    state.relationshipView,
+    narrowViewport,
+  );
   const emptyRelationshipFilters = {
     relationshipType: "",
     provenance: "",
@@ -217,7 +245,9 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   }
 
   return (
-    <section className="panel atlas-map-page">
+    <section
+      className={`panel atlas-map-page${focused ? " atlas-map-page--focused" : ""}`}
+    >
       <PageHeader
         eyebrow="ATLAS"
         summary={
@@ -268,12 +298,13 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
           />
         </label>
         <button className="primary" type="submit">
-          Open map
+          Search
         </button>
       </form>
 
       {!focused ? (
-        <>
+        <details className="atlas-display-options">
+          <summary>Display options</summary>
           <div
             aria-label="Source visibility filters"
             className="ca-source-filter-group atlas-source-filters"
@@ -322,7 +353,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
               <p>{DEFAULT_MAP_WARNINGS.registryOnly}</p>
             ) : null}
           </div>
-        </>
+        </details>
       ) : null}
 
       <div className="atlas-map-layout">
@@ -434,12 +465,15 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
             </aside>
           ) : null}
         </div>
-        <AtlasMatrix
-          edges={model.edges}
-          nodes={model.nodes}
-          onSelectNode={handleSelectNode}
-          selectedNodeId={selectedNodeId}
-        />
+        <details className="atlas-coverage-drawer">
+          <summary>Coverage matrix</summary>
+          <AtlasMatrix
+            edges={model.edges}
+            nodes={model.nodes}
+            onSelectNode={handleSelectNode}
+            selectedNodeId={selectedNodeId}
+          />
+        </details>
       </div>
     </section>
   );
@@ -464,12 +498,11 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
     [bundle.runtime, state.node],
   );
 
-  const relationshipView =
-    state.relationshipView === "list" ||
-    state.relationshipView === "table" ||
-    state.relationshipView === "map"
-      ? (state.relationshipView === "map" ? "map" : "list")
-      : "map";
+  const narrowViewport = useIsNarrowViewport();
+  const relationshipView = resolveRelationshipView(
+    state.relationshipView,
+    narrowViewport,
+  );
 
   const filters = useMemo(
     () => relationshipFiltersFromState(state),
@@ -597,7 +630,9 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
   }
 
   return (
-    <section className="panel atlas-map-page">
+    <section
+      className={`panel atlas-map-page${isStarter ? "" : " atlas-map-page--focused"}`}
+    >
       <PageHeader
         eyebrow="ATLAS"
         summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
@@ -711,12 +746,15 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
           />
         </div>
 
-        <AtlasMatrix
-          edges={displayEdges}
-          nodes={displayNodes}
-          onSelectNode={setSelectedNodeId}
-          selectedNodeId={selectedNodeId}
-        />
+        <details className="atlas-coverage-drawer">
+          <summary>Coverage matrix</summary>
+          <AtlasMatrix
+            edges={displayEdges}
+            nodes={displayNodes}
+            onSelectNode={setSelectedNodeId}
+            selectedNodeId={selectedNodeId}
+          />
+        </details>
       </div>
 
       <form

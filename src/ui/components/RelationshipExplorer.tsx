@@ -1,9 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   IconLink,
-  IconMaximize,
-  IconMinus,
-  IconPlus,
   IconRefresh,
 } from "@tabler/icons-react";
 
@@ -426,16 +423,9 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
                 canvasOverlay={
                   mapControls ? (
                     <div aria-label="Map controls" className="ca-map-toolbar" role="group">
-                      <button
-                        aria-label="Fit to screen"
-                        className="ca-map-toolbar-btn"
-                        disabled={layoutRunning}
-                        onClick={() => graphRef.current?.fitToScreen()}
-                        title="Fit to screen"
-                        type="button"
-                      >
-                        <IconMaximize aria-hidden="true" size={16} stroke={1.8} />
-                      </button>
+                      {/* Zoom in/out/fit live in the React Flow <Controls>
+                          cluster (CATL-51); the toolbar keeps only the actions
+                          Controls lacks: rebuild-layout and copy-link. */}
                       <button
                         aria-label="Reset view"
                         className="ca-map-toolbar-btn"
@@ -445,26 +435,6 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
                         type="button"
                       >
                         <IconRefresh aria-hidden="true" size={16} stroke={1.8} />
-                      </button>
-                      <button
-                        aria-label="Zoom in"
-                        className="ca-map-toolbar-btn"
-                        disabled={layoutRunning}
-                        onClick={() => graphRef.current?.zoomIn()}
-                        title="Zoom in"
-                        type="button"
-                      >
-                        <IconPlus aria-hidden="true" size={16} stroke={1.8} />
-                      </button>
-                      <button
-                        aria-label="Zoom out"
-                        className="ca-map-toolbar-btn"
-                        disabled={layoutRunning}
-                        onClick={() => graphRef.current?.zoomOut()}
-                        title="Zoom out"
-                        type="button"
-                      >
-                        <IconMinus aria-hidden="true" size={16} stroke={1.8} />
                       </button>
                       {onCopyMapLink ? (
                         <button
