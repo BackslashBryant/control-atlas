@@ -8,6 +8,7 @@ test.beforeEach(async ({ page }) => {
 // CATL-61: per-route document.title so browser history, bookmarks, and shared
 // tabs read honestly instead of a single generic title.
 test('each route sets an honest, human-readable document.title', async ({ page }) => {
+  /** @type {Array<[string, RegExp]>} */
   const cases = [
     ['/#/', /Control Atlas — The public map for federal cyber compliance/],
     ['/#/atlas-map', /^Atlas Map — Control Atlas$/],
