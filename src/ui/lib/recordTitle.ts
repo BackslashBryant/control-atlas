@@ -6,6 +6,8 @@
  * scaffold ids (FAMILY-AC, DOC-STRATEGY, HIGH) as titles on their own.
  */
 
+import { displayNameFor } from "../../app/display-names.mjs";
+
 type TitledNode = {
   id: string;
   node_type?: string;
@@ -104,11 +106,20 @@ const TYPE_PLURALS: Record<string, [string, string]> = {
   impact_category: ["impact level", "impact levels"],
 };
 
+/** English pluralization for the display-name fallback (avoids "categorys"). */
+function pluralize(word: string): string {
+  if (/[^aeiou]y$/i.test(word)) return `${word.slice(0, -1)}ies`;
+  if (/(s|x|z|ch|sh)$/i.test(word)) return `${word}es`;
+  return `${word}s`;
+}
+
 export function friendlyTypePlural(nodeType: string, count: number): string {
   const entry = TYPE_PLURALS[nodeType];
   if (entry) return count === 1 ? entry[0] : entry[1];
-  const pretty = nodeType.replaceAll("_", " ");
-  return count === 1 ? pretty : `${pretty}s`;
+  // Fall back to the hardened formatter for casing (no "impact categorys",
+  // no lower-case "disa ccis") and pluralize the last word properly.
+  const pretty = displayNameFor("node_type", nodeType);
+  return count === 1 ? pretty : pluralize(pretty);
 }
 
 export type ImpactBreakdown = {

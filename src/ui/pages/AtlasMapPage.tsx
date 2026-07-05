@@ -319,7 +319,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
             aria-label="Search Atlas Map"
             id="foundation-atlas-map-search"
             onChange={(event) => setMapSearchDraft(event.target.value)}
-            placeholder="AC-2, CCI-000225, FedRAMP High"
+            placeholder="account management, AC-2, CCI-000225"
             type="search"
             value={mapSearchDraft}
           />
@@ -842,7 +842,7 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
           <input
             id="atlas-map-search"
             onChange={(event) => setMapSearchDraft(event.target.value)}
-            placeholder="AC-2, CCI-000225, FedRAMP High"
+            placeholder="account management, AC-2, CCI-000225"
             type="search"
             value={mapSearchDraft}
           />
