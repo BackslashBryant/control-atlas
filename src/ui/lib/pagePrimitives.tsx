@@ -35,7 +35,12 @@ export function copyText(value: string) {
   return Promise.resolve();
 }
 
-export function downloadTextFile(filename: string, content: string, mimeType: string) {
+export function downloadTextFile(
+  filename: string,
+  content: string,
+  mimeType: string,
+  onDispatch?: () => void,
+) {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -43,6 +48,9 @@ export function downloadTextFile(filename: string, content: string, mimeType: st
   anchor.download = filename;
   document.body.appendChild(anchor);
   anchor.click();
+  // Fire confirmation from the real anchor-click dispatch so the toast tracks
+  // the actual download, not just a successful generate (CATL-V2/67).
+  onDispatch?.();
   anchor.remove();
   URL.revokeObjectURL(url);
 }

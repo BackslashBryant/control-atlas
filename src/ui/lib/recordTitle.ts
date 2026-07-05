@@ -45,6 +45,46 @@ export function recordDisplayTitle(node: TitledNode | null | undefined): string 
   return `${itemId} — ${title}`;
 }
 
+const BASE_TITLE = "Control Atlas";
+
+// Per-view suffixes for document.title (CATL-61). Wayfinding + honest browser
+// history/bookmark labels; record pages use the official record name.
+const VIEW_TITLE_LABELS: Record<string, string> = {
+  "start-here": "Start",
+  "atlas-map": "Atlas Map",
+  search: "Explore",
+  browse: "Explore",
+  matrix: "Compare",
+  patterns: "Playbooks",
+  templates: "Templates",
+  sources: "Sources",
+  about: "About",
+  retired: "Retired",
+  "not-found": "Page not found",
+};
+
+export function routeDocumentTitle(
+  state: { view: string; node?: string; query?: string },
+  node?: TitledNode | null,
+): string {
+  if (state.view === "home") {
+    return `${BASE_TITLE} — The public map for federal cyber compliance`;
+  }
+  if (state.view === "library-detail") {
+    const recordName = recordDisplayTitle(node) || "Record";
+    return `${recordName} — ${BASE_TITLE}`;
+  }
+  const base = VIEW_TITLE_LABELS[state.view];
+  if (!base) {
+    return BASE_TITLE;
+  }
+  const label =
+    (state.view === "search" || state.view === "browse") && state.query
+      ? `${state.query} — ${base}`
+      : base;
+  return `${label} — ${BASE_TITLE}`;
+}
+
 // Friendly plural names for connection-impact summaries, keyed by node_type.
 const TYPE_PLURALS: Record<string, [string, string]> = {
   control: ["NIST control", "NIST controls"],

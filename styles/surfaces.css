@@ -917,6 +917,24 @@ li {
   margin: 0;
 }
 
+/* Download confirmation toast, styled like the About-page trust blocks. */
+.generation-status.tone-trust,
+.generation-status.tone-warning {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: var(--radius-lg);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+}
+
+.generation-status.tone-trust {
+  border-left: 4px solid var(--ca-secondary);
+}
+
+.generation-status.tone-warning {
+  border-left: 4px solid var(--ca-warning);
+}
+
 .catalog-filter-bar {
   position: sticky;
   top: calc(var(--space-4) + 3rem);
