@@ -3,6 +3,7 @@ import { IconSearch, IconSparkles } from "@tabler/icons-react";
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -42,9 +43,20 @@ export function ExplorePage(props: {
   } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
   const [connectionsOnly, setConnectionsOnly] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setQueryDraft(state.query);
+  }, [state.query]);
+
+  // CATL-17: when a committed query arrives (typed into the header overlay and
+  // submitted, or a deep link), carry focus into the results region so keyboard
+  // users continue into the results instead of the top of the page. The header
+  // overlay and Explore then read as one search surface, not two.
+  useEffect(() => {
+    if (state.query.trim()) {
+      resultsRef.current?.focus();
+    }
   }, [state.query]);
 
   const filters = {
@@ -261,10 +273,13 @@ export function ExplorePage(props: {
 
         {hasVisibleResults ? (
           <Accordion.Root
+            aria-label="Search results"
             className="accordion-root search-result-groups"
             defaultValue={defaultOpenGroups}
             id="library-results"
             key={`${state.query}|${Object.keys(groupedDocuments).join(",")}`}
+            ref={resultsRef}
+            tabIndex={-1}
             type="multiple"
           >
             {glossaryMatches.length ? (

@@ -36,6 +36,18 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
+  // Guessable aliases (CATL-47): resolve friendly URLs people type by hand to
+  // the canonical view. Serialization always emits the canonical path above, so
+  // these only affect inbound parsing.
+  "/home": "home",
+  "/atlas": "atlas-map",
+  "/map": "atlas-map",
+  "/search": "search",
+  "/browse": "search",
+  "/compare-controls": "matrix",
+  "/playbook": "patterns",
+  "/template": "templates",
+  "/source": "sources",
 };
 
 function parseNodeIdFromPath(pathname: string): {

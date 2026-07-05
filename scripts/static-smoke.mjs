@@ -5,6 +5,7 @@ import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const required = [
   'dist/site/index.html',
+  'dist/site/404.html',
   'dist/site/assets/',
   'dist/site/lib/d3.min.js',
   'dist/site/data/source-registry.json',
@@ -42,5 +43,9 @@ assert.match(indexHtml, /\.\/assets\//);
 assert.doesNotMatch(indexHtml, /(?:src|href)="\/assets\//);
 assert.ok(assets.some((asset) => asset.endsWith('.js')), 'built JavaScript asset must exist');
 assert.ok(assets.some((asset) => asset.endsWith('.css')), 'built CSS asset must exist');
+
+const notFoundHtml = readFileSync('dist/site/404.html', 'utf8');
+assert.match(notFoundHtml, /l\.replace\(l\.origin \+ base \+ "#\/"/, '404.html must redirect path URLs into the HashRouter');
+assert.match(notFoundHtml, /script-src 'sha256-/, '404.html inline redirect must be CSP-pinned');
 
 console.log(`Static smoke passed: ${registry.sources.length} sources, ${nodes.length} nodes, ${edges.length} edges, ${findings.length} findings`);

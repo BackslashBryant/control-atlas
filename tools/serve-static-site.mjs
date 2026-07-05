@@ -20,6 +20,14 @@ createServer((request, response) => {
   const requestPath = rawPath === '/' ? '/index.html' : rawPath;
   const filePath = normalize(join(ROOT, requestPath));
   if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+    // Mirror GitHub Pages: unknown paths serve 404.html (which redirects
+    // path-style deep links into the HashRouter) with a 404 status.
+    const notFoundPage = join(ROOT, '404.html');
+    if (existsSync(notFoundPage)) {
+      response.writeHead(404, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      createReadStream(notFoundPage).pipe(response);
+      return;
+    }
     response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
     response.end('Not found');
     return;

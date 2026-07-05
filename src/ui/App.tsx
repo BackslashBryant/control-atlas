@@ -41,6 +41,7 @@ import {
   parseHashLocation,
   serializeHashLocation,
 } from "./lib/hashRoutes";
+import { routeDocumentTitle } from "./lib/recordTitle";
 
 const AboutPage = lazy(() =>
   import("./pages/AboutPage").then((module) => ({
@@ -185,6 +186,17 @@ export function App() {
       setViewState(parseHashLocation(location.pathname, location.search));
     });
   }, [location.pathname, location.search]);
+
+  // Per-route document.title (CATL-61): honest browser-history/bookmark labels,
+  // with record pages resolving to the official record name once the graph is
+  // loaded.
+  useEffect(() => {
+    const node =
+      viewState.view === "library-detail" && viewState.node && bundle?.graphReady
+        ? bundle.runtime.getNode(viewState.node)
+        : null;
+    document.title = routeDocumentTitle(viewState, node);
+  }, [viewState, bundle]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

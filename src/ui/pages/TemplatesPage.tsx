@@ -114,6 +114,9 @@ export function TemplatesPage(props: {
   const [queryFilter, setQueryFilter] = useState("");
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
+  const [generationTone, setGenerationTone] = useState<"trust" | "warning">(
+    "trust",
+  );
   const templates = (bundle.templateRegistry.templates || []) as Array<{
     name: string;
     display_name: string;
@@ -258,6 +261,7 @@ export function TemplatesPage(props: {
     }
     setGenerating(true);
     setGenerationStatus("");
+    let downloadDispatched = false;
     try {
       const generated = generateTemplate(
         {
@@ -287,16 +291,31 @@ export function TemplatesPage(props: {
       );
 
       if (generated.frameworkResolutionError) {
+        setGenerationTone("warning");
         setGenerationStatus(generated.frameworkResolutionError);
         return;
       }
 
-      downloadTextFile(generated.filename, generated.content, generated.mimeType);
-      setGenerationStatus(
-        `Download started for ${generated.filename}. Check your downloads folder.`,
+      downloadTextFile(
+        generated.filename,
+        generated.content,
+        generated.mimeType,
+        () => {
+          downloadDispatched = true;
+          setGenerationTone("trust");
+          setGenerationStatus(
+            `Download started for ${generated.filename}. Check your downloads folder.`,
+          );
+        },
       );
     } finally {
-      setGenerating(false);
+      if (downloadDispatched) {
+        // Keep the button briefly disabled after a real download so a rapid
+        // double-click can't fire a second identical generate (CATL-67).
+        window.setTimeout(() => setGenerating(false), 1200);
+      } else {
+        setGenerating(false);
+      }
     }
   }
 
@@ -407,7 +426,10 @@ export function TemplatesPage(props: {
             </SummaryCard>
           ) : null}
           {generationStatus ? (
-            <p className="generation-status" role="status">
+            <p
+              className={`generation-status tone-${generationTone}`}
+              role="status"
+            >
               {generationStatus}
             </p>
           ) : null}
