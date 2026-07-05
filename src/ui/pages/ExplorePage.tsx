@@ -186,7 +186,7 @@ export function ExplorePage(props: {
               <input
                 id="search-query"
                 onChange={(event) => setQueryDraft(event.target.value)}
-                placeholder="AC-2, account management, FedRAMP High, CCI-000225"
+                placeholder="account management, AC-2, FedRAMP High, CCI-000225"
                 type="search"
                 value={queryDraft}
               />

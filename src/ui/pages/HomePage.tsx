@@ -84,7 +84,7 @@ export function HomePage(props: HomePageProps) {
           <input
             aria-label="Search controls, baselines, CCIs, STIGs, and terms"
             onChange={(event) => setSearchDraft(event.target.value)}
-            placeholder="Search anything — AC-2, FedRAMP High, CCI-000225, Zero Trust…"
+            placeholder="Search anything — account management, AC-2, FedRAMP High, CCI-000225…"
             type="search"
             value={searchDraft}
           />

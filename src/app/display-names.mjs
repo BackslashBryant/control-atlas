@@ -50,9 +50,12 @@ const DISPLAY_NAMES = {
     uses: 'Uses',
     provides_context_for: 'Provides context for',
     leads_to: 'Leads to',
+    applies_to: 'Applies to',
+    defines: 'Defines',
   },
   confidence: {
     direct: 'Direct match',
+    derived: 'Derived match',
     inferred_high: 'Strong inference',
     inferred_medium: 'Moderate inference',
     inferred_low: 'Weak inference',
@@ -108,8 +111,83 @@ const DISPLAY_NAMES = {
     family: 'Control family',
     attack_technique: 'ATT&CK technique',
     defend_countermeasure: 'D3FEND countermeasure',
+    requirement: 'CCI / requirement',
+    srg_requirement: 'SRG requirement',
+    stig_rule: 'STIG rule',
+    impact_category: 'Impact level',
+    policy: 'Policy',
+    program: 'Program',
+    rmf_step: 'RMF step',
+    zt_activity: 'Zero Trust activity',
+    zt_capability: 'Zero Trust capability',
+    zt_document: 'Zero Trust document',
+    zt_overlay_section: 'Zero Trust overlay section',
+    zt_pillar: 'Zero Trust pillar',
+    zt_tenet: 'Zero Trust tenet',
   },
 };
+
+/**
+ * Casing for acronyms and proper nouns that must never be lower-cased when a
+ * slug value falls through to humanization (CATL-32/66/71/83). Keys are the
+ * lower-cased token; values are the display form.
+ * @type {Record<string, string>}
+ */
+const ACRONYMS = {
+  cci: 'CCI',
+  ccis: 'CCIs',
+  disa: 'DISA',
+  dod: 'DoD',
+  nist: 'NIST',
+  srg: 'SRG',
+  stig: 'STIG',
+  rmf: 'RMF',
+  fedramp: 'FedRAMP',
+  cui: 'CUI',
+  csf: 'CSF',
+  cmmc: 'CMMC',
+  zt: 'Zero Trust',
+  mitre: 'MITRE',
+  attack: 'ATT&CK',
+  d3fend: 'D3FEND',
+  ato: 'ATO',
+  atc: 'ATC',
+  conmon: 'ConMon',
+  oscal: 'OSCAL',
+  poam: 'POA&M',
+  api: 'API',
+  json: 'JSON',
+  xml: 'XML',
+  pdf: 'PDF',
+  csv: 'CSV',
+  fips: 'FIPS',
+  olir: 'OLIR',
+  ssp: 'SSP',
+  poc: 'POC',
+  saas: 'SaaS',
+};
+
+/**
+ * Humanize a slug/enum value: split on `_`/`-`/space, expand acronyms, and
+ * sentence-case the rest so no raw schema string reaches the UI. E.g.
+ * `zt_capability` → "Zero Trust capability", `disa_stig` → "DISA STIG".
+ * @param {string} value
+ * @returns {string}
+ */
+export function humanizeSlug(value) {
+  const tokens = String(value)
+    .split(/[_\-\s]+/)
+    .filter(Boolean);
+  if (tokens.length === 0) return String(value);
+  return tokens
+    .map((token, index) => {
+      const lower = token.toLowerCase();
+      if (ACRONYMS[lower]) return ACRONYMS[lower];
+      if (index === 0) return lower.charAt(0).toUpperCase() + lower.slice(1);
+      return lower;
+    })
+    .join(' ');
+}
 
 /**
  * @param {string} domain
@@ -120,7 +198,7 @@ export function displayNameFor(domain, value) {
   if (!value) return 'Unknown';
   const mapped = DISPLAY_NAMES[domain]?.[value];
   if (mapped) return mapped;
-  return String(value).replaceAll('_', ' ');
+  return humanizeSlug(value);
 }
 
 /** @type {Record<string, { title: string, why: string }>} */
