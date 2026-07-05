@@ -38,3 +38,34 @@ test("AC-2 opens a controlled focused map with clustered context", async ({
   await expect(matrix).toContainText("AC-2");
   await expect(matrix).toContainText("SP 800-53 Rev. 5");
 });
+
+// Phase D2: the leverage inspector answers "if I implement this, what else do
+// I satisfy?" — the birds-per-stone impact, on the canvas.
+test("focused map shows the leverage inspector with the impact breakdown", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas-map?node=AC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const leverage = page.locator(".atlas-leverage");
+  await expect(leverage).toBeVisible();
+  await expect(leverage).toContainText("Implementing this also satisfies");
+  await expect(leverage).toContainText("AC-2 — Account Management");
+  await expect(leverage).toContainText(/\d+ connected requirements?/);
+  await expect(leverage).toContainText(/CCIs \/ requirements/);
+});
+
+test("leverage rows filter the map to a connected requirement type", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas-map?node=nist-800-53:AU-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const leverage = page.locator(".atlas-leverage");
+  await expect(leverage).toBeVisible();
+  await expect(leverage).toContainText("AU-2");
+  await leverage.locator("button.atlas-leverage-row").first().click();
+  await expect(page).toHaveURL(/[?&]type=/);
+});
