@@ -70,6 +70,18 @@ export function validateTemplateRegistry(registry) {
 
     if (!Array.isArray(template.source_refs)) errors.push(`template ${template.template_id} source_refs must be an array`);
     if (typeof template.disclaimer_required !== 'boolean') errors.push(`template ${template.template_id} disclaimer_required must be boolean`);
+
+    const alt = template.official_alternative;
+    if (!alt || typeof alt !== 'object') {
+      errors.push(`template ${template.template_id} missing official_alternative { label, url }`);
+    } else {
+      if (typeof alt.label !== 'string' || alt.label.trim() === '') {
+        errors.push(`template ${template.template_id} official_alternative.label must be a non-empty string`);
+      }
+      if (typeof alt.url !== 'string' || !/^https:\/\//.test(alt.url)) {
+        errors.push(`template ${template.template_id} official_alternative.url must be an https URL`);
+      }
+    }
   }
 
   return errors;

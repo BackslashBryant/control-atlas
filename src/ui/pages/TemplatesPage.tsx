@@ -87,6 +87,21 @@ const INPUT_LABELS: Record<string, string> = {
   environment_archetype: "Environment type",
 };
 
+const FORMAT_HELP: Record<string, string> = {
+  markdown: "Readable document — open in any editor or paste into a report.",
+  csv: "Spreadsheet-ready — import into Excel or Google Sheets, one row per control.",
+  json: "Machine-readable — for scripts, pipelines, or GRC tooling.",
+  yaml: "Machine-readable and human-friendly — structured, config-style data.",
+};
+
+const BASELINE_LABELS: Record<string, string> = {
+  LOW: "Low",
+  MODERATE: "Moderate",
+  HIGH: "High",
+  PRIVACY: "Privacy",
+  "LI-SAAS": "LI-SaaS",
+};
+
 export function TemplatesPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "templates" }>;
@@ -105,7 +120,8 @@ export function TemplatesPage(props: {
     description: string;
     supported_formats: string[];
     input_options: string[];
-    source_refs?: Array<Record<string, string>>;
+    source_refs?: string[];
+    official_alternative?: { label: string; url: string };
   }>;
   const filteredTemplates = useMemo(
     () =>
@@ -139,6 +155,89 @@ export function TemplatesPage(props: {
     ? state.format || supportedFormats[0]
     : supportedFormats[0];
 
+  const inputOptions = selectedTemplate?.input_options || [];
+  const datasetNodes = (bundle.runtime.dataset?.nodes || []) as any[];
+  const datasetSources = (bundle.runtime.dataset?.sources || []) as any[];
+  const activeFramework = state.framework || "nist-800-53";
+
+  // Baseline membership lives in a companion catalog (NIST 800-53B for the
+  // 800-53 framework; FedRAMP carries its own baselines), so scope the options
+  // there rather than to the framework catalog itself.
+  const baselineCatalog =
+    activeFramework === "fedramp-rev5" ? "fedramp-rev5" : "nist-800-53b";
+  const baselineOptions = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const node of datasetNodes) {
+      if (node.node_type !== "baseline") continue;
+      if (node.metadata?.catalog_id !== baselineCatalog) continue;
+      const id = String(node.metadata?.item_id || "").toUpperCase();
+      if (id && !seen.has(id)) {
+        seen.set(id, BASELINE_LABELS[id] || node.metadata?.title || id);
+      }
+    }
+    return [...seen.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([value, label]) => ({ value, label }));
+  }, [datasetNodes, baselineCatalog]);
+
+  const familyOptions = useMemo(() => {
+    const families = new Set<string>();
+    for (const node of datasetNodes) {
+      if (node.node_type !== "control") continue;
+      if (node.metadata?.catalog_id !== activeFramework) continue;
+      const family = node.metadata?.family || node.metadata?.control_family;
+      if (family) families.add(family);
+    }
+    return [...families]
+      .sort((a, b) => a.localeCompare(b))
+      .map((family) => ({ value: family, label: family }));
+  }, [datasetNodes, activeFramework]);
+
+  const primarySourceRef = selectedTemplate?.source_refs?.[0];
+  const catalogSource = primarySourceRef
+    ? datasetSources.find((source) => source.id === primarySourceRef)
+    : null;
+
+  // "View related map" should land somewhere relevant to the template: a STIG
+  // rule for STIG-scoped templates, otherwise the first control of the chosen
+  // framework so the map opens on that framework's landscape rather than the
+  // generic starter view.
+  const relatedMapNode = useMemo(() => {
+    if (!selectedTemplate) return "";
+    if (inputOptions.includes("selected_stigs")) {
+      const stig = datasetNodes
+        .filter((node) => node.node_type === "stig_rule")
+        .sort((a, b) =>
+          String(a.metadata?.item_id || a.id).localeCompare(
+            String(b.metadata?.item_id || b.id),
+            undefined,
+            { numeric: true },
+          ),
+        )[0];
+      if (stig) return stig.id as string;
+    }
+    const controls = datasetNodes
+      .filter(
+        (node) =>
+          node.node_type === "control" &&
+          node.metadata?.catalog_id === activeFramework,
+      )
+      .sort((a, b) =>
+        String(a.metadata?.item_id || a.id).localeCompare(
+          String(b.metadata?.item_id || b.id),
+          undefined,
+          { numeric: true },
+        ),
+      );
+    if (controls[0]) return controls[0].id as string;
+    const baseline = datasetNodes.find(
+      (node) =>
+        node.node_type === "baseline" &&
+        node.metadata?.catalog_id === activeFramework,
+    );
+    return (baseline?.id as string) || "";
+  }, [selectedTemplate?.name, activeFramework, inputOptions, datasetNodes]);
+
   useEffect(() => {
     if (!selectedTemplate) {
       return;
@@ -163,7 +262,15 @@ export function TemplatesPage(props: {
       const generated = generateTemplate(
         {
           templateType: selectedTemplate.name,
-          framework: state.framework || "nist-800-53",
+          framework: selectedTemplate.input_options.includes("framework")
+            ? state.framework || "nist-800-53"
+            : "",
+          baseline: selectedTemplate.input_options.includes("baseline")
+            ? state.baseline || ""
+            : "",
+          controlFamily: selectedTemplate.input_options.includes("control_family")
+            ? state.controlFamily || ""
+            : "",
           format: activeFormat,
           environment: state.environment || "Generic",
           includePlaceholders: true,
@@ -227,6 +334,8 @@ export function TemplatesPage(props: {
                     framework: state.framework || "nist-800-53",
                     format: template.supported_formats?.[0] || "markdown",
                     environment: state.environment || "Generic",
+                    baseline: "",
+                    controlFamily: "",
                   })
                 }
                 title={template.display_name}
@@ -265,6 +374,38 @@ export function TemplatesPage(props: {
               </p>
             ) : null}
           </SummaryCard>
+          {catalogSource || selectedTemplate.official_alternative ? (
+            <SummaryCard title="Source data & official alternative">
+              {catalogSource ? (
+                <p>
+                  Catalog data:{" "}
+                  {catalogSource.display_name || catalogSource.name}
+                  {catalogSource.version
+                    ? ` (version ${catalogSource.version})`
+                    : ""}
+                  .
+                </p>
+              ) : null}
+              {selectedTemplate.official_alternative ? (
+                <p>
+                  Prefer an authoritative form? Use the{" "}
+                  <a
+                    href={selectedTemplate.official_alternative.url}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {selectedTemplate.official_alternative.label}
+                    <IconExternalLink
+                      size={14}
+                      stroke={1.8}
+                      style={{ verticalAlign: "text-bottom", marginLeft: 4 }}
+                    />
+                  </a>
+                  .
+                </p>
+              ) : null}
+            </SummaryCard>
+          ) : null}
           {generationStatus ? (
             <p className="generation-status" role="status">
               {generationStatus}
@@ -292,7 +433,12 @@ export function TemplatesPage(props: {
             </button>
             <button
               className="secondary"
-              onClick={() => onNavigate("atlas-map")}
+              onClick={() =>
+                onNavigate(
+                  "atlas-map",
+                  relatedMapNode ? { node: relatedMapNode } : undefined,
+                )
+              }
               type="button"
             >
               View related map
@@ -305,37 +451,73 @@ export function TemplatesPage(props: {
           >
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">
+                {inputOptions.includes("framework") ? (
+                  <SelectField
+                    hint="Which control catalog the template should reference."
+                    label="Framework"
+                    onChange={(value) =>
+                      onNavigate("templates", {
+                        ...state,
+                        framework: value,
+                        baseline: "",
+                        controlFamily: "",
+                      })
+                    }
+                    options={catalogOptions}
+                    value={state.framework || "nist-800-53"}
+                  />
+                ) : null}
+                {inputOptions.includes("baseline") ? (
+                  <SelectField
+                    emptyLabel="All controls"
+                    hint="Limit to a baseline (Low, Moderate, High) or leave as all controls."
+                    label="Baseline"
+                    onChange={(value) =>
+                      onNavigate("templates", { ...state, baseline: value })
+                    }
+                    options={baselineOptions}
+                    value={state.baseline || ""}
+                  />
+                ) : null}
+                {inputOptions.includes("control_family") ? (
+                  <SelectField
+                    emptyLabel="All families"
+                    hint="Limit to one control family (e.g. Access Control)."
+                    label="Control family"
+                    onChange={(value) =>
+                      onNavigate("templates", { ...state, controlFamily: value })
+                    }
+                    options={familyOptions}
+                    value={state.controlFamily || ""}
+                  />
+                ) : null}
+                {inputOptions.includes("environment_archetype") ? (
+                  <SelectField
+                    hint="Where the system runs — cloud, on-premises, or hybrid."
+                    label="Environment"
+                    onChange={(value) =>
+                      onNavigate("templates", { ...state, environment: value })
+                    }
+                    options={[
+                      { value: "Generic", label: "Generic" },
+                      { value: "Cloud SaaS", label: "Cloud SaaS" },
+                      { value: "Platform service", label: "Platform service" },
+                      { value: "Enclave", label: "Enclave" },
+                      { value: "On-premises", label: "On-premises" },
+                      { value: "Hybrid", label: "Hybrid" },
+                      {
+                        value: "Enterprise service",
+                        label: "Enterprise service",
+                      },
+                    ]}
+                    value={state.environment || "Generic"}
+                  />
+                ) : null}
                 <SelectField
-                  hint="Which control catalog the template should reference."
-                  label="Framework"
-                  onChange={(value) =>
-                    onNavigate("templates", { ...state, framework: value })
+                  hint={
+                    FORMAT_HELP[activeFormat] ||
+                    "File type for the downloaded template."
                   }
-                  options={catalogOptions}
-                  value={state.framework || "nist-800-53"}
-                />
-                <SelectField
-                  hint="Where the system runs — cloud, on-premises, or hybrid."
-                  label="Environment"
-                  onChange={(value) =>
-                    onNavigate("templates", { ...state, environment: value })
-                  }
-                  options={[
-                    { value: "Generic", label: "Generic" },
-                    { value: "Cloud SaaS", label: "Cloud SaaS" },
-                    { value: "Platform service", label: "Platform service" },
-                    { value: "Enclave", label: "Enclave" },
-                    { value: "On-premises", label: "On-premises" },
-                    { value: "Hybrid", label: "Hybrid" },
-                    {
-                      value: "Enterprise service",
-                      label: "Enterprise service",
-                    },
-                  ]}
-                  value={state.environment || "Generic"}
-                />
-                <SelectField
-                  hint="File type for download: Markdown, CSV, or JSON."
                   label="Format"
                   onChange={(value) =>
                     onNavigate("templates", { ...state, format: value })
@@ -347,6 +529,16 @@ export function TemplatesPage(props: {
                   value={activeFormat}
                 />
               </div>
+              {supportedFormats.length > 1 ? (
+                <ul className="format-help-list">
+                  {supportedFormats.map((format: string) => (
+                    <li key={format}>
+                      <strong>{FORMAT_LABELS[format] || format}:</strong>{" "}
+                      {FORMAT_HELP[format] || "Downloadable file format."}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </DisclosurePanel>
           </Accordion.Root>
         </section>
