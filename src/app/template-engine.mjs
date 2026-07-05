@@ -960,7 +960,18 @@ function familyOf(node) {
  * @param {any} options
  * @param {{ nodes?: any[], edges?: any[], sources?: { sources?: any[] } }} dataset
  */
-export function generateTemplate(options, dataset) {
+/**
+ * Build the structured template document (title + description + typed
+ * sections) without serializing it. Shared by the string formatters
+ * (markdown/csv/json/yaml via {@link generateTemplate}) and the client-side
+ * office serializers (xlsx/docx), so every format renders from one source of
+ * truth.
+ *
+ * @param {any} options
+ * @param {any} dataset
+ * @returns {{ doc: any, templateType: string, frameworkResolutionError: string | null }}
+ */
+export function buildTemplateDocument(options, dataset) {
   const normalized = {
     ...options,
     includeSourceFootnotes: true,
@@ -1095,11 +1106,42 @@ export function generateTemplate(options, dataset) {
     });
   }
 
+  return {
+    doc,
+    templateType: normalized.templateType,
+    frameworkResolutionError: unresolvedFramework ? frameworkNoticeText : null,
+  };
+}
+
+/**
+ * Compose the download filename for a generated template.
+ *
+ * @param {string} templateType
+ * @param {string} extension
+ * @returns {string}
+ */
+export function templateFilename(templateType, extension) {
+  const date = new Date().toISOString().split("T")[0];
+  return `${templateType.replace(/_/g, "-")}-${date}.${extension}`;
+}
+
+/**
+ * Serialize a template to one of the text/data formats (markdown, csv, json,
+ * yaml). Office formats (xlsx/docx) are rendered client-side from
+ * {@link buildTemplateDocument} — they do not flow through here because their
+ * payload is binary, not a string.
+ */
+export function generateTemplate(options, dataset) {
+  const { doc, templateType, frameworkResolutionError } = buildTemplateDocument(
+    options,
+    dataset,
+  );
+
   let content;
   let extension;
   let mimeType;
 
-  switch (normalized.format) {
+  switch (options.format) {
     case "csv":
       content = formatCsv(doc);
       extension = "csv";
@@ -1123,11 +1165,10 @@ export function generateTemplate(options, dataset) {
       break;
   }
 
-  const filename = `${normalized.templateType.replace(/_/g, "-")}-${new Date().toISOString().split("T")[0]}.${extension}`;
   return {
     content,
-    filename,
+    filename: templateFilename(templateType, extension),
     mimeType,
-    frameworkResolutionError: unresolvedFramework ? frameworkNoticeText : null,
+    frameworkResolutionError,
   };
 }

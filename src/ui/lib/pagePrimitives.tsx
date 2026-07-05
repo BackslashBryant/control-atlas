@@ -35,13 +35,11 @@ export function copyText(value: string) {
   return Promise.resolve();
 }
 
-export function downloadTextFile(
+export function downloadBlobFile(
   filename: string,
-  content: string,
-  mimeType: string,
+  blob: Blob,
   onDispatch?: () => void,
 ) {
-  const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -53,6 +51,15 @@ export function downloadTextFile(
   onDispatch?.();
   anchor.remove();
   URL.revokeObjectURL(url);
+}
+
+export function downloadTextFile(
+  filename: string,
+  content: string,
+  mimeType: string,
+  onDispatch?: () => void,
+) {
+  downloadBlobFile(filename, new Blob([content], { type: mimeType }), onDispatch);
 }
 
 export function sourceTrustSummary(source: any) {

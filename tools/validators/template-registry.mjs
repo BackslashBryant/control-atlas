@@ -24,6 +24,7 @@ const ARTIFACT_TYPES = new Set([
 ]);
 
 const FORMATS = new Set(['markdown', 'csv', 'json', 'yaml']);
+const OFFICE_FORMATS = new Set(['xlsx', 'docx']);
 const INPUT_OPTIONS = new Set(['framework', 'baseline', 'control_family', 'selected_controls', 'selected_stigs', 'environment_archetype']);
 
 export function validateTemplateRegistry(registry) {
@@ -58,6 +59,18 @@ export function validateTemplateRegistry(registry) {
       }
     } else {
       errors.push(`template ${template.template_id} supported_formats must be an array`);
+    }
+
+    if (template.office_formats !== undefined) {
+      if (Array.isArray(template.office_formats)) {
+        for (const fmt of template.office_formats) {
+          if (!OFFICE_FORMATS.has(fmt)) {
+            errors.push(`template ${template.template_id} has unsupported office_format: ${fmt}`);
+          }
+        }
+      } else {
+        errors.push(`template ${template.template_id} office_formats must be an array`);
+      }
     }
 
     if (Array.isArray(template.input_options)) {

@@ -58,3 +58,47 @@ test('format change updates download extension', async ({ page }) => {
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.csv$/);
 });
+
+// CATL-73: office-format export runs entirely client-side. A downloaded file
+// that starts with the ZIP local-file-header magic ("PK\x03\x04") is a real
+// OOXML package, not a text stub.
+async function assertZipDownload(download) {
+  const path = await download.path();
+  expect(path).toBeTruthy();
+  const bytes = readFileSync(path);
+  expect(bytes.length).toBeGreaterThan(0);
+  expect(bytes[0]).toBe(0x50); // P
+  expect(bytes[1]).toBe(0x4b); // K
+  expect(bytes[2]).toBe(0x03);
+  expect(bytes[3]).toBe(0x04);
+}
+
+test('tabular template exports a real .xlsx workbook client-side', async ({ page }) => {
+  await page.goto('/?view=templates&templateType=poam_starter');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByRole('button', { name: 'More options' }).click();
+  await page.locator("#field-format").selectOption("xlsx");
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Generate POA&M Starter' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.xlsx$/);
+  await assertZipDownload(download);
+});
+
+test('SSP starter exports a real .docx document client-side', async ({ page }) => {
+  await page.goto('/?view=templates&templateType=security_plan_starter');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByRole('button', { name: 'More options' }).click();
+  await page.locator("#field-format").selectOption("docx");
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Generate Security Plan Starter' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.docx$/);
+  await assertZipDownload(download);
+});
