@@ -18,7 +18,8 @@ import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
 } from "../graph/buildVisibleRelationshipModel.ts";
-import { recordDisplayTitle } from "../lib/recordTitle";
+import { AtlasLeverageInspector } from "../components/AtlasLeverageInspector";
+import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
@@ -217,6 +218,32 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
     state.relationshipView,
     narrowViewport,
   );
+
+  // Leverage for the focused control (e.g. AC-2), computed from the runtime's
+  // real published edges rather than the curated foundation cluster.
+  const foundationLeverage = useMemo(() => {
+    if (!focused) {
+      return { impact: { total: 0, byType: [] }, nodeId: "", title: "" };
+    }
+    const nodeId = bundle.runtime.getNode(trimmedNode)
+      ? trimmedNode
+      : nodeIdFromItemId(bundle.runtime, trimmedNode) || trimmedNode;
+    const node = bundle.runtime.getNode(nodeId);
+    if (!node) {
+      return { impact: { total: 0, byType: [] }, nodeId, title: trimmedNode };
+    }
+    const edges = bundle.runtime.getEdgesForNode(nodeId, {
+      publication_status: "published",
+    });
+    return {
+      impact: buildImpactBreakdown(nodeId, edges, (id) =>
+        bundle.runtime.getNode(id),
+      ),
+      nodeId,
+      title: recordDisplayTitle(node) || trimmedNode,
+    };
+  }, [bundle.runtime, focused, trimmedNode]);
+
   const emptyRelationshipFilters = {
     relationshipType: "",
     provenance: "",
@@ -426,6 +453,18 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
             }}
           />
 
+          {focused ? (
+            <AtlasLeverageInspector
+              impact={foundationLeverage.impact}
+              onOpenRecord={() =>
+                onNavigate("library-detail", {
+                  node: foundationLeverage.nodeId,
+                })
+              }
+              title={foundationLeverage.title}
+            />
+          ) : null}
+
           {selectedSource ? (
             <aside aria-label="Selected source" className="ca-source-detail">
               <p className="eyebrow">Selected source</p>
@@ -497,6 +536,20 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
     () => resolveCenterNode(bundle.runtime, state.node),
     [bundle.runtime, state.node],
   );
+
+  // Leverage: how many requirements does implementing the focused control also
+  // satisfy? Counted from every published edge, not just the visible cluster.
+  const leverageImpact = useMemo(() => {
+    if (!center || !state.node.trim()) {
+      return { total: 0, byType: [] };
+    }
+    const edges = bundle.runtime.getEdgesForNode(center.centerNodeId, {
+      publication_status: "published",
+    });
+    return buildImpactBreakdown(center.centerNodeId, edges, (id) =>
+      bundle.runtime.getNode(id),
+    );
+  }, [bundle.runtime, center, state.node]);
 
   const narrowViewport = useIsNarrowViewport();
   const relationshipView = resolveRelationshipView(
@@ -744,6 +797,17 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
               stats: neighborhood.stats,
             }}
           />
+          {!isStarter ? (
+            <AtlasLeverageInspector
+              impact={leverageImpact}
+              onExploreType={(nodeType) => patchFilters({ nodeType })}
+              onOpenRecord={() => onOpenNode(center.centerNodeId)}
+              title={
+                recordDisplayTitle(bundle.runtime.getNode(center.centerNodeId)) ||
+                center.centerItemId
+              }
+            />
+          ) : null}
         </div>
 
         <details className="atlas-coverage-drawer">

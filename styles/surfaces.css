@@ -1762,6 +1762,106 @@ a:focus-visible {
   margin: 0;
 }
 
+/* Leverage inspector (CATL / Phase D2): floats over the canvas top-right and
+   answers "if I implement this, what else do I satisfy?" without obscuring the
+   graph. Collapsible; stacks inline on narrow viewports. */
+.atlas-map-main {
+  position: relative;
+}
+.atlas-leverage {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 10;
+  width: min(20rem, calc(100% - 2rem));
+  background: color-mix(in srgb, var(--ca-surface) 94%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--ca-border);
+  border-left: 4px solid var(--ca-secondary);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  font-size: var(--font-size-sm);
+}
+.atlas-leverage > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--space-3);
+  font-weight: 700;
+  color: var(--ca-text);
+  display: grid;
+  gap: 2px;
+}
+.atlas-leverage > summary::-webkit-details-marker {
+  display: none;
+}
+.atlas-leverage-eyebrow {
+  color: var(--ca-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.atlas-leverage-body {
+  padding: 0 var(--space-3) var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+.atlas-leverage-record {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-weight: 600;
+}
+.atlas-leverage-total {
+  margin: 0;
+}
+.atlas-leverage-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.atlas-leverage-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ca-text);
+}
+button.atlas-leverage-row {
+  cursor: pointer;
+}
+button.atlas-leverage-row:hover {
+  background: var(--ca-surface-raised);
+  border-color: var(--ca-border);
+}
+.atlas-leverage-count {
+  min-width: 1.75rem;
+  text-align: center;
+  font-weight: 800;
+  color: var(--ca-secondary);
+}
+.atlas-leverage-more {
+  color: var(--ca-text-muted);
+  padding: 4px 6px;
+}
+.atlas-leverage-open {
+  width: fit-content;
+}
+@media (max-width: 768px) {
+  .atlas-leverage {
+    position: static;
+    width: auto;
+    margin-bottom: var(--space-3);
+  }
+}
+
 /* Slim, single-row Atlas chrome so the graph starts high (top edge < 25vh). */
 .atlas-map-page > .page-header {
   margin-bottom: 0;
