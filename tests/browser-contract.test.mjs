@@ -209,5 +209,8 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.match(templatesPage, /<h2>\{selectedTemplate\.display_name\}<\/h2>/);
   assert.match(templatesPage, /hint="Which control catalog/);
   assert.match(templatesPage, /hint="Where the system runs/);
-  assert.match(templatesPage, /hint="File type for download/);
+  // CATL-09: Format help is per-template/per-format, not a single generic
+  // "Markdown, CSV, or JSON" string.
+  assert.match(templatesPage, /FORMAT_HELP\[activeFormat\]/);
+  assert.doesNotMatch(templatesPage, /Markdown, CSV, or JSON/);
 });
