@@ -1013,6 +1013,17 @@ export function generateTemplate(options, dataset) {
         });
       }
 
+      // Natural (numeric-aware) order so control IDs read AC-1, AC-2, AC-10 —
+      // not the lexicographic AC-1, AC-10, AC-2 of the raw catalog. Item IDs
+      // already encode the family prefix, so this also keeps families grouped.
+      controlNodes.sort((a, b) =>
+        String(a.metadata?.item_id || a.id).localeCompare(
+          String(b.metadata?.item_id || b.id),
+          undefined,
+          { numeric: true, sensitivity: "base" },
+        ),
+      );
+
       // A framework that resolved control nodes but whose baseline/family
       // filter excluded them all falls through to the placeholder row below —
       // the framework itself is not "unresolved".
