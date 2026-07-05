@@ -47,6 +47,9 @@ const DISPLAY_NAMES = {
     depends_on: 'Depends on',
     protects: 'Protects',
     mitigates: 'Mitigates',
+    uses: 'Uses',
+    provides_context_for: 'Provides context for',
+    leads_to: 'Leads to',
   },
   confidence: {
     direct: 'Direct match',

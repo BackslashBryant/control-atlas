@@ -15,9 +15,9 @@ test("atlas map: standalone route with list fallback", async ({ page }) => {
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(
-    page.getByText(/See the control in context/i),
-  ).toBeVisible();
+  // The focused map renders the relationship explorer (its intro summary is
+  // dropped on the graph-first canvas shell).
+  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
 
   await page.getByRole("tab", { name: "List" }).click();
   const table = page.getByRole("table", { name: "Relationship table" });

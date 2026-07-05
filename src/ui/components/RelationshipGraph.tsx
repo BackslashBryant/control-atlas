@@ -29,6 +29,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { displayNameFor } from "../../app/display-names.mjs";
 import type { ClusterNodeMeta } from "../lib/graphClustering";
 import type { RelationshipLayoutMode } from "../graph/sourceRegistryTypes";
 import {
@@ -82,7 +83,30 @@ type DiagramNodeData = {
   dimmed: boolean;
   label: string;
   title: string;
+  subtitle: string;
 };
+
+/**
+ * Second-line text for a node: the human name with any leading ID prefix
+ * stripped, or — when the label is just the ID again — a one-line role from the
+ * node type. Never repeats the ID, so nodes read "AC-2 / Account Management",
+ * not "AC-2AC-2" (CATL-50/21).
+ */
+function nodeSubtitle(graphNode: GraphNode): string {
+  const itemId = (graphNode.itemId || "").trim();
+  const rawTitle = (graphNode.label || "").trim();
+  const role = graphNode.nodeType
+    ? displayNameFor("node_type", graphNode.nodeType)
+    : "";
+  if (!rawTitle || rawTitle === itemId) {
+    return role;
+  }
+  if (itemId && rawTitle.startsWith(itemId)) {
+    const stripped = rawTitle.slice(itemId.length).replace(/^[\s:–—-]+/, "").trim();
+    return stripped || role;
+  }
+  return rawTitle;
+}
 
 type DiagramNode = Node<DiagramNodeData, "controlAtlas">;
 type DiagramEdge = Edge<{ relationshipType: string }>;
@@ -142,7 +166,9 @@ function ControlAtlasNode(props: NodeProps<DiagramNode>) {
         type="target"
       />
       <span className="ca-flow-node-label">{data.label}</span>
-      <span className="ca-flow-node-title">{data.title}</span>
+      {data.subtitle ? (
+        <span className="ca-flow-node-title">{data.subtitle}</span>
+      ) : null}
       <Handle
         className="ca-flow-handle"
         isConnectable={false}
@@ -261,6 +287,7 @@ function buildDiagramNodes(
         dimmed,
         label: truncateCanvasLabel(graphNode.itemId, 28),
         title: graphNode.label,
+        subtitle: truncateCanvasLabel(nodeSubtitle(graphNode), 30),
       },
       draggable: true,
       position: {
@@ -529,7 +556,7 @@ const RelationshipGraphInner = forwardRef<
           fitView
           fitViewOptions={{ padding: 0.18 }}
           maxZoom={2.5}
-          minZoom={0.2}
+          minZoom={0.4}
           nodes={diagramNodes}
           nodeTypes={nodeTypes}
           nodesDraggable={!reducedMotion}
