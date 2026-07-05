@@ -19,7 +19,11 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
-import { generateTemplate } from "../../app/template-engine.mjs";
+import {
+  buildTemplateDocument,
+  generateTemplate,
+  templateFilename,
+} from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
   ExpandableChipList,
@@ -62,6 +66,7 @@ import {
   SourceSummaryCard,
   SummaryCard,
   copyText,
+  downloadBlobFile,
   downloadTextFile,
   formatConfidence,
   formatRelationshipLabel,
@@ -76,6 +81,8 @@ const FORMAT_LABELS: Record<string, string> = {
   csv: "CSV",
   json: "JSON",
   yaml: "YAML",
+  xlsx: "Excel (.xlsx)",
+  docx: "Word (.docx)",
 };
 
 const INPUT_LABELS: Record<string, string> = {
@@ -89,9 +96,11 @@ const INPUT_LABELS: Record<string, string> = {
 
 const FORMAT_HELP: Record<string, string> = {
   markdown: "Readable document — open in any editor or paste into a report.",
-  csv: "Spreadsheet-ready — import into Excel or Google Sheets, one row per control.",
-  json: "Machine-readable — for scripts, pipelines, or GRC tooling.",
-  yaml: "Machine-readable and human-friendly — structured, config-style data.",
+  csv: "Spreadsheet-ready data — import into Excel or Google Sheets, one row per control.",
+  json: "Machine-readable data — for scripts, pipelines, or GRC tooling.",
+  yaml: "Machine-readable and human-friendly data — structured, config-style.",
+  xlsx: "Excel workbook — opens directly in Excel, one sheet per table.",
+  docx: "Word document — opens directly in Word with headings and tables.",
 };
 
 const BASELINE_LABELS: Record<string, string> = {
@@ -122,6 +131,7 @@ export function TemplatesPage(props: {
     display_name: string;
     description: string;
     supported_formats: string[];
+    office_formats?: string[];
     input_options: string[];
     source_refs?: string[];
     official_alternative?: { label: string; url: string };
@@ -153,10 +163,13 @@ export function TemplatesPage(props: {
   const catalogOptions = bundle.runtime
     .getCatalogs()
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
-  const supportedFormats = selectedTemplate?.supported_formats || ["markdown"];
-  const activeFormat = supportedFormats.includes(state.format || "markdown")
-    ? state.format || supportedFormats[0]
-    : supportedFormats[0];
+  const dataFormats = selectedTemplate?.supported_formats || ["markdown"];
+  const officeFormats = selectedTemplate?.office_formats || [];
+  // Data formats (string) + office formats (binary xlsx/docx) share one picker.
+  const supportedFormats = [...dataFormats, ...officeFormats];
+  const activeFormat = supportedFormats.includes(state.format || "")
+    ? state.format || dataFormats[0]
+    : dataFormats[0];
 
   const inputOptions = selectedTemplate?.input_options || [];
   const datasetNodes = (bundle.runtime.dataset?.nodes || []) as any[];
@@ -255,40 +268,79 @@ export function TemplatesPage(props: {
     generateButtonRef.current?.focus();
   }, [selectedTemplate?.name]);
 
-  function createTemplate() {
+  async function createTemplate() {
     if (!selectedTemplate || generating) {
       return;
     }
     setGenerating(true);
     setGenerationStatus("");
     let downloadDispatched = false;
-    try {
-      const generated = generateTemplate(
-        {
-          templateType: selectedTemplate.name,
-          framework: selectedTemplate.input_options.includes("framework")
-            ? state.framework || "nist-800-53"
-            : "",
-          baseline: selectedTemplate.input_options.includes("baseline")
-            ? state.baseline || ""
-            : "",
-          controlFamily: selectedTemplate.input_options.includes("control_family")
-            ? state.controlFamily || ""
-            : "",
-          format: activeFormat,
-          environment: state.environment || "Generic",
-          includePlaceholders: true,
-          includeImplementationPrompts: true,
-          includeEvidenceExpectations: true,
-          includeInheritancePrompts: true,
-          includeReciprocityPrompts: true,
-          includeSourceFootnotes: true,
-          includeStigReferences: true,
-          sourceRefs: selectedTemplate.source_refs || [],
-          sources: bundle.runtime.dataset?.sources || [],
-        },
-        bundle.runtime.dataset,
+    const confirmDownload = (filename: string) => {
+      downloadDispatched = true;
+      setGenerationTone("trust");
+      setGenerationStatus(
+        `Download started for ${filename}. Check your downloads folder.`,
       );
+    };
+    try {
+      const options = {
+        templateType: selectedTemplate.name,
+        framework: selectedTemplate.input_options.includes("framework")
+          ? state.framework || "nist-800-53"
+          : "",
+        baseline: selectedTemplate.input_options.includes("baseline")
+          ? state.baseline || ""
+          : "",
+        controlFamily: selectedTemplate.input_options.includes("control_family")
+          ? state.controlFamily || ""
+          : "",
+        format: activeFormat,
+        environment: state.environment || "Generic",
+        includePlaceholders: true,
+        includeImplementationPrompts: true,
+        includeEvidenceExpectations: true,
+        includeInheritancePrompts: true,
+        includeReciprocityPrompts: true,
+        includeSourceFootnotes: true,
+        includeStigReferences: true,
+        sourceRefs: selectedTemplate.source_refs || [],
+        sources: bundle.runtime.dataset?.sources || [],
+      };
+
+      const isOfficeFormat = officeFormats.includes(activeFormat);
+      if (isOfficeFormat) {
+        // Office formats produce binary payloads (OOXML zips), so they render
+        // client-side from the structured document. fflate + the serializers
+        // are lazily imported so their weight only loads when an office format
+        // is actually chosen (no-upload posture preserved).
+        const { renderOfficeDocument } = await import(
+          "../../app/office-export.mjs"
+        );
+        const { doc, frameworkResolutionError } = buildTemplateDocument(
+          options,
+          bundle.runtime.dataset,
+        );
+        if (frameworkResolutionError) {
+          setGenerationTone("warning");
+          setGenerationStatus(frameworkResolutionError);
+          return;
+        }
+        const { bytes, mimeType, extension } = renderOfficeDocument(
+          doc,
+          activeFormat as "xlsx" | "docx",
+        );
+        const filename = templateFilename(selectedTemplate.name, extension);
+        downloadBlobFile(
+          filename,
+          // Copy into a fresh ArrayBuffer-backed view so the bytes satisfy the
+          // Blob part type across lib.dom versions.
+          new Blob([new Uint8Array(bytes)], { type: mimeType }),
+          () => confirmDownload(filename),
+        );
+        return;
+      }
+
+      const generated = generateTemplate(options, bundle.runtime.dataset);
 
       if (generated.frameworkResolutionError) {
         setGenerationTone("warning");
@@ -300,13 +352,7 @@ export function TemplatesPage(props: {
         generated.filename,
         generated.content,
         generated.mimeType,
-        () => {
-          downloadDispatched = true;
-          setGenerationTone("trust");
-          setGenerationStatus(
-            `Download started for ${generated.filename}. Check your downloads folder.`,
-          );
-        },
+        () => confirmDownload(generated.filename),
       );
     } finally {
       if (downloadDispatched) {
@@ -377,12 +423,21 @@ export function TemplatesPage(props: {
           </SummaryCard>
           <SummaryCard title="What it includes">
             <p>
-              Download formats:{" "}
-              {selectedTemplate.supported_formats
+              Data formats:{" "}
+              {dataFormats
                 .map((format: string) => FORMAT_LABELS[format] || format)
                 .join(", ")}
               .
             </p>
+            {officeFormats.length > 0 ? (
+              <p>
+                Office formats:{" "}
+                {officeFormats
+                  .map((format: string) => FORMAT_LABELS[format] || format)
+                  .join(", ")}{" "}
+                — opens directly in Excel or Word, no reformatting.
+              </p>
+            ) : null}
             {selectedTemplate.input_options.length > 0 ? (
               <p>
                 Optional inputs:{" "}
