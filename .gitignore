@@ -21,6 +21,8 @@
 !tests/fixtures/**
 !docs/
 !docs/**
+# AI-assistant working notes dropped by a plugin — not app logic, never ship.
+docs/guardrails/
 
 !.github/
 !.github/dependabot.yml
