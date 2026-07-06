@@ -3,6 +3,7 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { glossaryData } from "../../app/glossary-data.mjs";
+import { helpSurfaces } from "../../app/help-data.mjs";
 import { templatesForPatterns } from "../lib/glossarySearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -170,54 +171,21 @@ export function GlossaryDrawer(props: {
               id="help-drawer-panel"
               role="tabpanel"
             >
-              <SummaryCard title="Start Here">
-                <p>
-                  Answer three short questions, then open the recommended
-                  library, compare, pattern, and template links.
-                </p>
-                <button
-                  className="secondary"
-                  onClick={() => {
-                    setOpen(false);
-                    onNavigate("start-here");
-                  }}
-                  type="button"
-                >
-                  Open Start Here
-                </button>
-              </SummaryCard>
-              <SummaryCard title="Explore">
-                <p>
-                  Search by control ID or topic. Open records to see
-                  grouped connections and source support.
-                </p>
-                <button
-                  className="secondary"
-                  onClick={() => {
-                    setOpen(false);
-                    onNavigate("search");
-                  }}
-                  type="button"
-                >
-                  Open Explore
-                </button>
-              </SummaryCard>
-              <SummaryCard title="Compare">
-                <p>
-                  Pick a comparison intent first, set frameworks, then review
-                  results before exporting or opening detailed mappings.
-                </p>
-                <button
-                  className="secondary"
-                  onClick={() => {
-                    setOpen(false);
-                    onNavigate("matrix");
-                  }}
-                  type="button"
-                >
-                  Open Compare
-                </button>
-              </SummaryCard>
+              {helpSurfaces.map((surface) => (
+                <SummaryCard key={surface.view} title={surface.title}>
+                  <p>{surface.body}</p>
+                  <button
+                    className="secondary"
+                    onClick={() => {
+                      setOpen(false);
+                      onNavigate(surface.view as ViewState["view"]);
+                    }}
+                    type="button"
+                  >
+                    {surface.actionLabel}
+                  </button>
+                </SummaryCard>
+              ))}
             </div>
           ) : (
             <div
@@ -272,8 +240,7 @@ export function GlossaryDrawer(props: {
                   </div>
                   <p>{entry.definition}</p>
                   <p className="drawer-support">
-                    Why it matters: use this term to understand the surrounding
-                    control, pattern, or template before you act on it.
+                    Why it matters: {entry.why_it_matters}
                   </p>
                   <div className="chip-row">
                     {entry.related_patterns.map((patternId) => (

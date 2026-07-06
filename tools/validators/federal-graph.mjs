@@ -7,7 +7,7 @@ const PROVENANCE_CLASSES = new Set([
   'mitre_published',
   'inferred',
 ]);
-const CONFIDENCE_VALUES = new Set(['direct', 'derived', 'inferred_high', 'inferred_medium', 'inferred_low']);
+const CONFIDENCE_VALUES = new Set(['direct', 'derived', 'inferred', 'inferred_high', 'inferred_medium', 'inferred_low']);
 const PUBLICATION_STATUSES = new Set(['published', 'candidate']);
 
 function pushDuplicateErrors(errors, label, items) {

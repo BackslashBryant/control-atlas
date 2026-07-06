@@ -225,7 +225,7 @@ export function buildStartHereRecommendations(answers) {
     kind: 'pattern',
     patternId,
     label: patternLabel(patternId),
-    rationale: `This pattern explains a concept that commonly blocks ${systemType.toLowerCase()} teams in a ${environment.toLowerCase()} setting.`,
+    rationale: `This pattern explains a concept that commonly blocks ${systemType} teams in a ${environment} setting.`,
   }));
 
   const templates = uniqueTemplateIds(templateIds).map((templateType) => ({
