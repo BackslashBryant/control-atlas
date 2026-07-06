@@ -240,6 +240,16 @@ a {
   font-size: var(--font-size-sm);
   padding: 0 1px;
 }
+.brand-icon-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+}
+.brand-icon-mark svg {
+  width: 100%;
+  height: 100%;
+}
 .brand-lockup {
   display: flex;
   flex-direction: column;
