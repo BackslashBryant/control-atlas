@@ -1,13 +1,20 @@
-import type { ImpactBreakdown } from "../lib/recordTitle";
+import type {
+  CrossFrameworkGroup,
+  ImpactBreakdown,
+} from "../lib/recordTitle";
 
 type AtlasLeverageInspectorProps = {
   /** Human title of the focused record, e.g. "AC-2 — Account Management". */
   title: string;
   impact: ImpactBreakdown;
+  /** Equivalents in other requirement frameworks (CSF, 800-171, …). */
+  equivalents?: CrossFrameworkGroup[];
   /** Open the full record (all connections, provenance). */
   onOpenRecord?: () => void;
   /** Focus the map on a single connected type (e.g. only the CCIs). */
   onExploreType?: (nodeType: string) => void;
+  /** Open a connected node (e.g. a cross-framework equivalent). */
+  onOpenNode?: (nodeId: string) => void;
 };
 
 /**
@@ -17,7 +24,9 @@ type AtlasLeverageInspectorProps = {
  * (Phase D2). Collapsible so it never obscures the graph.
  */
 export function AtlasLeverageInspector(props: AtlasLeverageInspectorProps) {
-  const { title, impact, onOpenRecord, onExploreType } = props;
+  const { title, impact, equivalents, onOpenRecord, onExploreType, onOpenNode } =
+    props;
+  const showEquivalents = equivalents !== undefined;
   return (
     <details className="atlas-leverage" open>
       <summary>
@@ -69,6 +78,46 @@ export function AtlasLeverageInspector(props: AtlasLeverageInspectorProps) {
         ) : (
           <p className="muted">No published connections yet for this record.</p>
         )}
+        {showEquivalents ? (
+          <div className="atlas-leverage-frameworks">
+            <p className="atlas-leverage-subhead">Cross-framework equivalents</p>
+            {equivalents && equivalents.length > 0 ? (
+              <ul className="atlas-leverage-list">
+                {equivalents.map((group) => (
+                  <li key={group.catalogId} className="atlas-leverage-fw">
+                    <span className="atlas-leverage-fw-label">{group.label}</span>
+                    <span className="atlas-leverage-fw-items">
+                      {group.items.slice(0, 4).map((item, index) => (
+                        <span key={item.nodeId}>
+                          {index > 0 ? ", " : ""}
+                          {onOpenNode ? (
+                            <button
+                              className="atlas-leverage-chip"
+                              onClick={() => onOpenNode(item.nodeId)}
+                              type="button"
+                            >
+                              {item.itemId}
+                            </button>
+                          ) : (
+                            item.itemId
+                          )}
+                        </span>
+                      ))}
+                      {group.items.length > 4
+                        ? ` +${group.items.length - 4}`
+                        : ""}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="muted">
+                No published cross-framework mapping ingested for this record
+                yet.
+              </p>
+            )}
+          </div>
+        ) : null}
         {onOpenRecord ? (
           <button
             className="secondary atlas-leverage-open"

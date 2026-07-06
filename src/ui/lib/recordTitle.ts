@@ -12,7 +12,7 @@ type TitledNode = {
   id: string;
   node_type?: string;
   label?: string;
-  metadata?: { item_id?: string; title?: string };
+  metadata?: { item_id?: string; title?: string; catalog_id?: string };
 };
 
 // Node types whose item_id is an internal scaffold id, not an official
@@ -157,4 +157,69 @@ export function buildImpactBreakdown(
     }))
     .sort((a, b) => b.count - a.count);
   return { total: seen.size, byType };
+}
+
+/**
+ * Requirement frameworks a practitioner cross-maps against (the "overlays").
+ * Same-framework detail (CCIs, STIGs, baselines, enhancements) and threat/
+ * assessment catalogs are intentionally excluded — this is equivalence, not
+ * implementation. Keyed by catalog_id → display label.
+ */
+const EQUIVALENCE_FRAMEWORKS: Record<string, string> = {
+  "csf-2": "NIST CSF 2.0",
+  "nist-800-171": "SP 800-171",
+  "nist-800-171-rev2": "SP 800-171 Rev. 2",
+  "nist-800-172": "SP 800-172",
+  "cmmc-2": "CMMC 2.0",
+  "nist-ai-rmf": "AI RMF",
+  "nist-ssdf": "SSDF",
+  "fips-200": "FIPS 200",
+};
+
+export type CrossFrameworkGroup = {
+  catalogId: string;
+  label: string;
+  items: Array<{ nodeId: string; itemId: string }>;
+};
+
+/**
+ * The focused control's equivalents in OTHER requirement frameworks, from real
+ * published `maps_to` edges — "AC-17 in 800-53 is also CSF PR.AA-05 and 800-171
+ * 3.1.12". Empty array when no cross-framework mapping is ingested (the honest
+ * signal that coverage is partial), never a fabricated link.
+ */
+export function buildCrossFrameworkEquivalents(
+  centerNodeId: string,
+  edges: Array<{
+    source_node_id: string;
+    target_node_id: string;
+    relationship_type?: string;
+  }>,
+  getNode: (id: string) => TitledNode | null | undefined,
+): CrossFrameworkGroup[] {
+  const groups = new Map<string, CrossFrameworkGroup>();
+  const seen = new Set<string>();
+  for (const edge of edges) {
+    if (edge.relationship_type && edge.relationship_type !== "maps_to") continue;
+    const counterpartId =
+      edge.source_node_id === centerNodeId
+        ? edge.target_node_id
+        : edge.target_node_id === centerNodeId
+          ? edge.source_node_id
+          : null;
+    if (!counterpartId || seen.has(counterpartId)) continue;
+    const counterpart = getNode(counterpartId);
+    const catalogId = counterpart?.metadata?.catalog_id;
+    const label = catalogId ? EQUIVALENCE_FRAMEWORKS[catalogId] : undefined;
+    if (!catalogId || !label) continue;
+    seen.add(counterpartId);
+    if (!groups.has(catalogId)) {
+      groups.set(catalogId, { catalogId, label, items: [] });
+    }
+    groups.get(catalogId)!.items.push({
+      nodeId: counterpartId,
+      itemId: counterpart?.metadata?.item_id || counterpartId,
+    });
+  }
+  return [...groups.values()].sort((a, b) => a.label.localeCompare(b.label));
 }
