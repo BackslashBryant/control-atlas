@@ -407,11 +407,12 @@ export function ObjectDetailPage(props: {
                 {edges.length ? (
                   <>
                     <button
-                      className="primary"
+                      className="link-action"
                       onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                       type="button"
                     >
-                      Open in Atlas Map
+                      <IconMap aria-hidden="true" size={16} stroke={1.8} />
+                      <span>Open in Atlas Map</span>
                     </button>
                     <button
                       className="secondary"
@@ -510,6 +511,18 @@ export function ObjectDetailPage(props: {
                 </a>
               </p>
             ) : null}
+            {source?.catalog_browse_url ? (
+              <p>
+                <a
+                  href={source.catalog_browse_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Browse the official catalog (search for{" "}
+                  {document.item_id})
+                </a>
+              </p>
+            ) : null}
           </SummaryCard>
         </section>
 
@@ -545,11 +558,12 @@ export function ObjectDetailPage(props: {
             {edges.length ? (
               <div className="card-actions">
                 <button
-                  className="primary"
+                  className="link-action"
                   onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                   type="button"
                 >
-                  Open in Atlas Map
+                  <IconMap aria-hidden="true" size={16} stroke={1.8} />
+                  <span>Open in Atlas Map</span>
                 </button>
                 <button
                   className="secondary"

@@ -131,31 +131,33 @@ export function PlaybooksPage(props: {
           query={queryFilter}
           queryPlaceholder="Search playbooks by outcome or topic"
         />
-        <section className="catalog-group recommended-patterns">
-          <h2 className="catalog-group-title">Recommended for new users</h2>
-          <p className="field-hint">
-            Start with these three if you are new to federal compliance mapping.
-          </p>
-          <div className="intent-grid">
-            {recommendedPatterns.map((pattern) => (
-              <QuickIntentCard
-                actionLabel="Open this pattern"
-                body={pattern.summary}
-                icon={<IconBook2 size={20} stroke={1.8} />}
-                key={pattern.id}
-                onClick={() => onNavigate("patterns", { pattern: pattern.id })}
-                title={PATTERN_RENAMES[pattern.id] || pattern.title}
-              />
-            ))}
-          </div>
-        </section>
+        {!categoryFilter && !queryFilter ? (
+          <section className="catalog-group recommended-patterns">
+            <h2 className="catalog-group-title">Recommended for new users</h2>
+            <p className="field-hint">
+              Start with these three if you are new to federal compliance mapping.
+            </p>
+            <div className="intent-grid">
+              {recommendedPatterns.map((pattern) => (
+                <QuickIntentCard
+                  actionLabel="Open playbook"
+                  body={pattern.summary}
+                  icon={<IconBook2 size={20} stroke={1.8} />}
+                  key={pattern.id}
+                  onClick={() => onNavigate("patterns", { pattern: pattern.id })}
+                  title={PATTERN_RENAMES[pattern.id] || pattern.title}
+                />
+              ))}
+            </div>
+          </section>
+        ) : null}
         {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => (
           <section className="catalog-group" key={category}>
             <h2 className="catalog-group-title">{category}</h2>
             <div className="intent-grid">
               {categoryPatterns.map((pattern) => (
                 <QuickIntentCard
-                  actionLabel="Open this pattern"
+                  actionLabel="Open playbook"
                   body={pattern.summary}
                   icon={<IconBook2 size={20} stroke={1.8} />}
                   key={pattern.id}

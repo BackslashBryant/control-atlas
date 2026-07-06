@@ -214,6 +214,24 @@ export function TemplatesPage(props: {
     ? datasetSources.find((source) => source.id === primarySourceRef)
     : null;
 
+  // Static structure preview: call the real engine with no framework selected
+  // (it falls back to a single placeholder control row) so the column layout
+  // is authoritative without requiring the user to generate anything.
+  const structurePreview = useMemo(() => {
+    if (!selectedTemplate) return null;
+    try {
+      const { doc } = buildTemplateDocument(
+        { templateType: selectedTemplate.name },
+        bundle.runtime.dataset,
+      );
+      return doc.sections.filter(
+        (section: any) => section.type === "table",
+      ) as Array<{ heading: string; headers: string[] }>;
+    } catch {
+      return null;
+    }
+  }, [selectedTemplate?.name, bundle.runtime.dataset]);
+
   // "View related map" should land somewhere relevant to the template: a STIG
   // rule for STIG-scoped templates, otherwise the first control of the chosen
   // framework so the map opens on that framework's landscape rather than the
@@ -368,47 +386,62 @@ export function TemplatesPage(props: {
   return (
     <section className="panel">
       <PageHeader
+        action={
+          selectedTemplate ? (
+            <button
+              className="secondary"
+              onClick={() => onNavigate("templates", { templateType: "" })}
+              type="button"
+            >
+              Back to templates
+            </button>
+          ) : undefined
+        }
         eyebrow="Templates"
-        summary="Choose the artifact you need first, review what it is for, then generate a blank reference starter without exposing extra options too early."
+        summary="Pick the artifact you need, see what it covers, then generate a blank starter you fill in yourself — nothing you type is uploaded or stored."
         title="What are you trying to create?"
       />
 
-      <CatalogFilterBar
-        category={categoryFilter}
-        categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
-        countLabel={`${filteredTemplates.length} template${filteredTemplates.length === 1 ? "" : "s"} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
-        onCategoryChange={setCategoryFilter}
-        onQueryChange={setQueryFilter}
-        query={queryFilter}
-        queryPlaceholder="Search templates by name or purpose"
-      />
+      {!selectedTemplate ? (
+        <>
+          <CatalogFilterBar
+            category={categoryFilter}
+            categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
+            countLabel={`${filteredTemplates.length} template${filteredTemplates.length === 1 ? "" : "s"} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+            onCategoryChange={setCategoryFilter}
+            onQueryChange={setQueryFilter}
+            query={queryFilter}
+            queryPlaceholder="Search templates by name or purpose"
+          />
 
-      {[...groupedTemplates.entries()].map(([category, categoryTemplates]) => (
-        <section className="catalog-group" key={category}>
-          <h2 className="catalog-group-title">{category}</h2>
-          <div className="intent-grid">
-            {categoryTemplates.map((template: any) => (
-              <QuickIntentCard
-                actionLabel="Select this template"
-                body={template.description}
-                icon={<IconFileDescription size={20} stroke={1.8} />}
-                key={template.name}
-                onClick={() =>
-                  onNavigate("templates", {
-                    templateType: template.name,
-                    framework: state.framework || "nist-800-53",
-                    format: template.supported_formats?.[0] || "markdown",
-                    environment: state.environment || "Generic",
-                    baseline: "",
-                    controlFamily: "",
-                  })
-                }
-                title={template.display_name}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+          {[...groupedTemplates.entries()].map(([category, categoryTemplates]) => (
+            <section className="catalog-group" key={category}>
+              <h2 className="catalog-group-title">{category}</h2>
+              <div className="intent-grid">
+                {categoryTemplates.map((template: any) => (
+                  <QuickIntentCard
+                    actionLabel="Select this template"
+                    body={template.description}
+                    icon={<IconFileDescription size={20} stroke={1.8} />}
+                    key={template.name}
+                    onClick={() =>
+                      onNavigate("templates", {
+                        templateType: template.name,
+                        framework: state.framework || "nist-800-53",
+                        format: template.supported_formats?.[0] || "markdown",
+                        environment: state.environment || "Generic",
+                        baseline: "",
+                        controlFamily: "",
+                      })
+                    }
+                    title={template.display_name}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </>
+      ) : null}
 
       {selectedTemplate ? (
         <section className="stack" ref={generationRef}>
@@ -448,6 +481,21 @@ export function TemplatesPage(props: {
               </p>
             ) : null}
           </SummaryCard>
+          {structurePreview && structurePreview.length > 0 ? (
+            <SummaryCard title="Structure preview">
+              <p className="field-hint">
+                Columns this template will include, before you fill in any data.
+              </p>
+              <div className="stack compact">
+                {structurePreview.map((section) => (
+                  <div key={section.heading}>
+                    <strong>{section.heading}</strong>
+                    <p>{section.headers.join(" · ")}</p>
+                  </div>
+                ))}
+              </div>
+            </SummaryCard>
+          ) : null}
           {catalogSource || selectedTemplate.official_alternative ? (
             <SummaryCard title="Source data & official alternative">
               {catalogSource ? (
