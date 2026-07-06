@@ -408,7 +408,7 @@ export function ComparePage(props: {
     <section className="panel">
       <PageHeader
         eyebrow="Compare"
-        summary="Start with the comparison you need to make, then reveal only the inputs and raw details that help answer it."
+        summary="Pick two frameworks, baselines, or controls to reconcile, and see what overlaps, what's unique to each, and what still needs review."
         title="What do you want to compare?"
       />
 

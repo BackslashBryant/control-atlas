@@ -1700,24 +1700,6 @@ a:focus-visible {
   background: rgba(15, 23, 42, 0.55);
 }
 
-/* Atlas flagship nav pill */
-.primary-nav button[data-atlas] {
-  background: var(--ca-primary);
-  color: #fff;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-}
-.primary-nav button[data-atlas]:hover {
-  background: color-mix(in srgb, var(--ca-primary) 85%, #fff);
-  border-color: transparent;
-}
-.primary-nav button[data-atlas].nav-active {
-  background: color-mix(in srgb, var(--ca-primary) 70%, #000);
-  color: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ca-primary) 40%, transparent);
-}
-
 .connection-rollup {
   margin: 0 0 var(--space-4);
   color: var(--ca-text-muted);

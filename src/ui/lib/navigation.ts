@@ -66,11 +66,15 @@ export function activeNavForState(state: ViewState): ViewState["view"] | null {
   if (state.view === "home") {
     return null;
   }
-  if (
-    state.view === "library-detail" ||
-    state.view === "browse" ||
-    state.view === "retired"
-  ) {
+  if (state.view === "library-detail") {
+    // Preserve the real entry point (Atlas, Compare, Playbooks, ...) across
+    // record-to-record hops instead of always reporting "search" — callers
+    // that don't pass an explicit `from` inherit it via
+    // `activeNavForState(currentViewState)` in App.tsx's `openNode`, so this
+    // is the one place that provenance can get silently overwritten.
+    return (state.from as ViewState["view"]) || "search";
+  }
+  if (state.view === "browse" || state.view === "retired") {
     return "search";
   }
   return state.view;

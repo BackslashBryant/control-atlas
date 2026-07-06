@@ -270,10 +270,7 @@ export function SourcesPage(props: {
             <p>{selectedSource.name}</p>
           </SummaryCard>
           <SummaryCard title="How Control Atlas uses it">
-            <p>
-              {sourceUsageSummary(selectedSource)}. Parser:{" "}
-              {selectedSource.metadata?.parser || "Not recorded"}.
-            </p>
+            <p>{sourceUsageSummary(selectedSource)}.</p>
           </SummaryCard>
           <SummaryCard title="Trust and status">
             <p>
@@ -304,6 +301,12 @@ export function SourcesPage(props: {
                 <div>
                   <span>Retrieved</span>
                   <strong>{selectedSource.retrieved_at}</strong>
+                </div>
+                <div>
+                  <span>Parser</span>
+                  <strong>
+                    {selectedSource.metadata?.parser || "Not recorded"}
+                  </strong>
                 </div>
               </div>
             </DisclosurePanel>

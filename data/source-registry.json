@@ -16,6 +16,7 @@
       "retrieved_at": "2026-06-09",
       "retrieval_method": "download",
       "artifact_url": "https://github.com/usnistgov/oscal-content",
+      "catalog_browse_url": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/home",
       "artifact_type": "oscal_json",
       "checksum": "sha256:catalog_nist_oscal_placeholder_checksum",
       "access_status": "public",
