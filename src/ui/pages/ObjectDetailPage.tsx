@@ -230,6 +230,7 @@ export function ObjectDetailPage(props: {
           onNavigate("matrix", {
             workbench: "relationships",
             items: document.item_id,
+            source: node.metadata?.catalog_id || "",
           })
         }
         onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
@@ -270,6 +271,7 @@ export function ObjectDetailPage(props: {
                 onNavigate("matrix", {
                   workbench: "relationships",
                   items: document.item_id,
+                  source: node.metadata?.catalog_id || "",
                 })
               }
               type="button"
@@ -433,6 +435,7 @@ export function ObjectDetailPage(props: {
                         onNavigate("matrix", {
                           workbench: "relationships",
                           items: document.item_id,
+                          source: node.metadata?.catalog_id || "",
                         })
                       }
                       type="button"
@@ -571,6 +574,7 @@ export function ObjectDetailPage(props: {
                     onNavigate("matrix", {
                       workbench: "relationships",
                       items: document.item_id,
+                      source: node.metadata?.catalog_id || "",
                     })
                   }
                   type="button"
@@ -633,6 +637,7 @@ export function ObjectDetailPage(props: {
                   onNavigate("matrix", {
                     workbench: "relationships",
                     items: document.item_id,
+                    source: node.metadata?.catalog_id || "",
                   })
                 }
                 type="button"

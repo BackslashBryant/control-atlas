@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
+
 export function LoadingStatusPanel(props: {
   slow: boolean;
   children?: ReactNode;
@@ -145,6 +147,9 @@ export function CompareExportDisclosure(props: {
           Export JSON
         </button>
       </div>
+      <p className="ca-text-subtle" style={{ fontSize: "var(--ca-text-xs)" }}>
+        {PRODUCT_DISCLAIMER}
+      </p>
     </details>
   );
 }
