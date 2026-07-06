@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { IconSearch } from "@tabler/icons-react";
+import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
 
 import {
   activeNavForState,
+  ALL_NAV_ITEMS,
   MORE_NAV_ITEM,
   PRIMARY_NAV_ITEMS,
   SECONDARY_NAV_ITEMS,
@@ -39,6 +40,7 @@ export function TopNav(props: TopNavProps) {
 
   const activeNav = activeNavForState(viewState);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const MoreIcon = MORE_NAV_ITEM.icon;
 
   const prefersReducedMotion =
@@ -70,6 +72,11 @@ export function TopNav(props: TopNavProps) {
 
   function navigateFromMenu(view: ViewState["view"]) {
     setMoreOpen(false);
+    onNavigate(view);
+  }
+
+  function navigateFromMobileMenu(view: ViewState["view"]) {
+    setMobileMenuOpen(false);
     onNavigate(view);
   }
 
@@ -195,21 +202,82 @@ export function TopNav(props: TopNavProps) {
           <IconSearch aria-hidden="true" size={18} stroke={1.8} />
           <span>Search</span>
         </button>
+        <div className="header-actions-text">
+          <button
+            className="secondary quiet"
+            onClick={onOpenHelp}
+            type="button"
+          >
+            Help
+          </button>
+          <button
+            className="secondary quiet"
+            onClick={onOpenGlossary}
+            type="button"
+          >
+            Glossary
+          </button>
+        </div>
         <button
-          className="secondary quiet"
-          onClick={onOpenHelp}
+          aria-controls="mobile-nav-sheet"
+          aria-expanded={mobileMenuOpen}
+          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          className="mobile-nav-toggle"
+          onClick={() => setMobileMenuOpen((current) => !current)}
           type="button"
         >
-          Help
-        </button>
-        <button
-          className="secondary quiet"
-          onClick={onOpenGlossary}
-          type="button"
-        >
-          Glossary
+          {mobileMenuOpen ? (
+            <IconX aria-hidden="true" size={20} stroke={1.8} />
+          ) : (
+            <IconMenu2 aria-hidden="true" size={20} stroke={1.8} />
+          )}
         </button>
       </div>
+      {mobileMenuOpen ? (
+        <div className="mobile-nav-sheet" id="mobile-nav-sheet">
+          <nav aria-label="Primary navigation (mobile)" role="menu">
+            {ALL_NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const active = activeNav === item.view;
+              return (
+                <button
+                  aria-current={active ? "page" : undefined}
+                  className={active ? "active nav-active" : ""}
+                  key={item.label}
+                  onClick={() => navigateFromMobileMenu(item.view)}
+                  role="menuitem"
+                  type="button"
+                >
+                  <Icon aria-hidden="true" size={18} stroke={1.8} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+          <div className="mobile-nav-sheet-actions">
+            <button
+              className="secondary quiet"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenHelp();
+              }}
+              type="button"
+            >
+              Help
+            </button>
+            <button
+              className="secondary quiet"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenGlossary();
+              }}
+              type="button"
+            >
+              Glossary
+            </button>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }

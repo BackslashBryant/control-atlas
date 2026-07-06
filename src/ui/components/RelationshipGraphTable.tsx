@@ -30,6 +30,7 @@ export function RelationshipGraphTable(props: {
   }
 
   return (
+    <div className="compare-table-scroll">
     <table
       aria-label="Relationship table"
       className="detail-table relationship-graph-table"
@@ -73,5 +74,6 @@ export function RelationshipGraphTable(props: {
         ))}
       </tbody>
     </table>
+    </div>
   );
 }

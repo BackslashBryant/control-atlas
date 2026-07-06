@@ -51,7 +51,6 @@
 .ca-input:focus,
 .ca-select:focus {
   border-color: var(--ca-primary);
-  outline: none;
 }
 .ca-select option[disabled] {
   color: var(--ca-text-subtle);
@@ -383,7 +382,6 @@
 .search-overlay-result:hover,
 .search-overlay-result:focus-visible {
   border-color: var(--ca-primary);
-  outline: none;
 }
 
 .search-overlay-result-title {
@@ -747,10 +745,6 @@
   color: var(--ca-text);
   font-size: var(--ca-text-base);
   padding: var(--ca-space-2) 0;
-}
-
-.home-search input[type="search"]:focus {
-  outline: none;
 }
 
 .home-search button {
