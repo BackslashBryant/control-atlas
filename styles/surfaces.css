@@ -1854,6 +1854,44 @@ button.atlas-leverage-row:hover {
 .atlas-leverage-open {
   width: fit-content;
 }
+.atlas-leverage-frameworks {
+  border-top: 1px solid var(--ca-border);
+  padding-top: var(--space-2);
+  display: grid;
+  gap: var(--space-2);
+}
+.atlas-leverage-subhead {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ca-text-muted);
+}
+.atlas-leverage-fw {
+  display: grid;
+  gap: 2px;
+}
+.atlas-leverage-fw-label {
+  font-weight: 600;
+  color: var(--ca-text);
+}
+.atlas-leverage-fw-items {
+  color: var(--ca-text-muted);
+}
+.atlas-leverage-chip {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--ca-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.atlas-leverage-chip:hover {
+  color: var(--ca-text);
+}
 @media (max-width: 768px) {
   .atlas-leverage {
     position: static;

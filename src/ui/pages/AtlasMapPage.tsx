@@ -19,7 +19,11 @@ import {
   type SourceVisibilityFilters,
 } from "../graph/buildVisibleRelationshipModel.ts";
 import { AtlasLeverageInspector } from "../components/AtlasLeverageInspector";
-import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
+import {
+  buildCrossFrameworkEquivalents,
+  buildImpactBreakdown,
+  recordDisplayTitle,
+} from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
@@ -222,23 +226,29 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   // Leverage for the focused control (e.g. AC-2), computed from the runtime's
   // real published edges rather than the curated foundation cluster.
   const foundationLeverage = useMemo(() => {
+    const empty = {
+      impact: { total: 0, byType: [] },
+      equivalents: [],
+      nodeId: "",
+      title: "",
+    };
     if (!focused) {
-      return { impact: { total: 0, byType: [] }, nodeId: "", title: "" };
+      return empty;
     }
     const nodeId = bundle.runtime.getNode(trimmedNode)
       ? trimmedNode
       : nodeIdFromItemId(bundle.runtime, trimmedNode) || trimmedNode;
     const node = bundle.runtime.getNode(nodeId);
     if (!node) {
-      return { impact: { total: 0, byType: [] }, nodeId, title: trimmedNode };
+      return { ...empty, nodeId, title: trimmedNode };
     }
     const edges = bundle.runtime.getEdgesForNode(nodeId, {
       publication_status: "published",
     });
+    const getNode = (id: string) => bundle.runtime.getNode(id);
     return {
-      impact: buildImpactBreakdown(nodeId, edges, (id) =>
-        bundle.runtime.getNode(id),
-      ),
+      impact: buildImpactBreakdown(nodeId, edges, getNode),
+      equivalents: buildCrossFrameworkEquivalents(nodeId, edges, getNode),
       nodeId,
       title: recordDisplayTitle(node) || trimmedNode,
     };
@@ -455,7 +465,11 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
 
           {focused ? (
             <AtlasLeverageInspector
+              equivalents={foundationLeverage.equivalents}
               impact={foundationLeverage.impact}
+              onOpenNode={(nodeId) =>
+                onNavigate("atlas-map", { ...state, node: nodeId })
+              }
               onOpenRecord={() =>
                 onNavigate("library-detail", {
                   node: foundationLeverage.nodeId,
@@ -539,16 +553,22 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
 
   // Leverage: how many requirements does implementing the focused control also
   // satisfy? Counted from every published edge, not just the visible cluster.
-  const leverageImpact = useMemo(() => {
+  const leverage = useMemo(() => {
     if (!center || !state.node.trim()) {
-      return { total: 0, byType: [] };
+      return { impact: { total: 0, byType: [] }, equivalents: [] };
     }
     const edges = bundle.runtime.getEdgesForNode(center.centerNodeId, {
       publication_status: "published",
     });
-    return buildImpactBreakdown(center.centerNodeId, edges, (id) =>
-      bundle.runtime.getNode(id),
-    );
+    const getNode = (id: string) => bundle.runtime.getNode(id);
+    return {
+      impact: buildImpactBreakdown(center.centerNodeId, edges, getNode),
+      equivalents: buildCrossFrameworkEquivalents(
+        center.centerNodeId,
+        edges,
+        getNode,
+      ),
+    };
   }, [bundle.runtime, center, state.node]);
 
   const narrowViewport = useIsNarrowViewport();
@@ -799,8 +819,13 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
           />
           {!isStarter ? (
             <AtlasLeverageInspector
-              impact={leverageImpact}
+              equivalents={leverage.equivalents}
+              impact={leverage.impact}
               onExploreType={(nodeType) => patchFilters({ nodeType })}
+              onOpenNode={(nodeId) => {
+                onNavigate("atlas-map", { ...state, node: nodeId });
+                setSelectedNodeId(nodeId);
+              }}
               onOpenRecord={() => onOpenNode(center.centerNodeId)}
               title={
                 recordDisplayTitle(bundle.runtime.getNode(center.centerNodeId)) ||

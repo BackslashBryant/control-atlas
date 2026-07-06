@@ -69,3 +69,33 @@ test("leverage rows filter the map to a connected requirement type", async ({
   await leverage.locator("button.atlas-leverage-row").first().click();
   await expect(page).toHaveURL(/[?&]type=/);
 });
+
+// Finish D: cross-framework equivalents ("what is this control in CSF / 800-171?")
+// from real published maps_to edges — the honest, data-backed "overlay".
+test("cross-framework equivalents surface a control's CSF / 800-171 mapping", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas-map?node=nist-800-53:AC-17");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const leverage = page.locator(".atlas-leverage");
+  await expect(leverage).toContainText("Cross-framework equivalents");
+  await expect(leverage).toContainText("NIST CSF 2.0");
+  await expect(leverage).toContainText("PR.AA-05");
+  await expect(leverage).toContainText("SP 800-171");
+});
+
+test("cross-framework section is honest when no mapping is ingested", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas-map?node=AC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const leverage = page.locator(".atlas-leverage");
+  await expect(leverage).toContainText("Cross-framework equivalents");
+  await expect(leverage).toContainText(
+    "No published cross-framework mapping ingested",
+  );
+});
