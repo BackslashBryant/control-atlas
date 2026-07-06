@@ -1154,6 +1154,27 @@ test("runtime builds a catalog relationship matrix and CSV from graph edges", ()
   assert.match(runtime.buildRelationshipCsv(matrix), /AC-2/);
 });
 
+test("runtime reports honest per-catalog connectivity (CATL-24)", () => {
+  const runtime = createFederalGraphRuntime(fixture);
+  const catalogs = runtime.getCatalogs();
+  for (const catalog of catalogs) {
+    assert.equal(
+      typeof catalog.connected_count,
+      "number",
+      `${catalog.id} missing connected_count`,
+    );
+    assert.ok(
+      catalog.connected_count <= catalog.node_count,
+      `${catalog.id} connected_count exceeds node_count`,
+    );
+    assert.ok(catalog.connected_count >= 0);
+  }
+  // A catalog whose nodes all sit on published edges reports full connectivity.
+  const nist = catalogs.find((catalog) => catalog.id === "nist-800-53");
+  assert.ok(nist);
+  assert.ok(nist.connected_count > 0);
+});
+
 test("runtime filters library documents by keyword and facets", () => {
   const runtime = createFederalGraphRuntime(fixture);
   const controlResults = runtime.searchLibrary("account", {

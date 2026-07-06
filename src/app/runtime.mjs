@@ -157,27 +157,47 @@ export function createFederalGraphRuntime(dataset) {
     "nist-800-53b": { name: "SP 800-53B", group: "NIST" },
     "nist-ai-rmf": { name: "AI RMF", group: "NIST" },
     "nist-ssdf": { name: "SSDF", group: "NIST" },
+    "mitre-attack": { name: "MITRE ATT&CK", group: "MITRE" },
+    "mitre-attack-ics": { name: "MITRE ATT&CK for ICS", group: "MITRE" },
+    "mitre-d3fend": { name: "MITRE D3FEND", group: "MITRE" },
   };
 
+  // Nodes that participate in at least one published edge — used to report
+  // honest per-catalog connectivity instead of implying full coverage.
+  const connectedNodeIds = new Set();
+  for (const edge of dataset.edges) {
+    if (edge.publication_status && edge.publication_status !== "published") {
+      continue;
+    }
+    connectedNodeIds.add(edge.source_node_id);
+    connectedNodeIds.add(edge.target_node_id);
+  }
   const catalogs = [
     ...new Set(
       dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean),
     ),
   ]
     .sort()
-    .map((id) => ({
-      id,
-      name: CATALOG_DISPLAY_NAMES[id]?.name || id,
-      display_group: CATALOG_DISPLAY_NAMES[id]?.group || "Other",
-      node_count: dataset.nodes.filter(
+    .map((id) => {
+      const catalogNodes = dataset.nodes.filter(
         (node) => node.metadata?.catalog_id === id,
-      ).length,
-      relationship_count: dataset.edges.filter(
-        (edge) =>
-          nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id ||
-          nodeById.get(edge.target_node_id)?.metadata?.catalog_id === id,
-      ).length,
-    }));
+      );
+      const connectedCount = catalogNodes.filter((node) =>
+        connectedNodeIds.has(node.id),
+      ).length;
+      return {
+        id,
+        name: CATALOG_DISPLAY_NAMES[id]?.name || id,
+        display_group: CATALOG_DISPLAY_NAMES[id]?.group || "Other",
+        node_count: catalogNodes.length,
+        connected_count: connectedCount,
+        relationship_count: dataset.edges.filter(
+          (edge) =>
+            nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id ||
+            nodeById.get(edge.target_node_id)?.metadata?.catalog_id === id,
+        ).length,
+      };
+    });
   const sortNodesByItemId = (left, right) =>
     itemIdFor(left).localeCompare(itemIdFor(right)) ||
     left.id.localeCompare(right.id);
