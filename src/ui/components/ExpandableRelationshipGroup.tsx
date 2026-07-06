@@ -30,7 +30,7 @@ export function RelationshipGroupsSection(props: {
       counterpart: {
         id: string;
         label?: string;
-        metadata?: { item_id?: string; title?: string };
+        metadata?: { item_id?: string; title?: string; description?: string; catalog_id?: string };
       };
       edge: { relationship_type?: string };
     }>;
@@ -84,7 +84,7 @@ function RelationshipGroupItem(props: {
       counterpart: {
         id: string;
         label?: string;
-        metadata?: { item_id?: string; title?: string };
+        metadata?: { item_id?: string; title?: string; description?: string; catalog_id?: string };
       };
       edge: { relationship_type?: string };
     }>;
@@ -124,7 +124,11 @@ function RelationshipGroupItem(props: {
                   {item.counterpart.metadata?.item_id || item.counterpart.id}
                 </strong>
                 <p>
-                  {item.counterpart.metadata?.title || item.counterpart.label}
+                  {item.counterpart.metadata?.catalog_id === "disa-cci"
+                    ? item.counterpart.metadata?.description ||
+                      item.counterpart.metadata?.title ||
+                      item.counterpart.label
+                    : item.counterpart.metadata?.title || item.counterpart.label}
                 </p>
               </div>
               <div className="relationship-meta">

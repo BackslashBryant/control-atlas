@@ -56,6 +56,7 @@ const DISPLAY_NAMES = {
   confidence: {
     direct: 'Direct match',
     derived: 'Derived match',
+    inferred: 'Inferred',
     inferred_high: 'Strong inference',
     inferred_medium: 'Moderate inference',
     inferred_low: 'Weak inference',

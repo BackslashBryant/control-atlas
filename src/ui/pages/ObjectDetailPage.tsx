@@ -28,6 +28,7 @@ import {
 import { RelationshipExplorer, relationshipFiltersFromState, relationshipFiltersToPatch } from "../components/RelationshipExplorer";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
+import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { StartHereResult } from "../components/StartHereResult";
 import {
   CatalogFilterBar,
@@ -343,12 +344,27 @@ export function ObjectDetailPage(props: {
           </SummaryCard>
           <SummaryCard title="Where it appears">
             <p>
-              {locationSummary.length
-                ? `This item appears in ${locationSummary.join(", ")}.`
-                : node.node_type === "attack_technique" ||
-                    node.node_type === "defend_countermeasure"
-                  ? "This MITRE item connects through the public threat lens rather than a baseline membership list."
-                  : "This item does not have a published baseline placement summary yet."}
+              {locationSummary.length ? (
+                <>
+                  This item appears in{" "}
+                  {locationSummary.map((label, index) => (
+                    <Fragment key={label}>
+                      {index > 0 ? ", " : ""}
+                      {label === "LI-SAAS" ? (
+                        <GlossaryTermChip termId="li-saas">{label}</GlossaryTermChip>
+                      ) : (
+                        label
+                      )}
+                    </Fragment>
+                  ))}
+                  .
+                </>
+              ) : node.node_type === "attack_technique" ||
+                  node.node_type === "defend_countermeasure" ? (
+                "This MITRE item connects through the public threat lens rather than a baseline membership list."
+              ) : (
+                "This item does not have a published baseline placement summary yet."
+              )}
             </p>
           </SummaryCard>
           {node.node_type === "attack_technique" ? (

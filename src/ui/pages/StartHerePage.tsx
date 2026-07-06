@@ -11,6 +11,7 @@ import type {
 } from "../lib/startHereRecommendations.d.ts";
 import type { ViewState } from "../lib/viewState";
 import { StartHereResult } from "../components/StartHereResult";
+import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { PageHeader, SelectField } from "../lib/pagePrimitives";
 
 export function StartHerePage(props: {
@@ -152,6 +153,12 @@ export function StartHerePage(props: {
           value={state.environment}
         />
       </div>
+
+      <p className="field-hint start-here-glossary-hint">
+        Not sure what <GlossaryTermChip termId="cui">CUI</GlossaryTermChip> or{" "}
+        <GlossaryTermChip termId="csp">CSP</GlossaryTermChip> means? Focus or
+        hover the term for a plain-language definition.
+      </p>
 
       {!showResults ? (
         <div className="card-actions">

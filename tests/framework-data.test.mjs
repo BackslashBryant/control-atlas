@@ -283,15 +283,15 @@ test('graph build derives control-enhancement includes edges with derived confid
   assert.equal(enhancementEdge.confidence, 'derived');
   assert.match(enhancementEdge.rationale, /control enhancement of AC-2/);
 
-  // Sanity: today's 800-53 family-membership edges remain 'direct' so the new
-  // enhancement edges introduce deliberate, honest variance rather than being
-  // rubber-stamped the same as everything else.
+  // Family-membership edges are structural ID-parsing, the same kind of
+  // derivation as enhancement membership above, so they carry the same
+  // 'derived' confidence rather than being rubber-stamped 'direct' (CATL-23).
   const familyEdge = edges.find((edge) =>
     edge.source_node_id === 'nist-800-53:FAMILY-AC'
     && edge.target_node_id === 'nist-800-53:AC-2'
     && edge.relationship_type === 'includes');
   assert.ok(familyEdge);
-  assert.equal(familyEdge.confidence, 'direct');
+  assert.equal(familyEdge.confidence, 'derived');
 
   // No duplicate enhancement edges after two consecutive builds.
   buildFrameworkData();

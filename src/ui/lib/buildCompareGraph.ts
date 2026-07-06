@@ -52,6 +52,7 @@ const MAX_NODES = 200;
 type ProvenanceItem = {
   provenance_class?: string;
   publication_status?: string;
+  confidence?: string;
 };
 
 export function summarizeProvenance(items: ProvenanceItem[]): Pick<
@@ -65,8 +66,8 @@ export function summarizeProvenance(items: ProvenanceItem[]): Pick<
     if (item.provenance_class === "deprecated") {
       deprecated += 1;
     } else if (
-      item.provenance_class === "inferred" ||
-      item.publication_status === "candidate"
+      item.publication_status === "candidate" ||
+      item.confidence === "inferred"
     ) {
       inferred += 1;
     } else {
