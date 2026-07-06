@@ -15,7 +15,7 @@ test('load resilience shows library skeleton and allows offline navigation', asy
   await page.goto('/?view=explore');
   await expect(page.locator('.skeleton-card').first()).toBeVisible();
   const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
-  await primaryNav.getByRole('button', { name: 'More', exact: true }).click();
+  await primaryNav.getByRole('button', { name: 'Build', exact: true }).click();
   await primaryNav.getByRole('menuitem', { name: 'Playbooks', exact: true }).click();
   await expect(page).toHaveURL(/#\/playbooks|view=playbooks/);
   await expect(page.getByRole('heading', { name: 'Compliance playbooks' })).toBeVisible();

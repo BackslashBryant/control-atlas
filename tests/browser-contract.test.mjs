@@ -46,11 +46,12 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.doesNotMatch(html, /Technical labels/);
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
   assert.match(navigation, /Start/);
-  assert.match(navigation, /Explore/);
   assert.match(navigation, /Compare/);
   assert.match(navigation, /Playbooks/);
   assert.match(navigation, /Templates/);
   assert.match(navigation, /Sources/);
+  assert.match(navigation, /Frameworks/);
+  assert.match(navigation, /Controls/);
   assert.doesNotMatch(navigation, /Crosswalks/);
 });
 

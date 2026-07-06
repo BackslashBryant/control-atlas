@@ -176,7 +176,8 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
-  const startHere = primaryNav.getByRole("button", {
+  await primaryNav.getByRole("button", { name: "Navigate" }).click();
+  const startHere = primaryNav.getByRole("menuitem", {
     name: "Start",
     exact: true,
   });

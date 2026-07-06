@@ -18,10 +18,10 @@ export function SiteFooter(props: {
           <strong>Navigate</strong>
           <ul className="site-footer-links">
             {ALL_NAV_ITEMS.map((item) => (
-              <li key={item.view}>
+              <li key={item.label}>
                 <button
                   className="footer-nav-link"
-                  onClick={() => props.onNavigate(item.view)}
+                  onClick={() => props.onNavigate(item.view, item.patch)}
                   role="link"
                   type="button"
                 >
