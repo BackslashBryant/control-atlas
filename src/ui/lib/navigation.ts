@@ -2,7 +2,6 @@ import {
   IconBook2,
   IconClipboardList,
   IconCompass,
-  IconDots,
   IconGitCompare,
   IconMap,
   IconSearch,
@@ -11,34 +10,57 @@ import {
 
 import type { ViewState } from "./viewState";
 
-export const PRIMARY_NAV_ITEMS = [
-  { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
-  { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
-  { label: "Explore", view: "search", path: "/explore", icon: IconSearch },
-  { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
-] as const;
+export type NavItem = {
+  label: string;
+  view: ViewState["view"];
+  path: string;
+  icon: typeof IconCompass;
+  patch?: Record<string, string>;
+};
 
-export const SECONDARY_NAV_ITEMS = [
-  { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
+export type NavGroup = {
+  label: string;
+  items: NavItem[];
+};
+
+export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Templates",
-    view: "templates",
-    path: "/templates",
-    icon: IconClipboardList,
+    label: "Navigate",
+    items: [
+      { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
+      { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+    ],
   },
-  { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
-] as const;
+  {
+    label: "Research",
+    items: [
+      { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
+      { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
+      { label: "Frameworks", view: "search", path: "/explore", icon: IconSearch },
+      {
+        label: "Controls",
+        view: "search",
+        path: "/explore",
+        icon: IconSearch,
+        patch: { objectType: "control" },
+      },
+    ],
+  },
+  {
+    label: "Build",
+    items: [
+      {
+        label: "Templates",
+        view: "templates",
+        path: "/templates",
+        icon: IconClipboardList,
+      },
+      { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
+    ],
+  },
+];
 
-export const MORE_NAV_ITEM = {
-  label: "More",
-  view: "more",
-  icon: IconDots,
-} as const;
-
-export const ALL_NAV_ITEMS = [
-  ...PRIMARY_NAV_ITEMS,
-  ...SECONDARY_NAV_ITEMS,
-] as const;
+export const ALL_NAV_ITEMS = NAV_GROUPS.flatMap((group) => group.items);
 
 export function activeNavForState(state: ViewState): ViewState["view"] | null {
   if (state.view === "home") {
@@ -52,6 +74,17 @@ export function activeNavForState(state: ViewState): ViewState["view"] | null {
     return "search";
   }
   return state.view;
+}
+
+export function activeNavGroupForState(state: ViewState): string | null {
+  const view = activeNavForState(state);
+  if (!view) {
+    return null;
+  }
+  const group = NAV_GROUPS.find((candidate) =>
+    candidate.items.some((item) => item.view === view),
+  );
+  return group?.label || null;
 }
 
 export function isStaticViewWithoutBundle(view: ViewState["view"]) {

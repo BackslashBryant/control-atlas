@@ -272,7 +272,6 @@ export function App() {
         introVisible={introVisible}
         onHeaderSearchDraftChange={setHeaderSearchDraft}
         onNavigate={navigate}
-        onOpenGlossary={() => openGlossary()}
         onOpenHelp={() => openHelp()}
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}

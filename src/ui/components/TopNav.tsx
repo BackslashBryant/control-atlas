@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
 
-import {
-  activeNavForState,
-  ALL_NAV_ITEMS,
-  MORE_NAV_ITEM,
-  PRIMARY_NAV_ITEMS,
-  SECONDARY_NAV_ITEMS,
-} from "../lib/navigation";
+import { activeNavGroupForState, NAV_GROUPS } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 
@@ -22,7 +16,6 @@ type TopNavProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenSearch: () => void;
   onOpenHelp: () => void;
-  onOpenGlossary: () => void;
 };
 
 export function TopNav(props: TopNavProps) {
@@ -35,13 +28,11 @@ export function TopNav(props: TopNavProps) {
     onNavigate,
     onOpenSearch,
     onOpenHelp,
-    onOpenGlossary,
   } = props;
 
-  const activeNav = activeNavForState(viewState);
-  const [moreOpen, setMoreOpen] = useState(false);
+  const activeGroup = activeNavGroupForState(viewState);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const MoreIcon = MORE_NAV_ITEM.icon;
 
   const prefersReducedMotion =
     typeof window !== "undefined" &&
@@ -70,14 +61,14 @@ export function TopNav(props: TopNavProps) {
     "",
   );
 
-  function navigateFromMenu(view: ViewState["view"]) {
-    setMoreOpen(false);
-    onNavigate(view);
+  function navigateFromGroup(view: ViewState["view"], patch?: Partial<ViewState>) {
+    setOpenGroup(null);
+    onNavigate(view, patch);
   }
 
-  function navigateFromMobileMenu(view: ViewState["view"]) {
+  function navigateFromMobileMenu(view: ViewState["view"], patch?: Partial<ViewState>) {
     setMobileMenuOpen(false);
-    onNavigate(view);
+    onNavigate(view, patch);
   }
 
   return (
@@ -92,70 +83,62 @@ export function TopNav(props: TopNavProps) {
         onClick={() => onNavigate("home")}
         type="button"
       >
-        <span className="brand-kbd" aria-hidden="true">
-          <span className="brand-key">Ctrl</span>
-          <span className="brand-plus">+</span>
-          <span className="brand-key">Alt</span>
-          <span className="brand-plus">+</span>
-          <span className="brand-key brand-key--active">
-            <span aria-hidden="true" className="brand-key-sizer">
-              {longestBrandWord}
-            </span>
-            <span className={`brand-key-word${fading ? " fading" : ""}`}>
-              {rotatingWord}
+        <span className="brand-lockup">
+          <span className="brand-kbd" aria-hidden="true">
+            <span className="brand-key">Ctrl</span>
+            <span className="brand-plus">+</span>
+            <span className="brand-key">Alt</span>
+            <span className="brand-plus">+</span>
+            <span className="brand-key brand-key--active">
+              <span aria-hidden="true" className="brand-key-sizer">
+                {longestBrandWord}
+              </span>
+              <span className={`brand-key-word${fading ? " fading" : ""}`}>
+                {rotatingWord}
+              </span>
             </span>
           </span>
+          <span className="brand-name">Control Atlas</span>
         </span>
       </button>
       <nav aria-label="Primary navigation" className="primary-nav">
-        {PRIMARY_NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const active = activeNav === item.view;
-          return (
+        {NAV_GROUPS.map((group) => (
+          <div className="nav-more" key={group.label}>
             <button
-              aria-current={active ? "page" : undefined}
-              className={active ? "active nav-active" : ""}
-              data-atlas={item.view === "atlas-map" ? "" : undefined}
-              key={item.label}
-              onClick={() => onNavigate(item.view)}
+              aria-expanded={openGroup === group.label}
+              aria-haspopup="menu"
+              className={
+                activeGroup === group.label ? "active nav-active" : ""
+              }
+              onClick={() =>
+                setOpenGroup((current) =>
+                  current === group.label ? null : group.label,
+                )
+              }
               type="button"
             >
-              <Icon aria-hidden="true" size={16} stroke={1.8} />
-              <span>{item.label}</span>
+              <span>{group.label}</span>
             </button>
-          );
-        })}
-        <button
-          aria-expanded={moreOpen}
-          aria-haspopup="menu"
-          className={SECONDARY_NAV_ITEMS.some((item) => item.view === activeNav) ? "active nav-active" : ""}
-          onClick={() => setMoreOpen((current) => !current)}
-          type="button"
-        >
-          <MoreIcon aria-hidden="true" size={16} stroke={1.8} />
-          <span>{MORE_NAV_ITEM.label}</span>
-        </button>
-        {moreOpen ? (
-          <div className="nav-more-menu" role="menu">
-            {SECONDARY_NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const active = activeNav === item.view;
-              return (
-                <button
-                  aria-current={active ? "page" : undefined}
-                  className={active ? "active nav-active" : ""}
-                  key={item.label}
-                  onClick={() => navigateFromMenu(item.view)}
-                  role="menuitem"
-                  type="button"
-                >
-                  <Icon aria-hidden="true" size={16} stroke={1.8} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+            {openGroup === group.label ? (
+              <div className="nav-more-menu" role="menu">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => navigateFromGroup(item.view, item.patch)}
+                      role="menuitem"
+                      type="button"
+                    >
+                      <Icon aria-hidden="true" size={16} stroke={1.8} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        ))}
       </nav>
       <div className="header-actions">
         {bundle ? (
@@ -210,13 +193,6 @@ export function TopNav(props: TopNavProps) {
           >
             Help
           </button>
-          <button
-            className="secondary quiet"
-            onClick={onOpenGlossary}
-            type="button"
-          >
-            Glossary
-          </button>
         </div>
         <button
           aria-controls="mobile-nav-sheet"
@@ -236,23 +212,29 @@ export function TopNav(props: TopNavProps) {
       {mobileMenuOpen ? (
         <div className="mobile-nav-sheet" id="mobile-nav-sheet">
           <nav aria-label="Primary navigation (mobile)" role="menu">
-            {ALL_NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const active = activeNav === item.view;
-              return (
-                <button
-                  aria-current={active ? "page" : undefined}
-                  className={active ? "active nav-active" : ""}
-                  key={item.label}
-                  onClick={() => navigateFromMobileMenu(item.view)}
-                  role="menuitem"
-                  type="button"
-                >
-                  <Icon aria-hidden="true" size={18} stroke={1.8} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+            {NAV_GROUPS.map((group) => (
+              <div className="mobile-nav-sheet-group" key={group.label}>
+                <span className="mobile-nav-sheet-group-label">
+                  {group.label}
+                </span>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() =>
+                        navigateFromMobileMenu(item.view, item.patch)
+                      }
+                      role="menuitem"
+                      type="button"
+                    >
+                      <Icon aria-hidden="true" size={18} stroke={1.8} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
           </nav>
           <div className="mobile-nav-sheet-actions">
             <button
@@ -264,16 +246,6 @@ export function TopNav(props: TopNavProps) {
               type="button"
             >
               Help
-            </button>
-            <button
-              className="secondary quiet"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenGlossary();
-              }}
-              type="button"
-            >
-              Glossary
             </button>
           </div>
         </div>

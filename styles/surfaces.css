@@ -240,6 +240,19 @@ a {
   font-size: var(--font-size-sm);
   padding: 0 1px;
 }
+.brand-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.brand-name {
+  font-weight: 600;
+  font-size: var(--ca-text-xs);
+  color: var(--ca-text-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
 .primary-nav {
   position: relative;
   display: flex;
@@ -1434,7 +1447,22 @@ a:focus-visible {
 
   .mobile-nav-sheet nav {
     display: grid;
+    gap: var(--space-3);
+  }
+
+  .mobile-nav-sheet-group {
+    display: grid;
     gap: var(--space-1);
+  }
+
+  .mobile-nav-sheet-group-label {
+    display: block;
+    padding: 0 0.85rem;
+    font-size: var(--ca-text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ca-text-muted);
   }
 
   .mobile-nav-sheet nav button,

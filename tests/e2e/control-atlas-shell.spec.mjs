@@ -41,31 +41,37 @@ test('control atlas map-first shell exposes navigation and guided start path', a
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
   expect(navLabels).toEqual([
-    'Start',
-    'Atlas',
-    'Explore',
-    'Compare',
-    'More',
+    'Navigate',
+    'Research',
+    'Build',
   ]);
 
-  await primaryNav.getByRole('button', { name: 'More' }).click();
-  await expect(primaryNav.getByRole('menuitem', { name: 'Playbooks' })).toBeVisible();
-  await expect(primaryNav.getByRole('menuitem', { name: 'Templates' })).toBeVisible();
-  await expect(primaryNav.getByRole('menuitem', { name: 'Sources' })).toBeVisible();
+  await primaryNav.getByRole('button', { name: 'Navigate' }).click();
+  await expect(primaryNav.getByRole('menuitem', { name: 'Start' })).toBeVisible();
+  await expect(primaryNav.getByRole('menuitem', { name: 'Atlas' })).toBeVisible();
 
-  const expandedNavLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
+  const navigateMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(expandedNavLabels).toEqual([
-    'Playbooks',
-    'Templates',
-    'Sources',
-  ]);
+  expect(navigateMenuLabels).toEqual(['Start', 'Atlas']);
+
+  await primaryNav.getByRole('button', { name: 'Research' }).click();
+  const researchMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
+    nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
+  );
+  expect(researchMenuLabels).toEqual(['Compare', 'Sources', 'Frameworks', 'Controls']);
+
+  await primaryNav.getByRole('button', { name: 'Build' }).click();
+  const buildMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
+    nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
+  );
+  expect(buildMenuLabels).toEqual(['Templates', 'Playbooks']);
 
   await page.getByRole('button', { name: 'Control Atlas' }).click();
   await expect(page).toHaveURL(/#\/?$|\/$/);
 
-  await primaryNav.getByRole('button', { name: 'Start', exact: true }).click();
+  await primaryNav.getByRole('button', { name: 'Navigate' }).click();
+  await primaryNav.getByRole('menuitem', { name: 'Start', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
