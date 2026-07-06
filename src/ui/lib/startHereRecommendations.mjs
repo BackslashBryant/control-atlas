@@ -90,7 +90,52 @@ export function buildStartHereRecommendations(answers) {
     templateIds.push('inheritance_worksheet');
   }
 
-  if (environment === 'CSP' || systemType === 'Cloud SaaS') {
+  if (environment === 'DoD') {
+    library.push(
+      {
+        kind: 'library-catalog',
+        catalogId: 'nist-800-53',
+        label: 'NIST SP 800-53 Rev. 5',
+        rationale: 'DoD systems still trace back to NIST controls even when STIGs drive the technical checks.',
+      },
+      {
+        kind: 'library-catalog',
+        catalogId: 'disa-stig',
+        label: 'DISA STIG / SRG',
+        rationale: 'DoD operational environments usually need the public STIG and SRG library alongside NIST controls.',
+      },
+    );
+
+    if (isCloud) {
+      library.push({
+        kind: 'library-catalog',
+        catalogId: 'disa-srg',
+        label: 'DISA SRG Library',
+        rationale: 'DoD cloud systems are scoped by Impact Level (IL2 through IL6) under the DISA Cloud Computing SRG — check the SRG library for the technology-area requirements that apply once you know your IL, rather than the commercial FedRAMP path.',
+      });
+    }
+
+    const nistBaseline = nistBaselineId(dataSensitivity);
+    if (nistBaseline) {
+      library.push({
+        kind: 'library-node',
+        nodeId: nistBaseline,
+        label: baselineLabel('NIST SP 800-53B', dataSensitivity),
+        rationale: `Use this baseline to see which controls apply at the ${dataSensitivity.toLowerCase()} impact level you selected.`,
+      });
+    }
+
+    patternIds.push('rmf-lifecycle', 'evidence-patterns');
+    templateIds.push('stig_evidence_checklist');
+
+    compare.push({
+      kind: 'compare',
+      workbench: 'stig-chain',
+      patch: {},
+      label: 'Trace STIG rules to controls',
+      rationale: 'Follow the public STIG to CCI to NIST chain so you know where a technical rule lands in control language.',
+    });
+  } else if (environment === 'CSP' || systemType === 'Cloud SaaS') {
     library.push({
       kind: 'library-catalog',
       catalogId: 'fedramp-rev5',
@@ -120,42 +165,6 @@ export function buildStartHereRecommendations(answers) {
         rationale: 'See what your FedRAMP baseline shares with the matching NIST baseline before you plan controls.',
       });
     }
-  } else if (environment === 'DoD') {
-    library.push(
-      {
-        kind: 'library-catalog',
-        catalogId: 'nist-800-53',
-        label: 'NIST SP 800-53 Rev. 5',
-        rationale: 'DoD systems still trace back to NIST controls even when STIGs drive the technical checks.',
-      },
-      {
-        kind: 'library-catalog',
-        catalogId: 'disa-stig',
-        label: 'DISA STIG / SRG',
-        rationale: 'DoD operational environments usually need the public STIG and SRG library alongside NIST controls.',
-      },
-    );
-
-    const nistBaseline = nistBaselineId(dataSensitivity);
-    if (nistBaseline) {
-      library.push({
-        kind: 'library-node',
-        nodeId: nistBaseline,
-        label: baselineLabel('NIST SP 800-53B', dataSensitivity),
-        rationale: `Use this baseline to see which controls apply at the ${dataSensitivity.toLowerCase()} impact level you selected.`,
-      });
-    }
-
-    patternIds.push('rmf-lifecycle', 'evidence-patterns');
-    templateIds.push('stig_evidence_checklist');
-
-    compare.push({
-      kind: 'compare',
-      workbench: 'stig-chain',
-      patch: {},
-      label: 'Trace STIG rules to controls',
-      rationale: 'Follow the public STIG to CCI to NIST chain so you know where a technical rule lands in control language.',
-    });
   } else if (environment === 'Contractor' || isCui) {
     library.push({
       kind: 'library-catalog',

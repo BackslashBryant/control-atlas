@@ -43,6 +43,21 @@ test('dod high path recommends stig chain compare and stig evidence checklist', 
   assert.ok(recommendations.library.some((entry) => entry.kind === 'library-catalog' && entry.catalogId === 'disa-stig'));
   assert.ok(recommendations.compare.some((entry) => entry.workbench === 'stig-chain'));
   assert.ok(recommendations.templates.some((entry) => entry.templateType === 'stig_evidence_checklist'));
+  assert.ok(!recommendations.library.some((entry) => entry.catalogId === 'disa-srg'));
+});
+
+test('dod cloud path additionally recommends the DISA SRG library for Impact Level scoping', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'Moderate',
+    environment: 'DoD',
+  });
+
+  assert.ok(recommendations);
+  assert.ok(recommendations.library.some((entry) => entry.kind === 'library-catalog' && entry.catalogId === 'disa-stig'));
+  const srgEntry = recommendations.library.find((entry) => entry.catalogId === 'disa-srg');
+  assert.ok(srgEntry, 'expected a disa-srg library recommendation for DoD cloud systems');
+  assert.match(srgEntry.rationale, /Impact Level/);
 });
 
 test('incomplete answers return null recommendations', () => {

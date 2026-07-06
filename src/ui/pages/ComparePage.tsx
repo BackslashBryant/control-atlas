@@ -169,6 +169,26 @@ export function ComparePage(props: {
           node_ids: relationshipNodeIds,
         })
       : null;
+  // A record-handoff link (e.g. "Compare this item against other public
+  // mappings") sets `items` but no framework pair — the runtime already
+  // returns cross-catalog rows for that case, so show results/empty-state
+  // whenever there's *some* comparison scope, not only a chosen pair.
+  const hasComparisonScope = Boolean(
+    (state.source && state.target) || state.items,
+  );
+  // Distinguish "this framework pair has zero published edges at all" (a
+  // real data gap — resetting filters won't help) from "your filters
+  // narrowed a real pair down to zero" (recoverable). Checked with no
+  // item/type/provenance/confidence filters, since pair-level support is
+  // about the catalogs, not one item or one relationship type.
+  const pairHasAnyPublishedMapping =
+    workbench === "relationships" && state.source && state.target
+      ? bundle.runtime.buildRelationshipRows({
+          source_catalog: state.source,
+          target_catalog: state.target,
+          include_candidates: true,
+        }).rows.length > 0
+      : true;
   const relationshipFilterOptions = useMemo(() => {
     if (!state.source || !state.target) {
       return {
@@ -523,7 +543,7 @@ export function ComparePage(props: {
                   </p>
                 </Field>
               </div>
-              {state.source && state.target ? (
+              {hasComparisonScope ? (
                 <Accordion.Root
                   className="accordion-root"
                   collapsible
@@ -611,7 +631,7 @@ export function ComparePage(props: {
                   </DisclosurePanel>
                 </Accordion.Root>
               ) : null}
-              {state.source && state.target ? (
+              {hasComparisonScope ? (
                 <div className="card-actions">
                   <button
                     className="primary"
@@ -622,7 +642,7 @@ export function ComparePage(props: {
                   </button>
                 </div>
               ) : null}
-              {state.source && state.target && relationshipRows?.rows?.length ? (
+              {hasComparisonScope && relationshipRows?.rows?.length ? (
                 <section
                   className="compare-results"
                   id="compare-results"
@@ -715,31 +735,42 @@ export function ComparePage(props: {
                     onOpenNode={onOpenNode}
                   />
                 </section>
-              ) : state.source && state.target ? (
+              ) : hasComparisonScope ? (
                 <section className="empty-state">
                   <IconFilter aria-hidden="true" size={24} stroke={1.8} />
-                  <h2>No public connections found for this comparison.</h2>
+                  <h2>
+                    {!state.source || !state.target
+                      ? `No published mapping found for ${state.items} yet.`
+                      : pairHasAnyPublishedMapping
+                        ? "No public connections found for this comparison."
+                        : `No published mapping ingested for ${catalogs.find((c: any) => c.id === state.source)?.name || state.source} ↔ ${catalogs.find((c: any) => c.id === state.target)?.name || state.target} yet.`}
+                  </h2>
                   <p>
-                    Try changing one catalog, removing filters, or searching for
-                    a specific control identifier.
+                    {!state.source || !state.target
+                      ? "Pick a Framework A and Framework B above to compare this item against, or try a different comparison type below."
+                      : pairHasAnyPublishedMapping
+                        ? "Try changing one catalog, removing filters, or searching for a specific control identifier."
+                        : "This isn't a filter issue — no official crosswalk between these two catalogs has been ingested yet. Try a different framework pair."}
                   </p>
                   <div className="card-actions">
-                    <button
-                      className="primary"
-                      onClick={() =>
-                        onNavigate("matrix", {
-                          ...state,
-                          workbench,
-                          relationshipType: "",
-                          provenance: "",
-                          confidence: "",
-                          includeCandidates: "",
-                        })
-                      }
-                      type="button"
-                    >
-                      Reset filters
-                    </button>
+                    {state.source && state.target && pairHasAnyPublishedMapping ? (
+                      <button
+                        className="primary"
+                        onClick={() =>
+                          onNavigate("matrix", {
+                            ...state,
+                            workbench,
+                            relationshipType: "",
+                            provenance: "",
+                            confidence: "",
+                            includeCandidates: "",
+                          })
+                        }
+                        type="button"
+                      >
+                        Reset filters
+                      </button>
+                    ) : null}
                     <button
                       className="secondary"
                       onClick={() => onNavigate("sources")}
