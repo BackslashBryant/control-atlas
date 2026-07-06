@@ -84,10 +84,9 @@ export function BrandEntranceOverlay(props: {
     >
       <span className="brand-entrance-orbit" aria-hidden="true" />
       <span className="brand-entrance-mark" aria-hidden="true">
-        <svg viewBox="0 0 220 96">
-          <path d="M26 48h48M50 24v48" />
-          <path d="M98 24h42v48H98z" />
-          <path d="M166 25v46M143 48h46" />
+        <svg viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="34" strokeDasharray="166.1 47.5" />
+          <path d="M52.6 44.1 78.6 22.5M70.1 22.8 81.7 19.7 76.64 30.58" />
         </svg>
       </span>
       <strong>Control Atlas</strong>

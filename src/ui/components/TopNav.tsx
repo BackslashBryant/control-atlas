@@ -83,6 +83,19 @@ export function TopNav(props: TopNavProps) {
         onClick={() => onNavigate("home")}
         type="button"
       >
+        <span className="brand-icon-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="brand-mark-gradient" x1="36.6" y1="28.14" x2="54.98" y2="12.71" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stopColor="#2563EB" />
+                <stop offset="1" stopColor="#22D3EE" />
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="22" fill="none" stroke="#22D3EE" strokeWidth="5" strokeLinecap="round" strokeDasharray="107.51 30.72" />
+            <line x1="36.6" y1="28.14" x2="50.4" y2="16.57" stroke="url(#brand-mark-gradient)" strokeWidth="5.5" strokeLinecap="round" />
+            <polygon points="54.98,12.71 53.29,20.02 47.51,13.12" fill="url(#brand-mark-gradient)" />
+          </svg>
+        </span>
         <span className="brand-lockup">
           <span className="brand-kbd" aria-hidden="true">
             <span className="brand-key">Ctrl</span>
