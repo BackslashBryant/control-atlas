@@ -111,6 +111,26 @@ export function SourcesPage(props: {
     );
   }, [sources]);
 
+  // Honest per-catalog connectivity (CATL-24): how much of each framework is
+  // actually wired into the public map, so the tool never implies full coverage.
+  const catalogCoverage = useMemo(
+    () =>
+      bundle.runtime
+        .getCatalogs()
+        .filter((catalog: any) => catalog.node_count >= 10)
+        .map((catalog: any) => ({
+          id: catalog.id,
+          name: catalog.name,
+          total: catalog.node_count,
+          connected: catalog.connected_count ?? 0,
+          pct: catalog.node_count
+            ? Math.round((catalog.connected_count ?? 0) / catalog.node_count * 100)
+            : 0,
+        }))
+        .sort((a: any, b: any) => b.total - a.total),
+    [bundle.runtime],
+  );
+
   return (
     <section className="panel">
       <PageHeader
@@ -145,6 +165,37 @@ export function SourcesPage(props: {
               </li>
             );
           })}
+        </ul>
+      </section>
+
+      <section
+        aria-labelledby="catalog-coverage-heading"
+        className="catalog-coverage"
+      >
+        <h2 id="catalog-coverage-heading">Map coverage by catalog</h2>
+        <p>
+          How much of each catalog is actually connected in the public map. Low
+          coverage means mappings for that framework are not fully ingested yet
+          — a missing link is not proof that no relationship exists.
+        </p>
+        <ul className="catalog-coverage-list">
+          {catalogCoverage.map((catalog) => (
+            <li className="catalog-coverage-row" key={catalog.id}>
+              <span className="catalog-coverage-name">{catalog.name}</span>
+              <span
+                aria-hidden="true"
+                className="catalog-coverage-bar"
+                data-level={
+                  catalog.pct >= 75 ? "high" : catalog.pct >= 40 ? "mid" : "low"
+                }
+              >
+                <span style={{ width: `${catalog.pct}%` }} />
+              </span>
+              <span className="catalog-coverage-stat">
+                {catalog.connected}/{catalog.total} connected ({catalog.pct}%)
+              </span>
+            </li>
+          ))}
         </ul>
       </section>
 
