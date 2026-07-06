@@ -853,6 +853,7 @@ export function ComparePage(props: {
                     disabled={!(chainPayload.rows.length || selectedChain)}
                     onExport={exportRows}
                   />
+                  <div className="compare-table-scroll">
                   <table
                     className="detail-table"
                     aria-label="STIG chain summary"
@@ -906,6 +907,7 @@ export function ComparePage(props: {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                   {selectedChain ? (
                     <CompareResultsPanel
                       bundle={bundle}
@@ -1081,6 +1083,7 @@ export function ComparePage(props: {
                     onExport={exportRows}
                   />
                   {!selectedThreatChain ? (
+                  <div className="compare-table-scroll">
                   <table
                     className="detail-table"
                     aria-label="Threat chain summary"
@@ -1134,6 +1137,7 @@ export function ComparePage(props: {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                   ) : null}
                   {selectedThreatChain ? (
                     <CompareResultsPanel
