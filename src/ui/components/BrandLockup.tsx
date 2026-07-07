@@ -1,6 +1,23 @@
 import { useEffect, useState } from "react";
 
-const BRAND_WORDS = ["Comply", "Map", "Navigate", "Audit"];
+const BRAND_WORDS = [
+  "Comply",
+  "Map",
+  "Navigate",
+  "Audit",
+  "Assess",
+  "Trace",
+  "Compare",
+  "Verify",
+  "Authorize",
+  "Inherit",
+  "Reconcile",
+  "Baseline",
+  "Crosswalk",
+  "Simplify",
+  "Clarify",
+  "Demystify",
+];
 
 // Real logo geometry from the user's brand asset export (components/logo/logo-icon.tsx):
 // a 270° "C" arc (gap on the east side) with a navigation-arrow dart centered on it.
@@ -29,21 +46,19 @@ export function BrandFlourish() {
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const [wordIdx, setWordIdx] = useState(0);
-  const [fading, setFading] = useState(false);
+  const [wordPhase, setWordPhase] = useState<"enter" | "exit">("enter");
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-    let swapTimer: number | undefined;
     const interval = window.setInterval(() => {
-      setFading(true);
-      swapTimer = window.setTimeout(() => {
+      setWordPhase("exit");
+      window.setTimeout(() => {
         setWordIdx((i) => (i + 1) % BRAND_WORDS.length);
-        setFading(false);
-      }, 200);
-    }, 2500);
+        setWordPhase("enter");
+      }, 320);
+    }, 2400);
     return () => {
       window.clearInterval(interval);
-      if (swapTimer !== undefined) window.clearTimeout(swapTimer);
     };
   }, [prefersReducedMotion]);
 
@@ -63,7 +78,7 @@ export function BrandFlourish() {
         <span aria-hidden="true" className="brand-key-sizer">
           {longestBrandWord}
         </span>
-        <span className={`brand-key-word${fading ? " fading" : ""}`}>
+        <span className={`brand-key-word word-${wordPhase}`}>
           {rotatingWord}
         </span>
       </span>

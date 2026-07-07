@@ -2,8 +2,19 @@ import { ALL_NAV_ITEMS } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 
 export function SiteFooter(props: {
+  minimal?: boolean;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
+  if (props.minimal) {
+    return (
+      <footer className="site-footer">
+        <p className="site-footer-bar ca-text-subtle ca-page">
+          Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system. All mappings are reference aids based on public sources.
+        </p>
+      </footer>
+    );
+  }
+
   return (
     <footer className="site-footer">
       <div className="site-footer-grid ca-page">

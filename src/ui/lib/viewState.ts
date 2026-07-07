@@ -1,5 +1,6 @@
 export type AppView =
   | "home"
+  | "menu"
   | "atlas-map"
   | "search"
   | "library-detail"
@@ -109,6 +110,9 @@ export type ViewState =
     }
   | {
       view: "about";
+    }
+  | {
+      view: "menu";
     }
   | {
       view: "retired";
@@ -302,6 +306,10 @@ export function parseViewState(search: string): ViewState {
     return { view: "about" };
   }
 
+  if (view === "menu") {
+    return { view: "menu" };
+  }
+
   if (view === "not-found") {
     return { view: "not-found" };
   }
@@ -428,6 +436,10 @@ export function normalizeViewState(
 
   if (view === "about") {
     return { view: "about" };
+  }
+
+  if (view === "menu") {
+    return { view: "menu" };
   }
 
   if (view === "not-found") {
@@ -560,6 +572,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "dataSensitivity", state.dataSensitivity);
     setIfValue(params, "environment", state.environment);
   } else if (state.view === "about") {
+    params.set("view", state.view);
+  } else if (state.view === "menu") {
     params.set("view", state.view);
   } else if (state.view === "retired") {
     params.set("view", state.view);

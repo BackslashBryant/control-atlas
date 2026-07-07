@@ -11,8 +11,13 @@ test('landing presents the map-first hero and primary entry paths', async ({ pag
   await dismissOnboarding(page);
 
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start here — answer three questions for a personalized starting point' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start — see where to begin' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Navigate', exact: true })).toBeVisible();
+
+  // The calm landing is search + buttons only - the primary entry cards
+  // live one hop in, on the tile menu the center launch button opens.
+  await page.goto('/#/menu');
+  await waitForAppReady(page);
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'Atlas' })).toBeVisible();
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'How do these frameworks relate?' })).toBeVisible();
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'What do I need to produce?' })).toBeVisible();
