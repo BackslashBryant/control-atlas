@@ -67,7 +67,10 @@ test('header overlay search submits to Explore and carries focus to results', as
   page,
 }) => {
   test.setTimeout(90_000);
-  await page.goto('/');
+  // The header search trigger lives in the persistent site chrome, which is
+  // hidden on the calm home entrance — exercise it from a page where it's
+  // actually visible.
+  await page.goto('/?view=explore');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

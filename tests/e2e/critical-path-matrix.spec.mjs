@@ -169,7 +169,11 @@ test("critical path: baseline compare surfaces delta controls with export action
 test("critical path: keyboard focus reaches primary nav and header search", async ({
   page,
 }) => {
-  await page.goto("/");
+  // The home view is a self-contained calm entrance without the persistent
+  // site chrome (its own wordmark/search/buttons cover that role there) — the
+  // primary nav and header search this test exercises only render once the
+  // user has navigated somewhere else.
+  await page.goto("/?view=explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

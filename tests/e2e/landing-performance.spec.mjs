@@ -11,8 +11,8 @@ test('landing presents the map-first hero and primary entry paths', async ({ pag
   await dismissOnboarding(page);
 
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.locator('.home-hero').getByText('The public map for federal cyber compliance.')).toBeVisible();
-  await expect(page.locator('.hero-actions').getByRole('button', { name: 'Atlas →', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start here — answer three questions for a personalized starting point' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Navigate', exact: true })).toBeVisible();
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'Atlas' })).toBeVisible();
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'How do these frameworks relate?' })).toBeVisible();
   await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'What do I need to produce?' })).toBeVisible();
