@@ -26,11 +26,6 @@ export function HomePage(props: HomePageProps) {
         <BrandFlourish />
       </div>
 
-      <p className="landing-tagline">
-        Unified intelligence for NIST controls, STIGs, CCIs,
-        and FedRAMP baselines — all in one place.
-      </p>
-
       <div className={`landing-search-container ${searchFocused ? "search-focused" : ""}`}>
         <form
           className="home-search"
