@@ -632,15 +632,13 @@ export function ComparePage(props: {
                 </Accordion.Root>
               ) : null}
               {hasComparisonScope ? (
-                <div className="card-actions">
-                  <button
-                    className="primary"
-                    onClick={scrollToCompareResults}
-                    type="button"
-                  >
-                    Review results
-                  </button>
-                </div>
+                <button
+                  className="link-action"
+                  onClick={scrollToCompareResults}
+                  type="button"
+                >
+                  Review results
+                </button>
               ) : null}
               {hasComparisonScope && relationshipRows?.rows?.length ? (
                 <section
@@ -871,15 +869,12 @@ export function ComparePage(props: {
                 Official link = published mapping. Inferred link = candidate
                 mapping. Pick a STIG rule, review CCI connections, then open the
                 related NIST control.
+                {chainPayload?.rows?.length
+                  ? ` ${chainPayload.rows.length} STIG or SRG item${chainPayload.rows.length === 1 ? "" : "s"} visible in the current chain scope.`
+                  : ""}
               </p>
               {chainPayload?.rows?.length ? (
                 <div className="stack">
-                  <SummaryCard title="What this is">
-                    <p>
-                      {chainPayload.rows.length} STIG or SRG items are visible
-                      in the current chain scope.
-                    </p>
-                  </SummaryCard>
                   <CompareExportDisclosure
                     disabled={!(chainPayload.rows.length || selectedChain)}
                     onExport={exportRows}
@@ -989,35 +984,44 @@ export function ComparePage(props: {
                                 )}
                               </ul>
                             </SummaryCard>
-                            <SummaryCard title="Unmapped CCIs">
-                              <ul className="source-ref-list">
-                                {selectedChain.unmapped_cci_nodes.length ? (
-                                  selectedChain.unmapped_cci_nodes.map(
-                                    (node: any) => (
-                                      <li
-                                        className="chain-link-item"
-                                        key={node.id}
-                                      >
-                                        <button
-                                          className="link-action"
-                                          onClick={() => onOpenNode(node.id)}
-                                          type="button"
+                            <Accordion.Root
+                              className="accordion-root"
+                              collapsible
+                              type="single"
+                            >
+                              <DisclosurePanel
+                                title="Unmapped CCIs"
+                                value="unmapped-ccis"
+                              >
+                                <ul className="source-ref-list">
+                                  {selectedChain.unmapped_cci_nodes.length ? (
+                                    selectedChain.unmapped_cci_nodes.map(
+                                      (node: any) => (
+                                        <li
+                                          className="chain-link-item"
+                                          key={node.id}
                                         >
-                                          <strong>
-                                            {node.metadata?.item_id || node.id}
-                                          </strong>{" "}
-                                          — {node.metadata?.title || node.label}
-                                        </button>
-                                      </li>
-                                    ),
-                                  )
-                                ) : (
-                                  <li>
-                                    Every visible CCI has a visible NIST link.
-                                  </li>
-                                )}
-                              </ul>
-                            </SummaryCard>
+                                          <button
+                                            className="link-action"
+                                            onClick={() => onOpenNode(node.id)}
+                                            type="button"
+                                          >
+                                            <strong>
+                                              {node.metadata?.item_id || node.id}
+                                            </strong>{" "}
+                                            — {node.metadata?.title || node.label}
+                                          </button>
+                                        </li>
+                                      ),
+                                    )
+                                  ) : (
+                                    <li>
+                                      Every visible CCI has a visible NIST link.
+                                    </li>
+                                  )}
+                                </ul>
+                              </DisclosurePanel>
+                            </Accordion.Root>
                           </div>
                         </section>
                       }
@@ -1096,15 +1100,12 @@ export function ComparePage(props: {
               <p className="compare-legend">
                 Official link = MITRE published mapping. Pick a technique, review
                 D3FEND countermeasures, then open the related NIST controls.
+                {threatChainPayload?.rows?.length
+                  ? ` ${threatChainPayload.rows.length} ATT&CK technique${threatChainPayload.rows.length === 1 ? "" : "s"} visible in the current threat chain scope.`
+                  : ""}
               </p>
               {threatChainPayload?.rows?.length ? (
                 <div className="stack">
-                  <SummaryCard title="What this is">
-                    <p>
-                      {threatChainPayload.rows.length} ATT&CK techniques are
-                      visible in the current threat chain scope.
-                    </p>
-                  </SummaryCard>
                   <CompareExportDisclosure
                     disabled={
                       !(
@@ -1227,37 +1228,46 @@ export function ComparePage(props: {
                                 )}
                               </ul>
                             </SummaryCard>
-                            <SummaryCard title="Unmapped D3FEND countermeasures">
-                              <ul className="source-ref-list">
-                                {selectedThreatChain.unmapped_d3fend_nodes
-                                  .length ? (
-                                  selectedThreatChain.unmapped_d3fend_nodes.map(
-                                    (node: any) => (
-                                      <li
-                                        className="chain-link-item"
-                                        key={node.id}
-                                      >
-                                        <button
-                                          className="link-action"
-                                          onClick={() => onOpenNode(node.id)}
-                                          type="button"
+                            <Accordion.Root
+                              className="accordion-root"
+                              collapsible
+                              type="single"
+                            >
+                              <DisclosurePanel
+                                title="Unmapped D3FEND countermeasures"
+                                value="unmapped-d3fend"
+                              >
+                                <ul className="source-ref-list">
+                                  {selectedThreatChain.unmapped_d3fend_nodes
+                                    .length ? (
+                                    selectedThreatChain.unmapped_d3fend_nodes.map(
+                                      (node: any) => (
+                                        <li
+                                          className="chain-link-item"
+                                          key={node.id}
                                         >
-                                          <strong>
-                                            {node.metadata?.item_id || node.id}
-                                          </strong>{" "}
-                                          — {node.metadata?.title || node.label}
-                                        </button>
-                                      </li>
-                                    ),
-                                  )
-                                ) : (
-                                  <li>
-                                    Every visible D3FEND countermeasure has a
-                                    visible NIST link.
-                                  </li>
-                                )}
-                              </ul>
-                            </SummaryCard>
+                                          <button
+                                            className="link-action"
+                                            onClick={() => onOpenNode(node.id)}
+                                            type="button"
+                                          >
+                                            <strong>
+                                              {node.metadata?.item_id || node.id}
+                                            </strong>{" "}
+                                            — {node.metadata?.title || node.label}
+                                          </button>
+                                        </li>
+                                      ),
+                                    )
+                                  ) : (
+                                    <li>
+                                      Every visible D3FEND countermeasure has a
+                                      visible NIST link.
+                                    </li>
+                                  )}
+                                </ul>
+                              </DisclosurePanel>
+                            </Accordion.Root>
                           </div>
                         </section>
                       }
