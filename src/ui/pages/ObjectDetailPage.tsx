@@ -9,7 +9,6 @@ import {
   IconGitCompare,
   IconInfoCircle,
   IconLink,
-  IconMap,
   IconSearch,
   IconShieldCheck,
   IconSourceCode,
@@ -344,31 +343,33 @@ export function ObjectDetailPage(props: {
               <p>{document.description}</p>
             ) : null}
           </SummaryCard>
-          <SummaryCard title="Where it appears">
-            <p>
-              {locationSummary.length ? (
-                <>
-                  This item appears in{" "}
-                  {locationSummary.map((label, index) => (
-                    <Fragment key={label}>
-                      {index > 0 ? ", " : ""}
-                      {label === "LI-SAAS" ? (
-                        <GlossaryTermChip termId="li-saas">{label}</GlossaryTermChip>
-                      ) : (
-                        label
-                      )}
-                    </Fragment>
-                  ))}
-                  .
-                </>
-              ) : node.node_type === "attack_technique" ||
-                  node.node_type === "defend_countermeasure" ? (
-                "This MITRE item connects through the public threat lens rather than a baseline membership list."
-              ) : (
-                "This item does not have a published baseline placement summary yet."
-              )}
-            </p>
-          </SummaryCard>
+          <Accordion.Root className="accordion-root" collapsible type="single">
+            <DisclosurePanel title="Where it appears" value="where-it-appears">
+              <p>
+                {locationSummary.length ? (
+                  <>
+                    This item appears in{" "}
+                    {locationSummary.map((label, index) => (
+                      <Fragment key={label}>
+                        {index > 0 ? ", " : ""}
+                        {label === "LI-SAAS" ? (
+                          <GlossaryTermChip termId="li-saas">{label}</GlossaryTermChip>
+                        ) : (
+                          label
+                        )}
+                      </Fragment>
+                    ))}
+                    .
+                  </>
+                ) : node.node_type === "attack_technique" ||
+                    node.node_type === "defend_countermeasure" ? (
+                  "This MITRE item connects through the public threat lens rather than a baseline membership list."
+                ) : (
+                  "This item does not have a published baseline placement summary yet."
+                )}
+              </p>
+            </DisclosurePanel>
+          </Accordion.Root>
           {node.node_type === "attack_technique" ? (
             <SummaryCard title="Threat context">
               <p>
@@ -407,42 +408,19 @@ export function ObjectDetailPage(props: {
               </div>
               <div className="section-header-actions">
                 {edges.length ? (
-                  <>
-                    <button
-                      className="link-action"
-                      onClick={() => openAtlasMapForNode(onNavigate, state.node)}
-                      type="button"
-                    >
-                      <IconMap aria-hidden="true" size={16} stroke={1.8} />
-                      <span>Open in Atlas Map</span>
-                    </button>
-                    <button
-                      className="secondary"
-                      onClick={() =>
-                        onNavigate("library-detail", {
-                          node: state.node,
-                          from: state.from,
-                          relationshipView: "list",
-                        })
-                      }
-                      type="button"
-                    >
-                      View as list
-                    </button>
-                    <button
-                      className="secondary"
-                      onClick={() =>
-                        onNavigate("matrix", {
-                          workbench: "relationships",
-                          items: document.item_id,
-                          source: node.metadata?.catalog_id || "",
-                        })
-                      }
-                      type="button"
-                    >
-                      Compare
-                    </button>
-                  </>
+                  <button
+                    className="secondary"
+                    onClick={() =>
+                      onNavigate("library-detail", {
+                        node: state.node,
+                        from: state.from,
+                        relationshipView: "list",
+                      })
+                    }
+                    type="button"
+                  >
+                    View as list
+                  </button>
                 ) : null}
                 <Badge tone="info">{edges.length} connections</Badge>
               </div>
@@ -497,36 +475,41 @@ export function ObjectDetailPage(props: {
             />
           </section>
 
-          <SummaryCard title="Official text / source excerpt">
-            <p>
-              {document.description
-                ? renderOdpText(document.description)
-                : "No public description available."}
-            </p>
-            {source?.artifact_url ? (
+          <Accordion.Root className="accordion-root" collapsible type="single">
+            <DisclosurePanel
+              title="Official text / source excerpt"
+              value="official-text"
+            >
               <p>
-                <a
-                  href={source.artifact_url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Open official source document
-                </a>
+                {document.description
+                  ? renderOdpText(document.description)
+                  : "No public description available."}
               </p>
-            ) : null}
-            {source?.catalog_browse_url ? (
-              <p>
-                <a
-                  href={source.catalog_browse_url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Browse the official catalog (search for{" "}
-                  {document.item_id})
-                </a>
-              </p>
-            ) : null}
-          </SummaryCard>
+              {source?.artifact_url ? (
+                <p>
+                  <a
+                    href={source.artifact_url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Open official source document
+                  </a>
+                </p>
+              ) : null}
+              {source?.catalog_browse_url ? (
+                <p>
+                  <a
+                    href={source.catalog_browse_url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Browse the official catalog (search for{" "}
+                    {document.item_id})
+                  </a>
+                </p>
+              ) : null}
+            </DisclosurePanel>
+          </Accordion.Root>
         </section>
 
         <aside className="stack detail-sidebar">
@@ -558,31 +541,6 @@ export function ObjectDetailPage(props: {
             ) : (
               <p>No published connections yet.</p>
             )}
-            {edges.length ? (
-              <div className="card-actions">
-                <button
-                  className="link-action"
-                  onClick={() => openAtlasMapForNode(onNavigate, state.node)}
-                  type="button"
-                >
-                  <IconMap aria-hidden="true" size={16} stroke={1.8} />
-                  <span>Open in Atlas Map</span>
-                </button>
-                <button
-                  className="secondary"
-                  onClick={() =>
-                    onNavigate("matrix", {
-                      workbench: "relationships",
-                      items: document.item_id,
-                      source: node.metadata?.catalog_id || "",
-                    })
-                  }
-                  type="button"
-                >
-                  Compare
-                </button>
-              </div>
-            ) : null}
           </SummaryCard>
           <SummaryCard title="Source support" tone="trust">
             <p>{sourceTrustSummary(source)}</p>
@@ -605,16 +563,6 @@ export function ObjectDetailPage(props: {
 
           <SummaryCard title="What to do next">
             <div className="stack compact">
-              {edges.length ? (
-                <button
-                  className="link-action"
-                  onClick={() => openAtlasMapForNode(onNavigate, state.node)}
-                  type="button"
-                >
-                  <IconMap aria-hidden="true" size={16} stroke={1.8} />
-                  <span>Open in Atlas Map</span>
-                </button>
-              ) : null}
               {node.node_type === "attack_technique" ? (
                 <button
                   className="link-action"
@@ -631,20 +579,6 @@ export function ObjectDetailPage(props: {
                   <span>Trace this technique to D3FEND and NIST controls</span>
                 </button>
               ) : null}
-              <button
-                className="link-action"
-                onClick={() =>
-                  onNavigate("matrix", {
-                    workbench: "relationships",
-                    items: document.item_id,
-                    source: node.metadata?.catalog_id || "",
-                  })
-                }
-                type="button"
-              >
-                <IconGitCompare aria-hidden="true" size={16} stroke={1.8} />
-                <span>Compare this item against other public mappings</span>
-              </button>
               <button
                 className="link-action"
                 onClick={() => onNavigate("templates")}
