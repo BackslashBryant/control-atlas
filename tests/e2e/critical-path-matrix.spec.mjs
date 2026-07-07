@@ -20,6 +20,14 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
   await expect(
+    page.getByRole("button", { name: "Navigate", exact: true }),
+  ).toBeVisible();
+
+  // The calm landing is search + buttons only - the primary entry cards
+  // live one hop in, on the tile menu the center launch button opens.
+  await page.goto("/#/menu");
+  await waitForAppReady(page);
+  await expect(
     page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas" }),
   ).toBeVisible();
   await expect(

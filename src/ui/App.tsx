@@ -67,6 +67,11 @@ const ObjectDetailPage = lazy(() =>
     default: module.ObjectDetailPage,
   })),
 );
+const MenuPage = lazy(() =>
+  import("./pages/MenuPage").then((module) => ({
+    default: module.MenuPage,
+  })),
+);
 const PlaybooksPage = lazy(() =>
   import("./pages/PlaybooksPage").then((module) => ({
     default: module.PlaybooksPage,
@@ -312,7 +317,7 @@ export function App() {
         </section>
       </main>
 
-      <SiteFooter onNavigate={navigate} />
+      <SiteFooter minimal={viewState.view === "home"} onNavigate={navigate} />
 
       <SearchOverlay
         bundle={bundle}
@@ -397,6 +402,10 @@ function AppContent(props: {
 
   if (state.view === "home") {
     return <HomePage onNavigate={onNavigate} />;
+  }
+
+  if (state.view === "menu") {
+    return <MenuPage onNavigate={onNavigate} />;
   }
 
   if (state.view === "not-found") {

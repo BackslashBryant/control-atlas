@@ -1,82 +1,37 @@
-import {
-  IconBook2,
-  IconCompass,
-  IconFileDescription,
-  IconGitCompare,
-  IconMap,
-  IconSearch,
-  IconSourceCode,
-} from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 
 import { BrandFlourish, BrandMark } from "../components/BrandLockup";
-import { QuickIntentCard } from "../components/QuickIntentCard";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
-const HOME_CARDS = [
-  {
-    title: "Where do I begin?",
-    body: "Answer three questions and get a plain-language starting point.",
-    actionLabel: "Start",
-    icon: IconCompass,
-    view: "start-here" as const,
-  },
-  {
-    title: "What does this control mean?",
-    body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
-    actionLabel: "Explore",
-    icon: IconSearch,
-    view: "search" as const,
-  },
-  {
-    title: "How do these frameworks relate?",
-    body: "Compare public mappings and see what overlaps or needs review.",
-    actionLabel: "Compare",
-    icon: IconGitCompare,
-    view: "matrix" as const,
-  },
-  {
-    title: "How does this process work?",
-    body: "Use task-focused playbooks for common compliance problems.",
-    actionLabel: "Playbooks",
-    icon: IconBook2,
-    view: "patterns" as const,
-  },
-  {
-    title: "What do I need to produce?",
-    body: "Generate blank RMF/ATO templates without uploading data.",
-    actionLabel: "Templates",
-    icon: IconFileDescription,
-    view: "templates" as const,
-  },
-  {
-    title: "Why trust this mapping?",
-    body: "Review sources, versions, and provenance for every link.",
-    actionLabel: "Sources",
-    icon: IconSourceCode,
-    view: "sources" as const,
-  },
-] as const;
-
 export function HomePage(props: HomePageProps) {
   const { onNavigate } = props;
   const [searchDraft, setSearchDraft] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
 
   return (
-    <>
-      <section className="hero home-hero landing-hero">
-        <div className="landing-brand">
-          <BrandMark />
-          <span className="landing-brand-lockup">
-            <BrandFlourish />
-            <h1 className="landing-brand-name">Control Atlas</h1>
-          </span>
-        </div>
+    <section className="landing-hero dot-grid">
+      {/* Radial glow backdrop */}
+      <div aria-hidden="true" className="landing-glow-backdrop" />
 
+      <div className="landing-brand">
+        <div className="landing-wordmark">
+          <BrandMark />
+          <h1 className="landing-brand-name">Control Atlas</h1>
+        </div>
+        <BrandFlourish />
+      </div>
+
+      <p className="landing-tagline">
+        Unified intelligence for NIST controls, STIGs, CCIs,
+        and FedRAMP baselines — all in one place.
+      </p>
+
+      <div className={`landing-search-container ${searchFocused ? "search-focused" : ""}`}>
         <form
           className="home-search"
           onSubmit={(event) => {
@@ -91,79 +46,59 @@ export function HomePage(props: HomePageProps) {
           <input
             aria-label="Search controls, baselines, CCIs, STIGs, and terms"
             onChange={(event) => setSearchDraft(event.target.value)}
-            placeholder="Search anything — account management, AC-2, FedRAMP High, CCI-000225…"
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder="Search anything — account management, AC-2, FedRAMP High…"
             type="search"
             value={searchDraft}
           />
-          <button className="primary" type="submit">
+          <button type="submit">
             Search
           </button>
         </form>
+        {/* Accent line under search on focus */}
+        <div aria-hidden="true" className="search-accent-line" />
+      </div>
 
-        <div className="landing-cta-row">
-          <button
-            className="landing-pill"
-            onClick={() => onNavigate("search", {})}
-            type="button"
-          >
-            Research
-          </button>
+      <div className="landing-cta-row">
+        <button
+          className="landing-pill"
+          onClick={() => onNavigate("search", {})}
+          type="button"
+        >
+          Research
+        </button>
 
-          <button
-            aria-label="Start here — answer three questions for a personalized starting point"
-            className="landing-launch"
-            onClick={() => onNavigate("start-here")}
-            type="button"
-          >
-            <span aria-hidden="true" className="landing-launch-ring">
-              <BrandMark />
-            </span>
-            <span className="landing-launch-caption">click to start</span>
-          </button>
-
-          <button
-            className="landing-pill"
-            onClick={() => onNavigate("templates")}
-            type="button"
-          >
-            Build
-          </button>
-        </div>
+        <button
+          aria-label="Start — see where to begin"
+          className="landing-launch"
+          onClick={() => onNavigate("menu")}
+          type="button"
+        >
+          <span aria-hidden="true" className="landing-launch-ring">
+            <BrandMark />
+          </span>
+          <span className="landing-launch-caption">click to start</span>
+        </button>
 
         <button
           className="landing-pill"
+          onClick={() => onNavigate("templates")}
+          type="button"
+        >
+          Build
+        </button>
+      </div>
+
+      <div className="landing-navigate-row">
+        <button
+          className="landing-pill sm"
           onClick={() => onNavigate("atlas-map")}
           type="button"
         >
           Navigate
         </button>
-      </section>
-
-      <section
-        aria-label="What do you want to do?"
-        className="intent-grid home-card-grid"
-      >
-        <QuickIntentCard
-          actionLabel="Open map"
-          body="See how controls, baselines, CCIs, STIGs, templates, sources, and playbooks connect."
-          icon={<IconMap aria-hidden="true" size={20} stroke={1.8} />}
-          onClick={() => onNavigate("atlas-map")}
-          title="Atlas"
-        />
-        {HOME_CARDS.map((card) => {
-          const Icon = card.icon;
-          return (
-            <QuickIntentCard
-              actionLabel={card.actionLabel}
-              body={card.body}
-              icon={<Icon aria-hidden="true" size={20} stroke={1.8} />}
-              key={card.title}
-              onClick={() => onNavigate(card.view)}
-              title={card.title}
-            />
-          );
-        })}
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

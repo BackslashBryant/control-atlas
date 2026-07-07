@@ -9,6 +9,7 @@ import {
 /** Map internal view keys to hash path segments (user-facing routes). */
 const VIEW_TO_PATH: Record<AppView, string> = {
   home: "/",
+  menu: "/menu",
   "start-here": "/start",
   "atlas-map": "/atlas-map",
   search: "/explore",
@@ -25,6 +26,7 @@ const VIEW_TO_PATH: Record<AppView, string> = {
 
 const PATH_TO_VIEW: Record<string, AppView> = {
   "/": "home",
+  "/menu": "menu",
   "/start": "start-here",
   "/atlas-map": "atlas-map",
   "/explore": "search",

@@ -39,10 +39,13 @@ test('control atlas map-first shell exposes navigation and guided start path', a
 
   // Home is a calm, chrome-free entrance (its own wordmark/search/buttons
   // cover navigation there) — the persistent primary nav is hidden until the
-  // user has gone somewhere else. Reach Start Here via the home hero's own
-  // launch button.
+  // user has gone somewhere else. The center launch button opens the tile
+  // menu one hop in; Start Here is one of those tiles.
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
-  await page.getByRole('button', { name: 'Start here — answer three questions for a personalized starting point' }).click();
+  await page.getByRole('button', { name: 'Start — see where to begin' }).click();
+  await page
+    .locator('.home-card-grid .intent-card', { hasText: 'Where do I begin?' })
+    .click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
