@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { useState } from "react";
 
+import { BrandFlourish, BrandMark } from "../components/BrandLockup";
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import type { ViewState } from "../lib/viewState";
 
@@ -67,9 +68,15 @@ export function HomePage(props: HomePageProps) {
 
   return (
     <>
-      <section className="hero home-hero">
-        <h1>Control Atlas</h1>
-        <p>The public map for federal cyber compliance.</p>
+      <section className="hero home-hero landing-hero">
+        <div className="landing-brand">
+          <BrandMark />
+          <span className="landing-brand-lockup">
+            <BrandFlourish />
+            <h1 className="landing-brand-name">Control Atlas</h1>
+          </span>
+        </div>
+
         <form
           className="home-search"
           onSubmit={(event) => {
@@ -92,22 +99,44 @@ export function HomePage(props: HomePageProps) {
             Search
           </button>
         </form>
-        <div className="hero-actions">
+
+        <div className="landing-cta-row">
           <button
-            className="primary"
+            className="landing-pill"
+            onClick={() => onNavigate("search", {})}
+            type="button"
+          >
+            Research
+          </button>
+
+          <button
+            aria-label="Start here — answer three questions for a personalized starting point"
+            className="landing-launch"
             onClick={() => onNavigate("start-here")}
             type="button"
           >
-            Start here
+            <span aria-hidden="true" className="landing-launch-ring">
+              <BrandMark />
+            </span>
+            <span className="landing-launch-caption">click to start</span>
           </button>
+
           <button
-            className="secondary"
-            onClick={() => onNavigate("atlas-map")}
+            className="landing-pill"
+            onClick={() => onNavigate("templates")}
             type="button"
           >
-            Atlas →
+            Build
           </button>
         </div>
+
+        <button
+          className="landing-pill"
+          onClick={() => onNavigate("atlas-map")}
+          type="button"
+        >
+          Navigate
+        </button>
       </section>
 
       <section

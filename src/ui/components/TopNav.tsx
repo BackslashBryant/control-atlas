@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
 
+import { BrandFlourish, BrandMark } from "./BrandLockup";
 import { activeNavGroupForState, NAV_GROUPS } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
-
-const BRAND_WORDS = ["Comply", "Map", "Navigate", "Audit"];
 
 type TopNavProps = {
   bundle: RuntimeBundle | null;
@@ -34,32 +33,11 @@ export function TopNav(props: TopNavProps) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const [wordIdx, setWordIdx] = useState(0);
-  const [fading, setFading] = useState(false);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    let swapTimer: number | undefined;
-    const interval = window.setInterval(() => {
-      setFading(true);
-      swapTimer = window.setTimeout(() => {
-        setWordIdx((i) => (i + 1) % BRAND_WORDS.length);
-        setFading(false);
-      }, 200);
-    }, 2500);
-    return () => {
-      window.clearInterval(interval);
-      if (swapTimer !== undefined) window.clearTimeout(swapTimer);
-    };
-  }, [prefersReducedMotion]);
-  const rotatingWord = BRAND_WORDS[wordIdx];
-  const longestBrandWord = BRAND_WORDS.reduce(
-    (longest, word) => (word.length > longest.length ? word : longest),
-    "",
-  );
+  // The home view is a self-contained calm entrance (its own wordmark,
+  // flourish, search, and nav-equivalent buttons) — the persistent site
+  // chrome would duplicate all of that, so it stays hidden until the user
+  // has navigated somewhere else.
+  const hideChrome = introVisible || viewState.view === "home";
 
   function navigateFromGroup(view: ViewState["view"], patch?: Partial<ViewState>) {
     setOpenGroup(null);
@@ -73,9 +51,9 @@ export function TopNav(props: TopNavProps) {
 
   return (
     <header
-      aria-hidden={introVisible || undefined}
+      aria-hidden={hideChrome || undefined}
       className="site-header"
-      hidden={introVisible}
+      hidden={hideChrome}
     >
       <button
         aria-label="Control Atlas — home"
@@ -83,34 +61,9 @@ export function TopNav(props: TopNavProps) {
         onClick={() => onNavigate("home")}
         type="button"
       >
-        <span className="brand-icon-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <defs>
-              <linearGradient id="brand-mark-gradient" x1="36.6" y1="28.14" x2="54.98" y2="12.71" gradientUnits="userSpaceOnUse">
-                <stop offset="0" stopColor="#2563EB" />
-                <stop offset="1" stopColor="#22D3EE" />
-              </linearGradient>
-            </defs>
-            <circle cx="32" cy="32" r="22" fill="none" stroke="#22D3EE" strokeWidth="5" strokeLinecap="round" strokeDasharray="107.51 30.72" />
-            <line x1="36.6" y1="28.14" x2="50.4" y2="16.57" stroke="url(#brand-mark-gradient)" strokeWidth="5.5" strokeLinecap="round" />
-            <polygon points="54.98,12.71 53.29,20.02 47.51,13.12" fill="url(#brand-mark-gradient)" />
-          </svg>
-        </span>
+        <BrandMark />
         <span className="brand-lockup">
-          <span className="brand-kbd" aria-hidden="true">
-            <span className="brand-key">Ctrl</span>
-            <span className="brand-plus">+</span>
-            <span className="brand-key">Alt</span>
-            <span className="brand-plus">+</span>
-            <span className="brand-key brand-key--active">
-              <span aria-hidden="true" className="brand-key-sizer">
-                {longestBrandWord}
-              </span>
-              <span className={`brand-key-word${fading ? " fading" : ""}`}>
-                {rotatingWord}
-              </span>
-            </span>
-          </span>
+          <BrandFlourish />
           <span className="brand-name">Control Atlas</span>
         </span>
       </button>

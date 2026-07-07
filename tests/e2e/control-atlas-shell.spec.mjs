@@ -13,7 +13,9 @@ test('brand entrance appears once, is dismissible, and hides navigation while vi
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
   await entrance.press('Escape');
   await expect(entrance).toBeHidden();
-  await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
+  // Home is a calm, chrome-free entrance — the primary nav stays hidden here
+  // by design; dismissing the intro reveals the home hero's own controls.
+  await expect(page.getByRole('button', { name: 'Navigate', exact: true })).toBeVisible();
   await page.reload();
   await expect(entrance).toHaveCount(0);
 });
@@ -30,13 +32,31 @@ test('reduced motion bypasses the brand entrance without an artificial hold', as
 test('control atlas map-first shell exposes navigation and guided start path', async ({ page }) => {
   await page.goto('/');
   await waitForAppReady(page);
-  const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
 
   await expect(page).toHaveTitle(/Control Atlas/);
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.locator('.home-hero').getByText('The public map for federal cyber compliance.')).toBeVisible();
 
+  // Home is a calm, chrome-free entrance (its own wordmark/search/buttons
+  // cover navigation there) — the persistent primary nav is hidden until the
+  // user has gone somewhere else. Reach Start Here via the home hero's own
+  // launch button.
+  await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
+  await page.getByRole('button', { name: 'Start here — answer three questions for a personalized starting point' }).click();
+  await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
+  await page.getByLabel('System type').selectOption('Cloud SaaS');
+  await page.getByLabel('Data sensitivity').selectOption('Moderate');
+  await page.getByLabel('Operational environment').selectOption('CSP');
+  await page.getByRole('button', { name: 'Show recommendation' }).click();
+  await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
+  await expect(page.getByText('FedRAMP Rev. 5 Baselines')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true })).toBeVisible();
+
+  // Off the home view, the persistent site chrome appears with its three
+  // nav groups.
+  const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' });
+  await expect(primaryNav).toBeVisible();
   const navLabels = await primaryNav.getByRole('button').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
@@ -67,25 +87,19 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   );
   expect(buildMenuLabels).toEqual(['Templates', 'Playbooks']);
 
+  // Clicking the brand button returns to the calm home entrance, which
+  // hides the chrome again.
   await page.getByRole('button', { name: 'Control Atlas' }).click();
   await expect(page).toHaveURL(/#\/?$|\/$/);
-
-  await primaryNav.getByRole('button', { name: 'Navigate' }).click();
-  await primaryNav.getByRole('menuitem', { name: 'Start', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
-  await page.getByLabel('System type').selectOption('Cloud SaaS');
-  await page.getByLabel('Data sensitivity').selectOption('Moderate');
-  await page.getByLabel('Operational environment').selectOption('CSP');
-  await page.getByRole('button', { name: 'Show recommendation' }).click();
-  await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
-  await expect(page.getByText('FedRAMP Rev. 5 Baselines')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true })).toBeVisible();
+  await expect(primaryNav).toBeHidden();
 });
 
 test('visible search trigger opens the global search dialog', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  // The header search trigger lives in the persistent site chrome, which is
+  // hidden on the calm home entrance — exercise it from a page where it's
+  // actually visible.
+  await page.goto('/?view=explore');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
