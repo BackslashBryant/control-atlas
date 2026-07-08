@@ -15,7 +15,7 @@ test('brand entrance appears once, is dismissible, and hides navigation while vi
   await expect(entrance).toBeHidden();
   // Home is a calm, chrome-free entrance — the primary nav stays hidden here
   // by design; dismissing the intro reveals the home hero's own controls.
-  await expect(page.getByRole('button', { name: 'Navigate', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Navigate Maps', exact: true })).toBeVisible();
   await page.reload();
   await expect(entrance).toHaveCount(0);
 });
@@ -44,7 +44,7 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
   await page.getByRole('button', { name: 'Start — see where to begin' }).click();
   await page
-    .locator('.home-card-grid .intent-card', { hasText: 'Where do I begin?' })
+    .locator('.home-card-grid .intent-card', { hasText: 'Research · Learn' })
     .click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
@@ -64,31 +64,37 @@ test('control atlas map-first shell exposes navigation and guided start path', a
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
   expect(navLabels).toEqual([
+    'Search',
+    'Research · Learn',
     'Navigate',
-    'Research',
-    'Build',
+    'Build · Create',
   ]);
 
   await primaryNav.getByRole('button', { name: 'Navigate' }).click();
-  await expect(primaryNav.getByRole('menuitem', { name: 'Start' })).toBeVisible();
   await expect(primaryNav.getByRole('menuitem', { name: 'Atlas' })).toBeVisible();
 
   const navigateMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(navigateMenuLabels).toEqual(['Start', 'Atlas']);
+  expect(navigateMenuLabels).toEqual(['Atlas', 'Compare']);
 
-  await primaryNav.getByRole('button', { name: 'Research' }).click();
+  await primaryNav.getByRole('button', { name: 'Research · Learn' }).click();
   const researchMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(researchMenuLabels).toEqual(['Compare', 'Sources', 'Frameworks', 'Controls']);
+  expect(researchMenuLabels).toEqual(['Start', 'Sources', 'Playbooks']);
 
-  await primaryNav.getByRole('button', { name: 'Build' }).click();
+  await primaryNav.getByRole('button', { name: 'Build · Create' }).click();
   const buildMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
     nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
   );
-  expect(buildMenuLabels).toEqual(['Templates', 'Playbooks']);
+  expect(buildMenuLabels).toEqual(['Templates']);
+
+  await primaryNav.getByRole('button', { name: 'Search', exact: true }).click();
+  const searchMenuLabels = await primaryNav.getByRole('menuitem').evaluateAll((nodes) =>
+    nodes.map((node) => node.textContent?.replace(/\s+/g, ' ').trim() || ''),
+  );
+  expect(searchMenuLabels).toEqual(['Search']);
 
   // Clicking the brand button returns to the calm home entrance, which
   // hides the chrome again.
@@ -188,8 +194,6 @@ test('compare starts with intent cards and opens summary-first framework results
   await dismissOnboarding(page);
   await expect(page.getByRole('heading', { name: 'What do you want to compare?' })).toBeVisible();
   await expect(page.getByText('Framework to framework')).toBeVisible();
-  await expect(page.getByText('STIG/SRG to controls')).toBeVisible();
-  await page.locator('.intent-card', { hasText: 'Framework to framework' }).click();
   await expect(page.getByLabel('Framework A')).toBeVisible();
   await expect(page.getByLabel('Framework B')).toBeVisible();
   await page.getByLabel('Framework A').selectOption('nist-800-53');
@@ -212,8 +216,8 @@ test('compare stig chain traces DISA items through CCI to NIST controls', async 
   await page.goto('/?view=matrix');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.locator('.intent-card', { hasText: 'STIG/SRG to controls' }).click();
-  await expect(page.getByLabel('Catalog')).toBeVisible();
+  await page.getByRole("button", { name: "STIG/SRG to controls" }).click();
+  await expect(page.locator('#field-catalog')).toBeVisible();
   await page.getByRole('button', { name: 'View mapping trace' }).first().click();
   await expect(page.getByText('Selected chain')).toBeVisible();
   const chainPanel = page.locator('.chain-grid');
@@ -277,7 +281,7 @@ test('legacy view query redirects to hash route on boot', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/atlas-map/);
-  await expect(page.locator("main").getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
+  await expect(page.locator("main").getByRole("heading", { name: "Where would you like to start?", level: 1 })).toBeVisible();
 });
 
 test('hash deep route survives refresh on built site', async ({ page }) => {

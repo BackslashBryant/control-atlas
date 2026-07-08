@@ -14,6 +14,10 @@ test("Atlas Map starts with nine ordered source categories", async ({ page }) =>
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
+
   await expect(
     page.getByText(
       "Nine layers make up federal cyber compliance. Select a layer to open it and see the sources inside.",
@@ -77,8 +81,12 @@ test("Atlas Map search opens a focused control map from the default route", asyn
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
+
   await page.getByRole("searchbox", { name: "Search Atlas Map" }).fill("AC-2");
-  await page.getByRole("button", { name: "Search", exact: true }).click();
+  await page.locator(".atlas-map-command").getByRole("button", { name: "Search" }).click();
 
   await expect(page).toHaveURL(/node=(AC-2|nist-800-53%3AAC-2|nist-800-53:AC-2)/);
   // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
@@ -94,6 +102,10 @@ test("selecting a layer drills into its sources and back", async ({
   await page.goto("/#/atlas-map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
+
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
 
   await page
     .getByRole("group", { name: "Map nodes" })
