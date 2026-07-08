@@ -15,7 +15,7 @@ test('brand entrance appears once, is dismissible, and hides navigation while vi
   await expect(entrance).toBeHidden();
   // Home is a calm, chrome-free entrance — the primary nav stays hidden here
   // by design; dismissing the intro reveals the home hero's own controls.
-  await expect(page.getByRole('button', { name: 'Navigate Maps', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Research & Learn', exact: true })).toBeVisible();
   await page.reload();
   await expect(entrance).toHaveCount(0);
 });
@@ -42,10 +42,7 @@ test('control atlas map-first shell exposes navigation and guided start path', a
   // user has gone somewhere else. The center launch button opens the tile
   // menu one hop in; Start Here is one of those tiles.
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeHidden();
-  await page.getByRole('button', { name: 'Start — see where to begin' }).click();
-  await page
-    .locator('.home-card-grid .intent-card', { hasText: 'Research · Learn' })
-    .click();
+  await page.getByRole('button', { name: 'Research & Learn', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Find the best place to start' })).toBeVisible();
   await page.getByLabel('System type').selectOption('Cloud SaaS');
   await page.getByLabel('Data sensitivity').selectOption('Moderate');
