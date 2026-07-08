@@ -25,37 +25,30 @@ export type NavGroup = {
 
 export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Navigate",
+    label: "Search",
+    items: [
+      { label: "Search", view: "search", path: "/explore", icon: IconSearch },
+    ],
+  },
+  {
+    label: "Research · Learn",
     items: [
       { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
-      { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
-    ],
-  },
-  {
-    label: "Research",
-    items: [
-      { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
       { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
-      { label: "Frameworks", view: "search", path: "/explore", icon: IconSearch },
-      {
-        label: "Controls",
-        view: "search",
-        path: "/explore",
-        icon: IconSearch,
-        patch: { objectType: "control" },
-      },
+      { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
     ],
   },
   {
-    label: "Build",
+    label: "Navigate",
     items: [
-      {
-        label: "Templates",
-        view: "templates",
-        path: "/templates",
-        icon: IconClipboardList,
-      },
-      { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
+      { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+      { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
+    ],
+  },
+  {
+    label: "Build · Create",
+    items: [
+      { label: "Templates", view: "templates", path: "/templates", icon: IconClipboardList },
     ],
   },
 ];

@@ -41,7 +41,7 @@ test('/atlas resolves to the Atlas Map view', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
-    page.locator('main').getByRole('heading', { name: 'Atlas', level: 1 }),
+    page.locator('main').getByRole('heading', { name: 'Where would you like to start?', level: 1 }),
   ).toBeVisible();
 });
 
@@ -98,6 +98,10 @@ test('atlas map renders a bounded starter cluster, not the full graph', async ({
   await page.goto('/#/atlas-map');
   await waitForAppReady(page);
   await dismissOnboarding(page);
+
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
   await expect(page.locator('.react-flow__node').first()).toBeVisible({
     timeout: 20000,
   });

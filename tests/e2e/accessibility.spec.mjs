@@ -85,9 +85,7 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page
-    .locator(".intent-card", { hasText: "Framework to framework" })
-    .click();
+  // The compare page now defaults to the Framework to framework workbench
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });

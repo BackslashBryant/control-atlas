@@ -136,8 +136,8 @@ export function ExplorePage(props: {
   // Bound the DOM: an empty query matches the whole library (9k+ records).
   // Open every group only for small result sets; always cap the cards
   // rendered per group so browsing stays responsive.
-  const GROUP_RENDER_CAP = 30;
-  const openAllGroups = visibleDocumentRows.length <= 60;
+  const GROUP_RENDER_CAP = 5;
+  const openAllGroups = visibleDocumentRows.length <= 10;
   const defaultOpenGroups = [
     ...(glossaryMatches.length ? ["Glossary"] : []),
     ...(openAllGroups

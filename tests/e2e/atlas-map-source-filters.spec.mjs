@@ -16,6 +16,10 @@ test("optional source filters expose gated records with warnings", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
+
   // Source-visibility filters now live in a "Display options" disclosure.
   await page.getByText("Display options", { exact: true }).click();
 

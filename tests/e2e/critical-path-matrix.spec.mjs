@@ -20,7 +20,7 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Navigate", exact: true }),
+    page.getByRole("button", { name: "Navigate Maps", exact: true }),
   ).toBeVisible();
 
   // The calm landing is search + buttons only - the primary entry cards
@@ -28,15 +28,20 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await page.goto("/#/menu");
   await waitForAppReady(page);
   await expect(
-    page.locator(".home-card-grid .intent-card").filter({ hasText: "Atlas" }),
-  ).toBeVisible();
-  await expect(
     page.locator(".home-card-grid .intent-card").filter({
-      hasText: "How do these frameworks relate?",
+      has: page.getByText("Search", { exact: true }),
     }),
   ).toBeVisible();
   await expect(
-    page.locator(".home-card-grid .intent-card").filter({ hasText: "What do I need to produce?" }),
+    page.locator(".home-card-grid .intent-card").filter({
+      hasText: "Research · Learn",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "Navigate Maps" }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".home-card-grid .intent-card").filter({ hasText: "Build · Create" }),
   ).toBeVisible();
 });
 
@@ -44,6 +49,10 @@ test("critical path: Atlas matrix table links to graph node", async ({ page }) =
   await page.goto("/?view=atlas-map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
+
+  // Navigate through the preset menu to the framework map
+  await page.getByRole("button", { name: "Framework Map" }).click();
+  await expect(page).toHaveURL(/node=foundation/);
 
   // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
   await page.getByText("Coverage matrix", { exact: true }).click();
@@ -61,9 +70,7 @@ test("critical path: compare detailed mappings expose text provenance labels", a
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page
-    .locator(".intent-card", { hasText: "Framework to framework" })
-    .click();
+  // The compare page now defaults to the Framework to framework workbench
   await page.getByLabel("Framework A").selectOption("nist-800-53");
   await page.getByLabel("Framework B").selectOption("csf-2");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
@@ -188,7 +195,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
-  await primaryNav.getByRole("button", { name: "Navigate" }).click();
+  await primaryNav.getByRole("button", { name: "Research · Learn" }).click();
   const startHere = primaryNav.getByRole("menuitem", {
     name: "Start",
     exact: true,

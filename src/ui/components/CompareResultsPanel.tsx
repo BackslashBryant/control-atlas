@@ -140,7 +140,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
             <button
               className="secondary"
               onClick={() =>
-                onNavigate("matrix", { workbench: "intent", compareView: "list" })
+                onNavigate("matrix", { workbench: "relationships", compareView: "list" })
               }
               type="button"
             >

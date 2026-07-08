@@ -18,6 +18,12 @@ import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
 } from "../graph/buildVisibleRelationshipModel.ts";
+import {
+  IconSearch,
+  IconFocusCentered,
+  IconMap,
+} from "@tabler/icons-react";
+import { QuickIntentCard } from "../components/QuickIntentCard";
 import { AtlasLeverageInspector } from "../components/AtlasLeverageInspector";
 import {
   buildCrossFrameworkEquivalents,
@@ -99,16 +105,57 @@ function useIsNarrowViewport(query = "(max-width: 768px)"): boolean {
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
-  const node = props.state.node.trim();
+  const node = props.state.node?.trim();
+  if (!node) {
+    return <AtlasPresetMenu {...props} />;
+  }
   if (
-    !node ||
     node === "AC-2" ||
     node === "nist-800-53:AC-2" ||
-    node.startsWith("hierarchy:")
+    node.startsWith("hierarchy:") ||
+    node === "foundation"
   ) {
     return <FoundationAtlasMapPage {...props} />;
   }
   return <RuntimeAtlasMapPage {...props} />;
+}
+
+function AtlasPresetMenu(props: AtlasMapPageProps) {
+  const { onNavigate } = props;
+  return (
+    <section className="panel">
+      <header className="page-header">
+        <p className="eyebrow">Atlas Map</p>
+        <div>
+          <h1>Where would you like to start?</h1>
+          <p className="page-summary">Visualize connections across frameworks, templates, and playbooks. Choose a preset below to start.</p>
+        </div>
+      </header>
+      <div className="intent-grid">
+        <QuickIntentCard
+          actionLabel="Open map"
+          body="Explore the full framework taxonomy from the top down."
+          icon={<IconMap size={20} stroke={1.8} />}
+          onClick={() => onNavigate("atlas-map", { node: "foundation" })}
+          title="Framework Map"
+        />
+        <QuickIntentCard
+          actionLabel="Open map"
+          body="See how a single control connects to everything else, using AC-2 as an example."
+          icon={<IconFocusCentered size={20} stroke={1.8} />}
+          onClick={() => onNavigate("atlas-map", { node: "AC-2" })}
+          title="Focused Control"
+        />
+        <QuickIntentCard
+          actionLabel="Search"
+          body="Find a specific control, baseline, or template and view its connections."
+          icon={<IconSearch size={20} stroke={1.8} />}
+          onClick={() => onNavigate("search")}
+          title="Search for a node"
+        />
+      </div>
+    </section>
+  );
 }
 
 function FoundationAtlasMapPage(props: AtlasMapPageProps) {
@@ -120,7 +167,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const drillLabel = drillTier
     ? (SOURCE_HIERARCHY_LABELS[drillTier as SourceHierarchyTier] ?? drillTier)
     : null;
-  const focused = Boolean(trimmedNode) && !drillTier;
+  const focused = Boolean(trimmedNode) && !drillTier && trimmedNode !== "foundation" && trimmedNode !== "landscape";
   const [mapSearchDraft, setMapSearchDraft] = useState("");
   const routeVisibilityFilters: SourceVisibilityFilters = {
     showSupportingReferences: state.showSupportingReferences === "true",
@@ -301,7 +348,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
         <nav aria-label="Atlas breadcrumb" className="ca-atlas-drill-bar">
           <button
             className="secondary quiet"
-            onClick={() => onNavigate("atlas-map", { ...state, node: "" })}
+            onClick={() => onNavigate("atlas-map", { ...state, node: "foundation" })}
             type="button"
           >
             ← All layers
