@@ -329,7 +329,7 @@ test('explore search is route-derived and survives refresh', async ({ page }) =>
 });
 
 test('footer about link opens the trust page with full disclaimer', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/search');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('link', { name: 'About & trust' }).click();
