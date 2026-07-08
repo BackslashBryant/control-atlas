@@ -58,10 +58,10 @@ export function HomePage(props: HomePageProps) {
       <div className="landing-cta-row">
         <button
           className="landing-pill"
-          onClick={() => onNavigate("search", {})}
+          onClick={() => onNavigate("start-here")}
           type="button"
         >
-          Research
+          Research · Learn
         </button>
 
         <button
@@ -81,7 +81,7 @@ export function HomePage(props: HomePageProps) {
           onClick={() => onNavigate("templates")}
           type="button"
         >
-          Build
+          Build · Create
         </button>
       </div>
 
@@ -91,7 +91,7 @@ export function HomePage(props: HomePageProps) {
           onClick={() => onNavigate("atlas-map")}
           type="button"
         >
-          Navigate
+          Navigate Maps
         </button>
       </div>
     </section>

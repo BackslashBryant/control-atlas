@@ -32,9 +32,9 @@ test("atlas map: default starter state without selected node", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Where would you like to start?", level: 1 })).toBeVisible();
   await expect(
-    page.getByText(/Nine layers make up federal cyber compliance/i),
+    page.getByRole("button", { name: "Framework Map" }),
   ).toBeVisible();
 });
 
