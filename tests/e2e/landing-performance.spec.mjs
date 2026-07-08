@@ -11,17 +11,11 @@ test('landing presents the map-first hero and primary entry paths', async ({ pag
   await dismissOnboarding(page);
 
   await expect(page.getByRole('heading', { name: 'Control Atlas', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start — see where to begin' })).toBeVisible();
+  
+  // The landing page directly presents the primary intent paths
+  await expect(page.getByRole('button', { name: 'Research & Learn', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Navigate Maps', exact: true })).toBeVisible();
-
-  // The calm landing is search + buttons only - the primary entry cards
-  // live one hop in, on the tile menu the center launch button opens.
-  await page.goto('/#/menu');
-  await waitForAppReady(page);
-  await expect(page.locator('.home-card-grid .intent-card').filter({ has: page.getByText('Search', { exact: true }) })).toBeVisible();
-  await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'Research · Learn' })).toBeVisible();
-  await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'Navigate Maps' })).toBeVisible();
-  await expect(page.locator('.home-card-grid .intent-card').filter({ hasText: 'Build · Create' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Build & Create', exact: true })).toBeVisible();
 });
 
 test('landing search and brand-home flow work without legacy onboarding surfaces', async ({ page }) => {

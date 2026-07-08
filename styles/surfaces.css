@@ -1,4 +1,4 @@
-/* LEGACY — do not add new rules here. New components use .ca-* tokens in components.css. Migrate incrementally. */
+/* LEGACY â€” do not add new rules here. New components use .ca-* tokens in components.css. Migrate incrementally. */
 
 * {
   box-sizing: border-box;
@@ -116,7 +116,7 @@ a {
 }
 
 /* The navigation-arrow dart is a solid fill in the real logo, not a stroked
-   outline like the surrounding arc — override the shared stroke-only rule
+   outline like the surrounding arc â€” override the shared stroke-only rule
    above for just this path. */
 .brand-entrance-mark .ca-mark-arrow {
   fill: currentColor;
@@ -186,7 +186,7 @@ a {
   flex-shrink: 0;
 }
 
-/* Brand wordmark — [Ctrl]+[Alt]+[Comply↻] */
+/* Brand wordmark â€” [Ctrl]+[Alt]+[Complyâ†»] */
 .brand {
   display: flex;
   align-items: center;
@@ -2049,7 +2049,7 @@ button.atlas-leverage-row:hover {
   display: none;
 }
 
-/* Coverage matrix as a collapsible bottom drawer (CATL-52) — never competes
+/* Coverage matrix as a collapsible bottom drawer (CATL-52) â€” never competes
    with the graph for width. */
 .atlas-coverage-drawer {
   border: 1px solid var(--ca-border);
@@ -2072,7 +2072,7 @@ button.atlas-leverage-row:hover {
   display: none;
 }
 .atlas-coverage-drawer > summary::before {
-  content: "▸";
+  content: "â–¸";
   color: var(--ca-text-muted);
   transition: transform 0.15s ease;
 }
@@ -2116,7 +2116,7 @@ button.atlas-leverage-row:hover {
   display: none;
 }
 .atlas-display-options > summary::before {
-  content: "⚙";
+  content: "âš™";
   color: var(--ca-text-muted);
 }
 .atlas-display-options[open] > summary {
@@ -2232,7 +2232,7 @@ button.atlas-leverage-row:hover {
   }
 }
 
-/* Per-catalog map coverage (CATL-24) — honest connectivity, not implied full. */
+/* Per-catalog map coverage (CATL-24) â€” honest connectivity, not implied full. */
 .catalog-coverage {
   display: grid;
   gap: var(--space-3);
@@ -2616,107 +2616,71 @@ button.atlas-leverage-row:hover {
   cursor: not-allowed;
 }
 
-/* Calm, self-contained entrance: wordmark, flourish, search, buttons */
+/* â”€â”€ Landing Page (HomePage) â”€â”€ */
 .landing-hero {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100dvh;
-  text-align: center;
-  overflow: hidden;
-  padding: 0 var(--space-6);
-}
-
-.dot-grid {
-  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-.landing-glow-backdrop {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.landing-glow-backdrop::after {
-  content: "";
-  height: 800px;
-  width: 800px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--ca-brand) 3.5%, transparent);
-  filter: blur(160px);
+  min-height: calc(100vh - 120px);
+  padding: var(--space-8) 0 var(--space-16);
+  z-index: 10;
 }
 
 .landing-brand {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
-  margin-bottom: var(--space-16);
-  z-index: 10;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+  text-align: center;
 }
 
-.landing-wordmark {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+.landing-brand svg {
+  color: var(--ca-text);
+  width: 56px;
+  height: 56px;
 }
 
-.landing-wordmark .brand-icon-mark {
-  width: 36px;
-  height: 36px;
-  color: var(--ca-brand);
-}
-
-.landing-hero .landing-brand-name {
-  font-size: clamp(1.5rem, 4vw, 1.875rem);
-  font-weight: 600;
+.landing-brand-name {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ca-text);
-  max-width: none;
+  margin: 0;
 }
 
 .landing-tagline {
-  margin-bottom: var(--space-12);
-  max-width: 28rem;
-  text-align: center;
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
   color: var(--ca-text-muted);
-  text-wrap: pretty;
-  z-index: 10;
+  max-width: 32rem;
+  line-height: var(--line-height-relaxed);
+  margin: 0;
 }
 
 .landing-search-container {
-  position: relative;
-  margin-bottom: var(--space-16);
   width: 100%;
-  max-width: 42rem;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.landing-search-container.search-focused {
-  animation: scan-glow 0.6s ease forwards;
+  max-width: 48rem;
+  margin-bottom: var(--space-16);
 }
 
 .home-search {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--ca-border);
+  gap: var(--space-3);
+  width: 100%;
   background: var(--ca-surface-raised);
-  padding: 0.85rem var(--space-4);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .landing-search-container.search-focused .home-search {
-  border-color: color-mix(in srgb, var(--ca-brand) 50%, transparent);
+  border-color: var(--ca-secondary);
+  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4), 0 0 0 4px color-mix(in srgb, var(--ca-secondary) 15%, transparent);
 }
 
 .home-search-icon {
@@ -2724,200 +2688,100 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text-muted);
 }
 
-.home-search input {
+.home-search input[type="search"] {
   flex: 1;
+  min-width: 0;
+  border: none;
   background: transparent;
-  border: none;
   color: var(--ca-text);
-  font-size: var(--font-size-sm);
-  font-family: var(--ca-font-mono);
+  font-size: var(--font-size-base);
+  padding: var(--space-3) 0;
   outline: none;
-  padding: 0;
 }
 
-.home-search input::placeholder {
-  color: color-mix(in srgb, var(--ca-text-muted) 50%, transparent);
+.home-search input[type="search"]::placeholder {
+  color: var(--ca-text-subtle);
 }
 
-.home-search button {
+.home-search-submit {
   flex-shrink: 0;
-  border-radius: var(--radius-lg);
-  background: var(--ca-brand);
-  padding: 0.35rem 1rem;
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: #fff;
+  background: var(--ca-secondary);
+  color: #000;
   border: none;
-  transition: opacity 0.2s;
-}
-
-.home-search button:hover {
-  opacity: 0.85;
-}
-
-.home-search button:active {
-  transform: scale(0.95);
-}
-
-.search-accent-line {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  height: 1px;
-  transform: translateX(-50%);
-  background: var(--ca-brand);
-  transition: all 0.3s ease;
-  width: 0;
-  opacity: 0;
-}
-
-.landing-search-container.search-focused .search-accent-line {
-  width: 100%;
-  opacity: 1;
-}
-
-@keyframes scan-glow {
-  0%   { box-shadow: 0 0 0 1px color-mix(in srgb, var(--ca-brand) 0%, transparent); }
-  50%  { box-shadow: 0 0 20px 2px color-mix(in srgb, var(--ca-brand) 30%, transparent); }
-  100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--ca-brand) 50%, transparent); }
-}
-
-/* Grid (not flex justify-content:center) so the launch ring sits at the true visual center */
-.landing-cta-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: var(--space-16);
-  margin-top: var(--space-8);
-  z-index: 10;
-}
-
-.landing-cta-row > .landing-pill:first-child {
-  justify-self: end;
-}
-
-.landing-cta-row > .landing-pill:last-child {
-  justify-self: start;
-}
-
-.landing-pill {
-  appearance: none;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 500;
+  padding: 0.8rem 1.5rem;
+  border-radius: calc(var(--radius-xl) - 4px);
+  font-weight: 700;
   font-size: var(--font-size-sm);
-  padding: 0.6rem 1.75rem;
-  border-radius: 999px;
-  color: var(--ca-text-muted);
-  background: var(--ca-surface-raised);
-  border: 1px solid var(--ca-border);
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-
-.landing-pill.sm {
-  padding: 0.5rem 1.25rem;
-  font-size: var(--font-size-xs);
-}
-
-.landing-pill:hover,
-.landing-pill:focus-visible {
-  border-color: color-mix(in srgb, var(--ca-brand) 30%, transparent);
-  background: color-mix(in srgb, var(--ca-brand) 8%, transparent);
-  color: var(--ca-text);
-}
-
-.landing-pill:active {
-  transform: scale(0.95);
-}
-
-.landing-launch {
-  appearance: none;
+  transition: background-color 0.2s ease;
   cursor: pointer;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  background: none;
-  border: none;
-  padding: 0;
 }
 
-.landing-launch-ring {
+.home-search-submit:hover,
+.home-search-submit:focus-visible {
+  background: color-mix(in srgb, var(--ca-secondary) 85%, #fff);
+  outline: none;
+}
+
+.landing-intents {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 64rem;
+}
+
+.landing-intent-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.landing-intent-card:hover,
+.landing-intent-card:focus-visible {
+  background: color-mix(in srgb, var(--ca-surface-raised) 50%, transparent);
+  border-color: rgba(148, 163, 184, 0.35);
+  transform: translateY(-2px);
+}
+
+.intent-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: var(--ca-surface-raised);
-  border: 1px solid color-mix(in srgb, var(--ca-brand) 25%, transparent);
-  color: var(--ca-brand);
-  transition: all 0.2s ease;
-  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--ca-secondary) 12%, transparent);
+  color: var(--ca-secondary);
+  flex-shrink: 0;
 }
 
-.landing-launch-ring::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--ca-brand) 8%, transparent);
-  transition: border-color 0.2s ease;
+.intent-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
-.landing-launch-ring .brand-icon-mark {
-  width: 56px;
-  height: 56px;
+.intent-content h3 {
+  color: var(--ca-text);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin: 0;
 }
 
-.landing-launch:hover .landing-launch-ring,
-.landing-launch:focus-visible .landing-launch-ring {
-  border-color: color-mix(in srgb, var(--ca-brand) 50%, transparent);
-  background: color-mix(in srgb, var(--ca-brand) 8%, transparent);
+.intent-content p {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
 }
-
-.landing-launch:hover .landing-launch-ring::before,
-.landing-launch:focus-visible .landing-launch-ring::before {
-  border-color: color-mix(in srgb, var(--ca-brand) 15%, transparent);
-}
-
-.landing-launch-caption {
-  font-family: var(--ca-font-mono);
-  font-size: 11px;
-  color: color-mix(in srgb, var(--ca-text-muted) 60%, transparent);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.landing-navigate-row {
-  margin-top: var(--space-12);
-  z-index: 10;
-}
-
-@keyframes landing-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ca-brand) 0%, transparent);
-  }
-  50% {
-    transform: scale(1.04);
-    box-shadow: 0 0 28px 8px color-mix(in srgb, var(--ca-brand) 20%, transparent);
-  }
-}
-
-.landing-launch-ring {
-  animation: landing-pulse 2.8s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .landing-launch-ring {
-    animation: none;
-  }
-}
-
 .detail-page {
   display: grid;
   gap: var(--ca-space-6);
@@ -3152,3 +3016,4 @@ button.atlas-leverage-row:hover {
 .react-flow__controls-button:hover {
   background: rgba(37, 99, 235, 0.24);
 }
+

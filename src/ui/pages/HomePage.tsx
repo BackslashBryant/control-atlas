@@ -1,7 +1,7 @@
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconBook, IconMap, IconLayoutList } from "@tabler/icons-react";
 import { useState } from "react";
 
-import { BrandFlourish, BrandMark } from "../components/BrandLockup";
+import { BrandMark } from "../components/BrandLockup";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -14,16 +14,13 @@ export function HomePage(props: HomePageProps) {
   const [searchFocused, setSearchFocused] = useState(false);
 
   return (
-    <section className="landing-hero dot-grid">
-      {/* Radial glow backdrop */}
-      <div aria-hidden="true" className="landing-glow-backdrop" />
-
+    <section className="landing-hero">
       <div className="landing-brand">
-        <div className="landing-wordmark">
-          <BrandMark />
-          <h1 className="landing-brand-name">Control Atlas</h1>
-        </div>
-        <BrandFlourish />
+        <BrandMark />
+        <h1 className="landing-brand-name">Control Atlas</h1>
+        <p className="landing-tagline">
+          The public map for federal cyber compliance.
+        </p>
       </div>
 
       <div className={`landing-search-container ${searchFocused ? "search-focused" : ""}`}>
@@ -37,7 +34,7 @@ export function HomePage(props: HomePageProps) {
           }}
           role="search"
         >
-          <IconSearch aria-hidden="true" className="home-search-icon" size={20} stroke={1.8} />
+          <IconSearch aria-hidden="true" className="home-search-icon" size={24} stroke={1.5} />
           <input
             aria-label="Search controls, baselines, CCIs, STIGs, and terms"
             onChange={(event) => setSearchDraft(event.target.value)}
@@ -47,51 +44,41 @@ export function HomePage(props: HomePageProps) {
             type="search"
             value={searchDraft}
           />
-          <button type="submit">
+          <button className="home-search-submit" type="submit">
             Search
           </button>
         </form>
-        {/* Accent line under search on focus */}
-        <div aria-hidden="true" className="search-accent-line" />
       </div>
 
-      <div className="landing-cta-row">
-        <button
-          className="landing-pill"
-          onClick={() => onNavigate("start-here")}
-          type="button"
-        >
-          Research · Learn
+      <div className="landing-intents">
+        <button aria-label="Research & Learn" className="landing-intent-card" onClick={() => onNavigate("start-here")} type="button">
+          <div className="intent-icon-wrapper">
+             <IconBook size={24} stroke={1.5} />
+          </div>
+          <div className="intent-content">
+            <h3 aria-hidden="true">Research &middot; Learn</h3>
+            <p aria-hidden="true">Understand controls, baselines, and get practical advice.</p>
+          </div>
         </button>
 
-        <button
-          aria-label="Start — see where to begin"
-          className="landing-launch"
-          onClick={() => onNavigate("menu")}
-          type="button"
-        >
-          <span aria-hidden="true" className="landing-launch-ring">
-            <BrandMark />
-          </span>
-          <span className="landing-launch-caption">click to start</span>
+        <button aria-label="Navigate Maps" className="landing-intent-card" onClick={() => onNavigate("atlas-map")} type="button">
+          <div className="intent-icon-wrapper">
+             <IconMap size={24} stroke={1.5} />
+          </div>
+          <div className="intent-content">
+            <h3 aria-hidden="true">Navigate Maps</h3>
+            <p aria-hidden="true">Explore connections across frameworks and STIGs.</p>
+          </div>
         </button>
 
-        <button
-          className="landing-pill"
-          onClick={() => onNavigate("templates")}
-          type="button"
-        >
-          Build · Create
-        </button>
-      </div>
-
-      <div className="landing-navigate-row">
-        <button
-          className="landing-pill sm"
-          onClick={() => onNavigate("atlas-map")}
-          type="button"
-        >
-          Navigate Maps
+        <button aria-label="Build & Create" className="landing-intent-card" onClick={() => onNavigate("templates")} type="button">
+          <div className="intent-icon-wrapper">
+             <IconLayoutList size={24} stroke={1.5} />
+          </div>
+          <div className="intent-content">
+            <h3 aria-hidden="true">Build &middot; Create</h3>
+            <p aria-hidden="true">Generate templates and RMF packages instantly.</p>
+          </div>
         </button>
       </div>
     </section>
