@@ -152,7 +152,7 @@ export function ComparePage(props: {
   const compareResultsRef = useRef<HTMLElement | null>(null);
   const [showComparisonPicker, setShowComparisonPicker] = useState(false);
   const catalogs = bundle.runtime.getCatalogs();
-  const workbench = state.workbench || "intent";
+  const workbench = state.workbench || "relationships";
   const relationshipNodeIds = useMemo(
     () => parseCatalogItemIds(state.items, state.source),
     [state.items, state.source],
@@ -432,15 +432,13 @@ export function ComparePage(props: {
         title="What do you want to compare?"
       />
 
-      <CompareStepIndicator label="Compare progress" step={compareStep} />
-
-      {workbench === "intent" ? (
-        <div className="intent-grid">
-          {comparisonCards.map((card) => (
-            <QuickIntentCard
-              actionLabel="Start this comparison"
-              body={card.body}
-              icon={<IconGitCompare size={20} stroke={1.8} />}
+      <div className="workbench-toggle" style={{ marginBottom: "var(--space-8)" }}>
+        {comparisonCards.map((card) => {
+          // Hide redundant entry
+          if (card.title === "Find what maps to this item") return null;
+          return (
+            <button
+              className={card.workbench === workbench ? "active" : ""}
               key={card.title}
               onClick={() =>
                 onNavigate("matrix", {
@@ -449,51 +447,15 @@ export function ComparePage(props: {
                   intent: card.title,
                 })
               }
-              title={card.title}
-            />
-          ))}
-        </div>
-      ) : (
-        <>
-          <div className="compare-workbench-header">
-            <button
-              className="link-action"
-              onClick={() =>
-                onNavigate("matrix", { ...state, workbench: "intent" })
-              }
               type="button"
             >
-              Change comparison type
+              {card.title}
             </button>
-            {showComparisonPicker ? (
-              <div className="workbench-toggle">
-                {comparisonCards.map((card) => (
-                  <button
-                    className={card.workbench === workbench ? "active" : ""}
-                    key={card.title}
-                    onClick={() =>
-                      onNavigate("matrix", {
-                        ...state,
-                        workbench: card.workbench,
-                        intent: card.title,
-                      })
-                    }
-                    type="button"
-                  >
-                    {card.title}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <button
-                className="secondary quiet"
-                onClick={() => setShowComparisonPicker(true)}
-                type="button"
-              >
-                Show all comparison types
-              </button>
-            )}
-          </div>
+          );
+        })}
+      </div>
+
+
 
           {workbench === "relationships" ? (
             <>
@@ -1391,8 +1353,7 @@ export function ComparePage(props: {
               )}
             </>
           ) : null}
-        </>
-      )}
+
     </section>
   );
 }

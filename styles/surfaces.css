@@ -2655,8 +2655,8 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
+  gap: var(--space-6);
+  margin-bottom: var(--space-16);
   z-index: 10;
 }
 
@@ -2693,9 +2693,9 @@ button.atlas-leverage-row:hover {
 
 .landing-search-container {
   position: relative;
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-16);
   width: 100%;
-  max-width: 36rem;
+  max-width: 42rem;
   transition: all 0.3s ease;
   z-index: 10;
 }
@@ -2787,7 +2787,8 @@ button.atlas-leverage-row:hover {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: var(--space-12);
+  gap: var(--space-16);
+  margin-top: var(--space-8);
   z-index: 10;
 }
 

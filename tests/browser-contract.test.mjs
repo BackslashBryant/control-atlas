@@ -50,8 +50,7 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.match(navigation, /Playbooks/);
   assert.match(navigation, /Templates/);
   assert.match(navigation, /Sources/);
-  assert.match(navigation, /Frameworks/);
-  assert.match(navigation, /Controls/);
+  assert.match(navigation, /Search/);
   assert.doesNotMatch(navigation, /Crosswalks/);
 });
 

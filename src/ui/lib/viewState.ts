@@ -158,7 +158,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
 function compareState(): Extract<ViewState, { view: "matrix" }> {
   return {
     view: "matrix",
-    workbench: "intent",
+    workbench: "relationships",
     source: "",
     target: "",
     items: "",
@@ -246,7 +246,7 @@ export function parseViewState(search: string): ViewState {
     const state = compareState();
     return {
       ...state,
-      workbench: (params.get("workbench") as CompareWorkbench) || "intent",
+      workbench: (params.get("workbench") as CompareWorkbench) || "relationships",
       source: params.get("source") || "",
       target: params.get("target") || "",
       items: params.get("items") || "",
@@ -386,7 +386,7 @@ export function normalizeViewState(
       ...compareState(),
       ...incoming,
       view,
-      workbench: incoming.workbench || "intent",
+      workbench: incoming.workbench || "relationships",
     };
   }
 
