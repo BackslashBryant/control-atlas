@@ -6,9 +6,7 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { AtlasMatrix } from "../components/AtlasMatrix";
-import {
-  DEFAULT_MAP_WARNINGS,
-} from "../graph/defaultMapFilter.ts";
+import { DEFAULT_MAP_WARNINGS } from "../graph/defaultMapFilter.ts";
 import { expandFocusedControlCluster } from "../graph/buildFocusedControlRings.ts";
 import { SOURCE_HIERARCHY_LABELS } from "../graph/sourceHierarchy.ts";
 import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors.ts";
@@ -18,11 +16,7 @@ import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
 } from "../graph/buildVisibleRelationshipModel.ts";
-import {
-  IconSearch,
-  IconFocusCentered,
-  IconMap,
-} from "@tabler/icons-react";
+import { IconSearch, IconFocusCentered, IconMap } from "@tabler/icons-react";
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import { AtlasLeverageInspector } from "../components/AtlasLeverageInspector";
 import {
@@ -128,7 +122,10 @@ function AtlasPresetMenu(props: AtlasMapPageProps) {
         <p className="eyebrow">Atlas Map</p>
         <div>
           <h1>Where would you like to start?</h1>
-          <p className="page-summary">Visualize connections across frameworks, templates, and playbooks. Choose a preset below to start.</p>
+          <p className="page-summary">
+            Visualize connections across frameworks, templates, and playbooks.
+            Choose a preset below to start.
+          </p>
         </div>
       </header>
       <div className="intent-grid">
@@ -167,7 +164,11 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const drillLabel = drillTier
     ? (SOURCE_HIERARCHY_LABELS[drillTier as SourceHierarchyTier] ?? drillTier)
     : null;
-  const focused = Boolean(trimmedNode) && !drillTier && trimmedNode !== "foundation" && trimmedNode !== "landscape";
+  const focused =
+    Boolean(trimmedNode) &&
+    !drillTier &&
+    trimmedNode !== "foundation" &&
+    trimmedNode !== "landscape";
   const [mapSearchDraft, setMapSearchDraft] = useState("");
   const routeVisibilityFilters: SourceVisibilityFilters = {
     showSupportingReferences: state.showSupportingReferences === "true",
@@ -179,6 +180,17 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const [foundationExpandedClusters, setFoundationExpandedClusters] = useState<
     Set<string>
   >(() => new Set());
+  const [mapViewLoading, setMapViewLoading] = useState(false);
+
+  useEffect(() => {
+    if (!focused) {
+      setMapViewLoading(false);
+      return;
+    }
+    setMapViewLoading(true);
+    const timer = window.setTimeout(() => setMapViewLoading(false), 1200);
+    return () => window.clearTimeout(timer);
+  }, [focused, trimmedNode]);
 
   useEffect(() => {
     setVisibilityFilters(routeVisibilityFilters);
@@ -188,25 +200,22 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
     state.showSupportingReferences,
   ]);
 
-  const model = useMemo(
-    () => {
-      let nextModel = buildVisibleRelationshipModel({
-        nodeId: state.node,
-        filters: visibilityFilters,
-      });
-      for (const clusterKey of foundationExpandedClusters) {
-        nextModel = expandFocusedControlCluster(nextModel, clusterKey);
-      }
-      return nextModel;
-    },
-    [
-      foundationExpandedClusters,
-      state.node,
-      visibilityFilters.showDraftOrLegacy,
-      visibilityFilters.showRegistryOnly,
-      visibilityFilters.showSupportingReferences,
-    ],
-  );
+  const model = useMemo(() => {
+    let nextModel = buildVisibleRelationshipModel({
+      nodeId: state.node,
+      filters: visibilityFilters,
+    });
+    for (const clusterKey of foundationExpandedClusters) {
+      nextModel = expandFocusedControlCluster(nextModel, clusterKey);
+    }
+    return nextModel;
+  }, [
+    foundationExpandedClusters,
+    state.node,
+    visibilityFilters.showDraftOrLegacy,
+    visibilityFilters.showRegistryOnly,
+    visibilityFilters.showSupportingReferences,
+  ]);
   const [selectedNodeId, setSelectedNodeId] = useState(model.centerNodeId);
 
   useEffect(() => {
@@ -348,7 +357,9 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
         <nav aria-label="Atlas breadcrumb" className="ca-atlas-drill-bar">
           <button
             className="secondary quiet"
-            onClick={() => onNavigate("atlas-map", { ...state, node: "foundation" })}
+            onClick={() =>
+              onNavigate("atlas-map", { ...state, node: "foundation" })
+            }
             type="button"
           >
             ← All layers
@@ -442,6 +453,11 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
 
       <div className="atlas-map-layout">
         <div className="atlas-map-main">
+          {mapViewLoading ? (
+            <p className="notice-inline" role="status">
+              Loading map view…
+            </p>
+          ) : null}
           <RelationshipExplorer
             centerItemId={
               focused ? "AC-2" : (drillLabel ?? "Control landscape")
@@ -555,7 +571,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
                   <a
                     className="link-action"
                     href={selectedSource.canonicalUrl}
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     Open official source ↗
@@ -875,8 +891,9 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
               }}
               onOpenRecord={() => onOpenNode(center.centerNodeId)}
               title={
-                recordDisplayTitle(bundle.runtime.getNode(center.centerNodeId)) ||
-                center.centerItemId
+                recordDisplayTitle(
+                  bundle.runtime.getNode(center.centerNodeId),
+                ) || center.centerItemId
               }
             />
           ) : null}
@@ -897,7 +914,10 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
         className="atlas-map-search-form"
         onSubmit={(event) => {
           event.preventDefault();
-          const resolved = nodeIdFromItemId(bundle.runtime, mapSearchDraft.trim());
+          const resolved = nodeIdFromItemId(
+            bundle.runtime,
+            mapSearchDraft.trim(),
+          );
           if (resolved) {
             onNavigate("atlas-map", {
               ...state,
@@ -934,9 +954,7 @@ function PageHeader(props: {
 }) {
   return (
     <header className="page-header">
-      {props.eyebrow ? (
-        <p className="eyebrow">{props.eyebrow}</p>
-      ) : null}
+      {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
       <h1>{props.title}</h1>
       <p className="page-summary">{props.summary}</p>
     </header>

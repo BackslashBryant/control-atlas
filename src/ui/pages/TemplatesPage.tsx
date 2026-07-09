@@ -331,9 +331,8 @@ export function TemplatesPage(props: {
         // client-side from the structured document. fflate + the serializers
         // are lazily imported so their weight only loads when an office format
         // is actually chosen (no-upload posture preserved).
-        const { renderOfficeDocument } = await import(
-          "../../app/office-export.mjs"
-        );
+        const { renderOfficeDocument } =
+          await import("../../app/office-export.mjs");
         const { doc, frameworkResolutionError } = buildTemplateDocument(
           options,
           bundle.runtime.dataset,
@@ -414,32 +413,34 @@ export function TemplatesPage(props: {
             queryPlaceholder="Search templates by name or purpose"
           />
 
-          {[...groupedTemplates.entries()].map(([category, categoryTemplates]) => (
-            <section className="catalog-group" key={category}>
-              <h2 className="catalog-group-title">{category}</h2>
-              <div className="intent-grid">
-                {categoryTemplates.map((template: any) => (
-                  <QuickIntentCard
-                    actionLabel="Select this template"
-                    body={template.description}
-                    icon={<IconFileDescription size={20} stroke={1.8} />}
-                    key={template.name}
-                    onClick={() =>
-                      onNavigate("templates", {
-                        templateType: template.name,
-                        framework: state.framework || "nist-800-53",
-                        format: template.supported_formats?.[0] || "markdown",
-                        environment: state.environment || "Generic",
-                        baseline: "",
-                        controlFamily: "",
-                      })
-                    }
-                    title={template.display_name}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+          {[...groupedTemplates.entries()].map(
+            ([category, categoryTemplates]) => (
+              <section className="catalog-group" key={category}>
+                <h2 className="catalog-group-title">{category}</h2>
+                <div className="intent-grid">
+                  {categoryTemplates.map((template: any) => (
+                    <QuickIntentCard
+                      actionLabel="Select this template"
+                      body={template.description}
+                      icon={<IconFileDescription size={20} stroke={1.8} />}
+                      key={template.name}
+                      onClick={() =>
+                        onNavigate("templates", {
+                          templateType: template.name,
+                          framework: state.framework || "nist-800-53",
+                          format: template.supported_formats?.[0] || "markdown",
+                          environment: state.environment || "Generic",
+                          baseline: "",
+                          controlFamily: "",
+                        })
+                      }
+                      title={template.display_name}
+                    />
+                  ))}
+                </div>
+              </section>
+            ),
+          )}
         </>
       ) : null}
 
@@ -513,7 +514,7 @@ export function TemplatesPage(props: {
                   Prefer an authoritative form? Use the{" "}
                   <a
                     href={selectedTemplate.official_alternative.url}
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     {selectedTemplate.official_alternative.label}
@@ -569,11 +570,7 @@ export function TemplatesPage(props: {
               View related map
             </button>
           </div>
-          <Accordion.Root
-            className="accordion-root"
-            collapsible
-            type="single"
-          >
+          <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">
                 {inputOptions.includes("framework") ? (
@@ -610,7 +607,10 @@ export function TemplatesPage(props: {
                     hint="Limit to one control family (e.g. Access Control)."
                     label="Control family"
                     onChange={(value) =>
-                      onNavigate("templates", { ...state, controlFamily: value })
+                      onNavigate("templates", {
+                        ...state,
+                        controlFamily: value,
+                      })
                     }
                     options={familyOptions}
                     value={state.controlFamily || ""}

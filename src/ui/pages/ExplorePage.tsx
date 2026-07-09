@@ -1,11 +1,6 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { IconSearch, IconSparkles } from "@tabler/icons-react";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
@@ -29,6 +24,7 @@ export function ExplorePage(props: {
   state: Extract<ViewState, { view: "search" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
+  onRequestFullGraph: () => void;
   onOpenGlossary: (termId?: string) => void;
   onOpenHelp: () => void;
   setHelpOpen: (open: boolean) => void;
@@ -39,6 +35,7 @@ export function ExplorePage(props: {
     state,
     onNavigate,
     onOpenNode,
+    onRequestFullGraph,
     onOpenGlossary,
   } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
@@ -69,16 +66,17 @@ export function ExplorePage(props: {
 
   const hasFilters = Boolean(
     state.filter ||
-      state.objectType ||
-      state.sourceClass ||
-      state.controlFamily ||
-      state.severity,
+    state.objectType ||
+    state.sourceClass ||
+    state.controlFamily ||
+    state.severity,
   );
 
   const documents = useMemo(() => {
     return bundle.runtime.searchLibrary(state.query, filters);
   }, [
     bundle.runtime,
+    bundle.librarySearchRevision,
     state.query,
     state.filter,
     state.objectType,
@@ -167,8 +165,8 @@ export function ExplorePage(props: {
 
         {!graphReady ? (
           <p className="notice-inline" role="status">
-            Search is ready. Detail pages and comparisons unlock when
-            connection data finishes loading.
+            Search is ready. Opening a record loads connection data when you
+            need it.
           </p>
         ) : null}
 
@@ -205,12 +203,10 @@ export function ExplorePage(props: {
                 onChange={(value) =>
                   onNavigate("search", { ...state, filter: value })
                 }
-                options={bundle.runtime
-                  .getCatalogs()
-                  .map((catalog: any) => ({
-                    value: catalog.id,
-                    label: catalog.name,
-                  }))}
+                options={bundle.runtime.getCatalogs().map((catalog: any) => ({
+                  value: catalog.id,
+                  label: catalog.name,
+                }))}
                 value={state.filter}
               />
               <SelectField
@@ -265,11 +261,22 @@ export function ExplorePage(props: {
           <input
             checked={connectionsOnly}
             id="connections-only"
-            onChange={(event) => setConnectionsOnly(event.target.checked)}
+            onChange={(event) => {
+              const checked = event.target.checked;
+              setConnectionsOnly(checked);
+              if (checked && !graphReady) {
+                onRequestFullGraph();
+              }
+            }}
             type="checkbox"
           />
           Show only items with connections
         </label>
+        {connectionsOnly && !graphReady ? (
+          <p className="notice-inline" role="status">
+            Loading connection data for this filter…
+          </p>
+        ) : null}
 
         {hasVisibleResults ? (
           <Accordion.Root
@@ -355,127 +362,127 @@ export function ExplorePage(props: {
                   value={group}
                 >
                   <div className="stack">
-                    {entries.slice(0, GROUP_RENDER_CAP).map(({ document, node, relationshipCount, source }) => {
-                      return (
-                        <article className="result-card" key={document.id}>
-                          <div className="result-card-header">
-                            <div>
-                              <p className="result-meta">
-                                {displayNameFor(
-                                  "object_type",
-                                  document.object_type,
-                                )}
-                              </p>
-                              <h3>
-                                {recordDisplayTitle(
-                                  node ?? {
-                                    id: document.id,
-                                    node_type: document.object_type,
-                                    metadata: {
-                                      item_id: document.item_id,
-                                      title: document.title,
+                    {entries
+                      .slice(0, GROUP_RENDER_CAP)
+                      .map(({ document, node, relationshipCount, source }) => {
+                        return (
+                          <article className="result-card" key={document.id}>
+                            <div className="result-card-header">
+                              <div>
+                                <p className="result-meta">
+                                  {displayNameFor(
+                                    "object_type",
+                                    document.object_type,
+                                  )}
+                                </p>
+                                <h3>
+                                  {recordDisplayTitle(
+                                    node ?? {
+                                      id: document.id,
+                                      node_type: document.object_type,
+                                      metadata: {
+                                        item_id: document.item_id,
+                                        title: document.title,
+                                      },
                                     },
-                                  },
-                                )}
-                              </h3>
+                                  )}
+                                </h3>
+                              </div>
+                              {relationshipCount > 0 ? (
+                                <Badge tone="info">
+                                  {relationshipCount} connections
+                                </Badge>
+                              ) : (
+                                <span className="no-connections">
+                                  No connections yet
+                                </span>
+                              )}
                             </div>
-                            {relationshipCount > 0 ? (
-                              <Badge tone="info">
-                                {relationshipCount} connections
-                              </Badge>
-                            ) : (
-                              <span className="no-connections">
-                                No connections yet
+                            <p className="result-summary">
+                              {document.plain_language_summary ||
+                                node?.plain_language_summary ||
+                                document.description}
+                            </p>
+                            <div className="result-support">
+                              <span>
+                                Source:{" "}
+                                {source?.display_name ||
+                                  source?.name ||
+                                  "Source unavailable"}
                               </span>
-                            )}
-                          </div>
-                          <p className="result-summary">
-                            {document.plain_language_summary ||
-                              node?.plain_language_summary ||
-                              document.description}
-                          </p>
-                          <div className="result-support">
-                            <span>
-                              Source:{" "}
-                              {source?.display_name ||
-                                source?.name ||
-                                "Source unavailable"}
-                            </span>
-                            {source?.provenance_class ? (
-                              <ProvenanceTerm
-                                kind="provenance"
-                                value={source.provenance_class}
-                              />
-                            ) : null}
-                          </div>
-                          <div className="card-actions">
-                            <button
-                              className="primary"
-                              disabled={!graphReady}
-                              onClick={() => onOpenNode(document.id, "search")}
-                              title={
-                                graphReady
-                                  ? undefined
-                                  : "Detail views unlock when connections finish loading"
-                              }
-                              type="button"
-                            >
-                              Open record
-                            </button>
-                            <details className="result-actions-menu">
-                              <summary role="button">More actions</summary>
-                              <div className="result-actions-popover">
-                                {relationshipCount > 0 ? (
+                              {source?.provenance_class ? (
+                                <ProvenanceTerm
+                                  kind="provenance"
+                                  value={source.provenance_class}
+                                />
+                              ) : null}
+                            </div>
+                            <div className="card-actions">
+                              <button
+                                className="primary"
+                                onClick={() =>
+                                  onOpenNode(document.id, "search")
+                                }
+                                type="button"
+                              >
+                                Open record
+                              </button>
+                              <details className="result-actions-menu">
+                                <summary role="button">More actions</summary>
+                                <div className="result-actions-popover">
+                                  {relationshipCount > 0 ? (
+                                    <button
+                                      className="secondary"
+                                      onClick={() =>
+                                        openAtlasMapForNode(
+                                          onNavigate,
+                                          document.id,
+                                        )
+                                      }
+                                      type="button"
+                                    >
+                                      Open in Atlas Map
+                                    </button>
+                                  ) : null}
                                   <button
                                     className="secondary"
-                                    disabled={!graphReady}
                                     onClick={() =>
-                                      openAtlasMapForNode(onNavigate, document.id)
+                                      onNavigate("matrix", {
+                                        workbench: "relationships",
+                                        items: document.item_id,
+                                      })
                                     }
                                     type="button"
                                   >
-                                    Open in Atlas Map
+                                    Compare
                                   </button>
-                                ) : null}
-                                <button
-                                  className="secondary"
-                                  disabled={!graphReady}
-                                  onClick={() =>
-                                    onNavigate("matrix", {
-                                      workbench: "relationships",
-                                      items: document.item_id,
-                                    })
-                                  }
-                                  type="button"
-                                >
-                                  Compare
-                                </button>
-                                <button
-                                  className="secondary"
-                                  onClick={() =>
-                                    navigator.clipboard?.writeText(
-                                      `${window.location.origin}${window.location.pathname}${serializeHashUrl({
-                                        view: "library-detail",
-                                        node: document.id,
-                                        from: "search",
-                                      })}`,
-                                    )
-                                  }
-                                  type="button"
-                                >
-                                  Copy link
-                                </button>
-                              </div>
-                            </details>
-                          </div>
-                        </article>
-                      );
-                    })}
+                                  <button
+                                    className="secondary"
+                                    onClick={() =>
+                                      navigator.clipboard?.writeText(
+                                        `${window.location.origin}${window.location.pathname}${serializeHashUrl(
+                                          {
+                                            view: "library-detail",
+                                            node: document.id,
+                                            from: "search",
+                                          },
+                                        )}`,
+                                      )
+                                    }
+                                    type="button"
+                                  >
+                                    Copy link
+                                  </button>
+                                </div>
+                              </details>
+                            </div>
+                          </article>
+                        );
+                      })}
                     {entries.length > GROUP_RENDER_CAP ? (
                       <p className="muted">
-                        Showing the first {GROUP_RENDER_CAP} of{" "}
-                        {entries.length}. Search or use “Refine results” to
-                        narrow this list.
+                        Showing the first {GROUP_RENDER_CAP} of {entries.length}
+                        . Search or use “Refine results” to narrow this list.
                       </p>
                     ) : null}
                   </div>
@@ -488,8 +495,8 @@ export function ExplorePage(props: {
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
             <h2>No matching connected records found.</h2>
             <p>
-              Matching records exist, but none have published connections in
-              the current data.
+              Matching records exist, but none have published connections in the
+              current data.
             </p>
             <button
               className="secondary"
@@ -503,7 +510,7 @@ export function ExplorePage(props: {
           <section className="empty-state">
             <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
             <h2>No matching records found.</h2>
-            <p>
+            <p aria-live="polite">
               Try searching by control ID, topic, baseline, CCI, or source.
             </p>
             <div className="card-actions">

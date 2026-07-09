@@ -254,12 +254,24 @@ a {
 }
 
 @keyframes word-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes word-out {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-6px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
 }
 
 .brand-plus {
@@ -1021,6 +1033,17 @@ li {
   grid-template-columns: minmax(0, 1.4fr) minmax(200px, 0.8fr);
 }
 
+@media (max-width: 480px) {
+  .catalog-filter-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 .catalog-group-title {
   margin: var(--space-5) 0 var(--space-3);
   font-size: var(--font-size-lg);
@@ -1392,7 +1415,6 @@ li {
   text-align: center;
 }
 
-
 @media (prefers-reduced-motion: no-preference) {
   .intent-card-button:hover,
   .offline-fallback-card:hover,
@@ -1705,10 +1727,22 @@ a:focus-visible {
   border-radius: var(--radius-md);
   background:
     linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.1), transparent),
-    radial-gradient(circle at 30% 35%, rgba(37, 99, 235, 0.28) 0 5px, transparent 6px),
-    radial-gradient(circle at 62% 55%, rgba(34, 211, 238, 0.28) 0 6px, transparent 7px),
+    radial-gradient(
+      circle at 30% 35%,
+      rgba(37, 99, 235, 0.28) 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 62% 55%,
+      rgba(34, 211, 238, 0.28) 0 6px,
+      transparent 7px
+    ),
     var(--ca-surface);
-  background-size: 200% 100%, auto, auto, auto;
+  background-size:
+    200% 100%,
+    auto,
+    auto,
+    auto;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
 }
 
@@ -2278,6 +2312,100 @@ button.atlas-leverage-row:hover {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+
+.catalog-coverage-chip {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(251, 146, 60, 0.08);
+  font-size: var(--font-size-sm);
+}
+
+.catalog-coverage-chip-label {
+  color: var(--ca-text);
+  font-weight: 700;
+}
+
+.catalog-coverage-chip-detail {
+  color: var(--ca-text-muted);
+}
+
+.compare-trust-note {
+  margin-bottom: var(--space-4);
+}
+
+.catalog-version-chip {
+  display: inline-flex;
+  margin: 0 0 var(--space-4);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.compare-table-scroll-hint {
+  display: none;
+  margin: 0 0 var(--space-3);
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+  .compare-table-scroll-hint {
+    display: block;
+  }
+}
+
+.compare-results-panel .relationship-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.landing-trust-row {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 40rem;
+  margin-top: var(--space-6);
+  text-align: center;
+}
+
+.landing-trust-lead {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.landing-trust-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.landing-trust-link {
+  background: transparent;
+  border: none;
+  color: var(--ca-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.landing-trust-link:hover,
+.landing-trust-link:focus-visible {
+  color: color-mix(in srgb, var(--ca-secondary) 85%, #fff);
+}
+
 @media (max-width: 640px) {
   .catalog-coverage-row {
     grid-template-columns: 1fr auto;
@@ -2555,7 +2683,6 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text);
 }
 
-
 .atlas-source-filters {
   display: flex;
   flex-wrap: wrap;
@@ -2675,12 +2802,16 @@ button.atlas-leverage-row:hover {
   border-radius: var(--radius-xl);
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
   box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .landing-search-container.search-focused .home-search {
   border-color: var(--ca-secondary);
-  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4), 0 0 0 4px color-mix(in srgb, var(--ca-secondary) 15%, transparent);
+  box-shadow:
+    0 8px 32px rgba(2, 6, 23, 0.4),
+    0 0 0 4px color-mix(in srgb, var(--ca-secondary) 15%, transparent);
 }
 
 .home-search-icon {
@@ -2936,7 +3067,8 @@ button.atlas-leverage-row:hover {
   align-content: center;
   gap: 0.25rem;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid color-mix(in srgb, var(--ca-flow-node-color) 58%, var(--ca-border));
+  border: 1px solid
+    color-mix(in srgb, var(--ca-flow-node-color) 58%, var(--ca-border));
   border-left: 5px solid var(--ca-flow-node-color);
   border-radius: var(--radius-md);
   background: rgba(15, 23, 42, 0.94);
@@ -3016,4 +3148,3 @@ button.atlas-leverage-row:hover {
 .react-flow__controls-button:hover {
   background: rgba(37, 99, 235, 0.24);
 }
-

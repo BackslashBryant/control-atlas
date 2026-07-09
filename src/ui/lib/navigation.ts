@@ -34,21 +34,41 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Research · Learn",
     items: [
       { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
-      { label: "Sources", view: "sources", path: "/sources", icon: IconSourceCode },
-      { label: "Playbooks", view: "patterns", path: "/playbooks", icon: IconBook2 },
+      {
+        label: "Sources",
+        view: "sources",
+        path: "/sources",
+        icon: IconSourceCode,
+      },
+      {
+        label: "Playbooks",
+        view: "patterns",
+        path: "/playbooks",
+        icon: IconBook2,
+      },
     ],
   },
   {
     label: "Navigate",
     items: [
       { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
-      { label: "Compare", view: "matrix", path: "/compare", icon: IconGitCompare },
+      {
+        label: "Compare",
+        view: "matrix",
+        path: "/compare",
+        icon: IconGitCompare,
+      },
     ],
   },
   {
     label: "Build · Create",
     items: [
-      { label: "Templates", view: "templates", path: "/templates", icon: IconClipboardList },
+      {
+        label: "Templates",
+        view: "templates",
+        path: "/templates",
+        icon: IconClipboardList,
+      },
     ],
   },
 ];
@@ -98,7 +118,6 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 export function requiresFullGraph(view: ViewState["view"]) {
   return (
     view === "atlas-map" ||
-    view === "search" ||
     view === "library-detail" ||
     view === "matrix" ||
     view === "sources" ||

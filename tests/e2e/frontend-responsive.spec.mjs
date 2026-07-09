@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -39,7 +40,7 @@ for (const viewport of VIEWPORTS) {
     });
 
     for (const route of ROUTES) {
-      await page.goto(route);
+      await gotoApp(page, route);
       await waitForAppReady(page);
       await dismissOnboarding(page);
       await expect(page.locator("main h1").first(), route).toBeVisible();

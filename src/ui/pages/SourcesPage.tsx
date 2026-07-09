@@ -17,6 +17,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { buildCatalogCoverageList } from "../lib/catalogCoverage";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
@@ -72,7 +73,6 @@ import {
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
 
-
 export function SourcesPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "sources" }>;
@@ -111,23 +111,8 @@ export function SourcesPage(props: {
     );
   }, [sources]);
 
-  // Honest per-catalog connectivity (CATL-24): how much of each framework is
-  // actually wired into the public map, so the tool never implies full coverage.
   const catalogCoverage = useMemo(
-    () =>
-      bundle.runtime
-        .getCatalogs()
-        .filter((catalog: any) => catalog.node_count >= 10)
-        .map((catalog: any) => ({
-          id: catalog.id,
-          name: catalog.name,
-          total: catalog.node_count,
-          connected: catalog.connected_count ?? 0,
-          pct: catalog.node_count
-            ? Math.round((catalog.connected_count ?? 0) / catalog.node_count * 100)
-            : 0,
-        }))
-        .sort((a: any, b: any) => b.total - a.total),
+    () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 10),
     [bundle.runtime],
   );
 
@@ -139,7 +124,10 @@ export function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
-      <section className="canonical-source-links" aria-labelledby="canonical-source-links-heading">
+      <section
+        className="canonical-source-links"
+        aria-labelledby="canonical-source-links-heading"
+      >
         <h2 id="canonical-source-links-heading">Canonical source links</h2>
         <p>
           Open the official source before relying on a control, mapping, threat
@@ -157,7 +145,7 @@ export function SourcesPage(props: {
               <li key={source.sourceId}>
                 <a
                   href={source.canonicalUrl}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   {source.displayName}

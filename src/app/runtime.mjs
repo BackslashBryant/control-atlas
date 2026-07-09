@@ -113,29 +113,60 @@ export function createFederalGraphRuntime(dataset) {
     if (existing) existing.push(edge);
     else edgesBySource.set(edge.source_node_id, [edge]);
   }
-  const libraryDocuments = dataset.librarySearch?.documents || [];
-  const libraryDocumentById = new Map(
-    libraryDocuments.map((entry) => [entry.id, entry]),
-  );
+  const libraryDocuments = [];
+  const libraryDocumentById = new Map();
+  const libraryIndexes = [];
 
-  let miniSearch = null;
-  if (dataset.librarySearch?.serialized_index) {
+  const miniSearchOptions = {
+    fields: ["item_id", "title", "plain_language_summary", "description"],
+    storeFields: ["id"],
+    searchOptions: {
+      prefix: true,
+      boost: {
+        item_id: 5,
+        title: 3,
+        plain_language_summary: 2,
+        description: 1,
+      },
+    },
+  };
+
+  function ingestLibrarySearchShard(shard) {
+    if (!shard) return;
+    for (const document of shard.documents || []) {
+      if (libraryDocumentById.has(document.id)) {
+        continue;
+      }
+      libraryDocumentById.set(document.id, document);
+      libraryDocuments.push(document);
+    }
+    if (!shard.serialized_index) {
+      return;
+    }
     try {
-      miniSearch = /** @type {any} */ (MiniSearch).loadJSON(
-        dataset.librarySearch.serialized_index,
-        {
-          fields: ["item_id", "title", "description"],
-          storeFields: ["id"],
-          searchOptions: {
-            prefix: true,
-            boost: { item_id: 5, title: 3, description: 1 },
-          },
-        },
+      libraryIndexes.push(
+        /** @type {any} */ (MiniSearch).loadJSON(
+          shard.serialized_index,
+          miniSearchOptions,
+        ),
       );
     } catch (err) {
-      console.warn("Failed to load MiniSearch index:", err);
+      console.warn("Failed to load MiniSearch shard:", err);
     }
   }
+
+  if (
+    Array.isArray(dataset.librarySearchShards) &&
+    dataset.librarySearchShards.length > 0
+  ) {
+    for (const shard of dataset.librarySearchShards) {
+      ingestLibrarySearchShard(shard);
+    }
+  } else if (dataset.librarySearch) {
+    ingestLibrarySearchShard(dataset.librarySearch);
+  }
+
+  let miniSearch = libraryIndexes[0] || null;
   const CATALOG_DISPLAY_NAMES = {
     "cmmc-2": { name: "CMMC 2.0", group: "Other" },
     "csf-2": { name: "NIST CSF 2.0", group: "NIST" },
@@ -212,8 +243,7 @@ export function createFederalGraphRuntime(dataset) {
         if (!entry) return null;
         return {
           source_id: entry.source_id,
-          source_name:
-            source?.display_name || source?.name || entry.source_id,
+          source_name: source?.display_name || source?.name || entry.source_id,
           source_version: entry.source_version || "",
           locator: entry.locator || "",
           evidence_quality: entry.evidence_quality || "",
@@ -391,8 +421,7 @@ export function createFederalGraphRuntime(dataset) {
     dataset.nodes
       .filter((node) => node.node_type === "attack_technique")
       .filter(
-        (node) =>
-          !chainCatalog || node.metadata?.catalog_id === chainCatalog,
+        (node) => !chainCatalog || node.metadata?.catalog_id === chainCatalog,
       )
       .sort(sortNodesByItemId);
   const d3fendLinksForAttack = (nodeId, includeCandidates = false) =>
@@ -650,10 +679,22 @@ export function createFederalGraphRuntime(dataset) {
   };
 
   const STARTER_GROUPS = [
-    { key: "controls", label: "Controls", nodeTypes: ["control", "control_enhancement"] },
-    { key: "baselines", label: "Baselines", nodeTypes: ["baseline", "baseline_profile"] },
+    {
+      key: "controls",
+      label: "Controls",
+      nodeTypes: ["control", "control_enhancement"],
+    },
+    {
+      key: "baselines",
+      label: "Baselines",
+      nodeTypes: ["baseline", "baseline_profile"],
+    },
     { key: "disa-ccis", label: "DISA CCIs", prefix: "disa-cci" },
-    { key: "stig-srg", label: "STIG/SRG", match: (id) => id.includes("stig") || id.includes("srg") },
+    {
+      key: "stig-srg",
+      label: "STIG/SRG",
+      match: (id) => id.includes("stig") || id.includes("srg"),
+    },
     { key: "templates", label: "Templates", nodeTypes: ["template"] },
     { key: "playbooks", label: "Playbooks", nodeTypes: ["pattern"] },
     { key: "sources", label: "Sources", nodeTypes: ["source"] },
@@ -805,6 +846,24 @@ export function createFederalGraphRuntime(dataset) {
       });
       if (exactMatches.length > 0) return exactMatches;
 
+      if (libraryIndexes.length > 0) {
+        const merged = new Map();
+        const searchNeedle = aliasNeedle !== needle ? aliasNeedle : query;
+        for (const index of libraryIndexes) {
+          for (const result of index.search(searchNeedle)) {
+            const previous = merged.get(result.id);
+            if (!previous || result.score > previous.score) {
+              merged.set(result.id, result);
+            }
+          }
+        }
+        return [...merged.values()]
+          .sort((left, right) => right.score - left.score)
+          .map((result) => libraryDocumentById.get(result.id))
+          .filter((doc) => doc && matchesLibraryFacet(doc, filters))
+          .slice(0, 100);
+      }
+
       if (miniSearch) {
         const results = miniSearch.search(
           aliasNeedle !== needle ? aliasNeedle : query,
@@ -904,6 +963,10 @@ export function createFederalGraphRuntime(dataset) {
     },
     getGraphHealth() {
       return dataset.findings;
+    },
+    appendLibrarySearchShard(shard) {
+      ingestLibrarySearchShard(shard);
+      miniSearch = libraryIndexes[0] || null;
     },
     getCatalogs() {
       return catalogs;
@@ -1171,10 +1234,7 @@ export function createFederalGraphRuntime(dataset) {
               d3fend_item_id: itemIdFor(entry.d3fendNode),
               d3fend_title: itemTitleFor(entry.d3fendNode),
               nist_item_ids: itemIdFor(nistEntry.nistNode),
-              source_refs: [
-                ...entry.sourceRefs,
-                ...nistEntry.sourceRefs,
-              ]
+              source_refs: [...entry.sourceRefs, ...nistEntry.sourceRefs]
                 .map(sourceRefLabel)
                 .join("; "),
             }));

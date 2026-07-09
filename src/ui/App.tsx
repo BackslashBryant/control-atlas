@@ -1,10 +1,4 @@
-import {
-  lazy,
-  startTransition,
-  Suspense,
-  useEffect,
-  useState,
-} from "react";
+import { lazy, startTransition, Suspense, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   DataPendingNotice,
@@ -12,7 +6,10 @@ import {
   LoadingStatusPanel,
   OfflineFallbackActions,
 } from "./components/LoadStatusPanel";
-import { DetailConnectionsSkeleton, LibrarySkeleton } from "./components/LibrarySkeleton";
+import {
+  DetailConnectionsSkeleton,
+  LibrarySkeleton,
+} from "./components/LibrarySkeleton";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import { SearchOverlay } from "./components/SearchOverlay";
@@ -32,14 +29,8 @@ import {
   isStaticViewWithoutBundle,
   requiresFullGraph,
 } from "./lib/navigation";
-import {
-  normalizeViewState,
-  type ViewState,
-} from "./lib/viewState";
-import {
-  parseHashLocation,
-  serializeHashLocation,
-} from "./lib/hashRoutes";
+import { normalizeViewState, type ViewState } from "./lib/viewState";
+import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { routeDocumentTitle } from "./lib/recordTitle";
 
 const AboutPage = lazy(() =>
@@ -111,6 +102,11 @@ export function App() {
   );
   const [introVisible, setIntroVisible] = useState(shouldShowBrandEntrance);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
+  const [graphRequested, setGraphRequested] = useState(false);
+
+  function requestFullGraph() {
+    setGraphRequested((current) => (current ? current : true));
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -132,7 +128,7 @@ export function App() {
     }, 10000);
 
     loadRuntimeDatasetStaged({
-      includeFullGraph: requiresFullGraph(viewState.view),
+      includeFullGraph: requiresFullGraph(viewState.view) || graphRequested,
       onSearchReady: (result) => {
         if (!cancelled) {
           setBundle((current) => (current?.graphReady ? current : result));
@@ -154,6 +150,19 @@ export function App() {
           );
         }
       },
+      onShardLoaded: () => {
+        if (!cancelled) {
+          setBundle((current) =>
+            current
+              ? {
+                  ...current,
+                  librarySearchRevision:
+                    (current.librarySearchRevision ?? 0) + 1,
+                }
+              : current,
+          );
+        }
+      },
     }).finally(() => {
       if (!cancelled) {
         window.clearTimeout(slowTimer);
@@ -166,12 +175,13 @@ export function App() {
       window.clearTimeout(slowTimer);
       window.clearTimeout(timeoutTimer);
     };
-  }, [loadAttempt, viewState.view]);
+  }, [graphRequested, loadAttempt, viewState.view]);
 
   function retryLoad() {
     setBundle(null);
     setLoadError("");
     setLoadSlow(false);
+    setGraphRequested(false);
     setLoadAttempt((current) => current + 1);
   }
 
@@ -186,7 +196,9 @@ export function App() {
   // loaded.
   useEffect(() => {
     const node =
-      viewState.view === "library-detail" && viewState.node && bundle?.graphReady
+      viewState.view === "library-detail" &&
+      viewState.node &&
+      bundle?.graphReady
         ? bundle.runtime.getNode(viewState.node)
         : null;
     document.title = routeDocumentTitle(viewState, node);
@@ -248,6 +260,8 @@ export function App() {
   useEffect(() => {
     if (viewState.view === "search") {
       setHeaderSearchDraft(viewState.query);
+    } else {
+      setHeaderSearchDraft("");
     }
   }, [viewState]);
 
@@ -300,6 +314,7 @@ export function App() {
                 onOpenHelp={openHelp}
                 onOpenNode={openNode}
                 onOpenNodeByItemId={openNodeByItemId}
+                onRequestFullGraph={requestFullGraph}
                 onRetryLoad={retryLoad}
                 setHelpOpen={setHelpOpen}
                 state={viewState}
@@ -353,6 +368,7 @@ function AppContent(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
+  onRequestFullGraph: () => void;
   onOpenGlossary: (termId?: string) => void;
   onOpenHelp: () => void;
   onRetryLoad: () => void;
@@ -365,6 +381,7 @@ function AppContent(props: {
     onNavigate,
     onOpenNode,
     onOpenNodeByItemId,
+    onRequestFullGraph,
     onOpenGlossary,
     onOpenHelp,
     onRetryLoad,
@@ -533,9 +550,7 @@ function AppContent(props: {
     return (
       <section className="notice">
         <h2>We do not have a public map entry for "{state.query}"</h2>
-        <p>
-          Try Explore search or Start to find the closest path.
-        </p>
+        <p>Try Explore search or Start to find the closest path.</p>
         <div className="card-actions">
           <button
             className="primary"
@@ -568,6 +583,7 @@ function AppContent(props: {
       onOpenGlossary={onOpenGlossary}
       onOpenHelp={onOpenHelp}
       onOpenNode={onOpenNode}
+      onRequestFullGraph={onRequestFullGraph}
       setHelpOpen={setHelpOpen}
       state={
         state.view === "browse"

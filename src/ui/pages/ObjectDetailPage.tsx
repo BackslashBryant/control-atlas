@@ -24,7 +24,11 @@ import {
   ExpandableChipList,
   RelationshipGroupsSection,
 } from "../components/ExpandableRelationshipGroup";
-import { RelationshipExplorer, relationshipFiltersFromState, relationshipFiltersToPatch } from "../components/RelationshipExplorer";
+import {
+  RelationshipExplorer,
+  relationshipFiltersFromState,
+  relationshipFiltersToPatch,
+} from "../components/RelationshipExplorer";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
@@ -120,7 +124,11 @@ function isMeaningfullyDifferentSummary(
   if (!normalizedSummary) return false;
   if (normalizedSummary === normalizedDescription) return false;
   if (normalizedDescription.startsWith(normalizedSummary)) return false;
-  if (normalizedSummary.startsWith(normalizedDescription) && normalizedDescription) return false;
+  if (
+    normalizedSummary.startsWith(normalizedDescription) &&
+    normalizedDescription
+  )
+    return false;
   return true;
 }
 
@@ -152,7 +160,9 @@ export function ObjectDetailPage(props: {
   const impact = useMemo(
     () =>
       node
-        ? buildImpactBreakdown(node.id, edges, (id) => bundle.runtime.getNode(id))
+        ? buildImpactBreakdown(node.id, edges, (id) =>
+            bundle.runtime.getNode(id),
+          )
         : { total: 0, byType: [] },
     [bundle.runtime, edges, node],
   );
@@ -165,18 +175,22 @@ export function ObjectDetailPage(props: {
     .map((id: string) => {
       const catalogId = node?.metadata?.catalog_id;
       const candidateNodeId = catalogId ? `${catalogId}:${id}` : id;
-      return bundle.runtime.getNode(candidateNodeId) || bundle.runtime.getNode(id);
+      return (
+        bundle.runtime.getNode(candidateNodeId) || bundle.runtime.getNode(id)
+      );
     })
     .filter(Boolean) as Array<{ id: string; metadata?: { item_id?: string } }>;
 
   const recordItemId: string = node?.metadata?.item_id || "";
   const isEnhancement = node?.node_type === "control_enhancement";
-  const baseItemId = isEnhancement && recordItemId.includes(".")
-    ? recordItemId.slice(0, recordItemId.lastIndexOf("."))
-    : "";
-  const baseControlNode = baseItemId && node?.metadata?.catalog_id
-    ? bundle.runtime.getNode(`${node.metadata.catalog_id}:${baseItemId}`)
-    : null;
+  const baseItemId =
+    isEnhancement && recordItemId.includes(".")
+      ? recordItemId.slice(0, recordItemId.lastIndexOf("."))
+      : "";
+  const baseControlNode =
+    baseItemId && node?.metadata?.catalog_id
+      ? bundle.runtime.getNode(`${node.metadata.catalog_id}:${baseItemId}`)
+      : null;
 
   const rawSummary: string | undefined =
     node?.plain_language_summary || document?.plain_language_summary;
@@ -297,7 +311,9 @@ export function ObjectDetailPage(props: {
         <p className="record-parent-link">
           <button
             className="link-action quiet"
-            onClick={() => onOpenNode(baseControlNode.id, state.from || "search")}
+            onClick={() =>
+              onOpenNode(baseControlNode.id, state.from || "search")
+            }
             type="button"
           >
             Part of {baseItemId}
@@ -353,7 +369,9 @@ export function ObjectDetailPage(props: {
                       <Fragment key={label}>
                         {index > 0 ? ", " : ""}
                         {label === "LI-SAAS" ? (
-                          <GlossaryTermChip termId="li-saas">{label}</GlossaryTermChip>
+                          <GlossaryTermChip termId="li-saas">
+                            {label}
+                          </GlossaryTermChip>
                         ) : (
                           label
                         )}
@@ -362,7 +380,7 @@ export function ObjectDetailPage(props: {
                     .
                   </>
                 ) : node.node_type === "attack_technique" ||
-                    node.node_type === "defend_countermeasure" ? (
+                  node.node_type === "defend_countermeasure" ? (
                   "This MITRE item connects through the public threat lens rather than a baseline membership list."
                 ) : (
                   "This item does not have a published baseline placement summary yet."
@@ -403,6 +421,13 @@ export function ObjectDetailPage(props: {
                       )
                       .join(", ")}
                     .
+                  </p>
+                ) : null}
+                {edges.length > 20 ? (
+                  <p className="notice-inline" role="note">
+                    New here? Start with baselines or your primary source
+                    framework group — those links are usually the fastest path
+                    for authorization research.
                   </p>
                 ) : null}
               </div>
@@ -469,7 +494,9 @@ export function ObjectDetailPage(props: {
             <RelationshipGroupsSection
               formatRelationshipLabel={formatRelationshipLabel}
               groups={grouped}
-              onOpenNode={(nodeId) => onOpenNode(nodeId, state.from || "search")}
+              onOpenNode={(nodeId) =>
+                onOpenNode(nodeId, state.from || "search")
+              }
               source={source}
               sourceTrustSummary={sourceTrustSummary}
             />
@@ -503,8 +530,7 @@ export function ObjectDetailPage(props: {
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    Browse the official catalog (search for{" "}
-                    {document.item_id})
+                    Browse the official catalog (search for {document.item_id})
                   </a>
                 </p>
               ) : null}
@@ -518,7 +544,9 @@ export function ObjectDetailPage(props: {
               <>
                 <p>
                   Working on this touches{" "}
-                  <strong>{impact.total} related item{impact.total === 1 ? "" : "s"}</strong>{" "}
+                  <strong>
+                    {impact.total} related item{impact.total === 1 ? "" : "s"}
+                  </strong>{" "}
                   across the frameworks you get assessed on:
                 </p>
                 <ul className="impact-breakdown">
@@ -650,7 +678,10 @@ export function ObjectDetailPage(props: {
                           />
                         </td>
                         <td>
-                          <ProvenanceTerm kind="confidence" value={edge.confidence} />
+                          <ProvenanceTerm
+                            kind="confidence"
+                            value={edge.confidence}
+                          />
                         </td>
                       </tr>
                     );
@@ -664,5 +695,3 @@ export function ObjectDetailPage(props: {
     </section>
   );
 }
-
-
