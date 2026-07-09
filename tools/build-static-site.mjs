@@ -18,6 +18,7 @@ const COPY_PATHS = [
   ["lib/d3.min.js", "lib/d3.min.js"],
 ];
 const VITE_BUILD_COMMAND = "vite build";
+const DATA_BUILD_COMMAND = ["./scripts/build-framework-data.mjs"];
 
 function copyIntoDist(sourceRelativePath, destRelativePath) {
   const sourcePath = join(ROOT, sourceRelativePath);
@@ -28,6 +29,11 @@ function copyIntoDist(sourceRelativePath, destRelativePath) {
   mkdirSync(dirname(destPath), { recursive: true });
   cpSync(sourcePath, destPath, { recursive: true });
 }
+
+execFileSync(process.execPath, DATA_BUILD_COMMAND, {
+  cwd: ROOT,
+  stdio: "inherit",
+});
 
 for (const sourceRelativePath of REQUIRED_GENERATED_FILES) {
   if (!existsSync(join(ROOT, sourceRelativePath))) {
