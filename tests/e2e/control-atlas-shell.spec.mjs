@@ -329,11 +329,16 @@ test("compare stig chain traces DISA items through CCI to NIST controls", async 
   await dismissOnboarding(page);
   await page.getByRole("button", { name: "STIG/SRG to controls" }).click();
   await expect(page.locator("#field-catalog")).toBeVisible();
-  await page
-    .getByRole("button", { name: "View mapping trace" })
-    .first()
-    .click();
-  await expect(page.getByText("Selected chain")).toBeVisible();
+  const itemSelect = page.getByLabel("STIG or SRG item");
+  const firstTraceableItem = await itemSelect
+    .locator("option")
+    .nth(1)
+    .getAttribute("value");
+  expect(firstTraceableItem).toBeTruthy();
+  await itemSelect.selectOption(firstTraceableItem || "");
+  await expect(page.getByText("Selected chain")).toBeVisible({
+    timeout: 15000,
+  });
   const chainPanel = page.locator(".chain-grid");
   await expect(
     chainPanel.getByText("CCI links", { exact: true }),
