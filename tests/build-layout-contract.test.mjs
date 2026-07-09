@@ -30,6 +30,7 @@ test('control atlas source of truth builds through Vite into the staged static o
   }
 
   assert.equal(packageJson.scripts['build:site'], 'node ./tools/build-static-site.mjs');
+  assert.match(siteBuilder, /build-framework-data\.mjs/);
   assert.match(siteBuilder, /vite build/);
   assert.match(siteBuilder, /dist\/site/);
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
