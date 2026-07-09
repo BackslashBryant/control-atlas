@@ -59,7 +59,11 @@ export function downloadTextFile(
   mimeType: string,
   onDispatch?: () => void,
 ) {
-  downloadBlobFile(filename, new Blob([content], { type: mimeType }), onDispatch);
+  downloadBlobFile(
+    filename,
+    new Blob([content], { type: mimeType }),
+    onDispatch,
+  );
 }
 
 export function sourceTrustSummary(source: any) {
@@ -184,9 +188,20 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
         {source.name} is maintained by {source.owner}.
       </p>
       <div className="source-summary-grid">
-        <ProvenanceTerm kind="provenance" value={source.provenance_class || ""} />
-        <ProvenanceTerm kind="trust" label={displayNameFor("lifecycle_status", source.lifecycle_status)} value={source.lifecycle_status} />
-        <ProvenanceTerm kind="trust" label={displayNameFor("access_status", source.access_status)} value={source.access_status} />
+        <ProvenanceTerm
+          kind="provenance"
+          value={source.provenance_class || ""}
+        />
+        <ProvenanceTerm
+          kind="trust"
+          label={displayNameFor("lifecycle_status", source.lifecycle_status)}
+          value={source.lifecycle_status}
+        />
+        <ProvenanceTerm
+          kind="trust"
+          label={displayNameFor("access_status", source.access_status)}
+          value={source.access_status}
+        />
       </div>
       {sourceWarnings(source).length ? (
         <div className="warning-list">
@@ -204,7 +219,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
         <a
           className="secondary"
           href={source.artifact_url}
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           Open source artifact

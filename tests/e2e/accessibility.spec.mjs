@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -70,7 +71,7 @@ for (const route of ROUTES) {
     if (route.label === "compare threat chain") {
       test.setTimeout(60_000);
     }
-    await page.goto(route.path);
+    await gotoApp(page, route.path);
     await waitForAppReady(page);
     await dismissOnboarding(page);
     await assertNoBlockingViolations(page, route.path);
@@ -81,14 +82,16 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   page,
 }) => {
   test.setTimeout(90_000);
-  await page.goto("/?view=matrix");
+  await gotoApp(
+    page,
+    "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
+  );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // The compare page now defaults to the Framework to framework workbench
-  await page.getByLabel("Framework A").selectOption("nist-800-53");
-  await page.getByLabel("Framework B").selectOption("csf-2");
-  await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
+  await expect(page.locator("#compare-results")).toBeVisible({
+    timeout: 60000,
+  });
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible();
@@ -111,7 +114,8 @@ test("a11y: compare detailed mappings table has no serious or critical violation
 test("a11y: library detail relationship table has no serious or critical violations", async ({
   page,
 }) => {
-  await page.goto(
+  await gotoApp(
+    page,
     "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
   );
   await waitForAppReady(page);

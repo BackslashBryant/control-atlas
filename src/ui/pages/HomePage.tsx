@@ -1,4 +1,9 @@
-import { IconSearch, IconBook, IconMap, IconLayoutList } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconBook,
+  IconMap,
+  IconLayoutList,
+} from "@tabler/icons-react";
 import { useState } from "react";
 
 import { BrandMark } from "../components/BrandLockup";
@@ -23,7 +28,9 @@ export function HomePage(props: HomePageProps) {
         </p>
       </div>
 
-      <div className={`landing-search-container ${searchFocused ? "search-focused" : ""}`}>
+      <div
+        className={`landing-search-container ${searchFocused ? "search-focused" : ""}`}
+      >
         <form
           className="home-search"
           onSubmit={(event) => {
@@ -34,7 +41,12 @@ export function HomePage(props: HomePageProps) {
           }}
           role="search"
         >
-          <IconSearch aria-hidden="true" className="home-search-icon" size={24} stroke={1.5} />
+          <IconSearch
+            aria-hidden="true"
+            className="home-search-icon"
+            size={24}
+            stroke={1.5}
+          />
           <input
             aria-label="Search controls, baselines, CCIs, STIGs, and terms"
             onChange={(event) => setSearchDraft(event.target.value)}
@@ -51,35 +63,79 @@ export function HomePage(props: HomePageProps) {
       </div>
 
       <div className="landing-intents">
-        <button aria-label="Research & Learn" className="landing-intent-card" onClick={() => onNavigate("start-here")} type="button">
+        <button
+          aria-label="Research & Learn"
+          className="landing-intent-card"
+          onClick={() => onNavigate("start-here")}
+          type="button"
+        >
           <div className="intent-icon-wrapper">
-             <IconBook size={24} stroke={1.5} />
+            <IconBook size={24} stroke={1.5} />
           </div>
           <div className="intent-content">
             <h3 aria-hidden="true">Research &middot; Learn</h3>
-            <p aria-hidden="true">Understand controls, baselines, and get practical advice.</p>
+            <p aria-hidden="true">
+              Understand controls, baselines, and get practical advice.
+            </p>
           </div>
         </button>
 
-        <button aria-label="Navigate Maps" className="landing-intent-card" onClick={() => onNavigate("atlas-map")} type="button">
+        <button
+          aria-label="Atlas Map"
+          className="landing-intent-card"
+          onClick={() => onNavigate("atlas-map")}
+          type="button"
+        >
           <div className="intent-icon-wrapper">
-             <IconMap size={24} stroke={1.5} />
+            <IconMap size={24} stroke={1.5} />
           </div>
           <div className="intent-content">
-            <h3 aria-hidden="true">Navigate Maps</h3>
-            <p aria-hidden="true">Explore connections across frameworks and STIGs.</p>
+            <h3 aria-hidden="true">Atlas Map</h3>
+            <p aria-hidden="true">
+              Explore connections across frameworks and STIGs.
+            </p>
           </div>
         </button>
 
-        <button aria-label="Build & Create" className="landing-intent-card" onClick={() => onNavigate("templates")} type="button">
+        <button
+          aria-label="Build & Create"
+          className="landing-intent-card"
+          onClick={() => onNavigate("templates")}
+          type="button"
+        >
           <div className="intent-icon-wrapper">
-             <IconLayoutList size={24} stroke={1.5} />
+            <IconLayoutList size={24} stroke={1.5} />
           </div>
           <div className="intent-content">
             <h3 aria-hidden="true">Build &middot; Create</h3>
-            <p aria-hidden="true">Generate templates and RMF packages instantly.</p>
+            <p aria-hidden="true">
+              Generate templates and RMF packages instantly.
+            </p>
           </div>
         </button>
+      </div>
+
+      <div className="landing-trust-row">
+        <p className="landing-trust-lead">
+          New here? Read what this tool is and is not before you rely on a
+          match.
+        </p>
+        <div className="landing-trust-links">
+          <button
+            className="landing-trust-link"
+            onClick={() => onNavigate("about")}
+            type="button"
+          >
+            About this tool
+          </button>
+          <button
+            className="landing-trust-link"
+            onClick={() => onNavigate("sources")}
+            type="button"
+          >
+            Review sources
+          </button>
+        </div>
       </div>
     </section>
   );

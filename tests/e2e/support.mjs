@@ -37,6 +37,20 @@ export function attachPageDiagnostics(page) {
   });
 }
 
+export function appUrl(path = '/') {
+  const baseURL = process.env.PLAYWRIGHT_BASE_URL;
+  if (!baseURL) {
+    return path;
+  }
+  const normalizedBase = baseURL.endsWith('/') ? baseURL : `${baseURL}/`;
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+  return new URL(normalizedPath, normalizedBase).toString();
+}
+
+export async function gotoApp(page, path = '/', options = undefined) {
+  return page.goto(appUrl(path), options);
+}
+
 export async function dismissOnboarding(page) {
   const brandEntrance = page.getByRole('dialog', { name: 'Control Atlas introduction' });
   if (await brandEntrance.isVisible()) {

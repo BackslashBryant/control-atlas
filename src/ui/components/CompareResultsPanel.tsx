@@ -68,6 +68,10 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
 
   return (
     <section className="compare-results-panel">
+      <p className="notice-inline compare-trust-note" role="note">
+        Reference aid only — not an official government mapping. Verify every
+        row against the public source before you cite it in workpapers.
+      </p>
       <div className="compare-summary-grid summary-grid">
         <article className="summary-card">
           <h3>{graph.labels.shared}</h3>
@@ -96,8 +100,18 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
       </div>
 
       <p className="compare-legend">
-        <ProvenanceTerm kind="publication" label="Official link" value="published" /> = published mapping.{" "}
-        <ProvenanceTerm kind="publication" label="Inferred link" value="candidate" /> = candidate mapping that still needs review.
+        <ProvenanceTerm
+          kind="publication"
+          label="Official link"
+          value="published"
+        />{" "}
+        = published mapping.{" "}
+        <ProvenanceTerm
+          kind="publication"
+          label="Inferred link"
+          value="candidate"
+        />{" "}
+        = candidate mapping that still needs review.
       </p>
 
       <div className="card-actions">
@@ -140,7 +154,10 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
             <button
               className="secondary"
               onClick={() =>
-                onNavigate("matrix", { workbench: "relationships", compareView: "list" })
+                onNavigate("matrix", {
+                  workbench: "relationships",
+                  compareView: "list",
+                })
               }
               type="button"
             >
@@ -186,32 +203,37 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
         />
       ) : (
         listContent || (
-          <RelationshipExplorer
-            centerItemId={graph.atlasMapNode}
-            centerNodeId={graph.centerNodeId}
-            filters={{
-              relationshipType: "",
-              provenance: "",
-              confidence: "",
-              nodeType: "",
-              includeCandidates: false,
-              search: "",
-            }}
-            heading="Compare list"
-            listLabel="List"
-            onFilterChange={() => {}}
-            onOpenNode={onOpenNode}
-            onViewChange={(view) => setCompareView(view)}
-            relationshipView="list"
-            runtime={bundle.runtime}
-            showFilters={false}
-            staticGraph={{
-              nodes: graph.nodes,
-              edges: graph.edges,
-              stats: graph.stats,
-            }}
-            staticTableRows={staticTableRows}
-          />
+          <>
+            <p className="compare-table-scroll-hint">
+              Swipe horizontally to review every comparison column.
+            </p>
+            <RelationshipExplorer
+              centerItemId={graph.atlasMapNode}
+              centerNodeId={graph.centerNodeId}
+              filters={{
+                relationshipType: "",
+                provenance: "",
+                confidence: "",
+                nodeType: "",
+                includeCandidates: false,
+                search: "",
+              }}
+              heading="Compare list"
+              listLabel="List"
+              onFilterChange={() => {}}
+              onOpenNode={onOpenNode}
+              onViewChange={(view) => setCompareView(view)}
+              relationshipView="list"
+              runtime={bundle.runtime}
+              showFilters={false}
+              staticGraph={{
+                nodes: graph.nodes,
+                edges: graph.edges,
+                stats: graph.stats,
+              }}
+              staticTableRows={staticTableRows}
+            />
+          </>
         )
       )}
     </section>

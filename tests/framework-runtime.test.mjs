@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import MiniSearch from "minisearch";
 
 import {
   createFederalGraphRuntime,
@@ -1699,7 +1700,11 @@ function makeRelationshipGroupsFixtureRuntime() {
         id: "nist-800-53:AC-2",
         node_type: "control",
         label: "AC-2 Account Management",
-        metadata: { catalog_id: "nist-800-53", item_id: "AC-2", title: "Account Management" },
+        metadata: {
+          catalog_id: "nist-800-53",
+          item_id: "AC-2",
+          title: "Account Management",
+        },
       },
     ],
     [
@@ -1708,7 +1713,11 @@ function makeRelationshipGroupsFixtureRuntime() {
         id: "nist-800-53:AC-2.1",
         node_type: "control_enhancement",
         label: "AC-2(1) Automated System Account Management",
-        metadata: { catalog_id: "nist-800-53", item_id: "AC-2.1", title: "Automated System Account Management" },
+        metadata: {
+          catalog_id: "nist-800-53",
+          item_id: "AC-2.1",
+          title: "Automated System Account Management",
+        },
       },
     ],
     [
@@ -1717,7 +1726,11 @@ function makeRelationshipGroupsFixtureRuntime() {
         id: "nist-800-53:AC-2.2",
         node_type: "control_enhancement",
         label: "AC-2(2) Automated Temporary and Emergency Account Management",
-        metadata: { catalog_id: "nist-800-53", item_id: "AC-2.2", title: "Automated Temporary and Emergency Account Management" },
+        metadata: {
+          catalog_id: "nist-800-53",
+          item_id: "AC-2.2",
+          title: "Automated Temporary and Emergency Account Management",
+        },
       },
     ],
     [
@@ -1726,7 +1739,11 @@ function makeRelationshipGroupsFixtureRuntime() {
         id: "nist-800-53:AC-3",
         node_type: "control",
         label: "AC-3 Access Enforcement",
-        metadata: { catalog_id: "nist-800-53", item_id: "AC-3", title: "Access Enforcement" },
+        metadata: {
+          catalog_id: "nist-800-53",
+          item_id: "AC-3",
+          title: "Access Enforcement",
+        },
       },
     ],
   ]);
@@ -1792,4 +1809,54 @@ test("groupRelationships routes an enhancement's base control counterpart into t
   assert.equal(baseControlGroup.label, "Base control");
   assert.equal(baseControlGroup.items.length, 1);
   assert.equal(baseControlGroup.items[0].counterpart.id, "nist-800-53:AC-2");
+});
+
+test("runtime federated search returns AC-2 from a loaded shard without monolithic index", () => {
+  const documents = [
+    {
+      id: "nist-800-53:AC-2",
+      item_id: "AC-2",
+      title: "Account Management",
+      description: "Manage system accounts.",
+      plain_language_summary:
+        "Manage who can use the system and how accounts are approved.",
+      object_type: "control",
+      source_id: "nist-oscal",
+      source_class: "federal_published",
+      catalog_id: "nist-800-53",
+      control_family: "Access Control",
+      severity: "",
+    },
+  ];
+  const index = new MiniSearch({
+    fields: ["item_id", "title", "plain_language_summary", "description"],
+    storeFields: ["id"],
+    searchOptions: {
+      prefix: true,
+      boost: {
+        item_id: 5,
+        title: 3,
+        plain_language_summary: 2,
+        description: 1,
+      },
+    },
+  });
+  index.addAll(documents);
+
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    nodes: [],
+    edges: [],
+    evidence: [],
+    findings: [],
+    librarySearchShards: [
+      {
+        catalog_id: "nist-800-53",
+        documents,
+        serialized_index: JSON.stringify(index.toJSON()),
+      },
+    ],
+  });
+
+  assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
 });

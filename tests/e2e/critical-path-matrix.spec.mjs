@@ -19,20 +19,22 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await expect(
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
-  
+
   // The landing page directly presents the primary intent paths
   await expect(
     page.getByRole("button", { name: "Research & Learn", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Navigate Maps", exact: true }),
+    page.getByRole("button", { name: "Atlas Map", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Build & Create", exact: true }),
   ).toBeVisible();
 });
 
-test("critical path: Atlas matrix table links to graph node", async ({ page }) => {
+test("critical path: Atlas matrix table links to graph node", async ({
+  page,
+}) => {
   await page.goto("/?view=atlas-map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -53,14 +55,15 @@ test("critical path: Atlas matrix table links to graph node", async ({ page }) =
 test("critical path: compare detailed mappings expose text provenance labels", async ({
   page,
 }) => {
-  await page.goto("/?view=matrix");
+  await page.goto(
+    "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
+  );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // The compare page now defaults to the Framework to framework workbench
-  await page.getByLabel("Framework A").selectOption("nist-800-53");
-  await page.getByLabel("Framework B").selectOption("csf-2");
-  await expect(page.locator("#compare-results")).toBeVisible({ timeout: 15000 });
+  await expect(page.locator("#compare-results")).toBeVisible({
+    timeout: 15000,
+  });
 
   const table = page.getByRole("table", { name: "Relationship mappings" });
   await expect(table).toBeVisible();
@@ -122,10 +125,16 @@ test("critical path: STIG chain summary table is labeled for screen readers", as
 test("critical path: MITRE library search returns technique with plain-language summary", async ({
   page,
 }) => {
+  test.setTimeout(120000);
   await page.goto("/?view=search&q=T1033");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await expect(
+    page.getByRole("button", { name: "Open record" }).first(),
+  ).toBeVisible({
+    timeout: 90000,
+  });
   await page.getByRole("button", { name: "Open record" }).first().click();
   await expect(page).toHaveURL(/record\/mitre-attack|library-detail/);
   await expect(page.getByText("What this is")).toBeVisible();

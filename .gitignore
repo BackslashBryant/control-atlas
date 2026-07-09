@@ -9,6 +9,7 @@
 !package-lock.json
 !eslint.config.mjs
 !playwright.config.mjs
+!playwright.live.config.mjs
 !tsconfig.json
 !tsconfig.app.json
 !src/
@@ -35,6 +36,7 @@ docs/guardrails/
 !.github/workflows/dependency-review.yml
 !.github/workflows/nightly-refresh.yml
 !.github/workflows/pages.yml
+!.github/workflows/pages-live-smoke.yml
 !.github/workflows/secret-scan.yml
 
 !lib/

@@ -8,13 +8,15 @@
       "nodes.json",
       "edges.json",
       "evidence.json",
-      "graph-health.json"
+      "graph-health.json",
+      "library-search-manifest.json",
+      "library-search/"
     ],
     "governance_artifacts": [
       "build-manifest.json",
       "source-manifests.json",
       "graph-diff-summary.json",
-      "library-search.json"
+      "library-search-manifest.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
