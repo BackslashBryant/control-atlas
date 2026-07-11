@@ -22,14 +22,15 @@ test("critical path: landing hero and primary entry cards are visible", async ({
 
   // The landing page directly presents the primary intent paths
   await expect(
-    page.getByRole("button", { name: "Research & Learn", exact: true }),
+    page.getByRole("button", { name: /^click to start$/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Atlas Map", exact: true }),
+    page.getByRole("button", { name: /^Research/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Build & Create", exact: true }),
+    page.getByRole("button", { name: /^Navigate/ }),
   ).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
 });
 
 test("critical path: Atlas matrix table links to graph node", async ({
@@ -192,7 +193,8 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
     name: "Primary navigation",
   });
   await primaryNav.getByRole("button", { name: "Research · Learn" }).click();
-  const startHere = primaryNav.getByRole("menuitem", {
+  // Nav groups are disclosures — items are plain buttons in the revealed panel.
+  const startHere = primaryNav.locator(".nav-more-menu").getByRole("button", {
     name: "Start",
     exact: true,
   });

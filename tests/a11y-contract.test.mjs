@@ -162,9 +162,48 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
+test("landing launch actions expose their visible text to assistive technology", () => {
+  const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
+  // The orb's accessible name is its visible caption; satellite buttons carry
+  // visible label + description text. No landing action text may be
+  // aria-hidden (SPR finding A11Y-001).
+  assert.match(homePage, /Click to start/);
+  assert.doesNotMatch(homePage, /<h3 aria-hidden/);
+  assert.doesNotMatch(homePage, /<p aria-hidden/);
+  assert.doesNotMatch(homePage, /aria-label="Research/);
+  assert.doesNotMatch(homePage, /aria-label="Build/);
+});
+
 test("compact icon and chip controls retain 44 pixel touch targets", () => {
   const block = surfacesCss.match(/\.icon-button,\s*\.chip\s*\{([^}]*)\}/);
   assert.ok(block, "Missing shared icon and chip control rule");
   assert.match(block[1], /min-height:\s*44px;/);
   assert.match(block[1], /min-width:\s*44px;/);
+});
+
+test("coverage-transparency surfaces warn users when a catalog is under-mapped", () => {
+  // CATL coverage blocker: low-coverage catalogs stay visible but must be
+  // labelled so users do not read a missing link as proof of no relationship.
+  const catalogCoverage = readFileSync(
+    "src/ui/lib/catalogCoverage.ts",
+    "utf8",
+  );
+  const sourcesPage = readFileSync("src/ui/pages/SourcesPage.tsx", "utf8");
+  const explorePage = readFileSync("src/ui/pages/ExplorePage.tsx", "utf8");
+
+  // isLowCatalogCoverage flags any catalog below the 75% coverage threshold.
+  assert.match(catalogCoverage, /export function isLowCatalogCoverage/);
+  assert.match(catalogCoverage, /coverage\.pct\s*<\s*75/);
+
+  // SourcesPage carries the supported-catalog contract statement and drives a
+  // "Preview / low coverage" badge from isLowCatalogCoverage.
+  assert.match(sourcesPage, /Supported catalogs/);
+  assert.match(sourcesPage, /Preview \/ low coverage/);
+  assert.match(sourcesPage, /not that no relationship exists/);
+  assert.match(sourcesPage, /isLowCatalogCoverage\(catalog\)/);
+
+  // ExplorePage result cards derive coverage per document and surface a
+  // "Limited coverage" badge so absence of a link is not over-trusted.
+  assert.match(explorePage, /catalogCoverageForId\(catalogCoverage/);
+  assert.match(explorePage, /Limited coverage/);
 });

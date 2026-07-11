@@ -27,7 +27,8 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     .getByRole("button", { name: "Research · Learn", exact: true })
     .click();
   await primaryNav
-    .getByRole("menuitem", { name: "Playbooks", exact: true })
+    .locator(".nav-more-menu")
+    .getByRole("button", { name: "Playbooks", exact: true })
     .click();
   await expect(page).toHaveURL(/#\/playbooks|view=playbooks/);
   await expect(

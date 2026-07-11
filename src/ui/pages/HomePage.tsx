@@ -1,12 +1,7 @@
-import {
-  IconSearch,
-  IconBook,
-  IconMap,
-  IconLayoutList,
-} from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 
-import { BrandMark } from "../components/BrandLockup";
+import { BrandFlourish, BrandMark } from "../components/BrandLockup";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -21,10 +16,14 @@ export function HomePage(props: HomePageProps) {
   return (
     <section className="landing-hero">
       <div className="landing-brand">
-        <BrandMark />
-        <h1 className="landing-brand-name">Control Atlas</h1>
+        <div className="landing-brand-row">
+          <BrandMark />
+          <h1 className="landing-brand-name">Control Atlas</h1>
+        </div>
+        <BrandFlourish />
         <p className="landing-tagline">
-          The public map for federal cyber compliance.
+          Unified intelligence for NIST controls, STIGs, CCIs, and FedRAMP
+          baselines — all in one place.
         </p>
       </div>
 
@@ -62,58 +61,49 @@ export function HomePage(props: HomePageProps) {
         </form>
       </div>
 
-      <div className="landing-intents">
+      <div className="landing-launch">
         <button
-          aria-label="Research & Learn"
-          className="landing-intent-card"
+          aria-describedby="landing-orb-hint"
+          className="landing-orb"
           onClick={() => onNavigate("start-here")}
           type="button"
         >
-          <div className="intent-icon-wrapper">
-            <IconBook size={24} stroke={1.5} />
-          </div>
-          <div className="intent-content">
-            <h3 aria-hidden="true">Research &middot; Learn</h3>
-            <p aria-hidden="true">
-              Understand controls, baselines, and get practical advice.
-            </p>
-          </div>
+          <span aria-hidden="true" className="landing-orb-circle">
+            <BrandMark />
+          </span>
+          <span className="landing-orb-caption">Click to start</span>
         </button>
 
         <button
-          aria-label="Atlas Map"
-          className="landing-intent-card"
-          onClick={() => onNavigate("atlas-map")}
+          className="landing-orbit-btn landing-orbit-research"
+          onClick={() => onNavigate("patterns")}
           type="button"
         >
-          <div className="intent-icon-wrapper">
-            <IconMap size={24} stroke={1.5} />
-          </div>
-          <div className="intent-content">
-            <h3 aria-hidden="true">Atlas Map</h3>
-            <p aria-hidden="true">
-              Explore connections across frameworks and STIGs.
-            </p>
-          </div>
+          <strong>Research</strong>
+          <span>Playbooks &amp; practical guidance</span>
         </button>
 
         <button
-          aria-label="Build & Create"
-          className="landing-intent-card"
+          className="landing-orbit-btn landing-orbit-build"
           onClick={() => onNavigate("templates")}
           type="button"
         >
-          <div className="intent-icon-wrapper">
-            <IconLayoutList size={24} stroke={1.5} />
-          </div>
-          <div className="intent-content">
-            <h3 aria-hidden="true">Build &middot; Create</h3>
-            <p aria-hidden="true">
-              Generate templates and RMF packages instantly.
-            </p>
-          </div>
+          <strong>Build</strong>
+          <span>Templates &amp; RMF starters</span>
+        </button>
+
+        <button
+          className="landing-orbit-btn landing-orbit-navigate"
+          onClick={() => onNavigate("atlas-map")}
+          type="button"
+        >
+          <strong>Navigate</strong>
+          <span>Map connections across frameworks</span>
         </button>
       </div>
+      <p className="visually-hidden" id="landing-orb-hint">
+        Answer three questions and get the best place to start.
+      </p>
 
       <div className="landing-trust-row">
         <p className="landing-trust-lead">

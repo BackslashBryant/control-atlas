@@ -22,14 +22,15 @@ test("landing presents the map-first hero and primary entry paths", async ({
 
   // The landing page directly presents the primary intent paths
   await expect(
-    page.getByRole("button", { name: "Research & Learn", exact: true }),
+    page.getByRole("button", { name: /^click to start$/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Atlas Map", exact: true }),
+    page.getByRole("button", { name: /^Research/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Build & Create", exact: true }),
+    page.getByRole("button", { name: /^Navigate/ }),
   ).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
 });
 
 test("landing search and brand-home flow work without legacy onboarding surfaces", async ({
