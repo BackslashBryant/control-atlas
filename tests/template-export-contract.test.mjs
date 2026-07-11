@@ -248,6 +248,77 @@ test('fedramp-rev5 resolves member controls via baseline edges instead of a plac
   assert.ok(ac1Index >= 0 && ac2Index >= 0 && ac1Index < ac2Index, 'Expected sorted natural order AC-1 before AC-2');
 });
 
+// ---------------------------------------------------------------------------
+// Markdown layout (spr-20260709 WS2): wide tables are restructured — no pipe
+// table wider than 6 columns; guidance/placeholder text renders as prose.
+// ---------------------------------------------------------------------------
+
+function maxMarkdownTableColumns(markdown) {
+  let max = 0;
+  for (const line of markdown.split('\n')) {
+    if (!line.startsWith('|')) continue;
+    const pipes = (line.match(/(?<!\\)\|/g) || []).length;
+    max = Math.max(max, pipes - 1);
+  }
+  return max;
+}
+
+test('markdown tables never exceed 6 columns for any template', () => {
+  for (const template of registry.templates) {
+    if (!template.supported_formats.includes('markdown')) continue;
+    const result = generateTemplate(
+      {
+        templateType: template.name,
+        framework: 'nist-800-53',
+        environment: 'Cloud SaaS',
+        format: 'markdown',
+        sourceRefs: template.source_refs || [],
+        sources: dataset.sources,
+      },
+      dataset,
+    );
+    const max = maxMarkdownTableColumns(result.content);
+    assert.ok(max <= 6, `${template.name} markdown emits a ${max}-column table`);
+  }
+});
+
+test('poam markdown renders the wide starter row as a labelled field list, not a pipe table', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'poam_starter',
+      framework: 'nist-800-53',
+      environment: 'Cloud SaaS',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal'],
+      sources: dataset.sources,
+    },
+    dataset,
+  );
+  assert.match(result.content, /- \*\*POA&M ID:\*\* \[POA&M ID\]/, 'field labels must render as prose bullets');
+  assert.match(result.content, /- \*\*Weakness Description:\*\*/, 'guidance fields must render as prose');
+  assert.match(result.content, /- \*\*Milestones with Completion Dates:\*\*/, 'all 20 POA&M fields must survive');
+  assert.equal(maxMarkdownTableColumns(result.content), 0, 'POA&M starter must not emit a wide pipe table');
+});
+
+test('ssp markdown splits the wide baseline into prose guidance plus narrow keyed tables', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'security_plan_starter',
+      framework: 'fedramp-rev5',
+      environment: 'Generic',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal'],
+      sources: fedrampDataset.sources,
+    },
+    fedrampDataset,
+  );
+  assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'SSP markdown tables must stay at 6 columns or fewer');
+  assert.match(result.content, /- \*\*Implementation Status:\*\* \[Status\]/, 'constant guidance columns must render as prose above the tables');
+  assert.match(result.content, /\| Control ID \| Control Title \|/, 'identity/status columns must form a narrow table');
+  assert.match(result.content, /\| Control ID \| Implementation Prompt/, 'detail tables must repeat the key column');
+  assert.match(result.content, /How is Policy and Procedures \(AC-1\)/, 'per-control prompts must be preserved');
+});
+
 test('framework with zero resolvable controls emits an honest notice and flags the error', () => {
   const emptyDataset = {
     nodes: [

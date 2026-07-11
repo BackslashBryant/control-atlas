@@ -132,6 +132,62 @@ test('xlsx round-trips through a real spreadsheet reader (Excel-compatible)', as
   }
 });
 
+test('xlsx worksheets set bounded column widths, freeze the header row, and style headers', () => {
+  const bytes = docToXlsx(buildDoc('poam_starter'));
+  const entries = unzipSync(bytes);
+  const sheet1 = strFromU8(entries['xl/worksheets/sheet1.xml']);
+
+  // Per-column widths, declared before sheetData in schema order.
+  assert.match(sheet1, /<cols><col min="1" max="1" width="\d+" customWidth="1"\/>/, 'missing <cols> declaration');
+  assert.ok(sheet1.indexOf('<sheetViews>') < sheet1.indexOf('<cols>'), 'sheetViews must precede cols');
+  assert.ok(sheet1.indexOf('<cols>') < sheet1.indexOf('<sheetData>'), 'cols must precede sheetData');
+  for (const m of sheet1.matchAll(/width="(\d+)"/g)) {
+    const w = Number(m[1]);
+    assert.ok(w >= 12 && w <= 60, `column width ${w} out of the 12..60 bounds`);
+  }
+
+  // Frozen top row.
+  assert.match(
+    sheet1,
+    /<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"\/>/,
+    'header row must be frozen',
+  );
+
+  // Header cells reference the bold + wrapped cellXf (s="1").
+  assert.match(sheet1, /<c r="A1" s="1" t="inlineStr">/, 'header cells must use the header style');
+
+  // Styles part wired through content types and workbook rels.
+  const styles = strFromU8(entries['xl/styles.xml']);
+  assert.match(styles, /<b\/>/, 'styles must define a bold header font');
+  assert.match(styles, /<alignment vertical="top" wrapText="1"\/>/, 'header style must wrap text');
+  assert.match(strFromU8(entries['[Content_Types].xml']), /\/xl\/styles\.xml/, 'styles part must be declared');
+  assert.match(strFromU8(entries['xl/_rels/workbook.xml.rels']), /relationships\/styles/, 'workbook must relate to styles');
+});
+
+test('docx tables declare a fixed-width grid and a repeating header row', () => {
+  const bytes = docToDocx(buildDoc('security_plan_starter'));
+  const document = strFromU8(unzipSync(bytes)['word/document.xml']);
+
+  const tblCount = (document.match(/<w:tbl>/g) || []).length;
+  const gridCount = (document.match(/<w:tblGrid>/g) || []).length;
+  const headerCount = (document.match(/<w:trPr><w:tblHeader\/><\/w:trPr>/g) || []).length;
+  assert.ok(tblCount > 0, 'SSP docx must contain tables');
+  assert.equal(gridCount, tblCount, 'every table must declare a tblGrid');
+  assert.equal(headerCount, tblCount, 'every table must repeat its header row across pages');
+
+  assert.match(document, /<w:tblW w:w="5000" w:type="pct"\/>/, 'tables must span the page width (pct)');
+  assert.match(document, /<w:tblLayout w:type="fixed"\/>/, 'tables must use fixed layout');
+  assert.match(document, /<w:gridCol w:w="\d+"\/>/, 'grid columns must carry explicit widths');
+  assert.match(document, /<w:tcW w:w="\d+" w:type="dxa"\/>/, 'cells must carry explicit widths');
+  assert.doesNotMatch(document, /<w:tblW w:w="0" w:type="auto"\/>/, 'auto-width tables clip in Word');
+
+  // Every grid must distribute exactly the usable page width (12240 − 2×1440).
+  for (const grid of document.match(/<w:tblGrid>.*?<\/w:tblGrid>/g) || []) {
+    const sum = [...grid.matchAll(/w:w="(\d+)"/g)].reduce((total, m) => total + Number(m[1]), 0);
+    assert.equal(sum, 9360, 'gridCol widths must sum to the usable page width');
+  }
+});
+
 test('xml special characters in cell values are escaped, not injected', () => {
   const doc = {
     title: 'Ampersand & <Angle> "Quote"',
