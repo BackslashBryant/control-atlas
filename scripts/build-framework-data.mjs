@@ -170,6 +170,21 @@ const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
 const nodeId = (catalogId, recordId) => `${catalogId}:${recordId}`;
 const identifier = (value) => String(value).replace(/[^A-Za-z0-9:_-]+/g, "-");
 
+// OLIR-style mapping files zero-pad SP 800-53 control IDs and write
+// enhancements in paren notation ("AC-01", "CM-07(02)", "AC-02.3"), while
+// ingested catalog nodes use unpadded dot notation ("AC-1", "CM-7.2",
+// "AC-2.3"). Normalize at the mapping read site so endpoints resolve against
+// the node set; anything that is not an 800-53-style control ID (CSF
+// "GV.OC-03", CCI "CCI-000015", 800-171 "3.1.1") passes through unchanged.
+function normalizeControlId(recordId) {
+  const match = String(recordId ?? "").match(
+    /^([A-Za-z]{2})-0*(\d+)(?:\.0*(\d+)|\(0*(\d+)\))?$/,
+  );
+  if (!match) return recordId;
+  const enhancement = match[3] ?? match[4];
+  return `${match[1]}-${match[2]}${enhancement != null ? `.${enhancement}` : ""}`;
+}
+
 function relationshipId(prefix, sourceNodeId, targetNodeId, relationshipType) {
   return identifier(
     `${prefix}:${relationshipType}:${sourceNodeId}:${targetNodeId}`,
@@ -854,11 +869,11 @@ function buildEdges(registry, nodes) {
     ).entries()) {
       const sourceNodeId = nodeId(
         relationship.source_catalog || sourceCatalog,
-        relationship.source_id,
+        normalizeControlId(relationship.source_id),
       );
       const targetNodeId = nodeId(
         relationship.target_catalog || targetCatalog,
-        relationship.target_id,
+        normalizeControlId(relationship.target_id),
       );
       const sourceId =
         relationship.evidence_source || document.source_key || defaultSourceId;
@@ -1005,6 +1020,7 @@ function buildLibraryDocuments(graph) {
       plain_language_summary: node.plain_language_summary || "",
       object_type: node.node_type,
       source_id: node.source_id,
+      source_name: source?.display_name || source?.name || "",
       source_class: source?.provenance_class || "",
       catalog_id: node.metadata?.catalog_id || "",
       control_family: node.metadata?.family || "",

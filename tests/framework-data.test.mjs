@@ -335,11 +335,71 @@ test("epic 2 graph build emits sharded library search artifacts with filter face
   );
   assert.ok(ac2, "missing AC-2 library document");
   assert.equal(ac2.object_type, "control");
+  assert.equal(ac2.source_id, "nist-oscal");
+  assert.equal(
+    ac2.source_name,
+    "SP 800-53 Rev. 5",
+    "library documents must carry a resolved source name so search-phase result cards can render it before sources.json loads",
+  );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");
   assert.ok(
     ac2.plain_language_summary?.trim(),
     "AC-2 library document must include plain_language_summary",
+  );
+});
+
+test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
+  buildFrameworkData();
+  const edges = generated("edges").edges;
+  const findings = generated("graph-health").findings;
+
+  // maps/800-53-to-csf.json writes "AC-01"/"CM-07(02)"; ingested nodes use
+  // "AC-1"/"CM-7.2". The build must normalize the notation, not block the
+  // relationship.
+  assert.ok(
+    edges.some(
+      (edge) =>
+        edge.id.startsWith("edge:800-53-to-csf:") &&
+        edge.source_node_id === "nist-800-53:AC-1" &&
+        edge.target_node_id.startsWith("csf-2:"),
+    ),
+    "expected zero-padded AC-01 CSF mapping to resolve to nist-800-53:AC-1",
+  );
+  assert.ok(
+    edges.some(
+      (edge) =>
+        edge.id.startsWith("edge:800-53-to-csf:") &&
+        edge.source_node_id === "nist-800-53:CM-7.2",
+    ),
+    "expected paren enhancement CM-07(02) to resolve to nist-800-53:CM-7.2",
+  );
+
+  // Notation alone must no longer block OLIR mappings. Before the fix, 579
+  // CSF and 126 SP 800-171 mappings were blocked purely by zero-padding; the
+  // only blocks that may remain are genuine upstream data gaps, NOT notation:
+  //   - all 126 SP 800-171 notation blocks clear outright (nothing residual);
+  //   - a small CSF residue remains from mappings that reference bare
+  //     family/category IDs the OLIR source left incomplete (e.g. "CP" ->
+  //     "PR.IR-03", "CP-4" -> "RC.RP"), which normalizeControlId correctly
+  //     leaves unchanged and which have no catalog node.
+  const blocked = findings.filter(
+    (finding) => finding.finding_type === "blocked_relationship",
+  );
+  const p171Blocked = blocked.filter((finding) =>
+    finding.subject_id.startsWith("800-53-to-800-171:"),
+  );
+  assert.equal(
+    p171Blocked.length,
+    0,
+    "every SP 800-171 OLIR mapping was blocked only by control ID notation and must now resolve",
+  );
+  const csfBlocked = blocked.filter((finding) =>
+    finding.subject_id.startsWith("800-53-to-csf:"),
+  );
+  assert.ok(
+    csfBlocked.length <= 12,
+    `CSF OLIR notation blocks (573 of 579) must clear; only bare-identifier data gaps may remain, got ${csfBlocked.length} (was 579)`,
   );
 });
 
