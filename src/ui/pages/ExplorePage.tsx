@@ -413,11 +413,11 @@ export function ExplorePage(props: {
                                   <Badge tone="info">
                                     {relationshipCount} connections
                                   </Badge>
-                                ) : (
+                                ) : graphReady ? (
                                   <span className="no-connections">
                                     No connections yet
                                   </span>
-                                )}
+                                ) : null}
                                 {lowCoverage ? (
                                   <Badge tone="warning">Limited coverage</Badge>
                                 ) : null}
@@ -460,7 +460,7 @@ export function ExplorePage(props: {
                               <details className="result-actions-menu">
                                 <summary role="button">More actions</summary>
                                 <div className="result-actions-popover">
-                                  {relationshipCount > 0 ? (
+                                  {relationshipCount > 0 || !graphReady ? (
                                     <button
                                       className="secondary"
                                       onClick={() =>
