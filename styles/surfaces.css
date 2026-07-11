@@ -2893,7 +2893,9 @@ button.atlas-leverage-row:hover {
   align-items: center;
   justify-items: center;
   column-gap: clamp(2.5rem, 9vw, 7rem);
-  row-gap: var(--space-8);
+  /* Match column-gap so the orbit reads as roughly equidistant on both axes
+     instead of pulling the Navigate satellite in close underneath the orb. */
+  row-gap: clamp(2.5rem, 9vw, 7rem);
   padding: var(--space-6) 0 var(--space-4);
 }
 
@@ -3006,6 +3008,8 @@ button.atlas-leverage-row:hover {
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  /* Fixed width so the three pills match regardless of caption length. */
+  width: 14.5rem;
   padding: var(--space-3) var(--space-6);
   border-radius: 999px;
   background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
@@ -3045,6 +3049,13 @@ button.atlas-leverage-row:hover {
 .landing-orbit-btn span {
   color: var(--ca-text-subtle);
   font-size: var(--ca-text-xs);
+  line-height: 1.6;
+  /* Reserve 2 lines so single-line captions don't render shorter than the
+     captions that wrap, which was making the three pills different heights. */
+  min-height: calc(3.2 * var(--ca-text-xs));
+  display: flex;
+  align-items: center;
+  text-align: center;
 }
 
 @media (max-width: 720px) {
