@@ -24,7 +24,10 @@ test("header search clears when leaving Explore after an empty result", async ({
     .getByRole("navigation", { name: "Primary navigation" })
     .getByRole("button", { name: "Navigate", exact: true })
     .click();
-  await page.getByRole("menuitem", { name: "Compare", exact: true }).click();
+  await page
+    .locator(".nav-more-menu")
+    .getByRole("button", { name: "Compare", exact: true })
+    .click();
   await expect(page).toHaveURL(/view=matrix|#\/compare/);
   await expect(page.locator("#header-search")).toHaveValue("");
 });

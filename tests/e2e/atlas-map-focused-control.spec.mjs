@@ -89,7 +89,11 @@ test("cross-framework equivalents surface a control's CSF / 800-171 mapping", as
 test("cross-framework section is honest when no mapping is ingested", async ({
   page,
 }) => {
-  await page.goto("/#/atlas-map?node=AC-2");
+  // CA-6 (Authorization) is an active 800-53 control that currently has no
+  // ingested OLIR cross-framework mapping, so it exercises the honest
+  // empty-state. (AC-2 no longer works here: the OLIR control-ID normalization
+  // fix ingested its CSF/800-171 equivalents, which is the intended behavior.)
+  await page.goto("/#/atlas-map?node=CA-6");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

@@ -69,10 +69,24 @@ export function TopNav(props: TopNavProps) {
       </button>
       <nav aria-label="Primary navigation" className="primary-nav">
         {NAV_GROUPS.map((group) => (
-          <div className="nav-more" key={group.label}>
+          <div
+            className="nav-more"
+            key={group.label}
+            onKeyDown={(event) => {
+              // Disclosure pattern: Escape closes the open group and returns
+              // focus to its toggle button (the div's first button child).
+              if (event.key !== "Escape" || openGroup !== group.label) {
+                return;
+              }
+              event.stopPropagation();
+              setOpenGroup(null);
+              event.currentTarget
+                .querySelector<HTMLButtonElement>(":scope > button")
+                ?.focus();
+            }}
+          >
             <button
               aria-expanded={openGroup === group.label}
-              aria-haspopup="menu"
               className={
                 activeGroup === group.label ? "active nav-active" : ""
               }
@@ -86,14 +100,13 @@ export function TopNav(props: TopNavProps) {
               <span>{group.label}</span>
             </button>
             {openGroup === group.label ? (
-              <div className="nav-more-menu" role="menu">
+              <div className="nav-more-menu">
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   return (
                     <button
                       key={item.label}
                       onClick={() => navigateFromGroup(item.view, item.patch)}
-                      role="menuitem"
                       type="button"
                     >
                       <Icon aria-hidden="true" size={16} stroke={1.8} />
@@ -177,7 +190,7 @@ export function TopNav(props: TopNavProps) {
       </div>
       {mobileMenuOpen ? (
         <div className="mobile-nav-sheet" id="mobile-nav-sheet">
-          <nav aria-label="Primary navigation (mobile)" role="menu">
+          <nav aria-label="Primary navigation (mobile)">
             {NAV_GROUPS.map((group) => (
               <div className="mobile-nav-sheet-group" key={group.label}>
                 <span className="mobile-nav-sheet-group-label">
@@ -191,7 +204,6 @@ export function TopNav(props: TopNavProps) {
                       onClick={() =>
                         navigateFromMobileMenu(item.view, item.patch)
                       }
-                      role="menuitem"
                       type="button"
                     >
                       <Icon aria-hidden="true" size={18} stroke={1.8} />

@@ -4,6 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
+import {
+  buildCatalogCoverageList,
+  catalogCoverageForId,
+  isLowCatalogCoverage,
+} from "../lib/catalogCoverage";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { recordDisplayTitle } from "../lib/recordTitle";
@@ -91,6 +96,11 @@ export function ExplorePage(props: {
   );
   const hasQuery = Boolean(state.query.trim());
 
+  const catalogCoverage = useMemo(
+    () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1),
+    [bundle.runtime],
+  );
+
   const documentRows = useMemo(
     () =>
       documents.map((document: any) => {
@@ -101,9 +111,12 @@ export function ExplorePage(props: {
               publication_status: "published",
             }).length
           : 0;
-        return { document, node, relationshipCount, source };
+        const lowCoverage = isLowCatalogCoverage(
+          catalogCoverageForId(catalogCoverage, document.catalog_id),
+        );
+        return { document, node, relationshipCount, source, lowCoverage };
       }),
-    [bundle.runtime, documents],
+    [bundle.runtime, catalogCoverage, documents],
   );
 
   const visibleDocumentRows = useMemo(
@@ -364,7 +377,14 @@ export function ExplorePage(props: {
                   <div className="stack">
                     {entries
                       .slice(0, GROUP_RENDER_CAP)
-                      .map(({ document, node, relationshipCount, source }) => {
+                      .map(
+                        ({
+                          document,
+                          node,
+                          relationshipCount,
+                          source,
+                          lowCoverage,
+                        }) => {
                         return (
                           <article className="result-card" key={document.id}>
                             <div className="result-card-header">
@@ -388,15 +408,20 @@ export function ExplorePage(props: {
                                   )}
                                 </h3>
                               </div>
-                              {relationshipCount > 0 ? (
-                                <Badge tone="info">
-                                  {relationshipCount} connections
-                                </Badge>
-                              ) : (
-                                <span className="no-connections">
-                                  No connections yet
-                                </span>
-                              )}
+                              <div className="result-card-badges">
+                                {relationshipCount > 0 ? (
+                                  <Badge tone="info">
+                                    {relationshipCount} connections
+                                  </Badge>
+                                ) : (
+                                  <span className="no-connections">
+                                    No connections yet
+                                  </span>
+                                )}
+                                {lowCoverage ? (
+                                  <Badge tone="warning">Limited coverage</Badge>
+                                ) : null}
+                              </div>
                             </div>
                             <p className="result-summary">
                               {document.plain_language_summary ||
@@ -408,12 +433,17 @@ export function ExplorePage(props: {
                                 Source:{" "}
                                 {source?.display_name ||
                                   source?.name ||
+                                  document.source_name ||
                                   "Source unavailable"}
                               </span>
-                              {source?.provenance_class ? (
+                              {source?.provenance_class ||
+                              document.source_class ? (
                                 <ProvenanceTerm
                                   kind="provenance"
-                                  value={source.provenance_class}
+                                  value={
+                                    source?.provenance_class ||
+                                    document.source_class
+                                  }
                                 />
                               ) : null}
                             </div>

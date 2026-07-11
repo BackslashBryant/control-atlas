@@ -554,6 +554,13 @@ li {
   gap: var(--space-4);
 }
 
+.result-card-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
 .summary-card {
   padding: var(--space-4);
 }
@@ -2763,6 +2770,9 @@ button.atlas-leverage-row:hover {
   min-height: calc(100vh - 120px);
   padding: var(--space-8) 0 var(--space-16);
   z-index: 10;
+  /* Contain the decorative glow and the 3-column orbit row so neither can
+     create document-level horizontal overflow on narrow viewports. */
+  overflow-x: clip;
 }
 
 .landing-brand {
@@ -2774,10 +2784,13 @@ button.atlas-leverage-row:hover {
   text-align: center;
 }
 
+.landing-brand .brand-icon-mark {
+  width: 52px;
+  height: 52px;
+}
+
 .landing-brand svg {
   color: var(--ca-text);
-  width: 56px;
-  height: 56px;
 }
 
 .landing-brand-name {
@@ -2863,65 +2876,186 @@ button.atlas-leverage-row:hover {
   outline: none;
 }
 
-.landing-intents {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-4);
-  width: 100%;
-  max-width: 64rem;
-}
-
-.landing-intent-card {
+.landing-brand-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-4);
+}
+
+.landing-launch {
+  position: relative;
+  width: 100%;
+  max-width: 54rem;
+  display: grid;
+  grid-template-areas:
+    "research orb build"
+    ". navigate .";
+  align-items: center;
+  justify-items: center;
+  column-gap: clamp(2.5rem, 9vw, 7rem);
+  row-gap: var(--space-8);
+  padding: var(--space-6) 0 var(--space-4);
+}
+
+.landing-launch::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Cap to viewport width so the centered glow never forces document overflow
+     on narrow screens (the pseudo-element escapes .landing-launch's box). */
+  width: min(34rem, 92vw);
+  height: min(34rem, 92vw);
+  transform: translate(-50%, -58%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ca-secondary) 9%, transparent) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.landing-orb {
+  grid-area: orb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
   background: transparent;
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  text-align: left;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
 }
 
-.landing-intent-card:hover,
-.landing-intent-card:focus-visible {
-  background: color-mix(in srgb, var(--ca-surface-raised) 50%, transparent);
-  border-color: rgba(148, 163, 184, 0.35);
-  transform: translateY(-2px);
-}
-
-.intent-icon-wrapper {
+.landing-orb-circle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--ca-secondary) 12%, transparent);
-  color: var(--ca-secondary);
-  flex-shrink: 0;
+  width: clamp(8.5rem, 16vw, 10.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 32% 26%,
+    color-mix(in srgb, var(--ca-secondary) 22%, transparent),
+    rgba(15, 23, 42, 0.92) 72%
+  );
+  border: 1px solid color-mix(in srgb, var(--ca-secondary) 40%, transparent);
+  box-shadow:
+    0 0 44px color-mix(in srgb, var(--ca-secondary) 22%, transparent),
+    inset 0 0 24px rgba(2, 6, 23, 0.55);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  animation: orb-breathe 4.5s ease-in-out infinite;
 }
 
-.intent-content {
+.landing-orb-circle .brand-icon-mark {
+  width: 46%;
+  height: 46%;
+}
+
+.landing-orb:hover .landing-orb-circle,
+.landing-orb:focus-visible .landing-orb-circle {
+  transform: scale(1.045);
+  box-shadow:
+    0 0 64px color-mix(in srgb, var(--ca-secondary) 38%, transparent),
+    inset 0 0 24px rgba(2, 6, 23, 0.55);
+}
+
+.landing-orb:focus-visible {
+  outline: none;
+}
+
+.landing-orb:focus-visible .landing-orb-circle {
+  outline: 2px solid var(--ca-secondary);
+  outline-offset: 6px;
+}
+
+.landing-orb-caption {
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--ca-text-subtle);
+  transition: color 0.2s ease;
+}
+
+.landing-orb:hover .landing-orb-caption,
+.landing-orb:focus-visible .landing-orb-caption {
+  color: var(--ca-text);
+}
+
+@keyframes orb-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 38px color-mix(in srgb, var(--ca-secondary) 18%, transparent),
+      inset 0 0 24px rgba(2, 6, 23, 0.55);
+  }
+  50% {
+    box-shadow:
+      0 0 58px color-mix(in srgb, var(--ca-secondary) 30%, transparent),
+      inset 0 0 24px rgba(2, 6, 23, 0.55);
+  }
+}
+
+.landing-orbit-btn {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-6);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.intent-content h3 {
+.landing-orbit-btn:hover,
+.landing-orbit-btn:focus-visible {
+  background: var(--ca-surface-raised);
+  border-color: color-mix(in srgb, var(--ca-secondary) 45%, transparent);
+  transform: translateY(-2px);
+}
+
+.landing-orbit-research {
+  grid-area: research;
+}
+
+.landing-orbit-build {
+  grid-area: build;
+}
+
+.landing-orbit-navigate {
+  grid-area: navigate;
+}
+
+.landing-orbit-btn strong {
   color: var(--ca-text);
   font-size: var(--font-size-base);
   font-weight: 600;
-  margin: 0;
 }
 
-.intent-content p {
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-  margin: 0;
-  line-height: var(--line-height-relaxed);
+.landing-orbit-btn span {
+  color: var(--ca-text-subtle);
+  font-size: var(--ca-text-xs);
+}
+
+@media (max-width: 720px) {
+  .landing-launch {
+    grid-template-areas:
+      "orb"
+      "research"
+      "navigate"
+      "build";
+    row-gap: var(--space-4);
+  }
 }
 .detail-page {
   display: grid;

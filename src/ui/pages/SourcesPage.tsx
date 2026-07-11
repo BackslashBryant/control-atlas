@@ -17,7 +17,10 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
-import { buildCatalogCoverageList } from "../lib/catalogCoverage";
+import {
+  buildCatalogCoverageList,
+  isLowCatalogCoverage,
+} from "../lib/catalogCoverage";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
@@ -169,7 +172,12 @@ export function SourcesPage(props: {
         <ul className="catalog-coverage-list">
           {catalogCoverage.map((catalog) => (
             <li className="catalog-coverage-row" key={catalog.id}>
-              <span className="catalog-coverage-name">{catalog.name}</span>
+              <span className="catalog-coverage-name">
+                {catalog.name}
+                {isLowCatalogCoverage(catalog) ? (
+                  <Badge tone="warning">Preview / low coverage</Badge>
+                ) : null}
+              </span>
               <span
                 aria-hidden="true"
                 className="catalog-coverage-bar"
@@ -185,6 +193,16 @@ export function SourcesPage(props: {
             </li>
           ))}
         </ul>
+        <div className="catalog-coverage-contract">
+          <h3>Supported catalogs</h3>
+          <p>
+            Every catalog above is supported and stays fully searchable.
+            Catalogs marked <strong>Preview / low coverage</strong> are still
+            being mapped into the public graph, so they are shown for reference
+            only. In a low-coverage catalog, a missing link means the mapping is
+            not ingested yet — not that no relationship exists.
+          </p>
+        </div>
       </section>
 
       <Accordion.Root className="accordion-root" collapsible type="single">

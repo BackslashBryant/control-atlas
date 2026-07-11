@@ -26,7 +26,7 @@ test("brand entrance appears once, is dismissible, and hides navigation while vi
   // Home is a calm, chrome-free entrance — the primary nav stays hidden here
   // by design; dismissing the intro reveals the home hero's own controls.
   await expect(
-    page.getByRole("button", { name: "Research & Learn", exact: true }),
+    page.getByRole("button", { name: /^click to start$/i }),
   ).toBeVisible();
   await page.reload();
   await expect(entrance).toHaveCount(0);
@@ -59,13 +59,13 @@ test("control atlas map-first shell exposes navigation and guided start path", a
 
   // Home is a calm, chrome-free entrance (its own wordmark/search/buttons
   // cover navigation there) — the persistent primary nav is hidden until the
-  // user has gone somewhere else. The center launch button opens the tile
-  // menu one hop in; Start Here is one of those tiles.
+  // user has gone somewhere else. The center "Click to start" orb goes
+  // straight to the guided Start Here flow.
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
   ).toBeHidden();
   await page
-    .getByRole("button", { name: "Research & Learn", exact: true })
+    .getByRole("button", { name: /^click to start$/i })
     .click();
   await expect(
     page.getByRole("heading", { name: "Find the best place to start" }),
@@ -94,6 +94,9 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     name: "Primary navigation",
   });
   await expect(primaryNav).toBeVisible();
+  // Nav groups are disclosures: plain buttons revealing a container of plain
+  // buttons (no ARIA menu roles) — scope item queries to the revealed panel.
+  const openGroupMenu = primaryNav.locator(".nav-more-menu");
   const navLabels = await primaryNav
     .getByRole("button")
     .evaluateAll((nodes) =>
@@ -107,40 +110,52 @@ test("control atlas map-first shell exposes navigation and guided start path", a
   ]);
 
   await primaryNav.getByRole("button", { name: "Navigate" }).click();
+  await expect(openGroupMenu).toBeVisible();
   await expect(
-    primaryNav.getByRole("menuitem", { name: "Atlas" }),
+    openGroupMenu.getByRole("button", { name: "Atlas" }),
   ).toBeVisible();
 
-  const navigateMenuLabels = await primaryNav
-    .getByRole("menuitem")
+  const navigateMenuLabels = await openGroupMenu
+    .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
   expect(navigateMenuLabels).toEqual(["Atlas", "Compare"]);
 
   await primaryNav.getByRole("button", { name: "Research · Learn" }).click();
-  const researchMenuLabels = await primaryNav
-    .getByRole("menuitem")
+  const researchMenuLabels = await openGroupMenu
+    .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
   expect(researchMenuLabels).toEqual(["Start", "Sources", "Playbooks"]);
 
   await primaryNav.getByRole("button", { name: "Build · Create" }).click();
-  const buildMenuLabels = await primaryNav
-    .getByRole("menuitem")
+  const buildMenuLabels = await openGroupMenu
+    .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
   expect(buildMenuLabels).toEqual(["Templates"]);
 
   await primaryNav.getByRole("button", { name: "Search", exact: true }).click();
-  const searchMenuLabels = await primaryNav
-    .getByRole("menuitem")
+  const searchMenuLabels = await openGroupMenu
+    .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
   expect(searchMenuLabels).toEqual(["Search"]);
+
+  // Disclosure keyboard contract (SPR A11Y-002): Escape closes the open
+  // group and returns focus to its toggle button.
+  await openGroupMenu
+    .getByRole("button", { name: "Search", exact: true })
+    .focus();
+  await page.keyboard.press("Escape");
+  await expect(openGroupMenu).toHaveCount(0);
+  await expect(
+    primaryNav.getByRole("button", { name: "Search", exact: true }),
+  ).toBeFocused();
 
   // Clicking the brand button returns to the calm home entrance, which
   // hides the chrome again.
