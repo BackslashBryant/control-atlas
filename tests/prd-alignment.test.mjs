@@ -50,7 +50,7 @@ test('pattern library contains 15 required authorization and risk patterns', () 
 test('template factory implements all conditional include flags and bug fixes', () => {
   const dataset = {
     nodes: [
-      { id: 'nist-800-53:AC-2', node_type: 'control', label: 'AC-2 Account Management', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-2', title: 'Account Management', control_family: 'Access Control' } }
+      { id: 'nist-800-53:AC-2', node_type: 'control', label: 'AC-2 Account Management', plain_language_summary: 'Keep track of every account on the system: who gets one, who approves it, and when it gets disabled.', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-2', title: 'Account Management', control_family: 'Access Control' } }
     ]
   };
 
@@ -66,7 +66,8 @@ test('template factory implements all conditional include flags and bug fixes', 
   const resultFramework = generateTemplate(optionsWithFramework, dataset);
   assert.match(resultFramework.content, /AC-2/);
   assert.match(resultFramework.content, /Account Management/);
-  assert.match(resultFramework.content, /\[Status\]/);
+  // Markdown cell values escape pipes, so match the escaped form.
+  assert.ok(resultFramework.content.includes('[Planned \\| Implemented \\| Inherited \\| N/A]'));
 
   // Test optional flags - exclude placeholders
   const optionsNoPlaceholders = {
@@ -78,8 +79,8 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultNoPlaceholders = generateTemplate(optionsNoPlaceholders, dataset);
-  assert.doesNotMatch(resultNoPlaceholders.content, /\[Status\]/);
-  assert.doesNotMatch(resultNoPlaceholders.content, /\[Role\]/);
+  assert.ok(!resultNoPlaceholders.content.includes('[Planned \\| Implemented \\| Inherited \\| N/A]'));
+  assert.doesNotMatch(resultNoPlaceholders.content, /\[Artifact name\(s\)\]/);
 
   // Test including implementation prompts
   const optionsWithPrompts = {
@@ -92,7 +93,12 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultWithPrompts = generateTemplate(optionsWithPrompts, dataset);
-  assert.match(resultWithPrompts.content, /How is Account Management \(AC-2\) implemented/);
+  // Guidance renders once, as a section — never repeated per control row.
+  const guidanceMatches = resultWithPrompts.content.match(/## How to Fill the Control Baseline/g) || [];
+  assert.equal(guidanceMatches.length, 1, 'fill guidance must render exactly once');
+  assert.match(resultWithPrompts.content, /Implementation Statement: describe how each control is implemented in the Cloud SaaS environment/);
+  // The control row carries real plain-language text, not a generated prompt.
+  assert.match(resultWithPrompts.content, /AC-2 \| Account Management \| Keep track of every account on the system/);
 
   // Test including source footnotes
   const optionsWithFootnotes = {

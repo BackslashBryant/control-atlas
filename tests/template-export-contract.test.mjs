@@ -239,7 +239,10 @@ test('fedramp-rev5 resolves member controls via baseline edges instead of a plac
   assert.match(result.content, /AC-1\b/, 'Expected AC-1 resolved via baseline membership edge');
   assert.match(result.content, /AC-2\b/, 'Expected AC-2 resolved via baseline membership edge');
   assert.doesNotMatch(result.content, /AC-13\b/, 'Withdrawn AC-13 must be excluded even when resolved via edges');
-  assert.doesNotMatch(result.content, /\[Control ID\]/, 'Should not fall back to placeholder row when resolution succeeds');
+  // "[Control ID]" now legitimately appears in the blank Inheritance Summary
+  // starter rows; "[Control Title]" only appears in the placeholder-control
+  // fallback row, so it is the fallback detector.
+  assert.doesNotMatch(result.content, /\[Control Title\]/, 'Should not fall back to placeholder row when resolution succeeds');
   assert.equal(result.frameworkResolutionError, null);
 
   // Natural/sorted order: AC-1 before AC-2.
@@ -282,7 +285,7 @@ test('markdown tables never exceed 6 columns for any template', () => {
   }
 });
 
-test('poam markdown renders the wide starter row as a labelled field list, not a pipe table', () => {
+test('poam markdown renders a field guide as prose plus a 6-column tracker table', () => {
   const result = generateTemplate(
     {
       templateType: 'poam_starter',
@@ -294,13 +297,31 @@ test('poam markdown renders the wide starter row as a labelled field list, not a
     },
     dataset,
   );
-  assert.match(result.content, /- \*\*POA&M ID:\*\* \[POA&M ID\]/, 'field labels must render as prose bullets');
-  assert.match(result.content, /- \*\*Weakness Description:\*\*/, 'guidance fields must render as prose');
-  assert.match(result.content, /- \*\*Milestones with Completion Dates:\*\*/, 'all 20 POA&M fields must survive');
-  assert.equal(maxMarkdownTableColumns(result.content), 0, 'POA&M starter must not emit a wide pipe table');
+  const poamFields = [
+    'POA&M ID', 'Detection Source', 'Related Control (CCI)', 'Related STIG/SRG',
+    'Weakness Description', 'Risk Statement', 'Severity', 'Severity Category (CAT)',
+    'Point of Contact (POC)', 'Resources Required', 'Planned Remediation',
+    'Milestones with Completion Dates', 'Original Detection Date', 'Scheduled Completion Date',
+    'Responsible Office/Role', 'Status', 'Deviation Reference', 'Risk Acceptance Reference',
+    'Evidence Needed for Closure', 'Notes',
+  ];
+  for (const field of poamFields) {
+    assert.ok(result.content.includes(field), `all 20 POA&M fields must survive — missing "${field}"`);
+  }
+  assert.match(result.content, /- \*\*POA&M ID\*\* —/, 'field guide must render as prose bullets');
+  assert.match(
+    result.content,
+    /\| POA&M ID \| Weakness \| Related Control\/CCI \| Severity \| Scheduled Completion \| Status \|/,
+    'tracker table header must be present',
+  );
+  // 10 usable blank tracker rows pass through as a plain table — never as
+  // prose bullets of empty values.
+  const blankRows = (result.content.match(/^\|\s+\|\s+\|\s+\|\s+\|\s+\|\s+\|$/gm) || []).length;
+  assert.equal(blankRows, 10, 'tracker must carry exactly 10 blank rows');
+  assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'POA&M starter must not emit a wide pipe table');
 });
 
-test('ssp markdown splits the wide baseline into prose guidance plus narrow keyed tables', () => {
+test('ssp markdown renders one plain-language baseline table with guidance stated once', () => {
   const result = generateTemplate(
     {
       templateType: 'security_plan_starter',
@@ -313,10 +334,174 @@ test('ssp markdown splits the wide baseline into prose guidance plus narrow keye
     fedrampDataset,
   );
   assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'SSP markdown tables must stay at 6 columns or fewer');
-  assert.match(result.content, /- \*\*Implementation Status:\*\* \[Status\]/, 'constant guidance columns must render as prose above the tables');
-  assert.match(result.content, /\| Control ID \| Control Title \|/, 'identity/status columns must form a narrow table');
-  assert.match(result.content, /\| Control ID \| Implementation Prompt/, 'detail tables must repeat the key column');
-  assert.match(result.content, /How is Policy and Procedures \(AC-1\)/, 'per-control prompts must be preserved');
+  assert.match(
+    result.content,
+    /\| Control ID \| Control Title \| What It Means \| Implementation Statement \| Evidence \| Status \|/,
+    'the control baseline must be one table with plain-language and fill-in columns',
+  );
+  assert.match(result.content, /## How to Fill the Control Baseline/, 'fill guidance must render as its own section');
+  // The old per-control madlib prompt ("How is <Title> (<ID>) implemented…")
+  // must never repeat across rows. The fill-in placeholder ("[How is this
+  // implemented for this system?]") has no (<ID>) and is exempt.
+  const madlibs = (result.content.match(/How is .+ \(.+\) implemented/g) || []).length;
+  assert.ok(madlibs <= 1, `madlib prompt sentence appears ${madlibs} times — it must not repeat per control`);
+});
+
+// ---------------------------------------------------------------------------
+// Content overhaul (spr-20260709): enhancement scoping, honest baseline
+// fallback, and real CCI/STIG cross-references.
+// ---------------------------------------------------------------------------
+
+const enhancementDataset = {
+  nodes: [
+    {
+      id: 'nist-800-53:AC-2',
+      node_type: 'control',
+      label: 'AC-2 Account Management',
+      lifecycle_status: 'active',
+      plain_language_summary: 'Keep track of every account on the system.',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-2',
+        title: 'Account Management',
+        control_family: 'Access Control',
+      },
+    },
+    {
+      id: 'nist-800-53:AC-2.1',
+      node_type: 'control_enhancement',
+      label: 'AC-2(1) Automated System Account Management',
+      lifecycle_status: 'active',
+      plain_language_summary: 'Use tooling, not spreadsheets, to manage accounts.',
+      metadata: {
+        catalog_id: 'nist-800-53',
+        item_id: 'AC-2.1',
+        title: 'Automated System Account Management',
+        control_family: 'Access Control',
+      },
+    },
+    {
+      id: 'nist-800-53b:MODERATE',
+      node_type: 'baseline',
+      label: 'MODERATE Moderate Baseline',
+      lifecycle_status: 'active',
+      metadata: { catalog_id: 'nist-800-53b', item_id: 'MODERATE', title: 'Moderate Baseline' },
+    },
+  ],
+  edges: [
+    {
+      id: 'edge:baseline:includes:nist-800-53b:MODERATE:nist-800-53:AC-2',
+      source_node_id: 'nist-800-53b:MODERATE',
+      target_node_id: 'nist-800-53:AC-2',
+      relationship_type: 'includes',
+    },
+    {
+      id: 'edge:baseline:includes:nist-800-53b:MODERATE:nist-800-53:AC-2.1',
+      source_node_id: 'nist-800-53b:MODERATE',
+      target_node_id: 'nist-800-53:AC-2.1',
+      relationship_type: 'includes',
+    },
+  ],
+  sources: dataset.sources,
+};
+
+test('no-baseline generation excludes enhancements unless includeEnhancements is set', () => {
+  const base = {
+    templateType: 'security_plan_starter',
+    framework: 'nist-800-53',
+    environment: 'Generic',
+    format: 'markdown',
+    sourceRefs: ['nist-oscal'],
+    sources: enhancementDataset.sources,
+  };
+
+  const noBaseline = generateTemplate(base, enhancementDataset);
+  assert.match(noBaseline.content, /AC-2\b/, 'base control must be present');
+  assert.doesNotMatch(noBaseline.content, /AC-2\.1/, 'enhancements must be dropped without a baseline');
+
+  const withEnhancements = generateTemplate({ ...base, includeEnhancements: true }, enhancementDataset);
+  assert.match(withEnhancements.content, /AC-2\.1/, 'includeEnhancements must restore enhancement rows');
+
+  const moderate = generateTemplate({ ...base, baseline: 'MODERATE' }, enhancementDataset);
+  assert.match(moderate.content, /AC-2\.1/, 'baseline members keep their enhancements');
+  assert.doesNotMatch(moderate.content, /## Baseline Notice/, 'a recognized baseline emits no notice');
+});
+
+test('unrecognized baseline emits a Baseline Notice instead of silently including everything', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'security_plan_starter',
+      framework: 'nist-800-53',
+      environment: 'Generic',
+      format: 'markdown',
+      baseline: 'BOGUS',
+      sourceRefs: ['nist-oscal'],
+      sources: enhancementDataset.sources,
+    },
+    enhancementDataset,
+  );
+  assert.match(result.content, /## Baseline Notice/, 'notice section must be present');
+  assert.match(
+    result.content,
+    /Baseline "BOGUS" was not recognized for nist-800-53 — this template includes the full catalog\. Valid values include LOW, MODERATE, HIGH\./,
+  );
+  assert.match(result.content, /AC-2\b/, 'fallback still includes the catalog controls');
+});
+
+const cciDataset = {
+  nodes: [
+    enhancementDataset.nodes[0],
+    {
+      id: 'disa-cci:CCI-000015',
+      node_type: 'cci',
+      label: 'CCI-000015',
+      lifecycle_status: 'active',
+      metadata: { catalog_id: 'disa-cci-list', item_id: 'CCI-000015' },
+    },
+    {
+      id: 'disa-srg:SRG-OS-000001-GPOS-00001',
+      node_type: 'srg_requirement',
+      label: 'SRG-OS-000001-GPOS-00001',
+      lifecycle_status: 'active',
+      metadata: { catalog_id: 'disa-stig-library', item_id: 'SRG-OS-000001-GPOS-00001' },
+    },
+  ],
+  edges: [
+    {
+      id: 'edge:cci:maps_to:disa-cci:CCI-000015:nist-800-53:AC-2',
+      source_node_id: 'disa-cci:CCI-000015',
+      target_node_id: 'nist-800-53:AC-2',
+      relationship_type: 'maps_to',
+    },
+    {
+      id: 'edge:srg:references:disa-srg:SRG-OS-000001-GPOS-00001:disa-cci:CCI-000015',
+      source_node_id: 'disa-srg:SRG-OS-000001-GPOS-00001',
+      target_node_id: 'disa-cci:CCI-000015',
+      relationship_type: 'references',
+    },
+  ],
+  sources: dataset.sources,
+};
+
+test('evidence matrix cites real CCI and STIG/SRG cross-references for a control', () => {
+  const result = generateTemplate(
+    {
+      templateType: 'evidence_expectation_matrix',
+      framework: 'nist-800-53',
+      environment: 'Generic',
+      format: 'markdown',
+      sourceRefs: ['nist-oscal', 'disa-cci-list'],
+      sources: cciDataset.sources,
+    },
+    cciDataset,
+  );
+  assert.match(result.content, /CCI-\d+/, 'a real CCI number must appear for AC-2');
+  assert.match(result.content, /SRG-OS-000001-GPOS-00001/, 'the related SRG requirement must appear');
+  assert.match(
+    result.content,
+    /\| Control ID \| Control Title \| What It Means \| Related CCIs \| Related STIG\/SRG \| Evidence to Collect \|/,
+    'matrix must use the six-column plain-language layout',
+  );
 });
 
 test('framework with zero resolvable controls emits an honest notice and flags the error', () => {
