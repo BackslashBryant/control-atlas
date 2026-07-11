@@ -42,19 +42,28 @@ export const ENVIRONMENT_ARCHETYPES = [
 ];
 
 /**
- * @param {{ id: string, title?: string }} control
- * @returns {string}
- */
-function controlReference(control) {
-  return control.title ? `${control.title} (${control.id})` : control.id;
-}
-
-/**
  * @param {any} options
  * @returns {(txt: string) => string}
  */
 function placeholder(options) {
   return (txt) => (options.includePlaceholders !== false ? txt : "");
+}
+
+/**
+ * Truncate a plain-language summary at a word boundary so it fits a table
+ * cell without mid-word cuts.
+ *
+ * @param {string} text
+ * @param {number} [max]
+ * @returns {string}
+ */
+function truncatePlain(text, max = 170) {
+  const str = String(text || "").trim();
+  if (str.length <= max) return str;
+  const cut = str.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  const clipped = (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.]+$/, "");
+  return `${clipped}…`;
 }
 
 /**
@@ -124,57 +133,51 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
   const ph = placeholder(options);
   const env = options.environment || "Generic";
 
-  const baselineHeaders = ["Control ID", "Control Title", "Implementation Status", "Responsible Role"];
-  if (options.includeImplementationPrompts !== false) baselineHeaders.push("Implementation Prompt");
-  if (options.includeEvidenceExpectations !== false) baselineHeaders.push("Evidence Expectation");
-  if (options.includeInheritancePrompts !== false) baselineHeaders.push("Inheritance Prompt");
-  if (options.includeReciprocityPrompts !== false) baselineHeaders.push("Reciprocity Prompt");
-  if (options.includeStigReferences !== false) baselineHeaders.push("STIG References");
-  baselineHeaders.push("Notes");
-
-  const baselineRows = controls.map((c) => {
-    const row = [c.id, c.title, ph("[Status]"), ph("[Role]")];
-    if (options.includeImplementationPrompts !== false) {
-      row.push(`How is ${controlReference(c)} implemented in the ${env} environment? Describe policies, technical controls, and who maintains them.`);
-    }
-    if (options.includeEvidenceExpectations !== false) {
-      row.push(`What evidence would show ${controlReference(c)} is working? Name artifact types and review cadence.`);
-    }
-    if (options.includeInheritancePrompts !== false) {
-      row.push(`Is ${controlReference(c)} inherited from a common control provider? If yes, name the provider and split responsibilities.`);
-    }
-    if (options.includeReciprocityPrompts !== false) {
-      row.push(`Can assessment results for ${controlReference(c)} be reused at another agency? Note gaps or caveats.`);
-    }
-    if (options.includeStigReferences !== false) {
-      const refs = crossRef && c.nodeId ? crossRefForControl(crossRef, c.nodeId) : null;
-      if (refs && refs.stigIds.length) {
-        row.push(refs.stigIds.join("; "));
-      } else {
-        row.push(ph("[Related STIG/SRG rules — list rule IDs or N/A]"));
-      }
-    }
-    row.push(ph("[Notes]"));
-    return row;
-  });
-
-  const inheritanceHeaders = ["Control ID", "Inheritance Type", "Provider", "Customer Responsibility", "Notes"];
-  const inheritanceRows = controls.map((c) => [
+  const baselineHeaders = ["Control ID", "Control Title", "What It Means", "Implementation Statement", "Evidence", "Status"];
+  const baselineRows = controls.map((c) => [
     c.id,
+    c.title,
+    truncatePlain(c.plain),
+    ph("[How is this implemented for this system?]"),
+    ph("[Artifact name(s)]"),
+    ph("[Planned | Implemented | Inherited | N/A]"),
+  ]);
+
+  // One-time fill guidance, stated once instead of repeated per control row.
+  const guidanceBullets = [];
+  if (options.includeImplementationPrompts !== false) {
+    guidanceBullets.push(`- Implementation Statement: describe how each control is implemented in the ${env} environment — the policies, technical mechanisms, and who maintains them.`);
+  }
+  if (options.includeEvidenceExpectations !== false) {
+    guidanceBullets.push("- Evidence: name the artifact(s) that would show the control is working — reports, configs, records — and how often they are reviewed.");
+  }
+  if (options.includeInheritancePrompts !== false) {
+    guidanceBullets.push("- Inherited controls: mark Status as Inherited, then record the provider and your remaining local responsibility in the Inheritance Summary below.");
+  }
+  if (options.includeReciprocityPrompts !== false) {
+    guidanceBullets.push("- Reciprocity: note in the Implementation Statement whether assessment results can be reused at another agency, plus any gaps or caveats.");
+  }
+
+  // Blank starter rows: practitioners list the handful of inherited services,
+  // not every control in the baseline.
+  const inheritanceHeaders = ["Control ID", "Inheritance Type", "Provider", "Customer Responsibility", "Notes"];
+  const inheritanceRows = Array.from({ length: 10 }, () => [
+    ph("[Control ID]"),
     ph("[Fully inherited | Hybrid | Not inherited]"),
-    ph("[Provider name or N/A]"),
+    ph("[Provider name]"),
     ph("[What your team still implements locally]"),
     ph("[Notes]"),
   ]);
 
-  const evidenceHeaders = ["Control ID", "Evidence Type", "Example Artifacts", "Review Cadence", "Notes"];
-  const evidenceRows = controls.map((c) => [
-    c.id,
-    ph(`[${EVIDENCE_TYPE_HINT}]`),
-    ph("[Name specific files, reports, or records]"),
-    ph("[Annual | Quarterly | Continuous]"),
-    ph("[Notes]"),
-  ]);
+  // Real cross-referenced STIG/SRG rule IDs only — no placeholder rows.
+  const stigRows = [];
+  if (options.includeStigReferences !== false && crossRef) {
+    for (const c of controls) {
+      if (!c.nodeId) continue;
+      const refs = crossRefForControl(crossRef, c.nodeId);
+      if (refs.stigIds.length) stigRows.push([c.id, refs.stigIds.join("; ")]);
+    }
+  }
 
   /** @type {DocSection[]} */
   const sections = [
@@ -218,9 +221,32 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
       heading: "Interconnections",
       content: ph("External connections — What other systems connect to this one? Note direction of data flow and security agreements."),
     },
+    ...(guidanceBullets.length
+      ? [
+          /** @type {DocSection} */ ({
+            type: "text",
+            heading: "How to Fill the Control Baseline",
+            content: guidanceBullets.join("\n"),
+          }),
+        ]
+      : []),
     { type: "table", heading: "Control Baseline", headers: baselineHeaders, rows: baselineRows },
     { type: "table", heading: "Inheritance Summary", headers: inheritanceHeaders, rows: inheritanceRows },
-    { type: "table", heading: "Evidence Expectations", headers: evidenceHeaders, rows: evidenceRows },
+    {
+      type: "text",
+      heading: "Evidence Expectations",
+      content: "Plan evidence in the dedicated Evidence Expectation Matrix template — it lists every control with its related CCIs and STIG/SRG rules and gives you a column to name the artifact you will collect.",
+    },
+    ...(stigRows.length
+      ? [
+          /** @type {DocSection} */ ({
+            type: "table",
+            heading: "STIG/SRG References",
+            headers: ["Control ID", "STIG/SRG rule IDs"],
+            rows: stigRows,
+          }),
+        ]
+      : []),
     {
       type: "text",
       heading: "Revision History",
@@ -248,25 +274,30 @@ function generateImplementationStatementWorksheet(options, controls) {
   const headers = [
     "Control ID",
     "Control Title",
+    "What It Means",
     "Implementation Statement",
-    "Evidence Type Hint",
     "Responsible Role",
-    "Implementation Prompt",
     "Status",
   ];
 
   const rows = controls.map((c) => [
     c.id,
     c.title,
+    truncatePlain(c.plain),
     ph("[Draft statement — describe how this control is implemented]"),
-    ph(`[${EVIDENCE_TYPE_HINT}]`),
     ph("[Role responsible for maintaining this control]"),
-    `Describe the technical controls, policies, or mechanisms implementing ${controlReference(c)}. Include who operates them and how often they are reviewed.`,
     ph("[Draft | Reviewed | Approved]"),
   ]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "Implementation Statements", headers, rows }];
+  const sections = [
+    {
+      type: "text",
+      heading: "How to Draft a Statement",
+      content: `For each control, describe the technical controls, policies, or mechanisms that implement it. Include who operates them and how often they are reviewed. Typical evidence types you can point to: ${EVIDENCE_TYPE_HINT}.`,
+    },
+    { type: "table", heading: "Implementation Statements", headers, rows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -289,44 +320,39 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
   const headers = [
     "Control ID",
     "Control Title",
-    "Control Family",
+    "What It Means",
+    "Related CCIs",
     "Related STIG/SRG",
-    "Related CCI",
-    "Evidence Type",
-    "Example Artifact Names",
-    "Suggested Owner Role",
-    "Review Cadence",
-    "Notes",
-    "Source",
-    "Confidence",
+    "Evidence to Collect",
   ];
 
   const rows = controls.map((c) => {
     const refs = crossRef && c.nodeId ? crossRefForControl(crossRef, c.nodeId) : null;
-    const stigCell = refs && refs.stigIds.length
-      ? refs.stigIds.join("; ")
-      : ph("[STIG/SRG rule IDs or N/A]");
-    const cciCell = refs && refs.cciIds.length
-      ? refs.cciIds.join("; ")
-      : ph("[CCI numbers or N/A]");
     return [
       c.id,
       c.title,
-      c.family || "",
-      stigCell,
-      cciCell,
-      ph(`[${EVIDENCE_TYPE_HINT}]`),
-      ph("[Specific file names, report titles, or record types]"),
-      ph("[Role who maintains evidence]"),
-      ph("[Annual | Quarterly | Continuous]"),
-      ph("[Notes]"),
-      ph("[Catalog or assessment source]"),
-      ph("[High | Medium | Low — your confidence this evidence is sufficient]"),
+      truncatePlain(c.plain),
+      refs && refs.cciIds.length ? refs.cciIds.join("; ") : "—",
+      refs && refs.stigIds.length ? refs.stigIds.join("; ") : "—",
+      ph("[Artifact type + name]"),
     ];
   });
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "Evidence Expectations", headers, rows }];
+  const sections = [
+    {
+      type: "text",
+      heading: "How to Use This Matrix",
+      content: [
+        `- Evidence types to pick from: ${EVIDENCE_TYPE_HINT}.`,
+        "- Name each artifact specifically (file name, report title, or record type) — \"screenshots\" is not an artifact.",
+        "- Assign an owner role (not a person) who maintains each artifact.",
+        "- Set a review cadence — Annual, Quarterly, or Continuous — so evidence stays fresh.",
+        "- Rate your confidence (High | Medium | Low) that the evidence would satisfy an assessor, and revisit Low items first.",
+      ].join("\n"),
+    },
+    { type: "table", heading: "Evidence Expectations", headers, rows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -343,45 +369,36 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
  * @returns {TemplateDocument}
  */
 function generateSTIGEvidenceChecklist(options) {
-  const ph = placeholder(options);
   const headers = [
-    "STIG Title",
-    "STIG ID",
     "Rule ID",
-    "Vuln ID",
     "Severity",
-    "Title",
-    "Check Text Summary",
-    "Fix Text Summary",
-    "CCI Refs",
-    "Related Controls",
-    "Evidence Expectation",
+    "Rule Title",
+    "Evidence",
     "Validation Method",
-    "N/A Justification",
-    "Deviation Prompt",
     "Notes",
   ];
-
-  const row = [
-    ph("[STIG name]"),
-    ph("[STIG ID]"),
-    ph("[Rule ID]"),
-    ph("[Vuln ID]"),
-    ph("[High | Medium | Low]"),
-    ph("[Rule title]"),
-    ph("[Summarize what the check verifies]"),
-    ph("[Summarize required fix or configuration]"),
-    ph("[CCI reference numbers]"),
-    ph("[Related NIST controls]"),
-    ph("[What artifact proves compliance — scan, config, interview, etc.]"),
-    ph("[How you validated — automated scan, manual review, interview]"),
-    ph("[If not applicable, explain why this rule does not apply to your system]"),
-    ph("[If deviating from the STIG, document approved exception and compensating control]"),
-    ph("[Notes]"),
-  ];
+  const rows = Array.from({ length: 10 }, () => ["", "", "", "", "", ""]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "STIG Rules", headers, rows: [row] }];
+  const sections = [
+    {
+      type: "text",
+      heading: "Field Guide",
+      content: [
+        "- **STIG Title / STIG ID** — the benchmark this rule comes from; record it once per checklist, not per row.",
+        "- **Rule ID / Vuln ID** — the identifiers from the STIG (SV-… / V-…); the Rule ID goes in the tracker.",
+        "- **Severity** — CAT I (high), CAT II (medium), or CAT III (low) as assigned by the STIG.",
+        "- **Rule Title** — the rule's short name from the benchmark.",
+        "- **Check / Fix text** — what the check verifies and the required configuration; summarize in Notes if a rule needs context.",
+        "- **CCI Refs / Related Controls** — the CCIs the rule references and the NIST controls they map to.",
+        "- **Evidence** — the artifact that proves compliance: scan output, configuration export, interview record.",
+        "- **Validation Method** — how you validated: automated scan, manual review, or interview.",
+        "- **N/A Justification** — if a rule does not apply, record why in Notes.",
+        "- **Deviation** — if deviating from the STIG, record the approved exception and compensating control in Notes.",
+      ].join("\n"),
+    },
+    { type: "table", heading: "STIG Rule Tracker", headers, rows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -403,35 +420,35 @@ function generateInheritanceWorksheet(options, controls) {
   const headers = [
     "Control ID",
     "Control Title",
-    "Inheritance Type",
-    "Common Control Provider",
-    "Provider Responsibility",
+    "What It Means",
+    "Inherited?",
+    "Provider",
     "Customer Responsibility",
-    "Shared Notes",
-    "Evidence Dependency",
-    "Artifact Freshness Concern",
-    "Local Delta Needed",
-    "Source",
-    "Notes",
   ];
 
   const rows = controls.map((c) => [
     c.id,
     c.title,
+    truncatePlain(c.plain),
     ph("[Fully inherited | Hybrid | System-specific | Not inherited]"),
     ph("[Provider name — CSP, agency shared service, etc.]"),
-    ph("[What the provider implements and attests to]"),
     ph("[What your program must still implement or verify locally]"),
-    ph("[Shared responsibilities or coordination notes]"),
-    ph("[Evidence you rely on from the provider — attestation, audit report, etc.]"),
-    ph("[Is provider evidence current? Note review date or concern]"),
-    ph("[Yes/No — does local implementation differ from provider baseline?]"),
-    ph("[Source of inheritance decision — contract, FedRAMP package, etc.]"),
-    ph("[Notes]"),
   ]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "Inheritance Plan", headers, rows }];
+  const sections = [
+    {
+      type: "text",
+      heading: "How to Plan Inheritance",
+      content: [
+        "- For each inherited or hybrid control, name the evidence you rely on from the provider — attestation, audit report, FedRAMP package.",
+        "- Check that provider evidence is current; note the review date or any freshness concern.",
+        "- Record whether your local implementation differs from the provider baseline (a local delta means extra work and extra evidence).",
+        "- Cite the source of the inheritance decision — contract, FedRAMP package, or agency agreement.",
+      ].join("\n"),
+    },
+    { type: "table", heading: "Inheritance Plan", headers, rows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -506,59 +523,53 @@ function generateReciprocityChecklist(options) {
  * @returns {TemplateDocument}
  */
 function generatePOAMStarter(options) {
-  const ph = placeholder(options);
-  // Column set aligns with the eMASS and FedRAMP POA&M presets so an export can
+  // Field set aligns with the eMASS and FedRAMP POA&M presets so an export can
   // be mapped into either workflow: severity category (CAT I/II/III), original
   // detection date, resources required, and a named point of contact sit
-  // alongside the core weakness/remediation fields.
-  const headers = [
-    "POA&M ID",
-    "Detection Source",
-    "Related Control (CCI)",
-    "Related STIG/SRG",
-    "Weakness Description",
-    "Risk Statement",
-    "Severity",
-    "Severity Category (CAT)",
-    "Point of Contact (POC)",
-    "Resources Required",
-    "Planned Remediation",
-    "Milestones with Completion Dates",
-    "Original Detection Date",
-    "Scheduled Completion Date",
-    "Responsible Office/Role",
-    "Status",
-    "Deviation Reference",
-    "Risk Acceptance Reference",
-    "Evidence Needed for Closure",
-    "Notes",
+  // alongside the core weakness/remediation fields. The full field guide is a
+  // text section; the tracker table keeps the six columns you fill first.
+  const fieldGuide = [
+    ["POA&M ID", "unique tracking number for this item"],
+    ["Detection Source", "Scan | Assessment | Audit | Incident — how was this found?"],
+    ["Related Control (CCI)", "control ID and/or CCI number"],
+    ["Related STIG/SRG", "STIG/SRG rule or N/A"],
+    ["Weakness Description", "describe the weakness in plain language"],
+    ["Risk Statement", "what could go wrong if not fixed?"],
+    ["Severity", "High | Medium | Low"],
+    ["Severity Category (CAT)", "CAT I = high | CAT II = medium | CAT III = low"],
+    ["Point of Contact (POC)", "name/role accountable for remediation"],
+    ["Resources Required", "funding, staff, or tools needed to remediate"],
+    ["Planned Remediation", "planned fix or compensating control"],
+    ["Milestones with Completion Dates", "milestone description | target date; one per line"],
+    ["Original Detection Date", "date the weakness was first identified"],
+    ["Scheduled Completion Date", "target completion date"],
+    ["Responsible Office/Role", "responsible office or role"],
+    ["Status", "Open | Ongoing | Risk Accepted | Completed"],
+    ["Deviation Reference", "deviation or exception ID if applicable"],
+    ["Risk Acceptance Reference", "risk acceptance memo ID if risk is accepted"],
+    ["Evidence Needed for Closure", "evidence required before closing this item"],
+    ["Notes", "anything a reviewer needs that does not fit above"],
   ];
 
-  const row = [
-    ph("[POA&M ID]"),
-    ph("[Scan | Assessment | Audit | Incident — how was this found?]"),
-    ph("[Control ID and/or CCI number]"),
-    ph("[STIG/SRG rule or N/A]"),
-    ph("[Describe the weakness in plain language]"),
-    ph("[What could go wrong if not fixed?]"),
-    ph("[High | Medium | Low]"),
-    ph("[CAT I = high | CAT II = medium | CAT III = low]"),
-    ph("[Name/role accountable for remediation — POC]"),
-    ph("[Funding, staff, or tools needed to remediate]"),
-    ph("[Planned fix or compensating control]"),
-    ph("[Milestone description | target date; one per line]"),
-    ph("[Date the weakness was first identified]"),
-    ph("[Target completion date]"),
-    ph("[Responsible office or role]"),
-    ph("[Open | Ongoing | Risk Accepted | Completed]"),
-    ph("[Deviation or exception ID if applicable]"),
-    ph("[Risk acceptance memo ID if risk is accepted]"),
-    ph("[Evidence required before closing this item]"),
-    ph("[Notes]"),
+  const trackerHeaders = [
+    "POA&M ID",
+    "Weakness",
+    "Related Control/CCI",
+    "Severity",
+    "Scheduled Completion",
+    "Status",
   ];
+  const trackerRows = Array.from({ length: 10 }, () => ["", "", "", "", "", ""]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "POA&M Items", headers, rows: [row] }];
+  const sections = [
+    {
+      type: "text",
+      heading: "POA&M Field Guide",
+      content: fieldGuide.map(([name, hint]) => `- **${name}** — ${hint}`).join("\n"),
+    },
+    { type: "table", heading: "POA&M Tracker", headers: trackerHeaders, rows: trackerRows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -580,25 +591,34 @@ function generateAssessmentPlanningWorksheet(options, controls) {
   const headers = [
     "Control ID",
     "Control Title",
+    "What It Means",
     "Assessment Method",
-    "Assessor",
-    "Target Date",
-    "Status",
-    "Observations",
+    "Evidence to Request",
+    "Notes",
   ];
 
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    ph("[Test | Interview | Examine | Automated — pick method(s)]"),
-    ph("[Assessor name or role]"),
-    ph("[Planned assessment date]"),
-    ph("[Not started | Scheduled | Complete]"),
-    ph("[Notes from planning — scope, sample size, tools]"),
+    truncatePlain(c.plain),
+    ph("[Examine | Interview | Test]"),
+    ph("[Artifacts to request before the assessment]"),
+    ph("[Notes]"),
   ]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "Assessment Plan", headers, rows }];
+  const sections = [
+    {
+      type: "text",
+      heading: "How to Plan an Assessment",
+      content: [
+        "- Pick one or more methods per control: Examine (review artifacts), Interview (talk to the people who run it), Test (exercise the mechanism).",
+        "- Request evidence before the assessment window so gaps surface early.",
+        "- Track assessor, target date, and completion status in your schedule; use Notes for scope, sample size, and tooling.",
+      ].join("\n"),
+    },
+    { type: "table", heading: "Assessment Plan", headers, rows },
+  ];
 
   return appendSourceMetadata(
     {
@@ -617,27 +637,40 @@ function generateAssessmentPlanningWorksheet(options, controls) {
 function generateConMonCalendar(options) {
   const ph = placeholder(options);
   const headers = [
-    "Activity/Artifact",
-    "Control Reference",
+    "Activity",
+    "Control Refs",
     "Frequency",
-    "Source Basis Reference",
-    "Next Review Date",
-    "Responsible Role",
+    "Owner",
+    "Next Review",
     "Status",
   ];
 
-  const row = [
-    ph("[Activity name — e.g., vulnerability scan, access review, config audit]"),
-    ph("[Related control IDs]"),
-    ph("[Annual | Quarterly | Monthly | Continuous]"),
-    ph("[NIST SP 800-137 or agency ConMon policy reference]"),
-    ph("[Next scheduled review date]"),
-    ph("[Role responsible for this activity]"),
-    ph("[Scheduled | Complete | Overdue]"),
+  // Canonical continuous-monitoring activities (NIST SP 800-137 aligned) with
+  // typical cadences — a real starter schedule, not a placeholder row. Adjust
+  // frequencies to your agency's ConMon strategy.
+  const starterActivities = [
+    ["Vulnerability scanning", "RA-5", "Monthly"],
+    ["Access review", "AC-2", "Quarterly"],
+    ["Configuration audit", "CM-6", "Quarterly"],
+    ["Audit log review", "AU-6", "Weekly"],
+    ["Contingency plan test", "CP-4", "Annual"],
+    ["Security awareness training", "AT-2", "Annual"],
+    ["POA&M review", "CA-5", "Monthly"],
+    ["Penetration test", "CA-8", "Annual"],
+    ["Incident response exercise", "IR-3", "Annual"],
+    ["Inventory reconciliation", "CM-8", "Quarterly"],
   ];
+  const rows = starterActivities.map(([activity, refs, frequency]) => [
+    activity,
+    refs,
+    frequency,
+    ph("[Role]"),
+    ph("[Date]"),
+    "",
+  ]);
 
   /** @type {DocSection[]} */
-  const sections = [{ type: "table", heading: "Monitoring Schedule", headers, rows: [row] }];
+  const sections = [{ type: "table", heading: "Monitoring Schedule", headers, rows }];
 
   return appendSourceMetadata(
     {
@@ -1071,6 +1104,7 @@ export function buildTemplateDocument(options, dataset) {
     includeInheritancePrompts: options.includeInheritancePrompts !== false,
     includeReciprocityPrompts: options.includeReciprocityPrompts !== false,
     includeStigReferences: options.includeStigReferences !== false,
+    includeEnhancements: options.includeEnhancements === true,
     environment: options.environment || "Generic",
     sourceRefs: options.sourceRefs || [],
     sources: options.sources || dataset?.sources || [],
@@ -1078,19 +1112,23 @@ export function buildTemplateDocument(options, dataset) {
 
   let controls = [];
   let unresolvedFramework = false;
+  let unrecognizedBaseline = false;
   if (normalized.framework) {
     // Resolve the raw control nodes for the framework, either directly or (for
     // catalogs that only carry `baseline` nodes, e.g. fedramp-rev5) via
     // baseline-membership edges.
     let controlNodes = collectCatalogControls(dataset.nodes, normalized.framework);
+    let resolvedViaBaselineEdges = false;
     if (controlNodes.length === 0) {
       controlNodes = resolveControlsViaBaselineEdges(dataset, normalized.framework);
+      resolvedViaBaselineEdges = controlNodes.length > 0;
     }
 
     if (controlNodes.length === 0) {
       unresolvedFramework = true;
     } else {
       // Optional baseline filter (Low / Moderate / High / ...).
+      let baselineApplied = false;
       if (normalized.baseline) {
         const memberIds = collectBaselineMemberIds(
           dataset,
@@ -1099,7 +1137,22 @@ export function buildTemplateDocument(options, dataset) {
         );
         if (memberIds.size > 0) {
           controlNodes = controlNodes.filter((n) => memberIds.has(n.id));
+          baselineApplied = true;
+        } else {
+          // Keep the full-catalog fallback, but never silently — the Baseline
+          // Notice section below tells the reader what happened.
+          unrecognizedBaseline = true;
         }
+      }
+      // Without a baseline scoping the set, the full catalog's ~900 control
+      // enhancements (item_id "AC-2.1" style) drown the base controls — drop
+      // them unless explicitly requested. A baseline (including catalogs
+      // resolved via baseline-membership edges) legitimately names specific
+      // enhancements, so its members pass through untouched.
+      if (!baselineApplied && !resolvedViaBaselineEdges && !normalized.includeEnhancements) {
+        controlNodes = controlNodes.filter(
+          (n) => !String(n.metadata?.item_id || n.id).includes("."),
+        );
       }
       // Optional control-family filter (matched case-insensitively against the
       // family name or the control ID prefix, e.g. "Access Control" or "AC").
@@ -1133,6 +1186,7 @@ export function buildTemplateDocument(options, dataset) {
         id: n.metadata?.item_id || n.id,
         title: n.metadata?.title || n.label || n.id,
         family: familyOf(n),
+        plain: n.plain_language_summary || "",
       }));
     }
   }
@@ -1186,6 +1240,14 @@ export function buildTemplateDocument(options, dataset) {
       break;
     default:
       doc = generateSecurityPlanStarter(normalized, controls, crossRef);
+  }
+
+  if (unrecognizedBaseline) {
+    doc.sections.unshift({
+      type: "text",
+      heading: "Baseline Notice",
+      content: `Baseline "${normalized.baseline}" was not recognized for ${normalized.framework} — this template includes the full catalog. Valid values include LOW, MODERATE, HIGH.`,
+    });
   }
 
   if (frameworkNoticeText) {

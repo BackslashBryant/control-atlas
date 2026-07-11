@@ -196,6 +196,18 @@ export function TemplatesPage(props: {
       .map(([value, label]) => ({ value, label }));
   }, [datasetNodes, baselineCatalog]);
 
+  // Default to the Moderate baseline when the framework offers one — the full
+  // catalog is rarely what someone starting a plan wants. An empty
+  // state.baseline means "not chosen yet"; the explicit all-controls choice is
+  // stored as the "ALL" sentinel so it survives the default.
+  const defaultBaseline = baselineOptions.some(
+    (option) => option.value === "MODERATE",
+  )
+    ? "MODERATE"
+    : "";
+  const activeBaseline =
+    state.baseline === "ALL" ? "" : state.baseline || defaultBaseline;
+
   const familyOptions = useMemo(() => {
     const families = new Set<string>();
     for (const node of datasetNodes) {
@@ -307,7 +319,7 @@ export function TemplatesPage(props: {
           ? state.framework || "nist-800-53"
           : "",
         baseline: selectedTemplate.input_options.includes("baseline")
-          ? state.baseline || ""
+          ? activeBaseline
           : "",
         controlFamily: selectedTemplate.input_options.includes("control_family")
           ? state.controlFamily || ""
@@ -592,13 +604,16 @@ export function TemplatesPage(props: {
                 {inputOptions.includes("baseline") ? (
                   <SelectField
                     emptyLabel="All controls"
-                    hint="Limit to a baseline (Low, Moderate, High) or leave as all controls."
+                    hint="Defaults to the Moderate baseline when available; pick All controls for the full catalog."
                     label="Baseline"
                     onChange={(value) =>
-                      onNavigate("templates", { ...state, baseline: value })
+                      onNavigate("templates", {
+                        ...state,
+                        baseline: value === "" ? "ALL" : value,
+                      })
                     }
                     options={baselineOptions}
-                    value={state.baseline || ""}
+                    value={activeBaseline}
                   />
                 ) : null}
                 {inputOptions.includes("control_family") ? (
