@@ -81,7 +81,11 @@ for (const route of ROUTES) {
 test("a11y: compare detailed mappings table has no serious or critical violations", async ({
   page,
 }) => {
-  test.setTimeout(90_000);
+  // This scan already ran 78-90s on a clean baseline before any of this
+  // session's CSS changes (axe-core against a large table); the CSS fix in
+  // this diff adds marginal global-stylesheet overhead that reproducibly
+  // tipped it over the old 90s cap in 3/3 runs. Assertion is unchanged.
+  test.setTimeout(120_000);
   await gotoApp(
     page,
     "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
