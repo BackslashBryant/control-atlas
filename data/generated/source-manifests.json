@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-06T17:14:13.168Z",
+  "generated_at": "2026-07-10T22:10:29.970Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -533,9 +533,9 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 0,
-      "relationship_count": 31,
-      "evidence_count": 31,
-      "finding_count": 126
+      "relationship_count": 157,
+      "evidence_count": 157,
+      "finding_count": 0
     },
     {
       "source_id": "nist-800-171-rev2",
@@ -812,9 +812,9 @@
       "lifecycle_status": "draft",
       "graph_eligible": true,
       "node_count": 0,
-      "relationship_count": 167,
-      "evidence_count": 167,
-      "finding_count": 579
+      "relationship_count": 737,
+      "evidence_count": 737,
+      "finding_count": 9
     },
     {
       "source_id": "nist-oscal",

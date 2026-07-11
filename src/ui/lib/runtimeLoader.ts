@@ -1,6 +1,6 @@
 import { createFederalGraphRuntime } from "../../app/runtime.mjs";
 
-const CACHE_VERSION = "20260709-1";
+const CACHE_VERSION = "20260710-1";
 const artifactCache = new Map<string, Promise<unknown>>();
 
 export type TemplateRegistry = {

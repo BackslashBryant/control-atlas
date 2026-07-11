@@ -1822,6 +1822,7 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
         "Manage who can use the system and how accounts are approved.",
       object_type: "control",
       source_id: "nist-oscal",
+      source_name: "SP 800-53 Rev. 5",
       source_class: "federal_published",
       catalog_id: "nist-800-53",
       control_family: "Access Control",
@@ -1859,4 +1860,10 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
   });
 
   assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
+  // The search-phase runtime has no sources loaded; the result card falls
+  // back to the source_name embedded in the shard document.
+  assert.equal(
+    runtime.searchLibrary("AC-2")[0].source_name,
+    "SP 800-53 Rev. 5",
+  );
 });
