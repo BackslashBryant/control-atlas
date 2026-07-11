@@ -658,6 +658,101 @@ function escapeCsv(val) {
   return str;
 }
 
+// Markdown layout limits: pipe tables wider than ~6 columns are unreadable in
+// any renderer, so wide sections are restructured (constant guidance columns
+// become prose, varying columns are split across narrow keyed tables).
+const MD_MAX_TABLE_COLUMNS = 6;
+const MD_LONG_CELL_THRESHOLD = 80;
+const MD_LONG_CHUNK_COLUMNS = 4;
+
+/** Escape a value for use inside a markdown pipe-table cell. */
+function mdCell(value) {
+  return String(value ?? "").replace(/\|/g, "\\|").replace(/\n/g, "<br>");
+}
+
+/** Flatten a value to a single prose line. */
+function mdProse(value) {
+  return String(value ?? "").replace(/\n/g, " ").trim();
+}
+
+function mdTableBlock(headers, rows) {
+  let out = `| ${headers.map(mdCell).join(" | ")} |\n`;
+  out += `| ${headers.map(() => "---").join(" | ")} |\n`;
+  for (const row of rows) {
+    out += `| ${row.map(mdCell).join(" | ")} |\n`;
+  }
+  return `${out}\n`;
+}
+
+/**
+ * Render a table section as markdown. Narrow tables pass through as one pipe
+ * table. Wide tables (> {@link MD_MAX_TABLE_COLUMNS} columns) are
+ * restructured for readability, deterministically:
+ * - single-row starters (e.g. the 20-column POA&M) become a labelled field
+ *   list — prose, no table;
+ * - multi-row tables emit columns whose value is identical on every row
+ *   (guidance/placeholder columns) as prose bullets above the tables, then
+ *   split the varying columns into keyed tables of at most
+ *   {@link MD_MAX_TABLE_COLUMNS} columns: identity/status columns first, then
+ *   long prompt/detail columns in narrower chunks, each table repeating the
+ *   first (key) column so rows stay correlated.
+ */
+function formatMarkdownTableSection(sec) {
+  const headers = sec.headers || [];
+  const rows = (sec.rows || []).map((r) => r || []);
+  if (headers.length <= MD_MAX_TABLE_COLUMNS) {
+    return mdTableBlock(headers, rows);
+  }
+
+  if (rows.length <= 1) {
+    const row = rows[0] || [];
+    let out = "";
+    headers.forEach((h, i) => {
+      out += `- **${mdProse(h)}:** ${mdProse(row[i])}\n`;
+    });
+    return `${out}\n`;
+  }
+
+  const constantIdx = [];
+  const shortIdx = [];
+  const longIdx = [];
+  for (let i = 1; i < headers.length; i++) {
+    const first = String(rows[0][i] ?? "");
+    if (rows.every((r) => String(r[i] ?? "") === first)) {
+      constantIdx.push(i);
+      continue;
+    }
+    const maxLen = rows.reduce(
+      (max, r) => Math.max(max, String(r[i] ?? "").length),
+      String(headers[i] ?? "").length,
+    );
+    (maxLen > MD_LONG_CELL_THRESHOLD ? longIdx : shortIdx).push(i);
+  }
+
+  let out = "";
+  for (const i of constantIdx) {
+    out += `- **${mdProse(headers[i])}:** ${mdProse(rows[0][i])}\n`;
+  }
+  if (constantIdx.length > 0) out += "\n";
+
+  const emitChunks = (indices, maxColumns) => {
+    for (let start = 0; start < indices.length; start += maxColumns - 1) {
+      const cols = [0, ...indices.slice(start, start + maxColumns - 1)];
+      out += mdTableBlock(
+        cols.map((i) => headers[i]),
+        rows.map((r) => cols.map((i) => r[i])),
+      );
+    }
+  };
+  emitChunks(shortIdx, MD_MAX_TABLE_COLUMNS);
+  emitChunks(longIdx, MD_LONG_CHUNK_COLUMNS);
+  if (shortIdx.length === 0 && longIdx.length === 0) {
+    // Everything but the key column was constant: still emit the key column.
+    out += mdTableBlock([headers[0]], rows.map((r) => [r[0]]));
+  }
+  return out;
+}
+
 function formatMarkdown(doc) {
   let out = `# ${doc.title}\n\n${doc.description}\n\n> **Disclaimer:** ${DISCLAIMER}\n\n`;
   for (const sec of doc.sections) {
@@ -665,12 +760,7 @@ function formatMarkdown(doc) {
     if (sec.type === "text") {
       out += `${sec.content}\n\n`;
     } else if (sec.type === "table") {
-      out += `| ${sec.headers.join(" | ")} |\n`;
-      out += `| ${sec.headers.map(() => "---").join(" | ")} |\n`;
-      for (const row of sec.rows) {
-        out += `| ${row.map((c) => String(c).replace(/\n/g, "<br>")).join(" | ")} |\n`;
-      }
-      out += "\n";
+      out += formatMarkdownTableSection(sec);
     }
   }
   return out;

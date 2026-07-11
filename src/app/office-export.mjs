@@ -95,13 +95,59 @@ function docToSheets(doc) {
   return sheets;
 }
 
+/**
+ * Approximate per-column widths (Excel character units) from the widest cell
+ * in each column, clamped so ID columns stay readable (~12) and prompt-length
+ * text wraps inside a bounded column (~60) instead of stretching the sheet.
+ */
+function columnWidths(rows) {
+  const widths = [];
+  for (const row of rows || []) {
+    (row || []).forEach((cell, i) => {
+      const len = String(cell ?? "").length;
+      if (widths[i] === undefined || len > widths[i]) widths[i] = len;
+    });
+  }
+  return widths.map((len) => Math.min(60, Math.max(12, len + 2)));
+}
+
+/** Minimal styles part: cellXf 0 = default, cellXf 1 = bold wrapped header. */
+const XLSX_STYLES_XML =
+  `${XML_DECL}<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
+  '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
+  '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>' +
+  "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>" +
+  '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+  '<cellXfs count="2">' +
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+  '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+  "</cellXfs>" +
+  '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+  "</styleSheet>";
+
 function sheetXml(rows) {
-  let out = `${XML_DECL}<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>`;
+  let out = `${XML_DECL}<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">`;
+  // Freeze the header row so it stays visible while scrolling the data rows.
+  out +=
+    '<sheetViews><sheetView workbookViewId="0">' +
+    '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>' +
+    "</sheetView></sheetViews>";
+  const widths = columnWidths(rows);
+  if (widths.length > 0) {
+    out += `<cols>${widths
+      .map(
+        (w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`,
+      )
+      .join("")}</cols>`;
+  }
+  out += "<sheetData>";
   rows.forEach((row, rowIndex) => {
     out += `<row r="${rowIndex + 1}">`;
+    // Row 1 is always the header row; style it bold + wrapped (cellXf 1).
+    const style = rowIndex === 0 ? ' s="1"' : "";
     (row || []).forEach((cell, colIndex) => {
       const ref = `${columnLetter(colIndex)}${rowIndex + 1}`;
-      out += `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${escapeXml(
+      out += `<c r="${ref}"${style} t="inlineStr"><is><t xml:space="preserve">${escapeXml(
         cell,
       )}</t></is></c>`;
     });
@@ -133,11 +179,16 @@ export function docToXlsx(doc) {
     files[`xl/worksheets/sheet${index}.xml`] = strToU8(sheetXml(sheet.rows));
   });
 
+  const stylesRid = `rId${sheets.length + 1}`;
+  workbookRels += `<Relationship Id="${stylesRid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>`;
+  files["xl/styles.xml"] = strToU8(XLSX_STYLES_XML);
+
   files["[Content_Types].xml"] = strToU8(
     `${XML_DECL}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
       '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
       '<Default Extension="xml" ContentType="application/xml"/>' +
       '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
       `${overrides}</Types>`,
   );
   files["_rels/.rels"] = strToU8(
@@ -176,6 +227,55 @@ function docxParagraph(text, opts = {}) {
   )}</w:t></w:r></w:p>`;
 }
 
+/** Usable page width in twips — keep in sync with the <w:sectPr> page size and margins below. */
+const DOCX_CONTENT_WIDTH_TWIPS = 12240 - 1440 - 1440;
+
+/**
+ * Distribute the usable page width across columns, weighting each column by
+ * its widest cell (clamped) so ID columns stay narrow and prompt columns get
+ * room. The rounding remainder lands on the last column so the grid always
+ * sums to the full content width.
+ */
+function docxColumnWidths(headers, rows) {
+  const weights = (headers || []).map((h) => String(h ?? "").length);
+  for (const row of rows || []) {
+    (row || []).forEach((cell, i) => {
+      const len = String(cell ?? "").length;
+      if (weights[i] === undefined || len > weights[i]) weights[i] = len;
+    });
+  }
+  const clamped = weights.map((len) => Math.min(50, Math.max(10, len)));
+  const total = clamped.reduce((a, b) => a + b, 0) || 1;
+  let widths = clamped.map((w) =>
+    Math.floor((DOCX_CONTENT_WIDTH_TWIPS * w) / total),
+  );
+  if (widths.length > 0) {
+    // Guarantee every column a readable floor (~0.5", capped at an equal
+    // share) so ID columns never collapse to slivers next to prompt columns;
+    // shrink the above-floor columns proportionally to pay for it.
+    const floor = Math.min(
+      720,
+      Math.floor(DOCX_CONTENT_WIDTH_TWIPS / widths.length),
+    );
+    let deficit = 0;
+    let pool = 0;
+    for (const w of widths) {
+      if (w < floor) deficit += floor - w;
+      else pool += w - floor;
+    }
+    if (deficit > 0 && pool > 0) {
+      widths = widths.map((w) =>
+        w < floor
+          ? floor
+          : floor + Math.floor(((w - floor) * (pool - deficit)) / pool),
+      );
+    }
+    const used = widths.reduce((a, b) => a + b, 0);
+    widths[widths.length - 1] += DOCX_CONTENT_WIDTH_TWIPS - used;
+  }
+  return widths;
+}
+
 function docxTable(headers, rows) {
   const borders = ["top", "left", "bottom", "right", "insideH", "insideV"]
     .map(
@@ -183,16 +283,27 @@ function docxTable(headers, rows) {
         `<w:${edge} w:val="single" w:sz="4" w:space="0" w:color="999999"/>`,
     )
     .join("");
-  const cell = (text, bold) => {
-    const rPr = bold ? "<w:rPr><w:b/></w:rPr>" : "";
-    return `<w:tc><w:p><w:r>${rPr}<w:t xml:space="preserve">${escapeXml(
+  const widths = docxColumnWidths(headers, rows);
+  const cell = (text, colIndex, isHeader) => {
+    const rPr = isHeader ? "<w:rPr><w:b/></w:rPr>" : "";
+    const shd = isHeader
+      ? '<w:shd w:val="clear" w:color="auto" w:fill="EFEFEF"/>'
+      : "";
+    const tcPr = `<w:tcPr><w:tcW w:w="${widths[colIndex] ?? 0}" w:type="dxa"/>${shd}</w:tcPr>`;
+    return `<w:tc>${tcPr}<w:p><w:r>${rPr}<w:t xml:space="preserve">${escapeXml(
       text,
     )}</w:t></w:r></w:p></w:tc>`;
   };
-  let out = `<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblBorders>${borders}</w:tblBorders></w:tblPr>`;
-  out += `<w:tr>${(headers || []).map((h) => cell(h, true)).join("")}</w:tr>`;
+  // Fixed layout + explicit grid: Word renders the table at page width instead
+  // of auto-sizing ~1,000-row tables (which collapses/clips columns).
+  let out = `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>${borders}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr>`;
+  out += `<w:tblGrid>${widths.map((w) => `<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>`;
+  // <w:tblHeader/> repeats the header row at the top of every page.
+  out += `<w:tr><w:trPr><w:tblHeader/></w:trPr>${(headers || [])
+    .map((h, i) => cell(h, i, true))
+    .join("")}</w:tr>`;
   for (const row of rows || []) {
-    out += `<w:tr>${(row || []).map((c) => cell(c, false)).join("")}</w:tr>`;
+    out += `<w:tr>${(row || []).map((c, i) => cell(c, i, false)).join("")}</w:tr>`;
   }
   out += "</w:tbl>";
   return out;
