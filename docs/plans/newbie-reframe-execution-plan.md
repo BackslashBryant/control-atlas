@@ -28,8 +28,8 @@
 
 | Phase | Chat-sized scope | Status |
 |---|---|---|
-| 1 | Newbie-first copy reposition (landing, nav, menu, interior sweep) | [ ] |
-| 2 | Visual de-blend spike → owner picks intensity → rollout; + header brand-lockup fix | [ ] |
+| 1 | Newbie-first copy reposition (landing, nav, menu, interior sweep) | [x] |
+| 2 | Visual de-blend spike → owner picks intensity → rollout; + header brand-lockup fix | [x] |
 | 3 | Positioning docs reframe (PRD, vision, backlog header) | [ ] |
 | 4 | Start Here sharpening — situation→requirements as the newbie's main path | [ ] |
 | 5 | Trust & connection labeling (named crosswalk groups, coverage honesty) | [ ] |
