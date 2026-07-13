@@ -192,7 +192,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
-  await primaryNav.getByRole("button", { name: "Research · Learn" }).click();
+  await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
   // Nav groups are disclosures — items are plain buttons in the revealed panel.
   const startHere = primaryNav.locator(".nav-more-menu").getByRole("button", {
     name: "Start",

@@ -102,12 +102,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(navLabels).toEqual([
-    "Search",
-    "Research · Learn",
-    "Navigate",
-    "Build · Create",
-  ]);
+  expect(navLabels).toEqual(["Search", "Learn", "Navigate", "Build"]);
 
   await primaryNav.getByRole("button", { name: "Navigate" }).click();
   await expect(openGroupMenu).toBeVisible();
@@ -122,7 +117,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     );
   expect(navigateMenuLabels).toEqual(["Atlas", "Compare"]);
 
-  await primaryNav.getByRole("button", { name: "Research · Learn" }).click();
+  await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
   const researchMenuLabels = await openGroupMenu
     .getByRole("button")
     .evaluateAll((nodes) =>
@@ -130,7 +125,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     );
   expect(researchMenuLabels).toEqual(["Start", "Sources", "Playbooks"]);
 
-  await primaryNav.getByRole("button", { name: "Build · Create" }).click();
+  await primaryNav.getByRole("button", { name: "Build", exact: true }).click();
   const buildMenuLabels = await openGroupMenu
     .getByRole("button")
     .evaluateAll((nodes) =>
@@ -225,7 +220,7 @@ test("explore filters narrow results without a page reload", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
-    page.getByRole("heading", { name: "Explore the control landscape" }),
+    page.getByRole("heading", { name: "Search everything in one place" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Refine results" }).click();
   await page.getByLabel("Item type").selectOption("control");
@@ -472,7 +467,9 @@ test("hash deep route survives refresh on built site", async ({ page }) => {
   await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.getByRole("heading", { name: "Explore" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Search everything in one place" }),
+  ).toBeVisible();
   await page.reload();
   // Mirror the pre-reload order: wait for the app to finish booting (the
   // explore route requires the full graph chunk, which is slow to reload on a
@@ -481,7 +478,9 @@ test("hash deep route survives refresh on built site", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/explore/);
-  await expect(page.getByRole("heading", { name: "Explore" })).toBeVisible({
+  await expect(
+    page.getByRole("heading", { name: "Search everything in one place" }),
+  ).toBeVisible({
     timeout: 15000,
   });
 });
