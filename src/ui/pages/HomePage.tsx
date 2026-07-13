@@ -21,10 +21,6 @@ export function HomePage(props: HomePageProps) {
           <h1 className="landing-brand-name">Control Atlas</h1>
         </div>
         <BrandFlourish />
-        <p className="landing-tagline">
-          Unified intelligence for NIST controls, STIGs, CCIs, and FedRAMP
-          baselines — all in one place.
-        </p>
       </div>
 
       <div
@@ -80,7 +76,7 @@ export function HomePage(props: HomePageProps) {
           type="button"
         >
           <strong>Research</strong>
-          <span>Playbooks &amp; practical guidance</span>
+          <span>Plain-English guides to how it all works</span>
         </button>
 
         <button
@@ -89,7 +85,7 @@ export function HomePage(props: HomePageProps) {
           type="button"
         >
           <strong>Build</strong>
-          <span>Templates &amp; RMF starters</span>
+          <span>Create starter documents in your browser</span>
         </button>
 
         <button
@@ -98,7 +94,7 @@ export function HomePage(props: HomePageProps) {
           type="button"
         >
           <strong>Navigate</strong>
-          <span>Map connections across frameworks</span>
+          <span>See how everything connects</span>
         </button>
       </div>
       <p className="visually-hidden" id="landing-orb-hint">

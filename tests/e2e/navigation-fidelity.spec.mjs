@@ -56,7 +56,7 @@ test('a path-style deep link redirects into the hash route with its query intact
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/[?&]q=AC-2/);
   await expect(
-    page.getByRole('heading', { name: 'Explore the control landscape' }),
+    page.getByRole('heading', { name: 'Search everything in one place' }),
   ).toBeVisible();
 });
 

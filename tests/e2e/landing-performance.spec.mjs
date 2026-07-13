@@ -42,7 +42,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
 
   await expect(
     page.getByRole("heading", {
-      name: "Explore the control landscape",
+      name: "Search everything in one place",
       level: 1,
     }),
   ).toBeVisible({

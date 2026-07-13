@@ -31,7 +31,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Research · Learn",
+    label: "Learn",
     items: [
       { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
       {
@@ -61,7 +61,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Build · Create",
+    label: "Build",
     items: [
       {
         label: "Templates",

@@ -24,7 +24,7 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Research · Learn", exact: true })
+    .getByRole("button", { name: "Learn", exact: true })
     .click();
   await primaryNav
     .locator(".nav-more-menu")
@@ -66,7 +66,7 @@ test("staged library search enables results before detail pages", async ({
 
   await page.goto("/?view=explore&q=AC-2");
   await expect(
-    page.getByRole("heading", { name: "Explore the control landscape" }),
+    page.getByRole("heading", { name: "Search everything in one place" }),
   ).toBeVisible({
     timeout: 15000,
   });
