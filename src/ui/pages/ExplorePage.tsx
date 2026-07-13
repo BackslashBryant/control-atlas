@@ -173,7 +173,7 @@ export function ExplorePage(props: {
             </button>
           }
           summary="Search controls, baselines, CCIs, STIGs, terms, templates, playbooks, and sources. Open a record to see what it means and how it connects."
-          title="Explore the control landscape"
+          title="Search everything in one place"
         />
 
         {!graphReady ? (

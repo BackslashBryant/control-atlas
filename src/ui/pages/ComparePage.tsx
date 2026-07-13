@@ -857,8 +857,8 @@ export function ComparePage(props: {
           </div>
           <p className="compare-legend">
             Official link = published mapping. Inferred link = candidate
-            mapping. Pick a STIG rule, review CCI connections, then open the
-            related NIST control.
+            mapping. Pick a STIG rule, review its CCI (Control Correlation
+            Identifier) connections, then open the related NIST control.
             {chainPayload?.rows?.length
               ? ` ${chainPayload.rows.length} STIG or SRG item${chainPayload.rows.length === 1 ? "" : "s"} visible in the current chain scope.`
               : ""}

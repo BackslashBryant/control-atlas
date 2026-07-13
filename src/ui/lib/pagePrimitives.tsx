@@ -222,7 +222,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
           rel="noopener noreferrer"
           target="_blank"
         >
-          Open source artifact
+          Open the original source
         </a>
       </div>
     </article>

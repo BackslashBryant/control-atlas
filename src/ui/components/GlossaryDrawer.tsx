@@ -100,7 +100,7 @@ export function GlossaryDrawer(props: {
               </Dialog.Title>
               <Dialog.Description>
                 {helpTab === "guide"
-                  ? "How to use Control Atlas: start with intent, search the library, then compare or generate artifacts."
+                  ? "How to use Control Atlas: pick what you are trying to do, search the records, then compare frameworks or create starter documents."
                   : "Short definitions, why they matter, and quick links back into the library or pattern pages."}
               </Dialog.Description>
             </div>

@@ -81,16 +81,19 @@ export function AboutPage(props: {
     <section className="panel">
       <PageHeader
         eyebrow="About & trust"
-        summary="Control Atlas is a public reference workbench. It helps you map federal cyber guidance and generate blank planning templates — without storing your data or making official decisions."
+        summary="Federal cyber guidance is scattered across dozens of official sites. Control Atlas pulls the public pieces into one place, connects them, and explains them in plain English — without storing your data or making official decisions."
         title="What Control Atlas is — and is not"
       />
 
       <div className="stack">
         <SummaryCard title="What this is" tone="trust">
           <p>
-            An open-source reference workbench that maps public federal cyber
-            guidance — controls, frameworks, STIGs, and patterns — into plain
-            language you can trace back to sources.
+            The rules for federal cybersecurity compliance live in many
+            separate places — NIST publications, DISA STIGs, FedRAMP baselines,
+            and more — and connecting them yourself can take months. Control
+            Atlas is an open-source reference that gathers that public
+            guidance, links related requirements together, and translates it
+            into plain language you can trace back to the official source.
           </p>
           <p>
             Everything runs in your browser. There are no accounts, no file

@@ -799,7 +799,7 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
               onClick={() => onNavigate("start-here")}
               type="button"
             >
-              Start with RMF lifecycle
+              Start with the RMF (Risk Management Framework) lifecycle
             </button>
             <button
               className="chip"

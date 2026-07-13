@@ -302,7 +302,7 @@ export function PlaybooksPage(props: {
                 onClick={() => setHelpOpen(true)}
                 type="button"
               >
-                Open glossary support
+                Open the glossary
               </button>
             </div>
           </SummaryCard>
