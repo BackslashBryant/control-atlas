@@ -409,7 +409,7 @@ export function TemplatesPage(props: {
           ) : undefined
         }
         eyebrow="Templates"
-        summary="Pick the artifact you need, see what it covers, then generate a blank starter you fill in yourself — nothing you type is uploaded or stored."
+        summary="Pick the document you need, see what it covers, then generate a blank starter you fill in yourself — nothing you type is uploaded or stored."
         title="What are you trying to create?"
       />
 
@@ -523,7 +523,7 @@ export function TemplatesPage(props: {
               ) : null}
               {selectedTemplate.official_alternative ? (
                 <p>
-                  Prefer an authoritative form? Use the{" "}
+                  Prefer the official version? Use the{" "}
                   <a
                     href={selectedTemplate.official_alternative.url}
                     rel="noopener noreferrer"

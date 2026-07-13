@@ -381,7 +381,7 @@ export function ObjectDetailPage(props: {
                   </>
                 ) : node.node_type === "attack_technique" ||
                   node.node_type === "defend_countermeasure" ? (
-                  "This MITRE item connects through the public threat lens rather than a baseline membership list."
+                  "This MITRE item connects through attack and defense mappings rather than a baseline membership list."
                 ) : (
                   "This item does not have a published baseline placement summary yet."
                 )}
@@ -409,7 +409,7 @@ export function ObjectDetailPage(props: {
             <div className="section-header">
               <div>
                 <h2>Connections</h2>
-                <p>Grouped relationships for this record.</p>
+                <p>How this record connects to other frameworks and sources, grouped by type.</p>
                 {edges.length ? (
                   <p className="support-meta">
                     {edges.length} connections across {grouped.length} group

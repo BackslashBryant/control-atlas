@@ -131,7 +131,7 @@ export function SourcesPage(props: {
         className="canonical-source-links"
         aria-labelledby="canonical-source-links-heading"
       >
-        <h2 id="canonical-source-links-heading">Canonical source links</h2>
+        <h2 id="canonical-source-links-heading">Official source links</h2>
         <p>
           Open the official source before relying on a control, mapping, threat
           technique, or defensive reference.
