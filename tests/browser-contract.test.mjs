@@ -177,8 +177,8 @@ test('dark atlas visual system remains active in the shared stylesheet', () => {
   assert.match(html, /Content-Security-Policy/);
   assert.doesNotMatch(html, /fonts\.googleapis\.com/);
   assert.doesNotMatch(html, /fonts\.gstatic\.com/);
-  assert.match(css, /--ca-bg:\s*#0B1020/i);
-  assert.match(css, /--ca-surface:\s*#111827/i);
+  assert.match(css, /--ca-bg:\s*#10131A/i);
+  assert.match(css, /--ca-surface:\s*#1C212B/i);
   assert.match(css, /--ca-primary:\s*#2563EB/i);
   assert.match(css, /--ca-secondary:\s*#22D3EE/i);
   assert.match(css, /Space Grotesk/);
