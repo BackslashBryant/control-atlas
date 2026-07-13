@@ -63,8 +63,8 @@ export function TopNav(props: TopNavProps) {
       >
         <BrandMark />
         <span className="brand-lockup">
-          <BrandFlourish />
           <span className="brand-name">Control Atlas</span>
+          <BrandFlourish />
         </span>
       </button>
       <nav aria-label="Primary navigation" className="primary-nav">
