@@ -20,6 +20,7 @@
 
 .ca-card--raised {
   background: var(--ca-surface-raised);
+  box-shadow: var(--ca-elev-1);
 }
 
 .ca-card--interactive {
@@ -276,6 +277,7 @@
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-md);
   overflow: hidden;
+  box-shadow: var(--ca-elev-1);
 }
 .ca-code-block__header {
   display: flex;
