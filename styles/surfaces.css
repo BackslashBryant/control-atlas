@@ -524,9 +524,9 @@ li {
 .drawer-content,
 .source-card,
 .empty-state {
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
-  background: rgba(17, 24, 39, 0.92);
+  background: color-mix(in srgb, var(--ca-surface) 92%, transparent);
   box-shadow: 0 20px 55px rgba(2, 6, 23, 0.38);
 }
 
@@ -890,7 +890,7 @@ li {
 .intent-card-button {
   width: 100%;
   color: inherit;
-  background: rgba(17, 24, 39, 0.92);
+  background: color-mix(in srgb, var(--ca-surface) 92%, transparent);
   text-align: left;
   cursor: pointer;
   transition:
@@ -935,9 +935,9 @@ li {
   gap: var(--space-2);
   min-width: 12rem;
   padding: var(--space-3);
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
-  background: rgba(17, 24, 39, 0.98);
+  background: color-mix(in srgb, var(--ca-surface) 98%, transparent);
   box-shadow: 0 20px 55px rgba(2, 6, 23, 0.45);
 }
 
@@ -1001,7 +1001,7 @@ li {
 .generation-status.tone-trust,
 .generation-status.tone-warning {
   padding: var(--space-3) var(--space-4);
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
   color: var(--ca-text);
@@ -1023,9 +1023,9 @@ li {
   gap: var(--space-3);
   margin-bottom: var(--space-5);
   padding: var(--space-4);
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
-  background: rgba(17, 24, 39, 0.96);
+  background: color-mix(in srgb, var(--ca-surface) 96%, transparent);
 }
 
 .catalog-filter-summary {
@@ -1074,7 +1074,7 @@ li {
   align-items: center;
   gap: var(--space-2);
   padding: 0.45rem 0.85rem;
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: 999px;
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
@@ -1324,7 +1324,7 @@ li {
   min-height: 44px;
   border-radius: 999px;
   padding: 0.35rem 0.75rem;
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   color: inherit;
   background: rgba(15, 23, 42, 0.72);
 }
@@ -1341,7 +1341,7 @@ li {
 }
 
 .workbench-toggle button {
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: 999px;
   padding: 0.65rem 0.95rem;
   color: inherit;
@@ -2617,7 +2617,7 @@ button.atlas-leverage-row:hover {
 .export-disclosure {
   margin: var(--space-3) 0;
   padding: var(--space-3);
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
 }
 
@@ -2821,7 +2821,7 @@ button.atlas-leverage-row:hover {
   gap: var(--space-3);
   width: 100%;
   background: var(--ca-surface-raised);
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
   box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
