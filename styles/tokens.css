@@ -2,14 +2,21 @@
   color-scheme: dark;
 
   /* ── Backgrounds ── */
-  --ca-bg: #0b1020;
-  --ca-surface: #111827;
-  --ca-surface-raised: #1e293b;
-  /* Calm-dark: translucent borders read softer than solid slate on the
-     varied panel backgrounds, and hairlines recede instead of boxing
-     everything in. */
-  --ca-border: rgba(148, 163, 184, 0.22);
+  /* De-blend (reframe phase 2, round 3): bg/surface/raised were all the
+     same saturated navy hue as --ca-primary/--ca-secondary, so nothing
+     read as neutral ground and lightness-only steps still looked "all
+     just blue" (owner feedback, round 2). Desaturated toward slate here
+     so the blue/cyan accents pop against a genuinely neutral ground,
+     instead of adding new hues. Elevation shadow carries the raised tier;
+     borders stay translucent but strong enough to read against slate. */
+  --ca-bg: #10131a;
+  --ca-surface: #1c212b;
+  --ca-surface-raised: #2a3040;
+  --ca-border: rgba(148, 163, 184, 0.45);
   --ca-border-subtle: rgba(148, 163, 184, 0.11);
+  --ca-elev-1:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.25);
 
   /* ── Text ── */
   --ca-text: #f8fafc;

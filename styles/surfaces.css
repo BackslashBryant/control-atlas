@@ -554,6 +554,11 @@ li {
   gap: var(--space-4);
 }
 
+.section-header {
+  border-left: 3px solid var(--ca-secondary);
+  padding-left: var(--space-3);
+}
+
 .result-card-badges {
   display: flex;
   flex-direction: column;
