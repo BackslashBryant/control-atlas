@@ -2,6 +2,8 @@
 
 Build for translation, not complexity.
 
+Write for the newcomer first; practitioners get depth on demand.
+
 ## Voice
 
 Plain, direct, operational.

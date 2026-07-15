@@ -17,6 +17,8 @@ It takes frameworks, controls, STIGs, mappings, and RMF artifacts — and connec
 
 It does this using public data only, with no login, no evidence upload, and no organizational data stored.
 
+The moat is consolidation, connection, and freshness. Federal GRC guidance is scattered across dozens of separate sites and takes months — sometimes years — to connect by hand. Control Atlas hosts the connective tissue in one place, kept reasonably current, so a newcomer never has to rediscover it themselves.
+
 ---
 
 ## Design Principle
@@ -67,17 +69,17 @@ It does not ingest evidence, connect to operational systems, store organizationa
 
 ## Users
 
-Five practitioner types. All share the same core problem: **compliance language doesn't connect to action.**
+**Primary user — the newcomer.** Someone new to federal cyber compliance — "get us compliant" or "get an ATO" just landed on their desk — who doesn't yet know how NIST, FedRAMP, CMMC, STIGs, and CCIs relate to each other, or to the work in front of them. Every surface must work for this person first: plain language, no assumed jargon, a clear next step.
 
-**ISSO / ISSM** — Needs to understand control relationships, build planning worksheets, explain inheritance and evidence expectations, and prepare for assessments. Drowning in repetitive documentation with unclear relationships.
+**Secondary — practitioners.** Served by the same plain-language model — depth is available on demand, but never required, and never at the newcomer's expense:
 
-**Assessor / Auditor / SCA** — Needs to trace STIG/SRG/CCI/control relationships and understand baseline differences. Blocked by inconsistent implementation statements and vague inherited-control claims.
+- **ISSO / ISSM** — Needs to understand control relationships, build planning worksheets, explain inheritance and evidence expectations, and prepare for assessments.
+- **Assessor / Auditor / SCA** — Needs to trace STIG/SRG/CCI/control relationships and understand baseline differences.
+- **Engineer / System Integrator** — Needs to connect control language to real technical implementation.
+- **Program Manager / Compliance Manager** — Needs process patterns, planning templates, and plain explanations of scope, reciprocity, and evidence expectations.
+- **Contractor / CSP / Small Vendor** — Needs a starting point before engaging consultants.
 
-**Engineer / System Integrator** — Needs to connect control language to real technical implementation. STIGs and controls feel disconnected; inheritance and shared responsibility are unclear until it's too late.
-
-**Program Manager / Compliance Manager** — Needs process patterns, planning templates, and plain explanations of scope, reciprocity, and evidence expectations. Authorization timelines are opaque; stakeholders confuse authorization types.
-
-**Contractor / CSP / Small Vendor** — Needs a starting point before engaging consultants. Confused by the source ecosystem and the relationship between public baselines and real authorization work.
+Both groups share the same core problem: **compliance language doesn't connect to action.**
 
 ---
 
@@ -307,6 +309,8 @@ Every term leads with a plain-language definition before citing the formal sourc
 ### Relationship Graph
 
 Visualizes public relationships between controls, STIGs, CCIs, baselines, techniques, and defenses. Extended from the GovFrame Navigator D3 engine.
+
+One lens among several — never the flagship or headline feature. Start Here (situation → requirements) is the newcomer's primary path; the graph is an optional, deeper view for users who already know what they're looking at.
 
 Graph edges are color-coded by provenance class with required text/icon labels. User can filter by node type, relationship type, provenance, and confidence. Accessible table fallback is required — the graph is an enhancement, not the only path to the data.
 

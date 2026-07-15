@@ -1,5 +1,7 @@
 # Live-Site Polish Backlog
 
+**2026-07-11 positioning shift:** the GRC newbie is now THE user everywhere (practitioners secondary); see `docs/plans/newbie-reframe-execution-plan.md` for the locked positioning and phase-by-phase reframe this backlog partially absorbs.
+
 Source: live-site walkthrough + template-output audit, 2026-07-10 (post SPR-remediation ship `0a29f49`).
 Shipped the same day, so NOT in this backlog: search provenance fix, 705 blocked-relationship repair, office export layout, coverage badges + supported-catalog contract, orbital landing, nav disclosure, frame-bust, template content overhaul, Explore "No connections yet" false-negative fix.
 
