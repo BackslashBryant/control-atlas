@@ -119,6 +119,21 @@ export function SourcesPage(props: {
     [bundle.runtime],
   );
 
+  const knownGaps = useMemo(() => {
+    const findings = bundle.runtime.getGraphHealth();
+    const bySource = new Map<string, number>();
+    for (const finding of findings) {
+      bySource.set(finding.source_id, (bySource.get(finding.source_id) || 0) + 1);
+    }
+    return {
+      total: findings.length,
+      bySource: [...bySource.entries()].map(([sourceId, count]) => ({
+        count,
+        name: bundle.runtime.getSource(sourceId)?.name || sourceId,
+      })),
+    };
+  }, [bundle.runtime]);
+
   return (
     <section className="panel">
       <PageHeader
@@ -203,6 +218,17 @@ export function SourcesPage(props: {
             not ingested yet — not that no relationship exists.
           </p>
         </div>
+        {knownGaps.total > 0 ? (
+          <p className="support-meta">
+            <strong>{knownGaps.total} known upstream gaps:</strong>{" "}
+            {knownGaps.bySource
+              .map((entry) => `${entry.count} from ${entry.name}`)
+              .join(", ")}
+            . These rows reference an identifier the official source data
+            doesn&rsquo;t resolve to a specific record yet — a gap in the
+            upstream mapping, not an error on this site.
+          </p>
+        ) : null}
       </section>
 
       <Accordion.Root className="accordion-root" collapsible type="single">

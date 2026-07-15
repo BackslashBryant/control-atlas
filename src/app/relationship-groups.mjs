@@ -6,6 +6,8 @@ export function groupRelationships(edges, runtimeNodeLookupId, runtime) {
     assessment: { label: 'Assessment procedures', description: 'Assessment procedures related to this item.', items: [] },
     stig: { label: 'STIG / SRG references', description: 'Related STIG and SRG requirements.', items: [] },
     mitre: { label: 'MITRE references', description: 'Related MITRE ATT&CK or mitigations.', items: [] },
+    csf: { label: 'CSF 2.0 crosswalks (NIST OLIR)', description: 'Official NIST OLIR concept crosswalk to Cybersecurity Framework 2.0 subcategories.', items: [] },
+    sp171: { label: 'SP 800-171 mappings', description: 'Official NIST SP 800-171 requirement references to this control.', items: [] },
     enhancements: { label: 'Enhancements', description: 'Control enhancements that extend this control.', items: [] },
     baseControl: { label: 'Base control', description: 'The base control this enhancement extends.', items: [] },
     nistControl: { label: 'Related controls', description: 'Connections to other NIST controls.', items: [] },
@@ -28,6 +30,8 @@ export function groupRelationships(edges, runtimeNodeLookupId, runtime) {
     else if (counterpart.node_type === 'assessment_procedure') groups.assessment.items.push({edge, counterpart});
     else if (counterpartId.includes('stig') || counterpartId.includes('srg')) groups.stig.items.push({edge, counterpart});
     else if (counterpartId.startsWith('mitre-')) groups.mitre.items.push({edge, counterpart});
+    else if (counterpartId.startsWith('csf-2:')) groups.csf.items.push({edge, counterpart});
+    else if (counterpartId.startsWith('nist-800-171')) groups.sp171.items.push({edge, counterpart});
     else if (
       counterpart.node_type === 'control_enhancement' &&
       recordItemId &&

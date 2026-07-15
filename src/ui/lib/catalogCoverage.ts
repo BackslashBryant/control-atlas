@@ -41,5 +41,5 @@ export function catalogCoverageForId(
 }
 
 export function isLowCatalogCoverage(coverage: CatalogCoverage | undefined) {
-  return coverage !== undefined && coverage.pct < 75;
+  return coverage !== undefined && coverage.pct <= 75;
 }
