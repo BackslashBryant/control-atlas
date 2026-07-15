@@ -30,6 +30,8 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await page.getByLabel('Operational environment').selectOption('CSP');
   await page.getByRole('button', { name: 'Show recommendation' }).click();
 
+  await expect(page.getByText('Your situation', { exact: true })).toBeVisible();
+  await expect(page.getByText('FedRAMP authorization path', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Compare', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Playbooks', exact: true })).toBeVisible();

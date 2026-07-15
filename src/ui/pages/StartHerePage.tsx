@@ -113,6 +113,7 @@ export function StartHerePage(props: {
             { value: "On-premises", label: "On-premises" },
             { value: "Hybrid", label: "Hybrid" },
             { value: "Enterprise service", label: "Enterprise service" },
+            { value: "Not sure", label: "Not sure" },
           ]}
           value={state.systemType}
         />
@@ -133,6 +134,7 @@ export function StartHerePage(props: {
             { value: "Moderate", label: "Moderate" },
             { value: "High", label: "High" },
             { value: "CUI", label: "CUI" },
+            { value: "Not sure", label: "Not sure" },
           ]}
           value={state.dataSensitivity}
         />
@@ -149,6 +151,7 @@ export function StartHerePage(props: {
             { value: "DoD", label: "DoD" },
             { value: "Contractor", label: "Contractor" },
             { value: "CSP", label: "CSP" },
+            { value: "Not sure", label: "Not sure" },
           ]}
           value={state.environment}
         />
@@ -159,6 +162,15 @@ export function StartHerePage(props: {
         <GlossaryTermChip termId="csp">CSP</GlossaryTermChip> means? Focus or
         hover the term for a plain-language definition.
       </p>
+
+      {state.systemType === "Not sure" ||
+      state.dataSensitivity === "Not sure" ||
+      state.environment === "Not sure" ? (
+        <p className="field-hint" role="status">
+          "Not sure" is fine — we will use a safe, common default and tell you
+          exactly what we assumed in the result.
+        </p>
+      ) : null}
 
       {!showResults ? (
         <div className="card-actions">
