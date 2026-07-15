@@ -30,7 +30,7 @@
 |---|---|---|
 | 1 | Newbie-first copy reposition (landing, nav, menu, interior sweep) | [x] |
 | 2 | Visual de-blend spike → owner picks intensity → rollout; + header brand-lockup fix | [x] |
-| 3 | Positioning docs reframe (PRD, vision, backlog header) | [ ] |
+| 3 | Positioning docs reframe (PRD, vision, backlog header) | [x] |
 | 4 | Start Here sharpening — situation→requirements as the newbie's main path | [ ] |
 | 5 | Trust & connection labeling (named crosswalk groups, coverage honesty) | [ ] |
 | 6 | Freshness: auto-sync pipeline + "current as of" stamping | [ ] |
