@@ -22,9 +22,10 @@ export function StartHereResult(props: StartHereResultProps) {
     onFollowCompareLink,
     onRestart,
   } = props;
+  const { situation } = recommendations;
 
   return (
-    
+
         <div className="stack">
           <div className="card-actions">
             <button
@@ -36,14 +37,35 @@ export function StartHereResult(props: StartHereResultProps) {
             </button>
           </div>
 
-          <div className="summary-grid">
-            <SummaryCard title="What this is" tone="trust">
-              <p>
-                This is a reference recommendation. It is not a compliance
-                determination.
-              </p>
-            </SummaryCard>
-          </div>
+          <SummaryCard title="Your situation" tone="trust">
+            <dl className="start-here-recap">
+              <div className="start-here-recap-item">
+                <dt>System</dt>
+                <dd>{situation.answers.systemType}</dd>
+              </div>
+              <div className="start-here-recap-item">
+                <dt>Data sensitivity</dt>
+                <dd>{situation.answers.dataSensitivity}</dd>
+              </div>
+              <div className="start-here-recap-item">
+                <dt>Environment</dt>
+                <dd>{situation.answers.environment}</dd>
+              </div>
+            </dl>
+            <p className="start-here-path">{situation.pathLabel}</p>
+            <p>{situation.narrative}</p>
+            {situation.assumptions.length > 0 ? (
+              <ul className="start-here-assumptions">
+                {situation.assumptions.map((note) => (
+                  <li key={note}>{note}</li>
+                ))}
+              </ul>
+            ) : null}
+          </SummaryCard>
+
+          <p className="start-here-disclaimer field-hint">
+            This is a reference recommendation, not a compliance determination.
+          </p>
 
           <section className="stack">
             <div className="section-header">

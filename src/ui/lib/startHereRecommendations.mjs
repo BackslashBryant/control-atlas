@@ -24,6 +24,79 @@ const TEMPLATE_LABELS = {
   reciprocity_checklist: 'Reciprocity Checklist',
 };
 
+// Per-item plain-language "why this one" strings. Keep acronyms spelled out on
+// first mention so a newcomer never hits an unexplained term.
+const PATTERN_RATIONALES = {
+  'csp-inheritance': 'How to claim the controls your cloud provider already runs, so you are not re-documenting work FedRAMP has already covered.',
+  'shared-responsibility': "Spells out which security controls are yours versus your cloud provider's — the line people most often get wrong.",
+  'reciprocity-basics': "How to reuse another team's authorization work instead of building your evidence from scratch.",
+  'conmon-cadence': 'What you have to keep doing after authorization to keep your evidence current.',
+  'boundary-patterns': 'How to draw the line around what your system includes — the boundary decision that scopes everything else.',
+  'boe-reuse': 'How to package evidence once so it can be reused across audits.',
+  'enterprise-inheritance': 'How a shared enterprise service passes common controls down to the systems that run on it.',
+  'ato-vs-fedramp': 'Explains the difference between a single-agency Authorization to Operate (ATO) and a FedRAMP authorization, so you pursue the right one.',
+  'rmf-lifecycle': 'Walks the Risk Management Framework (RMF) end to end so you know which step you are actually on.',
+  'evidence-patterns': 'What assessors expect your evidence to look like, before they ask for it.',
+  'control-inheritance': 'How controls get inherited between systems so you only document what is truly yours.',
+  'poam-concepts': 'How to handle findings you cannot fix immediately without stalling your authorization.',
+};
+
+const TEMPLATE_RATIONALES = {
+  security_plan_starter: 'A blank system security plan scaffold — the core document every authorization package is built around.',
+  assessment_planning_worksheet: 'Plans out how your controls will be tested before an assessor arrives.',
+  inheritance_worksheet: 'Records which controls you inherit from a provider versus own yourself, so nothing falls through the cracks.',
+  stig_evidence_checklist: 'Tracks which DISA Security Technical Implementation Guide (STIG) checks you have evidence for — the technical proof DoD assessors ask for.',
+  poam_starter: 'A Plan of Action & Milestones (POA&M) scaffold for tracking findings you have not closed yet.',
+  reciprocity_checklist: 'Walks the steps to reuse a prior authorization so you are not redoing already-accepted work.',
+};
+
+function systemTypePhrase(systemType) {
+  switch (systemType) {
+    case 'Cloud SaaS':
+      return 'a cloud SaaS system';
+    case 'Platform service':
+      return 'a platform service';
+    case 'On-premises':
+      return 'an on-premises system';
+    case 'Hybrid':
+      return 'a hybrid system';
+    case 'Enterprise service':
+      return 'an enterprise service';
+    default:
+      return 'a system (type not yet decided)';
+  }
+}
+
+function sensitivityPhrase(sensitivity) {
+  switch (sensitivity) {
+    case 'Low':
+      return 'low-impact data';
+    case 'Moderate':
+      return 'moderate-impact data';
+    case 'High':
+      return 'high-impact data';
+    case 'CUI':
+      return 'Controlled Unclassified Information (CUI)';
+    default:
+      return 'data of an impact level you have not set yet';
+  }
+}
+
+function environmentPhrase(environment) {
+  switch (environment) {
+    case 'Federal civilian':
+      return 'a federal civilian agency';
+    case 'DoD':
+      return 'the Department of Defense (DoD)';
+    case 'Contractor':
+      return 'a federal contractor';
+    case 'CSP':
+      return 'a cloud service provider (CSP)';
+    default:
+      return 'a federal setting';
+  }
+}
+
 function patternLabel(patternId) {
   return PATTERN_LABELS[patternId] || patternsData.find((entry) => entry.id === patternId)?.title || patternId;
 }
@@ -73,14 +146,32 @@ export function buildStartHereRecommendations(answers) {
     return null;
   }
 
+  // "Not sure" is a valid answer: fall back to the broadest sensible default
+  // and record what we assumed so the result can say so plainly.
+  const assumptions = [];
+  const effectiveSensitivity = dataSensitivity === 'Not sure' ? 'Moderate' : dataSensitivity;
+  const effectiveEnvironment = environment === 'Not sure' ? 'Federal civilian' : environment;
+  if (dataSensitivity === 'Not sure') {
+    assumptions.push('You picked "Not sure" for data sensitivity, so we used Moderate — the most common federal starting baseline. Change it above once you know your impact level.');
+  }
+  if (environment === 'Not sure') {
+    assumptions.push('You picked "Not sure" for environment, so we assumed a federal civilian agency. Change it above if your system is DoD, contractor-run, or a cloud service provider.');
+  }
+  if (systemType === 'Not sure') {
+    assumptions.push('You picked "Not sure" for system type, so these recommendations stay general — revisit once you know whether it is cloud, on-premises, or hybrid.');
+  }
+
   const library = [];
   const compare = [];
   const patternIds = [];
   const templateIds = [];
+  // Assigned in every branch of the exhaustive environment/path chain below.
+  let pathLabel;
+  let narrative;
 
   const isCloud = systemType === 'Cloud SaaS' || systemType === 'Platform service';
   const isEnterpriseShape = systemType === 'Hybrid' || systemType === 'Enterprise service' || systemType === 'On-premises';
-  const isCui = dataSensitivity === 'CUI';
+  const isCui = effectiveSensitivity === 'CUI';
 
   if (isCloud) {
     patternIds.push('csp-inheritance', 'shared-responsibility');
@@ -90,7 +181,10 @@ export function buildStartHereRecommendations(answers) {
     templateIds.push('inheritance_worksheet');
   }
 
-  if (environment === 'DoD') {
+  if (effectiveEnvironment === 'DoD') {
+    pathLabel = 'DoD RMF + STIG path';
+    narrative = `You're working on ${systemTypePhrase(systemType)} for ${environmentPhrase('DoD')}, handling ${sensitivityPhrase(effectiveSensitivity)}. DoD systems get authorized through the Risk Management Framework (RMF) and layer DISA Security Technical Implementation Guides (STIGs) — the specific technical hardening checks — on top of the NIST SP 800-53 controls every federal system shares. Start with the NIST baseline below to scope your controls, then use Compare to trace each STIG rule back to the control it satisfies.${isCloud ? ' Because this is a cloud system, your scope is also set by a DoD Impact Level (IL2–IL6) under the DISA Cloud Computing SRG.' : ''}`;
+
     library.push(
       {
         kind: 'library-catalog',
@@ -115,13 +209,13 @@ export function buildStartHereRecommendations(answers) {
       });
     }
 
-    const nistBaseline = nistBaselineId(dataSensitivity);
+    const nistBaseline = nistBaselineId(effectiveSensitivity);
     if (nistBaseline) {
       library.push({
         kind: 'library-node',
         nodeId: nistBaseline,
-        label: baselineLabel('NIST SP 800-53B', dataSensitivity),
-        rationale: `Use this baseline to see which controls apply at the ${dataSensitivity.toLowerCase()} impact level you selected.`,
+        label: baselineLabel('NIST SP 800-53B', effectiveSensitivity),
+        rationale: `Use this baseline to see which controls apply at the ${effectiveSensitivity.toLowerCase()} impact level you selected.`,
       });
     }
 
@@ -135,7 +229,10 @@ export function buildStartHereRecommendations(answers) {
       label: 'Trace STIG rules to controls',
       rationale: 'Follow the public STIG to CCI to NIST chain so you know where a technical rule lands in control language.',
     });
-  } else if (environment === 'CSP' || systemType === 'Cloud SaaS') {
+  } else if (effectiveEnvironment === 'CSP' || systemType === 'Cloud SaaS') {
+    pathLabel = 'FedRAMP authorization path';
+    narrative = `You're authorizing ${systemTypePhrase(systemType)} that handles ${sensitivityPhrase(effectiveSensitivity)}${effectiveEnvironment === 'CSP' ? ' as a cloud service provider (CSP)' : ''}. Cloud systems that serve federal agencies get authorized against FedRAMP baselines, which build on the underlying NIST SP 800-53 controls. Start with the FedRAMP baseline below, then compare it against NIST to see which controls you can inherit rather than build yourself.`;
+
     library.push({
       kind: 'library-catalog',
       catalogId: 'fedramp-rev5',
@@ -143,19 +240,19 @@ export function buildStartHereRecommendations(answers) {
       rationale: 'Cloud and CSP paths usually start with the public FedRAMP baseline catalog before you map inheritance.',
     });
 
-    const fedrampBaseline = fedrampBaselineId(dataSensitivity);
+    const fedrampBaseline = fedrampBaselineId(effectiveSensitivity);
     if (fedrampBaseline) {
       library.push({
         kind: 'library-node',
         nodeId: fedrampBaseline,
-        label: baselineLabel('FedRAMP', dataSensitivity),
-        rationale: `Your ${dataSensitivity.toLowerCase()} sensitivity answer points to this public FedRAMP baseline as a first reference set.`,
+        label: baselineLabel('FedRAMP', effectiveSensitivity),
+        rationale: `Your ${effectiveSensitivity.toLowerCase()} sensitivity answer points to this public FedRAMP baseline as a first reference set.`,
       });
     }
 
     patternIds.push('ato-vs-fedramp');
 
-    const nistBaseline = nistBaselineId(dataSensitivity);
+    const nistBaseline = nistBaselineId(effectiveSensitivity);
     if (fedrampBaseline && nistBaseline) {
       compare.push({
         kind: 'compare',
@@ -165,7 +262,10 @@ export function buildStartHereRecommendations(answers) {
         rationale: 'See what your FedRAMP baseline shares with the matching NIST baseline before you plan controls.',
       });
     }
-  } else if (environment === 'Contractor' || isCui) {
+  } else if (effectiveEnvironment === 'Contractor' || isCui) {
+    pathLabel = 'NIST SP 800-171 (contractor / CUI) path';
+    narrative = `You're ${effectiveEnvironment === 'Contractor' ? 'working as a federal contractor' : 'handling Controlled Unclassified Information (CUI)'}${systemType && systemType !== 'Not sure' ? ` on ${systemTypePhrase(systemType)}` : ''}. That points you to NIST SP 800-171 — the control set contractors must meet to protect CUI — which maps back into the broader NIST SP 800-53 catalog a government system may later inherit. Start with the 800-171 control set below.`;
+
     library.push({
       kind: 'library-catalog',
       catalogId: 'nist-800-171-rev2',
@@ -184,6 +284,9 @@ export function buildStartHereRecommendations(answers) {
       rationale: 'See how contractor-facing requirements map to the broader NIST control catalog you may inherit later.',
     });
   } else {
+    pathLabel = 'NIST RMF path';
+    narrative = `You're authorizing ${systemTypePhrase(systemType)} for ${environmentPhrase(effectiveEnvironment)}, handling ${sensitivityPhrase(effectiveSensitivity)}. Federal systems get authorized through the Risk Management Framework (RMF), scoping controls from the NIST SP 800-53 catalog at your impact level. Start with the NIST baseline below.`;
+
     library.push({
       kind: 'library-catalog',
       catalogId: 'nist-800-53',
@@ -191,13 +294,13 @@ export function buildStartHereRecommendations(answers) {
       rationale: 'Federal civilian systems usually begin with the public NIST control catalog and baseline placement.',
     });
 
-    const nistBaseline = nistBaselineId(dataSensitivity);
+    const nistBaseline = nistBaselineId(effectiveSensitivity);
     if (nistBaseline) {
       library.push({
         kind: 'library-node',
         nodeId: nistBaseline,
-        label: baselineLabel('NIST SP 800-53B', dataSensitivity),
-        rationale: `This baseline matches the ${dataSensitivity.toLowerCase()} impact level you selected for scoping controls.`,
+        label: baselineLabel('NIST SP 800-53B', effectiveSensitivity),
+        rationale: `This baseline matches the ${effectiveSensitivity.toLowerCase()} impact level you selected for scoping controls.`,
       });
 
       compare.push({
@@ -220,7 +323,7 @@ export function buildStartHereRecommendations(answers) {
     patternIds.push('rmf-lifecycle', 'control-inheritance');
   }
 
-  if (dataSensitivity === 'Moderate' || dataSensitivity === 'High') {
+  if (effectiveSensitivity === 'Moderate' || effectiveSensitivity === 'High') {
     templateIds.push('poam_starter', 'assessment_planning_worksheet');
   }
 
@@ -234,15 +337,26 @@ export function buildStartHereRecommendations(answers) {
     kind: 'pattern',
     patternId,
     label: patternLabel(patternId),
-    rationale: `This pattern explains a concept that commonly blocks ${systemType} teams in a ${environment} setting.`,
+    rationale:
+      PATTERN_RATIONALES[patternId] ||
+      `This pattern explains a concept that commonly blocks ${systemType} teams in a ${environment} setting.`,
   }));
 
   const templates = uniqueTemplateIds(templateIds).map((templateType) => ({
     kind: 'template',
     templateType,
     label: templateLabel(templateType),
-    rationale: 'Generate this blank artifact locally to turn the reference path into a planning worksheet without storing your data.',
+    rationale:
+      TEMPLATE_RATIONALES[templateType] ||
+      'Generate this blank artifact locally to turn the reference path into a planning worksheet without storing your data.',
   }));
 
-  return { library, compare, patterns, templates };
+  const situation = {
+    answers: { systemType, dataSensitivity, environment },
+    pathLabel,
+    narrative,
+    assumptions,
+  };
+
+  return { situation, library, compare, patterns, templates };
 }

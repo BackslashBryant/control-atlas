@@ -60,6 +60,59 @@ test('dod cloud path additionally recommends the DISA SRG library for Impact Lev
   assert.match(srgEntry.rationale, /Impact Level/);
 });
 
+test('recommendations lead with a plain-language situation summary and labeled path', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'Moderate',
+    environment: 'CSP',
+  });
+
+  assert.ok(recommendations.situation, 'expected a situation summary');
+  assert.equal(recommendations.situation.pathLabel, 'FedRAMP authorization path');
+  assert.match(recommendations.situation.narrative, /FedRAMP/);
+  assert.ok(recommendations.situation.narrative.length > 80, 'narrative should be a real sentence, not a stub');
+  assert.deepEqual(recommendations.situation.assumptions, []);
+  assert.deepEqual(recommendations.situation.answers, {
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'Moderate',
+    environment: 'CSP',
+  });
+});
+
+test('pattern and template rationales are specific per item, not one boilerplate string', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'Moderate',
+    environment: 'CSP',
+  });
+
+  const patternRationales = recommendations.patterns.map((entry) => entry.rationale);
+  const templateRationales = recommendations.templates.map((entry) => entry.rationale);
+
+  assert.ok(patternRationales.length >= 2);
+  assert.equal(new Set(patternRationales).size, patternRationales.length, 'each pattern rationale should be distinct');
+  assert.ok(templateRationales.length >= 2);
+  assert.equal(new Set(templateRationales).size, templateRationales.length, 'each template rationale should be distinct');
+});
+
+test('"Not sure" answers fall back to a safe default and record the assumption', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'Not sure',
+    environment: 'Not sure',
+  });
+
+  assert.ok(recommendations, 'a "Not sure" combination should still produce recommendations');
+  // Sensitivity falls back to Moderate -> a concrete baseline is still recommended.
+  assert.ok(
+    recommendations.library.some((entry) => entry.kind === 'library-node' && entry.nodeId === 'fedramp-rev5:MODERATE'),
+    'expected the Moderate fallback baseline',
+  );
+  assert.equal(recommendations.situation.assumptions.length, 2, 'expected one assumption note per "Not sure" answer');
+  assert.ok(recommendations.situation.assumptions.some((note) => /Moderate/.test(note)));
+  assert.ok(recommendations.situation.assumptions.some((note) => /federal civilian/i.test(note)));
+});
+
 test('incomplete answers return null recommendations', () => {
   assert.equal(
     buildStartHereRecommendations({

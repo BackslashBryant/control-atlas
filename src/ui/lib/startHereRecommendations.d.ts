@@ -32,7 +32,15 @@ export type StartHereTemplateLink = {
   rationale: string;
 };
 
+export type StartHereSituation = {
+  answers: StartHereAnswers;
+  pathLabel: string;
+  narrative: string;
+  assumptions: string[];
+};
+
 export type StartHereRecommendations = {
+  situation: StartHereSituation;
   library: StartHereLibraryLink[];
   compare: StartHereCompareLink[];
   patterns: StartHerePatternLink[];
