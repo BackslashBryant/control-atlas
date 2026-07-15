@@ -191,9 +191,10 @@ test("coverage-transparency surfaces warn users when a catalog is under-mapped",
   const sourcesPage = readFileSync("src/ui/pages/SourcesPage.tsx", "utf8");
   const explorePage = readFileSync("src/ui/pages/ExplorePage.tsx", "utf8");
 
-  // isLowCatalogCoverage flags any catalog below the 75% coverage threshold.
+  // isLowCatalogCoverage flags any catalog at or below the 75% coverage
+  // threshold (inclusive, so an exactly-75% catalog still gets flagged).
   assert.match(catalogCoverage, /export function isLowCatalogCoverage/);
-  assert.match(catalogCoverage, /coverage\.pct\s*<\s*75/);
+  assert.match(catalogCoverage, /coverage\.pct\s*<=\s*75/);
 
   // SourcesPage carries the supported-catalog contract statement and drives a
   // "Preview / low coverage" badge from isLowCatalogCoverage.
