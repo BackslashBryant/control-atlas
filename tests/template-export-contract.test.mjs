@@ -81,8 +81,8 @@ for (const template of registry.templates) {
   }
 }
 
-test('all nine templates are registered', () => {
-  assert.equal(registry.templates.length, 9);
+test('all twelve artifact companions are registered', () => {
+  assert.equal(registry.templates.length, 12);
 });
 
 test('registry templates have non-empty source_refs', () => {
@@ -285,7 +285,7 @@ test('markdown tables never exceed 6 columns for any template', () => {
   }
 });
 
-test('poam markdown renders a field guide as prose plus a 6-column tracker table', () => {
+test('POA&M markdown preserves the schema-aligned field set without a wide table', () => {
   const result = generateTemplate(
     {
       templateType: 'poam_starter',
@@ -298,26 +298,21 @@ test('poam markdown renders a field guide as prose plus a 6-column tracker table
     dataset,
   );
   const poamFields = [
-    'POA&M ID', 'Detection Source', 'Related Control (CCI)', 'Related STIG/SRG',
-    'Weakness Description', 'Risk Statement', 'Severity', 'Severity Category (CAT)',
-    'Point of Contact (POC)', 'Resources Required', 'Planned Remediation',
-    'Milestones with Completion Dates', 'Original Detection Date', 'Scheduled Completion Date',
-    'Responsible Office/Role', 'Status', 'Deviation Reference', 'Risk Acceptance Reference',
-    'Evidence Needed for Closure', 'Notes',
+    'externalUid', 'status', 'vulnerabilityDescription', 'sourceIdentifyingVulnerability',
+    'controlAcronym', 'assessmentProcedure', 'securityChecks', 'severity', 'rawSeverity',
+    'relevanceOfThreat', 'likelihood', 'impact', 'impactDescription', 'residualRiskLevel',
+    'pocOrganization', 'Point of Contact', 'resources', 'Planned Remediation',
+    'Milestones with Completion Dates', 'Original Detection Date', 'scheduledCompletionDate',
+    'completionDate', 'recommendations', 'mitigations', 'Evidence Needed for Closure',
+    'Risk Acceptance / Deviation Reference', 'comments',
   ];
   for (const field of poamFields) {
-    assert.ok(result.content.includes(field), `all 20 POA&M fields must survive — missing "${field}"`);
+    assert.ok(result.content.includes(field), `POA&M field must survive — missing "${field}"`);
   }
-  assert.match(result.content, /- \*\*POA&M ID\*\* —/, 'field guide must render as prose bullets');
-  assert.match(
-    result.content,
-    /\| POA&M ID \| Weakness \| Related Control\/CCI \| Severity \| Scheduled Completion \| Status \|/,
-    'tracker table header must be present',
-  );
-  // 10 usable blank tracker rows pass through as a plain table — never as
-  // prose bullets of empty values.
-  const blankRows = (result.content.match(/^\|\s+\|\s+\|\s+\|\s+\|\s+\|\s+\|$/gm) || []).length;
-  assert.equal(blankRows, 10, 'tracker must carry exactly 10 blank rows');
+  assert.match(result.content, /## Operating Rules/, 'operating guidance must precede the register');
+  assert.match(result.content, /Classification: eMASS API v3\.22 schema-aligned preparation aid/);
+  const starterRows = (result.content.match(/\[Stable external tracking ID\]/g) || []).length;
+  assert.equal(starterRows, 20, 'register must carry exactly 20 starter rows');
   assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'POA&M starter must not emit a wide pipe table');
 });
 
@@ -336,10 +331,10 @@ test('ssp markdown renders one plain-language baseline table with guidance state
   assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'SSP markdown tables must stay at 6 columns or fewer');
   assert.match(
     result.content,
-    /\| Control ID \| Control Title \| What It Means \| Implementation Statement \| Evidence \| Status \|/,
-    'the control baseline must be one table with plain-language and fill-in columns',
+    /\| Control ID \| Control Title \| Implementation Status \| Implementation Narrative \| Evidence References \| Responsible Role \|/,
+    'the control baseline must carry implementation, evidence, and ownership fields',
   );
-  assert.match(result.content, /## How to Fill the Control Baseline/, 'fill guidance must render as its own section');
+  assert.match(result.content, /## How to Complete the Control Rows/, 'fill guidance must render as its own section');
   // The old per-control madlib prompt ("How is <Title> (<ID>) implemented…")
   // must never repeat across rows. The fill-in placeholder ("[How is this
   // implemented for this system?]") has no (<ID>) and is exempt.
@@ -497,11 +492,9 @@ test('evidence matrix cites real CCI and STIG/SRG cross-references for a control
   );
   assert.match(result.content, /CCI-\d+/, 'a real CCI number must appear for AC-2');
   assert.match(result.content, /SRG-OS-000001-GPOS-00001/, 'the related SRG requirement must appear');
-  assert.match(
-    result.content,
-    /\| Control ID \| Control Title \| What It Means \| Related CCIs \| Related STIG\/SRG \| Evidence to Collect \|/,
-    'matrix must use the six-column plain-language layout',
-  );
+  for (const field of ['Evidence Owner', 'Collection Cadence', 'Evidence Date / Period', 'Confidence', 'Review Status', 'Assessor Notes']) {
+    assert.ok(result.content.includes(field), `matrix must preserve ${field}`);
+  }
 });
 
 test('framework with zero resolvable controls emits an honest notice and flags the error', () => {

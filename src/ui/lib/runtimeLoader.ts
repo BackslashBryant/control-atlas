@@ -7,6 +7,22 @@ export type TemplateRegistry = {
   templates?: Array<Record<string, unknown>>;
 };
 
+export type OfficialArtifactRegistry = {
+  retrieved_on?: string;
+  compatibility_levels?: string[];
+  artifacts?: Array<Record<string, unknown>>;
+};
+
+export type ComplianceWorkflowRegistry = {
+  retrieved_on?: string;
+  workflows?: Array<Record<string, unknown>>;
+};
+
+export type ComplianceToolRegistry = {
+  retrieved_on?: string;
+  tools?: Array<Record<string, unknown>>;
+};
+
 export type LibrarySearchShard = {
   catalog_id: string;
   document_count?: number;
@@ -17,6 +33,9 @@ export type LibrarySearchShard = {
 export type RuntimeBundle = {
   runtime: ReturnType<typeof createFederalGraphRuntime>;
   templateRegistry: TemplateRegistry;
+  officialArtifactRegistry?: OfficialArtifactRegistry;
+  complianceWorkflowRegistry?: ComplianceWorkflowRegistry;
+  complianceToolRegistry?: ComplianceToolRegistry;
   graphReady: boolean;
   librarySearchRevision?: number;
 };
@@ -177,15 +196,29 @@ function createSearchRuntime(
 }
 
 export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
-  const [libraryBootstrap, templateRegistryRaw] = await Promise.all([
+  const [
+    libraryBootstrap,
+    templateRegistryRaw,
+    officialArtifactRegistryRaw,
+    complianceWorkflowRegistryRaw,
+    complianceToolRegistryRaw,
+  ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
+    fetchArtifact("./data/official-artifact-registry.json"),
+    fetchArtifact("./data/compliance-workflows.json"),
+    fetchArtifact("./data/compliance-tool-registry.json"),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
 
   return {
     runtime: createSearchRuntime(libraryBootstrap, templateRegistry),
     templateRegistry,
+    officialArtifactRegistry:
+      officialArtifactRegistryRaw as OfficialArtifactRegistry,
+    complianceWorkflowRegistry:
+      complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry,
+    complianceToolRegistry: complianceToolRegistryRaw as ComplianceToolRegistry,
     graphReady: false,
     librarySearchRevision: 0,
   };
@@ -194,6 +227,9 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
 export async function loadFullGraphPhase(
   libraryBootstrap: LibrarySearchBootstrap,
   templateRegistry: TemplateRegistry,
+  officialArtifactRegistry: OfficialArtifactRegistry,
+  complianceWorkflowRegistry: ComplianceWorkflowRegistry,
+  complianceToolRegistry: ComplianceToolRegistry,
   onShardLoaded?: () => void,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
@@ -222,20 +258,35 @@ export async function loadFullGraphPhase(
   return {
     runtime,
     templateRegistry,
+    officialArtifactRegistry,
+    complianceWorkflowRegistry,
+    complianceToolRegistry,
     graphReady: true,
     librarySearchRevision: 0,
   };
 }
 
 export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
-  const [libraryBootstrap, templateRegistryRaw] = await Promise.all([
+  const [
+    libraryBootstrap,
+    templateRegistryRaw,
+    officialArtifactRegistryRaw,
+    complianceWorkflowRegistryRaw,
+    complianceToolRegistryRaw,
+  ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
+    fetchArtifact("./data/official-artifact-registry.json"),
+    fetchArtifact("./data/compliance-workflows.json"),
+    fetchArtifact("./data/compliance-tool-registry.json"),
   ]);
 
   return loadFullGraphPhase(
     libraryBootstrap,
     templateRegistryRaw as TemplateRegistry,
+    officialArtifactRegistryRaw as OfficialArtifactRegistry,
+    complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry,
+    complianceToolRegistryRaw as ComplianceToolRegistry,
   );
 }
 
@@ -247,11 +298,26 @@ export async function loadRuntimeDatasetStaged(handlers: {
   includeFullGraph: boolean;
 }) {
   try {
-    const [libraryBootstrap, templateRegistryRaw] = await Promise.all([
+    const [
+      libraryBootstrap,
+      templateRegistryRaw,
+      officialArtifactRegistryRaw,
+      complianceWorkflowRegistryRaw,
+      complianceToolRegistryRaw,
+    ] = await Promise.all([
       loadLibrarySearchBootstrap(),
       fetchArtifact("./data/template-registry.json"),
+      fetchArtifact("./data/official-artifact-registry.json"),
+      fetchArtifact("./data/compliance-workflows.json"),
+      fetchArtifact("./data/compliance-tool-registry.json"),
     ]);
     const templateRegistry = templateRegistryRaw as TemplateRegistry;
+    const officialArtifactRegistry =
+      officialArtifactRegistryRaw as OfficialArtifactRegistry;
+    const complianceWorkflowRegistry =
+      complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry;
+    const complianceToolRegistry =
+      complianceToolRegistryRaw as ComplianceToolRegistry;
     const searchRuntime = createSearchRuntime(
       libraryBootstrap,
       templateRegistry,
@@ -260,6 +326,9 @@ export async function loadRuntimeDatasetStaged(handlers: {
     handlers.onSearchReady({
       runtime: searchRuntime,
       templateRegistry,
+      officialArtifactRegistry,
+      complianceWorkflowRegistry,
+      complianceToolRegistry,
       graphReady: false,
       librarySearchRevision: 0,
     });
@@ -269,6 +338,9 @@ export async function loadRuntimeDatasetStaged(handlers: {
     const fullBundle = await loadFullGraphPhase(
       libraryBootstrap,
       templateRegistry,
+      officialArtifactRegistry,
+      complianceWorkflowRegistry,
+      complianceToolRegistry,
       handlers.onShardLoaded,
     );
     handlers.onFullReady(fullBundle);

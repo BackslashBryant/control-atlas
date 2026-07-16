@@ -58,7 +58,7 @@ test('roadmap contains the Phase 0 through Phase 6 Control Atlas epics', () => {
     'Epic 1: Data Backbone',
     'Epic 2: Library \\+ Search',
     'Epic 3: Compare',
-    'Epic 4: Template Factory',
+    'Epic 4: Compliance Artifact and Template Nexus',
     'Epic 5: Patterns \\+ Glossary \\+ Start Here',
     'Epic 6: QA \\+ Accessibility \\+ Release',
   ]) {

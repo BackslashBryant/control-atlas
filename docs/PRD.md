@@ -238,9 +238,9 @@ Plain-language explanations of the authorization and audit concepts practitioner
 
 ---
 
-### Template Factory
+### Compliance Artifact and Template Nexus
 
-Blank templates generated in the browser. The selector leads with **what you need to produce**, not which framework to invoke. Every template includes plain-language prompts that explain what goes in each field and why.
+Control Atlas connects the work a practitioner needs to do with the authoritative source, official artifact, usable companion, compatible format, supporting tool, validation evidence, and next action. Official current resources appear first; official legacy resources and Control Atlas companions are labeled separately. The generator remains local to the browser and leads with **what you need to produce**, not which framework to invoke.
 
 **Templates:**
 1. Security Plan Starter
@@ -252,8 +252,11 @@ Blank templates generated in the browser. The selector leads with **what you nee
 7. POA&M Starter
 8. Assessment Planning Worksheet
 9. Continuous Monitoring Calendar
+10. Hardware Baseline
+11. Software Baseline
+12. PPSM Preparation Worksheet
 
-**Output formats:** Markdown (default), CSV, JSON, YAML
+**Output formats:** Markdown, CSV, JSON, YAML, XLSX, and DOCX as supported by each artifact
 
 **Selector flow:** Artifact type → Framework/baseline → Environment archetype → Optional includes
 
@@ -262,15 +265,20 @@ Blank templates generated in the browser. The selector leads with **what you nee
 **Every generated template includes:**
 - Plain-language prompts explaining what belongs in each section
 - Source and version metadata
+- Direct references to the corresponding official resources
+- A visible interoperability classification, evidence basis, and limitation
 - Required disclaimer
 - No pre-filled organizational data
+
+**Artifact and workflow catalog:** Each family explains what the artifact is, when it is used, who typically owns it, official current and legacy resources, related frameworks, compatible tools and formats, inputs, validation checks, related artifacts, and the next action. Compatibility is labeled as officially specified, Control Atlas round-trip verified, schema-aligned, community reference, historical, or unverified.
 
 **Privacy:** All generation is client-side. Nothing is transmitted or persisted.
 
 **Acceptance criteria:**
-- User reaches a generated Markdown download in three interactions or fewer
+- User reaches an authoritative resource or generated companion in three interactions or fewer
 - Every template field has a plain-language prompt, not just a label
-- Generated file includes disclaimer and source metadata
+- Generated file includes disclaimer, source metadata, and an interoperability limitation
+- Official resources appear before Control Atlas companions for the same artifact family
 - No user input is stored or transmitted
 
 ---
@@ -440,10 +448,19 @@ control_atlas_template:
   template_id: string
   name: string
   display_name: string
-  artifact_type: security_plan_starter | implementation_statement_worksheet | evidence_expectation_matrix | stig_evidence_checklist | inheritance_worksheet | reciprocity_checklist | poam_starter | assessment_planning_worksheet | conmon_calendar
+  artifact_type: security_plan_starter | implementation_statement_worksheet | evidence_expectation_matrix | stig_evidence_checklist | inheritance_worksheet | reciprocity_checklist | poam_starter | assessment_planning_worksheet | conmon_calendar | hardware_baseline | software_baseline | ppsm_preparation_worksheet
   supported_formats: [markdown | csv | json | yaml]
+  office_formats: [xlsx | docx]
   input_options: [framework | baseline | control_family | selected_controls | selected_stigs | environment_archetype]
   source_refs: [source_id]
+  official_resource_ids: [official_artifact_id]
+  compatibility:
+    classification: string
+    claim: string
+    limitations: string
+  provenance:
+    basis: string
+    verified_interchange: boolean
   disclaimer_required: true
 ```
 
@@ -765,6 +782,13 @@ Complete before any new feature work.
 **Story 4.7 — STIG Evidence Checklist**
 **Story 4.8 — Assessment Planning Worksheet**
 **Story 4.9 — Continuous Monitoring Calendar**
+**Story 4.10 — Hardware Baseline**
+**Story 4.11 — Software Baseline**
+**Story 4.12 — PPSM Preparation Worksheet**
+**Story 4.13 — Official artifact, workflow, and tool catalogs**
+- Official resources precede Control Atlas companions
+- Every compatibility claim carries an evidence level and limitation
+- Workflows connect tasks to inputs, outputs, validation, and next actions
 
 Each template story acceptance criteria: correct columns/sections per spec, plain-language prompts on every field, no user/org data required, download works.
 
@@ -844,7 +868,7 @@ The MVP is done when:
 5. Library is searchable by ID and plain language from any page.
 6. STIG → CCI → NIST trace is reachable in three clicks.
 7. Baseline comparator works for NIST and FedRAMP baselines.
-8. Template Factory generates all nine templates with plain-language field prompts.
+8. Template Factory generates all twelve artifact companions with plain-language field prompts and links each family to authoritative resources.
 9. Generated templates include disclaimer and source metadata. Nothing leaves the browser.
 10. Glossary covers all minimum terms with plain-language definitions.
 11. Provenance registry is live. Every mapping traces to a source or is labeled inferred.

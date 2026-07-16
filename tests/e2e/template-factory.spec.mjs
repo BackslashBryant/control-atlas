@@ -9,6 +9,10 @@ const registry = JSON.parse(readFileSync(join(__dirname, '../../data/template-re
 
 const DISCLAIMER_SNIPPET = 'open-source reference tool';
 
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
@@ -19,7 +23,9 @@ for (const template of registry.templates) {
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    const card = page.locator('.intent-card').filter({ hasText: template.display_name });
+    const card = page
+      .locator('#companion-templates')
+      .getByRole('button', { name: new RegExp(`^${escapeRegex(template.display_name)}\\b`) });
     await card.click();
     await expect(page.getByText('What this template is for')).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`templateType=${template.name}`));
@@ -82,7 +88,7 @@ test('tabular template exports a real .xlsx workbook client-side', async ({ page
   await page.locator("#field-format").selectOption("xlsx");
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Generate POA&M Starter' }).click();
+  await page.getByRole('button', { name: 'Generate POA&M Working Register' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.xlsx$/);
   await assertZipDownload(download);

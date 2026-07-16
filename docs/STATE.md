@@ -1,14 +1,12 @@
 # STATE
 
 ## Goal
-Execute `docs/plans/newbie-reframe-execution-plan.md` phase-by-phase. Phases 1-6 are shipped to `main`; Phase 7 is next.
+Complete `docs/plans/newbie-reframe-execution-plan.md` phase-by-phase. Implementation and owner review are complete across Phases 1-7.
 
 ## Now
-Phase 6 — Freshness — shipped to `main` in `74b1ddb` after owner approval.
+Phase 7 — Compliance artifact and template nexus — is the current release. It routes ten common tasks through 37 official artifacts, 11 supporting tools, and 12 Control Atlas companions. All companions earned an A professional-utility grade after structured generation, Office-package parsing, print-PDF rendering, and page-by-page visual review.
 
-The release classifies all 44 sources as auto-synced, curated, or link-out; schedules the existing build-time refresh weekly through a standing human-reviewed draft PR; adds MITRE to `refresh:data`; fails scheduled refreshes that fall back to committed DISA/MITRE snapshots; and surfaces version plus trustworthy current/stale wording on Sources and record-detail pages.
-
-Protected Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, and Pages Live Smoke passed on `main`. Live verification at `https://backslashbryant.github.io/control-atlas/?view=sources` confirmed the deployed Sources page shows update models, source versions, and `Current as of 2026-07-16` for refreshed sources.
+Official artifacts remain distinct from Control Atlas companions. Current FedRAMP schemas, legacy Office artifacts, public eMASS v3.22 schema evidence, STIG Viewer CSV guidance, DCSA baselines, and PPSM policy/training are cataloged with provenance, dates, formats, access, and limitations. No companion claims FedRAMP approval or current eMASS import compatibility.
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -32,7 +30,7 @@ Protected Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, and Pages Live 
 - Sparse catalogs remain visible with the existing Preview badge rather than being suppressed from search. Real crosswalk sourcing stays separate backlog work.
 
 ## Facts
-- Local verification is green: a live `npm run refresh:data` completed without fallback, the focused freshness/workflow tests passed, and `npm run precommit` passed with 111 Playwright tests plus one existing skip.
+- Phase 7 local verification includes 12 regenerated Office outputs, 12 print-QA PDFs, independent XLSX parsing, OOXML structure checks, registry/interoperability contracts, and page-by-page visual review.
 - An ignored local Tenable workflow referenced scripts and artifacts that no longer exist; it is not part of the tracked repository automation.
 - `refresh:data` now includes framework, OLIR, CCI, STIG observation, approved DISA STIG/SRG, and MITRE fetchers before freshness reconciliation and static-bundle generation.
 - Source freshness is evaluated from date-only UTC values so the warning boundary is deterministic across browsers and time zones.
@@ -46,6 +44,7 @@ Protected Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, and Pages Live 
 - Phase 5 base work shipped as `caac425`: named CSF 2.0 / SP 800-171 connection groups, inclusive `<= 75` coverage boundary, dynamic known-gap explanation.
 - Phase 5 spikes shipped as `129a0e0`: three source views over one manifest, purpose hierarchy relabel/order, shareable `sourceView` route state, purpose-aligned matrix labels, sidebar connection-group jump navigation, unit and E2E contract updates, phase/reference documentation.
 - Phase 6 shipped as `74b1ddb`: per-source freshness models and metadata, weekly human-reviewed refresh PR automation, fail-closed scheduled synchronization, newcomer-facing current/stale wording, refreshed public artifacts, and full contract/E2E coverage.
+- Phase 7 completed: official-first task/artifact/tool catalogs, 12 A-grade companions, honest compatibility boundaries, Office/print polish, and full contract coverage.
 
 ## Open items
-- Begin Phase 7 templates professionalism work from its execution-plan kickoff.
+- No remaining Newbie-Reframe execution phases.

@@ -58,6 +58,8 @@ test('xlsx export is a valid zip with a workbook, a data sheet, and a Notes shee
 
   const workbook = strFromU8(entries['xl/workbook.xml']);
   assert.match(workbook, /<sheet /, 'workbook must declare at least one sheet');
+  assert.match(workbook, /name="Field Guide"/, 'workbook must include a compact field dictionary');
+  assert.match(workbook, /name="Read Me"/, 'workbook must include instructions and provenance');
 
   // The Notes sheet always carries the disclaimer; find it in any worksheet.
   const allSheets = names
@@ -126,7 +128,7 @@ test('xlsx round-trips through a real spreadsheet reader (Excel-compatible)', as
     // rows, so the contract is that the header row survives the round-trip.
     assert.ok(rows.length >= 1, 'reader must recover the header row');
     assert.ok(
-      rows[0].some((cell) => String(cell).includes('POA&M ID')),
+      rows[0].some((cell) => String(cell).includes('externalUid')),
       'header row must survive the round-trip',
     );
   } finally {
@@ -164,6 +166,35 @@ test('xlsx worksheets set bounded column widths, freeze the header row, and styl
   assert.match(styles, /<alignment vertical="top" wrapText="1"\/>/, 'header style must wrap text');
   assert.match(strFromU8(entries['[Content_Types].xml']), /\/xl\/styles\.xml/, 'styles part must be declared');
   assert.match(strFromU8(entries['xl/_rels/workbook.xml.rels']), /relationships\/styles/, 'workbook must relate to styles');
+  assert.match(sheet1, /<showGridLines val="0"\/>/, 'explicit workbook styling should replace default gridlines');
+  assert.match(sheet1, /<autoFilter ref=/, 'tracker sheets must expose header filters');
+  assert.match(sheet1, /<dataValidations count=/, 'controlled tracker fields must expose dropdown validation');
+  assert.match(sheet1, /Controlled value/, 'POA&M controlled fields must explain their dropdown');
+  assert.match(styles, /17365D/, 'header style must use the restrained navy palette');
+  assert.match(sheet1, /<pageSetUpPr fitToPage="1"\/>/, 'print scaling must explicitly enable fit-to-page');
+  assert.match(sheet1, /<pageSetup paperSize="1" orientation="landscape" fitToWidth="1" fitToHeight="0"\/>/, 'worksheets must print one landscape Letter page wide');
+  assert.match(sheet1, /Control Atlas reference aid/, 'printed worksheets must identify their provenance in the footer');
+  const workbook = strFromU8(entries['xl/workbook.xml']);
+  assert.match(workbook, /_xlnm\.Print_Titles/, 'printed worksheets must repeat the header row');
+  assert.match(workbook, /\$1:\$1/, 'row 1 must be the repeated print title');
+});
+
+test('wide XLSX registers split into print-readable keyed sheets', () => {
+  const bytes = docToXlsx(buildDoc('poam_starter'));
+  const entries = unzipSync(bytes);
+  const workbook = strFromU8(entries['xl/workbook.xml']);
+  const sheetNames = [...workbook.matchAll(/<sheet name="([^"]+)"/g)].map((match) => match[1]);
+  assert.ok(sheetNames.length >= 5, '27-column POA&M register should split into keyed views plus Read Me');
+
+  const dataSheets = Object.keys(entries)
+    .filter((name) => name.startsWith('xl/worksheets/'))
+    .map((name) => strFromU8(entries[name]))
+    .filter((xml) => /<autoFilter ref=/.test(xml));
+  for (const xml of dataSheets) {
+    const firstRow = xml.match(/<row r="1".*?<\/row>/)?.[0] || '';
+    const columns = [...firstRow.matchAll(/<c r="([A-Z]+)1"/g)].map((match) => match[1]);
+    assert.ok(columns.length <= 8, `print view exposes ${columns.length} columns instead of at most 8`);
+  }
 });
 
 test('docx tables declare a fixed-width grid and a repeating header row', () => {
@@ -188,6 +219,19 @@ test('docx tables declare a fixed-width grid and a repeating header row', () => 
     const sum = [...grid.matchAll(/w:w="(\d+)"/g)].reduce((total, m) => total + Number(m[1]), 0);
     assert.equal(sum, 9360, 'gridCol widths must sum to the usable page width');
   }
+
+  assert.match(document, /w:pStyle w:val="Title"/, 'DOCX must use a real title style');
+  assert.match(document, /w:pStyle w:val="Heading1"/, 'DOCX must use a heading hierarchy');
+  assert.doesNotMatch(document, /\*\*/, 'DOCX must not expose markdown emphasis markers');
+
+  const entries = unzipSync(bytes);
+  assert.ok(entries['word/styles.xml'], 'DOCX must include styles.xml');
+  assert.ok(entries['word/numbering.xml'], 'DOCX must include real list numbering');
+  assert.ok(entries['word/header1.xml'], 'DOCX must include a running header');
+  assert.ok(entries['word/footer1.xml'], 'DOCX must include a page-number footer');
+  assert.match(document, /<w:numPr>/, 'instruction lists must use native Word bullets');
+  assert.doesNotMatch(document, /<w:t[^>]*>• /, 'bullet glyphs must not be embedded as body text');
+  assert.match(document, /<w:t[^>]*>Response<\/w:t>/, 'pipe-delimited SSP prompts must render as fillable field tables');
 });
 
 test('xml special characters in cell values are escaped, not injected', () => {

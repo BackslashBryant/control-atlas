@@ -48,6 +48,8 @@ scripts/*
 !scripts/build-framework-data.mjs
 !scripts/audit-coverage.mjs
 !scripts/check-data-size.mjs
+!scripts/generate-template-qa.mjs
+!scripts/render-template-print-qa.mjs
 !scripts/fetch-ccis.mjs
 !scripts/fetch-olir-mappings.mjs
 !scripts/fetch-framework-catalogs.mjs
