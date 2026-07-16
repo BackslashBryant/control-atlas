@@ -1,12 +1,17 @@
-name: Nightly Data Refresh
+name: Weekly Data Refresh
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '17 7 * * 3'
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: write
+
+concurrency:
+  group: source-refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -19,34 +24,30 @@ jobs:
       - run: npm ci || npm install
       - name: Dependency audit
         run: npm run audit:deps
-      - name: Refresh data artifacts
+      - name: Refresh validated build-time data
         run: npm run refresh:data
-      - name: Build staged static site
-        run: npm run build:site
-      - name: License check
-        run: npm run license:check
-      - name: Runtime checks
-        run: npm run test:browser && npm run smoke:dom
-      - name: Public verification
-        run: npm run verify:public
       - name: Install Playwright browser
         run: npx playwright install chromium
-      - name: Accessibility verification
-        run: npm run test:a11y
-      - name: Generate SBOM
+      - name: Run full repository gate
+        run: npm run precommit
+      - name: Generate review SBOM
         run: npm run sbom:generate
       - uses: actions/upload-artifact@v4
         with:
-          name: nightly-sbom-cdx-json
+          name: source-refresh-sbom-cdx-json
           path: artifacts/sbom.cdx.json
-      - name: Commit data changes
-        run: |
-          if git diff --quiet; then
-            echo "No data changes to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data maps
-          git commit -m "chore(data): nightly refresh [skip ci]"
-          git push
+      - name: Summarize source changes
+        run: node scripts/report-refresh-diff.mjs refresh-pr-body.md
+      - name: Create or update the human-review PR
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: |
+            data/**
+            maps/**
+          branch: automation/source-refresh
+          commit-message: 'chore(data): refresh public source snapshots'
+          title: 'chore(data): review refreshed public source snapshots'
+          body-path: refresh-pr-body.md
+          draft: always-true
+          delete-branch: true
+          labels: data-refresh

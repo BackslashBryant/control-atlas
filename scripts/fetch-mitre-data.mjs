@@ -204,6 +204,9 @@ export async function fetchMitreData(options = {}) {
 
 async function main() {
   const result = await fetchMitreData();
+  if (result.fallbackMode && process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') {
+    throw new Error(`MITRE refresh required a live upstream fetch but used ${result.fallbackMode}`);
+  }
   writeFileSync(COMMITTED.enterprise, `${JSON.stringify(result.enterprise, null, 2)}\n`, 'utf8');
   writeFileSync(COMMITTED.ics, `${JSON.stringify(result.ics, null, 2)}\n`, 'utf8');
   writeFileSync(COMMITTED.d3fend, `${JSON.stringify(result.d3fend, null, 2)}\n`, 'utf8');

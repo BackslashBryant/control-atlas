@@ -84,9 +84,7 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(pagesWorkflow, /npm run typecheck/);
   assert.match(pagesWorkflow, /npm run test:a11y/);
   assert.match(pagesWorkflow, /npm run test:e2e/);
-  assert.match(nightlyWorkflow, /npm run build:site/);
-  assert.match(nightlyWorkflow, /npm run license:check/);
-  assert.match(nightlyWorkflow, /npm run test:a11y/);
+  assert.match(nightlyWorkflow, /npm run precommit/);
 });
 
 test('direct ship scripts cover push retry, remote checks wait, and main ship flow', () => {

@@ -25,6 +25,7 @@ import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
+import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks.ts";
 import {
   ExpandableChipList,
@@ -331,8 +332,20 @@ export function SourcesPage(props: {
                   <strong>{selectedSource.version}</strong>
                 </div>
                 <div>
-                  <span>Retrieved</span>
-                  <strong>{selectedSource.retrieved_at}</strong>
+                  <span>Current as of</span>
+                  <strong>{selectedSource.last_checked}</strong>
+                </div>
+                <div>
+                  <span>Update model</span>
+                  <strong>{sourceSyncLabel(selectedSource.sync_model)}</strong>
+                </div>
+                <div>
+                  <span>Last imported</span>
+                  <strong>
+                    {selectedSource.sync_model === "link_out"
+                      ? "Official link only — not hosted by Control Atlas"
+                      : selectedSource.last_imported}
+                  </strong>
                 </div>
                 <div>
                   <span>Parser</span>

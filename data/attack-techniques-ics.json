@@ -3,7 +3,7 @@
   "source_key": "mitre-attack-ics",
   "source_artifact": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
   "source_version": "2026-05-12",
-  "snapshot_date": "2026-06-19",
+  "snapshot_date": "2026-07-16",
   "checksum": "sha256:c4d304f9736247390287f54d761a13c8ead2ebf14ee68adea4e012a6dce35192",
   "provenance": "MITRE ATT&CK for ICS STIX bundle",
   "records": [
@@ -27,7 +27,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0800"
       }
@@ -52,7 +52,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0801"
       }
@@ -77,7 +77,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0802"
       }
@@ -102,7 +102,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0806"
       }
@@ -127,7 +127,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0807"
       }
@@ -152,7 +152,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0809"
       }
@@ -177,7 +177,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0811"
       }
@@ -202,7 +202,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0813"
       }
@@ -227,7 +227,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0814"
       }
@@ -252,7 +252,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0815"
       }
@@ -277,7 +277,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0816"
       }
@@ -302,7 +302,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0817"
       }
@@ -327,7 +327,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0819"
       }
@@ -352,7 +352,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0820"
       }
@@ -377,7 +377,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0821"
       }
@@ -402,7 +402,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0822"
       }
@@ -427,7 +427,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0823"
       }
@@ -452,7 +452,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0826"
       }
@@ -477,7 +477,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0827"
       }
@@ -502,7 +502,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0828"
       }
@@ -527,7 +527,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0829"
       }
@@ -552,7 +552,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0830"
       }
@@ -577,7 +577,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0831"
       }
@@ -602,7 +602,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0832"
       }
@@ -627,7 +627,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0834"
       }
@@ -652,7 +652,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0835"
       }
@@ -677,7 +677,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0836"
       }
@@ -702,7 +702,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0837"
       }
@@ -727,7 +727,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0838"
       }
@@ -752,7 +752,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0840"
       }
@@ -777,7 +777,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0842"
       }
@@ -802,7 +802,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0843"
       }
@@ -825,7 +825,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0843.001"
       }
@@ -848,7 +848,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0843.002"
       }
@@ -871,7 +871,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0843.003"
       }
@@ -896,7 +896,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0845"
       }
@@ -921,7 +921,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0846"
       }
@@ -944,7 +944,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0846.001"
       }
@@ -967,7 +967,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0846.002"
       }
@@ -990,7 +990,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0846.003"
       }
@@ -1015,7 +1015,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0847"
       }
@@ -1040,7 +1040,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0848"
       }
@@ -1065,7 +1065,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0849"
       }
@@ -1091,7 +1091,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0851"
       }
@@ -1116,7 +1116,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0852"
       }
@@ -1141,7 +1141,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0853"
       }
@@ -1167,7 +1167,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0858"
       }
@@ -1193,7 +1193,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0859"
       }
@@ -1218,7 +1218,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0860"
       }
@@ -1243,7 +1243,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0861"
       }
@@ -1268,7 +1268,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0862"
       }
@@ -1293,7 +1293,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0863"
       }
@@ -1318,7 +1318,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0864"
       }
@@ -1343,7 +1343,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0865"
       }
@@ -1369,7 +1369,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0866"
       }
@@ -1394,7 +1394,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0867"
       }
@@ -1419,7 +1419,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0868"
       }
@@ -1444,7 +1444,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0869"
       }
@@ -1469,7 +1469,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0871"
       }
@@ -1494,7 +1494,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0872"
       }
@@ -1519,7 +1519,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0873"
       }
@@ -1542,7 +1542,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0873.001"
       }
@@ -1568,7 +1568,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0874"
       }
@@ -1593,7 +1593,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0877"
       }
@@ -1618,7 +1618,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0878"
       }
@@ -1643,7 +1643,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0879"
       }
@@ -1668,7 +1668,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0880"
       }
@@ -1693,7 +1693,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0881"
       }
@@ -1718,7 +1718,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0882"
       }
@@ -1743,7 +1743,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0883"
       }
@@ -1768,7 +1768,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0884"
       }
@@ -1793,7 +1793,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0885"
       }
@@ -1819,7 +1819,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0886"
       }
@@ -1845,7 +1845,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0887"
       }
@@ -1870,7 +1870,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0888"
       }
@@ -1895,7 +1895,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0889"
       }
@@ -1920,7 +1920,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0890"
       }
@@ -1945,7 +1945,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0892"
       }
@@ -1970,7 +1970,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0893"
       }
@@ -1995,7 +1995,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0894"
       }
@@ -2018,7 +2018,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T0895"
       }
@@ -2041,7 +2041,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1691"
       }
@@ -2064,7 +2064,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1691.001"
       }
@@ -2087,7 +2087,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1691.002"
       }
@@ -2111,7 +2111,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1692"
       }
@@ -2135,7 +2135,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1692.001"
       }
@@ -2159,7 +2159,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1692.002"
       }
@@ -2184,7 +2184,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1693"
       }
@@ -2209,7 +2209,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1693.001"
       }
@@ -2234,7 +2234,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1693.002"
       }
@@ -2258,7 +2258,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1694"
       }
@@ -2282,7 +2282,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1694.001"
       }
@@ -2306,7 +2306,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1694.002"
       }
@@ -2329,7 +2329,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1695"
       }
@@ -2352,7 +2352,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1695.001"
       }
@@ -2375,7 +2375,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1695.002"
       }
@@ -2398,7 +2398,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-06-19",
+        "snapshot_date": "2026-07-16",
         "version": "2026-05-12",
         "locator": "ics-attack.json#T1695.003"
       }
