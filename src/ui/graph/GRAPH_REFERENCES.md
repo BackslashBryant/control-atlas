@@ -57,18 +57,18 @@ Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK
 
 ## Control Atlas source hierarchy/reference set
 
-The source hierarchy and inventory we locked in should be treated as the map foundation, not just reference material. It defines the nine top-level categories, dispositions, and default-map gating model: Authority, Governance/Risk Framework, Control Catalog/Requirement Set, Baseline/Overlay/Profile, Assessment/Scoping, Implementation/Configuration, Control Mapping/Crosswalk, Threat/Defensive Mapping, and Supporting Reference. 
+The source inventory is one model with three views. Purpose is the canonical hierarchy and defines nine top-level categories, dispositions, and the default-map gating model: Rules, Frameworks, Controls, Baselines, Implementation, Assessment, Mappings, Threat / Defense, and Supporting Sources. The default Atlas interface groups the same records by novice question; the RMF lifecycle is an alternate guided view. Managerial, Operational, and Technical are control tags, not document categories.
 
 Key source families from that manifest:
 
 | Family                                   | Examples                                                                                                          |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Authority**                            | FISMA, OMB A-130, 32 CFR Part 2002, FIPS 199, FIPS 200, CNSSI 1253, DoDI 8500.01, DoDI 8510.01, FAR/DFARS clauses |
-| **Governance / Risk Framework**          | NIST RMF, NIST CSF 2.0, AI RMF, DoD RAI, DoD Zero Trust                                                           |
-| **Control Catalog / Requirement Set**    | SP 800-53, SP 800-171, SP 800-172, SSDF                                                                           |
-| **Baseline / Overlay / Program Profile** | SP 800-53B, FedRAMP Rev. 5, CMMC, DoD Zero Trust overlays                                                         |
-| **Assessment / Scoping**                 | SP 800-53A, SP 800-171A, SP 800-172A, CMMC assessment/scoping guides, FedRAMP artifacts                           |
-| **Implementation / Configuration**       | DISA SRGs, DISA STIGs, STIG/SRG CCI references                                                                    |
-| **Control Mapping / Crosswalk**          | DISA CCI, CCI-to-NIST mappings, CSF mappings, OLIR                                                                |
-| **Threat / Defensive Mapping**           | ATT&CK Enterprise, ATT&CK ICS, D3FEND                                                                             |
-| **Supporting Reference**                 | NARA CUI Registry, STIG Viewer, STIG Manager                                                                      |
+| **Rules**                                | FISMA, OMB A-130, 32 CFR Part 2002, FIPS 199, FIPS 200, CNSSI 1253, DoDI 8500.01, DoDI 8510.01, FAR/DFARS clauses |
+| **Frameworks**                           | NIST RMF, NIST CSF 2.0, AI RMF, DoD RAI, DoD Zero Trust                                                           |
+| **Controls**                             | SP 800-53, SP 800-171, SP 800-172, SSDF                                                                           |
+| **Baselines**                            | SP 800-53B, FedRAMP Rev. 5, CMMC, DoD Zero Trust overlays                                                         |
+| **Implementation**                       | DISA SRGs, DISA STIGs, STIG/SRG CCI references                                                                    |
+| **Assessment**                           | SP 800-53A, SP 800-171A, SP 800-172A, CMMC assessment/scoping guides, FedRAMP artifacts                           |
+| **Mappings**                             | DISA CCI, CCI-to-NIST mappings, CSF mappings, OLIR                                                                |
+| **Threat / Defense**                     | ATT&CK Enterprise, ATT&CK ICS, D3FEND                                                                             |
+| **Supporting Sources**                   | NARA CUI Registry, STIG Viewer, STIG Manager                                                                      |

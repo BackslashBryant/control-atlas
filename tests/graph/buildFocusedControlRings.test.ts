@@ -7,6 +7,7 @@ import {
   expandFocusedControlCluster,
 } from "../../src/ui/graph/buildFocusedControlRings.ts";
 import {
+  buildSourceViewModel,
   buildSourceHierarchyModel,
   buildVisibleRelationshipModel,
 } from "../../src/ui/graph/buildVisibleRelationshipModel.ts";
@@ -55,7 +56,7 @@ test("AC-2 focused model keeps the control dominant and clusters dense groups", 
   );
 });
 
-test("default visible relationship model is the nine-tier hierarchy", () => {
+test("purpose view is the nine-part canonical hierarchy", () => {
   const model = buildSourceHierarchyModel();
   assert.equal(model.layoutMode, "hierarchy");
   assert.equal(model.nodes.length, 9);
@@ -63,8 +64,27 @@ test("default visible relationship model is the nine-tier hierarchy", () => {
   assert.equal(model.nodes.some((node) => node.id.startsWith("source:")), false);
 });
 
-test("visible relationship model resolves AC-2 and empty map modes", () => {
-  assert.equal(buildVisibleRelationshipModel({ nodeId: "" }).nodes.length, 9);
+test("source views expose novice questions by default and RMF as an alternate", () => {
+  const novice = buildVisibleRelationshipModel({ nodeId: "" });
+  assert.equal(novice.nodes.length, 6);
+  assert.deepEqual(
+    novice.nodes.map((node) => node.label),
+    [
+      "Why does this apply?",
+      "What must I do?",
+      "Which requirements apply?",
+      "How do I implement it?",
+      "How do I test it?",
+      "How does it map elsewhere?",
+    ],
+  );
+  assert.deepEqual(
+    buildSourceViewModel("rmf").nodes.map((node) => node.label),
+    ["Prepare", "Categorize", "Select", "Implement", "Assess", "Authorize", "Monitor"],
+  );
+});
+
+test("visible relationship model resolves AC-2 and focused map modes", () => {
   assert.equal(
     buildVisibleRelationshipModel({ nodeId: "nist-800-53:AC-2" }).centerNodeId,
     "nist-800-53:AC-2",

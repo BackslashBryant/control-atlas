@@ -7,6 +7,25 @@ import { ProvenanceTerm } from "./ProvenanceTerm";
 
 const PAGE_SIZE = 10;
 
+export type RelationshipGroup = {
+  id: string;
+  label: string;
+  description: string;
+  items: Array<{
+    counterpart: {
+      id: string;
+      label?: string;
+      metadata?: {
+        item_id?: string;
+        title?: string;
+        description?: string;
+        catalog_id?: string;
+      };
+    };
+    edge: { relationship_type?: string };
+  }>;
+};
+
 export function formatConnectionRollup(
   groups: Array<{ label: string; items: unknown[] }>,
 ) {
@@ -22,21 +41,11 @@ export function formatConnectionRollup(
 }
 
 export function RelationshipGroupsSection(props: {
-  groups: Array<{
-    id: string;
-    label: string;
-    description: string;
-    items: Array<{
-      counterpart: {
-        id: string;
-        label?: string;
-        metadata?: { item_id?: string; title?: string; description?: string; catalog_id?: string };
-      };
-      edge: { relationship_type?: string };
-    }>;
-  }>;
+  groups: RelationshipGroup[];
   formatRelationshipLabel: (edge: { relationship_type?: string }) => string;
   onOpenNode: (nodeId: string) => void;
+  onOpenGroupIdsChange?: (groupIds: string[]) => void;
+  openGroupIds?: string[];
   sourceTrustSummary: (source: unknown) => string;
   source: unknown;
 }) {
@@ -58,7 +67,9 @@ export function RelationshipGroupsSection(props: {
       <Accordion.Root
         className="accordion-root relationship-groups-accordion"
         defaultValue={defaultOpen}
+        onValueChange={props.onOpenGroupIdsChange}
         type="multiple"
+        value={props.openGroupIds}
       >
         {props.groups.map((group) => (
           <RelationshipGroupItem
@@ -76,19 +87,7 @@ export function RelationshipGroupsSection(props: {
 }
 
 function RelationshipGroupItem(props: {
-  group: {
-    id: string;
-    label: string;
-    description: string;
-    items: Array<{
-      counterpart: {
-        id: string;
-        label?: string;
-        metadata?: { item_id?: string; title?: string; description?: string; catalog_id?: string };
-      };
-      edge: { relationship_type?: string };
-    }>;
-  };
+  group: RelationshipGroup;
   formatRelationshipLabel: (edge: { relationship_type?: string }) => string;
   onOpenNode: (nodeId: string) => void;
   sourceTrustSummary: (source: unknown) => string;
@@ -100,7 +99,11 @@ function RelationshipGroupItem(props: {
   const remaining = group.items.length - visibleItems.length;
 
   return (
-    <Accordion.Item className="accordion-item" value={group.id}>
+    <Accordion.Item
+      className="accordion-item"
+      id={`connection-group-${group.id}`}
+      value={group.id}
+    >
       <Accordion.Header>
         <Accordion.Trigger className="accordion-trigger relationship-group-trigger">
           <span>
@@ -162,6 +165,44 @@ function RelationshipGroupItem(props: {
         ) : null}
       </Accordion.Content>
     </Accordion.Item>
+  );
+}
+
+export function defaultOpenRelationshipGroups(
+  groups: RelationshipGroup[],
+): string[] {
+  const totalItems = groups.reduce((sum, group) => sum + group.items.length, 0);
+  return totalItems > 0 && totalItems <= PAGE_SIZE && groups[0]
+    ? [groups[0].id]
+    : [];
+}
+
+export function RelationshipGroupRollupNav(props: {
+  groups: RelationshipGroup[];
+  onJump: (groupId: string) => void;
+}) {
+  return (
+    <nav aria-label="Connection groups" className="connection-group-nav">
+      <ul>
+        {props.groups.map((group) => (
+          <li key={group.id}>
+            <button
+              className="connection-group-nav-link"
+              onClick={() => props.onJump(group.id)}
+              type="button"
+            >
+              <span>{group.label}</span>
+              <strong>
+                {group.items.length}
+                <span className="visually-hidden">
+                  {` connection${group.items.length === 1 ? "" : "s"}`}
+                </span>
+              </strong>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 

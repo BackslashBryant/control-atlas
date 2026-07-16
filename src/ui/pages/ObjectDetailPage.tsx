@@ -13,7 +13,7 @@ import {
   IconShieldCheck,
   IconSourceCode,
 } from "@tabler/icons-react";
-import { Fragment, useMemo, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
@@ -22,7 +22,9 @@ import { generateTemplate } from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
   ExpandableChipList,
+  RelationshipGroupRollupNav,
   RelationshipGroupsSection,
+  defaultOpenRelationshipGroups,
 } from "../components/ExpandableRelationshipGroup";
 import {
   RelationshipExplorer,
@@ -153,6 +155,15 @@ export function ObjectDetailPage(props: {
   const grouped = node
     ? groupRelationships(edges, node.id, bundle.runtime)
     : [];
+  const relationshipGroupSignature = grouped
+    .map((group) => `${group.id}:${group.items.length}`)
+    .join("|");
+  const [openRelationshipGroupIds, setOpenRelationshipGroupIds] = useState<
+    string[]
+  >([]);
+  useEffect(() => {
+    setOpenRelationshipGroupIds(defaultOpenRelationshipGroups(grouped));
+  }, [relationshipGroupSignature]);
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
     : null;
@@ -230,6 +241,26 @@ export function ObjectDetailPage(props: {
   ];
 
   const relatedGlossaryTerms = glossaryTermsForDocument(document);
+
+  function jumpToRelationshipGroup(groupId: string) {
+    setOpenRelationshipGroupIds((current) =>
+      current.includes(groupId) ? current : [...current, groupId],
+    );
+    window.setTimeout(() => {
+      const target = window.document.getElementById(
+        `connection-group-${groupId}`,
+      );
+      target?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+      target
+        ?.querySelector<HTMLElement>(".relationship-group-trigger")
+        ?.focus({ preventScroll: true });
+    }, 0);
+  }
 
   return (
     <section className="detail-page">
@@ -497,6 +528,8 @@ export function ObjectDetailPage(props: {
               onOpenNode={(nodeId) =>
                 onOpenNode(nodeId, state.from || "search")
               }
+              onOpenGroupIdsChange={setOpenRelationshipGroupIds}
+              openGroupIds={openRelationshipGroupIds}
               source={source}
               sourceTrustSummary={sourceTrustSummary}
             />
@@ -570,6 +603,17 @@ export function ObjectDetailPage(props: {
               <p>No published connections yet.</p>
             )}
           </SummaryCard>
+          {grouped.length ? (
+            <SummaryCard title="Connection groups" tone="trust">
+              <p className="support-meta">
+                Jump to a named group. The full lists stay in the main column.
+              </p>
+              <RelationshipGroupRollupNav
+                groups={grouped}
+                onJump={jumpToRelationshipGroup}
+              />
+            </SummaryCard>
+          ) : null}
           <SummaryCard title="Source support" tone="trust">
             <p>{sourceTrustSummary(source)}</p>
             <p className="support-meta">

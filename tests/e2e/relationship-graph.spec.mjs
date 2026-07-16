@@ -34,7 +34,7 @@ test("atlas map: default starter state without selected node", async ({
 
   await expect(page.getByRole("heading", { name: "Where would you like to start?", level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Framework Map" }),
+    page.getByRole("button", { name: "Source guide" }),
   ).toBeVisible();
 });
 

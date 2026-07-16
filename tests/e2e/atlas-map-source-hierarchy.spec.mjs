@@ -9,18 +9,18 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("Atlas Map starts with nine ordered source categories", async ({ page }) => {
+test("Atlas Map defaults to novice questions and offers purpose and RMF views", async ({ page }) => {
   await page.goto("/#/atlas-map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Framework Map" }).click();
+  await page.getByRole("button", { name: "Source guide" }).click();
   await expect(page).toHaveURL(/node=foundation/);
 
   await expect(
     page.getByText(
-      "Nine layers make up federal cyber compliance. Select a layer to open it and see the sources inside.",
+      "Start with the question you are trying to answer. Each path opens the same trusted source model in a more useful order.",
     ),
   ).toBeVisible();
   await expect(
@@ -31,19 +31,12 @@ test("Atlas Map starts with nine ordered source categories", async ({ page }) =>
   ).toBeVisible();
 
   const nodes = page.getByRole("group", { name: "Map nodes" }).getByRole("button");
-  await expect(nodes).toHaveCount(9);
-  await expect(page.getByRole("button", { name: "Authority", exact: true })).toBeVisible();
+  await expect(nodes).toHaveCount(6);
   await expect(
-    page.getByRole("button", {
-      name: "Governance / Risk Framework",
-      exact: true,
-    }),
+    page.getByRole("button", { name: "Why does this apply?", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", {
-      name: "Control Catalog / Requirement Set",
-      exact: true,
-    }),
+    page.getByRole("button", { name: "What must I do?", exact: true }),
   ).toBeVisible();
   await expect(
     page
@@ -51,27 +44,40 @@ test("Atlas Map starts with nine ordered source categories", async ({ page }) =>
       .getByRole("button", { name: "NIST SP 800-53 Rev. 5", exact: true }),
   ).toHaveCount(0);
 
-  const authorityRank = Number(
-    await page.getByRole("button", { name: "Authority", exact: true }).getAttribute("data-layout-rank"),
-  );
-  const governanceRank = Number(
-    await page
-      .getByRole("button", { name: "Governance / Risk Framework", exact: true })
-      .getAttribute("data-layout-rank"),
-  );
-  const catalogRank = Number(
-    await page
-      .getByRole("button", {
-        name: "Control Catalog / Requirement Set",
-        exact: true,
-      })
-      .getAttribute("data-layout-rank"),
-  );
-  expect(authorityRank).toBeLessThan(governanceRank);
-  expect(governanceRank).toBeLessThan(catalogRank);
   await expect(
-    page.getByRole("button", { name: "Supporting Reference", exact: true }),
+    page.getByRole("button", { name: "Novice questions", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("button", { name: "Purpose", exact: true }).click();
+  await expect(page).toHaveURL(/sourceView=purpose/);
+  await expect(nodes).toHaveCount(9);
+  expect(await nodes.allTextContents()).toEqual([
+    "Rules",
+    "Frameworks",
+    "Controls",
+    "Baselines",
+    "Implementation",
+    "Assessment",
+    "Mappings",
+    "Threat / Defense",
+    "Supporting Sources",
+  ]);
+  await expect(
+    page.getByRole("button", { name: "Supporting Sources", exact: true }),
   ).toHaveAttribute("data-deemphasized", "true");
+
+  await page.getByRole("button", { name: "RMF lifecycle", exact: true }).click();
+  await expect(page).toHaveURL(/sourceView=rmf/);
+  await expect(nodes).toHaveCount(7);
+  expect(await nodes.allTextContents()).toEqual([
+    "Prepare",
+    "Categorize",
+    "Select",
+    "Implement",
+    "Assess",
+    "Authorize",
+    "Monitor",
+  ]);
 });
 
 test("Atlas Map search opens a focused control map from the default route", async ({
@@ -82,7 +88,7 @@ test("Atlas Map search opens a focused control map from the default route", asyn
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Framework Map" }).click();
+  await page.getByRole("button", { name: "Source guide" }).click();
   await expect(page).toHaveURL(/node=foundation/);
 
   await page.getByRole("searchbox", { name: "Search Atlas Map" }).fill("AC-2");
@@ -104,13 +110,15 @@ test("selecting a layer drills into its sources and back", async ({
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Framework Map" }).click();
+  await page.getByRole("button", { name: "Source guide" }).click();
   await expect(page).toHaveURL(/node=foundation/);
+
+  await page.getByRole("button", { name: "Purpose", exact: true }).click();
 
   await page
     .getByRole("group", { name: "Map nodes" })
     .getByRole("button", {
-      name: "Control Catalog / Requirement Set",
+      name: "Controls",
       exact: true,
     })
     .click();
@@ -119,7 +127,7 @@ test("selecting a layer drills into its sources and back", async ({
   await expect(page).toHaveURL(/node=hierarchy(%3A|:)control-catalog-requirement-set/);
   await expect(
     page.getByRole("heading", {
-      name: "Control Catalog / Requirement Set",
+      name: "Controls",
       level: 1,
     }),
   ).toBeVisible();
@@ -139,8 +147,8 @@ test("selecting a layer drills into its sources and back", async ({
     detail.getByRole("link", { name: /Open official source/ }),
   ).toBeVisible();
 
-  // Breadcrumb returns to the nine-layer overview.
-  await page.getByRole("button", { name: "← All layers" }).click();
+  // Breadcrumb returns to the nine-part purpose overview.
+  await page.getByRole("button", { name: "← All purposes" }).click();
   await expect(
     page.getByRole("group", { name: "Map nodes" }).getByRole("button"),
   ).toHaveCount(9);

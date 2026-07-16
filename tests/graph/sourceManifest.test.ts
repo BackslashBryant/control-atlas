@@ -4,6 +4,7 @@ import test from "node:test";
 
 import { classifySource } from "../../src/ui/graph/classifySource.ts";
 import { SOURCE_SEED_MANIFEST } from "../../src/ui/graph/sourceSeedManifest.ts";
+import { SOURCE_VIEW_DEFINITIONS } from "../../src/ui/graph/sourceViews.ts";
 
 const VALID_TIERS = new Set([
   "authority",
@@ -35,6 +36,22 @@ test("every source has the complete manifest contract", () => {
     assert.ok(source.artifactName);
     assert.ok(source.publisher);
     assert.equal(VALID_TIERS.has(source.hierarchyTier), true);
+    assert.ok(source.noviceQuestions.length > 0, source.sourceId);
+    assert.ok(source.rmfLifecycle.length > 0, source.sourceId);
+    assert.equal(
+      source.noviceQuestions.every((question) =>
+        SOURCE_VIEW_DEFINITIONS.novice.groups.some((group) => group.id === question),
+      ),
+      true,
+      source.sourceId,
+    );
+    assert.equal(
+      source.rmfLifecycle.every((step) =>
+        SOURCE_VIEW_DEFINITIONS.rmf.groups.some((group) => group.id === step),
+      ),
+      true,
+      source.sourceId,
+    );
     assert.equal(VALID_DISPOSITIONS.has(source.disposition), true);
     assert.match(source.canonicalUrl, /^(https:\/\/|registry-local-only$)/);
     assert.equal(ids.has(source.sourceId), false, source.sourceId);
@@ -57,6 +74,18 @@ test("publisher metadata does not replace hierarchy classification", () => {
     classifySource("nist-sp-800-53-r5").hierarchyTier,
     "control-catalog-requirement-set",
   );
+});
+
+test("purpose stays canonical while novice and RMF memberships are alternate views", () => {
+  const fips199 = classifySource("fips-199");
+  assert.equal(fips199.hierarchyTier, "authority");
+  assert.deepEqual(fips199.noviceQuestions, ["why-apply"]);
+  assert.ok(fips199.rmfLifecycle.includes("categorize"));
+
+  const assessment = classifySource("nist-sp-800-53a-r5");
+  assert.equal(assessment.hierarchyTier, "assessment-scoping-procedure");
+  assert.deepEqual(assessment.noviceQuestions, ["test"]);
+  assert.ok(assessment.rmfLifecycle.includes("assess"));
 });
 
 test("source fixture includes at least one source from every hierarchy tier", () => {

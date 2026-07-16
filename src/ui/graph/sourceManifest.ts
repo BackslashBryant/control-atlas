@@ -9,6 +9,23 @@ export type SourceHierarchyTier =
   | "threat-defensive-mapping"
   | "supporting-reference";
 
+export type SourceNoviceQuestion =
+  | "why-apply"
+  | "must-do"
+  | "requirements-apply"
+  | "implement"
+  | "test"
+  | "map-elsewhere";
+
+export type RmfLifecycleStep =
+  | "prepare"
+  | "categorize"
+  | "select"
+  | "implement"
+  | "assess"
+  | "authorize"
+  | "monitor";
+
 export type SourceMapDisposition =
   | "default-map"
   | "add-to-default-map"
@@ -22,6 +39,8 @@ export type SourceManifestRecord = {
   artifactName: string;
   publisher: string;
   hierarchyTier: SourceHierarchyTier;
+  noviceQuestions: SourceNoviceQuestion[];
+  rmfLifecycle: RmfLifecycleStep[];
   subcategory: string;
   disposition: SourceMapDisposition;
   canonicalUrl: string;

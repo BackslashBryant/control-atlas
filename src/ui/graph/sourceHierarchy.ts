@@ -5,22 +5,21 @@ export const SOURCE_HIERARCHY_ORDER: SourceHierarchyTier[] = [
   "governance-risk-framework",
   "control-catalog-requirement-set",
   "baseline-overlay-program-profile",
-  "assessment-scoping-procedure",
   "implementation-configuration-standard",
+  "assessment-scoping-procedure",
   "control-mapping-crosswalk",
   "threat-defensive-mapping",
   "supporting-reference",
 ];
 
 export const SOURCE_HIERARCHY_LABELS: Record<SourceHierarchyTier, string> = {
-  authority: "Authority",
-  "governance-risk-framework": "Governance / Risk Framework",
-  "control-catalog-requirement-set": "Control Catalog / Requirement Set",
-  "baseline-overlay-program-profile": "Baseline / Overlay / Program Profile",
-  "assessment-scoping-procedure": "Assessment / Scoping Procedure",
-  "implementation-configuration-standard":
-    "Implementation / Configuration Standard",
-  "control-mapping-crosswalk": "Control Mapping / Crosswalk",
-  "threat-defensive-mapping": "Threat / Defensive Mapping",
-  "supporting-reference": "Supporting Reference",
+  authority: "Rules",
+  "governance-risk-framework": "Frameworks",
+  "control-catalog-requirement-set": "Controls",
+  "baseline-overlay-program-profile": "Baselines",
+  "implementation-configuration-standard": "Implementation",
+  "assessment-scoping-procedure": "Assessment",
+  "control-mapping-crosswalk": "Mappings",
+  "threat-defensive-mapping": "Threat / Defense",
+  "supporting-reference": "Supporting Sources",
 };

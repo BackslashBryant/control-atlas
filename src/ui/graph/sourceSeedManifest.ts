@@ -5,6 +5,7 @@ import type {
   SourceManifestRecord,
   SourceMapDisposition,
 } from "./sourceManifest.ts";
+import { defaultSourceViewMemberships } from "./sourceViews.ts";
 
 type SeedDefinition = {
   sourceId: string;
@@ -19,12 +20,15 @@ type SeedDefinition = {
 
 function manifestRecord(definition: SeedDefinition): SourceManifestRecord {
   const link = sourceLinkFor(definition.sourceId);
+  const viewMemberships = defaultSourceViewMemberships(definition.hierarchyTier);
   const source: SourceManifestRecord = {
     sourceId: definition.sourceId,
     displayName: link.displayName,
     artifactName: link.displayName,
     publisher: definition.publisher,
     hierarchyTier: definition.hierarchyTier,
+    noviceQuestions: viewMemberships.noviceQuestions,
+    rmfLifecycle: viewMemberships.rmfLifecycle,
     subcategory: definition.subcategory,
     disposition: definition.disposition,
     canonicalUrl: link.canonicalUrl,

@@ -41,7 +41,7 @@ test("critical path: Atlas matrix table links to graph node", async ({
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Framework Map" }).click();
+  await page.getByRole("button", { name: "Source guide" }).click();
   await expect(page).toHaveURL(/node=foundation/);
 
   // Coverage matrix now lives in a collapsible drawer (graph-first redesign).

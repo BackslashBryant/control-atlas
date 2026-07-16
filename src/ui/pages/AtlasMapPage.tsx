@@ -8,10 +8,14 @@ import {
 import { AtlasMatrix } from "../components/AtlasMatrix";
 import { DEFAULT_MAP_WARNINGS } from "../graph/defaultMapFilter.ts";
 import { expandFocusedControlCluster } from "../graph/buildFocusedControlRings.ts";
-import { SOURCE_HIERARCHY_LABELS } from "../graph/sourceHierarchy.ts";
 import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors.ts";
 import { SOURCE_SEED_MANIFEST } from "../graph/sourceSeedManifest.ts";
-import type { SourceHierarchyTier } from "../graph/sourceManifest.ts";
+import {
+  SOURCE_VIEW_DEFINITIONS,
+  normalizeSourceViewId,
+  sourceViewGroup,
+  type SourceViewId,
+} from "../graph/sourceViews.ts";
 import {
   buildVisibleRelationshipModel,
   type SourceVisibilityFilters,
@@ -131,10 +135,10 @@ function AtlasPresetMenu(props: AtlasMapPageProps) {
       <div className="intent-grid">
         <QuickIntentCard
           actionLabel="Open map"
-          body="Explore the full framework taxonomy from the top down."
+          body="Browse trusted sources by your question, their purpose, or the RMF lifecycle."
           icon={<IconMap size={20} stroke={1.8} />}
           onClick={() => onNavigate("atlas-map", { node: "foundation" })}
-          title="Framework Map"
+          title="Source guide"
         />
         <QuickIntentCard
           actionLabel="Open map"
@@ -161,9 +165,23 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   const drillTier = trimmedNode.startsWith("hierarchy:")
     ? trimmedNode.slice("hierarchy:".length)
     : null;
-  const drillLabel = drillTier
-    ? (SOURCE_HIERARCHY_LABELS[drillTier as SourceHierarchyTier] ?? drillTier)
-    : null;
+  const requestedSourceView = normalizeSourceViewId(state.sourceView);
+  const activeSourceView: SourceViewId =
+    drillTier &&
+    !sourceViewGroup(requestedSourceView, drillTier) &&
+    sourceViewGroup("purpose", drillTier)
+      ? "purpose"
+      : requestedSourceView;
+  const sourceViewDefinition = SOURCE_VIEW_DEFINITIONS[activeSourceView];
+  const sourceViewOverviewLabel = {
+    novice: "novice questions",
+    purpose: "purposes",
+    rmf: "RMF steps",
+  }[activeSourceView];
+  const drillGroup = drillTier
+    ? sourceViewGroup(activeSourceView, drillTier)
+    : undefined;
+  const drillLabel = drillGroup?.label ?? null;
   const focused =
     Boolean(trimmedNode) &&
     !drillTier &&
@@ -204,6 +222,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
     let nextModel = buildVisibleRelationshipModel({
       nodeId: state.node,
       filters: visibilityFilters,
+      sourceView: activeSourceView,
     });
     for (const clusterKey of foundationExpandedClusters) {
       nextModel = expandFocusedControlCluster(nextModel, clusterKey);
@@ -212,6 +231,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
   }, [
     foundationExpandedClusters,
     state.node,
+    activeSourceView,
     visibilityFilters.showDraftOrLegacy,
     visibilityFilters.showRegistryOnly,
     visibilityFilters.showSupportingReferences,
@@ -231,12 +251,16 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
       // On the overview, choosing a category drills into it — the map opens
       // that layer and shows the sources inside. Everything else selects.
       if (!drillTier && !focused && nodeId.startsWith("hierarchy:")) {
-        onNavigate("atlas-map", { ...state, node: nodeId });
+        onNavigate("atlas-map", {
+          ...state,
+          node: nodeId,
+          sourceView: activeSourceView,
+        });
         return;
       }
       setSelectedNodeId(nodeId);
     },
-    [drillTier, focused, onNavigate, state],
+    [activeSourceView, drillTier, focused, onNavigate, state],
   );
 
   const selectedSource = selectedNodeId?.startsWith("source:")
@@ -348,7 +372,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
             ? "See the control in context and explore its connections to baselines, assessments, implementation standards, and mappings."
             : drillLabel
               ? `Inside ${drillLabel}. Select a source to see who publishes it and what it covers.`
-              : "Nine layers make up federal cyber compliance. Select a layer to open it and see the sources inside."
+              : sourceViewDefinition.summary
         }
         title={drillLabel ?? "Atlas"}
       />
@@ -358,13 +382,43 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
           <button
             className="secondary quiet"
             onClick={() =>
-              onNavigate("atlas-map", { ...state, node: "foundation" })
+              onNavigate("atlas-map", {
+                ...state,
+                node: "foundation",
+                sourceView: activeSourceView,
+              })
             }
             type="button"
           >
-            ← All layers
+            ← All {sourceViewOverviewLabel}
           </button>
         </nav>
+      ) : null}
+
+      {!focused ? (
+        <div
+          aria-label="Browse sources by"
+          className="workbench-toggle source-view-toggle"
+          role="group"
+        >
+          {(["novice", "purpose", "rmf"] as SourceViewId[]).map((viewId) => (
+            <button
+              aria-pressed={activeSourceView === viewId}
+              className={activeSourceView === viewId ? "active" : ""}
+              key={viewId}
+              onClick={() =>
+                onNavigate("atlas-map", {
+                  ...state,
+                  node: "foundation",
+                  sourceView: viewId,
+                })
+              }
+              type="button"
+            >
+              {SOURCE_VIEW_DEFINITIONS[viewId].label}
+            </button>
+          ))}
+        </div>
       ) : null}
 
       <form
@@ -478,7 +532,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
                 ? "AC-2 focused map"
                 : drillLabel
                   ? `${drillLabel} sources`
-                  : "Source hierarchy"
+                  : `Sources by ${sourceViewDefinition.label.toLowerCase()}`
             }
             hideHeading
             introCopy={
@@ -486,7 +540,7 @@ function FoundationAtlasMapPage(props: AtlasMapPageProps) {
                 ? "AC-2 stays central while dense implementation and mapping details remain clustered."
                 : drillLabel
                   ? `These are the sources inside the ${drillLabel} layer. Select one for a plain-language summary.`
-                  : "Each node is a layer of the compliance ecosystem. Select a layer to open it and see the sources inside."
+                  : "Select a group to open its sources. You can switch views without changing the underlying records."
             }
             layoutMode={model.layoutMode}
             mapControls

@@ -100,7 +100,7 @@ test('atlas map renders a bounded starter cluster, not the full graph', async ({
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Framework Map" }).click();
+  await page.getByRole("button", { name: "Source guide" }).click();
   await expect(page).toHaveURL(/node=foundation/);
   await expect(page.locator('.react-flow__node').first()).toBeVisible({
     timeout: 20000,

@@ -1813,6 +1813,44 @@ a:focus-visible {
   min-height: 44px;
 }
 
+.relationship-groups-accordion .accordion-item {
+  scroll-margin-top: calc(var(--space-16) + var(--space-4));
+}
+
+.connection-group-nav ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.connection-group-nav-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ca-border-subtle);
+  border-radius: var(--ca-radius-sm);
+  color: var(--ca-text);
+  background: var(--ca-surface);
+  text-align: left;
+}
+
+.connection-group-nav-link:hover,
+.connection-group-nav-link:focus-visible {
+  border-color: var(--ca-border);
+  background: var(--ca-surface-raised);
+}
+
+.connection-group-nav-link strong {
+  color: var(--ca-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .sticky-detail-bar {
   position: fixed;
   right: 0;
@@ -2128,7 +2166,7 @@ button.atlas-leverage-row:hover {
   display: none;
 }
 .atlas-coverage-drawer > summary::before {
-  content: "â–¸";
+  content: "\25B8";
   color: var(--ca-text-muted);
   transition: transform 0.15s ease;
 }
@@ -2172,7 +2210,7 @@ button.atlas-leverage-row:hover {
   display: none;
 }
 .atlas-display-options > summary::before {
-  content: "âš™";
+  content: "\2699";
   color: var(--ca-text-muted);
 }
 .atlas-display-options[open] > summary {

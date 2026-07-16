@@ -37,6 +37,7 @@ export type ViewState =
       nodeType: string;
       includeCandidates: string;
       relationshipSearch: string;
+      sourceView: string;
       showSupportingReferences: string;
       showDraftOrLegacy: string;
       showRegistryOnly: string;
@@ -149,6 +150,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     nodeType: "",
     includeCandidates: "",
     relationshipSearch: "",
+    sourceView: "novice",
     showSupportingReferences: "",
     showDraftOrLegacy: "",
     showRegistryOnly: "",
@@ -221,6 +223,10 @@ export function parseViewState(search: string): ViewState {
       nodeType: params.get("type") || params.get("nodeType") || "",
       includeCandidates: params.get("includeCandidates") || "",
       relationshipSearch: params.get("relationshipSearch") || "",
+      sourceView:
+        params.get("sourceView") === "purpose" || params.get("sourceView") === "rmf"
+          ? params.get("sourceView") || "novice"
+          : "novice",
       showSupportingReferences: params.get("showSupportingReferences") || "",
       showDraftOrLegacy: params.get("showDraftOrLegacy") || "",
       showRegistryOnly: params.get("showRegistryOnly") || "",
@@ -495,6 +501,9 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "type", state.nodeType);
     setIfValue(params, "includeCandidates", state.includeCandidates);
     setIfValue(params, "relationshipSearch", state.relationshipSearch);
+    if (state.sourceView === "purpose" || state.sourceView === "rmf") {
+      params.set("sourceView", state.sourceView);
+    }
     setIfValue(
       params,
       "showSupportingReferences",
@@ -589,6 +598,7 @@ export function serializeViewState(state: ViewState): string {
 
 export type AtlasMapUrlOptions = {
   node?: string;
+  sourceView?: "novice" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
   provenance?: string;
@@ -618,6 +628,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
   const state = normalizeViewState("atlas-map", {
     view: "atlas-map",
     node: options.node || "",
+    sourceView: options.sourceView || "novice",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",
     provenance: options.provenance || "",

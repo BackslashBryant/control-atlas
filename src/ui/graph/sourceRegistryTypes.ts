@@ -1,7 +1,9 @@
 export type {
+  RmfLifecycleStep,
   SourceHierarchyTier,
   SourceManifestRecord,
   SourceMapDisposition,
+  SourceNoviceQuestion,
 } from "./sourceManifest.ts";
 
 export type VisibleGraphNode = {
@@ -16,6 +18,8 @@ export type VisibleGraphNode = {
     hierarchyTier?: string;
     description?: string;
     childCount?: number;
+    sourceView?: string;
+    sourceViewGroup?: string;
   };
 };
 
