@@ -33,7 +33,7 @@
 | 3 | Positioning docs reframe (PRD, vision, backlog header) | [x] |
 | 4 | Start Here sharpening — situation→requirements as the newbie's main path | [x] |
 | 5 | Trust & connection labeling (named crosswalk groups, coverage honesty) | [x] |
-| 6 | Freshness: auto-sync pipeline + "current as of" stamping | [ ] |
+| 6 | Freshness: auto-sync pipeline + "current as of" stamping | [x] |
 | 7 | Templates professionalism pass (parallel track, any time after 1) | [ ] |
 
 ---
