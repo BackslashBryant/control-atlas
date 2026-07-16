@@ -1,12 +1,14 @@
 # STATE
 
 ## Goal
-Execute `docs/plans/newbie-reframe-execution-plan.md` phase-by-phase. Phases 1-5 are shipped to `main`; Phase 6 is implemented locally and awaiting approval.
+Execute `docs/plans/newbie-reframe-execution-plan.md` phase-by-phase. Phases 1-6 are shipped to `main`; Phase 7 is next.
 
 ## Now
-Phase 6 — Freshness — is implemented locally on `reframe/phase-6-freshness` and awaiting owner review. It has not been pushed, merged, deployed, or marked complete.
+Phase 6 — Freshness — shipped to `main` in `74b1ddb` after owner approval.
 
-The local implementation classifies all 44 sources as auto-synced, curated, or link-out; schedules the existing build-time refresh weekly through a standing human-reviewed draft PR; adds MITRE to `refresh:data`; fails scheduled refreshes that fall back to committed DISA/MITRE snapshots; and surfaces version plus trustworthy current/stale wording on Sources and record-detail pages.
+The release classifies all 44 sources as auto-synced, curated, or link-out; schedules the existing build-time refresh weekly through a standing human-reviewed draft PR; adds MITRE to `refresh:data`; fails scheduled refreshes that fall back to committed DISA/MITRE snapshots; and surfaces version plus trustworthy current/stale wording on Sources and record-detail pages.
+
+Protected Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, and Pages Live Smoke passed on `main`. Live verification at `https://backslashbryant.github.io/control-atlas/?view=sources` confirmed the deployed Sources page shows update models, source versions, and `Current as of 2026-07-16` for refreshed sources.
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -43,6 +45,7 @@ The local implementation classifies all 44 sources as auto-synced, curated, or l
 - Phases 1-4 shipped.
 - Phase 5 base work shipped as `caac425`: named CSF 2.0 / SP 800-171 connection groups, inclusive `<= 75` coverage boundary, dynamic known-gap explanation.
 - Phase 5 spikes shipped as `129a0e0`: three source views over one manifest, purpose hierarchy relabel/order, shareable `sourceView` route state, purpose-aligned matrix labels, sidebar connection-group jump navigation, unit and E2E contract updates, phase/reference documentation.
+- Phase 6 shipped as `74b1ddb`: per-source freshness models and metadata, weekly human-reviewed refresh PR automation, fail-closed scheduled synchronization, newcomer-facing current/stale wording, refreshed public artifacts, and full contract/E2E coverage.
 
 ## Open items
-- Owner approval is required before push, workflow dispatch, merge, deploy, execution-plan checkbox update, or Phase 6 completion wording.
+- Begin Phase 7 templates professionalism work from its execution-plan kickoff.
