@@ -1,24 +1,13 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import {
-  IconArrowRight,
-  IconBook2,
-  IconClipboardList,
   IconCompass,
   IconExternalLink,
   IconFileDescription,
-  IconGitCompare,
   IconInfoCircle,
-  IconLink,
-  IconMap,
-  IconSearch,
   IconShieldCheck,
-  IconSourceCode,
 } from "@tabler/icons-react";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { displayNameFor } from "../../app/display-names.mjs";
-import { patternsData } from "../../app/patterns-data.mjs";
-import { groupRelationships } from "../../app/relationship-groups.mjs";
 import {
   buildTemplateDocument,
   generateTemplate,
@@ -26,36 +15,14 @@ import {
 } from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
-  ExpandableChipList,
-  RelationshipGroupsSection,
-} from "../components/ExpandableRelationshipGroup";
-import { RelationshipExplorer } from "../components/RelationshipExplorer";
-import { StickyDetailBar } from "../components/StickyDetailBar";
-import { ProvenanceTerm } from "../components/ProvenanceTerm";
-import { StartHereResult } from "../components/StartHereResult";
-import {
   CatalogFilterBar,
   QuickIntentCard,
 } from "../components/QuickIntentCard";
 import {
   filterByCategoryAndQuery,
   groupItemsByCategory,
-  PATTERN_CATEGORIES,
-  RECOMMENDED_PATTERN_IDS,
   TEMPLATE_CATEGORIES,
 } from "../lib/catalogGroups.mjs";
-import {
-  glossaryTermsForDocument,
-  glossaryTermsForPattern,
-  templatesForPatterns,
-} from "../lib/glossarySearch.mjs";
-import { buildStartHereRecommendations } from "../lib/startHereRecommendations.mjs";
-import type {
-  StartHereCompareLink,
-  StartHereLibraryLink,
-  StartHereRecommendations,
-} from "../lib/startHereRecommendations.d.ts";
-import { serializeHashUrl } from "../lib/hashRoutes";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -63,18 +30,277 @@ import {
   DisclosurePanel,
   PageHeader,
   SelectField,
-  SourceSummaryCard,
   SummaryCard,
-  copyText,
   downloadBlobFile,
   downloadTextFile,
-  formatConfidence,
-  formatRelationshipLabel,
-  openAtlasMapForNode,
-  sourceUsageSummary,
-  sourceWarnings,
-  PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
+
+type TemplateRecord = {
+  name: string;
+  display_name: string;
+  description: string;
+  artifact_type?: string;
+  supported_formats: string[];
+  office_formats?: string[];
+  input_options: string[];
+  source_refs?: string[];
+  official_alternative?: { label: string; url: string };
+  official_artifact_ids?: string[];
+  official_resource_ids?: string[];
+  workflow_ids?: string[];
+  related_tool_ids?: string[];
+  compatibility_level?: string;
+  limitations?: string[];
+  compatibility?: {
+    classification?: string;
+    claim?: string;
+    limitations?: string;
+  };
+};
+
+type OfficialArtifact = {
+  artifact_id: string;
+  title: string;
+  artifact_family?: string;
+  publisher?: string;
+  classification?: string;
+  status?: string;
+  version?: string;
+  retrieved_on?: string;
+  landing_url?: string;
+  download_url?: string;
+  formats?: string[];
+  summary?: string;
+  provenance_note?: string;
+  limitations?: string[];
+};
+
+type WorkflowStep = {
+  order: number;
+  title: string;
+  action: string;
+  artifact_ids?: string[];
+  tool_ids?: string[];
+  completion_signal?: string;
+};
+
+type ComplianceWorkflow = {
+  workflow_id: string;
+  title: string;
+  summary: string;
+  audiences?: string[];
+  outcomes?: string[];
+  artifact_ids?: string[];
+  tool_ids?: string[];
+  steps?: WorkflowStep[];
+  readiness_checks?: string[];
+  boundary_note?: string;
+};
+
+type ComplianceTool = {
+  tool_id: string;
+  name: string;
+  maintainer?: string;
+  classification?: string;
+  status?: string;
+  version_or_release?: string;
+  repository_url?: string;
+  project_url?: string;
+  license?: string;
+  purpose?: string;
+  supported_inputs?: string[];
+  supported_outputs?: string[];
+  artifact_families?: string[];
+  access_requirements?: string[];
+  limitations?: string[];
+};
+
+const COMPATIBILITY_LABELS: Record<string, string> = {
+  official_current: "Official current",
+  official_legacy: "Official legacy",
+  official_guidance: "Official guidance",
+  schema_aligned: "Schema-aligned",
+  community_reference: "Community reference",
+  unverified: "Unverified interoperability",
+};
+
+function compatibilityTone(value?: string) {
+  const normalized = normalizedFamily(value);
+  if (normalized === "official_current" || normalized === "officially_specified") {
+    return "success" as const;
+  }
+  if (normalized === "official_legacy" || normalized.includes("unverified")) {
+    return "warning" as const;
+  }
+  if (
+    normalized === "official_guidance" ||
+    normalized === "schema_aligned" ||
+    normalized.includes("schema_aligned")
+  ) {
+    return "info" as const;
+  }
+  return "default" as const;
+}
+
+function compatibilityLabel(value?: string) {
+  if (value && /[A-Z ]/.test(value)) return value;
+  return value
+    ? COMPATIBILITY_LABELS[value] || value.replaceAll("_", " ")
+    : "Control Atlas companion";
+}
+
+function normalizedFamily(value?: string) {
+  return (value || "").toLowerCase().replaceAll(/[^a-z0-9]+/g, "_");
+}
+
+function OfficialArtifactCard(props: { artifact: OfficialArtifact }) {
+  const { artifact } = props;
+  const primaryUrl = artifact.download_url || artifact.landing_url;
+  return (
+    <article className="nexus-card">
+      <div className="nexus-card-heading">
+        <div>
+          <p className="result-meta">{artifact.publisher || "Official source"}</p>
+          <h3>{artifact.title}</h3>
+        </div>
+        <Badge tone={compatibilityTone(artifact.classification)}>
+          {compatibilityLabel(artifact.classification)}
+        </Badge>
+      </div>
+      {artifact.summary ? <p>{artifact.summary}</p> : null}
+      <p className="support-meta">
+        {[
+          artifact.status,
+          artifact.version,
+          artifact.formats?.join(", "),
+          artifact.retrieved_on
+            ? `Checked ${artifact.retrieved_on}`
+            : undefined,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+      {artifact.provenance_note ? (
+        <details className="nexus-details">
+          <summary>Source and use notes</summary>
+          <p>{artifact.provenance_note}</p>
+        </details>
+      ) : null}
+      {artifact.limitations?.length ? (
+        <p className="nexus-limitation">
+          <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
+          {artifact.limitations[0]}
+        </p>
+      ) : null}
+      <div className="card-actions">
+        {primaryUrl ? (
+          <a
+            className="secondary"
+            href={primaryUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {artifact.download_url ? "Open official file" : "Open official source"}
+            <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
+          </a>
+        ) : null}
+        {artifact.download_url && artifact.landing_url ? (
+          <a
+            className="text-link"
+            href={artifact.landing_url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Publisher page
+          </a>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+function ToolCard(props: { tool: ComplianceTool }) {
+  const { tool } = props;
+  const primaryUrl = tool.project_url || tool.repository_url;
+  return (
+    <article className="nexus-card">
+      <div className="nexus-card-heading">
+        <div>
+          <p className="result-meta">{tool.maintainer || "Tool"}</p>
+          <h3>{tool.name}</h3>
+        </div>
+        {tool.classification ? (
+          <Badge tone={compatibilityTone(tool.classification)}>
+            {compatibilityLabel(tool.classification)}
+          </Badge>
+        ) : null}
+      </div>
+      {tool.purpose ? <p>{tool.purpose}</p> : null}
+      <p className="support-meta">
+        {[tool.status, tool.version_or_release, tool.license]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+      {tool.supported_inputs?.length || tool.supported_outputs?.length ? (
+        <dl className="nexus-facts">
+          {tool.supported_inputs?.length ? (
+            <div>
+              <dt>Accepts</dt>
+              <dd>{tool.supported_inputs.join(", ")}</dd>
+            </div>
+          ) : null}
+          {tool.supported_outputs?.length ? (
+            <div>
+              <dt>Produces</dt>
+              <dd>{tool.supported_outputs.join(", ")}</dd>
+            </div>
+          ) : null}
+        </dl>
+      ) : null}
+      {tool.access_requirements?.length ? (
+        <p className="nexus-limitation">
+          <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
+          {tool.access_requirements[0]}
+        </p>
+      ) : null}
+      {tool.limitations?.length ? (
+        <details className="nexus-details">
+          <summary>Compatibility limits</summary>
+          <ul className="nexus-list">
+            {tool.limitations.map((limitation) => (
+              <li key={limitation}>{limitation}</li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+      {primaryUrl ? (
+        <div className="card-actions">
+          <a
+            className="secondary"
+            href={primaryUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Open tool page
+            <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
+          </a>
+          {tool.project_url &&
+          tool.repository_url &&
+          tool.project_url !== tool.repository_url ? (
+            <a
+              className="text-link"
+              href={tool.repository_url}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Source repository
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+    </article>
+  );
+}
 
 const FORMAT_LABELS: Record<string, string> = {
   markdown: "Markdown",
@@ -119,34 +345,69 @@ export function TemplatesPage(props: {
   const { bundle, state, onNavigate } = props;
   const generationRef = useRef<HTMLElement | null>(null);
   const generateButtonRef = useRef<HTMLButtonElement | null>(null);
+  const workflowDetailRef = useRef<HTMLElement | null>(null);
   const [categoryFilter, setCategoryFilter] = useState("");
   const [queryFilter, setQueryFilter] = useState("");
+  const [selectedWorkflowId, setSelectedWorkflowId] = useState("");
+  const [showAllOfficialResources, setShowAllOfficialResources] =
+    useState(false);
+  const [showAllTools, setShowAllTools] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
   const [generationTone, setGenerationTone] = useState<"trust" | "warning">(
     "trust",
   );
-  const templates = (bundle.templateRegistry.templates || []) as Array<{
-    name: string;
-    display_name: string;
-    description: string;
-    supported_formats: string[];
-    office_formats?: string[];
-    input_options: string[];
-    source_refs?: string[];
-    official_alternative?: { label: string; url: string };
-  }>;
+  const templates = (bundle.templateRegistry.templates || []) as TemplateRecord[];
+  const officialArtifacts = (bundle.officialArtifactRegistry?.artifacts ||
+    []) as OfficialArtifact[];
+  const workflows = (bundle.complianceWorkflowRegistry?.workflows ||
+    []) as ComplianceWorkflow[];
+  const complianceTools = (bundle.complianceToolRegistry?.tools ||
+    []) as ComplianceTool[];
+  const selectedWorkflow =
+    workflows.find(
+      (workflow) => workflow.workflow_id === selectedWorkflowId,
+    ) || null;
+  const workflowArtifacts = selectedWorkflow
+    ? officialArtifacts.filter((artifact) =>
+        selectedWorkflow.artifact_ids?.includes(artifact.artifact_id),
+      )
+    : officialArtifacts;
+  const workflowTools = selectedWorkflow
+    ? complianceTools.filter((tool) =>
+        selectedWorkflow.tool_ids?.includes(tool.tool_id),
+      )
+    : complianceTools;
+  const visibleOfficialArtifacts = showAllOfficialResources
+    ? workflowArtifacts
+    : workflowArtifacts.slice(0, 8);
+  const visibleTools = showAllTools ? workflowTools : workflowTools.slice(0, 8);
+  const workflowReferenceIds = new Set([
+    ...(selectedWorkflow?.artifact_ids || []),
+    ...(selectedWorkflow?.tool_ids || []),
+  ]);
+  const workflowTemplates = selectedWorkflow
+    ? templates.filter((template) =>
+        template.official_resource_ids?.some((id) =>
+          workflowReferenceIds.has(id),
+        ),
+      )
+    : templates;
+  const companionPool =
+    selectedWorkflow && workflowTemplates.length > 0
+      ? workflowTemplates
+      : templates;
   const filteredTemplates = useMemo(
     () =>
       filterByCategoryAndQuery(
-        templates,
+        companionPool,
         TEMPLATE_CATEGORIES,
         (template: any) => template.name,
         (template: any) =>
           `${template.display_name} ${template.description} ${template.name}`,
         { category: categoryFilter, query: queryFilter },
       ),
-    [categoryFilter, queryFilter, templates],
+    [categoryFilter, queryFilter, companionPool],
   );
   const groupedTemplates = useMemo(
     () =>
@@ -158,8 +419,42 @@ export function TemplatesPage(props: {
     [filteredTemplates],
   );
   const selectedTemplate =
-    templates.find((template: any) => template.name === state.templateType) ||
-    null;
+    templates.find((template) => template.name === state.templateType) || null;
+  const selectedTemplateArtifactIds = selectedTemplate
+    ? [
+        ...(selectedTemplate.official_artifact_ids || []),
+        ...(selectedTemplate.official_resource_ids || []),
+      ]
+    : [];
+  const selectedTemplateArtifacts = selectedTemplate
+    ? officialArtifacts.filter((artifact) => {
+        if (selectedTemplateArtifactIds.includes(artifact.artifact_id)) {
+          return true;
+        }
+        return (
+          selectedTemplateArtifactIds.length === 0 &&
+          normalizedFamily(artifact.artifact_family) ===
+            normalizedFamily(selectedTemplate.artifact_type)
+        );
+      })
+    : [];
+  const selectedTemplateTools = selectedTemplate
+    ? complianceTools.filter((tool) => {
+        if (
+          selectedTemplate.related_tool_ids?.includes(tool.tool_id) ||
+          selectedTemplateArtifactIds.includes(tool.tool_id)
+        ) {
+          return true;
+        }
+        const family = normalizedFamily(selectedTemplate.artifact_type);
+        return Boolean(
+          family &&
+            tool.artifact_families?.some(
+              (toolFamily) => normalizedFamily(toolFamily) === family,
+            ),
+        );
+      })
+    : [];
   const catalogOptions = bundle.runtime
     .getCatalogs()
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
@@ -404,55 +699,289 @@ export function TemplatesPage(props: {
               onClick={() => onNavigate("templates", { templateType: "" })}
               type="button"
             >
-              Back to templates
+              Back to workbench
             </button>
           ) : undefined
         }
-        eyebrow="Templates"
-        summary="Pick the document you need, see what it covers, then generate a blank starter you fill in yourself — nothing you type is uploaded or stored."
-        title="What are you trying to create?"
+        eyebrow="Compliance workbench"
+        summary="Start with the job in front of you. Control Atlas connects the workflow, official source material, practical tools, and blank companions so you can move from requirement to review-ready work with less searching."
+        title="What do you need to get done?"
       />
 
       {!selectedTemplate ? (
         <>
-          <CatalogFilterBar
-            category={categoryFilter}
-            categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
-            countLabel={`${filteredTemplates.length} template${filteredTemplates.length === 1 ? "" : "s"} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
-            onCategoryChange={setCategoryFilter}
-            onQueryChange={setQueryFilter}
-            query={queryFilter}
-            queryPlaceholder="Search templates by name or purpose"
-          />
+          <section aria-labelledby="workflow-heading" className="nexus-section">
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">1 · Choose the work</p>
+                <h2 id="workflow-heading">Start with a compliance task</h2>
+                <p className="page-summary">
+                  You do not need to know the document name first. Pick the
+                  outcome you are working toward and follow the connected path.
+                </p>
+              </div>
+            </div>
+            <div className="intent-grid">
+              {workflows.map((workflow) => (
+                <button
+                  aria-pressed={selectedWorkflowId === workflow.workflow_id}
+                  className={`intent-card intent-card-button${
+                    selectedWorkflowId === workflow.workflow_id
+                      ? " nexus-workflow-selected"
+                      : ""
+                  }`}
+                  key={workflow.workflow_id}
+                  onClick={() => {
+                    setSelectedWorkflowId(workflow.workflow_id);
+                    setShowAllOfficialResources(false);
+                    setShowAllTools(false);
+                    window.setTimeout(
+                      () => workflowDetailRef.current?.focus(),
+                      0,
+                    );
+                  }}
+                  type="button"
+                >
+                  <div className="intent-icon">
+                    <IconCompass aria-hidden="true" size={20} stroke={1.8} />
+                  </div>
+                  <span className="intent-card-title">{workflow.title}</span>
+                  <span className="intent-card-body">{workflow.summary}</span>
+                  <span className="intent-card-action-hint">Show the path</span>
+                </button>
+              ))}
+            </div>
+            {workflows.length === 0 ? (
+              <div className="notice" role="status">
+                <p>
+                  Workflow guidance is temporarily unavailable. Official
+                  resources and companions remain available below.
+                </p>
+              </div>
+            ) : null}
+          </section>
 
-          {[...groupedTemplates.entries()].map(
-            ([category, categoryTemplates]) => (
-              <section className="catalog-group" key={category}>
-                <h2 className="catalog-group-title">{category}</h2>
-                <div className="intent-grid">
-                  {categoryTemplates.map((template: any) => (
-                    <QuickIntentCard
-                      actionLabel="Select this template"
-                      body={template.description}
-                      icon={<IconFileDescription size={20} stroke={1.8} />}
-                      key={template.name}
-                      onClick={() =>
-                        onNavigate("templates", {
-                          templateType: template.name,
-                          framework: state.framework || "nist-800-53",
-                          format: template.supported_formats?.[0] || "markdown",
-                          environment: state.environment || "Generic",
-                          baseline: "",
-                          controlFamily: "",
-                        })
-                      }
-                      title={template.display_name}
-                    />
-                  ))}
+          {selectedWorkflow ? (
+            <section
+              aria-labelledby="selected-workflow-heading"
+              className="nexus-section workflow-detail"
+              ref={workflowDetailRef}
+              tabIndex={-1}
+            >
+              <div className="section-header nexus-section-header">
+                <div>
+                  <p className="eyebrow">Your path</p>
+                  <h2 id="selected-workflow-heading">
+                    {selectedWorkflow.title}
+                  </h2>
+                  <p className="page-summary">{selectedWorkflow.summary}</p>
                 </div>
-              </section>
-            ),
-          )}
+                <button
+                  className="secondary"
+                  onClick={() => setSelectedWorkflowId("")}
+                  type="button"
+                >
+                  Clear task
+                </button>
+              </div>
+              {selectedWorkflow.outcomes?.length ? (
+                <SummaryCard title="What you will have">
+                  <ul className="nexus-list">
+                    {selectedWorkflow.outcomes.map((outcome) => (
+                      <li key={outcome}>{outcome}</li>
+                    ))}
+                  </ul>
+                </SummaryCard>
+              ) : null}
+              {selectedWorkflow.steps?.length ? (
+                <ol className="workflow-steps">
+                  {[...selectedWorkflow.steps]
+                    .sort((a, b) => a.order - b.order)
+                    .map((step) => (
+                      <li key={`${step.order}-${step.title}`}>
+                        <span
+                          aria-hidden="true"
+                          className="workflow-step-number"
+                        >
+                          {step.order}
+                        </span>
+                        <div>
+                          <h3>{step.title}</h3>
+                          <p>{step.action}</p>
+                          {step.completion_signal ? (
+                            <p className="support-meta">
+                              Ready when: {step.completion_signal}
+                            </p>
+                          ) : null}
+                        </div>
+                      </li>
+                    ))}
+                </ol>
+              ) : null}
+              {selectedWorkflow.readiness_checks?.length ? (
+                <SummaryCard title="Before you hand it off" tone="trust">
+                  <ul className="nexus-list">
+                    {selectedWorkflow.readiness_checks.map((check) => (
+                      <li key={check}>{check}</li>
+                    ))}
+                  </ul>
+                </SummaryCard>
+              ) : null}
+              {selectedWorkflow.boundary_note ? (
+                <p className="nexus-limitation">
+                  <IconShieldCheck
+                    aria-hidden="true"
+                    size={17}
+                    stroke={1.8}
+                  />
+                  {selectedWorkflow.boundary_note}
+                </p>
+              ) : null}
+            </section>
+          ) : null}
+
+          <section aria-labelledby="official-heading" className="nexus-section">
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">2 · Check source truth</p>
+                <h2 id="official-heading">
+                  {selectedWorkflow
+                    ? `Official resources for ${selectedWorkflow.title}`
+                    : "Official federal resources"}
+                </h2>
+                <p className="page-summary">
+                  Use the publisher's material first. Current, legacy, and
+                  guidance-only resources are labeled separately so useful does
+                  not get confused with current.
+                </p>
+              </div>
+            </div>
+            <div className="nexus-grid">
+              {visibleOfficialArtifacts.map((artifact) => (
+                <OfficialArtifactCard
+                  artifact={artifact}
+                  key={artifact.artifact_id}
+                />
+              ))}
+            </div>
+            {workflowArtifacts.length === 0 ? (
+              <div className="notice" role="status">
+                <p>
+                  No official resource is joined to this workflow yet. Use the
+                  complete catalog or a companion below, and verify against
+                  your authorizing organization's direction.
+                </p>
+              </div>
+            ) : null}
+            {workflowArtifacts.length > 8 ? (
+              <button
+                className="secondary nexus-show-more"
+                onClick={() => setShowAllOfficialResources((value) => !value)}
+                type="button"
+              >
+                {showAllOfficialResources
+                  ? "Show fewer official resources"
+                  : `Show all ${workflowArtifacts.length} official resources`}
+              </button>
+            ) : null}
+          </section>
+
+          <section aria-labelledby="tools-heading" className="nexus-section">
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">3 · Use proven tooling</p>
+                <h2 id="tools-heading">
+                  {selectedWorkflow
+                    ? "Tools for this workflow"
+                    : "Federal and open-source tools"}
+                </h2>
+                <p className="page-summary">
+                  See what each tool accepts, produces, and requires before you
+                  build another converter or tracker.
+                </p>
+              </div>
+            </div>
+            <div className="nexus-grid">
+              {visibleTools.map((tool) => (
+                <ToolCard key={tool.tool_id} tool={tool} />
+              ))}
+            </div>
+            {workflowTools.length === 0 ? (
+              <div className="notice" role="status">
+                <p>
+                  No tool is joined to this workflow yet. The official resources
+                  and Control Atlas companions remain usable without one.
+                </p>
+              </div>
+            ) : null}
+            {workflowTools.length > 8 ? (
+              <button
+                className="secondary nexus-show-more"
+                onClick={() => setShowAllTools((value) => !value)}
+                type="button"
+              >
+                {showAllTools
+                  ? "Show fewer tools"
+                  : `Show all ${workflowTools.length} tools`}
+              </button>
+            ) : null}
+          </section>
+
+          <section
+            aria-labelledby="companion-heading"
+            className="nexus-section"
+            id="companion-templates"
+          >
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">4 · Build the working artifact</p>
+                <h2 id="companion-heading">Control Atlas companions</h2>
+                <p className="page-summary">
+                  Generate a blank working document locally in your browser.
+                  These companions help organize the work; they are not official
+                  forms, approvals, or proof of compliance.
+                </p>
+              </div>
+            </div>
+            <CatalogFilterBar
+              category={categoryFilter}
+              categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
+              countLabel={`${filteredTemplates.length} companion${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+              onCategoryChange={setCategoryFilter}
+              onQueryChange={setQueryFilter}
+              query={queryFilter}
+              queryPlaceholder="Search companions by name or purpose"
+            />
+
+            {[...groupedTemplates.entries()].map(
+              ([category, categoryTemplates]) => (
+                <section className="catalog-group" key={category}>
+                  <h3 className="catalog-group-title">{category}</h3>
+                  <div className="intent-grid">
+                    {categoryTemplates.map((template: TemplateRecord) => (
+                      <QuickIntentCard
+                        actionLabel="Review and generate"
+                        body={template.description}
+                        icon={<IconFileDescription size={20} stroke={1.8} />}
+                        key={template.name}
+                        onClick={() =>
+                          onNavigate("templates", {
+                            templateType: template.name,
+                            framework: state.framework || "nist-800-53",
+                            format: template.supported_formats?.[0] || "markdown",
+                            environment: state.environment || "Generic",
+                            baseline: "",
+                            controlFamily: "",
+                          })
+                        }
+                        title={template.display_name}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ),
+            )}
+          </section>
         </>
       ) : null}
 
@@ -460,12 +989,78 @@ export function TemplatesPage(props: {
         <section className="stack" ref={generationRef}>
           <div className="section-header">
             <div>
-              <p className="eyebrow">Selected template</p>
+              <p className="eyebrow">Control Atlas companion</p>
               <h2>{selectedTemplate.display_name}</h2>
             </div>
+            <Badge
+              tone={compatibilityTone(
+                selectedTemplate.compatibility?.classification ||
+                  selectedTemplate.compatibility_level,
+              )}
+            >
+              {compatibilityLabel(
+                selectedTemplate.compatibility?.classification ||
+                  selectedTemplate.compatibility_level,
+              )}
+            </Badge>
           </div>
+          {selectedTemplateArtifacts.length > 0 ? (
+            <section aria-labelledby="template-official-heading" className="stack">
+              <div>
+                <p className="eyebrow">Check the source first</p>
+                <h3 id="template-official-heading">Official resources</h3>
+              </div>
+              <div className="nexus-grid">
+                {selectedTemplateArtifacts.map((artifact) => (
+                  <OfficialArtifactCard
+                    artifact={artifact}
+                    key={artifact.artifact_id}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : selectedTemplate.official_alternative ? (
+            <SummaryCard title="Official resource">
+              <p>
+                Review the publisher's material before using this companion: {" "}
+                <a
+                  href={selectedTemplate.official_alternative.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {selectedTemplate.official_alternative.label}
+                  <IconExternalLink
+                    aria-hidden="true"
+                    size={14}
+                    stroke={1.8}
+                    style={{ verticalAlign: "text-bottom", marginLeft: 4 }}
+                  />
+                </a>
+                .
+              </p>
+            </SummaryCard>
+          ) : null}
           <SummaryCard title="What this template is for" tone="trust">
             <p>{selectedTemplate.description}</p>
+            {selectedTemplate.compatibility?.claim ? (
+              <p>{selectedTemplate.compatibility.claim}</p>
+            ) : null}
+            <p className="support-meta">
+              This is a working aid, not an official form, authorization
+              decision, or guarantee that another system will accept the file.
+            </p>
+            {selectedTemplate.limitations?.length ? (
+              <ul className="nexus-list">
+                {selectedTemplate.limitations.map((limitation) => (
+                  <li key={limitation}>{limitation}</li>
+                ))}
+              </ul>
+            ) : selectedTemplate.compatibility?.limitations ? (
+              <p className="nexus-limitation">
+                <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
+                {selectedTemplate.compatibility.limitations}
+              </p>
+            ) : null}
           </SummaryCard>
           <SummaryCard title="What it includes">
             <p>
@@ -481,7 +1076,7 @@ export function TemplatesPage(props: {
                 {officeFormats
                   .map((format: string) => FORMAT_LABELS[format] || format)
                   .join(", ")}{" "}
-                — opens directly in Excel or Word, no reformatting.
+                — opens directly in Excel or Word for review and completion.
               </p>
             ) : null}
             {selectedTemplate.input_options.length > 0 ? (
@@ -509,37 +1104,30 @@ export function TemplatesPage(props: {
               </div>
             </SummaryCard>
           ) : null}
-          {catalogSource || selectedTemplate.official_alternative ? (
-            <SummaryCard title="Source data & official alternative">
-              {catalogSource ? (
-                <p>
-                  Catalog data:{" "}
-                  {catalogSource.display_name || catalogSource.name}
-                  {catalogSource.version
-                    ? ` (version ${catalogSource.version})`
-                    : ""}
-                  .
-                </p>
-              ) : null}
-              {selectedTemplate.official_alternative ? (
-                <p>
-                  Prefer the official version? Use the{" "}
-                  <a
-                    href={selectedTemplate.official_alternative.url}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {selectedTemplate.official_alternative.label}
-                    <IconExternalLink
-                      size={14}
-                      stroke={1.8}
-                      style={{ verticalAlign: "text-bottom", marginLeft: 4 }}
-                    />
-                  </a>
-                  .
-                </p>
-              ) : null}
+          {catalogSource ? (
+            <SummaryCard title="Catalog data used">
+              <p>
+                {catalogSource.display_name || catalogSource.name}
+                {catalogSource.version
+                  ? ` (version ${catalogSource.version})`
+                  : ""}
+                . Source references stay attached to the generated artifact for
+                review.
+              </p>
             </SummaryCard>
+          ) : null}
+          {selectedTemplateTools.length > 0 ? (
+            <section aria-labelledby="template-tools-heading" className="stack">
+              <div>
+                <p className="eyebrow">Related tooling</p>
+                <h3 id="template-tools-heading">Tools that use this artifact family</h3>
+              </div>
+              <div className="nexus-grid">
+                {selectedTemplateTools.map((tool) => (
+                  <ToolCard key={tool.tool_id} tool={tool} />
+                ))}
+              </div>
+            </section>
           ) : null}
           {generationStatus ? (
             <p

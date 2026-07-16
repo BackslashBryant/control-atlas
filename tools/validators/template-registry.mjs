@@ -8,6 +8,9 @@ const REQUIRED_FIELDS = [
   'supported_formats',
   'input_options',
   'source_refs',
+  'official_resource_ids',
+  'compatibility',
+  'provenance',
   'disclaimer_required',
 ];
 
@@ -21,6 +24,20 @@ const ARTIFACT_TYPES = new Set([
   'poam_starter',
   'assessment_planning_worksheet',
   'conmon_calendar',
+  'hardware_baseline',
+  'software_baseline',
+  'ppsm_preparation_worksheet',
+]);
+
+const COMPATIBILITY_CLASSES = new Set([
+  'Officially specified',
+  'Verified by Control Atlas round trip',
+  'eMASS API v3.22 schema-aligned',
+  'Schema-aligned',
+  'Community implementation reference',
+  'Historical compatibility',
+  'Control Atlas companion',
+  'Unverified',
 ]);
 
 const FORMATS = new Set(['markdown', 'csv', 'json', 'yaml']);
@@ -82,7 +99,37 @@ export function validateTemplateRegistry(registry) {
     }
 
     if (!Array.isArray(template.source_refs)) errors.push(`template ${template.template_id} source_refs must be an array`);
+    if (!Array.isArray(template.official_resource_ids) || template.official_resource_ids.length === 0) {
+      errors.push(`template ${template.template_id} official_resource_ids must be a non-empty array`);
+    }
     if (typeof template.disclaimer_required !== 'boolean') errors.push(`template ${template.template_id} disclaimer_required must be boolean`);
+
+    const compatibility = template.compatibility;
+    if (!compatibility || typeof compatibility !== 'object') {
+      errors.push(`template ${template.template_id} missing compatibility metadata`);
+    } else {
+      if (!COMPATIBILITY_CLASSES.has(compatibility.classification)) {
+        errors.push(`template ${template.template_id} has unsupported compatibility classification: ${compatibility.classification}`);
+      }
+      if (typeof compatibility.claim !== 'string' || compatibility.claim.trim() === '') {
+        errors.push(`template ${template.template_id} compatibility.claim must be non-empty`);
+      }
+      if (typeof compatibility.limitations !== 'string' || compatibility.limitations.trim() === '') {
+        errors.push(`template ${template.template_id} compatibility.limitations must be non-empty`);
+      }
+    }
+
+    const provenance = template.provenance;
+    if (!provenance || typeof provenance !== 'object') {
+      errors.push(`template ${template.template_id} missing provenance metadata`);
+    } else {
+      if (typeof provenance.basis !== 'string' || provenance.basis.trim() === '') {
+        errors.push(`template ${template.template_id} provenance.basis must be non-empty`);
+      }
+      if (typeof provenance.verified_interchange !== 'boolean') {
+        errors.push(`template ${template.template_id} provenance.verified_interchange must be boolean`);
+      }
+    }
 
     const alt = template.official_alternative;
     if (!alt || typeof alt !== 'object') {

@@ -435,9 +435,17 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page.goto("/?view=templates");
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "What are you trying to create?" }),
+    page.getByRole("heading", { name: "What do you need to get done?" }),
   ).toBeVisible();
-  await page.locator(".intent-card").first().click();
+  await page
+    .getByRole("button", { name: /Build an authorization package/i })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: /Official resources for Build an authorization package/i,
+    }),
+  ).toBeVisible();
+  await page.locator("#companion-templates .intent-card").first().click();
   await expect(page.getByText("What this template is for")).toBeVisible();
   await expect(page.getByText("What it includes")).toBeVisible();
   await expect(

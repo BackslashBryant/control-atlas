@@ -34,7 +34,7 @@
 | 4 | Start Here sharpening — situation→requirements as the newbie's main path | [x] |
 | 5 | Trust & connection labeling (named crosswalk groups, coverage honesty) | [x] |
 | 6 | Freshness: auto-sync pipeline + "current as of" stamping | [x] |
-| 7 | Templates professionalism pass (parallel track, any time after 1) | [ ] |
+| 7 | Templates professionalism pass (parallel track, any time after 1) | [x] |
 
 ---
 
@@ -189,18 +189,20 @@ Verify: dry-run the workflow (`workflow_dispatch`), show a real sync diff; data 
 
 ---
 
-## Phase 7 — Templates professionalism pass (parallel track)
+## Phase 7 — Compliance artifact and template nexus (parallel track)
 
-**Objective:** the 8 generated templates read professional when opened in Office. Absorbs backlog P0 items 3-4 + P2 value-adds if time allows.
+**Objective:** shorten the path from a federal-compliance task to its authoritative source, official artifact, usable companion, compatible format, validation evidence, and next action. The nine pre-Phase-7 templates must also read professionally when opened in Office. Absorbs backlog P0 items 3-4 + P2 value-adds.
 
-1. Generate all 8 (`data/template-registry.json`; engine `src/app/template-engine.mjs`), open each docx/xlsx export, grade content/tone/completeness against a real authorization-package bar (layout was fixed in `36f8ca9`; **content** has never been read through).
-2. FedRAMP honesty: the 3 templates with `official_alternative` all point to the generic `https://www.fedramp.gov/documents-templates/` — either deep-link each to its specific current document or state plainly in the UI that these are unofficial worksheets modeled on FedRAMP conventions. Newbie framing favors the plain statement + link.
-3. If capacity: P2 items — template card copy sync (`TemplatesPage.tsx` POA&M description), archetype-aware inheritance pre-fill, evidence-type-by-family suggestions.
+1. Generate all nine shipped templates (`data/template-registry.json`; engine `src/app/template-engine.mjs`), open each docx/xlsx export, and grade content/tone/completeness before editing.
+2. Put official current and legacy artifacts first, with precise links, provenance, version/status, and retrieval date. Label Control Atlas companions and compatibility evidence separately.
+3. Connect tasks, artifact families, supporting tools, formats, validation checks, and next actions through dedicated catalogs.
+4. Rebuild the nine shipped templates and add Hardware Baseline, Software Baseline, and PPSM Preparation Worksheet companions.
+5. Reuse license-compatible public schemas and implementations where justified; never claim import compatibility without matching evidence.
 
-Verify: regenerate + open exports; `tests/template-office-export.test.mjs` and template contract tests green.
+Verify: regenerate + open all twelve Office exports; validate registry and interoperability contracts; `tests/template-office-export.test.mjs`, template contract tests, and `npm run precommit` green.
 
 **Kickoff prompt:**
-> Execute Phase 7 of docs/plans/newbie-reframe-execution-plan.md (templates professionalism pass). Read that file's Phase 7 + docs/plans/live-site-polish-backlog.md P0 items 3-4 first. Generate all 8 templates and grade them before editing anything. Branch; no push unless I say so.
+> Execute Phase 7 of docs/plans/newbie-reframe-execution-plan.md (compliance artifact and template nexus). Read that file's Phase 7 + docs/plans/live-site-polish-backlog.md P0 items 3-4 first. Generate all nine shipped templates and grade them before editing anything. Branch; no push unless I say so.
 
 ---
 

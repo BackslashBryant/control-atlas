@@ -67,7 +67,7 @@ test('template factory implements all conditional include flags and bug fixes', 
   assert.match(resultFramework.content, /AC-2/);
   assert.match(resultFramework.content, /Account Management/);
   // Markdown cell values escape pipes, so match the escaped form.
-  assert.ok(resultFramework.content.includes('[Planned \\| Implemented \\| Inherited \\| N/A]'));
+  assert.ok(resultFramework.content.includes('[Planned \\| Implemented \\| Inherited \\| Not Applicable]'));
 
   // Test optional flags - exclude placeholders
   const optionsNoPlaceholders = {
@@ -79,8 +79,8 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultNoPlaceholders = generateTemplate(optionsNoPlaceholders, dataset);
-  assert.ok(!resultNoPlaceholders.content.includes('[Planned \\| Implemented \\| Inherited \\| N/A]'));
-  assert.doesNotMatch(resultNoPlaceholders.content, /\[Artifact name\(s\)\]/);
+  assert.ok(!resultNoPlaceholders.content.includes('[Planned \\| Implemented \\| Inherited \\| Not Applicable]'));
+  assert.doesNotMatch(resultNoPlaceholders.content, /\[Artifact IDs, report names, paths, or links\]/);
 
   // Test including implementation prompts
   const optionsWithPrompts = {
@@ -94,11 +94,10 @@ test('template factory implements all conditional include flags and bug fixes', 
 
   const resultWithPrompts = generateTemplate(optionsWithPrompts, dataset);
   // Guidance renders once, as a section — never repeated per control row.
-  const guidanceMatches = resultWithPrompts.content.match(/## How to Fill the Control Baseline/g) || [];
+  const guidanceMatches = resultWithPrompts.content.match(/## How to Complete the Control Rows/g) || [];
   assert.equal(guidanceMatches.length, 1, 'fill guidance must render exactly once');
-  assert.match(resultWithPrompts.content, /Implementation Statement: describe how each control is implemented in the Cloud SaaS environment/);
-  // The control row carries real plain-language text, not a generated prompt.
-  assert.match(resultWithPrompts.content, /AC-2 \| Account Management \| Keep track of every account on the system/);
+  assert.match(resultWithPrompts.content, /Describe implementation in the Cloud SaaS environment/);
+  assert.match(resultWithPrompts.content, /AC-2 \| Account Management \| \[Planned/);
 
   // Test including source footnotes
   const optionsWithFootnotes = {

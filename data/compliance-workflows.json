@@ -1,0 +1,400 @@
+{
+  "schema_version": "1.0",
+  "retrieved_on": "2026-07-16",
+  "workflows": [
+    {
+      "workflow_id": "build-authorization-package",
+      "title": "Build an authorization package",
+      "summary": "Turn the governing program's requirements into a traceable package inventory, system description, implementation record, assessment set, and remediation record.",
+      "audiences": ["novice", "system_owner", "issm", "authorizing_team"],
+      "outcomes": ["Applicable package requirements identified", "Official artifacts selected", "Package gaps assigned", "Submission boundary understood"],
+      "artifact_ids": [
+        "fedramp-schema-certification-package-overview-2026-06-24",
+        "fedramp-legacy-package-checklist",
+        "fedramp-legacy-ssp",
+        "fedramp-legacy-sap",
+        "fedramp-legacy-sar",
+        "fedramp-legacy-poam",
+        "nist-oscal-models-v1-2-2",
+        "dcsa-daapm-v2-2"
+      ],
+      "tool_ids": ["mitre-emass-client", "mitre-emasser"],
+      "companion_template_ids": ["tpl-ssp-starter", "tpl-evid-exp", "tpl-assess-plan", "tpl-poam"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Choose the governing path",
+          "action": "Identify the authorizing program, impact or baseline, system boundary, and current rules before selecting documents.",
+          "artifact_ids": ["fedramp-2026-schema-index", "dcsa-daapm-v2-2"],
+          "tool_ids": [],
+          "completion_signal": "The package owner can name the authority, rule set, boundary, and submission channel."
+        },
+        {
+          "order": 2,
+          "title": "Create the package manifest",
+          "action": "List every required artifact, its official source, owner, status, dependencies, and delivery format.",
+          "artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24", "fedramp-legacy-package-checklist"],
+          "tool_ids": [],
+          "completion_signal": "Every required artifact is present, intentionally not applicable, or assigned with a due date."
+        },
+        {
+          "order": 3,
+          "title": "Build and assess the evidence chain",
+          "action": "Connect control implementation statements to evidence, assessment procedures, findings, and remediation records.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2", "fedramp-legacy-sap", "fedramp-legacy-sar", "fedramp-legacy-poam"],
+          "tool_ids": ["mitre-emass-client"],
+          "completion_signal": "Each selected control has an implementation source, assessment status, and traceable result."
+        }
+      ],
+      "readiness_checks": [
+        "All artifacts identify their governing source and version.",
+        "Legacy documents are visibly marked and reconciled to current rules.",
+        "The package has owners, dates, and evidence locations.",
+        "Machine-readable artifacts validate against the pinned schema version."
+      ],
+      "boundary_note": "Control Atlas can organize and structurally validate package material; only the authorized program and authorizing officials determine acceptance."
+    },
+    {
+      "workflow_id": "write-control-implementations",
+      "title": "Write control implementation statements",
+      "summary": "Translate selected requirements into specific, testable descriptions of who performs each safeguard, what they do, where it operates, and what proves it.",
+      "audiences": ["novice", "control_owner", "issm", "assessor"],
+      "outcomes": ["Implementation scope defined", "Responsibilities explicit", "Evidence expectations attached", "Inheritance separated from local work"],
+      "artifact_ids": ["fedramp-legacy-ssp", "fedramp-legacy-crm-cis", "nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22"],
+      "tool_ids": ["mitre-emass-client", "mitre-emasser"],
+      "companion_template_ids": ["tpl-impl-stmt", "tpl-inherit-wksh", "tpl-evid-exp"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Resolve the requirement",
+          "action": "Read the control statement, parameters, enhancements, implementation guidance, and inherited responsibility before drafting.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2", "fedramp-legacy-crm-cis"],
+          "tool_ids": [],
+          "completion_signal": "The writer can explain the exact obligation and which part applies locally."
+        },
+        {
+          "order": 2,
+          "title": "Describe the operating safeguard",
+          "action": "Record responsible roles, mechanisms, scope, frequency, dependencies, and exceptions in testable language.",
+          "artifact_ids": ["fedramp-legacy-ssp", "mitre-emass-api-openapi-v3-22"],
+          "tool_ids": ["mitre-emass-client"],
+          "completion_signal": "An assessor can identify what to examine, interview, or test."
+        },
+        {
+          "order": 3,
+          "title": "Attach evidence and ownership",
+          "action": "Link each assertion to evidence type, location, custodian, review cadence, and freshness expectation.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2"],
+          "tool_ids": [],
+          "completion_signal": "Every material assertion has an owner and an evidence path."
+        }
+      ],
+      "readiness_checks": ["Statements are system-specific rather than control restatements.", "Inherited and local responsibilities are separated.", "Evidence can be collected without guessing what the statement means."],
+      "boundary_note": "Schema alignment can validate structure but cannot prove that an implementation is effective."
+    },
+    {
+      "workflow_id": "prepare-security-assessment",
+      "title": "Prepare for a security assessment",
+      "summary": "Define scope, procedures, targets, evidence, assessors, timing, and result handling before testing begins.",
+      "audiences": ["system_owner", "issm", "assessor", "assessment_lead"],
+      "outcomes": ["Assessment scope agreed", "Methods assigned", "Evidence requests scheduled", "Finding workflow established"],
+      "artifact_ids": ["fedramp-legacy-sap", "fedramp-legacy-sar", "nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22"],
+      "tool_ids": ["mitre-heimdall", "mitre-saf-cli", "mitre-emass-client"],
+      "companion_template_ids": ["tpl-assess-plan", "tpl-evid-exp"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Set scope and authority",
+          "action": "Name the assessment driver, control set, system boundary, components, locations, exclusions, and assessment period.",
+          "artifact_ids": ["fedramp-legacy-sap", "nist-oscal-models-v1-2-2"],
+          "tool_ids": [],
+          "completion_signal": "The owner and assessor agree on what is and is not being evaluated."
+        },
+        {
+          "order": 2,
+          "title": "Map procedures to evidence",
+          "action": "Assign examine, interview, and test procedures with targets, evidence owners, collection dates, and dependencies.",
+          "artifact_ids": ["fedramp-legacy-sap"],
+          "tool_ids": ["mitre-heimdall"],
+          "completion_signal": "Every in-scope objective has a method, owner, and evidence request."
+        },
+        {
+          "order": 3,
+          "title": "Define result handling",
+          "action": "Agree on result identifiers, severity or risk treatment, retest rules, report format, and POA&M handoff.",
+          "artifact_ids": ["fedramp-legacy-sar", "mitre-emass-api-openapi-v3-22", "nist-oscal-models-v1-2-2"],
+          "tool_ids": ["mitre-emass-client", "mitre-saf-cli"],
+          "completion_signal": "A finding can move from test result to report and remediation without manual re-identification."
+        }
+      ],
+      "readiness_checks": ["Scope, methods, dates, assessors, and targets are recorded.", "Evidence requests have owners and secure delivery paths.", "Result identifiers will remain stable across reports and remediation."],
+      "boundary_note": "A structurally ready plan is not approval to begin testing; obtain the required authorization and coordination."
+    },
+    {
+      "workflow_id": "run-stig-assessment",
+      "title": "Run and document a STIG assessment",
+      "summary": "Select the correct STIG, collect automated and manual results, preserve target identity, and produce a validated checklist handoff.",
+      "audiences": ["novice", "system_administrator", "security_engineer", "assessor"],
+      "outcomes": ["Applicable STIG selected", "Target identity preserved", "Manual and automated checks reconciled", "Checklist validated"],
+      "artifact_ids": ["disa-stig-viewer-guide-v1r7", "disa-stig-viewer-csv-contract-v1r7", "disa-stig-viewer-cklb-emass-guidance-v1r7"],
+      "tool_ids": ["disa-stig-viewer", "disa-evaluate-stig", "stig-manager-client-modules", "mitre-saf-cli", "openscap", "microsoft-powerstig", "complianceascode-content"],
+      "companion_template_ids": ["tpl-stig-chk"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Choose the benchmark and target",
+          "action": "Confirm product, version, benchmark release, target hostname, addresses, role, and applicability before evaluating rules.",
+          "artifact_ids": ["disa-stig-viewer-guide-v1r7"],
+          "tool_ids": ["disa-stig-viewer"],
+          "completion_signal": "The checklist identifies one unambiguous target and benchmark release."
+        },
+        {
+          "order": 2,
+          "title": "Collect and reconcile results",
+          "action": "Import supported automated results, complete manual checks, document finding details and comments, and review not-applicable decisions.",
+          "artifact_ids": ["disa-stig-viewer-csv-contract-v1r7"],
+          "tool_ids": ["disa-evaluate-stig", "mitre-saf-cli", "openscap", "microsoft-powerstig", "complianceascode-content"],
+          "completion_signal": "Every applicable rule has a reviewed status and adequate finding detail."
+        },
+        {
+          "order": 3,
+          "title": "Validate the handoff",
+          "action": "Open the output in the named STIG Viewer release, resolve validation warnings, and preserve the original plus reviewed export.",
+          "artifact_ids": ["disa-stig-viewer-csv-contract-v1r7", "disa-stig-viewer-cklb-emass-guidance-v1r7"],
+          "tool_ids": ["disa-stig-viewer", "stig-manager-client-modules"],
+          "completion_signal": "The output imports cleanly and round-trips without losing target or rule data."
+        }
+      ],
+      "readiness_checks": ["Benchmark and target versions are explicit.", "Automated results were reviewed instead of accepted blindly.", "Manual checks and not-applicable rationales are complete.", "The final file passed tool validation and round-trip review."],
+      "boundary_note": "A generated CSV or checklist is only compatible after validation in the named receiving tool; it is not an authorization decision."
+    },
+    {
+      "workflow_id": "create-update-poam",
+      "title": "Create or update a POA&M",
+      "summary": "Turn confirmed weaknesses into owned, dated, traceable remediation work with milestones, risk context, and closure evidence.",
+      "audiences": ["system_owner", "issm", "risk_manager", "assessor"],
+      "outcomes": ["Weaknesses uniquely identified", "Milestones measurable", "Risk treatment explicit", "Closure evidence traceable"],
+      "artifact_ids": ["fedramp-legacy-poam", "nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22"],
+      "tool_ids": ["mitre-emass-client", "mitre-emasser", "vulnerator"],
+      "companion_template_ids": ["tpl-poam"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Normalize the weakness",
+          "action": "Assign a stable identifier and record the source, affected assets, controls, detection date, severity, and risk basis.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22"],
+          "tool_ids": ["mitre-emass-client"],
+          "completion_signal": "The weakness can be traced back to its source result without text matching."
+        },
+        {
+          "order": 2,
+          "title": "Plan measurable remediation",
+          "action": "Name the owner, resources, scheduled completion, dependencies, and milestones with dates and observable completion criteria.",
+          "artifact_ids": ["fedramp-legacy-poam", "mitre-emass-api-openapi-v3-22"],
+          "tool_ids": ["vulnerator"],
+          "completion_signal": "Each open item has a current owner and at least one measurable path to closure."
+        },
+        {
+          "order": 3,
+          "title": "Validate status and closure",
+          "action": "Reconcile milestone status, document delay or risk acceptance decisions, retest fixes, and attach closure evidence.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2"],
+          "tool_ids": ["mitre-emasser"],
+          "completion_signal": "Closed items contain independent retest or accepted closure evidence."
+        }
+      ],
+      "readiness_checks": ["Identifiers remain stable across source, POA&M, and retest records.", "Milestones contain dates and completion criteria.", "Late items explain impact and next action.", "Closed items include closure evidence."],
+      "boundary_note": "Historical workbook similarity or eMASS API schema alignment is not proof that a workbook can be imported into a target eMASS instance."
+    },
+    {
+      "workflow_id": "establish-system-baselines",
+      "title": "Establish hardware and software baselines",
+      "summary": "Create owned, reviewable inventories that connect components and software to authorization boundaries, versions, locations, and lifecycle decisions.",
+      "audiences": ["novice", "system_administrator", "configuration_manager", "issm"],
+      "outcomes": ["Inventory scope fixed", "Assets uniquely identified", "Versions and ownership recorded", "Change process connected"],
+      "artifact_ids": ["dcsa-hardware-list-2020", "dcsa-software-list-2020", "dcsa-maintenance-change-log-2020", "fedramp-legacy-integrated-inventory", "mitre-emass-api-openapi-v3-22"],
+      "tool_ids": ["mitre-emass-client"],
+      "companion_template_ids": [],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Define the inventory boundary",
+          "action": "State which environments, components, software classes, virtual assets, and external services are included.",
+          "artifact_ids": ["dcsa-hardware-list-2020", "dcsa-software-list-2020", "fedramp-legacy-integrated-inventory"],
+          "tool_ids": [],
+          "completion_signal": "Operators know what must appear and what is managed elsewhere."
+        },
+        {
+          "order": 2,
+          "title": "Normalize asset records",
+          "action": "Use stable identifiers and record manufacturer or publisher, model or product, version, role, location, owner, status, and authorization-boundary relationship.",
+          "artifact_ids": ["mitre-emass-api-openapi-v3-22"],
+          "tool_ids": ["mitre-emass-client"],
+          "completion_signal": "Records can be compared over time without relying on display names alone."
+        },
+        {
+          "order": 3,
+          "title": "Connect changes and reviews",
+          "action": "Set review cadence, evidence source, change-log linkage, end-of-support tracking, and reconciliation ownership.",
+          "artifact_ids": ["dcsa-maintenance-change-log-2020"],
+          "tool_ids": [],
+          "completion_signal": "A reviewer can explain who updates the baseline and how changes are detected."
+        }
+      ],
+      "readiness_checks": ["All records belong to the declared boundary.", "Required identifiers, versions, owners, and status fields are present.", "Baseline review and reconciliation dates are recorded."],
+      "boundary_note": "A Control Atlas baseline can prepare schema-aligned data but does not replace an official system-generated import or the configuration-management system of record."
+    },
+    {
+      "workflow_id": "prepare-ppsm-information",
+      "title": "Prepare PPSM information",
+      "summary": "Collect application, protocol, port, service, boundary, mission, and implementation data before working in the official PPSM process.",
+      "audiences": ["novice", "network_engineer", "system_owner", "issm"],
+      "outcomes": ["Required PPS identified", "Mission need documented", "Boundary controls mapped", "Official registry handoff prepared"],
+      "artifact_ids": ["dodi-8551-01-ppsm-2023", "disa-ppsm-registry-training"],
+      "tool_ids": [],
+      "companion_template_ids": [],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Identify declared services",
+          "action": "List applications, protocols, ports, services, direction, endpoints, environments, and mission owners.",
+          "artifact_ids": ["dodi-8551-01-ppsm-2023"],
+          "tool_ids": [],
+          "completion_signal": "Each service is connected to a system, mission use, and network path."
+        },
+        {
+          "order": 2,
+          "title": "Document implementation and risk context",
+          "action": "Record boundary devices, allowed flows, applicable STIGs, discovery evidence, nonstandard use, and exception needs.",
+          "artifact_ids": ["dodi-8551-01-ppsm-2023"],
+          "tool_ids": [],
+          "completion_signal": "Reviewers can distinguish standard, nonstandard, and exception-dependent use."
+        },
+        {
+          "order": 3,
+          "title": "Complete the official registry workflow",
+          "action": "Use current component procedures and the authenticated PPSM Registry to validate and submit the prepared data.",
+          "artifact_ids": ["disa-ppsm-registry-training"],
+          "tool_ids": [],
+          "completion_signal": "The official system records the declaration or returns actionable corrections."
+        }
+      ],
+      "readiness_checks": ["Every PPS has an owner and mission purpose.", "Endpoints, direction, protocol, port, and service details are complete.", "Exceptions and nonstandard use are identified before submission."],
+      "boundary_note": "No public blank PPSM Registry import template was verified. A Control Atlas worksheet is preparation material, not an official registry artifact."
+    },
+    {
+      "workflow_id": "organize-continuous-monitoring",
+      "title": "Organize continuous monitoring deliverables",
+      "summary": "Translate monitoring obligations into a recurring calendar of evidence, reports, owners, review points, and escalation actions.",
+      "audiences": ["system_owner", "issm", "continuous_monitoring_lead", "authorizing_team"],
+      "outcomes": ["Cadence visible", "Deliverables owned", "Evidence locations known", "Exceptions escalated"],
+      "artifact_ids": ["fedramp-schema-ongoing-certification-report-2026-06-24", "fedramp-schema-accepted-vulnerability-info-2026-06-24", "fedramp-schema-vulnerability-detail-report-2026-06-24", "fedramp-legacy-conmon-deliverables"],
+      "tool_ids": [],
+      "companion_template_ids": ["tpl-conmon"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Identify monitoring obligations",
+          "action": "List recurring and event-driven deliverables from current rules, authorization conditions, and organizational policy.",
+          "artifact_ids": ["fedramp-schema-ongoing-certification-report-2026-06-24", "fedramp-legacy-conmon-deliverables"],
+          "tool_ids": [],
+          "completion_signal": "Every obligation has a trigger, cadence, due date rule, and recipient."
+        },
+        {
+          "order": 2,
+          "title": "Assign collection and review",
+          "action": "Name the producer, reviewer, evidence source, secure location, validation method, and escalation owner.",
+          "artifact_ids": ["fedramp-schema-accepted-vulnerability-info-2026-06-24", "fedramp-schema-vulnerability-detail-report-2026-06-24"],
+          "tool_ids": [],
+          "completion_signal": "A missed or invalid deliverable has an obvious next owner and action."
+        },
+        {
+          "order": 3,
+          "title": "Validate each reporting cycle",
+          "action": "Check completeness, reporting period, change summaries, vulnerabilities, incidents, exceptions, and delivery confirmation.",
+          "artifact_ids": ["fedramp-schema-ongoing-certification-report-2026-06-24"],
+          "tool_ids": [],
+          "completion_signal": "The cycle is structurally complete and all unresolved exceptions are assigned."
+        }
+      ],
+      "readiness_checks": ["Current rules take precedence over the legacy calendar.", "Dates, owners, evidence sources, reviewers, and recipients are present.", "Machine-readable reports validate against their dated schema."],
+      "boundary_note": "Calendar completion is not proof that monitoring evidence is adequate or accepted."
+    },
+    {
+      "workflow_id": "evaluate-inheritance",
+      "title": "Evaluate inheritance and shared responsibility",
+      "summary": "Separate provider, common-control, customer, and system responsibilities and retain the evidence needed to rely on inherited safeguards.",
+      "audiences": ["novice", "system_owner", "cloud_security_lead", "assessor"],
+      "outcomes": ["Responsibility allocated", "Provider evidence located", "Customer actions explicit", "Local gaps assigned"],
+      "artifact_ids": ["fedramp-legacy-crm-cis", "nist-oscal-models-v1-2-2", "fedramp-schema-certification-package-overview-2026-06-24"],
+      "tool_ids": [],
+      "companion_template_ids": ["tpl-inherit-wksh"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Collect the responsibility sources",
+          "action": "Obtain current provider matrices, common-control packages, service descriptions, secure-configuration guidance, and customer agreements.",
+          "artifact_ids": ["fedramp-legacy-crm-cis", "fedramp-schema-certification-package-overview-2026-06-24"],
+          "tool_ids": [],
+          "completion_signal": "Every claimed inherited responsibility has a named, dated source."
+        },
+        {
+          "order": 2,
+          "title": "Allocate each requirement",
+          "action": "Classify responsibility as inherited, shared, local, or not applicable and record provider evidence plus required customer implementation.",
+          "artifact_ids": ["nist-oscal-models-v1-2-2", "fedramp-legacy-crm-cis"],
+          "tool_ids": [],
+          "completion_signal": "Shared controls describe both parties' actions rather than using a generic inherited label."
+        },
+        {
+          "order": 3,
+          "title": "Resolve freshness and gaps",
+          "action": "Check source currency, authorization scope, service tier, region, and local deviations; assign unresolved responsibilities.",
+          "artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24"],
+          "tool_ids": [],
+          "completion_signal": "No inherited claim depends on stale, out-of-scope, or unavailable evidence without an explicit decision."
+        }
+      ],
+      "readiness_checks": ["Responsibility source, version, and date are recorded.", "Shared responsibilities state both provider and customer actions.", "Local deltas and missing evidence have owners."],
+      "boundary_note": "A legacy CRM is a structural reference only; use the provider's current responsibility material for an actual inheritance decision."
+    },
+    {
+      "workflow_id": "prepare-reciprocity-review",
+      "title": "Prepare a package for reciprocity review",
+      "summary": "Determine whether an existing authorization package can reduce duplicate assessment work by testing scope, freshness, evidence, and residual gaps.",
+      "audiences": ["authorizing_team", "risk_manager", "system_owner", "assessor"],
+      "outcomes": ["Source decision understood", "Package freshness measured", "Reusable evidence identified", "Delta work bounded"],
+      "artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24", "fedramp-legacy-package-checklist", "fedramp-legacy-ssp", "fedramp-legacy-sar", "fedramp-legacy-poam", "dcsa-daapm-v2-2"],
+      "tool_ids": [],
+      "companion_template_ids": ["tpl-reciprocity"],
+      "steps": [
+        {
+          "order": 1,
+          "title": "Understand the source authorization",
+          "action": "Record authorizing organization, decision date, boundary, baseline, conditions, expiration or review cycle, and package access.",
+          "artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24", "dcsa-daapm-v2-2"],
+          "tool_ids": [],
+          "completion_signal": "The reviewer can state exactly what was authorized and under which conditions."
+        },
+        {
+          "order": 2,
+          "title": "Test completeness and freshness",
+          "action": "Review the SSP, assessment report, POA&M, continuous-monitoring evidence, changes, and inherited-control sources for currency and accessibility.",
+          "artifact_ids": ["fedramp-legacy-package-checklist", "fedramp-legacy-ssp", "fedramp-legacy-sar", "fedramp-legacy-poam"],
+          "tool_ids": [],
+          "completion_signal": "Reusable material and stale or missing material are separately identified."
+        },
+        {
+          "order": 3,
+          "title": "Bound the delta assessment",
+          "action": "Compare target environment, mission, data, interconnections, threats, overlays, and risk tolerance; assign only the evidence or testing needed for material differences.",
+          "artifact_ids": ["dcsa-daapm-v2-2"],
+          "tool_ids": [],
+          "completion_signal": "The accepting official has a traceable reuse recommendation and a bounded list of delta work."
+        }
+      ],
+      "readiness_checks": ["Source authorization scope and conditions are documented.", "Package artifacts have freshness dates and access status.", "Target-environment differences are tied to specific evidence or tests.", "Residual risk and acceptance ownership are explicit."],
+      "boundary_note": "Control Atlas can organize a reciprocity review; only the receiving authorizing organization can accept prior authorization evidence or risk."
+    }
+  ]
+}

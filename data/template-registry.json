@@ -5,15 +5,22 @@
       "template_id": "tpl-ssp-starter",
       "name": "security_plan_starter",
       "display_name": "Security Plan Starter",
-      "description": "Baseline worksheet that lists your framework's controls with implementation, evidence, and inheritance prompts — a starting point for an SSP, not a finished plan.",
+      "description": "Operational SSP planning workbook that connects system scope, control implementation, evidence, inheritance, and review ownership.",
       "artifact_type": "security_plan_starter",
       "supported_formats": ["markdown", "csv"],
       "office_formats": ["docx"],
       "input_options": ["framework", "baseline", "control_family", "environment_archetype"],
       "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "official_resource_ids": ["fedramp-legacy-ssp", "nist-oscal-models-v1-2-2"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Planning aid aligned to NIST RMF and OSCAL SSP concepts.",
+        "limitations": "Not an official SSP and not directly importable into FedRAMP or eMASS."
+      },
+      "provenance": { "basis": "NIST SP 800-37 Rev. 2 and NIST OSCAL SSP model", "verified_interchange": false },
       "official_alternative": {
-        "label": "FedRAMP System Security Plan (SSP) template",
-        "url": "https://www.fedramp.gov/documents-templates/"
+        "label": "FedRAMP System Security Plan templates",
+        "url": "https://www.fedramp.gov/legacy/"
       },
       "disclaimer_required": true
     },
@@ -21,12 +28,19 @@
       "template_id": "tpl-impl-stmt",
       "name": "implementation_statement_worksheet",
       "display_name": "Implementation Statement Worksheet",
-      "description": "Worksheet to draft control implementation statements control by control.",
+      "description": "Control-by-control drafting worksheet with ownership, evidence, inheritance, and eMASS API v3.22-aligned fields.",
       "artifact_type": "implementation_statement_worksheet",
       "supported_formats": ["csv", "json"],
       "office_formats": ["xlsx"],
       "input_options": ["framework", "selected_controls"],
-      "source_refs": ["nist-oscal"],
+      "source_refs": ["nist-oscal", "mitre-emass-api-v3-22"],
+      "official_resource_ids": ["nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22", "mitre-emass-client"],
+      "compatibility": {
+        "classification": "eMASS API v3.22 schema-aligned",
+        "claim": "Uses public v3.22 control field names and enumerations as preparation guidance.",
+        "limitations": "Not an eMASS-generated import template and not directly importable. Instance-specific rules may differ."
+      },
+      "provenance": { "basis": "MITRE emass_client OpenAPI v3.22 Controls schemas", "verified_interchange": false },
       "official_alternative": {
         "label": "NIST OSCAL SSP implementation model",
         "url": "https://pages.nist.gov/OSCAL/learn/concepts/layer/implementation/ssp/"
@@ -37,12 +51,19 @@
       "template_id": "tpl-evid-exp",
       "name": "evidence_expectation_matrix",
       "display_name": "Evidence Expectation Matrix",
-      "description": "Matrix listing expected evidence types and example artifacts per control, cross-referenced to STIG/SRG rules and CCIs.",
+      "description": "Evidence planning matrix with cross-references, ownership, collection cadence, freshness, confidence, and assessor-facing notes.",
       "artifact_type": "evidence_expectation_matrix",
       "supported_formats": ["csv"],
       "office_formats": ["xlsx"],
       "input_options": ["framework", "baseline"],
       "source_refs": ["nist-oscal", "disa-stig-library", "disa-cci-list"],
+      "official_resource_ids": ["nist-oscal-models-v1-2-2", "disa-stig-viewer-guide-v1r7"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Evidence planning aid cross-referenced to ingested controls, CCIs, and STIG/SRG rules.",
+        "limitations": "Evidence examples are planning prompts, not assessor acceptance decisions."
+      },
+      "provenance": { "basis": "NIST SP 800-53A Rev. 5 and ingested DISA cross-references", "verified_interchange": false },
       "official_alternative": {
         "label": "NIST SP 800-53A Rev. 5 assessment procedures",
         "url": "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final"
@@ -52,13 +73,20 @@
     {
       "template_id": "tpl-stig-chk",
       "name": "stig_evidence_checklist",
-      "display_name": "STIG Evidence Checklist",
-      "description": "Checklist for documenting STIG rule compliance evidence and validation methods.",
+      "display_name": "STIG Viewer CSV Preparation Worksheet",
+      "description": "Officially specified STIG Viewer CSV columns plus a separate evidence working-notes sheet for assessment preparation.",
       "artifact_type": "stig_evidence_checklist",
       "supported_formats": ["csv"],
       "office_formats": ["xlsx"],
       "input_options": ["selected_stigs"],
-      "source_refs": ["disa-stig-library", "disa-cci-list"],
+      "source_refs": ["disa-stig-library", "disa-cci-list", "disa-stig-viewer-v1r7"],
+      "official_resource_ids": ["disa-stig-viewer-csv-contract-v1r7", "disa-stig-viewer-guide-v1r7", "disa-stig-viewer"],
+      "compatibility": {
+        "classification": "Officially specified",
+        "claim": "Primary table uses the 12 CSV headers documented by the DISA STIG Viewer 3.x User Guide V1R7.",
+        "limitations": "Control Atlas does not certify STIG Viewer import success; validate in the target STIG Viewer version."
+      },
+      "provenance": { "basis": "DISA STIG Viewer 3.x User Guide V1R7 CSV import contract", "verified_interchange": false },
       "official_alternative": {
         "label": "DISA STIG Viewer and SRG/STIG tools",
         "url": "https://public.cyber.mil/stigs/srg-stig-tools/"
@@ -69,30 +97,44 @@
       "template_id": "tpl-inherit-wksh",
       "name": "inheritance_worksheet",
       "display_name": "Inheritance Worksheet",
-      "description": "Plan which controls are inherited from a provider versus implemented locally.",
+      "description": "Control inheritance decision log covering provider evidence, freshness, local responsibilities, deltas, and decision basis.",
       "artifact_type": "inheritance_worksheet",
       "supported_formats": ["csv", "markdown"],
       "office_formats": ["xlsx"],
       "input_options": ["framework"],
       "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "official_resource_ids": ["fedramp-legacy-crm-cis", "nist-oscal-models-v1-2-2"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Supports responsibility analysis using NIST RMF and OSCAL inheritance concepts.",
+        "limitations": "Does not replace a provider CRM/CIS or authorize inherited-control acceptance."
+      },
+      "provenance": { "basis": "NIST SP 800-37 Rev. 2 and OSCAL implemented-requirement inheritance concepts", "verified_interchange": false },
       "official_alternative": {
-        "label": "FedRAMP Customer Responsibility Matrix (CRM) templates",
-        "url": "https://www.fedramp.gov/documents-templates/"
+        "label": "FedRAMP CRM and CIS resources",
+        "url": "https://www.fedramp.gov/legacy/"
       },
       "disclaimer_required": true
     },
     {
       "template_id": "tpl-reciprocity",
       "name": "reciprocity_checklist",
-      "display_name": "Reciprocity Checklist",
-      "description": "Review an existing authorization package (SSP, SAR, POA&M) for reuse at another agency.",
+      "display_name": "Reciprocity Package Review",
+      "description": "Structured package-reuse review with artifact freshness, ownership, gaps, risk decisions, and receiving-organization actions.",
       "artifact_type": "reciprocity_checklist",
       "supported_formats": ["csv"],
       "office_formats": ["xlsx"],
       "input_options": ["framework", "baseline"],
       "source_refs": ["nist-800-37-rev2"],
+      "official_resource_ids": ["nist-oscal-models-v1-2-2", "dcsa-daapm-v2-2"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Organizes evidence needed for a receiving organization to evaluate authorization-package reuse.",
+        "limitations": "Does not grant reciprocity or substitute for the receiving Authorizing Official's decision."
+      },
+      "provenance": { "basis": "NIST SP 800-37 Rev. 2 authorization and ongoing-authorization concepts", "verified_interchange": false },
       "official_alternative": {
-        "label": "NIST SP 800-37 Rev. 2 (RMF, reciprocity)",
+        "label": "NIST SP 800-37 Rev. 2",
         "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final"
       },
       "disclaimer_required": true
@@ -100,16 +142,23 @@
     {
       "template_id": "tpl-poam",
       "name": "poam_starter",
-      "display_name": "POA&M Starter",
-      "description": "Blank Plan of Action and Milestones (POA&M) tracker with eMASS/FedRAMP columns for open weaknesses and remediation dates.",
+      "display_name": "POA&M Working Register",
+      "description": "Operational POA&M register with remediation, milestone, evidence, ownership, and eMASS API v3.22-aligned preparation fields.",
       "artifact_type": "poam_starter",
       "supported_formats": ["csv"],
       "office_formats": ["xlsx"],
       "input_options": ["framework", "selected_controls"],
-      "source_refs": ["nist-800-37-rev2", "nist-oscal"],
+      "source_refs": ["nist-800-37-rev2", "nist-oscal", "mitre-emass-api-v3-22"],
+      "official_resource_ids": ["fedramp-legacy-poam", "mitre-emass-api-openapi-v3-22", "mitre-emass-client", "vulnerator"],
+      "compatibility": {
+        "classification": "eMASS API v3.22 schema-aligned",
+        "claim": "Includes public v3.22 POA&M field names and workflow-oriented companion fields.",
+        "limitations": "Not an eMASS-generated or FedRAMP import template. Dates remain human-readable until a validated converter is used."
+      },
+      "provenance": { "basis": "MITRE emass_client OpenAPI v3.22 POA&M schemas; historical layout lessons from Vulnerator", "verified_interchange": false },
       "official_alternative": {
-        "label": "FedRAMP POA&M template",
-        "url": "https://www.fedramp.gov/documents-templates/"
+        "label": "FedRAMP legacy POA&M template",
+        "url": "https://www.fedramp.gov/legacy/"
       },
       "disclaimer_required": true
     },
@@ -117,12 +166,19 @@
       "template_id": "tpl-assess-plan",
       "name": "assessment_planning_worksheet",
       "display_name": "Assessment Planning Worksheet",
-      "description": "Schedule control assessments with methods, assessors, and target dates.",
+      "description": "Control assessment schedule covering scope, assessor, methods, evidence, tooling, sampling, dates, results, and follow-up.",
       "artifact_type": "assessment_planning_worksheet",
       "supported_formats": ["csv", "markdown"],
       "office_formats": ["xlsx"],
       "input_options": ["framework", "baseline"],
-      "source_refs": ["nist-oscal", "nist-800-37-rev2"],
+      "source_refs": ["nist-oscal", "nist-800-37-rev2", "mitre-emass-api-v3-22"],
+      "official_resource_ids": ["fedramp-legacy-sap", "nist-oscal-models-v1-2-2", "mitre-emass-api-openapi-v3-22"],
+      "compatibility": {
+        "classification": "eMASS API v3.22 schema-aligned",
+        "claim": "Uses eMASS v3.22 test-result concepts alongside NIST SP 800-53A assessment planning.",
+        "limitations": "Not a Security Assessment Plan and not an eMASS test-result import file."
+      },
+      "provenance": { "basis": "NIST SP 800-53A Rev. 5 and MITRE emass_client v3.22 Test Results schema", "verified_interchange": false },
       "official_alternative": {
         "label": "NIST SP 800-53A Rev. 5 assessment procedures",
         "url": "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final"
@@ -132,16 +188,92 @@
     {
       "template_id": "tpl-conmon",
       "name": "conmon_calendar",
-      "display_name": "Continuous Monitoring Calendar",
-      "description": "Calendar for continuous monitoring activities aligned to NIST SP 800-137.",
+      "display_name": "Continuous Monitoring Delivery Calendar",
+      "description": "Monitoring schedule that connects activities to deliverables, evidence locations, owners, completion, reporting, and escalation.",
       "artifact_type": "conmon_calendar",
       "supported_formats": ["csv", "markdown"],
       "office_formats": ["xlsx"],
       "input_options": ["framework"],
       "source_refs": ["nist-sp-800-137", "nist-800-37-rev2"],
+      "official_resource_ids": ["fedramp-legacy-conmon-deliverables", "fedramp-schema-ongoing-certification-report-2026-06-24"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Starter operating calendar aligned to NIST information-security continuous monitoring concepts.",
+        "limitations": "Cadences are editable examples and do not replace agency- or program-specific ConMon requirements."
+      },
+      "provenance": { "basis": "NIST SP 800-137 and NIST SP 800-37 Rev. 2", "verified_interchange": false },
       "official_alternative": {
-        "label": "NIST SP 800-137 (Information Security Continuous Monitoring)",
+        "label": "NIST SP 800-137",
         "url": "https://csrc.nist.gov/pubs/sp/800/137/final"
+      },
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-hw-baseline",
+      "name": "hardware_baseline",
+      "display_name": "Hardware Baseline",
+      "description": "Asset inventory with operational ownership and eMASS API v3.22 hardware-baseline preparation fields.",
+      "artifact_type": "hardware_baseline",
+      "supported_formats": ["csv", "json"],
+      "office_formats": ["xlsx"],
+      "input_options": ["environment_archetype"],
+      "source_refs": ["dcsa-hardware-list", "mitre-emass-api-v3-22"],
+      "official_resource_ids": ["dcsa-hardware-list-2020", "fedramp-legacy-integrated-inventory", "mitre-emass-api-openapi-v3-22", "mitre-emass-client"],
+      "compatibility": {
+        "classification": "eMASS API v3.22 schema-aligned",
+        "claim": "Uses public v3.22 hardware-baseline field names with additional local inventory fields.",
+        "limitations": "Not an eMASS-generated import template and not directly importable."
+      },
+      "provenance": { "basis": "DCSA hardware list and MITRE emass_client OpenAPI v3.22 hardware schemas", "verified_interchange": false },
+      "official_alternative": {
+        "label": "DCSA Hardware List",
+        "url": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/Hardware_List_%28February2020%29.pdf"
+      },
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-sw-baseline",
+      "name": "software_baseline",
+      "display_name": "Software Baseline",
+      "description": "Software inventory with lifecycle, approval, ownership, dependency, and eMASS API v3.22 preparation fields.",
+      "artifact_type": "software_baseline",
+      "supported_formats": ["csv", "json"],
+      "office_formats": ["xlsx"],
+      "input_options": ["environment_archetype"],
+      "source_refs": ["dcsa-software-list", "mitre-emass-api-v3-22"],
+      "official_resource_ids": ["dcsa-software-list-2020", "fedramp-legacy-integrated-inventory", "mitre-emass-api-openapi-v3-22", "mitre-emass-client"],
+      "compatibility": {
+        "classification": "eMASS API v3.22 schema-aligned",
+        "claim": "Uses public v3.22 software-baseline field names with additional local lifecycle fields.",
+        "limitations": "Not an eMASS-generated import template and not directly importable."
+      },
+      "provenance": { "basis": "DCSA software list and MITRE emass_client OpenAPI v3.22 software schemas", "verified_interchange": false },
+      "official_alternative": {
+        "label": "DCSA Software List",
+        "url": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/Software_List_%28February2020%29.pdf"
+      },
+      "disclaimer_required": true
+    },
+    {
+      "template_id": "tpl-ppsm-prep",
+      "name": "ppsm_preparation_worksheet",
+      "display_name": "PPSM Preparation Worksheet",
+      "description": "Local collection worksheet for ports, protocols, services, boundaries, mission need, exposure, and approval tracking before PPSM submission.",
+      "artifact_type": "ppsm_preparation_worksheet",
+      "supported_formats": ["csv"],
+      "office_formats": ["xlsx"],
+      "input_options": ["environment_archetype"],
+      "source_refs": ["dod-ppsm-policy", "disa-ppsm-training"],
+      "official_resource_ids": ["dodi-8551-01-ppsm-2023", "disa-ppsm-registry-training"],
+      "compatibility": {
+        "classification": "Control Atlas companion",
+        "claim": "Prepares publicly documented PPSM information for review and later entry into the authorized registry workflow.",
+        "limitations": "Not an official PPSM worksheet, registry receipt, or import file."
+      },
+      "provenance": { "basis": "DoDI 8551.01 and public DISA PPSM training", "verified_interchange": false },
+      "official_alternative": {
+        "label": "DoD PPSM Registry training",
+        "url": "https://dl.dod.cyber.mil/wp-content/uploads/trn/cx-player/player/index.html?v=ppsm-registry"
       },
       "disclaimer_required": true
     }

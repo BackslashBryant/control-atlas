@@ -57,13 +57,13 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 
 **Dependencies:** Epics 1-2.
 
-## Epic 4: Template Factory
+## Epic 4: Compliance Artifact and Template Nexus
 
-**Goal:** Generate blank, reference-driven templates locally in the browser.
+**Goal:** Shorten the path from a compliance task to its authoritative source, official artifact, usable companion, compatible format, validation evidence, and next action.
 
-**Stories:** Template engine; Templates (Security Plan Starter, Evidence Expectation Matrix, POA&M Starter, Inheritance Worksheet, Reciprocity Checklist, STIG Evidence Checklist, Assessment Planning Worksheet, Continuous Monitoring Calendar).
+**Stories:** Official artifact, workflow, and tool catalogs; Template engine; Templates (Security Plan Starter, Implementation Statement Worksheet, Evidence Expectation Matrix, POA&M Working Register, Inheritance Worksheet, Reciprocity Package Review, STIG Viewer CSV Preparation Worksheet, Assessment Planning Worksheet, Continuous Monitoring Delivery Calendar, Hardware Baseline, Software Baseline, PPSM Preparation Worksheet).
 
-**Acceptance criteria:** Client-side only; Selector leads with artifact type; Outputs include disclaimer and source metadata; Plain-language prompts on every field; No user/org data required.
+**Acceptance criteria:** Client-side only; Official resources appear before companions; Selector leads with task and artifact type; Outputs include disclaimer, source metadata, and compatibility limitations; Plain-language prompts on every field; No user/org data required.
 
 **Dependencies:** Epics 1-3.
 
