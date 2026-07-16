@@ -36,4 +36,3 @@ Every revised artifact must:
 4. Include the fields necessary to perform the stated job, not merely describe it.
 5. Open cleanly in Word or Excel and remain usable at normal zoom.
 6. Avoid official, importable, accepted, or current claims unless evidence supports them.
-

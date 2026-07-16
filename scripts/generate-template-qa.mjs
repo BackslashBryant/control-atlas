@@ -71,4 +71,3 @@ writeFileSync(
   `${JSON.stringify({ generated_on: new Date().toISOString(), outputs: manifest }, null, 2)}\n`,
 );
 console.log(`Generated ${manifest.length} Office outputs in ${outputDirectory}`);
-
