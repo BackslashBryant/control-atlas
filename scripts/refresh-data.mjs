@@ -10,7 +10,7 @@ function run(label, script) {
   const result = spawnSync(process.execPath, [join(ROOT, 'scripts', script)], {
     cwd: ROOT,
     stdio: 'inherit',
-    env: process.env,
+    env: { ...process.env, CONTROL_ATLAS_REQUIRE_FRESH_FETCH: '1' },
   });
   if (result.status !== 0) {
     throw new Error(`${script} failed with exit ${result.status}`);
@@ -23,6 +23,8 @@ async function main() {
   run('fetch-ccis', 'fetch-ccis.mjs');
   run('fetch-stig-source-observations', 'fetch-stig-source-observations.mjs');
   run('fetch-disa-stigs', 'fetch-disa-stigs.mjs');
+  run('fetch-mitre-data', 'fetch-mitre-data.mjs');
+  run('reconcile-source-freshness', 'reconcile-source-freshness.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');
   run('audit-coverage', 'audit-coverage.mjs');

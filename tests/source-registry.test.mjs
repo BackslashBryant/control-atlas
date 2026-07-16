@@ -16,6 +16,67 @@ test('source registry schema 4.0 validates the federal source contract', () => {
   assert.ok(registry.sources.every((source) => source.license_or_use));
 });
 
+test('every source has the locked Phase 6 synchronization model', () => {
+  const expected = {
+    auto_synced: [
+      'disa-cci-list', 'disa-cci-nist-references', 'disa-srg-library',
+      'disa-stig-library', 'disa-stig-srg-cci-references', 'fedramp-rev5',
+      'mitre-attack-enterprise', 'mitre-attack-ics', 'mitre-d3fend-mappings',
+      'mitre-d3fend-ontology', 'nist-800-171-oscal-mappings', 'nist-800-171-rev2',
+      'nist-800-172-rev3', 'nist-800-53a-assessment-procedures',
+      'nist-800-53b-baselines', 'nist-ai-rmf-playbook', 'nist-olir-csf2-to-sp800-53',
+      'nist-oscal', 'nist-ssdf-oscal',
+    ],
+    curated: [
+      'dod-cmmc-rule', 'dod-rai-toolkit', 'dod-zt-capabilities',
+      'dod-zt-execution-roadmap', 'dod-zt-overlays-2024',
+      'dod-zt-reference-architecture-v2', 'dod-zt-strategy', 'isoo-cui-regulation',
+      'nara-cui-registry', 'nist-800-37-rev2', 'nist-fips-199', 'nist-fips-200',
+    ],
+    link_out: [
+      'community-cci-research', 'cyber-mil-stig-compilations',
+      'cyber-mil-stig-downloads', 'cyber-mil-stig-gpo', 'mitre-cis-cci-mappings',
+      'nist-csf-53-supplemental', 'nist-csf11-csf20-crosswalk',
+      'nist-informative-references', 'nist-olir-csf2-to-sp800-171',
+      'nuwcdivnpt-github-org', 'nuwcdivnpt-stig-manager', 'stigviewer-catalog',
+      'stigviewer-clkb-api',
+    ],
+  };
+  const actual = Object.fromEntries(
+    Object.keys(expected).map((model) => [
+      model,
+      registry.freshness.sources
+        .filter((entry) => entry.sync_model === model)
+        .map((entry) => entry.source_id)
+        .sort(),
+    ]),
+  );
+  for (const ids of Object.values(expected)) ids.sort();
+  assert.deepEqual(actual, expected);
+  assert.equal(registry.freshness.stale_after_days, 45);
+});
+
+test('loaded sources expose additive freshness fields', () => {
+  const { byId } = loadSourceRegistry(registry);
+  assert.equal(byId.get('nist-oscal').sync_model, 'auto_synced');
+  assert.equal(byId.get('nist-oscal').stale_after_days, 45);
+  assert.equal(byId.get('community-cci-research').last_imported, null);
+  assert.equal(byId.get('community-cci-research').hash, null);
+});
+
+test('source registry rejects invalid or incomplete freshness metadata', () => {
+  const invalid = structuredClone(registry);
+  invalid.freshness.sources[0].last_checked = '2026-02-30';
+  invalid.freshness.sources[1].hash = 'sha256:placeholder';
+  invalid.freshness.sources.find((entry) => entry.sync_model === 'link_out').last_imported = '2026-01-01';
+  invalid.freshness.sources.pop();
+  const errors = validateSourceRegistry(invalid);
+  assert.ok(errors.some((error) => error.includes('last_checked')));
+  assert.ok(errors.some((error) => error.includes('sha256 digest')));
+  assert.ok(errors.some((error) => error.includes('link-out source')));
+  assert.ok(errors.some((error) => error.includes('missing freshness entry')));
+});
+
 test('source provenance and eligibility remain separate', () => {
   const { sources } = loadSourceRegistry(registry);
   assert.ok(sources.length >= 35);

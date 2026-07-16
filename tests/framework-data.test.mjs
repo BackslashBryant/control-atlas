@@ -14,6 +14,7 @@ import {
 
 const generated = (name) =>
   JSON.parse(readFileSync(`data/generated/${name}.json`, "utf8"));
+const sourceRegistry = JSON.parse(readFileSync("data/source-registry.json", "utf8"));
 
 test("CCI adapter preserves official bridge requirements and references", () => {
   const result = parseCciXml(
@@ -161,6 +162,19 @@ test("issue 11 graph build emits assessment context and governance artifacts for
       (entry) => entry.source_id === "nist-800-53a-assessment-procedures",
     ),
   );
+  const oscalSource = sources.find((source) => source.id === "nist-oscal");
+  const oscalFreshness = sourceRegistry.freshness.sources.find(
+    (entry) => entry.source_id === "nist-oscal",
+  );
+  assert.equal(oscalSource.sync_model, "auto_synced");
+  assert.equal(oscalSource.last_checked, oscalFreshness.last_checked);
+  assert.equal(oscalSource.stale_after_days, 45);
+  const oscalManifest = sourceManifests.source_manifests.find(
+    (entry) => entry.source_id === "nist-oscal",
+  );
+  assert.equal(oscalManifest.sync_model, "auto_synced");
+  assert.equal(oscalManifest.last_checked, oscalFreshness.last_checked);
+  assert.equal(oscalManifest.stale_after_days, 45);
   assert.equal(diffSummary.graph_diff_summary.kind, "graph_diff_summary");
 });
 

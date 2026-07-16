@@ -22,6 +22,10 @@ export const ARTIFACT_TYPES = new Set([
   'other',
 ]);
 export const SOURCE_TIERS = new Set(['gold', 'silver', 'bronze']);
+export const SYNC_MODELS = new Set(['auto_synced', 'curated', 'link_out']);
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const SHA256 = /^sha256:[a-f0-9]{64}$/;
 
 const REQUIRED_FIELDS = [
   'id',
@@ -102,16 +106,77 @@ export function validateSourceRegistry(registry) {
       }
     }
   }
+
+  const freshness = registry.freshness;
+  if (!Number.isInteger(freshness?.stale_after_days) || freshness.stale_after_days < 1) {
+    errors.push('source registry freshness.stale_after_days must be a positive integer');
+  }
+  if (!Array.isArray(freshness?.sources)) {
+    errors.push('source registry freshness.sources must be an array');
+    return errors;
+  }
+
+  const sourceIds = new Set(registry.sources.map((source) => source.id));
+  const freshnessIds = new Set();
+  for (const entry of freshness.sources) {
+    if (!sourceIds.has(entry.source_id)) {
+      errors.push(`freshness entry references unknown source: ${entry.source_id || 'missing'}`);
+    }
+    if (freshnessIds.has(entry.source_id)) {
+      errors.push(`duplicate freshness entry: ${entry.source_id}`);
+    }
+    freshnessIds.add(entry.source_id);
+    if (!SYNC_MODELS.has(entry.sync_model)) {
+      errors.push(`source ${entry.source_id} has unsupported sync_model: ${entry.sync_model || 'missing'}`);
+    }
+    if (!isIsoDate(entry.last_checked)) {
+      errors.push(`source ${entry.source_id} last_checked must be a valid YYYY-MM-DD date`);
+    }
+    if (entry.sync_model === 'link_out') {
+      if (entry.last_imported !== null) {
+        errors.push(`link-out source ${entry.source_id} last_imported must be null`);
+      }
+      if (entry.hash !== null) {
+        errors.push(`link-out source ${entry.source_id} hash must be null`);
+      }
+    } else if (!isIsoDate(entry.last_imported)) {
+      errors.push(`source ${entry.source_id} last_imported must be a valid YYYY-MM-DD date`);
+    }
+    if (entry.hash !== null && !SHA256.test(entry.hash)) {
+      errors.push(`source ${entry.source_id} hash must be null or a sha256 digest`);
+    }
+  }
+  for (const sourceId of sourceIds) {
+    if (!freshnessIds.has(sourceId)) errors.push(`source ${sourceId} missing freshness entry`);
+  }
   return errors;
+}
+
+function isIsoDate(value) {
+  if (!ISO_DATE.test(String(value || ''))) return false;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
 
 export function loadSourceRegistry(registry) {
   const errors = validateSourceRegistry(registry);
   if (errors.length) throw new Error(`Invalid source registry:\n- ${errors.join('\n- ')}`);
+  const freshnessById = new Map(
+    registry.freshness.sources.map((entry) => [entry.source_id, entry]),
+  );
+  const sources = registry.sources.map((source) => {
+    const freshness = { ...freshnessById.get(source.id) };
+    delete freshness.source_id;
+    return {
+      ...source,
+      ...freshness,
+      stale_after_days: registry.freshness.stale_after_days,
+    };
+  });
   return {
     registry,
-    byId: new Map(registry.sources.map((source) => [source.id, source])),
-    sources: registry.sources,
+    byId: new Map(sources.map((source) => [source.id, source])),
+    sources,
   };
 }
 

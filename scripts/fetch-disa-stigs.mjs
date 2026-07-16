@@ -170,6 +170,9 @@ export async function fetchDisaStigs(options = {}) {
 
 async function main() {
   const result = await fetchDisaStigs();
+  if (result.fallbackMode && process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') {
+    throw new Error(`DISA refresh required a live upstream fetch but used ${result.fallbackMode}`);
+  }
   writeFileSync(join(ROOT, 'data', 'stig-rules.json'), `${JSON.stringify(result.stig, null, 2)}\n`, 'utf8');
   writeFileSync(join(ROOT, 'data', 'srg-requirements.json'), `${JSON.stringify(result.srg, null, 2)}\n`, 'utf8');
   writeFileSync(join(ROOT, 'maps', 'stig-srg-to-cci.json'), `${JSON.stringify(result.relationships, null, 2)}\n`, 'utf8');

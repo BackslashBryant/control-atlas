@@ -56,6 +56,8 @@ scripts/*
 !scripts/extract-dod-zt.mjs
 !scripts/fetch-stig-source-observations.mjs
 !scripts/refresh-data.mjs
+!scripts/reconcile-source-freshness.mjs
+!scripts/report-refresh-diff.mjs
 !scripts/static-smoke.mjs
 !scripts/dom-smoke.mjs
 !scripts/lib/

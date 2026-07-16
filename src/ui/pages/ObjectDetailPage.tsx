@@ -21,6 +21,11 @@ import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
+  sourceCurrentAsOf,
+  sourceFreshness,
+  sourceSyncLabel,
+} from "../../shared/source-freshness.mjs";
+import {
   ExpandableChipList,
   RelationshipGroupRollupNav,
   RelationshipGroupsSection,
@@ -614,12 +619,20 @@ export function ObjectDetailPage(props: {
               />
             </SummaryCard>
           ) : null}
-          <SummaryCard title="Source support" tone="trust">
+          <SummaryCard
+            title="Source support"
+            tone={sourceFreshness(source).is_stale ? "warning" : "trust"}
+          >
             <p>{sourceTrustSummary(source)}</p>
             <p className="support-meta">
               Primary source:{" "}
               {source?.display_name || source?.name || "Unavailable"}
             </p>
+            {source ? (
+              <p className="support-meta">
+                {sourceSyncLabel(source.sync_model)} · {sourceCurrentAsOf(source)}
+              </p>
+            ) : null}
             <div className="card-actions">
               <button
                 className="secondary"

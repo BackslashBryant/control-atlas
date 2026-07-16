@@ -3,6 +3,11 @@ import { IconArrowRight } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import {
+  sourceCurrentAsOf,
+  sourceFreshness,
+  sourceSyncLabel,
+} from "../../shared/source-freshness.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import type { ViewState } from "./viewState";
 
@@ -112,6 +117,9 @@ export function sourceWarnings(source: any) {
       "Access restrictions may limit what can be verified from this source.",
     );
   }
+  if (sourceFreshness(source).is_stale) {
+    warnings.push(sourceCurrentAsOf(source));
+  }
   return warnings;
 }
 
@@ -186,6 +194,12 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       </div>
       <p className="result-summary">
         {source.name} is maintained by {source.owner}.
+      </p>
+      <p className="support-meta">
+        {sourceSyncLabel(source.sync_model)} ·{" "}
+        {sourceFreshness(source).is_stale
+          ? `Last checked ${source.last_checked}`
+          : sourceCurrentAsOf(source)}
       </p>
       <div className="source-summary-grid">
         <ProvenanceTerm

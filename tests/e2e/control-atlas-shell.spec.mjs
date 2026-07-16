@@ -206,6 +206,7 @@ test("library detail deep links stay compatible and keep advanced details collap
   await expect(page.locator(".relationship-group-trigger").first()).toBeFocused();
   await expect(page.locator(".relationship-card").first()).toBeVisible();
   await expect(page.getByText("Source support", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Automatically synchronized/)).toBeVisible();
   await expect(
     page.getByText("What to do next", { exact: true }),
   ).toBeVisible();
@@ -415,6 +416,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
       "This source is not used in the public map by default.",
     ),
   ).toBeVisible();
+  await expect(communityCard).toContainText("Official link only");
   await communityCard
     .getByRole("button", { name: "View source details" })
     .click();
@@ -423,6 +425,11 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   ).toBeVisible();
   await expect(
     page.getByText("Trust and status", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Advanced metadata" }).click();
+  await expect(page.getByText("Update model", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Official link only — not hosted by Control Atlas"),
   ).toBeVisible();
 
   await page.goto("/?view=templates");

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-10T22:10:29.970Z",
+  "generated_at": "2026-07-16T10:59:41.325Z",
   "sources": [
     {
       "id": "nist-oscal",
@@ -34,7 +34,12 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:d11a20c2c7fba8a5dc83c1323d1a9d93108111ab22bba3041d44dc574422af3a",
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-171-rev2",
@@ -64,7 +69,12 @@
           "nist-800-171-rev2"
         ],
         "parser": "csv"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:0576169b53f874f28a321225fcefdc7b3479c8e326a12fcb581fd9156a64e3e5",
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-172-rev3",
@@ -94,7 +104,12 @@
           "nist-800-172"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:b6e2a3adcf5030e4767a5690c76a2a43d0969b9cfe0032c6d16f0637f925b4c6",
+      "stale_after_days": 45
     },
     {
       "id": "isoo-cui-regulation",
@@ -124,7 +139,12 @@
           "cui-policy"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-13",
+      "last_imported": "2026-06-13",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nara-cui-registry",
@@ -154,7 +174,12 @@
           "cui-policy"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-13",
+      "last_imported": "2026-06-13",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "disa-cci-list",
@@ -183,7 +208,12 @@
           "disa-cci"
         ],
         "parser": "cci-xml"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:b37b11384fa8e13b8a4df0d024c697ba6809ecd100ef56bd76136b0c23d340d4",
+      "stale_after_days": 45
     },
     {
       "id": "disa-stig-library",
@@ -195,7 +225,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see metadata.artifacts)",
+      "version": "multiple (see per-record source.version)",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -243,7 +273,12 @@
             "checksum": "sha256:7553bc92c09fdd53a32270f5b69971924725d478fb8ddf5ded430bc88f5b93b5"
           }
         ]
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:41591893a51bc95fc12b2437339da4e0a50905c93d5957bbadc788e80c3e9978",
+      "stale_after_days": 45
     },
     {
       "id": "disa-srg-library",
@@ -255,7 +290,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see metadata.artifacts)",
+      "version": "multiple (see per-record source.version)",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -363,7 +398,12 @@
             "checksum": "sha256:9470b9caadd3ff44b90e608c524012fa719c9b3541b3f0bb027b38b5b9e67971"
           }
         ]
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:e7e4984846db7b3b86c6fc9ed62f00dd44b092b792080a86e18ffbf0c4d52c64",
+      "stale_after_days": 45
     },
     {
       "id": "disa-stig-srg-cci-references",
@@ -375,7 +415,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see disa-stig-library and disa-srg-library metadata.artifacts)",
+      "version": "multiple (see per-relationship source_locator)",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -399,7 +439,12 @@
           "resolved_from": "gold",
           "fallbacks": []
         }
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:d23c39e01e81d99c46f4e11d0d8368581a43a3e1605afbcf7cab0dddee102e67",
+      "stale_after_days": 45
     },
     {
       "id": "cyber-mil-stig-compilations",
@@ -443,7 +488,12 @@
             "nuwcdivnpt-stig-manager"
           ]
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "cyber-mil-stig-downloads",
@@ -484,7 +534,12 @@
             "stigviewer-clkb-api"
           ]
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "cyber-mil-stig-gpo",
@@ -522,7 +577,12 @@
             "nuwcdivnpt-stig-manager"
           ]
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "stigviewer-catalog",
@@ -558,7 +618,12 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "stigviewer-clkb-api",
@@ -594,7 +659,12 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nuwcdivnpt-github-org",
@@ -629,7 +699,12 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nuwcdivnpt-stig-manager",
@@ -665,7 +740,12 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-07-16",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-ai-rmf-playbook",
@@ -695,7 +775,12 @@
           "nist-ai-rmf"
         ],
         "parser": "json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:7f5b942ef16b1efacc76d6eb1f58d393dd1d43c51fd9e9e7cd655f0b6ec50616",
+      "stale_after_days": 45
     },
     {
       "id": "nist-ssdf-oscal",
@@ -725,7 +810,12 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:d711a85a4f88f7053544eead9e29d4d22846b60c85d01f01140af292a2d8e6f6",
+      "stale_after_days": 45
     },
     {
       "id": "dod-cmmc-rule",
@@ -754,7 +844,12 @@
           "cmmc-2"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-09",
+      "last_imported": "2026-06-09",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "fedramp-rev5",
@@ -784,7 +879,12 @@
           "nist-800-53"
         ],
         "parser": "oscal-profile"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:171cd1ef564eae8eefcc8ac578305da3841ecfc453669bcf7dadf80559f7924b",
+      "stale_after_days": 45
     },
     {
       "id": "dod-rai-toolkit",
@@ -813,7 +913,12 @@
           "dod-rai"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-09",
+      "last_imported": "2026-06-09",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-53b-baselines",
@@ -844,7 +949,12 @@
           "nist-800-53b"
         ],
         "parser": "oscal-profile"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398",
+      "stale_after_days": 45
     },
     {
       "id": "nist-fips-199",
@@ -873,7 +983,12 @@
           "fips-199"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-13",
+      "last_imported": "2026-06-13",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-fips-200",
@@ -902,7 +1017,12 @@
           "fips-200"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-13",
+      "last_imported": "2026-06-13",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-37-rev2",
@@ -932,7 +1052,12 @@
           "nist-800-37"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-13",
+      "last_imported": "2026-06-13",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-53a-assessment-procedures",
@@ -963,7 +1088,12 @@
           "nist-800-53"
         ],
         "parser": "oscal-assessment-procedures"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:1d4aa2ff194fc0ad0848cb18f738532a296deece8a1f58141f76fa17c46689cf",
+      "stale_after_days": 45
     },
     {
       "id": "nist-csf-53-supplemental",
@@ -994,7 +1124,12 @@
           "csf-2"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-06-09",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-csf11-csf20-crosswalk",
@@ -1024,7 +1159,12 @@
           "csf-2"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2024-02-20",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-800-171-oscal-mappings",
@@ -1037,7 +1177,7 @@
         "FISMA",
         "FIPS 200"
       ],
-      "version": "2026-06-09",
+      "version": "1.1.0",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "download",
       "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
@@ -1055,7 +1195,12 @@
           "nist-800-171"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:6edfe9c55fb66ff884220cc5863c6ee1431af993a8004c5a9b9149ae1d0d2c55",
+      "stale_after_days": 45
     },
     {
       "id": "disa-cci-nist-references",
@@ -1085,7 +1230,12 @@
           "nist-800-53"
         ],
         "parser": "cci-xml"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:cbe530bfa300eb783cdae2083e791f719439ef7c15ace8740328f79f10ef985e",
+      "stale_after_days": 45
     },
     {
       "id": "nist-informative-references",
@@ -1116,7 +1266,12 @@
           "csf-2"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-06-09",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "mitre-attack-enterprise",
@@ -1143,7 +1298,12 @@
           "mitre-attack"
         ],
         "parser": "stix-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:246f6b4e6c3c690f45ff5bccfa64c11901184eeac1f3b8f83b6831119ef571f4",
+      "stale_after_days": 45
     },
     {
       "id": "mitre-attack-ics",
@@ -1170,7 +1330,12 @@
           "mitre-attack-ics"
         ],
         "parser": "stix-json"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:ec13191ae62f86f8911bb30ccfa44dadc44ca571865d110bf1e0b6bdb652f091",
+      "stale_after_days": 45
     },
     {
       "id": "mitre-d3fend-ontology",
@@ -1197,7 +1362,12 @@
           "mitre-d3fend"
         ],
         "parser": "json-ld"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:226b582efb2eadf7ff0d61f930a9de232c857e8df3d59c7f0a049ee52d7edcfa",
+      "stale_after_days": 45
     },
     {
       "id": "mitre-d3fend-mappings",
@@ -1207,7 +1377,7 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-06-19",
+      "version": "2026-07-16",
       "retrieved_at": "2026-06-19",
       "retrieval_method": "api",
       "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
@@ -1226,7 +1396,12 @@
           "nist-800-53"
         ],
         "parser": "json-ld"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:afe6f07205047985fb185f4e40836f025602e583dd2dbe45320290c5eb712330",
+      "stale_after_days": 45
     },
     {
       "id": "mitre-cis-cci-mappings",
@@ -1253,7 +1428,12 @@
           "disa-cci"
         ],
         "parser": "github-json"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-06-09",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "community-cci-research",
@@ -1280,7 +1460,12 @@
           "disa-cci"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2026-06-09",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "nist-olir-csf2-to-sp800-53",
@@ -1293,7 +1478,7 @@
         "FISMA",
         "FIPS 200"
       ],
-      "version": "2024-02-20",
+      "version": "2.0-draft",
       "retrieved_at": "2024-02-20",
       "retrieval_method": "download",
       "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
@@ -1311,7 +1496,12 @@
           "nist-800-53"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:ce29801b55362097580aa7aa8679850ac077dbcd88ddf21bb268e546a319ba16",
+      "stale_after_days": 45
     },
     {
       "id": "nist-olir-csf2-to-sp800-171",
@@ -1342,7 +1532,12 @@
           "nist-800-171"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "sync_model": "link_out",
+      "last_checked": "2024-02-20",
+      "last_imported": null,
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "dod-zt-reference-architecture-v2",
@@ -1371,7 +1566,12 @@
           "dod-zt"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-15",
+      "last_imported": "2026-06-15",
+      "hash": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "stale_after_days": 45
     },
     {
       "id": "dod-zt-strategy",
@@ -1400,7 +1600,12 @@
           "dod-zt"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-15",
+      "last_imported": "2026-06-15",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "dod-zt-overlays-2024",
@@ -1431,7 +1636,12 @@
         ],
         "parser": "manual-seed",
         "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA."
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-15",
+      "last_imported": "2026-06-15",
+      "hash": "sha256:196d381b7e74a2dc7b88e7d7705cf64e4389f35019282332b97d5a575f05f3fc",
+      "stale_after_days": 45
     },
     {
       "id": "dod-zt-capabilities",
@@ -1460,7 +1670,12 @@
           "dod-zt"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-15",
+      "last_imported": "2026-06-15",
+      "hash": null,
+      "stale_after_days": 45
     },
     {
       "id": "dod-zt-execution-roadmap",
@@ -1489,7 +1704,12 @@
           "dod-zt"
         ],
         "parser": "manual-seed"
-      }
+      },
+      "sync_model": "curated",
+      "last_checked": "2026-06-15",
+      "last_imported": "2026-06-15",
+      "hash": null,
+      "stale_after_days": 45
     }
   ]
 }
