@@ -31,43 +31,45 @@ type AtlasMatrixProps = {
 
 type Coverage = "official" | "inferred" | "none";
 
-// Canonical compliance layers, ordered authority → reference. Columns are the
+// Canonical purpose hierarchy, ordered rules → supporting sources. Columns are the
 // subset of these that the current graph actually contains.
 const LAYER_ORDER = [
-  "Authority",
-  "Governance",
-  "Catalog",
-  "Baseline",
-  "Assessment",
+  "Rules",
+  "Frameworks",
+  "Controls",
+  "Baselines",
   "Implementation",
-  "Mapping",
-  "Threat",
-  "Reference",
+  "Assessment",
+  "Mappings",
+  "Threat / Defense",
+  "Supporting Sources",
 ] as const;
 
 type Layer = (typeof LAYER_ORDER)[number];
 
 const TIER_TO_LAYER: Record<string, Layer> = {
-  authority: "Authority",
-  "governance-risk-framework": "Governance",
-  "control-catalog-requirement-set": "Catalog",
-  "baseline-overlay-program-profile": "Baseline",
-  "assessment-scoping-procedure": "Assessment",
+  authority: "Rules",
+  "governance-risk-framework": "Frameworks",
+  "control-catalog-requirement-set": "Controls",
+  "baseline-overlay-program-profile": "Baselines",
   "implementation-configuration-standard": "Implementation",
-  "control-mapping-crosswalk": "Mapping",
-  "threat-defensive-mapping": "Threat",
-  "supporting-reference": "Reference",
+  "assessment-scoping-procedure": "Assessment",
+  "control-mapping-crosswalk": "Mappings",
+  "threat-defensive-mapping": "Threat / Defense",
+  "supporting-reference": "Supporting Sources",
 };
 
 const ROLE_TO_LAYER: Record<string, Layer> = {
-  "nist-control": "Catalog",
-  "control-catalog": "Catalog",
-  "baseline-overlay-profile": "Baseline",
-  "assessment-scoping": "Assessment",
+  authority: "Rules",
+  "governance-framework": "Frameworks",
+  "nist-control": "Controls",
+  "control-catalog": "Controls",
+  "baseline-overlay-profile": "Baselines",
   "implementation-standard": "Implementation",
-  "mapping-crosswalk": "Mapping",
-  "threat-defense": "Threat",
-  "supporting-reference": "Reference",
+  "assessment-scoping": "Assessment",
+  "mapping-crosswalk": "Mappings",
+  "threat-defense": "Threat / Defense",
+  "supporting-reference": "Supporting Sources",
 };
 
 function layerOf(node: MatrixNode): Layer | null {

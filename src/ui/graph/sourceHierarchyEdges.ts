@@ -7,9 +7,9 @@ export const SOURCE_HIERARCHY_EDGES = [
   ["authority", "governance-risk-framework"],
   ["governance-risk-framework", "control-catalog-requirement-set"],
   ["control-catalog-requirement-set", "baseline-overlay-program-profile"],
-  ["baseline-overlay-program-profile", "assessment-scoping-procedure"],
-  ["assessment-scoping-procedure", "implementation-configuration-standard"],
-  ["implementation-configuration-standard", "control-mapping-crosswalk"],
+  ["baseline-overlay-program-profile", "implementation-configuration-standard"],
+  ["implementation-configuration-standard", "assessment-scoping-procedure"],
+  ["assessment-scoping-procedure", "control-mapping-crosswalk"],
   ["control-mapping-crosswalk", "threat-defensive-mapping"],
   ["threat-defensive-mapping", "supporting-reference"],
 ] as const;

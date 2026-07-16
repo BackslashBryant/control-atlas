@@ -23,15 +23,15 @@ test("source hierarchy uses the required plain-language labels", () => {
   assert.deepEqual(
     SOURCE_HIERARCHY_NODES.map((node) => node.displayName),
     [
-      "Authority",
-      "Governance / Risk Framework",
-      "Control Catalog / Requirement Set",
-      "Baseline / Overlay / Program Profile",
-      "Assessment / Scoping Procedure",
-      "Implementation / Configuration Standard",
-      "Control Mapping / Crosswalk",
-      "Threat / Defensive Mapping",
-      "Supporting Reference",
+      "Rules",
+      "Frameworks",
+      "Controls",
+      "Baselines",
+      "Implementation",
+      "Assessment",
+      "Mappings",
+      "Threat / Defense",
+      "Supporting Sources",
     ],
   );
 });

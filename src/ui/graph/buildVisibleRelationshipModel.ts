@@ -1,8 +1,15 @@
 import { DEFAULT_MAP_WARNINGS, isVisibleWithOptionalFilters } from "./defaultMapFilter.ts";
 import { buildFocusedControlRings } from "./buildFocusedControlRings.ts";
-import { SOURCE_HIERARCHY_EDGES, SOURCE_HIERARCHY_NODES } from "./sourceHierarchyEdges.ts";
 import { SOURCE_SEED_MANIFEST } from "./sourceSeedManifest.ts";
 import { sourceToGraphRole } from "./sourceToGraphRole.ts";
+import {
+  SOURCE_VIEW_DEFINITIONS,
+  normalizeSourceViewId,
+  sourceViewGroup,
+  sourceViewGroupsFor,
+  type SourceViewGroup,
+  type SourceViewId,
+} from "./sourceViews.ts";
 import type {
   VisibleGraphEdge,
   VisibleGraphNode,
@@ -21,28 +28,37 @@ const DEFAULT_FILTERS: SourceVisibilityFilters = {
   showRegistryOnly: false,
 };
 
-function tierMemberCount(hierarchyTier: string): number {
+function sourcesInViewGroup(
+  sourceView: SourceViewId,
+  groupId: string,
+  filters: SourceVisibilityFilters,
+) {
   return SOURCE_SEED_MANIFEST.filter(
-    (source) => source.hierarchyTier === hierarchyTier,
-  ).length;
+    (source) =>
+      sourceViewGroupsFor(source, sourceView).includes(groupId) &&
+      isVisibleWithOptionalFilters(source, filters),
+  );
 }
 
-function hierarchyNode(
-  hierarchyTier: string,
-  displayName: string,
-  graphRole: string,
+function viewGroupNode(
+  sourceView: SourceViewId,
+  group: SourceViewGroup,
+  filters: SourceVisibilityFilters,
 ): VisibleGraphNode {
-  const count = tierMemberCount(hierarchyTier);
+  const count = sourcesInViewGroup(sourceView, group.id, filters).length;
   return {
-    id: `hierarchy:${hierarchyTier}`,
-    label: displayName,
+    id: `hierarchy:${group.id}`,
+    label: group.label,
     node_type: "source-category",
-    graphRole,
+    graphRole: group.graphRole,
     metadata: {
-      item_id: displayName,
+      item_id: group.label,
       title: `${count} source${count === 1 ? "" : "s"} inside — select to open`,
-      hierarchyTier,
+      hierarchyTier: sourceView === "purpose" ? group.id : undefined,
       childCount: count,
+      description: group.description,
+      sourceView,
+      sourceViewGroup: group.id,
     },
   };
 }
@@ -64,35 +80,33 @@ function sourceNode(
   };
 }
 
-function hierarchyEdge(source: string, target: string): VisibleGraphEdge {
+function viewSequenceEdge(
+  sourceView: SourceViewId,
+  source: SourceViewGroup,
+  target: SourceViewGroup,
+): VisibleGraphEdge {
   return {
-    id: `hierarchy:${source}->${target}`,
-    source_node_id: `hierarchy:${source}`,
-    target_node_id: `hierarchy:${target}`,
+    id: `hierarchy:${sourceView}:${source.id}->${target.id}`,
+    source_node_id: `hierarchy:${source.id}`,
+    target_node_id: `hierarchy:${target.id}`,
     relationship_type: "leads_to",
     provenance_class: "official",
     publication_status: "published",
     confidence: "high",
-    plain_language_rationale:
-      "This category supplies context to the next layer of the compliance ecosystem.",
+    plain_language_rationale: `This guided view moves from ${source.label} to ${target.label}.`,
   };
 }
 
-export function buildSourceHierarchyModel(
+export function buildSourceViewModel(
+  sourceView: SourceViewId = "novice",
   filters: SourceVisibilityFilters = DEFAULT_FILTERS,
 ): VisibleRelationshipModel {
-  const nodes = SOURCE_HIERARCHY_NODES.map((entry) => {
-    const representative = SOURCE_SEED_MANIFEST.find(
-      (source) => source.hierarchyTier === entry.hierarchyTier,
-    );
-    return hierarchyNode(
-      entry.hierarchyTier,
-      entry.displayName,
-      representative ? sourceToGraphRole(representative) : "other",
-    );
-  });
-  const edges = SOURCE_HIERARCHY_EDGES.map(([source, target]) =>
-    hierarchyEdge(source, target),
+  const definition = SOURCE_VIEW_DEFINITIONS[sourceView];
+  const nodes = definition.groups.map((group) =>
+    viewGroupNode(sourceView, group, filters),
+  );
+  const edges = definition.groups.slice(0, -1).map((group, index) =>
+    viewSequenceEdge(sourceView, group, definition.groups[index + 1]),
   );
 
   const optionalSources = SOURCE_SEED_MANIFEST.filter(
@@ -102,16 +116,14 @@ export function buildSourceHierarchyModel(
   );
 
   for (const source of optionalSources) {
+    const parentGroup = sourceViewGroupsFor(source, sourceView)[0];
+    if (!parentGroup) continue;
+    const optionalNode = sourceNode(source);
     nodes.push({
-      id: `source:${source.sourceId}`,
-      label: source.displayName,
-      node_type: "source",
-      graphRole: sourceToGraphRole(source),
-      parent: `hierarchy:${source.hierarchyTier}`,
+      ...optionalNode,
+      parent: `hierarchy:${parentGroup}`,
       metadata: {
-        item_id: source.displayName,
-        title: source.displayName,
-        hierarchyTier: source.hierarchyTier,
+        ...optionalNode.metadata,
         description:
           source.disposition === "draft-gated"
             ? DEFAULT_MAP_WARNINGS.draftOrLegacy
@@ -120,12 +132,11 @@ export function buildSourceHierarchyModel(
               : DEFAULT_MAP_WARNINGS.registryOnly,
       },
     });
-    // We remove the explicit edge because the compound node relationship naturally shows the hierarchy
-    // without cluttering the graph with lines.
   }
 
+  const centerGroup = definition.groups[Math.min(2, definition.groups.length - 1)];
   return {
-    centerNodeId: "hierarchy:control-catalog-requirement-set",
+    centerNodeId: `hierarchy:${centerGroup.id}`,
     layoutMode: optionalSources.length > 0 ? "expanded" : "hierarchy",
     nodes,
     edges,
@@ -133,45 +144,39 @@ export function buildSourceHierarchyModel(
   };
 }
 
-/**
- * Drill-down view for one hierarchy tier: the category sits at the center and
- * its member sources fan out below it. Optional (gated) sources appear only
- * when the matching visibility filter is on.
- */
-export function buildTierDrillModel(
-  hierarchyTier: string,
+/** The canonical purpose hierarchy retained for callers and old deep links. */
+export function buildSourceHierarchyModel(
   filters: SourceVisibilityFilters = DEFAULT_FILTERS,
 ): VisibleRelationshipModel {
-  const entry = SOURCE_HIERARCHY_NODES.find(
-    (candidate) => candidate.hierarchyTier === hierarchyTier,
-  );
-  if (!entry) {
-    return buildSourceHierarchyModel(filters);
+  return buildSourceViewModel("purpose", filters);
+}
+
+/**
+ * Drill-down view for one group in the active lens. The group sits at the
+ * center and its source records fan out below it.
+ */
+export function buildTierDrillModel(
+  groupId: string,
+  filters: SourceVisibilityFilters = DEFAULT_FILTERS,
+  sourceView: SourceViewId = "purpose",
+): VisibleRelationshipModel {
+  const group = sourceViewGroup(sourceView, groupId);
+  if (!group) {
+    return buildSourceViewModel(sourceView, filters);
   }
 
-  const members = SOURCE_SEED_MANIFEST.filter(
-    (source) =>
-      source.hierarchyTier === hierarchyTier &&
-      isVisibleWithOptionalFilters(source, filters),
-  );
-  const representative = SOURCE_SEED_MANIFEST.find(
-    (source) => source.hierarchyTier === hierarchyTier,
-  );
-  const center = hierarchyNode(
-    entry.hierarchyTier,
-    entry.displayName,
-    representative ? sourceToGraphRole(representative) : "other",
-  );
+  const members = sourcesInViewGroup(sourceView, groupId, filters);
+  const center = viewGroupNode(sourceView, group, filters);
   const nodes = [center, ...members.map(sourceNode)];
   const edges = members.map((source) => ({
-    id: `drill:${hierarchyTier}->${source.sourceId}`,
+    id: `drill:${sourceView}:${groupId}->${source.sourceId}`,
     source_node_id: center.id,
     target_node_id: `source:${source.sourceId}`,
     relationship_type: "includes",
     provenance_class: "official",
     publication_status: "published",
     confidence: "high",
-    plain_language_rationale: `${source.displayName} is one of the sources that make up the ${entry.displayName} layer.`,
+    plain_language_rationale: `${source.displayName} helps answer “${group.label}” in the ${SOURCE_VIEW_DEFINITIONS[sourceView].label.toLowerCase()} view.`,
   }));
 
   return {
@@ -186,6 +191,7 @@ export function buildTierDrillModel(
 export function buildVisibleRelationshipModel(options: {
   nodeId: string;
   filters?: SourceVisibilityFilters;
+  sourceView?: SourceViewId | string;
 }): VisibleRelationshipModel {
   if (
     options.nodeId === "AC-2" ||
@@ -193,11 +199,17 @@ export function buildVisibleRelationshipModel(options: {
   ) {
     return buildFocusedControlRings(options.nodeId);
   }
+
+  const requestedView = normalizeSourceViewId(options.sourceView);
   if (options.nodeId.startsWith("hierarchy:")) {
-    return buildTierDrillModel(
-      options.nodeId.slice("hierarchy:".length),
-      options.filters,
-    );
+    const groupId = options.nodeId.slice("hierarchy:".length);
+    const sourceView = sourceViewGroup(requestedView, groupId)
+      ? requestedView
+      : sourceViewGroup("purpose", groupId)
+        ? "purpose"
+        : requestedView;
+    return buildTierDrillModel(groupId, options.filters, sourceView);
   }
-  return buildSourceHierarchyModel(options.filters);
+
+  return buildSourceViewModel(requestedView, options.filters);
 }

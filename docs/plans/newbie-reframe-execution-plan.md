@@ -31,7 +31,7 @@
 | 1 | Newbie-first copy reposition (landing, nav, menu, interior sweep) | [x] |
 | 2 | Visual de-blend spike → owner picks intensity → rollout; + header brand-lockup fix | [x] |
 | 3 | Positioning docs reframe (PRD, vision, backlog header) | [x] |
-| 4 | Start Here sharpening — situation→requirements as the newbie's main path | [ ] |
+| 4 | Start Here sharpening — situation→requirements as the newbie's main path | [x] |
 | 5 | Trust & connection labeling (named crosswalk groups, coverage honesty) | [ ] |
 | 6 | Freshness: auto-sync pipeline + "current as of" stamping | [ ] |
 | 7 | Templates professionalism pass (parallel track, any time after 1) | [ ] |
@@ -161,6 +161,8 @@ Verify: start-here tests green + e2e/a11y; walk the full flow in the browser pan
 2. **Coverage honesty:** decide `isLowCatalogCoverage` boundary (`src/ui/lib/catalogCoverage.ts`, currently `pct < 75` lets exactly-75% skate past) — pick inclusive `<=` or a stated cutoff; adjust the a11y-contract assertion together.
 3. **Known-gaps note:** Sources page line explaining the 11 residual blocked relationships (9 upstream OLIR bare-identifier rows, 2 stale DoD ZT refs) so the number is explained, not discovered.
 4. 0%-coverage catalogs (ATT&CK ICS, AI RMF, SSDF, DoD RAI; SP 800-172 at 1%): either suppress from default search ranking or clearly badge — propose, owner picks.
+5. **One source model, three views:** purpose is the canonical hierarchy (Rules → Frameworks → Controls → Baselines → Implementation → Assessment → Mappings → Threat/Defense → Supporting Sources). The default interface groups those same sources by novice question. RMF lifecycle is an alternate guided view from Prepare through Monitor. Managerial / Operational / Technical remain control-level tags, never document categories.
+6. **Connection group jump navigation:** keep full connection lists in the record page's main column, but add a compact named-group rollup in the detail sidebar that opens and jump-links to each accordion group.
 
 Verify: unit + e2e + a11y green; screenshot a record's Connections panel before/after.
 

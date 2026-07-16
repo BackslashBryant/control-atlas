@@ -200,7 +200,10 @@ test("library detail deep links stay compatible and keep advanced details collap
     page.getByRole("button", { name: "Open in Atlas Map" }).first(),
   ).toBeVisible();
   await expect(page.locator(".relationship-card")).toHaveCount(0);
-  await page.locator(".relationship-group-trigger").first().click();
+  const groupNav = page.getByRole("navigation", { name: "Connection groups" });
+  await expect(groupNav).toBeVisible();
+  await groupNav.getByRole("button").first().click();
+  await expect(page.locator(".relationship-group-trigger").first()).toBeFocused();
   await expect(page.locator(".relationship-card").first()).toBeVisible();
   await expect(page.getByText("Source support", { exact: true })).toBeVisible();
   await expect(
