@@ -17,10 +17,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
-import {
-  buildCatalogCoverageList,
-  isLowCatalogCoverage,
-} from "../lib/catalogCoverage";
+import { buildConnectionInventory } from "../lib/connectionInventory.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
@@ -61,7 +58,6 @@ import { serializeHashUrl } from "../lib/hashRoutes";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
-  Badge,
   DisclosurePanel,
   PageHeader,
   SelectField,
@@ -115,8 +111,12 @@ export function SourcesPage(props: {
     );
   }, [sources]);
 
-  const catalogCoverage = useMemo(
-    () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 10),
+  const connectionInventory = useMemo(
+    () =>
+      buildConnectionInventory(
+        bundle.runtime.dataset.nodes,
+        bundle.runtime.dataset.edges,
+      ),
     [bundle.runtime],
   );
 
@@ -176,49 +176,40 @@ export function SourcesPage(props: {
       </section>
 
       <section
-        aria-labelledby="catalog-coverage-heading"
-        className="catalog-coverage"
+        aria-labelledby="connection-inventory-heading"
+        className="connection-inventory"
       >
-        <h2 id="catalog-coverage-heading">Map coverage by catalog</h2>
+        <h2 id="connection-inventory-heading">Connection inventory</h2>
         <p>
-          How much of each catalog is actually connected in the public map. Low
-          coverage means mappings for that framework are not fully ingested yet
-          — a missing link is not proof that no relationship exists.
+          What Control Atlas currently loads and connects. These are build
+          counts, not completeness scores.
         </p>
-        <ul className="catalog-coverage-list">
-          {catalogCoverage.map((catalog) => (
-            <li className="catalog-coverage-row" key={catalog.id}>
-              <span className="catalog-coverage-name">
-                {catalog.name}
-                {isLowCatalogCoverage(catalog) ? (
-                  <Badge tone="warning">Preview / low coverage</Badge>
-                ) : null}
+        <p className="connection-inventory-summary">
+          <strong>{connectionInventory.totalRecords.toLocaleString()}</strong>{" "}
+          records across {connectionInventory.rows.length} practical categories
+          with{" "}
+          <strong>
+            {connectionInventory.publishedLinks.toLocaleString()}
+          </strong>{" "}
+          published links.
+        </p>
+        <ul className="connection-inventory-list">
+          {connectionInventory.rows.map((category) => (
+            <li className="connection-inventory-row" key={category.id}>
+              <strong>{category.label}</strong>
+              <span>{category.totalRecords.toLocaleString()} records loaded</span>
+              <span>
+                {category.connectedRecords.toLocaleString()} records connected
               </span>
-              <span
-                aria-hidden="true"
-                className="catalog-coverage-bar"
-                data-level={
-                  catalog.pct >= 75 ? "high" : catalog.pct >= 40 ? "mid" : "low"
-                }
-              >
-                <span style={{ width: `${catalog.pct}%` }} />
+              <span>
+                {category.publishedLinks.toLocaleString()} published links
               </span>
-              <span className="catalog-coverage-stat">
-                {catalog.connected}/{catalog.total} connected ({catalog.pct}%)
+              <span className="connection-inventory-related">
+                Connects to: {category.relatedCategories.join(", ") || "none yet"}
               </span>
             </li>
           ))}
         </ul>
-        <div className="catalog-coverage-contract">
-          <h3>Supported catalogs</h3>
-          <p>
-            Every catalog above is supported and stays fully searchable.
-            Catalogs marked <strong>Preview / low coverage</strong> are still
-            being mapped into the public graph, so they are shown for reference
-            only. In a low-coverage catalog, a missing link means the mapping is
-            not ingested yet — not that no relationship exists.
-          </p>
-        </div>
         {knownGaps.total > 0 ? (
           <p className="support-meta">
             <strong>{knownGaps.total} known upstream gaps:</strong>{" "}

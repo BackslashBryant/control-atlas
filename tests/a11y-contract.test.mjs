@@ -181,7 +181,7 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
   assert.match(block[1], /min-width:\s*44px;/);
 });
 
-test("coverage-transparency surfaces warn users when a catalog is under-mapped", () => {
+test("connection transparency distinguishes inventory from completeness", () => {
   // CATL coverage blocker: low-coverage catalogs stay visible but must be
   // labelled so users do not read a missing link as proof of no relationship.
   const catalogCoverage = readFileSync(
@@ -196,12 +196,15 @@ test("coverage-transparency surfaces warn users when a catalog is under-mapped",
   assert.match(catalogCoverage, /export function isLowCatalogCoverage/);
   assert.match(catalogCoverage, /coverage\.pct\s*<=\s*75/);
 
-  // SourcesPage carries the supported-catalog contract statement and drives a
-  // "Preview / low coverage" badge from isLowCatalogCoverage.
-  assert.match(sourcesPage, /Supported catalogs/);
-  assert.match(sourcesPage, /Preview \/ low coverage/);
-  assert.match(sourcesPage, /not that no relationship exists/);
-  assert.match(sourcesPage, /isLowCatalogCoverage\(catalog\)/);
+  // SourcesPage lists factual loaded/connected/link counts without presenting
+  // a percentage, warning badge, or traffic-light completeness judgment.
+  assert.match(sourcesPage, /Connection inventory/);
+  assert.match(sourcesPage, /records connected/);
+  assert.match(sourcesPage, /published links/);
+  assert.match(sourcesPage, /not completeness scores/);
+  assert.doesNotMatch(sourcesPage, /Preview \/ low coverage/);
+  assert.doesNotMatch(sourcesPage, /data-level=/);
+  assert.doesNotMatch(sourcesPage, /catalog\.pct/);
 
   // ExplorePage result cards derive coverage per document and surface a
   // "Limited coverage" badge so absence of a link is not over-trusted.

@@ -92,8 +92,8 @@ export function sourceTrustSummary(source: any) {
 
 export function sourceUsageSummary(source: any) {
   return source?.graph_eligible && source?.eligibility_status === "eligible"
-    ? "Used in map: Yes"
-    : "Used in map: No";
+    ? "Its published records and mappings appear in search, comparison, and Atlas connections"
+    : "Control Atlas links to this source for reference but does not import its records into Atlas connections";
 }
 
 export function sourceWarnings(source: any) {
@@ -102,7 +102,9 @@ export function sourceWarnings(source: any) {
     return warnings;
   }
   if (!source.graph_eligible || source.eligibility_status === "excluded") {
-    warnings.push("This source is not used in the public map by default.");
+    warnings.push(
+      "This source is linked for reference; its records are not imported into Atlas connections.",
+    );
   }
   if (
     source.lifecycle_status === "deprecated" ||
@@ -188,9 +190,6 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
           <p className="result-meta">Source</p>
           <h3>{source.display_name || source.name}</h3>
         </div>
-        <Badge tone={source.graph_eligible ? "success" : "warning"}>
-          {sourceUsageSummary(source)}
-        </Badge>
       </div>
       <p className="result-summary">
         {source.name} is maintained by {source.owner}.
