@@ -339,7 +339,7 @@ export function buildStartHereRecommendations(answers) {
     label: patternLabel(patternId),
     rationale:
       PATTERN_RATIONALES[patternId] ||
-      `This pattern explains a concept that commonly blocks ${systemType} teams in a ${environment} setting.`,
+      `This playbook explains a concept that commonly blocks ${systemType} teams in a ${environment} setting.`,
   }));
 
   const templates = uniqueTemplateIds(templateIds).map((templateType) => ({

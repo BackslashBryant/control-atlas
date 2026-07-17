@@ -1,12 +1,10 @@
 # STATE
 
 ## Goal
-Complete `docs/plans/newbie-reframe-execution-plan.md` phase-by-phase. Implementation and owner review are complete across Phases 1-7.
+Ship a release-ready Control Atlas branch with a bounded, readable, responsive Atlas and evidence-backed release review. Do not create or publish the `v1.0.0` release without owner approval.
 
 ## Now
-Phase 7 — Compliance artifact and template nexus — is the current release. It routes ten common tasks through 40 official artifacts, 11 supporting tools, and 12 Control Atlas companions. All companions earned an A professional-utility grade after structured generation, Office-package parsing, print-PDF rendering, and page-by-page visual review.
-
-Official artifacts remain distinct from Control Atlas companions. FedRAMP structured rules `2026.07.14.01`, their official dataset schema, all 11 current artifact schemas, 27 official legacy downloads, the historical GSA OSCAL archive, public eMASS v3.22 schema evidence, STIG Viewer CSV guidance, DCSA baselines, and PPSM policy/training are cataloged with provenance, dates, formats, access, and limitations. Ten legacy artifact families resolve to exact current rule IDs, schemas, paths, and next actions. No companion claims FedRAMP approval or current eMASS import compatibility.
+The v1.0 release-readiness sprint is active on `agent/pixel/v1-0-release-readiness`. Landing identity and federated search fixes are retained. The Atlas now defaults to Path, offers a bounded Map only when published connections exist, and keeps List as an equal accessible view. Full local precommit is green with 120 Playwright tests passed and 1 skipped. Lighthouse, CI, and live Pages verification remain before ship.
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -28,6 +26,11 @@ Official artifacts remain distinct from Control Atlas companions. FedRAMP struct
 - Source records keep one canonical purpose plus explicit novice-question and RMF memberships. Managerial / Operational / Technical are not document categories; they remain available for control-level tagging.
 - Connection lists stay in the main column. The sidebar contains only compact group names and counts; selecting one opens, scrolls to, and focuses the corresponding accordion.
 - Sparse catalogs remain visible with the existing Preview badge rather than being suppressed from search. Real crosswalk sourcing stays separate backlog work.
+- Path, Map, and List use one filtered relationship model. Published connections are the default; candidate links require an explicit toggle.
+- Desktop Path runs horizontally through six stages. Mobile Path is vertical. Map groups are arranged vertically as upstream, peer/equivalent, and downstream regions.
+- The Map is bounded to the selected record plus six group summaries; one group expands at a time to at most ten desktop or six compact records. Overflow opens List.
+- A zero-connection record gets an honest empty state. The Atlas never invents edges or renders a decorative canvas when there is nothing to map.
+- The Atlas route uses semantic React DOM and record-indexed neighborhood shards. React Flow and ELK remain lazy legacy dependencies for other bounded relationship surfaces, not the primary Atlas route.
 
 ## Facts
 - Phase 7 local verification includes 12 regenerated Office outputs, 12 print-QA PDFs / 72 pages, independent XLSX parsing, OOXML structure checks, registry/interoperability contracts, official FedRAMP schema validation, and page-by-page visual review.
@@ -38,6 +41,8 @@ Official artifacts remain distinct from Control Atlas companions. FedRAMP struct
 - `src/ui/graph/sourceViews.ts` defines the three source lenses; `src/ui/graph/sourceSeedManifest.ts` remains the one source inventory.
 - `runtime.getGraphHealth()` provides the dynamic Sources-page gap explanation. Current generated data: 45 sources, 11,486 nodes, 16,207 edges, 11 findings.
 - Current low-coverage examples: DoD RAI 0/11, ATT&CK ICS 0/97, AI RMF 0/72, SSDF 0/42, SP 800-172 1/116, SP 800-171 Rev. 3 98/131 (75%).
+- Generated Atlas data includes an 11,486-record compact index and 128 deterministic incident-edge shards. Opening one record no longer requires `nodes.json`, `edges.json`, or `evidence.json`.
+- Current local checks: 192 data tests, 30 runtime tests, 18 graph tests, 6 Atlas tests, browser contracts, lint, typecheck, license review, dependency audit, static build/smoke, public verification, and the 80 MiB data budget all pass.
 
 ## Done
 - Phases 1-4 shipped.
@@ -45,6 +50,12 @@ Official artifacts remain distinct from Control Atlas companions. FedRAMP struct
 - Phase 5 spikes shipped as `129a0e0`: three source views over one manifest, purpose hierarchy relabel/order, shareable `sourceView` route state, purpose-aligned matrix labels, sidebar connection-group jump navigation, unit and E2E contract updates, phase/reference documentation.
 - Phase 6 shipped as `74b1ddb`: per-source freshness models and metadata, weekly human-reviewed refresh PR automation, fail-closed scheduled synchronization, newcomer-facing current/stale wording, refreshed public artifacts, and full contract/E2E coverage.
 - Phase 7 completed and FedRAMP-hardened: official-first task/artifact/tool catalogs, official 2026 rules ingestion, complete legacy-file access, explicit legacy-to-current transitions, 12 A-grade companions, honest compatibility boundaries, Office/print polish, and full contract coverage.
+- Atlas release blocker V1-RR-003 has a local implementation: bounded Path/Map/List views, real-edge-only rendering, responsive orientation, separate inspector, source references, and on-demand neighborhood loading.
+- Release-blocking copy was tightened: the landing page states the product purpose, Navigate no longer claims to show “everything,” Playbooks replaces visible “pattern” drift, and repeated “source-backed” labels were replaced with concrete publication wording.
 
 ## Open items
-- No remaining Newbie-Reframe execution phases.
+- Run post-deploy desktop/mobile workflows and focused Atlas Lighthouse against GitHub Pages.
+- Keep the post-v1 tool evaluation in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) out of the v1.0 dependency set.
+- Human screen-reader and real-device checks remain explicitly unverified unless a human/device completes them.
+- Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
+- Do not publish `v1.0.0` without owner approval.

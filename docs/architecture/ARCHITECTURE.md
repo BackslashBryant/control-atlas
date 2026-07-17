@@ -56,6 +56,14 @@ Generated runtime graph artifacts remain:
 - `data/generated/evidence.json`
 - `data/generated/graph-health.json`
 
+The focused Atlas adds normalized read models generated from those canonical artifacts:
+
+- `data/generated/atlas-node-index.json`
+- `data/generated/atlas-neighborhood-manifest.json`
+- `data/generated/atlas-neighborhood/*.json` (128 deterministic incident-edge shards)
+
+These are delivery optimizations, not a second relationship truth. Each stored edge remains canonical and incident to the selected record.
+
 Every displayable relationship separates:
 
 - `relationship_type`: what the relationship means
@@ -69,8 +77,10 @@ Blocked relationships remain graph-health findings and never become displayable 
 
 - `src/` is the source-of-truth application tree and `tools/build-static-site.mjs` stages the deployable site into `dist/site`.
 - React + Vite render the translation-first UI while existing runtime/data contracts remain reusable.
-- React Flow + ELK render bounded relationship diagrams for source hierarchy, focused controls, and selected comparison slices.
-- Tables, search, filters, and detail pages remain the primary browsing model; the graph is supporting context, not primary navigation.
+- The primary Atlas route uses semantic React DOM for Path, bounded Map, and List views over one filtered neighborhood model.
+- Focused Atlas routes load the compact node index plus one incident-edge shard; they do not fetch monolithic `nodes`, `edges`, or `evidence` artifacts.
+- React Flow + ELK remain lazy dependencies for existing bounded relationship diagrams outside the primary Atlas route.
+- Tables, search, filters, and detail pages remain primary browsing models; visual relationships are supporting context, not a giant-canvas navigation system.
 - GitHub Pages remains the deployment target.
 - MiniSearch is the target search pattern.
 - Zod + JSON Schema is the target validation pattern.
@@ -90,4 +100,4 @@ Blocked relationships remain graph-health findings and never become displayable 
 
 ## Compatibility
 
-The hosted repository, package metadata, workflow labels, and Pages path now use Control Atlas. Existing runtime APIs and the five generated graph artifacts remain stable while future epics add capabilities.
+The hosted repository, package metadata, workflow labels, and Pages path use Control Atlas. Existing runtime APIs and canonical graph artifacts remain stable; Atlas neighborhood artifacts are reproducible projections of them.

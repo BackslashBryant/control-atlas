@@ -9,7 +9,7 @@
 
 ## Current Status
 
-The static public reference application is deployable. MVP Epics 0–6 are complete. Release candidate `v1.0.0-rc.1` was tagged June 19, 2026 after full `npm run precommit`, content review, accessibility, and E2E gates passed.
+Release candidate `v1.0.0-rc.1` remains the published release. A v1.0 release-readiness branch now contains the landing/search remediation and bounded Atlas rebuild. Full local precommit passes, including 120 Playwright tests passed and 1 skipped; the branch is not ready to merge until CI and post-deploy workflow/performance evidence pass. Creating or publishing `v1.0.0` requires separate owner approval.
 
 ## Phase 0 Development Readiness
 
@@ -36,8 +36,12 @@ The static public reference application is deployable. MVP Epics 0–6 are compl
 
 ## Public-shell release gate (Epic 7+)
 
-- [ ] Manual a11y checklist completed — [`docs/audits/a11y-manual-checklist.md`](audits/a11y-manual-checklist.md)
-- [ ] Live Pages audit filed from [`docs/audits/live-pages-audit-template.md`](audits/live-pages-audit-template.md)
+- [x] Local `npm run precommit` passes on the release-readiness worktree (120 Playwright passed, 1 skipped)
+- [x] Targeted desktop and mobile novice/expert Atlas workflows pass, including zero connections, bounded Map/inspector layout, and List fallback
+- [ ] Focused Atlas mobile Lighthouse meets the recorded release threshold
+- [ ] Manual keyboard, 200% zoom, responsive, and reduced-motion checks are recorded
+- [ ] Human screen-reader and real-device gaps are either completed or explicitly accepted as residual risk
+- [ ] Live Pages audit is updated with post-deploy evidence
 
 ## Historical Evidence
 
@@ -45,13 +49,13 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Operate in maintenance mode: scheduled CI, dependency/security gates, and actionable issues for failures. Scope new features only through an explicit Plan.md update.
+Finish the active v1.0 release-readiness gate and live Pages verification. Do not publish the v1.0 release artifact without owner approval.
 
 ## Residual (non-blocking)
 
-- Graph UI in React shell (Epic 0 residual; Epic 9 planned)
 - Branch protection API verification pending authenticated `gh` session — policy documented in [`docs/audits/branch-protection-verification-2026-06-19.md`](audits/branch-protection-verification-2026-06-19.md)
 - Action SHA pinning deferred per [`docs/adr/0012-defer-github-actions-sha-pinning.md`](adr/0012-defer-github-actions-sha-pinning.md)
+- Hands-on NVDA/VoiceOver/TalkBack, real iOS/Android devices, WebPageTest, and pen-test require external/human evidence
 
 ## Runtime Boundary
 

@@ -1,41 +1,43 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-
 import {
-  RelationshipExplorer,
-  relationshipFiltersFromState,
-  relationshipFiltersToPatch,
-} from "../components/RelationshipExplorer";
-import { AtlasMatrix } from "../components/AtlasMatrix";
-import { DEFAULT_MAP_WARNINGS } from "../graph/defaultMapFilter.ts";
-import { expandFocusedControlCluster } from "../graph/buildFocusedControlRings.ts";
-import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors.ts";
-import { SOURCE_SEED_MANIFEST } from "../graph/sourceSeedManifest.ts";
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+import { IconMap, IconSearch } from "@tabler/icons-react";
+
+import { displayNameFor } from "../../app/display-names.mjs";
+import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
+import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
+import {
+  DEFAULT_MAP_WARNINGS,
+  isVisibleWithOptionalFilters,
+} from "../graph/defaultMapFilter";
+import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors";
+import { SOURCE_SEED_MANIFEST } from "../graph/sourceSeedManifest";
 import {
   SOURCE_VIEW_DEFINITIONS,
   normalizeSourceViewId,
-  sourceViewGroup,
+  sourceViewGroupsFor,
   type SourceViewId,
-} from "../graph/sourceViews.ts";
+} from "../graph/sourceViews";
 import {
-  buildVisibleRelationshipModel,
-  type SourceVisibilityFilters,
-} from "../graph/buildVisibleRelationshipModel.ts";
-import { IconSearch, IconFocusCentered, IconMap } from "@tabler/icons-react";
-import { QuickIntentCard } from "../components/QuickIntentCard";
-import { AtlasLeverageInspector } from "../components/AtlasLeverageInspector";
+  ATLAS_PATH_STAGES,
+  atlasFilterOptions,
+  buildAtlasGroups,
+  buildAtlasRows,
+  resolveAtlasPathStage,
+  type AtlasConnectionGroup,
+  type AtlasFilterState,
+  type AtlasPathStageId,
+} from "../lib/atlasModel";
 import {
-  buildCrossFrameworkEquivalents,
-  buildImpactBreakdown,
-  recordDisplayTitle,
-} from "../lib/recordTitle";
-import type { RuntimeBundle } from "../lib/runtimeLoader";
-import { useClusteredGraph } from "../lib/useClusteredGraph";
-import {
-  buildAtlasMapUrl,
-  nodeIdFromItemId,
-  serializeViewState,
-  type ViewState,
-} from "../lib/viewState";
+  loadAtlasNeighborhood,
+  type AtlasNeighborhoodRecord,
+  type RuntimeBundle,
+} from "../lib/runtimeLoader";
+import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
@@ -44,949 +46,165 @@ type AtlasMapPageProps = {
   onOpenNode: (nodeId: string, from?: string) => void;
 };
 
-function resolveCenterNode(
-  runtime: RuntimeBundle["runtime"],
-  nodeParam: string,
-): { centerNodeId: string; centerItemId: string } | null {
-  if (!nodeParam.trim()) {
-    const starter = runtime.buildStarterMap();
-    return {
-      centerNodeId: starter.centerNodeId,
-      centerItemId: "Control landscape",
-    };
-  }
+type AtlasView = "path" | "map" | "list";
 
-  const direct = runtime.getNode(nodeParam);
-  if (direct) {
-    const doc = runtime.getLibraryDocument(nodeParam);
-    return {
-      centerNodeId: direct.id,
-      centerItemId: doc?.item_id || direct.metadata?.item_id || direct.id,
-    };
-  }
-
-  const resolvedId = nodeIdFromItemId(runtime, nodeParam);
-  if (!resolvedId) return null;
-  const node = runtime.getNode(resolvedId);
-  const doc = runtime.getLibraryDocument(resolvedId);
-  return {
-    centerNodeId: resolvedId,
-    centerItemId: doc?.item_id || node?.metadata?.item_id || resolvedId,
-  };
+function atlasView(value: string): AtlasView {
+  if (value === "map" || value === "list") return value;
+  return "path";
 }
 
-/**
- * Resolve the active relationship view (CATL-57): an explicit choice wins;
- * otherwise the graph is the default on desktop and the list on narrow
- * viewports, where the canvas is hard to read.
- */
-function resolveRelationshipView(
-  raw: string | undefined,
-  narrow: boolean,
-): "map" | "list" {
-  if (raw === "list" || raw === "table") return "list";
-  if (raw === "map") return "map";
-  return narrow ? "list" : "map";
+function handleTabKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>) {
+  if (
+    ![
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+    ].includes(event.key)
+  ) {
+    return;
+  }
+  const tabs = Array.from(
+    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+      ':scope > [role="tab"]',
+    ) || [],
+  );
+  if (!tabs.length) return;
+  event.preventDefault();
+  const currentIndex = tabs.indexOf(event.currentTarget);
+  const nextIndex =
+    event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : event.key === "ArrowLeft" || event.key === "ArrowUp"
+          ? (currentIndex - 1 + tabs.length) % tabs.length
+          : (currentIndex + 1) % tabs.length;
+  tabs[nextIndex]?.focus();
+  tabs[nextIndex]?.click();
 }
 
-function useIsNarrowViewport(query = "(max-width: 768px)"): boolean {
-  const [narrow, setNarrow] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+function useCompactAtlas() {
+  const [compact, setCompact] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches,
   );
   useEffect(() => {
-    const media = window.matchMedia(query);
-    const onChange = (event: MediaQueryListEvent) => setNarrow(event.matches);
+    const media = window.matchMedia("(max-width: 767px)");
+    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
-  }, [query]);
-  return narrow;
+  }, []);
+  return compact;
+}
+
+function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
+  const node = rawNode.trim();
+  if (!node || node === "foundation" || node === "landscape") return "";
+  if (node.startsWith("hierarchy:")) return "";
+  const resolved = nodeIdFromItemId(bundle.runtime, node);
+  if (resolved) return resolved;
+  return node.includes(":") ? node : "";
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
-  const node = props.state.node?.trim();
-  if (!node) {
-    return <AtlasPresetMenu {...props} />;
-  }
-  if (
-    node === "AC-2" ||
-    node === "nist-800-53:AC-2" ||
-    node.startsWith("hierarchy:") ||
-    node === "foundation"
-  ) {
-    return <FoundationAtlasMapPage {...props} />;
-  }
-  return <RuntimeAtlasMapPage {...props} />;
-}
-
-function AtlasPresetMenu(props: AtlasMapPageProps) {
-  const { onNavigate } = props;
-  return (
-    <section className="panel">
-      <header className="page-header">
-        <p className="eyebrow">Atlas Map</p>
-        <div>
-          <h1>Where would you like to start?</h1>
-          <p className="page-summary">
-            Visualize connections across frameworks, templates, and playbooks.
-            Choose a preset below to start.
-          </p>
-        </div>
-      </header>
-      <div className="intent-grid">
-        <QuickIntentCard
-          actionLabel="Open map"
-          body="Browse trusted sources by your question, their purpose, or the RMF lifecycle."
-          icon={<IconMap size={20} stroke={1.8} />}
-          onClick={() => onNavigate("atlas-map", { node: "foundation" })}
-          title="Source guide"
-        />
-        <QuickIntentCard
-          actionLabel="Open map"
-          body="See how a single control connects to everything else, using AC-2 as an example."
-          icon={<IconFocusCentered size={20} stroke={1.8} />}
-          onClick={() => onNavigate("atlas-map", { node: "AC-2" })}
-          title="Focused Control"
-        />
-        <QuickIntentCard
-          actionLabel="Search"
-          body="Find a specific control, baseline, or template and view its connections."
-          icon={<IconSearch size={20} stroke={1.8} />}
-          onClick={() => onNavigate("search")}
-          title="Search for a node"
-        />
-      </div>
-    </section>
-  );
-}
-
-function FoundationAtlasMapPage(props: AtlasMapPageProps) {
-  const { bundle, state, onNavigate } = props;
-  const trimmedNode = state.node.trim();
-  const drillTier = trimmedNode.startsWith("hierarchy:")
-    ? trimmedNode.slice("hierarchy:".length)
-    : null;
-  const requestedSourceView = normalizeSourceViewId(state.sourceView);
-  const activeSourceView: SourceViewId =
-    drillTier &&
-    !sourceViewGroup(requestedSourceView, drillTier) &&
-    sourceViewGroup("purpose", drillTier)
-      ? "purpose"
-      : requestedSourceView;
-  const sourceViewDefinition = SOURCE_VIEW_DEFINITIONS[activeSourceView];
-  const sourceViewOverviewLabel = {
-    novice: "novice questions",
-    purpose: "purposes",
-    rmf: "RMF steps",
-  }[activeSourceView];
-  const drillGroup = drillTier
-    ? sourceViewGroup(activeSourceView, drillTier)
-    : undefined;
-  const drillLabel = drillGroup?.label ?? null;
-  const focused =
-    Boolean(trimmedNode) &&
-    !drillTier &&
-    trimmedNode !== "foundation" &&
-    trimmedNode !== "landscape";
-  const [mapSearchDraft, setMapSearchDraft] = useState("");
-  const routeVisibilityFilters: SourceVisibilityFilters = {
-    showSupportingReferences: state.showSupportingReferences === "true",
-    showDraftOrLegacy: state.showDraftOrLegacy === "true",
-    showRegistryOnly: state.showRegistryOnly === "true",
-  };
-  const [visibilityFilters, setVisibilityFilters] =
-    useState<SourceVisibilityFilters>(routeVisibilityFilters);
-  const [foundationExpandedClusters, setFoundationExpandedClusters] = useState<
-    Set<string>
-  >(() => new Set());
-  const [mapViewLoading, setMapViewLoading] = useState(false);
-
-  useEffect(() => {
-    if (!focused) {
-      setMapViewLoading(false);
-      return;
-    }
-    setMapViewLoading(true);
-    const timer = window.setTimeout(() => setMapViewLoading(false), 1200);
-    return () => window.clearTimeout(timer);
-  }, [focused, trimmedNode]);
-
-  useEffect(() => {
-    setVisibilityFilters(routeVisibilityFilters);
-  }, [
-    state.showDraftOrLegacy,
-    state.showRegistryOnly,
-    state.showSupportingReferences,
-  ]);
-
-  const model = useMemo(() => {
-    let nextModel = buildVisibleRelationshipModel({
-      nodeId: state.node,
-      filters: visibilityFilters,
-      sourceView: activeSourceView,
-    });
-    for (const clusterKey of foundationExpandedClusters) {
-      nextModel = expandFocusedControlCluster(nextModel, clusterKey);
-    }
-    return nextModel;
-  }, [
-    foundationExpandedClusters,
-    state.node,
-    activeSourceView,
-    visibilityFilters.showDraftOrLegacy,
-    visibilityFilters.showRegistryOnly,
-    visibilityFilters.showSupportingReferences,
-  ]);
-  const [selectedNodeId, setSelectedNodeId] = useState(model.centerNodeId);
-
-  useEffect(() => {
-    setSelectedNodeId(model.centerNodeId);
-  }, [model.centerNodeId]);
-
-  useEffect(() => {
-    setFoundationExpandedClusters(new Set());
-  }, [state.node]);
-
-  const handleSelectNode = useCallback(
-    (nodeId: string) => {
-      // On the overview, choosing a category drills into it — the map opens
-      // that layer and shows the sources inside. Everything else selects.
-      if (!drillTier && !focused && nodeId.startsWith("hierarchy:")) {
-        onNavigate("atlas-map", {
-          ...state,
-          node: nodeId,
-          sourceView: activeSourceView,
-        });
-        return;
-      }
-      setSelectedNodeId(nodeId);
-    },
-    [activeSourceView, drillTier, focused, onNavigate, state],
-  );
-
-  const selectedSource = selectedNodeId?.startsWith("source:")
-    ? SOURCE_SEED_MANIFEST.find(
-        (source) => `source:${source.sourceId}` === selectedNodeId,
-      )
-    : null;
-  const selectedSourceAnchor = selectedSource
-    ? SOURCE_RUNTIME_ANCHORS[selectedSource.sourceId]
-    : undefined;
-  const anchorAvailable = useMemo(() => {
-    if (!selectedSourceAnchor) return false;
-    try {
-      return Boolean(bundle.runtime.getNode(selectedSourceAnchor));
-    } catch {
-      return false;
-    }
-  }, [bundle.runtime, selectedSourceAnchor]);
-
-  const foundationRuntime = useMemo(
-    () => ({
-      buildNeighborhood: () => ({
-        centerNode:
-          model.nodes.find((node) => node.id === model.centerNodeId) ?? null,
-        nodes: model.nodes,
-        edges: model.edges,
-        stats: {
-          total: model.edges.length,
-          filtered: model.edges.length,
-          truncated: false,
-          nodeCount: model.nodes.length,
-        },
-      }),
-    }),
-    [model],
-  );
-  const narrowViewport = useIsNarrowViewport();
-  const relationshipView = resolveRelationshipView(
-    state.relationshipView,
-    narrowViewport,
-  );
-
-  // Leverage for the focused control (e.g. AC-2), computed from the runtime's
-  // real published edges rather than the curated foundation cluster.
-  const foundationLeverage = useMemo(() => {
-    const empty = {
-      impact: { total: 0, byType: [] },
-      equivalents: [],
-      nodeId: "",
-      title: "",
-    };
-    if (!focused) {
-      return empty;
-    }
-    const nodeId = bundle.runtime.getNode(trimmedNode)
-      ? trimmedNode
-      : nodeIdFromItemId(bundle.runtime, trimmedNode) || trimmedNode;
-    const node = bundle.runtime.getNode(nodeId);
-    if (!node) {
-      return { ...empty, nodeId, title: trimmedNode };
-    }
-    const edges = bundle.runtime.getEdgesForNode(nodeId, {
-      publication_status: "published",
-    });
-    const getNode = (id: string) => bundle.runtime.getNode(id);
-    return {
-      impact: buildImpactBreakdown(nodeId, edges, getNode),
-      equivalents: buildCrossFrameworkEquivalents(nodeId, edges, getNode),
-      nodeId,
-      title: recordDisplayTitle(node) || trimmedNode,
-    };
-  }, [bundle.runtime, focused, trimmedNode]);
-
-  const emptyRelationshipFilters = {
-    relationshipType: "",
-    provenance: "",
-    confidence: "",
-    nodeType: "",
-    includeCandidates: false,
-    search: "",
-  };
-
-  function patchVisibility(key: keyof SourceVisibilityFilters, value: boolean) {
-    const stateKey = {
-      showSupportingReferences: "showSupportingReferences",
-      showDraftOrLegacy: "showDraftOrLegacy",
-      showRegistryOnly: "showRegistryOnly",
-    }[key];
-    setVisibilityFilters((current) => ({ ...current, [key]: value }));
-    onNavigate("atlas-map", {
-      ...state,
-      [stateKey]: value ? "true" : "",
-    });
-  }
-
-  function copyMapLink() {
-    const url = `${window.location.origin}${window.location.pathname}${serializeViewState(state)}`;
-    void navigator.clipboard?.writeText(url);
-  }
-
-  return (
-    <section
-      className={`panel atlas-map-page${focused ? " atlas-map-page--focused" : ""}`}
-    >
-      <PageHeader
-        eyebrow="ATLAS"
-        summary={
-          focused
-            ? "See the control in context and explore its connections to baselines, assessments, implementation standards, and mappings."
-            : drillLabel
-              ? `Inside ${drillLabel}. Select a source to see who publishes it and what it covers.`
-              : sourceViewDefinition.summary
-        }
-        title={drillLabel ?? "Atlas"}
-      />
-
-      {drillTier ? (
-        <nav aria-label="Atlas breadcrumb" className="ca-atlas-drill-bar">
-          <button
-            className="secondary quiet"
-            onClick={() =>
-              onNavigate("atlas-map", {
-                ...state,
-                node: "foundation",
-                sourceView: activeSourceView,
-              })
-            }
-            type="button"
-          >
-            ← All {sourceViewOverviewLabel}
-          </button>
-        </nav>
-      ) : null}
-
-      {!focused ? (
-        <div
-          aria-label="Browse sources by"
-          className="workbench-toggle source-view-toggle"
-          role="group"
-        >
-          {(["novice", "purpose", "rmf"] as SourceViewId[]).map((viewId) => (
-            <button
-              aria-pressed={activeSourceView === viewId}
-              className={activeSourceView === viewId ? "active" : ""}
-              key={viewId}
-              onClick={() =>
-                onNavigate("atlas-map", {
-                  ...state,
-                  node: "foundation",
-                  sourceView: viewId,
-                })
-              }
-              type="button"
-            >
-              {SOURCE_VIEW_DEFINITIONS[viewId].label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-
-      <form
-        className="atlas-map-command"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const query = mapSearchDraft.trim();
-          if (!query) return;
-          const resolved = nodeIdFromItemId(bundle.runtime, query);
-          if (resolved) {
-            onNavigate("atlas-map", { ...state, node: resolved });
-            return;
-          }
-          onNavigate("search", { query });
-        }}
-      >
-        <label className="field grow" htmlFor="foundation-atlas-map-search">
-          <span>Find a control, CCI, baseline, STIG, or source.</span>
-          <input
-            aria-label="Search Atlas Map"
-            id="foundation-atlas-map-search"
-            onChange={(event) => setMapSearchDraft(event.target.value)}
-            placeholder="account management, AC-2, CCI-000225"
-            type="search"
-            value={mapSearchDraft}
-          />
-        </label>
-        <button className="primary" type="submit">
-          Search
-        </button>
-      </form>
-
-      {!focused ? (
-        <details className="atlas-display-options">
-          <summary>Display options</summary>
-          <div
-            aria-label="Source visibility filters"
-            className="ca-source-filter-group atlas-source-filters"
-            role="group"
-          >
-            <span className="atlas-source-filters-label">Show:</span>
-            <label className="ca-source-filter-label">
-              <input
-                checked={visibilityFilters.showSupportingReferences}
-                onChange={(e) =>
-                  patchVisibility("showSupportingReferences", e.target.checked)
-                }
-                type="checkbox"
-              />
-              Show supporting references
-            </label>
-            <label className="ca-source-filter-label">
-              <input
-                checked={visibilityFilters.showDraftOrLegacy}
-                onChange={(e) =>
-                  patchVisibility("showDraftOrLegacy", e.target.checked)
-                }
-                type="checkbox"
-              />
-              Show draft / legacy sources
-            </label>
-            <label className="ca-source-filter-label">
-              <input
-                checked={visibilityFilters.showRegistryOnly}
-                onChange={(e) =>
-                  patchVisibility("showRegistryOnly", e.target.checked)
-                }
-                type="checkbox"
-              />
-              Show registry-only entries
-            </label>
-          </div>
-          <div aria-live="polite" className="atlas-source-warnings">
-            {visibilityFilters.showSupportingReferences ? (
-              <p>{DEFAULT_MAP_WARNINGS.supportingReferences}</p>
-            ) : null}
-            {visibilityFilters.showDraftOrLegacy ? (
-              <p>{DEFAULT_MAP_WARNINGS.draftOrLegacy}</p>
-            ) : null}
-            {visibilityFilters.showRegistryOnly ? (
-              <p>{DEFAULT_MAP_WARNINGS.registryOnly}</p>
-            ) : null}
-          </div>
-        </details>
-      ) : null}
-
-      <div className="atlas-map-layout">
-        <div className="atlas-map-main">
-          {mapViewLoading ? (
-            <p className="notice-inline" role="status">
-              Loading map view…
-            </p>
-          ) : null}
-          <RelationshipExplorer
-            centerItemId={
-              focused ? "AC-2" : (drillLabel ?? "Control landscape")
-            }
-            centerNodeId={model.centerNodeId}
-            filters={emptyRelationshipFilters}
-            expandedClusterLabels={
-              new Map(
-                [...foundationExpandedClusters].map((clusterKey) => [
-                  clusterKey,
-                  `${clusterKey.replaceAll("-", " ")} cluster`,
-                ]),
-              )
-            }
-            expandedClusters={foundationExpandedClusters}
-            heading={
-              focused
-                ? "AC-2 focused map"
-                : drillLabel
-                  ? `${drillLabel} sources`
-                  : `Sources by ${sourceViewDefinition.label.toLowerCase()}`
-            }
-            hideHeading
-            introCopy={
-              focused
-                ? "AC-2 stays central while dense implementation and mapping details remain clustered."
-                : drillLabel
-                  ? `These are the sources inside the ${drillLabel} layer. Select one for a plain-language summary.`
-                  : "Select a group to open its sources. You can switch views without changing the underlying records."
-            }
-            layoutMode={model.layoutMode}
-            mapControls
-            onCopyMapLink={copyMapLink}
-            onFilterChange={() => undefined}
-            onClusterCollapse={(clusterKey) =>
-              setFoundationExpandedClusters((current) => {
-                const next = new Set(current);
-                next.delete(clusterKey);
-                return next;
-              })
-            }
-            onClusterExpand={(clusterKey) =>
-              setFoundationExpandedClusters((current) => {
-                const next = new Set(current);
-                next.add(clusterKey);
-                return next;
-              })
-            }
-            onOpenNode={handleSelectNode}
-            onSelectNode={handleSelectNode}
-            onViewChange={(view) =>
-              onNavigate("atlas-map", { ...state, relationshipView: view })
-            }
-            relationshipView={relationshipView}
-            runtime={foundationRuntime}
-            selectedNodeId={selectedNodeId}
-            showFilters={false}
-            staticGraph={{
-              nodes: model.nodes,
-              edges: model.edges,
-              stats: {
-                nodeCount: model.nodes.length,
-                filtered: model.edges.length,
-                truncated: false,
-              },
-            }}
-          />
-
-          {focused ? (
-            <AtlasLeverageInspector
-              equivalents={foundationLeverage.equivalents}
-              impact={foundationLeverage.impact}
-              onOpenNode={(nodeId) =>
-                onNavigate("atlas-map", { ...state, node: nodeId })
-              }
-              onOpenRecord={() =>
-                onNavigate("library-detail", {
-                  node: foundationLeverage.nodeId,
-                })
-              }
-              title={foundationLeverage.title}
-            />
-          ) : null}
-
-          {selectedSource ? (
-            <aside aria-label="Selected source" className="ca-source-detail">
-              <p className="eyebrow">Selected source</p>
-              <strong>{selectedSource.displayName}</strong>
-              <p className="muted">
-                {selectedSource.publisher} · {selectedSource.subcategory}
-              </p>
-              {selectedSource.defaultMapReason ? (
-                <p>{selectedSource.defaultMapReason}</p>
-              ) : null}
-              <div className="card-actions">
-                {anchorAvailable && selectedSourceAnchor ? (
-                  <button
-                    className="primary"
-                    onClick={() =>
-                      onNavigate("atlas-map", {
-                        ...state,
-                        node: selectedSourceAnchor,
-                      })
-                    }
-                    type="button"
-                  >
-                    Explore its records
-                  </button>
-                ) : null}
-                {selectedSource.canonicalUrl.startsWith("http") ? (
-                  <a
-                    className="link-action"
-                    href={selectedSource.canonicalUrl}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Open official source ↗
-                  </a>
-                ) : null}
-              </div>
-            </aside>
-          ) : null}
-        </div>
-        <details className="atlas-coverage-drawer">
-          <summary>Coverage matrix</summary>
-          <AtlasMatrix
-            edges={model.edges}
-            nodes={model.nodes}
-            onSelectNode={handleSelectNode}
-            selectedNodeId={selectedNodeId}
-          />
-        </details>
-      </div>
-    </section>
-  );
-}
-
-function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
   const { bundle, state, onNavigate, onOpenNode } = props;
-  const [expandedClusters, setExpandedClusters] = useState<Set<string>>(
-    () => new Set(),
+  const view = atlasView(state.relationshipView);
+  const compact = useCompactAtlas();
+  const nodeId = useMemo(
+    () => requestedNodeId(bundle, state.node),
+    [bundle, state.node],
   );
-
-  useEffect(() => {
-    setExpandedClusters(new Set());
-  }, [state.node]);
-
+  const [record, setRecord] = useState<AtlasNeighborhoodRecord | null>(null);
+  const [recordStatus, setRecordStatus] = useState<
+    "idle" | "loading" | "ready" | "missing" | "error"
+  >(nodeId ? "loading" : "idle");
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
-
-  const center = useMemo(
-    () => resolveCenterNode(bundle.runtime, state.node),
-    [bundle.runtime, state.node],
-  );
-
-  // Leverage: how many requirements does implementing the focused control also
-  // satisfy? Counted from every published edge, not just the visible cluster.
-  const leverage = useMemo(() => {
-    if (!center || !state.node.trim()) {
-      return { impact: { total: 0, byType: [] }, equivalents: [] };
-    }
-    const edges = bundle.runtime.getEdgesForNode(center.centerNodeId, {
-      publication_status: "published",
-    });
-    const getNode = (id: string) => bundle.runtime.getNode(id);
-    return {
-      impact: buildImpactBreakdown(center.centerNodeId, edges, getNode),
-      equivalents: buildCrossFrameworkEquivalents(
-        center.centerNodeId,
-        edges,
-        getNode,
-      ),
-    };
-  }, [bundle.runtime, center, state.node]);
-
-  const narrowViewport = useIsNarrowViewport();
-  const relationshipView = resolveRelationshipView(
-    state.relationshipView,
-    narrowViewport,
-  );
-
-  const filters = useMemo(
-    () => relationshipFiltersFromState(state),
-    [
-      state.relationshipType,
-      state.provenance,
-      state.confidence,
-      state.nodeType,
-      state.includeCandidates,
-      state.relationshipSearch,
-    ],
-  );
-
-  const neighborhood = useMemo(() => {
-    if (!center) return null;
-    if (!state.node.trim()) {
-      return bundle.runtime.buildStarterMap();
-    }
-    return bundle.runtime.buildNeighborhood(center.centerNodeId, {
-      relationship_type: filters.relationshipType || undefined,
-      provenance_class: filters.provenance || undefined,
-      confidence: filters.confidence || undefined,
-      node_type: filters.nodeType || undefined,
-      include_candidates: filters.includeCandidates,
-    });
-  }, [bundle.runtime, center, filters, state.node]);
-
-  const {
-    nodes: clusteredNodes,
-    edges: clusteredEdges,
-    clusterMeta,
-    expandedClusterLabels,
-    onClusterExpand,
-    onClusterCollapse,
-  } = useClusteredGraph({
-    runtime: bundle.runtime,
-    centerNodeId: center?.centerNodeId ?? "",
-    nodes: neighborhood?.nodes ?? [],
-    edges: neighborhood?.edges ?? [],
-    enabled: Boolean(center && neighborhood && state.node.trim()),
-    expandedClusters,
-    onExpandedClustersChange: setExpandedClusters,
-  });
-
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
-    center?.centerNodeId ?? null,
-  );
-
-  useEffect(() => {
-    setSelectedNodeId(center?.centerNodeId ?? null);
-  }, [center?.centerNodeId]);
 
   useEffect(() => {
     setMapSearchDraft(state.relationshipSearch || "");
   }, [state.relationshipSearch]);
 
-  if (!center || !neighborhood) {
-    return (
-      <section className="panel atlas-map-page">
-        <PageHeader
-          eyebrow="ATLAS"
-          summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-          title="No connections found"
-        />
-        <div className="notice">
-          <h2>No connections found for this item.</h2>
-          <p>
-            Try searching for another record, turning on inferred links, or
-            opening the source record.
-          </p>
-          <div className="card-actions">
-            <button
-              className="secondary"
-              onClick={() =>
-                onNavigate("atlas-map", {
-                  node: "",
-                  relationshipType: "",
-                  provenance: "",
-                  confidence: "",
-                  nodeType: "",
-                  includeCandidates: "",
-                  relationshipSearch: "",
-                })
-              }
-              type="button"
-            >
-              Clear filters
-            </button>
-            <button
-              className="secondary"
-              onClick={() =>
-                onNavigate("atlas-map", { includeCandidates: "true" })
-              }
-              type="button"
-            >
-              Turn on inferred links
-            </button>
-            <button
-              className="primary"
-              onClick={() => onNavigate("search")}
-              type="button"
-            >
-              Search records
-            </button>
-          </div>
-        </div>
-      </section>
-    );
+  useEffect(() => {
+    let cancelled = false;
+    setRecord(null);
+    if (!nodeId) {
+      setRecordStatus("idle");
+      return () => {
+        cancelled = true;
+      };
+    }
+    setRecordStatus("loading");
+    loadAtlasNeighborhood(nodeId)
+      .then((nextRecord) => {
+        if (cancelled) return;
+        setRecord(nextRecord);
+        setRecordStatus(nextRecord ? "ready" : "missing");
+      })
+      .catch(() => {
+        if (!cancelled) setRecordStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [nodeId]);
+
+  function patchAtlas(patch: Partial<typeof state>) {
+    onNavigate("atlas-map", patch);
   }
 
-  const isStarter = !state.node.trim();
-  const displayNodes = isStarter ? neighborhood.nodes : clusteredNodes;
-  const displayEdges = isStarter ? neighborhood.edges : clusteredEdges;
-
-  function patchFilters(patch: Partial<typeof filters>) {
-    onNavigate("atlas-map", {
-      ...state,
-      ...relationshipFiltersToPatch({ ...filters, ...patch }),
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const query = mapSearchDraft.trim();
+    if (!query) return;
+    const resolved = nodeIdFromItemId(bundle.runtime, query);
+    if (!resolved) {
+      onNavigate("search", { query });
+      return;
+    }
+    patchAtlas({
+      node: resolved,
+      relationshipSearch: "",
+      relationshipGroup: "",
+      atlasStage: "",
     });
   }
 
-  function copyMapLink() {
-    const url = `${window.location.origin}${window.location.pathname}${serializeViewState(state)}`;
-    void navigator.clipboard?.writeText(url);
-  }
-
   return (
-    <section
-      className={`panel atlas-map-page${isStarter ? "" : " atlas-map-page--focused"}`}
-    >
-      <PageHeader
-        eyebrow="ATLAS"
-        summary="Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect."
-        title={
-          isStarter
-            ? "Atlas"
-            : recordDisplayTitle(bundle.runtime.getNode(center.centerNodeId)) ||
-              center.centerItemId
-        }
-      />
-
-      {isStarter ? (
-        <div className="atlas-starter-banner">
-          <p>
-            Search for an item or select a group to begin exploring the control
-            landscape.
+    <section className="panel atlas-workspace">
+      <header className="atlas-workspace-header">
+        <div>
+          <p className="eyebrow">Atlas</p>
+          <h1>
+            {record
+              ? record.center_node.metadata?.item_id || record.center_node.id
+              : "Control Atlas"}
+          </h1>
+          <p className="page-summary">
+            {record
+              ? "Follow the published connections around this record. Path explains the work; Map shows the network; List preserves every result."
+              : "Start with a question or lifecycle step, then open a record to see only the connections that are actually published."}
           </p>
-          <div className="chip-row">
-            <button
-              className="chip"
-              onClick={() => onNavigate("search", { query: "AC-2" })}
-              type="button"
-            >
-              Search AC-2
-            </button>
-            <button
-              className="chip"
-              onClick={() => onNavigate("start-here")}
-              type="button"
-            >
-              Start with the RMF (Risk Management Framework) lifecycle
-            </button>
-            <button
-              className="chip"
-              onClick={() =>
-                onNavigate("search", { query: "FedRAMP High", filter: "" })
-              }
-              type="button"
-            >
-              Explore FedRAMP High
-            </button>
+        </div>
+        {record ? (
+          <div className="atlas-connection-count" aria-live="polite">
+            <strong>{record.published_connection_count}</strong>
+            <span>published connections</span>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </header>
 
-      <div className="atlas-map-layout">
-        <div className="atlas-map-main">
-          <RelationshipExplorer
-            centerItemId={center.centerItemId}
-            centerNodeId={center.centerNodeId}
-            clusterMeta={clusterMeta}
-            expandedClusterLabels={expandedClusterLabels}
-            expandedClusters={expandedClusters}
-            filters={filters}
-            heading="Atlas Map"
-            introCopy={
-              isStarter
-                ? "Select a starter group or search to explore the control landscape."
-                : `This map shows connections around ${center.centerItemId}.`
-            }
-            listLabel="List"
-            mapControls
-            onClusterCollapse={onClusterCollapse}
-            onClusterExpand={onClusterExpand}
-            onCopyMapLink={copyMapLink}
-            onFilterChange={patchFilters}
-            onOpenCompare={(itemId) =>
-              onNavigate("matrix", {
-                workbench: "relationships",
-                items: itemId,
-              })
-            }
-            onOpenNode={(nodeId) => {
-              if (nodeId.startsWith("starter:")) {
-                const key = nodeId.replace("starter:", "");
-                onNavigate("search", {
-                  query: "",
-                  objectType:
-                    key === "controls"
-                      ? "control"
-                      : key === "templates"
-                        ? "template"
-                        : "",
-                });
-                return;
-              }
-              if (nodeId.startsWith("cluster:")) {
-                onClusterExpand(nodeId.replace("cluster:", ""));
-                return;
-              }
-              onNavigate("atlas-map", { ...state, node: nodeId });
-              setSelectedNodeId(nodeId);
-            }}
-            onOpenRecord={onOpenNode}
-            onViewChange={(view) =>
-              onNavigate("atlas-map", {
-                ...state,
-                relationshipView: view,
-              })
-            }
-            onSelectNode={setSelectedNodeId}
-            relationshipView={relationshipView}
-            runtime={bundle.runtime}
-            selectedNodeId={selectedNodeId}
-            showEmptyState={!displayNodes.length}
-            staticGraph={{
-              edges: displayEdges,
-              nodes: displayNodes,
-              stats: neighborhood.stats,
-            }}
-          />
-          {!isStarter ? (
-            <AtlasLeverageInspector
-              equivalents={leverage.equivalents}
-              impact={leverage.impact}
-              onExploreType={(nodeType) => patchFilters({ nodeType })}
-              onOpenNode={(nodeId) => {
-                onNavigate("atlas-map", { ...state, node: nodeId });
-                setSelectedNodeId(nodeId);
-              }}
-              onOpenRecord={() => onOpenNode(center.centerNodeId)}
-              title={
-                recordDisplayTitle(
-                  bundle.runtime.getNode(center.centerNodeId),
-                ) || center.centerItemId
-              }
-            />
-          ) : null}
-        </div>
-
-        <details className="atlas-coverage-drawer">
-          <summary>Coverage matrix</summary>
-          <AtlasMatrix
-            edges={displayEdges}
-            nodes={displayNodes}
-            onSelectNode={setSelectedNodeId}
-            selectedNodeId={selectedNodeId}
-          />
-        </details>
-      </div>
-
-      <form
-        className="atlas-map-search-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const resolved = nodeIdFromItemId(
-            bundle.runtime,
-            mapSearchDraft.trim(),
-          );
-          if (resolved) {
-            onNavigate("atlas-map", {
-              ...state,
-              node: resolved,
-              relationshipSearch: mapSearchDraft.trim(),
-            });
-          } else {
-            onNavigate("search", { query: mapSearchDraft.trim() });
-          }
-        }}
-      >
-        <label className="field grow" htmlFor="atlas-map-search">
-          <span>Search map</span>
+      <form className="atlas-map-command" onSubmit={submitSearch}>
+        <label className="field grow" htmlFor="atlas-search">
+          <span>Find a control, CCI, baseline, STIG, or source</span>
           <input
-            id="atlas-map-search"
+            aria-label="Search Atlas"
+            id="atlas-search"
             onChange={(event) => setMapSearchDraft(event.target.value)}
             placeholder="account management, AC-2, CCI-000225"
             type="search"
@@ -994,23 +212,712 @@ function RuntimeAtlasMapPage(props: AtlasMapPageProps) {
           />
         </label>
         <button className="primary" type="submit">
-          Search
+          <IconSearch aria-hidden="true" size={18} /> Search
         </button>
       </form>
+
+      <div
+        aria-label="Atlas views"
+        className="atlas-view-tabs"
+        role="tablist"
+      >
+        {([
+          ["path", "Path"],
+          ["map", "Map"],
+          ["list", "List"],
+        ] as Array<[AtlasView, string]>).map(([viewId, label]) => (
+          <button
+            aria-controls="atlas-view-panel"
+            aria-selected={view === viewId}
+            className={view === viewId ? "active" : ""}
+            id={`atlas-view-tab-${viewId}`}
+            key={viewId}
+            onClick={() =>
+              patchAtlas({ relationshipView: viewId, relationshipGroup: "" })
+            }
+            onKeyDown={handleTabKeyDown}
+            role="tab"
+            tabIndex={view === viewId ? 0 : -1}
+            type="button"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div
+        aria-labelledby={`atlas-view-tab-${view}`}
+        className="atlas-view-panel"
+        id="atlas-view-panel"
+        role="tabpanel"
+      >
+      {recordStatus === "loading" ? (
+        <div className="atlas-loading" role="status">
+          <div aria-hidden="true" className="atlas-loading-block" />
+          Loading this record's connections…
+        </div>
+      ) : null}
+
+      {recordStatus === "missing" || recordStatus === "error" ? (
+        <AtlasLoadFailure
+          error={recordStatus === "error"}
+          onSearch={() => onNavigate("search", { query: state.node })}
+          onSources={() => onNavigate("sources")}
+        />
+      ) : null}
+
+      {record ? (
+        <FocusedAtlas
+          compact={compact}
+          onNavigate={onNavigate}
+          onOpenNode={onOpenNode}
+          patchAtlas={patchAtlas}
+          record={record}
+          state={state}
+          view={view}
+        />
+      ) : recordStatus === "idle" ? (
+        <SourceAtlas
+          onNavigate={onNavigate}
+          patchAtlas={patchAtlas}
+          state={state}
+          view={view}
+        />
+      ) : null}
+      </div>
     </section>
   );
 }
 
-function PageHeader(props: {
-  title: string;
-  summary: string;
-  eyebrow?: string;
+function FocusedAtlas(props: {
+  compact: boolean;
+  record: AtlasNeighborhoodRecord;
+  state: AtlasMapPageProps["state"];
+  view: AtlasView;
+  patchAtlas: (patch: Partial<AtlasMapPageProps["state"]>) => void;
+  onNavigate: AtlasMapPageProps["onNavigate"];
+  onOpenNode: AtlasMapPageProps["onOpenNode"];
+}) {
+  const { record, state, view, patchAtlas, compact, onNavigate, onOpenNode } = props;
+  const filters: AtlasFilterState = {
+    relationshipType: state.relationshipType,
+    provenance: state.provenance,
+    confidence: state.confidence,
+    nodeType: state.nodeType,
+    includeCandidates: state.includeCandidates === "true",
+    search: state.relationshipSearch,
+  };
+  const groups = useMemo(() => buildAtlasGroups(record, filters), [record, state]);
+  const rows = useMemo(() => buildAtlasRows(record, filters), [record, state]);
+  const options = useMemo(() => atlasFilterOptions(record), [record]);
+  const stage = resolveAtlasPathStage(groups, state.atlasStage);
+  const centerLabel = record.center_node.metadata?.item_id || record.center_node.id;
+  const centerTitle =
+    record.center_node.metadata?.title || record.center_node.label || centerLabel;
+
+  function updateFilters(patch: Partial<AtlasFilterState>) {
+    patchAtlas({
+      relationshipType:
+        patch.relationshipType === undefined
+          ? state.relationshipType
+          : patch.relationshipType,
+      provenance:
+        patch.provenance === undefined ? state.provenance : patch.provenance,
+      confidence:
+        patch.confidence === undefined ? state.confidence : patch.confidence,
+      nodeType: patch.nodeType === undefined ? state.nodeType : patch.nodeType,
+      includeCandidates:
+        patch.includeCandidates === undefined
+          ? state.includeCandidates
+          : patch.includeCandidates
+            ? "true"
+            : "",
+      relationshipSearch:
+        patch.search === undefined ? state.relationshipSearch : patch.search,
+      relationshipGroup: "",
+    });
+  }
+
+  return (
+    <div className="atlas-focused-shell">
+      <AtlasFilterBar
+        filters={filters}
+        onChange={updateFilters}
+        options={options}
+      />
+
+      {rows.length === 0 ? (
+        <AtlasNoConnections
+          candidateCount={record.candidate_connection_count}
+          filtersActive={Boolean(
+            filters.relationshipType ||
+              filters.provenance ||
+              filters.confidence ||
+              filters.nodeType ||
+              filters.search,
+          )}
+          includeCandidates={filters.includeCandidates}
+          onClear={() =>
+            updateFilters({
+              relationshipType: "",
+              provenance: "",
+              confidence: "",
+              nodeType: "",
+              search: "",
+            })
+          }
+          onIncludeCandidates={() => updateFilters({ includeCandidates: true })}
+          onOpenRecord={() => onOpenNode(record.center_node.id, "atlas-map")}
+          onSearch={() => onNavigate("search", { query: centerLabel })}
+          onSources={() => onNavigate("sources")}
+        />
+      ) : (
+        <div className="atlas-focused-layout">
+          <main className="atlas-focused-main">
+            {view === "path" ? (
+              <AtlasPath
+                groups={groups}
+                onOpenList={() => patchAtlas({ relationshipView: "list" })}
+                onRecenter={(node) =>
+                  patchAtlas({ node, relationshipGroup: "", atlasStage: "" })
+                }
+                onStageChange={(nextStage) =>
+                  patchAtlas({ atlasStage: nextStage, relationshipGroup: "" })
+                }
+                stage={stage}
+              />
+            ) : null}
+
+            {view === "map" ? (
+              <AtlasConnectionMap
+                center={record.center_node}
+                compact={compact}
+                expandedGroupId={state.relationshipGroup}
+                groups={groups}
+                onExpandedGroupChange={(relationshipGroup) =>
+                  patchAtlas({ relationshipGroup })
+                }
+                onOpenList={() => patchAtlas({ relationshipView: "list" })}
+                onRecenter={(node) =>
+                  patchAtlas({ node, relationshipGroup: "", atlasStage: "" })
+                }
+              />
+            ) : null}
+
+            {view === "list" ? (
+              <RelationshipGraphTable
+                conciseTrust
+                onOpenNode={(node) =>
+                  patchAtlas({ node, relationshipGroup: "", atlasStage: "" })
+                }
+                rows={rows}
+              />
+            ) : null}
+          </main>
+
+          <aside aria-label="Selected record" className="atlas-record-inspector">
+            <p className="eyebrow">Selected record</p>
+            <h2>{centerLabel}</h2>
+            <p>{centerTitle}</p>
+            <dl>
+              <div>
+                <dt>Visible now</dt>
+                <dd>{rows.length}</dd>
+              </div>
+              <div>
+                <dt>Published total</dt>
+                <dd>{record.published_connection_count}</dd>
+              </div>
+              {record.candidate_connection_count > 0 ? (
+                <div>
+                  <dt>Candidate links</dt>
+                  <dd>{record.candidate_connection_count}</dd>
+                </div>
+              ) : null}
+            </dl>
+            <button
+              className="secondary"
+              onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+              type="button"
+            >
+              Open full record
+            </button>
+            <p className="muted atlas-record-inspector-note">
+              Path may show an empty workflow stage when the absence matters.
+              Map never invents a connection.
+            </p>
+          </aside>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AtlasPath(props: {
+  groups: AtlasConnectionGroup[];
+  stage: AtlasPathStageId;
+  onStageChange: (stage: AtlasPathStageId) => void;
+  onRecenter: (nodeId: string) => void;
+  onOpenList: () => void;
+}) {
+  const stageDefinition = ATLAS_PATH_STAGES.find((entry) => entry.id === props.stage)!;
+  const stageGroups = props.groups.filter((group) => group.stage === props.stage);
+  return (
+    <section aria-labelledby="atlas-path-heading" className="atlas-path-view">
+      <header>
+        <p className="eyebrow">Guided decomposition</p>
+        <h2 id="atlas-path-heading">From meaning to action</h2>
+        <p>Move through the work in order. Every card below comes from a published connection.</p>
+      </header>
+      <div aria-label="Compliance path" className="atlas-path-stage-nav" role="tablist">
+        {ATLAS_PATH_STAGES.map((entry, index) => {
+          const count = props.groups
+            .filter((group) => group.stage === entry.id)
+            .reduce((total, group) => total + group.items.length, 0);
+          return (
+            <button
+              aria-controls="atlas-path-stage-panel"
+              aria-selected={props.stage === entry.id}
+              className={props.stage === entry.id ? "active" : ""}
+              id={`atlas-stage-tab-${entry.id}`}
+              key={entry.id}
+              onClick={() => props.onStageChange(entry.id)}
+              onKeyDown={handleTabKeyDown}
+              role="tab"
+              tabIndex={props.stage === entry.id ? 0 : -1}
+              type="button"
+            >
+              <span>{index + 1}</span>
+              <strong>{entry.label}</strong>
+              <small>{count} connections</small>
+            </button>
+          );
+        })}
+      </div>
+      <div
+        aria-labelledby={`atlas-stage-tab-${props.stage}`}
+        className="atlas-path-stage-panel"
+        id="atlas-path-stage-panel"
+        role="tabpanel"
+      >
+        <header>
+          <div>
+            <p className="eyebrow">Current stage</p>
+            <h3>{stageDefinition.label}</h3>
+          </div>
+          <p>{stageDefinition.description}</p>
+        </header>
+        {stageGroups.length === 0 ? (
+          <div className="atlas-stage-empty">
+            <strong>No published connections in this stage.</strong>
+            <p>This is a known gap, not a completed step.</p>
+          </div>
+        ) : (
+          <div className="atlas-path-groups">
+            {stageGroups.map((group) => (
+              <article className="atlas-path-group" key={group.id}>
+                <header>
+                  <div>
+                    <h4>{group.label}</h4>
+                    <p>{group.description}</p>
+                  </div>
+                  <strong>{group.items.length}</strong>
+                </header>
+                <div className="atlas-path-items">
+                  {group.items.slice(0, 4).map((item) => (
+                    <button
+                      key={`${item.edge.id}:${item.counterpart.id}`}
+                      onClick={() => props.onRecenter(item.counterpart.id)}
+                      type="button"
+                    >
+                      <strong>{item.itemId}</strong>
+                      <span>{item.title}</span>
+                    </button>
+                  ))}
+                </div>
+                {group.items.length > 4 ? (
+                  <button className="link-action" onClick={props.onOpenList} type="button">
+                    + {group.items.length - 4} more in List
+                  </button>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SourceAtlas(props: {
+  state: AtlasMapPageProps["state"];
+  view: AtlasView;
+  patchAtlas: (patch: Partial<AtlasMapPageProps["state"]>) => void;
+  onNavigate: AtlasMapPageProps["onNavigate"];
+}) {
+  const { state, view, patchAtlas, onNavigate } = props;
+  const oldDrill = state.node.startsWith("hierarchy:")
+    ? state.node.slice("hierarchy:".length)
+    : "";
+  const requestedSourceView = normalizeSourceViewId(state.sourceView);
+  const sourceView =
+    oldDrill &&
+    !SOURCE_VIEW_DEFINITIONS[requestedSourceView].groups.some(
+      (group) => group.id === oldDrill,
+    ) &&
+    SOURCE_VIEW_DEFINITIONS.purpose.groups.some(
+      (group) => group.id === oldDrill,
+    )
+      ? "purpose"
+      : requestedSourceView;
+  const definition = SOURCE_VIEW_DEFINITIONS[sourceView];
+  const initialGroup = definition.groups.some((group) => group.id === oldDrill)
+    ? oldDrill
+    : definition.groups[0]?.id || "";
+  const [activeGroup, setActiveGroup] = useState(initialGroup);
+  const visibility = {
+    showSupportingReferences: state.showSupportingReferences === "true",
+    showDraftOrLegacy: state.showDraftOrLegacy === "true",
+    showRegistryOnly: state.showRegistryOnly === "true",
+  };
+
+  useEffect(() => {
+    setActiveGroup(initialGroup);
+  }, [initialGroup]);
+
+  const sourcesByGroup = useMemo(
+    () =>
+      new Map(
+        definition.groups.map((group) => [
+          group.id,
+          SOURCE_SEED_MANIFEST.filter(
+            (source) =>
+              sourceViewGroupsFor(source, sourceView).includes(group.id) &&
+              isVisibleWithOptionalFilters(source, visibility),
+          ),
+        ]),
+      ),
+    [definition.groups, sourceView, state.showDraftOrLegacy, state.showRegistryOnly, state.showSupportingReferences],
+  );
+  const activeDefinition =
+    definition.groups.find((group) => group.id === activeGroup) || definition.groups[0];
+  const activeSources = sourcesByGroup.get(activeDefinition?.id || "") || [];
+
+  function openSource(sourceId: string) {
+    const anchor = SOURCE_RUNTIME_ANCHORS[sourceId];
+    if (anchor) {
+      patchAtlas({
+        node: anchor,
+        relationshipView: "path",
+        relationshipGroup: "",
+        atlasStage: "",
+      });
+      return;
+    }
+    onNavigate("sources", { source: sourceId });
+  }
+
+  return (
+    <section className="atlas-source-path">
+      <div aria-label="Browse sources by" className="source-view-toggle" role="group">
+        {(["novice", "purpose", "rmf"] as SourceViewId[]).map((viewId) => (
+          <button
+            aria-pressed={sourceView === viewId}
+            className={sourceView === viewId ? "active" : ""}
+            key={viewId}
+            onClick={() => patchAtlas({ sourceView: viewId, node: "" })}
+            type="button"
+          >
+            {SOURCE_VIEW_DEFINITIONS[viewId].label}
+          </button>
+        ))}
+      </div>
+      <p className="atlas-source-summary">{definition.summary}</p>
+
+      <details className="atlas-display-options">
+        <summary>Source options</summary>
+        <div aria-label="Source visibility filters" className="atlas-source-filters" role="group">
+          <SourceFilter
+            checked={visibility.showSupportingReferences}
+            label="Show supporting references"
+            onChange={(checked) =>
+              patchAtlas({ showSupportingReferences: checked ? "true" : "" })
+            }
+          />
+          <SourceFilter
+            checked={visibility.showDraftOrLegacy}
+            label="Show draft / legacy sources"
+            onChange={(checked) =>
+              patchAtlas({ showDraftOrLegacy: checked ? "true" : "" })
+            }
+          />
+          <SourceFilter
+            checked={visibility.showRegistryOnly}
+            label="Show registry-only entries"
+            onChange={(checked) =>
+              patchAtlas({ showRegistryOnly: checked ? "true" : "" })
+            }
+          />
+        </div>
+        <div aria-live="polite" className="atlas-source-warnings">
+          {visibility.showSupportingReferences ? <p>{DEFAULT_MAP_WARNINGS.supportingReferences}</p> : null}
+          {visibility.showDraftOrLegacy ? <p>{DEFAULT_MAP_WARNINGS.draftOrLegacy}</p> : null}
+          {visibility.showRegistryOnly ? <p>{DEFAULT_MAP_WARNINGS.registryOnly}</p> : null}
+        </div>
+      </details>
+
+      {view === "map" ? (
+        <div className="atlas-no-connections">
+          <IconMap aria-hidden="true" size={28} />
+          <h2>Choose a record before opening Map.</h2>
+          <p>Map only appears when a selected record has published connections. The guided source path is navigation, not relationship evidence.</p>
+          <button className="primary" onClick={() => onNavigate("search")} type="button">
+            Search for a record
+          </button>
+        </div>
+      ) : null}
+
+      {view === "path" ? (
+        <>
+          <div aria-label={`${definition.label} path`} className="atlas-path-stage-nav atlas-source-stage-nav" role="tablist">
+            {definition.groups.map((group, index) => (
+              <button
+                aria-controls="atlas-source-stage-panel"
+                aria-selected={activeDefinition?.id === group.id}
+                className={activeDefinition?.id === group.id ? "active" : ""}
+                id={`atlas-source-tab-${sourceView}-${group.id}`}
+                key={group.id}
+                onClick={() => setActiveGroup(group.id)}
+                onKeyDown={handleTabKeyDown}
+                role="tab"
+                tabIndex={activeDefinition?.id === group.id ? 0 : -1}
+                type="button"
+              >
+                <span>{index + 1}</span>
+                <strong>{group.label}</strong>
+                <small>{sourcesByGroup.get(group.id)?.length || 0} sources</small>
+              </button>
+            ))}
+          </div>
+          <div
+            aria-labelledby={`atlas-source-tab-${sourceView}-${activeDefinition?.id}`}
+            className="atlas-source-stage-panel"
+            id="atlas-source-stage-panel"
+            role="tabpanel"
+          >
+            <header>
+              <div>
+                <p className="eyebrow">Selected path</p>
+                <h2>{activeDefinition?.label}</h2>
+              </div>
+              <p>{activeDefinition?.description}</p>
+            </header>
+            <SourceCards onOpen={openSource} sources={activeSources} />
+          </div>
+        </>
+      ) : null}
+
+      {view === "list" ? (
+        <div className="atlas-source-list">
+          {definition.groups.map((group) => {
+            const sources = sourcesByGroup.get(group.id) || [];
+            if (!sources.length) return null;
+            return (
+              <section key={group.id}>
+                <header>
+                  <h2>{group.label}</h2>
+                  <p>{group.description}</p>
+                </header>
+                <SourceCards onOpen={openSource} sources={sources} />
+              </section>
+            );
+          })}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function SourceCards(props: {
+  sources: typeof SOURCE_SEED_MANIFEST;
+  onOpen: (sourceId: string) => void;
+}) {
+  if (!props.sources.length) {
+    return <p className="muted">No sources are visible in this step with the current options.</p>;
+  }
+  return (
+    <div className="atlas-source-cards">
+      {props.sources.map((source) => (
+        <article key={source.sourceId}>
+          <p className="eyebrow">{source.publisher}</p>
+          <h3>{source.displayName}</h3>
+          <p>{source.defaultMapReason}</p>
+          <div className="card-actions">
+            <button className="secondary" onClick={() => props.onOpen(source.sourceId)} type="button">
+              {SOURCE_RUNTIME_ANCHORS[source.sourceId] ? "View connected records" : "View source details"}
+            </button>
+            {source.canonicalUrl !== "registry-local-only" ? (
+              <a href={source.canonicalUrl} rel="noreferrer" target="_blank">
+                Official source
+              </a>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function AtlasFilterBar(props: {
+  filters: AtlasFilterState;
+  options: ReturnType<typeof atlasFilterOptions>;
+  onChange: (patch: Partial<AtlasFilterState>) => void;
 }) {
   return (
-    <header className="page-header">
-      {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
-      <h1>{props.title}</h1>
-      <p className="page-summary">{props.summary}</p>
-    </header>
+    <details className="atlas-connection-filters">
+      <summary>Filter connections</summary>
+      <div aria-label="Connection filters" className="atlas-filter-grid" role="group">
+        <AtlasSelect
+          label="Connection type"
+          onChange={(relationshipType) => props.onChange({ relationshipType })}
+          options={props.options.relationshipTypes}
+          value={props.filters.relationshipType}
+          vocabulary="relationship_type"
+        />
+        <AtlasSelect
+          label="Source basis"
+          onChange={(provenance) => props.onChange({ provenance })}
+          options={props.options.provenanceClasses}
+          value={props.filters.provenance}
+          vocabulary="provenance_class"
+        />
+        <AtlasSelect
+          label="Trust level"
+          onChange={(confidence) => props.onChange({ confidence })}
+          options={props.options.confidenceLevels}
+          value={props.filters.confidence}
+          vocabulary="confidence"
+        />
+        <AtlasSelect
+          label="Item type"
+          onChange={(nodeType) => props.onChange({ nodeType })}
+          options={props.options.nodeTypes}
+          value={props.filters.nodeType}
+          vocabulary="object_type"
+        />
+        <label>
+          Filter this record's connections
+          <input
+            onChange={(event) => props.onChange({ search: event.target.value })}
+            placeholder="ID, title, or rationale"
+            type="search"
+            value={props.filters.search}
+          />
+        </label>
+        <label className="atlas-candidate-toggle">
+          <input
+            checked={props.filters.includeCandidates}
+            onChange={(event) =>
+              props.onChange({ includeCandidates: event.target.checked })
+            }
+            type="checkbox"
+          />
+          Include candidate links
+        </label>
+      </div>
+    </details>
+  );
+}
+
+function AtlasSelect(props: {
+  label: string;
+  value: string;
+  options: string[];
+  vocabulary: string;
+  onChange: (value: string) => void;
+}) {
+  const id = `atlas-filter-${props.label.toLowerCase().replaceAll(" ", "-")}`;
+  return (
+    <label htmlFor={id}>
+      {props.label}
+      <select id={id} onChange={(event) => props.onChange(event.target.value)} value={props.value}>
+        <option value="">All</option>
+        {props.options.map((option) => (
+          <option key={option} value={option}>
+            {displayNameFor(props.vocabulary, option)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function SourceFilter(props: {
+  checked: boolean;
+  label: string;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label>
+      <input
+        checked={props.checked}
+        onChange={(event) => props.onChange(event.target.checked)}
+        type="checkbox"
+      />
+      {props.label}
+    </label>
+  );
+}
+
+function AtlasNoConnections(props: {
+  candidateCount: number;
+  filtersActive: boolean;
+  includeCandidates: boolean;
+  onClear: () => void;
+  onIncludeCandidates: () => void;
+  onOpenRecord: () => void;
+  onSearch: () => void;
+  onSources: () => void;
+}) {
+  return (
+    <section className="atlas-no-connections" role="status">
+      <IconMap aria-hidden="true" size={28} />
+      <h2>No published connections to show.</h2>
+      <p>
+        {props.filtersActive
+          ? "The current filters remove every published connection."
+          : "Control Atlas does not currently have a published relationship for this item."}
+      </p>
+      <div className="card-actions">
+        {props.filtersActive ? (
+          <button className="primary" onClick={props.onClear} type="button">Clear filters</button>
+        ) : null}
+        {!props.includeCandidates && props.candidateCount > 0 ? (
+          <button className="secondary" onClick={props.onIncludeCandidates} type="button">
+            Show {props.candidateCount} candidate links
+          </button>
+        ) : null}
+        <button className="secondary" onClick={props.onOpenRecord} type="button">Open record</button>
+        <button className="secondary" onClick={props.onSearch} type="button">Search Atlas</button>
+        <button className="secondary" onClick={props.onSources} type="button">View sources</button>
+      </div>
+    </section>
+  );
+}
+
+function AtlasLoadFailure(props: {
+  error: boolean;
+  onSearch: () => void;
+  onSources: () => void;
+}) {
+  return (
+    <section className="atlas-no-connections" role="alert">
+      <h2>{props.error ? "Connections could not be loaded." : "This record is not in the Atlas."}</h2>
+      <p>{props.error ? "The small connection file did not load. Try again or continue through Search." : "The link may be stale or the record may not be part of the current public graph."}</p>
+      <div className="card-actions">
+        <button className="primary" onClick={props.onSearch} type="button">Search records</button>
+        <button className="secondary" onClick={props.onSources} type="button">View sources</button>
+      </div>
+    </section>
   );
 }

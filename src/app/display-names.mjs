@@ -2,7 +2,7 @@
 const DISPLAY_NAMES = {
   provenance_class: {
     mandated: 'Mandated source',
-    federal_published: 'Federal published',
+    federal_published: 'Published federal source',
     federal_program: 'Federal program',
     federal_utilized: 'Federal utilized',
     federal_referenced: 'Federal referenced',

@@ -1,8 +1,8 @@
 # Atlas Recovery Courses of Action
 
-**Status:** Decision required before implementation
+**Status:** Hybrid decision selected and implemented locally; verification pending
 
-**Release effect:** v1.0 remains NO-GO while V1-RR-003 is open
+**Release effect:** v1.0 remains NO-GO until local browser and live Pages evidence closes V1-RR-003
 
 **Evidence:** [`../audits/live-browser-audit-2026-07-16-v1-release-readiness.md`](../audits/live-browser-audit-2026-07-16-v1-release-readiness.md)
 
@@ -117,3 +117,17 @@ This can repair the worst defects, but users still have to interpret a graph. It
 ## Recommendation
 
 Choose **Course 1 — Decomposition Atlas**. It uses the current categorization system without rewriting source data, gives newcomers a controlled path, preserves expert depth through expansion, and creates the strongest architectural boundary against another unreadable all-at-once graph.
+
+## Owner decision and implemented hybrid
+
+The selected direction combines the best parts of Courses 1, 2, and 3 without exposing three competing products:
+
+- **Path is the default.** It uses six working stages — Understand, Decide, Implement, Evidence, Assess, Monitor — as a decomposition/progression view.
+- **Map is optional and bounded.** It starts with the selected record plus no more than six real relationship groups. One group expands at a time; desktop shows at most ten records and compact/mobile shows at most six. Overflow opens List.
+- **List is equal, not a fallback afterthought.** Path, Map, and List derive from the same filtered edge set and preserve source references.
+- **Orientation is responsive and semantic.** Desktop stage progression is horizontal. Mobile stage progression is vertical. Map regions use a vertical upstream / peer / downstream axis so lateral equivalence is not confused with workflow progression.
+- **Zero means zero.** If no published connections exist, Map shows an explicit empty state and no canvas. Candidate links appear only after an explicit toggle.
+- **Details never cover navigation.** Desktop uses a separate inspector column; smaller screens place details below the active view.
+- **The Atlas no longer loads the full graph.** A compact record index and one incident-edge shard are loaded for the selected record.
+
+The implementation replaces React Flow/ELK on the primary Atlas route with semantic React DOM. The existing graph stack remains lazy for other bounded relationship surfaces until those are separately reviewed.

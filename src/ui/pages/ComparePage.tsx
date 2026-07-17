@@ -620,8 +620,8 @@ export function ComparePage(props: {
                   </Field>
                 </div>
                 <p className="compare-legend">
-                  Official link = published mapping. Inferred link = candidate
-                  mapping that still needs review.
+                  Published mappings come from named sources. Candidate mappings
+                  still need review.
                 </p>
               </DisclosurePanel>
             </Accordion.Root>
@@ -856,8 +856,8 @@ export function ComparePage(props: {
             </Field>
           </div>
           <p className="compare-legend">
-            Official link = published mapping. Inferred link = candidate
-            mapping. Pick a STIG rule, review its CCI (Control Correlation
+            Published mappings come from named sources. Candidate mappings still
+            need review. Pick a STIG rule, review its CCI (Control Correlation
             Identifier) connections, then open the related NIST control.
             {chainPayload?.rows?.length
               ? ` ${chainPayload.rows.length} STIG or SRG item${chainPayload.rows.length === 1 ? "" : "s"} visible in the current chain scope.`
@@ -1096,7 +1096,7 @@ export function ComparePage(props: {
             </Field>
           </div>
           <p className="compare-legend">
-            Official link = MITRE published mapping. Pick a technique, review
+            Published mappings come from MITRE. Pick a technique, review
             D3FEND countermeasures, then open the related NIST controls.
             {threatChainPayload?.rows?.length
               ? ` ${threatChainPayload.rows.length} ATT&CK technique${threatChainPayload.rows.length === 1 ? "" : "s"} visible in the current threat chain scope.`

@@ -206,8 +206,12 @@ test('route interactions keep canonical context and synchronize visible state', 
   const atlasMap = readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8');
   const explore = readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8');
   assert.match(searchOverlay, /onOpenNode\(nodeId,\s*"search"\)/);
-  assert.match(atlasMap, /setSelectedNodeId\(center\?\.centerNodeId \?\? null\)/);
-  assert.match(atlasMap, /setMapSearchDraft\(state\.relationshipSearch \|\| ""\)/);
+  assert.match(atlasMap, /loadAtlasNeighborhood\(nodeId\)/);
+  assert.match(atlasMap, /buildAtlasGroups\(record, filters\)/);
+  assert.match(atlasMap, /buildAtlasRows\(record, filters\)/);
+  assert.match(atlasMap, /relationshipView: viewId/);
+  assert.match(atlasMap, /relationshipGroup/);
+  assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
   assert.match(explore, /visibleDocumentRows\.length > 0/);
   assert.match(explore, /searchExploreResources/);
   assert.match(explore, /Official resources/);

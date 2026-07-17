@@ -99,7 +99,7 @@ export function HomePage(props: HomePageProps) {
           type="button"
         >
           <strong>Navigate</strong>
-          <span>See how everything connects</span>
+          <span>Trace published connections</span>
         </button>
       </div>
       <p className="visually-hidden" id="landing-orb-hint">

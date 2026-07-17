@@ -72,7 +72,7 @@ export function StartHerePage(props: {
     <section className="panel">
       <PageHeader
         eyebrow="Start Here"
-        summary="Answer three short questions, then get a plain-language starting path with the framework, template, and pattern links most likely to help first."
+        summary="Answer three short questions, then get a starting path with the framework, template, and playbook most likely to help first."
         title="Find the best place to start"
       />
 

@@ -85,9 +85,9 @@ export function sourceTrustSummary(source: any) {
     return "Official source.";
   }
   if (source.provenance_class?.includes("published")) {
-    return "Source-backed.";
+    return "Published by the named source.";
   }
-  return "Source-backed.";
+  return "Supporting source.";
 }
 
 export function sourceUsageSummary(source: any) {

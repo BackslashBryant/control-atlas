@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**Maintenance** — Newbie-Reframe Phase 7 is the current release. Its July 16 FedRAMP hardening ingests the official structured 2026 rules, exposes the complete legacy library, connects historical artifacts to current rules/schemas/profile paths, and preserves 12 A-grade Control Atlas companions with explicit authority and import boundaries.
+**v1.0 release readiness** — finish and verify the bounded Atlas rebuild, close the landing/search/copy release blockers, ship the verified code and Pages deployment, and stop before creating the `v1.0.0` release.
 
-**Active sprint:** None — see [`docs/Plan.md`](Plan.md).
+**Active sprint:** v1.0 release readiness — see [`docs/Plan.md`](Plan.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -25,8 +25,9 @@
 - React shell in `src/ui/App.tsx` is the active UI; legacy `src/app/app.mjs` is not mounted
 - Build-time importers and `data/generated/*` bundles are the runtime contract
 - Library search loads `library-search-manifest.json` + eager shards first; remaining catalog shards lazy-load with UI refresh via `librarySearchRevision`
-- Full graph (`nodes`, `edges`, …) loads on demand for graph routes, record detail, connections filter, and Compare
-- React Flow is lazy-loaded for Atlas Map surfaces, with ELK layout for directed source hierarchy, focused controls, and selected relationship slices
+- Atlas record views load a compact node index and one deterministic incident-edge shard; they do not load the monolithic graph artifacts
+- Atlas defaults to a semantic DOM Path, offers a bounded real-edge Map, and keeps List as an equal accessible view; desktop progression is horizontal and mobile progression is vertical
+- React Flow and ELK remain lazy for other legacy bounded relationship diagrams, not the primary Atlas route
 - Control Atlas is the active repo and deployment identity
 
 ## Product Boundary
@@ -37,8 +38,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Maintenance CI and optional RC promotion to `v1.0.0`
-2. Optional human SR sign-off per [`docs/audits/a11y-manual-checklist.md`](audits/a11y-manual-checklist.md) row 6
+1. Complete local Playwright/axe, post-deploy workflows, and Lighthouse evidence
+2. Ship branch/main and verify live Pages; do not publish `v1.0.0`
+3. Human screen-reader and real-device sign-off remains a clearly labeled residual until completed
 
 ## Status Docs
 

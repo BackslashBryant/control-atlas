@@ -390,10 +390,9 @@ export function createFederalGraphRuntime(dataset) {
       )
       .sort(sortNodesByItemId);
   const cciLinksForNode = (nodeId, includeCandidates = false) =>
-    dataset.edges
+    (edgesBySource.get(nodeId) || [])
       .filter(
         (edge) =>
-          edge.source_node_id === nodeId &&
           nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
             "disa-cci" &&
           (includeCandidates || edge.publication_status === "published"),
@@ -406,10 +405,9 @@ export function createFederalGraphRuntime(dataset) {
       .filter((entry) => entry.cciNode)
       .sort((left, right) => sortNodesByItemId(left.cciNode, right.cciNode));
   const nistLinksForCci = (cciId, includeCandidates = false) =>
-    dataset.edges
+    (edgesBySource.get(cciId) || [])
       .filter(
         (edge) =>
-          edge.source_node_id === cciId &&
           nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
             "nist-800-53" &&
           (includeCandidates || edge.publication_status === "published"),

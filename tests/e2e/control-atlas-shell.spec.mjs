@@ -255,12 +255,14 @@ test("explore groups results and filters out records without connections", async
   await expect(
     page.getByText("No connections yet", { exact: true }),
   ).toHaveCount(0);
-  const firstCard = page.locator("#library-results .result-card").first();
+  const firstCard = page.locator("#library-results .result-card").filter({
+    has: page.getByRole("button", { name: "Open record" }),
+  }).first();
   await expect(
     firstCard.getByRole("button", { name: "Open record" }),
   ).toBeVisible();
   await expect(
-    firstCard.getByRole("button", { name: "More actions" }),
+    firstCard.getByText("Compare, map, or export"),
   ).toBeVisible();
 });
 
@@ -506,7 +508,7 @@ test("legacy view query redirects to hash route on boot", async ({ page }) => {
     page
       .locator("main")
       .getByRole("heading", {
-        name: "Where would you like to start?",
+        name: "Control Atlas",
         level: 1,
       }),
   ).toBeVisible();

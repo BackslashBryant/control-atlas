@@ -19,6 +19,19 @@ Use this checklist before any public-shell release or when Epic acceptance requi
 | 5   | Reduced motion                     | Enable `prefers-reduced-motion: reduce`. Hero word rotation must not be the only way to access meaning.                                                                                                      | 2026-06-19 | Pixel (agent) | Pass        | Existing `matchMedia` guard in App.tsx disables hero interval when reduced motion is preferred.                         |
 | 6   | Graph map/list fallback (A11Y-001) | NVDA or VoiceOver on live `#/atlas-map?node=nist-800-53%3AAC-2` and `#/record/nist-800-53/AC-2?relationshipView=list`: verify Map/List tabs, labeled diagram, and relationship table with rationale columns. | 2026-07-09 | Pending human | Optional    | Automated axe on 14 live routes passed 2026-07-08; aria tree verified in product review.                                |
 
+## v1.0 release-readiness recheck — July 16, 2026
+
+The Atlas interaction model changed materially, so prior map/list evidence does not sign off the new Path/Map/List views. Required automated and manual checks for this branch are:
+
+- [ ] `npm run test:a11y` reports zero serious or critical violations on focused Path, Map, List, and a zero-connection record.
+- [ ] Keyboard-only: search, view tabs, stage controls, group expansion/back, record re-centering, inspector, and List overflow work in logical order; focus returns to the group trigger after collapse.
+- [ ] 200% zoom: desktop Path and Map reflow without obscured controls or horizontal page scroll.
+- [ ] 390×844 and 375×667: Path becomes vertical, Map becomes a stacked outline, inspector moves below, and no content requires canvas pan/zoom.
+- [ ] Reduced motion: no information or focus transition depends on animation.
+- [ ] Human NVDA/VoiceOver/TalkBack: landmarks, selected tab/stage state, group counts, empty state, table headers, and source-reference disclosures are understandable.
+
+The final row cannot be claimed from source inspection, axe, or an accessibility tree. If no human screen reader is available, record it as residual risk rather than marking it passed.
+
 ---
 
 ## Release gate

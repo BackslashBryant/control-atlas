@@ -16,6 +16,8 @@
 !src/**
 !tests/
 !tests/*.mjs
+!tests/graph/
+!tests/graph/**
 !tests/e2e/
 !tests/e2e/**
 !tests/fixtures/
@@ -97,6 +99,8 @@ data/*
 data/tenable-sync-state.json
 !data/generated/
 !data/generated/*.json
+!data/generated/atlas-neighborhood/
+!data/generated/atlas-neighborhood/*.json
 !data/shards/
 data/shards/*
 !data/shards/*.json

@@ -8,7 +8,7 @@ export const relationshipLabelMap = {
 
 export const trustLabelMap = {
   direct: "Official source",
-  derived: "Source-backed",
+  derived: "Published",
   inferred: "Inferred",
 };
 
@@ -33,7 +33,7 @@ export const provenanceDescriptionMap = {
   mandated:
     "Direct requirement or mapping from an official authoritative source.",
   federal_published:
-    "Published federal mapping or catalog entry used as source-backed context.",
+    "Published federal mapping or catalog entry from the named source.",
   federal_program:
     "Program-specific published baseline or overlay from an official source.",
   federal_referenced:
@@ -53,16 +53,16 @@ export const confidenceDescriptionMap = {
 };
 
 export const publicationDescriptionMap = {
-  published: "Published mapping from an official or source-backed catalog.",
+  published: "Published mapping from the named catalog.",
   candidate: "Candidate mapping that still needs review before you rely on it.",
 };
 
 export const productCopy = {
-  tagline: "Navigate federal cyber compliance.",
+  tagline: "The public map for federal cyber compliance.",
   productDescription:
     "Control Atlas helps you find a requirement, see how it connects, and open the next useful record, comparison, playbook, template, or source.",
   homepageDescription:
-    "Find a requirement, see how it connects, and open the next step with source-backed context.",
+    "Find a requirement, see its published connections, and open the next useful step.",
   exploreDescription:
     "Search controls, baselines, CCIs, STIGs, terms, templates, playbooks, and sources. Open a record to see what it means and how it connects.",
   atlasMapDescription:

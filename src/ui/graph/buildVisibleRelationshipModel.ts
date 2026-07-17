@@ -1,5 +1,4 @@
 import { DEFAULT_MAP_WARNINGS, isVisibleWithOptionalFilters } from "./defaultMapFilter.ts";
-import { buildFocusedControlRings } from "./buildFocusedControlRings.ts";
 import { SOURCE_SEED_MANIFEST } from "./sourceSeedManifest.ts";
 import { sourceToGraphRole } from "./sourceToGraphRole.ts";
 import {
@@ -90,8 +89,8 @@ function viewSequenceEdge(
     source_node_id: `hierarchy:${source.id}`,
     target_node_id: `hierarchy:${target.id}`,
     relationship_type: "leads_to",
-    provenance_class: "official",
-    publication_status: "published",
+    provenance_class: "curated_navigation",
+    publication_status: "projection",
     confidence: "high",
     plain_language_rationale: `This guided view moves from ${source.label} to ${target.label}.`,
   };
@@ -173,8 +172,8 @@ export function buildTierDrillModel(
     source_node_id: center.id,
     target_node_id: `source:${source.sourceId}`,
     relationship_type: "includes",
-    provenance_class: "official",
-    publication_status: "published",
+    provenance_class: "curated_navigation",
+    publication_status: "projection",
     confidence: "high",
     plain_language_rationale: `${source.displayName} helps answer “${group.label}” in the ${SOURCE_VIEW_DEFINITIONS[sourceView].label.toLowerCase()} view.`,
   }));
@@ -193,13 +192,6 @@ export function buildVisibleRelationshipModel(options: {
   filters?: SourceVisibilityFilters;
   sourceView?: SourceViewId | string;
 }): VisibleRelationshipModel {
-  if (
-    options.nodeId === "AC-2" ||
-    options.nodeId === "nist-800-53:AC-2"
-  ) {
-    return buildFocusedControlRings(options.nodeId);
-  }
-
   const requestedView = normalizeSourceViewId(options.sourceView);
   if (options.nodeId.startsWith("hierarchy:")) {
     const groupId = options.nodeId.slice("hierarchy:".length);

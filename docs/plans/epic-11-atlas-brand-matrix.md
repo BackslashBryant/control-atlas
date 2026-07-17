@@ -1,5 +1,7 @@
 # Epic 11: Atlas Identity + Matrix Layout
 
+> **Superseded July 16, 2026.** The v1.0 release-readiness decision replaces the graph-plus-matrix and pull-tab direction with one bounded Atlas offering Path, Map, and List over the same real relationship set. See [`atlas-recovery-options.md`](atlas-recovery-options.md). This file remains historical design evidence and must not be implemented as written.
+
 **Status:** Ready to execute  
 **Created:** 2026-06-27  
 **Priority:** P1 (brand + rename) → P1 (matrix layout) → P2 (pull-tab + nav pill)
