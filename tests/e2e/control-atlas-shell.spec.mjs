@@ -415,7 +415,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await expect(communityCard).toBeVisible();
   await expect(
     communityCard.getByText(
-      "This source is not used in the public map by default.",
+      "This source is linked for reference; its records are not imported into Atlas connections.",
     ),
   ).toBeVisible();
   await expect(communityCard).toContainText("Official link only");
