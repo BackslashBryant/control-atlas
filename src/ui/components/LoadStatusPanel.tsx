@@ -96,14 +96,15 @@ export function OfflineFallbackActions(props: {
 
 export function DataPendingNotice(props: {
   title?: string;
+  description?: string;
   onRetry?: () => void;
 }) {
   return (
     <section className="notice">
       <h2>{props.title || "Connection data is still loading"}</h2>
       <p>
-        This page needs the public mapping data. Wait a moment or retry if
-        loading failed.
+        {props.description ||
+          "This page needs the public mapping data. Wait a moment or retry if loading failed."}
       </p>
       {props.onRetry ? (
         <button className="primary" onClick={props.onRetry} type="button">

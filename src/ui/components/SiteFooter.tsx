@@ -1,6 +1,9 @@
 import { ALL_NAV_ITEMS } from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 
+const FOOTER_NOTICE =
+  "Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system.";
+
 export function SiteFooter(props: {
   minimal?: boolean;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
@@ -8,9 +11,7 @@ export function SiteFooter(props: {
   if (props.minimal) {
     return (
       <footer className="site-footer">
-        <p className="site-footer-bar ca-text-subtle ca-page">
-          Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system. All mappings are reference aids based on public sources.
-        </p>
+        <p className="site-footer-bar ca-text-subtle ca-page">{FOOTER_NOTICE}</p>
       </footer>
     );
   }
@@ -20,10 +21,7 @@ export function SiteFooter(props: {
       <div className="site-footer-grid ca-page">
         <div className="site-footer-brand">
           <strong>Control Atlas</strong>
-          <p>The public map for federal cyber compliance.</p>
-          <p className="ca-text-muted">
-            Open-source. No login. Public data only.
-          </p>
+          <p>See how federal cybersecurity requirements connect.</p>
         </div>
         <div className="site-footer-nav">
           <strong>Navigate</strong>
@@ -43,9 +41,8 @@ export function SiteFooter(props: {
           </ul>
         </div>
         <div className="site-footer-legal">
-          <strong>Legal</strong>
+          <strong>About</strong>
           <p>Open-source (MIT)</p>
-          <p>Not an official government system.</p>
           <button
             className="footer-nav-link"
             onClick={() => props.onNavigate("about")}
@@ -56,9 +53,7 @@ export function SiteFooter(props: {
           </button>
         </div>
       </div>
-      <p className="site-footer-bar ca-text-subtle ca-page">
-        Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system. All mappings are reference aids based on public sources.
-      </p>
+      <p className="site-footer-bar ca-text-subtle ca-page">{FOOTER_NOTICE}</p>
     </footer>
   );
 }

@@ -8,6 +8,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const registry = JSON.parse(readFileSync(join(__dirname, '../../data/template-registry.json'), 'utf8'));
 
 const DISCLAIMER_SNIPPET = 'open-source reference tool';
+const TEMPLATE_WORKFLOW = {
+  stig_evidence_checklist: 'Run and document a STIG assessment',
+  conmon_calendar: 'Organize continuous monitoring deliverables',
+  ppsm_preparation_worksheet: 'Prepare PPSM information',
+};
 
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -22,6 +27,14 @@ for (const template of registry.templates) {
     await page.goto('/?view=templates');
     await waitForAppReady(page);
     await dismissOnboarding(page);
+
+    await page
+      .getByRole('button', {
+        name: new RegExp(
+          `^${escapeRegex(TEMPLATE_WORKFLOW[template.name] || 'Build an authorization package')}\\b`,
+        ),
+      })
+      .click();
 
     const card = page
       .locator('#companion-templates')

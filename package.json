@@ -29,7 +29,7 @@
     "test:e2e": "npm run build:site && playwright test",
     "test:e2e:live": "playwright test --config playwright.live.config.mjs",
     "test:a11y": "npm run build:site && playwright test tests/e2e/accessibility.spec.mjs",
-    "test:runtime": "node --test ./tests/framework-runtime.test.mjs ./tests/graph-layout.test.mjs ./tests/graph-clustering.test.mjs",
+    "test:runtime": "node --test ./tests/search-quality.test.mjs ./tests/framework-runtime.test.mjs ./tests/graph-layout.test.mjs ./tests/graph-clustering.test.mjs",
     "test:graph": "tsx --test ./tests/graph/sourceManifest.test.ts ./tests/graph/sourceLinks.test.ts ./tests/graph/defaultMapFilter.test.ts ./tests/graph/sourceToGraphRole.test.ts ./tests/graph/sourceHierarchyEdges.test.ts ./tests/graph/buildFocusedControlRings.test.ts",
     "test:browser": "node --test ./tests/browser-contract.test.mjs",
     "smoke:dom": "node ./scripts/dom-smoke.mjs",

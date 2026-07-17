@@ -359,7 +359,7 @@ function FedrampCurrentTruthPanel(props: {
     <aside aria-labelledby="fedramp-current-heading" className="fedramp-truth-panel">
       <div className="fedramp-truth-heading">
         <div>
-          <p className="eyebrow">FedRAMP source truth</p>
+          <p className="eyebrow">FedRAMP current rules</p>
           <h3 id="fedramp-current-heading">
             Consolidated Rules {transition.source.version}
           </h3>
@@ -560,6 +560,8 @@ export function TemplatesPage(props: {
   const [selectedWorkflowId, setSelectedWorkflowId] = useState("");
   const [showAllOfficialResources, setShowAllOfficialResources] =
     useState(false);
+  const [showCompleteOfficialCatalog, setShowCompleteOfficialCatalog] =
+    useState(false);
   const [showAllTools, setShowAllTools] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
@@ -589,9 +591,12 @@ export function TemplatesPage(props: {
         selectedWorkflow.tool_ids?.includes(tool.tool_id),
       )
     : complianceTools;
+  const officialArtifactPool = showCompleteOfficialCatalog
+    ? officialArtifacts
+    : workflowArtifacts;
   const visibleOfficialArtifacts = showAllOfficialResources
-    ? workflowArtifacts
-    : workflowArtifacts.slice(0, 8);
+    ? officialArtifactPool
+    : officialArtifactPool.slice(0, 8);
   const visibleTools = showAllTools ? workflowTools : workflowTools.slice(0, 8);
   const workflowReferenceIds = new Set([
     ...(selectedWorkflow?.artifact_ids || []),
@@ -915,7 +920,7 @@ export function TemplatesPage(props: {
           ) : undefined
         }
         eyebrow="Compliance workbench"
-        summary="Start with the job in front of you. Control Atlas connects the workflow, official source material, practical tools, and blank companions so you can move from requirement to review-ready work with less searching."
+        summary="Pick the job in front of you. We will show the official materials, practical tools, and blank working documents that fit it."
         title="What do you need to get done?"
       />
 
@@ -945,6 +950,7 @@ export function TemplatesPage(props: {
                   onClick={() => {
                     setSelectedWorkflowId(workflow.workflow_id);
                     setShowAllOfficialResources(false);
+                    setShowCompleteOfficialCatalog(false);
                     setShowAllTools(false);
                     window.setTimeout(
                       () => workflowDetailRef.current?.focus(),
@@ -1051,10 +1057,12 @@ export function TemplatesPage(props: {
             </section>
           ) : null}
 
+          {selectedWorkflow ? (
+            <>
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">2 · Check source truth</p>
+                <p className="eyebrow">2 · Verify the rule</p>
                 <h2 id="official-heading">
                   {selectedWorkflow
                     ? `Official resources for ${selectedWorkflow.title}`
@@ -1068,6 +1076,18 @@ export function TemplatesPage(props: {
               </div>
             </div>
             <FedrampCurrentTruthPanel transition={fedrampTransition} />
+            <button
+              className="secondary nexus-show-more"
+              onClick={() => {
+                setShowCompleteOfficialCatalog((value) => !value);
+                setShowAllOfficialResources(false);
+              }}
+              type="button"
+            >
+              {showCompleteOfficialCatalog
+                ? "Show resources for this task"
+                : "Browse complete official catalog"}
+            </button>
             <div className="nexus-grid">
               {visibleOfficialArtifacts.map((artifact) => (
                 <OfficialArtifactCard
@@ -1086,7 +1106,7 @@ export function TemplatesPage(props: {
                 </p>
               </div>
             ) : null}
-            {workflowArtifacts.length > 8 ? (
+            {officialArtifactPool.length > 8 ? (
               <button
                 className="secondary nexus-show-more"
                 onClick={() => setShowAllOfficialResources((value) => !value)}
@@ -1094,7 +1114,7 @@ export function TemplatesPage(props: {
               >
                 {showAllOfficialResources
                   ? "Show fewer official resources"
-                  : `Show all ${workflowArtifacts.length} official resources`}
+                  : `Show all ${officialArtifactPool.length} official resources`}
               </button>
             ) : null}
           </section>
@@ -1123,7 +1143,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   No tool is joined to this workflow yet. The official resources
-                  and Control Atlas companions remain usable without one.
+                  and blank working documents remain usable without one.
                 </p>
               </div>
             ) : null}
@@ -1148,11 +1168,10 @@ export function TemplatesPage(props: {
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">4 · Build the working artifact</p>
-                <h2 id="companion-heading">Control Atlas companions</h2>
+                <h2 id="companion-heading">Blank working documents</h2>
                 <p className="page-summary">
-                  Generate a blank working document locally in your browser.
-                  These companions help organize the work; they are not official
-                  forms, approvals, or proof of compliance.
+                  Create a blank file in your browser. It helps organize the
+                  work; it is not an official form, approval, or proof.
                 </p>
               </div>
             </div>
@@ -1195,6 +1214,8 @@ export function TemplatesPage(props: {
               ),
             )}
           </section>
+            </>
+          ) : null}
         </>
       ) : null}
 

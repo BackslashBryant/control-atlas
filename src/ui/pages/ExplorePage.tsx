@@ -67,12 +67,17 @@ export function ExplorePage(props: {
     state.controlFamily ||
     state.severity,
   );
+  const hasQuery = Boolean(state.query.trim());
+  const searchStarted = hasQuery || hasFilters;
 
   const documents = useMemo(() => {
-    return bundle.runtime.searchLibrary(state.query, filters);
+    return searchStarted
+      ? bundle.runtime.searchLibrary(state.query, filters)
+      : [];
   }, [
     bundle.runtime,
     bundle.librarySearchRevision,
+    searchStarted,
     state.query,
     state.filter,
     state.objectType,
@@ -82,12 +87,12 @@ export function ExplorePage(props: {
   ]);
 
   const glossaryMatches = useMemo(
-    () => searchGlossary(state.query),
-    [state.query],
+    () => (hasQuery ? searchGlossary(state.query) : []),
+    [hasQuery, state.query],
   );
   const resourceMatches = useMemo(
     () =>
-      hasFilters
+      !hasQuery || hasFilters
         ? { templates: [], artifacts: [] }
         : searchExploreResources(state.query, {
             templates: bundle.templateRegistry.templates || [],
@@ -96,11 +101,11 @@ export function ExplorePage(props: {
     [
       bundle.officialArtifactRegistry,
       bundle.templateRegistry,
+      hasQuery,
       hasFilters,
       state.query,
     ],
   );
-  const hasQuery = Boolean(state.query.trim());
 
   const catalogCoverage = useMemo(
     () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1),
@@ -310,7 +315,7 @@ export function ExplorePage(props: {
           </p>
         ) : null}
 
-        {hasVisibleResults ? (
+        {searchStarted && hasVisibleResults ? (
           <Accordion.Root
             aria-label="Search results"
             className="accordion-root search-result-groups"

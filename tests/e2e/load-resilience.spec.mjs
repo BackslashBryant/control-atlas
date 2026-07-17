@@ -84,3 +84,27 @@ test("staged library search enables results before detail pages", async ({
   await dismissOnboarding(page);
   await expect.poll(() => graphRequests, { timeout: 15000 }).toBeGreaterThan(0);
 });
+
+test("heavy routes explain what they are loading", async ({ page }) => {
+  await page.route("**/data/generated/**", async (route) => {
+    const url = route.request().url();
+    if (url.includes("nodes.json") || url.includes("edges.json")) {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    }
+    await route.continue();
+  });
+
+  await page.goto("/#/templates");
+  await expect(
+    page.getByRole("heading", { name: "Loading the compliance workbench" }),
+  ).toBeVisible({ timeout: 15000 });
+  await expect(
+    page.getByText(
+      "The workbench is preparing task paths, official materials, and blank working documents.",
+    ),
+  ).toBeVisible();
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("heading", { name: "What do you need to get done?" }),
+  ).toBeVisible();
+});

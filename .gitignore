@@ -22,6 +22,8 @@
 !tests/e2e/**
 !tests/fixtures/
 !tests/fixtures/**
+!tests/benchmarks/
+!tests/benchmarks/**
 !docs/
 !docs/**
 # AI-assistant working notes dropped by a plugin — not app logic, never ship.
@@ -63,6 +65,8 @@ scripts/*
 !scripts/refresh-data.mjs
 !scripts/reconcile-source-freshness.mjs
 !scripts/report-refresh-diff.mjs
+!scripts/spikes/
+!scripts/spikes/**
 !scripts/static-smoke.mjs
 !scripts/dom-smoke.mjs
 !scripts/lib/

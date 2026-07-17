@@ -151,23 +151,30 @@ export function PlaybooksPage(props: {
             </div>
           </section>
         ) : null}
-        {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => (
-          <section className="catalog-group" key={category}>
-            <h2 className="catalog-group-title">{category}</h2>
-            <div className="intent-grid">
-              {categoryPatterns.map((pattern) => (
-                <QuickIntentCard
-                  actionLabel="Open playbook"
-                  body={pattern.summary}
-                  icon={<IconBook2 size={20} stroke={1.8} />}
-                  key={pattern.id}
-                  onClick={() => onNavigate("patterns", { pattern: pattern.id })}
-                  title={PATTERN_RENAMES[pattern.id] || pattern.title}
-                />
-              ))}
-            </div>
-          </section>
-        ))}
+        {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => {
+          const visiblePatterns = !categoryFilter && !queryFilter
+            ? categoryPatterns.filter(
+                (pattern) => !RECOMMENDED_PATTERN_IDS.includes(pattern.id),
+              )
+            : categoryPatterns;
+          return visiblePatterns.length ? (
+            <section className="catalog-group" key={category}>
+              <h2 className="catalog-group-title">{category}</h2>
+              <div className="intent-grid">
+                {visiblePatterns.map((pattern) => (
+                  <QuickIntentCard
+                    actionLabel="Open playbook"
+                    body={pattern.summary}
+                    icon={<IconBook2 size={20} stroke={1.8} />}
+                    key={pattern.id}
+                    onClick={() => onNavigate("patterns", { pattern: pattern.id })}
+                    title={PATTERN_RENAMES[pattern.id] || pattern.title}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : null;
+        })}
       </section>
     );
   }
@@ -311,4 +318,3 @@ export function PlaybooksPage(props: {
     </section>
   );
 }
-

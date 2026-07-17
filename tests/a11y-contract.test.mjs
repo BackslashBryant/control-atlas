@@ -18,8 +18,8 @@ test("provenance badges always render text labels alongside tone classes", () =>
     "utf8",
   );
   assert.match(compareHelpers, /function PublicationStatusBadge/);
-  assert.match(compareHelpers, /Inferred link/);
-  assert.match(compareHelpers, /Official link/);
+  assert.match(compareHelpers, /Candidate mapping/);
+  assert.match(compareHelpers, /Published mapping/);
   assert.match(compareHelpers, /function ProvenanceBadge/);
   assert.match(compareHelpers, /ProvenanceTerm/);
   assert.match(provenanceBadge, /entry\.label/);

@@ -76,7 +76,8 @@ test("Atlas Path, Map groups, and List rows derive from one published edge set",
   );
   assert.equal(groups[0]?.id, "csf");
   assert.equal(groups[0]?.placement, "lateral");
-  assert.equal(groups[0]?.stage, "decide");
+  assert.equal(groups[0]?.stage, "requirement");
+  assert.equal(groups[0]?.rmfStage, "select");
 });
 
 test("candidate links appear only after the explicit toggle", () => {
@@ -103,7 +104,8 @@ test("bounded Map keeps every available direction before filling six slots", () 
     label: id,
     description: id,
     placement,
-    stage: "understand" as const,
+    stage: "requirement" as const,
+    rmfStage: "select" as const,
     items: [],
   });
   const groups = [
@@ -123,20 +125,21 @@ test("bounded Map keeps every available direction before filling six slots", () 
   );
 });
 
-test("Path opens the first connected stage unless the user chose a stage", () => {
+test("legacy stage links resolve to the renamed decomposition stages", () => {
   const implementOnly = [
     {
       id: "disa",
       label: "DISA implementation",
       description: "Implementation link",
       placement: "downstream" as const,
-      stage: "implement" as const,
+      stage: "implementation" as const,
+      rmfStage: "implement" as const,
       items: [{} as never],
     },
   ];
-  assert.equal(resolveAtlasPathStage(implementOnly, ""), "implement");
+  assert.equal(resolveAtlasPathStage(implementOnly, ""), "implementation");
   assert.equal(
-    resolveAtlasPathStage(implementOnly, "understand"),
-    "understand",
+    resolveAtlasPathStage(implementOnly, "control"),
+    "control",
   );
 });

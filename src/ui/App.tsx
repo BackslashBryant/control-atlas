@@ -389,6 +389,7 @@ function AppContent(props: {
   } = props;
 
   const graphReady = Boolean(bundle?.graphReady);
+  const loadingCopy = routeLoadingCopy(state.view);
 
   if (!bundle && state.view === "search") {
     if (loadError) {
@@ -402,7 +403,13 @@ function AppContent(props: {
   }
 
   if (!bundle && !isStaticViewWithoutBundle(state.view)) {
-    return <DataPendingNotice onRetry={onRetryLoad} />;
+    return (
+      <DataPendingNotice
+        description={loadingCopy.description}
+        onRetry={onRetryLoad}
+        title={loadingCopy.title}
+      />
+    );
   }
 
   if (bundle && !graphReady && requiresFullGraph(state.view)) {
@@ -411,8 +418,9 @@ function AppContent(props: {
     }
     return (
       <DataPendingNotice
+        description={loadingCopy.description}
         onRetry={onRetryLoad}
-        title="Loading connections and compare data"
+        title={loadingCopy.title}
       />
     );
   }
@@ -600,4 +608,39 @@ function AppContent(props: {
       }
     />
   );
+}
+
+function routeLoadingCopy(view: ViewState["view"]) {
+  switch (view) {
+    case "matrix":
+      return {
+        title: "Loading Compare",
+        description:
+          "Compare needs the connection data before it can line up frameworks, baselines, or threat paths.",
+      };
+    case "sources":
+      return {
+        title: "Loading Sources",
+        description:
+          "Sources is joining the publisher registry to the records and known coverage gaps.",
+      };
+    case "templates":
+      return {
+        title: "Loading the compliance workbench",
+        description:
+          "The workbench is preparing task paths, official materials, and blank working documents.",
+      };
+    case "atlas-map":
+      return {
+        title: "Loading Atlas",
+        description:
+          "Atlas is preparing the selected record and its real published connections.",
+      };
+    default:
+      return {
+        title: "Loading connection data",
+        description:
+          "This page needs the public mapping data. Wait a moment or retry if loading failed.",
+      };
+  }
 }

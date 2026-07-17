@@ -362,7 +362,7 @@ test("compare stig chain traces DISA items through CCI to NIST controls", async 
   await expect(
     chainPanel.getByText("NIST controls", { exact: true }),
   ).toBeVisible();
-  await expect(chainPanel.getByText("Official link").first()).toBeVisible();
+  await expect(chainPanel.getByText("Published mapping").first()).toBeVisible();
   await page
     .locator(".compare-results-panel details.export-disclosure summary")
     .click();
@@ -474,6 +474,10 @@ test("FedRAMP workbench distinguishes current rules from the complete legacy lib
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await page
+    .getByRole("button", { name: /Build an authorization package/i })
+    .click();
+
   await expect(
     page.getByRole("heading", {
       name: "Consolidated Rules 2026.07.14.01",
@@ -483,6 +487,10 @@ test("FedRAMP workbench distinguishes current rules from the complete legacy lib
   await expect(
     page.getByText(/Only 1 process is marked placeholder: AGU/),
   ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "Browse complete official catalog" })
+    .click();
 
   const showAll = page.getByRole("button", {
     name: /Show all \d+ official resources/,
@@ -574,6 +582,75 @@ test("explore search is route-derived and survives refresh", async ({
   await expect(
     page.getByRole("searchbox", { name: "Search by ID, title, or topic" }),
   ).toHaveValue("account management");
+});
+
+test("release-readiness content stays calm, progressive, and de-duplicated", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+
+  await page.goto("/#/explore");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.locator(".search-result-groups")).toHaveCount(0);
+  await expect(
+    page.getByText(
+      "Try AC-2, FedRAMP High, CCI-000225, or account management.",
+    ),
+  ).toBeVisible();
+
+  const search = page.getByRole("searchbox", {
+    name: "Search by ID, title, or topic",
+  });
+  await search.fill("how do I control user accounts");
+  await search.press("Enter");
+  await expect(page.locator(".search-result-groups")).toBeVisible();
+  await expect(page.locator(".result-card h3").first()).toContainText("AC-2");
+
+  await page.goto("/#/templates");
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("heading", { name: "Start with a compliance task" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Official federal resources" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Blank working documents" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: /Build an authorization package/i })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: /Official resources for Build an authorization package/i,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Blank working documents" }),
+  ).toBeVisible();
+
+  await page.goto("/#/playbooks");
+  await waitForAppReady(page);
+  await expect(
+    page.getByText("What Your Cloud Provider Owns vs What You Own", {
+      exact: true,
+    }),
+  ).toHaveCount(1);
+  await expect(
+    page.getByText("Reusing Prior Authorization Work", { exact: true }),
+  ).toHaveCount(1);
+
+  const footer = page.locator("footer.site-footer");
+  await expect(
+    footer.getByText("See how federal cybersecurity requirements connect."),
+  ).toBeVisible();
+  await expect(
+    footer.getByText(
+      "Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system.",
+      { exact: true },
+    ),
+  ).toHaveCount(1);
 });
 
 test("footer about link opens the trust page with full disclaimer", async ({

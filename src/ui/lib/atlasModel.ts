@@ -27,16 +27,25 @@ export type AtlasConnectionGroup = {
   description: string;
   placement: "upstream" | "lateral" | "downstream";
   stage: AtlasPathStageId;
+  rmfStage: AtlasRmfStageId;
   items: AtlasRelationshipRow[];
 };
 
 export type AtlasPathStageId =
-  | "understand"
-  | "decide"
-  | "implement"
+  | "requirement"
+  | "control"
+  | "implementation"
   | "evidence"
+  | "assessment"
+  | "decision";
+
+export type AtlasRmfStageId =
+  | "prepare"
+  | "categorize"
+  | "select"
+  | "implement"
   | "assess"
-  | "monitor";
+  | "authorize-monitor";
 
 export const ATLAS_PATH_STAGES: Array<{
   id: AtlasPathStageId;
@@ -44,19 +53,19 @@ export const ATLAS_PATH_STAGES: Array<{
   description: string;
 }> = [
   {
-    id: "understand",
-    label: "Understand",
-    description: "See the control, its family, and the requirements around it.",
+    id: "requirement",
+    label: "Requirement",
+    description: "Published baselines and crosswalks that establish why this work applies.",
   },
   {
-    id: "decide",
-    label: "Decide",
-    description: "Use baselines and published mappings to determine what applies.",
+    id: "control",
+    label: "Control",
+    description: "The selected control and directly related controls in the public map.",
   },
   {
-    id: "implement",
-    label: "Implement",
-    description: "Follow implementation standards, enhancements, and technical references.",
+    id: "implementation",
+    label: "Implementation",
+    description: "Enhancements, CCIs, STIGs, and SRGs that turn the requirement into work.",
   },
   {
     id: "evidence",
@@ -64,33 +73,75 @@ export const ATLAS_PATH_STAGES: Array<{
     description: "Identify what should demonstrate that the requirement is in place.",
   },
   {
-    id: "assess",
-    label: "Assess",
+    id: "assessment",
+    label: "Assessment",
     description: "Use published assessment procedures and scoping references.",
   },
   {
-    id: "monitor",
-    label: "Monitor",
-    description: "Track related threats, defenses, and changing context.",
+    id: "decision",
+    label: "Decision",
+    description: "Use related risk and threat context to support a review decision.",
+  },
+];
+
+export const ATLAS_RMF_STAGES: Array<{
+  id: AtlasRmfStageId;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "prepare",
+    label: "Prepare",
+    description: "Establish context, ownership, and the records that frame the work.",
+  },
+  {
+    id: "categorize",
+    label: "Categorize",
+    description: "Review the baselines and program context that establish impact.",
+  },
+  {
+    id: "select",
+    label: "Select",
+    description: "Use published mappings and related controls to determine coverage.",
+  },
+  {
+    id: "implement",
+    label: "Implement",
+    description: "Follow enhancements and technical requirements that put controls in place.",
+  },
+  {
+    id: "assess",
+    label: "Assess",
+    description: "Use the published procedures connected to this record.",
+  },
+  {
+    id: "authorize-monitor",
+    label: "Authorize / monitor",
+    description: "Carry assessment and risk context into decisions and ongoing review.",
   },
 ];
 
 const GROUP_META: Record<
   string,
-  { placement: AtlasConnectionGroup["placement"]; stage: AtlasPathStageId; rank: number }
+  {
+    placement: AtlasConnectionGroup["placement"];
+    stage: AtlasPathStageId;
+    rmfStage: AtlasRmfStageId;
+    rank: number;
+  }
 > = {
-  baseControl: { placement: "upstream", stage: "understand", rank: 0 },
-  nistBaseline: { placement: "upstream", stage: "decide", rank: 1 },
-  fedrampBaseline: { placement: "upstream", stage: "decide", rank: 2 },
-  csf: { placement: "lateral", stage: "decide", rank: 3 },
-  sp171: { placement: "lateral", stage: "decide", rank: 4 },
-  nistControl: { placement: "lateral", stage: "understand", rank: 5 },
-  enhancements: { placement: "downstream", stage: "implement", rank: 6 },
-  disa: { placement: "downstream", stage: "implement", rank: 7 },
-  stig: { placement: "downstream", stage: "implement", rank: 8 },
-  assessment: { placement: "downstream", stage: "assess", rank: 9 },
-  mitre: { placement: "downstream", stage: "monitor", rank: 10 },
-  other: { placement: "lateral", stage: "understand", rank: 11 },
+  baseControl: { placement: "upstream", stage: "control", rmfStage: "prepare", rank: 0 },
+  nistBaseline: { placement: "upstream", stage: "requirement", rmfStage: "categorize", rank: 1 },
+  fedrampBaseline: { placement: "upstream", stage: "requirement", rmfStage: "categorize", rank: 2 },
+  csf: { placement: "lateral", stage: "requirement", rmfStage: "select", rank: 3 },
+  sp171: { placement: "lateral", stage: "requirement", rmfStage: "select", rank: 4 },
+  nistControl: { placement: "lateral", stage: "control", rmfStage: "select", rank: 5 },
+  enhancements: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 6 },
+  disa: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 7 },
+  stig: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 8 },
+  assessment: { placement: "downstream", stage: "assessment", rmfStage: "assess", rank: 9 },
+  mitre: { placement: "downstream", stage: "decision", rmfStage: "authorize-monitor", rank: 10 },
+  other: { placement: "lateral", stage: "control", rmfStage: "prepare", rank: 11 },
 };
 
 function counterpartFor(
@@ -185,6 +236,7 @@ export function buildAtlasGroups(
         description: group.description,
         placement: meta.placement,
         stage: meta.stage,
+        rmfStage: meta.rmfStage,
         items: group.items
           .map(({ edge, counterpart }) => ({
             edge,
@@ -259,6 +311,6 @@ export function resolveAtlasPathStage(
   return (
     ATLAS_PATH_STAGES.find((stage) =>
       groups.some((group) => group.stage === stage.id && group.items.length > 0),
-    )?.id || "understand"
+    )?.id || "requirement"
   );
 }

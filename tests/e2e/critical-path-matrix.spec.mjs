@@ -33,20 +33,26 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
 });
 
-test("critical path: Atlas Path opens a published connected record", async ({
+test("critical path: Atlas Purpose opens a published connected record", async ({
   page,
 }) => {
   await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("tab", { name: /Decide/ }).click();
-  const connected = page.locator(".atlas-path-items button").first();
+  const connected = page
+    .locator(
+      ".atlas-decomposition-card:not(.atlas-decomposition-card--center)",
+    )
+    .first();
   await expect(connected).toBeVisible();
-  const previousUrl = page.url();
   await connected.click();
+  const previousUrl = page.url();
+  await page.getByRole("button", { name: "Open selected record" }).click();
   await expect(page).not.toHaveURL(previousUrl);
-  await expect(page.getByRole("heading", { level: 1 })).not.toHaveText("AC-2");
+  await expect(page.getByRole("heading", { level: 1 })).not.toContainText(
+    "AC-2 — Account Management",
+  );
 });
 
 test("critical path: compare detailed mappings expose text provenance labels", async ({
@@ -65,7 +71,7 @@ test("critical path: compare detailed mappings expose text provenance labels", a
   const table = page.getByRole("table", { name: "Relationship mappings" });
   await expect(table).toBeVisible();
   await expect(table).toContainText("Plain-language rationale");
-  await expect(page.getByText("Official link").first()).toBeVisible();
+  await expect(page.getByText("Published mapping").first()).toBeVisible();
 });
 
 test("critical path: library detail relationships show connection and source trust text", async ({

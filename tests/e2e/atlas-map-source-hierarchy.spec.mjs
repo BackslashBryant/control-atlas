@@ -64,5 +64,8 @@ test("a source Path card opens a real connected record", async ({ page }) => {
   await sourceCard.getByRole("button", { name: "View connected records" }).click();
   await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
   await expect(page.getByRole("heading", { name: "FAMILY-AC", level: 1 })).toBeVisible();
-  await expect(page.getByText("published connections", { exact: true })).toBeVisible();
+  await expect(page.locator(".atlas-decomposition-stage")).toHaveCount(6);
+  await expect(
+    page.getByRole("complementary", { name: "Selected path" }),
+  ).toBeVisible();
 });

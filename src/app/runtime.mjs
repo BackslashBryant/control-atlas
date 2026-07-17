@@ -20,8 +20,55 @@ const SEARCH_STOP_WORDS = new Set([
   "with",
 ]);
 
+const SEARCH_INTENT_ALIASES = [
+  {
+    terms: [
+      /\b(manage|managing|administer|control|review)\b/i,
+      /\b(system\s+|user\s+)?accounts?\b/i,
+    ],
+    query: "account management",
+  },
+  {
+    terms: [
+      /\b(data|information)\b/i,
+      /\b(stored|storage|at\s+rest)\b/i,
+      /\b(protect|protection|secure|encrypt|encryption)\b/i,
+    ],
+    query: "protection information at rest",
+  },
+  {
+    terms: [
+      /\b(reuse|reusing|reused|invalidate|logout)\b/i,
+      /\b(login\s+)?sessions?\b|\bsession\s+(token|identifier)s?\b/i,
+    ],
+    query: "invalidate session identifiers logout",
+  },
+  {
+    terms: [
+      /\bvulnerabilit(?:y|ies)\b|\bsecurity\s+(flaws?|weakness(?:es)?)\b/i,
+      /\b(fix|fixing|remediate|remediation|scan|scanning|find)\b/i,
+    ],
+    query: "vulnerability monitoring scanning",
+  },
+  {
+    terms: [
+      /\b(security\s+|cyber\s+)?incident\b|\bbreach\b/i,
+      /\b(happen|happens|respond|response|handle|handling|do)\b/i,
+    ],
+    query: "incident handling",
+  },
+];
+
+function expandLibrarySearchIntent(value) {
+  const raw = String(value || "").trim();
+  const alias = SEARCH_INTENT_ALIASES.find(({ terms }) =>
+    terms.every((pattern) => pattern.test(raw)),
+  );
+  return alias?.query || raw;
+}
+
 function normalizeLibrarySearchQuery(value) {
-  const normalized = String(value || "")
+  const normalized = expandLibrarySearchIntent(value)
     .replace(/poa\s*&\s*m/gi, "poam")
     .replace(/poa\s+and\s+m/gi, "poam");
   const terms = normalized.match(/[a-zA-Z0-9][a-zA-Z0-9.()-]*/g) || [];
@@ -30,6 +77,19 @@ function normalizeLibrarySearchQuery(value) {
       (term) => term.length > 1 && !SEARCH_STOP_WORDS.has(term.toLowerCase()),
     )
     .join(" ");
+}
+
+function librarySearchRankBoost(document, query) {
+  const normalizedQuery = normalize(query);
+  const title = normalize(document?.title);
+  const itemId = normalize(document?.item_id);
+  let boost = 0;
+  if (title === normalizedQuery) boost += 10_000;
+  else if (title.includes(normalizedQuery)) boost += 1_000;
+  if (itemId === normalizedQuery) boost += 20_000;
+  if (document?.object_type === "control") boost += 200;
+  if (document?.catalog_id === "nist-800-53") boost += 50;
+  return boost;
 }
 
 // Practitioner notation for control enhancements uses parentheses, e.g.
@@ -887,7 +947,19 @@ export function createFederalGraphRuntime(dataset) {
           }
         }
         return [...merged.values()]
-          .sort((left, right) => right.score - left.score)
+          .sort((left, right) => {
+            const leftDocument = libraryDocumentById.get(left.id);
+            const rightDocument = libraryDocumentById.get(right.id);
+            const leftRank = left.score + librarySearchRankBoost(
+              leftDocument,
+              searchNeedle,
+            );
+            const rightRank = right.score + librarySearchRankBoost(
+              rightDocument,
+              searchNeedle,
+            );
+            return rightRank - leftRank || left.id.localeCompare(right.id);
+          })
           .map((result) => libraryDocumentById.get(result.id))
           .filter((doc) => doc && matchesLibraryFacet(doc, filters))
           .slice(0, 100);
@@ -900,6 +972,19 @@ export function createFederalGraphRuntime(dataset) {
         if (!searchNeedle) return [];
         const results = miniSearch.search(searchNeedle, { combineWith: "AND" });
         return results
+          .sort((left, right) => {
+            const leftDocument = libraryDocumentById.get(left.id);
+            const rightDocument = libraryDocumentById.get(right.id);
+            const leftRank = left.score + librarySearchRankBoost(
+              leftDocument,
+              searchNeedle,
+            );
+            const rightRank = right.score + librarySearchRankBoost(
+              rightDocument,
+              searchNeedle,
+            );
+            return rightRank - leftRank || left.id.localeCompare(right.id);
+          })
           .map((result) => libraryDocumentById.get(result.id))
           .filter((doc) => doc && matchesLibraryFacet(doc, filters))
           .slice(0, 100);

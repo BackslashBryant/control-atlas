@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "queries": [
+    {
+      "id": "expert-control-id",
+      "audience": "expert",
+      "query": "AC-2",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-enhancement-notation",
+      "audience": "expert",
+      "query": "AC-2(1)",
+      "expected_ids": ["nist-800-53:AC-2.1"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-cci-id",
+      "audience": "expert",
+      "query": "CCI-000225",
+      "expected_ids": ["disa-cci:CCI-000225"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-control-title",
+      "audience": "expert",
+      "query": "account management",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 3
+    },
+    {
+      "id": "novice-account-access",
+      "audience": "novice",
+      "query": "manage system accounts",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-account-access-variant",
+      "audience": "novice",
+      "query": "how do I control user accounts",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-data-at-rest",
+      "audience": "novice",
+      "query": "protect data stored on a device",
+      "expected_ids": ["nist-800-53:SC-28"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-data-at-rest-variant",
+      "audience": "novice",
+      "query": "encrypt information at rest",
+      "expected_ids": ["nist-800-53:SC-28"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-session-reuse",
+      "audience": "novice",
+      "query": "stop someone reusing an old login session",
+      "expected_ids": ["nist-800-53:SC-23.1"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-session-reuse-variant",
+      "audience": "novice",
+      "query": "prevent session token reuse",
+      "expected_ids": ["nist-800-53:SC-23.1"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-vulnerability-scanning",
+      "audience": "novice",
+      "query": "find software vulnerabilities and fix them",
+      "expected_ids": ["nist-800-53:RA-5"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-vulnerability-scanning-variant",
+      "audience": "novice",
+      "query": "scan for security flaws",
+      "expected_ids": ["nist-800-53:RA-5"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-incident-response",
+      "audience": "novice",
+      "query": "what should we do when a security incident happens",
+      "expected_ids": ["nist-800-53:IR-4"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-incident-response-variant",
+      "audience": "novice",
+      "query": "respond to a cyber incident",
+      "expected_ids": ["nist-800-53:IR-4"],
+      "top_k": 5
+    },
+    {
+      "id": "known-no-result",
+      "audience": "novice",
+      "query": "banana bread recipe",
+      "expected_ids": [],
+      "top_k": 5
+    }
+  ]
+}

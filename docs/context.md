@@ -38,8 +38,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Complete local Playwright/axe, post-deploy workflows, and Lighthouse evidence
-2. Ship branch/main and verify live Pages; do not publish `v1.0.0`
+1. Obtain owner approval before pushing, merging, or deploying the locally verified recovery branch
+2. Verify live Pages with novice/expert desktop/mobile workflows and focused-Atlas Lighthouse; do not publish `v1.0.0`
 3. Human screen-reader and real-device sign-off remains a clearly labeled residual until completed
 
 ## Status Docs
