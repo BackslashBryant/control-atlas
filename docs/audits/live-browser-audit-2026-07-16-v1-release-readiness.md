@@ -6,7 +6,7 @@
 - **Audited deployment:** `main` / `origin/main` at `ad0ddde`
 - **Working branch:** `agent/pixel/v1-0-release-readiness`
 - **Audit order:** The deployed site was exercised before any source edit.
-- **Related evidence:** [`fedramp-2026-transition-hardening-2026-07-16.md`](fedramp-2026-transition-hardening-2026-07-16.md), [`a11y-manual-checklist.md`](a11y-manual-checklist.md)
+- **Related evidence:** [`fedramp-2026-transition-hardening-2026-07-16.md`](fedramp-2026-transition-hardening-2026-07-16.md), [`a11y-manual-checklist.md`](a11y-manual-checklist.md), [`../plans/atlas-recovery-options.md`](../plans/atlas-recovery-options.md)
 
 ## Verification gates
 
