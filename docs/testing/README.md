@@ -5,6 +5,7 @@
 - `npm run test:data`
 - `npm run test:runtime`
 - `npm run test:browser`
+- `npm run test:atlas`
 - `npm run smoke:dom`
 - `npm run verify:public`
 - `npm run precommit`
@@ -18,6 +19,7 @@
 - Control Atlas shell branding, disclaimer, and accessibility markers
 - Product boundary: no prohibited operational capability, user upload, user-data storage, or write request
 - Required alignment documents and roadmap epics
+- Atlas shard integrity, shared Path/Map/List edge model, explicit candidate opt-in, zero-connection behavior, responsive bounds, and source-reference traceability
 
 Documentation may name prohibited concepts to explain the boundary. Tests must reject their implementation in runtime/config surfaces rather than banning explanatory language.
 

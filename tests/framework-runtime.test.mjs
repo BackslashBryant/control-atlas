@@ -1902,6 +1902,14 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
   });
 
   assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
+  assert.equal(
+    runtime.searchLibrary("account management")[0].id,
+    "nist-800-53:AC-2",
+  );
+  assert.equal(
+    runtime.searchLibrary("manage system accounts")[0].id,
+    "nist-800-53:AC-2",
+  );
   assert.deepEqual(
     runtime.searchLibrary("FedRAMP 2026").map((entry) => entry.id),
     ["test:fedramp-2026"],

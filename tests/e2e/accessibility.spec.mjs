@@ -30,6 +30,22 @@ test.beforeEach(async ({ page }) => {
 const ROUTES = [
   { label: "home", path: "/" },
   { label: "atlas map", path: "/?view=atlas-map" },
+  {
+    label: "focused Atlas Path",
+    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=path",
+  },
+  {
+    label: "focused Atlas Map",
+    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=map",
+  },
+  {
+    label: "focused Atlas List",
+    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=list",
+  },
+  {
+    label: "Atlas zero connections",
+    path: "/?view=atlas-map&node=csf-2%3ADE.AE-01&relationshipView=map",
+  },
   { label: "explore search", path: "/?view=explore&q=AC-2" },
   {
     label: "library detail",

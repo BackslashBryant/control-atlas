@@ -41,7 +41,7 @@ test('/atlas resolves to the Atlas Map view', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
-    page.locator('main').getByRole('heading', { name: 'Where would you like to start?', level: 1 }),
+    page.locator('main').getByRole('heading', { name: 'Control Atlas', level: 1 }),
   ).toBeVisible();
 });
 
@@ -78,7 +78,7 @@ test('header overlay search submits to Explore and carries focus to results', as
   const dialog = page.getByRole('dialog', { name: 'Search records' });
   await expect(dialog).toBeVisible();
   const input = dialog.getByRole('searchbox', {
-    name: 'Search records and glossary',
+    name: 'Search records',
   });
   await input.fill('account management');
   await input.press('Enter');
@@ -91,25 +91,25 @@ test('header overlay search submits to Explore and carries focus to results', as
 
 // CATL-25: the Atlas route renders a bounded starter cluster quickly; the full
 // 11k-node graph stays behind the route via the staged loader.
-test('atlas map renders a bounded starter cluster, not the full graph', async ({
+test('Atlas source Path does not request the full graph stack', async ({
   page,
 }) => {
   test.setTimeout(90_000);
+  const requests = [];
+  page.on('request', (request) => requests.push(request.url()));
   await page.goto('/#/atlas-map');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Source guide" }).click();
-  await expect(page).toHaveURL(/node=foundation/);
-  await expect(page.locator('.react-flow__node').first()).toBeVisible({
-    timeout: 20000,
-  });
-  const nodeCount = await page.locator('.react-flow__node').count();
-  expect(nodeCount).toBeGreaterThan(0);
+  await expect(page.getByRole('tablist', { name: 'Novice questions path' })).toBeVisible();
+  await expect(page.locator('.react-flow')).toHaveCount(0);
   // A bounded focused/starter cluster — proof the route did not hydrate every
   // node in the catalog on cold load.
-  expect(nodeCount).toBeLessThan(80);
+  expect(requests.some((url) => /\/nodes\.json/.test(url))).toBe(false);
+  expect(requests.some((url) => /\/edges\.json/.test(url))).toBe(false);
+  expect(requests.some((url) => /\/evidence\.json/.test(url))).toBe(false);
+  expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });
 
 // CATL-V2 / CATL-67: the download confirmation toast fires from the real

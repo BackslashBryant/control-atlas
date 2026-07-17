@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — Newbie-Reframe Phase 7 is the current release. Its July 16 FedRAMP corrective hardening ingests the official structured 2026 rules, preserves the complete legacy library, maps historical artifacts to current rules/schemas, and revalidates all 12 companions. Evidence: [`docs/audits/fedramp-2026-transition-hardening-2026-07-16.md`](audits/fedramp-2026-transition-hardening-2026-07-16.md).
+**v1.0 release readiness** — rebuild the Atlas around bounded Path, Map, and List views; close the landing/search/copy release blockers; complete desktop/mobile/accessibility/performance verification; and ship the verified branch without creating the `v1.0.0` tag or release. Baseline and post-fix evidence: [`docs/audits/live-browser-audit-2026-07-16-v1-release-readiness.md`](audits/live-browser-audit-2026-07-16-v1-release-readiness.md).
 
 ## Epic Status (July 9, 2026)
 
@@ -69,7 +69,7 @@ No backend or user, organization, or system data is part of this product directi
 - Static GitHub Pages application (React shell in `src/ui/`)
 - Public-data-only build pipeline
 - Source registry schema `4.0`
-- Stable `sources`, `nodes`, `edges`, `evidence`, `graph-health`, and sharded `library-search-manifest` + per-catalog search shards
+- Stable `sources`, `nodes`, `edges`, `evidence`, and `graph-health` artifacts; sharded library search; and record-indexed Atlas neighborhood shards
 - Library search, Compare workbenches, Sources registry, Patterns, Templates shell, Start Here, glossary drawer
 - Provenance-aware CSV/Markdown/JSON exports on Compare surfaces
 
@@ -88,8 +88,9 @@ No backend or user, organization, or system data is part of this product directi
 
 ## Recommended Sequence (post-MVP)
 
-1. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
-2. **Optional** — promote `v1.0.0` after RC feedback
+1. **Finish v1.0 release readiness** — full browser gates, live Pages audit, and owner review
+2. **Optional, owner-approved only** — create and publish `v1.0.0`
+3. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
 
 ## Historical Delivery Records
 

@@ -316,18 +316,21 @@ Every term leads with a plain-language definition before citing the formal sourc
 
 ### Relationship Graph
 
-Visualizes public relationships between controls, STIGs, CCIs, baselines, techniques, and defenses. Extended from the GovFrame Navigator D3 engine.
+Shows public relationships between controls, STIGs, CCIs, baselines, techniques, and defenses through three coordinated views: Path, Map, and List.
 
-One lens among several — never the flagship or headline feature. Start Here (situation → requirements) is the newcomer's primary path; the graph is an optional, deeper view for users who already know what they're looking at.
+Path is the default and organizes the selected record into six working stages: Understand, Decide, Implement, Evidence, Assess, and Monitor. Map is an optional bounded neighborhood, not an open-ended canvas. List exposes the same filtered connections and source references in a dense accessible format.
 
-Graph edges are color-coded by provenance class with required text/icon labels. User can filter by node type, relationship type, provenance, and confidence. Accessible table fallback is required — the graph is an enhancement, not the only path to the data.
+Published connections are shown by default. Candidate relationships require an explicit user toggle. If the selected record has no published connections, the product says so and does not draw a map. No presentation-only projection may masquerade as a published relationship.
 
-**Migration note:** Phase 0 extends the existing GovFrame D3 graph's node/edge schema to add `provenance_class`, `confidence`, `relationship_type`, and `source_refs`. The renderer is updated to surface these as filters and edge colors. This is a data layer task, not a UI rebuild.
+Desktop Path progresses horizontally; compact/mobile Path progresses vertically. Map uses upstream, lateral/equivalent, and downstream regions. The selected record plus six group summaries is the overview limit. Only one group may expand at once, with at most ten desktop or six compact records; overflow routes to List. Details occupy a separate column or appear below the view and never cover navigable content.
 
 **Acceptance criteria:**
 - User can open graph from any object detail page
 - User can filter out inferred relationships
-- Table fallback is always available and accessible
+- Path, Map, and List derive from the same filtered edge set
+- List is always available and accessible
+- Map does not render when there are zero visible connections
+- Opening a focused Atlas record does not require the monolithic graph bundle
 - Edge colors have text/icon labels — color is never the sole differentiator
 
 ---
@@ -573,7 +576,8 @@ FedRAMP uses `#0D9488` (Teal), not blue, to avoid collision with `--ca-primary`.
 | Layer | Decision | Rationale |
 |---|---|---|
 | Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
-| Graph | React Flow + ELK.js | Better fit for bounded, guided relationship diagrams than an open-ended network canvas |
+| Atlas | Semantic React DOM + record-indexed neighborhood shards | Readable, bounded, responsive Path/Map/List views without a canvas or monolithic graph download |
+| Other relationship diagrams | React Flow + ELK.js, lazy | Retained for existing bounded detail and Compare surfaces pending separate review |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |
 | Data format | JSON/JSONL runtime, YAML for curated registry | Performance vs. human-readability split |

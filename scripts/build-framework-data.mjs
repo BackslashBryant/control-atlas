@@ -17,6 +17,11 @@ import {
   generatePlainLanguageRationale,
   generatePlainLanguageSummary,
 } from "./lib/plain-language.mjs";
+import {
+  ATLAS_NEIGHBORHOOD_SHARD_COUNT,
+  buildAtlasNodeIndex,
+  buildAtlasNeighborhoodShards,
+} from "../src/app/atlas-neighborhood.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -32,8 +37,11 @@ const GOVERNANCE_FILES = [
   "source-manifests.json",
   "graph-diff-summary.json",
   "library-search-manifest.json",
+  "atlas-neighborhood-manifest.json",
+  "atlas-node-index.json",
 ];
 const LIBRARY_SEARCH_DIR = join(GENERATED, "library-search");
+const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
 const EAGER_CATALOG_IDS = ["nist-800-53", "csf-2", "fedramp-rev5"];
 const MAX_INITIAL_SEARCH_BYTES = 3_200_000;
 
@@ -997,6 +1005,9 @@ function createBuildManifest(graph) {
       ...RUNTIME_COLLECTIONS.map((name) => `${name}.json`),
       "library-search-manifest.json",
       "library-search/",
+      "atlas-neighborhood-manifest.json",
+      "atlas-neighborhood/",
+      "atlas-node-index.json",
     ],
     governance_artifacts: GOVERNANCE_FILES,
     source_registry_path: "data/source-registry.json",
@@ -1153,11 +1164,13 @@ export function buildFrameworkData() {
     generatedAt,
   );
   const librarySearchShards = buildLibrarySearchShards(graph);
+  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards(graph);
+  const atlasNodeIndex = buildAtlasNodeIndex(graph);
 
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
     const entryPath = join(GENERATED, entry);
-    if (entry === "library-search") {
+    if (entry === "library-search" || entry === "atlas-neighborhood") {
       rmSync(entryPath, { recursive: true, force: true });
       continue;
     }
@@ -1170,7 +1183,7 @@ export function buildFrameworkData() {
     const value = artifact(collection, values, generatedAt);
     writeFileSync(
       join(GENERATED, `${name}.json`),
-      `${JSON.stringify(value, null, 2)}\n`,
+      `${JSON.stringify(value)}\n`,
       "utf8",
     );
   }
@@ -1208,8 +1221,6 @@ export function buildFrameworkData() {
           },
           generatedAt,
         ),
-        null,
-        2,
       )}\n`,
       "utf8",
     );
@@ -1235,6 +1246,58 @@ export function buildFrameworkData() {
       null,
       2,
     )}\n`,
+    "utf8",
+  );
+
+  mkdirSync(ATLAS_NEIGHBORHOOD_DIR, { recursive: true });
+  const atlasShardManifest = [];
+  for (const shard of atlasNeighborhoodShards) {
+    const shardPath = `atlas-neighborhood/${shard.shard_id}.json`;
+    writeFileSync(
+      join(GENERATED, shardPath),
+      `${JSON.stringify(
+        artifact(
+          "atlas_neighborhood_shard",
+          {
+            shard_id: shard.shard_id,
+            record_count: shard.record_count,
+            records: shard.records,
+          },
+          generatedAt,
+        ),
+      )}\n`,
+      "utf8",
+    );
+    atlasShardManifest.push({
+      shard_id: shard.shard_id,
+      record_count: shard.record_count,
+      path: shardPath,
+      bytes: statSync(join(GENERATED, shardPath)).size,
+    });
+  }
+
+  writeFileSync(
+    join(GENERATED, "atlas-neighborhood-manifest.json"),
+    `${JSON.stringify(
+      artifact(
+        "atlas_neighborhood_manifest",
+        {
+          shard_count: ATLAS_NEIGHBORHOOD_SHARD_COUNT,
+          hash_algorithm: "fnv1a-32",
+          records: graph.nodes.length,
+          shards: atlasShardManifest,
+        },
+        generatedAt,
+      ),
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+
+  writeFileSync(
+    join(GENERATED, "atlas-node-index.json"),
+    `${JSON.stringify(artifact("atlas_nodes", atlasNodeIndex, generatedAt))}\n`,
     "utf8",
   );
 

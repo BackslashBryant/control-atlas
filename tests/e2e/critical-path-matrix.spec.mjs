@@ -33,24 +33,20 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
 });
 
-test("critical path: Atlas matrix table links to graph node", async ({
+test("critical path: Atlas Path opens a published connected record", async ({
   page,
 }) => {
-  await page.goto("/?view=atlas-map");
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // Navigate through the preset menu to the framework map
-  await page.getByRole("button", { name: "Source guide" }).click();
-  await expect(page).toHaveURL(/node=foundation/);
-
-  // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
-  await page.getByText("Coverage matrix", { exact: true }).click();
-  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
-  await expect(matrix).toBeVisible();
-  const firstRow = matrix.locator("tbody tr").first();
-  await firstRow.click();
-  await expect(firstRow).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: /Decide/ }).click();
+  const connected = page.locator(".atlas-path-items button").first();
+  await expect(connected).toBeVisible();
+  const previousUrl = page.url();
+  await connected.click();
+  await expect(page).not.toHaveURL(previousUrl);
+  await expect(page.getByRole("heading", { level: 1 })).not.toHaveText("AC-2");
 });
 
 test("critical path: compare detailed mappings expose text provenance labels", async ({
@@ -104,8 +100,9 @@ test("critical path: library detail relationship map exposes table fallback", as
 
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table).toBeVisible();
-  await expect(page.getByText("Official link").first()).toBeVisible();
-  await expect(table).toContainText("Plain-language rationale");
+  await expect(table).toContainText("Published federal source");
+  await expect(table).toContainText("Why it matters");
+  await expect(table).not.toContainText("Review both sides of this");
 });
 
 test("critical path: STIG chain summary table is labeled for screen readers", async ({
@@ -117,9 +114,9 @@ test("critical path: STIG chain summary table is labeled for screen readers", as
 
   await expect(
     page.getByRole("table", { name: "STIG chain summary" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 30000 });
   await expect(
-    page.getByText("Official link = published mapping"),
+    page.getByText("Published mappings come from named sources"),
   ).toBeVisible();
 });
 
@@ -155,7 +152,7 @@ test("critical path: threat chain summary table is labeled for screen readers", 
     page.getByRole("table", { name: "Threat chain summary" }),
   ).toBeVisible();
   await expect(
-    page.getByText("Official link = MITRE published mapping"),
+    page.getByText("Published mappings come from MITRE"),
   ).toBeVisible();
 });
 

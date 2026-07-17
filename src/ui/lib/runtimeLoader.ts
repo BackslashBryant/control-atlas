@@ -1,4 +1,5 @@
 import { createFederalGraphRuntime } from "../../app/runtime.mjs";
+import { atlasNeighborhoodShardId } from "../../app/atlas-neighborhood.mjs";
 
 const CACHE_VERSION = "20260716-2";
 const artifactCache = new Map<string, Promise<unknown>>();
@@ -54,6 +55,59 @@ export type RuntimeBundle = {
   librarySearchRevision?: number;
 };
 
+export type AtlasNeighborhoodNode = {
+  id: string;
+  node_type?: string;
+  label?: string;
+  metadata?: {
+    item_id?: string;
+    title?: string;
+    catalog_id?: string;
+    family?: string;
+  };
+};
+
+export type AtlasNeighborhoodEdge = {
+  id: string;
+  source_node_id: string;
+  target_node_id: string;
+  relationship_type: string;
+  provenance_class: string;
+  publication_status: string;
+  confidence: string;
+  evidence_ids?: string[];
+  source_refs?: Array<{
+    source_id?: string;
+    ref_type?: string;
+    locator?: string;
+  }>;
+  rationale?: string;
+  plain_language_rationale?: string;
+};
+
+export type AtlasNeighborhoodRecord = {
+  center_node: AtlasNeighborhoodNode;
+  nodes: AtlasNeighborhoodNode[];
+  edges: AtlasNeighborhoodEdge[];
+  published_connection_count: number;
+  candidate_connection_count: number;
+};
+
+type AtlasNeighborhoodShardRecord = {
+  edges: Array<[
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    Array<[string, string, string]>,
+  ]>;
+  published_connection_count: number;
+  candidate_connection_count: number;
+};
+
 type LibrarySearchBootstrap = {
   librarySearch: {
     documents: Array<Record<string, unknown>>;
@@ -95,6 +149,133 @@ async function fetchCollection(path: string, key: string) {
 
 function artifactPath(name: string) {
   return `./data/generated/${name}?v=${CACHE_VERSION}`;
+}
+
+const RELATIONSHIP_GUIDANCE: Record<string, string> = {
+  maps_to:
+    "Compare the two records; this mapping does not transfer compliance by itself.",
+  supports: "Use this as supporting context, not proof that the requirement is met.",
+  implements: "This describes one way to put the selected requirement into practice.",
+  includes: "The selected record contains or selects this item.",
+  assesses: "Use this procedure to examine the selected requirement.",
+  overlaps: "The records cover some of the same ground but are not interchangeable.",
+  references: "The selected record points to this item for additional context.",
+  derived_from: "This item was derived from the selected source record.",
+  supersedes: "This item replaces an earlier record; confirm the effective version.",
+  mitigates: "This item can reduce the threat or weakness described by the selected record.",
+  protects: "This item identifies protection related to the selected record.",
+  related_to: "The source records a relationship without claiming equivalence.",
+};
+
+function atlasRelationshipGuidance(
+  relationshipType: string,
+  publicationStatus: string,
+) {
+  const guidance =
+    RELATIONSHIP_GUIDANCE[relationshipType] ||
+    "Use the source reference to understand how these records are connected.";
+  return publicationStatus === "published"
+    ? guidance
+    : `Candidate only: ${guidance.charAt(0).toLowerCase()}${guidance.slice(1)}`;
+}
+
+export async function loadAtlasNeighborhood(
+  nodeId: string,
+): Promise<AtlasNeighborhoodRecord | null> {
+  const [manifestArtifact, nodeIndexArtifact] = await Promise.all([
+    fetchArtifact(artifactPath("atlas-neighborhood-manifest.json")),
+    fetchArtifact(artifactPath("atlas-node-index.json")),
+  ]) as [
+    { atlas_neighborhood_manifest?: { shard_count?: number } },
+    { atlas_nodes?: Array<[string, string, string, string, string]> },
+  ];
+  const shardCount =
+    manifestArtifact.atlas_neighborhood_manifest?.shard_count || 128;
+  const shardId = atlasNeighborhoodShardId(nodeId, shardCount);
+  const shardArtifact = (await fetchArtifact(
+    artifactPath(`atlas-neighborhood/${shardId}.json`),
+  )) as {
+    atlas_neighborhood_shard?: {
+      records?: Record<string, AtlasNeighborhoodShardRecord>;
+    };
+  };
+  const shardRecord =
+    shardArtifact.atlas_neighborhood_shard?.records?.[nodeId] || null;
+  if (!shardRecord) return null;
+  const nodeById = new Map(
+    (nodeIndexArtifact.atlas_nodes || []).map(
+      ([id, nodeType, itemId, title, catalogId]) => [
+        id,
+        {
+          id,
+          node_type: nodeType,
+          metadata: {
+            item_id: itemId,
+            title,
+            catalog_id: catalogId,
+          },
+        } satisfies AtlasNeighborhoodNode,
+      ],
+    ),
+  );
+  const centerNode = nodeById.get(nodeId);
+  if (!centerNode) return null;
+  const counterpartIds = new Set<string>();
+  const edges = shardRecord.edges.map((compactEdge) => {
+    const [
+      id,
+      sourceNodeId,
+      targetNodeId,
+      relationshipType,
+      provenanceClass,
+      publicationStatus,
+      confidence,
+      compactSourceRefs,
+    ] = compactEdge;
+    const edge: AtlasNeighborhoodEdge = {
+      id,
+      source_node_id: sourceNodeId,
+      target_node_id: targetNodeId,
+      relationship_type: relationshipType,
+      provenance_class: provenanceClass,
+      publication_status: publicationStatus,
+      confidence,
+      source_refs: compactSourceRefs.map(
+        ([sourceId, refType, locator]) => ({
+          source_id: sourceId,
+          ref_type: refType,
+          locator,
+        }),
+      ),
+    };
+    counterpartIds.add(
+      edge.source_node_id === nodeId
+        ? edge.target_node_id
+        : edge.source_node_id,
+    );
+    return {
+      ...edge,
+      plain_language_rationale: atlasRelationshipGuidance(
+        relationshipType,
+        publicationStatus,
+      ),
+    };
+  });
+  const nodes = [
+    centerNode,
+    ...[...counterpartIds]
+      .flatMap((id) => {
+        const node = nodeById.get(id);
+        return node ? [node] : [];
+      }),
+  ];
+  return {
+    center_node: centerNode,
+    nodes,
+    edges,
+    published_connection_count: shardRecord.published_connection_count,
+    candidate_connection_count: shardRecord.candidate_connection_count,
+  };
 }
 
 function mergeLibraryShards(shards: LibrarySearchShard[]) {

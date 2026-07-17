@@ -78,3 +78,19 @@ Current direction:
 - Keep tables, search, filters, and curated pathways as the main user journey.
 - Use diagrams only for bounded relationship views, such as a focused control, a selected comparison path, or a selected Atlas Map slice.
 - Do not re-introduce Cytoscape, fCoSE, dagre, raw D3-force, or a single giant graph canvas for the main product experience.
+
+---
+
+## Amended 2026-07 — Primary Atlas is DOM-first
+
+The July v1.0 release-readiness audit showed that even a bounded React Flow/ELK implementation could fail the Atlas product goal when it loaded the monolithic graph, shrank labels into a large canvas, and depended on pan/zoom for comprehension. The focused Atlas scored 12 in the deployed mobile Lighthouse baseline.
+
+The primary Atlas route now uses semantic React DOM for three coordinated views:
+
+- Path: six working stages, horizontal on desktop and vertical on compact/mobile
+- Map: selected record plus bounded real relationship groups, one expansion at a time
+- List: the same filtered connections with source references
+
+The canonical graph model is unchanged. Build-time normalization emits a compact record index and 128 deterministic incident-edge shards, and a focused route loads one shard. React Flow and ELK remain available, lazy-loaded, for existing bounded detail and Compare diagrams. They are no longer the default Atlas renderer.
+
+This amendment keeps the earlier prohibition on full-corpus canvases and fabricated presentation edges.

@@ -86,7 +86,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           <p>{graph.summary.uniqueB}</p>
         </article>
         <article className="summary-card">
-          <h3>Source-backed</h3>
+          <h3>Published</h3>
           <p>{graph.summary.sourceBacked}</p>
         </article>
         <article className="summary-card">

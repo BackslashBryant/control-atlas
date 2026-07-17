@@ -577,15 +577,15 @@ export function ObjectDetailPage(props: {
         </section>
 
         <aside className="stack detail-sidebar">
-          <SummaryCard title="One stone, how many birds?" tone="trust">
+          <SummaryCard title="What this also connects to" tone="trust">
             {impact.total ? (
               <>
                 <p>
-                  Working on this touches{" "}
+                  This record has{" "}
                   <strong>
                     {impact.total} related item{impact.total === 1 ? "" : "s"}
                   </strong>{" "}
-                  across the frameworks you get assessed on:
+                    across the published data:
                 </p>
                 <ul className="impact-breakdown">
                   {impact.byType.slice(0, 6).map((entry) => (

@@ -52,16 +52,6 @@ export function ExplorePage(props: {
     setQueryDraft(state.query);
   }, [state.query]);
 
-  // CATL-17: when a committed query arrives (typed into the header overlay and
-  // submitted, or a deep link), carry focus into the results region so keyboard
-  // users continue into the results instead of the top of the page. The header
-  // overlay and Explore then read as one search surface, not two.
-  useEffect(() => {
-    if (state.query.trim()) {
-      resultsRef.current?.focus();
-    }
-  }, [state.query]);
-
   const filters = {
     catalog_id: state.filter || undefined,
     object_type: state.objectType || undefined,
@@ -162,6 +152,14 @@ export function ExplorePage(props: {
     glossaryMatches.length > 0 ||
     resourceMatches.templates.length > 0 ||
     resourceMatches.artifacts.length > 0;
+
+  // CATL-17: wait until asynchronous search shards have produced a results
+  // region before carrying focus out of the header overlay.
+  useEffect(() => {
+    if (state.query.trim() && hasVisibleResults) {
+      resultsRef.current?.focus();
+    }
+  }, [hasVisibleResults, state.query]);
 
   // Bound the DOM: an empty query matches the whole library (9k+ records).
   // Open every group only for small result sets; always cap the cards
@@ -560,7 +558,7 @@ export function ExplorePage(props: {
                                 Open record
                               </button>
                               <details className="result-actions-menu">
-                                <summary role="button">More actions</summary>
+                                <summary>Compare, map, or export</summary>
                                 <div className="result-actions-popover">
                                   {relationshipCount > 0 || !graphReady ? (
                                     <button

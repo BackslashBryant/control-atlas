@@ -21,7 +21,7 @@ export type CompareWorkbench =
   | "baseline-compare"
   | "threat-chain";
 
-export type RelationshipViewMode = "map" | "list";
+export type RelationshipViewMode = "path" | "map" | "list";
 
 export type CompareViewMode = "map" | "list";
 
@@ -37,6 +37,8 @@ export type ViewState =
       nodeType: string;
       includeCandidates: string;
       relationshipSearch: string;
+      atlasStage: string;
+      relationshipGroup: string;
       sourceView: string;
       showSupportingReferences: string;
       showDraftOrLegacy: string;
@@ -143,13 +145,15 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
   return {
     view: "atlas-map",
     node: "",
-    relationshipView: "",
+    relationshipView: "path",
     relationshipType: "",
     provenance: "",
     confidence: "",
     nodeType: "",
     includeCandidates: "",
     relationshipSearch: "",
+    atlasStage: "",
+    relationshipGroup: "",
     sourceView: "novice",
     showSupportingReferences: "",
     showDraftOrLegacy: "",
@@ -185,6 +189,7 @@ function normalizeCompareView(value: string): CompareViewMode | "" {
 }
 
 function normalizeRelationshipView(value: string): RelationshipViewMode | "" {
+  if (value === "path") return "path";
   if (value === "list" || value === "table") return "list";
   if (value === "map") return "map";
   return "";
@@ -216,13 +221,15 @@ export function parseViewState(search: string): ViewState {
       view,
       node: params.get("node") || "",
       relationshipView:
-        normalizeRelationshipView(params.get("relationshipView") || "") || "",
+        normalizeRelationshipView(params.get("relationshipView") || "") || "path",
       relationshipType: params.get("relationshipType") || "",
       provenance: params.get("provenance") || "",
       confidence: params.get("confidence") || "",
       nodeType: params.get("type") || params.get("nodeType") || "",
       includeCandidates: params.get("includeCandidates") || "",
       relationshipSearch: params.get("relationshipSearch") || "",
+      atlasStage: params.get("atlasStage") || "",
+      relationshipGroup: params.get("relationshipGroup") || "",
       sourceView:
         params.get("sourceView") === "purpose" || params.get("sourceView") === "rmf"
           ? params.get("sourceView") || "novice"
@@ -490,7 +497,9 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "atlas-map") {
     params.set("view", "atlas-map");
     setIfValue(params, "node", state.node);
-    if (state.relationshipView === "map") {
+    if (state.relationshipView === "path") {
+      params.set("relationshipView", "path");
+    } else if (state.relationshipView === "map") {
       params.set("relationshipView", "map");
     } else if (state.relationshipView === "list") {
       params.set("relationshipView", "list");
@@ -501,6 +510,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "type", state.nodeType);
     setIfValue(params, "includeCandidates", state.includeCandidates);
     setIfValue(params, "relationshipSearch", state.relationshipSearch);
+    setIfValue(params, "atlasStage", state.atlasStage);
+    setIfValue(params, "relationshipGroup", state.relationshipGroup);
     if (state.sourceView === "purpose" || state.sourceView === "rmf") {
       params.set("sourceView", state.sourceView);
     }
@@ -606,6 +617,8 @@ export type AtlasMapUrlOptions = {
   nodeType?: string;
   includeCandidates?: boolean;
   relationshipSearch?: string;
+  atlasStage?: string;
+  relationshipGroup?: string;
 };
 
 export type CompareUrlOptions = Partial<
@@ -636,6 +649,8 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     nodeType: options.nodeType || "",
     includeCandidates: options.includeCandidates ? "true" : "",
     relationshipSearch: options.relationshipSearch || "",
+    atlasStage: options.atlasStage || "",
+    relationshipGroup: options.relationshipGroup || "",
   }) as Extract<ViewState, { view: "atlas-map" }>;
   return serializeViewState(state);
 }

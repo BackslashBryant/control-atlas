@@ -182,7 +182,7 @@ export const ITEM_TYPE_LEGEND = [
 
 export const PROVENANCE_LEGEND = [
   { key: "mandated", label: "Official source", pattern: "solid" },
-  { key: "federal_published", label: "Source-backed", pattern: "solid" },
+  { key: "federal_published", label: "Published source", pattern: "solid" },
   { key: "federal_program", label: "Program-backed", pattern: "solid" },
   { key: "inferred", label: "Inferred", pattern: "dashed" },
   { key: "deprecated", label: "Deprecated", pattern: "dotted" },

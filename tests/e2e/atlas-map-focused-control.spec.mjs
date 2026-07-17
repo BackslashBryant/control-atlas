@@ -9,97 +9,136 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("AC-2 opens a controlled focused map with clustered context", async ({
-  page,
-}) => {
-  await page.goto("/#/atlas-map?node=AC-2");
+test("focused Atlas defaults to the six-stage published connection Path", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const nodes = page.getByRole("group", { name: "Map nodes" }).getByRole("button");
-  expect(await nodes.count()).toBeLessThanOrEqual(12);
-  await expect(page.getByRole("button", { name: "AC-2", exact: true })).toHaveAttribute(
-    "data-graph-role",
-    "nist-control",
+  await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Path" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
+  await expect(page.getByRole("tablist", { name: "Compliance path" }).getByRole("tab")).toHaveCount(6);
+  await expect(page.getByText("Expanded item", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("Templates / Playbooks / Sources cluster", { exact: false })).toHaveCount(0);
+});
+
+test("Atlas view and Path tabs support keyboard arrow navigation", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const pathTab = page.getByRole("tab", { name: "Path", exact: true });
+  await pathTab.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveAttribute(
+    "aria-selected",
+    "true",
   );
-  await expect(page.getByRole("button", { name: "SP 800-53 Rev. 5" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "DISA CCIs cluster" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "STIG/SRG cluster" })).toBeVisible();
+  await page.keyboard.press("ArrowLeft");
+  await expect(pathTab).toHaveAttribute("aria-selected", "true");
+
+  const stageTabs = page.getByRole("tablist", { name: "Compliance path" });
+  const understand = stageTabs.getByRole("tab", { name: /Understand/ });
+  await understand.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(stageTabs.getByRole("tab", { name: /Decide/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+});
+
+test("focused Map is absolutely bounded and restores focus after collapse", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const map = page.getByRole("group", { name: /connection groups around AC-2/i });
+  await expect(map).toBeVisible();
+  expect(await map.locator('[data-map-node="true"]').count()).toBeLessThanOrEqual(7);
+
+  const group = map.getByRole("button", { name: /NIST baselines/i }).first();
+  await group.click();
+  const expanded = page.getByRole("group", { name: /Expanded NIST baselines connections/i });
+  await expect(expanded).toBeVisible();
+  expect(await expanded.locator('[data-map-node="true"]').count()).toBeLessThanOrEqual(11);
+  await page.keyboard.press("Escape");
+  await expect(group).toBeFocused();
+});
+
+test("List uses the same published set and exposes traceable source references", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=list");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const table = page.getByRole("table", { name: "Relationship table" });
+  await expect(table).toBeVisible();
+  await expect(table.locator("tbody tr").first()).toBeVisible();
+  await expect(table.getByText(/source reference/i).first()).toBeVisible();
+  await expect(table).not.toContainText("Expanded item");
+  await expect(table).not.toContainText("nist-olir-");
+});
+
+test("zero-published-edge records render an honest empty state instead of Map", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=csf-2%3ADE.AE-01&relationshipView=map");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByRole("heading", { name: "No published connections to show." })).toBeVisible();
+  await expect(page.locator(".atlas-bounded-map")).toHaveCount(0);
+  await expect(page.locator(".react-flow")).toHaveCount(0);
+});
+
+test("a sparse STIG opens the first stage that contains its real connection", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=disa-stig%3AV-222387");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByRole("heading", { name: "V-222387", level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("button", {
-      name: "Templates / Playbooks / Sources cluster",
+    page.getByRole("tablist", { name: "Compliance path" }).getByRole("tab", {
+      name: /Implement/,
     }),
-  ).toBeVisible();
-
-  // Coverage matrix now lives in a collapsible drawer (graph-first redesign).
-  await page.getByText("Coverage matrix", { exact: true }).click();
-  const matrix = page.getByRole("table", { name: "Atlas coverage matrix" });
-  await expect(matrix).toBeVisible();
-  await expect(matrix).toContainText("AC-2");
-  await expect(matrix).toContainText("SP 800-53 Rev. 5");
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByText("No published connections to show.")).toHaveCount(0);
 });
 
-// Phase D2: the leverage inspector answers "if I implement this, what else do
-// I satisfy?" — the birds-per-stone impact, on the canvas.
-test("focused map shows the leverage inspector with the impact breakdown", async ({
-  page,
-}) => {
-  await page.goto("/#/atlas-map?node=AC-2");
+test("compact Map expands to no more than seven visible nodes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const leverage = page.locator(".atlas-leverage");
-  await expect(leverage).toBeVisible();
-  await expect(leverage).toContainText("Implementing this also satisfies");
-  await expect(leverage).toContainText("AC-2 — Account Management");
-  await expect(leverage).toContainText(/\d+ connected requirements?/);
-  await expect(leverage).toContainText(/CCIs \/ requirements/);
+  const map = page.getByRole("group", { name: /connection groups around AC-2/i });
+  const group = map.getByRole("button", { name: /NIST baselines/i }).first();
+  await group.click();
+  const expanded = page.getByRole("group", { name: /Expanded NIST baselines connections/i });
+  expect(await expanded.locator('[data-map-node="true"]').count()).toBeLessThanOrEqual(7);
+  const overflow = await page.evaluate(() => ({
+    body:
+      globalThis.document.body.scrollWidth -
+      globalThis.document.body.clientWidth,
+    document:
+      globalThis.document.documentElement.scrollWidth -
+      globalThis.document.documentElement.clientWidth,
+  }));
+  expect(overflow).toEqual({ body: 0, document: 0 });
 });
 
-test("leverage rows filter the map to a connected requirement type", async ({
-  page,
-}) => {
-  await page.goto("/#/atlas-map?node=nist-800-53:AU-2");
+test("compact Path is vertical and places the inspector below the active view", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const leverage = page.locator(".atlas-leverage");
-  await expect(leverage).toBeVisible();
-  await expect(leverage).toContainText("AU-2");
-  await leverage.locator("button.atlas-leverage-row").first().click();
-  await expect(page).toHaveURL(/[?&]type=/);
-});
-
-// Finish D: cross-framework equivalents ("what is this control in CSF / 800-171?")
-// from real published maps_to edges — the honest, data-backed "overlay".
-test("cross-framework equivalents surface a control's CSF / 800-171 mapping", async ({
-  page,
-}) => {
-  await page.goto("/#/atlas-map?node=nist-800-53:AC-17");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  const leverage = page.locator(".atlas-leverage");
-  await expect(leverage).toContainText("Cross-framework equivalents");
-  await expect(leverage).toContainText("NIST CSF 2.0");
-  await expect(leverage).toContainText("PR.AA-05");
-  await expect(leverage).toContainText("SP 800-171");
-});
-
-test("cross-framework section is honest when no mapping is ingested", async ({
-  page,
-}) => {
-  // CA-6 (Authorization) is an active 800-53 control that currently has no
-  // ingested OLIR cross-framework mapping, so it exercises the honest
-  // empty-state. (AC-2 no longer works here: the OLIR control-ID normalization
-  // fix ingested its CSF/800-171 equivalents, which is the intended behavior.)
-  await page.goto("/#/atlas-map?node=CA-6");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  const leverage = page.locator(".atlas-leverage");
-  await expect(leverage).toContainText("Cross-framework equivalents");
-  await expect(leverage).toContainText(
-    "No published cross-framework mapping ingested",
+  const stageColumns = await page.locator(".atlas-path-stage-nav").evaluate(
+    (element) =>
+      globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length,
   );
+  expect(stageColumns).toBe(1);
+  const main = await page.locator(".atlas-focused-main").boundingBox();
+  const inspector = await page.locator(".atlas-record-inspector").boundingBox();
+  expect(main).not.toBeNull();
+  expect(inspector).not.toBeNull();
+  expect(inspector.y).toBeGreaterThanOrEqual(main.y + main.height - 1);
 });

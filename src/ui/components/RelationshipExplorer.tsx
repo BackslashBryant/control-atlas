@@ -546,6 +546,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           role="tabpanel"
         >
           <RelationshipGraphTable
+            conciseTrust
             onOpenNode={onOpenNode}
             rows={
               tableRows as Parameters<typeof RelationshipGraphTable>[0]["rows"]

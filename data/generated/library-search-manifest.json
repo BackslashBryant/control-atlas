@@ -12,139 +12,139 @@
         "catalog_id": "disa-cci",
         "document_count": 5137,
         "path": "library-search/disa-cci.json",
-        "bytes": 6372215
+        "bytes": 5683812
       },
       {
         "catalog_id": "disa-srg",
         "document_count": 1514,
         "path": "library-search/disa-srg.json",
-        "bytes": 3489842
+        "bytes": 3286921
       },
       {
         "catalog_id": "nist-800-53",
         "document_count": 1216,
         "path": "library-search/nist-800-53.json",
-        "bytes": 2650925
+        "bytes": 2487936
       },
       {
         "catalog_id": "nist-800-53a",
         "document_count": 1014,
         "path": "library-search/nist-800-53a.json",
-        "bytes": 1070647
+        "bytes": 934726
       },
       {
         "catalog_id": "mitre-attack",
         "document_count": 697,
         "path": "library-search/mitre-attack.json",
-        "bytes": 2665377
+        "bytes": 2571934
       },
       {
         "catalog_id": "disa-stig",
         "document_count": 603,
         "path": "library-search/disa-stig.json",
-        "bytes": 1390537
+        "bytes": 1309690
       },
       {
         "catalog_id": "mitre-d3fend",
         "document_count": 271,
         "path": "library-search/mitre-d3fend.json",
-        "bytes": 242041
+        "bytes": 205682
       },
       {
         "catalog_id": "dod-zt",
         "document_count": 228,
         "path": "library-search/dod-zt.json",
-        "bytes": 235343
+        "bytes": 204746
       },
       {
         "catalog_id": "csf-2",
         "document_count": 185,
         "path": "library-search/csf-2.json",
-        "bytes": 323741
+        "bytes": 298906
       },
       {
         "catalog_id": "nist-800-171",
         "document_count": 131,
         "path": "library-search/nist-800-171.json",
-        "bytes": 319755
+        "bytes": 302156
       },
       {
         "catalog_id": "nist-800-172",
         "document_count": 116,
         "path": "library-search/nist-800-172.json",
-        "bytes": 347382
+        "bytes": 331793
       },
       {
         "catalog_id": "nist-800-171-rev2",
         "document_count": 111,
         "path": "library-search/nist-800-171-rev2.json",
-        "bytes": 335872
+        "bytes": 320953
       },
       {
         "catalog_id": "mitre-attack-ics",
         "document_count": 97,
         "path": "library-search/mitre-attack-ics.json",
-        "bytes": 315468
+        "bytes": 302425
       },
       {
         "catalog_id": "nist-ai-rmf",
         "document_count": 72,
         "path": "library-search/nist-ai-rmf.json",
-        "bytes": 414476
+        "bytes": 404783
       },
       {
         "catalog_id": "nist-ssdf",
         "document_count": 42,
         "path": "library-search/nist-ssdf.json",
-        "bytes": 122190
+        "bytes": 116517
       },
       {
         "catalog_id": "fips-200",
         "document_count": 17,
         "path": "library-search/fips-200.json",
-        "bytes": 21570
+        "bytes": 19247
       },
       {
         "catalog_id": "dod-rai",
         "document_count": 11,
         "path": "library-search/dod-rai.json",
-        "bytes": 11398
+        "bytes": 9879
       },
       {
         "catalog_id": "nist-800-37",
         "document_count": 7,
         "path": "library-search/nist-800-37.json",
-        "bytes": 9984
+        "bytes": 9001
       },
       {
         "catalog_id": "fedramp-rev5",
         "document_count": 4,
         "path": "library-search/fedramp-rev5.json",
-        "bytes": 4321
+        "bytes": 3740
       },
       {
         "catalog_id": "nist-800-53b",
         "document_count": 4,
         "path": "library-search/nist-800-53b.json",
-        "bytes": 4599
+        "bytes": 4018
       },
       {
         "catalog_id": "cmmc-2",
         "document_count": 3,
         "path": "library-search/cmmc-2.json",
-        "bytes": 4453
+        "bytes": 4006
       },
       {
         "catalog_id": "cui-policy",
         "document_count": 3,
         "path": "library-search/cui-policy.json",
-        "bytes": 4734
+        "bytes": 4287
       },
       {
         "catalog_id": "fips-199",
         "document_count": 3,
         "path": "library-search/fips-199.json",
-        "bytes": 5789
+        "bytes": 5342
       }
     ]
   }

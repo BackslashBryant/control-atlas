@@ -1,7 +1,7 @@
 export const pageIntros = {
   home: {
     title: 'Search the public compliance library.',
-    description: 'What: browse controls, frameworks, and source-backed links. Why: see what is officially mapped before you plan or assess. Next: search a control ID or open Start Here for a guided path.',
+    description: 'Browse controls, frameworks, and published links. See what is actually mapped before you plan or assess, then search a control ID or open Start Here for a guided path.',
   },
   search: {
     title: 'Search the public reference library',
@@ -9,11 +9,11 @@ export const pageIntros = {
   },
   matrix: {
     title: 'Compare frameworks with traceable sources',
-    description: 'What: side-by-side framework comparison. Why: official and inferred links stay separate so you can judge trust. Next: pick two frameworks, filter, and export visible rows.',
+    description: 'Compare two frameworks side by side. Published and candidate links stay separate so you can judge each match, filter the results, and export only what is visible.',
   },
   browse: {
     title: 'Browse frameworks in the library',
-    description: 'What: see which frameworks are included and how many items and mapped links each has. Why: pick a framework before you search or compare. Next: open a framework card to review its items.',
+    description: 'See which frameworks are included, how many records they contain, and how many published links are available. Open a framework to review its records.',
   },
   sources: {
     title: 'Review sources before you rely on a match',
