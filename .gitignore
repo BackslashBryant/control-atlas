@@ -10,6 +10,11 @@
 !eslint.config.mjs
 !playwright.config.mjs
 !playwright.live.config.mjs
+!playwright.visual.config.mjs
+!.lighthouserc.json
+!.vale.ini
+!vale/
+!vale/**
 !tsconfig.json
 !tsconfig.app.json
 !src/
@@ -42,6 +47,7 @@ docs/guardrails/
 !.github/workflows/pages.yml
 !.github/workflows/pages-live-smoke.yml
 !.github/workflows/secret-scan.yml
+!.github/workflows/oscal-validation.yml
 
 !lib/
 lib/*

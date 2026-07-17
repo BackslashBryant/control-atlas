@@ -3,7 +3,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { chromium } from 'playwright';
+import { chromium } from '@playwright/test';
 
 import { buildTemplateDocument } from '../src/app/template-engine.mjs';
 import { officeDocumentToSheets } from '../src/app/office-export.mjs';

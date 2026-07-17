@@ -1,0 +1,31 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "startServerCommand": "npm run serve:static",
+      "startServerReadyPattern": "Control Atlas static site available",
+      "startServerReadyTimeout": 120000,
+      "url": [
+        "http://localhost:4317/",
+        "http://localhost:4317/#/explore?q=AC-2",
+        "http://localhost:4317/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map",
+        "http://localhost:4317/#/templates"
+      ],
+      "settings": {
+        "chromeFlags": "--headless --no-sandbox",
+        "formFactor": "desktop",
+        "screenEmulation": {
+          "mobile": false,
+          "width": 1440,
+          "height": 1000,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        }
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "artifacts/lighthouse-ci"
+    }
+  }
+}

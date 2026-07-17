@@ -20,6 +20,16 @@ const ALLOWED_LICENSES = new Set([
   '(BSD-2-Clause OR MIT OR Apache-2.0)',
 ]);
 
+// This package ships a BSD-3-Clause LICENSE but omits the license field from
+// its published package metadata. Keep this exception path-specific and
+// evidence-backed so a different package cannot inherit the waiver.
+const MISSING_LICENSE_METADATA_EXCEPTIONS = new Map([
+  ['node_modules/parse-cache-control', {
+    license: 'BSD-3-Clause',
+    evidence: 'https://github.com/roryf/parse-cache-control/blob/master/LICENSE',
+  }],
+]);
+
 const packageLock = JSON.parse(readFileSync('package-lock.json', 'utf8'));
 const failures = [];
 
@@ -27,6 +37,8 @@ for (const [packagePath, metadata] of Object.entries(packageLock.packages || {})
   if (!packagePath || !metadata) continue;
   const license = metadata.license;
   if (!license) {
+    const exception = MISSING_LICENSE_METADATA_EXCEPTIONS.get(packagePath);
+    if (exception && ALLOWED_LICENSES.has(exception.license)) continue;
     failures.push(`${packagePath}: missing license field`);
     continue;
   }

@@ -9,8 +9,10 @@
     "build:data": "node ./scripts/build-framework-data.mjs",
     "build:xref": "npm run build:data",
     "audit:deps": "node ./scripts/security/npm-audit.mjs",
-    "lint": "eslint src tests/graph tests/atlas-neighborhood.test.mjs tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/fedramp-transition.test.mjs tests/framework-runtime.test.mjs tests/package-scripts.test.mjs tests/source-freshness.test.mjs tests/source-refresh-reconciliation.test.mjs tests/workflow-refresh.test.mjs tests/e2e/control-atlas-shell.spec.mjs tests/e2e/critical-path-matrix.spec.mjs tests/e2e/landing-performance.spec.mjs tests/e2e/accessibility.spec.mjs tests/e2e/frontend-responsive.spec.mjs tests/e2e/atlas-map-source-hierarchy.spec.mjs tests/e2e/atlas-map-focused-control.spec.mjs tests/e2e/atlas-map-source-filters.spec.mjs tests/e2e/atlas-map-links.spec.mjs tests/e2e/navigation-fidelity.spec.mjs tests/e2e/release-readiness-visual.spec.mjs scripts/reconcile-source-freshness.mjs scripts/report-refresh-diff.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/check-licenses.mjs tools/serve-static-site.mjs tools/sync-public.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
+    "lint": "eslint src tests/graph tests/atlas-neighborhood.test.mjs tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/fedramp-transition.test.mjs tests/framework-runtime.test.mjs tests/package-scripts.test.mjs tests/source-freshness.test.mjs tests/source-refresh-reconciliation.test.mjs tests/workflow-refresh.test.mjs tests/e2e/control-atlas-shell.spec.mjs tests/e2e/critical-path-matrix.spec.mjs tests/e2e/landing-performance.spec.mjs tests/e2e/accessibility.spec.mjs tests/e2e/frontend-responsive.spec.mjs tests/e2e/atlas-map-source-hierarchy.spec.mjs tests/e2e/atlas-map-focused-control.spec.mjs tests/e2e/atlas-map-source-filters.spec.mjs tests/e2e/atlas-map-links.spec.mjs tests/e2e/navigation-fidelity.spec.mjs tests/e2e/release-readiness-visual.spec.mjs tests/e2e/approved-layout-visual.spec.mjs playwright.visual.config.mjs scripts/reconcile-source-freshness.mjs scripts/report-refresh-diff.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/check-licenses.mjs tools/serve-static-site.mjs tools/sync-public.mjs tools/extract-ui-copy.mjs tools/oscal-cross-check.mjs tools/ports-free-win.mjs tools/run-oscal-cli.mjs tools/run-vale.mjs tools/summarize-lighthouse.mjs tools/test-vale-style.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
     "ports:status": "node ./tools/ports-status.mjs",
+    "ports:free:win": "node ./tools/ports-free-win.mjs",
+    "serve:static": "node ./tools/serve-static-site.mjs",
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:fedramp-2026": "node ./scripts/fetch-fedramp-2026-rules.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
@@ -27,6 +29,12 @@
     "test:atlas": "node --test ./tests/atlas-neighborhood.test.mjs && tsx --test ./tests/graph/atlasModel.test.ts",
     "test:data": "node --test --test-concurrency=1 ./tests/source-registry.test.mjs ./tests/fedramp-transition.test.mjs ./tests/source-freshness.test.mjs ./tests/source-refresh-reconciliation.test.mjs ./tests/workflow-refresh.test.mjs ./tests/artifact-nexus-registry.test.mjs ./tests/template-registry.test.mjs ./tests/template-export-contract.test.mjs ./tests/template-office-export.test.mjs ./tests/template-professionalism.test.mjs ./tests/display-names.test.mjs ./tests/federal-graph-contract.test.mjs ./tests/framework-data.test.mjs ./tests/dod-zt-extract.test.mjs ./tests/oscal-normalize.test.mjs ./tests/disa-stig-importer.test.mjs ./tests/mitre-attack-importer.test.mjs ./tests/mitre-d3fend-importer.test.mjs ./tests/stig-source-observer.test.mjs ./tests/retired-concepts.test.mjs ./tests/alignment-contract.test.mjs ./tests/package-scripts.test.mjs ./tests/prd-alignment.test.mjs ./tests/start-here-recommendations.test.mjs ./tests/glossary-search.test.mjs ./tests/explore-resource-search.test.mjs ./tests/a11y-contract.test.mjs ./tests/content-review.test.mjs",
     "test:e2e": "npm run build:site && playwright test",
+    "test:visual": "playwright test --config playwright.visual.config.mjs",
+    "test:performance": "npm run build:site && node ./node_modules/@lhci/cli/src/cli.js autorun && node ./tools/summarize-lighthouse.mjs",
+    "copy:extract": "node ./tools/extract-ui-copy.mjs",
+    "style:check": "npm run copy:extract && node ./tools/run-vale.mjs README.md docs/PRD.md docs/vision.md docs/DESIGN_PRINCIPLES.md artifacts/vale/ui-copy.md",
+    "test:style": "node ./tools/test-vale-style.mjs",
+    "test:oscal:independent": "node ./tools/oscal-cross-check.mjs",
     "test:e2e:live": "playwright test --config playwright.live.config.mjs",
     "test:a11y": "npm run build:site && playwright test tests/e2e/accessibility.spec.mjs",
     "test:runtime": "node --test ./tests/search-quality.test.mjs ./tests/framework-runtime.test.mjs ./tests/graph-layout.test.mjs ./tests/graph-clustering.test.mjs",
@@ -41,15 +49,19 @@
     "git:push": "node ./tools/git-push-with-retry.mjs",
     "checks:wait": "node ./tools/wait-for-checks.mjs",
     "ship:main": "node ./tools/ship-to-main.mjs",
-    "precommit": "npm run build:site && npm run lint && npm run typecheck && npm run license:check && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public && npm run test:a11y && npm run test:e2e"
+    "precommit": "npm run build:site && npm run lint && npm run typecheck && npm run license:check && npm run test:style && npm run style:check && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public && npm run test:a11y && npm run test:e2e"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "overrides": {
+    "tmp": "0.2.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@cyclonedx/cyclonedx-npm": "^5.0.0",
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
@@ -59,7 +71,6 @@
     "@vitejs/plugin-react": "^6.0.2",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "axe-core": "^4.11.0",
     "eslint": "^10.5.0",
     "fast-xml-parser": "^5.2.5",
     "globals": "^17.6.0",

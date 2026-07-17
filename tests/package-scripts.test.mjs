@@ -44,6 +44,13 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.equal(typeof packageJson.scripts['license:check'], 'string');
   assert.equal(typeof packageJson.scripts['test:a11y'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e'], 'string');
+  assert.equal(typeof packageJson.scripts['test:visual'], 'string');
+  assert.equal(typeof packageJson.scripts['test:performance'], 'string');
+  assert.equal(typeof packageJson.scripts['serve:static'], 'string');
+  assert.equal(typeof packageJson.scripts['test:style'], 'string');
+  assert.equal(typeof packageJson.scripts['style:check'], 'string');
+  assert.equal(typeof packageJson.scripts['test:oscal:independent'], 'string');
+  assert.equal(typeof packageJson.scripts['ports:free:win'], 'string');
   assert.equal(typeof packageJson.scripts['test:graph'], 'string');
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(packageJson.scripts.precommit, /npm run lint/);

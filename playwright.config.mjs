@@ -2,6 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
+  testIgnore: '**/approved-layout-visual.spec.mjs',
   timeout: process.env.CI ? 45000 : 30000,
   workers: 1,
   retries: process.env.CI ? 1 : 0,

@@ -1,0 +1,8 @@
+extends: existence
+message: "Heading '%s' does not explain what the user can do."
+level: error
+ignorecase: true
+scope: heading
+nonword: true
+raw:
+  - '^(?:Overview|Details|Information|Resources|Learn more)$'

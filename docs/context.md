@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**v1.0 release readiness** — finish and verify the bounded Atlas rebuild, close the landing/search/copy release blockers, ship the verified code and Pages deployment, and stop before creating the `v1.0.0` release.
+**Post-v1 platform strengthening** — add stable regression evidence and only the tools that demonstrate concrete value, while preserving the recovered Atlas and static public-data-only architecture.
 
-**Active sprint:** v1.0 release readiness — see [`docs/Plan.md`](Plan.md).
+**Active sprint:** post-v1 platform strengthening — see [`docs/Plan.md`](Plan.md) and the dated [implementation audit](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -38,9 +38,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Obtain owner approval before pushing, merging, or deploying the locally verified recovery branch
-2. Verify live Pages with novice/expert desktop/mobile workflows and focused-Atlas Lighthouse; do not publish `v1.0.0`
-3. Human screen-reader and real-device sign-off remains a clearly labeled residual until completed
+1. Review the locally verified post-v1 commit and dated implementation audit
+2. Decide whether to authorize a branch push; merge, deployment, tagging, and publication remain separate owner decisions
+3. Keep Ubuntu CI, live Pages, human screen-reader, real-device, and deployed Lighthouse evidence separate from local emulation
 
 ## Status Docs
 

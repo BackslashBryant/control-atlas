@@ -1,0 +1,9 @@
+extends: existence
+message: "Do not expose the internal schema term '%s' in public copy."
+level: error
+ignorecase: false
+tokens:
+  - source_id
+  - canonical_id
+  - node_type
+  - lifecycle_status

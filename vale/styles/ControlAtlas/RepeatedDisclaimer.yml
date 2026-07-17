@@ -1,0 +1,6 @@
+extends: occurrence
+message: "This disclaimer pattern appears more than once in the same public surface."
+level: error
+scope: raw
+max: 1
+token: '(?i)(not legal advice|does not determine compliance|verify against the official source)'

@@ -27,6 +27,16 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
 ## Optional maintenance
 
+### Post-v1 platform strengthening (active locally)
+
+| Milestone | Status |
+| --- | --- |
+| Approved-layout regression protection | Four desktop/compact Map/Purpose baselines generated and visually reviewed in the pinned Ubuntu Playwright image; immediate comparison passed 4/4, and full precommit passed 127 Playwright tests with 1 skipped. |
+| Performance regression evidence | Lighthouse CI report-only integration and 12 local reports complete; no blocking budgets |
+| Copy and terminology debt | Focused Vale rules integrated after fixture and false-positive review |
+| Technical-debt inventory | Knip classified; nine proven dead files plus redundant declarations/exports removed, legacy renderer queued separately |
+| Independent OSCAL validation | Unique schema signal confirmed; monthly additive NIST CLI workflow implemented |
+
 - Promote `v1.0.0` after RC feedback
 - Run the staged ingestion/search experiments in [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no listed tool is approved as a v1.0 dependency
 - Run the post-v1 UI/performance/copy/data strengthening sequence in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md), beginning with Playwright golden routes, Lighthouse CI, and a project-owned Vale style

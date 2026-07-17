@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**v1.0 release readiness** — rebuild the Atlas around bounded Path, Map, and List views; close the landing/search/copy release blockers; complete desktop/mobile/accessibility/performance verification; and ship the verified branch without creating the `v1.0.0` tag or release. Baseline and post-fix evidence: [`docs/audits/live-browser-audit-2026-07-16-v1-release-readiness.md`](audits/live-browser-audit-2026-07-16-v1-release-readiness.md).
+**Post-v1 platform strengthening** — locally verified on `agent/pixel/post-v1-platform-strengthening`: four reviewed Ubuntu approved-layout baselines, report-only performance evidence, focused copy rules, a classified debt inventory, and additive OSCAL validation, with the static public-data-only architecture unchanged. A complete `npm run precommit` passes (127 Playwright passed, 1 skipped). Evidence: [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md). Nothing is authorized for push, merge, deployment, tagging, or publication.
 
 ## Epic Status (July 9, 2026)
 
@@ -88,9 +88,9 @@ No backend or user, organization, or system data is part of this product directi
 
 ## Recommended Sequence (post-MVP)
 
-1. **Finish v1.0 release readiness** — full browser gates, live Pages audit, and owner review
-2. **Optional, owner-approved only** — create and publish `v1.0.0`
-3. **Maintenance** — scheduled CI, dependency/security gates, stale-work reporting
+1. **Owner review of the locally verified post-v1 branch** — inspect the dated implementation audit and decide whether to authorize a push; deployment and publication remain separate decisions
+2. **Owner decision** — decide whether to commit/push this maintenance branch; no deployment or release is implied
+3. **Optional, separately owner-approved** — finish live v1.0 verification and create/publish `v1.0.0`
 
 ## Historical Delivery Records
 

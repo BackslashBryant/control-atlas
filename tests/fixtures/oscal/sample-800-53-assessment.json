@@ -1,5 +1,12 @@
 {
   "catalog": {
+    "uuid": "7d6ab6d6-c080-4e3b-b0ba-9a623f8c711d",
+    "metadata": {
+      "title": "Control Atlas OSCAL catalog validation fixture",
+      "last-modified": "2026-07-17T16:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2"
+    },
     "groups": [
       {
         "id": "ac",

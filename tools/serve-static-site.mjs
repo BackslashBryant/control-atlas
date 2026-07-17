@@ -5,7 +5,7 @@ import { extname, join, normalize } from 'node:path';
 import { createServer } from 'node:http';
 
 const ROOT = join(process.cwd(), 'dist', 'site');
-const PORT = Number(process.env.PORT || 4173);
+const PORT = Number(process.env.PORT || 4317);
 
 const contentTypes = new Map([
   ['.css', 'text/css; charset=utf-8'],

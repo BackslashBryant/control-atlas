@@ -7,7 +7,6 @@ const required = [
   'dist/site/index.html',
   'dist/site/404.html',
   'dist/site/assets/',
-  'dist/site/lib/d3.min.js',
   'dist/site/data/source-registry.json',
   'dist/site/data/generated/sources.json',
   'dist/site/data/generated/nodes.json',

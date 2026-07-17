@@ -15,7 +15,6 @@ const REQUIRED_GENERATED_FILES = [
 const COPY_PATHS = [
   ["data", "data"],
   ["maps", "maps"],
-  ["lib/d3.min.js", "lib/d3.min.js"],
 ];
 const VITE_BUILD_COMMAND = "vite build";
 const DATA_BUILD_COMMAND = ["./scripts/build-framework-data.mjs"];
