@@ -1,0 +1,10 @@
+extends: existence
+message: "Replace '%s' with a concrete user action or verifiable product behavior."
+level: error
+ignorecase: true
+tokens:
+  - build trust
+  - earn trust
+  - trusted clarity
+  - clear and trustworthy
+  - confidence at a glance

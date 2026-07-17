@@ -15,7 +15,7 @@ For Control Atlas, that means turning frameworks, controls, mappings, STIGs, MIT
 3. **Make action obvious.** The user should not have to perform the final synthesis.
 4. **Preserve rigor.** Simplifying something must not make it less accurate, traceable, or defensible.
 5. **Design for constrained teams.** Assume limited time, limited staffing, imperfect data, and competing priorities.
-6. **Separate source truth from interpretation.** Make clear what is known, what is inferred, and what is recommended.
+6. **Separate published source material from interpretation.** Make clear what is known, what is inferred, and what is recommended.
 7. **Prefer usable systems over impressive systems.** A smaller workflow that people actually trust and use is better than a powerful one they avoid.
 8. **Every output should answer:** What is this? Why does it matter? What should I do with it?
 
@@ -39,7 +39,7 @@ Before shipping UI copy or a new surface, confirm:
 - Does it suggest a concrete next action (rule 3)?
 - Is it still accurate, traceable, and defensible (rule 4)?
 - Would a constrained team understand the first screen (rule 5)?
-- Is source truth separated from interpretation (rule 6)?
+- Is published source material separated from interpretation (rule 6)?
 - Is this the simplest workflow people will actually use (rule 7)?
 - Does it answer: What is this? Why does it matter? What should I do with it (rule 8)?
 - Can the user trace back to an authoritative source?

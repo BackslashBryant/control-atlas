@@ -1,0 +1,25 @@
+name: Independent OSCAL validation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 1 * *'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci
+      - run: npm run test:oscal:independent
+      - uses: actions/upload-artifact@v4
+        with:
+          name: oscal-cli-cross-check
+          path: artifacts/oscal-cli/cross-check.json

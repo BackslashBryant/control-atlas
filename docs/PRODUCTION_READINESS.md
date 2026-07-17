@@ -49,7 +49,16 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Finish the active v1.0 release-readiness gate and live Pages verification. Do not publish the v1.0 release artifact without owner approval.
+Review the locally verified post-v1 branch and decide whether to authorize a push. Four approved Atlas compositions now compare against reviewed pinned-Ubuntu baselines, and the complete local precommit passes with 127 Playwright tests passed and 1 skipped. Lighthouse CI remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check. Do not merge, deploy, tag, or publish the v1.0 release artifact without owner approval.
+
+## Post-v1 strengthening status
+
+- [x] Four approved Atlas compositions compare against reviewed baselines generated in the pinned Ubuntu Playwright image
+- [x] Post-v1 `npm run precommit` passes as one complete run (127 Playwright passed, 1 skipped)
+- [x] Lighthouse CI records three local synthetic runs for Landing, Explore, focused Atlas, and Templates without public upload or blocking budgets
+- [x] Project-owned Vale rules pass focused fixtures and mounted React/public-doc copy with human review still authoritative
+- [x] Knip inventory is classified; only proven dead UI/graph/D3 residue was removed and React Flow/ELK remain mounted
+- [x] NIST OSCAL CLI independently rejects schema-invalid catalog/profile fixtures that current normalization accepts; monthly scheduled validation is additive
 
 ## Residual (non-blocking)
 

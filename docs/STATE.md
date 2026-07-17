@@ -1,10 +1,10 @@
 # STATE
 
 ## Goal
-Recover the owner-approved Atlas compositions and remove release-blocking navigation/copy debt without regressing the sharded data architecture. Do not create or publish the `v1.0.0` release without owner approval.
+Strengthen the recovered Control Atlas platform with measured regression evidence and narrowly justified tools. Preserve the static architecture and do not push, merge, deploy, tag, or publish without owner approval.
 
 ## Now
-Owner approval of the deployed Atlas was revoked after live review of commit `94ab460`. The recovery sprint on `agent/muse/v1-0-approved-comp-recovery` now matches the approved compositions, closes the release-blocking search/navigation/copy findings, and passes the complete local gate (127 Playwright passed, 1 skipped). Push, merge, deployment, live Lighthouse, and release approval remain outstanding; see [`docs/audits/v1-release-readiness-local-evidence-2026-07-17.md`](audits/v1-release-readiness-local-evidence-2026-07-17.md).
+The post-v1 sprint is locally verified on `agent/pixel/post-v1-platform-strengthening` from `5f7a76b`. Lighthouse CI, the focused Vale style, classified Knip cleanup, monthly NIST OSCAL validation, and four reviewed Ubuntu approved-layout baselines have local evidence. Full precommit passes with 127 Playwright tests passed and 1 skipped. The branch is ready for owner review but remains unpushed and undeployed; see [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -42,7 +42,7 @@ Owner approval of the deployed Atlas was revoked after live review of commit `94
 - `runtime.getGraphHealth()` provides the dynamic Sources-page gap explanation. Current generated data: 45 sources, 11,486 nodes, 16,207 edges, 11 findings.
 - Current low-coverage examples: DoD RAI 0/11, ATT&CK ICS 0/97, AI RMF 0/72, SSDF 0/42, SP 800-172 1/116, SP 800-171 Rev. 3 98/131 (75%).
 - Generated Atlas data includes an 11,486-record compact index and 128 deterministic incident-edge shards. Opening one record no longer requires `nodes.json`, `edges.json`, or `evidence.json`.
-- Current local checks: 192 data tests, 30 runtime tests, 18 graph tests, 6 Atlas tests, browser contracts, lint, typecheck, 407-package license review, dependency audit, static build/smoke, public verification, the 80 MiB data budget, and the full Playwright matrix (127 passed, 1 skipped) all pass.
+- Post-v1 checks: 38 contract tests, 6 Atlas tests, 192 data tests, 31 runtime tests, 18 graph tests, 15 browser contracts, lint, typecheck, 699-package license review, dependency audit, Vale fixtures/project scan, static build/smoke, public verification, 22/22 focused accessibility tests, Lighthouse's 12 report-only audits, the independent OSCAL cross-check, four Ubuntu visual comparisons, and one complete precommit pass. The final Playwright matrix passed 127 with 1 skipped.
 
 ## Done
 - Phases 1-4 shipped.
@@ -54,6 +54,7 @@ Owner approval of the deployed Atlas was revoked after live review of commit `94
 - Release-blocking copy was tightened: the landing page states the product purpose, Navigate no longer claims to show “everything,” Playbooks replaces visible “pattern” drift, and repeated “source-backed” labels were replaced with concrete publication wording.
 
 ## Open items
+- Present the locally verified post-v1 commit for owner review; no push, merge, deployment, tag, or publication is authorized yet.
 - Obtain explicit owner approval before any push, merge, or Pages deployment of the locally verified recovery branch.
 - Run post-deploy desktop/mobile workflows and focused Atlas Lighthouse against GitHub Pages.
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.

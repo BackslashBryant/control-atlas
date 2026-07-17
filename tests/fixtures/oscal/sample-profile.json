@@ -1,0 +1,20 @@
+{
+  "profile": {
+    "uuid": "94ee221d-4fe6-4b61-87f4-811fb2b8164e",
+    "metadata": {
+      "title": "Control Atlas OSCAL profile validation fixture",
+      "last-modified": "2026-07-17T16:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2"
+    },
+    "imports": [
+      {
+        "href": "sample-800-53-assessment.json",
+        "include-all": {}
+      }
+    ],
+    "merge": {
+      "as-is": true
+    }
+  }
+}

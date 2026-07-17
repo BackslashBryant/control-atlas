@@ -101,4 +101,3 @@ export function BrandEntranceOverlay(props: {
 }
 
 /** @deprecated Use BrandEntranceOverlay */
-export const BrandEntrance = BrandEntranceOverlay;
