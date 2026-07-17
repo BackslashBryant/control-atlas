@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import test from "node:test";
+import test, { before } from "node:test";
 import { parseCciXml } from "../tools/importers/cci-adapter.mjs";
 import {
   parseOlirCsv,
@@ -15,6 +15,11 @@ import {
 const generated = (name) =>
   JSON.parse(readFileSync(`data/generated/${name}.json`, "utf8"));
 const sourceRegistry = JSON.parse(readFileSync("data/source-registry.json", "utf8"));
+let buildResult;
+
+before(() => {
+  buildResult = buildFrameworkData();
+});
 
 test("CCI adapter preserves official bridge requirements and references", () => {
   const result = parseCciXml(
@@ -50,19 +55,17 @@ test("OLIR adapter parses workbook rows from official-style crosswalk sheets", a
 });
 
 test("federal graph build emits graph contract counts", () => {
-  const result = buildFrameworkData();
   const generatedAt = generated("sources").generated_at;
   buildFrameworkData();
-  assert.equal(result.sources, 45);
-  assert.ok(result.nodes > 9000);
-  assert.ok(result.edges > 12000);
-  assert.equal(result.edges, result.evidence);
-  assert.ok(result.findings > 0);
+  assert.equal(buildResult.sources, 45);
+  assert.ok(buildResult.nodes > 9000);
+  assert.ok(buildResult.edges > 12000);
+  assert.equal(buildResult.edges, buildResult.evidence);
+  assert.ok(buildResult.findings > 0);
   assert.equal(generated("sources").generated_at, generatedAt);
 });
 
 test("issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2", () => {
-  buildFrameworkData();
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
 
@@ -108,7 +111,6 @@ test("issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2
 });
 
 test("issue 11 graph build emits assessment context and governance artifacts for AC-2", () => {
-  buildFrameworkData();
   const sources = generated("sources").sources;
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
@@ -179,7 +181,6 @@ test("issue 11 graph build emits assessment context and governance artifacts for
 });
 
 test("issue 12 graph build emits Release 2 program context without a synthetic revision bridge", () => {
-  buildFrameworkData();
   const sources = generated("sources").sources;
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
@@ -275,7 +276,6 @@ test("issue 12 graph build emits Release 2 program context without a synthetic r
 });
 
 test("epic 2 graph build emits DISA STIG and SRG nodes plus official CCI references", () => {
-  buildFrameworkData();
   const sources = generated("sources").sources;
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
@@ -328,7 +328,6 @@ test("epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
 });
 
 test("epic 2 graph build emits sharded library search artifacts with filter facets", () => {
-  buildFrameworkData();
   const manifest = generated("library-search-manifest");
   const nistShard = JSON.parse(
     readFileSync(
@@ -364,7 +363,6 @@ test("epic 2 graph build emits sharded library search artifacts with filter face
 });
 
 test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
-  buildFrameworkData();
   const edges = generated("edges").edges;
   const findings = generated("graph-health").findings;
 
@@ -418,7 +416,6 @@ test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
 });
 
 test("library search manifest emits eager shards under bootstrap budget", () => {
-  buildFrameworkData();
   const manifest = generated("library-search-manifest");
   const eagerShardIds = manifest.library_search_manifest.eager_shard_ids;
 
@@ -447,7 +444,6 @@ test("library search manifest emits eager shards under bootstrap budget", () => 
 });
 
 test("dod-zt graph build emits pillars, capabilities, and overlay crosswalk edges", () => {
-  buildFrameworkData();
   const sources = generated("sources").sources;
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
@@ -517,7 +513,6 @@ test("lifecycleStatus maps withdrawn and deprecated record statuses to node life
 });
 
 test("graph build derives control-enhancement includes edges with derived confidence", () => {
-  buildFrameworkData();
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
 
@@ -576,7 +571,6 @@ test("graph build merges curated plain-language entries onto matching 800-53 nod
   const curatedControlId = Object.keys(curated.entries || {})[0];
   if (!curatedControlId) return;
 
-  buildFrameworkData();
   const nodes = generated("nodes").nodes;
   const node = nodes.find((n) => n.id === `nist-800-53:${curatedControlId}`);
   assert.ok(node, `expected node for curated control ${curatedControlId}`);

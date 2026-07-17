@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**Post-v1 platform strengthening** — add stable regression evidence and only the tools that demonstrate concrete value, while preserving the recovered Atlas and static public-data-only architecture.
+**V1.0 release handoff** — the post-v1 strengthening sprint is shipped and deployed; finish release evidence and reconcile any separate release-polish work without expanding product scope.
 
-**Active sprint:** post-v1 platform strengthening — see [`docs/Plan.md`](Plan.md) and the dated [implementation audit](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
+**Active sprint:** v1.0 release finalization — see [`docs/Plan.md`](Plan.md), [`docs/PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), and the dated [implementation audit](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -38,9 +38,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Review the locally verified post-v1 commit and dated implementation audit
-2. Decide whether to authorize a branch push; merge, deployment, tagging, and publication remain separate owner decisions
-3. Keep Ubuntu CI, live Pages, human screen-reader, real-device, and deployed Lighthouse evidence separate from local emulation
+1. Verify the deployed `main` SHA and the optimized Public Repo Checks → Pages chain
+2. Reconcile the separate v1.0 release-polish worktree intentionally; do not silently fold unreviewed changes into the release
+3. Keep Ubuntu CI, live Pages, human screen-reader, real-device, and deployed Lighthouse evidence separate from local emulation; create/publish `v1.0.0` only with explicit owner approval
 
 ## Status Docs
 

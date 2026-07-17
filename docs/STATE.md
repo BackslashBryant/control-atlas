@@ -1,10 +1,10 @@
 # STATE
 
 ## Goal
-Strengthen the recovered Control Atlas platform with measured regression evidence and narrowly justified tools. Preserve the static architecture and do not push, merge, deploy, tag, or publish without owner approval.
+Keep the strengthened Control Atlas platform release-ready with measured regression evidence, efficient CI ownership, and narrowly justified tools. Preserve the static architecture; the final `v1.0.0` tag and release remain owner-gated.
 
 ## Now
-The post-v1 sprint is locally verified on `agent/pixel/post-v1-platform-strengthening` from `5f7a76b`. Lighthouse CI, the focused Vale style, classified Knip cleanup, monthly NIST OSCAL validation, and four reviewed Ubuntu approved-layout baselines have local evidence. Full precommit passes with 127 Playwright tests passed and 1 skipped. The branch is ready for owner review but remains unpushed and undeployed; see [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
+The post-v1 sprint is shipped on `main` at `e56ffc7` and deployed to GitHub Pages. Lighthouse CI, the focused Vale style, classified Knip cleanup, monthly NIST OSCAL validation, and four reviewed Ubuntu approved-layout baselines have recorded evidence. Follow-up CI hardening separates accessibility from the functional Playwright matrix, builds once per precommit, reuses the generated build in CI, and makes Pages deploy the exact SHA already accepted by Public Repo Checks. The optimized full precommit passes with 22 accessibility tests plus 105 functional tests passed and 1 skipped; see [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -42,7 +42,7 @@ The post-v1 sprint is locally verified on `agent/pixel/post-v1-platform-strength
 - `runtime.getGraphHealth()` provides the dynamic Sources-page gap explanation. Current generated data: 45 sources, 11,486 nodes, 16,207 edges, 11 findings.
 - Current low-coverage examples: DoD RAI 0/11, ATT&CK ICS 0/97, AI RMF 0/72, SSDF 0/42, SP 800-172 1/116, SP 800-171 Rev. 3 98/131 (75%).
 - Generated Atlas data includes an 11,486-record compact index and 128 deterministic incident-edge shards. Opening one record no longer requires `nodes.json`, `edges.json`, or `evidence.json`.
-- Post-v1 checks: 38 contract tests, 6 Atlas tests, 192 data tests, 31 runtime tests, 18 graph tests, 15 browser contracts, lint, typecheck, 699-package license review, dependency audit, Vale fixtures/project scan, static build/smoke, public verification, 22/22 focused accessibility tests, Lighthouse's 12 report-only audits, the independent OSCAL cross-check, four Ubuntu visual comparisons, and one complete precommit pass. The final Playwright matrix passed 127 with 1 skipped.
+- Post-v1 checks include contract, Atlas, data, runtime, graph, and browser suites; lint; typecheck; 699-package license review; dependency audit; Vale fixtures/project scan; static build/smoke; public verification; 22/22 focused accessibility tests; 12 report-only Lighthouse audits; the independent OSCAL cross-check; and four Ubuntu visual comparisons. CI hardening keeps the same browser assertions but reports them as 22 accessibility tests plus 105 functional passes and 1 skip instead of executing accessibility twice.
 
 ## Done
 - Phases 1-4 shipped.
@@ -54,10 +54,9 @@ The post-v1 sprint is locally verified on `agent/pixel/post-v1-platform-strength
 - Release-blocking copy was tightened: the landing page states the product purpose, Navigate no longer claims to show “everything,” Playbooks replaces visible “pattern” drift, and repeated “source-backed” labels were replaced with concrete publication wording.
 
 ## Open items
-- Present the locally verified post-v1 commit for owner review; no push, merge, deployment, tag, or publication is authorized yet.
-- Obtain explicit owner approval before any push, merge, or Pages deployment of the locally verified recovery branch.
-- Run post-deploy desktop/mobile workflows and focused Atlas Lighthouse against GitHub Pages.
+- Complete the focused deployed Lighthouse run against GitHub Pages; the existing CI evidence remains synthetic and report-only.
+- Reconcile the separate v1.0 release-polish branch intentionally before final release; it was not included in `e56ffc7`.
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.
 - Human screen-reader and real-device checks remain explicitly unverified unless a human/device completes them.
 - Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
-- Do not publish `v1.0.0` without owner approval.
+- Do not create or publish `v1.0.0` without separate owner approval.
