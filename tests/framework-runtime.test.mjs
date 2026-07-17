@@ -1828,6 +1828,48 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
       control_family: "Access Control",
       severity: "",
     },
+    {
+      id: "test:fedramp-2026",
+      item_id: "FR-2026",
+      title: "FedRAMP rules for 2026",
+      description: "Current rules source.",
+      plain_language_summary: "Current FedRAMP transition rules.",
+      object_type: "requirement",
+      source_id: "fedramp",
+      source_name: "FedRAMP",
+      source_class: "federal_published",
+      catalog_id: "test",
+      control_family: "",
+      severity: "",
+    },
+    {
+      id: "test:fedramp-legacy",
+      item_id: "FR-LEGACY",
+      title: "FedRAMP legacy baseline",
+      description: "Historical baseline.",
+      plain_language_summary: "Legacy reference.",
+      object_type: "baseline",
+      source_id: "fedramp",
+      source_name: "FedRAMP",
+      source_class: "federal_published",
+      catalog_id: "test",
+      control_family: "",
+      severity: "",
+    },
+    {
+      id: "test:year-2026",
+      item_id: "YEAR-2026",
+      title: "Unrelated 2026 publication",
+      description: "Different program publication.",
+      plain_language_summary: "Unrelated publication.",
+      object_type: "requirement",
+      source_id: "other",
+      source_name: "Other",
+      source_class: "federal_published",
+      catalog_id: "test",
+      control_family: "",
+      severity: "",
+    },
   ];
   const index = new MiniSearch({
     fields: ["item_id", "title", "plain_language_summary", "description"],
@@ -1860,6 +1902,10 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
   });
 
   assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
+  assert.deepEqual(
+    runtime.searchLibrary("FedRAMP 2026").map((entry) => entry.id),
+    ["test:fedramp-2026"],
+  );
   // The search-phase runtime has no sources loaded; the result card falls
   // back to the source_name embedded in the shard document.
   assert.equal(

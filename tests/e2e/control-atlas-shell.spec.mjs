@@ -174,7 +174,7 @@ test("visible search trigger opens the global search dialog", async ({
   const dialog = page.getByRole("dialog", { name: "Search records" });
   await expect(dialog).toBeVisible();
   await expect(
-    dialog.getByRole("searchbox", { name: "Search records and glossary" }),
+    dialog.getByRole("searchbox", { name: "Search records" }),
   ).toBeFocused();
 });
 
