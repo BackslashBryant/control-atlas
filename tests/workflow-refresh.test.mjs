@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const workflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
+const refreshScript = readFileSync('scripts/refresh-data.mjs', 'utf8');
 
 test('source refresh runs weekly and remains manually dispatchable', () => {
   assert.match(workflow, /cron: '17 7 \* \* 3'/);
@@ -28,4 +29,8 @@ test('source refresh opens one human-reviewed draft PR after the full gate', () 
 
 test('obsolete Tenable refresh cannot run outside the current registry pipeline', () => {
   assert.equal(existsSync('.github/workflows/weekly-tenable.yml'), false);
+});
+
+test('source refresh ingests the current structured FedRAMP rules before rebuilding', () => {
+  assert.match(refreshScript, /fetch-fedramp-2026-rules\.mjs/);
 });

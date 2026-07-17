@@ -19,6 +19,7 @@ function run(label, script) {
 
 async function main() {
   await import('./fetch-framework-catalogs.mjs').then((m) => m.fetchFrameworkCatalogs());
+  run('fetch-fedramp-2026-rules', 'fetch-fedramp-2026-rules.mjs');
   run('fetch-olir-mappings', 'fetch-olir-mappings.mjs');
   run('fetch-ccis', 'fetch-ccis.mjs');
   run('fetch-stig-source-observations', 'fetch-stig-source-observations.mjs');

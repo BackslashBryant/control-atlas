@@ -1,6 +1,6 @@
 import { createFederalGraphRuntime } from "../../app/runtime.mjs";
 
-const CACHE_VERSION = "20260710-1";
+const CACHE_VERSION = "20260716-2";
 const artifactCache = new Map<string, Promise<unknown>>();
 
 export type TemplateRegistry = {
@@ -23,6 +23,19 @@ export type ComplianceToolRegistry = {
   tools?: Array<Record<string, unknown>>;
 };
 
+export type FedrampTransitionIndex = {
+  retrieved_on?: string;
+  source?: Record<string, unknown>;
+  interpretation_notice?: string;
+  official_links?: Record<string, string>;
+  milestones?: Array<Record<string, unknown>>;
+  process_statuses?: Array<Record<string, unknown>>;
+  current_artifact_rules?: Record<string, string[]>;
+  legacy_mappings?: Array<Record<string, unknown>>;
+  resolved_rules?: Array<Record<string, unknown>>;
+  legacy_assets?: Array<Record<string, unknown>>;
+};
+
 export type LibrarySearchShard = {
   catalog_id: string;
   document_count?: number;
@@ -36,6 +49,7 @@ export type RuntimeBundle = {
   officialArtifactRegistry?: OfficialArtifactRegistry;
   complianceWorkflowRegistry?: ComplianceWorkflowRegistry;
   complianceToolRegistry?: ComplianceToolRegistry;
+  fedrampTransitionIndex?: FedrampTransitionIndex;
   graphReady: boolean;
   librarySearchRevision?: number;
 };
@@ -202,12 +216,14 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     officialArtifactRegistryRaw,
     complianceWorkflowRegistryRaw,
     complianceToolRegistryRaw,
+    fedrampTransitionIndexRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
     fetchArtifact("./data/official-artifact-registry.json"),
     fetchArtifact("./data/compliance-workflows.json"),
     fetchArtifact("./data/compliance-tool-registry.json"),
+    fetchArtifact("./data/fedramp-transition-index.json"),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
 
@@ -219,6 +235,8 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     complianceWorkflowRegistry:
       complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry,
     complianceToolRegistry: complianceToolRegistryRaw as ComplianceToolRegistry,
+    fedrampTransitionIndex:
+      fedrampTransitionIndexRaw as FedrampTransitionIndex,
     graphReady: false,
     librarySearchRevision: 0,
   };
@@ -230,6 +248,7 @@ export async function loadFullGraphPhase(
   officialArtifactRegistry: OfficialArtifactRegistry,
   complianceWorkflowRegistry: ComplianceWorkflowRegistry,
   complianceToolRegistry: ComplianceToolRegistry,
+  fedrampTransitionIndex: FedrampTransitionIndex,
   onShardLoaded?: () => void,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
@@ -261,6 +280,7 @@ export async function loadFullGraphPhase(
     officialArtifactRegistry,
     complianceWorkflowRegistry,
     complianceToolRegistry,
+    fedrampTransitionIndex,
     graphReady: true,
     librarySearchRevision: 0,
   };
@@ -273,12 +293,14 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     officialArtifactRegistryRaw,
     complianceWorkflowRegistryRaw,
     complianceToolRegistryRaw,
+    fedrampTransitionIndexRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
     fetchArtifact("./data/official-artifact-registry.json"),
     fetchArtifact("./data/compliance-workflows.json"),
     fetchArtifact("./data/compliance-tool-registry.json"),
+    fetchArtifact("./data/fedramp-transition-index.json"),
   ]);
 
   return loadFullGraphPhase(
@@ -287,6 +309,7 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     officialArtifactRegistryRaw as OfficialArtifactRegistry,
     complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry,
     complianceToolRegistryRaw as ComplianceToolRegistry,
+    fedrampTransitionIndexRaw as FedrampTransitionIndex,
   );
 }
 
@@ -304,12 +327,14 @@ export async function loadRuntimeDatasetStaged(handlers: {
       officialArtifactRegistryRaw,
       complianceWorkflowRegistryRaw,
       complianceToolRegistryRaw,
+      fedrampTransitionIndexRaw,
     ] = await Promise.all([
       loadLibrarySearchBootstrap(),
       fetchArtifact("./data/template-registry.json"),
       fetchArtifact("./data/official-artifact-registry.json"),
       fetchArtifact("./data/compliance-workflows.json"),
       fetchArtifact("./data/compliance-tool-registry.json"),
+      fetchArtifact("./data/fedramp-transition-index.json"),
     ]);
     const templateRegistry = templateRegistryRaw as TemplateRegistry;
     const officialArtifactRegistry =
@@ -318,6 +343,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry;
     const complianceToolRegistry =
       complianceToolRegistryRaw as ComplianceToolRegistry;
+    const fedrampTransitionIndex =
+      fedrampTransitionIndexRaw as FedrampTransitionIndex;
     const searchRuntime = createSearchRuntime(
       libraryBootstrap,
       templateRegistry,
@@ -329,6 +356,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
       officialArtifactRegistry,
       complianceWorkflowRegistry,
       complianceToolRegistry,
+      fedrampTransitionIndex,
       graphReady: false,
       librarySearchRevision: 0,
     });
@@ -341,6 +369,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
       officialArtifactRegistry,
       complianceWorkflowRegistry,
       complianceToolRegistry,
+      fedrampTransitionIndex,
       handlers.onShardLoaded,
     );
     handlers.onFullReady(fullBundle);

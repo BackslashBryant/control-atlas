@@ -59,6 +59,10 @@ No remaining PDF page showed clipped fields or an orphan column view. A rasteriz
 - The hardware, software, POA&M, and implementation outputs are preparation aids, not eMASS-generated import files.
 - The PPSM worksheet is a local preparation register, not an official PPSM registry export, receipt, or import file.
 
+## FedRAMP 2026 corrective review
+
+The later same-day corrective pass revalidated these grades against the official structured rules dataset rather than the legacy-page labels alone. It added current rule context to ten FedRAMP-relevant companions, corrected SSP/SAP/SAR/POA&M/inventory/ConMon transition semantics, and rerendered all 12 outputs. See `docs/audits/fedramp-2026-transition-hardening-2026-07-16.md` for the official-source lineage, legacy-to-current mapping, and 72-page final review.
+
 ## Verdict
 
 All twelve companions earn an A for professional utility: each performs its stated job, explains its authority boundary, points to the official source path, supplies field-level guidance and handoff checks, and prints without structural loss. The remaining limits are correctly disclosed interoperability proof and source access—not missing template fields or misleading presentation.

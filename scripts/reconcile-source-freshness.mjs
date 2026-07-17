@@ -19,6 +19,7 @@ const ARTIFACTS = new Map([
   ['nist-ai-rmf-playbook', 'data/ai-rmf.json'],
   ['nist-ssdf-oscal', 'data/ssdf.json'],
   ['fedramp-rev5', 'data/fedramp-baselines.json'],
+  ['fedramp-2026-rules', ['data/fedramp-2026-rules.json', 'data/fedramp-2026-rules.schema.json', 'data/fedramp-transition-index.json']],
   ['nist-800-53b-baselines', 'data/800-53b-baselines.json'],
   ['nist-800-53a-assessment-procedures', 'data/controls-800-53.json'],
   ['nist-800-171-oscal-mappings', 'maps/800-53-to-800-171.json'],
@@ -50,7 +51,7 @@ function artifactVersion(document) {
   if (Array.isArray(document)) {
     return document.map(artifactVersion).find(Boolean) || null;
   }
-  return document.source_version || document.version || document.records?.[0]?.source?.version || null;
+  return document.source_version || document.version || document.info?.version || document.source?.version || document.records?.[0]?.source?.version || null;
 }
 
 export function reconcileFreshness(registry, artifactDocuments, runDate, observedSourceIds = []) {

@@ -2,7 +2,7 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 9, 2026 (SPR-20260708 remediation shipped; gaps below are deferred/non-blocking)
+**Last synced:** July 16, 2026 (Phase 7 FedRAMP corrective hardening added no new PRD gaps; items below remain deferred/non-blocking)
 
 ## Deferred (SPR Sprint E — not blocking)
 

@@ -20,7 +20,8 @@ test('every source has the locked Phase 6 synchronization model', () => {
   const expected = {
     auto_synced: [
       'disa-cci-list', 'disa-cci-nist-references', 'disa-srg-library',
-      'disa-stig-library', 'disa-stig-srg-cci-references', 'fedramp-rev5',
+      'disa-stig-library', 'disa-stig-srg-cci-references', 'fedramp-2026-rules',
+      'fedramp-rev5',
       'mitre-attack-enterprise', 'mitre-attack-ics', 'mitre-d3fend-mappings',
       'mitre-d3fend-ontology', 'nist-800-171-oscal-mappings', 'nist-800-171-rev2',
       'nist-800-172-rev3', 'nist-800-53a-assessment-procedures',
@@ -111,6 +112,8 @@ test('required federal sources are registered', () => {
     'stigviewer-clkb-api',
     'nuwcdivnpt-github-org',
     'nuwcdivnpt-stig-manager',
+    'fedramp-2026-rules',
+    'fedramp-rev5',
   ]) {
     assert.ok(ids.has(id), `missing source ${id}`);
   }

@@ -465,6 +465,38 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await expect(page.getByText("Next action", { exact: true })).toBeVisible();
 });
 
+test("FedRAMP workbench distinguishes current rules from the complete legacy library", async ({
+  page,
+}) => {
+  await page.goto("/?view=templates");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Consolidated Rules 2026.07.14.01",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("16 stable process documents")).toBeVisible();
+  await expect(
+    page.getByText(/Only 1 process is marked placeholder: AGU/),
+  ).toBeVisible();
+
+  const showAll = page.getByRole("button", {
+    name: /Show all \d+ official resources/,
+  });
+  if (await showAll.isVisible()) await showAll.click();
+  const legacyCard = page
+    .locator(".nexus-card")
+    .filter({ hasText: "FedRAMP Legacy Assets Combined Archive" });
+  await expect(legacyCard).toBeVisible();
+  await legacyCard
+    .getByText("Browse all 27 official legacy files", { exact: true })
+    .click();
+  await expect(legacyCard.locator(".fedramp-legacy-index li")).toHaveCount(27);
+  await expect(legacyCard.getByText("Legacy → current")).toBeVisible();
+});
+
 test("legacy view query redirects to hash route on boot", async ({ page }) => {
   await page.goto("/?view=atlas-map");
   await waitForAppReady(page);

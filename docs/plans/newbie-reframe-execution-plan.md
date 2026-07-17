@@ -201,6 +201,8 @@ Verify: dry-run the workflow (`workflow_dispatch`), show a real sync diff; data 
 
 Verify: regenerate + open all twelve Office exports; validate registry and interoperability contracts; `tests/template-office-export.test.mjs`, template contract tests, and `npm run precommit` green.
 
+**Corrective hardening closeout (2026-07-16):** ingested and schema-validated FedRAMP rules `2026.07.14.01`; indexed 27 official legacy downloads; mapped ten legacy artifact families to 28 current rule IDs, current schemas, 20x/Rev5 paths, dates, and next actions; limited the placeholder warning to AGU; corrected FedRAMP baseline membership ingestion to the official legacy workbook; regenerated and visually reviewed all 12 companions across 72 PDF pages. Audit: `docs/audits/fedramp-2026-transition-hardening-2026-07-16.md`.
+
 **Kickoff prompt:**
 > Execute Phase 7 of docs/plans/newbie-reframe-execution-plan.md (compliance artifact and template nexus). Read that file's Phase 7 + docs/plans/live-site-polish-backlog.md P0 items 3-4 first. Generate all nine shipped templates and grade them before editing anything. Branch; no push unless I say so.
 

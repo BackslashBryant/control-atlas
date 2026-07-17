@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None** — SPR-20260708 Performance + Trust Remediation shipped July 9, 2026. Home trust links, header search draft clear, Compare coverage chips, deferred graph on Explore, federated library-search shards (~3.2MB eager bootstrap), live Pages smoke workflow, and enumerated polish backlog closed. Verification: `npm run precommit` green (111 E2E, 139 data, 29 runtime tests).
+**None** — Newbie-Reframe Phase 7 is the current release. Its July 16 FedRAMP corrective hardening ingests the official structured 2026 rules, preserves the complete legacy library, maps historical artifacts to current rules/schemas, and revalidates all 12 companions. Evidence: [`docs/audits/fedramp-2026-transition-hardening-2026-07-16.md`](audits/fedramp-2026-transition-hardening-2026-07-16.md).
 
 ## Epic Status (July 9, 2026)
 
