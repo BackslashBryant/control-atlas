@@ -321,7 +321,7 @@ export function ExplorePage(props: {
             className="accordion-root search-result-groups"
             defaultValue={defaultOpenGroups}
             id="library-results"
-            key={`${state.query}|${Object.keys(groupedDocuments).join(",")}`}
+            key={state.query}
             ref={resultsRef}
             tabIndex={-1}
             type="multiple"

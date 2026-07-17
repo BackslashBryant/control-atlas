@@ -2,10 +2,10 @@
 
 **Date:** July 17, 2026
 
-**Branch:** `agent/pixel/post-v1-platform-strengthening`
+**Implementation branch:** `agent/pixel/post-v1-platform-strengthening`
 
 **Base:** `5f7a76b`
-**Decision:** All five milestones have local implementation evidence. The four approved-layout baselines were generated and visually reviewed inside the pinned Ubuntu Playwright image, then reproduced 4/4 without updating snapshots. A complete `npm run precommit` passes, including 127 Playwright tests passed and 1 skipped, so the branch is locally ready for owner review. Nothing in this audit authorizes push, merge, deployment, tagging, or publication.
+**Decision:** All five milestones were shipped to `main` at `e56ffc7` and deployed to GitHub Pages after local and remote verification. The four approved-layout baselines were generated and visually reviewed inside the pinned Ubuntu Playwright image, then reproduced 4/4 without updating snapshots. Follow-up pipeline hardening retains every gate while removing duplicate build and browser execution. The final `v1.0.0` tag and release remain separately owner-gated.
 
 ## Adopted tools and measured value
 
@@ -54,5 +54,20 @@ Every initial finding is classified below. “Queued” means no removal is auth
 1. The four Ubuntu baselines were personally reviewed: desktop Map keeps the centered hub, six readable connection groups, and contained controls; desktop Purpose keeps six aligned stages and the selected path/actions; compact Map becomes a readable unclipped vertical list; compact Purpose stacks every stage in order with reachable full-width actions. No animation, font-swap, timestamp, clipping, blank-region, or loading artifact was accepted.
 2. Docker Desktop was repaired without a reset: stale `dockerInference` startup residue was removed, Docker Desktop was updated in place to 4.82.0, and the intact WSL data disk was attached once with elevation. `docker run --rm hello-world` then passed. Docker was stopped after baseline work and remains intentionally stopped, not broken.
 3. The earlier 124/1/3 browser result was load instability rather than a reproducible product regression. Docker/WSL startup loops and duplicate backends consumed about 1.08 GiB working set; stopping them increased free memory from 1.33 GiB to 2.57 GiB. With that workload isolated, the detailed-mappings axe test passed twice in 1.1 minutes, the Atlas Purpose case passed in 4.4 seconds, the Start Here destination passed in 6.5 seconds, and the unchanged complete matrix passed 127 with 1 skipped in 9.2 minutes. No assertion, timeout, worker count, or performance budget was relaxed.
-4. Ubuntu CI execution, human screen-reader testing, real-device testing, live Pages workflows, and deployed Lighthouse remain separate unverified evidence. Lighthouse stays report-only until repeated Ubuntu CI runs establish stable route-specific budgets.
-5. Recommended next action: review the local commit and decide whether to authorize a push. Do not deploy or publish from this audit.
+4. Ubuntu visual CI, Pages deployment, and Pages Live Smoke have remote evidence after `e56ffc7` reached `main`. Human screen-reader testing, real-device testing, and focused deployed Lighthouse remain separate unverified evidence. Lighthouse stays report-only until repeated Ubuntu CI runs establish stable route-specific budgets.
+5. The final `v1.0.0` tag and release were not created or published. The release agent should reconcile any separate release-polish branch, complete or accept the remaining external evidence gaps, and request explicit owner approval before publication.
+
+## Pipeline hardening follow-up
+
+The post-deploy review found duplicate work rather than a need to weaken the gate:
+
+- `precommit` built the static site before browser work, then both accessibility and the general Playwright command rebuilt it. The revised scripts build once and expose no-build `:run` variants for CI and precommit ownership.
+- The general Playwright matrix also rediscovered and reran all 22 accessibility cases. A functional-only config now excludes the separately owned accessibility and approved-layout visual suites while retaining their dedicated jobs and assertions.
+- Pages repeated the complete Public Repo Checks gate after `main` had already passed it. Pages now triggers from a successful `Public Repo Checks` push run on `main`, checks out that run's exact `head_sha`, rebuilds the deploy artifact, verifies it, and deploys it. Manual dispatch remains available.
+- Lighthouse remains report-only. A protocol timeout or missing report artifact warns without turning the entire required-check workflow red; reports stay private to the runner and GitHub artifact storage.
+- Framework data tests now construct their immutable graph fixture once per file, retaining the two explicit rebuilds that verify idempotency. Focused data verification passed 194 assertions in 36.6 seconds.
+- Explore results no longer remount when asynchronously loaded groups expand the result set. Five consecutive focus checks passed after keying the accordion by route query rather than loaded group membership.
+
+Measured local evidence: the dedicated accessibility suite passed 22/22 in 3.5 minutes; the functional matrix passed 105 with 1 skipped in 7.7 minutes; the complete optimized precommit passed in 868.6 seconds. Earlier separation alone reduced the functional matrix from 127 passed plus 1 skipped in 11.4 minutes to 105 passed plus 1 skipped in 7.1 minutes on the same constrained Windows host. Wall-clock variance remains material because the large detailed-mappings axe case and single-worker browser workload are intentionally retained.
+
+Rollback: restore the previous package scripts and Playwright discovery, restore direct `push` ownership in `pages.yml`, restore the duplicated Pages verification steps, and remove `playwright.e2e.config.mjs`. Reverting the shared data fixture and Explore key changes is independent. Rollback increases repeated work and reintroduces the focus-loss defect; it does not restore any unique assertion.

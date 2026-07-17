@@ -24,6 +24,7 @@ async function assertNoBlockingViolations(page, contextLabel) {
 }
 
 test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   attachPageDiagnostics(page);
 });
 

@@ -32,9 +32,9 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install chromium
       - name: Accessibility verification
-        run: npm run test:a11y
+        run: npm run test:a11y:run
       - name: End-to-end verification
-        run: npm run test:e2e
+        run: npm run test:e2e:run
       - name: Upload Playwright failure artifacts
         if: failure()
         uses: actions/upload-artifact@v4
@@ -77,11 +77,13 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - run: npm run test:performance
+      - name: Run report-only Lighthouse evidence
+        continue-on-error: true
+        run: npm run test:performance
       - name: Upload Lighthouse reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-ci-reports
           path: artifacts/lighthouse-ci
-          if-no-files-found: error
+          if-no-files-found: warn

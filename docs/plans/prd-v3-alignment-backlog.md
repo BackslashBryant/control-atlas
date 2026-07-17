@@ -2,15 +2,15 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 17, 2026 (approved-comp recovery in progress)
+**Last synced:** July 17, 2026 (approved compositions and platform strengthening deployed)
 
 ## Active release gate
 
 | ID | Gap | Owner | Status |
 | --- | --- | --- | --- |
 | V1-RR-003 | Atlas clarity, bounded rendering, mobile behavior, and focused-route performance | Pixel / Forge | Performance/data architecture shipped at `94ab460`, but product approval was revoked after live visual review. Superseded by V1-RR-004 through V1-RR-010. |
-| V1-RR-004 | Match the approved six-column decomposition view on desktop and vertical workflow on mobile | Muse / Forge | Implemented and locally verified — owner review pending |
-| V1-RR-005 | Match the approved centered, connected, expandable Map and guidance inspector | Muse / Forge | Implemented and locally verified — owner review pending |
+| V1-RR-004 | Match the approved six-column decomposition view on desktop and vertical workflow on mobile | Muse / Forge | Shipped and protected by reviewed desktop/compact Ubuntu visual baselines |
+| V1-RR-005 | Match the approved centered, connected, expandable Map and guidance inspector | Muse / Forge | Shipped and protected by reviewed desktop/compact Ubuntu visual baselines |
 | V1-RR-006 | Replace empty-query search taxonomy dump with a calm starting state | Muse / Forge | Implemented locally — 4/4 expert and 11/11 novice search gate passes |
 | V1-RR-007 | Turn Templates default page into a progressive task workflow | Muse / Forge | Implemented locally — route contract passes |
 | V1-RR-008 | Remove redundant trust/legal/copy boilerplate and restore specific action guidance | Muse | Implemented locally for release blockers — content contract passes |
@@ -27,11 +27,11 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
 ## Optional maintenance
 
-### Post-v1 platform strengthening (active locally)
+### Post-v1 platform strengthening (shipped)
 
 | Milestone | Status |
 | --- | --- |
-| Approved-layout regression protection | Four desktop/compact Map/Purpose baselines generated and visually reviewed in the pinned Ubuntu Playwright image; immediate comparison passed 4/4, and full precommit passed 127 Playwright tests with 1 skipped. |
+| Approved-layout regression protection | Four desktop/compact Map/Purpose baselines generated and visually reviewed in the pinned Ubuntu Playwright image; immediate comparison passed 4/4, and CI owns the same Ubuntu comparisons. |
 | Performance regression evidence | Lighthouse CI report-only integration and 12 local reports complete; no blocking budgets |
 | Copy and terminology debt | Focused Vale rules integrated after fixture and false-positive review |
 | Technical-debt inventory | Knip classified; nine proven dead files plus redundant declarations/exports removed, legacy renderer queued separately |

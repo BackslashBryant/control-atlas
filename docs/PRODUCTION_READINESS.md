@@ -9,7 +9,7 @@
 
 ## Current Status
 
-Release candidate `v1.0.0-rc.1` remains the published release. The v1.0 release-readiness branch contains the landing/search remediation and approved-composition Atlas rebuild. Full local precommit passes, including 127 Playwright tests passed and 1 skipped. Push, merge, deployment, and post-deploy workflow/performance evidence remain owner-gated. Creating or publishing `v1.0.0` requires separate owner approval.
+Release candidate `v1.0.0-rc.1` remains the published release. The approved-composition Atlas rebuild and post-v1 platform strengthening are on `main` and deployed to GitHub Pages. The optimized full local precommit passes with 22 accessibility tests plus 105 functional tests passed and 1 skipped. Public Repo Checks, Pages deployment, and Pages Live Smoke have remote evidence; focused deployed Lighthouse, human screen-reader, and real-device evidence remain separate gaps. Creating or publishing `v1.0.0` requires separate owner approval.
 
 ## Phase 0 Development Readiness
 
@@ -36,7 +36,7 @@ Release candidate `v1.0.0-rc.1` remains the published release. The v1.0 release-
 
 ## Public-shell release gate (Epic 7+)
 
-- [x] Local `npm run precommit` passes on the release-readiness branch (127 Playwright passed, 1 skipped)
+- [x] Local `npm run precommit` passes after CI hardening (22 accessibility tests; 105 functional passed, 1 skipped)
 - [x] Targeted desktop and mobile novice/expert Atlas workflows pass, including zero connections, bounded Map/inspector layout, and List fallback
 - [ ] Focused Atlas mobile Lighthouse meets the recorded release threshold
 - [x] Keyboard, 200% equivalent reflow, responsive, and reduced-motion checks are recorded in the July 17 local evidence audit
@@ -49,12 +49,12 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Review the locally verified post-v1 branch and decide whether to authorize a push. Four approved Atlas compositions now compare against reviewed pinned-Ubuntu baselines, and the complete local precommit passes with 127 Playwright tests passed and 1 skipped. Lighthouse CI remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check. Do not merge, deploy, tag, or publish the v1.0 release artifact without owner approval.
+Complete the v1.0 release handoff: verify the optimized remote pipeline, finish or explicitly accept the remaining deployed Lighthouse and human/device gaps, and intentionally reconcile any separate release-polish branch. Lighthouse CI remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check. Do not create or publish the final `v1.0.0` tag/release without separate owner approval.
 
 ## Post-v1 strengthening status
 
 - [x] Four approved Atlas compositions compare against reviewed baselines generated in the pinned Ubuntu Playwright image
-- [x] Post-v1 `npm run precommit` passes as one complete run (127 Playwright passed, 1 skipped)
+- [x] Post-v1 `npm run precommit` passes as one complete run after removing duplicate execution (22 accessibility tests; 105 functional passed, 1 skipped)
 - [x] Lighthouse CI records three local synthetic runs for Landing, Explore, focused Atlas, and Templates without public upload or blocking budgets
 - [x] Project-owned Vale rules pass focused fixtures and mounted React/public-doc copy with human review still authoritative
 - [x] Knip inventory is classified; only proven dead UI/graph/D3 residue was removed and React Flow/ELK remain mounted

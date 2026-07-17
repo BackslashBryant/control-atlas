@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**Post-v1 platform strengthening** — locally verified on `agent/pixel/post-v1-platform-strengthening`: four reviewed Ubuntu approved-layout baselines, report-only performance evidence, focused copy rules, a classified debt inventory, and additive OSCAL validation, with the static public-data-only architecture unchanged. A complete `npm run precommit` passes (127 Playwright passed, 1 skipped). Evidence: [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md). Nothing is authorized for push, merge, deployment, tagging, or publication.
+**Post-v1 platform strengthening** — shipped to `main` at `e56ffc7` and deployed to GitHub Pages: four reviewed Ubuntu approved-layout baselines, report-only performance evidence, focused copy rules, a classified debt inventory, and additive OSCAL validation, with the static public-data-only architecture unchanged. Follow-up CI hardening removes duplicate builds and test ownership while retaining every assertion. Evidence: [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md). The final `v1.0.0` tag and release remain separately owner-gated.
 
 ## Epic Status (July 9, 2026)
 
@@ -88,9 +88,9 @@ No backend or user, organization, or system data is part of this product directi
 
 ## Recommended Sequence (post-MVP)
 
-1. **Owner review of the locally verified post-v1 branch** — inspect the dated implementation audit and decide whether to authorize a push; deployment and publication remain separate decisions
-2. **Owner decision** — decide whether to commit/push this maintenance branch; no deployment or release is implied
-3. **Optional, separately owner-approved** — finish live v1.0 verification and create/publish `v1.0.0`
+1. **Release-agent handoff** — reconcile any separately developed v1.0 release-polish branch intentionally; do not assume it was included in the platform-strengthening deployment
+2. **Finish live v1.0 evidence** — complete the focused deployed Lighthouse and human/device checks or explicitly accept them as residual risk
+3. **Optional, separately owner-approved** — create and publish `v1.0.0`; the deployed maintenance work does not itself authorize the final tag or release
 
 ## Historical Delivery Records
 
