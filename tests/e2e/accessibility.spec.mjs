@@ -31,8 +31,8 @@ const ROUTES = [
   { label: "home", path: "/" },
   { label: "atlas map", path: "/?view=atlas-map" },
   {
-    label: "focused Atlas Path",
-    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=path",
+    label: "focused Atlas Purpose",
+    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=purpose",
   },
   {
     label: "focused Atlas Map",

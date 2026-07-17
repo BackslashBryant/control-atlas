@@ -70,8 +70,8 @@ const DISPLAY_NAMES = {
     tertiary: 'Indirect source',
   },
   publication_status: {
-    published: 'Official link',
-    candidate: 'Inferred link',
+    published: 'Published mapping',
+    candidate: 'Candidate mapping',
   },
   object_type: {
     control: 'Control',

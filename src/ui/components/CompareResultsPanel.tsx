@@ -102,13 +102,13 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
       <p className="compare-legend">
         <ProvenanceTerm
           kind="publication"
-          label="Official link"
+          label="Published mapping"
           value="published"
         />{" "}
         = published mapping.{" "}
         <ProvenanceTerm
           kind="publication"
-          label="Inferred link"
+          label="Candidate mapping"
           value="candidate"
         />{" "}
         = candidate mapping that still needs review.

@@ -1,7 +1,9 @@
 # Open-source tool assessment
 
 **Decision date:** July 17, 2026
-**Scope:** Post-v1 ingestion, search, and optional model-assisted build tooling. None of these tools is part of the v1.0 release gate.
+**Scope:** Post-v1 ingestion, search, and optional model-assisted build tooling. None of these tools is part of the v1.0 release gate. Results from the July 17 bounded spike are recorded in [`../spikes/open-source-tool-spike-results-2026-07-17.md`](../spikes/open-source-tool-spike-results-2026-07-17.md).
+
+The broader UI/UX, copy, build, data aggregation, OSCAL, and supply-chain review is recorded in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md).
 
 Control Atlas should remain static-first, deterministic, source-traceable, and usable without an AI service. A tool earns a place only when a measured problem requires it and its output can preserve canonical source URLs, checksums, and reviewable build artifacts.
 
@@ -9,11 +11,11 @@ Control Atlas should remain static-first, deterministic, source-traceable, and u
 
 | Tool | Decision | Control Atlas fit |
 | --- | --- | --- |
-| [Crawl4AI](https://docs.crawl4ai.com/) | Pilot after v1 | Best near-term candidate for controlled acquisition of dynamic official pages that current fetchers cannot reliably capture. Compare it against the existing source adapters on two or three difficult sources before adoption. |
-| [Chonkie](https://docs.chonkie.ai/oss/quick-start) | Evaluate only after a search benchmark | Its local chunkers could help long-document discovery, but the current search problem was ranking and corpus coverage, not proof that another chunking layer is needed. |
-| [Qdrant](https://qdrant.tech/documentation/search/hybrid-queries/) | Conditional experiment | Hybrid lexical/vector search may improve plain-language discovery, but a server-backed vector store would expand the architecture of a static product. Adopt only if a benchmark shows a material gain over deterministic static search and a build-time index is insufficient. |
+| [Crawl4AI](https://docs.crawl4ai.com/) | Hold as an isolated exception fallback | It recovered a JavaScript-driven DoD transcript, but the spike environment and cache exceeded 1.1 GB and pulled 93 packages. Revisit only after three active sources defeat the existing Playwright path. |
+| [Chonkie](https://docs.chonkie.ai/oss/quick-start) | Hold for long-document search | Sentence chunking was fast (2,185 chunks from 1,216 records in 0.096 s), but chunking alone does not repair today's record ranking. |
+| [Qdrant](https://qdrant.tech/documentation/search/hybrid-queries/) | Reject for the current static stack | Both full and reduced local semantic-index trials exceeded their time limits. It also lacks a credible static deployment path for this product today. |
 | [Ollama](https://docs.ollama.com/capabilities/structured-outputs) | Optional local research harness | Useful for private, build-time structured-output experiments. It must not become a runtime dependency or a provenance authority. Test the smallest viable model first and stop if laptop latency or memory is impractical. |
-| [Marker](https://github.com/datalab-to/marker) | Hold for license review | Strong document-to-Markdown/JSON capability, but the project is GPL-3.0 and its commercial-use terms require deliberate review before it enters an MIT-licensed product pipeline. Keep it isolated from production until that review is complete. |
+| [Marker](https://github.com/datalab-to/marker) | Reject locally; hold for external evaluation | The dry-run resolved 79 packages including Torch, Surya OCR, and Transformers before model download. Keep it out of the laptop and product; reconsider only for a named blocking PDF after license review. |
 | [Instructor](https://github.com/567-labs/instructor) | Preferred structured-output option if needed | If model-assisted extraction is later approved, schema validation and retries fit a reviewable Python ingestion pipeline. Do not add it before a concrete extraction job exists. |
 | [Outlines](https://dottxt-ai.github.io/outlines/latest/) | Alternative, not a companion to Instructor | Consider when constrained decoding for a local model is specifically required. Avoid carrying two overlapping structured-output stacks. |
 | [Langfuse](https://langfuse.com/docs) | Skip now | Observability, evaluation, and prompt management solve an ongoing LLM-service problem that Control Atlas does not currently have. |
@@ -24,8 +26,8 @@ Control Atlas should remain static-first, deterministic, source-traceable, and u
 
 1. Ship v1.0 without any of these dependencies.
 2. Create a representative search evaluation set: exact IDs, exact titles, novice topic queries, acronyms, current-resource queries, and known no-result cases.
-3. Pilot Crawl4AI on difficult official sources while preserving the current provenance contract.
-4. Benchmark current search before considering Chonkie or Qdrant. Require a documented quality gain and acceptable static-build/runtime cost.
+3. Use the existing Playwright path for dynamic sources. Reconsider isolated Crawl4AI only after three active sources defeat that path.
+4. Improve deterministic search against the checked-in benchmark. Do not add Qdrant to the current static architecture; retain Chonkie only as a future long-document option.
 5. If a repeatable extraction task remains, evaluate one structured-output path: Instructor for schema validation/retries, or Outlines for constrained local decoding.
 6. Revisit Langfuse, LiteLLM, or DSPy only if Control Atlas deliberately becomes an ongoing multi-model system.
 

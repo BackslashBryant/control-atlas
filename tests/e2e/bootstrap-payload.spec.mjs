@@ -64,3 +64,28 @@ test("explore bootstrap avoids graph JSON until record open", async ({
     .poll(() => graphArtifactUrls(requested).length, { timeout: 15000 })
     .toBeGreaterThan(0);
 });
+
+test("focused Atlas loads one neighborhood without monolithic graph JSON", async ({
+  page,
+}) => {
+  const requested = [];
+  page.on("request", (request) => {
+    const url = request.url();
+    if (url.includes("/data/generated/")) requested.push(url);
+  });
+
+  await page.goto(
+    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map",
+  );
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.locator(".atlas-spatial-map")).toBeVisible();
+
+  expect(graphArtifactUrls(requested)).toEqual([]);
+  expect(
+    requested.some((url) => url.includes("atlas-neighborhood/32.json")),
+  ).toBeTruthy();
+  expect(
+    requested.some((url) => url.includes("RelationshipGraph-")),
+  ).toBeFalsy();
+});

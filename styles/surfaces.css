@@ -2727,6 +2727,677 @@ a:focus-visible {
   }
 }
 
+/* Approved-comp recovery: deterministic decomposition and spatial Atlas. */
+.atlas-workspace-header {
+  align-items: center;
+}
+
+.atlas-workspace-header h1 {
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  line-height: 1.2;
+}
+
+.atlas-map-command {
+  display: block;
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.atlas-map-command .search-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding-inline: var(--space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  background: var(--ca-surface);
+}
+
+.atlas-map-command .search-input input {
+  width: 100%;
+  min-width: 0;
+  padding-block: var(--space-3);
+}
+
+.atlas-map-command button.visually-hidden {
+  width: 1px;
+}
+
+.atlas-focused-toolbar {
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.atlas-focused-toolbar .atlas-view-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.atlas-focused-toolbar .atlas-connection-filters {
+  position: relative;
+}
+
+.atlas-focused-toolbar .atlas-connection-filters > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  list-style: none;
+}
+
+.atlas-focused-toolbar .atlas-connection-filters > summary::before {
+  content: "⌄";
+  margin-right: var(--space-2);
+  color: var(--ca-secondary);
+}
+
+.atlas-focused-toolbar .atlas-connection-filters[open] > summary::before {
+  content: "⌃";
+}
+
+.atlas-focused-toolbar .atlas-filter-grid {
+  position: relative;
+  z-index: 3;
+  width: min(76rem, calc(100vw - 4rem));
+}
+
+.atlas-focused-layout--board {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.atlas-decomposition {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.atlas-decomposition-board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-3);
+  min-height: 32rem;
+}
+
+.atlas-decomposition-stage {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ca-primary) 4%, var(--ca-surface)), var(--ca-surface));
+}
+
+.atlas-decomposition-stage > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 58px;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--ca-border-subtle);
+}
+
+.atlas-decomposition-stage > header h2 {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.atlas-decomposition-stage > header > span {
+  display: grid;
+  place-items: center;
+  min-width: 1.8rem;
+  height: 1.8rem;
+  padding-inline: 0.45rem;
+  border: 1px solid var(--ca-border);
+  border-radius: 999px;
+  color: var(--ca-text-muted);
+  background: var(--ca-surface-raised);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+}
+
+.atlas-decomposition-stage-body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-3);
+}
+
+.atlas-decomposition-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 92px;
+  padding: var(--space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  color: var(--ca-text-muted);
+  background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
+  text-align: left;
+}
+
+.atlas-decomposition-card > svg {
+  color: currentColor;
+}
+
+.atlas-decomposition-card > span {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.atlas-decomposition-card strong,
+.atlas-decomposition-card small {
+  overflow-wrap: anywhere;
+}
+
+.atlas-decomposition-card strong {
+  color: var(--ca-text);
+}
+
+.atlas-decomposition-card small {
+  color: inherit;
+  line-height: 1.35;
+}
+
+.atlas-decomposition-card:hover,
+.atlas-decomposition-card:focus-visible,
+.atlas-decomposition-card.active {
+  border-color: var(--ca-secondary);
+  color: var(--ca-text);
+  background: color-mix(in srgb, var(--ca-secondary) 7%, var(--ca-surface));
+}
+
+.atlas-decomposition-card.active {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ca-secondary) 18%, transparent);
+}
+
+.atlas-decomposition-empty {
+  display: grid;
+  place-items: center;
+  min-height: 92px;
+  padding: var(--space-3);
+  border: 1px dashed var(--ca-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.atlas-decomposition-empty span {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-decomposition-empty p {
+  margin: var(--space-1) 0 0;
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.atlas-decomposition-more {
+  min-height: 44px;
+  padding: var(--space-2);
+  border: 0;
+  color: var(--ca-secondary);
+  background: transparent;
+  text-align: left;
+}
+
+.atlas-decomposition-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 8.2rem;
+  right: calc(-1 * var(--space-3) - 12px);
+  color: var(--ca-secondary);
+  pointer-events: none;
+}
+
+.atlas-selected-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  background: var(--ca-surface);
+}
+
+.atlas-selected-path h2,
+.atlas-selected-path p {
+  margin: 0;
+}
+
+.atlas-selected-path > div:first-child {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.atlas-selected-path-actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.atlas-selected-path-actions button,
+.atlas-record-inspector > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.atlas-spatial-map {
+  position: relative;
+  min-height: 38rem;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--ca-primary) 7%, transparent), transparent 48%),
+    linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    var(--ca-surface-raised);
+  background-size: auto, 24px 24px, 24px 24px, auto;
+}
+
+.atlas-spatial-map-inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.atlas-spatial-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.atlas-spatial-wires path {
+  fill: none;
+  stroke: var(--ca-secondary);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-spatial-center,
+.atlas-spatial-group,
+.atlas-spatial-items {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.atlas-spatial-center {
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: min(15rem, 28%);
+  min-height: 9.5rem;
+  padding: var(--space-4);
+  border: 3px solid var(--ca-primary);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ca-primary) 22%, transparent);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.atlas-spatial-center strong {
+  font-size: var(--font-size-xl);
+}
+
+.atlas-spatial-center span:last-child {
+  line-height: 1.35;
+}
+
+.atlas-spatial-group {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(15rem, 28%);
+  min-height: 78px;
+  padding: var(--space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  color: var(--ca-text);
+  background: var(--ca-surface);
+  text-align: left;
+}
+
+.atlas-spatial-group > svg {
+  color: var(--ca-secondary);
+}
+
+.atlas-spatial-group > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.atlas-spatial-group small {
+  color: var(--ca-secondary);
+}
+
+.atlas-spatial-expand {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--ca-border);
+  border-radius: 999px;
+  color: var(--ca-text);
+  font-size: var(--font-size-lg);
+}
+
+.atlas-spatial-group:hover,
+.atlas-spatial-group:focus-visible,
+.atlas-spatial-group--expanded {
+  border-color: var(--ca-secondary);
+  background: color-mix(in srgb, var(--ca-secondary) 7%, var(--ca-surface));
+}
+
+.atlas-spatial-slot-0 { top: 6%; left: 4%; }
+.atlas-spatial-slot-1 { top: 6%; left: 50%; transform: translateX(-50%); }
+.atlas-spatial-slot-2 { top: 43%; left: 3%; }
+.atlas-spatial-slot-3 { top: 43%; right: 3%; }
+.atlas-spatial-slot-4 { bottom: 6%; left: 18%; }
+.atlas-spatial-slot-5 { right: 18%; bottom: 6%; }
+
+.atlas-spatial-map--expanded .atlas-spatial-center {
+  left: 33%;
+}
+
+.atlas-spatial-map--expanded .atlas-spatial-slot-0 { top: 6%; left: 2%; }
+.atlas-spatial-map--expanded .atlas-spatial-slot-1 { top: 6%; left: 31%; transform: translateX(-50%); }
+.atlas-spatial-map--expanded .atlas-spatial-slot-2 { top: 43%; left: 1%; }
+.atlas-spatial-map--expanded .atlas-spatial-slot-3 { top: 43%; right: 43%; }
+.atlas-spatial-map--expanded .atlas-spatial-slot-4 { bottom: 6%; left: 10%; }
+.atlas-spatial-map--expanded .atlas-spatial-slot-5 { right: 45%; bottom: 6%; }
+
+.atlas-spatial-map--expanded .atlas-spatial-group--expanded {
+  top: 43%;
+  right: 28%;
+  left: auto;
+  transform: none;
+}
+
+.atlas-spatial-items {
+  top: 10%;
+  right: 2%;
+  display: grid;
+  align-content: center;
+  gap: var(--space-2);
+  width: 24%;
+  min-width: 13rem;
+  height: 80%;
+}
+
+.atlas-spatial-items > header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.atlas-spatial-items > header p,
+.atlas-spatial-items > header span {
+  margin: 0;
+}
+
+.atlas-spatial-items > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 58px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm);
+  color: var(--ca-text);
+  background: var(--ca-surface);
+  text-align: left;
+}
+
+.atlas-spatial-items > button > span {
+  display: grid;
+  min-width: 0;
+}
+
+.atlas-spatial-items > button small {
+  overflow: hidden;
+  color: var(--ca-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-spatial-items > button:hover,
+.atlas-spatial-items > button:focus-visible,
+.atlas-spatial-items > button.active {
+  border-color: var(--ca-secondary);
+}
+
+.atlas-spatial-items > .atlas-spatial-more {
+  border-style: dashed;
+  color: var(--ca-secondary);
+  background: transparent;
+}
+
+.atlas-spatial-controls {
+  position: absolute;
+  bottom: var(--space-3);
+  left: var(--space-3);
+  z-index: 3;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm);
+  background: var(--ca-surface);
+}
+
+.atlas-spatial-controls button {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-bottom: 1px solid var(--ca-border-subtle);
+  color: var(--ca-text);
+  background: transparent;
+}
+
+.atlas-spatial-controls button:last-child {
+  border-bottom: 0;
+}
+
+.atlas-spatial-overflow {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 3;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm);
+  color: var(--ca-secondary);
+  background: var(--ca-surface);
+}
+
+.atlas-record-inspector {
+  gap: var(--space-4);
+}
+
+.atlas-record-inspector > section {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--ca-border-subtle);
+}
+
+.atlas-record-inspector > section + section {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.atlas-record-inspector h3,
+.atlas-record-inspector > section p {
+  margin: 0;
+}
+
+.atlas-record-inspector h3 {
+  font-size: var(--font-size-base);
+}
+
+.atlas-inspector-count {
+  color: var(--ca-text-muted);
+}
+
+.atlas-inspector-count strong {
+  color: var(--ca-secondary);
+}
+
+@media (max-width: 1180px) {
+  .atlas-decomposition-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .atlas-decomposition-arrow {
+    display: none;
+  }
+
+  .atlas-focused-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .atlas-focused-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .atlas-focused-toolbar .atlas-view-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .atlas-focused-toolbar .atlas-view-tabs button {
+    justify-content: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-sm);
+  }
+
+  .atlas-focused-toolbar .atlas-view-tabs button svg {
+    display: none;
+  }
+
+  .atlas-focused-toolbar .atlas-filter-grid {
+    width: 100%;
+  }
+
+  .atlas-decomposition-board {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .atlas-decomposition-stage {
+    border-left: 3px solid var(--ca-secondary);
+  }
+
+  .atlas-decomposition-card {
+    min-height: 76px;
+  }
+
+  .atlas-selected-path,
+  .atlas-selected-path-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .atlas-selected-path-actions button {
+    width: 100%;
+  }
+
+  .atlas-spatial-map,
+  .atlas-spatial-map--expanded {
+    min-height: 0;
+    padding: var(--space-3);
+    overflow: visible;
+  }
+
+  .atlas-spatial-map-inner {
+    position: relative;
+    inset: auto;
+    display: grid;
+    gap: var(--space-3);
+    transform: none !important;
+  }
+
+  .atlas-spatial-wires {
+    display: none;
+  }
+
+  .atlas-spatial-center,
+  .atlas-spatial-group,
+  .atlas-spatial-items,
+  .atlas-spatial-map--expanded .atlas-spatial-center,
+  .atlas-spatial-map--expanded .atlas-spatial-group--expanded {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    min-width: 0;
+    transform: none;
+  }
+
+  .atlas-spatial-center {
+    min-height: 8rem;
+  }
+
+  .atlas-spatial-group {
+    min-height: 68px;
+  }
+
+  .atlas-spatial-items {
+    order: 20;
+    height: auto;
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--ca-secondary);
+  }
+
+  .atlas-spatial-controls {
+    display: none;
+  }
+
+  .atlas-spatial-overflow {
+    position: relative;
+    inset: auto;
+    width: calc(100% - 2 * var(--space-3));
+    margin: var(--space-3);
+  }
+
+  .atlas-record-inspector {
+    margin-top: var(--space-3);
+  }
+}
+
 .primary-nav button.active.nav-active {
   color: var(--ca-nav-active-text);
   border-color: transparent;
@@ -2857,6 +3528,8 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-left: calc(50% - 50vw);
   padding: 0 var(--space-4);
   gap: var(--space-2);
@@ -4344,4 +5017,33 @@ button.atlas-leverage-row:hover {
 
 .react-flow__controls-button:hover {
   background: rgba(37, 99, 235, 0.24);
+}
+
+/* Approved Atlas comps use the full workspace width and avoid a card within a card. */
+@media (min-width: 768px) {
+  .atlas-workspace {
+    width: calc(100vw - 2 * var(--space-4));
+    max-width: none;
+    margin-left: calc(50% - 50vw + var(--space-4));
+  }
+}
+
+.atlas-workspace.panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.atlas-workspace .atlas-map-command {
+  display: block;
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.atlas-workspace .atlas-map-command button.visually-hidden {
+  width: 1px;
 }

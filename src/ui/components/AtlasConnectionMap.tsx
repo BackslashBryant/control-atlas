@@ -1,4 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  IconAdjustments,
+  IconChevronRight,
+  IconClipboardCheck,
+  IconFileDescription,
+  IconFocusCentered,
+  IconLayersIntersect,
+  IconListDetails,
+  IconMinus,
+  IconPlus,
+  IconShield,
+} from "@tabler/icons-react";
 
 import type {
   AtlasConnectionGroup,
@@ -12,19 +24,41 @@ type AtlasConnectionMapProps = {
   groups: AtlasConnectionGroup[];
   expandedGroupId: string;
   compact: boolean;
+  selectedItemId: string;
   onExpandedGroupChange: (groupId: string) => void;
   onOpenList: () => void;
-  onRecenter: (nodeId: string) => void;
+  onSelectItem: (row: AtlasRelationshipRow) => void;
 };
 
 const MAX_GROUPS = 6;
-const MAX_DESKTOP_BRANCH_ITEMS = 10;
-const MAX_COMPACT_BRANCH_ITEMS = 6;
+const MAX_DESKTOP_BRANCH_ITEMS = 4;
+const MAX_COMPACT_BRANCH_ITEMS = 3;
 
-function itemLabel(item: AtlasRelationshipRow) {
-  return item.itemId === item.title
-    ? item.itemId
-    : `${item.itemId} — ${item.title}`;
+const OVERVIEW_POINTS = [
+  { x: 190, y: 105 },
+  { x: 500, y: 105 },
+  { x: 150, y: 310 },
+  { x: 850, y: 310 },
+  { x: 290, y: 520 },
+  { x: 710, y: 520 },
+];
+
+const EXPANDED_POINTS = [
+  { x: 135, y: 105 },
+  { x: 400, y: 105 },
+  { x: 120, y: 310 },
+  { x: 720, y: 310 },
+  { x: 210, y: 520 },
+  { x: 500, y: 520 },
+];
+
+function groupIcon(groupId: string) {
+  if (groupId.includes("Baseline")) return IconLayersIntersect;
+  if (groupId === "nistControl" || groupId === "baseControl") return IconShield;
+  if (groupId === "disa" || groupId === "stig") return IconAdjustments;
+  if (groupId === "assessment") return IconClipboardCheck;
+  if (groupId === "csf" || groupId === "sp171") return IconListDetails;
+  return IconFileDescription;
 }
 
 export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
@@ -33,12 +67,14 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     groups,
     expandedGroupId,
     compact,
+    selectedItemId,
     onExpandedGroupChange,
     onOpenList,
-    onRecenter,
+    onSelectItem,
   } = props;
   const triggerRefs = useRef(new Map<string, HTMLButtonElement>());
   const pendingFocusGroup = useRef("");
+  const [zoom, setZoom] = useState(1);
   const visibleGroups = selectAtlasOverviewGroups(groups, MAX_GROUPS);
   const expandedGroup = visibleGroups.find(
     (group) => group.id === expandedGroupId,
@@ -48,6 +84,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   const itemLimit = compact
     ? MAX_COMPACT_BRANCH_ITEMS
     : MAX_DESKTOP_BRANCH_ITEMS;
+  const visibleItems = expandedGroup?.items.slice(0, itemLimit) || [];
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -67,193 +104,158 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     window.setTimeout(() => triggerRefs.current.get(groupId)?.focus(), 0);
   }, [expandedGroupId]);
 
-  if (expandedGroup) {
-    const visibleItems = expandedGroup.items.slice(0, itemLimit);
-    return (
+  const wires = useMemo(() => {
+    const expanded = Boolean(expandedGroup);
+    const centerPoint = expanded ? { x: 400, y: 310 } : { x: 500, y: 310 };
+    const points = expanded ? EXPANDED_POINTS : OVERVIEW_POINTS;
+    return visibleGroups.map((group, index) => ({
+      id: group.id,
+      point:
+        expanded && group.id === expandedGroup?.id
+          ? { x: 720, y: 310 }
+          : points[index] || points[points.length - 1],
+      centerPoint,
+    }));
+  }, [expandedGroup, visibleGroups]);
+
+  return (
+    <div
+      aria-label={`${visibleGroups.length} connection groups around ${centerLabel}`}
+      className={`atlas-spatial-map${expandedGroup ? " atlas-spatial-map--expanded" : ""}`}
+      role="group"
+    >
       <div
-        aria-label={`Expanded ${expandedGroup.label} connections`}
-        className="atlas-bounded-map atlas-bounded-map--expanded"
-        role="group"
+        className="atlas-spatial-map-inner"
+        style={{ transform: `scale(${zoom})` }}
       >
-        <article className="atlas-map-center" data-map-node="true">
+        <svg
+          aria-hidden="true"
+          className="atlas-spatial-wires"
+          preserveAspectRatio="none"
+          viewBox={expandedGroup ? "0 0 1200 620" : "0 0 1000 620"}
+        >
+          {wires.map(({ id, point, centerPoint }) => (
+            <path
+              d={`M ${centerPoint.x} ${centerPoint.y} C ${(centerPoint.x + point.x) / 2} ${centerPoint.y}, ${(centerPoint.x + point.x) / 2} ${point.y}, ${point.x} ${point.y}`}
+              key={id}
+            />
+          ))}
+          {expandedGroup ? (
+            <path d="M 720 310 L 920 310" />
+          ) : null}
+        </svg>
+
+        <article className="atlas-spatial-center" data-map-node="true">
           <span className="atlas-map-card-kicker">Selected record</span>
           <strong>{centerLabel}</strong>
           <span>{centerTitle}</span>
         </article>
 
-        <div aria-hidden="true" className="atlas-map-connector" />
-
-        <section className="atlas-map-branch">
-          <header>
-            <div>
-              <span className="atlas-map-card-kicker">Connection group</span>
-              <h3>{expandedGroup.label}</h3>
-              <p>{expandedGroup.description}</p>
-            </div>
+        {visibleGroups.map((group, index) => {
+          const GroupIcon = groupIcon(group.id);
+          const expanded = group.id === expandedGroup?.id;
+          return (
             <button
-              aria-expanded="true"
-              className="secondary quiet"
-              onClick={() => {
-                pendingFocusGroup.current = expandedGroup.id;
-                onExpandedGroupChange("");
+              aria-expanded={expanded}
+              className={`atlas-spatial-group atlas-spatial-slot-${index}${expanded ? " atlas-spatial-group--expanded" : ""}`}
+              data-map-node="true"
+              key={group.id}
+              onClick={(event) => {
+                triggerRefs.current.set(group.id, event.currentTarget);
+                if (expanded) {
+                  pendingFocusGroup.current = group.id;
+                  onExpandedGroupChange("");
+                } else {
+                  onExpandedGroupChange(group.id);
+                }
+              }}
+              ref={(trigger) => {
+                if (trigger) triggerRefs.current.set(group.id, trigger);
+                else triggerRefs.current.delete(group.id);
               }}
               type="button"
             >
-              Back to groups
+              <GroupIcon aria-hidden="true" size={28} stroke={1.7} />
+              <span>
+                <strong>{group.label}</strong>
+                <small>{group.items.length} related</small>
+              </span>
+              <span aria-hidden="true" className="atlas-spatial-expand">
+                {expanded ? "−" : "+"}
+              </span>
             </button>
-          </header>
-          <div className="atlas-map-branch-grid">
-            {visibleItems.map((item) => (
-              <button
-                className="atlas-map-item-card"
-                data-map-node="true"
-                key={`${item.edge.id}:${item.counterpart.id}`}
-                onClick={() => onRecenter(item.counterpart.id)}
-                title={`Recenter the Atlas on ${itemLabel(item)}`}
-                type="button"
-              >
-                <strong>{item.itemId}</strong>
-                <span>{item.title}</span>
-                <small>Recenter map</small>
+          );
+        })}
+
+        {expandedGroup ? (
+          <section
+            aria-label={`${expandedGroup.label} records`}
+            className="atlas-spatial-items"
+          >
+            <header>
+              <p className="eyebrow">{expandedGroup.label}</p>
+              <span>{expandedGroup.items.length} records</span>
+            </header>
+            {visibleItems.map((row) => {
+              const selected = row.counterpart.id === selectedItemId;
+              return (
+                <button
+                  aria-pressed={selected}
+                  className={selected ? "active" : ""}
+                  key={`${row.edge.id}:${row.counterpart.id}`}
+                  onClick={() => onSelectItem(row)}
+                  type="button"
+                >
+                  <span>
+                    <strong>{row.itemId}</strong>
+                    <small>{row.title}</small>
+                  </span>
+                  <IconChevronRight aria-hidden="true" size={18} />
+                </button>
+              );
+            })}
+            {expandedGroup.items.length > visibleItems.length ? (
+              <button className="atlas-spatial-more" onClick={onOpenList} type="button">
+                + {expandedGroup.items.length - visibleItems.length} more in List
               </button>
-            ))}
-          </div>
-          {expandedGroup.items.length > visibleItems.length ? (
-            <button className="link-action" onClick={onOpenList} type="button">
-              + {expandedGroup.items.length - visibleItems.length} more in List
-            </button>
-          ) : null}
-        </section>
-        <p aria-live="polite" className="visually-hidden">
-          {expandedGroup.label} expanded. {visibleItems.length} of{" "}
-          {expandedGroup.items.length} connections are visible.
-        </p>
+            ) : null}
+          </section>
+        ) : null}
       </div>
-    );
-  }
 
-  const regions = [
-    {
-      id: "upstream",
-      label: "Where this comes from",
-      groups: visibleGroups.filter((group) => group.placement === "upstream"),
-    },
-    {
-      id: "lateral",
-      label: "Equivalent and related requirements",
-      groups: visibleGroups.filter((group) => group.placement === "lateral"),
-    },
-    {
-      id: "downstream",
-      label: "What this leads to",
-      groups: visibleGroups.filter((group) => group.placement === "downstream"),
-    },
-  ].filter((region) => region.groups.length > 0);
-
-  return (
-    <div
-      aria-label={`${visibleGroups.length} connection groups around ${centerLabel}`}
-      className="atlas-bounded-map"
-      role="group"
-    >
-      {regions
-        .filter((region) => region.id === "upstream")
-        .map((region) => (
-          <MapRegion
-            key={region.id}
-            label={region.label}
-            placement={region.id}
-            groups={region.groups}
-            registerTrigger={(groupId, trigger) => {
-              if (trigger) triggerRefs.current.set(groupId, trigger);
-              else triggerRefs.current.delete(groupId);
-            }}
-            onExpand={(groupId, trigger) => {
-              triggerRefs.current.set(groupId, trigger);
-              onExpandedGroupChange(groupId);
-            }}
-          />
-        ))}
-
-      <article className="atlas-map-center" data-map-node="true">
-        <span className="atlas-map-card-kicker">Selected record</span>
-        <strong>{centerLabel}</strong>
-        <span>{centerTitle}</span>
-      </article>
-
-      {regions
-        .filter((region) => region.id !== "upstream")
-        .map((region) => (
-          <MapRegion
-            key={region.id}
-            label={region.label}
-            placement={region.id}
-            groups={region.groups}
-            registerTrigger={(groupId, trigger) => {
-              if (trigger) triggerRefs.current.set(groupId, trigger);
-              else triggerRefs.current.delete(groupId);
-            }}
-            onExpand={(groupId, trigger) => {
-              triggerRefs.current.set(groupId, trigger);
-              onExpandedGroupChange(groupId);
-            }}
-          />
-        ))}
+      <div aria-label="Map zoom" className="atlas-spatial-controls" role="group">
+        <button
+          aria-label="Zoom in"
+          disabled={zoom >= 1.1}
+          onClick={() => setZoom((current) => Math.min(1.1, current + 0.1))}
+          type="button"
+        >
+          <IconPlus aria-hidden="true" size={18} />
+        </button>
+        <button
+          aria-label="Zoom out"
+          disabled={zoom <= 0.9}
+          onClick={() => setZoom((current) => Math.max(0.9, current - 0.1))}
+          type="button"
+        >
+          <IconMinus aria-hidden="true" size={18} />
+        </button>
+        <button aria-label="Reset zoom" onClick={() => setZoom(1)} type="button">
+          <IconFocusCentered aria-hidden="true" size={18} />
+        </button>
+      </div>
 
       {groups.length > visibleGroups.length ? (
-        <button className="link-action atlas-map-overflow" onClick={onOpenList} type="button">
+        <button className="atlas-spatial-overflow" onClick={onOpenList} type="button">
           + {groups.length - visibleGroups.length} more connection groups in List
         </button>
       ) : null}
       <p aria-live="polite" className="visually-hidden">
-        {visibleGroups.length} connection groups and{" "}
-        {visibleGroups.reduce((total, group) => total + group.items.length, 0)}{" "}
-        connections are visible.
+        {visibleGroups.length} connection groups are visible.
+        {expandedGroup
+          ? ` ${expandedGroup.label} is expanded with ${visibleItems.length} records visible.`
+          : " Select a group to reveal its records."}
       </p>
     </div>
-  );
-}
-
-function MapRegion(props: {
-  label: string;
-  placement: string;
-  groups: AtlasConnectionGroup[];
-  onExpand: (groupId: string, trigger: HTMLButtonElement) => void;
-  registerTrigger: (groupId: string, trigger: HTMLButtonElement | null) => void;
-}) {
-  return (
-    <section
-      aria-label={props.label}
-      className={`atlas-map-region atlas-map-region--${props.placement}`}
-    >
-      <h3>{props.label}</h3>
-      <div className="atlas-map-region-grid">
-        {props.groups.map((group) => (
-          <button
-            aria-expanded="false"
-            className="atlas-map-group-card"
-            data-map-node="true"
-            key={group.id}
-            ref={(trigger) => props.registerTrigger(group.id, trigger)}
-            onClick={(event) => props.onExpand(group.id, event.currentTarget)}
-            type="button"
-          >
-            <strong>{group.label}</strong>
-            <span>
-              {group.items.filter(
-                (item) => item.edge.publication_status === "published",
-              ).length}{" "}
-              published
-              {group.items.some(
-                (item) => item.edge.publication_status !== "published",
-              )
-                ? ` + ${group.items.filter((item) => item.edge.publication_status !== "published").length} candidate`
-                : ""}
-            </span>
-            <small>Open group</small>
-          </button>
-        ))}
-      </div>
-    </section>
   );
 }

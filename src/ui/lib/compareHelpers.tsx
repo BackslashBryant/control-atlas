@@ -33,7 +33,7 @@ export function PublicationStatusBadge(props: { publicationStatus?: string; prov
     <span className={`badge tone-${inferred ? 'warning' : 'success'}`}>
       <ProvenanceTerm
         kind="publication"
-        label={inferred ? 'Inferred link' : 'Official link'}
+        label={inferred ? 'Candidate mapping' : 'Published mapping'}
         value={inferred ? 'candidate' : 'published'}
       />
     </span>

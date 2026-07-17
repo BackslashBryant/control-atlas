@@ -21,7 +21,7 @@ export type CompareWorkbench =
   | "baseline-compare"
   | "threat-chain";
 
-export type RelationshipViewMode = "path" | "map" | "list";
+export type RelationshipViewMode = "path" | "map" | "list" | "purpose" | "rmf";
 
 export type CompareViewMode = "map" | "list";
 
@@ -192,6 +192,8 @@ function normalizeRelationshipView(value: string): RelationshipViewMode | "" {
   if (value === "path") return "path";
   if (value === "list" || value === "table") return "list";
   if (value === "map") return "map";
+  if (value === "purpose") return "purpose";
+  if (value === "rmf") return "rmf";
   return "";
 }
 
@@ -503,6 +505,10 @@ export function serializeViewState(state: ViewState): string {
       params.set("relationshipView", "map");
     } else if (state.relationshipView === "list") {
       params.set("relationshipView", "list");
+    } else if (state.relationshipView === "purpose") {
+      params.set("relationshipView", "purpose");
+    } else if (state.relationshipView === "rmf") {
+      params.set("relationshipView", "rmf");
     }
     setIfValue(params, "relationshipType", state.relationshipType);
     setIfValue(params, "provenance", state.provenance);

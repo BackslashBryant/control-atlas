@@ -9,7 +9,7 @@
 
 ## Current Status
 
-Release candidate `v1.0.0-rc.1` remains the published release. A v1.0 release-readiness branch now contains the landing/search remediation and bounded Atlas rebuild. Full local precommit passes, including 120 Playwright tests passed and 1 skipped; the branch is not ready to merge until CI and post-deploy workflow/performance evidence pass. Creating or publishing `v1.0.0` requires separate owner approval.
+Release candidate `v1.0.0-rc.1` remains the published release. The v1.0 release-readiness branch contains the landing/search remediation and approved-composition Atlas rebuild. Full local precommit passes, including 127 Playwright tests passed and 1 skipped. Push, merge, deployment, and post-deploy workflow/performance evidence remain owner-gated. Creating or publishing `v1.0.0` requires separate owner approval.
 
 ## Phase 0 Development Readiness
 
@@ -36,10 +36,10 @@ Release candidate `v1.0.0-rc.1` remains the published release. A v1.0 release-re
 
 ## Public-shell release gate (Epic 7+)
 
-- [x] Local `npm run precommit` passes on the release-readiness worktree (120 Playwright passed, 1 skipped)
+- [x] Local `npm run precommit` passes on the release-readiness branch (127 Playwright passed, 1 skipped)
 - [x] Targeted desktop and mobile novice/expert Atlas workflows pass, including zero connections, bounded Map/inspector layout, and List fallback
 - [ ] Focused Atlas mobile Lighthouse meets the recorded release threshold
-- [ ] Manual keyboard, 200% zoom, responsive, and reduced-motion checks are recorded
+- [x] Keyboard, 200% equivalent reflow, responsive, and reduced-motion checks are recorded in the July 17 local evidence audit
 - [ ] Human screen-reader and real-device gaps are either completed or explicitly accepted as residual risk
 - [ ] Live Pages audit is updated with post-deploy evidence
 
