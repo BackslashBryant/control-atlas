@@ -53,7 +53,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <div className="search-input search-overlay-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
-                aria-label="Search records and glossary"
+                aria-label="Search records"
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
@@ -77,7 +77,8 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
             <p className="field-hint">
-              Type to search records. Press Enter to open full Explore results.
+              Type to search records. Press Enter for templates, terms, and
+              official resources in Explore.
             </p>
           ) : results.length === 0 ? (
             <p className="field-hint">No records match &quot;{query.trim()}&quot;.</p>

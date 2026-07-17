@@ -21,6 +21,11 @@ export function HomePage(props: HomePageProps) {
           <h1 className="landing-brand-name">Control Atlas</h1>
         </div>
         <BrandFlourish />
+        <p className="landing-tagline">
+          The public map for federal cyber compliance. Search controls, trace
+          framework connections, and build blank working documents without a
+          login or upload.
+        </p>
       </div>
 
       <div

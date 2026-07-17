@@ -10,6 +10,7 @@ import {
   isLowCatalogCoverage,
 } from "../lib/catalogCoverage";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
+import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -94,6 +95,21 @@ export function ExplorePage(props: {
     () => searchGlossary(state.query),
     [state.query],
   );
+  const resourceMatches = useMemo(
+    () =>
+      hasFilters
+        ? { templates: [], artifacts: [] }
+        : searchExploreResources(state.query, {
+            templates: bundle.templateRegistry.templates || [],
+            artifacts: bundle.officialArtifactRegistry?.artifacts || [],
+          }),
+    [
+      bundle.officialArtifactRegistry,
+      bundle.templateRegistry,
+      hasFilters,
+      state.query,
+    ],
+  );
   const hasQuery = Boolean(state.query.trim());
 
   const catalogCoverage = useMemo(
@@ -142,7 +158,10 @@ export function ExplorePage(props: {
     );
   }, [visibleDocumentRows]);
   const hasVisibleResults =
-    visibleDocumentRows.length > 0 || glossaryMatches.length > 0;
+    visibleDocumentRows.length > 0 ||
+    glossaryMatches.length > 0 ||
+    resourceMatches.templates.length > 0 ||
+    resourceMatches.artifacts.length > 0;
 
   // Bound the DOM: an empty query matches the whole library (9k+ records).
   // Open every group only for small result sets; always cap the cards
@@ -150,6 +169,8 @@ export function ExplorePage(props: {
   const GROUP_RENDER_CAP = 5;
   const openAllGroups = visibleDocumentRows.length <= 10;
   const defaultOpenGroups = [
+    ...(resourceMatches.templates.length ? ["Templates"] : []),
+    ...(resourceMatches.artifacts.length ? ["Official resources"] : []),
     ...(glossaryMatches.length ? ["Glossary"] : []),
     ...(openAllGroups
       ? Object.keys(groupedDocuments)
@@ -172,7 +193,7 @@ export function ExplorePage(props: {
               Start guided path
             </button>
           }
-          summary="Search controls, baselines, CCIs, STIGs, terms, templates, playbooks, and sources. Open a record to see what it means and how it connects."
+          summary="Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources. Open a result to see what it is and where it comes from."
           title="Search everything in one place"
         />
 
@@ -302,6 +323,87 @@ export function ExplorePage(props: {
             tabIndex={-1}
             type="multiple"
           >
+            {resourceMatches.templates.length ? (
+              <DisclosurePanel
+                title={`Templates (${resourceMatches.templates.length})`}
+                value="Templates"
+              >
+                <div className="stack">
+                  {resourceMatches.templates.map((template: any) => (
+                    <article className="result-card" key={template.id}>
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">Blank working template</p>
+                          <h3>{template.title}</h3>
+                        </div>
+                        <Badge tone="info">{template.classification}</Badge>
+                      </div>
+                      <p className="result-summary">{template.summary}</p>
+                      <div className="card-actions">
+                        <button
+                          className="primary"
+                          onClick={() =>
+                            onNavigate("templates", {
+                              templateType: template.templateType,
+                            })
+                          }
+                          type="button"
+                        >
+                          Open template
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            ) : null}
+            {resourceMatches.artifacts.length ? (
+              <DisclosurePanel
+                title={`Official resources (${resourceMatches.artifacts.length})`}
+                value="Official resources"
+              >
+                <div className="stack">
+                  {resourceMatches.artifacts.map((artifact: any) => (
+                    <article className="result-card" key={artifact.id}>
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">Official resource</p>
+                          <h3>{artifact.title}</h3>
+                        </div>
+                        <Badge
+                          tone={
+                            artifact.classification === "official_current"
+                              ? "success"
+                              : "warning"
+                          }
+                        >
+                          {displayNameFor(
+                            "compatibility_level",
+                            artifact.classification,
+                          )}
+                        </Badge>
+                      </div>
+                      <p className="result-summary">{artifact.summary}</p>
+                      <p className="result-support">
+                        {artifact.version ? `Version: ${artifact.version}` : ""}
+                      </p>
+                      {artifact.href ? (
+                        <div className="card-actions">
+                          <a
+                            className="primary button-link"
+                            href={artifact.href}
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            Open official source
+                          </a>
+                        </div>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            ) : null}
             {glossaryMatches.length ? (
               <DisclosurePanel
                 title={`Glossary (${glossaryMatches.length})`}

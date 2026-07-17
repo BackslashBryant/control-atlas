@@ -6,6 +6,32 @@ function normalize(value) {
     .toLowerCase();
 }
 
+const SEARCH_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "for",
+  "in",
+  "of",
+  "on",
+  "or",
+  "the",
+  "to",
+  "with",
+]);
+
+function normalizeLibrarySearchQuery(value) {
+  const normalized = String(value || "")
+    .replace(/poa\s*&\s*m/gi, "poam")
+    .replace(/poa\s+and\s+m/gi, "poam");
+  const terms = normalized.match(/[a-zA-Z0-9][a-zA-Z0-9.()-]*/g) || [];
+  return terms
+    .filter(
+      (term) => term.length > 1 && !SEARCH_STOP_WORDS.has(term.toLowerCase()),
+    )
+    .join(" ");
+}
+
 // Practitioner notation for control enhancements uses parentheses, e.g.
 // "AC-2(1)" or "AC-2 (1) (a)", but the underlying data (item_id) stores
 // enhancements with dot notation, e.g. "AC-2.1". This converts an already
@@ -848,9 +874,14 @@ export function createFederalGraphRuntime(dataset) {
 
       if (libraryIndexes.length > 0) {
         const merged = new Map();
-        const searchNeedle = aliasNeedle !== needle ? aliasNeedle : query;
+        const searchNeedle = normalizeLibrarySearchQuery(
+          aliasNeedle !== needle ? aliasNeedle : query,
+        );
+        if (!searchNeedle) return [];
         for (const index of libraryIndexes) {
-          for (const result of index.search(searchNeedle)) {
+          for (const result of index.search(searchNeedle, {
+            combineWith: "AND",
+          })) {
             const previous = merged.get(result.id);
             if (!previous || result.score > previous.score) {
               merged.set(result.id, result);
@@ -865,14 +896,24 @@ export function createFederalGraphRuntime(dataset) {
       }
 
       if (miniSearch) {
-        const results = miniSearch.search(
+        const searchNeedle = normalizeLibrarySearchQuery(
           aliasNeedle !== needle ? aliasNeedle : query,
         );
+        if (!searchNeedle) return [];
+        const results = miniSearch.search(searchNeedle, { combineWith: "AND" });
         return results
           .map((result) => libraryDocumentById.get(result.id))
           .filter((doc) => doc && matchesLibraryFacet(doc, filters))
           .slice(0, 100);
       }
+
+      const searchTerms = normalizeLibrarySearchQuery(
+        aliasNeedle !== needle ? aliasNeedle : query,
+      )
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+      if (searchTerms.length === 0) return [];
 
       return candidates
         .map((document) => {
@@ -882,8 +923,15 @@ export function createFederalGraphRuntime(dataset) {
             document.plain_language_summary || "",
           );
           const description = normalize(document.description);
-          const score =
-            itemId === needle || itemId === aliasNeedle
+          const searchableText = [itemId, title, plainLanguage, description].join(
+            " ",
+          );
+          const matchesAllTerms = searchTerms.every((term) =>
+            searchableText.includes(term),
+          );
+          const score = !matchesAllTerms
+            ? 99
+            : itemId === needle || itemId === aliasNeedle
               ? 0
               : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
                 ? 1

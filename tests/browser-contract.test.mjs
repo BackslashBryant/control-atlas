@@ -30,7 +30,7 @@ test('shell identifies Control Atlas and boots a React root', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /Ctrl\+Alt\+Comply/);
   assert.match(html, /The public map for federal cyber compliance/);
-  assert.match(html, /Search controls, trace source-backed links/);
+  assert.match(html, /Search controls, trace framework connections/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -194,6 +194,13 @@ test('shared shell exposes visible search access and valid intent-card markup', 
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
 });
 
+test('landing page states what the product is before asking for action', () => {
+  const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
+  assert.match(homePage, /The public map for federal cyber compliance/);
+  assert.match(homePage, /Search controls, trace\s+framework connections/);
+  assert.doesNotMatch(homePage, /source-backed/i);
+});
+
 test('route interactions keep canonical context and synchronize visible state', () => {
   const searchOverlay = readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8');
   const atlasMap = readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8');
@@ -202,6 +209,8 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(atlasMap, /setSelectedNodeId\(center\?\.centerNodeId \?\? null\)/);
   assert.match(atlasMap, /setMapSearchDraft\(state\.relationshipSearch \|\| ""\)/);
   assert.match(explore, /visibleDocumentRows\.length > 0/);
+  assert.match(explore, /searchExploreResources/);
+  assert.match(explore, /Official resources/);
   assert.match(explore, /No matching connected records found/);
 });
 
