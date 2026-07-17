@@ -87,6 +87,14 @@ test('artifact nexus registries are internally consistent', async (t) => {
     );
     assert.equal(currentSchemas.length, 11, 'all eleven dated FedRAMP 2026 schemas must be cataloged');
     assert.ok(currentSchemas.every((artifact) => artifact.download_url?.endsWith('.json')));
+    for (const id of [
+      'fedramp-2026-consolidated-rules-json',
+      'fedramp-2026-rules-schema',
+      'fedramp-2026-schema-index',
+    ]) {
+      const artifact = artifactsRegistry.artifacts.find((item) => item.artifact_id === id);
+      assert.equal(artifact?.classification, 'official_current', `${id} must be current source truth`);
+    }
 
     const legacyIds = new Set(
       artifactsRegistry.artifacts
@@ -99,13 +107,20 @@ test('artifact nexus registries are internally consistent', async (t) => {
       'fedramp-legacy-ssp',
       'fedramp-legacy-crm-cis',
       'fedramp-legacy-integrated-inventory',
+      'fedramp-legacy-cryptographic-modules',
       'fedramp-legacy-poam',
       'fedramp-legacy-sap',
       'fedramp-legacy-sar',
       'fedramp-legacy-conmon-deliverables',
+      'fedramp-legacy-oscal-automation-archive',
     ]) {
       assert.ok(legacyIds.has(id), `missing legacy artifact: ${id}`);
     }
+    const oscalArchive = artifactsRegistry.artifacts.find(
+      (artifact) => artifact.artifact_id === 'fedramp-legacy-oscal-automation-archive',
+    );
+    assert.match(oscalArchive.provenance_note, /GSA|official/i);
+    assert.match(oscalArchive.license_or_use_note, /CC0|public domain/i);
   });
 
   await t.test('foundational DCSA, STIG, PPSM, OSCAL, and eMASS sources are present', () => {

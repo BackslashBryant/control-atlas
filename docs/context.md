@@ -10,7 +10,7 @@
 
 ## Current Objective
 
-**Maintenance** — SPR-20260708 Performance + Trust Remediation shipped July 9, 2026. Explore/search no longer eagerly loads the full graph; library search is federated via manifest + catalog shards; live GitHub Pages smoke runs post-deploy; home trust links, Compare coverage chips, and polish backlog items are in `main`.
+**Maintenance** — Newbie-Reframe Phase 7 is the current release. Its July 16 FedRAMP hardening ingests the official structured 2026 rules, exposes the complete legacy library, connects historical artifacts to current rules/schemas/profile paths, and preserves 12 A-grade Control Atlas companions with explicit authority and import boundaries.
 
 **Active sprint:** None — see [`docs/Plan.md`](Plan.md).
 
@@ -18,6 +18,7 @@
 
 - Epics 0-10 baseline through Map Foundation v4.0 (see Plan.md epic table)
 - **SPR-20260708 remediation:** deferred graph on Explore, sharded `library-search-manifest` + per-catalog shards, `bootstrap-payload` / `load-resilience` E2E, home About/Sources trust row, header search draft clear, Compare coverage chips, mobile overflow fixes, live Pages smoke workflow (`.github/workflows/pages-live-smoke.yml`), federated search shard refresh on lazy load, connections-only filter triggers on-demand graph
+- **Newbie-Reframe Phase 7:** 40 official artifacts, 11 supporting tools, 12 companions, FedRAMP rules `2026.07.14.01`, 27 indexed legacy downloads, ten explicit legacy-to-current transitions, and official-workbook FedRAMP baseline ingestion
 
 ## Adopted Baseline
 

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-16T10:59:41.325Z",
+  "generated_at": "2026-07-17T00:30:50.184Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -425,30 +425,57 @@
       "finding_count": 0
     },
     {
+      "source_id": "fedramp-2026-rules",
+      "display_name": "FedRAMP Consolidated Rules for 2026",
+      "display_group": "Other",
+      "frameworks": [
+        "fedramp-20x",
+        "fedramp-rev5"
+      ],
+      "owner": "FedRAMP",
+      "version": "2026.07.14.01",
+      "sync_model": "auto_synced",
+      "last_checked": "2026-07-16",
+      "last_imported": "2026-07-16",
+      "hash": "sha256:457b41ffaf36dfc603918615e2cefbb22e26ad358f367443f9d8f799c4410292",
+      "stale_after_days": 45,
+      "retrieved_at": "2026-07-16",
+      "artifact_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json",
+      "artifact_type": "json",
+      "checksum": "sha256:d8e06bd19d1b91093a22eebe360f7c72024e11d0bcaae87178c987a75ab5b8af",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": false,
+      "node_count": 0,
+      "relationship_count": 0,
+      "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
       "source_id": "fedramp-rev5",
-      "display_name": "FedRAMP Rev. 5",
+      "display_name": "FedRAMP Rev. 5 (legacy transition)",
       "display_group": "Other",
       "frameworks": [
         "fedramp-rev5",
         "nist-800-53"
       ],
       "owner": "FedRAMP",
-      "version": "2026-06-09",
+      "version": "Legacy Rev5 security controls baseline workbook",
       "sync_model": "auto_synced",
       "last_checked": "2026-07-16",
       "last_imported": "2026-07-16",
-      "hash": "sha256:171cd1ef564eae8eefcc8ac578305da3841ecfc453669bcf7dadf80559f7924b",
+      "hash": "sha256:a2bb86150a66f34a3c70e68c6361cd3d85fd46b92c3c474be6bc007dc355d860",
       "stale_after_days": 45,
-      "retrieved_at": "2026-06-09",
-      "artifact_url": "https://www.fedramp.gov/rev5/documents-templates/",
-      "artifact_type": "oscal_json",
-      "checksum": "sha256:catalog_fedramp_rev5_placeholder_checksum",
+      "retrieved_at": "2026-07-16",
+      "artifact_url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+      "artifact_type": "spreadsheet",
+      "checksum": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 4,
-      "relationship_count": 955,
-      "evidence_count": 955,
+      "relationship_count": 1045,
+      "evidence_count": 1045,
       "finding_count": 0
     },
     {

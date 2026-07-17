@@ -14,6 +14,7 @@ export const RETRIEVAL_METHODS = new Set(['download', 'api', 'committed_artifact
 export const ARTIFACT_TYPES = new Set([
   'publication',
   'spreadsheet',
+  'json',
   'oscal_json',
   'oscal_xml',
   'api',

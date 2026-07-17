@@ -108,3 +108,40 @@ test('evidence operations and dense control cross-references are separated', () 
   assert.doesNotMatch(evidence.headers.join('|'), /CCI|STIG/, 'dense mappings do not belong in the operating view');
   assert.deepEqual(references.headers, ['Control ID', 'Control Title', 'Related CCIs', 'Related STIG/SRG']);
 });
+
+test('FedRAMP-related companions state the current 2026 transition boundary', () => {
+  const affected = [
+    'security_plan_starter',
+    'implementation_statement_worksheet',
+    'evidence_expectation_matrix',
+    'inheritance_worksheet',
+    'reciprocity_checklist',
+    'poam_starter',
+    'assessment_planning_worksheet',
+    'conmon_calendar',
+    'hardware_baseline',
+    'software_baseline',
+  ];
+  for (const templateType of affected) {
+    const section = build(templateType).sections.find(
+      (candidate) => candidate.heading === 'Current FedRAMP 2026 Context',
+    );
+    assert.ok(section, `${templateType} needs current FedRAMP context`);
+  }
+  assert.match(
+    build('security_plan_starter').sections.find((section) => section.heading === 'Current FedRAMP 2026 Context').content,
+    /Certification Package Overview replaces the historical Rev5 SSP/i,
+  );
+  assert.match(
+    build('assessment_planning_worksheet').sections.find((section) => section.heading === 'Current FedRAMP 2026 Context').content,
+    /does not require a separate SAP or SAR for either 20x or Rev5/i,
+  );
+  assert.match(
+    build('poam_starter').sections.find((section) => section.heading === 'Current FedRAMP 2026 Context').content,
+    /not automatically an agency POA&M/i,
+  );
+  assert.match(
+    build('hardware_baseline').sections.find((section) => section.heading === 'Current FedRAMP 2026 Context').content,
+    /machine-readable information-resource data.*code used to generate it/i,
+  );
+});

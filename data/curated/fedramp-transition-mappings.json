@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0",
+  "interpretation_notice": "Control Atlas curates these relationships to connect historical FedRAMP files to the current rules. The FedRAMP rules dataset remains the source of truth; a relationship is not a FedRAMP determination or a claim that every historical field has a one-to-one replacement.",
+  "official_links": {
+    "current_rules": "https://www.fedramp.gov/2026/",
+    "machine_readable_source": "https://github.com/FedRAMP/rules",
+    "source_data_guidance": "https://www.fedramp.gov/2026/sources/",
+    "schema_index": "https://www.fedramp.gov/schemas/",
+    "changelog": "https://www.fedramp.gov/2026/changelog/",
+    "timeline": "https://www.fedramp.gov/2026/timeline/",
+    "legacy_reference": "https://www.fedramp.gov/legacy/",
+    "agency_poam_guidance": "https://www.fedramp.gov/2026/agencies/use/ongoing/poams/"
+  },
+  "milestones": [
+    {
+      "date": "2026-07-04",
+      "label": "Optional early adoption",
+      "meaning": "Stakeholders should begin incremental adoption or transition to the Consolidated Rules for 2026."
+    },
+    {
+      "date": "2026-07-28",
+      "label": "FedRAMP Ready becomes legacy",
+      "meaning": "FedRAMP Ready submissions stop; providers are directed toward FedRAMP 20x Class A."
+    },
+    {
+      "date": "2026-08-03",
+      "label": "20x Class A pipeline opens",
+      "meaning": "FedRAMP begins accepting applications for 20x Class A certifications."
+    },
+    {
+      "date": "2026-08-31",
+      "label": "20x Class B and C pipeline opens",
+      "meaning": "FedRAMP begins accepting applications for 20x Class B and C certifications."
+    },
+    {
+      "date": "2027-01-01",
+      "label": "Mandatory adoption",
+      "meaning": "The Consolidated Rules for 2026 take mandatory effect, subject to rule-specific applicability and effective dates."
+    },
+    {
+      "date": "2027-06-11",
+      "label": "End of new Rev5 certifications",
+      "meaning": "FedRAMP stops accepting applications for new Rev5 certifications."
+    }
+  ],
+  "current_artifact_rules": {
+    "fedramp-2026-consolidated-rules-json": [],
+    "fedramp-2026-rules-schema": [],
+    "fedramp-2026-schema-index": ["FRC-CSO-JSN"],
+    "fedramp-schema-accepted-vulnerability-info-2026-06-24": ["VER-RPT-AVI"],
+    "fedramp-schema-advisor-information-2026-06-24": ["MKT-CAS-WEB"],
+    "fedramp-schema-assessor-information-2026-06-24": ["MKT-IAS-WEB"],
+    "fedramp-schema-certification-package-overview-2026-06-24": ["CDS-CSO-PUB", "CDS-CSO-SVC", "CDS-CSO-UTC", "FRC-CSO-PKG", "MAS-CSO-TPR", "SCG-CSO-RSC"],
+    "fedramp-schema-common-definitions-2026-06-24": [],
+    "fedramp-schema-historical-ver-activity-2026-06-24": ["VER-TFR-MRH"],
+    "fedramp-schema-incident-report-2026-06-24": ["IEC-CSO-IIR", "IEC-CSO-OIR", "IEC-CSO-FIR", "IEC-CSO-EFI"],
+    "fedramp-schema-ongoing-certification-report-2026-06-24": ["CCM-OCR-AVL"],
+    "fedramp-schema-security-decision-record-2026-06-24": ["SDR-CSO-FRR"],
+    "fedramp-schema-significant-change-notification-2026-06-24": ["SCN-CSO-EVA", "SCN-CSO-INF"],
+    "fedramp-schema-vulnerability-detail-report-2026-06-24": ["VER-RPT-PER", "VER-RPT-VDT"]
+  },
+  "legacy_mappings": [
+    {
+      "legacy_artifact_id": "fedramp-legacy-assets-2026-transition",
+      "relationship": "reference_collection",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-2026-consolidated-rules-json", "fedramp-2026-schema-index"],
+      "rule_ids": ["FRC-CSO-PKG", "FRC-CSO-JSN"],
+      "summary": "The archive preserves the former document set. It is not a current package checklist or submission standard; the applicable 2026 rules and schemas now govern what must be supplied.",
+      "action": "Keep the historical files available for migration and comparison, then select the applicable 20x or Rev5 rules and current schemas before authoring or submitting anything."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-package-checklist",
+      "relationship": "replaced_by_current_package_rules",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24", "fedramp-schema-security-decision-record-2026-06-24", "fedramp-schema-ongoing-certification-report-2026-06-24"],
+      "rule_ids": ["FRC-CSO-PKG", "CPO-CSO-OVR", "SDR-CSO-FRR", "CCM-OCR-AVL"],
+      "summary": "The historical workbook is no longer the authoritative definition of package completeness. FRC-CSO-PKG now points to the Certification Package Overview, Security Decision Record, and Ongoing Certification Report.",
+      "action": "Use the current package rule and its related schemas as the checklist; use the workbook only to compare or migrate an older package."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-ssp",
+      "relationship": "core_document_replaced_for_rev5",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24", "fedramp-schema-security-decision-record-2026-06-24"],
+      "rule_ids": ["CPO-CSO-OVR", "SDR-CSO-FRR", "FRC-CSO-PKG"],
+      "summary": "CPO-CSO-OVR explicitly says the Certification Package Overview replaces the historical Rev5 SSP, excluding appendices. Current implementation, verification, validation, and assessment information belongs in the Security Decision Record and related package data.",
+      "action": "Do not start a new FedRAMP package from the legacy SSP by default. Determine the certification profile, then build the current Overview, Security Decision Record, and rule-specific artifacts."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-crm-cis",
+      "relationship": "no_single_replacement_template",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24"],
+      "rule_ids": ["CPO-CSO-OVR", "CDS-CSO-SVC", "SCG-CSO-RSC"],
+      "summary": "The 2026 rules do not designate this legacy CRM/CIS workbook as a current submission template. Current service scope, provider documentation, and secure-configuration guidance must be used to allocate real customer and provider responsibilities.",
+      "action": "Use the provider's current responsibility material for the exact service, tier, region, and date. Keep the workbook only as a migration aid and record unresolved shared responsibilities explicitly."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-integrated-inventory",
+      "relationship": "replaced_by_machine_readable_scope_evidence",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24"],
+      "rule_ids": ["MAS-CSO-IIR", "MAS-CSO-TPR", "CPO-CSO-OVR"],
+      "summary": "The current minimum-scope rules require machine-readable information-resource data, a human-readable derivation explanation, and the code used to generate it; the legacy inventory workbook is not that current requirement.",
+      "action": "Generate the inventory from authoritative system sources and retain the workbook only for field comparison or transition planning."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-cryptographic-modules",
+      "relationship": "governed_by_current_rules",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-certification-package-overview-2026-06-24"],
+      "rule_ids": ["CMU-CSO-CMD", "CPO-CSO-OVR"],
+      "summary": "The historical table remains a useful inventory shape, but current cryptographic-module documentation is governed by CMU-CSO-CMD and included through the Certification Package Overview.",
+      "action": "Use current module validation and configuration evidence, then map it to CMU-CSO-CMD rather than treating the old table as approval evidence."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-poam",
+      "relationship": "provider_vulnerability_reporting_separated_from_agency_poam",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-accepted-vulnerability-info-2026-06-24", "fedramp-schema-vulnerability-detail-report-2026-06-24"],
+      "rule_ids": ["VER-RPT-AVI", "VER-RPT-VDT", "VER-AGM-MAP"],
+      "summary": "Provider vulnerability information is not automatically an agency POA&M. Providers report and maintain vulnerability data; agencies create POA&Ms only for agency-owned actions, agency-managed weaknesses, compensating controls, or agency risk decisions.",
+      "action": "First identify who owns the action. Use current vulnerability schemas for provider reporting; create an agency POA&M entry only when the agency has work or risk to manage."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-sap",
+      "relationship": "separate_document_no_longer_required",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-security-decision-record-2026-06-24", "fedramp-schema-certification-package-overview-2026-06-24"],
+      "rule_ids": ["IVV-IAS-SUM", "SDR-CSO-FRR", "IVV-CSO-ICP"],
+      "summary": "IVV-IAS-SUM states that FedRAMP does not require a separate SAP or SAR for 20x or Rev5 certifications. Assessment process and findings are expected in the provider's Security Decision Record and certification package.",
+      "action": "Use the old SAP only to migrate planning detail. Organize current assessment scope, methods, evidence, and results around the applicable rules and Security Decision Record."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-sar",
+      "relationship": "separate_document_no_longer_required",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-security-decision-record-2026-06-24", "fedramp-schema-certification-package-overview-2026-06-24"],
+      "rule_ids": ["IVV-IAS-SUM", "IVV-IAS-OSA", "IVV-CSO-ICP", "SDR-CSO-FRR"],
+      "summary": "The 2026 rules do not require a separate SAR. Assessors supply high-level and overall summaries; providers include assessment results without inappropriate modification in the current package and Security Decision Record.",
+      "action": "Preserve historical SAR evidence, but route new assessment results to the current summaries, package overview, and Security Decision Record."
+    },
+    {
+      "legacy_artifact_id": "fedramp-legacy-conmon-deliverables",
+      "relationship": "replaced_by_current_ongoing_reporting",
+      "path_scope": ["20x", "rev5"],
+      "current_artifact_ids": ["fedramp-schema-ongoing-certification-report-2026-06-24", "fedramp-schema-accepted-vulnerability-info-2026-06-24", "fedramp-schema-vulnerability-detail-report-2026-06-24"],
+      "rule_ids": ["CCM-OCR-AVL", "VER-RPT-PER", "VER-RPT-AVI", "VER-RPT-VDT"],
+      "summary": "Current ongoing certification uses the quarterly Ongoing Certification Report plus current vulnerability reporting rules and schemas. The old deliverables calendar is a migration reference, not the governing cadence.",
+      "action": "Build the operating calendar from the applicable current rule dates and authorization conditions, then validate every machine-readable report against its current schema."
+    }
+  ]
+}

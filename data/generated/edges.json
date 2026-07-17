@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-16T10:59:41.325Z",
+  "generated_at": "2026-07-17T00:30:50.184Z",
   "edges": [
     {
       "id": "edge:800-53-to-csf:1",
@@ -332643,6 +332643,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:CA-2-1",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:CA-2.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:CA-2-1"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:CA-2.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes CA-2.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes CA-2.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:CA-2.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:CA-3",
       "source_node_id": "fedramp-rev5:LI-SAAS",
       "target_node_id": "nist-800-53:CA-3",
@@ -332759,6 +332783,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#LI-SaaS:CA-7.4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:CA-8",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:CA-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:CA-8"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:CA-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:CA-8"
         }
       ]
     },
@@ -334275,6 +334323,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:PL-8",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:PL-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:PL-8"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:PL-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes PL-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes PL-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:PL-8"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:PS-1",
       "source_node_id": "fedramp-rev5:LI-SAAS",
       "target_node_id": "nist-800-53:PS-1",
@@ -335067,6 +335139,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-28",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:SC-28",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-28"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:SC-28",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes SC-28 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes SC-28 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:SC-28"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-28-1",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:SC-28.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-28-1"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:SC-28.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes SC-28.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes SC-28.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:SC-28.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-39",
       "source_node_id": "fedramp-rev5:LI-SAAS",
       "target_node_id": "nist-800-53:SC-39",
@@ -335135,6 +335255,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#LI-SaaS:SC-7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-8",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:SC-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-8"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:SC-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes SC-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes SC-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:SC-8"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-8-1",
+      "source_node_id": "fedramp-rev5:LI-SAAS",
+      "target_node_id": "nist-800-53:SC-8.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LI-SAAS:nist-800-53:SC-8-1"
+      ],
+      "display_label": "fedramp-rev5:LI-SAAS includes nist-800-53:SC-8.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "LI-SaaS Baseline includes SC-8.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "LI-SaaS Baseline includes SC-8.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#LI-SaaS:SC-8.1"
         }
       ]
     },
@@ -336219,6 +336387,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:CA-2-1",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:CA-2.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:CA-2-1"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:CA-2.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes CA-2.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes CA-2.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:CA-2.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:CA-3",
       "source_node_id": "fedramp-rev5:LOW",
       "target_node_id": "nist-800-53:CA-3",
@@ -336335,6 +336527,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Low:CA-7.4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:CA-8",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:CA-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:CA-8"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:CA-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:CA-8"
         }
       ]
     },
@@ -337851,6 +338067,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:PL-8",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:PL-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:PL-8"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:PL-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes PL-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes PL-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:PL-8"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:PS-1",
       "source_node_id": "fedramp-rev5:LOW",
       "target_node_id": "nist-800-53:PS-1",
@@ -338643,6 +338883,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-28",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:SC-28",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-28"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:SC-28",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes SC-28 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes SC-28 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:SC-28"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-28-1",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:SC-28.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-28-1"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:SC-28.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes SC-28.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes SC-28.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:SC-28.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-39",
       "source_node_id": "fedramp-rev5:LOW",
       "target_node_id": "nist-800-53:SC-39",
@@ -338711,6 +338999,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Low:SC-7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-8",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:SC-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-8"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:SC-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes SC-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes SC-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:SC-8"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-8-1",
+      "source_node_id": "fedramp-rev5:LOW",
+      "target_node_id": "nist-800-53:SC-8.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:LOW:nist-800-53:SC-8-1"
+      ],
+      "display_label": "fedramp-rev5:LOW includes nist-800-53:SC-8.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Low Baseline includes SC-8.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Low Baseline includes SC-8.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Low:SC-8.1"
         }
       ]
     },
@@ -339531,6 +339867,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-12",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:AC-2.12",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-12"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:AC-2.12",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes AC-2.12 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes AC-2.12 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:AC-2.12"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-13",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:AC-2.13",
@@ -339647,6 +340007,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:AC-2.5"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-7",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:AC-2.7",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-7"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:AC-2.7",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes AC-2.7 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes AC-2.7 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:AC-2.7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-9",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:AC-2.9",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-2-9"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:AC-2.9",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes AC-2.9 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes AC-2.9 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:AC-2.9"
         }
       ]
     },
@@ -339815,6 +340223,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:AC-4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-4-21",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:AC-4.21",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:AC-4-21"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:AC-4.21",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes AC-4.21 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes AC-4.21 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:AC-4.21"
         }
       ]
     },
@@ -340659,6 +341091,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-2-3",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CA-2.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-2-3"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CA-2.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CA-2.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CA-2.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CA-2.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-3",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:CA-3",
@@ -340799,6 +341255,78 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:CA-7.4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CA-8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CA-8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CA-8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CA-8"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CA-8.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CA-8.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CA-8.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CA-8.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CA-8.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8-2",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CA-8.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CA-8-2"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CA-8.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CA-8.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CA-8.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CA-8.2"
         }
       ]
     },
@@ -341187,6 +341715,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-5-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CM-5.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-5-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CM-5.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CM-5.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CM-5.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CM-5.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-5-5",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CM-5.5",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-5-5"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CM-5.5",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CM-5.5 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CM-5.5 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CM-5.5"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-6",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:CM-6",
@@ -341207,6 +341783,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:CM-6"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-6-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:CM-6.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:CM-6-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:CM-6.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes CM-6.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes CM-6.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:CM-6.1"
         }
       ]
     },
@@ -342195,6 +342795,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-2-5",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IA-2.5",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-2-5"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IA-2.5",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IA-2.5 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IA-2.5 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IA-2.5"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-2-6",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IA-2.6",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-2-6"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IA-2.6",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IA-2.6 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IA-2.6 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IA-2.6"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-2-8",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:IA-2.8",
@@ -342383,6 +343031,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:IA-5.6"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-5-7",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IA-5.7",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IA-5-7"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IA-5.7",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IA-5.7 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IA-5.7 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IA-5.7"
         }
       ]
     },
@@ -342843,6 +343515,102 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IR-9",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IR-9",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IR-9 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IR-9 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IR-9"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-2",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IR-9.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-2"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IR-9.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IR-9.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IR-9.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IR-9.2"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-3",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IR-9.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-3"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IR-9.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IR-9.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IR-9.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IR-9.3"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-4",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:IR-9.4",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:IR-9-4"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:IR-9.4",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes IR-9.4 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes IR-9.4 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:IR-9.4"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:MA-1",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:MA-1",
@@ -343031,6 +343799,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:MA-5"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:MA-5-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:MA-5.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:MA-5-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:MA-5.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes MA-5.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes MA-5.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:MA-5.1"
         }
       ]
     },
@@ -343367,6 +344159,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:PE-13.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:PE-13-2",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:PE-13.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:PE-13-2"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:PE-13.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes PE-13.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes PE-13.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:PE-13.2"
         }
       ]
     },
@@ -343899,6 +344715,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:PS-3-3",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:PS-3.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:PS-3-3"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:PS-3.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes PS-3.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes PS-3.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:PS-3.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:PS-4",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:PS-4",
@@ -344211,6 +345051,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:RA-5-3",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:RA-5.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:RA-5-3"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:RA-5.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes RA-5.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes RA-5.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:RA-5.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:RA-5-5",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:RA-5.5",
@@ -344351,6 +345215,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:SA-11"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-11-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SA-11.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-11-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SA-11.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SA-11.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SA-11.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SA-11.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-11-2",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SA-11.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-11-2"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SA-11.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SA-11.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SA-11.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SA-11.2"
         }
       ]
     },
@@ -344667,6 +345579,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-9-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SA-9.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-9-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SA-9.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SA-9.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SA-9.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SA-9.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-9-2",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:SA-9.2",
@@ -344687,6 +345623,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:SA-9.2"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-9-5",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SA-9.5",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SA-9-5"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SA-9.5",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SA-9.5 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SA-9.5 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SA-9.5"
         }
       ]
     },
@@ -345075,6 +346035,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-45",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SC-45",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-45"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SC-45",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SC-45 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SC-45 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SC-45"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-45-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SC-45.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-45-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SC-45.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SC-45.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SC-45.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SC-45.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-5",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:SC-5",
@@ -345119,6 +346127,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:SC-7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-7-12",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SC-7.12",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-7-12"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SC-7.12",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SC-7.12 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SC-7.12 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SC-7.12"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-7-18",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SC-7.18",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SC-7-18"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SC-7.18",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SC-7.18 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SC-7.18 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SC-7.18"
         }
       ]
     },
@@ -345459,6 +346515,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-2-3",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-2.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-2-3"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-2.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-2.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-2.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-2.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-3",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:SI-3",
@@ -345507,6 +346587,78 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-1",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-4.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-1"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-4.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-4.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-4.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-4.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-16",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-4.16",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-16"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-4.16",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-4.16 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-4.16 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-4.16"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-18",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-4.18",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-18"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-4.18",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-4.18 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-4.18 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-4.18"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-2",
       "source_node_id": "fedramp-rev5:MODERATE",
       "target_node_id": "nist-800-53:SI-4.2",
@@ -345527,6 +346679,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:SI-4.2"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-23",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-4.23",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-4-23"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-4.23",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-4.23 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-4.23 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-4.23"
         }
       ]
     },
@@ -345599,6 +346775,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#Moderate:SI-5"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-6",
+      "source_node_id": "fedramp-rev5:MODERATE",
+      "target_node_id": "nist-800-53:SI-6",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:MODERATE:nist-800-53:SI-6"
+      ],
+      "display_label": "fedramp-rev5:MODERATE includes nist-800-53:SI-6",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "Moderate Baseline includes SI-6 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "Moderate Baseline includes SI-6 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#Moderate:SI-6"
         }
       ]
     },
@@ -346659,6 +347859,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-2-7",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AC-2.7",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-2-7"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AC-2.7",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AC-2.7 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AC-2.7 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AC-2.7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-2-9",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AC-2.9",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-2-9"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AC-2.9",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AC-2.9 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AC-2.9 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AC-2.9"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-20",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:AC-20",
@@ -346823,6 +348071,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:AC-4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-4-21",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AC-4.21",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-4-21"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AC-4.21",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AC-4.21 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AC-4.21 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AC-4.21"
         }
       ]
     },
@@ -347039,6 +348311,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:AC-6.7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-6-8",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AC-6.8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AC-6-8"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AC-6.8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AC-6.8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AC-6.8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AC-6.8"
         }
       ]
     },
@@ -347643,6 +348939,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AU-6-4",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AU-6.4",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AU-6-4"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AU-6.4",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AU-6.4 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AU-6.4 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AU-6.4"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AU-6-5",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:AU-6.5",
@@ -347687,6 +349007,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:AU-6.6"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AU-6-7",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:AU-6.7",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:AU-6-7"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:AU-6.7",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes AU-6.7 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes AU-6.7 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:AU-6.7"
         }
       ]
     },
@@ -347955,6 +349299,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-2-3",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:CA-2.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-2-3"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:CA-2.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes CA-2.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes CA-2.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:CA-2.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-3",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:CA-3",
@@ -348171,6 +349539,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-8-2",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:CA-8.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-8-2"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:CA-8.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes CA-8.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes CA-8.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:CA-8.2"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CA-9",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:CA-9",
@@ -348311,6 +349703,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:CM-12.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CM-14",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:CM-14",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CM-14"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:CM-14",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes CM-14 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes CM-14 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:CM-14"
         }
       ]
     },
@@ -348647,6 +350063,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:CM-5.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CM-5-5",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:CM-5.5",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:CM-5-5"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:CM-5.5",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes CM-5.5 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes CM-5.5 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:CM-5.5"
         }
       ]
     },
@@ -350091,6 +351531,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-2-6",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IA-2.6",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-2-6"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IA-2.6",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IA-2.6 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IA-2.6 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IA-2.6"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-2-8",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:IA-2.8",
@@ -350235,6 +351699,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-13",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IA-5.13",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-13"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IA-5.13",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IA-5.13 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IA-5.13 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IA-5.13"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-2",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:IA-5.2",
@@ -350279,6 +351767,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:IA-5.6"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-7",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IA-5.7",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-7"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IA-5.7",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IA-5.7 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IA-5.7 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IA-5.7"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-8",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IA-5.8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IA-5-8"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IA-5.8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IA-5.8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IA-5.8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IA-5.8"
         }
       ]
     },
@@ -350643,6 +352179,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-4-2",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-4.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-4-2"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-4.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-4.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-4.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-4.2"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-4-4",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:IR-4.4",
@@ -350663,6 +352223,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:IR-4.4"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-4-6",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-4.6",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-4-6"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-4.6",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-4.6 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-4.6 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-4.6"
         }
       ]
     },
@@ -350855,6 +352439,102 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:IR-8"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-9",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-9",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-9 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-9 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-9"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-2",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-9.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-2"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-9.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-9.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-9.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-9.2"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-3",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-9.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-3"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-9.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-9.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-9.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-9.3"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-4",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:IR-9.4",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:IR-9-4"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:IR-9.4",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes IR-9.4 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes IR-9.4 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:IR-9.4"
         }
       ]
     },
@@ -351603,6 +353283,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PE-14-2",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:PE-14.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PE-14-2"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:PE-14.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes PE-14.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes PE-14.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:PE-14.2"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PE-15",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:PE-15",
@@ -352227,6 +353931,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PS-3-3",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:PS-3.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PS-3-3"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:PS-3.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes PS-3.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes PS-3.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:PS-3.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:PS-4",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:PS-4",
@@ -352563,6 +354291,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:RA-5-3",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:RA-5.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:RA-5-3"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:RA-5.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes RA-5.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes RA-5.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:RA-5.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:RA-5-4",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:RA-5.4",
@@ -352607,6 +354359,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:RA-5.5"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:RA-5-8",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:RA-5.8",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:RA-5-8"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:RA-5.8",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes RA-5.8 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes RA-5.8 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:RA-5.8"
         }
       ]
     },
@@ -352727,6 +354503,54 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SA-11"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-11-1",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SA-11.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-11-1"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SA-11.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SA-11.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SA-11.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SA-11.1"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-11-2",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SA-11.2",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-11-2"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SA-11.2",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SA-11.2 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SA-11.2 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SA-11.2"
         }
       ]
     },
@@ -353139,6 +354963,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-9-1",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SA-9.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-9-1"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SA-9.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SA-9.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SA-9.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SA-9.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-9-2",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:SA-9.2",
@@ -353159,6 +355007,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SA-9.2"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-9-5",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SA-9.5",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SA-9-5"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SA-9.5",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SA-9.5 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SA-9.5 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SA-9.5"
         }
       ]
     },
@@ -353619,6 +355491,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-45",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SC-45",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-45"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SC-45",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SC-45 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SC-45 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SC-45"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-45-1",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SC-45.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-45-1"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SC-45.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SC-45.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SC-45.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SC-45.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-5",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:SC-5",
@@ -353667,6 +355587,54 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-10",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SC-7.10",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-10"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SC-7.10",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SC-7.10 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SC-7.10 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SC-7.10"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-12",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SC-7.12",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-12"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SC-7.12",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SC-7.12 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SC-7.12 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SC-7.12"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-18",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:SC-7.18",
@@ -353687,6 +355655,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SC-7.18"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-20",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SC-7.20",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SC-7-20"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SC-7.20",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SC-7.20 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SC-7.20 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SC-7.20"
         }
       ]
     },
@@ -354051,6 +356043,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-2-3",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-2.3",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-2-3"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-2.3",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-2.3 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-2.3 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-2.3"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-3",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:SI-3",
@@ -354099,6 +356115,30 @@
       ]
     },
     {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-1",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.1",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-1"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.1",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.1 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.1 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.1"
+        }
+      ]
+    },
+    {
       "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-10",
       "source_node_id": "fedramp-rev5:HIGH",
       "target_node_id": "nist-800-53:SI-4.10",
@@ -354119,6 +356159,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SI-4.10"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-11",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.11",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-11"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.11",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.11 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.11 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.11"
         }
       ]
     },
@@ -354167,6 +356231,78 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SI-4.14"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-16",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.16",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-16"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.16",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.16 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.16 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.16"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-18",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.18",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-18"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.18",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.18 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.18 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.18"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-19",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.19",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-19"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.19",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.19 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.19 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.19"
         }
       ]
     },
@@ -354239,6 +356375,30 @@
           "source_id": "fedramp-rev5",
           "ref_type": "primary",
           "locator": "rev5/documents-templates/#High:SI-4.22"
+        }
+      ]
+    },
+    {
+      "id": "edge:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-23",
+      "source_node_id": "fedramp-rev5:HIGH",
+      "target_node_id": "nist-800-53:SI-4.23",
+      "relationship_type": "includes",
+      "provenance_class": "federal_program",
+      "confidence": "direct",
+      "publication_status": "published",
+      "evidence_ids": [
+        "evidence:fedramp-membership:includes:fedramp-rev5:HIGH:nist-800-53:SI-4-23"
+      ],
+      "display_label": "fedramp-rev5:HIGH includes nist-800-53:SI-4.23",
+      "warning": null,
+      "inference_rule_id": null,
+      "rationale": "High Baseline includes SI-4.23 in the published FedRAMP Rev. 5 baseline membership.",
+      "plain_language_rationale": "High Baseline includes SI-4.23 in the published FedRAMP Rev. 5 baseline membership. Review both sides of this includes link in FedRAMP Rev. 5 Baselines before assuming coverage transfers.",
+      "source_refs": [
+        {
+          "source_id": "fedramp-rev5",
+          "ref_type": "primary",
+          "locator": "rev5/documents-templates/#High:SI-4.23"
         }
       ]
     },

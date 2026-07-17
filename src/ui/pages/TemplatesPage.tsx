@@ -75,6 +75,50 @@ type OfficialArtifact = {
   limitations?: string[];
 };
 
+type FedrampRule = {
+  rule_id: string;
+  process_name?: string;
+  name?: string;
+  force?: string;
+  applicability?: string;
+};
+
+type FedrampTransitionMapping = {
+  legacy_artifact_id: string;
+  relationship: string;
+  path_scope: string[];
+  current_artifact_ids: string[];
+  rule_ids: string[];
+  summary: string;
+  action: string;
+};
+
+type FedrampLegacyAsset = {
+  title: string;
+  format: string;
+  url: string;
+};
+
+type FedrampTransitionIndex = {
+  retrieved_on?: string;
+  source?: {
+    version?: string;
+    last_updated?: string;
+  };
+  interpretation_notice?: string;
+  official_links?: Record<string, string>;
+  milestones?: Array<{ date: string; label: string; meaning: string }>;
+  process_statuses?: Array<{
+    process_id: string;
+    name: string;
+    status: string;
+  }>;
+  current_artifact_rules?: Record<string, string[]>;
+  legacy_mappings?: FedrampTransitionMapping[];
+  resolved_rules?: FedrampRule[];
+  legacy_assets?: FedrampLegacyAsset[];
+};
+
 type WorkflowStep = {
   order: number;
   title: string;
@@ -153,9 +197,27 @@ function normalizedFamily(value?: string) {
   return (value || "").toLowerCase().replaceAll(/[^a-z0-9]+/g, "_");
 }
 
-function OfficialArtifactCard(props: { artifact: OfficialArtifact }) {
-  const { artifact } = props;
+function ruleLabel(rule: FedrampRule) {
+  return `${rule.rule_id}${rule.name ? ` — ${rule.name}` : ""}`;
+}
+
+function OfficialArtifactCard(props: {
+  artifact: OfficialArtifact;
+  fedrampTransition?: FedrampTransitionIndex;
+}) {
+  const { artifact, fedrampTransition } = props;
   const primaryUrl = artifact.download_url || artifact.landing_url;
+  const transition = fedrampTransition?.legacy_mappings?.find(
+    (entry) => entry.legacy_artifact_id === artifact.artifact_id,
+  );
+  const currentRuleIds =
+    fedrampTransition?.current_artifact_rules?.[artifact.artifact_id] || [];
+  const applicableRuleIds = transition?.rule_ids || currentRuleIds;
+  const resolvedRules = new Map(
+    (fedrampTransition?.resolved_rules || []).map((rule) => [rule.rule_id, rule]),
+  );
+  const isLegacyArchive =
+    artifact.artifact_id === "fedramp-legacy-assets-2026-transition";
   return (
     <article className="nexus-card">
       <div className="nexus-card-heading">
@@ -192,6 +254,65 @@ function OfficialArtifactCard(props: { artifact: OfficialArtifact }) {
           {artifact.limitations[0]}
         </p>
       ) : null}
+      {transition ? (
+        <div className="fedramp-transition-block">
+          <p className="eyebrow">Legacy → current</p>
+          <p>{transition.summary}</p>
+          <dl className="nexus-facts">
+            <div>
+              <dt>Paths</dt>
+              <dd>{transition.path_scope.join(" + ")}</dd>
+            </div>
+            <div>
+              <dt>Next</dt>
+              <dd>{transition.action}</dd>
+            </div>
+          </dl>
+          {applicableRuleIds.length ? (
+            <details className="nexus-details">
+              <summary>{applicableRuleIds.length} governing rule{applicableRuleIds.length === 1 ? "" : "s"}</summary>
+              <ul className="nexus-list compact-list">
+                {applicableRuleIds.map((ruleId) => (
+                  <li key={ruleId}>
+                    {resolvedRules.has(ruleId)
+                      ? ruleLabel(resolvedRules.get(ruleId) as FedrampRule)
+                      : ruleId}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : null}
+        </div>
+      ) : currentRuleIds.length ? (
+        <details className="nexus-details fedramp-rule-list">
+          <summary>Governed by {currentRuleIds.length} current rule{currentRuleIds.length === 1 ? "" : "s"}</summary>
+          <ul className="nexus-list compact-list">
+            {currentRuleIds.map((ruleId) => (
+              <li key={ruleId}>
+                {resolvedRules.has(ruleId)
+                  ? ruleLabel(resolvedRules.get(ruleId) as FedrampRule)
+                  : ruleId}
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+      {isLegacyArchive && fedrampTransition?.legacy_assets?.length ? (
+        <details className="nexus-details fedramp-legacy-index">
+          <summary>
+            Browse all {fedrampTransition.legacy_assets.length} official legacy files
+          </summary>
+          <ul className="nexus-list compact-list">
+            {fedrampTransition.legacy_assets.map((asset) => (
+              <li key={asset.url}>
+                <a href={asset.url} rel="noopener noreferrer" target="_blank">
+                  {asset.title} ({asset.format.toUpperCase()})
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
       <div className="card-actions">
         {primaryUrl ? (
           <a
@@ -216,6 +337,94 @@ function OfficialArtifactCard(props: { artifact: OfficialArtifact }) {
         ) : null}
       </div>
     </article>
+  );
+}
+
+function FedrampCurrentTruthPanel(props: {
+  transition?: FedrampTransitionIndex;
+}) {
+  const { transition } = props;
+  if (!transition?.source) return null;
+  const stableProcesses = (transition.process_statuses || []).filter(
+    (process) => process.status === "stable",
+  );
+  const placeholders = (transition.process_statuses || []).filter(
+    (process) => process.status === "placeholder",
+  );
+  const links = transition.official_links || {};
+  const upcomingMilestones = (transition.milestones || []).filter(
+    (milestone) => milestone.date >= "2026-07-16",
+  );
+  return (
+    <aside aria-labelledby="fedramp-current-heading" className="fedramp-truth-panel">
+      <div className="fedramp-truth-heading">
+        <div>
+          <p className="eyebrow">FedRAMP source truth</p>
+          <h3 id="fedramp-current-heading">
+            Consolidated Rules {transition.source.version}
+          </h3>
+          <p>
+            Updated {transition.source.last_updated}. The machine-readable rules
+            and schemas govern; legacy files remain available for migration and
+            comparison.
+          </p>
+        </div>
+        <Badge tone="success">Official current</Badge>
+      </div>
+      <div className="fedramp-truth-grid">
+        <div>
+          <strong>{stableProcesses.length} stable process documents</strong>
+          <span>
+            Only {placeholders.length || "no"} process is marked placeholder
+            {placeholders.length
+              ? `: ${placeholders.map((process) => `${process.process_id} — ${process.name}`).join(", ")}.`
+              : "."}
+          </span>
+        </div>
+        <div>
+          <strong>20x and Rev5 are both mapped</strong>
+          <span>
+            Applicability and effective dates are rule-specific. Do not treat a
+            legacy workbook as the current path for either profile.
+          </span>
+        </div>
+      </div>
+      {upcomingMilestones.length ? (
+        <details className="nexus-details">
+          <summary>Transition dates</summary>
+          <ol className="fedramp-milestones">
+            {upcomingMilestones.map((milestone) => (
+              <li key={milestone.date}>
+                <time dateTime={milestone.date}>{milestone.date}</time>
+                <span>
+                  <strong>{milestone.label}</strong> — {milestone.meaning}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : null}
+      <div className="card-actions fedramp-source-links">
+        {[
+          ["Current rules", links.current_rules],
+          ["Machine-readable source", links.machine_readable_source],
+          ["Schema index", links.schema_index],
+          ["Changelog", links.changelog],
+          ["Timeline", links.timeline],
+          ["Legacy library", links.legacy_reference],
+        ].map(([label, url]) =>
+          url ? (
+            <a className="text-link" href={url} key={label} rel="noopener noreferrer" target="_blank">
+              {label}
+              <IconExternalLink aria-hidden="true" size={14} stroke={1.8} />
+            </a>
+          ) : null,
+        )}
+      </div>
+      {transition.interpretation_notice ? (
+        <p className="support-meta">{transition.interpretation_notice}</p>
+      ) : null}
+    </aside>
   );
 }
 
@@ -364,6 +573,8 @@ export function TemplatesPage(props: {
     []) as ComplianceWorkflow[];
   const complianceTools = (bundle.complianceToolRegistry?.tools ||
     []) as ComplianceTool[];
+  const fedrampTransition =
+    bundle.fedrampTransitionIndex as FedrampTransitionIndex | undefined;
   const selectedWorkflow =
     workflows.find(
       (workflow) => workflow.workflow_id === selectedWorkflowId,
@@ -856,10 +1067,12 @@ export function TemplatesPage(props: {
                 </p>
               </div>
             </div>
+            <FedrampCurrentTruthPanel transition={fedrampTransition} />
             <div className="nexus-grid">
               {visibleOfficialArtifacts.map((artifact) => (
                 <OfficialArtifactCard
                   artifact={artifact}
+                  fedrampTransition={fedrampTransition}
                   key={artifact.artifact_id}
                 />
               ))}
@@ -1014,6 +1227,7 @@ export function TemplatesPage(props: {
                 {selectedTemplateArtifacts.map((artifact) => (
                   <OfficialArtifactCard
                     artifact={artifact}
+                    fedrampTransition={fedrampTransition}
                     key={artifact.artifact_id}
                   />
                 ))}

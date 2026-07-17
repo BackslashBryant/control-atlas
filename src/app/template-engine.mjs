@@ -24,6 +24,7 @@ const EVIDENCE_TYPE_HINT = "Policy | Procedure | Config screenshot | System repo
 
 /** @type {Record<string, { display_name: string, version: string }>} */
 const SOURCE_FALLBACK = {
+  "fedramp-2026-rules": { display_name: "FedRAMP Consolidated Rules for 2026", version: "2026.07.14.01" },
   "nist-oscal": { display_name: "SP 800-53 Rev. 5", version: "2026-06-09" },
   "disa-stig-library": { display_name: "DISA STIG Library", version: "2026-06-09" },
   "disa-cci-list": { display_name: "DISA CCI List", version: "2026-06-09" },
@@ -40,8 +41,8 @@ const SOURCE_FALLBACK = {
 const TEMPLATE_COMPATIBILITY = {
   security_plan_starter: [
     "Classification: Control Atlas companion.",
-    "Basis: NIST RMF and OSCAL SSP concepts.",
-    "Limit: This is not an official SSP and is not directly importable into FedRAMP or eMASS.",
+    "Basis: NIST RMF concepts plus the current FedRAMP Certification Package Overview and Security Decision Record transition path.",
+    "Limit: This is not an official SSP or FedRAMP package and is not directly importable into FedRAMP or eMASS.",
   ],
   implementation_statement_worksheet: [
     "Classification: eMASS API v3.22 schema-aligned preparation aid.",
@@ -70,18 +71,18 @@ const TEMPLATE_COMPATIBILITY = {
   ],
   poam_starter: [
     "Classification: eMASS API v3.22 schema-aligned preparation aid.",
-    "Basis: Public MITRE emass_client v3.22 POA&M schemas plus operational tracking fields.",
-    "Limit: This is not an eMASS-generated or FedRAMP import template and is not directly importable.",
+    "Basis: Public MITRE emass_client v3.22 POA&M schemas plus operational tracking fields and current FedRAMP vulnerability-reporting boundaries.",
+    "Limit: This is not an eMASS-generated or FedRAMP import template; determine whether each action belongs to the provider or agency before using it as a FedRAMP POA&M record.",
   ],
   assessment_planning_worksheet: [
     "Classification: eMASS API v3.22 schema-aligned preparation aid.",
     "Basis: NIST SP 800-53A methods and public eMASS v3.22 test-result concepts.",
-    "Limit: This is neither a complete SAP nor an eMASS test-result import file.",
+    "Limit: This is neither a complete SAP nor an eMASS test-result import file; current FedRAMP rules do not require a separate SAP or SAR.",
   ],
   conmon_calendar: [
     "Classification: Control Atlas companion.",
-    "Basis: NIST SP 800-137 and NIST RMF continuous-monitoring concepts.",
-    "Limit: Starter cadences must be reconciled with agency, authorization, and contract requirements.",
+    "Basis: NIST SP 800-137 concepts plus current FedRAMP Ongoing Certification Report and vulnerability-reporting rules.",
+    "Limit: Starter cadences must be reconciled with current rule-specific dates, certification profile, authorization conditions, and contracts.",
   ],
   hardware_baseline: [
     "Classification: eMASS API v3.22 schema-aligned preparation aid.",
@@ -97,6 +98,51 @@ const TEMPLATE_COMPATIBILITY = {
     "Classification: Control Atlas companion.",
     "Basis: DoDI 8551.01 and public DISA PPSM Registry training.",
     "Limit: This is not an official PPSM worksheet, registry receipt, or import file.",
+  ],
+};
+
+const FEDRAMP_2026_CONTEXT = {
+  security_plan_starter: [
+    "Current rule connection: CPO-CSO-OVR says the Certification Package Overview replaces the historical Rev5 SSP, excluding appendices.",
+    "Current package shape: FRC-CSO-PKG points to the Certification Package Overview, Security Decision Record (SDR-CSO-FRR), and an Ongoing Certification Report.",
+    "Use this companion to organize working material, then move the final content into the applicable current rule and schema structure.",
+  ],
+  implementation_statement_worksheet: [
+    "Current rule connection: SDR-CSO-FRR requires implementation, verification, validation, independent assessment, responses, and rule-specific artifacts for each applicable FedRAMP rule.",
+    "Use stable rule IDs and the current Security Decision Record schema when this worksheet supports a FedRAMP package.",
+  ],
+  evidence_expectation_matrix: [
+    "Current rule connection: SDR-CSO-FRR organizes evidence by applicable FedRAMP rule, while IVV rules govern independent verification and validation results.",
+    "Treat evidence examples here as collection prompts; the applicable rule, class, assessor, and authorizing organization decide sufficiency.",
+  ],
+  inheritance_worksheet: [
+    "Current transition: the legacy CRM/CIS workbook has no single current replacement template in the 2026 rules.",
+    "Use current provider service scope, secure-configuration guidance, and responsibility material for the exact service, tier, region, and date; record shared and local actions separately.",
+  ],
+  reciprocity_checklist: [
+    "Current rule connection: evaluate the current Certification Package Overview, Security Decision Record, assessment results, Ongoing Certification Report, and authorization conditions instead of assuming a legacy checklist defines completeness.",
+    "The receiving organization still owns the reuse and risk decision.",
+  ],
+  poam_starter: [
+    "Current FedRAMP boundary: provider-maintained vulnerability information is not automatically an agency POA&M.",
+    "Providers report and maintain vulnerability data under VER rules and schemas. Agencies create POA&Ms only for agency-owned actions, agency-managed weaknesses, compensating controls, or agency risk decisions (VER-AGM-MAP).",
+    "Before adding a row, identify the action owner and keep provider vulnerability reporting separate from the agency's plan of action.",
+  ],
+  assessment_planning_worksheet: [
+    "Current transition: IVV-IAS-SUM states that FedRAMP does not require a separate SAP or SAR for either 20x or Rev5 certifications.",
+    "Assessors supply assessment summaries; providers include results without inappropriate modification in the current package and Security Decision Record.",
+  ],
+  conmon_calendar: [
+    "Current rule connection: CCM-OCR-AVL requires a quarterly Ongoing Certification Report, while VER rules and schemas govern vulnerability reporting.",
+    "Use the rule-specific effective dates for the selected 20x or Rev5 profile. The legacy ConMon calendar is migration reference only.",
+  ],
+  hardware_baseline: [
+    "Current rule connection: MAS-CSO-IIR requires machine-readable information-resource data, a human-readable explanation of how it was derived, and the code used to generate it.",
+    "This workbook can normalize working inventory, but it is not the authoritative system-generated scope evidence required by the rule.",
+  ],
+  software_baseline: [
+    "Current rule connection: MAS-CSO-IIR requires machine-readable information-resource data, a human-readable explanation of how it was derived, and the code used to generate it.",
+    "This workbook can normalize working inventory, but it is not the authoritative system-generated scope evidence required by the rule.",
   ],
 };
 
@@ -194,6 +240,14 @@ function appendSourceMetadata(doc, options) {
       "- Validate any downstream import, upload, or submission in the target system; preserve the source and version used for that validation.",
     ].join("\n"),
   });
+  const fedrampContext = FEDRAMP_2026_CONTEXT[options.templateType];
+  if (fedrampContext) {
+    doc.sections.push({
+      type: "text",
+      heading: "Current FedRAMP 2026 Context",
+      content: fedrampContext.join("\n"),
+    });
+  }
   const compatibility = TEMPLATE_COMPATIBILITY[options.templateType];
   if (compatibility) {
     doc.sections.push({
