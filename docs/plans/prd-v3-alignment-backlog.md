@@ -2,20 +2,20 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 17, 2026 (approved compositions and platform strengthening deployed)
+**Last synced:** July 17, 2026 (v1.0 verification complete; publication owner-gated)
 
-## Active release gate
+## Release verification record
 
 | ID | Gap | Owner | Status |
 | --- | --- | --- | --- |
-| V1-RR-003 | Atlas clarity, bounded rendering, mobile behavior, and focused-route performance | Pixel / Forge | Performance/data architecture shipped at `94ab460`, but product approval was revoked after live visual review. Superseded by V1-RR-004 through V1-RR-010. |
+| V1-RR-003 | Atlas clarity, bounded rendering, mobile behavior, and focused-route performance | Pixel / Forge | Superseded by V1-RR-004 through V1-RR-010; final deployed Lighthouse and browser evidence recorded at `b64928c` |
 | V1-RR-004 | Match the approved six-column decomposition view on desktop and vertical workflow on mobile | Muse / Forge | Shipped and protected by reviewed desktop/compact Ubuntu visual baselines |
 | V1-RR-005 | Match the approved centered, connected, expandable Map and guidance inspector | Muse / Forge | Shipped and protected by reviewed desktop/compact Ubuntu visual baselines |
-| V1-RR-006 | Replace empty-query search taxonomy dump with a calm starting state | Muse / Forge | Implemented locally — 4/4 expert and 11/11 novice search gate passes |
-| V1-RR-007 | Turn Templates default page into a progressive task workflow | Muse / Forge | Implemented locally — route contract passes |
-| V1-RR-008 | Remove redundant trust/legal/copy boilerplate and restore specific action guidance | Muse | Implemented locally for release blockers — content contract passes |
-| V1-RR-009 | De-duplicate Playbooks and progressively orient heavy routes | Muse / Forge | Implemented locally — browser contracts pass |
-| V1-RR-010 | Add structural visual contracts for the owner-approved compositions and density limits | Pixel | Implemented locally — desktop/mobile/zoom/reduced-motion contracts pass |
+| V1-RR-006 | Replace empty-query search taxonomy dump with a calm starting state | Muse / Forge | Shipped and verified locally, in CI, and on deployed Pages |
+| V1-RR-007 | Turn Templates default page into a progressive task workflow | Muse / Forge | Shipped and verified locally, in CI, and on deployed Pages |
+| V1-RR-008 | Remove redundant trust/legal/copy boilerplate and restore specific action guidance | Muse | Shipped; final Sources polish replaces coverage scores and binary map badges with factual connection counts |
+| V1-RR-009 | De-duplicate Playbooks and progressively orient heavy routes | Muse / Forge | Shipped and verified locally, in CI, and on deployed Pages |
+| V1-RR-010 | Add structural visual contracts for the owner-approved compositions and density limits | Pixel | Shipped and protected by desktop/mobile/zoom/reduced-motion contracts plus reviewed Ubuntu baselines |
 
 ## Deferred (SPR Sprint E — not blocking)
 
@@ -36,6 +36,16 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 | Copy and terminology debt | Focused Vale rules integrated after fixture and false-positive review |
 | Technical-debt inventory | Knip classified; nine proven dead files plus redundant declarations/exports removed, legacy renderer queued separately |
 | Independent OSCAL validation | Unique schema signal confirmed; monthly additive NIST CLI workflow implemented |
+
+### Maintenance debt register (owner: Bryant; solo repo)
+
+| Item | Consequence of leaving it | Trigger / deadline |
+| --- | --- | --- |
+| GitHub Actions Node 20-runtime deprecation annotations | Workflows fail when GitHub removes the Node 20 runtime | Before GitHub's announced Node 20 Actions runtime removal date; check on the first Dependabot review after an annotation escalates to a warning of removal |
+| Transitive `uuid` constrained by `@lhci/cli@0.15.1` | Dependabot PR #1465767594 stays red; audit noise | When `@lhci/cli` publishes a release lifting the constraint, or when reassessing Lighthouse CI retention |
+| `npm ci \|\| npm install` fallbacks in workflows | Lockfile drift can pass CI silently | Next workflow-touching maintenance change |
+| Deployed mobile Lighthouse Performance floor (>= 50; release band 54–60) | Performance regressions land undetected because tooling is report-only | Compare every future recorded deployed run against the floor; investigate before shipping if below |
+| Route-state patch idiom still spreads `...state` in remaining page handlers | Redundant now that `navigate()` merges the latest state; rapid paired interactions elsewhere could revive the dropped-patch race | Next UI maintenance pass; sweep `onNavigate` callers to pass only changed keys |
 
 - Promote `v1.0.0` after RC feedback
 - Run the staged ingestion/search experiments in [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no listed tool is approved as a v1.0 dependency

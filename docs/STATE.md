@@ -1,10 +1,10 @@
 # STATE
 
 ## Goal
-Keep the strengthened Control Atlas platform release-ready with measured regression evidence, efficient CI ownership, and narrowly justified tools. Preserve the static architecture; the final `v1.0.0` tag and release remain owner-gated.
+Hold the verified Control Atlas v1.0 candidate ready for the owner's publication decision. Preserve the static public-data-only architecture and keep the final `v1.0.0` tag and release owner-gated.
 
 ## Now
-The post-v1 sprint is shipped on `main` at `e56ffc7` and deployed to GitHub Pages. Lighthouse CI, the focused Vale style, classified Knip cleanup, monthly NIST OSCAL validation, and four reviewed Ubuntu approved-layout baselines have recorded evidence. Follow-up CI hardening separates accessibility from the functional Playwright matrix, builds once per precommit, reuses the generated build in CI, and makes Pages deploy the exact SHA already accepted by Public Repo Checks. The optimized full precommit passes with 22 accessibility tests plus 105 functional tests passed and 1 skipped; see [`docs/audits/post-v1-platform-strengthening-implementation-2026-07-17.md`](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
+Release finalization is complete on `main` at `b64928c` and deployed to GitHub Pages. The separate Muse source-polish work was rebased onto the strengthened platform, completed, and verified: the Sources page replaces legacy coverage scores and binary map badges with exact loaded-record, connected-record, and published-link counts across seven practical categories. The full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional Playwright tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, Pages Live Smoke, a 28-test deployed replay, and three deployed mobile Lighthouse runs have recorded evidence; see [`docs/audits/v1-release-finalization-2026-07-17.md`](audits/v1-release-finalization-2026-07-17.md).
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -25,7 +25,7 @@ The post-v1 sprint is shipped on `main` at `e56ffc7` and deployed to GitHub Page
 - Novice Questions is the default Atlas source interface. RMF Lifecycle is an alternate guided view using Prepare → Categorize → Select → Implement → Assess → Authorize → Monitor.
 - Source records keep one canonical purpose plus explicit novice-question and RMF memberships. Managerial / Operational / Technical are not document categories; they remain available for control-level tagging.
 - Connection lists stay in the main column. The sidebar contains only compact group names and counts; selecting one opens, scrolls to, and focuses the corresponding accordion.
-- Sparse catalogs remain visible with the existing Preview badge rather than being suppressed from search. Real crosswalk sourcing stays separate backlog work.
+- Sparse catalogs remain searchable and may show a limited-coverage notice in search results. The Sources page does not score catalog completeness; it lists factual connection counts instead. Real crosswalk sourcing stays separate backlog work.
 - Path, Map, and List use one filtered relationship model. Published connections are the default; candidate links require an explicit toggle.
 - Desktop Path runs horizontally through six stages. Mobile Path is vertical. Map groups are arranged vertically as upstream, peer/equivalent, and downstream regions.
 - The Map is bounded to the selected record plus six group summaries; one group expands at a time to at most ten desktop or six compact records. Overflow opens List.
@@ -42,7 +42,7 @@ The post-v1 sprint is shipped on `main` at `e56ffc7` and deployed to GitHub Page
 - `runtime.getGraphHealth()` provides the dynamic Sources-page gap explanation. Current generated data: 45 sources, 11,486 nodes, 16,207 edges, 11 findings.
 - Current low-coverage examples: DoD RAI 0/11, ATT&CK ICS 0/97, AI RMF 0/72, SSDF 0/42, SP 800-172 1/116, SP 800-171 Rev. 3 98/131 (75%).
 - Generated Atlas data includes an 11,486-record compact index and 128 deterministic incident-edge shards. Opening one record no longer requires `nodes.json`, `edges.json`, or `evidence.json`.
-- Post-v1 checks include contract, Atlas, data, runtime, graph, and browser suites; lint; typecheck; 699-package license review; dependency audit; Vale fixtures/project scan; static build/smoke; public verification; 22/22 focused accessibility tests; 12 report-only Lighthouse audits; the independent OSCAL cross-check; and four Ubuntu visual comparisons. CI hardening keeps the same browser assertions but reports them as 22 accessibility tests plus 105 functional passes and 1 skip instead of executing accessibility twice.
+- Finalization checks include contract, Atlas, 195 data assertions, runtime, graph, and browser suites; lint; typecheck; 699-package license review; dependency audit; Vale fixtures/project scan; static build/smoke; public verification; 22/22 focused accessibility tests; 107 functional passes and 1 skip; 28/28 deployed Playwright tests; three deployed mobile Lighthouse runs; and green Public Repo Checks, CodeQL, Secret Scan, Pages, and Pages Live Smoke workflows.
 
 ## Done
 - Phases 1-4 shipped.
@@ -50,13 +50,16 @@ The post-v1 sprint is shipped on `main` at `e56ffc7` and deployed to GitHub Page
 - Phase 5 spikes shipped as `129a0e0`: three source views over one manifest, purpose hierarchy relabel/order, shareable `sourceView` route state, purpose-aligned matrix labels, sidebar connection-group jump navigation, unit and E2E contract updates, phase/reference documentation.
 - Phase 6 shipped as `74b1ddb`: per-source freshness models and metadata, weekly human-reviewed refresh PR automation, fail-closed scheduled synchronization, newcomer-facing current/stale wording, refreshed public artifacts, and full contract/E2E coverage.
 - Phase 7 completed and FedRAMP-hardened: official-first task/artifact/tool catalogs, official 2026 rules ingestion, complete legacy-file access, explicit legacy-to-current transitions, 12 A-grade companions, honest compatibility boundaries, Office/print polish, and full contract coverage.
-- Atlas release blocker V1-RR-003 has a local implementation: bounded Path/Map/List views, real-edge-only rendering, responsive orientation, separate inspector, source references, and on-demand neighborhood loading.
+- Atlas release blocker V1-RR-003 is shipped: bounded Path/Map/List views, real-edge-only rendering, responsive orientation, separate inspector, source references, and on-demand neighborhood loading.
 - Release-blocking copy was tightened: the landing page states the product purpose, Navigate no longer claims to show “everything,” Playbooks replaces visible “pattern” drift, and repeated “source-backed” labels were replaced with concrete publication wording.
+- Final source polish shipped as `b64928c`: redundant “Used in map” badges and per-catalog coverage bars were removed; the Sources page now reports 11,486 loaded records and 16,207 published links across seven practical categories with desktop and compact overflow protection.
+- Doctrine audit (July 18, 2026) — RESULT: pass with three findings; all addressed. (1) Numeric deployed mobile Lighthouse floor >= 50 recorded in PRODUCTION_READINESS.md; (2) maintenance debt register with consequence/trigger added to prd-v3-alignment-backlog.md; (3) Knip-discrepancy finding disproved — one-time `npx` inventory classified in the post-v1 strengthening audit, adoption deliberately rejected.
+- Compare navigation race fixed — RESULT: `navigate()` in `src/ui/App.tsx` now merges from a synchronously updated `latestNavStateRef` instead of transition-deferred `viewState`, and ComparePage rapid-fire selects (Framework A/B, Baseline A/B, items input) pass only changed keys. Root cause: back-to-back navigations dropped the earlier patch (Baseline A reset to "All"), surfacing as intermittent compare-map.spec failures (2 of 12 isolated runs) and a real fast-input UX bug. Verified: 24/24 `npx playwright test tests/e2e/compare-map.spec.mjs --repeat-each=6` after fix.
 
 ## Open items
-- Complete the focused deployed Lighthouse run against GitHub Pages; the existing CI evidence remains synthetic and report-only.
-- Reconcile the separate v1.0 release-polish branch intentionally before final release; it was not included in `e56ffc7`.
+- Obtain explicit owner approval before creating or publishing `v1.0.0`.
+- Human NVDA/VoiceOver/TalkBack and real iOS/Android device checks remain unverified residuals unless a human/device completes them or the owner explicitly accepts the risk.
+- A forward deployed-mobile Lighthouse Performance floor of 50 (release band 54–60) is recorded in `docs/PRODUCTION_READINESS.md`; compare future recorded runs against it. The measurements remain synthetic, report-only evidence and must not be presented as field or real-device results.
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.
-- Human screen-reader and real-device checks remain explicitly unverified unless a human/device completes them.
 - Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
-- Do not create or publish `v1.0.0` without separate owner approval.
+- Keep GitHub Actions Node 20-runtime deprecation work, the `@lhci/cli@0.15.1` → `uuid` constraint, and `npm ci || npm install` fallback review in separate maintenance changes.
