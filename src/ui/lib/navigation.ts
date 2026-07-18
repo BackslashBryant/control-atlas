@@ -40,12 +40,6 @@ export const NAV_GROUPS: NavGroup[] = [
         path: "/sources",
         icon: IconSourceCode,
       },
-      {
-        label: "Playbooks",
-        view: "patterns",
-        path: "/playbooks",
-        icon: IconBook2,
-      },
     ],
   },
   {
@@ -63,6 +57,12 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Build",
     items: [
+      {
+        label: "Playbooks",
+        view: "patterns",
+        path: "/playbooks",
+        icon: IconBook2,
+      },
       {
         label: "Templates",
         view: "templates",

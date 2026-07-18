@@ -15,6 +15,8 @@ Execute the owner-approved UX spine remediation (docs/plans/v1-ux-spine-plan-202
 - Do not start a dev/static server without explicit confirmation of command and port.
 - Calm design: no new badge or color noise.
 - "Push is approved as long as everything has been reviewed, polish confirmed by you via a visual browse/audit of all pages and features." (owner, 2026-07-18)
+- "Overall this whole thing should feel like Shallow > Wading > Deep — a lot of stuff just feels DEEP." (owner, 2026-07-18 — every surface opens shallow: one clear thing; wading = grouped summaries/counts on demand; deep = full lists/advanced detail only when explicitly entered)
+- "I want you to handle it all." (owner, 2026-07-18 — delegates executing UX spine phases 1–6, accepting the human screen-reader/real-device gaps as documented residual risk, and creating/publishing v1.0.0 when phases 1–5 are shipped and verified)
 
 ## Decisions
 - Source freshness is additive to registry schema 4.0: `sync_model`, `last_checked`, `last_imported`, `hash`, and a 45-day stale threshold coexist with legacy `retrieved_at` and `checksum` fields.

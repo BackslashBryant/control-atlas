@@ -47,3 +47,14 @@ Owner visual review (2026-07-18) rejected "polish confirmed": tagline too long, 
 ## Verification (every phase)
 
 `npm run precommit` (build, lint, typecheck, data/runtime/browser contracts, 22 a11y + functional Playwright) → designer-grade visual browse (overlap/redundancy/path/padding per screenshot, desktop + 375px) → ship via branch → Public Repo Checks → main → Pages → Live Smoke. Phases 4–5 additionally: Ubuntu visual re-baseline + owner review of new baselines. After phase 5: fresh deployed Lighthouse vs the recorded ≥50 floor.
+
+## Cross-cutting design law: Shallow > Wading > Deep (owner, 2026-07-18)
+
+Every surface opens **Shallow** (one headline, one primary action, minimal orientation), reveals **Wading** on one interaction (grouped summaries, counts, category rollups), and reaches **Deep** (full lists, tables, advanced metadata) only behind an explicit step. Apply to each phase:
+
+- Phase 2 (cards): a card's shallow face = title + one-line gloss; per-card action clusters and metadata move behind the wading affordance.
+- Phase 3 (spine/sidebar): the sidebar IS the wading layer — section names + counts; sections default collapsed so the first screenful stays shallow.
+- Phase 4 (Atlas Map): overview = shallow (record + 6 group summaries); one expanded group = wading; List = deep. Already matches — preserve during layout rewrite.
+- Phase 5 (Compare): summary tiles = shallow; grouped map = wading; full List/export = deep.
+- Phase 6 (primitives): the shared disclosure/EmptyState primitives default to collapsed/shallow states.
+- Review rule: for every screenshot in a phase's visual audit, ask "what does the first screenful demand of a newcomer?" — a page that opens deep is a defect even if tests pass.

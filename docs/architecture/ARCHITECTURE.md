@@ -5,7 +5,7 @@
 - Public product name: **Control Atlas**
 - Campaign line: **Ctrl+Alt+Comply**
 - Tagline: **The public map for federal cyber compliance.**
-- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates - no login, no evidence upload, no organizational data required.
+- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates - no login, no evidence upload, no organizational data required.
 
 ## Adopted Architecture
 

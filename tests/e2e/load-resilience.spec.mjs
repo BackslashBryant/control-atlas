@@ -24,7 +24,7 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Learn", exact: true })
+    .getByRole("button", { name: "Build", exact: true })
     .click();
   await primaryNav
     .locator(".nav-more-menu")
@@ -100,7 +100,7 @@ test("heavy routes explain what they are loading", async ({ page }) => {
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "The workbench is preparing task paths, official materials, and blank working documents.",
+      "The workbench is preparing task paths, official materials, and starter documents.",
     ),
   ).toBeVisible();
   await waitForAppReady(page);
