@@ -10,9 +10,9 @@
 
 ## Current Objective
 
-**V1.0 release handoff** — the post-v1 strengthening sprint is shipped and deployed; finish release evidence and reconcile any separate release-polish work without expanding product scope.
+**V1.0 publication decision** — release verification and source-polish reconciliation are complete on deployed `main`; hold the verified candidate without creating or publishing `v1.0.0` until the owner explicitly approves that action.
 
-**Active sprint:** v1.0 release finalization — see [`docs/Plan.md`](Plan.md), [`docs/PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), and the dated [implementation audit](audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
+**Active sprint:** v1.0 release finalization — verification complete; see [`docs/Plan.md`](Plan.md), [`docs/PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), and the dated [finalization audit](audits/v1-release-finalization-2026-07-17.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -38,9 +38,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Verify the deployed `main` SHA and the optimized Public Repo Checks → Pages chain
-2. Reconcile the separate v1.0 release-polish worktree intentionally; do not silently fold unreviewed changes into the release
-3. Keep Ubuntu CI, live Pages, human screen-reader, real-device, and deployed Lighthouse evidence separate from local emulation; create/publish `v1.0.0` only with explicit owner approval
+1. Owner reviews the finalization evidence and decides whether to accept the documented human screen-reader and real-device residuals
+2. Create/publish `v1.0.0` only after a new, explicit owner approval for that final action
+3. Keep Node runtime notices, the constrained Lighthouse `uuid` dependency, and install-fallback cleanup in separate maintenance work
 
 ## Status Docs
 

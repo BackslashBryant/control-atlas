@@ -9,7 +9,7 @@
 
 ## Current Status
 
-Release candidate `v1.0.0-rc.1` remains the published release. The approved-composition Atlas rebuild and post-v1 platform strengthening are on `main` and deployed to GitHub Pages. The optimized full local precommit passes with 22 accessibility tests plus 105 functional tests passed and 1 skipped. Public Repo Checks, Pages deployment, and Pages Live Smoke have remote evidence; focused deployed Lighthouse, human screen-reader, and real-device evidence remain separate gaps. Creating or publishing `v1.0.0` requires separate owner approval.
+Release candidate `v1.0.0-rc.1` remains the published release. The approved-composition Atlas rebuild, post-v1 platform strengthening, and reconciled source polish are on `main` at `b64928c` and deployed to GitHub Pages. The final full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, Pages, Pages Live Smoke, 28 deployed browser tests, and three focused deployed mobile Lighthouse runs have recorded evidence. Human screen-reader and real-device checks remain explicit residuals. Creating or publishing `v1.0.0` requires separate owner approval.
 
 ## Phase 0 Development Readiness
 
@@ -36,12 +36,13 @@ Release candidate `v1.0.0-rc.1` remains the published release. The approved-comp
 
 ## Public-shell release gate (Epic 7+)
 
-- [x] Local `npm run precommit` passes after CI hardening (22 accessibility tests; 105 functional passed, 1 skipped)
+- [x] Local `npm run precommit` passes after source-polish reconciliation (195 data assertions; 22 accessibility tests; 107 functional passed, 1 skipped)
 - [x] Targeted desktop and mobile novice/expert Atlas workflows pass, including zero connections, bounded Map/inspector layout, and List fallback
-- [ ] Focused Atlas mobile Lighthouse meets the recorded release threshold
+- [x] Focused deployed Atlas mobile Lighthouse recorded in three runs and materially improves over the failed baseline; no numeric blocking threshold was previously established
+- [x] Doctrine audit (July 18, 2026): a forward performance budget is now recorded — deployed focused-Atlas mobile Lighthouse Performance must stay at or above 50 (recorded release band: 54–60). Lighthouse tooling stays report-only; the floor is the comparison criterion for future runs, not a retroactive gate.
 - [x] Keyboard, 200% equivalent reflow, responsive, and reduced-motion checks are recorded in the July 17 local evidence audit
 - [ ] Human screen-reader and real-device gaps are either completed or explicitly accepted as residual risk
-- [ ] Live Pages audit is updated with post-deploy evidence
+- [x] Live Pages audit is updated with post-deploy evidence at `b64928c`
 
 ## Historical Evidence
 
@@ -49,7 +50,7 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Complete the v1.0 release handoff: verify the optimized remote pipeline, finish or explicitly accept the remaining deployed Lighthouse and human/device gaps, and intentionally reconcile any separate release-polish branch. Lighthouse CI remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check. Do not create or publish the final `v1.0.0` tag/release without separate owner approval.
+Await the owner's release decision. The code, CI, deployment, live browser replay, and deployed Lighthouse evidence are complete. The owner must explicitly accept or defer human screen-reader and real-device residuals and separately approve creation/publication of `v1.0.0`. Lighthouse remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check.
 
 ## Post-v1 strengthening status
 
