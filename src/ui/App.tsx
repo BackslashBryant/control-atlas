@@ -143,12 +143,21 @@ export function App() {
       includeFullGraph: requiresFullGraph(viewState.view) || graphRequested,
       onSearchReady: (result) => {
         if (!cancelled) {
+          // A delivered stage proves the connection works: cancel the hard
+          // load timers so slow full-graph fetches degrade to the partial
+          // bundle instead of stamping an error over usable content.
+          window.clearTimeout(slowTimer);
+          window.clearTimeout(timeoutTimer);
+          setLoadSlow(false);
           setBundle((current) => (current?.graphReady ? current : result));
           setLoadError("");
         }
       },
       onFullReady: (result) => {
         if (!cancelled) {
+          window.clearTimeout(slowTimer);
+          window.clearTimeout(timeoutTimer);
+          setLoadSlow(false);
           setBundle(result);
           setLoadError("");
         }
