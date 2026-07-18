@@ -1,4 +1,11 @@
-import { lazy, startTransition, Suspense, useEffect, useState } from "react";
+import {
+  lazy,
+  startTransition,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   DataPendingNotice,
@@ -90,6 +97,11 @@ export function App() {
   const [viewState, setViewState] = useState<ViewState>(() =>
     parseHashLocation(location.pathname, location.search),
   );
+  // Latest URL-derived state, updated synchronously by navigate() and the
+  // location effect. viewState itself commits inside startTransition, which
+  // React may defer past a second rapid navigation; merging from this ref
+  // keeps back-to-back navigations from dropping each other's patches.
+  const latestNavStateRef = useRef<ViewState>(viewState);
   const [bundle, setBundle] = useState<RuntimeBundle | null>(null);
   const [loadError, setLoadError] = useState<string>("");
   const [loadSlow, setLoadSlow] = useState(false);
@@ -186,8 +198,10 @@ export function App() {
   }
 
   useEffect(() => {
+    const parsed = parseHashLocation(location.pathname, location.search);
+    latestNavStateRef.current = parsed;
     startTransition(() => {
-      setViewState(parseHashLocation(location.pathname, location.search));
+      setViewState(parsed);
     });
   }, [location.pathname, location.search]);
 
@@ -220,9 +234,10 @@ export function App() {
     patch: Partial<ViewState> = {},
   ) {
     const nextState = normalizeViewState(nextView, {
-      ...(viewState as Record<string, unknown>),
+      ...(latestNavStateRef.current as Record<string, unknown>),
       ...(patch as Record<string, unknown>),
     } as Partial<ViewState>);
+    latestNavStateRef.current = nextState;
     routerNavigate(serializeHashLocation(nextState));
     window.scrollTo({ top: 0, behavior: "auto" });
   }

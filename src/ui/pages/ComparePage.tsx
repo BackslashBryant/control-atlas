@@ -490,7 +490,7 @@ export function ComparePage(props: {
                 hint="The first framework or catalog you want to compare from."
                 label="Framework A"
                 onChange={(value) =>
-                  onNavigate("matrix", { ...state, workbench, source: value })
+                  onNavigate("matrix", { workbench, source: value })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -509,7 +509,7 @@ export function ComparePage(props: {
                 hint="The second framework or catalog you want to compare against."
                 label="Framework B"
                 onChange={(value) =>
-                  onNavigate("matrix", { ...state, workbench, target: value })
+                  onNavigate("matrix", { workbench, target: value })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -527,7 +527,6 @@ export function ComparePage(props: {
               <input
                 onChange={(event) =>
                   onNavigate("matrix", {
-                    ...state,
                     workbench,
                     items: event.target.value,
                   })
@@ -1293,7 +1292,6 @@ export function ComparePage(props: {
               label="Baseline A"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   workbench,
                   baselineA: value,
                 })
@@ -1305,7 +1303,6 @@ export function ComparePage(props: {
               label="Baseline B"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   workbench,
                   baselineB: value,
                 })
