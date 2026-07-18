@@ -79,16 +79,15 @@ export function StartHereResult(props: StartHereResultProps) {
                   key={`${link.kind}-${link.kind === "library-catalog" ? link.catalogId : link.nodeId}`}
                 >
                   <div>
-                    <strong>{link.label}</strong>
+                    <button
+                      className="card-title-action"
+                      onClick={() => onFollowLibraryLink(link)}
+                      type="button"
+                    >
+                      <strong>{link.label}</strong>
+                    </button>
                     <p>{link.rationale}</p>
                   </div>
-                  <button
-                    className="secondary"
-                    onClick={() => onFollowLibraryLink(link)}
-                    type="button"
-                  >
-                    Open in Explore
-                  </button>
                 </article>
               ))}
             </div>
@@ -106,16 +105,15 @@ export function StartHereResult(props: StartHereResultProps) {
                   key={`compare-${link.workbench}-${link.label}`}
                 >
                   <div>
-                    <strong>{link.label}</strong>
+                    <button
+                      className="card-title-action"
+                      onClick={() => onFollowCompareLink(link)}
+                      type="button"
+                    >
+                      <strong>{link.label}</strong>
+                    </button>
                     <p>{link.rationale}</p>
                   </div>
-                  <button
-                    className="secondary"
-                    onClick={() => onFollowCompareLink(link)}
-                    type="button"
-                  >
-                    Open Compare
-                  </button>
                 </article>
               ))}
             </div>
@@ -132,18 +130,17 @@ export function StartHereResult(props: StartHereResultProps) {
               {recommendations.patterns.map((link) => (
                 <article className="relationship-card" key={link.patternId}>
                   <div>
-                    <strong>{link.label}</strong>
+                    <button
+                      className="card-title-action"
+                      onClick={() =>
+                        onNavigate("patterns", { pattern: link.patternId })
+                      }
+                      type="button"
+                    >
+                      <strong>{link.label}</strong>
+                    </button>
                     <p>{link.rationale}</p>
                   </div>
-                  <button
-                    className="secondary"
-                    onClick={() =>
-                      onNavigate("patterns", { pattern: link.patternId })
-                    }
-                    type="button"
-                  >
-                    Read pattern
-                  </button>
                 </article>
               ))}
             </div>
@@ -152,26 +149,25 @@ export function StartHereResult(props: StartHereResultProps) {
           <section className="stack">
             <div className="section-header">
               <h2>Templates</h2>
-              <p>Blank artifacts you can generate locally in your browser.</p>
+              <p>Starter artifacts you can generate locally in your browser.</p>
             </div>
             <div className="stack compact">
               {recommendations.templates.map((link) => (
                 <article className="relationship-card" key={link.templateType}>
                   <div>
-                    <strong>{link.label}</strong>
+                    <button
+                      className="card-title-action"
+                      onClick={() =>
+                        onNavigate("templates", {
+                          templateType: link.templateType,
+                        })
+                      }
+                      type="button"
+                    >
+                      <strong>{link.label}</strong>
+                    </button>
                     <p>{link.rationale}</p>
                   </div>
-                  <button
-                    className="primary"
-                    onClick={() =>
-                      onNavigate("templates", {
-                        templateType: link.templateType,
-                      })
-                    }
-                    type="button"
-                  >
-                    Generate {link.label}
-                  </button>
                 </article>
               ))}
             </div>

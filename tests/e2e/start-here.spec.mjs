@@ -37,7 +37,7 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await expect(page.getByRole('heading', { name: 'Playbooks', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Generate Inheritance Worksheet', exact: true }).click();
+  await page.getByRole('button', { name: 'Inheritance Worksheet', exact: true }).click();
   await expect(page).toHaveURL(/#\/templates\?.*templateType=inheritance_worksheet|view=templates&templateType=inheritance_worksheet/);
   await expect(
     page.getByRole("heading", { name: "Inheritance Worksheet" }),
@@ -46,19 +46,19 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.getByRole('button', { name: 'Read pattern', exact: true }).first().click();
+  await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Playbooks', exact: true }) }).locator('.card-title-action').first().click();
   await expect(page).toHaveURL(/#\/playbooks\?.*pattern=|view=playbooks&pattern=/);
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.getByRole('button', { name: 'Open in Explore', exact: true }).first().click();
+  await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Explore', exact: true }) }).locator('.card-title-action').first().click();
   await expect(page).toHaveURL(/#\/explore\?.*(filter=|framework=)fedramp-rev5|view=browse&framework=fedramp-rev5|view=explore&filter=fedramp-rev5/);
 
   await page.goto('/?view=start-here&systemType=Hybrid&dataSensitivity=High&environment=DoD&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.getByRole('button', { name: 'Open Compare', exact: true }).first().click();
+  await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Compare', exact: true }) }).locator('.card-title-action').first().click();
   await expect(page).toHaveURL(/#\/compare\?.*workbench=stig-chain|view=matrix&workbench=stig-chain/);
 });
 
@@ -72,7 +72,7 @@ test('header search surfaces glossary results from any page', async ({ page }) =
 
   await expect(page).toHaveURL(/#\/explore\?.*q=reciprocity|view=explore&q=reciprocity/);
   await expect(page.getByRole('button', { name: /^Glossary \(\d+\)$/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Open term details', exact: true }).first()).toBeVisible();
+  await expect(page.locator('.result-card .card-title-action').first()).toBeVisible();
 });
 
 test('library detail exposes related glossary terms', async ({ page }) => {

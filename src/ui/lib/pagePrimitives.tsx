@@ -181,6 +181,41 @@ export function Badge(props: {
   );
 }
 
+export function CardTitle(props: {
+  children: ReactNode;
+  onOpen?: () => void;
+  href?: string;
+}) {
+  if (props.onOpen) {
+    return (
+      <h3 className="card-title">
+        <button
+          className="card-title-action"
+          onClick={props.onOpen}
+          type="button"
+        >
+          {props.children}
+        </button>
+      </h3>
+    );
+  }
+  if (props.href) {
+    return (
+      <h3 className="card-title">
+        <a
+          className="card-title-action"
+          href={props.href}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {props.children}
+        </a>
+      </h3>
+    );
+  }
+  return <h3 className="card-title">{props.children}</h3>;
+}
+
 export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
   const { source, onOpen } = props;
   return (
@@ -188,7 +223,9 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       <div className="result-card-header">
         <div>
           <p className="result-meta">Source</p>
-          <h3>{source.display_name || source.name}</h3>
+          <CardTitle onOpen={onOpen}>
+            {source.display_name || source.name}
+          </CardTitle>
         </div>
       </div>
       <p className="result-summary">
@@ -224,11 +261,6 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
         </div>
       ) : null}
       <div className="card-actions">
-        {onOpen ? (
-          <button className="primary" onClick={onOpen} type="button">
-            View source details
-          </button>
-        ) : null}
         <a
           className="secondary"
           href={source.artifact_url}

@@ -55,7 +55,9 @@ test("explore bootstrap avoids graph JSON until record open", async ({
 
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  const openDetail = page.getByRole("button", { name: "Open record" }).first();
+  const openDetail = page
+    .locator("#library-results .result-card .card-title-action")
+    .first();
   await expect(openDetail).toBeEnabled({ timeout: 15000 });
   await openDetail.click();
   await expect(page).toHaveURL(/library-detail|record\//);

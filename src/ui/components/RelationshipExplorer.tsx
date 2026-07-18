@@ -517,25 +517,29 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           {!mapControls && selectedNode ? (
             <aside className="relationship-map-selection">
               <p className="eyebrow">Selected item</p>
-              <strong>
-                {selectedNode.metadata?.item_id || selectedNode.id}
-              </strong>
+              {selectedNode.id !== centerNodeId ? (
+                <button
+                  className="card-title-action"
+                  onClick={() => onOpenNode(selectedNode.id)}
+                  type="button"
+                >
+                  <strong>
+                    {selectedNode.metadata?.item_id || selectedNode.id}
+                  </strong>
+                </button>
+              ) : (
+                <strong>
+                  {selectedNode.metadata?.item_id || selectedNode.id}
+                </strong>
+              )}
               <p>
                 {selectedNode.metadata?.title ||
                   selectedNode.label ||
                   selectedNode.id}
               </p>
-              {selectedNode.id !== centerNodeId ? (
-                <button
-                  className="secondary"
-                  onClick={() => onOpenNode(selectedNode.id)}
-                  type="button"
-                >
-                  Open record
-                </button>
-              ) : (
+              {selectedNode.id === centerNodeId ? (
                 <p className="muted">Center of this map.</p>
-              )}
+              ) : null}
             </aside>
           ) : null}
         </div>

@@ -83,7 +83,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
   await expect(page.getByText("FedRAMP Rev. 5 Baselines")).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: "Generate Inheritance Worksheet",
+      name: "Inheritance Worksheet",
       exact: true,
     }),
   ).toBeVisible();
@@ -256,10 +256,10 @@ test("explore groups results and filters out records without connections", async
     page.getByText("No connections yet", { exact: true }),
   ).toHaveCount(0);
   const firstCard = page.locator("#library-results .result-card").filter({
-    has: page.getByRole("button", { name: "Open record" }),
+    has: page.locator(".result-actions-menu"),
   }).first();
   await expect(
-    firstCard.getByRole("button", { name: "Open record" }),
+    firstCard.locator(".card-title-action"),
   ).toBeVisible();
   await expect(
     firstCard.getByText("Compare, map, or export"),
@@ -419,9 +419,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
     ),
   ).toBeVisible();
   await expect(communityCard).toContainText("Official link only");
-  await communityCard
-    .getByRole("button", { name: "View source details" })
-    .click();
+  await communityCard.locator(".card-title-action").click();
   await expect(
     page.getByText("How Control Atlas uses it", { exact: true }),
   ).toBeVisible();
