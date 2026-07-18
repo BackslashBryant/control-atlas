@@ -1,10 +1,10 @@
 # STATE
 
 ## Goal
-Hold the verified Control Atlas v1.0 candidate ready for the owner's publication decision. Preserve the static public-data-only architecture and keep the final `v1.0.0` tag and release owner-gated.
+Execute the owner-approved UX spine remediation (docs/plans/v1-ux-spine-plan-2026-07-18.md); `v1.0.0` tags only after phases 1–5 land. Preserve the static public-data-only architecture.
 
 ## Now
-Release finalization is complete on `main` at `b64928c` and deployed to GitHub Pages. The separate Muse source-polish work was rebased onto the strengthened platform, completed, and verified: the Sources page replaces legacy coverage scores and binary map badges with exact loaded-record, connected-record, and published-link counts across seven practical categories. The full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional Playwright tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, Pages Live Smoke, a 28-test deployed replay, and three deployed mobile Lighthouse runs have recorded evidence; see [`docs/audits/v1-release-finalization-2026-07-17.md`](audits/v1-release-finalization-2026-07-17.md).
+`main` is at `1e5f30d` (race fix + finalization docs pushed 2026-07-18; deploy chain in progress). Owner rejected the visual polish audit and locked a 6-phase UX spine plan: sidebar on dense routes only, Playbooks→Build, Compare map→grouped summary, v1.0.0 gated on phases 1–5. Next session starts Phase 1 (copy + IA). Previous state: release finalization was complete on `main` at `b64928c` and deployed to GitHub Pages. The separate Muse source-polish work was rebased onto the strengthened platform, completed, and verified: the Sources page replaces legacy coverage scores and binary map badges with exact loaded-record, connected-record, and published-link counts across seven practical categories. The full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional Playwright tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, Pages Live Smoke, a 28-test deployed replay, and three deployed mobile Lighthouse runs have recorded evidence; see [`docs/audits/v1-release-finalization-2026-07-17.md`](audits/v1-release-finalization-2026-07-17.md).
 
 ## Constraints
 - Keep the rotating Ctrl+Alt+X brand wordmark; do not touch `src/ui/components/BrandLockup.tsx`.
@@ -14,6 +14,7 @@ Release finalization is complete on `main` at `b64928c` and deployed to GitHub P
 - `dist/` is generated; never hand-edit it.
 - Do not start a dev/static server without explicit confirmation of command and port.
 - Calm design: no new badge or color noise.
+- "Push is approved as long as everything has been reviewed, polish confirmed by you via a visual browse/audit of all pages and features." (owner, 2026-07-18)
 
 ## Decisions
 - Source freshness is additive to registry schema 4.0: `sync_model`, `last_checked`, `last_imported`, `hash`, and a 45-day stale threshold coexist with legacy `retrieved_at` and `checksum` fields.
@@ -31,6 +32,8 @@ Release finalization is complete on `main` at `b64928c` and deployed to GitHub P
 - The Map is bounded to the selected record plus six group summaries; one group expands at a time to at most ten desktop or six compact records. Overflow opens List.
 - A zero-connection record gets an honest empty state. The Atlas never invents edges or renders a decorative canvas when there is nothing to map.
 - The Atlas route uses semantic React DOM and record-indexed neighborhood shards. React Flow and ELK remain lazy legacy dependencies for other bounded relationship surfaces, not the primary Atlas route.
+
+- DECISION (owner 2026-07-18): in-page jump sidebar on dense routes only (record detail, Sources, Compare, Templates, Playbooks); Playbooks moves Learn→Build; Compare map replaced by the bounded grouped-summary idiom (canvas retires); v1.0.0 tags only after UX spine phases 1–5 — plan: docs/plans/v1-ux-spine-plan-2026-07-18.md.
 
 ## Facts
 - Phase 7 local verification includes 12 regenerated Office outputs, 12 print-QA PDFs / 72 pages, independent XLSX parsing, OOXML structure checks, registry/interoperability contracts, official FedRAMP schema validation, and page-by-page visual review.
