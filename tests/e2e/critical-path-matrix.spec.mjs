@@ -135,11 +135,14 @@ test("critical path: MITRE library search returns technique with plain-language 
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("button", { name: "Open record" }).first(),
+    page.locator("#library-results .result-card .card-title-action").first(),
   ).toBeVisible({
     timeout: 90000,
   });
-  await page.getByRole("button", { name: "Open record" }).first().click();
+  await page
+    .locator("#library-results .result-card .card-title-action")
+    .first()
+    .click();
   await expect(page).toHaveURL(/record\/mitre-attack|library-detail/);
   await expect(page.getByText("What this is")).toBeVisible();
   await expect(page.getByText("Threat context")).toBeVisible();

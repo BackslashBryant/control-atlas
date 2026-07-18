@@ -76,7 +76,9 @@ test("staged library search enables results before detail pages", async ({
     timeout: 15000,
   });
   expect(graphRequests).toBe(0);
-  const openDetail = page.getByRole("button", { name: "Open record" }).first();
+  const openDetail = page
+    .locator("#library-results .result-card .card-title-action")
+    .first();
   await expect(openDetail).toBeEnabled();
   await openDetail.click();
   await expect(page).toHaveURL(/library-detail|record\//);

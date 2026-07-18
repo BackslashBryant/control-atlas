@@ -17,6 +17,7 @@ import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
   Badge,
+  CardTitle,
   DisclosurePanel,
   PageHeader,
   PATTERN_RENAMES,
@@ -336,25 +337,20 @@ export function ExplorePage(props: {
                     <article className="result-card" key={template.id}>
                       <div className="result-card-header">
                         <div>
-                          <p className="result-meta">Blank working template</p>
-                          <h3>{template.title}</h3>
+                          <p className="result-meta">Starter template</p>
+                          <CardTitle
+                            onOpen={() =>
+                              onNavigate("templates", {
+                                templateType: template.templateType,
+                              })
+                            }
+                          >
+                            {template.title}
+                          </CardTitle>
                         </div>
                         <Badge tone="info">{template.classification}</Badge>
                       </div>
                       <p className="result-summary">{template.summary}</p>
-                      <div className="card-actions">
-                        <button
-                          className="primary"
-                          onClick={() =>
-                            onNavigate("templates", {
-                              templateType: template.templateType,
-                            })
-                          }
-                          type="button"
-                        >
-                          Open template
-                        </button>
-                      </div>
                     </article>
                   ))}
                 </div>
@@ -371,7 +367,9 @@ export function ExplorePage(props: {
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Official resource</p>
-                          <h3>{artifact.title}</h3>
+                          <CardTitle href={artifact.href || undefined}>
+                            {artifact.title}
+                          </CardTitle>
                         </div>
                         <Badge
                           tone={
@@ -390,18 +388,6 @@ export function ExplorePage(props: {
                       <p className="result-support">
                         {artifact.version ? `Version: ${artifact.version}` : ""}
                       </p>
-                      {artifact.href ? (
-                        <div className="card-actions">
-                          <a
-                            className="primary button-link"
-                            href={artifact.href}
-                            rel="noreferrer"
-                            target="_blank"
-                          >
-                            Open official source
-                          </a>
-                        </div>
-                      ) : null}
                     </article>
                   ))}
                 </div>
@@ -418,10 +404,10 @@ export function ExplorePage(props: {
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Glossary term</p>
-                          <h3>
+                          <CardTitle onOpen={() => onOpenGlossary(entry.id)}>
                             {entry.term}
                             {entry.expansion ? ` · ${entry.expansion}` : ""}
-                          </h3>
+                          </CardTitle>
                         </div>
                         <Badge tone={entry.consensus ? "warning" : "success"}>
                           {entry.consensus
@@ -458,15 +444,6 @@ export function ExplorePage(props: {
                           </button>
                         ))}
                       </div>
-                      <div className="card-actions">
-                        <button
-                          className="primary"
-                          onClick={() => onOpenGlossary(entry.id)}
-                          type="button"
-                        >
-                          Open term details
-                        </button>
-                      </div>
                     </article>
                   ))}
                 </div>
@@ -500,7 +477,11 @@ export function ExplorePage(props: {
                                     document.object_type,
                                   )}
                                 </p>
-                                <h3>
+                                <CardTitle
+                                  onOpen={() =>
+                                    onOpenNode(document.id, "search")
+                                  }
+                                >
                                   {recordDisplayTitle(
                                     node ?? {
                                       id: document.id,
@@ -511,7 +492,7 @@ export function ExplorePage(props: {
                                       },
                                     },
                                   )}
-                                </h3>
+                                </CardTitle>
                               </div>
                               <div className="result-card-badges">
                                 {relationshipCount > 0 ? (
@@ -553,15 +534,6 @@ export function ExplorePage(props: {
                               ) : null}
                             </div>
                             <div className="card-actions">
-                              <button
-                                className="primary"
-                                onClick={() =>
-                                  onOpenNode(document.id, "search")
-                                }
-                                type="button"
-                              >
-                                Open record
-                              </button>
                               <details className="result-actions-menu">
                                 <summary>Compare, map, or export</summary>
                                 <div className="result-actions-popover">

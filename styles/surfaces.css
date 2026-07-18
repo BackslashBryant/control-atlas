@@ -742,6 +742,29 @@ li {
   padding: var(--space-3);
 }
 
+.card-title {
+  margin: 0;
+}
+
+.card-title-action {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card-title-action:hover,
+.card-title-action:focus-visible {
+  color: var(--ca-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .result-summary {
   margin: 0;
 }
