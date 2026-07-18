@@ -32,7 +32,7 @@ export const helpSurfaces = [
   {
     view: "templates",
     title: "Templates",
-    body: "Generate blank RMF/ATO artifacts locally in your browser. Nothing you type is uploaded or stored.",
+    body: "Generate starter RMF/ATO artifacts locally in your browser. Nothing you type is uploaded or stored.",
     actionLabel: "Open Templates",
   },
   {

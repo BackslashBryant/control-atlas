@@ -652,7 +652,7 @@ function routeLoadingCopy(view: ViewState["view"]) {
       return {
         title: "Loading the compliance workbench",
         description:
-          "The workbench is preparing task paths, official materials, and blank working documents.",
+          "The workbench is preparing task paths, official materials, and starter documents.",
       };
     case "atlas-map":
       return {

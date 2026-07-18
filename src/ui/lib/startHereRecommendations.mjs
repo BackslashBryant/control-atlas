@@ -42,7 +42,7 @@ const PATTERN_RATIONALES = {
 };
 
 const TEMPLATE_RATIONALES = {
-  security_plan_starter: 'A blank system security plan scaffold — the core document every authorization package is built around.',
+  security_plan_starter: 'A starter system security plan scaffold — the core document every authorization package is built around.',
   assessment_planning_worksheet: 'Plans out how your controls will be tested before an assessor arrives.',
   inheritance_worksheet: 'Records which controls you inherit from a provider versus own yourself, so nothing falls through the cracks.',
   stig_evidence_checklist: 'Tracks which DISA Security Technical Implementation Guide (STIG) checks you have evidence for — the technical proof DoD assessors ask for.',
@@ -348,7 +348,7 @@ export function buildStartHereRecommendations(answers) {
     label: templateLabel(templateType),
     rationale:
       TEMPLATE_RATIONALES[templateType] ||
-      'Generate this blank artifact locally to turn the reference path into a planning worksheet without storing your data.',
+      'Generate this starter artifact locally to turn the reference path into a planning worksheet without storing your data.',
   }));
 
   const situation = {

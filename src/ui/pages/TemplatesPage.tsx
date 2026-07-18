@@ -920,7 +920,7 @@ export function TemplatesPage(props: {
           ) : undefined
         }
         eyebrow="Compliance workbench"
-        summary="Pick the job in front of you. We will show the official materials, practical tools, and blank working documents that fit it."
+        summary="Pick the job in front of you. We will show the official materials, practical tools, and starter documents that fit it."
         title="What do you need to get done?"
       />
 
@@ -1143,7 +1143,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   No tool is joined to this workflow yet. The official resources
-                  and blank working documents remain usable without one.
+                  and starter documents remain usable without one.
                 </p>
               </div>
             ) : null}
@@ -1170,7 +1170,7 @@ export function TemplatesPage(props: {
                 <p className="eyebrow">4 · Build the working artifact</p>
                 <h2 id="companion-heading">Blank working documents</h2>
                 <p className="page-summary">
-                  Create a blank file in your browser. It helps organize the
+                  Create a starter file in your browser. It helps organize the
                   work; it is not an official form, approval, or proof.
                 </p>
               </div>

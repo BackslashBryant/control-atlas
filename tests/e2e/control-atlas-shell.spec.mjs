@@ -123,7 +123,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(researchMenuLabels).toEqual(["Start", "Sources", "Playbooks"]);
+  expect(researchMenuLabels).toEqual(["Start", "Sources"]);
 
   await primaryNav.getByRole("button", { name: "Build", exact: true }).click();
   const buildMenuLabels = await openGroupMenu
@@ -131,7 +131,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(buildMenuLabels).toEqual(["Templates"]);
+  expect(buildMenuLabels).toEqual(["Playbooks", "Templates"]);
 
   await primaryNav.getByRole("button", { name: "Search", exact: true }).click();
   const searchMenuLabels = await openGroupMenu

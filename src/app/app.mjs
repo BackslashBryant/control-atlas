@@ -370,7 +370,7 @@ async function renderSearch(state) {
             <button type="button" class="walkthrough-card" data-view-shortcut="search"><strong>Library</strong><br>Find a control, CCI, STIG, baseline, or topic and see what it connects to. <span class="walkthrough-next">Search above.</span></button>
             <button type="button" class="walkthrough-card" data-view-shortcut="matrix"><strong>Crosswalks</strong><br>Compare frameworks and see which requirements overlap. <span class="walkthrough-next">Open Crosswalks.</span></button>
             <button type="button" class="walkthrough-card" data-view-shortcut="sources"><strong>Sources</strong><br>Check which public source supports a mapping before you rely on it. <span class="walkthrough-next">Open Sources.</span></button>
-            <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate blank planning files for RMF, ATO, assessment, and ConMon work. <span class="walkthrough-next">Open Templates.</span></button>
+            <button type="button" class="walkthrough-card" data-view-shortcut="templates"><strong>Templates</strong><br>Generate starter planning files for RMF, ATO, assessment, and ConMon work. <span class="walkthrough-next">Open Templates.</span></button>
             <button type="button" class="walkthrough-card" data-view-shortcut="patterns"><strong>Patterns</strong><br>Browse common authorization and compliance patterns with practical examples. <span class="walkthrough-next">Open Patterns.</span></button>
             <button type="button" class="walkthrough-card" data-view-shortcut="start-here"><strong>Start Here</strong><br>Answer a few questions and get a recommended place to begin. <span class="walkthrough-next">Open Start Here.</span></button>
           </div>
@@ -966,8 +966,8 @@ function renderTemplates(state = currentState) {
   app.innerHTML = `
     <section class="panel">
       <p class="eyebrow">Templates</p>
-      <h2>Blank planning starters stay local to your browser</h2>
-      <p class="muted">Generate public-reference templates without uploading any data. Pick a document type, optional framework context, and download a blank worksheet.</p>
+      <h2>Starter planning documents stay local to your browser</h2>
+      <p class="muted">Generate public-reference templates without uploading any data. Pick a document type, optional framework context, and download a starter worksheet.</p>
 
       <form id="template-factory-form" class="template-builder" style="margin-top: 1.5rem;">
         <div class="form-group" style="margin-bottom: 1rem;">
@@ -1072,7 +1072,7 @@ function renderTemplates(state = currentState) {
         </div>
 
         <div class="form-actions" style="margin-top: 1.5rem;">
-          <button type="submit" class="primary">Download blank template</button>
+          <button type="submit" class="primary">Download starter template</button>
         </div>
       </form>
     </section>`;

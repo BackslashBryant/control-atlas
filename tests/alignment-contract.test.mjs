@@ -45,7 +45,7 @@ test('core product docs state the canonical Control Atlas boundary', () => {
     assert.match(content, /Control Atlas/);
     assert.match(content, /Ctrl\+Alt\+Comply/);
     assert.match(content, /The public map for federal cyber compliance\./);
-    assert.match(content, /Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF\/ATO templates/i);
+    assert.match(content, /Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF\/ATO templates/i);
     assert.match(content, /public.data.only/i);
     assert.match(content, /no (?:backend|user\/org\/system data|user, organization, or system data)/i);
   }

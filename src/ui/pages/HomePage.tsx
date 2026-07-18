@@ -23,8 +23,7 @@ export function HomePage(props: HomePageProps) {
         <BrandFlourish />
         <p className="landing-tagline">
           The public map for federal cyber compliance. Search controls, trace
-          framework connections, and build blank working documents without a
-          login or upload.
+          framework connections, create starter documents.
         </p>
       </div>
 

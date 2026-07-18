@@ -4,7 +4,7 @@
 
 The public map for federal cyber compliance.
 
-Open-source reference workbench for mapping controls, tracing frameworks, and generating blank RMF/ATO templates. This is a public-data-only application.
+Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates. This is a public-data-only application.
 
 Control Atlas translates federal security frameworks, controls, STIGs, and
 RMF artifacts into plain language — connecting what things mean, how they
