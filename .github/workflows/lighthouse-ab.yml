@@ -1,0 +1,111 @@
+name: Lighthouse A/B
+
+# Diagnostic utility: builds two git refs on the SAME runner, serves each
+# locally, and measures both with mobile Lighthouse. Isolates a genuine code
+# regression from a hardware-dependent score, which a single measurement on
+# unfamiliar hardware cannot do. Report-only — never writes to the repository.
+# Trigger: manual dispatch, or push a branch named evidence/lighthouse-ab*.
+
+on:
+  workflow_dispatch:
+    inputs:
+      before_ref:
+        description: Baseline git ref
+        required: false
+        default: "743dcde"
+      after_ref:
+        description: Candidate git ref
+        required: false
+        default: "9f687d7"
+  push:
+    branches:
+      - "evidence/lighthouse-ab*"
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    env:
+      BEFORE_REF: ${{ github.event.inputs.before_ref || '743dcde' }}
+      AFTER_REF: ${{ github.event.inputs.after_ref || '9f687d7' }}
+      ROUTE: "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Measure both refs on identical hardware
+        run: |
+          set -e
+          mkdir -p artifacts/lighthouse-ab
+          measure () {
+            local label="$1" ref="$2"
+            echo "::group::$label ($ref)"
+            git checkout --force "$ref"
+            npm ci
+            npm run build:site
+            PORT=4317 npm run serve:static &
+            local server_pid=$!
+            for _ in $(seq 1 60); do
+              curl -sf http://localhost:4317/ >/dev/null && break || sleep 2
+            done
+            for i in 1 2 3; do
+              npx lighthouse "http://localhost:4317${ROUTE}" \
+                --quiet \
+                --chrome-flags="--headless --no-sandbox" \
+                --form-factor=mobile \
+                --screenEmulation.mobile \
+                --output=json \
+                --output-path="artifacts/lighthouse-ab/$label-$i.json"
+            done
+            kill "$server_pid" 2>/dev/null || true
+            echo "::endgroup::"
+          }
+          measure before "$BEFORE_REF"
+          measure after "$AFTER_REF"
+
+      - name: Summarize
+        run: |
+          node -e "
+            const read = (label, i) =>
+              require('./artifacts/lighthouse-ab/' + label + '-' + i + '.json');
+            const summarize = (label) =>
+              [1, 2, 3].map((i) => {
+                const r = read(label, i);
+                return {
+                  ref: label,
+                  run: i,
+                  performance: Math.round(r.categories.performance.score * 100),
+                  lcp: r.audits['largest-contentful-paint'].displayValue,
+                  tbt: r.audits['total-blocking-time'].displayValue,
+                  cls: r.audits['cumulative-layout-shift'].displayValue,
+                };
+              });
+            const before = summarize('before');
+            const after = summarize('after');
+            console.table([...before, ...after]);
+            const min = (rows) => Math.min(...rows.map((r) => r.performance));
+            console.log('BEFORE(' + process.env.BEFORE_REF + ') lowest: ' + min(before));
+            console.log('AFTER (' + process.env.AFTER_REF + ') lowest: ' + min(after));
+            const shifts = read('after', 3).audits['layout-shifts'];
+            for (const item of (shifts?.details?.items || []).slice(0, 5)) {
+              const sel = item.subItems?.items?.[0]?.node?.selector || item.node?.selector || '';
+              console.log('after shift', (item.score ?? 0).toFixed(3), sel.slice(0, 80));
+            }
+            require('fs').writeFileSync(
+              'artifacts/lighthouse-ab/summary.json',
+              JSON.stringify({ before, after }, null, 2),
+            );
+          "
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-ab
+          path: artifacts/lighthouse-ab
+          if-no-files-found: error
