@@ -1,16 +1,91 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
+import { AtlasConnectionMap } from "./AtlasConnectionMap";
 import { CompareExportDisclosure } from "./LoadStatusPanel";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { RelationshipExplorer } from "./RelationshipExplorer";
 import {
   compareGraphTableRows,
   type CompareGraphResult,
+  type CompareRole,
 } from "../lib/buildCompareGraph";
-import { useClusteredGraph } from "../lib/useClusteredGraph";
+import type {
+  AtlasConnectionGroup,
+  AtlasRelationshipRow,
+} from "../lib/atlasModel";
 import type { CompareViewMode, ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+
+function useCompactMapViewport() {
+  const [compact, setCompact] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+  return compact;
+}
+
+const COMPARE_GROUP_ORDER: CompareRole[] = [
+  "shared",
+  "uniqueA",
+  "uniqueB",
+  "neutral",
+];
+
+function buildCompareMapGroups(
+  graph: CompareGraphResult,
+): AtlasConnectionGroup[] {
+  const edgeByNode = new Map(
+    graph.edges.flatMap((edge) => [
+      [edge.source_node_id, edge],
+      [edge.target_node_id, edge],
+    ]) as Array<[string, (typeof graph.edges)[number]]>,
+  );
+  const byRole = new Map<CompareRole, AtlasRelationshipRow[]>();
+  for (const node of graph.nodes) {
+    if (node.id === graph.centerNodeId) {
+      continue;
+    }
+    const role: CompareRole = node.compareRole || "neutral";
+    const edge = edgeByNode.get(node.id);
+    const row = {
+      edge: (edge ? { ...edge, id: edge.id } : { id: `compare-${node.id}` }) as
+        AtlasRelationshipRow["edge"],
+      counterpart: node as AtlasRelationshipRow["counterpart"],
+      itemId: node.metadata?.item_id || node.id,
+      title: node.metadata?.title || node.label || node.id,
+    };
+    const rows = byRole.get(role) || [];
+    rows.push(row);
+    byRole.set(role, rows);
+  }
+  const labelFor = (role: CompareRole) =>
+    role === "shared"
+      ? graph.labels.shared
+      : role === "uniqueA"
+        ? graph.labels.uniqueA
+        : role === "uniqueB"
+          ? graph.labels.uniqueB
+          : "Related records";
+  return COMPARE_GROUP_ORDER.filter((role) => byRole.get(role)?.length).map(
+    (role) => ({
+      id: role,
+      label: labelFor(role),
+      description: labelFor(role),
+      placement: "lateral" as const,
+      stage: "control" as const,
+      rmfStage: "select" as const,
+      items: byRole.get(role) || [],
+    }),
+  );
+}
 
 type CompareResultsPanelProps = {
   bundle: RuntimeBundle;
@@ -36,23 +111,26 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
   } = props;
 
   const staticTableRows = useMemo(() => compareGraphTableRows(graph), [graph]);
-  const compareViewMode = compareView === "map" ? "map" : "list";
-
-  const {
-    nodes: clusteredNodes,
-    edges: clusteredEdges,
-    clusterMeta,
-    expandedClusters,
-    expandedClusterLabels,
-    onClusterExpand,
-    onClusterCollapse,
-  } = useClusteredGraph({
-    runtime: bundle.runtime,
-    centerNodeId: graph.centerNodeId,
-    nodes: graph.nodes,
-    edges: graph.edges,
-    enabled: compareView === "map" && graph.mapAvailable,
-  });
+  const totalMappingRows = useMemo(
+    () => graph.edges.filter((edge) => edge.id !== "baseline-a").length,
+    [graph],
+  );
+  const hiddenMappingRows = totalMappingRows - staticTableRows.length;
+  const compact = useCompactMapViewport();
+  const [expandedGroupId, setExpandedGroupId] = useState("");
+  const compareMapGroups = useMemo(
+    () => buildCompareMapGroups(graph),
+    [graph],
+  );
+  const centerNode = useMemo(
+    () =>
+      (graph.nodes.find((node) => node.id === graph.centerNodeId) || {
+        id: graph.centerNodeId,
+        metadata: { item_id: graph.atlasMapNode, title: "Comparison scope" },
+        label: graph.atlasMapNode || "Comparison scope",
+      }) as Parameters<typeof AtlasConnectionMap>[0]["center"],
+    [graph],
+  );
 
   const setCompareView = (view: CompareViewMode) => {
     onNavigate("matrix", { compareView: view, workbench: matrixWorkbench });
@@ -62,9 +140,6 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
     if (!graph.atlasMapNode) return;
     onNavigate("atlas-map", { node: graph.atlasMapNode });
   };
-
-  const compareUsesPathLayout =
-    matrixWorkbench === "stig-chain" || matrixWorkbench === "threat-chain";
 
   return (
     <section className="compare-results-panel">
@@ -166,47 +241,37 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           </div>
         </section>
       ) : compareView === "map" ? (
-        <RelationshipExplorer
-          centerItemId={graph.atlasMapNode}
-          centerNodeId={graph.centerNodeId}
-          clusterMeta={clusterMeta}
-          compareLegend
-          expandedClusterLabels={expandedClusterLabels}
-          expandedClusters={expandedClusters}
-          filters={{
-            relationshipType: "",
-            provenance: "",
-            confidence: "",
-            nodeType: "",
-            includeCandidates: false,
-            search: "",
-          }}
-          heading="Compare map"
-          introCopy={`Showing ${graph.stats.filtered} of ${graph.stats.nodeCount} items in this comparison.`}
-          layoutMode={compareUsesPathLayout ? "hierarchy" : "expanded"}
-          listLabel="List"
-          mapControls
-          onClusterCollapse={onClusterCollapse}
-          onClusterExpand={onClusterExpand}
-          onFilterChange={() => {}}
-          onOpenNode={onOpenNode}
-          onViewChange={(view) => setCompareView(view)}
-          relationshipView={compareViewMode}
-          runtime={bundle.runtime}
-          showFilters={false}
-          staticGraph={{
-            nodes: clusteredNodes,
-            edges: clusteredEdges,
-            stats: graph.stats,
-          }}
-          staticTableRows={staticTableRows}
-        />
+        <section aria-label="Compare map" className="stack" id="compare-detail">
+          <h3>Compare map</h3>
+          <p className="muted">
+            {graph.stats.nodeCount} items across {compareMapGroups.length}{" "}
+            groups. Open a group to see its records; the List holds every
+            connection.
+          </p>
+          <AtlasConnectionMap
+            center={centerNode}
+            compact={compact}
+            expandedGroupId={expandedGroupId}
+            groups={compareMapGroups}
+            onExpandedGroupChange={setExpandedGroupId}
+            onOpenList={() => setCompareView("list")}
+            onSelectItem={(row) => onOpenNode(row.counterpart.id)}
+            selectedItemId=""
+          />
+        </section>
       ) : (
         listContent || (
           <>
             <p className="compare-table-scroll-hint">
               Swipe horizontally to review every comparison column.
             </p>
+            {hiddenMappingRows > 0 ? (
+              <p className="notice-inline" role="note">
+                Showing the first {staticTableRows.length.toLocaleString()} of{" "}
+                {totalMappingRows.toLocaleString()} mappings. Export the results
+                to work with every row.
+              </p>
+            ) : null}
             <RelationshipExplorer
               centerItemId={graph.atlasMapNode}
               centerNodeId={graph.centerNodeId}

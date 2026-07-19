@@ -47,7 +47,6 @@ export type CompareGraphResult = {
   stats: { nodeCount: number; filtered: number; truncated: boolean };
 };
 
-const MAX_NODES = 200;
 
 type ProvenanceItem = {
   provenance_class?: string;
@@ -168,27 +167,22 @@ function finalizeGraph(
   atlasMapNode: string,
   roleCounts: Pick<CompareSummaryCounts, "shared" | "uniqueA" | "uniqueB">,
 ): CompareGraphResult {
+  // The grouped-summary map renders category rollups (never every node at
+  // once), so no node cap is needed; the List remains the full deep view.
   const nodeList = [...nodes.values()];
-  const truncated = nodeList.length > MAX_NODES;
-  const limitedNodes = truncated ? nodeList.slice(0, MAX_NODES) : nodeList;
-  const allowedIds = new Set(limitedNodes.map((node) => node.id));
-  const limitedEdges = edges.filter(
-    (edge) =>
-      allowedIds.has(edge.source_node_id) && allowedIds.has(edge.target_node_id),
-  );
-  const provenance = summarizeProvenance(limitedEdges);
+  const provenance = summarizeProvenance(edges);
   return {
-    mapAvailable: limitedNodes.length > 0,
-    nodes: limitedNodes,
-    edges: limitedEdges,
-    centerNodeId: centerNodeId || limitedNodes[0]?.id || "",
+    mapAvailable: nodeList.length > 0,
+    nodes: nodeList,
+    edges,
+    centerNodeId: centerNodeId || nodeList[0]?.id || "",
     atlasMapNode,
     summary: { ...roleCounts, ...provenance },
     labels: getCompareLegendLabels(workbench),
     stats: {
       nodeCount: nodeList.length,
-      filtered: limitedNodes.length,
-      truncated,
+      filtered: nodeList.length,
+      truncated: false,
     },
   };
 }
@@ -464,6 +458,13 @@ export function buildWorkbenchCompareGraph(
   return emptyResult(workbench);
 }
 
+// The grouped map renders category rollups, so the graph itself stays
+// uncapped and its counts stay complete. The List is the deep view: it is
+// the one surface that puts a row in the DOM per mapping, so it stays
+// bounded (unbounded tables stall assistive-technology scans). Callers
+// disclose the remainder and point at export for the full set.
+export const MAX_COMPARE_TABLE_ROWS = 750;
+
 export function compareGraphTableRows(
   graph: CompareGraphResult,
 ): Array<{
@@ -475,6 +476,7 @@ export function compareGraphTableRows(
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   return graph.edges
     .filter((edge) => edge.id !== "baseline-a")
+    .slice(0, MAX_COMPARE_TABLE_ROWS)
     .map((edge) => {
       const target = nodeById.get(edge.target_node_id);
       return {
