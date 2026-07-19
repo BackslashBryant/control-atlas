@@ -21,7 +21,6 @@ import { buildConnectionInventory } from "../lib/connectionInventory.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
-import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks.ts";
 import {

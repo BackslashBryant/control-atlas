@@ -55,16 +55,16 @@ a {
 .skip-link {
   position: absolute;
   top: -100px;
-  left: var(--space-4);
+  left: var(--ca-space-4);
   z-index: 40;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface-raised);
 }
 
 .skip-link:focus {
-  top: var(--space-4);
+  top: var(--ca-space-4);
 }
 
 .brand-entrance {
@@ -74,7 +74,7 @@ a {
   display: grid;
   place-content: center;
   justify-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
   min-height: 100dvh;
   border: 0;
@@ -167,8 +167,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-4) max(var(--space-4), calc((100vw - 1240px) / 2));
+  gap: var(--ca-space-4);
+  padding: var(--ca-space-4) max(var(--ca-space-4), calc((100vw - 1240px) / 2));
   border-bottom: 1px solid rgba(148, 163, 184, 0.18);
   background: rgba(11, 16, 32, 0.9);
   backdrop-filter: blur(16px);
@@ -190,11 +190,11 @@ a {
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border-radius: var(--radius-md);
   text-decoration: none;
   text-align: left;
@@ -306,7 +306,7 @@ a {
   position: relative;
   display: flex;
   flex-wrap: nowrap;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
 }
 
 .primary-nav button,
@@ -317,9 +317,9 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   border-radius: 999px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid transparent;
   text-decoration: none;
   min-height: 36px;
@@ -334,13 +334,13 @@ a {
 
 .nav-more-menu {
   position: absolute;
-  top: calc(100% + var(--space-2));
+  top: calc(100% + var(--ca-space-2));
   right: 0;
   z-index: 35;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   min-width: 12rem;
-  padding: var(--space-2);
+  padding: var(--ca-space-2);
   border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: var(--radius-md);
   background: rgba(15, 23, 42, 0.98);
@@ -361,7 +361,7 @@ a {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   flex-shrink: 0;
 }
 
@@ -372,7 +372,7 @@ a {
 .action-group {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
 }
 
 .header-search-trigger {
@@ -436,15 +436,15 @@ main {
 }
 
 main {
-  padding: var(--space-6) 0 var(--space-7);
+  padding: var(--ca-space-8) 0 var(--ca-space-12);
 }
 
 .hero {
-  padding: var(--space-6) 0 var(--space-7);
+  padding: var(--ca-space-8) 0 var(--ca-space-12);
 }
 
 .eyebrow {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--ca-space-3);
   color: var(--ca-secondary);
   font-size: var(--font-size-xs);
   font-weight: 800;
@@ -488,7 +488,7 @@ li {
 }
 
 .hero-rotating-line {
-  margin: var(--space-4) 0 var(--space-3);
+  margin: var(--ca-space-4) 0 var(--ca-space-3);
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono);
   font-size: clamp(1rem, 2.5vw, 1.4rem);
@@ -511,7 +511,7 @@ li {
 .chip-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .panel,
@@ -534,15 +534,15 @@ li {
 .loading-card,
 .notice,
 .empty-state {
-  padding: clamp(var(--space-4), 3vw, var(--space-6));
+  padding: clamp(var(--ca-space-4), 3vw, var(--ca-space-8));
 }
 
 .panel {
-  padding: clamp(var(--space-4), 3vw, var(--ca-space-12));
+  padding: clamp(var(--ca-space-4), 3vw, var(--ca-space-12));
 }
 
 .page-header {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--ca-space-6);
 }
 
 .page-header-row,
@@ -551,29 +551,29 @@ li {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .section-header {
   border-left: 3px solid var(--ca-secondary);
-  padding-left: var(--space-3);
+  padding-left: var(--ca-space-3);
 }
 
 .result-card-badges {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .summary-card {
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
 }
 
 .summary-card-title,
 .result-meta {
   display: block;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--ca-space-2);
   color: var(--ca-text-muted);
   font-size: var(--font-size-xs);
   font-weight: 800;
@@ -591,16 +591,16 @@ li {
 
 .stack {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .stack.compact {
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .search-panel {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--ca-space-6);
 }
 
 .search-form,
@@ -610,7 +610,7 @@ li {
 .intent-grid,
 .source-summary-grid {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .search-form {
@@ -623,10 +623,10 @@ li {
 }
 
 .format-help-list {
-  margin: var(--space-3) 0 0;
-  padding-left: var(--space-4);
+  margin: var(--ca-space-3) 0 0;
+  padding-left: var(--ca-space-4);
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -646,7 +646,7 @@ li {
 
 .field {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .field span {
@@ -658,10 +658,10 @@ li {
 .search-input {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: var(--radius-lg);
-  padding: 0 var(--space-3);
+  padding: 0 var(--ca-space-3);
   background: rgba(15, 23, 42, 0.88);
 }
 
@@ -670,7 +670,7 @@ li {
 .field select,
 .field textarea {
   width: 100%;
-  padding: var(--space-3) 0;
+  padding: var(--ca-space-3) 0;
   border: 0;
   color: inherit;
   background: transparent;
@@ -678,22 +678,22 @@ li {
 
 .result-group {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .result-group-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .connections-only-filter {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-height: 44px;
-  margin: var(--space-4) 0;
+  margin: var(--ca-space-4) 0;
 }
 
 .no-connections {
@@ -709,7 +709,7 @@ li {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -725,9 +725,9 @@ li {
   z-index: 20;
   right: 0;
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-width: 12rem;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface-raised);
@@ -735,11 +735,11 @@ li {
 }
 
 .result-card {
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
 }
 
 .result-card.compact {
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
 }
 
 .card-title {
@@ -767,9 +767,9 @@ li {
 
 .page-sidebar {
   position: sticky;
-  top: var(--space-6);
+  top: var(--ca-space-8);
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   align-self: start;
 }
 
@@ -789,7 +789,7 @@ li {
 .support-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -798,7 +798,7 @@ li {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--ca-space-1) var(--ca-space-3);
   background: rgba(37, 99, 235, 0.18);
   color: var(--ca-text);
   font-size: var(--font-size-xs);
@@ -823,12 +823,12 @@ li {
 .badge-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1);
-  margin-top: var(--space-1);
+  gap: var(--ca-space-1);
+  margin-top: var(--ca-space-1);
 }
 
 .source-ref-list {
-  margin: var(--space-1) 0 0;
+  margin: var(--ca-space-1) 0 0;
   padding-left: 1.1rem;
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
@@ -836,7 +836,7 @@ li {
 
 .chain-grid {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
 
@@ -847,27 +847,27 @@ li {
 .compare-legend {
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
-  margin: var(--space-2) 0 0;
+  margin: var(--ca-space-2) 0 0;
 }
 
 .compare-summary-grid {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--ca-space-4);
 }
 
 .compare-map-unavailable {
-  margin-top: var(--space-4);
+  margin-top: var(--ca-space-4);
 }
 
 .compare-mappings {
-  margin-top: var(--space-2);
+  margin-top: var(--ca-space-2);
 }
 
 .compare-mappings-title {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-2);
+  gap: var(--ca-space-2);
+  margin: 0 0 var(--ca-space-2);
 }
 
 .compare-mappings-count {
@@ -909,13 +909,13 @@ li {
 .baseline-source-summary {
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
-  margin: var(--space-1) 0;
+  margin: var(--ca-space-1) 0;
 }
 
 .intent-card {
   display: grid;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
 }
 
 .intent-card-title {
@@ -974,9 +974,9 @@ li {
   right: 0;
   z-index: 35;
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-width: 12rem;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--ca-surface) 98%, transparent);
@@ -986,11 +986,11 @@ li {
 .nav-more-menu button {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   width: 100%;
   justify-content: flex-start;
   border-radius: var(--radius-md);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid transparent;
   background: transparent;
   color: inherit;
@@ -1042,7 +1042,7 @@ li {
 /* Download confirmation toast, styled like the About-page trust blocks. */
 .generation-status.tone-trust,
 .generation-status.tone-warning {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
@@ -1059,12 +1059,12 @@ li {
 
 .catalog-filter-bar {
   position: sticky;
-  top: calc(var(--space-4) + 3rem);
+  top: calc(var(--ca-space-4) + 3rem);
   z-index: 10;
   display: grid;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-6);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--ca-surface) 96%, transparent);
@@ -1078,7 +1078,7 @@ li {
 
 .catalog-filter-controls {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   grid-template-columns: minmax(0, 1.4fr) minmax(200px, 0.8fr);
 }
 
@@ -1094,38 +1094,38 @@ li {
 }
 
 .catalog-group-title {
-  margin: var(--space-5) 0 var(--space-3);
+  margin: var(--ca-space-6) 0 var(--ca-space-3);
   font-size: var(--font-size-lg);
 }
 
 .nexus-section {
   display: grid;
-  gap: var(--space-4);
-  padding-top: var(--space-5);
+  gap: var(--ca-space-4);
+  padding-top: var(--ca-space-6);
   scroll-margin-top: 6rem;
 }
 
 .nexus-section + .nexus-section {
-  margin-top: var(--space-5);
+  margin-top: var(--ca-space-6);
   border-top: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .nexus-section-header {
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--ca-space-1);
 }
 
 .nexus-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .nexus-card {
   display: grid;
   align-content: start;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   min-width: 0;
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
   background: color-mix(in srgb, var(--ca-surface) 92%, transparent);
@@ -1146,7 +1146,7 @@ li {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .nexus-card-heading .badge {
@@ -1156,8 +1156,8 @@ li {
 .nexus-limitation {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-3);
   border-radius: var(--radius-md);
   color: var(--ca-text-muted);
   background: rgba(245, 158, 11, 0.1);
@@ -1171,21 +1171,21 @@ li {
 
 .nexus-list {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   margin: 0;
-  padding-left: var(--space-4);
+  padding-left: var(--ca-space-4);
 }
 
 .nexus-facts {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   margin: 0;
 }
 
 .nexus-facts div {
   display: grid;
   grid-template-columns: 5rem minmax(0, 1fr);
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .nexus-facts dt {
@@ -1214,7 +1214,7 @@ li {
 }
 
 .nexus-details[open] summary {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--ca-space-2);
 }
 
 .nexus-show-more {
@@ -1223,8 +1223,8 @@ li {
 
 .fedramp-truth-panel {
   display: grid;
-  gap: var(--space-4);
-  padding: var(--space-5);
+  gap: var(--ca-space-4);
+  padding: var(--ca-space-6);
   border: 1px solid rgba(34, 211, 238, 0.38);
   border-radius: var(--radius-xl);
   background:
@@ -1236,7 +1236,7 @@ li {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .fedramp-truth-heading h3,
@@ -1245,20 +1245,20 @@ li {
 }
 
 .fedramp-truth-heading .eyebrow {
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--ca-space-1);
 }
 
 .fedramp-truth-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .fedramp-truth-grid > div,
 .fedramp-transition-block {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-3);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-md);
   background: rgba(15, 23, 42, 0.2);
@@ -1276,8 +1276,8 @@ li {
 
 .fedramp-milestones {
   display: grid;
-  gap: var(--space-2);
-  margin: var(--space-3) 0 0;
+  gap: var(--ca-space-2);
+  margin: var(--ca-space-3) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1285,7 +1285,7 @@ li {
 .fedramp-milestones li {
   display: grid;
   grid-template-columns: 7rem minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .fedramp-milestones time {
@@ -1300,18 +1300,18 @@ li {
 .fedramp-source-links .text-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
 }
 
 .compact-list {
-  margin-top: var(--space-2);
+  margin-top: var(--ca-space-2);
   font-size: var(--font-size-sm);
 }
 
 .fedramp-legacy-index .compact-list {
   max-height: 24rem;
   overflow: auto;
-  padding-right: var(--space-2);
+  padding-right: var(--ca-space-2);
 }
 
 @media (max-width: 640px) {
@@ -1325,7 +1325,7 @@ li {
 
   .fedramp-milestones li {
     grid-template-columns: 1fr;
-    gap: var(--space-1);
+    gap: var(--ca-space-1);
   }
 }
 
@@ -1336,12 +1336,12 @@ li {
 
 .workflow-detail:focus {
   outline: 2px solid var(--ca-secondary);
-  outline-offset: var(--space-2);
+  outline-offset: var(--ca-space-2);
 }
 
 .workflow-steps {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1350,8 +1350,8 @@ li {
 .workflow-steps li {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-lg);
   background: rgba(15, 23, 42, 0.52);
@@ -1369,13 +1369,13 @@ li {
 }
 
 .compare-stepper {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--ca-space-6);
 }
 
 .compare-stepper-list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1384,8 +1384,8 @@ li {
 .compare-step {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: 999px;
   color: var(--ca-text-muted);
@@ -1414,8 +1414,8 @@ li {
 
 .compare-workbench-header {
   display: grid;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-4);
 }
 
 .compare-results {
@@ -1423,11 +1423,11 @@ li {
 }
 
 .offline-fallback-actions {
-  margin-top: var(--space-3);
+  margin-top: var(--ca-space-3);
 }
 
 .source-groups .accordion-item {
-  padding: 0 var(--space-4);
+  padding: 0 var(--ca-space-4);
 }
 
 .intent-icon {
@@ -1445,9 +1445,9 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-lg);
   color: inherit;
@@ -1474,7 +1474,7 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) 0;
+  padding: var(--ca-space-3) 0;
   border: 0;
   color: inherit;
   background: transparent;
@@ -1483,19 +1483,19 @@ li {
 }
 
 .accordion-content {
-  padding: 0 0 var(--space-4);
+  padding: 0 0 var(--ca-space-4);
 }
 
 .advanced-list {
   display: grid;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-4);
 }
 
 .advanced-list div {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
 }
 
 .advanced-list span {
@@ -1512,7 +1512,7 @@ li {
 
 .detail-table th,
 .detail-table td {
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border-bottom: 1px solid rgba(148, 163, 184, 0.16);
   text-align: left;
   vertical-align: top;
@@ -1527,8 +1527,8 @@ li {
 .breadcrumbs {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-4);
   color: var(--ca-text-muted);
 }
 
@@ -1541,8 +1541,8 @@ li {
 
 .warning-list {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-3);
   border-radius: var(--radius-lg);
   background: rgba(245, 158, 11, 0.08);
 }
@@ -1558,7 +1558,7 @@ li {
 .notice,
 .loading-card {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   place-items: start;
 }
 
@@ -1578,15 +1578,15 @@ li {
   height: 100vh;
   display: grid;
   grid-template-rows: auto auto 1fr;
-  gap: var(--space-4);
-  padding: var(--space-5);
+  gap: var(--ca-space-4);
+  padding: var(--ca-space-6);
 }
 
 .drawer-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .drawer-header h2,
@@ -1597,22 +1597,22 @@ li {
 
 .drawer-list {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   overflow: auto;
-  padding-right: var(--space-2);
+  padding-right: var(--ca-space-2);
 }
 
 .drawer-glossary {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   min-height: 0;
 }
 
 .drawer-item {
   display: grid;
-  gap: var(--space-2);
-  padding-bottom: var(--space-4);
+  gap: var(--ca-space-2);
+  padding-bottom: var(--ca-space-4);
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
 }
 
@@ -1631,11 +1631,11 @@ li {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-width: 44px;
   min-height: 44px;
   border-radius: 999px;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--ca-space-1) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   color: inherit;
   background: rgba(15, 23, 42, 0.72);
@@ -1648,14 +1648,14 @@ li {
 .workbench-toggle {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-4);
 }
 
 .workbench-toggle button {
   border: 1px solid var(--ca-border);
   border-radius: 999px;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   color: inherit;
   background: transparent;
 }
@@ -1671,10 +1671,10 @@ li {
 }
 
 .site-footer {
-  margin-top: var(--space-7);
+  margin-top: var(--ca-space-12);
   border-top: 1px solid var(--ca-border);
-  padding-top: var(--space-6);
-  padding-bottom: var(--space-6);
+  padding-top: var(--ca-space-8);
+  padding-bottom: var(--ca-space-8);
   color: var(--ca-text-muted);
 }
 
@@ -1682,12 +1682,12 @@ li {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: var(--ca-space-8);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--ca-space-8);
 }
 
 .site-footer-brand strong {
   display: block;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--ca-space-2);
   color: var(--ca-text);
   font-family: var(--ca-font-display);
   font-size: var(--ca-text-lg);
@@ -1696,7 +1696,7 @@ li {
 .site-footer-nav strong,
 .site-footer-legal strong {
   display: block;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--ca-space-3);
   color: var(--ca-text-muted);
   font-size: var(--ca-text-xs);
   font-weight: 700;
@@ -1706,7 +1706,7 @@ li {
 
 .site-footer-links {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1729,7 +1729,7 @@ li {
 
 .site-footer-bar {
   border-top: 1px solid var(--ca-border-subtle);
-  padding-top: var(--space-4);
+  padding-top: var(--ca-space-4);
   font-size: var(--ca-text-xs);
   text-align: center;
 }
@@ -1775,7 +1775,7 @@ a:focus-visible {
 @media (max-width: 720px) {
   .site-footer-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--ca-space-8);
   }
 
   main,
@@ -1785,8 +1785,8 @@ a:focus-visible {
 
   .site-header {
     position: relative;
-    gap: var(--space-2);
-    padding-block: var(--space-3);
+    gap: var(--ca-space-2);
+    padding-block: var(--ca-space-3);
   }
 
   .brand {
@@ -1814,8 +1814,8 @@ a:focus-visible {
     right: 0;
     z-index: 40;
     display: grid;
-    gap: var(--space-3);
-    padding: var(--space-3);
+    gap: var(--ca-space-3);
+    padding: var(--ca-space-3);
     border: 1px solid rgba(148, 163, 184, 0.24);
     border-top: none;
     border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -1825,12 +1825,12 @@ a:focus-visible {
 
   .mobile-nav-sheet nav {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--ca-space-3);
   }
 
   .mobile-nav-sheet-group {
     display: grid;
-    gap: var(--space-1);
+    gap: var(--ca-space-1);
   }
 
   .mobile-nav-sheet-group-label {
@@ -1847,11 +1847,11 @@ a:focus-visible {
   .mobile-nav-sheet-actions button {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--ca-space-2);
     width: 100%;
     justify-content: flex-start;
     border-radius: var(--radius-md);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--ca-space-2) var(--ca-space-3);
     border: 1px solid transparent;
     background: transparent;
     color: inherit;
@@ -1867,9 +1867,9 @@ a:focus-visible {
 
   .mobile-nav-sheet-actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--ca-space-2);
     border-top: 1px solid rgba(148, 163, 184, 0.24);
-    padding-top: var(--space-3);
+    padding-top: var(--ca-space-3);
   }
 
   .mobile-nav-sheet-actions button {
@@ -1913,13 +1913,13 @@ a:focus-visible {
 .section-header-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   flex-wrap: wrap;
 }
 
 .relationship-map-panel {
-  margin-bottom: var(--space-5);
-  padding: var(--space-4);
+  margin-bottom: var(--ca-space-6);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background:
@@ -1933,19 +1933,19 @@ a:focus-visible {
 }
 
 .relationship-map-intro h3 {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--ca-space-2);
 }
 
 .relationship-map-filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: var(--space-3);
-  margin: var(--space-4) 0;
+  gap: var(--ca-space-3);
+  margin: var(--ca-space-4) 0;
 }
 
 .field-label {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   font-size: var(--font-size-sm);
   color: var(--ca-text-muted);
 }
@@ -1953,7 +1953,7 @@ a:focus-visible {
 .field-label select,
 .field-label input[type="search"] {
   width: 100%;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   background: var(--ca-surface);
@@ -1969,12 +1969,12 @@ a:focus-visible {
 
 .relationship-view-tabs {
   display: flex;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-3);
 }
 
 .relationship-view-tabs .tab {
-  padding: var(--space-2) var(--space-4);
+  padding: var(--ca-space-2) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   background: var(--ca-surface);
@@ -1990,8 +1990,8 @@ a:focus-visible {
 .relationship-map-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-3);
   font-size: var(--font-size-sm);
   color: var(--ca-text-muted);
 }
@@ -1999,7 +1999,7 @@ a:focus-visible {
 .legend-item {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .legend-swatch {
@@ -2011,7 +2011,7 @@ a:focus-visible {
 
 .relationship-map-body {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .relationship-graph-canvas-wrap {
@@ -2038,8 +2038,8 @@ a:focus-visible {
   z-index: 2;
   display: grid;
   place-content: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
   text-align: center;
   color: var(--ca-text);
   background: rgba(11, 16, 32, 0.72);
@@ -2076,7 +2076,7 @@ a:focus-visible {
 }
 
 .relationship-map-selection {
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -2089,7 +2089,7 @@ a:focus-visible {
 /* Atlas v1 release workspace: bounded DOM-first Path / Map / List views. */
 .atlas-workspace {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   width: 100%;
   min-width: 0;
   overflow: hidden;
@@ -2103,7 +2103,7 @@ a:focus-visible {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .atlas-workspace-header h1,
@@ -2115,7 +2115,7 @@ a:focus-visible {
   flex: none;
   display: grid;
   min-width: 9rem;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -2136,13 +2136,13 @@ a:focus-visible {
 .source-view-toggle {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-view-tabs button,
 .source-view-toggle button {
   min-height: 44px;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--ca-space-2) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   color: var(--ca-text-muted);
@@ -2160,9 +2160,9 @@ a:focus-visible {
 .atlas-no-connections {
   display: grid;
   place-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   min-height: clamp(18rem, 42vh, 30rem);
-  padding: var(--space-6);
+  padding: var(--ca-space-8);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
@@ -2188,14 +2188,14 @@ a:focus-visible {
 .atlas-source-path {
   display: grid;
   min-width: 0;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .atlas-focused-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(19rem, 26vw, 24rem);
   align-items: start;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   min-width: 0;
 }
 
@@ -2208,8 +2208,8 @@ a:focus-visible {
 
 .atlas-record-inspector {
   display: grid;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
@@ -2224,11 +2224,11 @@ a:focus-visible {
 .atlas-record-inspector dl {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-record-inspector dl div {
-  padding: var(--space-2);
+  padding: var(--ca-space-2);
   border: 1px solid var(--ca-border-subtle);
   border-radius: var(--radius-sm);
 }
@@ -2245,7 +2245,7 @@ a:focus-visible {
 }
 
 .atlas-record-inspector-note {
-  padding-top: var(--space-3);
+  padding-top: var(--ca-space-3);
   border-top: 1px solid var(--ca-border-subtle);
   font-size: var(--font-size-sm);
 }
@@ -2255,7 +2255,7 @@ a:focus-visible {
   cursor: pointer;
   width: fit-content;
   min-height: 44px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -2265,9 +2265,9 @@ a:focus-visible {
 .atlas-filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-  gap: var(--space-3);
-  margin-top: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--ca-space-3);
+  margin-top: var(--ca-space-3);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface-raised);
@@ -2275,7 +2275,7 @@ a:focus-visible {
 
 .atlas-filter-grid label {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -2284,7 +2284,7 @@ a:focus-visible {
 .atlas-filter-grid input[type="search"] {
   width: 100%;
   min-width: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   background: var(--ca-surface);
@@ -2296,14 +2296,14 @@ a:focus-visible {
   align-items: center;
   align-self: end;
   min-height: 44px;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-path-view,
 .atlas-source-stage-panel,
 .atlas-path-stage-panel {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   min-width: 0;
 }
 
@@ -2319,17 +2319,17 @@ a:focus-visible {
 .atlas-path-stage-nav {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-width: 0;
 }
 
 .atlas-path-stage-nav button {
   display: grid;
   align-content: start;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   min-width: 0;
   min-height: 88px;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   color: var(--ca-text-muted);
@@ -2369,7 +2369,7 @@ a:focus-visible {
 
 .atlas-path-stage-panel,
 .atlas-source-stage-panel {
-  padding: var(--space-5);
+  padding: var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface-raised);
@@ -2383,7 +2383,7 @@ a:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: start;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .atlas-path-stage-panel > header > p,
@@ -2396,7 +2396,7 @@ a:focus-visible {
 .atlas-source-cards,
 .atlas-source-list {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .atlas-path-groups,
@@ -2409,9 +2409,9 @@ a:focus-visible {
 .atlas-source-list > section {
   display: grid;
   align-content: start;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   min-width: 0;
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -2431,14 +2431,14 @@ a:focus-visible {
 
 .atlas-path-items {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-path-items button {
   display: grid;
   gap: 2px;
   min-height: 44px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border-subtle);
   border-radius: var(--radius-sm);
   color: var(--ca-text);
@@ -2452,7 +2452,7 @@ a:focus-visible {
 }
 
 .atlas-stage-empty {
-  padding: var(--space-5);
+  padding: var(--ca-space-6);
   border: 1px dashed var(--ca-border);
   border-radius: var(--radius-md);
   text-align: center;
@@ -2467,23 +2467,23 @@ a:focus-visible {
 .atlas-source-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
+  gap: var(--ca-space-3);
+  margin-top: var(--ca-space-3);
 }
 
 .atlas-source-filters label {
   display: flex;
   align-items: center;
   min-height: 44px;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   background: var(--ca-surface);
 }
 
 .atlas-source-warnings p {
-  margin: var(--space-2) 0 0;
+  margin: var(--ca-space-2) 0 0;
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -2493,13 +2493,13 @@ a:focus-visible {
   isolation: isolate;
   display: grid;
   justify-items: center;
-  gap: var(--space-5);
+  gap: var(--ca-space-6);
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
   min-height: clamp(30rem, 58vh, 44rem);
-  padding: clamp(var(--space-4), 4vw, var(--space-8));
+  padding: clamp(var(--ca-space-4), 4vw, var(--ca-space-8));
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -2528,7 +2528,7 @@ a:focus-visible {
   width: min(100%, 22rem);
   min-width: 0;
   min-height: 96px;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   color: var(--ca-text);
@@ -2538,7 +2538,7 @@ a:focus-visible {
 .atlas-map-center {
   z-index: 1;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   border-color: var(--ca-secondary);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ca-secondary) 12%, transparent);
   text-align: center;
@@ -2560,7 +2560,7 @@ a:focus-visible {
 .atlas-map-branch {
   z-index: 1;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
   min-width: 0;
 }
@@ -2568,7 +2568,7 @@ a:focus-visible {
 .atlas-map-region h3 {
   width: fit-content;
   margin: 0 auto;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--ca-space-1) var(--ca-space-3);
   border-radius: 999px;
   color: var(--ca-text-muted);
   background: var(--ca-surface-raised);
@@ -2582,7 +2582,7 @@ a:focus-visible {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
   justify-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
 }
 
@@ -2590,7 +2590,7 @@ a:focus-visible {
 .atlas-map-item-card {
   display: grid;
   align-content: center;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
   text-align: left;
 }
 
@@ -2624,7 +2624,7 @@ a:focus-visible {
 
 .atlas-map-connector {
   width: 2px;
-  height: var(--space-6);
+  height: var(--ca-space-8);
   background: var(--ca-secondary);
 }
 
@@ -2634,13 +2634,13 @@ a:focus-visible {
 }
 
 .relationship-source-refs {
-  margin-top: var(--space-2);
+  margin-top: var(--ca-space-2);
   font-size: var(--font-size-xs);
 }
 
 .relationship-source-refs ul {
-  margin: var(--space-2) 0 0;
-  padding-left: var(--space-4);
+  margin: var(--ca-space-2) 0 0;
+  padding-left: var(--ca-space-4);
 }
 
 @media (max-width: 1100px) {
@@ -2693,7 +2693,7 @@ a:focus-visible {
   }
 
   .atlas-view-tabs button {
-    padding-inline: var(--space-2);
+    padding-inline: var(--ca-space-2);
   }
 
   .atlas-path-stage-nav,
@@ -2715,7 +2715,7 @@ a:focus-visible {
   .atlas-source-stage-panel,
   .atlas-bounded-map,
   .atlas-no-connections {
-    padding: var(--space-4);
+    padding: var(--ca-space-4);
   }
 
   .atlas-bounded-map {
@@ -2723,7 +2723,7 @@ a:focus-visible {
   }
 
   .atlas-bounded-map::before {
-    left: var(--space-6);
+    left: var(--ca-space-8);
     top: 6rem;
     bottom: 6rem;
   }
@@ -2752,7 +2752,7 @@ a:focus-visible {
   .relationship-graph-table td {
     display: grid;
     grid-template-columns: minmax(7.5rem, 34%) minmax(0, 1fr);
-    gap: var(--space-3);
+    gap: var(--ca-space-3);
   }
 
   .relationship-graph-table td::before {
@@ -2788,7 +2788,7 @@ a:focus-visible {
   min-width: 0;
   min-height: 54px;
   box-sizing: border-box;
-  padding-inline: var(--space-4);
+  padding-inline: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -2797,7 +2797,7 @@ a:focus-visible {
 .atlas-map-command .search-input input {
   width: 100%;
   min-width: 0;
-  padding-block: var(--space-3);
+  padding-block: var(--ca-space-3);
 }
 
 .atlas-map-command button.visually-hidden {
@@ -2808,13 +2808,13 @@ a:focus-visible {
   display: flex;
   align-items: start;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-focused-toolbar .atlas-view-tabs button {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-focused-toolbar .atlas-connection-filters {
@@ -2830,7 +2830,7 @@ a:focus-visible {
 
 .atlas-focused-toolbar .atlas-connection-filters > summary::before {
   content: "⌄";
-  margin-right: var(--space-2);
+  margin-right: var(--ca-space-2);
   color: var(--ca-secondary);
 }
 
@@ -2850,14 +2850,14 @@ a:focus-visible {
 
 .atlas-decomposition {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
   min-width: 0;
 }
 
 .atlas-decomposition-board {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   min-height: 32rem;
 }
 
@@ -2873,9 +2873,9 @@ a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-height: 58px;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border-bottom: 1px solid var(--ca-border-subtle);
 }
 
@@ -2903,19 +2903,19 @@ a:focus-visible {
 .atlas-decomposition-stage-body {
   display: grid;
   align-content: start;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-3);
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4) var(--ca-space-3);
 }
 
 .atlas-decomposition-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
   box-sizing: border-box;
   min-height: 92px;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   color: var(--ca-text-muted);
@@ -2963,7 +2963,7 @@ a:focus-visible {
   display: grid;
   place-items: center;
   min-height: 92px;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px dashed var(--ca-border);
   border-radius: var(--radius-md);
   text-align: center;
@@ -2978,14 +2978,14 @@ a:focus-visible {
 }
 
 .atlas-decomposition-empty p {
-  margin: var(--space-1) 0 0;
+  margin: var(--ca-space-1) 0 0;
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
 
 .atlas-decomposition-more {
   min-height: 44px;
-  padding: var(--space-2);
+  padding: var(--ca-space-2);
   border: 0;
   color: var(--ca-secondary);
   background: transparent;
@@ -2996,7 +2996,7 @@ a:focus-visible {
   position: absolute;
   z-index: 2;
   top: 8.2rem;
-  right: calc(-1 * var(--space-3) - 12px);
+  right: calc(-1 * var(--ca-space-3) - 12px);
   color: var(--ca-secondary);
   pointer-events: none;
 }
@@ -3005,8 +3005,8 @@ a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-5);
-  padding: var(--space-5);
+  gap: var(--ca-space-6);
+  padding: var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -3019,14 +3019,14 @@ a:focus-visible {
 
 .atlas-selected-path > div:first-child {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-selected-path-actions {
   display: flex;
   flex: none;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .atlas-selected-path-actions button,
@@ -3034,7 +3034,7 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-spatial-map {
@@ -3089,7 +3089,7 @@ a:focus-visible {
   place-items: center;
   width: 15rem;
   min-height: 9.5rem;
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   border: 3px solid var(--ca-primary);
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface));
@@ -3109,10 +3109,10 @@ a:focus-visible {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 15rem;
   min-height: 78px;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   color: var(--ca-text);
@@ -3155,14 +3155,14 @@ a:focus-visible {
 .atlas-spatial-items {
   display: grid;
   align-content: start;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   width: 19rem;
 }
 
 .atlas-spatial-items > header {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-spatial-items > header p,
@@ -3174,10 +3174,10 @@ a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   width: 100%;
   min-height: 58px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   color: var(--ca-text);
@@ -3211,8 +3211,8 @@ a:focus-visible {
 
 .atlas-spatial-controls {
   position: absolute;
-  bottom: var(--space-3);
-  left: var(--space-3);
+  bottom: var(--ca-space-3);
+  left: var(--ca-space-3);
   z-index: 3;
   display: grid;
   overflow: hidden;
@@ -3238,12 +3238,12 @@ a:focus-visible {
 
 .atlas-spatial-overflow {
   position: absolute;
-  right: var(--space-3);
-  bottom: var(--space-3);
+  right: var(--ca-space-3);
+  bottom: var(--ca-space-3);
   z-index: 3;
   min-height: 44px;
   box-sizing: border-box;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   color: var(--ca-secondary);
@@ -3251,13 +3251,13 @@ a:focus-visible {
 }
 
 .atlas-record-inspector {
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .atlas-record-inspector > section {
   display: grid;
-  gap: var(--space-2);
-  padding-block: var(--space-4);
+  gap: var(--ca-space-2);
+  padding-block: var(--ca-space-4);
   border-block: 1px solid var(--ca-border-subtle);
 }
 
@@ -3309,7 +3309,7 @@ a:focus-visible {
 
   .atlas-focused-toolbar .atlas-view-tabs button {
     justify-content: center;
-    gap: var(--space-1);
+    gap: var(--ca-space-1);
     font-size: var(--font-size-sm);
   }
 
@@ -3347,7 +3347,7 @@ a:focus-visible {
   .atlas-spatial-map,
   .atlas-spatial-map--expanded {
     min-height: 0;
-    padding: var(--space-3);
+    padding: var(--ca-space-3);
     overflow: visible;
   }
 
@@ -3355,7 +3355,7 @@ a:focus-visible {
     position: relative;
     inset: auto;
     display: grid;
-    gap: var(--space-3);
+    gap: var(--ca-space-3);
     transform: none !important;
   }
 
@@ -3386,7 +3386,7 @@ a:focus-visible {
   .atlas-spatial-items {
     order: 20;
     height: auto;
-    padding-left: var(--space-3);
+    padding-left: var(--ca-space-3);
     border-left: 2px solid var(--ca-secondary);
   }
 
@@ -3397,12 +3397,12 @@ a:focus-visible {
   .atlas-spatial-overflow {
     position: relative;
     inset: auto;
-    width: calc(100% - 2 * var(--space-3));
-    margin: var(--space-3);
+    width: calc(100% - 2 * var(--ca-space-3));
+    margin: var(--ca-space-3);
   }
 
   .atlas-record-inspector {
-    margin-top: var(--space-3);
+    margin-top: var(--ca-space-3);
   }
 }
 
@@ -3421,18 +3421,18 @@ a:focus-visible {
 }
 
 .connection-rollup {
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--ca-space-4);
   color: var(--ca-text-muted);
 }
 
 .list-progress {
-  margin-top: var(--space-2);
+  margin-top: var(--ca-space-2);
   font-size: var(--font-size-sm);
   color: var(--ca-text-muted);
 }
 
 .relationship-group-description {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--ca-space-3);
   color: var(--ca-text-muted);
 }
 
@@ -3441,12 +3441,12 @@ a:focus-visible {
 }
 
 .relationship-groups-accordion .accordion-item {
-  scroll-margin-top: calc(var(--space-16) + var(--space-4));
+  scroll-margin-top: calc(var(--ca-space-16) + var(--ca-space-4));
 }
 
 .connection-group-nav ul {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3455,11 +3455,11 @@ a:focus-visible {
 .connection-group-nav-link {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   align-items: center;
   width: 100%;
   min-height: 44px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border-subtle);
   border-radius: var(--ca-radius-sm);
   color: var(--ca-text);
@@ -3487,9 +3487,9 @@ a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-3) var(--ca-space-4);
+  padding-bottom: calc(var(--ca-space-3) + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(11, 16, 32, 0.96);
   box-shadow: 0 -12px 40px rgba(2, 6, 23, 0.35);
@@ -3501,7 +3501,7 @@ a:focus-visible {
 }
 
 .home-card-grid {
-  margin-top: var(--space-5);
+  margin-top: var(--ca-space-6);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 /* 7 cards (Atlas + 6 intent cards): feature Atlas full-width so the rest
@@ -3525,7 +3525,7 @@ a:focus-visible {
 
 .atlas-map-page {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 /* Canvas-app shell (CATL-48/80): the Atlas breaks out of the centered 1240px
@@ -3539,8 +3539,8 @@ a:focus-visible {
   max-width: 100%;
   box-sizing: border-box;
   margin-left: calc(50% - 50vw);
-  padding: 0 var(--space-4);
-  gap: var(--space-2);
+  padding: 0 var(--ca-space-4);
+  gap: var(--ca-space-2);
   /* Fill from just under the top nav to the viewport bottom. */
   min-height: calc(100dvh - 7rem);
 }
@@ -3549,7 +3549,7 @@ a:focus-visible {
 .atlas-map-layout {
   flex: 1 1 auto;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) auto;
   align-items: stretch;
@@ -3570,7 +3570,7 @@ a:focus-visible {
   flex-direction: column;
   height: 100%;
   min-height: 0;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 .atlas-map-page .atlas-map-main > *,
 .atlas-map-page .relationship-map-body,
@@ -3590,7 +3590,7 @@ a:focus-visible {
 
 /* Reclaim the document top padding so the graph starts high on the page. */
 .atlas-map-page {
-  margin-top: calc(-1 * var(--space-6));
+  margin-top: calc(-1 * var(--ca-space-8));
 }
 /* On a focused map the search collapses to a single slim input row (its
    placeholder carries the hint); the overview keeps its caption for wayfinding. */
@@ -3599,14 +3599,14 @@ a:focus-visible {
 }
 .atlas-map-command {
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   max-width: 40rem;
 }
 .atlas-map-command .field {
   margin: 0;
 }
 .atlas-map-command input {
-  padding-block: var(--space-2);
+  padding-block: var(--ca-space-2);
 }
 .atlas-map-page .relationship-view-tabs {
   margin: 0;
@@ -3620,8 +3620,8 @@ a:focus-visible {
 }
 .atlas-leverage {
   position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
+  top: var(--ca-space-3);
+  right: var(--ca-space-3);
   z-index: 10;
   width: min(20rem, calc(100% - 2rem));
   background: color-mix(in srgb, var(--ca-surface) 94%, transparent);
@@ -3636,7 +3636,7 @@ a:focus-visible {
 .atlas-leverage > summary {
   cursor: pointer;
   list-style: none;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   font-weight: 700;
   color: var(--ca-text);
   display: grid;
@@ -3653,9 +3653,9 @@ a:focus-visible {
   text-transform: uppercase;
 }
 .atlas-leverage-body {
-  padding: 0 var(--space-3) var(--space-3);
+  padding: 0 var(--ca-space-3) var(--ca-space-3);
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 .atlas-leverage-record {
   margin: 0;
@@ -3675,7 +3675,7 @@ a:focus-visible {
 .atlas-leverage-row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   width: 100%;
   text-align: left;
   padding: 4px 6px;
@@ -3706,9 +3706,9 @@ button.atlas-leverage-row:hover {
 }
 .atlas-leverage-frameworks {
   border-top: 1px solid var(--ca-border);
-  padding-top: var(--space-2);
+  padding-top: var(--ca-space-2);
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 .atlas-leverage-subhead {
   margin: 0;
@@ -3746,7 +3746,7 @@ button.atlas-leverage-row:hover {
   .atlas-leverage {
     position: static;
     width: auto;
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--ca-space-3);
   }
 }
 
@@ -3783,13 +3783,13 @@ button.atlas-leverage-row:hover {
 .atlas-coverage-drawer > summary {
   cursor: pointer;
   list-style: none;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--ca-text);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 .atlas-coverage-drawer > summary::-webkit-details-marker {
   display: none;
@@ -3815,7 +3815,7 @@ button.atlas-leverage-row:hover {
 }
 .atlas-map-page > .page-header .page-summary {
   font-size: var(--font-size-sm);
-  margin-top: var(--space-1);
+  margin-top: var(--ca-space-1);
 }
 
 /* Source-visibility filters collapse into a compact disclosure (CATL-54) so
@@ -3825,8 +3825,8 @@ button.atlas-leverage-row:hover {
   list-style: none;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface);
@@ -3843,7 +3843,7 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text-muted);
 }
 .atlas-display-options[open] > summary {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--ca-space-2);
 }
 
 /* Atlas coverage matrix */
@@ -3875,7 +3875,7 @@ button.atlas-leverage-row:hover {
   top: 0;
   z-index: 1;
   background: var(--ca-surface);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   text-align: left;
   border-bottom: 1px solid var(--ca-border);
   font-size: var(--font-size-xs);
@@ -3896,7 +3896,7 @@ button.atlas-leverage-row:hover {
 }
 .atlas-matrix td,
 .atlas-matrix tbody th {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border-bottom: 1px solid var(--ca-border);
   color: var(--ca-text);
   text-align: left;
@@ -3931,9 +3931,9 @@ button.atlas-leverage-row:hover {
 .atlas-matrix-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border-top: 1px solid var(--ca-border);
   font-size: var(--font-size-xs);
   color: var(--ca-text-muted);
@@ -3941,7 +3941,7 @@ button.atlas-leverage-row:hover {
 .atlas-matrix-legend > span {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--ca-space-1);
 }
 
 @media (max-width: 900px) {
@@ -3958,11 +3958,11 @@ button.atlas-leverage-row:hover {
 /* Factual graph inventory: exact counts without a completeness score. */
 .connection-inventory {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 .connection-inventory-summary {
   margin: 0;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface-raised);
@@ -3977,14 +3977,14 @@ button.atlas-leverage-row:hover {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 .connection-inventory-row {
   display: grid;
   grid-template-columns: minmax(12rem, 1.4fr) repeat(3, minmax(9rem, 1fr));
   align-items: center;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--ca-space-2) var(--ca-space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
@@ -3998,15 +3998,15 @@ button.atlas-leverage-row:hover {
 }
 .connection-inventory-related {
   grid-column: 1 / -1;
-  padding-top: var(--space-2);
+  padding-top: var(--ca-space-2);
   border-top: 1px solid var(--ca-border);
 }
 
 .catalog-coverage-chip {
   display: grid;
-  gap: var(--space-1);
-  margin: var(--space-2) 0 0;
-  padding: var(--space-2) var(--space-3);
+  gap: var(--ca-space-1);
+  margin: var(--ca-space-2) 0 0;
+  padding: var(--ca-space-2) var(--ca-space-3);
   border-radius: var(--radius-md);
   border: 1px solid rgba(251, 146, 60, 0.35);
   background: rgba(251, 146, 60, 0.08);
@@ -4023,13 +4023,13 @@ button.atlas-leverage-row:hover {
 }
 
 .compare-trust-note {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--ca-space-4);
 }
 
 .catalog-version-chip {
   display: inline-flex;
-  margin: 0 0 var(--space-4);
-  padding: var(--space-1) var(--space-3);
+  margin: 0 0 var(--ca-space-4);
+  padding: var(--ca-space-1) var(--ca-space-3);
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.12);
   color: var(--ca-text-muted);
@@ -4041,7 +4041,7 @@ button.atlas-leverage-row:hover {
 
 .compare-table-scroll-hint {
   display: none;
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--ca-space-3);
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -4059,10 +4059,10 @@ button.atlas-leverage-row:hover {
 
 .landing-trust-row {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
   max-width: 40rem;
-  margin-top: var(--space-6);
+  margin-top: var(--ca-space-8);
   text-align: center;
 }
 
@@ -4076,7 +4076,7 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .landing-trust-link {
@@ -4107,7 +4107,7 @@ button.atlas-leverage-row:hover {
 .atlas-selected-panel {
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: var(--radius-md);
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   background: rgba(15, 23, 42, 0.55);
 }
 
@@ -4119,8 +4119,8 @@ button.atlas-leverage-row:hover {
 
 .atlas-selected-meta {
   display: grid;
-  gap: var(--space-2);
-  margin: var(--space-3) 0;
+  gap: var(--ca-space-2);
+  margin: var(--ca-space-3) 0;
 }
 
 .atlas-selected-meta dt {
@@ -4129,11 +4129,11 @@ button.atlas-leverage-row:hover {
 }
 
 .atlas-selected-actions {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--ca-space-4);
 }
 
 .atlas-starter-banner {
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-md);
 }
@@ -4141,9 +4141,9 @@ button.atlas-leverage-row:hover {
 .atlas-map-command {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   align-items: end;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-md);
   background: rgba(15, 23, 42, 0.52);
@@ -4152,14 +4152,14 @@ button.atlas-leverage-row:hover {
 .atlas-map-search-form {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   align-items: end;
 }
 
 .relationship-map-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .legend-shape {
@@ -4204,16 +4204,16 @@ button.atlas-leverage-row:hover {
 
 .offline-fallback-grid {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  margin-top: var(--space-4);
+  margin-top: var(--ca-space-4);
 }
 
 .offline-fallback-card {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   min-height: 44px;
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   border: 1px solid rgba(34, 211, 238, 0.35);
   border-radius: var(--radius-lg);
   background: rgba(37, 99, 235, 0.14);
@@ -4244,12 +4244,12 @@ button.atlas-leverage-row:hover {
 .skeleton-title {
   height: 2rem;
   width: min(18rem, 70%);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--ca-space-3);
 }
 
 .skeleton-line {
   height: 1rem;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--ca-space-2);
 }
 
 .skeleton-line.wide {
@@ -4262,11 +4262,11 @@ button.atlas-leverage-row:hover {
 
 .skeleton-search {
   height: 3rem;
-  margin: var(--space-4) 0;
+  margin: var(--ca-space-4) 0;
 }
 
 .skeleton-card {
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
 }
 
 @keyframes skeleton-shimmer {
@@ -4279,15 +4279,15 @@ button.atlas-leverage-row:hover {
 }
 
 .notice-inline {
-  margin: 0 0 var(--space-4);
-  padding: var(--space-3);
+  margin: 0 0 var(--ca-space-4);
+  padding: var(--ca-space-3);
   border-left: 3px solid var(--ca-secondary);
   color: var(--ca-text-muted);
 }
 
 .export-disclosure {
-  margin: var(--space-3) 0;
-  padding: var(--space-3);
+  margin: var(--ca-space-3) 0;
+  padding: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
 }
@@ -4303,13 +4303,13 @@ button.atlas-leverage-row:hover {
 .category-chip-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
+  gap: var(--ca-space-2);
+  margin-top: var(--ca-space-3);
 }
 
 .chip-filter {
   min-height: 44px;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--ca-space-2) var(--ca-space-4);
 }
 
 .chip-filter.active {
@@ -4333,14 +4333,14 @@ button.atlas-leverage-row:hover {
 
 .drawer-tabs {
   display: flex;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-4);
 }
 
 .drawer-tab {
   min-height: 44px;
   min-width: 44px;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--ca-space-2) var(--ca-space-4);
   border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: 999px;
   background: transparent;
@@ -4375,7 +4375,7 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-source-filters-label {
@@ -4387,7 +4387,7 @@ button.atlas-leverage-row:hover {
 
 .atlas-source-warnings {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .atlas-source-warnings:empty {
@@ -4396,7 +4396,7 @@ button.atlas-leverage-row:hover {
 
 .atlas-source-warnings p {
   margin: 0;
-  padding: var(--space-3);
+  padding: var(--ca-space-3);
   border-left: 4px solid var(--ca-warning);
   background: color-mix(in srgb, var(--ca-warning) 10%, transparent);
 }
@@ -4411,7 +4411,7 @@ button.atlas-leverage-row:hover {
 }
 
 .canonical-source-links {
-  padding: var(--space-4);
+  padding: var(--ca-space-4);
   border: 1px solid rgba(34, 211, 238, 0.3);
   border-radius: var(--radius-md);
   background: rgba(37, 99, 235, 0.08);
@@ -4423,7 +4423,7 @@ button.atlas-leverage-row:hover {
 
 .canonical-source-links ul {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
 }
 
 .field select:disabled {
@@ -4439,7 +4439,7 @@ button.atlas-leverage-row:hover {
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 120px);
-  padding: var(--space-8) 0 var(--space-16);
+  padding: var(--ca-space-8) 0 var(--ca-space-16);
   z-index: 10;
   /* Contain the decorative glow and the 3-column orbit row so neither can
      create document-level horizontal overflow on narrow viewports. */
@@ -4450,8 +4450,8 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-12);
+  gap: var(--ca-space-4);
+  margin-bottom: var(--ca-space-12);
   text-align: center;
 }
 
@@ -4483,18 +4483,18 @@ button.atlas-leverage-row:hover {
 .landing-search-container {
   width: 100%;
   max-width: 48rem;
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--ca-space-16);
 }
 
 .home-search {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
   width: 100%;
   background: var(--ca-surface-raised);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
-  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  padding: var(--ca-space-2) var(--ca-space-2) var(--ca-space-2) var(--ca-space-4);
   box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
   transition:
     border-color 0.2s ease,
@@ -4520,7 +4520,7 @@ button.atlas-leverage-row:hover {
   background: transparent;
   color: var(--ca-text);
   font-size: var(--font-size-base);
-  padding: var(--space-3) 0;
+  padding: var(--ca-space-3) 0;
   outline: none;
 }
 
@@ -4533,7 +4533,7 @@ button.atlas-leverage-row:hover {
   background: var(--ca-secondary);
   color: #000;
   border: none;
-  padding: var(--space-3) var(--space-6);
+  padding: var(--ca-space-3) var(--ca-space-8);
   border-radius: calc(var(--radius-xl) - 4px);
   font-weight: 700;
   font-size: var(--font-size-sm);
@@ -4550,7 +4550,7 @@ button.atlas-leverage-row:hover {
 .landing-brand-row {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--ca-space-4);
 }
 
 .landing-launch {
@@ -4567,7 +4567,7 @@ button.atlas-leverage-row:hover {
   /* Match column-gap so the orbit reads as roughly equidistant on both axes
      instead of pulling the Navigate satellite in close underneath the orb. */
   row-gap: clamp(2.5rem, 9vw, 7rem);
-  padding: var(--space-6) 0 var(--space-4);
+  padding: var(--ca-space-8) 0 var(--ca-space-4);
 }
 
 .landing-launch::before {
@@ -4593,7 +4593,7 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--ca-space-6);
   background: transparent;
   border: none;
   padding: 0;
@@ -4681,7 +4681,7 @@ button.atlas-leverage-row:hover {
   gap: 2px;
   /* Fixed width so the three pills match regardless of caption length. */
   width: 14.5rem;
-  padding: var(--space-3) var(--space-6);
+  padding: var(--ca-space-3) var(--ca-space-8);
   border-radius: 999px;
   background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
   border: 1px solid rgba(148, 163, 184, 0.2);
@@ -4736,7 +4736,7 @@ button.atlas-leverage-row:hover {
       "research"
       "navigate"
       "build";
-    row-gap: var(--space-4);
+    row-gap: var(--ca-space-4);
   }
 }
 .detail-page {
@@ -4761,14 +4761,14 @@ button.atlas-leverage-row:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-6);
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-8);
 }
 
 .start-here-step {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   color: var(--ca-text-subtle);
   font-size: var(--ca-text-sm);
 }
@@ -4812,15 +4812,15 @@ button.atlas-leverage-row:hover {
 .start-here-recap {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-3);
+  gap: var(--ca-space-2);
+  margin: 0 0 var(--ca-space-3);
 }
 
 .start-here-recap-item {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-sm);
   background: var(--ca-surface-raised);
@@ -4840,20 +4840,20 @@ button.atlas-leverage-row:hover {
 }
 
 .start-here-path {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--ca-space-2);
   font-weight: 700;
   color: var(--ca-text);
 }
 
 .start-here-assumptions {
-  margin: var(--space-3) 0 0;
-  padding-left: var(--space-4);
+  margin: var(--ca-space-3) 0 0;
+  padding-left: var(--ca-space-4);
   color: var(--ca-text-muted);
   font-size: var(--ca-text-sm);
 }
 
 .start-here-assumptions li + li {
-  margin-top: var(--space-2);
+  margin-top: var(--ca-space-2);
 }
 
 .start-here-disclaimer {
@@ -4863,7 +4863,7 @@ button.atlas-leverage-row:hover {
 .object-card-meta {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--ca-space-3);
 }
 
 .object-card-id {
@@ -4877,7 +4877,7 @@ button.atlas-leverage-row:hover {
 }
 
 .recommended-patterns {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--ca-space-6);
 }
 
 .detail-sidebar .card-actions {
@@ -4885,7 +4885,7 @@ button.atlas-leverage-row:hover {
 }
 
 .recommended-patterns {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--ca-space-6);
 }
 
 .detail-sidebar .card-actions {
@@ -4905,10 +4905,10 @@ button.atlas-leverage-row:hover {
 
 .graph-node-shortcuts {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--ca-space-2);
   overflow-x: auto;
   overflow-y: hidden;
-  padding: var(--space-2);
+  padding: var(--ca-space-2);
   border-top: 1px solid var(--ca-border);
 }
 
@@ -4916,7 +4916,7 @@ button.atlas-leverage-row:hover {
   flex: 0 0 auto;
   min-width: 44px;
   min-height: 44px;
-  padding: var(--space-2);
+  padding: var(--ca-space-2);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-sm);
   color: var(--ca-text-muted);
@@ -4942,8 +4942,8 @@ button.atlas-leverage-row:hover {
   height: 100%;
   display: grid;
   align-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--ca-space-1);
+  padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid
     color-mix(in srgb, var(--ca-flow-node-color) 58%, var(--ca-border));
   border-left: 5px solid var(--ca-flow-node-color);
@@ -5029,9 +5029,9 @@ button.atlas-leverage-row:hover {
 /* Approved Atlas comps use the full workspace width and avoid a card within a card. */
 @media (min-width: 768px) {
   .atlas-workspace {
-    width: calc(100vw - 2 * var(--space-4));
+    width: calc(100vw - 2 * var(--ca-space-4));
     max-width: none;
-    margin-left: calc(50% - 50vw + var(--space-4));
+    margin-left: calc(50% - 50vw + var(--ca-space-4));
   }
 }
 
