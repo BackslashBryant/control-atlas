@@ -34,23 +34,15 @@ const MAX_GROUPS = 6;
 const MAX_DESKTOP_BRANCH_ITEMS = 4;
 const MAX_COMPACT_BRANCH_ITEMS = 3;
 
-const OVERVIEW_POINTS = [
-  { x: 190, y: 105 },
-  { x: 500, y: 105 },
-  { x: 150, y: 310 },
-  { x: 850, y: 310 },
-  { x: 290, y: 520 },
-  { x: 710, y: 520 },
-];
+const CENTER_ID = "__atlas-center";
+const ITEMS_ID = "__atlas-items";
+const LAYOUT_PADDING = 16;
 
-const EXPANDED_POINTS = [
-  { x: 135, y: 105 },
-  { x: 400, y: 105 },
-  { x: 120, y: 310 },
-  { x: 720, y: 310 },
-  { x: 210, y: 520 },
-  { x: 500, y: 520 },
-];
+type MapLayout = {
+  positions: Map<string, { x: number; y: number; w: number; h: number }>;
+  width: number;
+  height: number;
+};
 
 function groupIcon(groupId: string) {
   if (groupId.includes("Baseline")) return IconLayersIntersect;
@@ -74,7 +66,11 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   } = props;
   const triggerRefs = useRef(new Map<string, HTMLButtonElement>());
   const pendingFocusGroup = useRef("");
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const nodeRefs = useRef(new Map<string, HTMLElement>());
   const [zoom, setZoom] = useState(1);
+  const [layout, setLayout] = useState<MapLayout | null>(null);
+  const [fit, setFit] = useState(1);
   const visibleGroups = selectAtlasOverviewGroups(groups, MAX_GROUPS);
   const expandedGroup = visibleGroups.find(
     (group) => group.id === expandedGroupId,
@@ -104,35 +100,214 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     window.setTimeout(() => triggerRefs.current.get(groupId)?.focus(), 0);
   }, [expandedGroupId]);
 
+  // Layout identity: recompute only when the shape of the map changes, not on
+  // selection highlights.
+  const layoutKey = [
+    visibleGroups.map((group) => `${group.id}:${group.items.length}`).join("|"),
+    expandedGroup?.id || "",
+    visibleItems.length,
+    centerLabel,
+  ].join("::");
+
+  // ELK (already a repo dependency; lazy so the Atlas route stays canvas-free)
+  // computes overlap-free positions from the measured card boxes.
+  useEffect(() => {
+    if (compact) {
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { default: ELK } = await import("elkjs/lib/elk.bundled.js");
+      await new Promise(requestAnimationFrame);
+      if (cancelled) {
+        return;
+      }
+      const size = (id: string, fallbackW: number, fallbackH: number) => {
+        const el = nodeRefs.current.get(id);
+        return {
+          width: el?.offsetWidth || fallbackW,
+          height: el?.offsetHeight || fallbackH,
+        };
+      };
+      const children = [
+        { id: CENTER_ID, ...size(CENTER_ID, 240, 152) },
+        ...visibleGroups.map((group) => ({
+          id: group.id,
+          ...size(group.id, 240, 86),
+        })),
+      ];
+      const edges = visibleGroups.map((group) => ({
+        id: `wire-${group.id}`,
+        sources: [CENTER_ID],
+        targets: [group.id],
+      }));
+      if (expandedGroup) {
+        children.push({ id: ITEMS_ID, ...size(ITEMS_ID, 300, 420) });
+        edges.push({
+          id: "wire-items",
+          sources: [expandedGroup.id],
+          targets: [ITEMS_ID],
+        });
+      }
+      const pad = `[top=${LAYOUT_PADDING},left=${LAYOUT_PADDING},bottom=${LAYOUT_PADDING},right=${LAYOUT_PADDING}]`;
+      const graph = {
+        id: "atlas-bounded-map",
+        layoutOptions: expandedGroup
+          ? {
+              "elk.algorithm": "layered",
+              "elk.direction": "RIGHT",
+              "elk.layered.spacing.nodeNodeBetweenLayers": "72",
+              "elk.spacing.nodeNode": "28",
+              "elk.padding": pad,
+            }
+          : {
+              "elk.algorithm": "radial",
+              "elk.spacing.nodeNode": "36",
+              "elk.padding": pad,
+            },
+        children,
+        edges,
+      };
+      const result = (await new ELK().layout(graph)) as {
+        children?: Array<{
+          id: string;
+          x?: number;
+          y?: number;
+          width?: number;
+          height?: number;
+        }>;
+        width?: number;
+        height?: number;
+      };
+      if (cancelled) {
+        return;
+      }
+      setLayout({
+        positions: new Map(
+          (result.children || []).map((child: any) => [
+            child.id,
+            {
+              x: child.x || 0,
+              y: child.y || 0,
+              w: child.width || 0,
+              h: child.height || 0,
+            },
+          ]),
+        ),
+        width: result.width || 0,
+        height: result.height || 0,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [compact, layoutKey]);
+
+  // Fit the computed canvas into the bounded container (same fit-to-view
+  // pattern React Flow uses); user zoom multiplies on top.
+  useEffect(() => {
+    if (compact || !layout || !containerRef.current) {
+      return;
+    }
+    const container = containerRef.current;
+    const applyFit = () => {
+      const nextFit = Math.min(
+        1,
+        container.clientWidth / layout.width || 1,
+        container.clientHeight / layout.height || 1,
+      );
+      setFit(nextFit > 0 ? nextFit : 1);
+    };
+    applyFit();
+    const observer = new ResizeObserver(applyFit);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [compact, layout]);
+
+  const registerNode = (id: string) => (el: HTMLElement | null) => {
+    if (el) {
+      nodeRefs.current.set(id, el);
+    } else {
+      nodeRefs.current.delete(id);
+    }
+  };
+
+  const nodeStyle = (id: string) => {
+    if (compact) {
+      return undefined;
+    }
+    const pos = layout?.positions.get(id);
+    if (!pos) {
+      return { opacity: 0 } as const;
+    }
+    return { left: pos.x, top: pos.y };
+  };
+
   const wires = useMemo(() => {
-    const expanded = Boolean(expandedGroup);
-    const centerPoint = expanded ? { x: 400, y: 310 } : { x: 500, y: 310 };
-    const points = expanded ? EXPANDED_POINTS : OVERVIEW_POINTS;
-    return visibleGroups.map((group, index) => ({
-      id: group.id,
-      point:
-        expanded && group.id === expandedGroup?.id
-          ? { x: 720, y: 310 }
-          : points[index] || points[points.length - 1],
-      centerPoint,
-    }));
-  }, [expandedGroup, visibleGroups]);
+    if (compact || !layout) {
+      return [];
+    }
+    const centerPos = layout.positions.get(CENTER_ID);
+    if (!centerPos) {
+      return [];
+    }
+    const centerPoint = {
+      x: centerPos.x + centerPos.w / 2,
+      y: centerPos.y + centerPos.h / 2,
+    };
+    const paths = visibleGroups
+      .map((group) => {
+        const pos = layout.positions.get(group.id);
+        if (!pos) {
+          return null;
+        }
+        return {
+          id: group.id,
+          point: { x: pos.x + pos.w / 2, y: pos.y + pos.h / 2 },
+          centerPoint,
+        };
+      })
+      .filter((wire): wire is NonNullable<typeof wire> => wire !== null);
+    const expandedPos = expandedGroup
+      ? layout.positions.get(expandedGroup.id)
+      : null;
+    const itemsPos = expandedGroup ? layout.positions.get(ITEMS_ID) : null;
+    if (expandedPos && itemsPos) {
+      paths.push({
+        id: "items",
+        point: { x: itemsPos.x, y: itemsPos.y + itemsPos.h / 2 },
+        centerPoint: {
+          x: expandedPos.x + expandedPos.w,
+          y: expandedPos.y + expandedPos.h / 2,
+        },
+      });
+    }
+    return paths;
+  }, [compact, layout, visibleGroups, expandedGroup]);
 
   return (
     <div
       aria-label={`${visibleGroups.length} connection groups around ${centerLabel}`}
       className={`atlas-spatial-map${expandedGroup ? " atlas-spatial-map--expanded" : ""}`}
+      ref={containerRef}
       role="group"
     >
       <div
         className="atlas-spatial-map-inner"
-        style={{ transform: `scale(${zoom})` }}
+        style={
+          compact
+            ? undefined
+            : {
+                width: layout?.width,
+                height: layout?.height,
+                transform: `translate(-50%, -50%) scale(${(fit * zoom).toFixed(3)})`,
+              }
+        }
       >
         <svg
           aria-hidden="true"
           className="atlas-spatial-wires"
-          preserveAspectRatio="none"
-          viewBox={expandedGroup ? "0 0 1200 620" : "0 0 1000 620"}
+          viewBox={`0 0 ${layout?.width || 1000} ${layout?.height || 620}`}
         >
           {wires.map(({ id, point, centerPoint }) => (
             <path
@@ -140,24 +315,26 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
               key={id}
             />
           ))}
-          {expandedGroup ? (
-            <path d="M 720 310 L 920 310" />
-          ) : null}
         </svg>
 
-        <article className="atlas-spatial-center" data-map-node="true">
+        <article
+          className="atlas-spatial-center"
+          data-map-node="true"
+          ref={registerNode(CENTER_ID)}
+          style={nodeStyle(CENTER_ID)}
+        >
           <span className="atlas-map-card-kicker">Selected record</span>
           <strong>{centerLabel}</strong>
           <span>{centerTitle}</span>
         </article>
 
-        {visibleGroups.map((group, index) => {
+        {visibleGroups.map((group) => {
           const GroupIcon = groupIcon(group.id);
           const expanded = group.id === expandedGroup?.id;
           return (
             <button
               aria-expanded={expanded}
-              className={`atlas-spatial-group atlas-spatial-slot-${index}${expanded ? " atlas-spatial-group--expanded" : ""}`}
+              className={`atlas-spatial-group${expanded ? " atlas-spatial-group--expanded" : ""}`}
               data-map-node="true"
               key={group.id}
               onClick={(event) => {
@@ -170,9 +347,15 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
                 }
               }}
               ref={(trigger) => {
-                if (trigger) triggerRefs.current.set(group.id, trigger);
-                else triggerRefs.current.delete(group.id);
+                if (trigger) {
+                  triggerRefs.current.set(group.id, trigger);
+                  nodeRefs.current.set(group.id, trigger);
+                } else {
+                  triggerRefs.current.delete(group.id);
+                  nodeRefs.current.delete(group.id);
+                }
               }}
+              style={nodeStyle(group.id)}
               type="button"
             >
               <GroupIcon aria-hidden="true" size={28} stroke={1.7} />
@@ -191,6 +374,8 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           <section
             aria-label={`${expandedGroup.label} records`}
             className="atlas-spatial-items"
+            ref={registerNode(ITEMS_ID)}
+            style={nodeStyle(ITEMS_ID)}
           >
             <header>
               <p className="eyebrow">{expandedGroup.label}</p>
