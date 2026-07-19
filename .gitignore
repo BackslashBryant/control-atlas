@@ -50,6 +50,7 @@ docs/guardrails/
 !.github/workflows/secret-scan.yml
 !.github/workflows/oscal-validation.yml
 !.github/workflows/update-visual-baselines.yml
+!.github/workflows/deployed-lighthouse.yml
 
 !lib/
 lib/*

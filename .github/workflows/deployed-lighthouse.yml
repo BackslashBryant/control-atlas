@@ -1,0 +1,74 @@
+name: Deployed Lighthouse
+
+# Release evidence utility: measures the DEPLOYED public site from a clean
+# Ubuntu runner and publishes the reports as an artifact. Report-only — it
+# never writes to the repository and never gates a build. Exists because
+# local developer hosts produce unreliable Lighthouse numbers under load.
+# Trigger: manual dispatch, or push a branch named evidence/lighthouse*.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Deployed URL to measure
+        required: false
+        default: "https://backslashbryant.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
+  push:
+    branches:
+      - "evidence/lighthouse*"
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - name: Run three deployed mobile Lighthouse passes
+        env:
+          TARGET_URL: ${{ github.event.inputs.url || 'https://backslashbryant.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map' }}
+        run: |
+          mkdir -p artifacts/deployed-lighthouse
+          for i in 1 2 3; do
+            npx lighthouse "$TARGET_URL" \
+              --quiet \
+              --chrome-flags="--headless --no-sandbox" \
+              --form-factor=mobile \
+              --screenEmulation.mobile \
+              --output=json \
+              --output-path="artifacts/deployed-lighthouse/run-$i.json"
+          done
+          node -e "
+            const rows = [1,2,3].map((i) => {
+              const r = require('./artifacts/deployed-lighthouse/run-' + i + '.json');
+              return {
+                run: i,
+                performance: Math.round(r.categories.performance.score * 100),
+                accessibility: Math.round(r.categories.accessibility.score * 100),
+                fcp: r.audits['first-contentful-paint'].displayValue,
+                lcp: r.audits['largest-contentful-paint'].displayValue,
+                tbt: r.audits['total-blocking-time'].displayValue,
+                cls: r.audits['cumulative-layout-shift'].displayValue,
+              };
+            });
+            console.table(rows);
+            require('fs').writeFileSync(
+              'artifacts/deployed-lighthouse/summary.json',
+              JSON.stringify(rows, null, 2),
+            );
+            const floor = 50;
+            const min = Math.min(...rows.map((row) => row.performance));
+            console.log('Recorded floor: >= ' + floor + '; lowest run: ' + min);
+            console.log(min >= floor ? 'AT OR ABOVE FLOOR' : 'BELOW FLOOR');
+          "
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployed-lighthouse
+          path: artifacts/deployed-lighthouse
+          if-no-files-found: error
