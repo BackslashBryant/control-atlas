@@ -65,7 +65,7 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 ## Open items
 - Obtain explicit owner approval before creating or publishing `v1.0.0`.
 - Human NVDA/VoiceOver/TalkBack and real iOS/Android device checks remain unverified residuals unless a human/device completes them or the owner explicitly accepts the risk.
-- A forward deployed-mobile Lighthouse Performance floor of 50 (release band 54–60) is recorded in `docs/PRODUCTION_READINESS.md`; compare future recorded runs against it. The measurements remain synthetic, report-only evidence and must not be presented as field or real-device results.
+- The absolute deployed-mobile Lighthouse floor of 50 was laptop-measured and does NOT reproduce on CI hardware: a same-runner A/B on 2026-07-19 scored `743dcde` (pre-UX-spine) at 34/41/41 and `9f687d7` (post-UX-spine) at 35/44/37, CLS 1.516 in both. The gate is now comparative — run the `Lighthouse A/B` workflow against the previous released ref on the same runner and require no material regression. Never compare scores measured on different machines.
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.
 - Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
 - Keep GitHub Actions Node 20-runtime deprecation work, the `@lhci/cli@0.15.1` → `uuid` constraint, and `npm ci || npm install` fallback review in separate maintenance changes.
