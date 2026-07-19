@@ -51,6 +51,7 @@ docs/guardrails/
 !.github/workflows/oscal-validation.yml
 !.github/workflows/update-visual-baselines.yml
 !.github/workflows/deployed-lighthouse.yml
+!.github/workflows/lighthouse-ab.yml
 
 !lib/
 lib/*
