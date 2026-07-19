@@ -181,6 +181,47 @@ export function Badge(props: {
   );
 }
 
+export function jumpToSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) {
+    return;
+  }
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  el.tabIndex = -1;
+  el.focus({ preventScroll: true });
+}
+
+export function PageJumpNav(props: {
+  sections: Array<{ id: string; label: string; count?: number }>;
+  ariaLabel?: string;
+  onJump?: (id: string) => void;
+}) {
+  return (
+    <nav
+      aria-label={props.ariaLabel || "On this page"}
+      className="connection-group-nav page-jump-nav"
+    >
+      <ul>
+        {props.sections.map((section) => (
+          <li key={section.id}>
+            <button
+              aria-label={`Jump to ${section.label}`}
+              className="connection-group-nav-link"
+              onClick={() => (props.onJump || jumpToSection)(section.id)}
+              type="button"
+            >
+              <span>{section.label}</span>
+              {section.count != null ? (
+                <strong>{section.count.toLocaleString()}</strong>
+              ) : null}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export function CardTitle(props: {
   children: ReactNode;
   onOpen?: () => void;

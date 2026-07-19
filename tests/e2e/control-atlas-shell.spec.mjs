@@ -406,7 +406,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
       name: "Review sources before you rely on a match",
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Refine sources" }).click();
+  await page.getByRole("button", { name: "Refine sources", exact: true }).click();
   await page.getByLabel("Included in map").selectOption("excluded");
   await page.getByRole("button", { name: /Federal referenced/i }).click();
   const communityCard = page
@@ -614,7 +614,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
     page.getByRole("heading", { name: "Official federal resources" }),
   ).toHaveCount(0);
   await expect(
-    page.getByRole("heading", { name: "Blank working documents" }),
+    page.getByRole("heading", { name: "Starter documents" }),
   ).toHaveCount(0);
   await page
     .getByRole("button", { name: /Build an authorization package/i })
@@ -625,7 +625,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Blank working documents" }),
+    page.getByRole("heading", { name: "Starter documents" }),
   ).toBeVisible();
 
   await page.goto("/#/playbooks");

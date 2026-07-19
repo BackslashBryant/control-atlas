@@ -765,6 +765,20 @@ li {
   text-underline-offset: 3px;
 }
 
+.page-sidebar {
+  position: sticky;
+  top: var(--space-6);
+  display: grid;
+  gap: var(--space-4);
+  align-self: start;
+}
+
+@media (max-width: 960px) {
+  .page-sidebar {
+    position: static;
+  }
+}
+
 .result-summary {
   margin: 0;
 }
