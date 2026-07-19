@@ -435,7 +435,7 @@ export function ComparePage(props: {
 
       <div
         className="workbench-toggle"
-        style={{ marginBottom: "var(--space-8)" }}
+        style={{ marginBottom: "var(--ca-space-8)" }}
       >
         {comparisonCards.map((card) => {
           // Hide redundant entry

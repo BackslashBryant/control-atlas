@@ -20,7 +20,6 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
-import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
   ExpandableChipList,
   RelationshipGroupsSection,

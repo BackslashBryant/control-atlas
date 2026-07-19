@@ -13,6 +13,12 @@ Owner visual review (2026-07-18) rejected "polish confirmed": tagline too long, 
 - Compare map is replaced by the **bounded grouped-summary idiom** (Atlas style); the 200-node canvas retires.
 - **v1.0.0 tags only after this pass** (phases 1–5).
 
+## Status (2026-07-19)
+
+Phases 1–5 are shipped to `main` and CI-verified — the `v1.0.0` gate is satisfied:
+`a7b61f0` (1), `e82bd79` (2), `f1ac91b` (3), `2a89a32` (4 + Ubuntu re-baseline), `2a4601a` (5).
+Phase 6 (tokens + primitives) is in flight and is not a tag gate.
+
 ## Phases
 
 ### 1. Copy + IA (small, contract-bounded)

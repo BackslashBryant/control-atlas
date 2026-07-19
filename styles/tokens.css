@@ -121,20 +121,12 @@
   --ca-provenance-deprecated: var(--ca-prov-deprecated);
   --ca-provenance-active: var(--ca-prov-active);
 
-  --space-1: var(--ca-space-1);
-  --space-2: var(--ca-space-2);
-  --space-3: var(--ca-space-3);
-  --space-4: var(--ca-space-4);
-  --space-5: var(--ca-space-6);
-  --space-6: var(--ca-space-8);
-  --space-7: var(--ca-space-12);
-  /* --space-8/12/16 were referenced (surfaces.css .landing-hero/.landing-launch
-     padding+margin, ComparePage.tsx) before they existed here, silently
-     zeroing those declarations (invalid var() -> whole shorthand falls back
-     to initial). Filled to match every --space-N actually used in the repo. */
-  --space-8: var(--ca-space-8);
-  --space-12: var(--ca-space-12);
-  --space-16: var(--ca-space-16);
+  /* The legacy --space-N aliases are retired. They were a trap: the ramp was
+     non-linear (--space-5 -> 1.5rem, --space-6 and --space-8 both -> 2rem,
+     --space-7 -> 3rem, i.e. --space-7 was LARGER than --space-8), so any
+     author who assumed a uniform scale got a surprise jump. Every consumer
+     now uses the canonical --ca-space-N scale directly with identical
+     computed values. Do not reintroduce a second spacing scale. */
 
   --radius-sm: var(--ca-radius-sm);
   --radius-md: var(--ca-radius-md);
