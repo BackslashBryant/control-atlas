@@ -29,6 +29,7 @@ import {
   Badge,
   DisclosurePanel,
   PageHeader,
+  PageJumpNav,
   SelectField,
   SummaryCard,
   downloadBlobFile,
@@ -926,6 +927,8 @@ export function TemplatesPage(props: {
 
       {!selectedTemplate ? (
         <>
+        <div className={selectedWorkflow ? "detail-grid" : undefined}>
+        <div className="stack">
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
@@ -1168,7 +1171,7 @@ export function TemplatesPage(props: {
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">4 · Build the working artifact</p>
-                <h2 id="companion-heading">Blank working documents</h2>
+                <h2 id="companion-heading">Starter documents</h2>
                 <p className="page-summary">
                   Create a starter file in your browser. It helps organize the
                   work; it is not an official form, approval, or proof.
@@ -1216,6 +1219,25 @@ export function TemplatesPage(props: {
           </section>
             </>
           ) : null}
+        </div>
+        {selectedWorkflow ? (
+          <aside className="detail-sidebar page-sidebar">
+            <SummaryCard title="On this page">
+              <PageJumpNav
+                sections={[
+                  { id: "workflow-heading", label: "1 · Choose the work" },
+                  { id: "official-heading", label: "2 · Verify the rule" },
+                  { id: "tools-heading", label: "3 · Use proven tooling" },
+                  {
+                    id: "companion-templates",
+                    label: "4 · Build the artifact",
+                  },
+                ]}
+              />
+            </SummaryCard>
+          </aside>
+        ) : null}
+        </div>
         </>
       ) : null}
 

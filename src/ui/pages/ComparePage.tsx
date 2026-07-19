@@ -26,6 +26,7 @@ import {
   SourceRefList,
 } from "../lib/compareHelpers";
 import { buildWorkbenchCompareGraph } from "../lib/buildCompareGraph";
+import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareWorkbench, ViewState } from "../lib/viewState";
 
@@ -41,30 +42,6 @@ function downloadTextFile(filename: string, content: string, mimeType: string) {
   URL.revokeObjectURL(url);
 }
 
-function PageHeader(props: {
-  eyebrow?: string;
-  title: string;
-  summary: string;
-}) {
-  return (
-    <header className="page-header">
-      {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
-      <div>
-        <h1>{props.title}</h1>
-        <p className="page-summary">{props.summary}</p>
-      </div>
-    </header>
-  );
-}
-
-function SummaryCard(props: { title: string; children: ReactNode }) {
-  return (
-    <article className="summary-card">
-      <span className="summary-card-title">{props.title}</span>
-      <div>{props.children}</div>
-    </article>
-  );
-}
 
 function DisclosurePanel(props: {
   value: string;

@@ -60,6 +60,7 @@ import type { ViewState } from "../lib/viewState";
 import {
   DisclosurePanel,
   PageHeader,
+  PageJumpNav,
   SelectField,
   SourceSummaryCard,
   SummaryCard,
@@ -143,8 +144,11 @@ export function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
+      <div className="detail-grid">
+      <div className="stack">
       <section
         className="canonical-source-links"
+        id="official-source-links"
         aria-labelledby="canonical-source-links-heading"
       >
         <h2 id="canonical-source-links-heading">Official source links</h2>
@@ -178,6 +182,7 @@ export function SourcesPage(props: {
       <section
         aria-labelledby="connection-inventory-heading"
         className="connection-inventory"
+        id="connection-inventory"
       >
         <h2 id="connection-inventory-heading">Connection inventory</h2>
         <p>
@@ -223,6 +228,7 @@ export function SourcesPage(props: {
         ) : null}
       </section>
 
+      <section id="refine-sources">
       <Accordion.Root className="accordion-root" collapsible type="single">
         <DisclosurePanel title="Refine sources" value="filters">
           <div className="filter-grid">
@@ -277,9 +283,10 @@ export function SourcesPage(props: {
           </div>
         </DisclosurePanel>
       </Accordion.Root>
+      </section>
 
       {selectedSource ? (
-        <section className="stack">
+        <section className="stack" id="source-detail">
           <SourceSummaryCard source={selectedSource} />
           <div className="card-actions">
             <button
@@ -353,6 +360,7 @@ export function SourcesPage(props: {
           className="accordion-root source-groups"
           collapsible
           defaultValue={groupedSources[0]?.[0] || ""}
+          id="source-groups"
           type="single"
         >
           {groupedSources.map(([groupLabel, groupSources]) => (
@@ -376,6 +384,30 @@ export function SourcesPage(props: {
           ))}
         </Accordion.Root>
       )}
+      </div>
+      <aside className="detail-sidebar page-sidebar">
+        <SummaryCard title="On this page">
+          <PageJumpNav
+            sections={[
+              { id: "official-source-links", label: "Official source links" },
+              {
+                id: "connection-inventory",
+                label: "Connection inventory",
+                count: connectionInventory.rows.length,
+              },
+              { id: "refine-sources", label: "Refine sources" },
+              selectedSource
+                ? { id: "source-detail", label: "Source detail" }
+                : {
+                    id: "source-groups",
+                    label: "All sources",
+                    count: sources.length,
+                  },
+            ]}
+          />
+        </SummaryCard>
+      </aside>
+      </div>
     </section>
   );
 }

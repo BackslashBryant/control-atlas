@@ -32,7 +32,8 @@ Owner visual review (2026-07-18) rejected "polish confirmed": tagline too long, 
 - No routing changes (sidebar is a rendering concern; confirmed in exploration).
 
 ### 4. Atlas Map collision-aware layout
-- `src/ui/components/AtlasConnectionMap.tsx`: replace hardcoded `atlas-spatial-slot-*` percentage classes (`styles/surfaces.css:3118-3141`) with measured placement — ref-measure card boxes, place radially with collision spacing, drive `left/top` inline; derive SVG wire endpoints from the same coordinates (retire hand-tuned `OVERVIEW_POINTS`/`EXPANDED_POINTS`, :37-53).
+- Acquire, don't invent (owner, 2026-07-19): compute placement with **elkjs** (already a repo dependency, lazy-imported so the Atlas route stays canvas-free) — radial/layered layout over measured card sizes gives overlap-free positions by construction. Rendering stays semantic DOM buttons positioned from ELK output.
+- `src/ui/components/AtlasConnectionMap.tsx`: replace hardcoded `atlas-spatial-slot-*` percentage classes (`styles/surfaces.css:3118-3141`) with ELK-computed `left/top` inline positions from ref-measured card boxes; derive SVG wire endpoints from the same coordinates (retire hand-tuned `OVERVIEW_POINTS`/`EXPANDED_POINTS`, :37-53).
 - Keep bounded-map invariants: `release-readiness-visual.spec.mjs` geometry asserts (map ≤ inspector edge, no page overflow) must stay green as-is.
 - Re-baseline the 4 `approved-layout-visual.spec.mjs` snapshots in the pinned Ubuntu image; owner reviews new baselines before accept.
 
