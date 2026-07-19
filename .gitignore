@@ -49,6 +49,7 @@ docs/guardrails/
 !.github/workflows/pages-live-smoke.yml
 !.github/workflows/secret-scan.yml
 !.github/workflows/oscal-validation.yml
+!.github/workflows/update-visual-baselines.yml
 
 !lib/
 lib/*

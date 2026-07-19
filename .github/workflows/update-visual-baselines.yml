@@ -1,0 +1,32 @@
+name: Update Visual Baselines
+
+# Maintenance utility: regenerates the approved-layout visual baselines inside
+# the same pinned Ubuntu Playwright image CI compares against, and publishes
+# them as an artifact for human review. Never writes to the repository.
+# Trigger: push a branch named refresh/visual-baselines* (or dispatch manually).
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "refresh/visual-baselines*"
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build:site
+      - run: npx playwright test --config playwright.visual.config.mjs --update-snapshots
+      - name: Upload regenerated baselines
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-layout-visual-baselines
+          path: tests/e2e/approved-layout-visual.spec.mjs-snapshots
+          if-no-files-found: error

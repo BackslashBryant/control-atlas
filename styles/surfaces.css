@@ -3052,8 +3052,11 @@ a:focus-visible {
 }
 
 .atlas-spatial-map-inner {
+  /* Sized and positioned by the ELK-computed layout: JS sets width/height and
+     a translate(-50%,-50%) scale() fit transform. */
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
   transform-origin: center;
   transition: transform 140ms ease;
 }
@@ -3082,11 +3085,9 @@ a:focus-visible {
 }
 
 .atlas-spatial-center {
-  top: 50%;
-  left: 50%;
   display: grid;
   place-items: center;
-  width: min(15rem, 28%);
+  width: 15rem;
   min-height: 9.5rem;
   padding: var(--space-4);
   border: 3px solid var(--ca-primary);
@@ -3094,7 +3095,6 @@ a:focus-visible {
   background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface));
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--ca-primary) 22%, transparent);
   text-align: center;
-  transform: translate(-50%, -50%);
 }
 
 .atlas-spatial-center strong {
@@ -3110,7 +3110,7 @@ a:focus-visible {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--space-3);
-  width: min(15rem, 28%);
+  width: 15rem;
   min-height: 78px;
   padding: var(--space-3);
   border: 1px solid var(--ca-border);
@@ -3152,40 +3152,11 @@ a:focus-visible {
   background: color-mix(in srgb, var(--ca-secondary) 7%, var(--ca-surface));
 }
 
-.atlas-spatial-slot-0 { top: 6%; left: 4%; }
-.atlas-spatial-slot-1 { top: 6%; left: 50%; transform: translateX(-50%); }
-.atlas-spatial-slot-2 { top: 43%; left: 3%; }
-.atlas-spatial-slot-3 { top: 43%; right: 3%; }
-.atlas-spatial-slot-4 { bottom: 6%; left: 18%; }
-.atlas-spatial-slot-5 { right: 18%; bottom: 6%; }
-
-.atlas-spatial-map--expanded .atlas-spatial-center {
-  left: 33%;
-}
-
-.atlas-spatial-map--expanded .atlas-spatial-slot-0 { top: 6%; left: 2%; }
-.atlas-spatial-map--expanded .atlas-spatial-slot-1 { top: 6%; left: 31%; transform: translateX(-50%); }
-.atlas-spatial-map--expanded .atlas-spatial-slot-2 { top: 43%; left: 1%; }
-.atlas-spatial-map--expanded .atlas-spatial-slot-3 { top: 43%; right: 43%; }
-.atlas-spatial-map--expanded .atlas-spatial-slot-4 { bottom: 6%; left: 10%; }
-.atlas-spatial-map--expanded .atlas-spatial-slot-5 { right: 45%; bottom: 6%; }
-
-.atlas-spatial-map--expanded .atlas-spatial-group--expanded {
-  top: 43%;
-  right: 28%;
-  left: auto;
-  transform: none;
-}
-
 .atlas-spatial-items {
-  top: 10%;
-  right: 2%;
   display: grid;
-  align-content: center;
+  align-content: start;
   gap: var(--space-2);
-  width: 24%;
-  min-width: 13rem;
-  height: 80%;
+  width: 19rem;
 }
 
 .atlas-spatial-items > header {
