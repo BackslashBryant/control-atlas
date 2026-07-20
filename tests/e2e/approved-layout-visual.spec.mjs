@@ -43,7 +43,9 @@ async function openApprovedComposition(page, viewport, relationshipView) {
       page.getByRole('complementary', { name: 'Selected record' }),
     ).toBeVisible();
   } else {
-    await expect(main.locator('.atlas-decomposition-stage')).toHaveCount(6);
+    // The six-column board is retired: the Path asks which stage first, so
+    // all six stages are offered as choices and no records are dumped.
+    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(6);
     await expect(
       page.getByRole('complementary', { name: 'Selected path' }),
     ).toBeVisible();
@@ -52,7 +54,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
 }
 
 for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
-  for (const relationshipView of ['map', 'purpose']) {
+  for (const relationshipView of ['map', 'path']) {
     test(`${viewportName} approved ${relationshipView} composition`, async ({ page }) => {
       const main = await openApprovedComposition(
         page,
