@@ -160,33 +160,42 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           <h3>{graph.labels.uniqueB}</h3>
           <p>{graph.summary.uniqueB}</p>
         </article>
-        <article className="summary-card">
-          <h3>Published</h3>
-          <p>{graph.summary.sourceBacked}</p>
-        </article>
-        <article className="summary-card">
-          <h3>Inferred</h3>
-          <p>{graph.summary.inferred}</p>
-        </article>
-        <article className="summary-card">
-          <h3>Deprecated</h3>
-          <p>{graph.summary.deprecated}</p>
-        </article>
       </div>
 
+      {/* Provenance is a quality note about the mappings, not a fourth thing
+          being compared. It used to occupy three more full-size tiles, two of
+          which usually read 0 — equal visual weight for nothing. */}
+      <p className="compare-provenance-note">
+        {[
+          graph.summary.sourceBacked
+            ? `${graph.summary.sourceBacked} published`
+            : "",
+          graph.summary.inferred ? `${graph.summary.inferred} candidate` : "",
+          graph.summary.deprecated
+            ? `${graph.summary.deprecated} deprecated`
+            : "",
+        ]
+          .filter(Boolean)
+          .join(" · ") || "No mapping provenance recorded for this comparison."}
+        {graph.summary.sourceBacked ? " mappings." : ""}
+      </p>
+
+      {/* This legend used to define each term as itself ("Published mapping =
+          published mapping"), which tells a newcomer nothing. */}
       <p className="compare-legend">
         <ProvenanceTerm
           kind="publication"
           label="Published mapping"
           value="published"
         />{" "}
-        = published mapping.{" "}
+        the publisher states this relationship.{" "}
         <ProvenanceTerm
           kind="publication"
           label="Candidate mapping"
           value="candidate"
         />{" "}
-        = candidate mapping that still needs review.
+        proposed but not published — confirm it against the source before you
+        rely on it.
       </p>
 
       <div className="card-actions">
