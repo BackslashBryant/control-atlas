@@ -58,7 +58,6 @@ import {
   DisclosurePanel,
   PageHeader,
   SelectField,
-  PageJumpNav,
   SourceSummaryCard,
   SummaryCard,
   copyText,
@@ -131,7 +130,6 @@ export function PlaybooksPage(props: {
           query={queryFilter}
           queryPlaceholder="Search playbooks by outcome or topic"
         />
-        <div className="detail-grid">
         <div className="stack">
         {!categoryFilter && !queryFilter ? (
           <section className="catalog-group recommended-patterns" id="playbooks-recommended">
@@ -181,33 +179,6 @@ export function PlaybooksPage(props: {
             </section>
           ) : null;
         })}
-        </div>
-        <aside className="detail-sidebar page-sidebar">
-          <SummaryCard title="On this page">
-            <PageJumpNav
-              sections={[
-                ...(!categoryFilter && !queryFilter
-                  ? [{ id: "playbooks-recommended", label: "Recommended" }]
-                  : []),
-                ...[...groupedPatterns.entries()]
-                  .filter(([category, categoryPatterns]) => {
-                    const visible = !categoryFilter && !queryFilter
-                      ? categoryPatterns.filter(
-                          (pattern) =>
-                            !RECOMMENDED_PATTERN_IDS.includes(pattern.id),
-                        )
-                      : categoryPatterns;
-                    return visible.length > 0;
-                  })
-                  .map(([category, categoryPatterns]) => ({
-                    id: `playbooks-${category.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`,
-                    label: category,
-                    count: categoryPatterns.length,
-                  })),
-              ]}
-            />
-          </SummaryCard>
-        </aside>
         </div>
       </section>
     );

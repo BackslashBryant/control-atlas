@@ -210,7 +210,12 @@ test("library detail deep links stay compatible and keep advanced details collap
   await expect(
     page.getByText("What to do next", { exact: true }),
   ).toBeVisible();
+  // Secondary record actions now sit behind one "More actions" affordance so
+  // the record opens with a single obvious next step.
+  await expect(page.getByRole("button", { name: "Copy link" })).toHaveCount(0);
+  await page.locator("details.record-actions-menu > summary").click();
   await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Compare" })).toBeVisible();
   await expect(page.getByText("Official text / source excerpt")).toBeVisible();
   await expect(page.getByText("Source location")).not.toBeVisible();
   await page.getByRole("button", { name: "Advanced details" }).click();
