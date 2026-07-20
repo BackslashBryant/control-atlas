@@ -313,30 +313,37 @@ export function ObjectDetailPage(props: {
                 Open in Atlas Map
               </button>
             ) : null}
-            <button
-              className="secondary"
-              onClick={() =>
-                onNavigate("matrix", {
-                  workbench: "relationships",
-                  items: document.item_id,
-                  source: node.metadata?.catalog_id || "",
-                })
-              }
-              type="button"
-            >
-              Compare
-            </button>
-            <button
-              className="secondary quiet"
-              onClick={() => {
-                void copyText(
-                  `${window.location.origin}${window.location.pathname}${serializeHashUrl(state)}`,
-                );
-              }}
-              type="button"
-            >
-              Copy link
-            </button>
+            {/* Secondary actions collapse into one affordance so the record
+                opens with a single obvious next step rather than four peers. */}
+            <details className="record-actions-menu">
+              <summary>More actions</summary>
+              <div className="record-actions-popover">
+                <button
+                  className="secondary"
+                  onClick={() =>
+                    onNavigate("matrix", {
+                      workbench: "relationships",
+                      items: document.item_id,
+                      source: node.metadata?.catalog_id || "",
+                    })
+                  }
+                  type="button"
+                >
+                  Compare
+                </button>
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    void copyText(
+                      `${window.location.origin}${window.location.pathname}${serializeHashUrl(state)}`,
+                    );
+                  }}
+                  type="button"
+                >
+                  Copy link
+                </button>
+              </div>
+            </details>
           </div>
         }
         title={recordDisplayTitle(node) || document.title}
@@ -445,19 +452,11 @@ export function ObjectDetailPage(props: {
               <div>
                 <h2>Connections</h2>
                 <p>How this record connects to other frameworks and sources, grouped by type.</p>
-                {edges.length ? (
-                  <p className="support-meta">
-                    {edges.length} connections across {grouped.length} group
-                    {grouped.length === 1 ? "" : "s"}:{" "}
-                    {grouped
-                      .map(
-                        (group) =>
-                          `${group.items.length} ${group.label.toLowerCase()}`,
-                      )
-                      .join(", ")}
-                    .
-                  </p>
-                ) : null}
+                {/* The per-group counts were spelled out here, again in the
+                    group list below, again in the sidebar jump nav, and again
+                    in an impact card — four times in one screenful, with two
+                    of them disagreeing. The group list and sidebar carry the
+                    counts; this header just states the total. */}
                 {edges.length > 20 ? (
                   <p className="notice-inline" role="note">
                     New here? Start with baselines or your primary source
@@ -576,37 +575,6 @@ export function ObjectDetailPage(props: {
         </section>
 
         <aside className="stack detail-sidebar">
-          <SummaryCard title="What this also connects to" tone="trust">
-            {impact.total ? (
-              <>
-                <p>
-                  This record has{" "}
-                  <strong>
-                    {impact.total} related item{impact.total === 1 ? "" : "s"}
-                  </strong>{" "}
-                    across the published data:
-                </p>
-                <ul className="impact-breakdown">
-                  {impact.byType.slice(0, 6).map((entry) => (
-                    <li key={entry.nodeType}>
-                      <strong>{entry.count}</strong> {entry.label}
-                    </li>
-                  ))}
-                  {impact.byType.length > 6 ? (
-                    <li>
-                      …and{" "}
-                      {impact.byType
-                        .slice(6)
-                        .reduce((sum, entry) => sum + entry.count, 0)}{" "}
-                      more
-                    </li>
-                  ) : null}
-                </ul>
-              </>
-            ) : (
-              <p>No published connections yet.</p>
-            )}
-          </SummaryCard>
           {grouped.length ? (
             <SummaryCard title="Connection groups" tone="trust">
               <p className="support-meta">

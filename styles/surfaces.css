@@ -701,11 +701,15 @@ li {
   font-size: var(--font-size-sm);
 }
 
-.result-actions-menu {
+/* Record header reuses the established result-card action popover
+   rather than inventing a second disclosure idiom. */
+.result-actions-menu,
+.record-actions-menu {
   position: relative;
 }
 
-.result-actions-menu summary {
+.result-actions-menu summary,
+.record-actions-menu summary {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -716,11 +720,13 @@ li {
   list-style: none;
 }
 
-.result-actions-menu summary::-webkit-details-marker {
+.result-actions-menu summary::-webkit-details-marker,
+.record-actions-menu summary::-webkit-details-marker {
   display: none;
 }
 
-.result-actions-popover {
+.result-actions-popover,
+.record-actions-popover {
   position: absolute;
   z-index: 20;
   right: 0;

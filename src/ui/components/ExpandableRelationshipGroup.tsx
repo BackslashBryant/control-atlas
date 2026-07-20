@@ -26,20 +26,6 @@ export type RelationshipGroup = {
   }>;
 };
 
-export function formatConnectionRollup(
-  groups: Array<{ label: string; items: unknown[] }>,
-) {
-  if (!groups.length) {
-    return "No published connections yet.";
-  }
-  return groups
-    .map((group) => {
-      const shortLabel = group.label.replace(/^Related /, "").replace(/ links$/, "");
-      return `${group.items.length} ${shortLabel}`;
-    })
-    .join(" · ");
-}
-
 export function RelationshipGroupsSection(props: {
   groups: RelationshipGroup[];
   formatRelationshipLabel: (edge: { relationship_type?: string }) => string;
@@ -58,11 +44,13 @@ export function RelationshipGroupsSection(props: {
 
   return (
     <>
+      {/* The per-group rollup used to enumerate every group and count here,
+          immediately beside a sidebar listing the same eight groups with the
+          same counts. The named group headers below and the sidebar jump nav
+          both carry that detail, so this states the total only. */}
       <p className="connection-rollup">
-        <strong>{totalItems} published links</strong>
-        {props.groups.length ? (
-          <> — {formatConnectionRollup(props.groups)}</>
-        ) : null}
+        <strong>{totalItems} published links</strong> across{" "}
+        {props.groups.length} group{props.groups.length === 1 ? "" : "s"}.
       </p>
       <Accordion.Root
         className="accordion-root relationship-groups-accordion"
