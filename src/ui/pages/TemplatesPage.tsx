@@ -37,6 +37,7 @@ import {
 } from "../lib/pagePrimitives";
 
 type TemplateRecord = {
+  template_id?: string;
   name: string;
   display_name: string;
   description: string;
@@ -140,6 +141,7 @@ type ComplianceWorkflow = {
   steps?: WorkflowStep[];
   readiness_checks?: string[];
   boundary_note?: string;
+  companion_template_ids?: string[];
 };
 
 type ComplianceTool = {
@@ -603,17 +605,42 @@ export function TemplatesPage(props: {
     ...(selectedWorkflow?.artifact_ids || []),
     ...(selectedWorkflow?.tool_ids || []),
   ]);
-  const workflowTemplates = selectedWorkflow
+  // A workflow names its own companions in `companion_template_ids`. Trust
+  // that first: matching on shared official resources instead returned nine
+  // loosely-related documents for "Create or update a POA&M" — none of them
+  // the POA&M — which is how a stated intent turned into a search problem.
+  const declaredCompanions = selectedWorkflow
+    ? templates.filter((template) =>
+        (selectedWorkflow.companion_template_ids || []).includes(
+          template.template_id,
+        ),
+      )
+    : [];
+  const relatedByResource = selectedWorkflow
     ? templates.filter((template) =>
         template.official_resource_ids?.some((id) =>
           workflowReferenceIds.has(id),
         ),
       )
     : templates;
-  const companionPool =
-    selectedWorkflow && workflowTemplates.length > 0
-      ? workflowTemplates
-      : templates;
+  const companionPool = !selectedWorkflow
+    ? templates
+    : declaredCompanions.length > 0
+      ? declaredCompanions
+      : relatedByResource.length > 0
+        ? relatedByResource
+        : templates;
+  // Searching and filtering a set you can already see is busywork.
+  const showCompanionFilters = companionPool.length > 4;
+  // Anything the task does not declare stays reachable behind one disclosure.
+  // Two templates (Hardware/Software Baseline) are declared by no workflow at
+  // all, so without this they would be unreachable whenever a task is picked.
+  const otherTemplates = selectedWorkflow
+    ? templates.filter(
+        (template) =>
+          !companionPool.some((inPool) => inPool.name === template.name),
+      )
+    : [];
   const filteredTemplates = useMemo(
     () =>
       filterByCategoryAndQuery(
@@ -932,7 +959,7 @@ export function TemplatesPage(props: {
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">1 · Choose the work</p>
+                <p className="eyebrow">Choose the work</p>
                 <h2 id="workflow-heading">Start with a compliance task</h2>
                 <p className="page-summary">
                   You do not need to know the document name first. Pick the
@@ -1004,6 +1031,12 @@ export function TemplatesPage(props: {
                   Clear task
                 </button>
               </div>
+              {/* The method — outcomes, steps, readiness — is reference, not a
+                  gate. It used to sit between the user's stated intent and the
+                  artifact they asked for, so choosing "Create a POA&M" meant
+                  reading an essay before reaching anything buildable. */}
+              <details className="workflow-method">
+                <summary>How this work is done — steps and what good looks like</summary>
               {selectedWorkflow.outcomes?.length ? (
                 <SummaryCard title="What you will have">
                   <ul className="nexus-list">
@@ -1047,6 +1080,7 @@ export function TemplatesPage(props: {
                   </ul>
                 </SummaryCard>
               ) : null}
+              </details>
               {selectedWorkflow.boundary_note ? (
                 <p className="nexus-limitation">
                   <IconShieldCheck
@@ -1062,10 +1096,101 @@ export function TemplatesPage(props: {
 
           {selectedWorkflow ? (
             <>
+          <section
+            aria-labelledby="companion-heading"
+            className="nexus-section"
+            id="companion-templates"
+          >
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">
+                  {selectedWorkflow ? "Build it" : "Starter documents"}
+                </p>
+                <h2 id="companion-heading">
+                  {selectedWorkflow && declaredCompanions.length === 1
+                    ? `Build your ${declaredCompanions[0].display_name}`
+                    : "Starter documents"}
+                </h2>
+                <p className="page-summary">
+                  Create a starter file in your browser. It helps organize the
+                  work; it is not an official form, approval, or proof.
+                </p>
+              </div>
+            </div>
+            {showCompanionFilters ? (
+              <CatalogFilterBar
+                category={categoryFilter}
+                categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
+                countLabel={`${filteredTemplates.length} companion${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+                onCategoryChange={setCategoryFilter}
+                onQueryChange={setQueryFilter}
+                query={queryFilter}
+                queryPlaceholder="Search companions by name or purpose"
+              />
+            ) : null}
+
+            {[...groupedTemplates.entries()].map(
+              ([category, categoryTemplates]) => (
+                <section className="catalog-group" key={category}>
+                  <h3 className="catalog-group-title">{category}</h3>
+                  <div className="intent-grid">
+                    {categoryTemplates.map((template: TemplateRecord) => (
+                      <QuickIntentCard
+                        actionLabel="Review and generate"
+                        body={template.description}
+                        icon={<IconFileDescription size={20} stroke={1.8} />}
+                        key={template.name}
+                        onClick={() =>
+                          onNavigate("templates", {
+                            templateType: template.name,
+                            framework: state.framework || "nist-800-53",
+                            format: template.supported_formats?.[0] || "markdown",
+                            environment: state.environment || "Generic",
+                            baseline: "",
+                            controlFamily: "",
+                          })
+                        }
+                        title={template.display_name}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ),
+            )}
+
+            {otherTemplates.length ? (
+              <details className="other-templates">
+                <summary>
+                  Other starter documents ({otherTemplates.length})
+                </summary>
+                <div className="intent-grid">
+                  {otherTemplates.map((template: TemplateRecord) => (
+                    <QuickIntentCard
+                      actionLabel="Review and generate"
+                      body={template.description}
+                      icon={<IconFileDescription size={20} stroke={1.8} />}
+                      key={template.name}
+                      onClick={() =>
+                        onNavigate("templates", {
+                          templateType: template.name,
+                          framework: state.framework || "nist-800-53",
+                          format: template.supported_formats?.[0] || "markdown",
+                          environment: state.environment || "Generic",
+                          baseline: "",
+                          controlFamily: "",
+                        })
+                      }
+                      title={template.display_name}
+                    />
+                  ))}
+                </div>
+              </details>
+            ) : null}
+          </section>
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">2 · Verify the rule</p>
+                <p className="eyebrow">Verify the rule</p>
                 <h2 id="official-heading">
                   {selectedWorkflow
                     ? `Official resources for ${selectedWorkflow.title}`
@@ -1125,7 +1250,7 @@ export function TemplatesPage(props: {
           <section aria-labelledby="tools-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">3 · Use proven tooling</p>
+                <p className="eyebrow">Use proven tooling</p>
                 <h2 id="tools-heading">
                   {selectedWorkflow
                     ? "Tools for this workflow"
@@ -1163,60 +1288,6 @@ export function TemplatesPage(props: {
             ) : null}
           </section>
 
-          <section
-            aria-labelledby="companion-heading"
-            className="nexus-section"
-            id="companion-templates"
-          >
-            <div className="section-header nexus-section-header">
-              <div>
-                <p className="eyebrow">4 · Build the working artifact</p>
-                <h2 id="companion-heading">Starter documents</h2>
-                <p className="page-summary">
-                  Create a starter file in your browser. It helps organize the
-                  work; it is not an official form, approval, or proof.
-                </p>
-              </div>
-            </div>
-            <CatalogFilterBar
-              category={categoryFilter}
-              categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
-              countLabel={`${filteredTemplates.length} companion${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
-              onCategoryChange={setCategoryFilter}
-              onQueryChange={setQueryFilter}
-              query={queryFilter}
-              queryPlaceholder="Search companions by name or purpose"
-            />
-
-            {[...groupedTemplates.entries()].map(
-              ([category, categoryTemplates]) => (
-                <section className="catalog-group" key={category}>
-                  <h3 className="catalog-group-title">{category}</h3>
-                  <div className="intent-grid">
-                    {categoryTemplates.map((template: TemplateRecord) => (
-                      <QuickIntentCard
-                        actionLabel="Review and generate"
-                        body={template.description}
-                        icon={<IconFileDescription size={20} stroke={1.8} />}
-                        key={template.name}
-                        onClick={() =>
-                          onNavigate("templates", {
-                            templateType: template.name,
-                            framework: state.framework || "nist-800-53",
-                            format: template.supported_formats?.[0] || "markdown",
-                            environment: state.environment || "Generic",
-                            baseline: "",
-                            controlFamily: "",
-                          })
-                        }
-                        title={template.display_name}
-                      />
-                    ))}
-                  </div>
-                </section>
-              ),
-            )}
-          </section>
             </>
           ) : null}
         </div>
@@ -1225,13 +1296,10 @@ export function TemplatesPage(props: {
             <SummaryCard title="On this page">
               <PageJumpNav
                 sections={[
-                  { id: "workflow-heading", label: "1 · Choose the work" },
-                  { id: "official-heading", label: "2 · Verify the rule" },
-                  { id: "tools-heading", label: "3 · Use proven tooling" },
-                  {
-                    id: "companion-templates",
-                    label: "4 · Build the artifact",
-                  },
+                  { id: "workflow-heading", label: "Choose the work" },
+                  { id: "companion-templates", label: "Build it" },
+                  { id: "official-heading", label: "Verify the rule" },
+                  { id: "tools-heading", label: "Use proven tooling" },
                 ]}
               />
             </SummaryCard>

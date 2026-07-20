@@ -9,13 +9,14 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("Atlas standalone route exposes Purpose, bounded Map, and List", async ({ page }) => {
+test("Atlas standalone route exposes Path, bounded Map, and List", async ({ page }) => {
   await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "Purpose" })).toBeVisible();
+  // Purpose/RMF are lenses inside Path now, not peer tabs.
+  await expect(page.getByRole("tab", { name: "Path", exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "Map" }).click();
   await expect(page.getByRole("group", { name: /connection groups around AC-2/i })).toBeVisible();
   await page.getByRole("tab", { name: "List" }).click();

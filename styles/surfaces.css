@@ -1114,6 +1114,133 @@ li {
   margin-bottom: var(--ca-space-1);
 }
 
+/* ── Atlas Path: one question per screen ───────────────────────────── */
+
+.atlas-path-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2);
+  margin-bottom: var(--ca-space-3);
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.atlas-path-crumb-subject {
+  font-weight: 800;
+  color: var(--ca-text);
+}
+
+.atlas-path-crumb-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ca-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.atlas-path-crumb-link:hover,
+.atlas-path-crumb-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.atlas-path-prompt {
+  margin: 0 0 var(--ca-space-4);
+  font-size: var(--font-size-lg);
+}
+
+.atlas-path-stage-list,
+.atlas-path-record-list {
+  display: grid;
+  gap: var(--ca-space-2);
+  margin: 0 0 var(--ca-space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-path-stage-option,
+.atlas-path-record {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-3);
+  width: 100%;
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  color: var(--ca-text);
+  background: var(--ca-surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.atlas-path-stage-option > svg:first-child {
+  flex: none;
+  color: var(--ca-secondary);
+}
+
+.atlas-path-stage-option-text,
+.atlas-path-record-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.atlas-path-stage-option small,
+.atlas-path-record small {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.atlas-path-record strong {
+  color: var(--ca-secondary);
+}
+
+.atlas-path-stage-option:hover:not(:disabled),
+.atlas-path-stage-option:focus-visible,
+.atlas-path-record:hover,
+.atlas-path-record:focus-visible,
+.atlas-path-record.active {
+  border-color: var(--ca-secondary);
+  background: color-mix(in srgb, var(--ca-secondary) 7%, var(--ca-surface));
+}
+
+.atlas-path-stage-option:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.atlas-path-stage-option > svg:last-child,
+.atlas-path-record > svg {
+  flex: none;
+  color: var(--ca-text-muted);
+}
+
+/* "Clear task" was wrapping into a cramped two-line pill. */
+.nexus-section-header button {
+  white-space: nowrap;
+}
+
+/* The method is reference material behind a disclosure: give the summary a
+   real target and keep it visually subordinate to the build action. */
+.workflow-method > summary {
+  cursor: pointer;
+  padding: var(--ca-space-2) 0;
+  color: var(--ca-text-muted);
+  font-weight: 700;
+}
+
+.workflow-method > summary:hover,
+.workflow-method > summary:focus-visible {
+  color: var(--ca-secondary);
+}
+
+.workflow-method[open] > summary {
+  margin-bottom: var(--ca-space-3);
+}
+
 .nexus-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
