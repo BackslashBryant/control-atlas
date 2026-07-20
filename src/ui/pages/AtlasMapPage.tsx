@@ -51,14 +51,25 @@ type AtlasMapPageProps = {
   onOpenNode: (nodeId: string, from?: string) => void;
 };
 
-type AtlasView = "path" | "map" | "list" | "purpose" | "rmf";
+type AtlasView = "path" | "map" | "list";
 
 function atlasView(value: string, focused: boolean): AtlasView {
-  if (["map", "list", "purpose", "rmf"].includes(value)) {
+  // "purpose"/"rmf" are legacy view ids: both are the Path view under a
+  // different lens, so they resolve to "path" and keep old links working.
+  if (value === "purpose" || value === "rmf") {
+    return "path";
+  }
+  if (["path", "map", "list"].includes(value)) {
     return value as AtlasView;
   }
-  if (focused) return value === "path" ? "purpose" : "map";
-  return "path";
+  return focused ? "path" : "path";
+}
+
+// The lens is an entry choice carried in the route, not a view toggle.
+function atlasLens(state: { relationshipView?: string; sourceView?: string }) {
+  return state.relationshipView === "rmf" || state.sourceView === "rmf-lifecycle"
+    ? "rmf"
+    : "purpose";
 }
 
 function handleTabKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>) {
@@ -218,33 +229,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         <button className="visually-hidden" type="submit">Search</button>
       </form>
 
-      {!record ? (
-        <div aria-label="Atlas views" className="atlas-view-tabs" role="tablist">
-          {(["path", "map", "list"] as AtlasView[]).map((viewId) => (
-            <button
-              aria-controls="atlas-view-panel"
-              aria-selected={view === viewId}
-              className={view === viewId ? "active" : ""}
-              id={`atlas-view-tab-${viewId}`}
-              key={viewId}
-              onClick={() => patchAtlas({ relationshipView: viewId, relationshipGroup: "" })}
-              onKeyDown={handleTabKeyDown}
-              role="tab"
-              tabIndex={view === viewId ? 0 : -1}
-              type="button"
-            >
-              {viewId === "path" ? "Path" : viewId === "map" ? "Map" : "List"}
-            </button>
-          ))}
-        </div>
-      ) : null}
+      {/* No view switcher before a record exists: Map and List are views OF a
+          chosen record. Offering them with nothing selected produced a
+          dead-end that told the user to go choose a record. With no subject,
+          this route's only job is helping them pick one. */}
 
-      <div
-        aria-labelledby={record ? undefined : `atlas-view-tab-${view}`}
-        className="atlas-view-panel"
-        id="atlas-view-panel"
-        role="tabpanel"
-      >
+      <div className="atlas-view-panel" id="atlas-view-panel">
       {recordStatus === "loading" ? (
         <div className="atlas-loading" role="status">
           <div aria-hidden="true" className="atlas-loading-block" />
@@ -337,17 +327,20 @@ function FocusedAtlas(props: {
     onNavigate("sources", sourceId ? { source: sourceId } : undefined);
   }
 
-  const boardView = view === "purpose" || view === "rmf";
+  const boardView = view === "path";
 
   return (
     <div className="atlas-focused-shell">
       <div className="atlas-focused-toolbar">
         <div aria-label="Atlas views" className="atlas-view-tabs" role="tablist">
+          {/* Three views of ONE record. The lens (Purpose vs RMF) is chosen
+              once on entry and shown as a breadcrumb inside Path — it is not
+              a fourth peer tab, because representation and ordering are
+              different questions and stacking them read as a settings panel. */}
           {([
+            ["path", "Path", IconRoute],
             ["map", "Map", IconMap],
             ["list", "List", IconListDetails],
-            ["purpose", "Purpose", IconRoute],
-            ["rmf", "RMF", IconRoute],
           ] as const).map(([viewId, label, ViewIcon]) => (
             <button
               aria-controls="atlas-focused-view"
@@ -417,12 +410,24 @@ function FocusedAtlas(props: {
               <AtlasDecompositionBoard
                 center={record.center_node}
                 groups={groups}
-                lens={view}
+                lens={atlasLens(state)}
                 onOpenList={() => patchAtlas({ relationshipView: "list" })}
-                onOpenRecord={(node) => onOpenNode(node, "atlas-map")}
+                onOpenRecord={(node) => {
+                  // Opening a record from the Path makes it the new subject,
+                  // so the path continues from there instead of dead-ending.
+                  setSelectedRow(null);
+                  patchAtlas({
+                    node,
+                    atlasStage: "",
+                    relationshipGroup: "",
+                    relationshipView: "path",
+                  });
+                }}
                 onOpenSources={openSources}
                 onSelect={setSelectedRow}
+                onStageChange={(atlasStage) => patchAtlas({ atlasStage })}
                 selectedItemId={selectedRow?.counterpart.id || ""}
+                stageId={state.atlasStage}
               />
             ) : null}
 

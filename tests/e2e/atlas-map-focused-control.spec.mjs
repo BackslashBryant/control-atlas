@@ -9,20 +9,37 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("focused Atlas defaults to the approved six-stage Purpose board", async ({ page }) => {
+test("focused Atlas opens the Path asking one question, not a six-stage dump", async ({ page }) => {
   await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "Purpose" })).toHaveAttribute("aria-selected", "true");
+  // Three views of ONE record. Purpose/RMF are no longer peer tabs: the lens
+  // is an entry choice shown as a breadcrumb inside Path.
+  await expect(page.getByRole("tab", { name: "Path" })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "RMF" })).toBeVisible();
-  await expect(page.locator(".atlas-decomposition-stage")).toHaveCount(6);
+  await expect(page.getByRole("tab", { name: "Purpose" })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: "RMF" })).toHaveCount(0);
+  // The Path asks which stage first; it does not render every stage's records.
+  await expect(page.getByText("Where do you want to go from")).toBeVisible();
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
+  await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
-  await expect(page.getByText("Expanded item", { exact: false })).toHaveCount(0);
-  await expect(page.getByText("Templates / Playbooks / Sources cluster", { exact: false })).toHaveCount(0);
+});
+
+test("choosing a Path stage shows only that stage and can continue from a record", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.locator(".atlas-path-stage-option").filter({ hasText: "Control" }).first().click();
+  await expect(page.locator(".atlas-path-record").first()).toBeVisible();
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
+  // Breadcrumb records where the walk is: subject > lens > stage.
+  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("AC-2");
+  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("Control");
 });
 
 test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
@@ -30,15 +47,15 @@ test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const purposeTab = page.getByRole("tab", { name: "Purpose", exact: true });
-  await purposeTab.focus();
+  const pathTab = page.getByRole("tab", { name: "Path", exact: true });
+  await pathTab.focus();
   await page.keyboard.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "RMF", exact: true })).toHaveAttribute(
+  await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveAttribute(
     "aria-selected",
     "true",
   );
   await page.keyboard.press("ArrowLeft");
-  await expect(purposeTab).toHaveAttribute("aria-selected", "true");
+  await expect(pathTab).toHaveAttribute("aria-selected", "true");
 });
 
 test("focused Map is absolutely bounded and restores focus after collapse", async ({ page }) => {
@@ -82,16 +99,19 @@ test("zero-published-edge records render an honest empty state instead of Map", 
   await expect(page.locator(".react-flow")).toHaveCount(0);
 });
 
-test("a sparse STIG keeps all six stages and shows its real implementation connection", async ({ page }) => {
+test("a sparse STIG still offers all six stages and its real implementation connection", async ({ page }) => {
   await page.goto("/#/atlas-map?node=disa-stig%3AV-222387");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
-  await expect(page.locator(".atlas-decomposition-stage")).toHaveCount(6);
-  await expect(page.locator('[data-stage="implementation"]')).not.toContainText(
-    "No published connection in this stage.",
-  );
+  // Every stage is still offered; empty ones say so honestly and are disabled
+  // rather than hidden, so the gap stays visible.
+  const stages = page.locator(".atlas-path-stage-option");
+  await expect(stages).toHaveCount(6);
+  const implementation = stages.filter({ hasText: "Implementation" }).first();
+  await expect(implementation).toBeEnabled();
+  await expect(implementation).not.toContainText("No published connection yet");
   await expect(page.getByText("No published connections to show.")).toHaveCount(0);
 });
 
@@ -117,20 +137,20 @@ test("compact Map expands to no more than seven visible nodes", async ({ page })
   expect(overflow).toEqual({ body: 0, document: 0 });
 });
 
-test("compact Purpose board stacks vertically and keeps the selected path below it", async ({ page }) => {
+test("compact Path stacks its stage choices and keeps the selected path below them", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const stageColumns = await page.locator(".atlas-decomposition-board").evaluate(
+  const stageColumns = await page.locator(".atlas-path-stage-list").evaluate(
     (element) =>
       globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length,
   );
   expect(stageColumns).toBe(1);
-  const board = await page.locator(".atlas-decomposition-board").boundingBox();
+  const stages = await page.locator(".atlas-path-stage-list").boundingBox();
   const selectedPath = await page.getByRole("complementary", { name: "Selected path" }).boundingBox();
-  expect(board).not.toBeNull();
+  expect(stages).not.toBeNull();
   expect(selectedPath).not.toBeNull();
-  expect(selectedPath.y).toBeGreaterThanOrEqual(board.y + board.height - 1);
+  expect(selectedPath.y).toBeGreaterThanOrEqual(stages.y + stages.height - 1);
 });

@@ -86,20 +86,18 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
   });
 });
 
-test("release evidence: approved decomposition is six columns on desktop", async ({ page }) => {
+test("release evidence: the Path offers every stage as one choice on desktop", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(
-    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=purpose",
+    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=path",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const board = page.locator(".atlas-decomposition-board");
-  await expect(board.locator(".atlas-decomposition-stage")).toHaveCount(6);
-  const columns = await board.evaluate(
-    (element) => globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length,
-  );
-  expect(columns).toBe(6);
+  // The six-column board is retired: the Path asks which stage first, so all
+  // six stages are offered but none of their records are dumped on screen.
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
+  await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
   await assertNoPageOverflow(page);
   await page.screenshot({
@@ -114,12 +112,12 @@ test("release evidence: Atlas reflows at the 200 percent zoom equivalent", async
   // A 1440px desktop viewport at 200% browser zoom exposes 720 CSS pixels.
   await page.setViewportSize({ width: 720, height: 500 });
   await page.goto(
-    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=purpose",
+    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=path",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const columns = await page.locator(".atlas-decomposition-board").evaluate(
+  const columns = await page.locator(".atlas-path-stage-list").evaluate(
     (element) =>
       globalThis.getComputedStyle(element).gridTemplateColumns.split(" ")
         .length,

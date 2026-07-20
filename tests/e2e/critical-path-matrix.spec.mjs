@@ -33,22 +33,24 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
 });
 
-test("critical path: Atlas Purpose opens a published connected record", async ({
+test("critical path: the Atlas Path walks to a published connected record", async ({
   page,
 }) => {
   await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const connected = page
-    .locator(
-      ".atlas-decomposition-card:not(.atlas-decomposition-card--center)",
-    )
-    .first();
+  // Pick a stage, then a record in it, then continue the path from that
+  // record: the subject changes, which is the whole point of the walk.
+  await page
+    .locator(".atlas-path-stage-option:not(:disabled)")
+    .first()
+    .click();
+  const connected = page.locator(".atlas-path-record").first();
   await expect(connected).toBeVisible();
   await connected.click();
   const previousUrl = page.url();
-  await page.getByRole("button", { name: "Open selected record" }).click();
+  await page.getByRole("button", { name: /^Continue from / }).click();
   await expect(page).not.toHaveURL(previousUrl);
   await expect(page.getByRole("heading", { level: 1 })).not.toContainText(
     "AC-2 — Account Management",

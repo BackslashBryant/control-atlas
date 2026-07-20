@@ -39,7 +39,18 @@ for (const template of registry.templates) {
     const card = page
       .locator('#companion-templates')
       .getByRole('button', { name: new RegExp(`^${escapeRegex(template.display_name)}\\b`) });
-    await card.click();
+    // A task leads with the documents it declares; everything else stays
+    // reachable behind "Other starter documents". Expand that when the wanted
+    // template is not one this task declares.
+    if (!(await card.count()) || !(await card.first().isVisible())) {
+      const others = page.locator(
+        '#companion-templates details.other-templates > summary',
+      );
+      if (await others.count()) {
+        await others.first().click();
+      }
+    }
+    await card.first().click();
     await expect(page.getByText('What this template is for')).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`templateType=${template.name}`));
 

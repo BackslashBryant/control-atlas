@@ -15,7 +15,11 @@ test("Atlas opens directly to the novice source Path", async ({ page }) => {
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Control Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "Path" })).toHaveAttribute("aria-selected", "true");
+  // With no subject chosen there is no view switcher at all: Map and List are
+  // views OF a record, and offering them here produced a dead-end that told
+  // the user to go pick one.
+  await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: "List", exact: true })).toHaveCount(0);
   await expect(
     page.getByText(
       "Start with the question you are trying to answer. Each path opens the same trusted source model in a more useful order.",
@@ -64,7 +68,7 @@ test("a source Path card opens a real connected record", async ({ page }) => {
   await sourceCard.getByRole("button", { name: "View connected records" }).click();
   await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
   await expect(page.getByRole("heading", { name: "FAMILY-AC", level: 1 })).toBeVisible();
-  await expect(page.locator(".atlas-decomposition-stage")).toHaveCount(6);
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
   await expect(
     page.getByRole("complementary", { name: "Selected path" }),
   ).toBeVisible();
