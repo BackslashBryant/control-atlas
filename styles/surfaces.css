@@ -853,11 +853,39 @@ li {
 .compare-legend {
   color: var(--ca-text-muted);
   font-size: var(--font-size-sm);
-  margin: var(--ca-space-2) 0 0;
+  margin: var(--ca-space-3) 0 var(--ca-space-4);
+  line-height: 1.55;
 }
 
+/* Three comparison tiles read as one row on desktop and stack cleanly when
+   narrow, instead of wrapping 4+2 and leaving a dead gap. */
 .compare-summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   margin-bottom: var(--ca-space-4);
+}
+
+.compare-provenance-note {
+  margin: 0 0 var(--ca-space-4);
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Section rhythm for the surfaces reworked in this pass: consistent vertical
+   spacing between a heading block and the content it introduces, so pages do
+   not mix 8px and 32px gaps between equivalent things. */
+.atlas-decomposition,
+.compare-results-panel > .stack,
+.workflow-method[open] {
+  margin-top: var(--ca-space-4);
+}
+
+.atlas-selected-path {
+  margin-top: var(--ca-space-6);
+}
+
+.record-actions-popover button {
+  width: 100%;
+  justify-content: flex-start;
 }
 
 .compare-map-unavailable {
