@@ -197,7 +197,7 @@ export function ExplorePage(props: {
               Start guided path
             </button>
           }
-          summary="Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources. Open a result to see what it is and where it comes from."
+          summary="Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources."
           title="Search everything in one place"
         />
 

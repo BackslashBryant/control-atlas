@@ -83,3 +83,11 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - DECISION: The lens (question / RMF stage) is a one-time entry choice that becomes a breadcrumb, not a persistent switch.
 - DECISION: Record detail opens shallow — 14 controls above the fold today; secondary actions move behind one affordance.
 - Owner framing: "Clear flows, clear selections, clear paths... highly intuitive and responsive across all surfaces."
+
+## Source labeling + copy diet decisions (owner, 2026-07-20)
+- FINDING: The Sources page is not showing duplicate records. 28 of 45 sources render under 6 generic titles (9x "DISA STIG", 5x "SP 800-53 Rev. 5", 5x "DoD Zero Trust", 4x "DISA CCI", 3x "NIST CSF 2.0", 2x "CUI Program") because `display_name` is a FAMILY label that the UI renders as the TITLE. Every record already carries a correct specific `name` (e.g. "DISA Public STIG Library", "NIST SP 800-53B Baseline Profiles").
+- FINDING: "Core source for the default compliance ecosystem map." exists in NO source record. It is generated per graph-role in `src/ui/graph/sourceDisposition.ts:16`, so many cards print the identical sentence.
+- DECISION: Render the specific `name` as the card title; demote `display_name` to a small family chip. No data migration, no mapping-contract change.
+- DECISION: Stop printing generated boilerplate. If nothing specific can be said about a source, say nothing rather than repeating one sentence across cards.
+- DECISION: Copy diet limited to the two measured offenders — Atlas entry (505 words / 34 sentences) and Sources (contains a 142-word sentence). Landing (76 words), Explore (68) and Compare (203) already measure lean and are left alone.
+- Measured baseline 2026-07-20 (words/sentences per surface): Landing 76/5, Explore 68/5, Atlas entry 505/34, Record 249/12, Sources 453/20, Templates 311/16, Playbooks 259/20, Compare 203/20.

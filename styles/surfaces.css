@@ -1259,7 +1259,8 @@ li {
 
 /* The method is reference material behind a disclosure: give the summary a
    real target and keep it visually subordinate to the build action. */
-.workflow-method > summary {
+.workflow-method > summary,
+.connection-inventory-details > summary {
   cursor: pointer;
   padding: var(--ca-space-2) 0;
   color: var(--ca-text-muted);
@@ -1267,7 +1268,9 @@ li {
 }
 
 .workflow-method > summary:hover,
-.workflow-method > summary:focus-visible {
+.workflow-method > summary:focus-visible,
+.connection-inventory-details > summary:hover,
+.connection-inventory-details > summary:focus-visible {
   color: var(--ca-secondary);
 }
 

@@ -62,10 +62,12 @@ test("a source Path card opens a real connected record", async ({ page }) => {
   await dismissOnboarding(page);
 
   await page.getByRole("tab", { name: /Controls/ }).click();
+  // The source card title is the click target now; the repeated
+  // "View source details" / "View connected records" button is retired.
   const sourceCard = page.locator(".atlas-source-cards article").filter({
     has: page.getByRole("heading", { name: "NIST SP 800-53 Rev. 5" }),
   });
-  await sourceCard.getByRole("button", { name: "View connected records" }).click();
+  await sourceCard.locator(".card-title-action").click();
   await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
   await expect(page.getByRole("heading", { name: "FAMILY-AC", level: 1 })).toBeVisible();
   await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
