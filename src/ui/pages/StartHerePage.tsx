@@ -46,7 +46,7 @@ export function StartHerePage(props: {
 
   function followLibraryLink(link: StartHereLibraryLink) {
     if (link.kind === "library-catalog") {
-      onNavigate("browse", { framework: link.catalogId });
+      onNavigate("catalog-detail", { catalog: link.catalogId });
       return;
     }
     onNavigate("library-detail", { node: link.nodeId, from: "start-here" });
@@ -66,6 +66,20 @@ export function StartHerePage(props: {
       dataSensitivity: "",
       environment: "",
     });
+  }
+
+  if (recommendations) {
+    return (
+      <section className="panel start-here-result-page">
+        <StartHereResult
+          onFollowCompareLink={followCompareLink}
+          onFollowLibraryLink={followLibraryLink}
+          onNavigate={onNavigate}
+          onRestart={restartQuestionnaire}
+          recommendations={recommendations}
+        />
+      </section>
+    );
   }
 
   return (
@@ -99,7 +113,29 @@ export function StartHerePage(props: {
         </div>
       </div>
 
-      <div className="filter-grid">
+      <div className="start-here-question">
+        {state.systemType && activeStep > 1 ? (
+          <div className="start-here-answer">
+            <span>System type</span>
+            <strong>{state.systemType}</strong>
+            <button
+              className="link-action"
+              onClick={() =>
+                onNavigate("start-here", {
+                  ...state,
+                  systemType: "",
+                  dataSensitivity: "",
+                  environment: "",
+                  step: "",
+                })
+              }
+              type="button"
+            >
+              Change
+            </button>
+          </div>
+        ) : null}
+        {activeStep === 1 ? (
         <SelectField
           emptyLabel="Choose a system type"
           hint="What kind of system you are authorizing or assessing."
@@ -117,8 +153,29 @@ export function StartHerePage(props: {
           ]}
           value={state.systemType}
         />
+        ) : null}
+        {state.dataSensitivity && activeStep > 2 ? (
+          <div className="start-here-answer">
+            <span>Data sensitivity</span>
+            <strong>{state.dataSensitivity}</strong>
+            <button
+              className="link-action"
+              onClick={() =>
+                onNavigate("start-here", {
+                  ...state,
+                  dataSensitivity: "",
+                  environment: "",
+                  step: "",
+                })
+              }
+              type="button"
+            >
+              Change
+            </button>
+          </div>
+        ) : null}
+        {activeStep === 2 ? (
         <SelectField
-          disabled={!state.systemType}
           emptyLabel="Choose a sensitivity level"
           hint="How sensitive the data handled by the system is."
           label="Data sensitivity"
@@ -138,8 +195,9 @@ export function StartHerePage(props: {
           ]}
           value={state.dataSensitivity}
         />
+        ) : null}
+        {activeStep === 3 ? (
         <SelectField
-          disabled={!state.dataSensitivity}
           emptyLabel="Choose an environment"
           hint="Who operates the system and under which federal context."
           label="Operational environment"
@@ -155,6 +213,7 @@ export function StartHerePage(props: {
           ]}
           value={state.environment}
         />
+        ) : null}
       </div>
 
       <p className="field-hint start-here-glossary-hint">
@@ -172,14 +231,10 @@ export function StartHerePage(props: {
         </p>
       ) : null}
 
-      {!showResults ? (
+      {!showResults && state.environment ? (
         <div className="card-actions">
           <button
-            aria-describedby={
-              hasCompleteContext ? undefined : "start-here-submit-hint"
-            }
             className="primary"
-            disabled={!hasCompleteContext}
             onClick={() =>
               onNavigate("start-here", { ...state, step: "results" })
             }
@@ -187,31 +242,9 @@ export function StartHerePage(props: {
           >
             Show recommendation
           </button>
-          {!hasCompleteContext ? (
-            <p className="field-hint" id="start-here-submit-hint" role="status">
-              Select all three answers to continue.
-            </p>
-          ) : null}
         </div>
       ) : null}
 
-      {recommendations ? (
-        <StartHereResult
-          onFollowCompareLink={followCompareLink}
-          onFollowLibraryLink={followLibraryLink}
-          onNavigate={onNavigate}
-          onRestart={restartQuestionnaire}
-          recommendations={recommendations}
-        />
-      ) : !showResults ? (
-        <section className="empty-state">
-          <h2>Choose your context, then show a recommendation</h2>
-          <p>
-            Pick the options that best match your system. Click Show
-            recommendation when you are ready for the next step.
-          </p>
-        </section>
-      ) : null}
     </section>
   );
 }

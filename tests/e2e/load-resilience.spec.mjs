@@ -24,15 +24,11 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Create", exact: true })
-    .click();
-  await primaryNav
-    .locator(".nav-more-menu")
-    .getByRole("button", { name: "Playbooks", exact: true })
+    .getByRole("button", { name: "Guides", exact: true })
     .click();
   await expect(page).toHaveURL(/#\/playbooks|view=playbooks/);
   await expect(
-    page.getByRole("heading", { name: "Compliance playbooks" }),
+    page.getByRole("heading", { name: "Guides for common compliance jobs" }),
   ).toBeVisible();
 });
 
@@ -98,11 +94,11 @@ test("heavy routes explain what they are loading", async ({ page }) => {
 
   await page.goto("/#/templates");
   await expect(
-    page.getByRole("heading", { name: "Loading the compliance workbench" }),
+    page.getByRole("heading", { name: "Loading document tasks" }),
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "The workbench is preparing task paths, official materials, and starter documents.",
+      "We are preparing starter documents and the official sources that support them.",
     ),
   ).toBeVisible();
   await waitForAppReady(page);

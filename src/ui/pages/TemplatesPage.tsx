@@ -29,11 +29,11 @@ import {
   Badge,
   DisclosurePanel,
   PageHeader,
-  PageJumpNav,
   SelectField,
   SummaryCard,
   downloadBlobFile,
   downloadTextFile,
+  scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
 
 type TemplateRecord = {
@@ -786,46 +786,6 @@ export function TemplatesPage(props: {
     }
   }, [selectedTemplate?.name, bundle.runtime.dataset]);
 
-  // "View related map" should land somewhere relevant to the template: a STIG
-  // rule for STIG-scoped templates, otherwise the first control of the chosen
-  // framework so the map opens on that framework's landscape rather than the
-  // generic starter view.
-  const relatedMapNode = useMemo(() => {
-    if (!selectedTemplate) return "";
-    if (inputOptions.includes("selected_stigs")) {
-      const stig = datasetNodes
-        .filter((node) => node.node_type === "stig_rule")
-        .sort((a, b) =>
-          String(a.metadata?.item_id || a.id).localeCompare(
-            String(b.metadata?.item_id || b.id),
-            undefined,
-            { numeric: true },
-          ),
-        )[0];
-      if (stig) return stig.id as string;
-    }
-    const controls = datasetNodes
-      .filter(
-        (node) =>
-          node.node_type === "control" &&
-          node.metadata?.catalog_id === activeFramework,
-      )
-      .sort((a, b) =>
-        String(a.metadata?.item_id || a.id).localeCompare(
-          String(b.metadata?.item_id || b.id),
-          undefined,
-          { numeric: true },
-        ),
-      );
-    if (controls[0]) return controls[0].id as string;
-    const baseline = datasetNodes.find(
-      (node) =>
-        node.node_type === "baseline" &&
-        node.metadata?.catalog_id === activeFramework,
-    );
-    return (baseline?.id as string) || "";
-  }, [selectedTemplate?.name, activeFramework, inputOptions, datasetNodes]);
-
   useEffect(() => {
     if (!selectedTemplate) {
       return;
@@ -833,10 +793,12 @@ export function TemplatesPage(props: {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    generationRef.current?.scrollIntoView({
-      behavior: reducedMotion ? "auto" : "smooth",
-      block: "start",
-    });
+    if (generationRef.current) {
+      scrollElementBelowHeader(
+        generationRef.current,
+        reducedMotion ? "auto" : "smooth",
+      );
+    }
     generateButtonRef.current?.focus();
   }, [selectedTemplate?.name]);
 
@@ -957,8 +919,9 @@ export function TemplatesPage(props: {
 
       {!selectedTemplate ? (
         <>
-        <div className={selectedWorkflow ? "detail-grid" : undefined}>
+        <div>
         <div className="stack">
+          {!selectedWorkflow ? (
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
@@ -970,8 +933,8 @@ export function TemplatesPage(props: {
                 </p>
               </div>
             </div>
-            <div className="intent-grid">
-              {workflows.map((workflow) => (
+            <div className="intent-grid template-featured-tasks">
+              {workflows.slice(0, 4).map((workflow) => (
                 <button
                   aria-pressed={selectedWorkflowId === workflow.workflow_id}
                   className={`intent-card intent-card-button${
@@ -997,10 +960,41 @@ export function TemplatesPage(props: {
                   </div>
                   <span className="intent-card-title">{workflow.title}</span>
                   <span className="intent-card-body">{workflow.summary}</span>
-                  <span className="intent-card-action-hint">Show the path</span>
+                  <span className="intent-card-action-hint">Choose this task</span>
                 </button>
               ))}
             </div>
+            {workflows.length > 4 ? (
+              <details className="other-templates template-more-tasks">
+                <summary>More document tasks ({workflows.length - 4})</summary>
+                <div className="intent-grid">
+                  {workflows.slice(4).map((workflow) => (
+                    <button
+                      className="intent-card intent-card-button"
+                      key={workflow.workflow_id}
+                      onClick={() => {
+                        setSelectedWorkflowId(workflow.workflow_id);
+                        setShowAllOfficialResources(false);
+                        setShowCompleteOfficialCatalog(false);
+                        setShowAllTools(false);
+                        window.setTimeout(
+                          () => workflowDetailRef.current?.focus(),
+                          0,
+                        );
+                      }}
+                      type="button"
+                    >
+                      <div className="intent-icon">
+                        <IconCompass aria-hidden="true" size={20} stroke={1.8} />
+                      </div>
+                      <span className="intent-card-title">{workflow.title}</span>
+                      <span className="intent-card-body">{workflow.summary}</span>
+                      <span className="intent-card-action-hint">Choose this task</span>
+                    </button>
+                  ))}
+                </div>
+              </details>
+            ) : null}
             {workflows.length === 0 ? (
               <div className="notice" role="status">
                 <p>
@@ -1010,6 +1004,7 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
           </section>
+          ) : null}
 
           {selectedWorkflow ? (
             <section
@@ -1031,7 +1026,7 @@ export function TemplatesPage(props: {
                   onClick={() => setSelectedWorkflowId("")}
                   type="button"
                 >
-                  Clear task
+                  Choose a different task
                 </button>
               </div>
               {/* The method — outcomes, steps, readiness — is reference, not a
@@ -1190,6 +1185,9 @@ export function TemplatesPage(props: {
               </details>
             ) : null}
           </section>
+          <details className="workflow-reference">
+            <summary>Official sources and tools for this task</summary>
+            <div className="stack disclosure-content">
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
@@ -1290,30 +1288,18 @@ export function TemplatesPage(props: {
               </button>
             ) : null}
           </section>
+            </div>
+          </details>
 
             </>
           ) : null}
         </div>
-        {selectedWorkflow ? (
-          <aside className="detail-sidebar page-sidebar">
-            <SummaryCard title="On this page">
-              <PageJumpNav
-                sections={[
-                  { id: "workflow-heading", label: "Choose the work" },
-                  { id: "companion-templates", label: "Build it" },
-                  { id: "official-heading", label: "Verify the rule" },
-                  { id: "tools-heading", label: "Use proven tooling" },
-                ]}
-              />
-            </SummaryCard>
-          </aside>
-        ) : null}
         </div>
         </>
       ) : null}
 
       {selectedTemplate ? (
-        <section className="stack" ref={generationRef}>
+        <section className="stack header-offset-target" ref={generationRef}>
           <div className="section-header">
             <div>
               <p className="eyebrow">Starter document</p>
@@ -1362,9 +1348,6 @@ export function TemplatesPage(props: {
             <div className="card-actions">
               <button className="primary" disabled={generating} onClick={createTemplate} ref={generateButtonRef} type="button">
                 {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
-              </button>
-              <button className="secondary" onClick={() => onNavigate("atlas-map", relatedMapNode ? { node: relatedMapNode } : undefined)} type="button">
-                View related map
               </button>
             </div>
             {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}

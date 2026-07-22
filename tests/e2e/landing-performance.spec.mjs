@@ -20,8 +20,8 @@ test("landing presents the map-first hero and primary entry paths", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
 
-  await expect(page.getByRole("button", { name: "Find where to start" })).toBeVisible();
-  await expect(page.getByText("Other ways to use Control Atlas")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
+  await expect(page.locator(".landing-orbit-btn")).toHaveCount(3);
 });
 
 test("landing search and brand-home flow work without legacy onboarding surfaces", async ({

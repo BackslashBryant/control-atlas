@@ -40,7 +40,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   if (relationshipView === 'map') {
     await expect(main.locator('.atlas-spatial-map')).toBeVisible();
     await expect(
-      page.getByRole('complementary', { name: 'Selected record' }),
+      page.getByRole('complementary', { name: 'Current record overview' }),
     ).toBeVisible();
   } else {
     // The six-column board is retired: the Path asks which stage first, so

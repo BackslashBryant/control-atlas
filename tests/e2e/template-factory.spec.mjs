@@ -28,13 +28,15 @@ for (const template of registry.templates) {
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    await page
-      .getByRole('button', {
+    const workflowButton = page.getByRole('button', {
         name: new RegExp(
           `^${escapeRegex(TEMPLATE_WORKFLOW[template.name] || 'Build an authorization package')}\\b`,
         ),
-      })
-      .click();
+      });
+    if (!(await workflowButton.isVisible())) {
+      await page.getByText(/More document tasks/).click();
+    }
+    await workflowButton.click();
 
     const card = page
       .locator('#companion-templates')

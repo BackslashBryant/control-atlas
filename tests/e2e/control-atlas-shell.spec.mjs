@@ -14,7 +14,14 @@ test("brand entrance is immediate and does not interrupt the user", async ({
 }) => {
   await page.goto("/");
   await expect(page.getByRole("dialog", { name: "Control Atlas introduction" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Find where to start" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
+  const flourishKeys = page.locator(".landing-brand .brand-key");
+  await expect(flourishKeys).toHaveCount(3);
+  await expect(flourishKeys.nth(0)).toHaveText("Ctrl");
+  await expect(flourishKeys.nth(1)).toHaveText("Alt");
+  const flourish = page.locator(".landing-brand .brand-key-word");
+  await expect(flourish).toHaveText("Comply");
+  await expect(flourish).toHaveText("Map", { timeout: 4000 });
 });
 
 test("reduced motion bypasses the brand entrance without an artificial hold", async ({
@@ -48,9 +55,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
   ).toBeHidden();
-  await page
-    .getByRole("button", { name: "Find where to start" })
-    .click();
+  await page.getByRole("button", { name: "Start here" }).click();
   await expect(
     page.getByRole("heading", { name: "Find the best place to start" }),
   ).toBeVisible();
@@ -62,71 +67,33 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     page.getByText("Recommended next step", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("FedRAMP Rev. 5 Baselines", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Other useful resources/)).toBeVisible();
+  await expect(page.getByText(/Related guides, documents, and comparisons/)).toBeVisible();
 
-  // Off the home view, the persistent site chrome appears with its three
-  // nav groups.
+  // Off the home view, the persistent site chrome exposes recognizable
+  // destinations directly instead of hiding them in category dropdowns.
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
   await expect(primaryNav).toBeVisible();
-  // Nav groups are disclosures: plain buttons revealing a container of plain
-  // buttons (no ARIA menu roles) — scope item queries to the revealed panel.
-  const openGroupMenu = primaryNav.locator(".nav-more-menu");
   const navLabels = await primaryNav
     .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(navLabels).toEqual(["Search", "Learn", "Explore", "Create"]);
+  expect(navLabels).toEqual([
+    "Library",
+    "Atlas",
+    "Compare",
+    "Guides",
+    "Documents",
+  ]);
 
-  await primaryNav.getByRole("button", { name: "Explore" }).click();
-  await expect(openGroupMenu).toBeVisible();
+  await primaryNav.getByRole("button", { name: "Compare" }).click();
+  await expect(page).toHaveURL(/view=matrix|#\/compare/);
   await expect(
-    openGroupMenu.getByRole("button", { name: "Atlas map" }),
-  ).toBeVisible();
-
-  const navigateMenuLabels = await openGroupMenu
-    .getByRole("button")
-    .evaluateAll((nodes) =>
-      nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
-    );
-  expect(navigateMenuLabels).toEqual(["Atlas map", "Compare"]);
-
-  await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
-  const researchMenuLabels = await openGroupMenu
-    .getByRole("button")
-    .evaluateAll((nodes) =>
-      nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
-    );
-  expect(researchMenuLabels).toEqual(["Start here", "Sources"]);
-
-  await primaryNav.getByRole("button", { name: "Create", exact: true }).click();
-  const buildMenuLabels = await openGroupMenu
-    .getByRole("button")
-    .evaluateAll((nodes) =>
-      nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
-    );
-  expect(buildMenuLabels).toEqual(["Playbooks", "Starter documents"]);
-
-  await primaryNav.getByRole("button", { name: "Search", exact: true }).click();
-  const searchMenuLabels = await openGroupMenu
-    .getByRole("button")
-    .evaluateAll((nodes) =>
-      nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
-    );
-  expect(searchMenuLabels).toEqual(["Search"]);
-
-  // Disclosure keyboard contract (SPR A11Y-002): Escape closes the open
-  // group and returns focus to its toggle button.
-  await openGroupMenu
-    .getByRole("button", { name: "Search", exact: true })
-    .focus();
-  await page.keyboard.press("Escape");
-  await expect(openGroupMenu).toHaveCount(0);
-  await expect(
-    primaryNav.getByRole("button", { name: "Search", exact: true }),
-  ).toBeFocused();
+    primaryNav.getByRole("button", { name: "Compare" }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
 
   // Clicking the brand button returns to the calm home entrance, which
   // hides the chrome again.
@@ -154,6 +121,37 @@ test("visible search trigger opens the global search dialog", async ({
   ).toBeFocused();
 });
 
+test("mobile navigation covers the page and closes predictably", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?view=about");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const toggle = page.getByRole("button", { name: "Open navigation menu" });
+  await toggle.click();
+
+  const sheet = page.locator("#mobile-nav-sheet");
+  await expect(sheet).toBeVisible();
+  await expect(
+    sheet.getByRole("button", { name: "Library", exact: true }),
+  ).toBeFocused();
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+  const coverage = await sheet.evaluate((node) => {
+    const box = node.getBoundingClientRect();
+    const background = globalThis.getComputedStyle(node).backgroundColor;
+    return { bottom: box.bottom, background };
+  });
+  expect(coverage.bottom).toBeGreaterThanOrEqual(843);
+  expect(coverage.background).toBe("rgb(15, 23, 42)");
+
+  await page.keyboard.press("Escape");
+  await expect(sheet).toHaveCount(0);
+  await expect(toggle).toBeFocused();
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+});
+
 test("library detail deep links stay compatible and keep advanced details collapsed by default", async ({
   page,
 }) => {
@@ -176,11 +174,18 @@ test("library detail deep links stay compatible and keep advanced details collap
     page.getByRole("button", { name: "Open in Atlas Map" }).first(),
   ).toBeVisible();
   await expect(page.locator(".relationship-card")).toHaveCount(0);
-  const groupNav = page.getByRole("navigation", { name: "Connection groups" });
-  await expect(groupNav).toBeVisible();
-  await groupNav.getByRole("button").first().click();
+  const firstGroup = page.locator(".relationship-group-trigger").first();
+  await expect(firstGroup).toBeVisible();
+  await firstGroup.click();
   await expect(page.locator(".relationship-group-trigger").first()).toBeFocused();
   await expect(page.locator(".relationship-card").first()).toBeVisible();
+  const siteHeaderBox = await page.locator(".site-header").boundingBox();
+  const connectionGroupBox = await page.locator(".relationship-groups-accordion .accordion-item").first().boundingBox();
+  expect(siteHeaderBox).not.toBeNull();
+  expect(connectionGroupBox).not.toBeNull();
+  expect(connectionGroupBox.y).toBeGreaterThanOrEqual(
+    siteHeaderBox.y + siteHeaderBox.height - 1,
+  );
   await expect(page.getByText("Source support", { exact: true })).toBeVisible();
   await expect(page.getByText(/Automatically synchronized/)).toBeVisible();
   await expect(
@@ -191,7 +196,9 @@ test("library detail deep links stay compatible and keep advanced details collap
   await expect(page.getByRole("button", { name: "Copy link" })).toHaveCount(0);
   await page.locator("details.record-actions-menu > summary").click();
   await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Compare" })).toBeVisible();
+  await expect(
+    page.locator("#app").getByRole("button", { name: "Compare" }),
+  ).toBeVisible();
   await expect(page.getByText("Official text / source excerpt")).toBeVisible();
   await expect(page.getByText("Source location")).not.toBeVisible();
   await page.getByRole("button", { name: "Advanced details" }).click();
@@ -221,13 +228,14 @@ test("explore groups results and filters out records without connections", async
   await page.goto("/?view=explore&q=account");
   await waitForAppReady(page);
   await dismissOnboarding(page);
+  await page.getByRole("button", { name: "Refine results" }).click();
   await expect(
-    page.getByLabel("Show only items with connections"),
+    page.getByLabel("Only show items with published connections"),
   ).toBeVisible();
   await expect(
     page.locator("#library-results .accordion-trigger").first(),
   ).toBeVisible();
-  await page.getByLabel("Show only items with connections").check();
+  await page.getByLabel("Only show items with published connections").check();
   await expect(
     page.getByText("Loading connection data for this filter"),
   ).toBeHidden({
@@ -250,11 +258,15 @@ test("explore groups results and filters out records without connections", async
 test("explore explains when the connections-only filter removes every record", async ({
   page,
 }) => {
-  await page.goto("/?view=explore&q=LEVEL-1");
+  await page.goto("/?view=explore&q=DE.AE-01");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByLabel("Show only items with connections").check();
+  await page.getByRole("button", { name: "Refine results" }).click();
+  await page.getByLabel("Only show items with published connections").check();
+  await expect(
+    page.getByText("Loading connection data for this filter"),
+  ).toBeHidden({ timeout: 90000 });
   await expect(
     page.getByRole("heading", { name: "No matching connected records found." }),
   ).toBeVisible();
@@ -421,6 +433,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
+  await page.getByText("Official sources and tools for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,
@@ -436,14 +449,46 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page.goto("/?view=playbooks");
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "Compliance playbooks" }),
+    page.getByRole("heading", { name: "Guides for common compliance jobs" }),
   ).toBeVisible();
   await page.locator(".intent-card").first().click();
-  await expect(page.getByText("Purpose")).toBeVisible();
+  await expect(page.getByText("Use this when", { exact: true })).toBeVisible();
+  await expect(page.getByText("What to do", { exact: true })).toBeVisible();
   await expect(
-    page.getByText("Common mistakes", { exact: true }),
+    page.getByText("What to avoid", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByText("Limits of this guide", { exact: true })).toBeVisible();
   await expect(page.getByText("Next action", { exact: true })).toBeVisible();
+});
+
+test("playbook copy names the decision, next record, and recovery action", async ({
+  page,
+}) => {
+  await page.goto("/?view=playbooks&pattern=common-control-provider");
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("heading", {
+      name: "Providing Controls Other Systems Can Inherit",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Define which controls a shared service owns, what evidence it provides, and what each customer system still owns.",
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("Control Atlas companion")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Inheritance Worksheet", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open PL-2 in Atlas" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Back to playbooks" }).click();
+  await page
+    .getByRole("searchbox", { name: "Search", exact: true })
+    .fill("not-a-real-playbook");
+  await expect(page.getByText("No playbooks match this search and category.")).toBeVisible();
+  await page.getByRole("button", { name: "Clear filters" }).click();
+  await expect(page.locator(".intent-card").first()).toBeVisible();
 });
 
 test("FedRAMP workbench distinguishes current rules from the complete legacy library", async ({
@@ -456,6 +501,7 @@ test("FedRAMP workbench distinguishes current rules from the complete legacy lib
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
+  await page.getByText("Official sources and tools for this task", { exact: true }).click();
 
   await expect(
     page.getByRole("heading", {
@@ -535,7 +581,7 @@ test("unknown hash routes render an honest not-found view with recovery actions"
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Go to Home" })).toBeVisible();
   await page.getByText("Try another path", { exact: true }).click();
-  await page.getByRole("button", { name: "Start here" }).click();
+  await page.locator("#app").getByRole("button", { name: "Start here" }).click();
   await expect(page).toHaveURL(/#\/start/);
   await expect(
     page.getByRole("heading", { name: "Find the best place to start" }),
@@ -601,6 +647,12 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
+  await expect(
+    page.getByRole("heading", {
+      name: /Official resources for Build an authorization package/i,
+    }),
+  ).toHaveCount(0);
+  await page.getByText("Official sources and tools for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,

@@ -28,7 +28,8 @@ type AtlasDecompositionBoardProps = {
   stageId: string;
   selectedItemId: string;
   onOpenList: () => void;
-  onOpenRecord: (nodeId: string) => void;
+  onContinueFrom: (nodeId: string) => void;
+  onOpenDetail: (nodeId: string) => void;
   onOpenSources: (sourceId?: string) => void;
   onSelect: (row: AtlasRelationshipRow | null) => void;
   onStageChange: (stageId: string) => void;
@@ -61,7 +62,7 @@ const STAGE_PREVIEW_LIMIT = 12;
  *
  *   1. which stage of the path do you want?   (shallow — stages + counts)
  *   2. which record in that stage?            (wading  — that stage only)
- *   3. open it, and it becomes the new subject so the path continues from there
+ *   3. either continue the path from it or open its full record
  */
 export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
   const centerLabel = props.center.metadata?.item_id || props.center.id;
@@ -213,7 +214,7 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
           {selectedRow ? (
             <button
               className="primary"
-              onClick={() => props.onOpenRecord(selectedRow.counterpart.id)}
+              onClick={() => props.onContinueFrom(selectedRow.counterpart.id)}
               type="button"
             >
               <IconArrowRight aria-hidden="true" size={18} />
@@ -223,23 +224,25 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
           <button
             className={selectedRow ? "secondary" : "primary"}
             onClick={() =>
-              props.onOpenRecord(selectedRow?.counterpart.id || props.center.id)
+              props.onOpenDetail(selectedRow?.counterpart.id || props.center.id)
             }
             type="button"
           >
             <IconExternalLink aria-hidden="true" size={18} />
-            Open {selectedRow ? "record" : centerLabel}
+            Open full record
           </button>
-          <button
-            className="secondary"
-            onClick={() =>
-              props.onOpenSources(selectedRow?.edge.source_refs?.[0]?.source_id)
-            }
-            type="button"
-          >
-            <IconFolderOpen aria-hidden="true" size={18} />
-            View source evidence
-          </button>
+          {selectedRow?.edge.source_refs?.[0]?.source_id ? (
+            <button
+              className="secondary"
+              onClick={() =>
+                props.onOpenSources(selectedRow.edge.source_refs[0].source_id)
+              }
+              type="button"
+            >
+              <IconFolderOpen aria-hidden="true" size={18} />
+              View source evidence
+            </button>
+          ) : null}
         </div>
       </aside>
     </section>

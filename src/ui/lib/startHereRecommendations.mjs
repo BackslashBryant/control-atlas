@@ -229,7 +229,10 @@ export function buildStartHereRecommendations(answers) {
       label: 'Trace STIG rules to controls',
       rationale: 'Follow the public STIG to CCI to NIST chain so you know where a technical rule lands in control language.',
     });
-  } else if (effectiveEnvironment === 'CSP' || systemType === 'Cloud SaaS') {
+  } else if (
+    effectiveEnvironment !== 'Contractor' &&
+    (effectiveEnvironment === 'CSP' || systemType === 'Cloud SaaS')
+  ) {
     pathLabel = 'FedRAMP authorization path';
     narrative = `You're authorizing ${systemTypePhrase(systemType)} that handles ${sensitivityPhrase(effectiveSensitivity)}${effectiveEnvironment === 'CSP' ? ' as a cloud service provider (CSP)' : ''}. Cloud systems that serve federal agencies get authorized against FedRAMP baselines, which build on the underlying NIST SP 800-53 controls. Start with the FedRAMP baseline below, then compare it against NIST to see which controls you can inherit rather than build yourself.`;
 
@@ -262,15 +265,15 @@ export function buildStartHereRecommendations(answers) {
         rationale: 'See what your FedRAMP baseline shares with the matching NIST baseline before you plan controls.',
       });
     }
-  } else if (effectiveEnvironment === 'Contractor' || isCui) {
-    pathLabel = 'NIST SP 800-171 (contractor / CUI) path';
-    narrative = `You're ${effectiveEnvironment === 'Contractor' ? 'working as a federal contractor' : 'handling Controlled Unclassified Information (CUI)'}${systemType && systemType !== 'Not sure' ? ` on ${systemTypePhrase(systemType)}` : ''}. That points you to NIST SP 800-171 — the control set contractors must meet to protect CUI — which maps back into the broader NIST SP 800-53 catalog a government system may later inherit. Start with the 800-171 control set below.`;
+  } else if (effectiveEnvironment === 'Contractor' && isCui) {
+    pathLabel = 'Contractor handling CUI';
+    narrative = 'You said a contractor operates this system and it handles Controlled Unclassified Information (CUI). NIST SP 800-171 is the relevant requirements family for protecting CUI in nonfederal systems, but your contract and agency guidance determine which revision applies. Control Atlas currently includes the Rev. 2 requirement set; confirm the required revision before relying on it.';
 
     library.push({
       kind: 'library-catalog',
       catalogId: 'nist-800-171-rev2',
       label: 'NIST SP 800-171 Rev. 2',
-      rationale: 'Contractor and CUI paths usually begin with the public 800-171 control set before you expand into broader RMF artifacts.',
+      rationale: 'Browse the imported Rev. 2 requirements by family, then trace their published mappings to related NIST controls.',
     });
 
     patternIds.push('reciprocity-basics', 'poam-concepts');
@@ -283,6 +286,18 @@ export function buildStartHereRecommendations(answers) {
       label: 'Compare 800-171 to NIST controls',
       rationale: 'See how contractor-facing requirements map to the broader NIST control catalog you may inherit later.',
     });
+  } else if (effectiveEnvironment === 'Contractor') {
+    pathLabel = 'Confirm the contract requirements';
+    narrative = 'You said a contractor operates this system, but you did not select CUI. Contractor status alone does not determine which security framework applies. Check the contract, data clauses, and agency or program instructions before choosing a control set. Do not assume SP 800-171 applies unless the work involves CUI or the contract names it.';
+
+    library.push({
+      kind: 'library-node',
+      nodeId: 'cui-policy:CUI-PROGRAM',
+      label: 'CUI Program overview',
+      rationale: 'Confirm whether the information is CUI, then use the contract or agency instruction to identify the required standard and revision.',
+    });
+
+    patternIds.push('boundary-patterns');
   } else {
     pathLabel = 'NIST RMF path';
     narrative = `You're authorizing ${systemTypePhrase(systemType)} for ${environmentPhrase(effectiveEnvironment)}, handling ${sensitivityPhrase(effectiveSensitivity)}. Federal systems get authorized through the Risk Management Framework (RMF), scoping controls from the NIST SP 800-53 catalog at your impact level. Start with the NIST baseline below.`;

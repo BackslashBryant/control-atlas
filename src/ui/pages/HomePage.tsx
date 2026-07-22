@@ -61,31 +61,49 @@ export function HomePage(props: HomePageProps) {
         </form>
       </div>
 
-      <div className="landing-actions">
+      <div className="landing-launch">
         <button
-          className="primary landing-primary-action"
+          aria-describedby="landing-orb-hint"
+          className="landing-orb"
           onClick={() => onNavigate("start-here")}
           type="button"
         >
-          Find where to start
+          <span aria-hidden="true" className="landing-orb-circle">
+            <BrandMark />
+          </span>
+          <span className="landing-orb-caption">Start here</span>
         </button>
-        <p>Answer three questions to get a recommended framework, document, and playbook.</p>
-      </div>
 
-      <details className="landing-more-paths">
-        <summary>Other ways to use Control Atlas</summary>
-        <div className="landing-path-grid">
-          <button className="secondary" onClick={() => onNavigate("patterns")} type="button">
-            Learn the basics
-          </button>
-          <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">
-            Explore connections
-          </button>
-          <button className="secondary" onClick={() => onNavigate("templates")} type="button">
-            Create a starter document
-          </button>
-        </div>
-      </details>
+        <button
+          className="landing-orbit-btn landing-orbit-research"
+          onClick={() => onNavigate("patterns")}
+          type="button"
+        >
+          <strong>Plan the work</strong>
+          <span>Choose a common compliance job and see what to do</span>
+        </button>
+
+        <button
+          className="landing-orbit-btn landing-orbit-build"
+          onClick={() => onNavigate("templates")}
+          type="button"
+        >
+          <strong>Create a document</strong>
+          <span>Open a starter file for the work in front of you</span>
+        </button>
+
+        <button
+          className="landing-orbit-btn landing-orbit-navigate"
+          onClick={() => onNavigate("atlas-map")}
+          type="button"
+        >
+          <strong>Trace connections</strong>
+          <span>See how controls, requirements, and evidence relate</span>
+        </button>
+      </div>
+      <p className="visually-hidden" id="landing-orb-hint">
+        Answer three questions to get a recommended framework, document, and guide.
+      </p>
 
       <div className="landing-trust-row">
         <p className="landing-trust-lead">

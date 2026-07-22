@@ -55,6 +55,7 @@ const VIEW_TITLE_LABELS: Record<string, string> = {
   "start-here": "Start",
   "atlas-map": "Atlas Map",
   search: "Explore",
+  "catalog-detail": "Library",
   browse: "Explore",
   matrix: "Compare",
   patterns: "Playbooks",

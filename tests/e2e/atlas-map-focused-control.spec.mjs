@@ -76,6 +76,39 @@ test("focused Map is absolutely bounded and restores focus after collapse", asyn
   await expect(group).toBeFocused();
 });
 
+test("selecting a Map item reveals its real record brief without leaving Atlas", async ({ page }) => {
+  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-1&relationshipView=map");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const map = page.getByRole("group", { name: /connection groups around AC-1/i });
+  await map.getByRole("button", { name: /DISA CCIs/i }).click();
+  const item = page.getByRole("button", { name: /CCI-000006/i });
+  await item.click();
+  await expect(item).toHaveAttribute("aria-pressed", "true");
+
+  const brief = page.getByRole("complementary", { name: /CCI-000006 record brief/i });
+  await expect(brief).toBeVisible();
+  const headerBox = await page.locator(".site-header").boundingBox();
+  expect(headerBox).not.toBeNull();
+  await expect
+    .poll(async () => (await brief.boundingBox())?.y || 0)
+    .toBeGreaterThanOrEqual(headerBox.y + headerBox.height - 1);
+  await expect(brief.getByRole("heading", { name: "CCI-000006" })).toBeVisible();
+  await expect(brief.getByRole("heading", { name: "What this record says" })).toBeVisible();
+  await expect(brief.getByRole("heading", { name: "Why it appears here" })).toBeVisible();
+  await expect(brief.getByRole("heading", { name: "Source basis" })).toBeVisible();
+  await expect(brief).not.toContainText("Open the related record to review its source support");
+  await expect(brief).toContainText(
+    "Review and update the current access control procedures on an organization-defined frequency.",
+  );
+  const synopsis = (await brief.locator(".atlas-inspector-synopsis p").first().textContent()) || "";
+  expect(synopsis.trim().length).toBeGreaterThan(40);
+
+  await brief.getByRole("button", { name: "Explore from this record" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("CCI-000006");
+});
+
 test("List uses the same published set and exposes traceable source references", async ({ page }) => {
   await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=list");
   await waitForAppReady(page);

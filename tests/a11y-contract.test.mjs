@@ -162,10 +162,14 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing presents one plain-language primary path with disclosed alternatives", () => {
+test("landing presents an accessible orbital task launcher without an entrance gate", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /Find where to start/);
-  assert.match(homePage, /<details className="landing-more-paths">/);
+  assert.match(homePage, /className="landing-launch"/);
+  assert.match(homePage, /className="landing-orb"/);
+  assert.match(homePage, /Plan the work/);
+  assert.match(homePage, /Trace connections/);
+  assert.match(homePage, /Create a document/);
+  assert.doesNotMatch(homePage, /landing-more-paths/);
   assert.doesNotMatch(homePage, /Click to start/);
   assert.doesNotMatch(homePage, /<h3 aria-hidden/);
   assert.doesNotMatch(homePage, /<p aria-hidden/);
@@ -181,7 +185,7 @@ test("high-density task surfaces bound results and name download actions", () =>
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
   assert.match(startHereResult, /Recommended next step/);
-  assert.match(startHereResult, /Other useful resources/);
+  assert.match(startHereResult, /Related guides, documents, and comparisons/);
 });
 
 test("compact icon and chip controls retain 44 pixel touch targets", () => {
@@ -189,6 +193,33 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
   assert.ok(block, "Missing shared icon and chip control rule");
   assert.match(block[1], /min-height:\s*44px;/);
   assert.match(block[1], /min-width:\s*44px;/);
+});
+
+test("sticky surfaces and in-page jumps share one header-safe offset", () => {
+  const topNav = readFileSync("src/ui/components/TopNav.tsx", "utf8");
+  assert.match(tokens, /--ca-header-height:\s*0px;/);
+  assert.match(
+    tokens,
+    /--ca-header-safe-offset:\s*calc\(var\(--ca-header-height\) \+ var\(--ca-space-3\)\);/,
+  );
+  assert.match(topNav, /ResizeObserver/);
+  assert.match(topNav, /--ca-header-height/);
+  assert.match(surfacesCss, /scroll-padding-top:\s*var\(--ca-header-safe-offset\);/);
+  assert.match(surfacesCss, /:where\(main \[id\], \.header-offset-target\)/);
+
+  for (const selector of [
+    ".page-sidebar",
+    ".catalog-filter-bar",
+  ]) {
+    const escaped = selector.replace(".", "\\.");
+    assert.match(
+      surfacesCss,
+      new RegExp(
+        `${escaped}\\s*\\{[^}]*top:\\s*var\\(--ca-header-safe-offset\\);`,
+      ),
+      `${selector} must clear the shared header offset`,
+    );
+  }
 });
 
 test("connection transparency distinguishes inventory from completeness", () => {

@@ -1,6 +1,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
   type FormEvent,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -37,6 +38,7 @@ import {
   type AtlasFilterState,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
+import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import {
   loadAtlasNeighborhood,
   type AtlasNeighborhoodRecord,
@@ -252,6 +254,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
       {record ? (
         <FocusedAtlas
+          bundle={bundle}
           compact={compact}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
@@ -274,6 +277,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 }
 
 function FocusedAtlas(props: {
+  bundle: RuntimeBundle;
   compact: boolean;
   record: AtlasNeighborhoodRecord;
   state: AtlasMapPageProps["state"];
@@ -282,7 +286,7 @@ function FocusedAtlas(props: {
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { record, state, view, patchAtlas, compact, onNavigate, onOpenNode } = props;
+  const { bundle, record, state, view, patchAtlas, compact, onNavigate, onOpenNode } = props;
   const filters: AtlasFilterState = {
     relationshipType: state.relationshipType,
     provenance: state.provenance,
@@ -295,9 +299,55 @@ function FocusedAtlas(props: {
   const rows = useMemo(() => buildAtlasRows(record, filters), [record, state]);
   const options = useMemo(() => atlasFilterOptions(record), [record]);
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
+  const inspectorRef = useRef<HTMLElement | null>(null);
   const centerLabel = record.center_node.metadata?.item_id || record.center_node.id;
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
+  const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
+  const inspectedNode = bundle.runtime.getNode(inspectedId);
+  const inspectedDocument = bundle.runtime.getLibraryDocument(inspectedId);
+  const inspectedItemId =
+    inspectedDocument?.item_id ||
+    inspectedNode?.metadata?.item_id ||
+    selectedRow?.itemId ||
+    centerLabel;
+  const inspectedTitle =
+    inspectedDocument?.title ||
+    inspectedNode?.metadata?.title ||
+    selectedRow?.title ||
+    centerTitle;
+  const showInspectedTitle =
+    inspectedTitle.trim().toLocaleLowerCase() !==
+    inspectedItemId.trim().toLocaleLowerCase();
+  const inspectedSynopsis =
+    (inspectedDocument?.catalog_id === "disa-cci"
+      ? inspectedDocument?.description
+      : inspectedNode?.plain_language_summary ||
+        inspectedDocument?.plain_language_summary) ||
+    inspectedDocument?.description ||
+    inspectedNode?.metadata?.description ||
+    "No public synopsis is available for this record.";
+  const inspectedAction = inspectedNode?.metadata?.plain_action || "";
+  const selectedSource = selectedRow?.edge.source_refs?.[0];
+  const selectedGroup = selectedRow
+    ? groups.find((group) =>
+        group.items.some(
+          (item) =>
+            item.edge.id === selectedRow.edge.id &&
+            item.counterpart.id === selectedRow.counterpart.id,
+        ),
+      )
+    : null;
+
+  useEffect(() => {
+    if (!selectedRow) return;
+    const frame = window.requestAnimationFrame(() => {
+      if (inspectorRef.current) {
+        scrollElementBelowHeader(inspectorRef.current, "auto");
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedRow]);
 
   function updateFilters(patch: Partial<AtlasFilterState>) {
     setSelectedRow(null);
@@ -411,10 +461,7 @@ function FocusedAtlas(props: {
                 center={record.center_node}
                 groups={groups}
                 lens={atlasLens(state)}
-                onOpenList={() => patchAtlas({ relationshipView: "list" })}
-                onOpenRecord={(node) => {
-                  // Opening a record from the Path makes it the new subject,
-                  // so the path continues from there instead of dead-ending.
+                onContinueFrom={(node) => {
                   setSelectedRow(null);
                   patchAtlas({
                     node,
@@ -423,6 +470,8 @@ function FocusedAtlas(props: {
                     relationshipView: "path",
                   });
                 }}
+                onOpenDetail={(node) => onOpenNode(node, "atlas-map")}
+                onOpenList={() => patchAtlas({ relationshipView: "list" })}
                 onOpenSources={openSources}
                 onSelect={setSelectedRow}
                 onStageChange={(atlasStage) => patchAtlas({ atlasStage })}
@@ -450,7 +499,9 @@ function FocusedAtlas(props: {
               <RelationshipGraphTable
                 conciseTrust
                 onOpenNode={(node) =>
-                  patchAtlas({ node, relationshipGroup: "", atlasStage: "" })
+                  setSelectedRow(
+                    rows.find((row) => row.counterpart.id === node) || null,
+                  )
                 }
                 rows={rows}
               />
@@ -458,61 +509,99 @@ function FocusedAtlas(props: {
           </main>
 
           {!boardView ? (
-            <aside aria-label="Selected record" className="atlas-record-inspector">
-              <p className="eyebrow">Selected item</p>
-              <h2>{selectedRow?.itemId || centerLabel}</h2>
-              <p>{selectedRow?.title || centerTitle}</p>
-              <section>
-                <h3>Why this connects</h3>
-                <p>
-                  {selectedRow?.edge.plain_language_rationale ||
-                    `${centerLabel} has ${rows.length} published relationships across ${groups.length} connection groups.`}
-                </p>
-              </section>
-              <section>
-                <h3>What to do next</h3>
-                <p>
+            <aside
+              aria-atomic="true"
+              aria-label={selectedRow ? `${inspectedItemId} record brief` : "Current record overview"}
+              aria-live="polite"
+              className={`atlas-record-inspector header-offset-target${selectedRow ? " atlas-record-inspector--selected" : ""}`}
+              ref={inspectorRef}
+            >
+              <div className="atlas-inspector-heading">
+                <p className="eyebrow">
                   {selectedRow
-                    ? "Open the related record to review its source support, or show the full relationship set in List."
-                    : "Open a connection group, select a related item, and review the source before using the relationship."}
+                    ? displayNameFor(
+                        "object_type",
+                        inspectedDocument?.object_type || inspectedNode?.node_type,
+                      )
+                    : "Current record"}
                 </p>
+                <h2>{inspectedItemId}</h2>
+                {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
+              </div>
+
+              <section className="atlas-inspector-synopsis">
+                <h3>{selectedRow ? "What this record says" : "About this record"}</h3>
+                <p>{inspectedSynopsis}</p>
+                {inspectedAction ? (
+                  <p>
+                    <strong>What to do:</strong> {inspectedAction}
+                  </p>
+                ) : null}
               </section>
-              <p className="atlas-inspector-count">
-                <strong>{rows.length}</strong> related items across <strong>{groups.length}</strong> groups
-              </p>
-              <button
-                className="primary"
-                onClick={() =>
-                  onOpenNode(selectedRow?.counterpart.id || record.center_node.id, "atlas-map")
-                }
-                type="button"
-              >
-                <IconExternalLink aria-hidden="true" size={18} />
-                Open full record
-              </button>
-              <button
-                className="secondary"
-                onClick={() =>
-                  selectedRow
-                    ? patchAtlas({
-                        relationshipView: "list",
-                        relationshipSearch: selectedRow.itemId,
-                      })
-                    : patchAtlas({ relationshipView: "list" })
-                }
-                type="button"
-              >
-                <IconListDetails aria-hidden="true" size={18} />
-                Show in list
-              </button>
-              <button
-                className="secondary quiet"
-                onClick={() => openSources(selectedRow?.edge.source_refs?.[0]?.source_id)}
-                type="button"
-              >
-                <IconFolderOpen aria-hidden="true" size={18} />
-                View source evidence
-              </button>
+
+              {selectedRow ? (
+                <>
+                  <section>
+                    <h3>Why it appears here</h3>
+                    <p>{selectedRow.edge.plain_language_rationale}</p>
+                  </section>
+                  <section className="atlas-inspector-source">
+                    <h3>Source basis</h3>
+                    <p>
+                      {displayNameFor("relationship_type", selectedRow.edge.relationship_type)} in {selectedGroup?.label || "this connection group"}.
+                    </p>
+                    <p>
+                      {selectedSource?.source_id
+                        ? displayNameFor("source", selectedSource.source_id)
+                        : displayNameFor("provenance_class", selectedRow.edge.provenance_class)}
+                      {selectedSource?.locator ? `, ${selectedSource.locator}` : ""}
+                    </p>
+                  </section>
+                </>
+              ) : (
+                <p className="atlas-inspector-count">
+                  <strong>{rows.length}</strong> related items across <strong>{groups.length}</strong> groups. Select an item to read it here.
+                </p>
+              )}
+
+              <div className="atlas-inspector-actions">
+                {selectedRow ? (
+                  <button
+                    className="primary"
+                    onClick={() => {
+                      setSelectedRow(null);
+                      patchAtlas({
+                        node: selectedRow.counterpart.id,
+                        atlasStage: "",
+                        relationshipGroup: "",
+                        relationshipSearch: "",
+                      });
+                    }}
+                    type="button"
+                  >
+                    <IconMap aria-hidden="true" size={18} />
+                    Explore from this record
+                  </button>
+                ) : null}
+                <button
+                  className="secondary"
+                  onClick={() => onOpenNode(inspectedId, "atlas-map")}
+                  type="button"
+                >
+                  <IconExternalLink aria-hidden="true" size={18} />
+                  Open full record
+                </button>
+                {selectedRow ? (
+                  <button
+                    className="secondary quiet"
+                    onClick={() => openSources(selectedSource?.source_id)}
+                    type="button"
+                  >
+                    <IconFolderOpen aria-hidden="true" size={18} />
+                    View source
+                  </button>
+                ) : null}
+              </div>
             </aside>
           ) : null}
         </div>

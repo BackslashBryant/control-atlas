@@ -45,12 +45,15 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
-  assert.match(navigation, /Start/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS/);
+  assert.match(navigation, /Library/);
+  assert.match(navigation, /Atlas/);
   assert.match(navigation, /Compare/);
-  assert.match(navigation, /Playbooks/);
-  assert.match(navigation, /Starter documents/);
+  assert.match(navigation, /Guides/);
+  assert.match(navigation, /Documents/);
+  assert.match(navigation, /Start here/);
   assert.match(navigation, /Sources/);
-  assert.match(navigation, /Search/);
+  assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
 });
 
@@ -64,12 +67,15 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
   assert.ok(existsSync('src/ui/lib/viewState.ts'), 'src/ui/lib/viewState.ts must exist');
 });
 
-test('calm brand entry and bounded diagram graph contracts are present', () => {
+test('brand identity is immediate, animated, and does not use an entrance gate', () => {
   const app = readFileSync('src/ui/App.tsx', 'utf8');
   const brand = readFileSync('src/ui/components/BrandLockup.tsx', 'utf8');
   assert.doesNotMatch(app, /BrandEntranceOverlay/);
-  assert.match(brand, /Public reference tool/);
-  assert.doesNotMatch(brand, /setInterval|BRAND_WORDS/);
+  assert.match(brand, /BRAND_WORDS/);
+  assert.match(brand, /"Comply"/);
+  assert.match(brand, /brand-key">Ctrl/);
+  assert.match(brand, /prefers-reduced-motion/);
+  assert.match(brand, /setInterval/);
   assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
   assert.equal(typeof packageJson.dependencies.elkjs, 'string');
   assert.equal(packageJson.dependencies.cytoscape, undefined);
@@ -227,4 +233,17 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Markdown, CSV, or JSON/);
   assert.match(templatesPage, /return "Starter document"/);
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
+});
+
+test('playbooks use task-first guidance instead of generic feature copy', () => {
+  const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
+  assert.doesNotMatch(playbooksPage, /Use task-focused guidance/);
+  assert.match(playbooksPage, /summary=\{selectedPattern\.summary\}/);
+  assert.match(playbooksPage, /title="Use this when"/);
+  assert.match(playbooksPage, /title="What to do"/);
+  assert.match(playbooksPage, /title="What to avoid"/);
+  assert.match(playbooksPage, /title="Limits of this guide"/);
+  assert.match(playbooksPage, /No playbooks match this search and category/);
+  assert.match(playbooksPage, /Clear filters/);
+  assert.match(playbooksPage, /displayNameFor\("template_type", templateId\)/);
 });

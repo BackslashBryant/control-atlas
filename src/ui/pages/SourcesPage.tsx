@@ -59,7 +59,6 @@ import type { ViewState } from "../lib/viewState";
 import {
   DisclosurePanel,
   PageHeader,
-  PageJumpNav,
   SelectField,
   SourceSummaryCard,
   SummaryCard,
@@ -164,9 +163,6 @@ export function SourcesPage(props: {
             <a className="primary" href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
               Open the official source
             </a>
-            <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">
-              View in Atlas Map
-            </button>
           </div>
           <SummaryCard title="How Control Atlas uses it">
             <p>{sourceUsageSummary(selectedSource)}.</p>
@@ -189,7 +185,7 @@ export function SourcesPage(props: {
           </Accordion.Root>
         </section>
       ) : (
-      <div className="detail-grid">
+      <div>
       <div className="stack">
       <label className="field" htmlFor="source-search">
         <span>Search sources</span>
@@ -198,6 +194,9 @@ export function SourcesPage(props: {
           <input id="source-search" onChange={(event) => setSourceQuery(event.target.value)} placeholder="NIST, FedRAMP, DISA, MITRE…" type="search" value={sourceQuery} />
         </div>
       </label>
+      <p className="support-meta" aria-live="polite">
+        {sources.length} public source{sources.length === 1 ? "" : "s"}. Search by publisher or source name, then open one to see how it is used and what trust to place in it.
+      </p>
       <details
         className="canonical-source-links"
         id="official-source-links"
@@ -346,11 +345,23 @@ export function SourcesPage(props: {
       </Accordion.Root>
       </section>
 
-      {groupedSources.length ? (
+      {groupedSources.length && sourceQuery.trim() ? (
+        <section aria-labelledby="source-search-results" className="stack" id="source-groups">
+          <h2 id="source-search-results">
+            Search results ({groupedSources.reduce((total, [, groupSources]) => total + groupSources.length, 0)})
+          </h2>
+          {groupedSources.flatMap(([, groupSources]) => groupSources).map((source: any) => (
+            <SourceSummaryCard
+              key={source.id}
+              onOpen={() => onNavigate("sources", { ...state, source: source.id })}
+              source={source}
+            />
+          ))}
+        </section>
+      ) : groupedSources.length ? (
         <Accordion.Root
           className="accordion-root source-groups"
           collapsible
-          defaultValue={groupedSources[0]?.[0] || ""}
           id="source-groups"
           type="single"
         >
@@ -382,28 +393,6 @@ export function SourcesPage(props: {
         </section>
       )}
       </div>
-      <aside className="detail-sidebar page-sidebar">
-        <SummaryCard title="On this page">
-          <PageJumpNav
-            sections={[
-              { id: "official-source-links", label: "Official source links" },
-              {
-                id: "connection-inventory",
-                label: "Connection inventory",
-                count: connectionInventory.rows.length,
-              },
-              { id: "refine-sources", label: "Refine sources" },
-              selectedSource
-                ? { id: "source-detail", label: "Source detail" }
-                : {
-                    id: "source-groups",
-                    label: "All sources",
-                    count: sources.length,
-                  },
-            ]}
-          />
-        </SummaryCard>
-      </aside>
       </div>
       )}
     </section>

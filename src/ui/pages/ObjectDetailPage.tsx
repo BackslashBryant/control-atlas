@@ -26,7 +26,6 @@ import {
 } from "../../shared/source-freshness.mjs";
 import {
   ExpandableChipList,
-  RelationshipGroupRollupNav,
   RelationshipGroupsSection,
   defaultOpenRelationshipGroups,
 } from "../components/ExpandableRelationshipGroup";
@@ -245,35 +244,62 @@ export function ObjectDetailPage(props: {
   ];
 
   const relatedGlossaryTerms = glossaryTermsForDocument(document);
+  const originLabel =
+    state.from === "search"
+      ? "Back to results"
+      : state.from === "atlas-map"
+        ? "Back to Atlas"
+        : state.from === "start-here"
+          ? "Back to recommendation"
+          : state.from === "patterns"
+            ? "Back to playbook"
+      : state.from === "matrix"
+              ? "Back to comparison"
+              : state.from === "catalog-detail"
+                ? "Back to Library"
+              : "Explore records";
 
-  function jumpToRelationshipGroup(groupId: string) {
-    setOpenRelationshipGroupIds((current) =>
-      current.includes(groupId) ? current : [...current, groupId],
-    );
-    window.setTimeout(() => {
-      const target = window.document.getElementById(
-        `connection-group-${groupId}`,
-      );
-      target?.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-        block: "start",
-      });
-      target
-        ?.querySelector<HTMLElement>(".relationship-group-trigger")
-        ?.focus({ preventScroll: true });
-    }, 0);
+  function returnToOrigin() {
+    if (state.returnTo && Number(window.history.state?.idx || 0) > 0) {
+      window.history.back();
+      return;
+    }
+    if (
+      state.returnTo?.startsWith("/") &&
+      !state.returnTo.startsWith("//")
+    ) {
+      window.location.hash = state.returnTo;
+      return;
+    }
+    if (state.from === "atlas-map") {
+      onNavigate("atlas-map", { node: document.id });
+      return;
+    }
+    if (state.from === "start-here") {
+      onNavigate("start-here");
+      return;
+    }
+    if (state.from === "patterns") {
+      onNavigate("patterns");
+      return;
+    }
+    if (state.from === "matrix") {
+      onNavigate("matrix");
+      return;
+    }
+    if (state.from === "catalog-detail") {
+      onNavigate("catalog-detail", { catalog: document.catalog_id });
+      return;
+    }
+    onNavigate("search");
   }
 
   return (
     <section className="detail-page">
       <StickyDetailBar
-        enabled={Boolean(state.from)}
+        enabled={state.from === "search"}
         itemLabel={document.item_id}
-        onBack={() =>
-          onNavigate("search", { query: state.from || document.item_id })
-        }
+        onBack={returnToOrigin}
         onCompare={() =>
           onNavigate("matrix", {
             workbench: "relationships",
@@ -297,12 +323,10 @@ export function ObjectDetailPage(props: {
           <div className="page-header-actions">
             <button
               className="secondary"
-              onClick={() =>
-                onNavigate("search", { query: state.from || document.item_id })
-              }
+              onClick={returnToOrigin}
               type="button"
             >
-              Back to results
+              {originLabel}
             </button>
             {edges.length ? (
               <button
@@ -387,14 +411,6 @@ export function ObjectDetailPage(props: {
           ) : null}
         </div>
       ) : null}
-
-      <div className="record-primary-action">
-        <button className="primary" onClick={() => onNavigate("templates")} type="button">
-          <IconClipboardList aria-hidden="true" size={18} stroke={1.8} />
-          <span>Open a starter document</span>
-        </button>
-        <span className="field-hint">Use this record as source context for a downloadable working document.</span>
-      </div>
 
       <div className="detail-grid">
         <section className="stack">
@@ -583,17 +599,6 @@ export function ObjectDetailPage(props: {
         </section>
 
         <aside className="stack detail-sidebar">
-          {grouped.length ? (
-            <SummaryCard title="Connection groups" tone="trust">
-              <p className="support-meta">
-                Jump to a named group. The full lists stay in the main column.
-              </p>
-              <RelationshipGroupRollupNav
-                groups={grouped}
-                onJump={jumpToRelationshipGroup}
-              />
-            </SummaryCard>
-          ) : null}
           <SummaryCard
             title="Source support"
             tone={sourceFreshness(source).is_stale ? "warning" : "trust"}
@@ -645,7 +650,7 @@ export function ObjectDetailPage(props: {
                 type="button"
               >
                 <IconClipboardList aria-hidden="true" size={16} stroke={1.8} />
-                <span>Open starter template</span>
+                <span>Browse starter documents</span>
               </button>
             </div>
           </SummaryCard>

@@ -64,7 +64,7 @@ export function OfflineFallbackActions(props: {
         type="button"
       >
         <strong>Explore playbooks</strong>
-        <span>Task-focused guides you can read without the full map.</span>
+        <span>Step-by-step guidance for common compliance work.</span>
       </button>
       <button
         className="offline-fallback-card"
@@ -79,8 +79,8 @@ export function OfflineFallbackActions(props: {
         onClick={() => props.onNavigate("start-here")}
         type="button"
       >
-        <strong>Start</strong>
-        <span>Answer a few questions for a tailored path.</span>
+        <strong>Get a recommendation</strong>
+        <span>Answer three questions to find a practical starting path.</span>
       </button>
       <button
         className="offline-fallback-card"

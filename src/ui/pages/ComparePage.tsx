@@ -16,17 +16,16 @@ import {
   useCatalogCoverage,
 } from "../components/CatalogCoverageNotice";
 import {
-  CompareStepIndicator,
-  QuickIntentCard,
-} from "../components/QuickIntentCard";
-import {
   ChainRelationshipItem,
   parseCatalogItemIds,
   ProvenanceBadge,
   SourceRefList,
 } from "../lib/compareHelpers";
 import { buildWorkbenchCompareGraph } from "../lib/buildCompareGraph";
-import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
+import {
+  PageHeader,
+  SummaryCard,
+} from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareWorkbench, ViewState } from "../lib/viewState";
 
@@ -134,7 +133,6 @@ export function ComparePage(props: {
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const compareResultsRef = useRef<HTMLElement | null>(null);
-  const [showComparisonPicker, setShowComparisonPicker] = useState(false);
   const [relationshipPage, setRelationshipPage] = useState(1);
   const catalogs = bundle.runtime.getCatalogs();
   const catalogCoverageList = useCatalogCoverage(bundle);
@@ -150,7 +148,7 @@ export function ComparePage(props: {
       : null;
     return source?.version || source?.source_version || null;
   }, [bundle.runtime, state.source, state.target]);
-  const workbench = state.workbench || "relationships";
+  const workbench = state.workbench || "intent";
   const relationshipNodeIds = useMemo(
     () => parseCatalogItemIds(state.items, state.source),
     [state.items, state.source],
@@ -440,49 +438,60 @@ export function ComparePage(props: {
               ? 3
               : 2;
 
-  function scrollToCompareResults() {
-    compareResultsRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
   return (
     <section className="panel">
       <PageHeader
         eyebrow="Compare"
-        summary="Pick two frameworks, baselines, or controls to reconcile, and see what overlaps, what's unique to each, and what still needs review."
+        summary="Choose the kind of comparison. Then pick the two things you need to reconcile."
         title="What do you want to compare?"
       />
       {selectedCatalogVersion ? (
         <CatalogVersionChip label="Active" version={selectedCatalogVersion} />
       ) : null}
 
-      <div
-        className="workbench-toggle"
-        style={{ marginBottom: "var(--ca-space-8)" }}
-      >
-        {comparisonCards.map((card) => {
-          // Hide redundant entry
-          if (card.title === "Find what maps to this item") return null;
-          return (
-            <button
-              className={card.workbench === workbench ? "active" : ""}
-              key={card.title}
-              onClick={() =>
-                onNavigate("matrix", {
-                  ...state,
-                  workbench: card.workbench,
-                  intent: card.title,
-                })
-              }
-              type="button"
-            >
-              {card.title}
-            </button>
-          );
-        })}
-      </div>
+      {workbench === "intent" ? (
+        <section aria-labelledby="compare-kind-heading" className="nexus-section">
+          <h2 className="visually-hidden" id="compare-kind-heading">
+            Choose a comparison type
+          </h2>
+          <div className="intent-grid compare-intent-grid">
+            {comparisonCards.slice(0, 4).map((card) => (
+              <button
+                className="intent-card intent-card-button"
+                key={card.title}
+                onClick={() =>
+                  onNavigate("matrix", {
+                    ...state,
+                    workbench: card.workbench,
+                    intent: card.title,
+                  })
+                }
+                type="button"
+              >
+                <span className="intent-card-title">{card.title}</span>
+                <span className="intent-card-body">{card.body}</span>
+                <span className="intent-card-action-hint">Choose this comparison</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <div className="compare-mode-header">
+          <div>
+            <p className="eyebrow">Comparison type</p>
+            <h2>
+              {comparisonCards.find((card) => card.workbench === workbench)?.title}
+            </h2>
+          </div>
+          <button
+            className="secondary"
+            onClick={() => onNavigate("matrix", { ...state, workbench: "intent" })}
+            type="button"
+          >
+            Change comparison
+          </button>
+        </div>
+      )}
 
       {workbench === "relationships" ? (
         <>
@@ -490,7 +499,7 @@ export function ComparePage(props: {
             <div className="field-stack">
               <SelectField
                 hint="The first framework or catalog you want to compare from."
-                label="Framework A"
+                label="Compare from"
                 onChange={(value) =>
                   onNavigate("matrix", { workbench, source: value })
                 }
@@ -509,7 +518,7 @@ export function ComparePage(props: {
             <div className="field-stack">
               <SelectField
                 hint="The second framework or catalog you want to compare against."
-                label="Framework B"
+                label="Compare against"
                 onChange={(value) =>
                   onNavigate("matrix", { workbench, target: value })
                 }
@@ -525,21 +534,6 @@ export function ComparePage(props: {
                 onNavigateSources={() => onNavigate("sources")}
               />
             </div>
-            <Field label="Specific item (optional)">
-              <input
-                onChange={(event) =>
-                  onNavigate("matrix", {
-                    workbench,
-                    items: event.target.value,
-                  })
-                }
-                placeholder="Leave blank to compare all visible items"
-                value={state.items}
-              />
-              <p className="field-hint">
-                Optional. Narrow the comparison to one control or rule ID.
-              </p>
-            </Field>
           </div>
           {hasComparisonScope ? (
             <Accordion.Root
@@ -549,6 +543,22 @@ export function ComparePage(props: {
             >
               <DisclosurePanel title="Refine comparison" value="refine">
                 <div className="filter-grid">
+                  <Field label="Specific control or rule (optional)">
+                    <input
+                      onChange={(event) =>
+                        onNavigate("matrix", {
+                          ...state,
+                          workbench,
+                          items: event.target.value,
+                        })
+                      }
+                      placeholder="For example, AC-2"
+                      value={state.items}
+                    />
+                    <p className="field-hint">
+                      Leave blank to compare every published mapping in this pair.
+                    </p>
+                  </Field>
                   <SelectField
                     emptyLabel="All connection types"
                     label="Connection type"
@@ -626,15 +636,6 @@ export function ComparePage(props: {
                 </p>
               </DisclosurePanel>
             </Accordion.Root>
-          ) : null}
-          {hasComparisonScope ? (
-            <button
-              className="link-action"
-              onClick={scrollToCompareResults}
-              type="button"
-            >
-              Show {relationshipRows?.rows.length.toLocaleString() ?? 0} mappings
-            </button>
           ) : null}
           {hasComparisonScope && relationshipRows?.rows?.length ? (
             <section
