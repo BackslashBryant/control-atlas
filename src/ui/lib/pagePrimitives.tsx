@@ -264,14 +264,19 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       <div className="result-card-header">
         <div>
           <p className="result-meta">Source</p>
+          {/* The specific name is the title. `display_name` is a family label
+              ("DISA STIG", "SP 800-53 Rev. 5") shared by many records — nine
+              sources rendered as identical "DISA STIG" cards when it was used
+              as the title, which read as duplicate records. */}
           <CardTitle onOpen={onOpen}>
-            {source.display_name || source.name}
+            {source.name || source.display_name}
           </CardTitle>
         </div>
+        {source.display_name && source.display_name !== source.name ? (
+          <Badge>{source.display_name}</Badge>
+        ) : null}
       </div>
-      <p className="result-summary">
-        {source.name} is maintained by {source.owner}.
-      </p>
+      <p className="result-summary">Maintained by {source.owner}.</p>
       <p className="support-meta">
         {sourceSyncLabel(source.sync_model)} ·{" "}
         {sourceFreshness(source).is_stale

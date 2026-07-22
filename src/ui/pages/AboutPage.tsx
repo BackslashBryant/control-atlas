@@ -88,12 +88,10 @@ export function AboutPage(props: {
       <div className="stack">
         <SummaryCard title="What this is" tone="trust">
           <p>
-            The rules for federal cybersecurity compliance live in many
-            separate places — NIST publications, DISA STIGs, FedRAMP baselines,
-            and more — and connecting them yourself can take months. Control
-            Atlas is an open-source reference that gathers that public
-            guidance, links related requirements together, and translates it
-            into plain language you can trace back to the official source.
+            Federal compliance rules live in many separate places — NIST
+            publications, DISA STIGs, FedRAMP baselines, and more. Control
+            Atlas gathers that public guidance, links related requirements,
+            and puts it in plain language you can trace to the official source.
           </p>
           <p>
             Everything runs in your browser. There are no accounts, no file

@@ -962,8 +962,8 @@ export function TemplatesPage(props: {
                 <p className="eyebrow">Choose the work</p>
                 <h2 id="workflow-heading">Start with a compliance task</h2>
                 <p className="page-summary">
-                  You do not need to know the document name first. Pick the
-                  outcome you are working toward and follow the connected path.
+                  Pick the outcome you are working toward — you do not need to
+                  know the document name.
                 </p>
               </div>
             </div>

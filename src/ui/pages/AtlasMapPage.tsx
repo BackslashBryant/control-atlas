@@ -722,18 +722,35 @@ function SourceCards(props: {
       {props.sources.map((source) => (
         <article key={source.sourceId}>
           <p className="eyebrow">{source.publisher}</p>
-          <h3>{source.displayName}</h3>
-          <p>{source.defaultMapReason}</p>
-          <div className="card-actions">
-            <button className="secondary" onClick={() => props.onOpen(source.sourceId)} type="button">
-              {SOURCE_RUNTIME_ANCHORS[source.sourceId] ? "View connected records" : "View source details"}
+          {/* Title is the click target — twenty cards each repeating a
+              "View source details" button and an "Official source" link was
+              forty identical labels on one screen. One quiet external link
+              stays; boilerplate disposition text stays gone (only cautionary
+              dispositions carry information worth a line). */}
+          <h3>
+            <button
+              className="card-title-action"
+              onClick={() => props.onOpen(source.sourceId)}
+              type="button"
+            >
+              {source.displayName}
             </button>
-            {source.canonicalUrl !== "registry-local-only" ? (
-              <a href={source.canonicalUrl} rel="noreferrer" target="_blank">
-                Official source
-              </a>
-            ) : null}
-          </div>
+          </h3>
+          {source.disposition === "supporting-reference-only" ||
+          source.disposition === "draft-gated" ||
+          source.disposition === "registry-only" ? (
+            <p>{source.defaultMapReason}</p>
+          ) : null}
+          {source.canonicalUrl !== "registry-local-only" ? (
+            <a
+              className="support-meta"
+              href={source.canonicalUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              Official source
+            </a>
+          ) : null}
         </article>
       ))}
     </div>

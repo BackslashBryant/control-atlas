@@ -118,7 +118,7 @@ export function PlaybooksPage(props: {
       <section className="panel">
         <PageHeader
           eyebrow="Playbooks"
-          summary="Use task-focused guidance to understand what to do, what to avoid, and which records or templates to open next."
+          summary="Task guides: what to do, what to avoid, and what to open next."
           title="Compliance playbooks"
         />
         <CatalogFilterBar

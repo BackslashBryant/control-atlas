@@ -197,34 +197,41 @@ export function SourcesPage(props: {
           </strong>{" "}
           published links.
         </p>
-        <ul className="connection-inventory-list">
-          {connectionInventory.rows.map((category) => (
-            <li className="connection-inventory-row" key={category.id}>
-              <strong>{category.label}</strong>
-              <span>{category.totalRecords.toLocaleString()} records loaded</span>
-              <span>
-                {category.connectedRecords.toLocaleString()} records connected
-              </span>
-              <span>
-                {category.publishedLinks.toLocaleString()} published links
-              </span>
-              <span className="connection-inventory-related">
-                Connects to: {category.relatedCategories.join(", ") || "none yet"}
-              </span>
-            </li>
-          ))}
-        </ul>
-        {knownGaps.total > 0 ? (
-          <p className="support-meta">
-            <strong>{knownGaps.total} known upstream gaps:</strong>{" "}
-            {knownGaps.bySource
-              .map((entry) => `${entry.count} from ${entry.name}`)
-              .join(", ")}
-            . These rows reference an identifier the official source data
-            doesn&rsquo;t resolve to a specific record yet — a gap in the
-            upstream mapping, not an error on this site.
-          </p>
-        ) : null}
+        {/* Shallow: the one-line total above. Wading: the seven per-category
+            rows, on request — five data points times seven categories was a
+            wall of numbers as the page's default state. */}
+        <details className="connection-inventory-details">
+          <summary>
+            Per-category counts ({connectionInventory.rows.length})
+          </summary>
+          <ul className="connection-inventory-list">
+            {connectionInventory.rows.map((category) => (
+              <li className="connection-inventory-row" key={category.id}>
+                <strong>{category.label}</strong>
+                <span>{category.totalRecords.toLocaleString()} records loaded</span>
+                <span>
+                  {category.connectedRecords.toLocaleString()} records connected
+                </span>
+                <span>
+                  {category.publishedLinks.toLocaleString()} published links
+                </span>
+                <span className="connection-inventory-related">
+                  Connects to: {category.relatedCategories.join(", ") || "none yet"}
+                </span>
+              </li>
+            ))}
+          </ul>
+          {knownGaps.total > 0 ? (
+            <p className="support-meta">
+              <strong>{knownGaps.total} known upstream gaps:</strong>{" "}
+              {knownGaps.bySource
+                .map((entry) => `${entry.count} from ${entry.name}`)
+                .join(", ")}
+              . These rows cite an identifier the official data does not
+              resolve yet. The gap is upstream, not an error on this site.
+            </p>
+          ) : null}
+        </details>
       </section>
 
       <section id="refine-sources">
