@@ -190,6 +190,9 @@ function compatibilityTone(value?: string) {
 }
 
 function compatibilityLabel(value?: string) {
+  if (value?.toLowerCase() === "control atlas companion") {
+    return "Starter document";
+  }
   if (value && /[A-Z ]/.test(value)) return value;
   return value
     ? COMPATIBILITY_LABELS[value] || value.replaceAll("_", " ")
@@ -1002,7 +1005,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   Workflow guidance is temporarily unavailable. Official
-                  resources and companions remain available below.
+                  resources and starter documents remain available below.
                 </p>
               </div>
             ) : null}
@@ -1121,11 +1124,11 @@ export function TemplatesPage(props: {
               <CatalogFilterBar
                 category={categoryFilter}
                 categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
-                countLabel={`${filteredTemplates.length} companion${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+                countLabel={`${filteredTemplates.length} starter document${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
                 onCategoryChange={setCategoryFilter}
                 onQueryChange={setQueryFilter}
                 query={queryFilter}
-                queryPlaceholder="Search companions by name or purpose"
+                queryPlaceholder="Search starter documents by name or purpose"
               />
             ) : null}
 
@@ -1229,7 +1232,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   No official resource is joined to this workflow yet. Use the
-                  complete catalog or a companion below, and verify against
+                  complete catalog or a starter document below, and verify against
                   your authorizing organization's direction.
                 </p>
               </div>
@@ -1388,7 +1391,7 @@ export function TemplatesPage(props: {
           ) : selectedTemplate.official_alternative ? (
             <SummaryCard title="Official resource">
               <p>
-                Review the publisher's material before using this companion: {" "}
+                Review the publisher's material before using this starter document: {" "}
                 <a
                   href={selectedTemplate.official_alternative.url}
                   rel="noopener noreferrer"
