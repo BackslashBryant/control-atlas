@@ -193,7 +193,7 @@ function compatibilityLabel(value?: string) {
   if (value && /[A-Z ]/.test(value)) return value;
   return value
     ? COMPATIBILITY_LABELS[value] || value.replaceAll("_", " ")
-    : "Control Atlas companion";
+    : "Starter document";
 }
 
 function normalizedFamily(value?: string) {
@@ -943,11 +943,11 @@ export function TemplatesPage(props: {
               onClick={() => onNavigate("templates", { templateType: "" })}
               type="button"
             >
-              Back to workbench
+              Back to document tasks
             </button>
           ) : undefined
         }
-        eyebrow="Compliance workbench"
+        eyebrow="Create a compliance document"
         summary="Pick the job in front of you. We will show the official materials, practical tools, and starter documents that fit it."
         title="What do you need to get done?"
       />
@@ -1313,7 +1313,7 @@ export function TemplatesPage(props: {
         <section className="stack" ref={generationRef}>
           <div className="section-header">
             <div>
-              <p className="eyebrow">Control Atlas companion</p>
+              <p className="eyebrow">Starter document</p>
               <h2>{selectedTemplate.display_name}</h2>
             </div>
             <Badge
@@ -1328,8 +1328,48 @@ export function TemplatesPage(props: {
               )}
             </Badge>
           </div>
+          <SummaryCard title="Download this starter document" tone="trust">
+            <p>{selectedTemplate.description}</p>
+            <div className="filter-grid template-essential-options">
+              {inputOptions.includes("environment_archetype") ? (
+                <SelectField
+                  hint="Where the system runs — cloud, on-premises, or hybrid."
+                  label="Environment"
+                  onChange={(value) => onNavigate("templates", { ...state, environment: value })}
+                  options={[
+                    { value: "Generic", label: "Generic" },
+                    { value: "Cloud SaaS", label: "Cloud SaaS" },
+                    { value: "Platform service", label: "Platform service" },
+                    { value: "Enclave", label: "Enclave" },
+                    { value: "On-premises", label: "On-premises" },
+                    { value: "Hybrid", label: "Hybrid" },
+                    { value: "Enterprise service", label: "Enterprise service" },
+                  ]}
+                  value={state.environment || "Generic"}
+                />
+              ) : null}
+              <SelectField
+                hint={FORMAT_HELP[activeFormat] || "File type for the downloaded template."}
+                label="Format"
+                onChange={(value) => onNavigate("templates", { ...state, format: value })}
+                options={supportedFormats.map((format: string) => ({ value: format, label: FORMAT_LABELS[format] || format }))}
+                value={activeFormat}
+              />
+            </div>
+            <div className="card-actions">
+              <button className="primary" disabled={generating} onClick={createTemplate} ref={generateButtonRef} type="button">
+                {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
+              </button>
+              <button className="secondary" onClick={() => onNavigate("atlas-map", relatedMapNode ? { node: relatedMapNode } : undefined)} type="button">
+                View related map
+              </button>
+            </div>
+            {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}
+          </SummaryCard>
           {selectedTemplateArtifacts.length > 0 ? (
-            <section aria-labelledby="template-official-heading" className="stack">
+            <details className="template-supporting-details">
+            <summary>Verify against official sources</summary>
+            <section aria-labelledby="template-official-heading" className="stack disclosure-content">
               <div>
                 <p className="eyebrow">Check the source first</p>
                 <h3 id="template-official-heading">Official resources</h3>
@@ -1344,6 +1384,7 @@ export function TemplatesPage(props: {
                 ))}
               </div>
             </section>
+            </details>
           ) : selectedTemplate.official_alternative ? (
             <SummaryCard title="Official resource">
               <p>
@@ -1454,14 +1495,6 @@ export function TemplatesPage(props: {
               </div>
             </section>
           ) : null}
-          {generationStatus ? (
-            <p
-              className={`generation-status tone-${generationTone}`}
-              role="status"
-            >
-              {generationStatus}
-            </p>
-          ) : null}
           <div className="notice" role="note">
             <p
               className="ca-text-subtle"
@@ -1469,31 +1502,6 @@ export function TemplatesPage(props: {
             >
               {PRODUCT_DISCLAIMER}
             </p>
-          </div>
-          <div className="card-actions">
-            <button
-              className="primary"
-              disabled={generating}
-              onClick={createTemplate}
-              ref={generateButtonRef}
-              type="button"
-            >
-              {generating
-                ? "Generating…"
-                : `Generate ${selectedTemplate.display_name}`}
-            </button>
-            <button
-              className="secondary"
-              onClick={() =>
-                onNavigate(
-                  "atlas-map",
-                  relatedMapNode ? { node: relatedMapNode } : undefined,
-                )
-              }
-              type="button"
-            >
-              View related map
-            </button>
           </div>
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="More options" value="options">
@@ -1544,43 +1552,6 @@ export function TemplatesPage(props: {
                     value={state.controlFamily || ""}
                   />
                 ) : null}
-                {inputOptions.includes("environment_archetype") ? (
-                  <SelectField
-                    hint="Where the system runs — cloud, on-premises, or hybrid."
-                    label="Environment"
-                    onChange={(value) =>
-                      onNavigate("templates", { ...state, environment: value })
-                    }
-                    options={[
-                      { value: "Generic", label: "Generic" },
-                      { value: "Cloud SaaS", label: "Cloud SaaS" },
-                      { value: "Platform service", label: "Platform service" },
-                      { value: "Enclave", label: "Enclave" },
-                      { value: "On-premises", label: "On-premises" },
-                      { value: "Hybrid", label: "Hybrid" },
-                      {
-                        value: "Enterprise service",
-                        label: "Enterprise service",
-                      },
-                    ]}
-                    value={state.environment || "Generic"}
-                  />
-                ) : null}
-                <SelectField
-                  hint={
-                    FORMAT_HELP[activeFormat] ||
-                    "File type for the downloaded template."
-                  }
-                  label="Format"
-                  onChange={(value) =>
-                    onNavigate("templates", { ...state, format: value })
-                  }
-                  options={supportedFormats.map((format: string) => ({
-                    value: format,
-                    label: FORMAT_LABELS[format] || format,
-                  }))}
-                  value={activeFormat}
-                />
               </div>
               {supportedFormats.length > 1 ? (
                 <ul className="format-help-list">

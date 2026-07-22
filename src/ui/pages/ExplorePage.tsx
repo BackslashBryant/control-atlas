@@ -622,7 +622,7 @@ export function ExplorePage(props: {
             </p>
             <div className="card-actions">
               <button
-                className="secondary"
+                className="primary"
                 onClick={() =>
                   onNavigate("search", {
                     query: "",
@@ -637,20 +637,12 @@ export function ExplorePage(props: {
               >
                 Clear search
               </button>
-              <button
-                className="secondary"
-                onClick={() => onNavigate("atlas-map")}
-                type="button"
-              >
-                Open Atlas Map
-              </button>
-              <button
-                className="primary"
-                onClick={() => onNavigate("start-here")}
-                type="button"
-              >
-                Start guided path
-              </button>
+              <details>
+                <summary>Try another path</summary>
+                <div className="card-actions disclosure-actions">
+                  <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Atlas Map</button>
+                </div>
+              </details>
             </div>
           </section>
         ) : (

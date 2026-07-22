@@ -388,6 +388,14 @@ export function ObjectDetailPage(props: {
         </div>
       ) : null}
 
+      <div className="record-primary-action">
+        <button className="primary" onClick={() => onNavigate("templates")} type="button">
+          <IconClipboardList aria-hidden="true" size={18} stroke={1.8} />
+          <span>Open a starter document</span>
+        </button>
+        <span className="field-hint">Use this record as source context for a downloadable working document.</span>
+      </div>
+
       <div className="detail-grid">
         <section className="stack">
           <SummaryCard title="What this is" tone="trust">

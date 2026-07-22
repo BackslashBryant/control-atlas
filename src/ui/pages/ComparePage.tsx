@@ -4,7 +4,7 @@ import {
   IconFilter,
   IconGitCompare,
 } from "@tabler/icons-react";
-import { useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ExpandableControlList } from "../components/ExpandableRelationshipGroup";
@@ -50,11 +50,13 @@ function DisclosurePanel(props: {
 }) {
   return (
     <Accordion.Item className="accordion-item" value={props.value}>
-      <Accordion.Header>
+      <Accordion.Header asChild>
+        <h2>
         <Accordion.Trigger className="accordion-trigger">
           <span>{props.title}</span>
           <IconArrowRight size={18} stroke={1.8} />
         </Accordion.Trigger>
+        </h2>
       </Accordion.Header>
       <Accordion.Content className="accordion-content">
         {props.children}
@@ -133,6 +135,7 @@ export function ComparePage(props: {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const compareResultsRef = useRef<HTMLElement | null>(null);
   const [showComparisonPicker, setShowComparisonPicker] = useState(false);
+  const [relationshipPage, setRelationshipPage] = useState(1);
   const catalogs = bundle.runtime.getCatalogs();
   const catalogCoverageList = useCatalogCoverage(bundle);
 
@@ -171,6 +174,28 @@ export function ComparePage(props: {
   const hasComparisonScope = Boolean(
     (state.source && state.target) || state.items,
   );
+  const relationshipPageSize = 25;
+  const relationshipPageCount = Math.max(
+    1,
+    Math.ceil((relationshipRows?.rows.length ?? 0) / relationshipPageSize),
+  );
+  const visibleRelationshipRows =
+    relationshipRows?.rows.slice(
+      (relationshipPage - 1) * relationshipPageSize,
+      relationshipPage * relationshipPageSize,
+    ) ?? [];
+
+  useEffect(() => {
+    setRelationshipPage(1);
+  }, [
+    state.source,
+    state.target,
+    state.items,
+    state.relationshipType,
+    state.provenance,
+    state.confidence,
+    state.includeCandidates,
+  ]);
   // Distinguish "this framework pair has zero published edges at all" (a
   // real data gap — resetting filters won't help) from "your filters
   // narrowed a real pair down to zero" (recoverable). Checked with no
@@ -608,7 +633,7 @@ export function ComparePage(props: {
               onClick={scrollToCompareResults}
               type="button"
             >
-              Review results
+              Show {relationshipRows?.rows.length.toLocaleString() ?? 0} mappings
             </button>
           ) : null}
           {hasComparisonScope && relationshipRows?.rows?.length ? (
@@ -626,10 +651,14 @@ export function ComparePage(props: {
                     <h3 className="compare-mappings-title">
                       Mapping details
                       <span className="compare-mappings-count">
-                        {relationshipRows.rows.length} row
+                        {relationshipRows.rows.length.toLocaleString()} row
                         {relationshipRows.rows.length === 1 ? "" : "s"}
                       </span>
                     </h3>
+                    <p aria-live="polite" className="field-hint compare-range">
+                      Showing {(relationshipPage - 1) * relationshipPageSize + 1}
+                      –{Math.min(relationshipPage * relationshipPageSize, relationshipRows.rows.length)} of {relationshipRows.rows.length.toLocaleString()}
+                    </p>
                     <div className="compare-table-scroll">
                       <table
                         aria-label="Relationship mappings"
@@ -641,56 +670,57 @@ export function ComparePage(props: {
                             <th>To</th>
                             <th>Connection</th>
                             <th>Source basis</th>
-                            <th>Trust level</th>
-                            <th>Official rationale</th>
-                            <th>Plain-language rationale</th>
-                            <th>Source references</th>
+                            <th>Details</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {relationshipRows.rows.map((row: any) => (
+                          {visibleRelationshipRows.map((row: any) => (
                             <tr key={row.edge_id}>
-                              <td>
+                              <td data-label="From">
                                 <strong>{row.from_item_id}</strong>
                                 <br />
                                 <span className="muted">{row.from_title}</span>
                               </td>
-                              <td>
+                              <td data-label="To">
                                 <strong>{row.to_item_id}</strong>
                                 <br />
                                 <span className="muted">{row.to_title}</span>
                               </td>
-                              <td>
+                              <td data-label="Connection">
                                 {displayNameFor(
                                   "relationship_type",
                                   row.relationship_type,
                                 )}
                               </td>
-                              <td>
+                              <td data-label="Source basis">
                                 <ProvenanceBadge
                                   provenanceClass={row.provenance_class}
                                   publicationStatus={row.publication_status}
                                 />
                               </td>
-                              <td>
-                                {displayNameFor("confidence", row.confidence)}
-                              </td>
-                              <td>
-                                {row.rationale ||
-                                  "No public rationale recorded."}
-                              </td>
-                              <td>
-                                {row.plain_language_rationale ||
-                                  "No plain-language rationale recorded."}
-                              </td>
-                              <td>
-                                <SourceRefList refs={row.source_refs} />
+                              <td data-label="Details">
+                                <details className="mapping-row-details">
+                                  <summary>View evidence</summary>
+                                  <dl>
+                                    <div><dt>Trust level</dt><dd>{displayNameFor("confidence", row.confidence)}</dd></div>
+                                    <div><dt>Official rationale</dt><dd>{row.rationale || "No public rationale recorded."}</dd></div>
+                                    <div><dt>Plain-language rationale</dt><dd>{row.plain_language_rationale || "No plain-language rationale recorded."}</dd></div>
+                                    <div><dt>Source references</dt><dd><SourceRefList refs={row.source_refs} /></dd></div>
+                                  </dl>
+                                </details>
                               </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
+                    {relationshipPageCount > 1 ? (
+                      <nav aria-label="Mapping result pages" className="pagination">
+                        <button className="secondary" disabled={relationshipPage === 1} onClick={() => setRelationshipPage((page) => Math.max(1, page - 1))} type="button">Previous</button>
+                        <span>Page {relationshipPage} of {relationshipPageCount}</span>
+                        <button className="secondary" disabled={relationshipPage === relationshipPageCount} onClick={() => setRelationshipPage((page) => Math.min(relationshipPageCount, page + 1))} type="button">Next</button>
+                      </nav>
+                    ) : null}
                   </section>
                 }
                 matrixWorkbench={workbench}
@@ -736,14 +766,7 @@ export function ComparePage(props: {
                   </button>
                 ) : null}
                 <button
-                  className="secondary"
-                  onClick={() => onNavigate("sources")}
-                  type="button"
-                >
-                  Review sources
-                </button>
-                <button
-                  className="secondary"
+                  className={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
                   onClick={() =>
                     onNavigate("matrix", { ...state, workbench: "intent" })
                   }
@@ -751,6 +774,10 @@ export function ComparePage(props: {
                 >
                   Choose another comparison
                 </button>
+                <details>
+                  <summary>Check the data source</summary>
+                  <button className="secondary disclosure-actions" onClick={() => onNavigate("sources")} type="button">Review sources</button>
+                </details>
               </div>
             </section>
           ) : null}

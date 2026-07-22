@@ -89,7 +89,7 @@ export function searchExploreResources(
         title: template.display_name || template.name,
         summary: template.description || "",
         classification:
-          template.compatibility?.classification || "Control Atlas companion",
+          template.compatibility?.classification || "Starter document",
         templateType: template.name,
         score: scoreResource(
           template.display_name || template.name,

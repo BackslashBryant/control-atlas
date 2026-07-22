@@ -8,7 +8,6 @@ import type { RuntimeBundle } from "../lib/runtimeLoader";
 
 type TopNavProps = {
   bundle: RuntimeBundle | null;
-  introVisible: boolean;
   viewState: ViewState;
   headerSearchDraft: string;
   onHeaderSearchDraftChange: (value: string) => void;
@@ -20,7 +19,6 @@ type TopNavProps = {
 export function TopNav(props: TopNavProps) {
   const {
     bundle,
-    introVisible,
     viewState,
     headerSearchDraft,
     onHeaderSearchDraftChange,
@@ -37,7 +35,7 @@ export function TopNav(props: TopNavProps) {
   // flourish, search, and nav-equivalent buttons) — the persistent site
   // chrome would duplicate all of that, so it stays hidden until the user
   // has navigated somewhere else.
-  const hideChrome = introVisible || viewState.view === "home";
+  const hideChrome = viewState.view === "home";
 
   function navigateFromGroup(view: ViewState["view"], patch?: Partial<ViewState>) {
     setOpenGroup(null);

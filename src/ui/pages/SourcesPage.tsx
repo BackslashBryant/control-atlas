@@ -79,6 +79,7 @@ export function SourcesPage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { bundle, state, onNavigate } = props;
+  const [sourceQuery, setSourceQuery] = useState("");
   const sources = bundle.runtime.getSources({
     provenance_class: state.provenance || undefined,
     eligibility_status: state.eligibility || undefined,
@@ -100,7 +101,13 @@ export function SourcesPage(props: {
 
   const groupedSources = useMemo(() => {
     const groups = new Map<string, any[]>();
-    for (const source of sources) {
+    const normalizedQuery = sourceQuery.trim().toLowerCase();
+    for (const source of sources.filter((entry: any) =>
+      !normalizedQuery ||
+      [entry.name, entry.display_name, entry.owner, entry.id]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(normalizedQuery)),
+    )) {
       const key = displayNameFor("provenance_class", source.provenance_class);
       const bucket = groups.get(key) || [];
       bucket.push(source);
@@ -109,7 +116,7 @@ export function SourcesPage(props: {
     return [...groups.entries()].sort(([left], [right]) =>
       left.localeCompare(right),
     );
-  }, [sources]);
+  }, [sourceQuery, sources]);
 
   const connectionInventory = useMemo(
     () =>
@@ -143,14 +150,60 @@ export function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
+      {selectedSource ? (
+        <section aria-labelledby="selected-source-heading" className="stack selected-source-focus" id="source-detail">
+          <button className="link-action" onClick={() => onNavigate("sources", { ...state, source: "" })} type="button">
+            ← Back to all sources
+          </button>
+          <div>
+            <p className="eyebrow">Selected source</p>
+            <h2 id="selected-source-heading">{selectedSource.name}</h2>
+          </div>
+          <SourceSummaryCard source={selectedSource} />
+          <div className="card-actions">
+            <a className="primary" href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
+              Open the official source
+            </a>
+            <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">
+              View in Atlas Map
+            </button>
+          </div>
+          <SummaryCard title="How Control Atlas uses it">
+            <p>{sourceUsageSummary(selectedSource)}.</p>
+          </SummaryCard>
+          <SummaryCard title="Trust and status" tone="trust">
+            <p><ProvenanceTerm kind="provenance" value={selectedSource.provenance_class || "federal_published"} /></p>
+            <p>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)} · {displayNameFor("access_status", selectedSource.access_status)}</p>
+          </SummaryCard>
+          <Accordion.Root className="accordion-root" collapsible type="single">
+            <DisclosurePanel title="Advanced metadata" value="metadata">
+              <div className="advanced-list">
+                <div><span>Owner</span><strong>{selectedSource.owner}</strong></div>
+                <div><span>Version</span><strong>{selectedSource.version}</strong></div>
+                <div><span>Current as of</span><strong>{selectedSource.last_checked}</strong></div>
+                <div><span>Update model</span><strong>{sourceSyncLabel(selectedSource.sync_model)}</strong></div>
+                <div><span>Last imported</span><strong>{selectedSource.sync_model === "link_out" ? "Official link only — not hosted by Control Atlas" : selectedSource.last_imported}</strong></div>
+                <div><span>Parser</span><strong>{selectedSource.metadata?.parser || "Not recorded"}</strong></div>
+              </div>
+            </DisclosurePanel>
+          </Accordion.Root>
+        </section>
+      ) : (
       <div className="detail-grid">
       <div className="stack">
-      <section
+      <label className="field" htmlFor="source-search">
+        <span>Search sources</span>
+        <div className="search-input">
+          <IconSearch aria-hidden="true" size={18} stroke={1.8} />
+          <input id="source-search" onChange={(event) => setSourceQuery(event.target.value)} placeholder="NIST, FedRAMP, DISA, MITRE…" type="search" value={sourceQuery} />
+        </div>
+      </label>
+      <details
         className="canonical-source-links"
         id="official-source-links"
-        aria-labelledby="canonical-source-links-heading"
       >
-        <h2 id="canonical-source-links-heading">Official source links</h2>
+        <summary>Official source links</summary>
+        <div className="disclosure-content">
         <p>
           Open the official source before relying on a control, mapping, threat
           technique, or defensive reference.
@@ -176,14 +229,15 @@ export function SourcesPage(props: {
             );
           })}
         </ul>
-      </section>
+        </div>
+      </details>
 
-      <section
-        aria-labelledby="connection-inventory-heading"
+      <details
         className="connection-inventory"
         id="connection-inventory"
       >
-        <h2 id="connection-inventory-heading">Connection inventory</h2>
+        <summary>Connection inventory</summary>
+        <div className="disclosure-content">
         <p>
           What Control Atlas currently loads and connects. These are build
           counts, not completeness scores.
@@ -232,7 +286,8 @@ export function SourcesPage(props: {
             </p>
           ) : null}
         </details>
-      </section>
+        </div>
+      </details>
 
       <section id="refine-sources">
       <Accordion.Root className="accordion-root" collapsible type="single">
@@ -291,77 +346,7 @@ export function SourcesPage(props: {
       </Accordion.Root>
       </section>
 
-      {selectedSource ? (
-        <section className="stack" id="source-detail">
-          <SourceSummaryCard source={selectedSource} />
-          <div className="card-actions">
-            <button
-              className="primary"
-              onClick={() => onNavigate("atlas-map")}
-              type="button"
-            >
-              View in Atlas Map
-            </button>
-          </div>
-          <SummaryCard title="What this source is" tone="trust">
-            <p>{selectedSource.name}</p>
-          </SummaryCard>
-          <SummaryCard title="How Control Atlas uses it">
-            <p>{sourceUsageSummary(selectedSource)}.</p>
-          </SummaryCard>
-          <SummaryCard title="Trust and status">
-            <p>
-              <ProvenanceTerm
-                kind="provenance"
-                value={selectedSource.provenance_class || "federal_published"}
-              />
-            </p>
-            <p>
-              {displayNameFor(
-                "lifecycle_status",
-                selectedSource.lifecycle_status,
-              )}{" "}
-              · {displayNameFor("access_status", selectedSource.access_status)}
-            </p>
-          </SummaryCard>
-          <Accordion.Root className="accordion-root" collapsible type="single">
-            <DisclosurePanel title="Advanced metadata" value="metadata">
-              <div className="advanced-list">
-                <div>
-                  <span>Owner</span>
-                  <strong>{selectedSource.owner}</strong>
-                </div>
-                <div>
-                  <span>Version</span>
-                  <strong>{selectedSource.version}</strong>
-                </div>
-                <div>
-                  <span>Current as of</span>
-                  <strong>{selectedSource.last_checked}</strong>
-                </div>
-                <div>
-                  <span>Update model</span>
-                  <strong>{sourceSyncLabel(selectedSource.sync_model)}</strong>
-                </div>
-                <div>
-                  <span>Last imported</span>
-                  <strong>
-                    {selectedSource.sync_model === "link_out"
-                      ? "Official link only — not hosted by Control Atlas"
-                      : selectedSource.last_imported}
-                  </strong>
-                </div>
-                <div>
-                  <span>Parser</span>
-                  <strong>
-                    {selectedSource.metadata?.parser || "Not recorded"}
-                  </strong>
-                </div>
-              </div>
-            </DisclosurePanel>
-          </Accordion.Root>
-        </section>
-      ) : (
+      {groupedSources.length ? (
         <Accordion.Root
           className="accordion-root source-groups"
           collapsible
@@ -389,6 +374,12 @@ export function SourcesPage(props: {
             </DisclosurePanel>
           ))}
         </Accordion.Root>
+      ) : (
+        <section className="empty-state">
+          <h2>No sources match your search.</h2>
+          <p>Try a publisher name such as NIST, DISA, FedRAMP, or MITRE.</p>
+          <button className="primary" onClick={() => setSourceQuery("")} type="button">Clear source search</button>
+        </section>
       )}
       </div>
       <aside className="detail-sidebar page-sidebar">
@@ -414,6 +405,7 @@ export function SourcesPage(props: {
         </SummaryCard>
       </aside>
       </div>
+      )}
     </section>
   );
 }

@@ -33,7 +33,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Learn",
     items: [
-      { label: "Start", view: "start-here", path: "/start", icon: IconCompass },
+      { label: "Start here", view: "start-here", path: "/start", icon: IconCompass },
       {
         label: "Sources",
         view: "sources",
@@ -43,9 +43,9 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Navigate",
+    label: "Explore",
     items: [
-      { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+      { label: "Atlas map", view: "atlas-map", path: "/atlas-map", icon: IconMap },
       {
         label: "Compare",
         view: "matrix",
@@ -55,7 +55,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Build",
+    label: "Create",
     items: [
       {
         label: "Playbooks",
@@ -64,7 +64,7 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: IconBook2,
       },
       {
-        label: "Templates",
+        label: "Starter documents",
         view: "templates",
         path: "/templates",
         icon: IconClipboardList,

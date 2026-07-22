@@ -20,10 +20,6 @@ import {
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import { SearchOverlay } from "./components/SearchOverlay";
-import {
-  BrandEntranceOverlay,
-  shouldShowBrandEntrance,
-} from "./components/BrandEntranceOverlay";
 import { GlossaryDrawer, type HelpTab } from "./components/GlossaryDrawer";
 import { userFacingLoadError } from "../app/display-names.mjs";
 import {
@@ -112,7 +108,6 @@ export function App() {
   const [headerSearchDraft, setHeaderSearchDraft] = useState(() =>
     viewState.view === "search" ? viewState.query : "",
   );
-  const [introVisible, setIntroVisible] = useState(shouldShowBrandEntrance);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
 
@@ -302,17 +297,12 @@ export function App() {
 
   return (
     <>
-      <BrandEntranceOverlay
-        onDismiss={() => setIntroVisible(false)}
-        visible={introVisible}
-      />
       <a className="skip-link" href="#workspace">
         Skip to workspace
       </a>
       <TopNav
         bundle={bundle}
         headerSearchDraft={headerSearchDraft}
-        introVisible={introVisible}
         onHeaderSearchDraftChange={setHeaderSearchDraft}
         onNavigate={navigate}
         onOpenHelp={() => openHelp()}
@@ -473,20 +463,13 @@ function AppContent(props: {
           >
             Go to Home
           </button>
-          <button
-            className="secondary"
-            onClick={() => onNavigate("start-here")}
-            type="button"
-          >
-            Start here
-          </button>
-          <button
-            className="secondary"
-            onClick={() => onNavigate("search")}
-            type="button"
-          >
-            Search records
-          </button>
+          <details>
+            <summary>Try another path</summary>
+            <div className="card-actions disclosure-actions">
+              <button className="secondary" onClick={() => onNavigate("start-here")} type="button">Start here</button>
+              <button className="secondary" onClick={() => onNavigate("search")} type="button">Search records</button>
+            </div>
+          </details>
         </div>
       </section>
     );

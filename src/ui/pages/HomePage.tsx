@@ -61,49 +61,31 @@ export function HomePage(props: HomePageProps) {
         </form>
       </div>
 
-      <div className="landing-launch">
+      <div className="landing-actions">
         <button
-          aria-describedby="landing-orb-hint"
-          className="landing-orb"
+          className="primary landing-primary-action"
           onClick={() => onNavigate("start-here")}
           type="button"
         >
-          <span aria-hidden="true" className="landing-orb-circle">
-            <BrandMark />
-          </span>
-          <span className="landing-orb-caption">Click to start</span>
+          Find where to start
         </button>
-
-        <button
-          className="landing-orbit-btn landing-orbit-research"
-          onClick={() => onNavigate("patterns")}
-          type="button"
-        >
-          <strong>Research</strong>
-          <span>Plain-English guides to how it all works</span>
-        </button>
-
-        <button
-          className="landing-orbit-btn landing-orbit-build"
-          onClick={() => onNavigate("templates")}
-          type="button"
-        >
-          <strong>Build</strong>
-          <span>Create starter documents in your browser</span>
-        </button>
-
-        <button
-          className="landing-orbit-btn landing-orbit-navigate"
-          onClick={() => onNavigate("atlas-map")}
-          type="button"
-        >
-          <strong>Navigate</strong>
-          <span>Trace published connections</span>
-        </button>
+        <p>Answer three questions to get a recommended framework, document, and playbook.</p>
       </div>
-      <p className="visually-hidden" id="landing-orb-hint">
-        Answer three questions and get the best place to start.
-      </p>
+
+      <details className="landing-more-paths">
+        <summary>Other ways to use Control Atlas</summary>
+        <div className="landing-path-grid">
+          <button className="secondary" onClick={() => onNavigate("patterns")} type="button">
+            Learn the basics
+          </button>
+          <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">
+            Explore connections
+          </button>
+          <button className="secondary" onClick={() => onNavigate("templates")} type="button">
+            Create a starter document
+          </button>
+        </div>
+      </details>
 
       <div className="landing-trust-row">
         <p className="landing-trust-lead">

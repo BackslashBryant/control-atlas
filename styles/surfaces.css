@@ -322,8 +322,8 @@ a {
   padding: var(--ca-space-2) var(--ca-space-3);
   border: 1px solid transparent;
   text-decoration: none;
-  min-height: 36px;
-  min-width: 36px;
+  min-height: 44px;
+  min-width: 44px;
   font-size: var(--ca-text-sm);
 }
 
@@ -5217,4 +5217,126 @@ button.atlas-leverage-row:hover {
 
 .atlas-workspace .atlas-map-command button.visually-hidden {
   width: 1px;
+}
+
+/* 2026-07 usability remediation: calm entry, bounded results, and explicit actions. */
+.brand-purpose {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.landing-actions {
+  display: grid;
+  justify-items: center;
+  gap: var(--ca-space-3);
+  max-width: 34rem;
+  text-align: center;
+}
+
+.landing-actions p {
+  margin: 0;
+  color: var(--ca-text-muted);
+}
+
+.landing-primary-action {
+  min-height: 48px;
+  padding-inline: var(--ca-space-8);
+  font-size: var(--font-size-base);
+}
+
+.landing-more-paths {
+  width: min(100%, 40rem);
+  margin-top: var(--ca-space-8);
+}
+
+.landing-more-paths > summary,
+.start-here-alternatives > summary,
+.template-supporting-details > summary,
+.drawer-all-help > summary,
+.mapping-row-details > summary {
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ca-secondary);
+  font-weight: 650;
+}
+
+.landing-path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ca-space-3);
+  padding-top: var(--ca-space-3);
+}
+
+.start-here-alternative-content,
+.disclosure-content,
+.disclosure-actions,
+.template-essential-options {
+  margin-top: var(--ca-space-4);
+}
+
+.record-primary-action {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
+  margin-bottom: var(--ca-space-6);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--ca-space-4);
+}
+
+.mapping-row-details dl {
+  display: grid;
+  gap: var(--ca-space-3);
+  margin: var(--ca-space-3) 0 0;
+}
+
+.mapping-row-details dt {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mapping-row-details dd {
+  margin: var(--ca-space-1) 0 0;
+}
+
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 720px) {
+  .detail-table tr {
+    border-bottom: 1px solid var(--ca-border);
+    padding: var(--ca-space-3) 0;
+  }
+
+  .detail-table td {
+    display: grid;
+    grid-template-columns: minmax(7rem, 35%) minmax(0, 1fr);
+    gap: var(--ca-space-3);
+    border: 0;
+    padding: var(--ca-space-2) var(--ca-space-3);
+  }
+
+  .detail-table td::before {
+    content: attr(data-label);
+    color: var(--ca-text-muted);
+    font-size: var(--ca-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .landing-path-grid {
+    grid-template-columns: 1fr;
+  }
 }

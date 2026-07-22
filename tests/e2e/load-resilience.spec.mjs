@@ -24,7 +24,7 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Build", exact: true })
+    .getByRole("button", { name: "Create", exact: true })
     .click();
   await primaryNav
     .locator(".nav-more-menu")

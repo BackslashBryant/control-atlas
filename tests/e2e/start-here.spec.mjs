@@ -32,7 +32,9 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
 
   await expect(page.getByText('Your situation', { exact: true })).toBeVisible();
   await expect(page.getByText('FedRAMP authorization path', { exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
+  await expect(page.getByText('Recommended next step', { exact: true })).toBeVisible();
+  await page.getByText(/Other useful resources/).click();
+  await expect(page.getByRole('heading', { name: 'Other frameworks', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Compare', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Playbooks', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
@@ -46,18 +48,20 @@ test('start here recommendations navigate to templates, playbooks, explore, and 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
+  await page.getByText(/Other useful resources/).click();
   await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Playbooks', exact: true }) }).locator('.card-title-action').first().click();
   await expect(page).toHaveURL(/#\/playbooks\?.*pattern=|view=playbooks&pattern=/);
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Explore', exact: true }) }).locator('.card-title-action').first().click();
+  await page.getByRole('button', { name: 'Open FedRAMP Rev. 5 Baselines' }).click();
   await expect(page).toHaveURL(/#\/explore\?.*(filter=|framework=)fedramp-rev5|view=browse&framework=fedramp-rev5|view=explore&filter=fedramp-rev5/);
 
   await page.goto('/?view=start-here&systemType=Hybrid&dataSensitivity=High&environment=DoD&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
+  await page.getByText(/Other useful resources/).click();
   await page.locator('section.stack').filter({ has: page.getByRole('heading', { name: 'Compare', exact: true }) }).locator('.card-title-action').first().click();
   await expect(page).toHaveURL(/#\/compare\?.*workbench=stig-chain|view=matrix&workbench=stig-chain/);
 });

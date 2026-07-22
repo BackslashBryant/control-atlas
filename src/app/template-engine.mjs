@@ -40,7 +40,7 @@ const SOURCE_FALLBACK = {
 
 const TEMPLATE_COMPATIBILITY = {
   security_plan_starter: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: NIST RMF concepts plus the current FedRAMP Certification Package Overview and Security Decision Record transition path.",
     "Limit: This is not an official SSP or FedRAMP package and is not directly importable into FedRAMP or eMASS.",
   ],
@@ -50,7 +50,7 @@ const TEMPLATE_COMPATIBILITY = {
     "Limit: This is not an eMASS-generated import template and is not directly importable; instance rules may differ.",
   ],
   evidence_expectation_matrix: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: NIST SP 800-53A assessment concepts and ingested DISA cross-references.",
     "Limit: Evidence expectations require assessor and organization validation.",
   ],
@@ -60,12 +60,12 @@ const TEMPLATE_COMPATIBILITY = {
     "Limit: Validate the CSV in the target STIG Viewer version; Control Atlas has not certified a round trip.",
   ],
   inheritance_worksheet: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: NIST RMF and OSCAL inheritance concepts.",
     "Limit: This does not replace a provider CRM/CIS or approve an inheritance decision.",
   ],
   reciprocity_checklist: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: NIST RMF authorization-package reuse concepts.",
     "Limit: This does not grant reciprocity or replace the receiving Authorizing Official's decision.",
   ],
@@ -80,7 +80,7 @@ const TEMPLATE_COMPATIBILITY = {
     "Limit: This is neither a complete SAP nor an eMASS test-result import file; current FedRAMP rules do not require a separate SAP or SAR.",
   ],
   conmon_calendar: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: NIST SP 800-137 concepts plus current FedRAMP Ongoing Certification Report and vulnerability-reporting rules.",
     "Limit: Starter cadences must be reconciled with current rule-specific dates, certification profile, authorization conditions, and contracts.",
   ],
@@ -95,7 +95,7 @@ const TEMPLATE_COMPATIBILITY = {
     "Limit: This is not an eMASS-generated import template and is not directly importable.",
   ],
   ppsm_preparation_worksheet: [
-    "Classification: Control Atlas companion.",
+    "Classification: Control Atlas starter document.",
     "Basis: DoDI 8551.01 and public DISA PPSM Registry training.",
     "Limit: This is not an official PPSM worksheet, registry receipt, or import file.",
   ],

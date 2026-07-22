@@ -20,17 +20,8 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
 
-  // The landing page directly presents the primary intent paths
-  await expect(
-    page.getByRole("button", { name: /^click to start$/i }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: /^Research/ }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: /^Navigate/ }),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: /^Build/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Find where to start" })).toBeVisible();
+  await expect(page.getByText("Other ways to use Control Atlas")).toBeVisible();
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({
@@ -203,7 +194,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
   // Nav groups are disclosures — items are plain buttons in the revealed panel.
   const startHere = primaryNav.locator(".nav-more-menu").getByRole("button", {
-    name: "Start",
+    name: "Start here",
     exact: true,
   });
   await startHere.focus();

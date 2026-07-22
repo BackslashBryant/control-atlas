@@ -122,9 +122,8 @@ test('template generation fires a trust-styled download toast and disables the b
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // Matches both the idle "Generate …" label and the disabled "Generating…"
-  // label, so the same locator tracks the button across the disable window.
-  const generate = page.getByRole('button', { name: /Generat(e|ing)/ });
+  // Matches the explicit download action across its brief disabled window.
+  const generate = page.getByRole('button', { name: /Download Security Plan Starter|Preparing download/ });
   await expect(generate).toBeEnabled();
 
   const downloadPromise = page.waitForEvent('download');

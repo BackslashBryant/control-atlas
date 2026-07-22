@@ -48,7 +48,7 @@ test('shell removes the old mode toggle and uses the translation-first nav order
   assert.match(navigation, /Start/);
   assert.match(navigation, /Compare/);
   assert.match(navigation, /Playbooks/);
-  assert.match(navigation, /Templates/);
+  assert.match(navigation, /Starter documents/);
   assert.match(navigation, /Sources/);
   assert.match(navigation, /Search/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -64,15 +64,12 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
   assert.ok(existsSync('src/ui/lib/viewState.ts'), 'src/ui/lib/viewState.ts must exist');
 });
 
-test('approved brand entrance and bounded diagram graph contracts are present', () => {
-  assert.ok(
-    existsSync('src/ui/components/BrandEntranceOverlay.tsx'),
-    'BrandEntranceOverlay component must exist',
-  );
-  const entrance = readFileSync('src/ui/components/BrandEntranceOverlay.tsx', 'utf8');
-  assert.match(entrance, /ca_intro_seen/);
-  assert.match(entrance, /prefers-reduced-motion/);
-  assert.match(entrance, /Ctrl \+ Alt \+ Comply/);
+test('calm brand entry and bounded diagram graph contracts are present', () => {
+  const app = readFileSync('src/ui/App.tsx', 'utf8');
+  const brand = readFileSync('src/ui/components/BrandLockup.tsx', 'utf8');
+  assert.doesNotMatch(app, /BrandEntranceOverlay/);
+  assert.match(brand, /Public reference tool/);
+  assert.doesNotMatch(brand, /setInterval|BRAND_WORDS/);
   assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
   assert.equal(typeof packageJson.dependencies.elkjs, 'string');
   assert.equal(packageJson.dependencies.cytoscape, undefined);

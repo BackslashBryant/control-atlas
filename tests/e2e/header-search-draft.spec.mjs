@@ -22,7 +22,7 @@ test("header search clears when leaving Explore after an empty result", async ({
 
   await page
     .getByRole("navigation", { name: "Primary navigation" })
-    .getByRole("button", { name: "Navigate", exact: true })
+    .getByRole("button", { name: "Explore", exact: true })
     .click();
   await page
     .locator(".nav-more-menu")
