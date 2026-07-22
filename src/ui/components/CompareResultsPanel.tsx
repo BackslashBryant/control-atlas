@@ -200,12 +200,13 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
 
       <div className="card-actions">
         {graph.atlasMapNode ? (
-          <button className="primary" onClick={openAtlasMap} type="button">
+          <button className="secondary" onClick={openAtlasMap} type="button">
             Open in Atlas Map
           </button>
         ) : null}
         <button
-          className={compareView === "map" ? "primary" : "secondary"}
+          aria-pressed={compareView === "map"}
+          className="secondary"
           disabled={!graph.mapAvailable}
           onClick={() => setCompareView("map")}
           type="button"
@@ -213,7 +214,8 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           Map
         </button>
         <button
-          className={compareView === "list" ? "primary" : "secondary"}
+          aria-pressed={compareView === "list"}
+          className="secondary"
           onClick={() => setCompareView("list")}
           type="button"
         >

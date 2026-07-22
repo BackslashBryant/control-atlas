@@ -23,6 +23,12 @@ export function StartHereResult(props: StartHereResultProps) {
     onRestart,
   } = props;
   const { situation } = recommendations;
+  const primaryRecommendation = recommendations.library[0];
+  const alternativeCount =
+    Math.max(0, recommendations.library.length - 1) +
+    recommendations.compare.length +
+    recommendations.patterns.length +
+    recommendations.templates.length;
 
   return (
 
@@ -67,13 +73,32 @@ export function StartHereResult(props: StartHereResultProps) {
             This is a reference recommendation, not a compliance determination.
           </p>
 
+          {primaryRecommendation ? (
+            <SummaryCard title="Recommended next step">
+              <p><strong>{primaryRecommendation.label}</strong></p>
+              <p>{primaryRecommendation.rationale}</p>
+              <div className="card-actions">
+                <button
+                  className="primary"
+                  onClick={() => onFollowLibraryLink(primaryRecommendation)}
+                  type="button"
+                >
+                  Open {primaryRecommendation.label}
+                </button>
+              </div>
+            </SummaryCard>
+          ) : null}
+
+          <details className="start-here-alternatives">
+            <summary>Other useful resources ({alternativeCount})</summary>
+            <div className="stack start-here-alternative-content">
+          {recommendations.library.length > 1 ? (
           <section className="stack">
             <div className="section-header">
-              <h2>Explore</h2>
-              <p>Framework catalogs and baselines to open first.</p>
+              <h3>Other frameworks</h3>
             </div>
             <div className="stack compact">
-              {recommendations.library.map((link) => (
+              {recommendations.library.slice(1).map((link) => (
                 <article
                   className="relationship-card"
                   key={`${link.kind}-${link.kind === "library-catalog" ? link.catalogId : link.nodeId}`}
@@ -92,10 +117,11 @@ export function StartHereResult(props: StartHereResultProps) {
               ))}
             </div>
           </section>
+          ) : null}
 
           <section className="stack">
             <div className="section-header">
-              <h2>Compare</h2>
+              <h3>Compare</h3>
               <p>Pre-filled comparison paths based on your answers.</p>
             </div>
             <div className="stack compact">
@@ -121,7 +147,7 @@ export function StartHereResult(props: StartHereResultProps) {
 
           <section className="stack">
             <div className="section-header">
-              <h2>Playbooks</h2>
+              <h3>Playbooks</h3>
               <p>
                 Plain-language guides for concepts that often block progress.
               </p>
@@ -148,7 +174,7 @@ export function StartHereResult(props: StartHereResultProps) {
 
           <section className="stack">
             <div className="section-header">
-              <h2>Templates</h2>
+              <h3>Templates</h3>
               <p>Starter artifacts you can generate locally in your browser.</p>
             </div>
             <div className="stack compact">
@@ -172,6 +198,8 @@ export function StartHereResult(props: StartHereResultProps) {
               ))}
             </div>
           </section>
+            </div>
+          </details>
         </div>
       
   );

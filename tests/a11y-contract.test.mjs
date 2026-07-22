@@ -162,16 +162,26 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing launch actions expose their visible text to assistive technology", () => {
+test("landing presents one plain-language primary path with disclosed alternatives", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  // The orb's accessible name is its visible caption; satellite buttons carry
-  // visible label + description text. No landing action text may be
-  // aria-hidden (SPR finding A11Y-001).
-  assert.match(homePage, /Click to start/);
+  assert.match(homePage, /Find where to start/);
+  assert.match(homePage, /<details className="landing-more-paths">/);
+  assert.doesNotMatch(homePage, /Click to start/);
   assert.doesNotMatch(homePage, /<h3 aria-hidden/);
   assert.doesNotMatch(homePage, /<p aria-hidden/);
-  assert.doesNotMatch(homePage, /aria-label="Research/);
-  assert.doesNotMatch(homePage, /aria-label="Build/);
+});
+
+test("high-density task surfaces bound results and name download actions", () => {
+  const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
+  const templatesPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
+  const startHereResult = readFileSync("src/ui/components/StartHereResult.tsx", "utf8");
+  assert.match(comparePage, /relationshipPageSize = 25/);
+  assert.match(comparePage, /Showing \{/);
+  assert.match(comparePage, /View evidence/);
+  assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
+  assert.match(templatesPage, /template-essential-options/);
+  assert.match(startHereResult, /Recommended next step/);
+  assert.match(startHereResult, /Other useful resources/);
 });
 
 test("compact icon and chip controls retain 44 pixel touch targets", () => {

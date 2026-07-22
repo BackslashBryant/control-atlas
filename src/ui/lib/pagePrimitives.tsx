@@ -327,11 +327,13 @@ export function DisclosurePanel(props: {
 }) {
   return (
     <Accordion.Item className="accordion-item" value={props.value}>
-      <Accordion.Header>
+      <Accordion.Header asChild>
+        <h2>
         <Accordion.Trigger className="accordion-trigger">
           <span>{props.title}</span>
           <IconArrowRight size={18} stroke={1.8} />
         </Accordion.Trigger>
+        </h2>
       </Accordion.Header>
       <Accordion.Content className="accordion-content">
         {props.children}

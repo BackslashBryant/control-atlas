@@ -13,6 +13,7 @@ test("Sources page exposes required canonical source links", async ({ page }) =>
   await page.goto("/#/sources");
   await waitForAppReady(page);
   await dismissOnboarding(page);
+  await page.locator("#official-source-links > summary").click();
 
   await expect(page.getByRole("link", { name: "FISMA / 44 U.S.C. Chapter 35, Subchapter II" })).toHaveAttribute(
     "href",
@@ -40,11 +41,10 @@ test("Sources page reports a factual connection inventory", async ({ page }) => 
   await dismissOnboarding(page);
 
   const inventory = page.locator(".connection-inventory");
-  await expect(
-    inventory.getByRole("heading", { name: "Connection inventory" }),
-  ).toBeVisible();
+  await inventory.getByText("Connection inventory", { exact: true }).click();
   await expect(inventory).toContainText("11,486 records across 7 practical categories");
   await expect(inventory).toContainText("16,207 published links");
+  await inventory.getByText("Per-category counts (7)", { exact: true }).click();
   await expect(inventory).toContainText("Requirements");
   await expect(inventory).toContainText("Assessment checks");
   await expect(inventory).toContainText("Threats and defenses");
@@ -77,6 +77,8 @@ test("Sources connection inventory reflows on a compact viewport", async ({
 
   const inventory = page.locator(".connection-inventory");
   await expect(inventory).toBeVisible();
+  await inventory.getByText("Connection inventory", { exact: true }).click();
+  await inventory.getByText("Per-category counts (7)", { exact: true }).click();
   await expect(inventory.locator(".connection-inventory-row")).toHaveCount(7);
   const pageWidth = await page.evaluate(() => ({
     client: globalThis.document.documentElement.clientWidth,

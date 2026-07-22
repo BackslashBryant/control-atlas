@@ -27,7 +27,7 @@ export function CompareStepIndicator(props: { step: 1 | 2 | 3; label: string }) 
   const steps = [
     { n: 1, text: "Choose comparison" },
     { n: 2, text: "Set inputs" },
-    { n: 3, text: "Review results" },
+    { n: 3, text: "Use results" },
   ] as const;
 
   return (

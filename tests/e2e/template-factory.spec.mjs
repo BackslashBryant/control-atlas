@@ -55,7 +55,7 @@ for (const template of registry.templates) {
     await expect(page).toHaveURL(new RegExp(`templateType=${template.name}`));
 
     const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('button', { name: new RegExp(`Generate ${template.display_name}`) }).click();
+    await page.getByRole('button', { name: new RegExp(`Download ${escapeRegex(template.display_name)} \\(`) }).click();
     const download = await downloadPromise;
 
     expect(download.suggestedFilename()).toMatch(new RegExp(`${template.name.replace(/_/g, '-')}-\\d{4}-\\d{2}-\\d{2}\\.`));
@@ -72,7 +72,7 @@ test('deep link pre-selects security plan starter', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByText('What this template is for')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Generate Security Plan Starter' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Download Security Plan Starter \(/ })).toBeVisible();
 });
 
 test('format change updates download extension', async ({ page }) => {
@@ -80,11 +80,10 @@ test('format change updates download extension', async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByLabel('Format').selectOption('csv');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Generate Inheritance Worksheet' }).click();
+  await page.getByRole('button', { name: /Download Inheritance Worksheet \(/ }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.csv$/);
 });
@@ -108,11 +107,10 @@ test('tabular template exports a real .xlsx workbook client-side', async ({ page
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole('button', { name: 'More options' }).click();
   await page.locator("#field-format").selectOption("xlsx");
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Generate POA&M Working Register' }).click();
+  await page.getByRole('button', { name: /Download POA&M Working Register \(/ }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.xlsx$/);
   await assertZipDownload(download);
@@ -123,11 +121,10 @@ test('SSP starter exports a real .docx document client-side', async ({ page }) =
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole('button', { name: 'More options' }).click();
   await page.locator("#field-format").selectOption("docx");
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Generate Security Plan Starter' }).click();
+  await page.getByRole('button', { name: /Download Security Plan Starter \(/ }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/\.docx$/);
   await assertZipDownload(download);

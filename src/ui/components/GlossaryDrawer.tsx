@@ -171,21 +171,29 @@ export function GlossaryDrawer(props: {
               id="help-drawer-panel"
               role="tabpanel"
             >
-              {helpSurfaces.map((surface) => (
-                <SummaryCard key={surface.view} title={surface.title}>
-                  <p>{surface.body}</p>
-                  <button
-                    className="secondary"
-                    onClick={() => {
-                      setOpen(false);
-                      onNavigate(surface.view as ViewState["view"]);
-                    }}
-                    type="button"
-                  >
-                    {surface.actionLabel}
-                  </button>
-                </SummaryCard>
-              ))}
+              <SummaryCard title="What do you need to do?" tone="trust">
+                <p>Answer three questions if you are not sure which framework, document, or guide to use first.</p>
+                <button className="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
+                  Find where to start
+                </button>
+              </SummaryCard>
+              <div className="card-actions">
+                <button className="secondary" onClick={() => { setOpen(false); onNavigate("search"); }} type="button">Search records</button>
+                <button className="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Compare frameworks</button>
+              </div>
+              <details className="drawer-all-help">
+                <summary>All help topics ({helpSurfaces.length})</summary>
+                <div className="stack disclosure-content">
+                  {helpSurfaces.map((surface) => (
+                    <SummaryCard key={surface.view} title={surface.title}>
+                      <p>{surface.body}</p>
+                      <button className="secondary" onClick={() => { setOpen(false); onNavigate(surface.view as ViewState["view"]); }} type="button">
+                        {surface.actionLabel}
+                      </button>
+                    </SummaryCard>
+                  ))}
+                </div>
+              </details>
             </div>
           ) : (
             <div

@@ -9,27 +9,12 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("brand entrance appears once, is dismissible, and hides navigation while visible", async ({
+test("brand entrance is immediate and does not interrupt the user", async ({
   page,
 }) => {
-  await page.addInitScript(() => localStorage.removeItem("ca_intro_seen"));
   await page.goto("/");
-  const entrance = page.getByRole("dialog", {
-    name: "Control Atlas introduction",
-  });
-  await expect(entrance).toBeVisible();
-  await expect(
-    page.getByRole("navigation", { name: "Primary navigation" }),
-  ).toBeHidden();
-  await entrance.press("Escape");
-  await expect(entrance).toBeHidden();
-  // Home is a calm, chrome-free entrance — the primary nav stays hidden here
-  // by design; dismissing the intro reveals the home hero's own controls.
-  await expect(
-    page.getByRole("button", { name: /^click to start$/i }),
-  ).toBeVisible();
-  await page.reload();
-  await expect(entrance).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Control Atlas introduction" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Find where to start" })).toBeVisible();
 });
 
 test("reduced motion bypasses the brand entrance without an artificial hold", async ({
@@ -59,13 +44,12 @@ test("control atlas map-first shell exposes navigation and guided start path", a
 
   // Home is a calm, chrome-free entrance (its own wordmark/search/buttons
   // cover navigation there) — the persistent primary nav is hidden until the
-  // user has gone somewhere else. The center "Click to start" orb goes
-  // straight to the guided Start Here flow.
+  // user has gone somewhere else. The primary action goes to Start Here.
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
   ).toBeHidden();
   await page
-    .getByRole("button", { name: /^click to start$/i })
+    .getByRole("button", { name: "Find where to start" })
     .click();
   await expect(
     page.getByRole("heading", { name: "Find the best place to start" }),
@@ -75,18 +59,10 @@ test("control atlas map-first shell exposes navigation and guided start path", a
   await page.getByLabel("Operational environment").selectOption("CSP");
   await page.getByRole("button", { name: "Show recommendation" }).click();
   await expect(
-    page.getByRole("heading", { name: "Explore", exact: true }),
+    page.getByText("Recommended next step", { exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Templates", exact: true }),
-  ).toBeVisible();
-  await expect(page.getByText("FedRAMP Rev. 5 Baselines")).toBeVisible();
-  await expect(
-    page.getByRole("button", {
-      name: "Inheritance Worksheet",
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.getByText("FedRAMP Rev. 5 Baselines", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Other useful resources/)).toBeVisible();
 
   // Off the home view, the persistent site chrome appears with its three
   // nav groups.
@@ -102,12 +78,12 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(navLabels).toEqual(["Search", "Learn", "Navigate", "Build"]);
+  expect(navLabels).toEqual(["Search", "Learn", "Explore", "Create"]);
 
-  await primaryNav.getByRole("button", { name: "Navigate" }).click();
+  await primaryNav.getByRole("button", { name: "Explore" }).click();
   await expect(openGroupMenu).toBeVisible();
   await expect(
-    openGroupMenu.getByRole("button", { name: "Atlas" }),
+    openGroupMenu.getByRole("button", { name: "Atlas map" }),
   ).toBeVisible();
 
   const navigateMenuLabels = await openGroupMenu
@@ -115,7 +91,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(navigateMenuLabels).toEqual(["Atlas", "Compare"]);
+  expect(navigateMenuLabels).toEqual(["Atlas map", "Compare"]);
 
   await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
   const researchMenuLabels = await openGroupMenu
@@ -123,15 +99,15 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(researchMenuLabels).toEqual(["Start", "Sources"]);
+  expect(researchMenuLabels).toEqual(["Start here", "Sources"]);
 
-  await primaryNav.getByRole("button", { name: "Build", exact: true }).click();
+  await primaryNav.getByRole("button", { name: "Create", exact: true }).click();
   const buildMenuLabels = await openGroupMenu
     .getByRole("button")
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
-  expect(buildMenuLabels).toEqual(["Playbooks", "Templates"]);
+  expect(buildMenuLabels).toEqual(["Playbooks", "Starter documents"]);
 
   await primaryNav.getByRole("button", { name: "Search", exact: true }).click();
   const searchMenuLabels = await openGroupMenu
@@ -558,6 +534,7 @@ test("unknown hash routes render an honest not-found view with recovery actions"
     page.getByRole("heading", { name: "Page not found" }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Go to Home" })).toBeVisible();
+  await page.getByText("Try another path", { exact: true }).click();
   await page.getByRole("button", { name: "Start here" }).click();
   await expect(page).toHaveURL(/#\/start/);
   await expect(
@@ -674,6 +651,6 @@ test("footer about link opens the trust page with full disclaimer", async ({
     page.locator("main").getByText("reference aids based on public sources"),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Review the Sources registry" }),
+    page.getByRole("button", { name: "Review sources" }),
   ).toBeVisible();
 });

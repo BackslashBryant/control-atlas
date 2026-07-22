@@ -125,29 +125,25 @@ export function AboutPage(props: {
           <div className="card-actions">
             <button
               className="primary"
-              onClick={() => onNavigate("sources")}
-              type="button"
-            >
-              Review the Sources registry
-            </button>
-            <button
-              className="secondary"
               onClick={() => onNavigate("start-here")}
               type="button"
             >
-              Start guided path
+              Find where to start
             </button>
             <button
               className="secondary"
-              onClick={() => onNavigate("templates")}
+              onClick={() => onNavigate("sources")}
               type="button"
             >
-              Browse templates
+              Review sources
             </button>
+            <details>
+              <summary>More options</summary>
+              <button className="secondary disclosure-actions" onClick={() => onNavigate("templates")} type="button">Create a starter document</button>
+            </details>
           </div>
         </section>
       </div>
     </section>
   );
 }
-

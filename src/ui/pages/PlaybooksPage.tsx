@@ -206,7 +206,8 @@ export function PlaybooksPage(props: {
             <p>{selectedPattern.summary}</p>
           </SummaryCard>
           {patternGlossaryTerms.length ? (
-            <SummaryCard title="Related glossary terms">
+            <details>
+              <summary>Related glossary terms ({patternGlossaryTerms.length})</summary>
               <div className="chip-row">
                 {patternGlossaryTerms.map((entry) => (
                   <button
@@ -219,7 +220,7 @@ export function PlaybooksPage(props: {
                   </button>
                 ))}
               </div>
-            </SummaryCard>
+            </details>
           ) : null}
           <SummaryCard title="When to use it">
             <p>{selectedPattern.friction}</p>
@@ -302,20 +303,25 @@ export function PlaybooksPage(props: {
                   Open related templates
                 </button>
               ) : null}
-              <button
-                className="secondary"
-                onClick={() => onNavigate("templates")}
-                type="button"
-              >
-                Browse all templates
-              </button>
-              <button
-                className="secondary quiet"
-                onClick={() => setHelpOpen(true)}
-                type="button"
-              >
-                Open the glossary
-              </button>
+              <details>
+                <summary>More options</summary>
+                <div className="stack compact disclosure-actions">
+                  <button
+                    className="secondary"
+                    onClick={() => onNavigate("templates")}
+                    type="button"
+                  >
+                    Browse all templates
+                  </button>
+                  <button
+                    className="secondary quiet"
+                    onClick={() => setHelpOpen(true)}
+                    type="button"
+                  >
+                    Open the glossary
+                  </button>
+                </div>
+              </details>
             </div>
           </SummaryCard>
         </aside>

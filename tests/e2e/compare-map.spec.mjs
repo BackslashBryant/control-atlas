@@ -14,7 +14,7 @@ test("relationship compare exposes map and list toggles with summary", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "Review results" }).click();
+  await page.getByRole("button", { name: /Show \d+ mappings/ }).click();
   await expect(page.locator(".compare-results-panel")).toBeVisible({
     timeout: 15000,
   });
