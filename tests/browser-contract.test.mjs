@@ -225,4 +225,6 @@ test('template options use collapsed progressive disclosure and associated hints
   // "Markdown, CSV, or JSON" string.
   assert.match(templatesPage, /FORMAT_HELP\[activeFormat\]/);
   assert.doesNotMatch(templatesPage, /Markdown, CSV, or JSON/);
+  assert.match(templatesPage, /return "Starter document"/);
+  assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
