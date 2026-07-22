@@ -23,6 +23,7 @@ export function generatePlainLanguageSummary(node) {
   }
 
   let summary = desc
+    .replace(/\ban organization-defined frequency\b/gi, 'a schedule your organization defines')
     .replace(/organization-defined\s+([\w\s/-]+)/gi, 'limits your organization defines for $1')
     .replace(/\bthe organization\s+(?:shall|must)\s+/gi, 'Your organization should ')
     .replace(/\bthe information system\s+(?:shall|must)\s+/gi, 'The system should ')
