@@ -57,7 +57,10 @@
     "node": ">=20.0.0"
   },
   "overrides": {
-    "tmp": "0.2.7"
+    "tmp": "0.2.7",
+    "@lhci/cli": {
+      "uuid": "11.1.1"
+    }
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
