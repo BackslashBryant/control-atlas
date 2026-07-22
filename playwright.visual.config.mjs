@@ -5,6 +5,6 @@ export default defineConfig({
   ...baseConfig,
   testIgnore: [],
   testMatch: '**/approved-layout-visual.spec.mjs',
-  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}{ext}',
+  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{platform}{ext}',
   workers: 1,
 });
