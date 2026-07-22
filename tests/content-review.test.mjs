@@ -21,6 +21,7 @@ const PROHIBITED_CLAIMS = [
 
 const ADVISORY_FIELDS = ['title', 'summary', 'explanation', 'friction'];
 const RAW_SCHEMA_SLUGS = /\b(includePlaceholders|artifact_type|templateType|security_plan_starter|implementation_statement_worksheet)\b/;
+const ABSTRACT_SUMMARY_LEADS = /^(understand|leverage|utilize|establish|centralize|facilitate|use task-focused)\b/i;
 
 const dataset = {
   nodes: [
@@ -65,6 +66,23 @@ test('pattern advisory copy avoids prohibited compliance or authorization claims
         assert.doesNotMatch(String(entry), claim, `Pattern ${pattern.id}.dos contains prohibited claim`);
       }
     }
+  }
+});
+
+test('playbook summaries name a concrete task or decision', () => {
+  for (const pattern of patternsData) {
+    const summary = String(pattern.summary || '').trim();
+    const wordCount = summary.split(/\s+/).filter(Boolean).length;
+    assert.ok(summary, `Pattern ${pattern.id} must have a summary`);
+    assert.doesNotMatch(
+      summary,
+      ABSTRACT_SUMMARY_LEADS,
+      `Pattern ${pattern.id} starts with abstract UI copy`,
+    );
+    assert.ok(
+      wordCount <= 20,
+      `Pattern ${pattern.id} summary has ${wordCount} words; expected 20 or fewer`,
+    );
   }
 });
 

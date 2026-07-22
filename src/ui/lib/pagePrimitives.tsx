@@ -12,12 +12,20 @@ import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import type { ViewState } from "./viewState";
 
 export const PATTERN_RENAMES: Record<string, string> = {
+  "rmf-lifecycle": "Plan Work Across the RMF Lifecycle",
+  "ato-vs-atc": "ATO vs. Network Connection Approval",
   "csp-inheritance": "Using FedRAMP Inheritance",
   "shared-responsibility": "What Your Cloud Provider Owns vs What You Own",
   "reciprocity-basics": "Reusing Prior Authorization Work",
+  "reciprocity-failures": "Why Prior Assessments Get Rejected",
+  "control-inheritance": "Using Controls Your Provider Already Runs",
+  "common-control-provider": "Providing Controls Other Systems Can Inherit",
+  "enterprise-inheritance": "Using Agency Identity, Logging, and Monitoring Services",
   "conmon-cadence": "Keeping Authorization Evidence Current",
   "boundary-patterns": "Defining the Right Authorization Boundary",
   "boe-reuse": "Packaging Evidence for Reuse",
+  "poam-concepts": "Managing a POA&M and Residual Risk",
+  "evidence-patterns": "Choosing Evidence an Assessor Can Use",
 };
 
 export function openAtlasMapForNode(
@@ -186,9 +194,24 @@ export function jumpToSection(id: string) {
   if (!el) {
     return;
   }
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollElementBelowHeader(el);
   el.tabIndex = -1;
   el.focus({ preventScroll: true });
+}
+
+export function scrollElementBelowHeader(
+  element: HTMLElement,
+  behavior: "auto" | "smooth" = "smooth",
+) {
+  const header = document.querySelector<HTMLElement>(".site-header:not([hidden])");
+  const safeOffset = (header?.getBoundingClientRect().height || 0) + 12;
+  window.scrollTo({
+    behavior,
+    top: Math.max(
+      0,
+      window.scrollY + element.getBoundingClientRect().top - safeOffset,
+    ),
+  });
 }
 
 export function PageJumpNav(props: {

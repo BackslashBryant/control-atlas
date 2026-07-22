@@ -82,6 +82,11 @@
   --ca-space-12: 3rem;
   --ca-space-16: 4rem;
 
+  /* TopNav publishes the rendered height. Sticky panels and programmatic
+     navigation use the measured value instead of guessing at a breakpoint. */
+  --ca-header-height: 0px;
+  --ca-header-safe-offset: calc(var(--ca-header-height) + var(--ca-space-3));
+
   /* ── Radii ── */
   --ca-radius-sm: 6px;
   --ca-radius-md: 10px;

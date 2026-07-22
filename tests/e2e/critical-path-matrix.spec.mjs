@@ -20,8 +20,10 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
 
-  await expect(page.getByRole("button", { name: "Find where to start" })).toBeVisible();
-  await expect(page.getByText("Other ways to use Control Atlas")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Plan the work/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Trace connections/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Create a document/ })).toBeVisible();
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({
@@ -45,6 +47,47 @@ test("critical path: the Atlas Path walks to a published connected record", asyn
   await expect(page).not.toHaveURL(previousUrl);
   await expect(page.getByRole("heading", { level: 1 })).not.toContainText(
     "AC-2 — Account Management",
+  );
+});
+
+test("critical path: Atlas Open full record leaves the path for record detail", async ({
+  page,
+}) => {
+  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page
+    .locator(".atlas-path-stage-option:not(:disabled)")
+    .first()
+    .click();
+  await page.locator(".atlas-path-record").first().click();
+  await page.getByRole("button", { name: "Open full record" }).click();
+
+  await expect(page).toHaveURL(/#\/record\//);
+  await expect(page.locator(".detail-page")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Back to Atlas" }),
+  ).toBeVisible();
+});
+
+test("critical path: record back returns to the original Explore results", async ({
+  page,
+}) => {
+  await page.goto("/#/explore?q=AC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.locator(".result-card").first().getByRole("button", { name: "Open record" }).click();
+  await expect(page.locator(".detail-page")).toBeVisible();
+  await page
+    .locator(".page-header-actions")
+    .getByRole("button", { name: "Back to results" })
+    .click();
+
+  await expect(page).toHaveURL(/#\/explore\?q=AC-2/);
+  await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
+    "AC-2",
   );
 });
 
@@ -191,9 +234,13 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
-  await primaryNav.getByRole("button", { name: "Learn", exact: true }).click();
-  // Nav groups are disclosures — items are plain buttons in the revealed panel.
-  const startHere = primaryNav.locator(".nav-more-menu").getByRole("button", {
+  const library = primaryNav.getByRole("button", {
+    name: "Library",
+    exact: true,
+  });
+  await library.focus();
+  await expect(library).toBeFocused();
+  const startHere = page.getByRole("button", {
     name: "Start here",
     exact: true,
   });

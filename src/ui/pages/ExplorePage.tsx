@@ -291,25 +291,24 @@ export function ExplorePage(props: {
                 }))}
                 value={state.severity}
               />
+              <label className="connections-only-filter" htmlFor="connections-only">
+                <input
+                  checked={connectionsOnly}
+                  id="connections-only"
+                  onChange={(event) => {
+                    const checked = event.target.checked;
+                    setConnectionsOnly(checked);
+                    if (checked && !graphReady) {
+                      onRequestFullGraph();
+                    }
+                  }}
+                  type="checkbox"
+                />
+                Only show items with published connections
+              </label>
             </div>
           </DisclosurePanel>
         </Accordion.Root>
-
-        <label className="connections-only-filter" htmlFor="connections-only">
-          <input
-            checked={connectionsOnly}
-            id="connections-only"
-            onChange={(event) => {
-              const checked = event.target.checked;
-              setConnectionsOnly(checked);
-              if (checked && !graphReady) {
-                onRequestFullGraph();
-              }
-            }}
-            type="checkbox"
-          />
-          Show only items with connections
-        </label>
         {connectionsOnly && !graphReady ? (
           <p className="notice-inline" role="status">
             Loading connection data for this filter…
@@ -534,6 +533,13 @@ export function ExplorePage(props: {
                               ) : null}
                             </div>
                             <div className="card-actions">
+                              <button
+                                className="primary"
+                                onClick={() => onOpenNode(document.id, "search")}
+                                type="button"
+                              >
+                                Open record
+                              </button>
                               <details className="result-actions-menu">
                                 <summary>Compare, map, or export</summary>
                                 <div className="result-actions-popover">

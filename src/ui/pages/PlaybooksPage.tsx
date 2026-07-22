@@ -118,8 +118,8 @@ export function PlaybooksPage(props: {
       <section className="panel">
         <PageHeader
           eyebrow="Playbooks"
-          summary="Task guides: what to do, what to avoid, and what to open next."
-          title="Compliance playbooks"
+          summary="Choose the job in front of you. Each guide shows the decision to make, common mistakes, and the records or starter documents to open next."
+          title="Guides for common compliance jobs"
         />
         <CatalogFilterBar
           category={categoryFilter}
@@ -135,7 +135,8 @@ export function PlaybooksPage(props: {
           <section className="catalog-group recommended-patterns" id="playbooks-recommended">
             <h2 className="catalog-group-title">Recommended for new users</h2>
             <p className="field-hint">
-              Start with these three if you are new to federal compliance mapping.
+              Start with the work most teams face first: plan the RMF, divide
+              provider responsibilities, or reuse an earlier assessment.
             </p>
             <div className="intent-grid">
               {recommendedPatterns.map((pattern) => (
@@ -179,6 +180,21 @@ export function PlaybooksPage(props: {
             </section>
           ) : null;
         })}
+        {filteredPatterns.length === 0 ? (
+          <div className="notice" role="status">
+            <p>No playbooks match this search and category.</p>
+            <button
+              className="primary"
+              onClick={() => {
+                setCategoryFilter("");
+                setQueryFilter("");
+              }}
+              type="button"
+            >
+              Clear filters
+            </button>
+          </div>
+        ) : null}
         </div>
       </section>
     );
@@ -197,14 +213,11 @@ export function PlaybooksPage(props: {
           </button>
         }
         eyebrow="Playbooks"
-        summary="Use task-focused guidance to understand what to do, what to avoid, and which records or templates to open next."
+        summary={selectedPattern.summary}
         title={PATTERN_RENAMES[selectedPattern.id] || selectedPattern.title}
       />
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard title="Purpose" tone="trust">
-            <p>{selectedPattern.summary}</p>
-          </SummaryCard>
           {patternGlossaryTerms.length ? (
             <details>
               <summary>Related glossary terms ({patternGlossaryTerms.length})</summary>
@@ -222,13 +235,20 @@ export function PlaybooksPage(props: {
               </div>
             </details>
           ) : null}
-          <SummaryCard title="When to use it">
+          <SummaryCard title="Use this when" tone="trust">
             <p>{selectedPattern.friction}</p>
+          </SummaryCard>
+          <SummaryCard title="What to do">
+            <ul className="list">
+              {selectedPattern.dos.map((entry) => (
+                <li key={entry}>{entry}</li>
+              ))}
+            </ul>
           </SummaryCard>
           <SummaryCard title="How it works">
             <p>{selectedPattern.explanation}</p>
           </SummaryCard>
-          <SummaryCard title="Common mistakes">
+          <SummaryCard title="What to avoid">
             <ul className="list">
               {selectedPattern.donts.map((entry) => (
                 <li key={entry}>{entry}</li>
@@ -237,7 +257,7 @@ export function PlaybooksPage(props: {
           </SummaryCard>
         </section>
         <aside className="stack">
-          <SummaryCard title="Related controls">
+          <SummaryCard title="Controls to review">
             <div className="chip-row">
               {selectedPattern.controls.map((controlId) => (
                 <button
@@ -251,7 +271,7 @@ export function PlaybooksPage(props: {
               ))}
             </div>
           </SummaryCard>
-          <SummaryCard title="Related templates">
+          <SummaryCard title="Starter documents to open">
             <div className="stack compact">
               {selectedPattern.templates.map((templateId) => (
                 <button
@@ -267,13 +287,16 @@ export function PlaybooksPage(props: {
                     size={16}
                     stroke={1.8}
                   />
-                  <span>{templateId.replaceAll("_", " ")}</span>
+                  <span>{displayNameFor("template_type", templateId)}</span>
                 </button>
               ))}
             </div>
           </SummaryCard>
-          <SummaryCard title="Source support">
+          <SummaryCard title="Basis for this guide">
             <p>{selectedPattern.sources.join(", ")}</p>
+          </SummaryCard>
+          <SummaryCard title="Limits of this guide">
+            <p>{selectedPattern.limitations}</p>
           </SummaryCard>
           <SummaryCard title="Next action">
             <div className="stack compact">
@@ -287,7 +310,7 @@ export function PlaybooksPage(props: {
                   }
                   type="button"
                 >
-                  Open related map
+                  Open {selectedPattern.controls[0]} in Atlas
                 </button>
               ) : null}
               {selectedPattern.templates[0] ? (
@@ -300,7 +323,7 @@ export function PlaybooksPage(props: {
                   }
                   type="button"
                 >
-                  Open related templates
+                  Open {displayNameFor("template_type", selectedPattern.templates[0])}
                 </button>
               ) : null}
               <details>
@@ -311,7 +334,7 @@ export function PlaybooksPage(props: {
                     onClick={() => onNavigate("templates")}
                     type="button"
                   >
-                    Browse all templates
+                    Browse all starter documents
                   </button>
                   <button
                     className="secondary quiet"

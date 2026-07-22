@@ -51,6 +51,11 @@ const ComparePage = lazy(() =>
     default: module.ComparePage,
   })),
 );
+const CatalogDetailPage = lazy(() =>
+  import("./pages/CatalogDetailPage").then((module) => ({
+    default: module.CatalogDetailPage,
+  })),
+);
 const ExplorePage = lazy(() =>
   import("./pages/ExplorePage").then((module) => ({
     default: module.ExplorePage,
@@ -247,7 +252,12 @@ export function App() {
   }
 
   function openNode(nodeId: string, from = activeNavForState(viewState)) {
-    navigate("library-detail", { node: nodeId, from });
+    const currentState = latestNavStateRef.current;
+    const returnTo =
+      currentState.view === "library-detail"
+        ? currentState.returnTo || "/library"
+        : serializeHashLocation(currentState);
+    navigate("library-detail", { node: nodeId, from, returnTo });
   }
 
   function openNodeByItemId(itemId: string) {
@@ -506,6 +516,34 @@ function AppContent(props: {
     );
   }
 
+  if (state.view === "catalog-detail") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Library" />;
+    }
+    return (
+      <CatalogDetailPage
+        bundle={bundle}
+        onNavigate={onNavigate}
+        onOpenNode={onOpenNode}
+        state={state}
+      />
+    );
+  }
+
+  if (state.view === "browse") {
+    if (!bundle) {
+      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Library" />;
+    }
+    return (
+      <CatalogDetailPage
+        bundle={bundle}
+        onNavigate={onNavigate}
+        onOpenNode={onOpenNode}
+        state={{ view: "catalog-detail", catalog: state.framework }}
+      />
+    );
+  }
+
   if (state.view === "matrix") {
     if (!bundle) {
       return <DataPendingNotice onRetry={onRetryLoad} />;
@@ -600,19 +638,7 @@ function AppContent(props: {
       onOpenNode={onOpenNode}
       onRequestFullGraph={onRequestFullGraph}
       setHelpOpen={setHelpOpen}
-      state={
-        state.view === "browse"
-          ? {
-              view: "search",
-              query: "",
-              filter: state.framework,
-              objectType: "",
-              sourceClass: "",
-              controlFamily: "",
-              severity: "",
-            }
-          : state
-      }
+      state={state}
     />
   );
 }
@@ -621,21 +647,27 @@ function routeLoadingCopy(view: ViewState["view"]) {
   switch (view) {
     case "matrix":
       return {
-        title: "Loading Compare",
+        title: "Loading comparison data",
         description:
-          "Compare needs the connection data before it can line up frameworks, baselines, or threat paths.",
+          "We are loading the public mappings needed to compare frameworks, baselines, and threat paths.",
+      };
+    case "catalog-detail":
+      return {
+        title: "Loading Library",
+        description:
+          "We are loading the selected catalog, its public records, and source details.",
       };
     case "sources":
       return {
         title: "Loading Sources",
         description:
-          "Sources is joining the publisher registry to the records and known coverage gaps.",
+          "We are loading publisher details, source status, and known coverage gaps.",
       };
     case "templates":
       return {
-        title: "Loading the compliance workbench",
+        title: "Loading document tasks",
         description:
-          "The workbench is preparing task paths, official materials, and starter documents.",
+          "We are preparing starter documents and the official sources that support them.",
       };
     case "atlas-map":
       return {

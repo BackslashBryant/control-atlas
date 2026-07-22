@@ -13,6 +13,7 @@ const VIEW_TO_PATH: Record<AppView, string> = {
   "start-here": "/start",
   "atlas-map": "/atlas-map",
   search: "/explore",
+  "catalog-detail": "/library",
   "library-detail": "/record",
   matrix: "/compare",
   patterns: "/playbooks",
@@ -30,6 +31,7 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/start": "start-here",
   "/atlas-map": "atlas-map",
   "/explore": "search",
+  "/library": "catalog-detail",
   "/record": "library-detail",
   "/compare": "matrix",
   "/playbooks": "patterns",
@@ -55,12 +57,22 @@ const PATH_TO_VIEW: Record<string, AppView> = {
 function parseNodeIdFromPath(pathname: string): {
   basePath: string;
   nodeId: string;
+  catalogId: string;
 } {
+  const catalogMatch = pathname.match(/^\/library\/([^/]+)$/);
+  if (catalogMatch) {
+    return {
+      basePath: "/library",
+      nodeId: "",
+      catalogId: decodeURIComponent(catalogMatch[1]),
+    };
+  }
   const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
   if (recordMatch) {
     return {
       basePath: "/record",
       nodeId: `${decodeURIComponent(recordMatch[1])}:${decodeURIComponent(recordMatch[2])}`,
+      catalogId: "",
     };
   }
   // Fallback for flat /object/ID without catalog (legacy)
@@ -69,9 +81,10 @@ function parseNodeIdFromPath(pathname: string): {
     return {
       basePath: "/record",
       nodeId: decodeURIComponent(legacyObjectMatch[1]),
+      catalogId: "",
     };
   }
-  return { basePath: pathname, nodeId: "" };
+  return { basePath: pathname, nodeId: "", catalogId: "" };
 }
 
 export function parseHashLocation(pathname: string, search: string): ViewState {
@@ -81,7 +94,7 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
   if (normalizedPath.length > 1) {
     normalizedPath = normalizedPath.replace(/\/+$/, "");
   }
-  const { basePath, nodeId } = parseNodeIdFromPath(normalizedPath);
+  const { basePath, nodeId, catalogId } = parseNodeIdFromPath(normalizedPath);
   // Root resolves to home; any other unrecognized path is an honest not-found
   // rather than silently rendering home.
   const view =
@@ -91,6 +104,9 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
 
   if (view === "library-detail" && nodeId) {
     params.set("node", nodeId);
+  }
+  if (view === "catalog-detail" && catalogId) {
+    params.set("catalog", catalogId);
   }
 
   if (view === "search" && basePath === "/explore") {
@@ -120,6 +136,10 @@ export function serializeHashLocation(state: ViewState): string {
     params.delete("node");
     const qs = params.toString();
     return `/record/${encodeURIComponent(catalog)}/${encodeURIComponent(item || state.node)}${qs ? `?${qs}` : ""}`;
+  }
+
+  if (state.view === "catalog-detail" && state.catalog) {
+    return `/library/${encodeURIComponent(state.catalog)}`;
   }
 
   const path = VIEW_TO_PATH[state.view] ?? "/";

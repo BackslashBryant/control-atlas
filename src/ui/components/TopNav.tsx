@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
 
 import { BrandFlourish, BrandMark } from "./BrandLockup";
-import { activeNavGroupForState, NAV_GROUPS } from "../lib/navigation";
+import {
+  activeNavForState,
+  MOBILE_NAV_SECTIONS,
+  PRIMARY_NAV_ITEMS,
+} from "../lib/navigation";
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 
@@ -27,24 +31,93 @@ export function TopNav(props: TopNavProps) {
     onOpenHelp,
   } = props;
 
-  const activeGroup = activeNavGroupForState(viewState);
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const activeView = activeNavForState(viewState);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
-  // The home view is a self-contained calm entrance (its own wordmark,
-  // flourish, search, and nav-equivalent buttons) — the persistent site
-  // chrome would duplicate all of that, so it stays hidden until the user
-  // has navigated somewhere else.
+  // Home keeps its distinctive orbit entrance. All interior pages use the
+  // same direct, stable product navigation.
   const hideChrome = viewState.view === "home";
 
-  function navigateFromGroup(view: ViewState["view"], patch?: Partial<ViewState>) {
-    setOpenGroup(null);
-    onNavigate(view, patch);
-  }
+  useEffect(() => {
+    const header = headerRef.current;
+    const root = document.documentElement;
+    if (!header) return;
 
-  function navigateFromMobileMenu(view: ViewState["view"], patch?: Partial<ViewState>) {
+    const publishHeaderHeight = () => {
+      const height = hideChrome
+        ? 0
+        : Math.ceil(header.getBoundingClientRect().height);
+      root.style.setProperty("--ca-header-height", `${height}px`);
+    };
+
+    publishHeaderHeight();
+    const observer = new ResizeObserver(publishHeaderHeight);
+    observer.observe(header);
+    window.addEventListener("resize", publishHeaderHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", publishHeaderHeight);
+    };
+  }, [hideChrome]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const priorOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const sheet = mobileMenuRef.current;
+    const firstLink = sheet?.querySelector<HTMLButtonElement>("nav button");
+    window.requestAnimationFrame(() => firstLink?.focus());
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileMenuOpen(false);
+        window.requestAnimationFrame(() => mobileMenuToggleRef.current?.focus());
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const controls = [
+        mobileMenuToggleRef.current,
+        ...(sheet
+          ? Array.from(
+              sheet.querySelectorAll<HTMLElement>(
+                'button:not([disabled]), a[href], input:not([disabled])',
+              ),
+            )
+          : []),
+      ].filter((control): control is HTMLElement => Boolean(control));
+      if (controls.length === 0) return;
+
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = priorOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  function navigate(
+    view: ViewState["view"],
+    patch?: Record<string, string>,
+  ) {
     setMobileMenuOpen(false);
-    onNavigate(view, patch);
+    onNavigate(view, patch as Partial<ViewState> | undefined);
   }
 
   return (
@@ -52,6 +125,7 @@ export function TopNav(props: TopNavProps) {
       aria-hidden={hideChrome || undefined}
       className="site-header"
       hidden={hideChrome}
+      ref={headerRef}
     >
       <button
         aria-label="Control Atlas — home"
@@ -65,67 +139,28 @@ export function TopNav(props: TopNavProps) {
           <BrandFlourish />
         </span>
       </button>
+
       <nav aria-label="Primary navigation" className="primary-nav">
-        {NAV_GROUPS.map((group) => (
-          <div
-            className="nav-more"
-            key={group.label}
-            onKeyDown={(event) => {
-              // Disclosure pattern: Escape closes the open group and returns
-              // focus to its toggle button (the div's first button child).
-              if (event.key !== "Escape" || openGroup !== group.label) {
-                return;
-              }
-              event.stopPropagation();
-              setOpenGroup(null);
-              event.currentTarget
-                .querySelector<HTMLButtonElement>(":scope > button")
-                ?.focus();
-            }}
+        {PRIMARY_NAV_ITEMS.map((item) => (
+          <button
+            aria-current={activeView === item.view ? "page" : undefined}
+            className={activeView === item.view ? "active nav-active" : ""}
+            key={item.label}
+            onClick={() => navigate(item.view, item.patch)}
+            type="button"
           >
-            <button
-              aria-expanded={openGroup === group.label}
-              className={
-                activeGroup === group.label ? "active nav-active" : ""
-              }
-              onClick={() =>
-                setOpenGroup((current) =>
-                  current === group.label ? null : group.label,
-                )
-              }
-              type="button"
-            >
-              <span>{group.label}</span>
-            </button>
-            {openGroup === group.label ? (
-              <div className="nav-more-menu">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.label}
-                      onClick={() => navigateFromGroup(item.view, item.patch)}
-                      type="button"
-                    >
-                      <Icon aria-hidden="true" size={16} stroke={1.8} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
+            {item.label}
+          </button>
         ))}
       </nav>
+
       <div className="header-actions">
         {bundle ? (
           <form
             className="header-search"
             onSubmit={(event) => {
               event.preventDefault();
-              const form = event.currentTarget;
-              const input = form.querySelector<HTMLInputElement>("#header-search");
-              const query = input?.value.trim() ?? headerSearchDraft.trim();
+              const query = headerSearchDraft.trim();
               onHeaderSearchDraftChange(query);
               onNavigate("search", {
                 query,
@@ -146,7 +181,7 @@ export function TopNav(props: TopNavProps) {
                 aria-label="Search records and glossary"
                 id="header-search"
                 onChange={(event) => onHeaderSearchDraftChange(event.target.value)}
-                placeholder="Search records or glossary"
+                placeholder="Search records"
                 type="search"
                 value={headerSearchDraft}
               />
@@ -164,10 +199,20 @@ export function TopNav(props: TopNavProps) {
         </button>
         <div className="header-actions-text">
           <button
-            className="secondary quiet"
-            onClick={onOpenHelp}
+            className="header-start-here"
+            onClick={() => onNavigate("start-here")}
             type="button"
           >
+            Start here
+          </button>
+          <button
+            className="secondary quiet header-utility-sources"
+            onClick={() => onNavigate("sources")}
+            type="button"
+          >
+            Sources
+          </button>
+          <button className="secondary quiet" onClick={onOpenHelp} type="button">
             Help
           </button>
         </div>
@@ -177,6 +222,7 @@ export function TopNav(props: TopNavProps) {
           aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           className="mobile-nav-toggle"
           onClick={() => setMobileMenuOpen((current) => !current)}
+          ref={mobileMenuToggleRef}
           type="button"
         >
           {mobileMenuOpen ? (
@@ -186,22 +232,29 @@ export function TopNav(props: TopNavProps) {
           )}
         </button>
       </div>
+
       {mobileMenuOpen ? (
-        <div className="mobile-nav-sheet" id="mobile-nav-sheet">
+        <div
+          aria-label="Site navigation"
+          className="mobile-nav-sheet"
+          id="mobile-nav-sheet"
+          ref={mobileMenuRef}
+          role="dialog"
+        >
           <nav aria-label="Primary navigation (mobile)">
-            {NAV_GROUPS.map((group) => (
-              <div className="mobile-nav-sheet-group" key={group.label}>
+            {MOBILE_NAV_SECTIONS.map((section) => (
+              <div className="mobile-nav-sheet-group" key={section.label}>
                 <span className="mobile-nav-sheet-group-label">
-                  {group.label}
+                  {section.label}
                 </span>
-                {group.items.map((item) => {
+                {section.items.map((item) => {
                   const Icon = item.icon;
                   return (
                     <button
+                      aria-current={activeView === item.view ? "page" : undefined}
+                      className={activeView === item.view ? "active" : ""}
                       key={item.label}
-                      onClick={() =>
-                        navigateFromMobileMenu(item.view, item.patch)
-                      }
+                      onClick={() => navigate(item.view, item.patch)}
                       type="button"
                     >
                       <Icon aria-hidden="true" size={18} stroke={1.8} />

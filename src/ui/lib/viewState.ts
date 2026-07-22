@@ -3,6 +3,7 @@ export type AppView =
   | "menu"
   | "atlas-map"
   | "search"
+  | "catalog-detail"
   | "library-detail"
   | "matrix"
   | "patterns"
@@ -54,9 +55,14 @@ export type ViewState =
       severity: string;
     }
   | {
+      view: "catalog-detail";
+      catalog: string;
+    }
+  | {
       view: "library-detail";
       node: string;
       from?: string;
+      returnTo?: string;
       relationshipView?: string;
       relationshipType?: string;
       provenance?: string;
@@ -164,7 +170,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
 function compareState(): Extract<ViewState, { view: "matrix" }> {
   return {
     view: "matrix",
-    workbench: "relationships",
+    workbench: "intent",
     source: "",
     target: "",
     items: "",
@@ -247,6 +253,7 @@ export function parseViewState(search: string): ViewState {
       view,
       node: params.get("node") || "",
       from: params.get("from") || "",
+      returnTo: params.get("returnTo") || "",
       relationshipView: params.get("relationshipView") || "",
       relationshipType: params.get("relationshipType") || "",
       provenance: params.get("provenance") || "",
@@ -257,11 +264,18 @@ export function parseViewState(search: string): ViewState {
     };
   }
 
+  if (view === "catalog-detail") {
+    return {
+      view,
+      catalog: params.get("catalog") || params.get("framework") || "",
+    };
+  }
+
   if (view === "matrix") {
     const state = compareState();
     return {
       ...state,
-      workbench: (params.get("workbench") as CompareWorkbench) || "relationships",
+      workbench: (params.get("workbench") as CompareWorkbench) || "intent",
       source: params.get("source") || "",
       target: params.get("target") || "",
       items: params.get("items") || "",
@@ -371,6 +385,9 @@ export function normalizeViewState(
         (state as Extract<ViewState, { view: "library-detail" }>).node || "",
       from:
         (state as Extract<ViewState, { view: "library-detail" }>).from || "",
+      returnTo:
+        (state as Extract<ViewState, { view: "library-detail" }>).returnTo ||
+        "",
       relationshipView:
         (state as Extract<ViewState, { view: "library-detail" }>)
           .relationshipView || "",
@@ -395,13 +412,22 @@ export function normalizeViewState(
     };
   }
 
+  if (view === "catalog-detail") {
+    return {
+      view,
+      catalog:
+        (state as Extract<ViewState, { view: "catalog-detail" }>).catalog ||
+        "",
+    };
+  }
+
   if (view === "matrix") {
     const incoming = state as Extract<ViewState, { view: "matrix" }>;
     return {
       ...compareState(),
       ...incoming,
       view,
-      workbench: incoming.workbench || "relationships",
+      workbench: incoming.workbench || "intent",
     };
   }
 
@@ -536,10 +562,14 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "sourceClass", state.sourceClass);
     setIfValue(params, "controlFamily", state.controlFamily);
     setIfValue(params, "severity", state.severity);
+  } else if (state.view === "catalog-detail") {
+    params.set("view", state.view);
+    setIfValue(params, "catalog", state.catalog);
   } else if (state.view === "library-detail") {
     params.set("view", state.view);
     setIfValue(params, "node", state.node);
     setIfValue(params, "from", state.from || "");
+    setIfValue(params, "returnTo", state.returnTo || "");
     if (state.relationshipView === "map") {
       params.set("relationshipView", "map");
     } else if (

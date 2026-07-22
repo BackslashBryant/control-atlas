@@ -74,3 +74,14 @@ test('displayNameFor returns a stable sentinel for empty input', () => {
   assert.equal(displayNameFor('node_type', null), 'Unknown');
   assert.equal(displayNameFor('node_type', undefined), 'Unknown');
 });
+
+test('template types use registry-aligned display names', () => {
+  assert.equal(
+    displayNameFor('template_type', 'inheritance_worksheet'),
+    'Inheritance Worksheet',
+  );
+  assert.equal(
+    displayNameFor('template_type', 'poam_starter'),
+    'POA&M Working Register',
+  );
+});

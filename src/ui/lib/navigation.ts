@@ -3,8 +3,8 @@ import {
   IconClipboardList,
   IconCompass,
   IconGitCompare,
+  IconLibrary,
   IconMap,
-  IconSearch,
   IconSourceCode,
 } from "@tabler/icons-react";
 
@@ -18,90 +18,82 @@ export type NavItem = {
   patch?: Record<string, string>;
 };
 
-export type NavGroup = {
+export type NavSection = {
   label: string;
   items: NavItem[];
 };
 
-export const NAV_GROUPS: NavGroup[] = [
+// The desktop header exposes the product's real destinations. Users should
+// not have to open an abstract verb menu before they can reach a familiar
+// catalog, map, comparison, guide, or document surface.
+export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
-    label: "Search",
-    items: [
-      { label: "Search", view: "search", path: "/explore", icon: IconSearch },
-    ],
+    label: "Library",
+    view: "catalog-detail",
+    path: "/library",
+    icon: IconLibrary,
+    patch: { catalog: "" },
+  },
+  { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap },
+  {
+    label: "Compare",
+    view: "matrix",
+    path: "/compare",
+    icon: IconGitCompare,
   },
   {
-    label: "Learn",
-    items: [
-      { label: "Start here", view: "start-here", path: "/start", icon: IconCompass },
-      {
-        label: "Sources",
-        view: "sources",
-        path: "/sources",
-        icon: IconSourceCode,
-      },
-    ],
+    label: "Guides",
+    view: "patterns",
+    path: "/playbooks",
+    icon: IconBook2,
   },
   {
-    label: "Explore",
-    items: [
-      { label: "Atlas map", view: "atlas-map", path: "/atlas-map", icon: IconMap },
-      {
-        label: "Compare",
-        view: "matrix",
-        path: "/compare",
-        icon: IconGitCompare,
-      },
-    ],
-  },
-  {
-    label: "Create",
-    items: [
-      {
-        label: "Playbooks",
-        view: "patterns",
-        path: "/playbooks",
-        icon: IconBook2,
-      },
-      {
-        label: "Starter documents",
-        view: "templates",
-        path: "/templates",
-        icon: IconClipboardList,
-      },
-    ],
+    label: "Documents",
+    view: "templates",
+    path: "/templates",
+    icon: IconClipboardList,
   },
 ];
 
-export const ALL_NAV_ITEMS = NAV_GROUPS.flatMap((group) => group.items);
+export const UTILITY_NAV_ITEMS: NavItem[] = [
+  {
+    label: "Start here",
+    view: "start-here",
+    path: "/start",
+    icon: IconCompass,
+  },
+  {
+    label: "Sources",
+    view: "sources",
+    path: "/sources",
+    icon: IconSourceCode,
+  },
+];
+
+export const MOBILE_NAV_SECTIONS: NavSection[] = [
+  { label: "Explore", items: PRIMARY_NAV_ITEMS.slice(0, 3) },
+  { label: "Work", items: PRIMARY_NAV_ITEMS.slice(3) },
+  { label: "Help", items: UTILITY_NAV_ITEMS },
+];
+
+export const ALL_NAV_ITEMS = [
+  ...PRIMARY_NAV_ITEMS,
+  ...UTILITY_NAV_ITEMS,
+];
 
 export function activeNavForState(state: ViewState): ViewState["view"] | null {
   if (state.view === "home") {
     return null;
   }
-  if (state.view === "library-detail") {
-    // Preserve the real entry point (Atlas, Compare, Playbooks, ...) across
-    // record-to-record hops instead of always reporting "search" — callers
-    // that don't pass an explicit `from` inherit it via
-    // `activeNavForState(currentViewState)` in App.tsx's `openNode`, so this
-    // is the one place that provenance can get silently overwritten.
-    return (state.from as ViewState["view"]) || "search";
-  }
-  if (state.view === "browse" || state.view === "retired") {
-    return "search";
+  if (
+    state.view === "search" ||
+    state.view === "browse" ||
+    state.view === "retired" ||
+    state.view === "library-detail"
+  ) {
+    return "catalog-detail";
   }
   return state.view;
-}
-
-export function activeNavGroupForState(state: ViewState): string | null {
-  const view = activeNavForState(state);
-  if (!view) {
-    return null;
-  }
-  const group = NAV_GROUPS.find((candidate) =>
-    candidate.items.some((item) => item.view === view),
-  );
-  return group?.label || null;
 }
 
 export function isStaticViewWithoutBundle(view: ViewState["view"]) {
@@ -118,6 +110,7 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 export function requiresFullGraph(view: ViewState["view"]) {
   return (
     view === "library-detail" ||
+    view === "catalog-detail" ||
     view === "matrix" ||
     view === "sources" ||
     view === "templates" ||

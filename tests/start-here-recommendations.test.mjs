@@ -124,6 +124,40 @@ test('incomplete answers return null recommendations', () => {
   );
 });
 
+test('contractor handling CUI receives a cautious 800-171 starting point even for cloud SaaS', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'Cloud SaaS',
+    dataSensitivity: 'CUI',
+    environment: 'Contractor',
+  });
+
+  assert.equal(recommendations.situation.pathLabel, 'Contractor handling CUI');
+  assert.match(recommendations.situation.narrative, /contract and agency guidance determine which revision applies/i);
+  assert.ok(recommendations.library.some(
+    (entry) => entry.kind === 'library-catalog' && entry.catalogId === 'nist-800-171-rev2',
+  ));
+  assert.ok(!recommendations.library.some(
+    (entry) => entry.kind === 'library-catalog' && entry.catalogId === 'fedramp-rev5',
+  ));
+});
+
+test('contractor status without CUI does not imply SP 800-171', () => {
+  const recommendations = buildStartHereRecommendations({
+    systemType: 'On-premises',
+    dataSensitivity: 'Low',
+    environment: 'Contractor',
+  });
+
+  assert.equal(recommendations.situation.pathLabel, 'Confirm the contract requirements');
+  assert.match(recommendations.situation.narrative, /Contractor status alone does not determine/i);
+  assert.ok(!recommendations.library.some(
+    (entry) => entry.kind === 'library-catalog' && entry.catalogId === 'nist-800-171-rev2',
+  ));
+  assert.ok(recommendations.library.some(
+    (entry) => entry.kind === 'library-node' && entry.nodeId === 'cui-policy:CUI-PROGRAM',
+  ));
+});
+
 test('start here only enables recommendations after all three answers are selected', () => {
   assert.equal(
     hasCompleteStartHereContext({

@@ -46,7 +46,7 @@ test("release evidence: focused Atlas stays bounded on desktop", async ({ page }
   await dismissOnboarding(page);
 
   const map = page.locator(".atlas-spatial-map");
-  const inspector = page.getByRole("complementary", { name: "Selected record" });
+  const inspector = page.getByRole("complementary", { name: "Current record overview" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
@@ -69,7 +69,7 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
   await dismissOnboarding(page);
 
   const map = page.locator(".atlas-spatial-map");
-  const inspector = page.getByRole("complementary", { name: "Selected record" });
+  const inspector = page.getByRole("complementary", { name: "Current record overview" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
@@ -139,7 +139,7 @@ test("release evidence: Atlas fits a 375 by 667 compact viewport", async ({
 
   const map = page.locator(".atlas-spatial-map");
   const inspector = page.getByRole("complementary", {
-    name: "Selected record",
+    name: "Current record overview",
   });
   const mapBox = await map.boundingBox();
   const inspectorBox = await inspector.boundingBox();
