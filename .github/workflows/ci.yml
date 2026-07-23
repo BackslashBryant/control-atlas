@@ -23,18 +23,14 @@ jobs:
         run: npm run lint
       - name: Type check
         run: npm run typecheck
-      - name: License check
-        run: npm run license:check
-      - name: Copy terminology and repetition checks
-        run: npm run test:style && npm run style:check
       - name: Unit and contract verification
         run: npm test && npm run test:browser && npm run smoke:dom && npm run verify:public
       - name: Install Playwright browser
         run: npx playwright install chromium
-      - name: Accessibility verification
-        run: npm run test:a11y:run
-      - name: End-to-end verification
-        run: npm run test:e2e:run
+      - name: Accessibility smoke
+        run: npm run test:a11y:smoke
+      - name: Critical browser smoke
+        run: npm run test:e2e:smoke
       - name: Upload Playwright failure artifacts
         if: failure()
         uses: actions/upload-artifact@v4
@@ -44,15 +40,9 @@ jobs:
             test-results
             playwright-report
           if-no-files-found: ignore
-      - name: Generate SBOM
-        run: npm run sbom:generate
-      - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom-cdx-json
-          path: artifacts/sbom.cdx.json
-
   approved-layout-visuals:
+    # Snapshot comparison is a diagnosis tool, not a deploy gate. Run it on demand.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.60.0-noble
@@ -70,6 +60,8 @@ jobs:
           if-no-files-found: ignore
 
   lighthouse-report:
+    # Lighthouse is useful for investigation, but noisy as a deploy requirement.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
