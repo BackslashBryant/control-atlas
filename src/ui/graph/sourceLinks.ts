@@ -1,10 +1,38 @@
+/**
+ * Confidence tier for a source URL.
+ *
+ * - `verified`   — Confirmed from the official source's own URL scheme or
+ *                  specification. Safe to display as a definitive link.
+ * - `best_effort`— Derived from public references or observed patterns, not
+ *                  from an official URL-scheme specification. Show with a
+ *                  fallback to the official catalog/document URL.
+ * - `unavailable`— No verified or best-effort per-element URL exists. Record
+ *                  the gap explicitly; do not fabricate a URL.
+ */
+export type SourceLinkConfidence = "verified" | "best_effort" | "unavailable";
+
+export type SourceDeepLink = {
+  /** The deep link URL, or null when confidence is `unavailable`. */
+  url: string | null;
+  confidence: SourceLinkConfidence;
+  /** Human-readable label for this link slot. */
+  label: string;
+};
+
 export type SourceLinkRecord = {
   sourceId: string;
   displayName: string;
+  /** Authoritative landing page or dataset URL. Always verified. */
   canonicalUrl: string;
   dataUrl?: string;
   repoUrl?: string;
   notes?: string;
+  /**
+   * Optional convenience deep link into a browser-navigable element view.
+   * May be `best_effort` or `unavailable`. Never fabricate a URL here.
+   * Use `resolveSourceLink()` to apply the correct fallback.
+   */
+  deepLink?: SourceDeepLink;
 };
 
 export const SOURCE_LINKS: SourceLinkRecord[] = [
@@ -27,7 +55,16 @@ export const SOURCE_LINKS: SourceLinkRecord[] = [
   { sourceId: "dod-rai-toolkit", displayName: "DoD Responsible AI Toolkit", canonicalUrl: "https://rai.tradewindai.com/" },
   { sourceId: "dod-zero-trust-strategy", displayName: "DoD Zero Trust Strategy", canonicalUrl: "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf" },
   { sourceId: "dod-zero-trust-ra-v2", displayName: "DoD Zero Trust Reference Architecture v2.0", canonicalUrl: "https://dodcio.defense.gov/Portals/0/Documents/Library/%28U%29ZT_RA_v2.0%28U%29_Sep22.pdf" },
-  { sourceId: "nist-sp-800-53-r5", displayName: "NIST SP 800-53 Rev. 5", canonicalUrl: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final" },
+  {
+    sourceId: "nist-sp-800-53-r5",
+    displayName: "NIST SP 800-53 Rev. 5",
+    canonicalUrl: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    deepLink: {
+      url: "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_2_0/home",
+      confidence: "best_effort",
+      label: "NIST CPRT catalog (best-effort route)",
+    },
+  },
   { sourceId: "nist-sp-800-53-oscal", displayName: "NIST SP 800-53 OSCAL Content", canonicalUrl: "https://github.com/usnistgov/oscal-content", repoUrl: "https://github.com/usnistgov/oscal-content" },
   { sourceId: "nist-sp-800-171-r2", displayName: "NIST SP 800-171 Rev. 2", canonicalUrl: "https://csrc.nist.gov/pubs/sp/800/171/r2/final" },
   { sourceId: "nist-sp-800-171-r3", displayName: "NIST SP 800-171 Rev. 3", canonicalUrl: "https://csrc.nist.gov/pubs/sp/800/171/r3/final" },
@@ -52,7 +89,16 @@ export const SOURCE_LINKS: SourceLinkRecord[] = [
   { sourceId: "disa-stig-compilations", displayName: "DISA STIG Compilations Landing Page", canonicalUrl: "https://www.cyber.mil/stigs/" },
   { sourceId: "disa-stig-downloads", displayName: "DISA STIG Downloads Landing Page", canonicalUrl: "https://www.cyber.mil/stigs/" },
   { sourceId: "disa-stig-gpo", displayName: "DISA STIG GPO Landing Page", canonicalUrl: "https://www.cyber.mil/stigs/gpo/" },
-  { sourceId: "disa-cci-list", displayName: "DISA CCI List", canonicalUrl: "https://www.cyber.mil/stigs/cci/" },
+  {
+    sourceId: "disa-cci-list",
+    displayName: "DISA CCI List",
+    canonicalUrl: "https://www.cyber.mil/stigs/cci/",
+    deepLink: {
+      url: null,
+      confidence: "unavailable",
+      label: "No verified official per-CCI deep link",
+    },
+  },
   { sourceId: "disa-cci-to-nist-800-53", displayName: "CCI to NIST SP 800-53 References", canonicalUrl: "https://www.cyber.mil/stigs/cci/" },
   { sourceId: "nist-800-53-csf-mapping", displayName: "CSF 1.1 to SP 800-53 Supplemental Mapping", canonicalUrl: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final" },
   { sourceId: "nist-csf-1-1-to-2-0-olir", displayName: "CSF 1.1 to CSF 2.0 OLIR Crosswalk", canonicalUrl: "https://csrc.nist.gov/projects/olir" },
@@ -85,4 +131,48 @@ export function sourceLinkFor(sourceId: string): SourceLinkRecord {
     throw new Error(`Unknown sourceId: ${sourceId}`);
   }
   return source;
+}
+
+export type ResolvedSourceLink = {
+  href: string;
+  label: string;
+  confidence: SourceLinkConfidence;
+  isDeepLink: boolean;
+};
+
+/**
+ * Resolves a source link with automatic fallback logic.
+ *
+ * If a controlId is provided and a best_effort/verified deep link is available,
+ * constructs the deep link. Otherwise, falls back to the authoritative canonical URL.
+ */
+export function resolveSourceLink(
+  sourceId: string,
+  controlId?: string,
+): ResolvedSourceLink {
+  const source = sourceLinkFor(sourceId);
+  if (
+    controlId &&
+    source.deepLink &&
+    source.deepLink.confidence !== "unavailable" &&
+    source.deepLink.url
+  ) {
+    let deepUrl = source.deepLink.url;
+    if (deepUrl.includes("cprt/catalog")) {
+      deepUrl = `${deepUrl}?element=${encodeURIComponent(controlId)}`;
+    }
+    return {
+      href: deepUrl,
+      label: `Open ${controlId} in ${source.displayName}`,
+      confidence: source.deepLink.confidence,
+      isDeepLink: true,
+    };
+  }
+
+  return {
+    href: source.canonicalUrl,
+    label: `Open ${source.displayName} official publication`,
+    confidence: "verified",
+    isDeepLink: false,
+  };
 }
