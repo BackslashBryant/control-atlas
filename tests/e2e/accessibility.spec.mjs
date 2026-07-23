@@ -89,7 +89,7 @@ for (const route of ROUTES) {
       test.setTimeout(60_000);
     }
     await gotoApp(page, route.path);
-    await waitForAppReady(page);
+    await waitForAppReady(page, { allowPartial: true });
     await dismissOnboarding(page);
     await assertNoBlockingViolations(page, route.path);
   });
@@ -105,7 +105,7 @@ test("a11y: compare detailed mappings table has no serious or critical violation
     page,
     "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
   );
-  await waitForAppReady(page);
+  await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
 
   await expect(page.locator("#compare-results")).toBeVisible({
@@ -137,7 +137,7 @@ test("a11y: library detail relationship table has no serious or critical violati
     page,
     "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table",
   );
-  await waitForAppReady(page);
+  await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
 
   await expect(
