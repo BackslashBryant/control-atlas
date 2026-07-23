@@ -39,6 +39,6 @@ createServer((request, response) => {
     'cache-control': 'no-store',
   });
   createReadStream(filePath).pipe(response);
-}).listen(PORT, 'localhost', () => {
+}).listen(PORT, () => {
   console.log(`Control Atlas static site available at http://localhost:${PORT}`);
 });
