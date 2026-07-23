@@ -19,6 +19,8 @@ const VIEW_TO_PATH: Record<AppView, string> = {
   patterns: "/playbooks",
   templates: "/templates",
   sources: "/sources",
+  commons: "/commons",
+  "commons-detail": "/commons-detail",
   about: "/about",
   retired: "/retired",
   browse: "/explore",
@@ -37,12 +39,12 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/playbooks": "patterns",
   "/templates": "templates",
   "/sources": "sources",
+  "/commons": "commons",
+  "/commons-detail": "commons-detail",
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
-  // Guessable aliases (CATL-47): resolve friendly URLs people type by hand to
-  // the canonical view. Serialization always emits the canonical path above, so
-  // these only affect inbound parsing.
+  // Guessable aliases: resolve friendly URLs people type by hand
   "/home": "home",
   "/atlas": "atlas-map",
   "/map": "atlas-map",
@@ -52,6 +54,9 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/playbook": "patterns",
   "/template": "templates",
   "/source": "sources",
+  "/resource-bazaar": "commons",
+  "/bazaar": "commons",
+  "/hub": "commons",
 };
 
 function parseNodeIdFromPath(pathname: string): {

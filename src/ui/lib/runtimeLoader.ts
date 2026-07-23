@@ -1,5 +1,9 @@
 import { createFederalGraphRuntime } from "../../app/runtime.mjs";
 import { atlasNeighborhoodShardId } from "../../app/atlas-neighborhood.mjs";
+import type {
+  CommonsResourceDataset,
+  CommonsSearchIndex,
+} from "./commonsTypes";
 
 const CACHE_VERSION = "20260716-2";
 const artifactCache = new Map<string, Promise<unknown>>();
@@ -51,6 +55,8 @@ export type RuntimeBundle = {
   complianceWorkflowRegistry?: ComplianceWorkflowRegistry;
   complianceToolRegistry?: ComplianceToolRegistry;
   fedrampTransitionIndex?: FedrampTransitionIndex;
+  commonsSearchIndex?: CommonsSearchIndex;
+  commonsDataset?: CommonsResourceDataset;
   graphReady: boolean;
   librarySearchRevision?: number;
 };
@@ -123,11 +129,18 @@ export async function fetchArtifact(path: string) {
     return cached;
   }
 
-  const request = fetch(path).then((response) => {
-    if (!response.ok) {
+  const request = fetch(path + ".gz").then(async (response) => {
+    if (response.ok && typeof DecompressionStream !== "undefined") {
+      const ds = new DecompressionStream("gzip");
+      const decompressedStream = response.body!.pipeThrough(ds);
+      return new Response(decompressedStream).json();
+    }
+    // Fallback to uncompressed
+    const fallbackResponse = await fetch(path);
+    if (!fallbackResponse.ok) {
       throw new Error(`Unable to load ${path}.`);
     }
-    return response.json();
+    return fallbackResponse.json();
   });
   artifactCache.set(path, request);
 
@@ -398,6 +411,8 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     complianceWorkflowRegistryRaw,
     complianceToolRegistryRaw,
     fedrampTransitionIndexRaw,
+    commonsSearchIndexRaw,
+    commonsDatasetRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
@@ -405,6 +420,8 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     fetchArtifact("./data/compliance-workflows.json"),
     fetchArtifact("./data/compliance-tool-registry.json"),
     fetchArtifact("./data/fedramp-transition-index.json"),
+    fetchArtifact("./data/generated/commons-search-index.json").catch(() => null),
+    fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
 
@@ -418,6 +435,8 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     complianceToolRegistry: complianceToolRegistryRaw as ComplianceToolRegistry,
     fedrampTransitionIndex:
       fedrampTransitionIndexRaw as FedrampTransitionIndex,
+    commonsSearchIndex: (commonsSearchIndexRaw as CommonsSearchIndex) || undefined,
+    commonsDataset: (commonsDatasetRaw as CommonsResourceDataset) || undefined,
     graphReady: false,
     librarySearchRevision: 0,
   };

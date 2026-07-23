@@ -9,13 +9,15 @@ export type AppView =
   | "patterns"
   | "templates"
   | "sources"
+  | "commons"
+  | "commons-detail"
   | "start-here"
   | "about"
   | "retired"
   | "browse"
   | "not-found";
 
-export type CompareWorkbench =
+export type CompareCrosswalk =
   | "intent"
   | "relationships"
   | "stig-chain"
@@ -73,7 +75,7 @@ export type ViewState =
     }
   | {
       view: "matrix";
-      workbench: CompareWorkbench;
+      crosswalk: CompareCrosswalk;
       source: string;
       target: string;
       items: string;
@@ -109,6 +111,26 @@ export type ViewState =
       eligibility: string;
       lifecycle: string;
       access: string;
+    }
+  | {
+      view: "commons";
+      query: string;
+      lane: string;
+      framework: string;
+      lifecycle: string;
+      audience: string;
+      accessType: string;
+      costType: string;
+      resourceType: string;
+      platform: string;
+      format: string;
+      collection: string;
+      selectedId: string;
+    }
+  | {
+      view: "commons-detail";
+      id: string;
+      from?: string;
     }
   | {
       view: "start-here";
@@ -170,7 +192,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
 function compareState(): Extract<ViewState, { view: "matrix" }> {
   return {
     view: "matrix",
-    workbench: "intent",
+    crosswalk: "intent",
     source: "",
     target: "",
     items: "",
@@ -275,7 +297,7 @@ export function parseViewState(search: string): ViewState {
     const state = compareState();
     return {
       ...state,
-      workbench: (params.get("workbench") as CompareWorkbench) || "intent",
+      crosswalk: (params.get("crosswalk") as CompareCrosswalk) || "intent",
       source: params.get("source") || "",
       target: params.get("target") || "",
       items: params.get("items") || "",
@@ -318,6 +340,32 @@ export function parseViewState(search: string): ViewState {
       eligibility: params.get("eligibility") || "",
       lifecycle: params.get("lifecycle") || "",
       access: params.get("access") || "",
+    };
+  }
+
+  if (view === "commons") {
+    return {
+      view,
+      query: params.get("q") || params.get("query") || "",
+      lane: params.get("lane") || "all",
+      framework: params.get("framework") || "",
+      lifecycle: params.get("lifecycle") || "",
+      audience: params.get("audience") || "",
+      accessType: params.get("accessType") || "",
+      costType: params.get("costType") || "",
+      resourceType: params.get("resourceType") || "",
+      platform: params.get("platform") || "",
+      format: params.get("format") || "",
+      collection: params.get("collection") || "",
+      selectedId: params.get("selectedId") || "",
+    };
+  }
+
+  if (view === "commons-detail") {
+    return {
+      view,
+      id: params.get("id") || "",
+      from: params.get("from") || "",
     };
   }
 
@@ -427,7 +475,7 @@ export function normalizeViewState(
       ...compareState(),
       ...incoming,
       view,
-      workbench: incoming.workbench || "intent",
+      crosswalk: incoming.crosswalk || "intent",
     };
   }
 
@@ -586,7 +634,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "relationshipSearch", state.relationshipSearch || "");
   } else if (state.view === "matrix") {
     params.set("view", state.view);
-    setIfValue(params, "workbench", state.workbench);
+    setIfValue(params, "crosswalk", state.crosswalk);
     setIfValue(params, "source", state.source);
     setIfValue(params, "target", state.target);
     setIfValue(params, "items", state.items);
@@ -621,6 +669,24 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "eligibility", state.eligibility);
     setIfValue(params, "lifecycle", state.lifecycle);
     setIfValue(params, "access", state.access);
+  } else if (state.view === "commons") {
+    params.set("view", state.view);
+    setIfValue(params, "q", state.query);
+    if (state.lane && state.lane !== "all") setIfValue(params, "lane", state.lane);
+    setIfValue(params, "framework", state.framework);
+    setIfValue(params, "lifecycle", state.lifecycle);
+    setIfValue(params, "audience", state.audience);
+    setIfValue(params, "accessType", state.accessType);
+    setIfValue(params, "costType", state.costType);
+    setIfValue(params, "resourceType", state.resourceType);
+    setIfValue(params, "platform", state.platform);
+    setIfValue(params, "format", state.format);
+    setIfValue(params, "collection", state.collection);
+    setIfValue(params, "selectedId", state.selectedId);
+  } else if (state.view === "commons-detail") {
+    params.set("view", state.view);
+    setIfValue(params, "id", state.id);
+    setIfValue(params, "from", state.from || "");
   } else if (state.view === "start-here") {
     params.set("view", state.view);
     setIfValue(params, "step", state.step);

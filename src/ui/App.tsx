@@ -91,6 +91,16 @@ const TemplatesPage = lazy(() =>
     default: module.TemplatesPage,
   })),
 );
+const CommonsPage = lazy(() =>
+  import("./pages/CommonsPage").then((module) => ({
+    default: module.CommonsPage,
+  })),
+);
+const CommonsDetailPage = lazy(() =>
+  import("./pages/CommonsDetailPage").then((module) => ({
+    default: module.CommonsDetailPage,
+  })),
+);
 
 export function App() {
   const location = useLocation();
@@ -271,6 +281,8 @@ export function App() {
       bundle.runtime.searchLibrary(itemId)[0];
     if (match) {
       openNode(match.id);
+    } else {
+      navigate("retired", { query: itemId });
     }
   }
 
@@ -564,6 +576,18 @@ function AppContent(props: {
     }
     return (
       <SourcesPage bundle={bundle} onNavigate={onNavigate} state={state} />
+    );
+  }
+
+  if (state.view === "commons") {
+    return (
+      <CommonsPage bundle={bundle} onNavigate={onNavigate} viewState={state} />
+    );
+  }
+
+  if (state.view === "commons-detail") {
+    return (
+      <CommonsDetailPage bundle={bundle} onNavigate={onNavigate} viewState={state} />
     );
   }
 

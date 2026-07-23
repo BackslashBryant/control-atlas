@@ -320,6 +320,7 @@ function buildDiagramEdges(
         strokeWidth: 2,
       },
       type: "smoothstep",
+      ariaLabel: `Connection from ${edge.source} to ${edge.target}: ${edge.relationshipType}`,
     };
   });
 }
@@ -554,7 +555,7 @@ const RelationshipGraphInner = forwardRef<
           colorMode="dark"
           edges={diagramEdges}
           fitView
-          fitViewOptions={{ padding: 0.18 }}
+          fitViewOptions={{ padding: 0.18, duration: reducedMotion ? 0 : 180 }}
           maxZoom={2.5}
           minZoom={0.4}
           nodes={diagramNodes}

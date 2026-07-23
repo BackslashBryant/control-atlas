@@ -1,0 +1,67 @@
+name: Submit a Control Commons Resource
+description: Propose an official government source, working tool, template, or practitioner resource for inclusion in Control Commons.
+title: "[Commons Candidate]: "
+labels: ["commons", "resource-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing to **Control Commons**! All submitted resources are evaluated against our inclusion rubric:
+        - **Official government status**, maintained open-source status, or established practitioner authority
+        - **Public access** without paywalls or mandatory sales calls
+        - **Direct practical utility** for government cybersecurity & compliance practitioners
+        - **No malware, SEO content farms, or unauthorized document leaks**
+
+  - type: input
+    id: resource_name
+    attributes:
+      label: Resource Name
+      placeholder: e.g. DISA STIG Viewer 3
+    validations:
+      required: true
+
+  - type: input
+    id: canonical_url
+    attributes:
+      label: Canonical URL
+      placeholder: e.g. https://public.cyber.mil/stigs/scca/
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resource_lane
+    attributes:
+      label: Resource Lane
+      options:
+        - Official (Governing government source, instruction, baseline)
+        - Open Source (Maintained software, SCAP engine, automation script)
+        - Practitioner (Template, guide, explainer, community forum)
+        - Commercial (Free tier software, vendor guidance)
+        - Legacy (Historical standard or superseded baseline)
+    validations:
+      required: true
+
+  - type: textarea
+    id: why_included
+    attributes:
+      label: Why is this resource useful?
+      description: Explain the specific compliance task, control family, or workflow this resource helps complete.
+      placeholder: e.g. Provides an interactive GUI for opening and reviewing DISA STIG CKL checklist files during a SCAP audit.
+    validations:
+      required: true
+
+  - type: input
+    id: publisher
+    attributes:
+      label: Publisher / Organization
+      placeholder: e.g. DISA / DoD Cyber Exchange
+    validations:
+      required: true
+
+  - type: input
+    id: frameworks
+    attributes:
+      label: Relevant Frameworks
+      placeholder: e.g. NIST SP 800-53, FedRAMP, DISA STIG, CMMC 2.0
+    validations:
+      required: false

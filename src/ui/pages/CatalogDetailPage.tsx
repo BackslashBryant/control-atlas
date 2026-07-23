@@ -155,12 +155,12 @@ export function CatalogDetailPage(props: {
               const synopsis =
                 record.plain_language_summary || record.description || "No synopsis is available for this record.";
               return (
-                <article className="catalog-record-row" key={record.id}>
-                  <button className="catalog-record-title" onClick={() => onOpenNode(record.id, "catalog-detail")} type="button">
+                <article className="catalog-record-row" key={record.id} aria-labelledby={`title-${record.id}`} aria-describedby={`desc-${record.id}`}>
+                  <button className="catalog-record-title" id={`title-${record.id}`} onClick={() => onOpenNode(record.id, "catalog-detail")} type="button">
                     <strong>{itemId}</strong>
                     {title !== itemId ? <span>{title}</span> : null}
                   </button>
-                  <p>{synopsis}</p>
+                  <p id={`desc-${record.id}`}>{synopsis}</p>
                   {record.metadata?.family ? <small>{record.metadata.family}</small> : null}
                 </article>
               );

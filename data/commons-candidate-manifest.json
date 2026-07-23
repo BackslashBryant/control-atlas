@@ -1,0 +1,44 @@
+{
+  "manifestVersion": "1.0",
+  "generatedOn": "2026-07-23",
+  "totalEvaluated": 86,
+  "acceptedCount": 79,
+  "rejectedCount": 7,
+  "rejectedCandidates": [
+    {
+      "candidateName": "Random Security Blogspot ATO Guide",
+      "url": "https://randomcyberblog.example.com/how-to-get-ato",
+      "reason": "Lead-generation blog with no verifiable authority, copied definitions, and stale 800-53 Rev 4 links."
+    },
+    {
+      "candidateName": "Pirated ISO 27001 Full PDF Download Mirror",
+      "url": "https://pirated-standards-mirror.example.org/iso27001.pdf",
+      "reason": "Illegal unauthorized copyright mirror of paywalled ISO/IEC standard."
+    },
+    {
+      "candidateName": "Abandoned 2017 CKL Convert Python Script",
+      "url": "https://github.com/abandoned-repo/ckl-converter-2017",
+      "reason": "Abandoned repository with unmaintained legacy dependencies, broken CKL parser, and no license."
+    },
+    {
+      "candidateName": "Unverified Third-Party STIG Viewer EXE Download",
+      "url": "https://free-stig-viewer-downloads.example.com/stigviewer.exe",
+      "reason": "Anonymous binary mirror download posing severe malware/supply-chain risk; users directed to official DISA Cyber Exchange."
+    },
+    {
+      "candidateName": "Generic AI Generated Compliance Summary Page",
+      "url": "https://ai-content-farm.example.com/nist-800-53-summary",
+      "reason": "Low-effort AI hallucinated summary containing false control IDs and inaccurate baseline claims."
+    },
+    {
+      "candidateName": "Gated Vendor Lead-Form CMMC Checklist",
+      "url": "https://vendor-sales-pitch.example.com/cmmc-checklist-pdf",
+      "reason": "Pure sales lead-capture form requiring corporate email for a 2-page marketing fluff document."
+    },
+    {
+      "candidateName": "Stale 2014 Agency FISMA PDF Guidelines",
+      "url": "https://example-agency.gov/historical/2014-fisma-policy.pdf",
+      "reason": "Outdated agency guidance superseded by modern CISA FISMA metric guides and OMB memoranda."
+    }
+  ]
+}

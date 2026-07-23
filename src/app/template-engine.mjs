@@ -274,12 +274,13 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
   const ph = placeholder(options);
   const env = options.environment || "Generic";
 
-  const baselineHeaders = ["Control ID", "Control Title", "What It Means", "Implementation Statement", "Evidence", "Status"];
+  const baselineHeaders = ["Control ID", "Control Title", "What It Means", "Implementation Statement", "Common Control Provider", "Evidence", "Status"];
   const baselineRows = controls.map((c) => [
     c.id,
     c.title,
     truncatePlain(c.plain),
     ph("[How is this implemented for this system?]"),
+    ph("[Name of provider if inherited]"),
     ph("[Artifact name(s)]"),
     ph("[Planned | Implemented | Inherited | N/A]"),
   ]);
@@ -417,6 +418,7 @@ function generateImplementationStatementWorksheet(options, controls) {
     "Control Title",
     "What It Means",
     "Implementation Statement",
+    "Common Control Provider",
     "Responsible Role",
     "Status",
   ];
@@ -426,6 +428,7 @@ function generateImplementationStatementWorksheet(options, controls) {
     c.title,
     truncatePlain(c.plain),
     ph("[Draft statement — describe how this control is implemented]"),
+    ph("[Name of provider if inherited]"),
     ph("[Role responsible for maintaining this control]"),
     ph("[Draft | Reviewed | Approved]"),
   ]);

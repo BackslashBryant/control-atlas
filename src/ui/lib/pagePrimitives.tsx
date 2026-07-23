@@ -247,6 +247,7 @@ export function PageJumpNav(props: {
 
 export function CardTitle(props: {
   children: ReactNode;
+  id?: string;
   onOpen?: () => void;
   href?: string;
 }) {
@@ -254,6 +255,7 @@ export function CardTitle(props: {
     return (
       <h3 className="card-title">
         <button
+          id={props.id}
           className="card-title-action"
           onClick={props.onOpen}
           type="button"
@@ -267,6 +269,7 @@ export function CardTitle(props: {
     return (
       <h3 className="card-title">
         <a
+          id={props.id}
           className="card-title-action"
           href={props.href}
           rel="noreferrer"
@@ -277,7 +280,7 @@ export function CardTitle(props: {
       </h3>
     );
   }
-  return <h3 className="card-title">{props.children}</h3>;
+  return <h3 className="card-title" id={props.id}>{props.children}</h3>;
 }
 
 export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {

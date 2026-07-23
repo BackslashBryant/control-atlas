@@ -302,7 +302,7 @@ export function ObjectDetailPage(props: {
         onBack={returnToOrigin}
         onCompare={() =>
           onNavigate("matrix", {
-            workbench: "relationships",
+            crosswalk: "relationships",
             items: document.item_id,
             source: node.metadata?.catalog_id || "",
           })
@@ -346,7 +346,7 @@ export function ObjectDetailPage(props: {
                   className="secondary"
                   onClick={() =>
                     onNavigate("matrix", {
-                      workbench: "relationships",
+                      crosswalk: "relationships",
                       items: document.item_id,
                       source: node.metadata?.catalog_id || "",
                     })
@@ -633,7 +633,7 @@ export function ObjectDetailPage(props: {
                   className="link-action"
                   onClick={() =>
                     onNavigate("matrix", {
-                      workbench: "threat-chain",
+                      crosswalk: "threat-chain",
                       chainCatalog: node.metadata?.catalog_id || "",
                       chainItem: node.id,
                     })
