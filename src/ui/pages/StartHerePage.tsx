@@ -122,7 +122,6 @@ export function StartHerePage(props: {
               className="link-action"
               onClick={() =>
                 onNavigate("start-here", {
-                  ...state,
                   systemType: "",
                   dataSensitivity: "",
                   environment: "",
@@ -141,7 +140,7 @@ export function StartHerePage(props: {
           hint="What kind of system you are authorizing or assessing."
           label="System type"
           onChange={(value) =>
-            onNavigate("start-here", { ...state, systemType: value, step: "" })
+            onNavigate("start-here", { systemType: value, step: "" })
           }
           options={[
             { value: "Cloud SaaS", label: "Cloud SaaS" },
@@ -162,7 +161,6 @@ export function StartHerePage(props: {
               className="link-action"
               onClick={() =>
                 onNavigate("start-here", {
-                  ...state,
                   dataSensitivity: "",
                   environment: "",
                   step: "",
@@ -181,7 +179,6 @@ export function StartHerePage(props: {
           label="Data sensitivity"
           onChange={(value) =>
             onNavigate("start-here", {
-              ...state,
               dataSensitivity: value,
               step: "",
             })
@@ -202,7 +199,7 @@ export function StartHerePage(props: {
           hint="Who operates the system and under which federal context."
           label="Operational environment"
           onChange={(value) =>
-            onNavigate("start-here", { ...state, environment: value, step: "" })
+            onNavigate("start-here", { environment: value, step: "" })
           }
           options={[
             { value: "Federal civilian", label: "Federal civilian" },
@@ -236,7 +233,7 @@ export function StartHerePage(props: {
           <button
             className="primary"
             onClick={() =>
-              onNavigate("start-here", { ...state, step: "results" })
+              onNavigate("start-here", { step: "results" })
             }
             type="button"
           >

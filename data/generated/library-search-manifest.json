@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-17T00:30:50.184Z",
+  "generated_at": "2026-07-23T00:14:31.766Z",
   "library_search_manifest": {
     "eager_shard_ids": [
       "nist-800-53",
@@ -12,7 +12,7 @@
         "catalog_id": "disa-cci",
         "document_count": 5137,
         "path": "library-search/disa-cci.json",
-        "bytes": 5683812
+        "bytes": 5680608
       },
       {
         "catalog_id": "disa-srg",

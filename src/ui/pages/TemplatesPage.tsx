@@ -1324,7 +1324,7 @@ export function TemplatesPage(props: {
                 <SelectField
                   hint="Where the system runs — cloud, on-premises, or hybrid."
                   label="Environment"
-                  onChange={(value) => onNavigate("templates", { ...state, environment: value })}
+                  onChange={(value) => onNavigate("templates", { environment: value })}
                   options={[
                     { value: "Generic", label: "Generic" },
                     { value: "Cloud SaaS", label: "Cloud SaaS" },
@@ -1340,7 +1340,7 @@ export function TemplatesPage(props: {
               <SelectField
                 hint={FORMAT_HELP[activeFormat] || "File type for the downloaded template."}
                 label="Format"
-                onChange={(value) => onNavigate("templates", { ...state, format: value })}
+                onChange={(value) => onNavigate("templates", { format: value })}
                 options={supportedFormats.map((format: string) => ({ value: format, label: FORMAT_LABELS[format] || format }))}
                 value={activeFormat}
               />
@@ -1498,7 +1498,6 @@ export function TemplatesPage(props: {
                     label="Framework"
                     onChange={(value) =>
                       onNavigate("templates", {
-                        ...state,
                         framework: value,
                         baseline: "",
                         controlFamily: "",
@@ -1515,7 +1514,6 @@ export function TemplatesPage(props: {
                     label="Baseline"
                     onChange={(value) =>
                       onNavigate("templates", {
-                        ...state,
                         baseline: value === "" ? "ALL" : value,
                       })
                     }
@@ -1530,7 +1528,6 @@ export function TemplatesPage(props: {
                     label="Control family"
                     onChange={(value) =>
                       onNavigate("templates", {
-                        ...state,
                         controlFamily: value,
                       })
                     }

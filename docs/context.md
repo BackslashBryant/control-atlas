@@ -40,7 +40,7 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 1. Owner reviews the finalization evidence and decides whether to accept the documented human screen-reader and real-device residuals
 2. Create/publish `v1.0.0` only after a new, explicit owner approval for that final action
-3. Keep Node runtime notices, the constrained Lighthouse `uuid` dependency, and install-fallback cleanup in separate maintenance work
+3. Keep Node runtime notices and install-fallback cleanup in separate maintenance work
 
 ## Status Docs
 

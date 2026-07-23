@@ -100,6 +100,34 @@
       "top_k": 5
     },
     {
+      "id": "expert-multifactor-enhancement",
+      "audience": "expert",
+      "query": "IA-2.1",
+      "expected_ids": ["nist-800-53:IA-2.1"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-audit-review-id",
+      "audience": "expert",
+      "query": "AU-6",
+      "expected_ids": ["nist-800-53:AU-6"],
+      "top_k": 1
+    },
+    {
+      "id": "novice-least-privilege",
+      "audience": "novice",
+      "query": "least privilege",
+      "expected_ids": ["nist-800-53:AC-6"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-audit-record-review",
+      "audience": "novice",
+      "query": "review audit logs",
+      "expected_ids": ["nist-800-53:AU-6"],
+      "top_k": 5
+    },
+    {
       "id": "known-no-result",
       "audience": "novice",
       "query": "banana bread recipe",

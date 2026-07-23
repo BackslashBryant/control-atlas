@@ -151,7 +151,7 @@ export function SourcesPage(props: {
 
       {selectedSource ? (
         <section aria-labelledby="selected-source-heading" className="stack selected-source-focus" id="source-detail">
-          <button className="link-action" onClick={() => onNavigate("sources", { ...state, source: "" })} type="button">
+          <button className="link-action" onClick={() => onNavigate("sources", { source: "" })} type="button">
             ← Back to all sources
           </button>
           <div>
@@ -296,7 +296,7 @@ export function SourcesPage(props: {
               emptyLabel="All source types"
               label="Source type"
               onChange={(value) =>
-                onNavigate("sources", { ...state, provenance: value })
+                onNavigate("sources", { provenance: value })
               }
               options={distinct("provenance_class").map((value) => ({
                 value,
@@ -308,7 +308,7 @@ export function SourcesPage(props: {
               emptyLabel="All map inclusion states"
               label="Included in map"
               onChange={(value) =>
-                onNavigate("sources", { ...state, eligibility: value })
+                onNavigate("sources", { eligibility: value })
               }
               options={distinct("eligibility_status").map((value) => ({
                 value,
@@ -320,7 +320,7 @@ export function SourcesPage(props: {
               emptyLabel="All statuses"
               label="Status"
               onChange={(value) =>
-                onNavigate("sources", { ...state, lifecycle: value })
+                onNavigate("sources", { lifecycle: value })
               }
               options={distinct("lifecycle_status").map((value) => ({
                 value,
@@ -332,7 +332,7 @@ export function SourcesPage(props: {
               emptyLabel="All access levels"
               label="Access"
               onChange={(value) =>
-                onNavigate("sources", { ...state, access: value })
+                onNavigate("sources", { access: value })
               }
               options={distinct("access_status").map((value) => ({
                 value,
@@ -353,7 +353,7 @@ export function SourcesPage(props: {
           {groupedSources.flatMap(([, groupSources]) => groupSources).map((source: any) => (
             <SourceSummaryCard
               key={source.id}
-              onOpen={() => onNavigate("sources", { ...state, source: source.id })}
+              onOpen={() => onNavigate("sources", { source: source.id })}
               source={source}
             />
           ))}
@@ -376,7 +376,7 @@ export function SourcesPage(props: {
                   <SourceSummaryCard
                     key={source.id}
                     onOpen={() =>
-                      onNavigate("sources", { ...state, source: source.id })
+                      onNavigate("sources", { source: source.id })
                     }
                     source={source}
                   />

@@ -461,7 +461,6 @@ export function ComparePage(props: {
                 key={card.title}
                 onClick={() =>
                   onNavigate("matrix", {
-                    ...state,
                     workbench: card.workbench,
                     intent: card.title,
                   })
@@ -485,7 +484,7 @@ export function ComparePage(props: {
           </div>
           <button
             className="secondary"
-            onClick={() => onNavigate("matrix", { ...state, workbench: "intent" })}
+            onClick={() => onNavigate("matrix", { workbench: "intent" })}
             type="button"
           >
             Change comparison
