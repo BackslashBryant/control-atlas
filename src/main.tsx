@@ -7,6 +7,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/surfaces.css';
+import '../styles/tailwind.css';
 
 // Anti-framing guard (TRUST-002): GitHub Pages cannot send response headers,
 // so frame-ancestors/X-Frame-Options are unavailable. Break out of hostile

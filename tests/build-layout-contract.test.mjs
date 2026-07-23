@@ -8,6 +8,8 @@ const publicSyncTool = readFileSync('tools/sync-public.mjs', 'utf8');
 const domSmoke = readFileSync('scripts/dom-smoke.mjs', 'utf8');
 const staticSmoke = readFileSync('scripts/static-smoke.mjs', 'utf8');
 const playwrightConfig = readFileSync('playwright.config.mjs', 'utf8');
+const viteConfig = readFileSync('vite.config.ts', 'utf8');
+const tailwindStyles = readFileSync('styles/tailwind.css', 'utf8');
 
 const siteBuilder = existsSync('tools/build-static-site.mjs')
   ? readFileSync('tools/build-static-site.mjs', 'utf8')
@@ -36,9 +38,20 @@ test('control atlas source of truth builds through Vite into the staged static o
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(pagesWorkflow, /npm run build:site/);
   assert.match(pagesWorkflow, /path:\s*'dist\/site'/);
-  assert.match(readFileSync('vite.config.ts', 'utf8'), /base:\s*'\.\/'/);
+  assert.match(viteConfig, /base:\s*'\.\/'/);
   assert.match(publicSyncTool, /dist-public/);
   assert.match(publicSyncTool, /dist\/site/);
+});
+
+test('Commons Tailwind utilities are compiled without replacing Control Atlas global styles', () => {
+  assert.ok(existsSync('styles/tailwind.css'), 'Commons utility stylesheet must exist');
+  assert.ok(packageJson.devDependencies.tailwindcss, 'tailwindcss must be installed');
+  assert.ok(packageJson.devDependencies['@tailwindcss/vite'], '@tailwindcss/vite must be installed');
+  assert.match(viteConfig, /tailwindcss\(\)/);
+  assert.match(readFileSync('src/main.tsx', 'utf8'), /styles\/tailwind\.css/);
+  assert.match(tailwindStyles, /tailwindcss\/theme\.css/);
+  assert.match(tailwindStyles, /tailwindcss\/utilities\.css/);
+  assert.doesNotMatch(tailwindStyles, /tailwindcss\/preflight\.css/);
 });
 
 test('static smoke checks validate the Vite output instead of the legacy app bundle', () => {
