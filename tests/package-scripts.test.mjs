@@ -21,9 +21,9 @@ test('security scripts exist for dependency audit and sbom generation', () => {
   assert.ok(existsSync('security/npm-audit-exceptions.json'));
 });
 
-test('ci workflows include dependency audit and sbom generation', () => {
+test('deploy checks include the dependency audit while SBOM generation stays manual', () => {
   assert.match(ciWorkflow, /npm run audit:deps/);
-  assert.match(ciWorkflow, /npm run sbom:generate/);
+  assert.doesNotMatch(ciWorkflow, /npm run sbom:generate/);
   assert.match(nightlyWorkflow, /npm run audit:deps/);
 });
 
@@ -48,7 +48,7 @@ test('security workflows exist for CodeQL and secret scanning', () => {
   assert.match(secrets, /gitleaks/gim);
 });
 
-test('epic 0 package scripts cover staged builds, lint, type checks, license checks, and e2e', () => {
+test('release scripts cover staged builds, static checks, and focused browser smoke', () => {
   assert.equal(typeof packageJson.scripts['build:site'], 'string');
   assert.equal(typeof packageJson.scripts.lint, 'string');
   assert.equal(typeof packageJson.scripts.typecheck, 'string');
@@ -68,21 +68,23 @@ test('epic 0 package scripts cover staged builds, lint, type checks, license che
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
   assert.match(packageJson.scripts.precommit, /npm run lint/);
   assert.match(packageJson.scripts.precommit, /npm run typecheck/);
-  assert.match(packageJson.scripts.precommit, /npm run license:check/);
-  assert.match(packageJson.scripts.precommit, /npm run test:a11y:run/);
+  assert.equal(typeof packageJson.scripts['test:a11y:smoke'], 'string');
+  assert.equal(typeof packageJson.scripts['test:e2e:smoke'], 'string');
+  assert.match(packageJson.scripts.precommit, /npm run test:a11y:smoke/);
+  assert.match(packageJson.scripts.precommit, /npm run test:e2e:smoke/);
   assert.match(packageJson.scripts.test, /test:graph/);
   assert.ok(existsSync('tsconfig.app.json'));
   assert.match(packageJson.scripts.typecheck, /tsconfig\.app\.json/);
 });
 
-test('precommit reuses one build and does not rerun accessibility inside e2e', () => {
+test('precommit reuses one build and runs only the focused browser smoke', () => {
   const precommitSteps = packageJson.scripts.precommit
     .split('&&')
     .map((step) => step.trim());
 
   assert.equal(precommitSteps.filter((step) => step === 'npm run build:site').length, 1);
-  assert.ok(precommitSteps.includes('npm run test:a11y:run'));
-  assert.ok(precommitSteps.includes('npm run test:e2e:run'));
+  assert.ok(precommitSteps.includes('npm run test:a11y:smoke'));
+  assert.ok(precommitSteps.includes('npm run test:e2e:smoke'));
   assert.ok(!precommitSteps.includes('npm run test:a11y'));
   assert.ok(!precommitSteps.includes('npm run test:e2e'));
   assert.match(packageJson.scripts['test:a11y'], /build:site.*test:a11y:run/);
@@ -113,9 +115,9 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(ciWorkflow, /npm run build:site/);
   assert.match(ciWorkflow, /npm run lint/);
   assert.match(ciWorkflow, /npm run typecheck/);
-  assert.match(ciWorkflow, /npm run license:check/);
-  assert.match(ciWorkflow, /npm run test:a11y:run/);
-  assert.match(ciWorkflow, /npm run test:e2e:run/);
+  assert.match(ciWorkflow, /npm run test:a11y:smoke/);
+  assert.match(ciWorkflow, /npm run test:e2e:smoke/);
+  assert.doesNotMatch(ciWorkflow, /npm run sbom:generate/);
   assert.match(pagesWorkflow, /workflows: \[Public Repo Checks\]/);
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.conclusion == 'success'/);
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.event == 'push'/);
