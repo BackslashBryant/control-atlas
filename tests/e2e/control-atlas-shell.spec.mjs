@@ -621,7 +621,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
   await expect(page.locator(".search-result-groups")).toHaveCount(0);
   await expect(
     page.getByText(
-      "Try AC-2, FedRAMP High, CCI-000225, or account management.",
+      "Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources.",
     ),
   ).toBeVisible();
 
