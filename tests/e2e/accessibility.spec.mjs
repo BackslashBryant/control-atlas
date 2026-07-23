@@ -103,7 +103,7 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   test.setTimeout(180_000);
   await gotoApp(
     page,
-    "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
+    "/?view=matrix&crosswalk=relationships&source=nist-800-53&target=csf-2",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
