@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { SOURCE_LINKS, sourceLinkFor } from "../../src/ui/graph/sourceLinks.ts";
+import {
+  SOURCE_LINKS,
+  resolveSourceLink,
+  sourceLinkFor,
+} from "../../src/ui/graph/sourceLinks.ts";
 import { SOURCE_SEED_MANIFEST } from "../../src/ui/graph/sourceSeedManifest.ts";
 
 test("canonical links are centralized and cover every source", () => {
@@ -34,4 +38,26 @@ test("required canonical links are exact", () => {
 
 test("unknown source links fail closed", () => {
   assert.throws(() => sourceLinkFor("unknown"), /Unknown sourceId: unknown/);
+});
+
+test("resolveSourceLink resolves best-effort CPRT deep links for NIST controls", () => {
+  const resolved = resolveSourceLink("nist-sp-800-53-r5", "AC-1");
+  assert.equal(resolved.confidence, "best_effort");
+  assert.equal(resolved.isDeepLink, true);
+  assert.equal(
+    resolved.href,
+    "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_2_0/home?element=AC-1",
+  );
+  assert.equal(resolved.label, "Open AC-1 in NIST SP 800-53 Rev. 5");
+});
+
+test("resolveSourceLink falls back to official catalog URL when deep link is unavailable", () => {
+  const resolved = resolveSourceLink("disa-cci-list", "CCI-000001");
+  assert.equal(resolved.confidence, "verified");
+  assert.equal(resolved.isDeepLink, false);
+  assert.equal(resolved.href, "https://www.cyber.mil/stigs/cci/");
+  assert.equal(
+    resolved.label,
+    "Open DISA CCI List official publication",
+  );
 });
