@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ControlCommonsDataset",
+  "type": "object",
+  "required": ["schemaVersion", "lastUpdated", "resources", "collections"],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "lastUpdated": { "type": "string" },
+    "collections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "summary", "whyCurated", "resourceIds"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "summary": { "type": "string" },
+          "whyCurated": { "type": "string" },
+          "resourceIds": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "shortName",
+          "slug",
+          "summary",
+          "whyIncluded",
+          "canonicalUrl",
+          "publisher",
+          "resourceLane",
+          "resourceType",
+          "frameworks",
+          "lifecycleStages",
+          "audiences",
+          "artifactTypes",
+          "accessType",
+          "costType",
+          "maintenanceStatus",
+          "lastCheckedAt"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "shortName": { "type": "string" },
+          "slug": { "type": "string" },
+          "summary": { "type": "string" },
+          "whyIncluded": { "type": "string" },
+          "canonicalUrl": { "type": "string" },
+          "alternateUrls": { "type": "array", "items": { "type": "string" } },
+          "publisher": { "type": "string" },
+          "maintainer": { "type": ["string", "null"] },
+          "publisherType": { "type": "string" },
+          "resourceLane": {
+            "type": "string",
+            "enum": ["official", "open_source", "practitioner", "commercial", "legacy"]
+          },
+          "resourceType": { "type": "string" },
+          "frameworks": { "type": "array", "items": { "type": "string" } },
+          "programs": { "type": "array", "items": { "type": "string" } },
+          "controlFamilies": { "type": "array", "items": { "type": "string" } },
+          "lifecycleStages": { "type": "array", "items": { "type": "string" } },
+          "audiences": { "type": "array", "items": { "type": "string" } },
+          "artifactTypes": { "type": "array", "items": { "type": "string" } },
+          "technologyScopes": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "jurisdictions": { "type": "array", "items": { "type": "string" } },
+          "governmentBranches": { "type": "array", "items": { "type": "string" } },
+          "formats": { "type": "array", "items": { "type": "string" } },
+          "accessType": {
+            "type": "string",
+            "enum": ["public", "free_account", "membership", "customer_only", "cac_or_piv", "paid", "restricted", "unknown"]
+          },
+          "costType": { "type": "string" },
+          "accountRequired": { "type": "boolean" },
+          "authenticationRequired": { "type": "boolean" },
+          "publicAccessNotes": { "type": ["string", "null"] },
+          "openSource": { "type": "boolean" },
+          "repositoryUrl": { "type": ["string", "null"] },
+          "license": { "type": ["string", "null"] },
+          "licenseUrl": { "type": ["string", "null"] },
+          "redistributionPolicy": { "type": ["string", "null"] },
+          "officialStatus": { "type": ["string", "null"] },
+          "maturity": { "type": ["string", "null"] },
+          "maintenanceStatus": {
+            "type": "string",
+            "enum": ["active", "maintained", "slow", "inactive", "archived", "deprecated", "superseded", "unknown"]
+          },
+          "currentVersion": { "type": ["string", "null"] },
+          "publisherUpdatedAt": { "type": ["string", "null"] },
+          "lastReleaseAt": { "type": ["string", "null"] },
+          "lastCommitAt": { "type": ["string", "null"] },
+          "lastCheckedAt": { "type": "string" },
+          "lastChangedAt": { "type": ["string", "null"] },
+          "nextCheckAt": { "type": ["string", "null"] },
+          "updateMethod": { "type": ["string", "null"] },
+          "updateCadence": { "type": ["string", "null"] },
+          "freshnessStatus": { "type": ["string", "null"] },
+          "supersedes": { "type": ["string", "null"] },
+          "supersededBy": { "type": ["string", "null"] },
+          "legacyReason": { "type": ["string", "null"] },
+          "officialCounterparts": { "type": "array", "items": { "type": "string" } },
+          "companionResources": { "type": "array", "items": { "type": "string" } },
+          "communityLinks": { "type": "array", "items": { "type": "string" } },
+          "trainingLinks": { "type": "array", "items": { "type": "string" } },
+          "downloadLinks": { "type": "array", "items": { "type": "string" } },
+          "apiLinks": { "type": "array", "items": { "type": "string" } },
+          "feedLinks": { "type": "array", "items": { "type": "string" } },
+          "popularitySignals": {
+            "type": "object",
+            "properties": {
+              "stars": { "type": "number" },
+              "forks": { "type": "number" },
+              "subscribers": { "type": "number" },
+              "citations": { "type": "number" }
+            }
+          },
+          "editorialRecommendation": { "type": "boolean" },
+          "editorialNotes": { "type": ["string", "null"] },
+          "warnings": { "type": "array", "items": { "type": "string" } },
+          "searchAliases": { "type": "array", "items": { "type": "string" } },
+          "searchKeywords": { "type": "array", "items": { "type": "string" } },
+          "featuredCollections": { "type": "array", "items": { "type": "string" } },
+          "sourceEvidence": { "type": ["string", "null"] },
+          "automatedFields": { "type": "array", "items": { "type": "string" } },
+          "manualFields": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

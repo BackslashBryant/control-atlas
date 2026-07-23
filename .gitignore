@@ -77,8 +77,9 @@ scripts/*
 !scripts/report-refresh-diff.mjs
 !scripts/spikes/
 !scripts/spikes/**
-!scripts/static-smoke.mjs
-!scripts/dom-smoke.mjs
+!scripts/build-commons-index.mjs
+!scripts/check-commons-health.mjs
+!scripts/generate-expanded-commons-dataset.mjs
 !scripts/lib/
 !scripts/lib/plain-language.mjs
 !scripts/security/
@@ -109,8 +110,8 @@ data/*
 !data/curated/dod-zt/
 !data/curated/dod-zt/*.json
 !data/curated/plain-language/
-!data/curated/plain-language/*.json
-data/tenable-sync-state.json
+!data/schemas/
+!data/schemas/*.json
 !data/generated/
 !data/generated/*.json
 !data/generated/atlas-neighborhood/
