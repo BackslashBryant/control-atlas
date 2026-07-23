@@ -637,6 +637,7 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "matrix") {
     params.set("view", state.view);
     setIfValue(params, "crosswalk", state.crosswalk);
+    setIfValue(params, "workbench", state.crosswalk);
     setIfValue(params, "source", state.source);
     setIfValue(params, "target", state.target);
     setIfValue(params, "items", state.items);
