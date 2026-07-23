@@ -105,7 +105,7 @@ test("a11y: compare detailed mappings table has no serious or critical violation
     page,
     "/?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2",
   );
-  await waitForAppReady(page, { allowPartial: true });
+  await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.locator("#compare-results")).toBeVisible({
