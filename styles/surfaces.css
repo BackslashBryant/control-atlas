@@ -4719,6 +4719,10 @@ button.atlas-leverage-row:hover {
   margin: var(--ca-space-4) 0;
 }
 
+.skeleton-container {
+  min-height: clamp(30rem, 60vh, 45rem);
+}
+
 .skeleton-card {
   padding: var(--ca-space-4);
 }

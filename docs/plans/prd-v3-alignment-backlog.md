@@ -42,7 +42,6 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 | Item | Consequence of leaving it | Trigger / deadline |
 | --- | --- | --- |
 | GitHub Actions Node 20-runtime deprecation annotations | Workflows fail when GitHub removes the Node 20 runtime | Before GitHub's announced Node 20 Actions runtime removal date; check on the first Dependabot review after an annotation escalates to a warning of removal |
-| Transitive `uuid` constrained by `@lhci/cli@0.15.1` | Dependabot PR #1465767594 stays red; audit noise | When `@lhci/cli` publishes a release lifting the constraint, or when reassessing Lighthouse CI retention |
 | `npm ci \|\| npm install` fallbacks in workflows | Lockfile drift can pass CI silently | Next workflow-touching maintenance change |
 | Deployed mobile Lighthouse performance gate | Performance regressions land undetected because tooling is report-only | Superseded 2026-07-19: the absolute `>= 50` floor was laptop-measured and does not reproduce on CI hardware (same code scores 34–44 there). Gate is now comparative — run the `Lighthouse A/B` workflow against the previous released ref on the same runner and require no material regression |
 | Layout shift on slow hardware: `footer.site-footer` moves ~1.5 CLS as late content grows the page | Users on slow connections/devices see the page jump while it loads; the score penalty is severe | Pre-existing (identical in `743dcde` and `9f687d7`), exposed by CI measurement on 2026-07-19. Fix by reserving height for loading regions (skeleton/content height parity in `src/ui/App.tsx`, `LibrarySkeleton.tsx`, and the compact Atlas map block in `styles/surfaces.css`). Trigger: first post-v1 UX maintenance pass, before any accessibility-conformance claim |
@@ -53,4 +52,4 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 - Run the post-v1 UI/performance/copy/data strengthening sequence in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md), beginning with Playwright golden routes, Lighthouse CI, and a project-owned Vale style
 - Dependabot PR review (Nexus)
 - Source real crosswalks for DoD RAI, ATT&CK ICS, AI RMF, SSDF, SP 800-172, and remaining sparse catalogs; never infer them merely to raise coverage
-- Resolve or document the 11 current graph-health findings upstream
+- Documented upstream provenance for the 11 `graph-health.json` findings: 9 NIST OLIR CSF 2.0 draft crosswalk entries targeting family/category-level nodes (`CP`, `IR`, `PT`, `RC.RP`, `RS.MA`) and 2 DoD ZT overlay entries with invalid control IDs (`EC-1`, `SAC-16`). All 11 are safely blocked from displayable edges as designed.

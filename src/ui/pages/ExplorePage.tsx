@@ -212,7 +212,7 @@ export function ExplorePage(props: {
           className="search-form"
           onSubmit={(event) => {
             event.preventDefault();
-            onNavigate("search", { ...state, query: queryDraft.trim() });
+            onNavigate("search", { query: queryDraft.trim() });
           }}
         >
           <label className="field grow" htmlFor="search-query">
@@ -239,7 +239,7 @@ export function ExplorePage(props: {
               <SelectField
                 label="Catalog"
                 onChange={(value) =>
-                  onNavigate("search", { ...state, filter: value })
+                  onNavigate("search", { filter: value })
                 }
                 options={bundle.runtime.getCatalogs().map((catalog: any) => ({
                   value: catalog.id,
@@ -250,7 +250,7 @@ export function ExplorePage(props: {
               <SelectField
                 label="Item type"
                 onChange={(value) =>
-                  onNavigate("search", { ...state, objectType: value })
+                  onNavigate("search", { objectType: value })
                 }
                 options={facets.objectTypes.map((value: string) => ({
                   value,
@@ -261,7 +261,7 @@ export function ExplorePage(props: {
               <SelectField
                 label="Source type"
                 onChange={(value) =>
-                  onNavigate("search", { ...state, sourceClass: value })
+                  onNavigate("search", { sourceClass: value })
                 }
                 options={facets.sourceClasses.map((value: string) => ({
                   value,
@@ -272,7 +272,7 @@ export function ExplorePage(props: {
               <SelectField
                 label="Control family"
                 onChange={(value) =>
-                  onNavigate("search", { ...state, controlFamily: value })
+                  onNavigate("search", { controlFamily: value })
                 }
                 options={facets.controlFamilies.map((value: string) => ({
                   value,
@@ -283,7 +283,7 @@ export function ExplorePage(props: {
               <SelectField
                 label="Severity"
                 onChange={(value) =>
-                  onNavigate("search", { ...state, severity: value })
+                  onNavigate("search", { severity: value })
                 }
                 options={facets.severities.map((value: string) => ({
                   value,

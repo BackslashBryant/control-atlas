@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - run: npm ci || npm install
+          node-version: '22'
+      - run: npm ci
       - name: Dependency audit
         run: npm run audit:deps
       - name: Build staged static site
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - run: npm ci
       - name: Run report-only Lighthouse evidence
         continue-on-error: true

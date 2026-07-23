@@ -32,8 +32,8 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - run: npm ci || npm install
+          node-version: '22'
+      - run: npm ci
       - name: Build staged static site
         run: npm run build:site
       - name: Public verification

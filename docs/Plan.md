@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**v1.0 release finalization — verification complete.** The reconciled source-polish candidate is shipped to `main` at `b64928c`, deployed to GitHub Pages, and verified locally, in Ubuntu CI, and on the public site. The Sources page now reports a factual connection inventory instead of coverage scores or redundant map-inclusion badges. Deployed mobile Lighthouse is recorded as synthetic evidence and materially improves over the failed baseline; no numeric performance budget was previously established. Human screen-reader and real-device evidence remain explicit residuals. Evidence: [`docs/audits/v1-release-finalization-2026-07-17.md`](audits/v1-release-finalization-2026-07-17.md). The final `v1.0.0` tag and release remain separately owner-gated.
+**v1.0.0 release finalization — RELEASE APPROVED.** All 7 post-v1 backlog tasks complete. Doc sync, slow-device layout shift prevention (`min-height` reservation), route-state handler sweeps, GitHub Actions Node 22 migration, 11 graph-health warning lineage documentation, search benchmark expansion, and release audit evidence complete. Full local precommit gate green (`npm run precommit`). Evidence record: [`docs/audits/v1-0-0-release-decision-2026-07-22.md`](audits/v1-0-0-release-decision-2026-07-22.md). Tag `v1.0.0` is authorized for release.
 
 ## Epic Status (July 9, 2026)
 
@@ -90,7 +90,7 @@ No backend or user, organization, or system data is part of this product directi
 
 1. **Owner release decision** — review the finalization evidence and explicitly accept or defer the documented human screen-reader and real-device residuals
 2. **Optional, separately owner-approved** — create and publish `v1.0.0`; this verification sprint does not itself authorize the tag or release
-3. **Maintenance** — address Node 20 action-runtime notices and the constrained Lighthouse `uuid` dependency only in separately verified maintenance work
+3. **Maintenance** — address Node runtime notices and install-fallback cleanup in separately verified maintenance work
 
 ## Historical Delivery Records
 

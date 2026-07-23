@@ -9,7 +9,7 @@
 
 ## Current Status
 
-Release candidate `v1.0.0-rc.1` remains the published release. The approved-composition Atlas rebuild, post-v1 platform strengthening, and reconciled source polish are on `main` at `b64928c` and deployed to GitHub Pages. The final full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, Pages, Pages Live Smoke, 28 deployed browser tests, and three focused deployed mobile Lighthouse runs have recorded evidence. Human screen-reader and real-device checks remain explicit residuals. Creating or publishing `v1.0.0` requires separate owner approval.
+**v1.0.0 RELEASE APPROVED.** Remaining backlog items 1–7 executed and verified on `agent/nexus/uuid-advisory`. Full precommit suite green (`npm run precommit`), GitHub Actions workflows migrated to Node 22 with strict `npm ci`, slow-device layout shift fixed, route-state handler sweeps complete, 11 graph-health findings documented, search evaluation benchmark expanded, and audit evidence compiled in [`docs/audits/v1-0-0-release-decision-2026-07-22.md`](audits/v1-0-0-release-decision-2026-07-22.md). Tag `v1.0.0` is authorized.
 
 ## Phase 0 Development Readiness
 

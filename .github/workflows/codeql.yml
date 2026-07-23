@@ -28,6 +28,6 @@ jobs:
           languages: ${{ matrix.language }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - run: npm ci || npm install
+          node-version: '22'
+      - run: npm ci
       - uses: github/codeql-action/analyze@v3

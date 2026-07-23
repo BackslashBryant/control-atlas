@@ -68,7 +68,7 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - The absolute deployed-mobile Lighthouse floor of 50 was laptop-measured and does NOT reproduce on CI hardware: a same-runner A/B on 2026-07-19 scored `743dcde` (pre-UX-spine) at 34/41/41 and `9f687d7` (post-UX-spine) at 35/44/37, CLS 1.516 in both. The gate is now comparative — run the `Lighthouse A/B` workflow against the previous released ref on the same runner and require no material regression. Never compare scores measured on different machines.
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.
 - Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
-- Keep GitHub Actions Node 20-runtime deprecation work, the `@lhci/cli@0.15.1` → `uuid` constraint, and `npm ci || npm install` fallback review in separate maintenance changes.
+- Keep GitHub Actions Node runtime deprecation work and `npm ci || npm install` fallback review in separate maintenance changes.
 
 ## Failed attempts
 - ATTEMPT 1 [L1] (Phase 4 gate, 2026-07-19): intermittent 30s timeouts in critical-path-matrix Atlas→record-detail flows (`.relationship-group-trigger` / Purpose open-record) — killed stray static server on :4399 -> still one 9/10 run afterward. Not ELK-related (map mounts only on view=map). Working hypothesis: cold-load latency under parallel Playwright workers; 20/20 on --repeat-each=2 after cleanup.

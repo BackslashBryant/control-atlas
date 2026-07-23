@@ -1,12 +1,12 @@
 export function LibrarySkeleton() {
   return (
-    <section aria-busy="true" aria-label="Loading library" className="panel">
+    <section aria-busy="true" aria-label="Loading library" className="panel skeleton-container">
       <div className="skeleton-block skeleton-title" />
       <div className="skeleton-block skeleton-line wide" />
       <div className="skeleton-block skeleton-line" />
       <div className="skeleton-search" />
       <div className="stack">
-        {[1, 2, 3].map((index) => (
+        {[1, 2, 3, 4, 5].map((index) => (
           <article className="result-card skeleton-card" key={index}>
             <div className="skeleton-block skeleton-line wide" />
             <div className="skeleton-block skeleton-line" />
