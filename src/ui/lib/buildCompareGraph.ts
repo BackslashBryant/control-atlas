@@ -1,4 +1,4 @@
-import type { CompareWorkbench } from "./viewState";
+import type { CompareCrosswalk } from "./viewState";
 
 export type CompareRole = "shared" | "uniqueA" | "uniqueB" | "neutral";
 
@@ -77,9 +77,9 @@ export function summarizeProvenance(items: ProvenanceItem[]): Pick<
 }
 
 export function getCompareLegendLabels(
-  workbench: CompareWorkbench,
+  crosswalk: CompareCrosswalk,
 ): CompareGraphLabels {
-  switch (workbench) {
+  switch (crosswalk) {
     case "relationships":
       return {
         shared: "Shared mappings",
@@ -137,7 +137,7 @@ function edgeFromRuntime(edge: any, id?: string): CompareGraphEdge {
 }
 
 function emptyResult(
-  workbench: CompareWorkbench,
+  crosswalk: CompareCrosswalk,
   mapAvailable = false,
 ): CompareGraphResult {
   return {
@@ -154,13 +154,13 @@ function emptyResult(
       inferred: 0,
       deprecated: 0,
     },
-    labels: getCompareLegendLabels(workbench),
+    labels: getCompareLegendLabels(crosswalk),
     stats: { nodeCount: 0, filtered: 0, truncated: false },
   };
 }
 
 function finalizeGraph(
-  workbench: CompareWorkbench,
+  crosswalk: CompareCrosswalk,
   nodes: Map<string, CompareGraphNode>,
   edges: CompareGraphEdge[],
   centerNodeId: string,
@@ -178,7 +178,7 @@ function finalizeGraph(
     centerNodeId: centerNodeId || nodeList[0]?.id || "",
     atlasMapNode,
     summary: { ...roleCounts, ...provenance },
-    labels: getCompareLegendLabels(workbench),
+    labels: getCompareLegendLabels(crosswalk),
     stats: {
       nodeCount: nodeList.length,
       filtered: nodeList.length,
@@ -353,11 +353,11 @@ function buildBaselineCompareGraph(comparison: any): CompareGraphResult {
 }
 
 function buildChainCompareGraph(
-  workbench: "stig-chain" | "threat-chain",
+  crosswalk: "stig-chain" | "threat-chain",
   selectedChain: any,
 ): CompareGraphResult {
   if (!selectedChain?.source_node) {
-    return emptyResult(workbench);
+    return emptyResult(crosswalk);
   }
 
   const nodes = new Map<string, CompareGraphNode>();
@@ -367,15 +367,15 @@ function buildChainCompareGraph(
   addNode(nodes, sourceNode, "uniqueA");
 
   const intermediateKey =
-    workbench === "stig-chain" ? "cci_entries" : "d3fend_entries";
+    crosswalk === "stig-chain" ? "cci_entries" : "d3fend_entries";
   const mappedKey =
-    workbench === "stig-chain" ? "nist_entries" : "nist_entries";
+    crosswalk === "stig-chain" ? "nist_entries" : "nist_entries";
   const unmappedKey =
-    workbench === "stig-chain" ? "unmapped_cci_nodes" : "unmapped_d3fend_nodes";
+    crosswalk === "stig-chain" ? "unmapped_cci_nodes" : "unmapped_d3fend_nodes";
 
   for (const entry of selectedChain[intermediateKey] || []) {
     const midNode =
-      workbench === "stig-chain" ? entry.cciNode : entry.d3fendNode;
+      crosswalk === "stig-chain" ? entry.cciNode : entry.d3fendNode;
     addNode(nodes, midNode, "neutral");
     edges.push(
       edgeFromRuntime(entry.relationshipEdge, `src-${midNode.id}`),
@@ -384,7 +384,7 @@ function buildChainCompareGraph(
 
   for (const entry of selectedChain[mappedKey] || []) {
     const leafNode =
-      workbench === "stig-chain" ? entry.nistNode : entry.nistNode;
+      crosswalk === "stig-chain" ? entry.nistNode : entry.nistNode;
     addNode(nodes, leafNode, "shared");
     edges.push(
       edgeFromRuntime(entry.relationshipEdge, `map-${leafNode.id}`),
@@ -401,7 +401,7 @@ function buildChainCompareGraph(
     sourceNode.id;
 
   return finalizeGraph(
-    workbench,
+    crosswalk,
     nodes,
     edges,
     sourceNode.id,
@@ -414,8 +414,8 @@ function buildChainCompareGraph(
   );
 }
 
-export type CompareWorkbenchInput = {
-  workbench: CompareWorkbench;
+export type CompareCrosswalkInput = {
+  crosswalk: CompareCrosswalk;
   relationshipRows?: { rows: any[] } | null;
   sourceCatalog?: string;
   targetCatalog?: string;
@@ -424,12 +424,12 @@ export type CompareWorkbenchInput = {
   threatChainPayload?: { selected_chain?: any } | null;
 };
 
-export function buildWorkbenchCompareGraph(
-  input: CompareWorkbenchInput,
+export function buildCrosswalkCompareGraph(
+  input: CompareCrosswalkInput,
 ): CompareGraphResult {
-  const { workbench } = input;
+  const { crosswalk } = input;
 
-  if (workbench === "relationships") {
+  if (crosswalk === "relationships") {
     return buildRelationshipCompareGraph(
       input.relationshipRows?.rows || [],
       input.sourceCatalog || "",
@@ -437,25 +437,25 @@ export function buildWorkbenchCompareGraph(
     );
   }
 
-  if (workbench === "baseline-compare") {
+  if (crosswalk === "baseline-compare") {
     return buildBaselineCompareGraph(input.baselineComparison);
   }
 
-  if (workbench === "stig-chain") {
+  if (crosswalk === "stig-chain") {
     return buildChainCompareGraph(
       "stig-chain",
       input.chainPayload?.selected_chain,
     );
   }
 
-  if (workbench === "threat-chain") {
+  if (crosswalk === "threat-chain") {
     return buildChainCompareGraph(
       "threat-chain",
       input.threatChainPayload?.selected_chain,
     );
   }
 
-  return emptyResult(workbench);
+  return emptyResult(crosswalk);
 }
 
 // The grouped map renders category rollups, so the graph itself stays

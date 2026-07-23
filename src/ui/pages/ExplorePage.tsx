@@ -222,7 +222,7 @@ export function ExplorePage(props: {
               <input
                 id="search-query"
                 onChange={(event) => setQueryDraft(event.target.value)}
-                placeholder="account management, AC-2, FedRAMP High, CCI-000225"
+                placeholder="encryption, access control, passwords"
                 type="search"
                 value={queryDraft}
               />
@@ -333,11 +333,12 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {resourceMatches.templates.map((template: any) => (
-                    <article className="result-card" key={template.id}>
+                    <article className="result-card" key={template.id} aria-labelledby={`title-${template.id}`} aria-describedby={`desc-${template.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Starter template</p>
                           <CardTitle
+                            id={`title-${template.id}`}
                             onOpen={() =>
                               onNavigate("templates", {
                                 templateType: template.templateType,
@@ -349,7 +350,7 @@ export function ExplorePage(props: {
                         </div>
                         <Badge tone="info">{template.classification}</Badge>
                       </div>
-                      <p className="result-summary">{template.summary}</p>
+                      <p className="result-summary" id={`desc-${template.id}`}>{template.summary}</p>
                     </article>
                   ))}
                 </div>
@@ -362,11 +363,11 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {resourceMatches.artifacts.map((artifact: any) => (
-                    <article className="result-card" key={artifact.id}>
+                    <article className="result-card" key={artifact.id} aria-labelledby={`title-${artifact.id}`} aria-describedby={`desc-${artifact.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Official resource</p>
-                          <CardTitle href={artifact.href || undefined}>
+                          <CardTitle id={`title-${artifact.id}`} href={artifact.href || undefined}>
                             {artifact.title}
                           </CardTitle>
                         </div>
@@ -383,7 +384,7 @@ export function ExplorePage(props: {
                           )}
                         </Badge>
                       </div>
-                      <p className="result-summary">{artifact.summary}</p>
+                      <p className="result-summary" id={`desc-${artifact.id}`}>{artifact.summary}</p>
                       <p className="result-support">
                         {artifact.version ? `Version: ${artifact.version}` : ""}
                       </p>
@@ -399,11 +400,11 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {glossaryMatches.map((entry) => (
-                    <article className="result-card" key={entry.id}>
+                    <article className="result-card" key={entry.id} aria-labelledby={`title-${entry.id}`} aria-describedby={`desc-${entry.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Glossary term</p>
-                          <CardTitle onOpen={() => onOpenGlossary(entry.id)}>
+                          <CardTitle id={`title-${entry.id}`} onOpen={() => onOpenGlossary(entry.id)}>
                             {entry.term}
                             {entry.expansion ? ` · ${entry.expansion}` : ""}
                           </CardTitle>
@@ -414,7 +415,7 @@ export function ExplorePage(props: {
                             : "Official source"}
                         </Badge>
                       </div>
-                      <p className="result-summary">{entry.definition}</p>
+                      <p className="result-summary" id={`desc-${entry.id}`}>{entry.definition}</p>
                       <div className="chip-row">
                         {entry.related_patterns.map((patternId) => (
                           <button
@@ -467,7 +468,7 @@ export function ExplorePage(props: {
                           lowCoverage,
                         }) => {
                         return (
-                          <article className="result-card" key={document.id}>
+                          <article className="result-card" key={document.id} aria-labelledby={`title-${document.id}`} aria-describedby={`desc-${document.id}`}>
                             <div className="result-card-header">
                               <div>
                                 <p className="result-meta">
@@ -477,6 +478,7 @@ export function ExplorePage(props: {
                                   )}
                                 </p>
                                 <CardTitle
+                                  id={`title-${document.id}`}
                                   onOpen={() =>
                                     onOpenNode(document.id, "search")
                                   }
@@ -508,7 +510,7 @@ export function ExplorePage(props: {
                                 ) : null}
                               </div>
                             </div>
-                            <p className="result-summary">
+                            <p className="result-summary" id={`desc-${document.id}`}>
                               {document.plain_language_summary ||
                                 node?.plain_language_summary ||
                                 document.description}
@@ -561,7 +563,7 @@ export function ExplorePage(props: {
                                     className="secondary"
                                     onClick={() =>
                                       onNavigate("matrix", {
-                                        workbench: "relationships",
+                                        crosswalk: "relationships",
                                         items: document.item_id,
                                       })
                                     }
@@ -654,7 +656,7 @@ export function ExplorePage(props: {
         ) : (
           <section className="empty-state subtle">
             <p className="muted">
-              Try AC-2, FedRAMP High, CCI-000225, or account management.
+              Try encryption, access control, or passwords.
             </p>
           </section>
         )}

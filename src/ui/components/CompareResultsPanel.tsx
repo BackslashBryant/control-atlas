@@ -91,7 +91,7 @@ type CompareResultsPanelProps = {
   bundle: RuntimeBundle;
   graph: CompareGraphResult;
   compareView: CompareViewMode;
-  matrixWorkbench: Extract<ViewState, { view: "matrix" }>["workbench"];
+  matrixCrosswalk: Extract<ViewState, { view: "matrix" }>["crosswalk"];
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string) => void;
   onExport: (format: "csv" | "markdown" | "json") => void;
@@ -103,7 +103,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
     bundle,
     graph,
     compareView,
-    matrixWorkbench,
+    matrixCrosswalk,
     onNavigate,
     onOpenNode,
     onExport,
@@ -133,7 +133,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
   );
 
   const setCompareView = (view: CompareViewMode) => {
-    onNavigate("matrix", { compareView: view, workbench: matrixWorkbench });
+    onNavigate("matrix", { compareView: view, crosswalk: matrixCrosswalk });
   };
 
   const openAtlasMap = () => {
@@ -241,7 +241,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
               className="secondary"
               onClick={() =>
                 onNavigate("matrix", {
-                  workbench: "relationships",
+                  crosswalk: "relationships",
                   compareView: "list",
                 })
               }

@@ -54,7 +54,7 @@ export function StartHerePage(props: {
 
   function followCompareLink(link: StartHereCompareLink) {
     onNavigate("matrix", {
-      workbench: link.workbench,
+      crosswalk: link.crosswalk,
       ...link.patch,
     });
   }
@@ -135,6 +135,7 @@ export function StartHerePage(props: {
           </div>
         ) : null}
         {activeStep === 1 ? (
+        <>
         <SelectField
           emptyLabel="Choose a system type"
           hint="What kind of system you are authorizing or assessing."
@@ -152,6 +153,13 @@ export function StartHerePage(props: {
           ]}
           value={state.systemType}
         />
+        <div className="field-hint terminology-hint">
+          <strong>Cloud SaaS:</strong> Fully hosted software (e.g., Salesforce, Google Workspace).<br/>
+          <strong>Platform service:</strong> Cloud hosting environment (e.g., AWS EC2, Azure).<br/>
+          <strong>On-premises:</strong> Servers in a datacenter you physically control.<br/>
+          <strong>Enterprise service:</strong> Internal shared service (e.g., agency Active Directory).
+        </div>
+        </>
         ) : null}
         {state.dataSensitivity && activeStep > 2 ? (
           <div className="start-here-answer">
@@ -184,10 +192,10 @@ export function StartHerePage(props: {
             })
           }
           options={[
-            { value: "Low", label: "Low" },
-            { value: "Moderate", label: "Moderate" },
-            { value: "High", label: "High" },
-            { value: "CUI", label: "CUI" },
+            { value: "Low", label: "Low (Public data)" },
+            { value: "Moderate", label: "Moderate (Internal data)" },
+            { value: "High", label: "High (Mission critical/PII)" },
+            { value: "CUI", label: "CUI (Controlled Unclassified Information)" },
             { value: "Not sure", label: "Not sure" },
           ]}
           value={state.dataSensitivity}
@@ -202,10 +210,10 @@ export function StartHerePage(props: {
             onNavigate("start-here", { environment: value, step: "" })
           }
           options={[
-            { value: "Federal civilian", label: "Federal civilian" },
-            { value: "DoD", label: "DoD" },
-            { value: "Contractor", label: "Contractor" },
-            { value: "CSP", label: "CSP" },
+            { value: "Federal civilian", label: "Federal civilian (FCEB)" },
+            { value: "DoD", label: "DoD (Department of Defense)" },
+            { value: "Contractor", label: "Contractor (Internal network)" },
+            { value: "CSP", label: "CSP (Cloud Service Provider)" },
             { value: "Not sure", label: "Not sure" },
           ]}
           value={state.environment}

@@ -1,0 +1,36 @@
+name: Report Broken Link or Outdated Resource
+description: Report a dead link, missing file, HTTP error, or outdated standard in Control Commons.
+title: "[Commons Link Issue]: "
+labels: ["commons", "broken-link"]
+body:
+  - type: input
+    id: resource_id
+    attributes:
+      label: Resource ID or Name
+      placeholder: e.g. official-fedramp-baselines or FedRAMP SSP Template
+    validations:
+      required: true
+
+  - type: input
+    id: broken_url
+    attributes:
+      label: Broken URL
+      placeholder: e.g. https://www.fedramp.gov/assets/resources/documents/SSP-Template.docx
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Description of the Problem
+      placeholder: e.g. HTTP 404 error when opening the link, or the FedRAMP PMO moved the document to a new URL path.
+    validations:
+      required: true
+
+  - type: input
+    id: replacement_url
+    attributes:
+      label: Replacement URL (if known)
+      placeholder: e.g. https://www.fedramp.gov/templates/
+    validations:
+      required: false

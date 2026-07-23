@@ -1,4 +1,4 @@
-import type { CompareWorkbench } from './viewState';
+import type { CompareCrosswalk } from './viewState';
 
 export type StartHereAnswers = {
   systemType: string;
@@ -12,7 +12,7 @@ export type StartHereLibraryLink =
 
 export type StartHereCompareLink = {
   kind: 'compare';
-  workbench: CompareWorkbench;
+  crosswalk: CompareCrosswalk;
   patch: Record<string, string>;
   label: string;
   rationale: string;

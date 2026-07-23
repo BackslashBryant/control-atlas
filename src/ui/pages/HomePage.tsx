@@ -51,7 +51,7 @@ export function HomePage(props: HomePageProps) {
             onChange={(event) => setSearchDraft(event.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            placeholder="Search anything — account management, AC-2, FedRAMP High…"
+            placeholder="Search anything — encryption, access control, passwords…"
             type="search"
             value={searchDraft}
           />

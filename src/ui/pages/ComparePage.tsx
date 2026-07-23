@@ -21,13 +21,13 @@ import {
   ProvenanceBadge,
   SourceRefList,
 } from "../lib/compareHelpers";
-import { buildWorkbenchCompareGraph } from "../lib/buildCompareGraph";
+import { buildCrosswalkCompareGraph } from "../lib/buildCompareGraph";
 import {
   PageHeader,
   SummaryCard,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
-import type { CompareWorkbench, ViewState } from "../lib/viewState";
+import type { CompareCrosswalk, ViewState } from "../lib/viewState";
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -148,13 +148,13 @@ export function ComparePage(props: {
       : null;
     return source?.version || source?.source_version || null;
   }, [bundle.runtime, state.source, state.target]);
-  const workbench = state.workbench || "intent";
+  const crosswalk = state.crosswalk || "intent";
   const relationshipNodeIds = useMemo(
     () => parseCatalogItemIds(state.items, state.source),
     [state.items, state.source],
   );
   const relationshipRows =
-    workbench === "relationships"
+    crosswalk === "relationships"
       ? bundle.runtime.buildRelationshipRows({
           source_catalog: state.source,
           target_catalog: state.target,
@@ -200,7 +200,7 @@ export function ComparePage(props: {
   // item/type/provenance/confidence filters, since pair-level support is
   // about the catalogs, not one item or one relationship type.
   const pairHasAnyPublishedMapping =
-    workbench === "relationships" && state.source && state.target
+    crosswalk === "relationships" && state.source && state.target
       ? bundle.runtime.buildRelationshipRows({
           source_catalog: state.source,
           target_catalog: state.target,
@@ -241,10 +241,10 @@ export function ComparePage(props: {
   }, [bundle, relationshipNodeIds, state.source, state.target]);
   const chainCatalogId =
     state.chainCatalog ||
-    (workbench === "threat-chain" ? "mitre-attack" : "disa-stig");
+    (crosswalk === "threat-chain" ? "mitre-attack" : "disa-stig");
   const chainCatalogNodes = useMemo(
     () =>
-      workbench === "threat-chain"
+      crosswalk === "threat-chain"
         ? bundle.runtime
             .getNodes({ node_type: "attack_technique" })
             .filter(
@@ -266,7 +266,7 @@ export function ComparePage(props: {
                   right.metadata?.item_id || "",
                 ) || left.id.localeCompare(right.id),
             ),
-    [bundle, chainCatalogId, state.chainCatalog, workbench],
+    [bundle, chainCatalogId, state.chainCatalog, crosswalk],
   );
   const chainBenchmarkOptions = useMemo(
     () =>
@@ -287,7 +287,7 @@ export function ComparePage(props: {
     [bundle, chainCatalogNodes],
   );
   const chainPayload =
-    workbench === "stig-chain"
+    crosswalk === "stig-chain"
       ? bundle.runtime.buildStigChain({
           chain_catalog: chainCatalogId,
           chain_benchmark: state.chainBenchmark,
@@ -296,7 +296,7 @@ export function ComparePage(props: {
         })
       : null;
   const threatChainPayload =
-    workbench === "threat-chain"
+    crosswalk === "threat-chain"
       ? bundle.runtime.buildThreatChain({
           chain_catalog: state.chainCatalog || "mitre-attack",
           chain_item: state.chainItem,
@@ -310,7 +310,7 @@ export function ComparePage(props: {
       label: `${node.metadata?.item_id || node.id} - ${node.metadata?.title || node.label}`,
     }));
   const baselineComparison =
-    workbench === "baseline-compare" &&
+    crosswalk === "baseline-compare" &&
     state.baselineA &&
     state.baselineB &&
     state.baselineA !== state.baselineB
@@ -325,8 +325,8 @@ export function ComparePage(props: {
 
   const compareGraph = useMemo(
     () =>
-      buildWorkbenchCompareGraph({
-        workbench,
+      buildCrosswalkCompareGraph({
+        crosswalk,
         relationshipRows,
         sourceCatalog: state.source,
         targetCatalog: state.target,
@@ -335,7 +335,7 @@ export function ComparePage(props: {
         threatChainPayload,
       }),
     [
-      workbench,
+      crosswalk,
       relationshipRows,
       state.source,
       state.target,
@@ -348,37 +348,37 @@ export function ComparePage(props: {
   const comparisonCards: Array<{
     title: string;
     body: string;
-    workbench: CompareWorkbench;
+    crosswalk: CompareCrosswalk;
   }> = [
     {
       title: "Framework to framework",
       body: "Compare two public catalogs and start with a summary before drilling into detailed mappings.",
-      workbench: "relationships",
+      crosswalk: "relationships",
     },
     {
       title: "STIG/SRG to controls",
       body: "Trace Security Technical Implementation Guide (STIG) and Security Requirements Guide (SRG) items through CCI links to related NIST controls.",
-      workbench: "stig-chain",
+      crosswalk: "stig-chain",
     },
     {
       title: "Threat to controls",
       body: "Trace an ATT&CK technique through D3FEND countermeasures to related NIST controls.",
-      workbench: "threat-chain",
+      crosswalk: "threat-chain",
     },
     {
       title: "Baseline to baseline",
       body: "See what two public baselines share and what is only present in one of them.",
-      workbench: "baseline-compare",
+      crosswalk: "baseline-compare",
     },
     {
       title: "Find what maps to this item",
       body: "Open the framework comparison view with one known item in mind instead of blank filters.",
-      workbench: "relationships",
+      crosswalk: "relationships",
     },
   ];
 
   function exportRows(format: "csv" | "markdown" | "json") {
-    if (workbench === "relationships" && relationshipRows) {
+    if (crosswalk === "relationships" && relationshipRows) {
       const content = bundle.runtime.exportRelationshipRows(
         relationshipRows.rows,
         format,
@@ -390,7 +390,7 @@ export function ComparePage(props: {
         format === "json" ? "application/json" : "text/plain",
       );
     }
-    if (workbench === "stig-chain" && chainPayload) {
+    if (crosswalk === "stig-chain" && chainPayload) {
       const content = bundle.runtime.exportStigChain(chainPayload, format);
       const extension = format === "markdown" ? "md" : format;
       downloadTextFile(
@@ -399,7 +399,7 @@ export function ComparePage(props: {
         format === "json" ? "application/json" : "text/plain",
       );
     }
-    if (workbench === "threat-chain" && threatChainPayload) {
+    if (crosswalk === "threat-chain" && threatChainPayload) {
       const content = bundle.runtime.exportThreatChain(
         threatChainPayload,
         format,
@@ -411,7 +411,7 @@ export function ComparePage(props: {
         format === "json" ? "application/json" : "text/plain",
       );
     }
-    if (workbench === "baseline-compare" && baselineComparison) {
+    if (crosswalk === "baseline-compare" && baselineComparison) {
       const content = bundle.runtime.exportBaselineComparison(
         baselineComparison,
         format,
@@ -426,15 +426,15 @@ export function ComparePage(props: {
   }
 
   const compareStep: 1 | 2 | 3 =
-    workbench === "intent"
+    crosswalk === "intent"
       ? 1
-      : workbench === "relationships" && relationshipRows?.rows?.length
+      : crosswalk === "relationships" && relationshipRows?.rows?.length
         ? 3
-        : workbench === "baseline-compare" && baselineComparison
+        : crosswalk === "baseline-compare" && baselineComparison
           ? 3
-          : workbench === "stig-chain" && selectedChain
+          : crosswalk === "stig-chain" && selectedChain
             ? 3
-            : workbench === "threat-chain" && selectedThreatChain
+            : crosswalk === "threat-chain" && selectedThreatChain
               ? 3
               : 2;
 
@@ -449,7 +449,7 @@ export function ComparePage(props: {
         <CatalogVersionChip label="Active" version={selectedCatalogVersion} />
       ) : null}
 
-      {workbench === "intent" ? (
+      {crosswalk === "intent" ? (
         <section aria-labelledby="compare-kind-heading" className="nexus-section">
           <h2 className="visually-hidden" id="compare-kind-heading">
             Choose a comparison type
@@ -461,7 +461,7 @@ export function ComparePage(props: {
                 key={card.title}
                 onClick={() =>
                   onNavigate("matrix", {
-                    workbench: card.workbench,
+                    crosswalk: card.crosswalk,
                     intent: card.title,
                   })
                 }
@@ -479,12 +479,12 @@ export function ComparePage(props: {
           <div>
             <p className="eyebrow">Comparison type</p>
             <h2>
-              {comparisonCards.find((card) => card.workbench === workbench)?.title}
+              {comparisonCards.find((card) => card.crosswalk === crosswalk)?.title}
             </h2>
           </div>
           <button
             className="secondary"
-            onClick={() => onNavigate("matrix", { workbench: "intent" })}
+            onClick={() => onNavigate("matrix", { crosswalk: "intent" })}
             type="button"
           >
             Change comparison
@@ -492,7 +492,7 @@ export function ComparePage(props: {
         </div>
       )}
 
-      {workbench === "relationships" ? (
+      {crosswalk === "relationships" ? (
         <>
           <div className="filter-grid">
             <div className="field-stack">
@@ -500,7 +500,7 @@ export function ComparePage(props: {
                 hint="The first framework or catalog you want to compare from."
                 label="Compare from"
                 onChange={(value) =>
-                  onNavigate("matrix", { workbench, source: value })
+                  onNavigate("matrix", { crosswalk, source: value })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -519,7 +519,7 @@ export function ComparePage(props: {
                 hint="The second framework or catalog you want to compare against."
                 label="Compare against"
                 onChange={(value) =>
-                  onNavigate("matrix", { workbench, target: value })
+                  onNavigate("matrix", { crosswalk, target: value })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -547,7 +547,7 @@ export function ComparePage(props: {
                       onChange={(event) =>
                         onNavigate("matrix", {
                           ...state,
-                          workbench,
+                          crosswalk,
                           items: event.target.value,
                         })
                       }
@@ -564,7 +564,7 @@ export function ComparePage(props: {
                     onChange={(value) =>
                       onNavigate("matrix", {
                         ...state,
-                        workbench,
+                        crosswalk,
                         relationshipType: value,
                       })
                     }
@@ -580,7 +580,7 @@ export function ComparePage(props: {
                     onChange={(value) =>
                       onNavigate("matrix", {
                         ...state,
-                        workbench,
+                        crosswalk,
                         provenance: value,
                       })
                     }
@@ -598,7 +598,7 @@ export function ComparePage(props: {
                     onChange={(value) =>
                       onNavigate("matrix", {
                         ...state,
-                        workbench,
+                        crosswalk,
                         confidence: value,
                       })
                     }
@@ -617,7 +617,7 @@ export function ComparePage(props: {
                         onChange={(event) =>
                           onNavigate("matrix", {
                             ...state,
-                            workbench,
+                            crosswalk,
                             includeCandidates: event.target.checked
                               ? "true"
                               : "",
@@ -723,7 +723,7 @@ export function ComparePage(props: {
                     ) : null}
                   </section>
                 }
-                matrixWorkbench={workbench}
+                matrixCrosswalk={crosswalk}
                 onExport={exportRows}
                 onNavigate={onNavigate}
                 onOpenNode={onOpenNode}
@@ -753,7 +753,7 @@ export function ComparePage(props: {
                     onClick={() =>
                       onNavigate("matrix", {
                         ...state,
-                        workbench,
+                        crosswalk,
                         relationshipType: "",
                         provenance: "",
                         confidence: "",
@@ -768,7 +768,7 @@ export function ComparePage(props: {
                 <button
                   className={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
                   onClick={() =>
-                    onNavigate("matrix", { ...state, workbench: "intent" })
+                    onNavigate("matrix", { ...state, crosswalk: "intent" })
                   }
                   type="button"
                 >
@@ -784,7 +784,7 @@ export function ComparePage(props: {
         </>
       ) : null}
 
-      {workbench === "stig-chain" ? (
+      {crosswalk === "stig-chain" ? (
         <>
           <div className="filter-grid">
             <SelectField
@@ -792,7 +792,7 @@ export function ComparePage(props: {
               onChange={(value) =>
                 onNavigate("matrix", {
                   ...state,
-                  workbench,
+                  crosswalk,
                   chainCatalog: value,
                   chainBenchmark: "",
                   chainItem: "",
@@ -810,7 +810,7 @@ export function ComparePage(props: {
               onChange={(value) =>
                 onNavigate("matrix", {
                   ...state,
-                  workbench,
+                  crosswalk,
                   chainBenchmark: value,
                   chainItem: "",
                 })
@@ -824,7 +824,7 @@ export function ComparePage(props: {
               onChange={(value) =>
                 onNavigate("matrix", {
                   ...state,
-                  workbench,
+                  crosswalk,
                   chainItem: value,
                 })
               }
@@ -848,7 +848,7 @@ export function ComparePage(props: {
                   onChange={(event) =>
                     onNavigate("matrix", {
                       ...state,
-                      workbench,
+                      crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
                   }
@@ -910,7 +910,7 @@ export function ComparePage(props: {
                             onClick={() =>
                               onNavigate("matrix", {
                                 ...state,
-                                workbench,
+                                crosswalk,
                                 chainItem: row.node_id,
                               })
                             }
@@ -1015,7 +1015,7 @@ export function ComparePage(props: {
                       </div>
                     </section>
                   }
-                  matrixWorkbench={workbench}
+                  matrixCrosswalk={crosswalk}
                   onExport={exportRows}
                   onNavigate={onNavigate}
                   onOpenNode={onOpenNode}
@@ -1034,7 +1034,7 @@ export function ComparePage(props: {
         </>
       ) : null}
 
-      {workbench === "threat-chain" ? (
+      {crosswalk === "threat-chain" ? (
         <>
           <p className="notice-inline" role="note">
             ATT&CK ICS coverage is still partial in the public map. A missing
@@ -1054,7 +1054,7 @@ export function ComparePage(props: {
               onChange={(value) =>
                 onNavigate("matrix", {
                   ...state,
-                  workbench,
+                  crosswalk,
                   chainCatalog: value,
                   chainItem: "",
                 })
@@ -1071,7 +1071,7 @@ export function ComparePage(props: {
               onChange={(value) =>
                 onNavigate("matrix", {
                   ...state,
-                  workbench,
+                  crosswalk,
                   chainItem: value,
                 })
               }
@@ -1088,7 +1088,7 @@ export function ComparePage(props: {
                   onChange={(event) =>
                     onNavigate("matrix", {
                       ...state,
-                      workbench,
+                      crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
                   }
@@ -1155,7 +1155,7 @@ export function ComparePage(props: {
                               onClick={() =>
                                 onNavigate("matrix", {
                                   ...state,
-                                  workbench,
+                                  crosswalk,
                                   chainItem: row.node_id,
                                 })
                               }
@@ -1270,7 +1270,7 @@ export function ComparePage(props: {
                       </div>
                     </section>
                   }
-                  matrixWorkbench={workbench}
+                  matrixCrosswalk={crosswalk}
                   onExport={exportRows}
                   onNavigate={onNavigate}
                   onOpenNode={onOpenNode}
@@ -1289,14 +1289,14 @@ export function ComparePage(props: {
         </>
       ) : null}
 
-      {workbench === "baseline-compare" ? (
+      {crosswalk === "baseline-compare" ? (
         <>
           <div className="filter-grid">
             <SelectField
               label="Baseline A"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  workbench,
+                  crosswalk,
                   baselineA: value,
                 })
               }
@@ -1307,7 +1307,7 @@ export function ComparePage(props: {
               label="Baseline B"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  workbench,
+                  crosswalk,
                   baselineB: value,
                 })
               }
@@ -1374,7 +1374,7 @@ export function ComparePage(props: {
                     />
                   </div>
                 }
-                matrixWorkbench={workbench}
+                matrixCrosswalk={crosswalk}
                 onExport={exportRows}
                 onNavigate={onNavigate}
                 onOpenNode={onOpenNode}

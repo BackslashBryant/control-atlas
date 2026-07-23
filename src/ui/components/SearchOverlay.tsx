@@ -26,9 +26,21 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
   const results = useMemo(() => {
     if (!bundle || !query.trim()) {
-      return [];
+      return { libraryResults: [], commonsResults: [] };
     }
-    return bundle.runtime.searchLibrary(query.trim()).slice(0, 12);
+    const q = query.trim().toLowerCase();
+    const libraryResults = bundle.runtime.searchLibrary(query.trim()).slice(0, 8);
+    const commonsResults = (bundle.commonsSearchIndex?.documents || [])
+      .filter(
+        (doc) =>
+          doc.name.toLowerCase().includes(q) ||
+          doc.shortName.toLowerCase().includes(q) ||
+          doc.summary.toLowerCase().includes(q) ||
+          doc.searchableText.includes(q)
+      )
+      .slice(0, 4);
+
+    return { libraryResults, commonsResults };
   }, [bundle, query]);
 
   function openResult(nodeId: string) {
@@ -36,9 +48,19 @@ export function SearchOverlay(props: SearchOverlayProps) {
     onOpenNode(nodeId, "search");
   }
 
+  function openCommonsResult(id: string) {
+    onOpenChange(false);
+    onNavigate("commons-detail", { id, from: "search" });
+  }
+
   function openExplore() {
     onOpenChange(false);
     onNavigate("search", { query: query.trim() });
+  }
+
+  function openCommons() {
+    onOpenChange(false);
+    onNavigate("commons", { query: query.trim() });
   }
 
   return (
@@ -61,7 +83,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     openExplore();
                   }
                 }}
-                placeholder="Search by control ID, STIG item, or topic"
+                placeholder="Search controls, STIGs, tools, templates, or Commons..."
                 type="search"
                 value={query}
               />
@@ -77,56 +99,98 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
             <p className="field-hint">
-              Type to search records. Press Enter for templates, terms, and
-              official resources in Explore.
+              Type to search records. Press Enter for templates, tools, and
+              official resources in Commons and Explore.
             </p>
-          ) : results.length === 0 ? (
+          ) : results.libraryResults.length === 0 && results.commonsResults.length === 0 ? (
             <p className="field-hint">No records match &quot;{query.trim()}&quot;.</p>
           ) : (
-            <ul className="search-overlay-results">
-              {results.map((document: any) => {
-                const missingSummary = !(
-                  document.plain_language_summary || document.description
-                );
-                return (
-                  <li key={document.id}>
-                    <button
-                      className="search-overlay-result"
-                      onClick={() => openResult(document.id)}
-                      type="button"
-                    >
-                      <span className="search-overlay-result-title">
-                        {document.title || document.item_id}
-                      </span>
-                      <span className="search-overlay-result-meta">
-                        <code>{document.item_id}</code>
-                        {" · "}
-                        {displayNameFor("object_type", document.object_type)}
-                      </span>
-                      <span className="search-overlay-result-summary">
-                        {document.plain_language_summary ||
-                          document.description ||
-                          (missingSummary
-                            ? "Plain-language summary missing for this record."
-                            : "")}
-                      </span>
-                      {missingSummary ? (
-                        <span className="warning-inline">
-                          Plain-language summary missing — review source text on
-                          the record page.
-                        </span>
-                      ) : null}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="search-overlay-results-container space-y-4">
+              {results.commonsResults.length > 0 ? (
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400 mb-2 px-3">
+                    Control Commons Resources ({results.commonsResults.length})
+                  </div>
+                  <ul className="search-overlay-results">
+                    {results.commonsResults.map((doc) => (
+                      <li key={doc.id}>
+                        <button
+                          className="search-overlay-result"
+                          onClick={() => openCommonsResult(doc.id)}
+                          type="button"
+                        >
+                          <span className="search-overlay-result-title flex items-center justify-between">
+                            <span>{doc.name}</span>
+                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">
+                              Commons · {doc.resourceLane}
+                            </span>
+                          </span>
+                          <span className="search-overlay-result-meta">
+                            <code>{doc.publisher}</code>
+                            {" · "}
+                            {doc.resourceType}
+                          </span>
+                          <span className="search-overlay-result-summary">
+                            {doc.summary}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {results.libraryResults.length > 0 ? (
+                <div>
+                  {results.commonsResults.length > 0 ? (
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-3">
+                      Control Atlas Catalog Records
+                    </div>
+                  ) : null}
+                  <ul className="search-overlay-results">
+                    {results.libraryResults.map((document: any) => {
+                      const missingSummary = !(
+                        document.plain_language_summary || document.description
+                      );
+                      return (
+                        <li key={document.id}>
+                          <button
+                            className="search-overlay-result"
+                            onClick={() => openResult(document.id)}
+                            type="button"
+                          >
+                            <span className="search-overlay-result-title">
+                              {document.title || document.item_id}
+                            </span>
+                            <span className="search-overlay-result-meta">
+                              <code>{document.item_id}</code>
+                              {" · "}
+                              {displayNameFor("object_type", document.object_type)}
+                            </span>
+                            <span className="search-overlay-result-summary">
+                              {document.plain_language_summary ||
+                                document.description ||
+                                (missingSummary
+                                  ? "Plain-language summary missing for this record."
+                                  : "")}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
           )}
 
           {query.trim() ? (
-            <div className="card-actions">
+            <div className="card-actions flex gap-2">
               <button className="secondary" onClick={openExplore} type="button">
-                View all Explore results
+                View all Explore records
+              </button>
+              <button className="secondary" onClick={openCommons} type="button">
+                Search in Control Commons
               </button>
             </div>
           ) : null}

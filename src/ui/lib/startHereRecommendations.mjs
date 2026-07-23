@@ -224,7 +224,7 @@ export function buildStartHereRecommendations(answers) {
 
     compare.push({
       kind: 'compare',
-      workbench: 'stig-chain',
+      crosswalk: 'stig-chain',
       patch: {},
       label: 'Trace STIG rules to controls',
       rationale: 'Follow the public STIG to CCI to NIST chain so you know where a technical rule lands in control language.',
@@ -259,7 +259,7 @@ export function buildStartHereRecommendations(answers) {
     if (fedrampBaseline && nistBaseline) {
       compare.push({
         kind: 'compare',
-        workbench: 'baseline-compare',
+        crosswalk: 'baseline-compare',
         patch: { baselineA: fedrampBaseline, baselineB: nistBaseline },
         label: 'Compare FedRAMP and NIST baselines',
         rationale: 'See what your FedRAMP baseline shares with the matching NIST baseline before you plan controls.',
@@ -281,7 +281,7 @@ export function buildStartHereRecommendations(answers) {
 
     compare.push({
       kind: 'compare',
-      workbench: 'relationships',
+      crosswalk: 'relationships',
       patch: { source: 'nist-800-171-rev2', target: 'nist-800-53' },
       label: 'Compare 800-171 to NIST controls',
       rationale: 'See how contractor-facing requirements map to the broader NIST control catalog you may inherit later.',
@@ -320,7 +320,7 @@ export function buildStartHereRecommendations(answers) {
 
       compare.push({
         kind: 'compare',
-        workbench: 'baseline-compare',
+        crosswalk: 'baseline-compare',
         patch: { baselineA: nistBaseline, baselineB: 'fedramp-rev5:MODERATE' },
         label: 'Compare your NIST baseline to FedRAMP Moderate',
         rationale: 'Check overlap with a common cloud authorization baseline before you inherit or tailor controls.',
@@ -328,7 +328,7 @@ export function buildStartHereRecommendations(answers) {
     } else {
       compare.push({
         kind: 'compare',
-        workbench: 'relationships',
+        crosswalk: 'relationships',
         patch: { source: 'nist-800-53', target: 'fedramp-rev5' },
         label: 'Compare NIST and FedRAMP catalogs',
         rationale: 'Start with a framework-to-framework view when you have not pinned a baseline impact level yet.',

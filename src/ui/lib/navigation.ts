@@ -42,6 +42,12 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     icon: IconGitCompare,
   },
   {
+    label: "Commons",
+    view: "commons",
+    path: "/commons",
+    icon: IconBook2,
+  },
+  {
     label: "Guides",
     view: "patterns",
     path: "/playbooks",
@@ -71,8 +77,8 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
 ];
 
 export const MOBILE_NAV_SECTIONS: NavSection[] = [
-  { label: "Explore", items: PRIMARY_NAV_ITEMS.slice(0, 3) },
-  { label: "Work", items: PRIMARY_NAV_ITEMS.slice(3) },
+  { label: "Explore", items: PRIMARY_NAV_ITEMS.slice(0, 4) },
+  { label: "Work", items: PRIMARY_NAV_ITEMS.slice(4) },
   { label: "Help", items: UTILITY_NAV_ITEMS },
 ];
 
@@ -93,6 +99,9 @@ export function activeNavForState(state: ViewState): ViewState["view"] | null {
   ) {
     return "catalog-detail";
   }
+  if (state.view === "commons-detail") {
+    return "commons";
+  }
   return state.view;
 }
 
@@ -103,6 +112,8 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
     view === "patterns" ||
     view === "start-here" ||
     view === "search" ||
+    view === "commons" ||
+    view === "commons-detail" ||
     view === "not-found"
   );
 }

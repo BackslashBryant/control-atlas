@@ -25,7 +25,7 @@ test('csp cloud path recommends fedramp library, inheritance template, and basel
   assert.ok(recommendations.library.some((entry) => entry.kind === 'library-catalog' && entry.catalogId === 'fedramp-rev5'));
   assert.ok(recommendations.library.some((entry) => entry.kind === 'library-node' && entry.nodeId === 'fedramp-rev5:MODERATE'));
   assert.ok(recommendations.templates.some((entry) => entry.templateType === 'inheritance_worksheet'));
-  assert.ok(recommendations.compare.some((entry) => entry.workbench === 'baseline-compare'));
+  assert.ok(recommendations.compare.some((entry) => entry.crosswalk === 'baseline-compare'));
 
   for (const rationale of allRationales(recommendations)) {
     assert.ok(rationale.length > 0);
@@ -41,7 +41,7 @@ test('dod high path recommends stig chain compare and stig evidence checklist', 
 
   assert.ok(recommendations);
   assert.ok(recommendations.library.some((entry) => entry.kind === 'library-catalog' && entry.catalogId === 'disa-stig'));
-  assert.ok(recommendations.compare.some((entry) => entry.workbench === 'stig-chain'));
+  assert.ok(recommendations.compare.some((entry) => entry.crosswalk === 'stig-chain'));
   assert.ok(recommendations.templates.some((entry) => entry.templateType === 'stig_evidence_checklist'));
   assert.ok(!recommendations.library.some((entry) => entry.catalogId === 'disa-srg'));
 });
