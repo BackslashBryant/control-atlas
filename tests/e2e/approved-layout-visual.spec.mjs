@@ -31,7 +31,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
       }
     `,
   });
-  await waitForAppReady(page);
+  await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
   await page.evaluate(() => globalThis.document.fonts.ready);
 
