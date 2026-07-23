@@ -603,6 +603,7 @@ function AppContent(props: {
   if (state.view === "patterns") {
     return (
       <PlaybooksPage
+        bundle={bundle}
         onNavigate={onNavigate}
         onOpenGlossary={onOpenGlossary}
         onOpenNodeByItemId={onOpenNodeByItemId}

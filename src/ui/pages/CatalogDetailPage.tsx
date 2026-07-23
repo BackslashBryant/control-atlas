@@ -1,4 +1,5 @@
 import { IconArrowLeft, IconExternalLink, IconSearch } from "@tabler/icons-react";
+import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { useMemo, useState } from "react";
 
 import { catalogProfileFor } from "../lib/catalogProfiles";
@@ -117,6 +118,14 @@ export function CatalogDetailPage(props: {
         ) : null}
         <p className="field-hint">This page organizes public reference data. It does not determine applicability or compliance.</p>
       </header>
+
+      <ContextualCommonsModule
+        bundle={bundle}
+        contextType="catalog"
+        contextId={catalog.id}
+        query={catalog.name}
+        onNavigate={onNavigate}
+      />
 
       <section className="catalog-records" aria-labelledby="catalog-records-title">
         <div className="catalog-records-heading">

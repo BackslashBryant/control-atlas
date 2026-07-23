@@ -25,6 +25,7 @@ import {
   RelationshipGroupsSection,
 } from "../components/ExpandableRelationshipGroup";
 import { RelationshipExplorer } from "../components/RelationshipExplorer";
+import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { StartHereResult } from "../components/StartHereResult";
@@ -72,13 +73,14 @@ import {
 
 
 export function PlaybooksPage(props: {
+  bundle: RuntimeBundle | null;
   state: Extract<ViewState, { view: "patterns" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNodeByItemId: (itemId: string) => void;
   onOpenGlossary: (termId?: string) => void;
   setHelpOpen: (open: boolean) => void;
 }) {
-  const { state, onNavigate, onOpenNodeByItemId, onOpenGlossary, setHelpOpen } =
+  const { bundle, state, onNavigate, onOpenNodeByItemId, onOpenGlossary, setHelpOpen } =
     props;
   const [categoryFilter, setCategoryFilter] = useState("");
   const [queryFilter, setQueryFilter] = useState("");
@@ -152,6 +154,11 @@ export function PlaybooksPage(props: {
             </div>
           </section>
         ) : null}
+        <ContextualCommonsModule
+          bundle={bundle}
+          contextType="guide"
+          onNavigate={onNavigate}
+        />
         {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => {
           const visiblePatterns = !categoryFilter && !queryFilter
             ? categoryPatterns.filter(

@@ -1,0 +1,35 @@
+name: Request Resource Removal
+description: Request the removal of a resource from Control Commons due to security concerns, copyright, or unmaintained posture.
+title: "[Request Removal]: "
+labels: ["commons", "request-removal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request the de-indexing or removal of a resource entry from Control Commons.
+  - type: input
+    id: resource_id
+    attributes:
+      label: Resource ID or Name
+      placeholder: e.g. ext-res-012-legacy
+    validations:
+      required: true
+  - type: dropdown
+    id: removal_reason
+    attributes:
+      label: Primary Reason for Removal
+      options:
+        - "Publisher Request / Author Discontinuation"
+        - "Security Vulnerability / Malware Concern"
+        - "Copyright / Licensing Issue"
+        - "Complete Deprecation without Replacement"
+        - "Duplicate Entry"
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Detailed Explanation & Evidence
+      description: Explain why this resource should be removed from the Control Commons hub.
+    validations:
+      required: true
