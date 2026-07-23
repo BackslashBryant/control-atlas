@@ -297,7 +297,9 @@ export function parseViewState(search: string): ViewState {
     const state = compareState();
     return {
       ...state,
-      crosswalk: (params.get("crosswalk") as CompareCrosswalk) || "intent",
+      crosswalk:
+        ((params.get("crosswalk") || params.get("workbench")) as CompareCrosswalk) ||
+        "intent",
       source: params.get("source") || "",
       target: params.get("target") || "",
       items: params.get("items") || "",
