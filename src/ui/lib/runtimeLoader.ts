@@ -453,6 +453,8 @@ export async function loadFullGraphPhase(
   complianceWorkflowRegistry: ComplianceWorkflowRegistry,
   complianceToolRegistry: ComplianceToolRegistry,
   fedrampTransitionIndex: FedrampTransitionIndex,
+  commonsSearchIndex?: CommonsSearchIndex,
+  commonsDataset?: CommonsResourceDataset,
   onShardLoaded?: () => void,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
@@ -485,6 +487,8 @@ export async function loadFullGraphPhase(
     complianceWorkflowRegistry,
     complianceToolRegistry,
     fedrampTransitionIndex,
+    commonsSearchIndex,
+    commonsDataset,
     graphReady: true,
     librarySearchRevision: 0,
   };
@@ -498,6 +502,8 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     complianceWorkflowRegistryRaw,
     complianceToolRegistryRaw,
     fedrampTransitionIndexRaw,
+    commonsSearchIndexRaw,
+    commonsDatasetRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
     fetchArtifact("./data/template-registry.json"),
@@ -505,6 +511,8 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     fetchArtifact("./data/compliance-workflows.json"),
     fetchArtifact("./data/compliance-tool-registry.json"),
     fetchArtifact("./data/fedramp-transition-index.json"),
+    fetchArtifact("./data/generated/commons-search-index.json").catch(() => null),
+    fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
   ]);
 
   return loadFullGraphPhase(
@@ -514,6 +522,8 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     complianceWorkflowRegistryRaw as ComplianceWorkflowRegistry,
     complianceToolRegistryRaw as ComplianceToolRegistry,
     fedrampTransitionIndexRaw as FedrampTransitionIndex,
+    (commonsSearchIndexRaw as CommonsSearchIndex) || undefined,
+    (commonsDatasetRaw as CommonsResourceDataset) || undefined,
   );
 }
 
@@ -532,6 +542,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       complianceWorkflowRegistryRaw,
       complianceToolRegistryRaw,
       fedrampTransitionIndexRaw,
+      commonsSearchIndexRaw,
+      commonsDatasetRaw,
     ] = await Promise.all([
       loadLibrarySearchBootstrap(),
       fetchArtifact("./data/template-registry.json"),
@@ -539,6 +551,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       fetchArtifact("./data/compliance-workflows.json"),
       fetchArtifact("./data/compliance-tool-registry.json"),
       fetchArtifact("./data/fedramp-transition-index.json"),
+      fetchArtifact("./data/generated/commons-search-index.json").catch(() => null),
+      fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
     ]);
     const templateRegistry = templateRegistryRaw as TemplateRegistry;
     const officialArtifactRegistry =
@@ -549,6 +563,9 @@ export async function loadRuntimeDatasetStaged(handlers: {
       complianceToolRegistryRaw as ComplianceToolRegistry;
     const fedrampTransitionIndex =
       fedrampTransitionIndexRaw as FedrampTransitionIndex;
+    const commonsSearchIndex = (commonsSearchIndexRaw as CommonsSearchIndex) || undefined;
+    const commonsDataset = (commonsDatasetRaw as CommonsResourceDataset) || undefined;
+
     const searchRuntime = createSearchRuntime(
       libraryBootstrap,
       templateRegistry,
@@ -561,6 +578,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       complianceWorkflowRegistry,
       complianceToolRegistry,
       fedrampTransitionIndex,
+      commonsSearchIndex,
+      commonsDataset,
       graphReady: false,
       librarySearchRevision: 0,
     });
@@ -574,6 +593,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       complianceWorkflowRegistry,
       complianceToolRegistry,
       fedrampTransitionIndex,
+      commonsSearchIndex,
+      commonsDataset,
       handlers.onShardLoaded,
     );
     handlers.onFullReady(fullBundle);
