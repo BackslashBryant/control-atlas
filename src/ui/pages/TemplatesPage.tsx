@@ -23,6 +23,7 @@ import {
   groupItemsByCategory,
   TEMPLATE_CATEGORIES,
 } from "../lib/catalogGroups.mjs";
+import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -921,6 +922,11 @@ export function TemplatesPage(props: {
         <>
         <div>
         <div className="stack">
+          <ContextualCommonsModule
+            bundle={bundle}
+            contextType="template"
+            onNavigate={onNavigate}
+          />
           {!selectedWorkflow ? (
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">

@@ -1,0 +1,37 @@
+name: Claim Ownership / Official Maintainer
+description: Claim official maintainership or publisher representation for an indexed resource in Control Commons.
+title: "[Claim Ownership]: "
+labels: ["commons", "claim-ownership"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If you are the official maintainer, agency publisher, or primary author of an open-source tool, template, or publication indexed in Control Commons, use this form to verify ownership and gain official badge recognition.
+  - type: input
+    id: resource_id
+    attributes:
+      label: Resource ID or Name
+      placeholder: e.g. tool-compliance-as-code
+    validations:
+      required: true
+  - type: input
+    id: publisher_organization
+    attributes:
+      label: Your Organization / Agency Name
+      placeholder: e.g. DISA, CISA, MITRE, IBM Open Source
+    validations:
+      required: true
+  - type: input
+    id: official_email
+    attributes:
+      label: Contact Email or Organizational Domain
+      placeholder: name@agency.gov or official maintainer handle
+    validations:
+      required: true
+  - type: textarea
+    id: proof_of_ownership
+    attributes:
+      label: Proof of Maintainership / Verification Method
+      description: Provide a link to your public profile, SECURITY.md, or GPG key listing.
+    validations:
+      required: true

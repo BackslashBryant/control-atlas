@@ -1,0 +1,37 @@
+name: Correct Metadata
+description: Propose metadata corrections (framework mapping, license, publisher, audience, tags) for an existing resource.
+title: "[Metadata Correction]: "
+labels: ["commons", "metadata-correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to submit metadata corrections or additions for an existing Control Commons entry.
+  - type: input
+    id: resource_id
+    attributes:
+      label: Resource ID or Name
+      placeholder: e.g. tool-compliance-as-code
+    validations:
+      required: true
+  - type: textarea
+    id: current_metadata
+    attributes:
+      label: Current Metadata (Incorrect)
+      placeholder: Describe what is currently wrong or missing...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_correction
+    attributes:
+      label: Proposed Correction
+      placeholder: Describe the exact correct values (e.g. License: MIT, Frameworks: NIST SP 800-171)...
+    validations:
+      required: true
+  - type: input
+    id: reference_url
+    attributes:
+      label: Verification Source / Reference Link
+      placeholder: https://github.com/... or official publisher page
+    validations:
+      required: true

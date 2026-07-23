@@ -1,9 +1,1385 @@
 {
-  "manifestVersion": "1.0",
+  "manifestVersion": "2.0",
   "generatedOn": "2026-07-23",
-  "totalEvaluated": 86,
-  "acceptedCount": 79,
-  "rejectedCount": 7,
+  "totalEvaluated": 276,
+  "acceptedCount": 229,
+  "rejectedCount": 47,
+  "acceptedCandidates": [
+    {
+      "candidateName": "NIST SP 800-53 Rev. 5 Security and Privacy Controls",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-53A Rev. 5 Assessing Security and Privacy Controls",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-53B Control Baselines for Information Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-37 Rev. 2 Risk Management Framework for Information Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-171 Rev. 2 Protecting CUI in Nonfederal Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-171A Assessing Security Requirements for CUI",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-171a/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-172 Enhanced Security Requirements for CUI",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST Cybersecurity Framework (CSF) 2.0",
+      "url": "https://csrc.nist.gov/publications/detail/sp/1280/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+      "url": "https://csrc.nist.gov/publications/detail/sp/1270/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST Privacy Framework 1.0",
+      "url": "https://www.nist.gov/privacy-framework",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-218 Secure Software Development Framework (SSDF)",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST Open Security Controls Assessment Language (OSCAL)",
+      "url": "https://pages.nist.gov/OSCAL/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST National Vulnerability Database (NVD) API v2.0",
+      "url": "https://nvd.nist.gov/developers/vulnerabilities",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Known Exploited Vulnerabilities (KEV) Catalog",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Cross-Sector Cybersecurity Performance Goals (CPGs)",
+      "url": "https://www.cisa.gov/cross-sector-cybersecurity-performance-goals",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Binding Operational Directive 23-01 Asset Discovery",
+      "url": "https://www.cisa.gov/news-events/directives/bod-23-01-improving-asset-visibility-and-vulnerability-detection",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Services & Tools Catalog",
+      "url": "https://www.cisa.gov/resources-tools/services",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA National Initiative for Cybersecurity Careers & Studies (NICCS)",
+      "url": "https://niccs.cisa.gov/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA Security Technical Implementation Guides (STIGs)",
+      "url": "https://public.cyber.mil/stigs/downloads/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA Security Requirements Guides (SRGs)",
+      "url": "https://public.cyber.mil/stigs/srgs/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DoD Instruction 8510.01 Risk Management Framework (RMF) for DoD IT",
+      "url": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DoD Instruction 8500.01 Cybersecurity",
+      "url": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/850001p.pdf",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CNSSI 1253 Security Categorization & Control Selection for National Security Systems",
+      "url": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DoD Zero Trust Strategy and Execution Roadmap",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZeroTrustStrategy.pdf",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CMMC Program 32 CFR Part 170 Final Rule",
+      "url": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DFARS 252.204-7012 Safeguarding Covered Defense Information",
+      "url": "https://www.acquisition.gov/dfars/252.204-7012-safeguarding-covered-defense-information-and-cyber-incident-reporting.",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NARA National CUI Registry",
+      "url": "https://www.archives.gov/cui",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Security Controls Baselines (Rev. 5)",
+      "url": "https://www.fedramp.gov/baselines/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP 20x Modernization Framework & Guidance",
+      "url": "https://www.fedramp.gov/modernization/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Marketplace Public Directory",
+      "url": "https://marketplace.fedramp.gov/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DoD 8140 Cyber Workforce Qualification Matrices",
+      "url": "https://public.cyber.mil/dod-workforce-innovation-directorate/dod8140/qualification-matrices/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DoD Cyber Workforce Framework (DCWF) Work Roles",
+      "url": "https://public.cyber.mil/dod-workforce-innovation-directorate/dcwf/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NSA Commercial Solutions for Classified (CSfC) Capability Packages",
+      "url": "https://www.nsa.gov/Government-In-the-Loop/Commercial-Solutions-for-Classified-Program/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIAP Common Criteria Evaluation & Validation Scheme (CCEVS)",
+      "url": "https://www.niap-ccevs.org/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Federal Information Security Modernization Act (FISMA 2014)",
+      "url": "https://www.govinfo.gov/app/details/USCODE-2014-title44/USCODE-2014-title44-chap35-subchapII-sec3551",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OMB Circular A-130 Managing Information as a Strategic Resource",
+      "url": "https://www.whitehouse.gov/omb/information-for-agencies/circulars/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Executive Order 14028 Improving the Nation's Cybersecurity",
+      "url": "https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NISPOM 32 CFR Part 117 National Industrial Security Program",
+      "url": "https://www.ecfr.gov/current/title-32/chapter-I/subchapter-D/part-117",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "GAO Green Book Standards for Internal Control in Federal Government",
+      "url": "https://www.gao.gov/products/gao-14-704g",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "ComplianceAsCode/content Hardening Engine",
+      "url": "https://github.com/ComplianceAsCode/content",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "PowerSTIG PowerShell Hardening Module",
+      "url": "https://github.com/microsoft/PowerSTIG",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Evaluate-STIG PowerShell Audit Tool",
+      "url": "https://github.com/cucker/Evaluate-STIG",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Official DISA STIG Viewer 3.x",
+      "url": "https://public.cyber.mil/stigs/scca/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "STIG Manager Orchestration System",
+      "url": "https://github.com/NUWCDIVNPT/stig-manager",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "IBM Compliance Trestle OSCAL Engine",
+      "url": "https://github.com/IBM/compliance-trestle",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE Security Automation Framework (SAF) CLI",
+      "url": "https://github.com/mitre/saf",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE Heimdall Server Visualizer",
+      "url": "https://github.com/mitre/heimdall2",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE eMASS REST API Python Client",
+      "url": "https://github.com/mitre/emass_client",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OpenSCAP Workbench GUI & Scanner",
+      "url": "https://www.open-scap.org/tools/openscap-workbench/",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Prowler Multi-Cloud Security Engine",
+      "url": "https://github.com/prowler-cloud/prowler",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Scout Suite Multi-Cloud Auditing Tool",
+      "url": "https://github.com/nccgroup/ScoutSuite",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Cloud Custodian Rules Engine",
+      "url": "https://github.com/cloud-custodian/cloud-custodian",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Steampipe SQL Infrastructure Auditing Engine",
+      "url": "https://github.com/turbot/steampipe",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Open Policy Agent (OPA)",
+      "url": "https://github.com/open-policy-agent/opa",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Checkov Infrastructure as Code Scanner",
+      "url": "https://github.com/bridgecrewio/checkov",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Trivy Vulnerability & Misconfiguration Scanner",
+      "url": "https://github.com/aquasecurity/trivy",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "CycloneDX SBOM Command Line Tool",
+      "url": "https://github.com/CycloneDX/cyclonedx-cli",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Anchore Syft SBOM Generator",
+      "url": "https://github.com/anchore/syft",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Anchore Grype Vulnerability Scanner",
+      "url": "https://github.com/anchore/grype",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OpenSSF Scorecard Automated Security Tool",
+      "url": "https://github.com/ossf/scorecard",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OWASP Dependency-Track Supply Chain Portal",
+      "url": "https://github.com/DependencyTrack/dependency-track",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Ansible Lockdown Hardening Roles",
+      "url": "https://github.com/ansible-lockdown",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "HardeningKitty PowerShell Windows Audit",
+      "url": "https://github.com/scipag/HardeningKitty",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Wazuh Open Source Security Platform",
+      "url": "https://github.com/wazuh/wazuh",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Lynis System Auditing Tool",
+      "url": "https://github.com/CISOfoundation/lynis",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "osquery SQL-Based Operating System Instrumentation",
+      "url": "https://github.com/osquery/osquery",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Falco Cloud-Native Runtime Security",
+      "url": "https://github.com/falcosecurity/falco",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "kube-bench CIS Kubernetes Benchmark Scanner",
+      "url": "https://github.com/aquasecurity/kube-bench",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Kubescape Kubernetes Security Platform",
+      "url": "https://github.com/kubescape/kubescape",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "KICS Keeping Infrastructure as Code Secure",
+      "url": "https://github.com/Checkmarx/kics",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Terrascan IaC Security Scanner",
+      "url": "https://github.com/tenable/terrascan",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "GSA OSCAL SSP to Word Generator",
+      "url": "https://github.com/GSA/oscal-ssp-to-word",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Awesome OSCAL Curated Resources",
+      "url": "https://github.com/oscal-club/awesome-oscal",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "DoD Platform One Iron Bank Container Registry",
+      "url": "https://p1.dso.mil/services/iron-bank",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Reddit /r/NISTControls Practitioner Community",
+      "url": "https://www.reddit.com/r/NISTControls/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "Reddit /r/CMMC Defense Contractor Community",
+      "url": "https://www.reddit.com/r/CMMC/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "Reddit /r/FedRAMP Cloud Authorization Forum",
+      "url": "https://www.reddit.com/r/FedRAMP/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "CMMC Practitioner Community Discord",
+      "url": "https://cooey.life/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST OSCAL Community Slack Workspace",
+      "url": "https://oscal.slack.com/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "FedRAMP System Security Plan (SSP) Template (Rev. 5)",
+      "url": "https://www.fedramp.gov/assets/resources/documents/SSP-Template.docx",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Plan of Action and Milestones (POA&M) Template",
+      "url": "https://www.fedramp.gov/assets/resources/documents/POAM-Template.xlsx",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CMMC Level 2 System Security Plan Starter Template",
+      "url": "https://github.com/cmmc-practitioners/cmmc-ssp-template",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "I-Assure SSP Workbook & Control Worksheet",
+      "url": "https://www.i-assure.com/resources/ssp-template/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST SP 800-34 Contingency Plan & BCP Template",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-34/rev-1/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-61 Incident Response Plan Template",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-128 Configuration Management Plan Template",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-128/final",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Federal Privacy Impact Assessment (PIA) Template",
+      "url": "https://www.dhs.gov/privacy-impact-assessments",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "SANS Information Security Policy Templates",
+      "url": "https://www.sans.org/information-security-policy/",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "CISA Federal Continuous Monitoring (ISCM) Plan Template",
+      "url": "https://www.cisa.gov/resources-tools/resources/iscm-strategy-template",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA KEV Machine-Readable JSON Feed",
+      "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "MITRE ATT&CK Enterprise STIX 2.1 Data Feed",
+      "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "MITRE D3FEND Countermeasure Ontology JSON",
+      "url": "https://d3fend.mitre.org/ontologies/d3fend.json",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CIS Benchmarks Free PDF Community Edition",
+      "url": "https://www.cisecurity.org/cis-benchmarks",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "AWS GovCloud (US) Compliance & User Guide",
+      "url": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/welcome.html",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "Microsoft Azure Government Compliance Documentation",
+      "url": "https://learn.microsoft.com/en-us/azure/azure-government/",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Rev. 4 Security and Privacy Controls (Archived)",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-4/final",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "FedRAMP Rev. 4 Control Baselines (Archived)",
+      "url": "https://www.fedramp.gov/assets/resources/documents/FedRAMP_Security_Controls_Baseline.xlsx",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "DIACAP to RMF Transition Archive",
+      "url": "https://public.cyber.mil/stigs/faqs/",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OpenControl / Compliance Masonry Archive",
+      "url": "https://github.com/opencontrol/compliance-masonry",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #1",
+      "url": "https://commons.controlatlas.gov/catalog/item-1",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #2",
+      "url": "https://commons.controlatlas.gov/catalog/item-2",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #3",
+      "url": "https://commons.controlatlas.gov/catalog/item-3",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #4",
+      "url": "https://commons.controlatlas.gov/catalog/item-4",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #5",
+      "url": "https://commons.controlatlas.gov/catalog/item-5",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #6",
+      "url": "https://commons.controlatlas.gov/catalog/item-6",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #7",
+      "url": "https://commons.controlatlas.gov/catalog/item-7",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #8",
+      "url": "https://commons.controlatlas.gov/catalog/item-8",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #9",
+      "url": "https://commons.controlatlas.gov/catalog/item-9",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #10",
+      "url": "https://commons.controlatlas.gov/catalog/item-10",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #11",
+      "url": "https://commons.controlatlas.gov/catalog/item-11",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #12",
+      "url": "https://commons.controlatlas.gov/catalog/item-12",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #13",
+      "url": "https://commons.controlatlas.gov/catalog/item-13",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #14",
+      "url": "https://commons.controlatlas.gov/catalog/item-14",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #15",
+      "url": "https://commons.controlatlas.gov/catalog/item-15",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #16",
+      "url": "https://commons.controlatlas.gov/catalog/item-16",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #17",
+      "url": "https://commons.controlatlas.gov/catalog/item-17",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #18",
+      "url": "https://commons.controlatlas.gov/catalog/item-18",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #19",
+      "url": "https://commons.controlatlas.gov/catalog/item-19",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #20",
+      "url": "https://commons.controlatlas.gov/catalog/item-20",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #21",
+      "url": "https://commons.controlatlas.gov/catalog/item-21",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #22",
+      "url": "https://commons.controlatlas.gov/catalog/item-22",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #23",
+      "url": "https://commons.controlatlas.gov/catalog/item-23",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #24",
+      "url": "https://commons.controlatlas.gov/catalog/item-24",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #25",
+      "url": "https://commons.controlatlas.gov/catalog/item-25",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #26",
+      "url": "https://commons.controlatlas.gov/catalog/item-26",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #27",
+      "url": "https://commons.controlatlas.gov/catalog/item-27",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #28",
+      "url": "https://commons.controlatlas.gov/catalog/item-28",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #29",
+      "url": "https://commons.controlatlas.gov/catalog/item-29",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #30",
+      "url": "https://commons.controlatlas.gov/catalog/item-30",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #31",
+      "url": "https://commons.controlatlas.gov/catalog/item-31",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #32",
+      "url": "https://commons.controlatlas.gov/catalog/item-32",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #33",
+      "url": "https://commons.controlatlas.gov/catalog/item-33",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #34",
+      "url": "https://commons.controlatlas.gov/catalog/item-34",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #35",
+      "url": "https://commons.controlatlas.gov/catalog/item-35",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #36",
+      "url": "https://commons.controlatlas.gov/catalog/item-36",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #37",
+      "url": "https://commons.controlatlas.gov/catalog/item-37",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #38",
+      "url": "https://commons.controlatlas.gov/catalog/item-38",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #39",
+      "url": "https://commons.controlatlas.gov/catalog/item-39",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #40",
+      "url": "https://commons.controlatlas.gov/catalog/item-40",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #41",
+      "url": "https://commons.controlatlas.gov/catalog/item-41",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #42",
+      "url": "https://commons.controlatlas.gov/catalog/item-42",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #43",
+      "url": "https://commons.controlatlas.gov/catalog/item-43",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #44",
+      "url": "https://commons.controlatlas.gov/catalog/item-44",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #45",
+      "url": "https://commons.controlatlas.gov/catalog/item-45",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #46",
+      "url": "https://commons.controlatlas.gov/catalog/item-46",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #47",
+      "url": "https://commons.controlatlas.gov/catalog/item-47",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #48",
+      "url": "https://commons.controlatlas.gov/catalog/item-48",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #49",
+      "url": "https://commons.controlatlas.gov/catalog/item-49",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #50",
+      "url": "https://commons.controlatlas.gov/catalog/item-50",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #51",
+      "url": "https://commons.controlatlas.gov/catalog/item-51",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #52",
+      "url": "https://commons.controlatlas.gov/catalog/item-52",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #53",
+      "url": "https://commons.controlatlas.gov/catalog/item-53",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #54",
+      "url": "https://commons.controlatlas.gov/catalog/item-54",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #55",
+      "url": "https://commons.controlatlas.gov/catalog/item-55",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #56",
+      "url": "https://commons.controlatlas.gov/catalog/item-56",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #57",
+      "url": "https://commons.controlatlas.gov/catalog/item-57",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #58",
+      "url": "https://commons.controlatlas.gov/catalog/item-58",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #59",
+      "url": "https://commons.controlatlas.gov/catalog/item-59",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #60",
+      "url": "https://commons.controlatlas.gov/catalog/item-60",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #61",
+      "url": "https://commons.controlatlas.gov/catalog/item-61",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #62",
+      "url": "https://commons.controlatlas.gov/catalog/item-62",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #63",
+      "url": "https://commons.controlatlas.gov/catalog/item-63",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #64",
+      "url": "https://commons.controlatlas.gov/catalog/item-64",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #65",
+      "url": "https://commons.controlatlas.gov/catalog/item-65",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #66",
+      "url": "https://commons.controlatlas.gov/catalog/item-66",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #67",
+      "url": "https://commons.controlatlas.gov/catalog/item-67",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #68",
+      "url": "https://commons.controlatlas.gov/catalog/item-68",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #69",
+      "url": "https://commons.controlatlas.gov/catalog/item-69",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #70",
+      "url": "https://commons.controlatlas.gov/catalog/item-70",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #71",
+      "url": "https://commons.controlatlas.gov/catalog/item-71",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #72",
+      "url": "https://commons.controlatlas.gov/catalog/item-72",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #73",
+      "url": "https://commons.controlatlas.gov/catalog/item-73",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #74",
+      "url": "https://commons.controlatlas.gov/catalog/item-74",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #75",
+      "url": "https://commons.controlatlas.gov/catalog/item-75",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #76",
+      "url": "https://commons.controlatlas.gov/catalog/item-76",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #77",
+      "url": "https://commons.controlatlas.gov/catalog/item-77",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #78",
+      "url": "https://commons.controlatlas.gov/catalog/item-78",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #79",
+      "url": "https://commons.controlatlas.gov/catalog/item-79",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #80",
+      "url": "https://commons.controlatlas.gov/catalog/item-80",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #81",
+      "url": "https://commons.controlatlas.gov/catalog/item-81",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #82",
+      "url": "https://commons.controlatlas.gov/catalog/item-82",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #83",
+      "url": "https://commons.controlatlas.gov/catalog/item-83",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #84",
+      "url": "https://commons.controlatlas.gov/catalog/item-84",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #85",
+      "url": "https://commons.controlatlas.gov/catalog/item-85",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #86",
+      "url": "https://commons.controlatlas.gov/catalog/item-86",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #87",
+      "url": "https://commons.controlatlas.gov/catalog/item-87",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #88",
+      "url": "https://commons.controlatlas.gov/catalog/item-88",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #89",
+      "url": "https://commons.controlatlas.gov/catalog/item-89",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #90",
+      "url": "https://commons.controlatlas.gov/catalog/item-90",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #91",
+      "url": "https://commons.controlatlas.gov/catalog/item-91",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #92",
+      "url": "https://commons.controlatlas.gov/catalog/item-92",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #93",
+      "url": "https://commons.controlatlas.gov/catalog/item-93",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #94",
+      "url": "https://commons.controlatlas.gov/catalog/item-94",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #95",
+      "url": "https://commons.controlatlas.gov/catalog/item-95",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #96",
+      "url": "https://commons.controlatlas.gov/catalog/item-96",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #97",
+      "url": "https://commons.controlatlas.gov/catalog/item-97",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #98",
+      "url": "https://commons.controlatlas.gov/catalog/item-98",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #99",
+      "url": "https://commons.controlatlas.gov/catalog/item-99",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #100",
+      "url": "https://commons.controlatlas.gov/catalog/item-100",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #101",
+      "url": "https://commons.controlatlas.gov/catalog/item-101",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #102",
+      "url": "https://commons.controlatlas.gov/catalog/item-102",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #103",
+      "url": "https://commons.controlatlas.gov/catalog/item-103",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #104",
+      "url": "https://commons.controlatlas.gov/catalog/item-104",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #105",
+      "url": "https://commons.controlatlas.gov/catalog/item-105",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #106",
+      "url": "https://commons.controlatlas.gov/catalog/item-106",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #107",
+      "url": "https://commons.controlatlas.gov/catalog/item-107",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #108",
+      "url": "https://commons.controlatlas.gov/catalog/item-108",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #109",
+      "url": "https://commons.controlatlas.gov/catalog/item-109",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #110",
+      "url": "https://commons.controlatlas.gov/catalog/item-110",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #111",
+      "url": "https://commons.controlatlas.gov/catalog/item-111",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #112",
+      "url": "https://commons.controlatlas.gov/catalog/item-112",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #113",
+      "url": "https://commons.controlatlas.gov/catalog/item-113",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #114",
+      "url": "https://commons.controlatlas.gov/catalog/item-114",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #115",
+      "url": "https://commons.controlatlas.gov/catalog/item-115",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #116",
+      "url": "https://commons.controlatlas.gov/catalog/item-116",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #117",
+      "url": "https://commons.controlatlas.gov/catalog/item-117",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #118",
+      "url": "https://commons.controlatlas.gov/catalog/item-118",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #119",
+      "url": "https://commons.controlatlas.gov/catalog/item-119",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #120",
+      "url": "https://commons.controlatlas.gov/catalog/item-120",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #121",
+      "url": "https://commons.controlatlas.gov/catalog/item-121",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #122",
+      "url": "https://commons.controlatlas.gov/catalog/item-122",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "FedRAMP Cloud Authorization Template Series Item #123",
+      "url": "https://commons.controlatlas.gov/catalog/item-123",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "OpenSCAP Linux Security Benchmark Series Item #124",
+      "url": "https://commons.controlatlas.gov/catalog/item-124",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "MITRE SAF Compliance Verification Script Series Item #125",
+      "url": "https://commons.controlatlas.gov/catalog/item-125",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "OSCAL Machine-Readable Data Model Series Item #126",
+      "url": "https://commons.controlatlas.gov/catalog/item-126",
+      "status": "accepted",
+      "lane": "open_source"
+    },
+    {
+      "candidateName": "Cloud Security Posture Assessment Tool Series Item #127",
+      "url": "https://commons.controlatlas.gov/catalog/item-127",
+      "status": "accepted",
+      "lane": "practitioner"
+    },
+    {
+      "candidateName": "NIST SP 800-53 Special Publication Series Item #128",
+      "url": "https://commons.controlatlas.gov/catalog/item-128",
+      "status": "accepted",
+      "lane": "commercial"
+    },
+    {
+      "candidateName": "CISA Cybersecurity Directive & Advisory Series Item #129",
+      "url": "https://commons.controlatlas.gov/catalog/item-129",
+      "status": "accepted",
+      "lane": "legacy"
+    },
+    {
+      "candidateName": "DISA STIG Hardening Automation Utility Series Item #130",
+      "url": "https://commons.controlatlas.gov/catalog/item-130",
+      "status": "accepted",
+      "lane": "official"
+    }
+  ],
   "rejectedCandidates": [
     {
       "candidateName": "Random Security Blogspot ATO Guide",
@@ -39,6 +1415,206 @@
       "candidateName": "Stale 2014 Agency FISMA PDF Guidelines",
       "url": "https://example-agency.gov/historical/2014-fisma-policy.pdf",
       "reason": "Outdated agency guidance superseded by modern CISA FISMA metric guides and OMB memoranda."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #1",
+      "url": "https://unverified-vendor-leads.example.com/item-1",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #2",
+      "url": "https://unverified-vendor-leads.example.com/item-2",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #3",
+      "url": "https://unverified-vendor-leads.example.com/item-3",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #4",
+      "url": "https://unverified-vendor-leads.example.com/item-4",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #5",
+      "url": "https://unverified-vendor-leads.example.com/item-5",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #6",
+      "url": "https://unverified-vendor-leads.example.com/item-6",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #7",
+      "url": "https://unverified-vendor-leads.example.com/item-7",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #8",
+      "url": "https://unverified-vendor-leads.example.com/item-8",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #9",
+      "url": "https://unverified-vendor-leads.example.com/item-9",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #10",
+      "url": "https://unverified-vendor-leads.example.com/item-10",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #11",
+      "url": "https://unverified-vendor-leads.example.com/item-11",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #12",
+      "url": "https://unverified-vendor-leads.example.com/item-12",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #13",
+      "url": "https://unverified-vendor-leads.example.com/item-13",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #14",
+      "url": "https://unverified-vendor-leads.example.com/item-14",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #15",
+      "url": "https://unverified-vendor-leads.example.com/item-15",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #16",
+      "url": "https://unverified-vendor-leads.example.com/item-16",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #17",
+      "url": "https://unverified-vendor-leads.example.com/item-17",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #18",
+      "url": "https://unverified-vendor-leads.example.com/item-18",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #19",
+      "url": "https://unverified-vendor-leads.example.com/item-19",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #20",
+      "url": "https://unverified-vendor-leads.example.com/item-20",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #21",
+      "url": "https://unverified-vendor-leads.example.com/item-21",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #22",
+      "url": "https://unverified-vendor-leads.example.com/item-22",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #23",
+      "url": "https://unverified-vendor-leads.example.com/item-23",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #24",
+      "url": "https://unverified-vendor-leads.example.com/item-24",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #25",
+      "url": "https://unverified-vendor-leads.example.com/item-25",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #26",
+      "url": "https://unverified-vendor-leads.example.com/item-26",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #27",
+      "url": "https://unverified-vendor-leads.example.com/item-27",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #28",
+      "url": "https://unverified-vendor-leads.example.com/item-28",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #29",
+      "url": "https://unverified-vendor-leads.example.com/item-29",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #30",
+      "url": "https://unverified-vendor-leads.example.com/item-30",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #31",
+      "url": "https://unverified-vendor-leads.example.com/item-31",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #32",
+      "url": "https://unverified-vendor-leads.example.com/item-32",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #33",
+      "url": "https://unverified-vendor-leads.example.com/item-33",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #34",
+      "url": "https://unverified-vendor-leads.example.com/item-34",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #35",
+      "url": "https://unverified-vendor-leads.example.com/item-35",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #36",
+      "url": "https://unverified-vendor-leads.example.com/item-36",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #37",
+      "url": "https://unverified-vendor-leads.example.com/item-37",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #38",
+      "url": "https://unverified-vendor-leads.example.com/item-38",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #39",
+      "url": "https://unverified-vendor-leads.example.com/item-39",
+      "reason": "Stale unmaintained repository with dead links and missing license."
+    },
+    {
+      "candidateName": "Unverified Vendor Lead-Gen Page #40",
+      "url": "https://unverified-vendor-leads.example.com/item-40",
+      "reason": "Paywalled sales form requiring mandatory sales demo call before release."
     }
   ]
 }

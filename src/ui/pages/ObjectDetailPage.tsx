@@ -34,6 +34,7 @@ import {
   relationshipFiltersFromState,
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
+import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
@@ -425,6 +426,13 @@ export function ObjectDetailPage(props: {
               <p>{document.description}</p>
             ) : null}
           </SummaryCard>
+          <ContextualCommonsModule
+            bundle={bundle}
+            contextType="control"
+            contextId={document.item_id}
+            query={document.title}
+            onNavigate={onNavigate}
+          />
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="Where it appears" value="where-it-appears">
               <p>

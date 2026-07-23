@@ -4,12 +4,19 @@ import { resolve } from "path";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 
+import { execSync } from "child_process";
+
 const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const MANIFEST_PATH = resolve("data/commons-candidate-manifest.json");
 const INDEX_PATH = resolve("data/generated/commons-search-index.json");
 const SCHEMA_PATH = resolve("data/schemas/commons-resource-schema.json");
 
 console.log("⚡ Running Control Commons Quality & Integrity Benchmark...");
+
+// Auto-generate search index if not built yet
+if (!existsSync(INDEX_PATH)) {
+  execSync("node scripts/build-commons-index.mjs");
+}
 
 // 1. Check file existence
 assert.ok(existsSync(DATASET_PATH), "Dataset file exists");
@@ -34,9 +41,32 @@ if (!valid) {
 }
 console.log("  ✓ Schema Validation Passed");
 
-// 3. Validate minimum resource count & field integrity
-assert.ok(dataset.resources.length >= 75, `Expected >= 75 resources, found ${dataset.resources.length}`);
+// 3. Validate minimum resource count & category targets
+assert.ok(dataset.resources.length >= 175, `Expected >= 175 resources, found ${dataset.resources.length}`);
 console.log(`  ✓ Resource Count: ${dataset.resources.length} indexed resources`);
+
+const officialCount = dataset.resources.filter(r => r.resourceLane === "official").length;
+const openSourceCount = dataset.resources.filter(r => r.openSource || r.resourceLane === "open_source").length;
+const practitionerCount = dataset.resources.filter(r => r.resourceLane === "practitioner" || r.resourceType === "community_forum").length;
+const templateCount = dataset.resources.filter(r => r.resourceType === "template" || r.artifactTypes.includes("template")).length;
+const toolCount = dataset.resources.filter(r => r.resourceType === "tool" || r.resourceLane === "open_source").length;
+const datasetFeedCount = dataset.resources.filter(r => r.resourceType === "dataset" || r.resourceType === "specification" || r.formats.includes("JSON") || r.formats.includes("REST API")).length;
+const commercialCount = dataset.resources.filter(r => r.resourceLane === "commercial" || r.costType === "freemium").length;
+const legacyCount = dataset.resources.filter(r => r.resourceLane === "legacy" || r.maintenanceStatus === "archived").length;
+
+assert.ok(officialCount >= 50, `Expected >= 50 official resources, found ${officialCount}`);
+assert.ok(openSourceCount >= 50, `Expected >= 50 open-source resources, found ${openSourceCount}`);
+assert.ok(practitionerCount >= 20, `Expected >= 20 practitioner resources, found ${practitionerCount}`);
+assert.ok(templateCount >= 20, `Expected >= 20 template resources, found ${templateCount}`);
+assert.ok(toolCount >= 30, `Expected >= 30 tool resources, found ${toolCount}`);
+assert.ok(datasetFeedCount >= 20, `Expected >= 20 dataset/API resources, found ${datasetFeedCount}`);
+assert.ok(commercialCount >= 10, `Expected >= 10 commercial resources, found ${commercialCount}`);
+assert.ok(legacyCount >= 10, `Expected >= 10 legacy resources, found ${legacyCount}`);
+
+console.log("  ✓ Category Breakdown Targets Passed:");
+console.log(`    - Official: ${officialCount} | Open Source: ${openSourceCount} | Practitioner: ${practitionerCount}`);
+console.log(`    - Templates: ${templateCount} | Tools: ${toolCount} | Datasets/APIs: ${datasetFeedCount}`);
+console.log(`    - Commercial: ${commercialCount} | Legacy: ${legacyCount}`);
 
 const idSet = new Set();
 const urlSet = new Set();
@@ -57,7 +87,7 @@ for (const r of dataset.resources) {
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
 
 // 4. Validate collection integrity
-assert.ok(dataset.collections.length >= 8, `Expected >= 8 collections, found ${dataset.collections.length}`);
+assert.ok(dataset.collections.length >= 10, `Expected >= 10 collections, found ${dataset.collections.length}`);
 for (const col of dataset.collections) {
   assert.ok(col.id && col.title && col.whyCurated, `Collection ${col.id} missing metadata`);
   assert.ok(col.resourceIds.length >= 2, `Collection ${col.id} has too few resources`);
@@ -68,12 +98,14 @@ for (const col of dataset.collections) {
 console.log(`  ✓ Collection Integrity Audit Passed (${dataset.collections.length} collections verified)`);
 
 // 5. Candidate Manifest & Rejection Audit
+assert.strictEqual(manifest.totalEvaluated, manifest.acceptedCount + manifest.rejectedCount, "Manifest total matches sum");
+assert.ok(manifest.totalEvaluated >= 225, `Expected >= 225 total evaluated candidates, found ${manifest.totalEvaluated}`);
 assert.ok(manifest.acceptedCount === dataset.resources.length, "Manifest accepted count matches dataset");
-assert.ok(manifest.rejectedCandidates.length >= 5, "Manifest records rejected candidates");
+assert.ok(manifest.rejectedCandidates.length >= 20, "Manifest records rejected candidates");
 for (const rej of manifest.rejectedCandidates) {
   assert.ok(rej.candidateName && rej.url && rej.reason, "Rejected candidate missing required fields");
 }
-console.log(`  ✓ Research Manifest Audit Passed (${manifest.rejectedCandidates.length} rejected candidates logged with reasons)`);
+console.log(`  ✓ Candidate Manifest Audit Passed (${manifest.totalEvaluated} total evaluated: ${manifest.acceptedCount} accepted, ${manifest.rejectedCount} rejected with rationale)`);
 
 // 6. Search Index Relevance & Benchmark Audits
 assert.strictEqual(index.documents.length, dataset.resources.length, "Index document count matches dataset");

@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ExpandableControlList } from "../components/ExpandableRelationshipGroup";
 import { CompareResultsPanel } from "../components/CompareResultsPanel";
+import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { CompareExportDisclosure } from "../components/LoadStatusPanel";
 import { CatalogVersionChip } from "../components/CatalogVersionChip";
 import {
@@ -534,6 +535,11 @@ export function ComparePage(props: {
               />
             </div>
           </div>
+          <ContextualCommonsModule
+            bundle={bundle}
+            contextType="compare"
+            onNavigate={onNavigate}
+          />
           {hasComparisonScope ? (
             <Accordion.Root
               className="accordion-root"
