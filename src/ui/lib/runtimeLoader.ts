@@ -131,9 +131,13 @@ export async function fetchArtifact(path: string) {
 
   const request = fetch(path + ".gz").then(async (response) => {
     if (response.ok && typeof DecompressionStream !== "undefined") {
-      const ds = new DecompressionStream("gzip");
-      const decompressedStream = response.body!.pipeThrough(ds);
-      return new Response(decompressedStream).json();
+      try {
+        const ds = new DecompressionStream("gzip");
+        const decompressedStream = response.body!.pipeThrough(ds);
+        return await new Response(decompressedStream).json();
+      } catch {
+        // Decompression failed; fall through to uncompressed fetch
+      }
     }
     // Fallback to uncompressed
     const fallbackResponse = await fetch(path);
