@@ -106,7 +106,7 @@ export function ContextualCommonsModule({
         {onNavigate ? (
           <button
             onClick={() => onNavigate("commons", { query: query || contextId || framework })}
-            className="text-[11px] font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1"
+            className="text-[11px] font-semibold text-slate-100 hover:text-white hover:underline inline-flex items-center gap-1"
           >
             <span>Explore all Commons ({dataset?.resources.length})</span>
             <IconChevronRight size={12} />

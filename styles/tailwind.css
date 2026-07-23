@@ -1,0 +1,9 @@
+/*
+ * Commons was authored with Tailwind utilities. Import only Tailwind's theme
+ * and utilities: the existing Control Atlas base stylesheet remains the source
+ * of truth for global element styling.
+ */
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none) important;
+@source "../src/ui";

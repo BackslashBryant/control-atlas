@@ -122,6 +122,20 @@ test("visible search trigger opens the global search dialog", async ({
   ).toBeFocused();
 });
 
+test("Control Commons renders its compiled utility layout", async ({ page }) => {
+  await page.goto("/#/commons");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(
+    page.getByRole("heading", { name: "Control Commons", exact: true }),
+  ).toBeVisible();
+
+  const commonsSurface = page.locator("div.min-h-screen.bg-slate-950");
+  await expect(commonsSurface).toHaveCount(1);
+  await expect(commonsSurface).toHaveCSS("padding-bottom", "64px");
+});
+
 test("mobile navigation covers the page and closes predictably", async ({
   page,
 }) => {
