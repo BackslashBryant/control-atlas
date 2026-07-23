@@ -84,6 +84,7 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     "Library",
     "Atlas",
     "Compare",
+    "Commons",
     "Guides",
     "Documents",
   ]);
