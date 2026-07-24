@@ -26,10 +26,12 @@ test("provenance badges always render text labels alongside tone classes", () =>
   assert.match(provenanceTerm, /displayNameFor\("provenance_class"/);
 });
 
-test("fedramp provenance token uses teal, not primary blueprint blue", () => {
-  assert.match(tokens, /--ca-prov-fedramp:\s*#0D9488/i);
-  assert.doesNotMatch(tokens, /--ca-prov-fedramp:\s*#2563EB/i);
-  assert.match(tokens, /--ca-primary:\s*#2563EB/i);
+test("provenance tokens stay distinct from Orbital action and status meanings", () => {
+  assert.match(tokens, /--ca-prov-fedramp:\s*var\(--lsm-dust\)/i);
+  assert.match(tokens, /--ca-primary:\s*var\(--lsm-relay\)/i);
+  assert.match(tokens, /--ca-warning:\s*var\(--lsm-rust\)/i);
+  assert.match(tokens, /--ca-danger:\s*var\(--lsm-fault\)/i);
+  assert.doesNotMatch(tokens, /(?:7c3aed|d8b4fe|6366f1)/i);
 });
 
 test("relationship graph surfaces include accessible table fallback and provenance legend", () => {
@@ -114,10 +116,19 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
-function tokenValue(name) {
-  const match = tokens.match(new RegExp(`${name}:\\s*(#[0-9a-f]{6})`, "i"));
-  assert.ok(match, `Missing ${name}`);
-  return match[1];
+function tokenValue(name, seen = new Set()) {
+  assert.ok(!seen.has(name), `Circular token reference at ${name}`);
+  seen.add(name);
+  const valueMatch = tokens.match(
+    new RegExp(`${name}:\\s*([^;]+);`, "i"),
+  );
+  assert.ok(valueMatch, `Missing ${name}`);
+  const value = valueMatch[1].trim();
+  const hexMatch = value.match(/^#[0-9a-f]{6}$/i);
+  if (hexMatch) return hexMatch[0];
+  const aliasMatch = value.match(/^var\((--[a-z0-9-]+)\)$/i);
+  assert.ok(aliasMatch, `${name} must resolve to a solid color token`);
+  return tokenValue(aliasMatch[1], seen);
 }
 
 test("secondary text and provenance badge text meet WCAG AA contrast", () => {
@@ -162,14 +173,17 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing presents an accessible orbital task launcher without an entrance gate", () => {
+test("landing presents one primary Signal action with secondary paths disclosed", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /className="landing-launch"/);
-  assert.match(homePage, /className="landing-orb"/);
+  assert.match(homePage, /className="landing-signal-grid"/);
+  assert.match(homePage, /className="primary landing-primary-action"/);
+  assert.match(homePage, /Start guided setup/);
   assert.match(homePage, /Plan the work/);
   assert.match(homePage, /Trace connections/);
   assert.match(homePage, /Create a document/);
-  assert.doesNotMatch(homePage, /landing-more-paths/);
+  assert.match(homePage, /<details className="landing-more-paths">/);
+  assert.doesNotMatch(homePage, /className="landing-launch"/);
+  assert.doesNotMatch(homePage, /className="landing-orb"/);
   assert.doesNotMatch(homePage, /Click to start/);
   assert.doesNotMatch(homePage, /<h3 aria-hidden/);
   assert.doesNotMatch(homePage, /<p aria-hidden/);

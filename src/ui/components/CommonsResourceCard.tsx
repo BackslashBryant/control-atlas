@@ -3,16 +3,11 @@ import {
   IconExternalLink,
   IconCopy,
   IconCheck,
-  IconShieldCheck,
-  IconCode,
-  IconUsers,
-  IconBuildingStore,
-  IconArchive,
-  IconSparkles,
   IconAlertTriangle,
   IconInfoCircle
 } from "@tabler/icons-react";
-import type { CommonsResource, CommonsResourceLane } from "../lib/commonsTypes";
+import type { CommonsResource } from "../lib/commonsTypes";
+import { CommonsLaneBadge, commonsLaneLabel } from "./CommonsLaneBadge";
 
 type CommonsResourceCardProps = {
   resource: CommonsResource;
@@ -35,22 +30,8 @@ export function CommonsResourceCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const laneBadgeConfig: Record<
-    CommonsResourceLane,
-    { label: string; bg: string; text: string; icon: React.ComponentType<{ size?: number; className?: string }> }
-  > = {
-    official: { label: "Official", bg: "bg-blue-900/40 border-blue-500/40", text: "text-blue-300", icon: IconShieldCheck },
-    open_source: { label: "Open Source", bg: "bg-emerald-900/40 border-emerald-500/40", text: "text-emerald-300", icon: IconCode },
-    practitioner: { label: "Practitioner", bg: "bg-purple-900/40 border-purple-500/40", text: "text-purple-300", icon: IconUsers },
-    commercial: { label: "Commercial", bg: "bg-amber-900/40 border-amber-500/40", text: "text-amber-300", icon: IconBuildingStore },
-    legacy: { label: "Legacy Record", bg: "bg-zinc-800 border-zinc-600", text: "text-zinc-400", icon: IconArchive }
-  };
-
-  const lane = laneBadgeConfig[resource.resourceLane] || laneBadgeConfig.official;
-  const LaneIcon = lane.icon;
-
   // Max 3 visible badges
-  const badges: string[] = [lane.label];
+  const badges: string[] = [commonsLaneLabel(resource.resourceLane)];
   if (resource.openSource && resource.resourceLane !== "open_source") {
     badges.push("Open Source");
   }
@@ -68,33 +49,23 @@ export function CommonsResourceCard({
   const visibleBadges = badges.slice(0, 3);
 
   return (
-    <article
-      tabIndex={0}
-      role="region"
-      aria-label={`Resource: ${resource.name}`}
-      className="group relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg transition-all duration-200 hover:border-slate-700 hover:bg-slate-900 hover:shadow-cyan-950/20 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-    >
+    <article className="group relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg transition-all duration-200 hover:border-slate-700 hover:bg-slate-900 hover:shadow-cyan-950/20">
       <div>
         {/* Header badges */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${lane.bg} ${lane.text}`}
-          >
-            <LaneIcon size={14} />
-            {lane.label}
-          </span>
+          <CommonsLaneBadge lane={resource.resourceLane} />
 
           {visibleBadges.slice(1).map((b, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-normal border border-slate-700 bg-slate-800/80 text-slate-300"
+              className="commons-neutral-badge"
             >
               {b}
             </span>
           ))}
 
           {resource.maintenanceStatus === "archived" || resource.maintenanceStatus === "superseded" ? (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-rose-950/50 border border-rose-800 text-rose-300">
+            <span className="commons-warning-badge">
               <IconAlertTriangle size={12} />
               {resource.maintenanceStatus}
             </span>
@@ -145,16 +116,17 @@ export function CommonsResourceCard({
         {/* Tags preview */}
         <div className="flex flex-wrap gap-1.5 mb-4">
           {resource.frameworks.map((fw) => (
-            <span
+            <button
+              type="button"
               key={fw}
-              className="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer"
+              className="commons-tag-button"
               onClick={(e) => {
                 e.stopPropagation();
                 if (onNavigateSearch) onNavigateSearch(fw);
               }}
             >
               {fw}
-            </span>
+            </button>
           ))}
           {resource.artifactTypes.map((art) => (
             <span key={art} className="text-[11px] px-2 py-0.5 rounded bg-slate-800/60 text-slate-400">

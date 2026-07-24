@@ -21,6 +21,10 @@ import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import { SearchOverlay } from "./components/SearchOverlay";
 import { GlossaryDrawer, type HelpTab } from "./components/GlossaryDrawer";
+import {
+  OrbitalContextBar,
+  orbitalRouteContext,
+} from "./components/OrbitalContextBar";
 import { userFacingLoadError } from "../app/display-names.mjs";
 import {
   loadRuntimeDatasetStaged,
@@ -316,6 +320,7 @@ export function App() {
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const showWorkspaceContent =
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
+  const routeContext = orbitalRouteContext(viewState);
 
   return (
     <>
@@ -331,6 +336,7 @@ export function App() {
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}
       />
+      <OrbitalContextBar onNavigate={navigate} state={viewState} />
 
       <main id="workspace">
         <section
@@ -338,6 +344,9 @@ export function App() {
           aria-live="polite"
           className="app-shell"
           data-app-ready={readyState}
+          data-depth={routeContext.depth}
+          data-mode={routeContext.mode}
+          data-view={viewState.view}
           id="app"
         >
           {showWorkspaceContent ? (

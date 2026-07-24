@@ -1,12 +1,8 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   IconArrowLeft,
   IconExternalLink,
-  IconShieldCheck,
   IconCode,
-  IconUsers,
-  IconBuildingStore,
-  IconArchive,
   IconCopy,
   IconCheck,
   IconAlertTriangle,
@@ -20,7 +16,8 @@ import {
 } from "@tabler/icons-react";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import type { CommonsResource, CommonsResourceLane } from "../lib/commonsTypes";
+import type { CommonsResource } from "../lib/commonsTypes";
+import { CommonsLaneBadge } from "../components/CommonsLaneBadge";
 
 type CommonsDetailPageProps = {
   bundle: RuntimeBundle | null;
@@ -74,20 +71,6 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
     );
   }
 
-  const laneBadgeConfig: Record<
-    CommonsResourceLane,
-    { label: string; bg: string; text: string; icon: React.ComponentType<{ size?: number }> }
-  > = {
-    official: { label: "Official Government Source", bg: "bg-blue-900/40 border-blue-500/40", text: "text-blue-300", icon: IconShieldCheck },
-    open_source: { label: "Open Source Tool / Project", bg: "bg-emerald-900/40 border-emerald-500/40", text: "text-emerald-300", icon: IconCode },
-    practitioner: { label: "Practitioner Knowledge / Template", bg: "bg-purple-900/40 border-purple-500/40", text: "text-purple-300", icon: IconUsers },
-    commercial: { label: "Commercial / Proprietary Resource", bg: "bg-amber-900/40 border-amber-500/40", text: "text-amber-300", icon: IconBuildingStore },
-    legacy: { label: "Legacy / Historical Record", bg: "bg-zinc-800 border-zinc-600", text: "text-zinc-400", icon: IconArchive }
-  };
-
-  const lane = laneBadgeConfig[resource.resourceLane] || laneBadgeConfig.official;
-  const LaneIcon = lane.icon;
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
       {/* Back Navigation */}
@@ -122,17 +105,17 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
         </div>
       </div>
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
+      <section
+        aria-label="Control Commons resource detail"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
+      >
         {/* Header Block */}
         <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-xl mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${lane.bg} ${lane.text}`}>
-              <LaneIcon size={14} />
-              {lane.label}
-            </span>
+            <CommonsLaneBadge full lane={resource.resourceLane} />
 
             {resource.editorialRecommendation ? (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-950/60 border border-amber-700 text-amber-300">
+              <span className="commons-priority-badge">
                 <IconSparkles size={13} />
                 Editorially Recommended
               </span>
@@ -186,13 +169,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
         {/* Supersession Warning Callout */}
         {resource.resourceLane === "legacy" || supersedingResource ? (
-          <div className="rounded-xl border border-rose-800/80 bg-rose-950/40 p-5 mb-8 flex items-start gap-3">
-            <IconAlertTriangle size={20} className="text-rose-400 shrink-0 mt-0.5" />
+          <div className="commons-warning-panel rounded-xl p-5 mb-8 flex items-start gap-3">
+            <IconAlertTriangle size={20} className="shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-sm font-bold text-rose-300 uppercase tracking-wider">
+              <h3 className="text-sm font-bold uppercase tracking-wider">
                 Legacy / Superseded Resource Notice
               </h3>
-              <p className="text-xs text-rose-200 mt-1">
+              <p className="text-xs mt-1">
                 {resource.legacyReason || "This resource has been superseded by a newer official standard or tool."}
               </p>
               {supersedingResource ? (
@@ -266,11 +249,11 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
             {/* Warnings & OPSEC Notes */}
             {resource.warnings && resource.warnings.length > 0 ? (
-              <section className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-5">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
+              <section className="commons-warning-panel rounded-xl p-5">
+                <h3 className="text-xs font-bold uppercase tracking-wider mb-2">
                   Warnings & Usage Guidance
                 </h3>
-                <ul className="list-disc list-inside space-y-1 text-xs text-amber-200">
+                <ul className="list-disc list-inside space-y-1 text-xs">
                   {resource.warnings.map((w, i) => (
                     <li key={i}>{w}</li>
                   ))}
@@ -336,7 +319,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
             </div>
           </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

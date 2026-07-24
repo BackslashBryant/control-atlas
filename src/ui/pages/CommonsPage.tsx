@@ -39,6 +39,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const initialFramework = viewState.view === "commons" ? viewState.framework || "" : "";
   const initialLifecycle = viewState.view === "commons" ? viewState.lifecycle || "" : "";
   const initialAudience = viewState.view === "commons" ? viewState.audience || "" : "";
+  const initialResourceType = viewState.view === "commons" ? viewState.resourceType || "" : "";
+  const initialAccessType = viewState.view === "commons" ? viewState.accessType || "" : "";
   const initialCollection = viewState.view === "commons" ? viewState.collection || "" : "";
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
@@ -46,8 +48,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const [selectedFramework, setSelectedFramework] = useState(initialFramework);
   const [selectedLifecycle, setSelectedLifecycle] = useState(initialLifecycle);
   const [selectedAudience, setSelectedAudience] = useState(initialAudience);
-  const [selectedResourceType, setSelectedResourceType] = useState("");
-  const [selectedAccessType, setSelectedAccessType] = useState("");
+  const [selectedResourceType, setSelectedResourceType] = useState(initialResourceType);
+  const [selectedAccessType, setSelectedAccessType] = useState(initialAccessType);
   const [selectedCollection, setSelectedCollection] = useState(initialCollection);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -63,6 +65,14 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     return dataset?.collections || [];
   }, [dataset]);
 
+  const accessTypeOptions = useMemo(
+    () =>
+      [...new Set(allResources.map((resource) => resource.accessType))]
+        .filter(Boolean)
+        .sort(),
+    [allResources],
+  );
+
   // Sync state changes back to URL
   const updateParams = (patch: Partial<Extract<ViewState, { view: "commons" }>>) => {
     onNavigate("commons", {
@@ -71,6 +81,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       framework: selectedFramework,
       lifecycle: selectedLifecycle,
       audience: selectedAudience,
+      resourceType: selectedResourceType,
+      accessType: selectedAccessType,
       collection: selectedCollection,
       ...patch
     });
@@ -253,6 +265,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       framework: "",
       lifecycle: "",
       audience: "",
+      resourceType: "",
+      accessType: "",
       collection: "",
       query: ""
     });
@@ -323,6 +337,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               />
               {searchQuery ? (
                 <button
+                  aria-label="Clear Commons search"
                   onClick={() => {
                     setSearchQuery("");
                     updateParams({ query: "" });
@@ -338,7 +353,10 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       </header>
 
       {/* Main Surface */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
+      <section
+        aria-label="Control Commons resources"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
+      >
         {/* Parallel Discovery Lanes Tabs */}
         <nav aria-label="Parallel Discovery Lanes" className="mb-6">
           <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
@@ -393,13 +411,14 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {allCollections.map((col) => (
-                <div
+                <button
                   key={col.id}
                   onClick={() => {
                     setSelectedCollection(col.id);
                     updateParams({ collection: col.id });
                   }}
-                  className="group cursor-pointer rounded-xl border border-slate-800 bg-slate-900/60 p-4 hover:border-cyan-500/50 hover:bg-slate-900 transition-all flex flex-col justify-between"
+                  className="group cursor-pointer rounded-xl border border-slate-800 bg-slate-900/60 p-4 hover:border-cyan-500/50 hover:bg-slate-900 transition-all flex flex-col justify-between text-left"
+                  type="button"
                 >
                   <div>
                     <h3 className="text-base font-semibold text-slate-100 group-hover:text-cyan-400 flex items-center justify-between">
@@ -414,7 +433,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                     <span>{col.resourceIds.length} resources</span>
                     <span className="text-cyan-400 font-medium group-hover:underline">Explore kit →</span>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </section>
@@ -449,7 +468,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedCollection ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-700 text-cyan-300 text-xs font-medium">
                 Collection: {allCollections.find((c) => c.id === selectedCollection)?.title}
-                <button onClick={() => { setSelectedCollection(""); updateParams({ collection: "" }); }}>
+                <button aria-label="Remove collection filter" onClick={() => { setSelectedCollection(""); updateParams({ collection: "" }); }}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -458,7 +477,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedFramework ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
                 Framework: {selectedFramework}
-                <button onClick={() => { setSelectedFramework(""); updateParams({ framework: "" }); }}>
+                <button aria-label="Remove framework filter" onClick={() => { setSelectedFramework(""); updateParams({ framework: "" }); }}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -467,7 +486,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedLifecycle ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
                 Lifecycle: {selectedLifecycle}
-                <button onClick={() => { setSelectedLifecycle(""); updateParams({ lifecycle: "" }); }}>
+                <button aria-label="Remove lifecycle filter" onClick={() => { setSelectedLifecycle(""); updateParams({ lifecycle: "" }); }}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -476,7 +495,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedAudience ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
                 Audience: {selectedAudience}
-                <button onClick={() => { setSelectedAudience(""); updateParams({ audience: "" }); }}>
+                <button aria-label="Remove audience filter" onClick={() => { setSelectedAudience(""); updateParams({ audience: "" }); }}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -502,10 +521,11 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {/* Framework Filter */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-framework-filter">
                 Framework / Program
               </label>
               <select
+                id="commons-framework-filter"
                 value={selectedFramework}
                 onChange={(e) => {
                   setSelectedFramework(e.target.value);
@@ -527,10 +547,11 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Lifecycle Stage */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-lifecycle-filter">
                 Lifecycle Stage
               </label>
               <select
+                id="commons-lifecycle-filter"
                 value={selectedLifecycle}
                 onChange={(e) => {
                   setSelectedLifecycle(e.target.value);
@@ -556,10 +577,11 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Audience */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-audience-filter">
                 Audience / Role
               </label>
               <select
+                id="commons-audience-filter"
                 value={selectedAudience}
                 onChange={(e) => {
                   setSelectedAudience(e.target.value);
@@ -585,12 +607,16 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Resource Type */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-resource-type-filter">
                 Resource Type
               </label>
               <select
+                id="commons-resource-type-filter"
                 value={selectedResourceType}
-                onChange={(e) => setSelectedResourceType(e.target.value)}
+                onChange={(e) => {
+                  setSelectedResourceType(e.target.value);
+                  updateParams({ resourceType: e.target.value });
+                }}
                 className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
               >
                 <option value="">All Resource Types</option>
@@ -605,6 +631,29 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 <option value="specification">Specification</option>
               </select>
             </div>
+
+            {/* Access Type */}
+            {accessTypeOptions.length > 1 ? <div>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-access-type-filter">
+                Access Type
+              </label>
+              <select
+                id="commons-access-type-filter"
+                value={selectedAccessType}
+                onChange={(e) => {
+                  setSelectedAccessType(e.target.value);
+                  updateParams({ accessType: e.target.value });
+                }}
+                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+              >
+                <option value="">All Access Types</option>
+                {accessTypeOptions.map((accessType) => (
+                  <option key={accessType} value={accessType}>
+                    {accessType.replaceAll("_", " ")}
+                  </option>
+                ))}
+              </select>
+            </div> : null}
           </div>
         ) : null}
 
@@ -638,7 +687,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             ))}
           </div>
         )}
-      </main>
+      </section>
     </div>
   );
 }

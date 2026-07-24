@@ -112,8 +112,6 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
     view === "patterns" ||
     view === "start-here" ||
     view === "search" ||
-    view === "commons" ||
-    view === "commons-detail" ||
     view === "not-found"
   );
 }

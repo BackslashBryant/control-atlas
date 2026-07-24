@@ -8,31 +8,60 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  background: var(--ca-bg);
 }
 
 body {
   margin: 0;
   background:
-    linear-gradient(color-mix(in srgb, var(--ca-primary) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ca-primary) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px, transparent 1px),
     radial-gradient(
-      circle at 18% 15%,
-      color-mix(in srgb, var(--ca-secondary) 14%, transparent),
-      transparent 22%
+      circle at 14% 8%,
+      color-mix(in srgb, var(--ca-primary) 9%, transparent),
+      transparent 24rem
     ),
     radial-gradient(
-      circle at 82% 10%,
-      color-mix(in srgb, var(--ca-prov-fedramp) 12%, transparent),
-      transparent 22%
+      circle at 88% 24%,
+      color-mix(in srgb, var(--ca-priority) 7%, transparent),
+      transparent 28rem
     ),
     var(--ca-bg);
-  background-size: 40px 40px, 40px 40px, auto, auto, auto;
+  background-size: 24px 24px, 24px 24px, auto, auto, auto;
   color: var(--ca-text);
   font-family: var(--ca-font-body);
   font-size: var(--ca-text-base);
-  line-height: 1.6;
+  line-height: var(--line-height-normal);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+#root {
+  isolation: isolate;
+  min-height: 100vh;
+  position: relative;
+}
+
+#root::before {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 3px,
+      color-mix(in srgb, var(--ca-text) 2%, transparent) 4px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--ca-text) 5%, transparent) 0 1px,
+      transparent 1.4px
+    );
+  background-size: auto, 9px 9px;
+  content: "";
+  inset: 0;
+  mix-blend-mode: soft-light;
+  opacity: 0.22;
+  pointer-events: none;
+  position: fixed;
+  z-index: 1000;
 }
 
 h1,
@@ -40,16 +69,18 @@ h2,
 h3,
 h4 {
   font-family: var(--ca-font-display);
-  font-weight: 600;
-  line-height: var(--line-height-tight);
+  font-weight: 700;
+  line-height: var(--line-height-heading);
   color: var(--ca-text);
 }
 
 h1 {
   font-size: var(--ca-text-3xl);
+  letter-spacing: -0.01em;
 }
 h2 {
   font-size: var(--ca-text-2xl);
+  letter-spacing: 0.01em;
 }
 h3 {
   font-size: var(--ca-text-xl);
@@ -68,9 +99,11 @@ kbd,
 a {
   color: var(--ca-secondary);
   text-decoration: none;
+  text-underline-offset: 0.2em;
 }
 
-a:hover {
+a:hover,
+a:focus-visible {
   text-decoration: underline;
 }
 
@@ -86,9 +119,10 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--ca-secondary);
-  outline-offset: 2px;
   border-radius: var(--ca-radius-sm);
+  box-shadow: var(--ca-focus-ring);
+  outline: 2px solid var(--ca-primary);
+  outline-offset: 3px;
 }
 
 .ca-skip-link,
@@ -97,7 +131,7 @@ button {
   top: -40px;
   left: 0;
   background: var(--ca-primary);
-  color: var(--ca-text);
+  color: var(--ca-surface-deep);
   padding: 8px 16px;
   z-index: 9999;
   border-radius: 0 0 var(--ca-radius-sm) 0;
@@ -108,6 +142,11 @@ button {
   top: 0;
 }
 
+::selection {
+  background: var(--ca-primary);
+  color: var(--ca-surface-deep);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -115,6 +154,7 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
 
   html {
