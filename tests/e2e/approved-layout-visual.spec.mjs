@@ -18,7 +18,7 @@ const ROUTE_COMPOSITIONS = [
   { slug: 'library', path: '/#/library' },
   { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
   { slug: 'compare', path: '/#/compare' },
-  { slug: 'commons', path: '/#/commons' },
+  { slug: 'commons', path: '/#/commons?collection=col-oscal-starter-kit' },
   {
     slug: 'commons-detail',
     path: '/#/commons-detail?id=official-nist-sp800-53-r5',

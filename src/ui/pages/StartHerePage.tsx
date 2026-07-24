@@ -153,7 +153,7 @@ export function StartHerePage(props: {
           ]}
           value={state.systemType || ""}
         />
-        <div className="text-[var(--ca-text-muted)] text-[12px] mt-[16px] leading-relaxed p-[16px] bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] rounded-[3px]">
+        <div className="text-[var(--ca-text)] text-[12px] mt-[16px] leading-relaxed p-[16px] bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] rounded-[3px]">
           <strong className="text-[var(--ca-text)]">Cloud SaaS:</strong> Fully hosted software (e.g., Salesforce, Google Workspace).<br/>
           <strong className="text-[var(--ca-text)]">Platform service:</strong> Cloud hosting environment (e.g., AWS EC2, Azure).<br/>
           <strong className="text-[var(--ca-text)]">On-premises:</strong> Servers in a datacenter you physically control.<br/>

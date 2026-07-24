@@ -199,7 +199,7 @@ export function TopNav(props: TopNavProps) {
           <IconSearch aria-hidden="true" size={16} stroke={2} />
           <span>Search</span>
         </Button>
-        <div className="header-actions-text flex items-center gap-[8px]">
+        <div className="header-actions-text">
           <Button
             variant="primary"
             className="!min-h-[36px]"

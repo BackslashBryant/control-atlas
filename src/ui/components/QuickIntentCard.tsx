@@ -20,7 +20,7 @@ export function QuickIntentCard(props: {
       type="button"
       aria-pressed={props.selected}
     >
-      <div className="text-[var(--ca-secondary)] mb-[16px] p-[8px] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] rounded-full group-hover:bg-[color-mix(in_srgb,var(--ca-secondary)_20%,transparent)] transition-colors">
+      <div className="text-[var(--ca-secondary)] mb-[16px] p-[8px] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] rounded group-hover:bg-[color-mix(in_srgb,var(--ca-secondary)_20%,transparent)] transition-colors">
         {props.icon}
       </div>
       <span className="block font-mono uppercase tracking-wider text-[11px] font-bold text-[var(--ca-text)] mb-[8px]">{props.title}</span>
@@ -56,9 +56,9 @@ export function CompareStepIndicator(props: { step: 1 | 2 | 3; label: string }) 
             }`}
             key={entry.n}
           >
-            <span className={`w-[20px] h-[20px] rounded-full flex items-center justify-center font-bold text-[10px] ${
+            <span className={`w-[20px] h-[20px] rounded flex items-center justify-center font-bold text-[10px] ${
               entry.n === props.step || entry.n < props.step
-                ? "bg-[var(--ca-secondary)] text-white"
+                ? "bg-[var(--ca-secondary)] text-[var(--ca-bg)]"
                 : "bg-[var(--ca-border-strong)] text-[var(--ca-text-muted)]"
             }`}>{entry.n}</span>
             <span>{entry.text}</span>
@@ -98,7 +98,7 @@ export function CatalogFilterBar(props: {
         role="group"
       >
         <button
-          className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
+          className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
             props.category === ""
               ? "border-[var(--ca-info)] text-[var(--ca-text)] bg-[color-mix(in_srgb,var(--ca-info)_20%,transparent)]"
               : "border-[var(--ca-border-strong)] text-[var(--ca-text)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
@@ -110,7 +110,7 @@ export function CatalogFilterBar(props: {
         {props.categoryOptions.map((option) => (
           <button
             key={option}
-            className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
+            className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
               props.category === option
                 ? "border-[var(--ca-info)] text-[var(--ca-text)] bg-[color-mix(in_srgb,var(--ca-info)_20%,transparent)]"
                 : "border-[var(--ca-border-strong)] text-[var(--ca-text)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"

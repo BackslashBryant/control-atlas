@@ -277,23 +277,23 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
+    <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
       {/* Hero Header Section */}
-      <header className="border-b border-slate-800 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 px-4 py-10 sm:px-6 lg:px-8">
+      <header className="border-b border-[var(--ca-border)] bg-gradient-to-b from-[var(--ca-surface)] via-[var(--ca-surface-deep)] to-[var(--ca-surface-deep)] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-700/60 text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_15%,transparent)] border border-[color-mix(in_srgb,var(--ca-primary)_60%,transparent)] text-[var(--ca-primary)] text-xs font-semibold uppercase tracking-widest mb-3">
                 <IconBook2 size={14} />
                 Control Commons
               </div>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-100 sm:text-4xl">
+              <h1 className="text-3xl font-bold tracking-tight text-[var(--ca-text)] sm:text-4xl">
                 Control Commons
               </h1>
-              <p className="text-lg font-medium text-cyan-400 mt-1">
+              <p className="text-lg font-medium text-[var(--ca-primary)] mt-1">
                 Official sources. Working tools. Practitioner knowledge.
               </p>
-              <p className="text-sm text-slate-400 max-w-2xl mt-2">
+              <p className="text-sm text-[var(--ca-secondary)] max-w-2xl mt-2">
                 The public shared resource hub for government cybersecurity, compliance, authorization, workforce qualification, hardening benchmarks, and compliance automation.
               </p>
             </div>
@@ -304,7 +304,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-sm shadow-lg transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-sm shadow-sm transition-colors"
               >
                 <IconPlus size={16} />
                 Submit Resource
@@ -313,7 +313,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-900 text-slate-300 font-medium text-sm transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm border border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface)] text-[var(--ca-text-muted)] font-medium text-sm transition-colors"
               >
                 <IconFlag size={16} />
                 Report Problem
@@ -324,7 +324,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           {/* Global Search Bar */}
           <div className="mt-8 relative max-w-4xl">
             <div className="relative">
-              <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+              <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--ca-secondary)]" size={20} />
               <input
                 type="text"
                 value={searchQuery}
@@ -333,7 +333,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   updateParams({ query: e.target.value });
                 }}
                 placeholder="Search templates, tools, frameworks, communities, datasets, and official guidance..."
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/90 py-3.5 pl-12 pr-10 text-slate-100 placeholder-slate-400 shadow-xl text-base focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full rounded-md border border-[var(--ca-border-strong)] bg-[color-mix(in_srgb,var(--ca-surface)_90%,transparent)] py-3.5 pl-12 pr-10 text-[var(--ca-text)] placeholder:text-[var(--ca-text-muted)] shadow-md text-base focus:border-[var(--ca-primary)] focus:outline-none focus:ring-2 focus:ring-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]"
               />
               {searchQuery ? (
                 <button
@@ -342,7 +342,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                     setSearchQuery("");
                     updateParams({ query: "" });
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ca-secondary)] hover:text-[var(--ca-text)]"
                 >
                   <IconX size={18} />
                 </button>
@@ -359,7 +359,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       >
         {/* Parallel Discovery Lanes Tabs */}
         <nav aria-label="Parallel Discovery Lanes" className="mb-6">
-          <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
+          <div className="flex flex-wrap items-center gap-2 border-b border-[var(--ca-border)] pb-3">
             {[
               { id: "all", label: "All Lanes", icon: IconBook2, count: allResources.length },
               { id: "official", label: "Official", icon: IconShieldCheck, count: allResources.filter(r => r.resourceLane === "official").length },
@@ -377,17 +377,17 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                     setActiveLane(lane.id);
                     updateParams({ lane: lane.id });
                   }}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-all ${
                     active
-                      ? "bg-cyan-600 text-white shadow-md"
-                      : "bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+                      ? "bg-[var(--ca-primary)] text-[var(--ca-bg)] shadow-md"
+                      : "bg-[var(--ca-surface)] border border-[var(--ca-border)] text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] hover:text-[var(--ca-text)]"
                   }`}
                 >
                   <Icon size={16} />
                   <span>{lane.label}</span>
                   <span
-                    className={`ml-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
-                      active ? "bg-cyan-700 text-white" : "bg-slate-800 text-slate-400"
+                    className={`ml-1 rounded px-2 py-0.5 text-xs font-semibold ${
+                      active ? "bg-[color-mix(in_srgb,var(--ca-primary)_70%,transparent)] text-[var(--ca-bg)]" : "bg-[var(--ca-surface-raised)] text-[var(--ca-text)]"
                     }`}
                   >
                     {lane.count}
@@ -402,11 +402,11 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         {!searchQuery && !selectedCollection && activeLane === "all" ? (
           <section className="mb-10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                <IconSparkles size={20} className="text-cyan-400" />
+              <h2 className="text-xl font-bold text-[var(--ca-text)] flex items-center gap-2">
+                <IconSparkles size={20} className="text-[var(--ca-primary)]" />
                 Featured Starter Collections
               </h2>
-              <span className="text-xs text-slate-400">Curated practitioner toolkits</span>
+              <span className="text-xs text-[var(--ca-secondary)]">Curated practitioner toolkits</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -417,21 +417,21 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                     setSelectedCollection(col.id);
                     updateParams({ collection: col.id });
                   }}
-                  className="group cursor-pointer rounded-xl border border-slate-800 bg-slate-900/60 p-4 hover:border-cyan-500/50 hover:bg-slate-900 transition-all flex flex-col justify-between text-left"
+                  className="group cursor-pointer rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_60%,transparent)] p-4 hover:border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)] hover:bg-[var(--ca-surface)] transition-all flex flex-col justify-between text-left"
                   type="button"
                 >
                   <div>
-                    <h3 className="text-base font-semibold text-slate-100 group-hover:text-cyan-400 flex items-center justify-between">
+                    <h3 className="text-base font-semibold text-[var(--ca-text)] group-hover:text-[var(--ca-primary)] flex items-center justify-between">
                       <span>{col.title}</span>
-                      <IconChevronRight size={16} className="text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
+                      <IconChevronRight size={16} className="text-[var(--ca-secondary)] group-hover:text-[var(--ca-primary)] group-hover:translate-x-0.5 transition-all" />
                     </h3>
-                    <p className="text-xs text-slate-300 mt-1.5 leading-relaxed line-clamp-2">
+                    <p className="text-xs text-[var(--ca-text-muted)] mt-1.5 leading-relaxed line-clamp-2">
                       {col.summary}
                     </p>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                  <div className="mt-4 pt-3 border-t border-[color-mix(in_srgb,var(--ca-border)_80%,transparent)] flex items-center justify-between text-xs text-[var(--ca-secondary)]">
                     <span>{col.resourceIds.length} resources</span>
-                    <span className="text-cyan-400 font-medium group-hover:underline">Explore kit →</span>
+                    <span className="text-[var(--ca-primary)] font-medium group-hover:underline">Explore kit →</span>
                   </div>
                 </button>
               ))}
@@ -453,12 +453,12 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setFilterDrawerOpen(!filterDrawerOpen)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-700 bg-slate-900 text-slate-200 text-xs font-medium hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-[var(--ca-text)] text-xs font-medium hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
               <IconFilter size={15} />
               <span>Filters</span>
               {activeFilterCount > 0 ? (
-                <span className="ml-1 rounded-full bg-cyan-500 text-slate-950 px-1.5 py-0.2 text-[11px] font-bold">
+                <span className="ml-1 rounded bg-[var(--ca-primary)] text-[var(--ca-bg)] px-1.5 py-0.2 text-[11px] font-bold">
                   {activeFilterCount}
                 </span>
               ) : null}
@@ -466,7 +466,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Active Filter Removable Tokens */}
             {selectedCollection ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-700 text-cyan-300 text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] border border-[var(--ca-primary)] text-[var(--ca-primary)] text-xs font-medium">
                 Collection: {allCollections.find((c) => c.id === selectedCollection)?.title}
                 <button aria-label="Remove collection filter" onClick={() => { setSelectedCollection(""); updateParams({ collection: "" }); }}>
                   <IconX size={13} />
@@ -475,7 +475,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             ) : null}
 
             {selectedFramework ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Framework: {selectedFramework}
                 <button aria-label="Remove framework filter" onClick={() => { setSelectedFramework(""); updateParams({ framework: "" }); }}>
                   <IconX size={13} />
@@ -484,7 +484,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             ) : null}
 
             {selectedLifecycle ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Lifecycle: {selectedLifecycle}
                 <button aria-label="Remove lifecycle filter" onClick={() => { setSelectedLifecycle(""); updateParams({ lifecycle: "" }); }}>
                   <IconX size={13} />
@@ -493,7 +493,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             ) : null}
 
             {selectedAudience ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Audience: {selectedAudience}
                 <button aria-label="Remove audience filter" onClick={() => { setSelectedAudience(""); updateParams({ audience: "" }); }}>
                   <IconX size={13} />
@@ -504,24 +504,24 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {activeFilterCount > 0 ? (
               <button
                 onClick={clearAllFilters}
-                className="text-xs text-cyan-400 hover:text-cyan-300 underline font-medium ml-2"
+                className="text-xs text-[var(--ca-primary)] hover:text-[var(--ca-primary)] underline font-medium ml-2"
               >
                 Clear all filters
               </button>
             ) : null}
           </div>
 
-          <div aria-live="polite" className="text-xs text-slate-400">
-            Showing <span className="font-semibold text-slate-200">{filteredResources.length}</span> of {allResources.length} resources
+          <div aria-live="polite" className="text-xs text-[var(--ca-secondary)]">
+            Showing <span className="font-semibold text-[var(--ca-text)]">{filteredResources.length}</span> of {allResources.length} resources
           </div>
         </div>
 
         {/* Filter Drawer / Facets Panel */}
         {filterDrawerOpen ? (
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {/* Framework Filter */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-framework-filter">
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-framework-filter">
                 Framework / Program
               </label>
               <select
@@ -531,7 +531,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   setSelectedFramework(e.target.value);
                   updateParams({ framework: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Frameworks</option>
                 <option value="NIST SP 800-53">NIST SP 800-53</option>
@@ -547,7 +547,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Lifecycle Stage */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-lifecycle-filter">
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-lifecycle-filter">
                 Lifecycle Stage
               </label>
               <select
@@ -557,7 +557,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   setSelectedLifecycle(e.target.value);
                   updateParams({ lifecycle: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Stages</option>
                 <option value="Learn">Learn</option>
@@ -577,7 +577,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Audience */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-audience-filter">
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-audience-filter">
                 Audience / Role
               </label>
               <select
@@ -587,7 +587,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   setSelectedAudience(e.target.value);
                   updateParams({ audience: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Audiences</option>
                 <option value="ISSO">ISSO</option>
@@ -607,7 +607,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Resource Type */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-resource-type-filter">
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-resource-type-filter">
                 Resource Type
               </label>
               <select
@@ -617,7 +617,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   setSelectedResourceType(e.target.value);
                   updateParams({ resourceType: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Resource Types</option>
                 <option value="catalog">Catalog</option>
@@ -634,7 +634,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
             {/* Access Type */}
             {accessTypeOptions.length > 1 ? <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2" htmlFor="commons-access-type-filter">
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-access-type-filter">
                 Access Type
               </label>
               <select
@@ -644,7 +644,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                   setSelectedAccessType(e.target.value);
                   updateParams({ accessType: e.target.value });
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 py-2 px-3 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Access Types</option>
                 {accessTypeOptions.map((accessType) => (
@@ -659,15 +659,15 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
         {/* Results Grid */}
         {filteredResources.length === 0 ? (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-12 text-center my-8">
-            <IconBook2 size={40} className="mx-auto text-slate-600 mb-3" />
-            <h3 className="text-lg font-bold text-slate-200">No resources found matching your query</h3>
-            <p className="text-sm text-slate-400 max-w-md mx-auto mt-1">
+          <div className="rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_60%,transparent)] p-12 text-center my-8">
+            <IconBook2 size={40} className="mx-auto text-[var(--ca-text-muted)] mb-3" />
+            <h3 className="text-lg font-bold text-[var(--ca-text)]">No resources found matching your query</h3>
+            <p className="text-sm text-[var(--ca-secondary)] max-w-md mx-auto mt-1">
               Try widening your search terms or clearing selected filters to view available resources.
             </p>
             <button
               onClick={clearAllFilters}
-              className="mt-4 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow"
+              className="mt-4 px-4 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-xs shadow"
             >
               Reset All Filters
             </button>
