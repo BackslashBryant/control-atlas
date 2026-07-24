@@ -514,6 +514,34 @@ export function normalizeViewState(
     };
   }
 
+  if (view === "commons") {
+    const incoming = state as Extract<ViewState, { view: "commons" }>;
+    return {
+      view,
+      query: incoming.query || "",
+      lane: incoming.lane || "all",
+      framework: incoming.framework || "",
+      lifecycle: incoming.lifecycle || "",
+      audience: incoming.audience || "",
+      accessType: incoming.accessType || "",
+      costType: incoming.costType || "",
+      resourceType: incoming.resourceType || "",
+      platform: incoming.platform || "",
+      format: incoming.format || "",
+      collection: incoming.collection || "",
+      selectedId: incoming.selectedId || "",
+    };
+  }
+
+  if (view === "commons-detail") {
+    const incoming = state as Extract<ViewState, { view: "commons-detail" }>;
+    return {
+      view,
+      id: incoming.id || "",
+      from: incoming.from || "",
+    };
+  }
+
   if (view === "start-here") {
     const incoming = state as Extract<ViewState, { view: "start-here" }>;
     return {
