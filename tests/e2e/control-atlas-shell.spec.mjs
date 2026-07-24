@@ -134,6 +134,12 @@ test("Control Commons renders its compiled utility layout", async ({ page }) => 
   const commonsSurface = page.locator("div.min-h-screen.bg-slate-950");
   await expect(commonsSurface).toHaveCount(1);
   await expect(commonsSurface).toHaveCSS("padding-bottom", "64px");
+
+  await page.getByRole("button", { name: "Details" }).first().click();
+  await expect(page).toHaveURL(/#\/commons-detail\?id=/);
+  await expect(
+    page.getByRole("button", { name: "Back to Commons Hub" }),
+  ).toBeVisible();
 });
 
 test("mobile navigation covers the page and closes predictably", async ({
