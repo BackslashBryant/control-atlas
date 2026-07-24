@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
 const html = readFileSync('src/index.html', 'utf8');
 const css = readFileSync('styles/tokens.css', 'utf8');
+const orbitalCss = readFileSync('styles/orbital.css', 'utf8');
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 
 const mainEntrypoint = existsSync('src/main.tsx') ? readFileSync('src/main.tsx', 'utf8') : '';
@@ -193,6 +194,51 @@ test('Orbital Archive visual system remains active in the shared stylesheet', ()
   assert.match(css, /Inter/);
   assert.match(css, /IBM Plex Mono/);
   assert.doesNotMatch(css, /#[a-f\d]{0,2}(?:7c3aed|d8b4fe|6366f1)/i);
+  assert.match(mainEntrypoint, /styles\/orbital\.css/);
+  assert.match(orbitalCss, /\.orbital-context/);
+  assert.match(orbitalCss, /\.landing-signal-grid/);
+});
+
+test('all route contexts and user-facing styles stay inside the Orbital system', () => {
+  const contextBar = readFileSync(
+    'src/ui/components/OrbitalContextBar.tsx',
+    'utf8',
+  );
+  for (const view of [
+    'home',
+    'menu',
+    'start-here',
+    'atlas-map',
+    'search',
+    'catalog-detail',
+    'library-detail',
+    'matrix',
+    'patterns',
+    'templates',
+    'sources',
+    'commons',
+    'commons-detail',
+    'about',
+    'retired',
+    'browse',
+    'not-found',
+  ]) {
+    assert.match(contextBar, new RegExp(`case "${view}"`));
+  }
+
+  const implementationFiles = [
+    ...readdirSync('src/ui', { recursive: true })
+      .map((path) => String(path))
+      .filter((path) => /\.(?:css|ts|tsx)$/.test(path))
+      .map((path) => readFileSync(`src/ui/${path}`, 'utf8')),
+    ...readdirSync('styles')
+      .filter((path) => path.endsWith('.css'))
+      .map((path) => readFileSync(`styles/${path}`, 'utf8')),
+  ].join('\n');
+  assert.doesNotMatch(
+    implementationFiles,
+    /(?:purple|violet|pink|magenta|#(?:7c3aed|d8b4fe|6366f1|4f46e5|a5b4fc))/i,
+  );
 });
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {

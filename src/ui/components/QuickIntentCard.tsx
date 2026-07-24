@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Input } from "./lsm";
 
 export function QuickIntentCard(props: {
   title: string;
@@ -6,18 +7,29 @@ export function QuickIntentCard(props: {
   icon: ReactNode;
   actionLabel?: string;
   onClick: () => void;
+  selected?: boolean;
 }) {
   return (
     <button
-      className="intent-card intent-card-button"
+      className={`flex flex-col items-start text-left p-[24px] border rounded-[3px] transition-all group w-full cursor-pointer h-full ${
+        props.selected
+          ? "border-[var(--ca-secondary)] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] shadow-[0_0_0_1px_var(--ca-secondary)]"
+          : "border-[var(--ca-border-strong)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
+      }`}
       onClick={props.onClick}
       type="button"
+      aria-pressed={props.selected}
     >
-      <div className="intent-icon">{props.icon}</div>
-      <span className="intent-card-title">{props.title}</span>
-      <span className="intent-card-body">{props.body}</span>
+      <div className="text-[var(--ca-secondary)] mb-[16px] p-[8px] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] rounded-full group-hover:bg-[color-mix(in_srgb,var(--ca-secondary)_20%,transparent)] transition-colors">
+        {props.icon}
+      </div>
+      <span className="block font-mono uppercase tracking-wider text-[11px] font-bold text-[var(--ca-text)] mb-[8px]">{props.title}</span>
+      <span className="block text-[var(--ca-text-muted)] text-[13px] leading-relaxed mb-[16px]">{props.body}</span>
       {props.actionLabel ? (
-        <span className="intent-card-action-hint">{props.actionLabel}</span>
+        <span className="mt-auto text-[var(--ca-secondary)] text-[12px] font-medium flex items-center gap-[4px] group-hover:translate-x-1 transition-transform">
+          {props.actionLabel}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </span>
       ) : null}
     </button>
   );
@@ -31,20 +43,24 @@ export function CompareStepIndicator(props: { step: 1 | 2 | 3; label: string }) 
   ] as const;
 
   return (
-    <nav aria-label={props.label} className="compare-stepper">
-      <ol className="compare-stepper-list">
+    <nav aria-label={props.label} className="mb-[24px]">
+      <ol className="flex gap-[8px] flex-wrap m-0 p-0 list-none">
         {steps.map((entry) => (
           <li
-            className={
+            className={`flex items-center gap-[8px] px-[12px] py-[8px] text-[12px] rounded-[3px] border ${
               entry.n === props.step
-                ? "compare-step active"
+                ? "border-[var(--ca-secondary)] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] text-[var(--ca-text)]"
                 : entry.n < props.step
-                  ? "compare-step complete"
-                  : "compare-step"
-            }
+                  ? "border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] text-[var(--ca-text)]"
+                  : "border-[var(--ca-border)] bg-[var(--ca-surface)] text-[var(--ca-text-muted)]"
+            }`}
             key={entry.n}
           >
-            <span className="compare-step-number">{entry.n}</span>
+            <span className={`w-[20px] h-[20px] rounded-full flex items-center justify-center font-bold text-[10px] ${
+              entry.n === props.step || entry.n < props.step
+                ? "bg-[var(--ca-secondary)] text-white"
+                : "bg-[var(--ca-border-strong)] text-[var(--ca-text-muted)]"
+            }`}>{entry.n}</span>
             <span>{entry.text}</span>
           </li>
         ))}
@@ -63,40 +79,43 @@ export function CatalogFilterBar(props: {
   queryPlaceholder: string;
 }) {
   return (
-    <div className="catalog-filter-bar">
-      <p className="catalog-filter-summary">{props.countLabel}</p>
-      <div className="catalog-filter-controls">
-        <label className="field grow catalog-search-field">
-          <span>Search</span>
-          <input
-            className="catalog-search-input"
+    <div className="mb-[32px] p-[24px] bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] rounded-[3px]">
+      <div className="flex flex-col md:flex-row gap-[16px] md:items-center justify-between mb-[24px]">
+        <p className="text-[13px] text-[var(--ca-text)] m-0">{props.countLabel}</p>
+        <div className="w-full md:w-[320px]">
+          <Input
+            aria-label="Search"
             onChange={(event) => props.onQueryChange(event.target.value)}
             placeholder={props.queryPlaceholder}
             type="search"
             value={props.query}
           />
-        </label>
+        </div>
       </div>
       <div
         aria-label="Filter by category"
-        className="category-chip-row"
+        className="flex gap-[8px] flex-wrap"
         role="group"
       >
         <button
-          className={props.category ? "chip chip-filter" : "chip chip-filter active"}
+          className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
+            props.category === ""
+              ? "border-[var(--ca-info)] text-[var(--ca-text)] bg-[color-mix(in_srgb,var(--ca-info)_20%,transparent)]"
+              : "border-[var(--ca-border-strong)] text-[var(--ca-text)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
+          }`}
           onClick={() => props.onCategoryChange("")}
-          type="button"
         >
           All categories
         </button>
         {props.categoryOptions.map((option) => (
           <button
-            className={
-              props.category === option ? "chip chip-filter active" : "chip chip-filter"
-            }
             key={option}
+            className={`inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer ${
+              props.category === option
+                ? "border-[var(--ca-info)] text-[var(--ca-text)] bg-[color-mix(in_srgb,var(--ca-info)_20%,transparent)]"
+                : "border-[var(--ca-border-strong)] text-[var(--ca-text)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
+            }`}
             onClick={() => props.onCategoryChange(option)}
-            type="button"
           >
             {option}
           </button>

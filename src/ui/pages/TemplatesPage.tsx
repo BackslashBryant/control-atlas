@@ -23,6 +23,7 @@ import {
   groupItemsByCategory,
   TEMPLATE_CATEGORIES,
 } from "../lib/catalogGroups.mjs";
+
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -36,6 +37,7 @@ import {
   downloadTextFile,
   scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
+import { Panel, Button } from "../components/lsm";
 
 type TemplateRecord = {
   template_id?: string;
@@ -900,17 +902,16 @@ export function TemplatesPage(props: {
   }
 
   return (
-    <section className="panel">
+    <Panel>
       <PageHeader
         action={
           selectedTemplate ? (
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={() => onNavigate("templates", { templateType: "" })}
-              type="button"
             >
               Back to document tasks
-            </button>
+            </Button>
           ) : undefined
         }
         eyebrow="Create a compliance document"
@@ -941,14 +942,13 @@ export function TemplatesPage(props: {
             </div>
             <div className="intent-grid template-featured-tasks">
               {workflows.slice(0, 4).map((workflow) => (
-                <button
-                  aria-pressed={selectedWorkflowId === workflow.workflow_id}
-                  className={`intent-card intent-card-button${
-                    selectedWorkflowId === workflow.workflow_id
-                      ? " nexus-workflow-selected"
-                      : ""
-                  }`}
+                <QuickIntentCard
                   key={workflow.workflow_id}
+                  title={workflow.title}
+                  body={workflow.summary}
+                  icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
+                  actionLabel="Choose this task"
+                  selected={selectedWorkflowId === workflow.workflow_id}
                   onClick={() => {
                     setSelectedWorkflowId(workflow.workflow_id);
                     setShowAllOfficialResources(false);
@@ -959,25 +959,21 @@ export function TemplatesPage(props: {
                       0,
                     );
                   }}
-                  type="button"
-                >
-                  <div className="intent-icon">
-                    <IconCompass aria-hidden="true" size={20} stroke={1.8} />
-                  </div>
-                  <span className="intent-card-title">{workflow.title}</span>
-                  <span className="intent-card-body">{workflow.summary}</span>
-                  <span className="intent-card-action-hint">Choose this task</span>
-                </button>
+                />
               ))}
             </div>
             {workflows.length > 4 ? (
               <details className="other-templates template-more-tasks">
                 <summary>More document tasks ({workflows.length - 4})</summary>
-                <div className="intent-grid">
+            <div className="intent-grid">
                   {workflows.slice(4).map((workflow) => (
-                    <button
-                      className="intent-card intent-card-button"
+                    <QuickIntentCard
                       key={workflow.workflow_id}
+                      title={workflow.title}
+                      body={workflow.summary}
+                      icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
+                      actionLabel="Choose this task"
+                      selected={selectedWorkflowId === workflow.workflow_id}
                       onClick={() => {
                         setSelectedWorkflowId(workflow.workflow_id);
                         setShowAllOfficialResources(false);
@@ -988,15 +984,7 @@ export function TemplatesPage(props: {
                           0,
                         );
                       }}
-                      type="button"
-                    >
-                      <div className="intent-icon">
-                        <IconCompass aria-hidden="true" size={20} stroke={1.8} />
-                      </div>
-                      <span className="intent-card-title">{workflow.title}</span>
-                      <span className="intent-card-body">{workflow.summary}</span>
-                      <span className="intent-card-action-hint">Choose this task</span>
-                    </button>
+                    />
                   ))}
                 </div>
               </details>
@@ -1027,13 +1015,12 @@ export function TemplatesPage(props: {
                   </h2>
                   <p className="page-summary">{selectedWorkflow.summary}</p>
                 </div>
-                <button
-                  className="secondary"
+                <Button
+                  variant="secondary"
                   onClick={() => setSelectedWorkflowId("")}
-                  type="button"
                 >
                   Choose a different task
-                </button>
+                </Button>
               </div>
               {/* The method — outcomes, steps, readiness — is reference, not a
                   gate. It used to sit between the user's stated intent and the
@@ -1211,18 +1198,18 @@ export function TemplatesPage(props: {
               </div>
             </div>
             <FedrampCurrentTruthPanel transition={fedrampTransition} />
-            <button
-              className="secondary nexus-show-more"
+            <Button
+              variant="secondary"
+              className="nexus-show-more"
               onClick={() => {
                 setShowCompleteOfficialCatalog((value) => !value);
                 setShowAllOfficialResources(false);
               }}
-              type="button"
             >
               {showCompleteOfficialCatalog
                 ? "Show resources for this task"
                 : "Browse complete official catalog"}
-            </button>
+            </Button>
             <div className="nexus-grid">
               {visibleOfficialArtifacts.map((artifact) => (
                 <OfficialArtifactCard
@@ -1242,15 +1229,15 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
             {officialArtifactPool.length > 8 ? (
-              <button
-                className="secondary nexus-show-more"
+              <Button
+                variant="secondary"
+                className="nexus-show-more"
                 onClick={() => setShowAllOfficialResources((value) => !value)}
-                type="button"
               >
                 {showAllOfficialResources
                   ? "Show fewer official resources"
                   : `Show all ${officialArtifactPool.length} official resources`}
-              </button>
+              </Button>
             ) : null}
           </section>
 
@@ -1283,15 +1270,15 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
             {workflowTools.length > 8 ? (
-              <button
-                className="secondary nexus-show-more"
+              <Button
+                variant="secondary"
+                className="nexus-show-more"
                 onClick={() => setShowAllTools((value) => !value)}
-                type="button"
               >
                 {showAllTools
                   ? "Show fewer tools"
                   : `Show all ${workflowTools.length} tools`}
-              </button>
+              </Button>
             ) : null}
           </section>
             </div>
@@ -1352,9 +1339,9 @@ export function TemplatesPage(props: {
               />
             </div>
             <div className="card-actions">
-              <button className="primary" disabled={generating} onClick={createTemplate} ref={generateButtonRef} type="button">
+              <Button variant="primary" disabled={generating} onClick={createTemplate}>
                 {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
-              </button>
+              </Button>
             </div>
             {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}
           </SummaryCard>
@@ -1556,6 +1543,6 @@ export function TemplatesPage(props: {
           </Accordion.Root>
         </section>
       ) : null}
-    </section>
+    </Panel>
   );
 }

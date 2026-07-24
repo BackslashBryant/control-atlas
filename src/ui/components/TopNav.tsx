@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
+import { Button, Input, Tabs } from "./lsm";
 
 import { BrandFlourish, BrandMark } from "./BrandLockup";
 import {
@@ -140,18 +141,16 @@ export function TopNav(props: TopNavProps) {
         </span>
       </button>
 
-      <nav aria-label="Primary navigation" className="primary-nav">
-        {PRIMARY_NAV_ITEMS.map((item) => (
-          <button
-            aria-current={activeView === item.view ? "page" : undefined}
-            className={activeView === item.view ? "active nav-active" : ""}
-            key={item.label}
-            onClick={() => navigate(item.view, item.patch)}
-            type="button"
-          >
-            {item.label}
-          </button>
-        ))}
+      <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
+        <Tabs 
+          tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
+          activeId={activeView as string}
+          onChange={(id) => {
+            const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
+            if (item) navigate(item.view, item.patch);
+          }}
+          className="border-b-0 h-full gap-[8px]"
+        />
       </nav>
 
       <div className="header-actions">
@@ -175,46 +174,53 @@ export function TopNav(props: TopNavProps) {
             <label className="visually-hidden" htmlFor="header-search">
               Search records and glossary
             </label>
-            <div className="search-input">
-              <IconSearch aria-hidden="true" size={18} stroke={1.8} />
-              <input
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-[12px] flex items-center pointer-events-none text-[var(--ca-text-muted)]">
+                <IconSearch aria-hidden="true" size={16} stroke={2} />
+              </div>
+              <Input
                 aria-label="Search records and glossary"
                 id="header-search"
                 onChange={(event) => onHeaderSearchDraftChange(event.target.value)}
                 placeholder="Search records"
                 type="search"
                 value={headerSearchDraft}
+                className="pl-[36px] rounded-full min-h-[36px] !bg-[color-mix(in_srgb,var(--ca-surface-raised)_40%,transparent)] focus-visible:!bg-[var(--ca-surface-raised)]"
               />
             </div>
           </form>
         ) : null}
-        <button
+        <Button
           aria-label="Open search"
-          className={`secondary quiet header-search-trigger${!bundle ? " header-search-trigger--no-bundle" : ""}`}
+          variant="secondary"
+          className={`!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)] header-search-trigger${!bundle ? " header-search-trigger--no-bundle" : ""}`}
           onClick={onOpenSearch}
-          type="button"
         >
-          <IconSearch aria-hidden="true" size={18} stroke={1.8} />
+          <IconSearch aria-hidden="true" size={16} stroke={2} />
           <span>Search</span>
-        </button>
-        <div className="header-actions-text">
-          <button
-            className="header-start-here"
+        </Button>
+        <div className="header-actions-text flex items-center gap-[8px]">
+          <Button
+            variant="primary"
+            className="!min-h-[36px]"
             onClick={() => onNavigate("start-here")}
-            type="button"
           >
             Start here
-          </button>
-          <button
-            className="secondary quiet header-utility-sources"
+          </Button>
+          <Button
+            variant="secondary"
+            className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
             onClick={() => onNavigate("sources")}
-            type="button"
           >
             Sources
-          </button>
-          <button className="secondary quiet" onClick={onOpenHelp} type="button">
+          </Button>
+          <Button 
+            variant="secondary"
+            className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
+            onClick={onOpenHelp}
+          >
             Help
-          </button>
+          </Button>
         </div>
         <button
           aria-controls="mobile-nav-sheet"
@@ -265,17 +271,17 @@ export function TopNav(props: TopNavProps) {
               </div>
             ))}
           </nav>
-          <div className="mobile-nav-sheet-actions">
-            <button
-              className="secondary quiet"
+          <div className="mobile-nav-sheet-actions p-[16px]">
+            <Button
+              variant="secondary"
+              className="w-full"
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenHelp();
               }}
-              type="button"
             >
               Help
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}

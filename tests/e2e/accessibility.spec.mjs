@@ -29,7 +29,22 @@ test.beforeEach(async ({ page }) => {
 });
 
 const ROUTES = [
-  { label: "home", path: "/" },
+  { label: "home", path: "/#/" },
+  { label: "menu", path: "/#/menu" },
+  { label: "start here", path: "/#/start" },
+  { label: "library", path: "/#/library" },
+  { label: "catalog", path: "/#/library/nist-800-53" },
+  {
+    label: "record detail",
+    path: "/#/record/nist-800-53/AC-2",
+  },
+  { label: "commons", path: "/#/commons" },
+  {
+    label: "commons detail",
+    path: "/#/commons-detail?id=official-nist-sp800-53-r5",
+  },
+  { label: "retired recovery", path: "/#/retired?q=old-control" },
+  { label: "not found recovery", path: "/#/does-not-exist" },
   { label: "atlas map", path: "/?view=atlas-map" },
   {
     label: "focused Atlas Purpose",
@@ -77,7 +92,6 @@ const ROUTES = [
   },
   { label: "playbooks hub", path: "/?view=playbooks" },
   { label: "playbook detail", path: "/?view=playbooks&pattern=rmf-lifecycle" },
-  { label: "start here", path: "/?view=start-here" },
   { label: "about", path: "/?view=about" },
 ];
 

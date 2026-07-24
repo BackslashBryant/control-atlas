@@ -394,7 +394,7 @@ body {
 .summary-card-title,
 .result-meta,
 .mobile-nav-sheet-group-label {
-  color: var(--ca-primary);
+  color: var(--ca-text);
   font-family: var(--ca-font-mono);
   font-size: var(--ca-text-micro);
   font-weight: 500;
@@ -851,7 +851,7 @@ details > summary {
 }
 
 .landing-more-paths > summary {
-  color: var(--ca-primary);
+  color: var(--ca-text);
   font-family: var(--ca-font-mono);
   font-size: var(--ca-text-xs);
   letter-spacing: 0.08em;

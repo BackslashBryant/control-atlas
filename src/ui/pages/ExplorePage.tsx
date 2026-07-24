@@ -24,6 +24,7 @@ import {
   SelectField,
   openAtlasMapForNode,
 } from "../lib/pagePrimitives";
+import { Button, Input, Panel } from "../components/lsm";
 
 export function ExplorePage(props: {
   bundle: RuntimeBundle;
@@ -185,17 +186,16 @@ export function ExplorePage(props: {
 
   return (
     <>
-      <section className="panel search-panel">
+      <Panel className="search-panel border-0 !bg-transparent p-0">
         <PageHeader
           eyebrow="Explore"
           action={
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={() => onNavigate("start-here")}
-              type="button"
             >
               Start guided path
-            </button>
+            </Button>
           }
           summary="Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources."
           title="Search everything in one place"
@@ -209,28 +209,27 @@ export function ExplorePage(props: {
         ) : null}
 
         <form
-          className="search-form"
+          className="search-form mb-[32px]"
           onSubmit={(event) => {
             event.preventDefault();
             onNavigate("search", { query: queryDraft.trim() });
           }}
         >
-          <label className="field grow" htmlFor="search-query">
-            <span>Search by ID, title, or topic</span>
-            <div className="search-input">
-              <IconSearch aria-hidden="true" size={18} stroke={1.8} />
-              <input
+          <div className="flex gap-[16px] items-end">
+            <div className="grow">
+              <Input
                 id="search-query"
+                label="Search by ID, title, or topic"
                 onChange={(event) => setQueryDraft(event.target.value)}
                 placeholder="encryption, access control, passwords"
                 type="search"
                 value={queryDraft}
               />
             </div>
-          </label>
-          <button className="primary" type="submit">
-            Search
-          </button>
+            <Button variant="primary" type="submit" className="min-h-[36px]">
+              Search
+            </Button>
+          </div>
         </form>
 
         <Accordion.Root className="accordion-root" collapsible type="single">
@@ -660,7 +659,7 @@ export function ExplorePage(props: {
             </p>
           </section>
         )}
-      </section>
+      </Panel>
     </>
   );
 }

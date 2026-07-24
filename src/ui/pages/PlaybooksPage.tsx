@@ -70,6 +70,7 @@ import {
   sourceWarnings,
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
+import { Panel, Button, StatusChip } from "../components/lsm";
 
 
 export function PlaybooksPage(props: {
@@ -117,7 +118,7 @@ export function PlaybooksPage(props: {
     );
 
     return (
-      <section className="panel">
+      <Panel>
         <PageHeader
           eyebrow="Playbooks"
           summary="Choose the job in front of you. Each guide shows the decision to make, common mistakes, and the records or starter documents to open next."
@@ -188,36 +189,34 @@ export function PlaybooksPage(props: {
           ) : null;
         })}
         {filteredPatterns.length === 0 ? (
-          <div className="notice" role="status">
-            <p>No playbooks match this search and category.</p>
-            <button
-              className="primary"
+          <div className="p-[24px] bg-[color-mix(in_srgb,var(--ca-surface-raised),white_5%)] border border-[var(--ca-border-strong)] rounded-[3px] text-center" role="status">
+            <p className="mb-[16px] text-[var(--ca-text)] font-medium">No playbooks match this search and category.</p>
+            <Button
+              variant="primary"
               onClick={() => {
                 setCategoryFilter("");
                 setQueryFilter("");
               }}
-              type="button"
             >
               Clear filters
-            </button>
+            </Button>
           </div>
         ) : null}
         </div>
-      </section>
+      </Panel>
     );
   }
 
   return (
-    <section className="panel">
+    <Panel>
       <PageHeader
         action={
-          <button
-            className="secondary"
+          <Button
+            variant="secondary"
             onClick={() => onNavigate("patterns", { pattern: "" })}
-            type="button"
           >
             Back to playbooks
-          </button>
+          </Button>
         }
         eyebrow="Playbooks"
         summary={selectedPattern.summary}
@@ -228,13 +227,12 @@ export function PlaybooksPage(props: {
           {patternGlossaryTerms.length ? (
             <details>
               <summary>Related glossary terms ({patternGlossaryTerms.length})</summary>
-              <div className="chip-row">
+              <div className="flex gap-[8px] flex-wrap mt-[12px]">
                 {patternGlossaryTerms.map((entry) => (
                   <button
-                    className="chip"
                     key={entry.id}
+                    className="inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer border-[var(--ca-border-strong)] text-[var(--ca-text-muted)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
                     onClick={() => onOpenGlossary(entry.id)}
-                    type="button"
                   >
                     {entry.term}
                   </button>
@@ -265,13 +263,12 @@ export function PlaybooksPage(props: {
         </section>
         <aside className="stack">
           <SummaryCard title="Controls to review">
-            <div className="chip-row">
+            <div className="flex gap-[8px] flex-wrap">
               {selectedPattern.controls.map((controlId) => (
                 <button
-                  className="chip"
                   key={controlId}
+                  className="inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer border-[var(--ca-info)] text-[var(--ca-text)] bg-[color-mix(in_srgb,var(--ca-info)_20%,transparent)] hover:bg-[color-mix(in_srgb,var(--ca-info)_30%,transparent)]"
                   onClick={() => onOpenNodeByItemId(controlId)}
-                  type="button"
                 >
                   {controlId}
                 </button>
@@ -306,56 +303,52 @@ export function PlaybooksPage(props: {
             <p>{selectedPattern.limitations}</p>
           </SummaryCard>
           <SummaryCard title="Next action">
-            <div className="stack compact">
+            <div className="grid gap-[12px]">
               {selectedPattern.controls[0] ? (
-                <button
-                  className="primary"
+                <Button
+                  variant="primary"
                   onClick={() =>
                     onNavigate("atlas-map", {
                       node: selectedPattern.controls[0],
                     })
                   }
-                  type="button"
                 >
                   Open {selectedPattern.controls[0]} in Atlas
-                </button>
+                </Button>
               ) : null}
               {selectedPattern.templates[0] ? (
-                <button
-                  className="secondary"
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     onNavigate("templates", {
                       templateType: selectedPattern.templates[0],
                     })
                   }
-                  type="button"
                 >
                   Open {displayNameFor("template_type", selectedPattern.templates[0])}
-                </button>
+                </Button>
               ) : null}
-              <details>
+              <details className="mt-[12px]">
                 <summary>More options</summary>
-                <div className="stack compact disclosure-actions">
-                  <button
-                    className="secondary"
+                <div className="grid gap-[8px] mt-[12px]">
+                  <Button
+                    variant="secondary"
                     onClick={() => onNavigate("templates")}
-                    type="button"
                   >
                     Browse all starter documents
-                  </button>
-                  <button
-                    className="secondary quiet"
+                  </Button>
+                  <Button
+                    variant="secondary"
                     onClick={() => setHelpOpen(true)}
-                    type="button"
                   >
                     Open the glossary
-                  </button>
+                  </Button>
                 </div>
               </details>
             </div>
           </SummaryCard>
         </aside>
       </div>
-    </section>
+    </Panel>
   );
 }

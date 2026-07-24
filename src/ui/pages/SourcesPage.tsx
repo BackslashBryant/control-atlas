@@ -72,6 +72,8 @@ import {
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
 
+import { Panel } from "../components/lsm";
+
 export function SourcesPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "sources" }>;
@@ -142,7 +144,7 @@ export function SourcesPage(props: {
   }, [bundle.runtime]);
 
   return (
-    <section className="panel">
+    <Panel>
       <PageHeader
         eyebrow="Sources"
         summary="Review what a source is, how Control Atlas uses it, and how much trust to place in the resulting public mapping."
@@ -414,6 +416,6 @@ export function SourcesPage(props: {
       </div>
       </div>
       )}
-    </section>
+    </Panel>
   );
 }

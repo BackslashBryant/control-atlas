@@ -138,6 +138,8 @@ function isMeaningfullyDifferentSummary(
   return true;
 }
 
+import { Panel } from "../components/lsm";
+
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "library-detail" }>;
@@ -479,7 +481,7 @@ export function ObjectDetailPage(props: {
             </SummaryCard>
           ) : null}
 
-          <section className="panel">
+          <Panel>
             <div className="section-header">
               <div>
                 <h2>Connections</h2>
@@ -568,7 +570,7 @@ export function ObjectDetailPage(props: {
               source={source}
               sourceTrustSummary={sourceTrustSummary}
             />
-          </section>
+          </Panel>
 
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel
