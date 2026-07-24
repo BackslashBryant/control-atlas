@@ -35,7 +35,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   await dismissOnboarding(page);
   await page.evaluate(() => globalThis.document.fonts.ready);
 
-  const main = page.locator('main.atlas-focused-main');
+  const main = page.locator('.atlas-focused-main');
   await expect(main).toBeVisible();
   if (relationshipView === 'map') {
     await expect(main.locator('.atlas-spatial-map')).toBeVisible();

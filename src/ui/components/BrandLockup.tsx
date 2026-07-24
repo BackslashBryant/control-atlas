@@ -12,11 +12,11 @@ export function BrandMark() {
         <path
           d={ARC_PATH}
           fill="none"
-          stroke="#FFFFFF"
+          stroke="currentColor"
           strokeLinecap="round"
           strokeWidth="7"
         />
-        <path d={ARROW_PATH} fill="#FFFFFF" />
+        <path d={ARROW_PATH} fill="currentColor" />
       </svg>
     </span>
   );

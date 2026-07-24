@@ -176,17 +176,23 @@ test('query-string deep link compatibility moves into typed React adapters', () 
   assert.match(router, /applyLegacyQueryRedirect/);
 });
 
-test('dark atlas visual system remains active in the shared stylesheet', () => {
+test('Orbital Archive visual system remains active in the shared stylesheet', () => {
   assert.match(html, /Content-Security-Policy/);
   assert.doesNotMatch(html, /fonts\.googleapis\.com/);
   assert.doesNotMatch(html, /fonts\.gstatic\.com/);
-  assert.match(css, /--ca-bg:\s*#10131A/i);
-  assert.match(css, /--ca-surface:\s*#1C212B/i);
-  assert.match(css, /--ca-primary:\s*#2563EB/i);
-  assert.match(css, /--ca-secondary:\s*#22D3EE/i);
-  assert.match(css, /Space Grotesk/);
-  assert.match(css, /Public Sans/);
-  assert.match(css, /JetBrains Mono/);
+  assert.match(css, /--lsm-orbit:\s*#11181e/i);
+  assert.match(css, /--lsm-graphite:\s*#253139/i);
+  assert.match(css, /--lsm-slate:\s*#2d3a42/i);
+  assert.match(css, /--lsm-relay:\s*#54bcd9/i);
+  assert.match(css, /--lsm-gold:\s*#cbae67/i);
+  assert.match(css, /--lsm-orange:\s*#e66a2c/i);
+  assert.match(css, /--lsm-signal:\s*#7eb79e/i);
+  assert.match(css, /--lsm-rust:\s*#c97a60/i);
+  assert.match(css, /--lsm-fault:\s*#ea7468/i);
+  assert.match(css, /Barlow Condensed/);
+  assert.match(css, /Inter/);
+  assert.match(css, /IBM Plex Mono/);
+  assert.doesNotMatch(css, /#[a-f\d]{0,2}(?:7c3aed|d8b4fe|6366f1)/i);
 });
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {

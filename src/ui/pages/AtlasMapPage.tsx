@@ -455,7 +455,10 @@ function FocusedAtlas(props: {
           id="atlas-focused-view"
           role="tabpanel"
         >
-          <main className="atlas-focused-main">
+          <section
+            aria-label="Focused Atlas record"
+            className="atlas-focused-main"
+          >
             {boardView ? (
               <AtlasDecompositionBoard
                 center={record.center_node}
@@ -506,7 +509,7 @@ function FocusedAtlas(props: {
                 rows={rows}
               />
             ) : null}
-          </main>
+          </section>
 
           {!boardView ? (
             <aside

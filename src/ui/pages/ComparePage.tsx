@@ -456,7 +456,7 @@ export function ComparePage(props: {
             Choose a comparison type
           </h2>
           <div className="intent-grid compare-intent-grid">
-            {comparisonCards.slice(0, 4).map((card) => (
+            {comparisonCards.map((card) => (
               <button
                 className="intent-card intent-card-button"
                 key={card.title}

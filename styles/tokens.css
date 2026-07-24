@@ -1,120 +1,166 @@
 :root {
   color-scheme: dark;
 
-  /* ── Backgrounds ── */
-  /* De-blend (reframe phase 2, round 3): bg/surface/raised were all the
-     same saturated navy hue as --ca-primary/--ca-secondary, so nothing
-     read as neutral ground and lightness-only steps still looked "all
-     just blue" (owner feedback, round 2). Desaturated toward slate here
-     so the blue/cyan accents pop against a genuinely neutral ground,
-     instead of adding new hues. Elevation shadow carries the raised tier;
-     borders stay translucent but strong enough to read against slate. */
-  --ca-bg: #10131a;
-  --ca-surface: #1c212b;
-  --ca-surface-raised: #2a3040;
-  --ca-border: rgba(148, 163, 184, 0.45);
-  --ca-border-subtle: rgba(148, 163, 184, 0.11);
-  --ca-elev-1:
-    0 1px 2px rgba(0, 0, 0, 0.45),
-    0 6px 16px rgba(0, 0, 0, 0.25);
+  /*
+   * Control Atlas adaptation of Orbital Archive No. 01 v1.5.0.
+   * This file is the single source of visual token values. Product styles
+   * consume semantic --ca-* aliases; route and component files do not define
+   * palette values.
+   */
 
-  /* ── Text ── */
-  --ca-text: #f8fafc;
-  --ca-text-muted: #cbd5e1;
-  --ca-text-subtle: #94a3b8;
+  /* Lunar Signal Modernism palette */
+  --lsm-orbit: #11181e;
+  --lsm-graphite: #253139;
+  --lsm-slate: #2d3a42;
+  --lsm-alloy: #37464f;
+  --lsm-grid-line: #56656e;
+  --lsm-dust: #98a4ac;
+  --lsm-bone: #e7e1d5;
+  --lsm-relay: #54bcd9;
+  --lsm-gold: #cbae67;
+  --lsm-orange: #e66a2c;
+  --lsm-signal: #7eb79e;
+  --lsm-rust: #c97a60;
+  --lsm-fault: #ea7468;
 
-  /* ── Interactive ── */
-  --ca-primary: #2563eb;
-  --ca-primary-hover: #1d4ed8;
-  --ca-secondary: #22d3ee;
-  --ca-secondary-hover: #06b6d4;
+  /* Semantic surfaces */
+  --ca-bg: var(--lsm-graphite);
+  --ca-surface: var(--lsm-slate);
+  --ca-surface-raised: var(--lsm-alloy);
+  --ca-surface-deep: var(--lsm-orbit);
+  --ca-border: color-mix(in srgb, var(--lsm-grid-line) 82%, transparent);
+  --ca-border-subtle: color-mix(in srgb, var(--lsm-grid-line) 34%, transparent);
+  --ca-border-strong: var(--lsm-grid-line);
+  --ca-elev-1: 0 8px 24px rgb(17 24 30 / 0.24);
+  --ca-elev-overlay: 0 24px 64px rgb(17 24 30 / 0.44);
 
-  /* ── Provenance (always pair with text label) ── */
-  --ca-prov-official: #2563eb;
-  --ca-prov-dod: #4f46e5;
-  --ca-prov-nist: #22d3ee;
-  --ca-prov-disa: #1e40af;
-  --ca-prov-fedramp: #0d9488;
-  --ca-prov-mitre: #7c3aed;
-  --ca-prov-community: #64748b;
-  --ca-prov-inferred: #f59e0b;
-  --ca-prov-deprecated: #dc2626;
-  --ca-prov-active: #16a34a;
+  /* Content */
+  --ca-text: var(--lsm-bone);
+  --ca-text-muted: var(--lsm-dust);
+  --ca-text-subtle: var(--lsm-dust);
 
-  /* Accessible text colors for provenance badges on dark surfaces */
-  --ca-prov-official-text: #60a5fa;
-  --ca-prov-dod-text: #a5b4fc;
-  --ca-prov-nist-text: #67e8f9;
-  --ca-prov-disa-text: #93c5fd;
-  --ca-prov-fedramp-text: #5eead4;
-  --ca-prov-mitre-text: #d8b4fe;
-  --ca-prov-community-text: #cbd5e1;
-  --ca-prov-inferred-text: #fbbf24;
-  --ca-prov-deprecated-text: #fca5a5;
-  --ca-prov-active-text: #86efac;
+  /* Operational interaction and editorial hierarchy */
+  --ca-primary: var(--lsm-relay);
+  --ca-primary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
+  --ca-secondary: var(--lsm-relay);
+  --ca-secondary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
+  --ca-priority: var(--lsm-gold);
+  --ca-editorial: var(--lsm-orange);
 
-  /* ── Semantic ── */
-  --ca-success: #16a34a;
-  --ca-warning: #f59e0b;
-  --ca-danger: #dc2626;
-  --ca-badge-info-text: #d4f6fc;
-  --ca-badge-warning-text: #fef3c7;
-  --ca-badge-success-text: #dcfce7;
-  --ca-nav-active-text: #f8fafc;
+  /* Provenance: always paired with a text label. */
+  --ca-prov-official: var(--lsm-relay);
+  --ca-prov-dod: var(--lsm-gold);
+  --ca-prov-nist: var(--lsm-relay);
+  --ca-prov-disa: var(--lsm-bone);
+  --ca-prov-fedramp: var(--lsm-dust);
+  --ca-prov-mitre: var(--lsm-gold);
+  --ca-prov-community: var(--lsm-dust);
+  --ca-prov-inferred: var(--lsm-rust);
+  --ca-prov-deprecated: var(--lsm-fault);
+  --ca-prov-active: var(--lsm-signal);
 
-  /* ── Graph compare roles ── */
-  --ca-graph-shared: #22c55e;
-  --ca-graph-unique-a: #2563eb;
-  --ca-graph-unique-b: #f97316;
-  --ca-graph-neutral: #94a3b8;
-  --ca-graph-cluster: #6366f1;
-  --ca-graph-selected: #22d3ee;
-  --ca-graph-center: #2563eb;
-  --ca-graph-dim: color-mix(in srgb, var(--ca-graph-neutral) 35%, transparent);
+  --ca-prov-official-text: var(--lsm-relay);
+  --ca-prov-dod-text: var(--lsm-gold);
+  --ca-prov-nist-text: var(--lsm-relay);
+  --ca-prov-disa-text: var(--lsm-bone);
+  --ca-prov-fedramp-text: var(--lsm-dust);
+  --ca-prov-mitre-text: var(--lsm-gold);
+  --ca-prov-community-text: var(--lsm-dust);
+  /* Inferred uses Alert Rust as its border/tone; Bone keeps the label AA-readable. */
+  --ca-prov-inferred-text: var(--lsm-bone);
+  /* Deprecated uses Fault Red as its border/tone; Bone keeps the label AA-readable. */
+  --ca-prov-deprecated-text: var(--lsm-bone);
+  --ca-prov-active-text: var(--lsm-signal);
 
-  /* ── Spacing ── */
+  /* Status meanings are fixed by the source system. */
+  --ca-info: var(--lsm-relay);
+  --ca-success: var(--lsm-signal);
+  --ca-warning: var(--lsm-rust);
+  --ca-danger: var(--lsm-fault);
+  --ca-badge-info-text: var(--lsm-bone);
+  --ca-badge-warning-text: var(--lsm-bone);
+  --ca-badge-success-text: var(--lsm-bone);
+  --ca-nav-active-text: var(--lsm-bone);
+
+  /* Graph roles use the restrained data palette and remain text-labelled. */
+  --ca-graph-shared: var(--lsm-signal);
+  --ca-graph-unique-a: var(--lsm-relay);
+  --ca-graph-unique-b: var(--lsm-gold);
+  --ca-graph-neutral: var(--lsm-dust);
+  --ca-graph-cluster: var(--lsm-dust);
+  --ca-graph-selected: var(--lsm-relay);
+  --ca-graph-center: var(--lsm-relay);
+  --ca-graph-dim: color-mix(in srgb, var(--lsm-dust) 35%, transparent);
+
+  /* 4-point spacing scale */
   --ca-space-1: 0.25rem;
   --ca-space-2: 0.5rem;
   --ca-space-3: 0.75rem;
   --ca-space-4: 1rem;
+  --ca-space-5: 1.25rem;
   --ca-space-6: 1.5rem;
   --ca-space-8: 2rem;
+  --ca-space-10: 2.5rem;
   --ca-space-12: 3rem;
   --ca-space-16: 4rem;
+  --ca-space-20: 5rem;
+  --ca-space-24: 6rem;
+  --ca-space-32: 8rem;
 
-  /* TopNav publishes the rendered height. Sticky panels and programmatic
-     navigation use the measured value instead of guessing at a breakpoint. */
   --ca-header-height: 0px;
   --ca-header-safe-offset: calc(var(--ca-header-height) + var(--ca-space-3));
 
-  /* ── Radii ── */
-  --ca-radius-sm: 6px;
-  --ca-radius-md: 10px;
-  --ca-radius-lg: 14px;
+  /* Minimal tactile geometry */
+  --ca-radius-sm: 2px;
+  --ca-radius-md: 3px;
+  --ca-radius-lg: 4px;
+  --ca-radius-xl: 6px;
+  --ca-radius-round: 999px;
 
-  /* ── Type ── */
-  --ca-font-display: "Space Grotesk", system-ui, sans-serif;
-  --ca-font-body: "Public Sans", system-ui, sans-serif;
-  --ca-font-mono: "JetBrains Mono", monospace;
+  /* Font files are not bundled by Orbital Archive; these stacks preserve its contract. */
+  --ca-font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ca-font-body: Inter, system-ui, sans-serif;
+  --ca-font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
+  --ca-text-micro: 0.6875rem;
   --ca-text-xs: 0.75rem;
-  --ca-text-sm: 0.875rem;
-  --ca-text-base: 1rem;
-  --ca-text-lg: 1.125rem;
-  --ca-text-xl: 1.25rem;
+  --ca-text-sm: 0.8125rem;
+  --ca-text-base: 0.9375rem;
+  --ca-text-lg: 1.0625rem;
+  --ca-text-xl: 1.125rem;
   --ca-text-2xl: 1.5rem;
-  --ca-text-3xl: 1.875rem;
-  --ca-text-4xl: 2.25rem;
+  --ca-text-3xl: 2rem;
+  --ca-text-4xl: 3rem;
+  --ca-text-display: clamp(4rem, 8vw, 6rem);
 
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
+  --line-height-tight: 0.92;
+  --line-height-heading: 1.08;
+  --line-height-compact: 1.25;
+  --line-height-normal: 1.55;
   --line-height-relaxed: 1.7;
 
-  --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ca-control-sm: 2rem;
+  --ca-control-md: 2.5rem;
+  --ca-control-lg: 3rem;
+  --ca-touch-target: 2.75rem;
+  --ca-content-xs: 20rem;
+  --ca-content-sm: 30rem;
+  --ca-content-md: 45rem;
+  --ca-content-lg: 60rem;
+  --ca-content-xl: 80rem;
+  --ca-content-max: 90rem;
 
-  color-scheme: dark;
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 320ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
 
-  /* Legacy aliases (surfaces.css) */
+  --ca-focus-ring: 0 0 0 3px rgb(84 188 217 / 0.28);
+  --ca-opacity-disabled: 0.42;
+  --ca-opacity-muted: 0.68;
+  --ca-opacity-grid: 0.14;
+
+  /* Legacy aliases retained for behavior-preserving migration. */
   --ca-provenance-official: var(--ca-prov-official);
   --ca-provenance-dod: var(--ca-prov-dod);
   --ca-provenance-nist: var(--ca-prov-nist);
@@ -126,20 +172,14 @@
   --ca-provenance-deprecated: var(--ca-prov-deprecated);
   --ca-provenance-active: var(--ca-prov-active);
 
-  /* The legacy --space-N aliases are retired. They were a trap: the ramp was
-     non-linear (--space-5 -> 1.5rem, --space-6 and --space-8 both -> 2rem,
-     --space-7 -> 3rem, i.e. --space-7 was LARGER than --space-8), so any
-     author who assumed a uniform scale got a surprise jump. Every consumer
-     now uses the canonical --ca-space-N scale directly with identical
-     computed values. Do not reintroduce a second spacing scale. */
-
   --radius-sm: var(--ca-radius-sm);
   --radius-md: var(--ca-radius-md);
   --radius-lg: var(--ca-radius-lg);
-  --radius-xl: var(--ca-radius-lg);
+  --radius-xl: var(--ca-radius-xl);
 
   --font-size-xs: var(--ca-text-xs);
   --font-size-sm: var(--ca-text-sm);
+  --font-size-base: var(--ca-text-base);
   --font-size-md: var(--ca-text-base);
   --font-size-lg: var(--ca-text-xl);
   --font-size-xl: var(--ca-text-2xl);

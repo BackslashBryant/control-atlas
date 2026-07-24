@@ -71,9 +71,9 @@ export function OfficialPracticalPairing({
         </div>
 
         {/* Use It With (Practical Companions) */}
-        <div className="rounded-lg border border-purple-900/50 bg-slate-950/80 p-4">
+        <div className="commons-practical-panel rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
-            <span className="px-2 py-0.5 rounded text-xs font-semibold bg-purple-900/60 text-purple-300 border border-purple-700/50 flex items-center gap-1">
+            <span className="commons-practical-badge">
               <IconTools size={13} />
               Use It With
             </span>
@@ -91,9 +91,13 @@ export function OfficialPracticalPairing({
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-slate-200 hover:text-cyan-400 cursor-pointer" onClick={() => onSelectResource(comp.id)}>
+                      <button
+                        type="button"
+                        className="text-xs font-medium text-slate-200 hover:text-cyan-400"
+                        onClick={() => onSelectResource(comp.id)}
+                      >
                         {comp.shortName || comp.name}
-                      </span>
+                      </button>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 capitalize">
                         {comp.resourceLane.replace("_", " ")}
                       </span>

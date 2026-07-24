@@ -59,7 +59,7 @@ export function provenanceColor(provenanceClass: string): string {
     disa_published: "--ca-prov-disa",
     fedramp_published: "--ca-prov-fedramp",
   };
-  return readToken(map[provenanceClass] ?? "--ca-prov-community", "#64748B");
+  return readToken(map[provenanceClass] ?? "--ca-prov-community", "#98A4AC");
 }
 
 export function provenanceCssVar(provenanceClass: string): string {
@@ -90,10 +90,10 @@ export function linkDashPattern(
 
 export function compareNodeColor(role: CompareRole): string {
   const map: Record<CompareRole, string> = {
-    shared: readToken("--ca-graph-shared", "#22C55E"),
-    uniqueA: readToken("--ca-graph-unique-a", "#2563EB"),
-    uniqueB: readToken("--ca-graph-unique-b", "#F97316"),
-    neutral: readToken("--ca-graph-neutral", "#94A3B8"),
+    shared: readToken("--ca-graph-shared", "#7EB79E"),
+    uniqueA: readToken("--ca-graph-unique-a", "#54BCD9"),
+    uniqueB: readToken("--ca-graph-unique-b", "#CBAE67"),
+    neutral: readToken("--ca-graph-neutral", "#98A4AC"),
   };
   return map[role];
 }
@@ -104,16 +104,16 @@ export function nodeColor(
   highlightIds: Set<string>,
 ): string {
   if (node.compareRole) return compareNodeColor(node.compareRole);
-  if (node.isCluster) return readToken("--ca-graph-cluster", "#6366F1");
-  if (node.id === selectedId) return readToken("--ca-graph-selected", "#22D3EE");
-  if (node.isCenter) return readToken("--ca-graph-center", "#2563EB");
+  if (node.isCluster) return readToken("--ca-graph-cluster", "#98A4AC");
+  if (node.id === selectedId) return readToken("--ca-graph-selected", "#54BCD9");
+  if (node.isCenter) return readToken("--ca-graph-center", "#54BCD9");
   if (highlightIds.size && !highlightIds.has(node.id)) {
-    return readToken("--ca-graph-dim", "rgba(148, 163, 184, 0.35)");
+    return readToken("--ca-graph-dim", "rgba(152, 164, 172, 0.35)");
   }
-  if (node.nodeType === "source") return readToken("--ca-prov-fedramp", "#0D9488");
-  if (node.nodeType === "template") return readToken("--ca-prov-mitre", "#7C3AED");
-  if (node.nodeType === "pattern") return readToken("--ca-graph-unique-b", "#F97316");
-  return readToken("--ca-text", "#F8FAFC");
+  if (node.nodeType === "source") return readToken("--ca-prov-fedramp", "#7EB79E");
+  if (node.nodeType === "template") return readToken("--ca-prov-mitre", "#CBAE67");
+  if (node.nodeType === "pattern") return readToken("--ca-graph-unique-b", "#CBAE67");
+  return readToken("--ca-text", "#E7E1D5");
 }
 
 export function nodeShapeRadius(node: GraphNode): number {
