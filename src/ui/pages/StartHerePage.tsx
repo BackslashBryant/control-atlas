@@ -12,7 +12,8 @@ import type {
 import type { ViewState } from "../lib/viewState";
 import { StartHereResult } from "../components/StartHereResult";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
-import { PageHeader, SelectField } from "../lib/pagePrimitives";
+import { PageHeader } from "../lib/pagePrimitives";
+import { Panel, Button, Select } from "../components/lsm";
 
 export function StartHerePage(props: {
   state: Extract<ViewState, { view: "start-here" }>;
@@ -70,7 +71,7 @@ export function StartHerePage(props: {
 
   if (recommendations) {
     return (
-      <section className="panel start-here-result-page">
+      <Panel className="start-here-result-page">
         <StartHereResult
           onFollowCompareLink={followCompareLink}
           onFollowLibraryLink={followLibraryLink}
@@ -78,12 +79,12 @@ export function StartHerePage(props: {
           onRestart={restartQuestionnaire}
           recommendations={recommendations}
         />
-      </section>
+      </Panel>
     );
   }
 
   return (
-    <section className="panel">
+    <Panel className="max-w-[800px] mx-auto">
       <PageHeader
         eyebrow="Start Here"
         summary="Answer three short questions, then get a starting path with the framework, template, and playbook most likely to help first."
@@ -115,11 +116,12 @@ export function StartHerePage(props: {
 
       <div className="start-here-question">
         {state.systemType && activeStep > 1 ? (
-          <div className="start-here-answer">
-            <span>System type</span>
-            <strong>{state.systemType}</strong>
-            <button
-              className="link-action"
+          <div className="flex justify-between items-center py-[12px] border-b border-[var(--ca-border)] mb-[16px]">
+            <span className="text-[var(--ca-text-muted)] font-mono uppercase tracking-[0.06em] text-[11px]">System type</span>
+            <strong className="text-[var(--ca-text)] font-medium text-[14px]">{state.systemType}</strong>
+            <Button
+              variant="secondary"
+              className="!min-h-[32px] !text-[10px] !px-[8px]"
               onClick={() =>
                 onNavigate("start-here", {
                   systemType: "",
@@ -128,22 +130,20 @@ export function StartHerePage(props: {
                   step: "",
                 })
               }
-              type="button"
             >
               Change
-            </button>
+            </Button>
           </div>
         ) : null}
         {activeStep === 1 ? (
-        <>
-        <SelectField
-          emptyLabel="Choose a system type"
-          hint="What kind of system you are authorizing or assessing."
+        <div className="mb-[24px]">
+        <Select
           label="System type"
-          onChange={(value) =>
-            onNavigate("start-here", { systemType: value, step: "" })
+          onChange={(event) =>
+            onNavigate("start-here", { systemType: event.target.value, step: "" })
           }
           options={[
+            { value: "", label: "Choose a system type" },
             { value: "Cloud SaaS", label: "Cloud SaaS" },
             { value: "Platform service", label: "Platform service" },
             { value: "On-premises", label: "On-premises" },
@@ -151,22 +151,23 @@ export function StartHerePage(props: {
             { value: "Enterprise service", label: "Enterprise service" },
             { value: "Not sure", label: "Not sure" },
           ]}
-          value={state.systemType}
+          value={state.systemType || ""}
         />
-        <div className="field-hint terminology-hint">
-          <strong>Cloud SaaS:</strong> Fully hosted software (e.g., Salesforce, Google Workspace).<br/>
-          <strong>Platform service:</strong> Cloud hosting environment (e.g., AWS EC2, Azure).<br/>
-          <strong>On-premises:</strong> Servers in a datacenter you physically control.<br/>
-          <strong>Enterprise service:</strong> Internal shared service (e.g., agency Active Directory).
+        <div className="text-[var(--ca-text-muted)] text-[12px] mt-[16px] leading-relaxed p-[16px] bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] rounded-[3px]">
+          <strong className="text-[var(--ca-text)]">Cloud SaaS:</strong> Fully hosted software (e.g., Salesforce, Google Workspace).<br/>
+          <strong className="text-[var(--ca-text)]">Platform service:</strong> Cloud hosting environment (e.g., AWS EC2, Azure).<br/>
+          <strong className="text-[var(--ca-text)]">On-premises:</strong> Servers in a datacenter you physically control.<br/>
+          <strong className="text-[var(--ca-text)]">Enterprise service:</strong> Internal shared service (e.g., agency Active Directory).
         </div>
-        </>
+        </div>
         ) : null}
         {state.dataSensitivity && activeStep > 2 ? (
-          <div className="start-here-answer">
-            <span>Data sensitivity</span>
-            <strong>{state.dataSensitivity}</strong>
-            <button
-              className="link-action"
+          <div className="flex justify-between items-center py-[12px] border-b border-[var(--ca-border)] mb-[16px]">
+            <span className="text-[var(--ca-text-muted)] font-mono uppercase tracking-[0.06em] text-[11px]">Data sensitivity</span>
+            <strong className="text-[var(--ca-text)] font-medium text-[14px]">{state.dataSensitivity}</strong>
+            <Button
+              variant="secondary"
+              className="!min-h-[32px] !text-[10px] !px-[8px]"
               onClick={() =>
                 onNavigate("start-here", {
                   dataSensitivity: "",
@@ -174,54 +175,57 @@ export function StartHerePage(props: {
                   step: "",
                 })
               }
-              type="button"
             >
               Change
-            </button>
+            </Button>
           </div>
         ) : null}
         {activeStep === 2 ? (
-        <SelectField
-          emptyLabel="Choose a sensitivity level"
-          hint="How sensitive the data handled by the system is."
+        <div className="mb-[24px]">
+        <Select
           label="Data sensitivity"
-          onChange={(value) =>
+          onChange={(event) =>
             onNavigate("start-here", {
-              dataSensitivity: value,
+              dataSensitivity: event.target.value,
               step: "",
             })
           }
           options={[
+            { value: "", label: "Choose a sensitivity level" },
             { value: "Low", label: "Low (Public data)" },
             { value: "Moderate", label: "Moderate (Internal data)" },
             { value: "High", label: "High (Mission critical/PII)" },
             { value: "CUI", label: "CUI (Controlled Unclassified Information)" },
             { value: "Not sure", label: "Not sure" },
           ]}
-          value={state.dataSensitivity}
+          value={state.dataSensitivity || ""}
         />
+        <p className="text-[var(--ca-text-muted)] text-[12px] mt-[8px]">How sensitive the data handled by the system is.</p>
+        </div>
         ) : null}
         {activeStep === 3 ? (
-        <SelectField
-          emptyLabel="Choose an environment"
-          hint="Who operates the system and under which federal context."
+        <div className="mb-[24px]">
+        <Select
           label="Operational environment"
-          onChange={(value) =>
-            onNavigate("start-here", { environment: value, step: "" })
+          onChange={(event) =>
+            onNavigate("start-here", { environment: event.target.value, step: "" })
           }
           options={[
+            { value: "", label: "Choose an environment" },
             { value: "Federal civilian", label: "Federal civilian (FCEB)" },
             { value: "DoD", label: "DoD (Department of Defense)" },
             { value: "Contractor", label: "Contractor (Internal network)" },
             { value: "CSP", label: "CSP (Cloud Service Provider)" },
             { value: "Not sure", label: "Not sure" },
           ]}
-          value={state.environment}
+          value={state.environment || ""}
         />
+        <p className="text-[var(--ca-text-muted)] text-[12px] mt-[8px]">Who operates the system and under which federal context.</p>
+        </div>
         ) : null}
       </div>
 
-      <p className="field-hint start-here-glossary-hint">
+      <p className="text-[var(--ca-text-muted)] text-[13px] mt-[24px]">
         Not sure what <GlossaryTermChip termId="cui">CUI</GlossaryTermChip> or{" "}
         <GlossaryTermChip termId="csp">CSP</GlossaryTermChip> means? Focus or
         hover the term for a plain-language definition.
@@ -230,26 +234,25 @@ export function StartHerePage(props: {
       {state.systemType === "Not sure" ||
       state.dataSensitivity === "Not sure" ||
       state.environment === "Not sure" ? (
-        <p className="field-hint" role="status">
+        <p className="p-[12px] bg-[color-mix(in_srgb,var(--ca-warning)_20%,transparent)] border border-[color-mix(in_srgb,var(--ca-warning)_50%,transparent)] text-[var(--ca-text)] rounded-[3px] mt-[16px] text-[13px]" role="status">
           "Not sure" is fine — we will use a safe, common default and tell you
           exactly what we assumed in the result.
         </p>
       ) : null}
 
       {!showResults && state.environment ? (
-        <div className="card-actions">
-          <button
-            className="primary"
+        <div className="mt-[32px] pt-[24px] border-t border-[var(--ca-border)] flex justify-end">
+          <Button
+            variant="primary"
             onClick={() =>
               onNavigate("start-here", { step: "results" })
             }
-            type="button"
           >
             Show recommendation
-          </button>
+          </Button>
         </div>
       ) : null}
 
-    </section>
+    </Panel>
   );
 }

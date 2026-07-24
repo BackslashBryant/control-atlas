@@ -484,18 +484,16 @@ control_atlas_template:
 
 ### Homepage
 
-**Hero (top to bottom):**
+**Depth 0 / Signal landing (top to bottom):**
 
-1. **Product name** — "Control Atlas" in `--ca-font-display`
-2. **Rotating tagline** — `Ctrl+Alt+[word]` in `--ca-font-mono`. Static prefix in `--ca-text-muted`, rotating word in `--ca-secondary`. Fixed-width container sized to `Crosswalk` (longest word) to prevent layout shift. Rotates every 2.5s via CSS opacity fade. `prefers-reduced-motion`: shows "Ctrl+Alt+Comply" statically. Screen reader: one static `aria-label`, rotation is `aria-hidden`.
-3. **Rotating word list (in order):** Comply · Map · Assess · Crosswalk · Navigate · Inherit · Audit · Authorize
-4. **Static subtagline** — "The public map for federal cyber compliance."
-5. **Subtext** — "Explore public controls, baselines, STIGs, and compliance patterns — and generate blank RMF/ATO templates without uploading data or creating an account."
-6. **CTAs** — Start Here · Explore Library · Generate Template
+1. **Product identity** — "Control Atlas" in `--ca-font-display`, with the `Ctrl+Alt+[word]` signature as a subordinate flourish.
+2. **Product definition** — "The public map for federal cyber compliance."
+3. **Trust boundary** — public reference data, no account, no uploaded system data, and no claim of official authorization.
+4. **One primary action** — Start guided setup.
+5. **Search workbench** — direct ID and plain-language lookup remains immediately available.
+6. **Secondary paths** — Guides, Documents, and Atlas are grouped in progressive disclosure to preserve hierarchy.
 
-**Section pillars below hero:** Start Here · Library · Crosswalks · Patterns · Templates · Provenance
-
-Each pillar card states the practitioner question it answers, not just the section name.
+All non-home routes expose a shared context rail with Depth 1 / Mission or Depth 2 / Systems, the active task, current scope, and a return path for detail surfaces.
 
 ### Accessibility
 
@@ -521,51 +519,43 @@ Each pillar card states the practitioner question it answers, not just the secti
 
 ### Visual Direction
 
-Dark cartographic atlas. Signature element: coordinate-grid overlay on key surfaces — contour lines, grid graticules, and provenance labels styled as map legend markers. Blueprint blue for interactive elements; amber for inferred/warning states. The product should read like a technical instrument, not a marketing site and not a fake government portal.
+Control Atlas adapts Orbital Archive No. 01 v1.5.0 and its Lunar Signal Modernism system. Editorial Signal composition is reserved for Depth 0; operational Mission and Systems surfaces use restrained technical geometry, thin borders, coordinate grids, visible scope, and compact metadata. Relay Cyan marks interaction, Observatory Gold marks priority, Solar Orange is rare editorial signal, and fixed status colors retain their meanings. Purple, violet, pink, and magenta are outside the product palette.
+
+The product should read like a public technical reference instrument, not a marketing site, aerospace simulation, or fake government portal.
 
 ### Design Tokens
 
 ```css
 :root {
-  /* Backgrounds */
-  --ca-bg:             #0B1020;
-  --ca-surface:        #111827;
-  --ca-surface-raised: #1E293B;
-  --ca-border:         #334155;
+  --lsm-orbit: #11181E;
+  --lsm-graphite: #253139;
+  --lsm-slate: #2D3A42;
+  --lsm-alloy: #37464F;
+  --lsm-grid-line: #56656E;
+  --lsm-dust: #98A4AC;
+  --lsm-bone: #E7E1D5;
+  --lsm-relay: #54BCD9;
+  --lsm-gold: #CBAE67;
+  --lsm-orange: #E66A2C;
+  --lsm-signal: #7EB79E;
+  --lsm-rust: #C97A60;
+  --lsm-fault: #EA7468;
 
-  /* Text */
-  --ca-text:           #F8FAFC;
-  --ca-text-muted:     #CBD5E1;
+  --ca-bg: var(--lsm-graphite);
+  --ca-surface: var(--lsm-slate);
+  --ca-surface-raised: var(--lsm-alloy);
+  --ca-text: var(--lsm-bone);
+  --ca-text-muted: var(--lsm-dust);
+  --ca-primary: var(--lsm-relay);
+  --ca-priority: var(--lsm-gold);
 
-  /* Interactive */
-  --ca-primary:        #2563EB;
-  --ca-secondary:      #22D3EE;
-
-  /* Provenance — always paired with text/icon label */
-  --ca-provenance-official:   #2563EB;
-  --ca-provenance-dod:        #4F46E5;
-  --ca-provenance-nist:       #22D3EE;
-  --ca-provenance-disa:       #1E40AF;
-  --ca-provenance-fedramp:    #0D9488;  /* Teal — distinct from primary blue */
-  --ca-provenance-mitre:      #7C3AED;
-  --ca-provenance-community:  #64748B;
-  --ca-provenance-inferred:   #F59E0B;
-  --ca-provenance-deprecated: #DC2626;
-  --ca-provenance-active:     #16A34A;
-
-  /* Semantic */
-  --ca-success: #16A34A;
-  --ca-warning: #F59E0B;
-  --ca-danger:  #DC2626;
-
-  /* Typography */
-  --ca-font-display: "Space Grotesk", system-ui, sans-serif;
-  --ca-font-body:    "Public Sans", system-ui, sans-serif;
-  --ca-font-mono:    "JetBrains Mono", monospace;
+  --ca-font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ca-font-body: Inter, system-ui, sans-serif;
+  --ca-font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 }
 ```
 
-FedRAMP uses `#0D9488` (Teal), not blue, to avoid collision with `--ca-primary`. All provenance colors require accompanying text or icon labels.
+The complete canonical values and semantic provenance/status mappings live in `styles/tokens.css`. All provenance and status colors require accompanying text or icon labels.
 
 ---
 

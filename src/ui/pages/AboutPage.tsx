@@ -70,6 +70,7 @@ import {
   sourceWarnings,
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
+import { Button, Panel } from "../components/lsm";
 
 
 export function AboutPage(props: {
@@ -78,14 +79,14 @@ export function AboutPage(props: {
   const { onNavigate } = props;
 
   return (
-    <section className="panel">
+    <Panel>
       <PageHeader
         eyebrow="About & trust"
         summary="Federal cyber guidance is scattered across dozens of official sites. Control Atlas pulls the public pieces into one place, connects them, and explains them in plain English — without storing your data or making official decisions."
         title="What Control Atlas is — and is not"
       />
 
-      <div className="stack">
+      <div className="flex flex-col gap-[24px]">
         <SummaryCard title="What this is" tone="trust">
           <p>
             Federal compliance rules live in many separate places — NIST
@@ -100,7 +101,7 @@ export function AboutPage(props: {
         </SummaryCard>
 
         <SummaryCard title="What this is not">
-          <ul className="list">
+          <ul className="list-disc pl-[24px] space-y-[8px]">
             <li>Not an official U.S. government system or endorsement.</li>
             <li>
               Not a GRC tool, evidence processor, compliance scorer, or
@@ -117,33 +118,33 @@ export function AboutPage(props: {
           <p>{PRODUCT_DISCLAIMER}</p>
         </SummaryCard>
 
-        <section className="stack">
-          <div className="section-header">
-            <h2>What to do next</h2>
-            <p>Verify source trust, then pick a starting path for your work.</p>
+        <section className="flex flex-col gap-[16px]">
+          <div className="border-b border-[var(--ca-border)] pb-[12px]">
+            <h2 className="font-display font-semibold text-[18px]">What to do next</h2>
+            <p className="text-[var(--ca-text-muted)] text-[14px]">Verify source trust, then pick a starting path for your work.</p>
           </div>
-          <div className="card-actions">
-            <button
-              className="primary"
+          <div className="flex gap-[16px] items-center flex-wrap">
+            <Button
+              variant="primary"
               onClick={() => onNavigate("start-here")}
-              type="button"
             >
               Find where to start
-            </button>
-            <button
-              className="secondary"
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() => onNavigate("sources")}
-              type="button"
             >
               Review sources
-            </button>
-            <details>
-              <summary>More options</summary>
-              <button className="secondary disclosure-actions" onClick={() => onNavigate("templates")} type="button">Create a starter document</button>
+            </Button>
+            <details className="relative">
+              <summary className="cursor-pointer text-[13px] text-[var(--ca-text-muted)] hover:text-[var(--ca-text)] font-medium">More options</summary>
+              <div className="absolute top-[100%] left-0 mt-[8px] bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] rounded-[3px] p-[8px] shadow-lg z-10 min-w-[200px]">
+                <Button variant="secondary" className="w-full text-left justify-start" onClick={() => onNavigate("templates")}>Create a starter document</Button>
+              </div>
             </details>
           </div>
         </section>
       </div>
-    </section>
+    </Panel>
   );
 }

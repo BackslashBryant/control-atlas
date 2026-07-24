@@ -1,32 +1,30 @@
 import type { ReactNode } from "react";
-
 import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
+import { Panel, Button, StatusChip } from "./lsm";
 
 export function LoadingStatusPanel(props: {
   slow: boolean;
   children?: ReactNode;
 }) {
   return (
-    <section aria-live="polite" className="loading-card" role="status">
-      <div aria-hidden="true" className="load-progress" />
-      <p className="eyebrow">Loading</p>
-      <h2>Loading records</h2>
-      <p>
+    <Panel className="max-w-[800px] mx-auto mt-[40px]" title="Loading Records">
+      <div aria-hidden="true" className="load-progress mb-[16px]" />
+      <p className="mb-[16px]">
         Please wait a moment while we load the public records, source registry,
         and comparison views.
       </p>
       {props.slow ? (
-        <p className="load-slow-hint">
+        <p className="text-[var(--ca-warning)] mb-[16px]">
           This is taking longer than usual. If it continues, refresh the page or
           check your network connection.
         </p>
       ) : null}
-      <p className="load-slow-hint">
+      <p className="text-[var(--ca-text-muted)] mb-[24px]">
         You can browse Playbooks, Templates, or About while records finish
         loading.
       </p>
       {props.children}
-    </section>
+    </Panel>
   );
 }
 
@@ -36,20 +34,19 @@ export function LoadErrorPanel(props: {
   children?: ReactNode;
 }) {
   return (
-    <section className="notice load-error-panel">
-      <h2>Record data unavailable</h2>
-      <p>{props.message}</p>
-      <p>
+    <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Record data unavailable">
+      <p className="mb-[16px] font-bold text-[var(--ca-danger)]">{props.message}</p>
+      <p className="mb-[24px]">
         Check your connection, then retry. You can still browse Playbooks and
         About without the full map data.
       </p>
-      <div className="card-actions">
-        <button className="primary" onClick={props.onRetry} type="button">
+      <div className="flex gap-[8px] mb-[24px]">
+        <Button variant="destructive" onClick={props.onRetry}>
           Retry loading
-        </button>
+        </Button>
       </div>
       {props.children}
-    </section>
+    </Panel>
   );
 }
 
@@ -57,38 +54,38 @@ export function OfflineFallbackActions(props: {
   onNavigate: (view: "patterns" | "templates" | "about" | "start-here") => void;
 }) {
   return (
-    <div className="offline-fallback-grid">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
       <button
-        className="offline-fallback-card"
+        className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("patterns")}
         type="button"
       >
-        <strong>Explore playbooks</strong>
-        <span>Step-by-step guidance for common compliance work.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Explore playbooks</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Step-by-step guidance for common compliance work.</span>
       </button>
       <button
-        className="offline-fallback-card"
+        className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("templates")}
         type="button"
       >
-        <strong>Browse templates</strong>
-        <span>Blank planning and assessment starters.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse templates</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Blank planning and assessment starters.</span>
       </button>
       <button
-        className="offline-fallback-card"
+        className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("start-here")}
         type="button"
       >
-        <strong>Get a recommendation</strong>
-        <span>Answer three questions to find a practical starting path.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Get a recommendation</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Answer three questions to find a practical starting path.</span>
       </button>
       <button
-        className="offline-fallback-card"
+        className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("about")}
         type="button"
       >
-        <strong>About &amp; trust</strong>
-        <span>How Control Atlas sources and limits its advice.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">About &amp; trust</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">How Control Atlas sources and limits its advice.</span>
       </button>
     </div>
   );
@@ -100,18 +97,17 @@ export function DataPendingNotice(props: {
   onRetry?: () => void;
 }) {
   return (
-    <section className="notice">
-      <h2>{props.title || "Connection data is still loading"}</h2>
-      <p>
+    <Panel className="max-w-[800px] mx-auto mt-[40px]" title={props.title || "Connection data is still loading"}>
+      <p className="mb-[24px]">
         {props.description ||
           "This page needs the public mapping data. Wait a moment or retry if loading failed."}
       </p>
       {props.onRetry ? (
-        <button className="primary" onClick={props.onRetry} type="button">
+        <Button variant="primary" onClick={props.onRetry}>
           Retry loading
-        </button>
+        </Button>
       ) : null}
-    </section>
+    </Panel>
   );
 }
 
@@ -120,37 +116,38 @@ export function CompareExportDisclosure(props: {
   onExport: (format: "csv" | "markdown" | "json") => void;
 }) {
   return (
-    <details className="export-disclosure">
-      <summary>Export results</summary>
-      <div className="card-actions">
-        <button
-          className="secondary"
-          disabled={props.disabled}
-          onClick={() => props.onExport("csv")}
-          type="button"
-        >
-          Export CSV
-        </button>
-        <button
-          className="secondary"
-          disabled={props.disabled}
-          onClick={() => props.onExport("markdown")}
-          type="button"
-        >
-          Export Markdown
-        </button>
-        <button
-          className="secondary"
-          disabled={props.disabled}
-          onClick={() => props.onExport("json")}
-          type="button"
-        >
-          Export JSON
-        </button>
+    <details className="mt-[24px] border border-[var(--ca-border-strong)] rounded-[3px] overflow-hidden group">
+      <summary className="p-[12px] bg-[var(--ca-surface-raised)] cursor-pointer hover:bg-[color-mix(in_srgb,var(--ca-surface-raised),white_5%)] list-none font-mono uppercase tracking-wider text-[11px] font-bold">
+        Export results
+      </summary>
+      <div className="p-[16px] bg-[var(--ca-surface)] border-t border-[var(--ca-border-strong)]">
+        <div className="flex gap-[8px] mb-[16px] flex-wrap">
+          <Button
+            variant="secondary"
+            disabled={props.disabled}
+            onClick={() => props.onExport("csv")}
+          >
+            Export CSV
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={props.disabled}
+            onClick={() => props.onExport("markdown")}
+          >
+            Export Markdown
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={props.disabled}
+            onClick={() => props.onExport("json")}
+          >
+            Export JSON
+          </Button>
+        </div>
+        <p className="text-[var(--ca-text-subtle)] text-[11px]">
+          {PRODUCT_DISCLAIMER}
+        </p>
       </div>
-      <p className="ca-text-subtle" style={{ fontSize: "var(--ca-text-xs)" }}>
-        {PRODUCT_DISCLAIMER}
-      </p>
     </details>
   );
 }

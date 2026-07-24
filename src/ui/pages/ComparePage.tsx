@@ -29,6 +29,7 @@ import {
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareCrosswalk, ViewState } from "../lib/viewState";
+import { Panel } from "../components/lsm";
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -440,7 +441,7 @@ export function ComparePage(props: {
               : 2;
 
   return (
-    <section className="panel">
+    <Panel>
       <PageHeader
         eyebrow="Compare"
         summary="Choose the kind of comparison. Then pick the two things you need to reconcile."
@@ -1394,6 +1395,6 @@ export function ComparePage(props: {
           )}
         </>
       ) : null}
-    </section>
+    </Panel>
   );
 }

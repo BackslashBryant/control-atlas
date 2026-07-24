@@ -448,7 +448,7 @@ main {
 
 .eyebrow {
   margin: 0 0 var(--ca-space-3);
-  color: var(--ca-secondary);
+  color: var(--ca-text);
   font-size: var(--font-size-xs);
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -2784,6 +2784,10 @@ a:focus-visible {
   color: var(--ca-text-muted);
 }
 
+.atlas-path-stage-nav button.active small {
+  color: var(--ca-text);
+}
+
 .atlas-path-stage-nav button.active {
   border-color: var(--ca-secondary);
   background: color-mix(in srgb, var(--ca-secondary) 8%, var(--ca-surface));
@@ -2816,7 +2820,7 @@ a:focus-visible {
 .atlas-path-stage-panel > header > p,
 .atlas-source-stage-panel > header > p {
   max-width: 40rem;
-  color: var(--ca-text-muted);
+  color: var(--ca-text);
 }
 
 .atlas-path-groups,

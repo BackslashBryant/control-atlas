@@ -46,6 +46,8 @@ import {
 } from "../lib/runtimeLoader";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
+import { Panel } from "../components/lsm";
+
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "atlas-map" }>;
@@ -197,7 +199,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }
 
   return (
-    <section className="panel atlas-workspace">
+    <Panel className="atlas-workspace">
       <header className="atlas-workspace-header">
         <div>
           <h1>
@@ -272,7 +274,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         />
       ) : null}
       </div>
-    </section>
+    </Panel>
   );
 }
 

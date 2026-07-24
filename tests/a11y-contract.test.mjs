@@ -175,15 +175,15 @@ test("search and glossary dialogs expose accessible control names", () => {
 
 test("landing presents one primary Signal action with secondary paths disclosed", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /className="landing-signal-grid"/);
-  assert.match(homePage, /className="primary landing-primary-action"/);
-  assert.match(homePage, /Start guided setup/);
+  assert.match(homePage, /landing-signal-grid/);
+  assert.match(homePage, /landing-primary-action/);
+  assert.match(homePage, /Start here/);
   assert.match(homePage, /Plan the work/);
   assert.match(homePage, /Trace connections/);
   assert.match(homePage, /Create a document/);
-  assert.match(homePage, /<details className="landing-more-paths">/);
-  assert.doesNotMatch(homePage, /className="landing-launch"/);
-  assert.doesNotMatch(homePage, /className="landing-orb"/);
+  assert.match(homePage, /<details[^>]*landing-more-paths/);
+  assert.doesNotMatch(homePage, /className="[^"]*landing-launch[^"]*"/);
+  assert.doesNotMatch(homePage, /className="[^"]*landing-orb[^"]*"/);
   assert.doesNotMatch(homePage, /Click to start/);
   assert.doesNotMatch(homePage, /<h3 aria-hidden/);
   assert.doesNotMatch(homePage, /<p aria-hidden/);

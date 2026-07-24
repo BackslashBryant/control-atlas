@@ -8,8 +8,12 @@ import {
 } from "./support.mjs";
 
 const ROUTES = [
-  "/",
-  "/?view=start-here",
+  "/#/",
+  "/#/menu",
+  "/#/start",
+  "/#/library",
+  "/#/library/nist-800-53",
+  "/#/record/nist-800-53/AC-2",
   "/?view=atlas-map",
   "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=path",
   "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=map",
@@ -18,10 +22,14 @@ const ROUTES = [
   "/?view=explore&q=AC-2",
   "/?view=library-detail&node=nist-800-53%3AAC-2",
   "/?view=matrix",
+  "/#/commons",
+  "/#/commons-detail?id=official-nist-sp800-53-r5",
   "/?view=playbooks",
   "/?view=templates",
   "/?view=sources",
   "/?view=about",
+  "/#/retired?q=old-control",
+  "/#/does-not-exist",
 ];
 
 const VIEWPORTS = [
@@ -47,7 +55,7 @@ for (const viewport of VIEWPORTS) {
       await gotoApp(page, route);
       await waitForAppReady(page);
       await dismissOnboarding(page);
-      await expect(page.locator("main h1").first(), route).toBeVisible();
+      await expect(page.locator("main h1, main h2").first(), route).toBeVisible();
 
       const overflow = await page.evaluate(() => ({
         body:

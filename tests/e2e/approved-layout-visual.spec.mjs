@@ -11,6 +11,23 @@ const VIEWPORTS = {
   desktop: { width: 1440, height: 1000 },
   compact: { width: 390, height: 844 },
 };
+const ROUTE_COMPOSITIONS = [
+  { slug: 'home', path: '/#/' },
+  { slug: 'guided-start', path: '/#/start' },
+  { slug: 'explore', path: '/#/explore?q=AC-2' },
+  { slug: 'library', path: '/#/library' },
+  { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
+  { slug: 'compare', path: '/#/compare' },
+  { slug: 'commons', path: '/#/commons' },
+  {
+    slug: 'commons-detail',
+    path: '/#/commons-detail?id=official-nist-sp800-53-r5',
+  },
+  { slug: 'guides', path: '/#/playbooks' },
+  { slug: 'documents', path: '/#/templates' },
+  { slug: 'sources', path: '/#/sources' },
+  { slug: 'about', path: '/#/about' },
+];
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -53,6 +70,27 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   return main;
 }
 
+async function openRouteComposition(page, viewport, path) {
+  await page.setViewportSize(viewport);
+  await page.goto(path);
+  await page.addStyleTag({
+    content: `
+      *, *::before, *::after {
+        animation-delay: 0s !important;
+        animation-duration: 0s !important;
+        caret-color: transparent !important;
+        transition-delay: 0s !important;
+        transition-duration: 0s !important;
+      }
+    `,
+  });
+  await waitForAppReady(page, { allowPartial: true });
+  await dismissOnboarding(page);
+  await page.evaluate(() => globalThis.document.fonts.ready);
+  await expect(page.locator('#workspace')).toBeVisible();
+  return page.locator('#workspace');
+}
+
 for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
   for (const relationshipView of ['map', 'path']) {
     test(`${viewportName} approved ${relationshipView} composition`, async ({ page }) => {
@@ -63,6 +101,24 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       );
       await expect(main).toHaveScreenshot(
         `atlas-${viewportName}-${relationshipView}.png`,
+        {
+          animations: 'disabled',
+          caret: 'hide',
+          scale: 'css',
+        },
+      );
+    });
+  }
+
+  for (const route of ROUTE_COMPOSITIONS) {
+    test(`${viewportName} ${route.slug} composition`, async ({ page }) => {
+      const workspace = await openRouteComposition(
+        page,
+        viewport,
+        route.path,
+      );
+      await expect(workspace).toHaveScreenshot(
+        `route-${route.slug}-${viewportName}.png`,
         {
           animations: 'disabled',
           caret: 'hide',
