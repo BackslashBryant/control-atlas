@@ -15,11 +15,11 @@ test("brand entrance is immediate and does not interrupt the user", async ({
   await page.goto("/");
   await expect(page.getByRole("dialog", { name: "Control Atlas introduction" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
-  const flourishKeys = page.locator(".landing-brand .brand-key");
+  const flourishKeys = page.locator(".landing-hero .brand-key");
   await expect(flourishKeys).toHaveCount(3);
   await expect(flourishKeys.nth(0)).toHaveText("Ctrl");
   await expect(flourishKeys.nth(1)).toHaveText("Alt");
-  const flourish = page.locator(".landing-brand .brand-key-word");
+  const flourish = page.locator(".landing-hero .brand-key-word");
   await expect(flourish).toHaveText("Comply");
   await expect(flourish).toHaveText("Map", { timeout: 4000 });
 });
@@ -135,6 +135,11 @@ test("Control Commons renders its compiled utility layout", async ({ page }) => 
   await expect(commonsSurface).toHaveCount(1);
   await expect(commonsSurface).toHaveCSS("padding-bottom", "64px");
 
+  // Shallow-to-deep: the full resource grid opens on intent. Reveal it, then
+  // confirm a resource's Details still routes to the detail view.
+  await page
+    .getByRole("button", { name: /browse all \d+ resources/i })
+    .click();
   await page.getByRole("button", { name: "Details" }).first().click();
   await expect(page).toHaveURL(/#\/commons-detail\?id=/);
   await expect(
@@ -460,7 +465,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
       name: /Official resources for Build an authorization package/i,
     }),
   ).toBeVisible();
-  await page.locator("#companion-templates .intent-card").first().click();
+  await page.locator("#companion-templates .intent-grid button").first().click();
   await expect(page.getByText("What this template is for")).toBeVisible();
   await expect(page.getByText("What it includes")).toBeVisible();
   await expect(
@@ -472,7 +477,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await expect(
     page.getByRole("heading", { name: "Guides for common compliance jobs" }),
   ).toBeVisible();
-  await page.locator(".intent-card").first().click();
+  await page.locator(".intent-grid button").first().click();
   await expect(page.getByText("Use this when", { exact: true })).toBeVisible();
   await expect(page.getByText("What to do", { exact: true })).toBeVisible();
   await expect(
@@ -509,7 +514,7 @@ test("playbook copy names the decision, next record, and recovery action", async
     .fill("not-a-real-playbook");
   await expect(page.getByText("No playbooks match this search and category.")).toBeVisible();
   await page.getByRole("button", { name: "Clear filters" }).click();
-  await expect(page.locator(".intent-card").first()).toBeVisible();
+  await expect(page.locator(".intent-grid button").first()).toBeVisible();
 });
 
 test("FedRAMP workbench distinguishes current rules from the complete legacy library", async ({
@@ -694,7 +699,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
     page.getByText("Reusing Prior Authorization Work", { exact: true }),
   ).toHaveCount(1);
 
-  const footer = page.locator("footer.site-footer");
+  const footer = page.locator("footer");
   await expect(
     footer.getByText("See how federal cybersecurity requirements connect."),
   ).toBeVisible();

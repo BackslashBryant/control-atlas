@@ -5,6 +5,7 @@ import {
   dismissOnboarding,
   gotoApp,
   waitForAppReady,
+  waitForSkeletonsSettled,
 } from "./support.mjs";
 
 async function assertNoBlockingViolations(page, contextLabel) {
@@ -39,6 +40,8 @@ const ROUTES = [
     path: "/#/record/nist-800-53/AC-2",
   },
   { label: "commons", path: "/#/commons" },
+  // Deep card grid (opened via a lane) is where badge/tag contrast lives.
+  { label: "commons resources", path: "/#/commons?lane=official" },
   {
     label: "commons detail",
     path: "/#/commons-detail?id=official-nist-sp800-53-r5",
@@ -153,6 +156,7 @@ test("a11y: library detail relationship table has no serious or critical violati
   );
   await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
+  await waitForSkeletonsSettled(page);
 
   await expect(
     page.getByRole("table", { name: "Relationship table" }),

@@ -519,7 +519,7 @@ All non-home routes expose a shared context rail with Depth 1 / Mission or Depth
 
 ### Visual Direction
 
-Control Atlas adapts Orbital Archive No. 01 v1.5.0 and its Lunar Signal Modernism system. Editorial Signal composition is reserved for Depth 0; operational Mission and Systems surfaces use restrained technical geometry, thin borders, coordinate grids, visible scope, and compact metadata. Relay Cyan marks interaction, Observatory Gold marks priority, Solar Orange is rare editorial signal, and fixed status colors retain their meanings. Purple, violet, pink, and magenta are outside the product palette.
+Control Atlas adapts Orbital Archive No. 01 v1.7.0 and its Lunar Signal Modernism system. Editorial Signal composition is reserved for Depth 0; operational Mission and Systems surfaces use restrained technical geometry, thin borders, coordinate grids, visible scope, and compact metadata. Relay Cyan marks interaction, Observatory Gold marks priority, Solar Orange is rare editorial signal, and fixed status colors retain their meanings. Purple, violet, pink, and magenta are outside the product palette.
 
 The product should read like a public technical reference instrument, not a marketing site, aerospace simulation, or fake government portal.
 
@@ -532,7 +532,7 @@ The product should read like a public technical reference instrument, not a mark
   --lsm-slate: #2D3A42;
   --lsm-alloy: #37464F;
   --lsm-grid-line: #56656E;
-  --lsm-dust: #98A4AC;
+  --lsm-dust: #B3BBC2;
   --lsm-bone: #E7E1D5;
   --lsm-relay: #54BCD9;
   --lsm-gold: #CBAE67;

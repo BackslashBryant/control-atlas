@@ -52,6 +52,10 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const [selectedAccessType, setSelectedAccessType] = useState(initialAccessType);
   const [selectedCollection, setSelectedCollection] = useState(initialCollection);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  // Shallow-to-deep: the full 229-resource grid is a deliberate "deep" view.
+  // It opens only after the visitor expresses intent (search, lane, filter,
+  // collection) or explicitly asks to browse everything.
+  const [showAllResources, setShowAllResources] = useState(false);
 
   // Load dataset and index from runtime bundle
   const dataset = bundle?.commonsDataset;
@@ -72,6 +76,44 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         .sort(),
     [allResources],
   );
+
+  // Derived from the data, never hand-listed: a hardcoded list previously
+  // offered "advisory" (which matched nothing) while omitting four real types
+  // covering 67 resources, making them unreachable through this filter.
+  const RESOURCE_TYPE_LABELS: Record<string, string> = {
+    catalog: "Catalog",
+    community_forum: "Community forum",
+    dataset: "Dataset / feed",
+    documentation: "Documentation",
+    historical_reference: "Historical reference",
+    instruction: "Instruction",
+    matrix: "Matrix",
+    policy: "Policy",
+    specification: "Specification",
+    template: "Template",
+    tool: "Tool / automation",
+    training: "Training / course",
+  };
+
+  const resourceTypeOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const resource of allResources) {
+      if (!resource.resourceType) continue;
+      counts.set(
+        resource.resourceType,
+        (counts.get(resource.resourceType) ?? 0) + 1,
+      );
+    }
+    return [...counts.entries()]
+      .map(([value, count]) => ({
+        value,
+        count,
+        label:
+          RESOURCE_TYPE_LABELS[value] ??
+          value.replaceAll("_", " ").replace(/^./, (c) => c.toUpperCase()),
+      }))
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  }, [allResources]);
 
   // Sync state changes back to URL
   const updateParams = (patch: Partial<Extract<ViewState, { view: "commons" }>>) => {
@@ -251,6 +293,9 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     (selectedAccessType ? 1 : 0) +
     (selectedCollection ? 1 : 0);
 
+  const hasIntent = Boolean(searchQuery.trim()) || activeFilterCount > 0;
+  const showResults = hasIntent || showAllResources;
+
   const clearAllFilters = () => {
     setActiveLane("all");
     setSelectedFramework("");
@@ -260,6 +305,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     setSelectedAccessType("");
     setSelectedCollection("");
     setSearchQuery("");
+    setShowAllResources(false);
     updateParams({
       lane: "all",
       framework: "",
@@ -504,16 +550,18 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {activeFilterCount > 0 ? (
               <button
                 onClick={clearAllFilters}
-                className="text-xs text-[var(--ca-primary)] hover:text-[var(--ca-primary)] underline font-medium ml-2"
+                className="text-xs bg-transparent text-[var(--ca-primary)] hover:text-[var(--ca-primary)] underline font-medium ml-2"
               >
                 Clear all filters
               </button>
             ) : null}
           </div>
 
-          <div aria-live="polite" className="text-xs text-[var(--ca-secondary)]">
-            Showing <span className="font-semibold text-[var(--ca-text)]">{filteredResources.length}</span> of {allResources.length} resources
-          </div>
+          {showResults ? (
+            <div aria-live="polite" className="text-xs text-[var(--ca-secondary)]">
+              Showing <span className="font-semibold text-[var(--ca-text)]">{filteredResources.length}</span> of {allResources.length} resources
+            </div>
+          ) : null}
         </div>
 
         {/* Filter Drawer / Facets Panel */}
@@ -620,15 +668,11 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Resource Types</option>
-                <option value="catalog">Catalog</option>
-                <option value="template">Template</option>
-                <option value="tool">Tool / Automation</option>
-                <option value="policy">Policy / Instruction</option>
-                <option value="advisory">Advisory / Bulletin</option>
-                <option value="dataset">Dataset / Feed</option>
-                <option value="training">Training / Course</option>
-                <option value="community_forum">Community Forum</option>
-                <option value="specification">Specification</option>
+                {resourceTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label} ({option.count})
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -657,8 +701,26 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           </div>
         ) : null}
 
-        {/* Results Grid */}
-        {filteredResources.length === 0 ? (
+        {/* Results — the "deep" full grid opens only after intent or an
+            explicit request. The shallow default guides toward a starting
+            point instead of dropping the whole catalog on the visitor. */}
+        {!showResults ? (
+          <div className="rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_60%,transparent)] p-10 text-center my-8">
+            <IconBook2 size={36} className="mx-auto text-[var(--ca-primary)] mb-3" />
+            <h3 className="text-lg font-bold text-[var(--ca-text)]">Start with a collection, lane, or search</h3>
+            <p className="text-sm text-[var(--ca-secondary)] max-w-md mx-auto mt-1">
+              Open a starter collection above, pick a discovery lane, or search to
+              find the tools, templates, and official guidance you need.
+            </p>
+            <button
+              onClick={() => setShowAllResources(true)}
+              className="mt-5 px-4 py-2 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-[var(--ca-text)] hover:bg-[var(--ca-surface-raised)] font-medium text-xs transition-colors"
+              type="button"
+            >
+              Or browse all {allResources.length} resources
+            </button>
+          </div>
+        ) : filteredResources.length === 0 ? (
           <div className="rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_60%,transparent)] p-12 text-center my-8">
             <IconBook2 size={40} className="mx-auto text-[var(--ca-text-muted)] mb-3" />
             <h3 className="text-lg font-bold text-[var(--ca-text)]">No resources found matching your query</h3>

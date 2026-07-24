@@ -49,7 +49,7 @@ export function CommonsResourceCard({
   const visibleBadges = badges.slice(0, 3);
 
   return (
-    <article className="group relative flex flex-col justify-between rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_80%,transparent)] p-5 shadow-sm transition-all duration-200 hover:border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface)] hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--ca-primary)_20%,transparent)]">
+    <article className="group relative flex flex-col justify-between rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 shadow-sm transition-all duration-200 hover:border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface-raised)] hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--ca-primary)_20%,transparent)]">
       <div>
         {/* Header badges */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -153,7 +153,7 @@ export function CommonsResourceCard({
           {onSelectDetail ? (
             <button
               onClick={() => onSelectDetail(resource.id)}
-              className="px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface-raised)] text-[var(--ca-text)] text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-border-strong)]"
+              className="px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-transparent hover:bg-[var(--ca-surface-raised)] text-[var(--ca-text)] text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-border-strong)]"
             >
               Details
             </button>

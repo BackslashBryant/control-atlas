@@ -460,58 +460,20 @@ addResource(res("legacy-diacap-transition", "DIACAP to RMF Transition Archive", 
 addResource(res("legacy-opencontrol-compliance-masonry", "OpenControl / Compliance Masonry Archive", "Compliance Masonry", "Early open-source compliance-as-code schema and CLI tool for assembling YAML system security plans.", "Preserved for historical significance as an early precursor to NIST OSCAL and FedRAMP digital submission formats.", "https://github.com/opencontrol/compliance-masonry", "OpenControl Project", "legacy", "historical_reference", ["OpenControl", "NIST SP 800-53"], ["OpenControl"], ["Developer", "Engineer"], ["archive", "tool"], ["Go", "YAML"], "public", "free", "archived", { supersededBy: "official-nist-oscal", legacyReason: "Superseded by NIST OSCAL standards and OSCAL Compass / Compliance Trestle.", featuredCollections: ["col-legacy-standards-archive"] }));
 
 
-// Dynamically generate additional structured entries to guarantee >= 180 unique resources
-for (let i = 1; i <= 130; i++) {
-  const lanes = ["official", "open_source", "practitioner", "commercial", "legacy"];
-  const lane = lanes[i % lanes.length];
-  
-  let rType = "tool";
-  if (lane === "official") rType = i % 2 === 0 ? "policy" : "catalog";
-  else if (lane === "open_source") rType = "tool";
-  else if (lane === "practitioner") rType = i % 2 === 0 ? "template" : "community_forum";
-  else if (lane === "commercial") rType = "documentation";
-  else if (lane === "legacy") rType = "historical_reference";
-
-  const categories = [
-    { title: "NIST SP 800-53 Special Publication", prefix: "NIST CSRC" },
-    { title: "CISA Cybersecurity Directive & Advisory", prefix: "CISA Cyber" },
-    { title: "DISA STIG Hardening Automation Utility", prefix: "DISA Cyber Exchange" },
-    { title: "FedRAMP Cloud Authorization Template", prefix: "FedRAMP PMO" },
-    { title: "OpenSCAP Linux Security Benchmark", prefix: "ComplianceAsCode" },
-    { title: "MITRE SAF Compliance Verification Script", prefix: "MITRE SAF" },
-    { title: "OSCAL Machine-Readable Data Model", prefix: "NIST OSCAL" },
-    { title: "Cloud Security Posture Assessment Tool", prefix: "DevSecOps Community" }
-  ];
-  
-  const cat = categories[i % categories.length];
-  const id = `ext-res-${i.toString().padStart(3, "0")}-${lane}`;
-  const name = `${cat.title} Series Item #${i}`;
-  const url = `https://commons.controlatlas.gov/catalog/item-${i}`;
-  
-  addResource(res(
-    id,
-    name,
-    `Res #${i} (${lane.replace("_", " ")})`,
-    `Validated compliance resource providing specialized guidance for federal cybersecurity workflow item #${i}.`,
-    `Essential practitioner resource supporting control implementation, assessment, or automated verification for task #${i}.`,
-    url,
-    cat.prefix,
-    lane,
-    rType,
-    ["NIST SP 800-53", "FedRAMP", "DISA STIG"],
-    ["FISMA", "RMF"],
-    ["ISSO", "Engineer", "Auditor"],
-    [rType],
-    ["HTML", "JSON"],
-    "public",
-    "free",
-    lane === "legacy" ? "archived" : "active"
-  ));
-}
+// NOTE (2026-07-24): a loop here previously fabricated 130 filler resources
+// (`ext-res-NNN-<lane>`, "... Series Item #N", all pointing at the
+// non-existent domain https://commons.controlatlas.gov/catalog/item-N) to
+// "guarantee >= 180 unique resources". It attributed invented documents to
+// real publishers — NIST CSRC, CISA, DISA, FedRAMP PMO, MITRE SAF — and
+// shipped 130 dead links. That directly violates the product's provenance
+// promise (docs/PRD.md: "Every crosswalk traces back to an authoritative
+// source"). It was deleted. Every resource in this file is now a real,
+// resolvable public source. Never pad this catalog to hit a count: if more
+// coverage is wanted, source real resources.
 
 console.log(`Successfully generated ${resources.length} unique production resources across 12 collections.`);
 
-// Generate Candidate Manifest (>= 225 total entries)
+// Generate Candidate Manifest (accepted + genuinely reviewed rejections)
 const acceptedCandidates = resources.map(r => ({
   candidateName: r.name,
   url: r.canonicalUrl,
@@ -529,14 +491,11 @@ const rejectedCandidates = [
   { candidateName: "Stale 2014 Agency FISMA PDF Guidelines", url: "https://example-agency.gov/historical/2014-fisma-policy.pdf", reason: "Outdated agency guidance superseded by modern CISA FISMA metric guides and OMB memoranda." }
 ];
 
-// Add additional rejected candidates to reach >= 45 rejected candidates (bringing total manifest count >= 225)
-for (let i = 1; i <= 40; i++) {
-  rejectedCandidates.push({
-    candidateName: `Unverified Vendor Lead-Gen Page #${i}`,
-    url: `https://unverified-vendor-leads.example.com/item-${i}`,
-    reason: i % 2 === 0 ? "Paywalled sales form requiring mandatory sales demo call before release." : "Stale unmaintained repository with dead links and missing license."
-  });
-}
+// NOTE (2026-07-24): a loop here padded this list with 40 invented rejections
+// ("Unverified Vendor Lead-Gen Page #N") purely to push the manifest past 225
+// entries. A review record that counts fabricated reviews is not a review
+// record. Deleted alongside the resource-padding loop above; the seven
+// rejections below are the real ones.
 
 const manifest = {
   manifestVersion: "2.0",
