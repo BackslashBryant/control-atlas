@@ -151,19 +151,19 @@ export function SourcesPage(props: {
         title="Review sources before you rely on a match"
       />
 
-      <div className="rounded-xl border border-cyan-900/60 bg-slate-900/90 p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg">
+      <div className="rounded-md border border-[color-mix(in_srgb,var(--ca-primary)_30%,transparent)] bg-[color-mix(in_srgb,var(--ca-surface)_90%,transparent)] p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
         <div>
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <IconBook2 size={18} className="text-cyan-400" />
+          <h3 className="text-sm font-bold text-[var(--ca-text)] flex items-center gap-2">
+            <IconBook2 size={18} className="text-[var(--ca-primary)]" />
             Looking for practical compliance tools, templates, or communities?
           </h3>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-[var(--ca-text-muted)] mt-1">
             <strong>Sources</strong> tracks data provenance used inside Control Atlas. Visit <strong>Control Commons</strong> for external working tools, SCAP/STIG software, SSP templates, and practitioner communities.
           </p>
         </div>
         <button
           onClick={() => onNavigate("commons")}
-          className="px-3.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shrink-0 shadow transition-colors"
+          className="px-3.5 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-semibold text-xs shrink-0 shadow transition-colors"
           type="button"
         >
           Explore Control Commons →

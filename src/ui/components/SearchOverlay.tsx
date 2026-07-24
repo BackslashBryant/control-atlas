@@ -108,7 +108,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <div className="search-overlay-results-container space-y-4">
               {results.commonsResults.length > 0 ? (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400 mb-2 px-3">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
                     Control Commons Resources ({results.commonsResults.length})
                   </div>
                   <ul className="search-overlay-results">
@@ -121,7 +121,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                         >
                           <span className="search-overlay-result-title flex items-center justify-between">
                             <span>{doc.name}</span>
-                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">
+                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
                               Commons · {doc.resourceLane}
                             </span>
                           </span>
@@ -143,7 +143,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
               {results.libraryResults.length > 0 ? (
                 <div>
                   {results.commonsResults.length > 0 ? (
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-3">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
                       Control Atlas Catalog Records
                     </div>
                   ) : null}

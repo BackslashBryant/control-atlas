@@ -131,7 +131,7 @@ test("Control Commons renders its compiled utility layout", async ({ page }) => 
     page.getByRole("heading", { name: "Control Commons", exact: true }),
   ).toBeVisible();
 
-  const commonsSurface = page.locator("div.min-h-screen.bg-slate-950");
+  const commonsSurface = page.locator("div.min-h-screen.bg-\\[var\\(--ca-bg\\)\\]");
   await expect(commonsSurface).toHaveCount(1);
   await expect(commonsSurface).toHaveCSS("padding-bottom", "64px");
 

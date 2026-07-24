@@ -92,13 +92,13 @@ export function ContextualCommonsModule({
   const moduleTitle = title || defaultTitles[contextType];
 
   return (
-    <aside aria-label={moduleTitle} className="rounded-xl border border-cyan-900/50 bg-slate-900/90 p-4 shadow-md my-4">
-      <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+    <aside aria-label={moduleTitle} className="rounded-md border border-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] bg-[var(--ca-surface-deep)] p-4 shadow-md my-4">
+      <div className="flex items-center justify-between mb-3 border-b border-[var(--ca-border)] pb-2">
         <div className="flex items-center gap-2">
-          <span className="p-1 rounded bg-cyan-950 text-cyan-400">
+          <span className="p-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)]">
             <IconBook2 size={16} />
           </span>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text)]">
             Control Commons · {moduleTitle}
           </h3>
         </div>
@@ -106,7 +106,7 @@ export function ContextualCommonsModule({
         {onNavigate ? (
           <button
             onClick={() => onNavigate("commons", { query: query || contextId || framework })}
-            className="text-[11px] font-semibold text-slate-100 hover:text-white hover:underline inline-flex items-center gap-1"
+            className="text-[11px] font-semibold bg-transparent text-[var(--ca-text)] hover:text-[var(--ca-text)] hover:underline inline-flex items-center gap-1"
           >
             <span>Explore all Commons ({dataset?.resources.length})</span>
             <IconChevronRight size={12} />
@@ -118,21 +118,21 @@ export function ContextualCommonsModule({
         {matchingResources.map((res) => (
           <div
             key={res.id}
-            className="p-2.5 rounded-lg border border-slate-800 bg-slate-950/70 hover:bg-slate-950 transition-colors flex items-start justify-between gap-3"
+            className="p-2.5 rounded-sm border border-[var(--ca-border)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)] transition-colors flex items-start justify-between gap-3"
           >
             <div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => onNavigate?.("commons-detail", { id: res.id, from: contextType })}
-                  className="text-xs font-semibold text-slate-100 hover:text-cyan-400 text-left"
+                  className="text-xs font-semibold bg-transparent text-[var(--ca-text)] hover:text-[var(--ca-primary)] text-left"
                 >
                   {res.name}
                 </button>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 capitalize">
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] capitalize">
                   {res.resourceLane.replace("_", " ")}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+              <p className="text-[11px] text-[var(--ca-secondary)] line-clamp-1 mt-0.5">
                 {res.whyIncluded}
               </p>
             </div>
@@ -141,7 +141,7 @@ export function ContextualCommonsModule({
               href={res.canonicalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-cyan-300 p-1 shrink-0"
+              className="text-[var(--ca-secondary)] hover:text-[var(--ca-primary)] p-1 shrink-0"
               title="Open canonical source link"
             >
               <IconExternalLink size={14} />

@@ -231,7 +231,7 @@ export function PlaybooksPage(props: {
                 {patternGlossaryTerms.map((entry) => (
                   <button
                     key={entry.id}
-                    className="inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer border-[var(--ca-border-strong)] text-[var(--ca-text-muted)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
+                    className="inline-flex items-center min-h-[26px] px-[12px] py-[4px] border rounded-full font-mono text-[10px] uppercase tracking-wider transition-colors cursor-pointer border-[var(--ca-border-strong)] text-[var(--ca-text)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
                     onClick={() => onOpenGlossary(entry.id)}
                   >
                     {entry.term}

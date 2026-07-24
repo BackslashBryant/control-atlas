@@ -49,7 +49,7 @@ export function CommonsResourceCard({
   const visibleBadges = badges.slice(0, 3);
 
   return (
-    <article className="group relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg transition-all duration-200 hover:border-slate-700 hover:bg-slate-900 hover:shadow-cyan-950/20">
+    <article className="group relative flex flex-col justify-between rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_80%,transparent)] p-5 shadow-sm transition-all duration-200 hover:border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface)] hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--ca-primary)_20%,transparent)]">
       <div>
         {/* Header badges */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -73,11 +73,11 @@ export function CommonsResourceCard({
         </div>
 
         {/* Resource Name */}
-        <h3 className="text-lg font-semibold text-slate-100 group-hover:text-cyan-400 transition-colors">
+        <h3 className="text-lg font-semibold text-[var(--ca-text)] group-hover:text-[var(--ca-primary)] transition-colors">
           {onSelectDetail ? (
             <button
               onClick={() => onSelectDetail(resource.id)}
-              className="text-left hover:underline focus:outline-none focus:text-cyan-400"
+              className="text-left hover:underline focus:outline-none focus:text-[var(--ca-primary)]"
             >
               {resource.name}
             </button>
@@ -87,26 +87,26 @@ export function CommonsResourceCard({
         </h3>
 
         {/* Publisher info */}
-        <p className="text-xs text-slate-400 mt-1 mb-3">
-          <span className="font-medium text-slate-300">{resource.publisher}</span>
+        <p className="text-xs text-[var(--ca-secondary)] mt-1 mb-3">
+          <span className="font-medium text-[var(--ca-text)]">{resource.publisher}</span>
           {resource.maintainer ? ` · ${resource.maintainer}` : ""}
           {resource.currentVersion ? ` · ${resource.currentVersion}` : ""}
         </p>
 
         {/* Short purpose summary */}
-        <p className="text-sm text-slate-300 leading-relaxed mb-4">
+        <p className="text-sm text-[var(--ca-text)] leading-relaxed mb-4">
           {resource.summary}
         </p>
 
         {/* Why Included callout */}
-        <div className="rounded-lg bg-slate-950/60 border border-slate-800/80 p-3 mb-4">
+        <div className="rounded-sm bg-[var(--ca-surface)] border border-[color-mix(in_srgb,var(--ca-border)_80%,transparent)] p-3 mb-4">
           <div className="flex items-start gap-2">
-            <IconInfoCircle size={15} className="text-cyan-400 mt-0.5 shrink-0" />
+            <IconInfoCircle size={15} className="text-[var(--ca-primary)] mt-0.5 shrink-0" />
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400 block mb-0.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--ca-primary)] block mb-0.5">
                 Why it is useful
               </span>
-              <p className="text-xs text-slate-300 leading-normal">
+              <p className="text-xs text-[var(--ca-text)] leading-normal">
                 {resource.whyIncluded}
               </p>
             </div>
@@ -129,7 +129,7 @@ export function CommonsResourceCard({
             </button>
           ))}
           {resource.artifactTypes.map((art) => (
-            <span key={art} className="text-[11px] px-2 py-0.5 rounded bg-slate-800/60 text-slate-400">
+            <span key={art} className="text-[11px] px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-surface-raised)_60%,transparent)] text-[var(--ca-secondary)]">
               {art}
             </span>
           ))}
@@ -137,13 +137,13 @@ export function CommonsResourceCard({
       </div>
 
       {/* Card Actions */}
-      <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2 mt-auto">
+      <div className="pt-3 border-t border-[color-mix(in_srgb,var(--ca-border)_80%,transparent)] flex items-center justify-between gap-2 mt-auto">
         <a
           href={resource.canonicalUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-xs shadow transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-primary)]"
         >
           <span>Open resource</span>
           <IconExternalLink size={14} />
@@ -153,7 +153,7 @@ export function CommonsResourceCard({
           {onSelectDetail ? (
             <button
               onClick={() => onSelectDetail(resource.id)}
-              className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-500"
+              className="px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] hover:bg-[var(--ca-surface-raised)] text-[var(--ca-text)] text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-border-strong)]"
             >
               Details
             </button>
@@ -162,10 +162,10 @@ export function CommonsResourceCard({
           <button
             onClick={handleCopyLink}
             title="Copy link to resource"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="p-1.5 rounded-sm text-[var(--ca-secondary)] hover:text-[var(--ca-text)] hover:bg-[var(--ca-surface-raised)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-border-strong)]"
             aria-label="Copy link"
           >
-            {copied ? <IconCheck size={16} className="text-emerald-400" /> : <IconCopy size={16} />}
+            {copied ? <IconCheck size={16} className="text-[var(--ca-success)]" /> : <IconCopy size={16} />}
           </button>
         </div>
       </div>

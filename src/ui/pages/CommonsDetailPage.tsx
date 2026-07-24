@@ -53,16 +53,16 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
   if (!resource) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 p-8">
-        <div className="mx-auto max-w-3xl rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
-          <IconAlertTriangle size={48} className="mx-auto text-amber-400 mb-3" />
+      <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] p-8">
+        <div className="mx-auto max-w-3xl rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-8 text-center">
+          <IconAlertTriangle size={48} className="mx-auto text-[var(--ca-warning)] mb-3" />
           <h2 className="text-xl font-bold">Resource Not Found</h2>
-          <p className="text-sm text-slate-400 mt-2 mb-6">
+          <p className="text-sm text-[var(--ca-secondary)] mt-2 mb-6">
             The resource ID "{resourceId}" could not be found in Control Commons.
           </p>
           <button
             onClick={() => onNavigate("commons")}
-            className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow"
+            className="px-4 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-xs shadow"
           >
             Return to Commons Hub
           </button>
@@ -72,13 +72,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
+    <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
       {/* Back Navigation */}
-      <div className="border-b border-slate-800 bg-slate-900/50 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="border-b border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_50%,transparent)] px-4 py-3 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           <button
             onClick={() => onNavigate("commons")}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+            className="inline-flex items-center gap-2 bg-transparent text-xs font-semibold text-[var(--ca-primary)] hover:text-[var(--ca-primary)] transition-colors"
           >
             <IconArrowLeft size={16} />
             Back to Commons Hub
@@ -87,16 +87,16 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-xs font-medium text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
-              {copied ? <IconCheck size={14} className="text-emerald-400" /> : <IconCopy size={14} />}
+              {copied ? <IconCheck size={14} className="text-[var(--ca-success)]" /> : <IconCopy size={14} />}
               <span>{copied ? "Link Copied!" : "Copy Link"}</span>
             </button>
             <a
               href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-xs font-medium text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
               <IconFlag size={14} />
               <span>Report Issue</span>
@@ -110,7 +110,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Header Block */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-xl mb-8">
+        <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <CommonsLaneBadge full lane={resource.resourceLane} />
 
@@ -121,23 +121,23 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               </span>
             ) : null}
 
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 capitalize">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium bg-[var(--ca-surface-raised)] text-[var(--ca-text)] border border-[var(--ca-border-strong)] capitalize">
               Status: {resource.maintenanceStatus}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-100">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--ca-text)]">
             {resource.name}
           </h1>
 
-          <p className="text-xs text-slate-400 mt-2 mb-4">
-            Published by <span className="font-semibold text-slate-200">{resource.publisher}</span>
+          <p className="text-xs text-[var(--ca-secondary)] mt-2 mb-4">
+            Published by <span className="font-semibold text-[var(--ca-text)]">{resource.publisher}</span>
             {resource.maintainer ? ` · Maintained by ${resource.maintainer}` : ""}
             {resource.currentVersion ? ` · Version: ${resource.currentVersion}` : ""}
             {resource.lastCheckedAt ? ` · Last checked: ${resource.lastCheckedAt}` : ""}
           </p>
 
-          <p className="text-base text-slate-200 leading-relaxed mb-6">
+          <p className="text-base text-[var(--ca-text)] leading-relaxed mb-6">
             {resource.summary}
           </p>
 
@@ -147,7 +147,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               href={resource.canonicalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm shadow-lg transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-semibold text-sm shadow-sm transition-colors"
             >
               <span>Open Canonical Resource</span>
               <IconExternalLink size={16} />
@@ -158,7 +158,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
                 href={resource.repositoryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 bg-slate-950 hover:bg-slate-800 text-slate-200 font-medium text-sm transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] hover:bg-[var(--ca-surface-raised)] text-[var(--ca-text)] font-medium text-sm transition-colors"
               >
                 <IconCode size={16} />
                 <span>Source Repository</span>
@@ -169,7 +169,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
         {/* Supersession Warning Callout */}
         {resource.resourceLane === "legacy" || supersedingResource ? (
-          <div className="commons-warning-panel rounded-xl p-5 mb-8 flex items-start gap-3">
+          <div className="commons-warning-panel rounded-md p-5 mb-8 flex items-start gap-3">
             <IconAlertTriangle size={20} className="shrink-0 mt-0.5" />
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wider">
@@ -181,7 +181,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               {supersedingResource ? (
                 <button
                   onClick={() => onNavigate("commons-detail", { id: supersedingResource.id })}
-                  className="mt-2 text-xs font-semibold text-cyan-300 hover:underline inline-flex items-center gap-1"
+                  className="mt-2 text-xs font-semibold text-[var(--ca-primary)] hover:underline inline-flex items-center gap-1"
                 >
                   View current replacement: {supersedingResource.name} →
                 </button>
@@ -195,17 +195,17 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
           {/* Left Main Details Column */}
           <div className="lg:col-span-2 space-y-8">
             {/* Why Included */}
-            <section className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-md">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-2 mb-3">
+            <section className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--ca-primary)] flex items-center gap-2 mb-3">
                 <IconInfoCircle size={18} />
                 Why This Resource Is Included
               </h2>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-[var(--ca-text)] leading-relaxed">
                 {resource.whyIncluded}
               </p>
               {resource.editorialNotes ? (
-                <div className="mt-4 p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300">
-                  <span className="font-semibold text-cyan-400 block mb-1">Editorial Note:</span>
+                <div className="mt-4 p-3 rounded-sm bg-[var(--ca-bg)] border border-[var(--ca-border)] text-xs text-[var(--ca-text-muted)]">
+                  <span className="font-semibold text-[var(--ca-primary)] block mb-1">Editorial Note:</span>
                   {resource.editorialNotes}
                 </div>
               ) : null}
@@ -213,31 +213,31 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
             {/* Practical Companion Resources */}
             {companionResources.length > 0 ? (
-              <section className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-md">
-                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2 mb-4">
-                  <IconSparkles size={18} className="text-cyan-400" />
+              <section className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--ca-text)] flex items-center gap-2 mb-4">
+                  <IconSparkles size={18} className="text-[var(--ca-primary)]" />
                   Recommended Companion Tools & Templates
                 </h2>
                 <div className="space-y-4">
                   {companionResources.map((comp) => (
                     <div
                       key={comp.id}
-                      className="p-4 rounded-lg border border-slate-800 bg-slate-950/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="p-4 rounded-sm border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface-deep)_80%,transparent)] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div>
                         <button
                           onClick={() => onNavigate("commons-detail", { id: comp.id })}
-                          className="text-sm font-semibold text-slate-100 hover:text-cyan-400 text-left"
+                          className="text-sm font-semibold text-[var(--ca-text)] hover:text-[var(--ca-primary)] text-left"
                         >
                           {comp.name}
                         </button>
-                        <p className="text-xs text-slate-400 mt-1">{comp.summary}</p>
+                        <p className="text-xs text-[var(--ca-secondary)] mt-1">{comp.summary}</p>
                       </div>
                       <a
                         href={comp.canonicalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs font-medium text-cyan-300 shrink-0 inline-flex items-center gap-1"
+                        className="px-3 py-1.5 rounded bg-[var(--ca-surface-raised)] hover:brightness-110 text-xs font-medium text-[var(--ca-text)] shrink-0 inline-flex items-center gap-1"
                       >
                         Open <IconExternalLink size={12} />
                       </a>
@@ -249,7 +249,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
             {/* Warnings & OPSEC Notes */}
             {resource.warnings && resource.warnings.length > 0 ? (
-              <section className="commons-warning-panel rounded-xl p-5">
+              <section className="commons-warning-panel rounded-md p-5">
                 <h3 className="text-xs font-bold uppercase tracking-wider mb-2">
                   Warnings & Usage Guidance
                 </h3>
@@ -265,31 +265,31 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
           {/* Right Metadata Sidebar */}
           <div className="space-y-6">
             {/* Metadata Card */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 space-y-4 text-xs">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-2">
+            <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 space-y-4 text-xs">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text-muted)] border-b border-[var(--ca-border)] pb-2">
                 Metadata & Access
               </h3>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Resource Lane</span>
-                <span className="font-semibold text-slate-200 capitalize">{resource.resourceLane.replace("_", " ")}</span>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Resource Lane</span>
+                <span className="font-semibold text-[var(--ca-text)] capitalize">{resource.resourceLane.replace("_", " ")}</span>
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Access Type</span>
-                <span className="font-semibold text-slate-200 capitalize">{resource.accessType.replace("_", " ")}</span>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Access Type</span>
+                <span className="font-semibold text-[var(--ca-text)] capitalize">{resource.accessType.replace("_", " ")}</span>
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">License & Copyright</span>
-                <span className="font-semibold text-slate-200">{resource.license || "Not specified"}</span>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">License & Copyright</span>
+                <span className="font-semibold text-[var(--ca-text)]">{resource.license || "Not specified"}</span>
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Formats Available</span>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Formats Available</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {(resource.formats || ["HTML"]).map((fmt) => (
-                    <span key={fmt} className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">
+                    <span key={fmt} className="px-2 py-0.5 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] font-mono">
                       {fmt}
                     </span>
                   ))}
@@ -297,10 +297,10 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Frameworks & Programs</span>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Frameworks & Programs</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {resource.frameworks.map((fw) => (
-                    <span key={fw} className="px-2 py-0.5 rounded bg-slate-800 text-cyan-300 font-medium">
+                    <span key={fw} className="px-2 py-0.5 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] font-medium">
                       {fw}
                     </span>
                   ))}
@@ -308,13 +308,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Target Audiences</span>
-                <p className="text-slate-300">{resource.audiences.join(", ")}</p>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Target Audiences</span>
+                <p className="text-[var(--ca-text-muted)]">{resource.audiences.join(", ")}</p>
               </div>
 
               <div>
-                <span className="text-slate-400 block mb-0.5">Lifecycle Stages</span>
-                <p className="text-slate-300">{resource.lifecycleStages.join(", ")}</p>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Lifecycle Stages</span>
+                <p className="text-[var(--ca-text-muted)]">{resource.lifecycleStages.join(", ")}</p>
               </div>
             </div>
           </div>
