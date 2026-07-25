@@ -1831,7 +1831,24 @@ li {
 .start-here-question {
   display: grid;
   gap: var(--ca-space-4);
-  max-width: 42rem;
+  max-width: 60rem;
+}
+
+/* Each step is a control plus its explainer. Stacked, the explainer stranded
+   ~640px of empty width beside an 800px card on a 1440px shell. Side by side
+   from 1080px up, the guidance sits next to the choice it explains and the
+   step gets materially shorter. The control column stays near its readable
+   measure instead of stretching. */
+.start-here-step-body {
+  display: grid;
+  gap: var(--ca-space-4);
+}
+
+@media (min-width: 1080px) {
+  .start-here-step-body {
+    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+    align-items: start;
+  }
 }
 
 .start-here-answer {
