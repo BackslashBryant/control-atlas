@@ -23,6 +23,7 @@ import type {
   CommonsResourceLane,
   CommonsCollection
 } from "../lib/commonsTypes";
+import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { OfficialPracticalPairing } from "../components/OfficialPracticalPairing";
 
@@ -296,6 +297,23 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const hasIntent = Boolean(searchQuery.trim()) || activeFilterCount > 0;
   const showResults = hasIntent || showAllResources;
 
+  // Browsing is grouped by kind so the visitor can tell rules from tools from
+  // communities at a glance. Searching is NOT: `filteredResources` is already
+  // ranked by relevance there, and sectioning would push the best match below
+  // whatever section happens to sort first.
+  const resourceGroups = useMemo(
+    () => groupResourcesByKind(filteredResources),
+    [filteredResources],
+  );
+  // Section headings have to earn their space. Below roughly four rows of cards
+  // the headings outnumber the content they organize — a 5-result collection
+  // rendered three headings for five cards — so small result sets stay flat.
+  const GROUPING_THRESHOLD = 12;
+  const groupResults =
+    !searchQuery.trim() &&
+    resourceGroups.length > 1 &&
+    filteredResources.length >= GROUPING_THRESHOLD;
+
   const clearAllFilters = () => {
     setActiveLane("all");
     setSelectedFramework("");
@@ -321,6 +339,22 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const handleSelectDetail = (id: string) => {
     onNavigate("commons-detail", { id, from: "commons" });
   };
+
+  const renderResourceGrid = (resources: CommonsResource[]) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {resources.map((resource) => (
+        <CommonsResourceCard
+          key={resource.id}
+          resource={resource}
+          onSelectDetail={handleSelectDetail}
+          onNavigateSearch={(q) => {
+            setSearchQuery(q);
+            updateParams({ query: q });
+          }}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
@@ -734,20 +768,25 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               Reset All Filters
             </button>
           </div>
+        ) : groupResults ? (
+          resourceGroups.map((group) => (
+            <section
+              aria-labelledby={`commons-group-${group.id}`}
+              className="commons-group"
+              key={group.id}
+            >
+              <div className="commons-group-header">
+                <h2 className="commons-group-title" id={`commons-group-${group.id}`}>
+                  <span>{group.label}</span>
+                  <span className="commons-group-count">{group.resources.length}</span>
+                </h2>
+                <p className="commons-group-blurb">{group.blurb}</p>
+              </div>
+              {renderResourceGrid(group.resources)}
+            </section>
+          ))
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredResources.map((resource) => (
-              <CommonsResourceCard
-                key={resource.id}
-                resource={resource}
-                onSelectDetail={handleSelectDetail}
-                onNavigateSearch={(q) => {
-                  setSearchQuery(q);
-                  updateParams({ query: q });
-                }}
-              />
-            ))}
-          </div>
+          renderResourceGrid(filteredResources)
         )}
       </section>
     </div>
