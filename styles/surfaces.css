@@ -378,7 +378,12 @@ a {
   gap: var(--ca-space-1);
 }
 
-.header-search-trigger {
+/* The wrapper — not the button — carries the show/hide. Button's base class
+   includes Tailwind's `inline-flex`, and styles/tailwind.css imports the
+   utilities layer with the `important` flag, so no rule on the button itself
+   can override it at any specificity. The wrapper is a plain div with no
+   utility classes, so ordinary CSS applies. */
+.header-search-trigger-wrap {
   display: none;
 }
 
@@ -2172,8 +2177,8 @@ a:focus-visible {
     display: none;
   }
 
-  .header-search-trigger {
-    display: inline-flex;
+  .header-search-trigger-wrap {
+    display: flex;
   }
 
   .header-utility-sources {

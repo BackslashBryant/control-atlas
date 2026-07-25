@@ -538,8 +538,8 @@
 }
 
 /* ── Search trigger: force-visible when no bundle ── */
-.header-search-trigger--no-bundle {
-  display: inline-flex !important;
+.header-search-trigger-wrap--no-bundle {
+  display: flex !important;
 }
 
 /* ── Canvas map toolbar (floating icon bar) ── */
