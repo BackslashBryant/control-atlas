@@ -190,15 +190,24 @@ export function TopNav(props: TopNavProps) {
             </div>
           </form>
         ) : null}
-        <Button
-          aria-label="Open search"
-          variant="secondary"
-          className={`!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)] header-search-trigger${!bundle ? " header-search-trigger--no-bundle" : ""}`}
-          onClick={onOpenSearch}
+        {/* Plain wrapper div carries the responsive show/hide. The Button
+            component's base class includes Tailwind's `inline-flex`, and this
+            project imports Tailwind utilities with the `important` flag
+            (styles/tailwind.css), so a display rule on the button itself can
+            never win. Mirrors the `.header-actions-text` wrapper below. */}
+        <div
+          className={`header-search-trigger-wrap${!bundle ? " header-search-trigger-wrap--no-bundle" : ""}`}
         >
-          <IconSearch aria-hidden="true" size={16} stroke={2} />
-          <span>Search</span>
-        </Button>
+          <Button
+            aria-label="Open search"
+            variant="secondary"
+            className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)] header-search-trigger"
+            onClick={onOpenSearch}
+          >
+            <IconSearch aria-hidden="true" size={16} stroke={2} />
+            <span>Search</span>
+          </Button>
+        </div>
         <div className="header-actions-text">
           <Button
             variant="primary"

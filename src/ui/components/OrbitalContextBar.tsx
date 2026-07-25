@@ -20,7 +20,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 0,
         mode: "editorial",
-        label: "Signal",
+        label: "Home",
         scope: "Control Atlas",
       };
     case "menu":
@@ -36,7 +36,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 2,
         mode: "operational",
-        label: "Record systems",
+        label: "Record",
         scope: state.node || "Record detail",
         back: {
           label: "Library",
@@ -49,7 +49,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 2,
         mode: "operational",
-        label: "Resource systems",
+        label: "Resource",
         scope: state.id || "Resource detail",
         back: { label: "Commons", view: "commons" },
       };
@@ -57,7 +57,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 0,
         mode: "operational",
-        label: "Signal lost",
+        label: "Page not found",
         scope: "Unknown route",
         back: { label: "Home", view: "home" },
       };
@@ -65,7 +65,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 0,
         mode: "operational",
-        label: "No active signal",
+        label: "Retired identifier",
         scope: state.query || "Retired identifier",
         back: { label: "Explore", view: "search" },
       };
@@ -73,14 +73,14 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Atlas mission",
+        label: "Atlas",
         scope: state.node || "Choose a source path",
       };
     case "search":
       return {
         depth: 1,
         mode: "operational",
-        label: "Explore mission",
+        label: "Explore",
         scope: state.query || "All public records",
       };
     case "catalog-detail":
@@ -88,7 +88,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Library mission",
+        label: "Library",
         scope:
           state.view === "catalog-detail"
             ? state.catalog || "All catalogs"
@@ -98,28 +98,28 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Compare mission",
+        label: "Compare",
         scope: state.crosswalk || "Choose a comparison",
       };
     case "patterns":
       return {
         depth: 1,
         mode: "operational",
-        label: "Guide mission",
+        label: "Guides",
         scope: state.pattern || "All guides",
       };
     case "templates":
       return {
         depth: 1,
         mode: "operational",
-        label: "Document mission",
+        label: "Documents",
         scope: state.templateType || "Choose a document task",
       };
     case "sources":
       return {
         depth: state.source ? 2 : 1,
         mode: "operational",
-        label: state.source ? "Source systems" : "Source mission",
+        label: state.source ? "Source" : "Sources",
         scope: state.source || "All publishers",
         back: state.source
           ? {
@@ -133,21 +133,21 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Commons mission",
+        label: "Commons",
         scope: state.query || state.lane || "All resources",
       };
     case "start-here":
       return {
         depth: 1,
         mode: "operational",
-        label: "Guided mission",
+        label: "Start here",
         scope: state.step ? `Step ${state.step}` : "Orientation",
       };
     case "about":
       return {
         depth: 0,
         mode: "operational",
-        label: "Product signal",
+        label: "About",
         scope: "Purpose and trust boundary",
         back: { label: "Home", view: "home" },
       };
@@ -178,7 +178,7 @@ export function OrbitalContextBar(props: {
       <div className="orbital-context-inner ca-page">
         <div className="orbital-context-location">
           <span className="orbital-depth">
-            Depth {context.depth} · {context.depth === 0 ? "Signal" : context.depth === 1 ? "Mission" : "Systems"}
+            {context.depth === 0 ? "Overview" : context.depth === 1 ? "Section" : "Detail"}
           </span>
           <span aria-hidden="true" className="orbital-context-datum" />
           <strong>{context.label}</strong>

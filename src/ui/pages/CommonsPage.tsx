@@ -52,7 +52,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const [selectedAccessType, setSelectedAccessType] = useState(initialAccessType);
   const [selectedCollection, setSelectedCollection] = useState(initialCollection);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
-  // Shallow-to-deep: the full 229-resource grid is a deliberate "deep" view.
+  // Shallow-to-deep: the full 99-resource grid is a deliberate "deep" view.
   // It opens only after the visitor expresses intent (search, lane, filter,
   // collection) or explicitly asks to browse everything.
   const [showAllResources, setShowAllResources] = useState(false);

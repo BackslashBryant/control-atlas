@@ -15,18 +15,8 @@ export function HomePage(props: HomePageProps) {
 
   return (
     <section className="landing-hero max-w-[1280px] mx-auto px-[24px]">
-      <div
-        aria-hidden="true"
-        className="font-mono text-[10px] text-[var(--ca-text-muted)] uppercase tracking-[0.1em] mb-[48px] pt-[24px]"
-      >
-        CATL / PUBLIC REFERENCE / 01
-      </div>
-
-      <div className="landing-signal-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[48px] items-start mb-[64px]">
+      <div className="landing-signal-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-[48px] items-start mb-[64px] pt-[24px]">
         <div>
-          <p className="font-mono text-[11px] text-[var(--ca-secondary)] uppercase tracking-[0.14em] font-bold mb-[12px]">
-            Depth 0 · Signal
-          </p>
           <div className="flex items-center gap-[16px] mb-[16px]">
             <BrandMark />
             <h1 className="font-display text-[clamp(2.5rem,6vw,5rem)] tracking-[-0.04em] leading-tight m-0 text-[var(--ca-text)]">
@@ -44,7 +34,7 @@ export function HomePage(props: HomePageProps) {
 
         <Panel
           aria-label="Current product state"
-          title="Archive reference"
+          title="How this works"
           className="mt-[32px] lg:mt-0"
         >
           <div className="mb-[16px]">
@@ -154,7 +144,7 @@ export function HomePage(props: HomePageProps) {
         </div>
       </details>
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-[24px] max-w-[1000px] mx-auto mb-[64px] py-[32px] border-t border-[var(--ca-border)]">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-[24px] max-w-[1000px] mx-auto mb-[24px] py-[32px] border-t border-[var(--ca-border)]">
         <p className="text-[var(--ca-text-muted)] text-[13px] m-0">
           Review the product boundary and source record before relying on a
           match.
@@ -175,13 +165,6 @@ export function HomePage(props: HomePageProps) {
             Review sources
           </Button>
         </div>
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="font-mono text-[10px] text-[var(--ca-text-muted)] uppercase tracking-[0.1em] text-right pb-[24px]"
-      >
-        ORIENT / WORK / VERIFY
       </div>
     </section>
   );

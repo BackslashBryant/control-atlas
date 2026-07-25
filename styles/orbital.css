@@ -1210,6 +1210,22 @@ details > summary {
   background: color-mix(in srgb, var(--ca-priority) 5%, var(--ca-surface-deep));
 }
 
+/* The six-section primary nav needs ~1233px of header width before it starts
+   clipping (brand 217 + nav 408 + actions 528 + gaps 48 + padding 32). Below
+   1280px the mobile sheet takes over instead: it lists every primary nav item
+   plus Help/Glossary, so nothing becomes less reachable. This replaces the
+   previous behaviour where `.primary-nav { overflow-x: auto }` silently hid
+   whole sections behind a hairline scroller on ordinary laptop widths. */
+@media (max-width: 1279px) {
+  .site-header .primary-nav {
+    display: none;
+  }
+
+  .header-actions .mobile-nav-toggle {
+    display: inline-flex;
+  }
+}
+
 /* Responsive order: primary work first, context afterward. */
 @media (max-width: 1100px) {
   .site-header {
@@ -1220,8 +1236,8 @@ details > summary {
     display: none;
   }
 
-  .header-search-trigger {
-    display: inline-flex;
+  .header-search-trigger-wrap {
+    display: flex;
   }
 
   .primary-nav button {

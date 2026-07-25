@@ -46,13 +46,18 @@ test("Purpose and RMF reorder the same source inventory without fabricating Map 
   await expect(page.locator(".atlas-bounded-map")).toHaveCount(0);
 });
 
-test("Map without a selected record explains why it is unavailable", async ({ page }) => {
+test("Map without a selected record recovers to the guided path instead of dead-ending", async ({ page }) => {
   await page.goto("/#/atlas-map?relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Choose a record before opening Map." })).toBeVisible();
-  await expect(page.getByText(/guided source path is navigation, not relationship evidence/i)).toBeVisible();
+  // Map draws connections OF a record. With no record selected the route now
+  // resolves to Path (atlasView in AtlasMapPage.tsx) rather than rendering the
+  // retired "Choose a record before opening Map." dead end, so a shared or
+  // bookmarked map link always lands somewhere usable.
+  await expect(page.getByRole("tablist", { name: /path$/ }).getByRole("tab").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose a record before opening Map." })).toHaveCount(0);
+  // Unchanged guarantee: no map is fabricated when there is no record.
   await expect(page.locator(".atlas-bounded-map")).toHaveCount(0);
 });
 

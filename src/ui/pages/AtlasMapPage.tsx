@@ -63,10 +63,18 @@ function atlasView(value: string, focused: boolean): AtlasView {
   if (value === "purpose" || value === "rmf") {
     return "path";
   }
+  // Map draws the connections OF a selected record, so with no record it can
+  // only ever be a dead end. A bookmarked or shared `?relationshipView=map`
+  // link with no record resolves to Path instead of stranding the visitor.
+  // List is unaffected: it renders the source inventory, which does not
+  // depend on a selected record.
+  if (value === "map" && !focused) {
+    return "path";
+  }
   if (["path", "map", "list"].includes(value)) {
     return value as AtlasView;
   }
-  return focused ? "path" : "path";
+  return "path";
 }
 
 // The lens is an entry choice carried in the route, not a view toggle.
@@ -732,17 +740,9 @@ function SourceAtlas(props: {
         </div>
       </details>
 
-      {view === "map" ? (
-        <div className="atlas-no-connections">
-          <IconMap aria-hidden="true" size={28} />
-          <h2>Choose a record before opening Map.</h2>
-          <p>Map only appears when a selected record has published connections. The guided source path is navigation, not relationship evidence.</p>
-          <button className="primary" onClick={() => onNavigate("search")} type="button">
-            Search for a record
-          </button>
-        </div>
-      ) : null}
-
+      {/* No "Map is unavailable" branch here by design: atlasView() resolves
+          `map` to `path` whenever no record is selected, so this component can
+          never be asked to render a Map it has no data for. */}
       {view === "path" ? (
         <>
           <div aria-label={`${definition.label} path`} className="atlas-path-stage-nav atlas-source-stage-nav" role="tablist">
