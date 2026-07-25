@@ -1210,6 +1210,80 @@ details > summary {
   background: color-mix(in srgb, var(--ca-priority) 5%, var(--ca-surface-deep));
 }
 
+/* Source identity. Deliberately quieter than the lane badge: it answers "where
+   does this link go" without becoming another coloured badge. The mark is a
+   bundled glyph or a text monogram — never a remote favicon, which the CSP
+   blocks and which would break offline use. */
+.commons-host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  max-width: 100%;
+  min-width: 0;
+  color: var(--ca-text-muted);
+}
+
+/* Auto-width, not a fixed square: the longest monograms ("FedRAMP", "MITRE")
+   need 28px and 23px of text, so a hard 22px box clipped them. */
+.commons-host-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 1.375rem;
+  height: 1.375rem;
+  padding: 0 0.25rem;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface-deep);
+  color: var(--ca-text);
+  font: 700 0.5625rem / 1 var(--ca-font-mono);
+  letter-spacing: 0.02em;
+}
+
+.commons-host-name {
+  overflow: hidden;
+  min-width: 0;
+  font: 500 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Browse sections. The heading + count is the "wading" layer: it tells you how
+   much of each kind exists before you read a single card. */
+.commons-group + .commons-group {
+  margin-top: var(--ca-space-8);
+}
+
+.commons-group-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-bottom: var(--ca-space-4);
+  padding-bottom: var(--ca-space-2);
+  border-bottom: 1px solid var(--ca-border);
+}
+
+.commons-group-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ca-space-2);
+  color: var(--ca-text);
+  font: 700 var(--ca-text-lg) / 1.3 var(--ca-font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.commons-group-count {
+  color: var(--ca-text-muted);
+  font: 500 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
+}
+
+.commons-group-blurb {
+  color: var(--ca-text-muted);
+  font: 400 var(--ca-text-sm) / 1.5 var(--ca-font-body);
+}
+
 /* The six-section primary nav needs ~1233px of header width before it starts
    clipping (brand 217 + nav 408 + actions 528 + gaps 48 + padding 32). Below
    1280px the mobile sheet takes over instead: it lists every primary nav item

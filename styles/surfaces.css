@@ -531,6 +531,7 @@ li {
 .relationship-group,
 .drawer-content,
 .source-card,
+.commons-card,
 .empty-state {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
