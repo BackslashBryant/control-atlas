@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
+import { CATALOG_TIERS } from '../scripts/build-framework-data.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
 const expectedArtifacts = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];
@@ -205,4 +206,81 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
   assert.ok(errors.includes('edge edge:blocked must reference evidence'));
   assert.ok(errors.includes('published edge edge:published-inferred cannot use inferred provenance_class'));
   assert.ok(errors.includes('evidence evidence:restricted source restricted-source must remain public for displayable graph content'));
+});
+
+test('every catalog with a declared parent tier has all of its records parented', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const parented = new Set(
+    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
+  );
+  const tierNodeTypes = new Set(Object.values(CATALOG_TIERS).map((tier) => tier.nodeType));
+
+  for (const catalogId of Object.keys(CATALOG_TIERS)) {
+    // A catalog summary node is the root of its own tree, so it is the one node
+    // that legitimately has no parent. Tier nodes are the branches; parenting
+    // those to their catalog is separate outstanding work (see docs/STATE.md).
+    const records = nodes.filter(
+      (node) =>
+        node.metadata?.catalog_id === catalogId &&
+        !tierNodeTypes.has(node.node_type) &&
+        node.node_type !== 'catalog',
+    );
+    assert.ok(records.length > 0, `${catalogId} produced no records`);
+    const unparented = records.filter((node) => !parented.has(node.id)).map((node) => node.id);
+    assert.deepEqual(
+      unparented,
+      [],
+      `${catalogId} declares a parent tier, so every record must have an includes edge from it`,
+    );
+  }
+});
+
+test('declared parent tiers materialize real tier nodes with plain-language titles', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const childCount = new Map();
+  for (const edge of edges) {
+    if (edge.relationship_type !== 'includes') continue;
+    childCount.set(edge.source_node_id, (childCount.get(edge.source_node_id) ?? 0) + 1);
+  }
+
+  for (const [catalogId, tier] of Object.entries(CATALOG_TIERS)) {
+    const tierNodes = nodes.filter(
+      (node) => node.metadata?.catalog_id === catalogId && node.node_type === tier.nodeType,
+    );
+    assert.ok(tierNodes.length > 0, `${catalogId} declares tier ${tier.nodeType} but built none`);
+    for (const node of tierNodes) {
+      assert.ok(node.label?.trim(), `${node.id} needs a label`);
+      assert.ok(node.metadata?.title?.trim(), `${node.id} needs a title`);
+      assert.ok(node.metadata?.description?.trim(), `${node.id} needs a description`);
+      assert.ok(
+        (childCount.get(node.id) ?? 0) > 0,
+        `${node.id} is a tier node with no children, so it should not exist`,
+      );
+    }
+  }
+});
+
+test('DISA STIG and SRG records carry their benchmark as the grouping label', () => {
+  const nodes = generated('nodes').nodes;
+  for (const [catalogId, nodeType] of [
+    ['disa-stig', 'stig_rule'],
+    ['disa-srg', 'srg_requirement'],
+  ]) {
+    const records = nodes.filter((node) => node.node_type === nodeType);
+    assert.ok(records.length > 0, `${catalogId} produced no ${nodeType} records`);
+    const unlabelled = records.filter((node) => !node.metadata?.family?.trim()).map((node) => node.id);
+    assert.deepEqual(
+      unlabelled,
+      [],
+      `${nodeType} records must carry metadata.family so the catalog family filter works`,
+    );
+  }
+
+  const benchmarks = nodes.filter((node) => node.node_type === 'benchmark');
+  const stigBenchmarks = benchmarks.filter((node) => node.metadata?.catalog_id === 'disa-stig');
+  const srgBenchmarks = benchmarks.filter((node) => node.metadata?.catalog_id === 'disa-srg');
+  assert.ok(stigBenchmarks.length > 0, 'expected DISA STIG benchmark nodes');
+  assert.ok(srgBenchmarks.length > 0, 'expected DISA SRG benchmark nodes');
 });

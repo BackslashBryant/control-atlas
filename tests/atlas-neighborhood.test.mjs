@@ -63,12 +63,19 @@ test("generated Atlas shards contain only incident canonical edges", () => {
   const canonicalEdges = new Map(
     JSON.parse(readFileSync("data/generated/edges.json", "utf8")).edges.map((edge) => [edge.id, edge]),
   );
+  const canonicalNodeIds = new Set(
+    JSON.parse(readFileSync("data/generated/nodes.json", "utf8")).nodes.map(
+      (node) => node.id,
+    ),
+  );
   const shardDir = "data/generated/atlas-neighborhood";
+  const shardedNodeIds = new Set();
   let recordCount = 0;
   for (const filename of readdirSync(shardDir)) {
     const artifact = JSON.parse(readFileSync(join(shardDir, filename), "utf8"));
     for (const [nodeId, record] of Object.entries(artifact.atlas_neighborhood_shard.records)) {
       recordCount += 1;
+      shardedNodeIds.add(nodeId);
       for (const compactEdge of record.edges) {
         const [edgeId, sourceNodeId, targetNodeId] = compactEdge;
         assert.ok(canonicalEdges.has(edgeId), `${edgeId} must be canonical`);
@@ -79,5 +86,14 @@ test("generated Atlas shards contain only incident canonical edges", () => {
       }
     }
   }
-  assert.equal(recordCount, 11_486);
+  // Stronger than the previous hardcoded `recordCount === 11_486`: assert the
+  // invariant that literal was standing in for — the shards cover EXACTLY the
+  // canonical node set, with no missing and no orphaned shard records. A magic
+  // number silently had to be bumped on every legitimate data change (it broke
+  // when the GRC tier nodes were added) while never actually proving coverage.
+  assert.equal(recordCount, canonicalNodeIds.size);
+  const missing = [...canonicalNodeIds].filter((id) => !shardedNodeIds.has(id));
+  const orphaned = [...shardedNodeIds].filter((id) => !canonicalNodeIds.has(id));
+  assert.deepEqual(missing, [], "every canonical node needs a shard record");
+  assert.deepEqual(orphaned, [], "no shard record may reference a dropped node");
 });

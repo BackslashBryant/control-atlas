@@ -1,5 +1,14 @@
 # GRC hierarchy audit — 2026-07-25
 
+> **Status update (same day, after this audit was written).** Sequencing steps 1–3
+> are DONE: the `catalogId === "nist-800-53"` gate is replaced by the declarative
+> `CATALOG_TIERS` table in `scripts/build-framework-data.mjs`, and the `benchmark`
+> (STIG 11 + SRG 18) and `family` (SP 800-171 Rev. 3 17, Rev. 2 14, SP 800-172 17)
+> tiers are materialized. Graph: 11,486 -> 11,563 nodes, 16,207 -> 18,679 edges.
+> **Unparented dropped from 88% to 67%**; fully isolated from 2,366 to 2,073.
+> Every measurement in the body below is the pre-fix baseline at commit `4b65312`
+> and is deliberately preserved as the historical record — steps 4-7 remain open.
+
 Owner brief: *"in plain language categories we should be able to map the tree of
 governance, Risk, and compliance from Roots>trunk>branches>twigs>leaves>etc."*
 Triggered by the owner reporting that STIGs are not bucketed

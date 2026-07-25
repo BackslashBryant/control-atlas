@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-23T00:14:31.766Z",
+  "generated_at": "2026-07-25T15:48:15.592Z",
   "library_search_manifest": {
     "eager_shard_ids": [
       "nist-800-53",
@@ -16,9 +16,9 @@
       },
       {
         "catalog_id": "disa-srg",
-        "document_count": 1514,
+        "document_count": 1532,
         "path": "library-search/disa-srg.json",
-        "bytes": 3286921
+        "bytes": 3402668
       },
       {
         "catalog_id": "nist-800-53",
@@ -40,9 +40,9 @@
       },
       {
         "catalog_id": "disa-stig",
-        "document_count": 603,
+        "document_count": 614,
         "path": "library-search/disa-stig.json",
-        "bytes": 1309690
+        "bytes": 1370208
       },
       {
         "catalog_id": "mitre-d3fend",
@@ -64,21 +64,21 @@
       },
       {
         "catalog_id": "nist-800-171",
-        "document_count": 131,
+        "document_count": 148,
         "path": "library-search/nist-800-171.json",
-        "bytes": 302156
+        "bytes": 318478
       },
       {
         "catalog_id": "nist-800-172",
-        "document_count": 116,
+        "document_count": 133,
         "path": "library-search/nist-800-172.json",
-        "bytes": 331793
+        "bytes": 348286
       },
       {
         "catalog_id": "nist-800-171-rev2",
-        "document_count": 111,
+        "document_count": 125,
         "path": "library-search/nist-800-171-rev2.json",
-        "bytes": 320953
+        "bytes": 334701
       },
       {
         "catalog_id": "mitre-attack-ics",

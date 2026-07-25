@@ -39,7 +39,14 @@ const CATEGORY_GROUPS = [
   {
     id: "framework-structure",
     label: "Framework structure",
-    nodeTypes: ["catalog", "family", "policy", "program", "rmf_step"],
+    nodeTypes: [
+      "benchmark",
+      "catalog",
+      "family",
+      "policy",
+      "program",
+      "rmf_step",
+    ],
   },
 ];
 
