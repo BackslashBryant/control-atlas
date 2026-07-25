@@ -1,8 +1,8 @@
 # Control Commons Multi-Tier Health & Link Status Report
 
-**Report Generated:** 2026-07-23T14:08:57.540Z  
-**Total Resources Monitored:** 229  
-**Overall Reachability:** 78 / 229 (34.1%)
+**Report Generated:** 2026-07-24T22:33:44.196Z  
+**Total Resources Monitored:** 99  
+**Overall Reachability:** 73 / 99 (73.7%)
 
 ---
 
@@ -11,10 +11,10 @@
 | Monitoring Tier | Recommended Check Frequency | Resources Monitored | Health Status |
 |---|---|---|---|
 | **Hot** | 6–12 Hours | 6 | All feeds validated |
-| **Active** | 24 Hours | 60 | All tools validated |
-| **Normal** | 7 Days | 87 | All publications validated |
-| **Slow** | 30 Days | 18 | All forums validated |
-| **Legacy** | 90 Days | 58 | All archives validated |
+| **Active** | 24 Hours | 34 | All tools validated |
+| **Normal** | 7 Days | 48 | All publications validated |
+| **Slow** | 30 Days | 5 | All forums validated |
+| **Legacy** | 90 Days | 6 | All archives validated |
 
 ---
 

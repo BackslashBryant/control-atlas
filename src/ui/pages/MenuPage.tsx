@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 
 import { QuickIntentCard } from "../components/QuickIntentCard";
+import { PageHeader } from "../lib/pagePrimitives";
 import type { ViewState } from "../lib/viewState";
 
 type MenuPageProps = {
@@ -50,23 +51,30 @@ export function MenuPage(props: MenuPageProps) {
   const { onNavigate } = props;
 
   return (
-    <section
-      aria-label="What do you want to do?"
-      className="intent-grid home-card-grid"
-    >
-      {MENU_CARDS.map((card) => {
-        const Icon = card.icon;
-        return (
-          <QuickIntentCard
-            actionLabel={card.actionLabel}
-            body={card.body}
-            icon={<Icon aria-hidden="true" size={20} stroke={1.8} />}
-            key={card.title}
-            onClick={() => onNavigate(card.view)}
-            title={card.title}
-          />
-        );
-      })}
-    </section>
+    <>
+      <PageHeader
+        eyebrow="Menu"
+        summary="Pick a workspace to start from. Each one focuses on a different part of federal compliance."
+        title="What do you want to do?"
+      />
+      <section
+        aria-label="Workspaces"
+        className="intent-grid home-card-grid"
+      >
+        {MENU_CARDS.map((card) => {
+          const Icon = card.icon;
+          return (
+            <QuickIntentCard
+              actionLabel={card.actionLabel}
+              body={card.body}
+              icon={<Icon aria-hidden="true" size={20} stroke={1.8} />}
+              key={card.title}
+              onClick={() => onNavigate(card.view)}
+              title={card.title}
+            />
+          );
+        })}
+      </section>
+    </>
   );
 }

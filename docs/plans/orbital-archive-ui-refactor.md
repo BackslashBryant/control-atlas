@@ -2,7 +2,7 @@
 
 ## Outcome
 
-Apply the Orbital Archive No. 01 v1.5.0 design system across every Control Atlas route without changing public data, deep links, exports, source truth, or task behavior.
+Apply the Orbital Archive No. 01 v1.7.0 design system across every Control Atlas route without changing public data, deep links, exports, source truth, or task behavior.
 
 ## Acceptance Boundaries
 

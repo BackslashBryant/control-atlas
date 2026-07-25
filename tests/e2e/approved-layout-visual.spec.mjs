@@ -4,6 +4,7 @@ import {
   attachPageDiagnostics,
   dismissOnboarding,
   waitForAppReady,
+  waitForSkeletonsSettled,
 } from './support.mjs';
 
 const FOCUSED_ATLAS = '/#/atlas-map?node=nist-800-53%3AAC-2';
@@ -86,6 +87,7 @@ async function openRouteComposition(page, viewport, path) {
   });
   await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
+  await waitForSkeletonsSettled(page);
   await page.evaluate(() => globalThis.document.fonts.ready);
   await expect(page.locator('#workspace')).toBeVisible();
   return page.locator('#workspace');

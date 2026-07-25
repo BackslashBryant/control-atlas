@@ -1,6 +1,6 @@
 # Control Atlas Design System
 
-Control Atlas adapts **Orbital Archive No. 01 v1.5.0** as its visual and interaction system. The product principle remains: build for translation, not complexity.
+Control Atlas adapts **Orbital Archive No. 01 v1.7.0** as its visual and interaction system. The product principle remains: build for translation, not complexity.
 
 ## Foundations
 
@@ -53,6 +53,10 @@ Every non-home route exposes its depth, mission label, and current scope through
 - Use disclosure for raw metadata, long mappings, source mechanics, and advanced options.
 - Never hide the primary action or information needed to understand the page.
 - Maintain an obvious return path from every Depth 2 surface.
+
+## Geometry Safe Corridors
+
+Decorative aerospace geometry (orbital rings, plotted paths, datum lines, grain, scanlines) may only occupy: page margins and gutters, the empty side of a hero split, plot/map/timeline/diagram canvases, panel edges and footer rails, or a dedicated media region. It must never cross running copy or headings, form labels/fields/controls/validation, table rows or cells, primary calls to action, or focus rings. Reducing decorative geometry is always preferred over reducing content clarity on narrow screens.
 
 ## Identity Boundaries
 

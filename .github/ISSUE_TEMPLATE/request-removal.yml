@@ -11,7 +11,7 @@ body:
     id: resource_id
     attributes:
       label: Resource ID or Name
-      placeholder: e.g. ext-res-012-legacy
+      placeholder: e.g. official-nist-oscal
     validations:
       required: true
   - type: dropdown
