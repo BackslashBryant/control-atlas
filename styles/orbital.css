@@ -449,19 +449,70 @@ body {
 .source-card,
 .commons-card {
   position: relative;
+  isolation: isolate;
 }
 
-.result-card::before,
+/* v1.7.0 instrument grammar: hairline relay top-datum. Panel already carries
+   this via an inline border-t utility; applied here so the rest of the card
+   family (summary/result/intent/source/commons) matches it. */
+.summary-card,
+.result-card,
+.intent-card,
+.source-card,
+.commons-card {
+  border-top-color: color-mix(in srgb, var(--ca-primary) 30%, transparent);
+}
+
+/* v1.7.0 instrument grammar: grain texture, matching Panel's recipe
+   (src/ui/components/lsm/Panel.tsx) so every card-family surface reads as
+   the same tactile material rather than a flat box. */
 .summary-card::before,
+.result-card::before,
 .intent-card::before,
+.source-card::before,
 .commons-card::before {
   position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 36px;
-  height: 1px;
-  background: var(--ca-primary);
+  inset: 0;
+  z-index: -1;
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 4px,
+      color-mix(in srgb, var(--ca-text), transparent 96%) 5px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--ca-text), transparent 91%) 0 1px,
+      transparent 1.4px
+    );
+  background-size: auto, 9px 9px;
   content: "";
+  pointer-events: none;
+}
+
+/* v1.7.0 instrument grammar: corner registration ticks. */
+.summary-card::after,
+.result-card::after,
+.intent-card::after,
+.source-card::after,
+.commons-card::after {
+  position: absolute;
+  inset: 7px;
+  z-index: 0;
+  opacity: 0.4;
+  background:
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 0 / 15px 1px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 0 / 1px 15px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 0 / 15px 1px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 0 / 1px 15px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 100% / 15px 1px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 100% / 1px 15px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 100% / 15px 1px no-repeat,
+    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 100% / 1px 15px no-repeat;
+  content: "";
+  pointer-events: none;
 }
 
 .result-card:hover,
@@ -664,24 +715,42 @@ details > summary {
   content: "";
 }
 
+/* v1.7.0 replaced the diagonal hero rule (it crossed the brand copy) with a
+   safe-corridor flight-plan field: a short plotted-path motif confined to
+   the empty top margin, above the two-column grid and clear of both the
+   copy column and the reference panel (see docs/design/design-system.md
+   "Geometry Safe Corridors"). */
 .landing-hero::after {
   position: absolute;
   z-index: -1;
-  right: -8%;
-  bottom: 24%;
-  left: 7%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    var(--ca-editorial),
-    var(--ca-priority) 28%,
-    var(--ca-primary) 62%,
-    transparent
-  );
+  top: clamp(0.25rem, 2vw, 1rem);
+  right: -4%;
+  width: clamp(14rem, 22vw, 20rem);
+  height: clamp(2.5rem, 5vw, 4rem);
+  background:
+    linear-gradient(
+      -6deg,
+      transparent 62%,
+      color-mix(in srgb, var(--ca-border-strong) 60%, transparent) 63%,
+      color-mix(in srgb, var(--ca-border-strong) 60%, transparent) 64%,
+      transparent 65%
+    ),
+    linear-gradient(
+      -10deg,
+      transparent 40%,
+      var(--ca-primary) 41%,
+      var(--ca-primary) 42%,
+      transparent 43%
+    ),
+    linear-gradient(
+      -14deg,
+      transparent 18%,
+      var(--ca-priority) 19%,
+      var(--ca-priority) 20%,
+      transparent 21%
+    );
   content: "";
-  opacity: 0.72;
-  transform: rotate(-5deg);
-  transform-origin: left;
+  opacity: 0.6;
 }
 
 .landing-signal-grid {
@@ -1037,7 +1106,9 @@ details > summary {
   padding: var(--ca-space-1) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-round);
-  background: color-mix(in srgb, var(--ca-surface-raised) 76%, transparent);
+  /* Solid deep surface so tinted lane text (e.g. legacy rust) meets AA and
+     axe can resolve a real background instead of a synthetic gray. */
+  background: var(--ca-surface-deep);
   color: var(--ca-text);
   font-family: var(--ca-font-mono);
   font-size: var(--ca-text-micro);
@@ -1097,14 +1168,18 @@ details > summary {
   padding: 0.125rem 0.5rem;
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-round);
-  background: var(--ca-surface-raised);
+  /* Deep surface keeps these quiet mono chips subtle while meeting AA
+     contrast for muted text (dust on alloy is only 3.83:1). */
+  background: var(--ca-surface-deep);
   color: var(--ca-text-muted);
   font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
 }
 
 .commons-warning-badge {
   border-color: color-mix(in srgb, var(--ca-danger) 62%, transparent);
-  background: color-mix(in srgb, var(--ca-danger) 12%, var(--ca-surface-raised));
+  /* Deep base keeps the fault-red status text (paired with its warning icon)
+     above the AA contrast floor. */
+  background: color-mix(in srgb, var(--ca-danger) 14%, var(--ca-surface-deep));
   color: var(--ca-danger);
   text-transform: capitalize;
 }
@@ -1119,7 +1194,7 @@ details > summary {
 .commons-tag-button {
   border: 1px solid transparent;
   border-radius: var(--ca-radius-sm);
-  background: var(--ca-surface-raised);
+  background: var(--ca-surface-deep);
   color: var(--ca-text-muted);
   padding: 0.125rem 0.5rem;
   font: 500 var(--ca-text-xs) / 1.4 var(--ca-font-mono);

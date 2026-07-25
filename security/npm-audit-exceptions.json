@@ -1,5 +1,30 @@
 {
   "version": 1,
   "threshold": "high",
-  "exceptions": []
+  "exceptions": [
+    {
+      "package": "react-router",
+      "id": 1124282,
+      "advisory": "GHSA-qwww-vcr4-c8h2",
+      "reason": "CSRF bypass is specific to RSC (React Server Components) mode. This app is a static, client-side-only SPA using HashRouter (src/main.tsx) with no server actions or RSC — the vector does not exist here. npm's suggested fix (react-router-dom@7.11.0) is a downgrade from the installed 7.18.0.",
+      "recordedAt": "2026-07-24",
+      "reviewBy": "2026-10-24"
+    },
+    {
+      "package": "postcss",
+      "id": 1124288,
+      "advisory": "GHSA-r28c-9q8g-f849",
+      "reason": "Path traversal in source-map auto-loading is a build-time devDependency risk (Tailwind's toolchain); postcss never runs against untrusted input in production and no .map files are served from user-controlled paths.",
+      "recordedAt": "2026-07-24",
+      "reviewBy": "2026-10-24"
+    },
+    {
+      "package": "brace-expansion",
+      "id": 1124334,
+      "advisory": "GHSA-mh99-v99m-4gvg",
+      "reason": "Transitive devDependency of @lhci/cli (Lighthouse CI), only invoked in local/CI performance-audit tooling against fixed, developer-controlled glob patterns — never against user input. Only available fix is a semver-major downgrade of @lhci/cli to 0.3.3.",
+      "recordedAt": "2026-07-24",
+      "reviewBy": "2026-10-24"
+    }
+  ]
 }

@@ -63,6 +63,17 @@ export async function dismissOnboarding(page) {
   }
 }
 
+// `data-app-ready="partial"` means search works but the full graph is still
+// loading, so connection surfaces still render their aria-busy skeletons.
+// Callers that assert on loaded content must wait for those to clear or they
+// race the background load and see a skeleton instead.
+export async function waitForSkeletonsSettled(page, options = {}) {
+  const { timeout = 30000 } = options;
+  await expect(page.locator('#workspace [aria-busy="true"]')).toHaveCount(0, {
+    timeout,
+  });
+}
+
 export async function waitForAppReady(page, options = {}) {
   const { allowPartial = false } = options;
   const readyPattern = allowPartial ? /^(true|partial)$/ : /^true$/;

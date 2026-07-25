@@ -1,14 +1,14 @@
 {
-  "checkedAt": "2026-07-23T14:08:57.540Z",
-  "totalResources": 229,
-  "passedCount": 78,
-  "failedCount": 151,
+  "checkedAt": "2026-07-24T22:33:44.196Z",
+  "totalResources": 99,
+  "passedCount": 73,
+  "failedCount": 26,
   "tierBreakdown": {
     "hot": 6,
-    "active": 60,
-    "normal": 87,
-    "slow": 18,
-    "legacy": 58
+    "active": 34,
+    "normal": 48,
+    "slow": 5,
+    "legacy": 6
   },
   "results": [
     {
@@ -21,7 +21,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-53a-r5",
@@ -33,7 +33,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-53b",
@@ -45,7 +45,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-37-r2",
@@ -57,7 +57,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-171-r2",
@@ -69,7 +69,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-171a",
@@ -81,7 +81,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-sp800-172",
@@ -93,7 +93,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-csf-2",
@@ -105,7 +105,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-ai-rmf",
@@ -117,7 +117,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-privacy-framework",
@@ -129,7 +129,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-ssdf",
@@ -141,7 +141,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-oscal",
@@ -153,7 +153,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-nist-nvd-api",
@@ -165,7 +165,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cisa-kev-catalog",
@@ -177,7 +177,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cisa-cpgs",
@@ -189,7 +189,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cisa-bod-23-01",
@@ -201,7 +201,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cisa-services-catalog",
@@ -213,7 +213,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-niccs-training-catalog",
@@ -225,7 +225,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-disa-stig-library",
@@ -234,10 +234,10 @@
       "publisher": "DISA Cyber Exchange",
       "tier": "normal",
       "checkFrequency": "7d",
-      "status": 302,
-      "ok": true,
-      "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "status": 0,
+      "ok": false,
+      "error": "getaddrinfo EAI_AGAIN public.cyber.mil",
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-disa-srg-library",
@@ -246,10 +246,10 @@
       "publisher": "DISA Cyber Exchange",
       "tier": "normal",
       "checkFrequency": "7d",
-      "status": 302,
-      "ok": true,
-      "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "status": 0,
+      "ok": false,
+      "error": "getaddrinfo EAI_AGAIN public.cyber.mil",
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dodi-8510-01",
@@ -261,7 +261,7 @@
       "status": 403,
       "ok": false,
       "error": "HTTP Status 403",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dodi-8500-01",
@@ -273,7 +273,7 @@
       "status": 403,
       "ok": false,
       "error": "HTTP Status 403",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cnssi-1253",
@@ -285,7 +285,7 @@
       "status": 0,
       "ok": false,
       "error": "unable to get local issuer certificate",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dod-zero-trust-strategy",
@@ -297,7 +297,7 @@
       "status": 403,
       "ok": false,
       "error": "HTTP Status 403",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cmmc-32cfr-170",
@@ -309,7 +309,7 @@
       "status": 302,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dfars-252-204-7012",
@@ -321,7 +321,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-cui-registry",
@@ -333,7 +333,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-fedramp-baselines",
@@ -345,7 +345,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-fedramp-20x",
@@ -357,7 +357,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-fedramp-marketplace",
@@ -369,7 +369,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dod-8140-matrix",
@@ -378,10 +378,10 @@
       "publisher": "DoD CIO",
       "tier": "normal",
       "checkFrequency": "7d",
-      "status": 302,
-      "ok": true,
-      "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "status": 0,
+      "ok": false,
+      "error": "getaddrinfo EAI_AGAIN public.cyber.mil",
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dcwf-work-roles",
@@ -390,10 +390,10 @@
       "publisher": "DoD CIO",
       "tier": "normal",
       "checkFrequency": "7d",
-      "status": 302,
-      "ok": true,
-      "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "status": 0,
+      "ok": false,
+      "error": "getaddrinfo EAI_AGAIN public.cyber.mil",
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-csfc-capability-packages",
@@ -405,7 +405,7 @@
       "status": 403,
       "ok": false,
       "error": "HTTP Status 403",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-niap-ccevs",
@@ -417,7 +417,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-fisma-44-usc-3551",
@@ -429,7 +429,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-omb-a130",
@@ -441,7 +441,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-eo-14028",
@@ -453,7 +453,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-dicsa-nispom-32cfr117",
@@ -465,7 +465,7 @@
       "status": 302,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "official-gao-green-book",
@@ -477,7 +477,7 @@
       "status": 403,
       "ok": false,
       "error": "HTTP Status 403",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-compliance-as-code",
@@ -489,7 +489,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-powerstig",
@@ -501,7 +501,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-evaluate-stig",
@@ -513,7 +513,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-disa-stig-viewer",
@@ -522,10 +522,10 @@
       "publisher": "DISA",
       "tier": "active",
       "checkFrequency": "24h",
-      "status": 302,
-      "ok": true,
-      "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "status": 0,
+      "ok": false,
+      "error": "getaddrinfo EAI_AGAIN public.cyber.mil",
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-stig-manager",
@@ -537,7 +537,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-compliance-trestle",
@@ -549,7 +549,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-mitre-saf-cli",
@@ -561,7 +561,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-mitre-heimdall",
@@ -573,7 +573,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-mitre-emass-client",
@@ -585,7 +585,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-openscap-workbench",
@@ -597,7 +597,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-prowler-cloud-security",
@@ -609,7 +609,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-scoutsuite",
@@ -621,7 +621,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-cloud-custodian",
@@ -633,7 +633,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-steampipe",
@@ -645,7 +645,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-open-policy-agent",
@@ -657,7 +657,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-checkov",
@@ -669,7 +669,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-trivy",
@@ -681,7 +681,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-cyclonedx-cli",
@@ -693,7 +693,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-syft-sbom-generator",
@@ -705,7 +705,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-grype-vulnerability-scanner",
@@ -717,7 +717,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-openssf-scorecard",
@@ -729,7 +729,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-dependency-track",
@@ -741,7 +741,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-ansible-lockdown",
@@ -753,7 +753,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-hardening-kitty",
@@ -765,7 +765,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-wazuh-siem",
@@ -777,7 +777,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-lynis",
@@ -789,7 +789,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-osquery",
@@ -801,7 +801,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-falco-runtime-security",
@@ -813,7 +813,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-kube-bench",
@@ -825,7 +825,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-kubescape",
@@ -837,7 +837,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-kics",
@@ -849,7 +849,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-terrascan",
@@ -861,7 +861,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-gsa-oscal-ssp-word",
@@ -873,7 +873,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-awesome-oscal",
@@ -885,7 +885,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "tool-platform-one-ironbank",
@@ -897,7 +897,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "community-reddit-nistcontrols",
@@ -909,7 +909,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "community-reddit-cmmc",
@@ -921,7 +921,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "community-reddit-fedramp",
@@ -933,7 +933,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "community-cmmc-practitioner-discord",
@@ -945,7 +945,7 @@
       "status": 302,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "community-oscal-slack",
@@ -957,7 +957,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-fedramp-ssp-rev5",
@@ -969,7 +969,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-fedramp-poam-rev5",
@@ -981,7 +981,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-cmmc-ssp-starter",
@@ -993,7 +993,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-i-assure-ssp-worksheet",
@@ -1005,7 +1005,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-contingency-plan-fisma",
@@ -1017,7 +1017,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-incident-response-plan",
@@ -1029,7 +1029,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-configuration-management-plan",
@@ -1041,7 +1041,7 @@
       "status": 301,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-privacy-impact-assessment",
@@ -1053,7 +1053,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-sans-security-policy",
@@ -1065,7 +1065,7 @@
       "status": 308,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "template-cisa-conmon-plan",
@@ -1077,7 +1077,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "dataset-cisa-known-exploited-vulnerabilities-json",
@@ -1089,7 +1089,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "dataset-mitre-attack-json",
@@ -1101,7 +1101,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "dataset-mitre-d3fend-json",
@@ -1113,7 +1113,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "commercial-cis-benchmarks-free",
@@ -1125,7 +1125,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "commercial-aws-govcloud-docs",
@@ -1137,7 +1137,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "commercial-azure-government-docs",
@@ -1149,7 +1149,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "legacy-nist-sp800-53-r4",
@@ -1161,7 +1161,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "legacy-fedramp-rev4-baselines",
@@ -1173,7 +1173,7 @@
       "status": 404,
       "ok": false,
       "error": "HTTP Status 404",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "legacy-diacap-transition",
@@ -1185,7 +1185,7 @@
       "status": 302,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     },
     {
       "id": "legacy-opencontrol-compliance-masonry",
@@ -1197,1567 +1197,7 @@
       "status": 200,
       "ok": true,
       "error": null,
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-001-open_source",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #1",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-1",
-      "publisher": "CISA Cyber",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-002-practitioner",
-      "name": "DISA STIG Hardening Automation Utility Series Item #2",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-2",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-003-commercial",
-      "name": "FedRAMP Cloud Authorization Template Series Item #3",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-3",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-004-legacy",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #4",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-4",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-005-official",
-      "name": "MITRE SAF Compliance Verification Script Series Item #5",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-5",
-      "publisher": "MITRE SAF",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-006-open_source",
-      "name": "OSCAL Machine-Readable Data Model Series Item #6",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-6",
-      "publisher": "NIST OSCAL",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-007-practitioner",
-      "name": "Cloud Security Posture Assessment Tool Series Item #7",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-7",
-      "publisher": "DevSecOps Community",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-008-commercial",
-      "name": "NIST SP 800-53 Special Publication Series Item #8",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-8",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-009-legacy",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #9",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-9",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-010-official",
-      "name": "DISA STIG Hardening Automation Utility Series Item #10",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-10",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-011-open_source",
-      "name": "FedRAMP Cloud Authorization Template Series Item #11",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-11",
-      "publisher": "FedRAMP PMO",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-012-practitioner",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #12",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-12",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-013-commercial",
-      "name": "MITRE SAF Compliance Verification Script Series Item #13",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-13",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-014-legacy",
-      "name": "OSCAL Machine-Readable Data Model Series Item #14",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-14",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-015-official",
-      "name": "Cloud Security Posture Assessment Tool Series Item #15",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-15",
-      "publisher": "DevSecOps Community",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-016-open_source",
-      "name": "NIST SP 800-53 Special Publication Series Item #16",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-16",
-      "publisher": "NIST CSRC",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-017-practitioner",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #17",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-17",
-      "publisher": "CISA Cyber",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-018-commercial",
-      "name": "DISA STIG Hardening Automation Utility Series Item #18",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-18",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-019-legacy",
-      "name": "FedRAMP Cloud Authorization Template Series Item #19",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-19",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-020-official",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #20",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-20",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-021-open_source",
-      "name": "MITRE SAF Compliance Verification Script Series Item #21",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-21",
-      "publisher": "MITRE SAF",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-022-practitioner",
-      "name": "OSCAL Machine-Readable Data Model Series Item #22",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-22",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-023-commercial",
-      "name": "Cloud Security Posture Assessment Tool Series Item #23",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-23",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-024-legacy",
-      "name": "NIST SP 800-53 Special Publication Series Item #24",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-24",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-025-official",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #25",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-25",
-      "publisher": "CISA Cyber",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-026-open_source",
-      "name": "DISA STIG Hardening Automation Utility Series Item #26",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-26",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-027-practitioner",
-      "name": "FedRAMP Cloud Authorization Template Series Item #27",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-27",
-      "publisher": "FedRAMP PMO",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-028-commercial",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #28",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-28",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-029-legacy",
-      "name": "MITRE SAF Compliance Verification Script Series Item #29",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-29",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-030-official",
-      "name": "OSCAL Machine-Readable Data Model Series Item #30",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-30",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-031-open_source",
-      "name": "Cloud Security Posture Assessment Tool Series Item #31",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-31",
-      "publisher": "DevSecOps Community",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-032-practitioner",
-      "name": "NIST SP 800-53 Special Publication Series Item #32",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-32",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-033-commercial",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #33",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-33",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-034-legacy",
-      "name": "DISA STIG Hardening Automation Utility Series Item #34",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-34",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-035-official",
-      "name": "FedRAMP Cloud Authorization Template Series Item #35",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-35",
-      "publisher": "FedRAMP PMO",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-036-open_source",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #36",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-36",
-      "publisher": "ComplianceAsCode",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-037-practitioner",
-      "name": "MITRE SAF Compliance Verification Script Series Item #37",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-37",
-      "publisher": "MITRE SAF",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-038-commercial",
-      "name": "OSCAL Machine-Readable Data Model Series Item #38",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-38",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-039-legacy",
-      "name": "Cloud Security Posture Assessment Tool Series Item #39",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-39",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-040-official",
-      "name": "NIST SP 800-53 Special Publication Series Item #40",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-40",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-041-open_source",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #41",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-41",
-      "publisher": "CISA Cyber",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-042-practitioner",
-      "name": "DISA STIG Hardening Automation Utility Series Item #42",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-42",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-043-commercial",
-      "name": "FedRAMP Cloud Authorization Template Series Item #43",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-43",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-044-legacy",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #44",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-44",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-045-official",
-      "name": "MITRE SAF Compliance Verification Script Series Item #45",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-45",
-      "publisher": "MITRE SAF",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-046-open_source",
-      "name": "OSCAL Machine-Readable Data Model Series Item #46",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-46",
-      "publisher": "NIST OSCAL",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-047-practitioner",
-      "name": "Cloud Security Posture Assessment Tool Series Item #47",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-47",
-      "publisher": "DevSecOps Community",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-048-commercial",
-      "name": "NIST SP 800-53 Special Publication Series Item #48",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-48",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-049-legacy",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #49",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-49",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-050-official",
-      "name": "DISA STIG Hardening Automation Utility Series Item #50",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-50",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-051-open_source",
-      "name": "FedRAMP Cloud Authorization Template Series Item #51",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-51",
-      "publisher": "FedRAMP PMO",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-052-practitioner",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #52",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-52",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-053-commercial",
-      "name": "MITRE SAF Compliance Verification Script Series Item #53",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-53",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-054-legacy",
-      "name": "OSCAL Machine-Readable Data Model Series Item #54",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-54",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-055-official",
-      "name": "Cloud Security Posture Assessment Tool Series Item #55",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-55",
-      "publisher": "DevSecOps Community",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-056-open_source",
-      "name": "NIST SP 800-53 Special Publication Series Item #56",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-56",
-      "publisher": "NIST CSRC",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-057-practitioner",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #57",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-57",
-      "publisher": "CISA Cyber",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-058-commercial",
-      "name": "DISA STIG Hardening Automation Utility Series Item #58",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-58",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-059-legacy",
-      "name": "FedRAMP Cloud Authorization Template Series Item #59",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-59",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-060-official",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #60",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-60",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-061-open_source",
-      "name": "MITRE SAF Compliance Verification Script Series Item #61",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-61",
-      "publisher": "MITRE SAF",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-062-practitioner",
-      "name": "OSCAL Machine-Readable Data Model Series Item #62",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-62",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-063-commercial",
-      "name": "Cloud Security Posture Assessment Tool Series Item #63",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-63",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-064-legacy",
-      "name": "NIST SP 800-53 Special Publication Series Item #64",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-64",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-065-official",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #65",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-65",
-      "publisher": "CISA Cyber",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-066-open_source",
-      "name": "DISA STIG Hardening Automation Utility Series Item #66",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-66",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-067-practitioner",
-      "name": "FedRAMP Cloud Authorization Template Series Item #67",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-67",
-      "publisher": "FedRAMP PMO",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-068-commercial",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #68",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-68",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-069-legacy",
-      "name": "MITRE SAF Compliance Verification Script Series Item #69",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-69",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-070-official",
-      "name": "OSCAL Machine-Readable Data Model Series Item #70",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-70",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-071-open_source",
-      "name": "Cloud Security Posture Assessment Tool Series Item #71",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-71",
-      "publisher": "DevSecOps Community",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-072-practitioner",
-      "name": "NIST SP 800-53 Special Publication Series Item #72",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-72",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-073-commercial",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #73",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-73",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-074-legacy",
-      "name": "DISA STIG Hardening Automation Utility Series Item #74",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-74",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-075-official",
-      "name": "FedRAMP Cloud Authorization Template Series Item #75",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-75",
-      "publisher": "FedRAMP PMO",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-076-open_source",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #76",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-76",
-      "publisher": "ComplianceAsCode",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-077-practitioner",
-      "name": "MITRE SAF Compliance Verification Script Series Item #77",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-77",
-      "publisher": "MITRE SAF",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-078-commercial",
-      "name": "OSCAL Machine-Readable Data Model Series Item #78",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-78",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-079-legacy",
-      "name": "Cloud Security Posture Assessment Tool Series Item #79",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-79",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-080-official",
-      "name": "NIST SP 800-53 Special Publication Series Item #80",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-80",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-081-open_source",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #81",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-81",
-      "publisher": "CISA Cyber",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-082-practitioner",
-      "name": "DISA STIG Hardening Automation Utility Series Item #82",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-82",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-083-commercial",
-      "name": "FedRAMP Cloud Authorization Template Series Item #83",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-83",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-084-legacy",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #84",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-84",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-085-official",
-      "name": "MITRE SAF Compliance Verification Script Series Item #85",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-85",
-      "publisher": "MITRE SAF",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-086-open_source",
-      "name": "OSCAL Machine-Readable Data Model Series Item #86",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-86",
-      "publisher": "NIST OSCAL",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-087-practitioner",
-      "name": "Cloud Security Posture Assessment Tool Series Item #87",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-87",
-      "publisher": "DevSecOps Community",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-088-commercial",
-      "name": "NIST SP 800-53 Special Publication Series Item #88",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-88",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-089-legacy",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #89",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-89",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-090-official",
-      "name": "DISA STIG Hardening Automation Utility Series Item #90",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-90",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-091-open_source",
-      "name": "FedRAMP Cloud Authorization Template Series Item #91",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-91",
-      "publisher": "FedRAMP PMO",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-092-practitioner",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #92",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-92",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-093-commercial",
-      "name": "MITRE SAF Compliance Verification Script Series Item #93",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-93",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-094-legacy",
-      "name": "OSCAL Machine-Readable Data Model Series Item #94",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-94",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-095-official",
-      "name": "Cloud Security Posture Assessment Tool Series Item #95",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-95",
-      "publisher": "DevSecOps Community",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-096-open_source",
-      "name": "NIST SP 800-53 Special Publication Series Item #96",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-96",
-      "publisher": "NIST CSRC",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-097-practitioner",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #97",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-97",
-      "publisher": "CISA Cyber",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-098-commercial",
-      "name": "DISA STIG Hardening Automation Utility Series Item #98",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-98",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-099-legacy",
-      "name": "FedRAMP Cloud Authorization Template Series Item #99",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-99",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-100-official",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #100",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-100",
-      "publisher": "ComplianceAsCode",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-101-open_source",
-      "name": "MITRE SAF Compliance Verification Script Series Item #101",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-101",
-      "publisher": "MITRE SAF",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-102-practitioner",
-      "name": "OSCAL Machine-Readable Data Model Series Item #102",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-102",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-103-commercial",
-      "name": "Cloud Security Posture Assessment Tool Series Item #103",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-103",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-104-legacy",
-      "name": "NIST SP 800-53 Special Publication Series Item #104",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-104",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-105-official",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #105",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-105",
-      "publisher": "CISA Cyber",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-106-open_source",
-      "name": "DISA STIG Hardening Automation Utility Series Item #106",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-106",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-107-practitioner",
-      "name": "FedRAMP Cloud Authorization Template Series Item #107",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-107",
-      "publisher": "FedRAMP PMO",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-108-commercial",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #108",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-108",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-109-legacy",
-      "name": "MITRE SAF Compliance Verification Script Series Item #109",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-109",
-      "publisher": "MITRE SAF",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-110-official",
-      "name": "OSCAL Machine-Readable Data Model Series Item #110",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-110",
-      "publisher": "NIST OSCAL",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-111-open_source",
-      "name": "Cloud Security Posture Assessment Tool Series Item #111",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-111",
-      "publisher": "DevSecOps Community",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-112-practitioner",
-      "name": "NIST SP 800-53 Special Publication Series Item #112",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-112",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-113-commercial",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #113",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-113",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-114-legacy",
-      "name": "DISA STIG Hardening Automation Utility Series Item #114",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-114",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-115-official",
-      "name": "FedRAMP Cloud Authorization Template Series Item #115",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-115",
-      "publisher": "FedRAMP PMO",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-116-open_source",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #116",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-116",
-      "publisher": "ComplianceAsCode",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-117-practitioner",
-      "name": "MITRE SAF Compliance Verification Script Series Item #117",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-117",
-      "publisher": "MITRE SAF",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-118-commercial",
-      "name": "OSCAL Machine-Readable Data Model Series Item #118",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-118",
-      "publisher": "NIST OSCAL",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-119-legacy",
-      "name": "Cloud Security Posture Assessment Tool Series Item #119",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-119",
-      "publisher": "DevSecOps Community",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-120-official",
-      "name": "NIST SP 800-53 Special Publication Series Item #120",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-120",
-      "publisher": "NIST CSRC",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-121-open_source",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #121",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-121",
-      "publisher": "CISA Cyber",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-122-practitioner",
-      "name": "DISA STIG Hardening Automation Utility Series Item #122",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-122",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-123-commercial",
-      "name": "FedRAMP Cloud Authorization Template Series Item #123",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-123",
-      "publisher": "FedRAMP PMO",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-124-legacy",
-      "name": "OpenSCAP Linux Security Benchmark Series Item #124",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-124",
-      "publisher": "ComplianceAsCode",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-125-official",
-      "name": "MITRE SAF Compliance Verification Script Series Item #125",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-125",
-      "publisher": "MITRE SAF",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-126-open_source",
-      "name": "OSCAL Machine-Readable Data Model Series Item #126",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-126",
-      "publisher": "NIST OSCAL",
-      "tier": "active",
-      "checkFrequency": "24h",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-127-practitioner",
-      "name": "Cloud Security Posture Assessment Tool Series Item #127",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-127",
-      "publisher": "DevSecOps Community",
-      "tier": "slow",
-      "checkFrequency": "30d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-128-commercial",
-      "name": "NIST SP 800-53 Special Publication Series Item #128",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-128",
-      "publisher": "NIST CSRC",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-129-legacy",
-      "name": "CISA Cybersecurity Directive & Advisory Series Item #129",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-129",
-      "publisher": "CISA Cyber",
-      "tier": "legacy",
-      "checkFrequency": "90d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
-    },
-    {
-      "id": "ext-res-130-official",
-      "name": "DISA STIG Hardening Automation Utility Series Item #130",
-      "canonicalUrl": "https://commons.controlatlas.gov/catalog/item-130",
-      "publisher": "DISA Cyber Exchange",
-      "tier": "normal",
-      "checkFrequency": "7d",
-      "status": 0,
-      "ok": false,
-      "error": "getaddrinfo ENOTFOUND commons.controlatlas.gov",
-      "lastCheckedAt": "2026-07-23"
+      "lastCheckedAt": "2026-07-24"
     }
   ]
 }

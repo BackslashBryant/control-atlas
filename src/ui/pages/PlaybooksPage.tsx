@@ -160,34 +160,37 @@ export function PlaybooksPage(props: {
           contextType="guide"
           onNavigate={onNavigate}
         />
-        {[...groupedPatterns.entries()].map(([category, categoryPatterns]) => {
-          const visiblePatterns = !categoryFilter && !queryFilter
-            ? categoryPatterns.filter(
-                (pattern) => !RECOMMENDED_PATTERN_IDS.includes(pattern.id),
-              )
-            : categoryPatterns;
-          return visiblePatterns.length ? (
-            <section
-              className="catalog-group"
-              id={`playbooks-${category.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`}
-              key={category}
-            >
-              <h2 className="catalog-group-title">{category}</h2>
-              <div className="intent-grid">
-                {visiblePatterns.map((pattern) => (
-                  <QuickIntentCard
-                    actionLabel="Open playbook"
-                    body={pattern.summary}
-                    icon={<IconBook2 size={20} stroke={1.8} />}
-                    key={pattern.id}
-                    onClick={() => onNavigate("patterns", { pattern: pattern.id })}
-                    title={PATTERN_RENAMES[pattern.id] || pattern.title}
-                  />
-                ))}
-              </div>
-            </section>
-          ) : null;
-        })}
+        {!categoryFilter && !queryFilter ? (
+          <p className="field-hint" id="playbooks-browse-hint">
+            Pick a category above or search by outcome to see the rest of the{" "}
+            {filteredPatterns.length} guides.
+          </p>
+        ) : null}
+        {categoryFilter || queryFilter
+          ? [...groupedPatterns.entries()].map(([category, categoryPatterns]) => {
+              return categoryPatterns.length ? (
+                <section
+                  className="catalog-group"
+                  id={`playbooks-${category.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`}
+                  key={category}
+                >
+                  <h2 className="catalog-group-title">{category}</h2>
+                  <div className="intent-grid">
+                    {categoryPatterns.map((pattern) => (
+                      <QuickIntentCard
+                        actionLabel="Open playbook"
+                        body={pattern.summary}
+                        icon={<IconBook2 size={20} stroke={1.8} />}
+                        key={pattern.id}
+                        onClick={() => onNavigate("patterns", { pattern: pattern.id })}
+                        title={PATTERN_RENAMES[pattern.id] || pattern.title}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ) : null;
+            })
+          : null}
         {filteredPatterns.length === 0 ? (
           <div className="p-[24px] bg-[color-mix(in_srgb,var(--ca-surface-raised),white_5%)] border border-[var(--ca-border-strong)] rounded-[3px] text-center" role="status">
             <p className="mb-[16px] text-[var(--ca-text)] font-medium">No playbooks match this search and category.</p>
