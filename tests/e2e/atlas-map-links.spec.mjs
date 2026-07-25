@@ -1,9 +1,18 @@
+import { readFileSync } from "node:fs";
+
 import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
   waitForAppReady,
 } from "./support.mjs";
+
+const GRAPH_NODE_COUNT = JSON.parse(
+  readFileSync("data/generated/nodes.json", "utf8"),
+).nodes.length;
+const GRAPH_PUBLISHED_LINK_COUNT = JSON.parse(
+  readFileSync("data/generated/edges.json", "utf8"),
+).edges.filter((edge) => edge.publication_status === "published").length;
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -42,8 +51,16 @@ test("Sources page reports a factual connection inventory", async ({ page }) => 
 
   const inventory = page.locator(".connection-inventory");
   await inventory.getByText("Connection inventory", { exact: true }).click();
-  await expect(inventory).toContainText("11,486 records across 7 practical categories");
-  await expect(inventory).toContainText("16,207 published links");
+  // Derived from the generated graph rather than hardcoded. The previous literals
+  // ("11,486 records", "16,207 published links") had to be hand-bumped on every
+  // legitimate data change and broke when the GRC parent tiers were added, while
+  // never actually checking that the page agrees with the graph it renders.
+  await expect(inventory).toContainText(
+    `${GRAPH_NODE_COUNT.toLocaleString("en-US")} records across 7 practical categories`,
+  );
+  await expect(inventory).toContainText(
+    `${GRAPH_PUBLISHED_LINK_COUNT.toLocaleString("en-US")} published links`,
+  );
   await inventory.getByText("Per-category counts (7)", { exact: true }).click();
   await expect(inventory).toContainText("Requirements");
   await expect(inventory).toContainText("Assessment checks");

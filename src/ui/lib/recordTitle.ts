@@ -95,6 +95,7 @@ const TYPE_PLURALS: Record<string, [string, string]> = {
   requirement: ["CCI / requirement", "CCIs / requirements"],
   stig_rule: ["STIG rule", "STIG rules"],
   srg_requirement: ["SRG requirement", "SRG requirements"],
+  benchmark: ["STIG / SRG benchmark", "STIG / SRG benchmarks"],
   baseline: ["baseline", "baselines"],
   program: ["program level", "program levels"],
   assessment_procedure: ["assessment procedure", "assessment procedures"],

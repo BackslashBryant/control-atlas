@@ -100,6 +100,106 @@ const CATALOGS = [
   ],
 ];
 
+/**
+ * Declarative parent-tier table — the "branches" of the
+ * roots > trunk > branches > twigs > leaves hierarchy.
+ *
+ * One row per catalog that publishes a grouping level between the catalog and its
+ * records. Adding a catalog's tier is a ROW here, not another branch inside
+ * buildNodes. Before this table, tier construction was gated behind
+ * `catalogId === "nist-800-53"`, which left 88% of graph nodes with no parent even
+ * though most catalogs carry their grouping value in the source data — measured in
+ * docs/audits/grc-hierarchy-audit-2026-07-25.md.
+ *
+ * Row contract:
+ *   nodeType     node_type for the tier node
+ *   idPrefix     id shape is `<catalogId>:<idPrefix>-<key>`
+ *   key          (record) => stable id fragment; null/empty skips the record
+ *   title        (record) => human title for the tier
+ *   label        (key, title) => node label; omit to use the title verbatim
+ *   description  (record, title) => tier node description
+ *   edgeDataset  locator prefix for the membership edge id
+ *   rationale    (record, title) => why this record belongs to this tier
+ *
+ * A record whose key or title is missing is left unparented rather than filed
+ * under a guessed tier. Catalogs absent from this table have no grouping level in
+ * their upstream data (disa-cci, mitre-d3fend) or need a vocabulary decision
+ * first; neither case is served by inventing a tier here.
+ */
+export const CATALOG_TIERS = {
+  "nist-800-53": {
+    nodeType: "family",
+    idPrefix: "FAMILY",
+    key: (record) => familyCodeFromControlId(record.id),
+    title: (record) => record.family,
+    label: (key, title) => `${key} ${title} Family`,
+    description: (record, title) =>
+      `${title} controls and enhancements from NIST SP 800-53 Rev. 5.`,
+    edgeDataset: "800-53-family-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} family in NIST SP 800-53 Rev. 5.`,
+  },
+  "nist-800-171": {
+    nodeType: "family",
+    idPrefix: "FAMILY",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} security requirements from NIST SP 800-171 Rev. 3.`,
+    edgeDataset: "800-171-family-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} family in NIST SP 800-171 Rev. 3.`,
+  },
+  "nist-800-171-rev2": {
+    nodeType: "family",
+    idPrefix: "FAMILY",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} security requirements from NIST SP 800-171 Rev. 2.`,
+    edgeDataset: "800-171-rev2-family-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} family in NIST SP 800-171 Rev. 2.`,
+  },
+  "nist-800-172": {
+    nodeType: "family",
+    idPrefix: "FAMILY",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} enhanced security requirements from NIST SP 800-172.`,
+    edgeDataset: "800-172-family-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} family in NIST SP 800-172.`,
+  },
+  // DISA publishes STIGs and SRGs as XCCDF Benchmarks — tools/importers/
+  // disa-stig-adapter.mjs parses `parsed.Benchmark` — so both use one node type.
+  "disa-stig": {
+    nodeType: "benchmark",
+    idPrefix: "BENCHMARK",
+    key: (record) => slugKey(record.metadata?.benchmark_id),
+    title: (record) => record.metadata?.benchmark_title,
+    description: (record, title) =>
+      record.metadata?.benchmark_description ||
+      `${title} published in the DISA STIG library.`,
+    edgeDataset: "disa-stig-benchmark-membership",
+    rationale: (record, title) =>
+      `${record.id} is a rule in the ${title} benchmark.`,
+  },
+  "disa-srg": {
+    nodeType: "benchmark",
+    idPrefix: "BENCHMARK",
+    key: (record) => slugKey(record.metadata?.benchmark_id),
+    title: (record) => record.metadata?.benchmark_title,
+    description: (record, title) =>
+      record.metadata?.benchmark_description ||
+      `${title} published in the DISA SRG library.`,
+    edgeDataset: "disa-srg-benchmark-membership",
+    rationale: (record, title) =>
+      `${record.id} is a requirement in the ${title} security requirements guide.`,
+  },
+};
+
 const MAPS = [
   ["800-53-to-csf.json", "nist-800-53", "csf-2", "nist-olir-csf2-to-sp800-53"],
   [
@@ -207,6 +307,37 @@ function nodeType(defaultType, recordId) {
 
 function familyCodeFromControlId(recordId) {
   return String(recordId || "").match(/^([A-Z]{2})-/)?.[1] || null;
+}
+
+/** Stable, id-safe fragment for a tier key derived from free text. */
+function slugKey(value) {
+  const text = String(value ?? "").trim();
+  if (!text) return null;
+  return (
+    text
+      .replace(/[^A-Za-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .toUpperCase() || null
+  );
+}
+
+/**
+ * Resolve a record's parent tier from CATALOG_TIERS, or null when the catalog has
+ * no tier or this record does not carry the grouping value. Never guesses.
+ */
+function tierFor(catalogId, record) {
+  const tier = CATALOG_TIERS[catalogId];
+  if (!tier) return null;
+  const key = tier.key(record);
+  const title = tier.title(record);
+  if (!key || !title) return null;
+  return {
+    tier,
+    key,
+    title,
+    nodeId: nodeId(catalogId, `${tier.idPrefix}-${key}`),
+    itemId: `${tier.idPrefix}-${key}`,
+  };
 }
 
 function normalize53BBaselineId(value) {
@@ -336,7 +467,7 @@ function curatedEntryFor(itemId) {
 
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
-  const familyNodes = new Map();
+  const tierNodes = new Map();
   for (const [filename, catalogId, defaultSourceId, defaultType] of CATALOGS) {
     const path = join(ROOT, "data", filename);
     if (!existsSync(path)) continue;
@@ -346,6 +477,7 @@ function buildNodes(registry) {
       const id = nodeId(catalogId, record.id);
       const curatedEntry =
         catalogId === "nist-800-53" ? curatedEntryFor(record.id) : null;
+      const resolvedTier = tierFor(catalogId, record);
       pushEligibleNode(
         state,
         registry,
@@ -367,7 +499,11 @@ function buildNodes(registry) {
             item_id: record.id,
             title: record.title || record.id,
             description: record.description || "",
-            family: record.family || record.group || "",
+            // A record's grouping label IS its parent tier's title. Falling back
+            // to the tier makes the existing family filter on CatalogDetailPage
+            // (src/ui/pages/CatalogDetailPage.tsx:27) work for STIG/SRG with no UI
+            // change; catalogs that already set `family` are unaffected.
+            family: record.family || record.group || resolvedTier?.title || "",
             severity: nodeSeverity(record),
             baselines:
               record.fedramp_baselines || record.metadata?.baselines || null,
@@ -396,31 +532,30 @@ function buildNodes(registry) {
           );
         }
 
-        const familyCode = familyCodeFromControlId(record.id);
-        if (familyCode && record.family) {
-          const familyId = nodeId("nist-800-53", `FAMILY-${familyCode}`);
-          if (!familyNodes.has(familyId)) {
-            familyNodes.set(familyId, {
-              id: familyId,
-              node_type: "family",
-              label: `${familyCode} ${record.family} Family`,
-              source_id: defaultSourceId,
-              lifecycle_status: "active",
-              metadata: {
-                catalog_id: "nist-800-53",
-                item_id: `FAMILY-${familyCode}`,
-                title: record.family,
-                description: `${record.family} controls and enhancements from NIST SP 800-53 Rev. 5.`,
-                family: record.family,
-                baselines: null,
-                nist_800_53b_baselines: null,
-                nist_control: null,
-                type: "control_family",
-                references: null,
-              },
-            });
-          }
-        }
+      }
+
+      if (resolvedTier && !tierNodes.has(resolvedTier.nodeId)) {
+        const { tier, key, title, nodeId: tierNodeId, itemId } = resolvedTier;
+        tierNodes.set(tierNodeId, {
+          id: tierNodeId,
+          node_type: tier.nodeType,
+          label: tier.label ? tier.label(key, title) : title,
+          source_id: defaultSourceId,
+          lifecycle_status: "active",
+          metadata: {
+            catalog_id: catalogId,
+            item_id: itemId,
+            title,
+            description: tier.description(record, title),
+            family: title,
+            baselines: null,
+            nist_800_53b_baselines: null,
+            nist_control: null,
+            type:
+              tier.nodeType === "family" ? "control_family" : tier.nodeType,
+            references: null,
+          },
+        });
       }
     }
 
@@ -435,8 +570,8 @@ function buildNodes(registry) {
     }
   }
 
-  for (const familyNode of familyNodes.values()) {
-    pushEligibleNode(state, registry, familyNode, familyNode.source_id);
+  for (const tierNode of tierNodes.values()) {
+    pushEligibleNode(state, registry, tierNode, tierNode.source_id);
   }
 
   return {
@@ -564,32 +699,40 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
   }
 }
 
-function addFamilyMembershipEdges(state, registry, nodeIds) {
-  const path = join(ROOT, "data", "controls-800-53.json");
-  if (!existsSync(path)) return;
-  const document = readJson(path);
-  for (const record of document.records || []) {
-    const familyCode = familyCodeFromControlId(record.id);
-    if (!familyCode) continue;
-    const sourceNodeId = nodeId("nist-800-53", `FAMILY-${familyCode}`);
-    const targetNodeId = nodeId("nist-800-53", record.id);
-    const subjectId = relationshipId(
-      "800-53-family-membership",
-      sourceNodeId,
-      targetNodeId,
-      "includes",
-    );
-    addPublishedEdge(state, registry, nodeIds, {
-      subjectId,
-      sourceId: record.source?.key || "nist-oscal",
-      sourceNodeId,
-      targetNodeId,
-      relationshipType: "includes",
-      confidence: "derived",
-      locator: record.source?.locator || `controls-800-53.json#${record.id}`,
-      retrievedAt: record.source?.snapshot_date,
-      rationale: `${record.id} is part of the ${record.family} family in NIST SP 800-53 Rev. 5.`,
-    });
+/**
+ * Join every record to its parent tier with an `includes` edge — the containment
+ * verb this graph already uses. Driven entirely by CATALOG_TIERS, so a catalog
+ * gains its branch level by adding a row, not by editing this function.
+ */
+function addTierMembershipEdges(state, registry, nodeIds) {
+  for (const [filename, catalogId, defaultSourceId] of CATALOGS) {
+    if (!CATALOG_TIERS[catalogId]) continue;
+    const path = join(ROOT, "data", filename);
+    if (!existsSync(path)) continue;
+    const document = readJson(path);
+    for (const record of document.records || []) {
+      const resolved = tierFor(catalogId, record);
+      if (!resolved) continue;
+      const { tier, title, nodeId: sourceNodeId } = resolved;
+      const targetNodeId = nodeId(catalogId, record.id);
+      const subjectId = relationshipId(
+        tier.edgeDataset,
+        sourceNodeId,
+        targetNodeId,
+        "includes",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || defaultSourceId,
+        sourceNodeId,
+        targetNodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `${filename}#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: tier.rationale(record, title),
+      });
+    }
   }
 }
 
@@ -903,7 +1046,7 @@ function buildEdges(registry, nodes) {
     }
   }
   addDocumentRelationshipEdges(state, registry, nodeIds);
-  addFamilyMembershipEdges(state, registry, nodeIds);
+  addTierMembershipEdges(state, registry, nodeIds);
   addEnhancementMembershipEdges(state, registry, nodeIds);
   addBaselineMembershipEdges(state, registry, nodeIds);
   addFedrampMembershipEdges(state, registry, nodeIds);
