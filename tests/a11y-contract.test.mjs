@@ -173,15 +173,18 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing presents one primary Signal action with secondary paths disclosed", () => {
+test("landing presents one guided primary action alongside direct destination shortcuts", () => {
+  // Owner directive (2026-07-25): returning visitors get immediate buttons to
+  // real destinations instead of everything funneled through Start Here, so
+  // this is a deliberately different shape from the old "one primary action,
+  // secondary paths behind a collapsed <details>" pattern it replaces.
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /landing-signal-grid/);
   assert.match(homePage, /landing-primary-action/);
   assert.match(homePage, /Start here/);
-  assert.match(homePage, /Plan the work/);
-  assert.match(homePage, /Trace connections/);
-  assert.match(homePage, /Create a document/);
-  assert.match(homePage, /<details[^>]*landing-more-paths/);
+  assert.match(homePage, /landing-shortcut-grid/);
+  // Shortcuts are driven by the real nav config, not a hand-copied list, so
+  // they can't silently drift out of sync with the actual site destinations.
+  assert.match(homePage, /PRIMARY_NAV_ITEMS/);
   assert.doesNotMatch(homePage, /className="[^"]*landing-launch[^"]*"/);
   assert.doesNotMatch(homePage, /className="[^"]*landing-orb[^"]*"/);
   assert.doesNotMatch(homePage, /Click to start/);

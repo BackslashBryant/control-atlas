@@ -8,6 +8,9 @@ import {
   MOBILE_NAV_SECTIONS,
   PRIMARY_NAV_ITEMS,
 } from "../lib/navigation";
+
+const FRAMEWORK_NAV_ITEMS = PRIMARY_NAV_ITEMS.filter((item) => item.section === "framework");
+const TOOLKIT_NAV_ITEMS = PRIMARY_NAV_ITEMS.filter((item) => item.section === "toolkit");
 import type { ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 
@@ -142,8 +145,18 @@ export function TopNav(props: TopNavProps) {
       </button>
 
       <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
-        <Tabs 
-          tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
+        <Tabs
+          tabs={FRAMEWORK_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
+          activeId={activeView as string}
+          onChange={(id) => {
+            const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
+            if (item) navigate(item.view, item.patch);
+          }}
+          className="border-b-0 h-full gap-[8px]"
+        />
+        <span aria-hidden="true" className="primary-nav-divider" />
+        <Tabs
+          tabs={TOOLKIT_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
           activeId={activeView as string}
           onChange={(id) => {
             const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);

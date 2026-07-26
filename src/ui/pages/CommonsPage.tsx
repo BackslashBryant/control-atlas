@@ -360,7 +360,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
       {/* Hero Header Section */}
       <header className="border-b border-[var(--ca-border)] bg-gradient-to-b from-[var(--ca-surface)] via-[var(--ca-surface-deep)] to-[var(--ca-surface-deep)] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[90rem]">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_15%,transparent)] border border-[color-mix(in_srgb,var(--ca-primary)_60%,transparent)] text-[var(--ca-primary)] text-xs font-semibold uppercase tracking-widest mb-3">
@@ -435,7 +435,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       {/* Main Surface */}
       <section
         aria-label="Control Commons resources"
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
+        className="mx-auto max-w-[90rem] px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Parallel Discovery Lanes Tabs */}
         <nav aria-label="Parallel Discovery Lanes" className="mb-6">

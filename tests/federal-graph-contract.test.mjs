@@ -284,3 +284,100 @@ test('DISA STIG and SRG records carry their benchmark as the grouping label', ()
   assert.ok(stigBenchmarks.length > 0, 'expected DISA STIG benchmark nodes');
   assert.ok(srgBenchmarks.length > 0, 'expected DISA SRG benchmark nodes');
 });
+
+test('every tiered catalog has its outermost tier parented to the catalog node, not floating', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const parented = new Set(
+    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
+  );
+  for (const [catalogId, tier] of Object.entries(CATALOG_TIERS)) {
+    const catalogNode = nodes.find((node) => node.id === `${catalogId}:CATALOG`);
+    assert.ok(catalogNode, `${catalogId} needs a catalog node for its tier to hang off`);
+    // The outermost tier is the parentTier when declared (e.g. CSF Function
+    // above Category), else the tier itself (e.g. STIG benchmark).
+    const outerNodeType = tier.parentTier?.nodeType || tier.nodeType;
+    const outerNodes = nodes.filter(
+      (node) => node.metadata?.catalog_id === catalogId && node.node_type === outerNodeType,
+    );
+    assert.ok(outerNodes.length > 0, `${catalogId} has no ${outerNodeType} tier nodes`);
+    for (const node of outerNodes) {
+      assert.ok(parented.has(node.id), `${node.id} should be parented to ${catalogId}:CATALOG`);
+    }
+  }
+});
+
+test('CSF 2.0 subcategories chain up through Category to Function', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const includesEdges = edges.filter((edge) => edge.relationship_type === 'includes');
+  const childrenOf = new Map();
+  for (const edge of includesEdges) {
+    if (!childrenOf.has(edge.source_node_id)) childrenOf.set(edge.source_node_id, []);
+    childrenOf.get(edge.source_node_id).push(edge.target_node_id);
+  }
+
+  const functions = nodes.filter((node) => node.node_type === 'function' && node.metadata?.catalog_id === 'csf-2');
+  const categories = nodes.filter((node) => node.node_type === 'category' && node.metadata?.catalog_id === 'csf-2');
+  assert.equal(functions.length, 6, 'CSF 2.0 has 6 Functions');
+  assert.equal(categories.length, 34, 'CSF 2.0 has 34 Categories');
+
+  for (const fn of functions) {
+    const children = childrenOf.get(fn.id) || [];
+    assert.ok(children.length > 0, `${fn.id} should include at least one Category`);
+    for (const childId of children) {
+      const child = nodes.find((node) => node.id === childId);
+      assert.equal(child?.node_type, 'category', `${fn.id} should only include Category nodes`);
+    }
+  }
+  for (const category of categories) {
+    const children = childrenOf.get(category.id) || [];
+    assert.ok(children.length > 0, `${category.id} should include at least one subcategory`);
+  }
+});
+
+test('ATT&CK sub-techniques nest under their parent technique', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const parented = new Set(
+    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
+  );
+
+  for (const catalogId of ['mitre-attack', 'mitre-attack-ics']) {
+    const subtechniques = nodes.filter(
+      (node) => node.metadata?.catalog_id === catalogId && node.metadata?.item_id?.includes('.'),
+    );
+    assert.ok(subtechniques.length > 0, `${catalogId} produced no sub-techniques`);
+    for (const node of subtechniques) {
+      const parentId = `${catalogId}:${node.metadata.item_id.split('.')[0]}`;
+      assert.ok(
+        edges.some(
+          (edge) =>
+            edge.relationship_type === 'includes' &&
+            edge.source_node_id === parentId &&
+            edge.target_node_id === node.id,
+        ),
+        `${node.id} should have an includes edge from its parent technique ${parentId}`,
+      );
+      assert.ok(parented.has(node.id), `${node.id} should be parented`);
+    }
+  }
+});
+
+test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pillar children', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const tenets = nodes.filter((node) => node.node_type === 'zt_tenet');
+  assert.equal(tenets.length, 5, 'DoD Zero Trust has 5 tenets');
+
+  const includesEdges = edges.filter((edge) => edge.relationship_type === 'includes');
+  for (const tenet of tenets) {
+    const parentEdge = includesEdges.find((edge) => edge.target_node_id === tenet.id);
+    assert.ok(parentEdge, `${tenet.id} should not be isolated`);
+    assert.equal(
+      parentEdge.source_node_id,
+      'dod-zt:CATALOG',
+      `${tenet.id} should hang off the catalog as a sibling collection to pillars, not a fabricated pillar link`,
+    );
+  }
+});

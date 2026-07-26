@@ -21,9 +21,14 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   ).toBeVisible();
 
   await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Plan the work/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Trace connections/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Create a document/ })).toBeVisible();
+  const shortcuts = page.locator(".landing-shortcut-grid .landing-shortcut");
+  await expect(shortcuts).toHaveCount(6);
+  await expect(shortcuts.filter({ hasText: "Atlas" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Library" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Compare" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Commons" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Guides" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Documents" })).toBeVisible();
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({

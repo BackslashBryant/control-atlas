@@ -272,10 +272,16 @@ export function parse80053Catalog(catalogJson, sourceKey) {
   };
 }
 
-function walkCsf(nodes, records) {
+function walkCsf(nodes, functionCtx, categoryCtx, records) {
   for (const node of nodes || []) {
-    if (node.controls) walkCsf(node.controls, records);
-    if (node.groups) walkCsf(node.groups, records);
+    const nextFunctionCtx =
+      node.class === 'function'
+        ? { id: node.id, title: node.title }
+        : functionCtx;
+    const nextCategoryCtx =
+      node.class === 'category' ? { id: node.id, title: node.title } : categoryCtx;
+    if (node.controls) walkCsf(node.controls, nextFunctionCtx, nextCategoryCtx, records);
+    if (node.groups) walkCsf(node.groups, nextFunctionCtx, nextCategoryCtx, records);
     if (node.class === 'subcategory' && node.id) {
       const desc = descriptionFromControl(node);
       records.push({
@@ -285,6 +291,10 @@ function walkCsf(nodes, records) {
         title: node.title || node.id,
         description: desc,
         plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
+        function_id: nextFunctionCtx?.id || null,
+        function: nextFunctionCtx?.title || null,
+        category_id: nextCategoryCtx?.id || null,
+        category: nextCategoryCtx?.title || null,
       });
     }
   }
@@ -295,7 +305,7 @@ export function parseCsfCatalog(catalogJson, sourceKey) {
     throw new Error('Expected OSCAL catalog document');
   }
   const records = [];
-  walkCsf(catalogJson.catalog?.groups, records);
+  walkCsf(catalogJson.catalog?.groups, null, null, records);
   return {
     schema_version: '1.0',
     source_key: sourceKey,

@@ -3,7 +3,7 @@
   "source_key": "mitre-d3fend-mappings",
   "source_artifact": "https://d3fend.mitre.org/ontologies/d3fend.json",
   "source_version": "4",
-  "snapshot_date": "2026-07-16",
+  "snapshot_date": "2026-07-25",
   "checksum": "sha256:a68b7f55e3c54077bb0f902de007eddc8c63c23d42a4fae43d19c516b28300a3",
   "provenance": "MITRE D3FEND NIST SP 800-53 Rev. 5 control to defensive technique mappings",
   "relationships": [

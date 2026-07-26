@@ -252,7 +252,7 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   assert.match(homePage, /The public map for federal cyber compliance/);
-  assert.match(homePage, /Search controls, trace\s+framework connections/);
+  assert.match(homePage, /Search controls and trace how\s+frameworks connect/);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
 

@@ -3,7 +3,7 @@
   "source_key": "mitre-d3fend-ontology",
   "source_artifact": "https://d3fend.mitre.org/api/technique/all.json",
   "source_version": "4",
-  "snapshot_date": "2026-07-16",
+  "snapshot_date": "2026-07-25",
   "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
   "provenance": "MITRE D3FEND defensive technique catalog",
   "records": [
@@ -13,14 +13,16 @@
       "title": "D3-AA Agent Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "AgentAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AA"
       }
@@ -31,18 +33,20 @@
       "title": "D3-ABPI Application-based Process Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "Application-basedProcessIsolation",
         "synonym": [
           "Sandbox",
           "Remote Browser Isolation",
           "Browser-based Process Isolation"
-        ]
+        ],
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ABPI"
       }
@@ -53,14 +57,16 @@
       "title": "D3-ACA Active Certificate Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ActiveCertificateAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ACA"
       }
@@ -71,14 +77,16 @@
       "title": "D3-ACH Application Configuration Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ApplicationConfigurationHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ACH"
       }
@@ -89,14 +97,16 @@
       "title": "D3-AEM Application Exception Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ApplicationExceptionMonitoring",
-        "synonym": "Application Failure Monitoring"
+        "synonym": "Application Failure Monitoring",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AEM"
       }
@@ -107,14 +117,16 @@
       "title": "D3-AH Application Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ApplicationHardening",
-        "synonym": "Process Hardening"
+        "synonym": "Process Hardening",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AH"
       }
@@ -125,17 +137,19 @@
       "title": "D3-AI Asset Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "AssetInventory",
         "synonym": [
           "Asset Discovery",
           "Asset Inventorying"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AI"
       }
@@ -146,14 +160,16 @@
       "title": "D3-AL Account Locking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "AccountLocking",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AL"
       }
@@ -164,14 +180,16 @@
       "title": "D3-ALLM Active Logical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "ActiveLogicalLinkMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ALLM"
       }
@@ -182,14 +200,16 @@
       "title": "D3-AM Access Modeling",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "AccessModeling",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AM"
       }
@@ -200,14 +220,16 @@
       "title": "D3-AMED Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "AccessMediation",
-        "synonym": "Access Control"
+        "synonym": "Access Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AMED"
       }
@@ -218,14 +240,16 @@
       "title": "D3-ANAA Administrative Network Activity Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "AdministrativeNetworkActivityAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ANAA"
       }
@@ -236,14 +260,16 @@
       "title": "D3-ANCI Authentication Cache Invalidation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "AuthenticationCacheInvalidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ANCI"
       }
@@ -254,14 +280,16 @@
       "title": "D3-ANET Authentication Event Thresholding",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "AuthenticationEventThresholding",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ANET"
       }
@@ -272,14 +300,16 @@
       "title": "D3-APA Access Policy Administration",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "AccessPolicyAdministration",
-        "synonym": "Access Control Administration"
+        "synonym": "Access Control Administration",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-APA"
       }
@@ -290,14 +320,16 @@
       "title": "D3-APCA Application Protocol Command Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ApplicationProtocolCommandAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-APCA"
       }
@@ -308,14 +340,16 @@
       "title": "D3-APLM Active Physical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "ActivePhysicalLinkMapping",
-        "synonym": "Active Physical Layer Mapping"
+        "synonym": "Active Physical Layer Mapping",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-APLM"
       }
@@ -326,14 +360,16 @@
       "title": "D3-APM Application Performance Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ApplicationPerformanceMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-APM"
       }
@@ -344,14 +380,16 @@
       "title": "D3-AVE Asset Vulnerability Enumeration",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "AssetVulnerabilityEnumeration",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AVE"
       }
@@ -362,14 +400,16 @@
       "title": "D3-AZET Authorization Event Thresholding",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "AuthorizationEventThresholding",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-AZET"
       }
@@ -380,14 +420,16 @@
       "title": "D3-BA Bootloader Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "BootloaderAuthentication",
-        "synonym": "Secure Boot"
+        "synonym": "Secure Boot",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-BA"
       }
@@ -398,14 +440,16 @@
       "title": "D3-BAN Biometric Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "BiometricAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-BAN"
       }
@@ -416,14 +460,16 @@
       "title": "D3-BDI Broadcast Domain Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "BroadcastDomainIsolation",
-        "synonym": "Network Segmentation"
+        "synonym": "Network Segmentation",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-BDI"
       }
@@ -434,14 +480,16 @@
       "title": "D3-BMA Bus Message Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "BusMessageAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-BMA"
       }
@@ -452,14 +500,16 @@
       "title": "D3-BSE Byte Sequence Emulation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ByteSequenceEmulation",
-        "synonym": "Shellcode Transmission Detection"
+        "synonym": "Shellcode Transmission Detection",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-BSE"
       }
@@ -470,14 +520,16 @@
       "title": "D3-CA Certificate Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "CertificateAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CA"
       }
@@ -488,14 +540,16 @@
       "title": "D3-CAA Connection Attempt Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ConnectionAttemptAnalysis",
-        "synonym": "Network Scan Detection"
+        "synonym": "Network Scan Detection",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CAA"
       }
@@ -506,14 +560,16 @@
       "title": "D3-CBAN Certificate-based Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "Certificate-basedAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CBAN"
       }
@@ -524,14 +580,16 @@
       "title": "D3-CCSA Credential Compromise Scope Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "CredentialCompromiseScopeAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CCSA"
       }
@@ -542,14 +600,16 @@
       "title": "D3-CDP Change Default Password",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ChangeDefaultPassword",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CDP"
       }
@@ -560,14 +620,16 @@
       "title": "D3-CE Credential Eviction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "CredentialEviction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CE"
       }
@@ -578,14 +640,16 @@
       "title": "D3-CERO Certificate Rotation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "CertificateRotation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CERO"
       }
@@ -596,14 +660,16 @@
       "title": "D3-CF Content Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentFiltering",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CF"
       }
@@ -614,14 +680,16 @@
       "title": "D3-CFC Content Format Conversion",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentFormatConversion",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CFC"
       }
@@ -632,14 +700,16 @@
       "title": "D3-CFI Control Flow Integrity",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ControlFlowIntegrity",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CFI"
       }
@@ -650,14 +720,16 @@
       "title": "D3-CH Credential Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "CredentialHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CH"
       }
@@ -668,14 +740,16 @@
       "title": "D3-CHN Connected Honeynet",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "ConnectedHoneynet",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CHN"
       }
@@ -686,14 +760,16 @@
       "title": "D3-CI Configuration Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "ConfigurationInventory",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CI"
       }
@@ -704,14 +780,16 @@
       "title": "D3-CIA Container Image Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "ContainerImageAnalysis",
-        "synonym": "Container Image Scanning"
+        "synonym": "Container Image Scanning",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CIA"
       }
@@ -722,14 +800,16 @@
       "title": "D3-CM Content Modification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentModification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CM"
       }
@@ -740,14 +820,16 @@
       "title": "D3-CNE Content Excision",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentExcision",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CNE"
       }
@@ -758,14 +840,16 @@
       "title": "D3-CNR Content Rebuild",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentRebuild",
-        "synonym": "Content Reconstruction"
+        "synonym": "Content Reconstruction",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CNR"
       }
@@ -776,14 +860,16 @@
       "title": "D3-CNS Content Substitution",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentSubstitution",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CNS"
       }
@@ -794,14 +880,16 @@
       "title": "D3-CP Certificate Pinning",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "CertificatePinning",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CP"
       }
@@ -812,14 +900,16 @@
       "title": "D3-CQ Content Quarantine",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentQuarantine",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CQ"
       }
@@ -830,14 +920,16 @@
       "title": "D3-CR Credential Revocation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "CredentialRevocation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CR"
       }
@@ -848,14 +940,16 @@
       "title": "D3-CRO Credential Rotation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "CredentialRotation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CRO"
       }
@@ -866,14 +960,16 @@
       "title": "D3-CS Credential Scrubbing",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "CredentialScrubbing",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CS"
       }
@@ -884,14 +980,16 @@
       "title": "D3-CSPP Client-server Payload Profiling",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "Client-serverPayloadProfiling",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CSPP"
       }
@@ -902,14 +1000,16 @@
       "title": "D3-CTS Credential Transmission Scoping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "CredentialTransmissionScoping",
-        "synonym": "Phishing Resistant Authentication"
+        "synonym": "Phishing Resistant Authentication",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CTS"
       }
@@ -920,14 +1020,16 @@
       "title": "D3-CV Content Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ContentValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-CV"
       }
@@ -938,17 +1040,19 @@
       "title": "D3-DA Dynamic Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "DynamicAnalysis",
         "synonym": [
           "Malware Sandbox",
           "Malware Detonation"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DA"
       }
@@ -959,14 +1063,16 @@
       "title": "D3-DAM Domain Account Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "DomainAccountMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DAM"
       }
@@ -977,14 +1083,16 @@
       "title": "D3-DCE Dead Code Elimination",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "DeadCodeElimination",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DCE"
       }
@@ -995,14 +1103,16 @@
       "title": "D3-DE Decoy Environment",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyEnvironment",
-        "synonym": "Honeypot"
+        "synonym": "Honeypot",
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DE"
       }
@@ -1013,17 +1123,19 @@
       "title": "D3-DEM Data Exchange Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "DataExchangeMapping",
         "synonym": [
           "Data Flow Mapping",
           "Information Exchange Mapping"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DEM"
       }
@@ -1034,14 +1146,16 @@
       "title": "D3-DENCR Disk Encryption",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "DiskEncryption",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DENCR"
       }
@@ -1052,14 +1166,16 @@
       "title": "D3-DF Decoy File",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyFile",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DF"
       }
@@ -1070,17 +1186,19 @@
       "title": "D3-DI Data Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "DataInventory",
         "synonym": [
           "Data Discovery",
           "Data Inventorying"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DI"
       }
@@ -1091,14 +1209,16 @@
       "title": "D3-DKE Disk Erasure",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "DiskErasure",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DKE"
       }
@@ -1109,14 +1229,16 @@
       "title": "D3-DKF Disk Formatting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "DiskFormatting",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DKF"
       }
@@ -1127,14 +1249,16 @@
       "title": "D3-DKP Disk Partitioning",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "DiskPartitioning",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DKP"
       }
@@ -1145,14 +1269,16 @@
       "title": "D3-DLIC Driver Load Integrity Checking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "DriverLoadIntegrityChecking",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DLIC"
       }
@@ -1163,14 +1289,16 @@
       "title": "D3-DLV Domain Logic Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "DomainLogicValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DLV"
       }
@@ -1181,14 +1309,16 @@
       "title": "D3-DNL Directional Network Link",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "DirectionalNetworkLink",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNL"
       }
@@ -1199,14 +1329,16 @@
       "title": "D3-DNR Decoy Network Resource",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyNetworkResource",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNR"
       }
@@ -1217,14 +1349,16 @@
       "title": "D3-DNRA Domain Name Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "DomainNameReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNRA"
       }
@@ -1235,14 +1369,16 @@
       "title": "D3-DNSAL DNS Allowlisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "DNSAllowlisting",
-        "synonym": "DNS Whitelisting"
+        "synonym": "DNS Whitelisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNSAL"
       }
@@ -1253,14 +1389,16 @@
       "title": "D3-DNSCE DNS Cache Eviction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "DNSCacheEviction",
-        "synonym": "Flush DNS Cache"
+        "synonym": "Flush DNS Cache",
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNSCE"
       }
@@ -1271,14 +1409,16 @@
       "title": "D3-DNSDL DNS Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "DNSDenylisting",
-        "synonym": "DNS Blacklisting"
+        "synonym": "DNS Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNSDL"
       }
@@ -1289,14 +1429,16 @@
       "title": "D3-DNSTA DNS Traffic Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "DNSTrafficAnalysis",
-        "synonym": "Domain Name Analysis"
+        "synonym": "Domain Name Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DNSTA"
       }
@@ -1307,14 +1449,16 @@
       "title": "D3-DO Decoy Object",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyObject",
-        "synonym": "Lure"
+        "synonym": "Lure",
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DO"
       }
@@ -1325,14 +1469,16 @@
       "title": "D3-DP Decoy Persona",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyPersona",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DP"
       }
@@ -1343,14 +1489,16 @@
       "title": "D3-DPLM Direct Physical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "DirectPhysicalLinkMapping",
-        "synonym": "Manual Physical Link Mapping"
+        "synonym": "Manual Physical Link Mapping",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DPLM"
       }
@@ -1361,14 +1509,16 @@
       "title": "D3-DPR Decoy Public Release",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyPublicRelease",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DPR"
       }
@@ -1379,14 +1529,16 @@
       "title": "D3-DQSA Database Query String Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "DatabaseQueryStringAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DQSA"
       }
@@ -1397,14 +1549,16 @@
       "title": "D3-DRA Disable Remote Access",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "DisableRemoteAccess",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DRA"
       }
@@ -1415,14 +1569,16 @@
       "title": "D3-DRT Domain Registration Takedown",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "DomainRegistrationTakedown",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DRT"
       }
@@ -1433,14 +1589,16 @@
       "title": "D3-DST Decoy Session Token",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoySessionToken",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DST"
       }
@@ -1451,14 +1609,16 @@
       "title": "D3-DTP Domain Trust Policy",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "DomainTrustPolicy",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DTP"
       }
@@ -1469,14 +1629,16 @@
       "title": "D3-DUC Decoy User Credential",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "DecoyUserCredential",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-DUC"
       }
@@ -1487,14 +1649,16 @@
       "title": "D3-EAL Executable Allowlisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ExecutableAllowlisting",
-        "synonym": "File Signature Authentication"
+        "synonym": "File Signature Authentication",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EAL"
       }
@@ -1505,14 +1669,16 @@
       "title": "D3-EBWSAM Endpoint-based Web Server Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "Endpoint-basedWebServerAccessMediation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EBWSAM"
       }
@@ -1523,14 +1689,16 @@
       "title": "D3-EDL Executable Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ExecutableDenylisting",
-        "synonym": "Executable Blacklisting"
+        "synonym": "Executable Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EDL"
       }
@@ -1541,14 +1709,16 @@
       "title": "D3-EF Email Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "EmailFiltering",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EF"
       }
@@ -1559,14 +1729,16 @@
       "title": "D3-EFA Emulated File Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "EmulatedFileAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EFA"
       }
@@ -1577,14 +1749,16 @@
       "title": "D3-EHB Endpoint Health Beacon",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "EndpointHealthBeacon",
-        "synonym": "Endpoint Health Telemetry"
+        "synonym": "Endpoint Health Telemetry",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EHB"
       }
@@ -1595,14 +1769,16 @@
       "title": "D3-EHPV Exception Handler Pointer Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ExceptionHandlerPointerValidation",
-        "synonym": "Exception Handler Validation"
+        "synonym": "Exception Handler Validation",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EHPV"
       }
@@ -1613,14 +1789,16 @@
       "title": "D3-EI Execution Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ExecutionIsolation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EI"
       }
@@ -1631,17 +1809,19 @@
       "title": "D3-ELM Electronic Lock Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ElectronicLockMonitoring",
         "synonym": [
           "Door Lock Monitoring",
           "Lock State Monitoring"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ELM"
       }
@@ -1652,14 +1832,16 @@
       "title": "D3-EMH Electromagnetic Radiation Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ElectromagneticRadiationHardening",
-        "synonym": "EM Hardening"
+        "synonym": "EM Hardening",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EMH"
       }
@@ -1670,14 +1852,16 @@
       "title": "D3-EPL Physical Locking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "PhysicalLocking",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-EPL"
       }
@@ -1688,14 +1872,16 @@
       "title": "D3-ER Email Removal",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "EmailRemoval",
-        "synonym": "Email Deletion"
+        "synonym": "Email Deletion",
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ER"
       }
@@ -1706,14 +1892,16 @@
       "title": "D3-ET Encrypted Tunnels",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "EncryptedTunnels",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ET"
       }
@@ -1724,14 +1912,16 @@
       "title": "D3-FA File Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FA"
       }
@@ -1742,14 +1932,16 @@
       "title": "D3-FAPA File Access Pattern Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileAccessPatternAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FAPA"
       }
@@ -1760,14 +1952,16 @@
       "title": "D3-FBA Firmware Behavior Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FirmwareBehaviorAnalysis",
-        "synonym": "Firmware Timing Analysis"
+        "synonym": "Firmware Timing Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FBA"
       }
@@ -1778,14 +1972,16 @@
       "title": "D3-FC File Carving",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileCarving",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FC"
       }
@@ -1796,14 +1992,16 @@
       "title": "D3-FCA File Creation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileCreationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FCA"
       }
@@ -1814,14 +2012,16 @@
       "title": "D3-FCDC File Content Decompression Checking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileContentDecompressionChecking",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FCDC"
       }
@@ -1832,14 +2032,16 @@
       "title": "D3-FCOA File Content Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileContentAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FCOA"
       }
@@ -1850,17 +2052,19 @@
       "title": "D3-FCR File Content Rules",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileContentRules",
         "synonym": [
           "File Signatures",
           "File Content Signatures"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FCR"
       }
@@ -1871,14 +2075,16 @@
       "title": "D3-FE File Encryption",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "FileEncryption",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FE"
       }
@@ -1889,14 +2095,16 @@
       "title": "D3-FEMC Firmware Embedded Monitoring Code",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FirmwareEmbeddedMonitoringCode",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FEMC"
       }
@@ -1907,14 +2115,16 @@
       "title": "D3-FEV File Eviction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "FileEviction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FEV"
       }
@@ -1925,14 +2135,16 @@
       "title": "D3-FFV File Format Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileFormatVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FFV"
       }
@@ -1943,14 +2155,16 @@
       "title": "D3-FH File Hashing",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileHashing",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FH"
       }
@@ -1961,14 +2175,16 @@
       "title": "D3-FHRA File Hash Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileHashReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FHRA"
       }
@@ -1979,14 +2195,16 @@
       "title": "D3-FIM File Integrity Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FileIntegrityMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FIM"
       }
@@ -1997,14 +2215,16 @@
       "title": "D3-FISV File Internal Structure Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileInternalStructureVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FISV"
       }
@@ -2015,14 +2235,16 @@
       "title": "D3-FMBV File Magic Byte Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileMagicByteVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FMBV"
       }
@@ -2033,14 +2255,16 @@
       "title": "D3-FMCV File Metadata Consistency Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileMetadataConsistencyValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FMCV"
       }
@@ -2051,14 +2275,16 @@
       "title": "D3-FMVV File Metadata Value Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "FileMetadataValueVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FMVV"
       }
@@ -2069,14 +2295,16 @@
       "title": "D3-FRDDL Forward Resolution Domain Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ForwardResolutionDomainDenylisting",
-        "synonym": "Forward Resolution Domain Blacklisting"
+        "synonym": "Forward Resolution Domain Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FRDDL"
       }
@@ -2087,14 +2315,16 @@
       "title": "D3-FRIDL Forward Resolution IP Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ForwardResolutionIPDenylisting",
-        "synonym": "Forward Resolution IP Blacklisting"
+        "synonym": "Forward Resolution IP Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FRIDL"
       }
@@ -2105,14 +2335,16 @@
       "title": "D3-FV Firmware Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "FirmwareVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-FV"
       }
@@ -2123,14 +2355,16 @@
       "title": "D3-HBPI Hardware-based Process Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "Hardware-basedProcessIsolation",
-        "synonym": "Virtualization"
+        "synonym": "Virtualization",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HBPI"
       }
@@ -2141,14 +2375,16 @@
       "title": "D3-HBWP Hardware-based Write Protection",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "Hardware-basedWriteProtection",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HBWP"
       }
@@ -2159,17 +2395,19 @@
       "title": "D3-HCI Hardware Component Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "HardwareComponentInventory",
         "synonym": [
           "Hardware Component Inventorying",
           "Hardware Component Discovery"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HCI"
       }
@@ -2180,14 +2418,16 @@
       "title": "D3-HD Homoglyph Detection",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "HomoglyphDetection",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HD"
       }
@@ -2198,14 +2438,16 @@
       "title": "D3-HDDL Hierarchical Domain Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "HierarchicalDomainDenylisting",
-        "synonym": "Hierarchical Domain Blacklisting"
+        "synonym": "Hierarchical Domain Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HDDL"
       }
@@ -2216,14 +2458,16 @@
       "title": "D3-HDL Homoglyph Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "HomoglyphDenylisting",
-        "synonym": "Homoglyph Blacklisting"
+        "synonym": "Homoglyph Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HDL"
       }
@@ -2234,14 +2478,16 @@
       "title": "D3-HR Host Reboot",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "HostReboot",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HR"
       }
@@ -2252,14 +2498,16 @@
       "title": "D3-HS Host Shutdown",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "HostShutdown",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-HS"
       }
@@ -2270,14 +2518,16 @@
       "title": "D3-IAA Identifier Activity Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IdentifierActivityAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IAA"
       }
@@ -2288,14 +2538,16 @@
       "title": "D3-IBCA Indirect Branch Call Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IndirectBranchCallAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IBCA"
       }
@@ -2306,14 +2558,16 @@
       "title": "D3-ID Identifier Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IdentifierAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ID"
       }
@@ -2324,14 +2578,16 @@
       "title": "D3-IDA Input Device Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "InputDeviceAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IDA"
       }
@@ -2342,14 +2598,16 @@
       "title": "D3-IHN Integrated Honeynet",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "IntegratedHoneynet",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IHN"
       }
@@ -2360,14 +2618,16 @@
       "title": "D3-IOPR IO Port Restriction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "IOPortRestriction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IOPR"
       }
@@ -2378,14 +2638,16 @@
       "title": "D3-IPCTA IPC Traffic Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IPCTrafficAnalysis",
-        "synonym": "IPC Analysis"
+        "synonym": "IPC Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IPCTA"
       }
@@ -2396,14 +2658,16 @@
       "title": "D3-IPRA IP Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IPReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IPRA"
       }
@@ -2414,14 +2678,16 @@
       "title": "D3-IRA Identifier Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "IdentifierReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IRA"
       }
@@ -2432,14 +2698,16 @@
       "title": "D3-IRV Integer Range Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "IntegerRangeValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-IRV"
       }
@@ -2450,14 +2718,16 @@
       "title": "D3-ISVA Inbound Session Volume Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "InboundSessionVolumeAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ISVA"
       }
@@ -2468,14 +2738,16 @@
       "title": "D3-ITF Inbound Traffic Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "InboundTrafficFiltering",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ITF"
       }
@@ -2486,14 +2758,16 @@
       "title": "D3-JFAPA Job Function Access Pattern Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "JobFunctionAccessPatternAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-JFAPA"
       }
@@ -2504,14 +2778,16 @@
       "title": "D3-KBPI Kernel-based Process Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "Kernel-basedProcessIsolation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-KBPI"
       }
@@ -2522,14 +2798,16 @@
       "title": "D3-LAM Local Account Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "LocalAccountMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-LAM"
       }
@@ -2540,14 +2818,16 @@
       "title": "D3-LAMED LAN Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "LANAccessMediation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-LAMED"
       }
@@ -2558,14 +2838,16 @@
       "title": "D3-LFAM Local File Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "LocalFileAccessMediation",
-        "synonym": "Local File Access Control"
+        "synonym": "Local File Access Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-LFAM"
       }
@@ -2576,14 +2858,16 @@
       "title": "D3-LFP Local File Permissions",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "LocalFilePermissions",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-LFP"
       }
@@ -2594,14 +2878,16 @@
       "title": "D3-LLM Logical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "LogicalLinkMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-LLM"
       }
@@ -2612,17 +2898,19 @@
       "title": "D3-MA Message Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "MessageAnalysis",
         "synonym": [
           "Email Or Messaging Analysis",
           "Electronic Message Analysis"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MA"
       }
@@ -2633,14 +2921,16 @@
       "title": "D3-MAN Message Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "MessageAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MAN"
       }
@@ -2651,14 +2941,16 @@
       "title": "D3-MBSV Memory Block Start Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "MemoryBlockStartValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MBSV"
       }
@@ -2669,14 +2961,16 @@
       "title": "D3-MBT Memory Boundary Tracking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "MemoryBoundaryTracking",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MBT"
       }
@@ -2687,14 +2981,16 @@
       "title": "D3-MENCR Message Encryption",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "MessageEncryption",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MENCR"
       }
@@ -2705,14 +3001,16 @@
       "title": "D3-MFA Multi-factor Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "Multi-factorAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MFA"
       }
@@ -2723,14 +3021,16 @@
       "title": "D3-MH Message Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "MessageHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MH"
       }
@@ -2741,17 +3041,19 @@
       "title": "D3-MSM Motion Sensor Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "MotionSensorMonitoring",
         "synonym": [
           "Motion Alarm Monitoring",
           "Motion Detector Monitoring"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-MSM"
       }
@@ -2762,14 +3064,16 @@
       "title": "D3-NAM Network Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "NetworkAccessMediation",
-        "synonym": "Network Access Control"
+        "synonym": "Network Access Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NAM"
       }
@@ -2780,14 +3084,16 @@
       "title": "D3-NI Network Isolation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "NetworkIsolation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NI"
       }
@@ -2798,14 +3104,16 @@
       "title": "D3-NM Network Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "NetworkMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NM"
       }
@@ -2816,17 +3124,19 @@
       "title": "D3-NNI Network Node Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "NetworkNodeInventory",
         "synonym": [
           "System Inventorying",
           "System Discovery"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NNI"
       }
@@ -2837,14 +3147,16 @@
       "title": "D3-NPC Null Pointer Checking",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "NullPointerChecking",
-        "synonym": "Nil Pointer Checking"
+        "synonym": "Nil Pointer Checking",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NPC"
       }
@@ -2855,14 +3167,16 @@
       "title": "D3-NRAM Network Resource Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "NetworkResourceAccessMediation",
-        "synonym": "Remote Access Control"
+        "synonym": "Remote Access Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NRAM"
       }
@@ -2873,14 +3187,16 @@
       "title": "D3-NTA Network Traffic Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "NetworkTrafficAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NTA"
       }
@@ -2891,14 +3207,16 @@
       "title": "D3-NTCD Network Traffic Community Deviation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "NetworkTrafficCommunityDeviation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NTCD"
       }
@@ -2909,14 +3227,16 @@
       "title": "D3-NTF Network Traffic Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "NetworkTrafficFiltering",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NTF"
       }
@@ -2927,7 +3247,7 @@
       "title": "D3-NTPM Network Traffic Policy Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "NetworkTrafficPolicyMapping",
         "synonym": [
@@ -2935,11 +3255,13 @@
           "Web Security Gateway Policy Mapping",
           "Firewall Mapping",
           "DLP Policy Mapping"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NTPM"
       }
@@ -2950,14 +3272,16 @@
       "title": "D3-NTSA Network Traffic Signature Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "NetworkTrafficSignatureAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NTSA"
       }
@@ -2968,14 +3292,16 @@
       "title": "D3-NVA Network Vulnerability Assessment",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "NetworkVulnerabilityAssessment",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-NVA"
       }
@@ -2986,14 +3312,16 @@
       "title": "D3-OAM Operational Activity Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "OperationalActivityMapping",
-        "synonym": "Mission Mapping"
+        "synonym": "Mission Mapping",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OAM"
       }
@@ -3004,14 +3332,16 @@
       "title": "D3-ODM Operational Dependency Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "OperationalDependencyMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ODM"
       }
@@ -3022,14 +3352,16 @@
       "title": "D3-OE Object Eviction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "ObjectEviction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OE"
       }
@@ -3040,14 +3372,16 @@
       "title": "D3-OLV Operational Logic Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "OperationalLogicValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OLV"
       }
@@ -3058,14 +3392,16 @@
       "title": "D3-OM Organization Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "OrganizationMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OM"
       }
@@ -3076,14 +3412,16 @@
       "title": "D3-OMM Operating Mode Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "OperatingModeMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OMM"
       }
@@ -3094,14 +3432,16 @@
       "title": "D3-OPM Operational Process Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "OperationalProcessMonitoring",
-        "synonym": "Supervisory Control Monitoring"
+        "synonym": "Supervisory Control Monitoring",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OPM"
       }
@@ -3112,14 +3452,16 @@
       "title": "D3-OPR Operating Mode Restriction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "OperatingModeRestriction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OPR"
       }
@@ -3130,14 +3472,16 @@
       "title": "D3-ORA Operational Risk Assessment",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "OperationalRiskAssessment",
-        "synonym": "Mission Risk Assessment"
+        "synonym": "Mission Risk Assessment",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ORA"
       }
@@ -3148,14 +3492,16 @@
       "title": "D3-OSM Operating System Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "OperatingSystemMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OSM"
       }
@@ -3166,14 +3512,16 @@
       "title": "D3-OTF Outbound Traffic Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "OutboundTrafficFiltering",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OTF"
       }
@@ -3184,14 +3532,16 @@
       "title": "D3-OTP One-time Password",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "One-timePassword",
-        "synonym": "OTP"
+        "synonym": "OTP",
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OTP"
       }
@@ -3202,14 +3552,16 @@
       "title": "D3-OVAR OT Variable Access Restriction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "OTVariableAccessRestriction",
-        "synonym": "OT Variable Access Policy"
+        "synonym": "OT Variable Access Policy",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-OVAR"
       }
@@ -3220,14 +3572,16 @@
       "title": "D3-PA Process Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProcessAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PA"
       }
@@ -3238,14 +3592,16 @@
       "title": "D3-PAM Physical Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "PhysicalAccessMediation",
-        "synonym": "Physical Access Control"
+        "synonym": "Physical Access Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PAM"
       }
@@ -3256,14 +3612,16 @@
       "title": "D3-PAN Pointer Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PointerAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PAN"
       }
@@ -3274,14 +3632,16 @@
       "title": "D3-PBWSAM Proxy-based Web Server Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "Proxy-basedWebServerAccessMediation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PBWSAM"
       }
@@ -3292,14 +3652,16 @@
       "title": "D3-PCA Passive Certificate Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PassiveCertificateAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PCA"
       }
@@ -3310,14 +3672,16 @@
       "title": "D3-PCSV Process Code Segment Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProcessCodeSegmentVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PCSV"
       }
@@ -3328,14 +3692,16 @@
       "title": "D3-PE Process Eviction",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "ProcessEviction",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PE"
       }
@@ -3346,14 +3712,16 @@
       "title": "D3-PEH Physical Enclosure Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PhysicalEnclosureHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PEH"
       }
@@ -3364,14 +3732,16 @@
       "title": "D3-PFV Peripheral Firmware Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PeripheralFirmwareVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PFV"
       }
@@ -3382,17 +3752,19 @@
       "title": "D3-PH Platform Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PlatformHardening",
         "synonym": [
           "System Hardening",
           "Endpoint Hardening"
-        ]
+        ],
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PH"
       }
@@ -3403,14 +3775,16 @@
       "title": "D3-PHAM Physical Access Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PhysicalAccessMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PHAM"
       }
@@ -3421,14 +3795,16 @@
       "title": "D3-PHDURA Per Host Download-Upload Ratio Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PerHostDownload-UploadRatioAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PHDURA"
       }
@@ -3439,14 +3815,16 @@
       "title": "D3-PLA Process Lineage Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProcessLineageAnalysis",
-        "synonym": "Process Tree Analysis"
+        "synonym": "Process Tree Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PLA"
       }
@@ -3457,14 +3835,16 @@
       "title": "D3-PLLM Passive Logical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "PassiveLogicalLinkMapping",
-        "synonym": "Passive Logical Layer Mapping"
+        "synonym": "Passive Logical Layer Mapping",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PLLM"
       }
@@ -3475,14 +3855,16 @@
       "title": "D3-PLM Physical Link Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "PhysicalLinkMapping",
-        "synonym": "Layer 1 Mapping"
+        "synonym": "Layer 1 Mapping",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PLM"
       }
@@ -3493,14 +3875,16 @@
       "title": "D3-PM Platform Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PlatformMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PM"
       }
@@ -3511,14 +3895,16 @@
       "title": "D3-PMAD Protocol Metadata Anomaly Detection",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProtocolMetadataAnomalyDetection",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PMAD"
       }
@@ -3529,14 +3915,16 @@
       "title": "D3-PR Password Rotation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PasswordRotation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PR"
       }
@@ -3547,14 +3935,16 @@
       "title": "D3-PS Process Suspension",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "ProcessSuspension",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PS"
       }
@@ -3565,14 +3955,16 @@
       "title": "D3-PSA Process Spawn Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProcessSpawnAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PSA"
       }
@@ -3583,17 +3975,19 @@
       "title": "D3-PSEP Process Segment Execution Prevention",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ProcessSegmentExecutionPrevention",
         "synonym": [
           "Execute Disable",
           "No Execute"
-        ]
+        ],
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PSEP"
       }
@@ -3604,17 +3998,19 @@
       "title": "D3-PSM Proximity Sensor Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProximitySensorMonitoring",
         "synonym": [
           "RFID Reader Monitoring",
           "Proximity Reader Monitoring"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PSM"
       }
@@ -3625,14 +4021,16 @@
       "title": "D3-PSMD Process Self-Modification Detection",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ProcessSelf-ModificationDetection",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PSMD"
       }
@@ -3643,14 +4041,16 @@
       "title": "D3-PT Process Termination",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "ProcessTermination",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PT"
       }
@@ -3661,14 +4061,16 @@
       "title": "D3-PUM Platform Uptime Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "PlatformUptimeMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PUM"
       }
@@ -3679,14 +4081,16 @@
       "title": "D3-PV Pointer Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PointerValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PV"
       }
@@ -3697,14 +4101,16 @@
       "title": "D3-PWA Password Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "PasswordAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-PWA"
       }
@@ -3715,14 +4121,16 @@
       "title": "D3-RA Restore Access",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreAccess",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RA"
       }
@@ -3733,14 +4141,16 @@
       "title": "D3-RAM Routing Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "RoutingAccessMediation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RAM"
       }
@@ -3751,14 +4161,16 @@
       "title": "D3-RAPA Resource Access Pattern Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ResourceAccessPatternAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RAPA"
       }
@@ -3769,14 +4181,16 @@
       "title": "D3-RC Restore Configuration",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreConfiguration",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RC"
       }
@@ -3787,14 +4201,16 @@
       "title": "D3-RD Restore Database",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreDatabase",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RD"
       }
@@ -3805,14 +4221,16 @@
       "title": "D3-RDI Restore Disk Image",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreDiskImage",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RDI"
       }
@@ -3823,14 +4241,16 @@
       "title": "D3-RE Restore Email",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreEmail",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RE"
       }
@@ -3841,14 +4261,16 @@
       "title": "D3-RF Restore File",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreFile",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RF"
       }
@@ -3859,14 +4281,16 @@
       "title": "D3-RFAM Remote File Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "RemoteFileAccessMediation",
-        "synonym": "File Share Access Mediation"
+        "synonym": "File Share Access Mediation",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RFAM"
       }
@@ -3877,14 +4301,16 @@
       "title": "D3-RFS RF Shielding",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "RFShielding",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RFS"
       }
@@ -3895,14 +4321,16 @@
       "title": "D3-RFUM Remote Firmware Update Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "RemoteFirmwareUpdateMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RFUM"
       }
@@ -3913,14 +4341,16 @@
       "title": "D3-RH Radiation Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "RadiationHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RH"
       }
@@ -3931,14 +4361,16 @@
       "title": "D3-RIC Reissue Credential",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "ReissueCredential",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RIC"
       }
@@ -3949,14 +4381,16 @@
       "title": "D3-RKD Registry Key Deletion",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "RegistryKeyDeletion",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RKD"
       }
@@ -3967,14 +4401,16 @@
       "title": "D3-RN Reference Nullification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "ReferenceNullification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RN"
       }
@@ -3985,14 +4421,16 @@
       "title": "D3-RNA Restore Network Access",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreNetworkAccess",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RNA"
       }
@@ -4003,14 +4441,16 @@
       "title": "D3-RO Restore Object",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreObject",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RO"
       }
@@ -4021,14 +4461,16 @@
       "title": "D3-RPA Relay Pattern Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "RelayPatternAnalysis",
-        "synonym": "Relay Network Detection"
+        "synonym": "Relay Network Detection",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RPA"
       }
@@ -4039,14 +4481,16 @@
       "title": "D3-RRID Reverse Resolution IP Denylisting",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "ReverseResolutionIPDenylisting",
-        "synonym": "Reverse Resolution IP Blacklisting"
+        "synonym": "Reverse Resolution IP Blacklisting",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RRID"
       }
@@ -4057,14 +4501,16 @@
       "title": "D3-RS Restore Software",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreSoftware",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RS"
       }
@@ -4075,14 +4521,16 @@
       "title": "D3-RTA RPC Traffic Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "RPCTrafficAnalysis",
-        "synonym": "RPC Protocol Analysis"
+        "synonym": "RPC Protocol Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RTA"
       }
@@ -4093,14 +4541,16 @@
       "title": "D3-RTSD Remote Terminal Session Detection",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "RemoteTerminalSessionDetection",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RTSD"
       }
@@ -4111,14 +4561,16 @@
       "title": "D3-RUAA Restore User Account Access",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "RestoreUserAccountAccess",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-RUAA"
       }
@@ -4129,17 +4581,19 @@
       "title": "D3-SAOR Segment Address Offset Randomization",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "SegmentAddressOffsetRandomization",
         "synonym": [
           "ASLR",
           "Address Space Layout Randomization"
-        ]
+        ],
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SAOR"
       }
@@ -4150,14 +4604,16 @@
       "title": "D3-SBV Service Binary Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ServiceBinaryVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SBV"
       }
@@ -4168,14 +4624,16 @@
       "title": "D3-SCA System Call Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SystemCallAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SCA"
       }
@@ -4186,14 +4644,16 @@
       "title": "D3-SCF System Call Filtering",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "SystemCallFiltering",
-        "synonym": "System Call Control"
+        "synonym": "System Call Control",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SCF"
       }
@@ -4204,14 +4664,16 @@
       "title": "D3-SCH Source Code Hardening",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "SourceCodeHardening",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SCH"
       }
@@ -4222,14 +4684,16 @@
       "title": "D3-SCP System Configuration Permissions",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "SystemConfigurationPermissions",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SCP"
       }
@@ -4240,14 +4704,16 @@
       "title": "D3-SDA Session Duration Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SessionDurationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SDA"
       }
@@ -4258,14 +4724,16 @@
       "title": "D3-SDM System Daemon Monitoring",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SystemDaemonMonitoring",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SDM"
       }
@@ -4276,14 +4744,16 @@
       "title": "D3-SEA Script Execution Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ScriptExecutionAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SEA"
       }
@@ -4294,14 +4764,16 @@
       "title": "D3-SFA System File Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SystemFileAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SFA"
       }
@@ -4312,14 +4784,16 @@
       "title": "D3-SFCV Stack Frame Canary Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "StackFrameCanaryValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SFCV"
       }
@@ -4330,14 +4804,16 @@
       "title": "D3-SFV System Firmware Verification",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SystemFirmwareVerification",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SFV"
       }
@@ -4348,14 +4824,16 @@
       "title": "D3-SHN Standalone Honeynet",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Deceive",
       "metadata": {
         "technique_slug": "StandaloneHoneynet",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Deceive",
+        "tactic_title": "Deceive"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SHN"
       }
@@ -4366,17 +4844,19 @@
       "title": "D3-SICA System Init Config Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SystemInitConfigAnalysis",
         "synonym": [
           "Startup Analysis",
           "Autorun Analysis"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SICA"
       }
@@ -4387,14 +4867,16 @@
       "title": "D3-SJA Scheduled Job Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ScheduledJobAnalysis",
-        "synonym": "Scheduled Job Execution"
+        "synonym": "Scheduled Job Execution",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SJA"
       }
@@ -4405,14 +4887,16 @@
       "title": "D3-SMRA Sender MTA Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SenderMTAReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SMRA"
       }
@@ -4423,14 +4907,16 @@
       "title": "D3-SPP Strong Password Policy",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "StrongPasswordPolicy",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SPP"
       }
@@ -4441,14 +4927,16 @@
       "title": "D3-SRA Sender Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "SenderReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SRA"
       }
@@ -4459,14 +4947,16 @@
       "title": "D3-SSC Shadow Stack Comparisons",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "ShadowStackComparisons",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SSC"
       }
@@ -4477,14 +4967,16 @@
       "title": "D3-ST Session Termination",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Evict",
       "metadata": {
         "technique_slug": "SessionTermination",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Evict",
+        "tactic_title": "Evict"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ST"
       }
@@ -4495,14 +4987,16 @@
       "title": "D3-SU Software Update",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "SoftwareUpdate",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SU"
       }
@@ -4513,14 +5007,16 @@
       "title": "D3-SVCDM Service Dependency Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "ServiceDependencyMapping",
-        "synonym": "Distributed Tracing"
+        "synonym": "Distributed Tracing",
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SVCDM"
       }
@@ -4531,17 +5027,19 @@
       "title": "D3-SWI Software Inventory",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "SoftwareInventory",
         "synonym": [
           "Software Discovery",
           "Software Inventorying"
-        ]
+        ],
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SWI"
       }
@@ -4552,14 +5050,16 @@
       "title": "D3-SYSDM System Dependency Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "SystemDependencyMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SYSDM"
       }
@@ -4570,14 +5070,16 @@
       "title": "D3-SYSM System Mapping",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "SystemMapping",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SYSM"
       }
@@ -4588,14 +5090,16 @@
       "title": "D3-SYSVA System Vulnerability Assessment",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Model",
       "metadata": {
         "technique_slug": "SystemVulnerabilityAssessment",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Model",
+        "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-SYSVA"
       }
@@ -4606,14 +5110,16 @@
       "title": "D3-TAAN Transfer Agent Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "TransferAgentAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-TAAN"
       }
@@ -4624,14 +5130,16 @@
       "title": "D3-TB Token Binding",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "TokenBinding",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-TB"
       }
@@ -4642,14 +5150,16 @@
       "title": "D3-TBA Token-based Authentication",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "Token-basedAuthentication",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-TBA"
       }
@@ -4660,17 +5170,19 @@
       "title": "D3-TBI TPM Boot Integrity",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "TPMBootIntegrity",
         "synonym": [
           "STRM",
           "Static Root of Trust Measurement"
-        ]
+        ],
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-TBI"
       }
@@ -4681,14 +5193,16 @@
       "title": "D3-TL Trusted Library",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "TrustedLibrary",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-TL"
       }
@@ -4699,14 +5213,16 @@
       "title": "D3-UA URL Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "URLAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-UA"
       }
@@ -4717,14 +5233,16 @@
       "title": "D3-UAP User Account Permissions",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "UserAccountPermissions",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-UAP"
       }
@@ -4735,17 +5253,19 @@
       "title": "D3-UBA User Behavior Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "UserBehaviorAnalysis",
         "synonym": [
           "UBA",
           "Credential Monitoring"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-UBA"
       }
@@ -4756,14 +5276,16 @@
       "title": "D3-UDTA User Data Transfer Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "UserDataTransferAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-UDTA"
       }
@@ -4774,14 +5296,16 @@
       "title": "D3-UGLPA User Geolocation Logon Pattern Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "UserGeolocationLogonPatternAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-UGLPA"
       }
@@ -4792,14 +5316,16 @@
       "title": "D3-ULA Unlock Account",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Restore",
       "metadata": {
         "technique_slug": "UnlockAccount",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Restore",
+        "tactic_title": "Restore"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-ULA"
       }
@@ -4810,14 +5336,16 @@
       "title": "D3-URA URL Reputation Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "URLReputationAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-URA"
       }
@@ -4828,14 +5356,16 @@
       "title": "D3-USICA User Session Init Config Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "UserSessionInitConfigAnalysis",
-        "synonym": "User Startup Config Analysis"
+        "synonym": "User Startup Config Analysis",
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-USICA"
       }
@@ -4846,14 +5376,16 @@
       "title": "D3-VI Variable Initialization",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "VariableInitialization",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-VI"
       }
@@ -4864,17 +5396,19 @@
       "title": "D3-VS Video Surveillance",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "VideoSurveillance",
         "synonym": [
           "Video Monitoring",
           "CCTV Surveillance"
-        ]
+        ],
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-VS"
       }
@@ -4885,14 +5419,16 @@
       "title": "D3-VTV Variable Type Validation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Harden",
       "metadata": {
         "technique_slug": "VariableTypeValidation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Harden",
+        "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-VTV"
       }
@@ -4903,14 +5439,16 @@
       "title": "D3-WSAA Web Session Activity Analysis",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Detect",
       "metadata": {
         "technique_slug": "WebSessionActivityAnalysis",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Detect",
+        "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-WSAA"
       }
@@ -4921,14 +5459,16 @@
       "title": "D3-WSAM Web Session Access Mediation",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "WebSessionAccessMediation",
-        "synonym": null
+        "synonym": null,
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3-WSAM"
       }
@@ -4939,14 +5479,16 @@
       "title": "D3F-UGPH User Group Permissions",
       "description": "",
       "status": "active",
-      "family": "",
+      "family": "Isolate",
       "metadata": {
         "technique_slug": "UserGroupPermissions",
-        "synonym": "Role Based Access Controls"
+        "synonym": "Role Based Access Controls",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-16",
+        "snapshot_date": "2026-07-25",
         "version": "4",
         "locator": "technique/all.json#D3F-UGPH"
       }

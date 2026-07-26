@@ -8,6 +8,21 @@ import type { ViewState } from "../lib/viewState";
 
 const RESULT_LIMIT = 100;
 
+// Grouping-tier node types (see CATALOG_TIERS in scripts/build-framework-data.mjs)
+// and the catalog summary node itself carry the same catalog_id as their leaf
+// records, so a raw catalog_id query returns both — excluded here so the
+// browsable/searchable list only ever shows actual records, never a
+// "benchmark" or "family" tier row mixed in as if it were one.
+const NON_LEAF_NODE_TYPES = new Set([
+  "catalog",
+  "family",
+  "benchmark",
+  "function",
+  "category",
+  "tactic",
+  "group",
+]);
+
 export function CatalogDetailPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "catalog-detail" }>;
@@ -20,7 +35,9 @@ export function CatalogDetailPage(props: {
   const catalogs = bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === state.catalog);
   const records = catalog
-    ? bundle.runtime.getNodes({ catalog_id: catalog.id })
+    ? bundle.runtime
+        .getNodes({ catalog_id: catalog.id })
+        .filter((record: any) => !NON_LEAF_NODE_TYPES.has(record.node_type))
     : [];
   const families = useMemo(
     () =>
@@ -47,31 +64,45 @@ export function CatalogDetailPage(props: {
   );
 
   if (!state.catalog) {
+    const groupOrder = ["NIST", "DISA", "MITRE", "DoD", "Other"];
+    const catalogsByGroup = groupOrder
+      .map((group) => ({
+        group,
+        entries: catalogs.filter((entry: any) => (entry.display_group || "Other") === group),
+      }))
+      .filter((section) => section.entries.length > 0);
+
     return (
       <section className="panel catalog-index">
         <header className="page-header">
           <p className="eyebrow">Library</p>
-          <h1>Browse public security catalogs</h1>
+          <h1>Official rules and frameworks</h1>
           <p className="page-summary">
-            Open a framework or source collection, then search its records without losing context.
+            These are the source documents themselves, grouped by the agency that publishes them.
+            Not sure where to start? <button className="link-button" onClick={() => onNavigate("atlas-map")} type="button">Try Atlas</button> — it asks what you're working on and finds the record for you.
           </p>
         </header>
-        <div className="catalog-index-list">
-          {catalogs.map((entry: any) => (
-            <button
-              className="catalog-index-row"
-              key={entry.id}
-              onClick={() => onNavigate("catalog-detail", { catalog: entry.id })}
-              type="button"
-            >
-              <span>
-                <strong>{entry.name}</strong>
-                <small>{catalogProfileFor(entry.id, entry.name).synopsis}</small>
-              </span>
-              <span>{entry.node_count.toLocaleString()} records</span>
-            </button>
-          ))}
-        </div>
+        {catalogsByGroup.map((section) => (
+          <div className="catalog-index-group" key={section.group}>
+            <h2 className="catalog-index-group-label">{section.group}</h2>
+            <div className="catalog-index-list">
+              {section.entries.map((entry: any) => (
+                <button
+                  className="catalog-index-row"
+                  key={entry.id}
+                  onClick={() => onNavigate("catalog-detail", { catalog: entry.id })}
+                  type="button"
+                >
+                  <span>
+                    <strong>{entry.name}</strong>
+                    <small>{catalogProfileFor(entry.id, entry.name).synopsis}</small>
+                  </span>
+                  <span>{(entry.leaf_record_count ?? entry.node_count).toLocaleString()} records</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
     );
   }
@@ -106,8 +137,10 @@ export function CatalogDetailPage(props: {
         <p className="catalog-synopsis">{profile.synopsis}</p>
         <p className="catalog-applicability"><strong>When to use it:</strong> {profile.appliesWhen}</p>
         <div className="catalog-facts" aria-label="Catalog summary">
-          <span><strong>{catalog.node_count.toLocaleString()}</strong> {profile.recordLabel}</span>
-          {families.length ? <span><strong>{families.length}</strong> families</span> : null}
+          <span><strong>{(catalog.leaf_record_count ?? catalog.node_count).toLocaleString()}</strong> {profile.recordLabel}</span>
+          {catalog.tier_count ? (
+            <span>across <strong>{catalog.tier_count.toLocaleString()}</strong> {catalog.tier_count === 1 ? catalog.tier_label : catalog.tier_label_plural}</span>
+          ) : null}
           <span><strong>{catalog.connected_count.toLocaleString()}</strong> connected records</span>
           {source?.version ? <span>Version <strong>{source.version}</strong></span> : null}
         </div>
@@ -116,7 +149,6 @@ export function CatalogDetailPage(props: {
             View official source <IconExternalLink aria-hidden="true" size={16} />
           </a>
         ) : null}
-        <p className="field-hint">This page organizes public reference data. It does not determine applicability or compliance.</p>
       </header>
 
       <ContextualCommonsModule
@@ -136,9 +168,9 @@ export function CatalogDetailPage(props: {
           <div className="catalog-record-filters">
             {families.length ? (
               <label>
-                <span className="sr-only">Filter by family</span>
+                <span className="sr-only">Filter by {catalog.tier_label || "family"}</span>
                 <select onChange={(event) => setFamily(event.target.value)} value={family}>
-                  <option value="">All families</option>
+                  <option value="">All {catalog.tier_label_plural || "families"}</option>
                   {families.map((name) => <option key={name} value={name}>{name}</option>)}
                 </select>
               </label>

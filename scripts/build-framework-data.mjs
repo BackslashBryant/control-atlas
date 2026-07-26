@@ -198,6 +198,118 @@ export const CATALOG_TIERS = {
     rationale: (record, title) =>
       `${record.id} is a requirement in the ${title} security requirements guide.`,
   },
+  // CSF 2.0 is two tiers deep (Function > Category > Subcategory). The
+  // Category row below is the record's immediate parent; `parentTier`
+  // declares Category's own parent (Function), resolved from the same
+  // record via tools/normalizers/oscal-normalize.mjs's walkCsf, which
+  // threads both grouping levels from the official OSCAL catalog's
+  // `class: "function"` / `class: "category"` groups (previously discarded).
+  "csf-2": {
+    nodeType: "category",
+    idPrefix: "CATEGORY",
+    key: (record) => record.category_id,
+    title: (record) => record.category,
+    description: (record, title) =>
+      `${title} category of the NIST Cybersecurity Framework 2.0.`,
+    edgeDataset: "csf-category-membership",
+    rationale: (record, title) =>
+      `${record.id} is a subcategory in the ${title} category of CSF 2.0.`,
+    parentTier: {
+      nodeType: "function",
+      idPrefix: "FUNCTION",
+      key: (record) => record.function_id,
+      title: (record) => record.function,
+      description: (record, title) =>
+        `${title} function of the NIST Cybersecurity Framework 2.0.`,
+      edgeDataset: "csf-function-membership",
+      rationale: (record, title) =>
+        `The ${title} function of CSF 2.0 organizes this category.`,
+    },
+  },
+  // Both ATT&CK domains and D3FEND publish a top-level tactic taxonomy
+  // (kill-chain tactics for ATT&CK, Model/Harden/Detect/Isolate/Deceive/
+  // Evict/Restore for D3FEND) — one shared node type, same precedent as
+  // "benchmark" above. Names/ids resolved upstream in the adapters
+  // (tools/importers/mitre-attack-adapter.mjs, mitre-d3fend-adapter.mjs)
+  // since neither ingested snapshot carried them as a flat field.
+  // Sub-techniques resolve a tactic tier key too (same as SP 800-53 control
+  // enhancements resolve a family key above) — they get BOTH the tactic-tier
+  // edge and, via addAttackSubtechniqueMembershipEdges below, a second edge
+  // from their parent technique. That is the established shape for
+  // enhancement-style child records in this graph, not a new convention.
+  "mitre-attack": {
+    nodeType: "tactic",
+    idPrefix: "TACTIC",
+    key: (record) => record.metadata?.tactic_id,
+    title: (record) => record.metadata?.tactic_title,
+    description: (record, title) =>
+      `${title} tactic of the MITRE ATT&CK Enterprise matrix.`,
+    edgeDataset: "mitre-attack-tactic-membership",
+    rationale: (record, title) =>
+      `${record.id} is a technique under the ${title} tactic in MITRE ATT&CK.`,
+  },
+  "mitre-attack-ics": {
+    nodeType: "tactic",
+    idPrefix: "TACTIC",
+    key: (record) => record.metadata?.tactic_id,
+    title: (record) => record.metadata?.tactic_title,
+    description: (record, title) =>
+      `${title} tactic of the MITRE ATT&CK for ICS matrix.`,
+    edgeDataset: "mitre-attack-ics-tactic-membership",
+    rationale: (record, title) =>
+      `${record.id} is a technique under the ${title} tactic in MITRE ATT&CK for ICS.`,
+  },
+  "mitre-d3fend": {
+    nodeType: "tactic",
+    idPrefix: "TACTIC",
+    key: (record) => record.metadata?.tactic_id,
+    title: (record) => record.metadata?.tactic_title,
+    description: (record, title) =>
+      `${title} tactic of the MITRE D3FEND defensive technique ontology.`,
+    edgeDataset: "mitre-d3fend-tactic-membership",
+    rationale: (record, title) =>
+      `${record.id} is a defensive technique under the ${title} tactic in MITRE D3FEND.`,
+  },
+  // nist-ai-rmf (GOVERN-n/MAP-n/... categories), nist-ssdf (PO/PS/PW/RV
+  // practice groups), and dod-rai (2 sections) each carry a real `family`
+  // grouping value but naming the tier "family" would misrender as
+  // "Control family: GOVERN-1" — owner decision 2026-07-25: one generic
+  // "group" node type shared across all three, same precedent as
+  // "benchmark"/"tactic" above. The tier node's own title still carries the
+  // real category name; only the internal type tag is generic.
+  "nist-ai-rmf": {
+    nodeType: "group",
+    idPrefix: "GROUP",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} group of the NIST AI Risk Management Framework Playbook.`,
+    edgeDataset: "nist-ai-rmf-group-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} group in the NIST AI RMF Playbook.`,
+  },
+  "nist-ssdf": {
+    nodeType: "group",
+    idPrefix: "GROUP",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} practice group of NIST SP 800-218 (SSDF).`,
+    edgeDataset: "nist-ssdf-group-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} practice group in the SSDF.`,
+  },
+  "dod-rai": {
+    nodeType: "group",
+    idPrefix: "GROUP",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    description: (record, title) =>
+      `${title} section of the DoD Responsible AI Toolkit.`,
+    edgeDataset: "dod-rai-group-membership",
+    rationale: (record, title) =>
+      `${record.id} is part of the ${title} section of the DoD Responsible AI Toolkit.`,
+  },
 };
 
 const MAPS = [
@@ -237,6 +349,96 @@ const MAPS = [
 
 const CATALOG_SUMMARIES = new Map([
   [
+    "nist-800-53",
+    {
+      sourceId: "nist-oscal",
+      title: "SP 800-53 Rev. 5 Catalog",
+      description:
+        "Catalog summary for NIST SP 800-53 Rev. 5 security and privacy controls.",
+    },
+  ],
+  [
+    "csf-2",
+    {
+      sourceId: "nist-oscal",
+      title: "CSF 2.0 Catalog",
+      description:
+        "Catalog summary for the NIST Cybersecurity Framework 2.0 Functions, Categories, and Subcategories.",
+    },
+  ],
+  [
+    "disa-stig",
+    {
+      sourceId: "disa-stig-library",
+      title: "DISA STIG Catalog",
+      description:
+        "Catalog summary for the DISA Security Technical Implementation Guide library.",
+    },
+  ],
+  [
+    "disa-srg",
+    {
+      sourceId: "disa-srg-library",
+      title: "DISA SRG Catalog",
+      description:
+        "Catalog summary for the DISA Security Requirements Guide library.",
+    },
+  ],
+  [
+    "mitre-attack",
+    {
+      sourceId: "mitre-attack-enterprise",
+      title: "MITRE ATT&CK Enterprise Catalog",
+      description:
+        "Catalog summary for the MITRE ATT&CK Enterprise adversary tactics and techniques knowledge base.",
+    },
+  ],
+  [
+    "mitre-attack-ics",
+    {
+      sourceId: "mitre-attack-ics",
+      title: "MITRE ATT&CK ICS Catalog",
+      description:
+        "Catalog summary for the MITRE ATT&CK for Industrial Control Systems knowledge base.",
+    },
+  ],
+  [
+    "mitre-d3fend",
+    {
+      sourceId: "mitre-d3fend-ontology",
+      title: "MITRE D3FEND Catalog",
+      description:
+        "Catalog summary for the MITRE D3FEND defensive technique ontology.",
+    },
+  ],
+  [
+    "nist-ai-rmf",
+    {
+      sourceId: "nist-ai-rmf-playbook",
+      title: "NIST AI RMF Playbook Catalog",
+      description:
+        "Catalog summary for the NIST AI Risk Management Framework Playbook.",
+    },
+  ],
+  [
+    "nist-ssdf",
+    {
+      sourceId: "nist-ssdf-oscal",
+      title: "NIST SSDF Catalog",
+      description:
+        "Catalog summary for NIST SP 800-218, the Secure Software Development Framework.",
+    },
+  ],
+  [
+    "dod-rai",
+    {
+      sourceId: "dod-rai-toolkit",
+      title: "DoD Responsible AI Catalog",
+      description:
+        "Catalog summary for the DoD Responsible AI Toolkit.",
+    },
+  ],
+  [
     "nist-800-171-rev2",
     {
       sourceId: "nist-800-171-rev2",
@@ -261,6 +463,24 @@ const CATALOG_SUMMARIES = new Map([
       title: "SP 800-172 Rev. 3 Catalog",
       description:
         "Catalog summary for NIST SP 800-172 Rev. 3 enhanced CUI security requirements.",
+    },
+  ],
+  [
+    "cmmc-2",
+    {
+      sourceId: "dod-cmmc-rule",
+      title: "CMMC 2.0 Catalog",
+      description:
+        "Catalog summary for the Cybersecurity Maturity Model Certification 2.0 program levels.",
+    },
+  ],
+  [
+    "cui-policy",
+    {
+      sourceId: "isoo-cui-regulation",
+      title: "CUI Program Catalog",
+      description:
+        "Catalog summary for the Controlled Unclassified Information program's designation categories.",
     },
   ],
   [
@@ -338,6 +558,33 @@ function tierFor(catalogId, record) {
     nodeId: nodeId(catalogId, `${tier.idPrefix}-${key}`),
     itemId: `${tier.idPrefix}-${key}`,
   };
+}
+
+/**
+ * Resolve a tier's own parent tier (e.g. CSF Category's parent Function),
+ * when the catalog's CATALOG_TIERS row declares one via `parentTier`. Most
+ * catalogs are one tier deep and have none.
+ */
+function parentTierFor(catalogId, record, tier) {
+  const parent = tier.parentTier;
+  if (!parent) return null;
+  const key = parent.key(record);
+  const title = parent.title(record);
+  if (!key || !title) return null;
+  return {
+    tier: parent,
+    key,
+    title,
+    nodeId: nodeId(catalogId, `${parent.idPrefix}-${key}`),
+    itemId: `${parent.idPrefix}-${key}`,
+  };
+}
+
+/** The outermost tier a record's chain resolves to — what hangs off the catalog. */
+function topTierFor(catalogId, record) {
+  const resolved = tierFor(catalogId, record);
+  if (!resolved) return null;
+  return parentTierFor(catalogId, record, resolved.tier) || resolved;
 }
 
 function normalize53BBaselineId(value) {
@@ -465,6 +712,31 @@ function curatedEntryFor(itemId) {
   return curated?.entries?.[itemId] || null;
 }
 
+/** Add a resolved tier's node to the dedup map, once per distinct tier node id. */
+function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, record) {
+  if (!resolved || tierNodes.has(resolved.nodeId)) return;
+  const { tier, key, title, nodeId: tierNodeId, itemId } = resolved;
+  tierNodes.set(tierNodeId, {
+    id: tierNodeId,
+    node_type: tier.nodeType,
+    label: tier.label ? tier.label(key, title) : title,
+    source_id: defaultSourceId,
+    lifecycle_status: "active",
+    metadata: {
+      catalog_id: catalogId,
+      item_id: itemId,
+      title,
+      description: tier.description(record, title),
+      family: title,
+      baselines: null,
+      nist_800_53b_baselines: null,
+      nist_control: null,
+      type: tier.nodeType === "family" ? "control_family" : tier.nodeType,
+      references: null,
+    },
+  });
+}
+
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
   const tierNodes = new Map();
@@ -499,11 +771,14 @@ function buildNodes(registry) {
             item_id: record.id,
             title: record.title || record.id,
             description: record.description || "",
-            // A record's grouping label IS its parent tier's title. Falling back
-            // to the tier makes the existing family filter on CatalogDetailPage
-            // (src/ui/pages/CatalogDetailPage.tsx:27) work for STIG/SRG with no UI
-            // change; catalogs that already set `family` are unaffected.
-            family: record.family || record.group || resolvedTier?.title || "",
+            // A record's grouping label IS its parent tier's title — prefer it
+            // over the raw record.family, which for some catalogs (e.g. ATT&CK)
+            // is a machine slug ("command-and-control") kept for matching, not
+            // display. Catalogs whose tier title already equals record.family
+            // (800-53, 800-171, AI-RMF, SSDF, ...) see no change; STIG/SRG,
+            // whose raw record.family is empty, keep resolving through the tier.
+            family:
+              resolvedTier?.title || record.family || record.group || "",
             severity: nodeSeverity(record),
             baselines:
               record.fedramp_baselines || record.metadata?.baselines || null,
@@ -534,28 +809,15 @@ function buildNodes(registry) {
 
       }
 
-      if (resolvedTier && !tierNodes.has(resolvedTier.nodeId)) {
-        const { tier, key, title, nodeId: tierNodeId, itemId } = resolvedTier;
-        tierNodes.set(tierNodeId, {
-          id: tierNodeId,
-          node_type: tier.nodeType,
-          label: tier.label ? tier.label(key, title) : title,
-          source_id: defaultSourceId,
-          lifecycle_status: "active",
-          metadata: {
-            catalog_id: catalogId,
-            item_id: itemId,
-            title,
-            description: tier.description(record, title),
-            family: title,
-            baselines: null,
-            nist_800_53b_baselines: null,
-            nist_control: null,
-            type:
-              tier.nodeType === "family" ? "control_family" : tier.nodeType,
-            references: null,
-          },
-        });
+      registerTierNode(tierNodes, catalogId, resolvedTier, defaultSourceId, record);
+      if (resolvedTier) {
+        registerTierNode(
+          tierNodes,
+          catalogId,
+          parentTierFor(catalogId, record, resolvedTier.tier),
+          defaultSourceId,
+          record,
+        );
       }
     }
 
@@ -736,6 +998,90 @@ function addTierMembershipEdges(state, registry, nodeIds) {
   }
 }
 
+/**
+ * Join a tier to ITS parent tier (e.g. CSF Category -> Function) for catalogs
+ * whose CATALOG_TIERS row declares `parentTier`. Most catalogs are one tier
+ * deep and have none, so this is a no-op for them.
+ */
+function addTierParentEdges(state, registry, nodeIds) {
+  const seen = new Set();
+  for (const [filename, catalogId, defaultSourceId] of CATALOGS) {
+    const tier = CATALOG_TIERS[catalogId];
+    if (!tier?.parentTier) continue;
+    const path = join(ROOT, "data", filename);
+    if (!existsSync(path)) continue;
+    const document = readJson(path);
+    for (const record of document.records || []) {
+      const resolved = tierFor(catalogId, record);
+      if (!resolved) continue;
+      const parent = parentTierFor(catalogId, record, resolved.tier);
+      if (!parent) continue;
+      const subjectId = relationshipId(
+        parent.tier.edgeDataset,
+        parent.nodeId,
+        resolved.nodeId,
+        "includes",
+      );
+      if (seen.has(subjectId)) continue;
+      seen.add(subjectId);
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || defaultSourceId,
+        sourceNodeId: parent.nodeId,
+        targetNodeId: resolved.nodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `${filename}#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: parent.tier.rationale(record, parent.title),
+      });
+    }
+  }
+}
+
+/**
+ * Every catalog that declares a CATALOG_TIERS row gets its outermost tier
+ * (the parent tier when one is declared, else the tier itself) linked to the
+ * catalog's own summary node, so nothing hangs disconnected above the tree —
+ * this is what closes docs/audits/grc-hierarchy-audit-2026-07-25.md's
+ * "family (20) has no parent itself" finding for every tiered catalog, not
+ * only SP 800-53.
+ */
+function addTierToCatalogEdges(state, registry, nodeIds) {
+  const seen = new Set();
+  for (const [filename, catalogId, defaultSourceId] of CATALOGS) {
+    if (!CATALOG_TIERS[catalogId]) continue;
+    const catalogNodeId = nodeId(catalogId, "CATALOG");
+    if (!nodeIds.has(catalogNodeId)) continue;
+    const path = join(ROOT, "data", filename);
+    if (!existsSync(path)) continue;
+    const document = readJson(path);
+    for (const record of document.records || []) {
+      const top = topTierFor(catalogId, record);
+      if (!top) continue;
+      const subjectId = relationshipId(
+        `${catalogId}-catalog-membership`,
+        catalogNodeId,
+        top.nodeId,
+        "includes",
+      );
+      if (seen.has(subjectId)) continue;
+      seen.add(subjectId);
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || defaultSourceId,
+        sourceNodeId: catalogNodeId,
+        targetNodeId: top.nodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `${filename}#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${top.title} is organized under the ${catalogId} catalog.`,
+      });
+    }
+  }
+}
+
 function baseControlIdFromEnhancementId(recordId) {
   const id = String(recordId || "");
   const dotIndex = id.indexOf(".");
@@ -774,6 +1120,49 @@ function addEnhancementMembershipEdges(state, registry, nodeIds) {
       retrievedAt: record.source?.snapshot_date,
       rationale: `${record.id} is a control enhancement of ${baseId} in SP 800-53 Rev. 5.`,
     });
+  }
+}
+
+/**
+ * Nest ATT&CK sub-techniques (e.g. T1055.001) under their parent technique
+ * (T1055) — the same enhancement-of-a-base-record pattern as SP 800-53
+ * above, driven by `metadata.parent_technique_id`
+ * (tools/importers/mitre-attack-adapter.mjs), not string-splitting the id
+ * here, since the STIX bundle's own `x_mitre_is_subtechnique` flag is the
+ * authoritative signal.
+ */
+function addAttackSubtechniqueMembershipEdges(state, registry, nodeIds) {
+  for (const [filename, catalogId, defaultSourceId] of [
+    ["attack-techniques-enterprise.json", "mitre-attack", "mitre-attack-enterprise"],
+    ["attack-techniques-ics.json", "mitre-attack-ics", "mitre-attack-ics"],
+  ]) {
+    const path = join(ROOT, "data", filename);
+    if (!existsSync(path)) continue;
+    const document = readJson(path);
+    const recordIds = new Set((document.records || []).map((record) => record.id));
+    for (const record of document.records || []) {
+      const parentId = record.metadata?.parent_technique_id;
+      if (!parentId || !recordIds.has(parentId)) continue;
+      const sourceNodeId = nodeId(catalogId, parentId);
+      const targetNodeId = nodeId(catalogId, record.id);
+      const subjectId = relationshipId(
+        `${catalogId}-subtechnique-membership`,
+        sourceNodeId,
+        targetNodeId,
+        "includes",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || defaultSourceId,
+        sourceNodeId,
+        targetNodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `${filename}#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.id} is a sub-technique of ${parentId}.`,
+      });
+    }
   }
 }
 
@@ -924,6 +1313,34 @@ function addCmmcProgramEdges(state, registry, nodeIds, nodes) {
       }
     }
   }
+
+  // Every CMMC level is a real child of the CMMC 2.0 program, regardless of
+  // which external requirement set it also `requires` — Level 1 requires
+  // only the 15 FAR 52.204-21 basic safeguarding requirements, a catalog
+  // this app does not ingest, so it was the one level with no edge at all
+  // (isolated) before this. Parenting all three under the catalog fixes
+  // that honestly instead of fabricating a link to an uningested source.
+  const catalogNodeId = "cmmc-2:CATALOG";
+  for (const record of document.records || []) {
+    const targetNodeId = nodeId("cmmc-2", record.id);
+    const subjectId = relationshipId(
+      "cmmc-program-membership",
+      catalogNodeId,
+      targetNodeId,
+      "includes",
+    );
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId,
+      sourceId: record.source?.key || "dod-cmmc-rule",
+      sourceNodeId: catalogNodeId,
+      targetNodeId,
+      relationshipType: "includes",
+      confidence: "derived",
+      locator: record.source?.locator || "32-CFR-170.14",
+      retrievedAt: record.source?.snapshot_date,
+      rationale: `${record.title} is one of the three CMMC 2.0 program levels.`,
+    });
+  }
 }
 
 function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
@@ -931,6 +1348,61 @@ function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
   if (!existsSync(path)) return;
   const document = readJson(path);
   for (const record of document.records || []) {
+    if (record.type === "zt_overlay_catalog") {
+      // The overlay reference document itself (source of the 799 SP 800-53
+      // <-> ZT capability `supports` mappings below) — a sibling of the
+      // tenets, not a container for the capabilities it documents.
+      const catalogNodeId = "dod-zt:CATALOG";
+      const targetNodeId = nodeId("dod-zt", record.id);
+      const subjectId = relationshipId(
+        "dod-zt-overlay-catalog-membership",
+        catalogNodeId,
+        targetNodeId,
+        "includes",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || "dod-zt-overlays-2024",
+        sourceNodeId: catalogNodeId,
+        targetNodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `dod-zt.json#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.title} is part of the DoD Zero Trust reference material.`,
+      });
+      continue;
+    }
+    if (record.type === "zt_tenet") {
+      // Tenets are cross-cutting principles that apply across every pillar in
+      // the DoD Zero Trust Reference Architecture, not a subdivision of any
+      // one pillar (no source field ties a specific tenet to specific
+      // pillars) — so "tenet includes pillar" would fabricate a containment
+      // relationship the data doesn't support. What the audit actually
+      // measured as the bug is that tenets had zero edges at all; the honest
+      // fix is parenting them to the catalog as their own sibling
+      // collection, alongside (not above) the pillars.
+      const catalogNodeId = "dod-zt:CATALOG";
+      const targetNodeId = nodeId("dod-zt", record.id);
+      const subjectId = relationshipId(
+        "dod-zt-tenet-membership",
+        catalogNodeId,
+        targetNodeId,
+        "includes",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || "dod-zt-reference-architecture-v2",
+        sourceNodeId: catalogNodeId,
+        targetNodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || `dod-zt.json#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.id} is one of the foundational tenets of the DoD Zero Trust model.`,
+      });
+      continue;
+    }
     if (record.type !== "zt_capability" && record.type !== "zt_activity")
       continue;
     const parentId =
@@ -1000,6 +1472,37 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
   for (const relationship of relationships) {
     addPublishedEdge(state, registry, nodeIds, relationship);
   }
+
+  // Every CUI designation is a real child of the CUI Program catalog. Basic
+  // and Program already carry a specific `protects`/`supports` edge above;
+  // Specified has no single catalog that governs it in this app's ingested
+  // set (each CUI Specified category cites its own separate law/regulation),
+  // so without this it was the one designation with zero edges at all.
+  const path = join(ROOT, "data", "cui-policy.json");
+  if (existsSync(path)) {
+    const document = readJson(path);
+    const catalogNodeId = "cui-policy:CATALOG";
+    for (const record of document.records || []) {
+      const targetNodeId = nodeId("cui-policy", record.id);
+      const subjectId = relationshipId(
+        "cui-policy-program-membership",
+        catalogNodeId,
+        targetNodeId,
+        "includes",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || "isoo-cui-regulation",
+        sourceNodeId: catalogNodeId,
+        targetNodeId,
+        relationshipType: "includes",
+        confidence: "derived",
+        locator: record.source?.locator || "32-CFR-2002",
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.title} is one of the designation categories in the CUI Program.`,
+      });
+    }
+  }
 }
 
 function buildEdges(registry, nodes) {
@@ -1047,7 +1550,10 @@ function buildEdges(registry, nodes) {
   }
   addDocumentRelationshipEdges(state, registry, nodeIds);
   addTierMembershipEdges(state, registry, nodeIds);
+  addTierParentEdges(state, registry, nodeIds);
+  addTierToCatalogEdges(state, registry, nodeIds);
   addEnhancementMembershipEdges(state, registry, nodeIds);
+  addAttackSubtechniqueMembershipEdges(state, registry, nodeIds);
   addBaselineMembershipEdges(state, registry, nodeIds);
   addFedrampMembershipEdges(state, registry, nodeIds);
   addAssessmentEdges(state, registry, nodeIds);

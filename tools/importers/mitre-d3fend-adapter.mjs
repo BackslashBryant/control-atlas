@@ -164,6 +164,71 @@ export function buildD3fendToNistRelationships(ontologyDocument, slugToD3fendId,
   return relationships;
 }
 
+const D3FEND_TACTIC_IDS = new Set([
+  'd3f:Model',
+  'd3f:Harden',
+  'd3f:Detect',
+  'd3f:Isolate',
+  'd3f:Deceive',
+  'd3f:Evict',
+  'd3f:Restore',
+]);
+
+/**
+ * D3FEND publishes its 7-tactic taxonomy (Model/Harden/Detect/Isolate/Deceive/
+ * Evict/Restore) as an OWL class hierarchy: a technique's `rdfs:subClassOf`
+ * chain leads to a mid-level class, whose `d3f:enables` names the top-level
+ * tactic. Neither the technique list (`technique/all.json`, what
+ * parseD3fendTechniques reads) nor a single flat field carries this — it only
+ * exists by walking the full ontology graph, which is why the audit found
+ * D3FEND "flat" (the currently-ingested snapshot really is flat; the
+ * ontology, fetched separately for the NIST-control mapping, is not).
+ */
+function resolveD3fendTacticId(startId, byId, depth = 0, seen = new Set()) {
+  if (depth > 25 || seen.has(startId)) return null;
+  seen.add(startId);
+  if (D3FEND_TACTIC_IDS.has(startId)) return startId;
+  const entry = byId.get(startId);
+  if (!entry) return null;
+  const enables = entry['d3f:enables'];
+  if (enables) {
+    const enablesId = Array.isArray(enables) ? enables[0]?.['@id'] : enables['@id'];
+    if (enablesId) {
+      const resolved = resolveD3fendTacticId(enablesId, byId, depth + 1, seen);
+      if (resolved) return resolved;
+    }
+  }
+  let parents = entry['rdfs:subClassOf'];
+  if (!parents) return null;
+  if (!Array.isArray(parents)) parents = [parents];
+  for (const parent of parents) {
+    const parentId = parent['@id'];
+    if (!parentId || parentId.startsWith('_:')) continue;
+    const resolved = resolveD3fendTacticId(parentId, byId, depth + 1, seen);
+    if (resolved) return resolved;
+  }
+  return null;
+}
+
+/** Map each D3FEND technique id (e.g. "D3-TB") to its top-level tactic. */
+export function resolveD3fendTactics(ontologyDocument) {
+  const graph = ontologyDocument?.['@graph'] || [];
+  const byId = new Map(graph.map((entry) => [entry['@id'], entry]));
+  const result = new Map();
+  for (const entry of graph) {
+    const d3fendId = entry['d3f:d3fend-id'];
+    if (!d3fendId) continue;
+    const tacticId = resolveD3fendTacticId(entry['@id'], byId);
+    if (!tacticId) continue;
+    const tacticEntry = byId.get(tacticId);
+    result.set(d3fendId, {
+      id: tacticId.replace(/^d3f:/, ''),
+      title: tacticEntry?.['rdfs:label'] || tacticId.replace(/^d3f:/, ''),
+    });
+  }
+  return result;
+}
+
 export function buildMappingDocument(relationships, metadata) {
   return {
     schema_version: '2.0',
