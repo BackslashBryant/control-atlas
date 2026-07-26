@@ -1,5 +1,42 @@
 # STATE
 
+## 2026-07-26 (session 6) - W3 documents
+
+Goal: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §9 (W3) only.
+
+### Completed changes
+
+- Every starter document now advertises only Word, Excel, and/or PDF in the
+  registry. Security Plan Starter defaults to Word; operational worksheets
+  default to Excel; every artifact also offers a branded PDF.
+- Added client-side PDF generation with a Control Atlas masthead, readable
+  record cards, disclaimer, and print footer. The package is `pdf-lib` 1.17.1
+  (MIT), loaded only when a document is generated.
+- Replaced the header-only structure view with the actual generated document's
+  headings, prompts, and starter rows before the download button.
+- Fixed a real Office-download race: object URLs now remain available long
+  enough for the browser's download manager to read the generated package.
+- Kept the legacy text generator for documented internal/legacy callers; it is
+  no longer advertised in the current Documents UI.
+
+### Verification
+
+- Generated and structurally verified all 24 registered Office/PDF outputs;
+  PDF raster inspection confirmed the branded title, disclaimer, readable
+  records, and print footer.
+- Focused document contracts passed (54 tests). The POA&M Excel-download,
+  document-preview, and PDF-selection browser regressions passed (3/3).
+- `npm run lint`, `npm run typecheck`, `npm run test:browser`,
+  `npm run smoke:dom`, `npm run verify:public`, `npm run test:e2e:smoke`, and
+  `npm run test:a11y:smoke` passed. The full `npm run precommit` was also
+  rerun locally after the final type fix; no push or merge occurred.
+
+### Next workstream
+
+Execute W4 - fold Commons into Documents and apply the approved user-facing
+rebrand. Do not start W7 or W2 first. Do not push or merge without fresh owner
+approval.
+
 ## 2026-07-26 (session 5) — W6 defects batch
 
 Goal: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §12 (W6) only.

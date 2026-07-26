@@ -4,9 +4,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { strFromU8, unzipSync } from 'fflate';
+import { PDFDocument } from 'pdf-lib';
 import readXlsxFile from 'read-excel-file/node';
 import { buildTemplateDocument } from '../src/app/template-engine.mjs';
-import { docToDocx, docToXlsx, renderOfficeDocument } from '../src/app/office-export.mjs';
+import { docToDocx, docToPdf, docToXlsx, renderOfficeDocument, renderPdfDocument } from '../src/app/office-export.mjs';
 
 const dataset = {
   nodes: [
@@ -96,6 +97,20 @@ test('docx export is a valid zip with a document body, a table, and the disclaim
   assert.match(document, /Account Management|AC-2/, 'control content must be present');
   assert.match(document, /open-source reference tool/, 'disclaimer must be present');
   assert.match(document, /<w:sectPr>/, 'body must end with section properties');
+});
+
+test('pdf export is a branded, readable document with the generated content', async () => {
+  const doc = buildDoc('security_plan_starter');
+  const bytes = await docToPdf(doc);
+  assert.equal(String.fromCharCode(...bytes.slice(0, 5)), '%PDF-', 'pdf must have the PDF magic header');
+  const parsed = await PDFDocument.load(bytes);
+  assert.ok(parsed.getPageCount() >= 1, 'PDF must contain at least one rendered page');
+  assert.equal(parsed.getTitle(), doc.title, 'PDF metadata must name the generated document');
+
+  const rendered = await renderPdfDocument(buildDoc('poam_starter'));
+  assert.equal(rendered.extension, 'pdf');
+  assert.equal(rendered.mimeType, 'application/pdf');
+  assert.ok(rendered.bytes instanceof Uint8Array);
 });
 
 test('renderOfficeDocument returns bytes, mime, and extension per format', () => {

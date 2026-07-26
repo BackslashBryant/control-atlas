@@ -256,7 +256,7 @@ Control Atlas connects the work a practitioner needs to do with the authoritativ
 11. Software Baseline
 12. PPSM Preparation Worksheet
 
-**Output formats:** Markdown, CSV, JSON, YAML, XLSX, and DOCX as supported by each artifact
+**Output formats:** Word, Excel, and PDF as supported by each artifact. Every starter document is visible in an in-browser preview before download.
 
 **Selector flow:** Artifact type → Framework/baseline → Environment archetype → Optional includes
 
@@ -452,8 +452,7 @@ control_atlas_template:
   name: string
   display_name: string
   artifact_type: security_plan_starter | implementation_statement_worksheet | evidence_expectation_matrix | stig_evidence_checklist | inheritance_worksheet | reciprocity_checklist | poam_starter | assessment_planning_worksheet | conmon_calendar | hardware_baseline | software_baseline | ppsm_preparation_worksheet
-  supported_formats: [markdown | csv | json | yaml]
-  office_formats: [xlsx | docx]
+  supported_formats: [xlsx | docx | pdf]
   input_options: [framework | baseline | control_family | selected_controls | selected_stigs | environment_archetype]
   source_refs: [source_id]
   official_resource_ids: [official_artifact_id]
@@ -571,7 +570,7 @@ The complete canonical values and semantic provenance/status mappings live in `s
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |
 | Data format | JSON/JSONL runtime, YAML for curated registry | Performance vs. human-readability split |
-| Templates | Markdown-first, CSV/JSON/YAML export | Most portable for practitioner use |
+| Templates | Branded Word, Excel, and PDF exports with an in-browser document preview | Usable working artifacts without a blind download |
 | Analytics | None (MVP) | Privacy principle |
 | Hosting | GitHub Pages | Already in use |
 | CI/CD | GitHub Actions | Already in use |
@@ -765,7 +764,7 @@ Complete before any new feature work.
 **Story 4.1 — Template engine**
 - Client-side only; no transmission
 - Selector leads with artifact type
-- Markdown, CSV, JSON, YAML export all work
+- Word, Excel, and PDF export all work, with a visible document preview before download
 - Every output includes disclaimer and source metadata
 
 **Story 4.2 — Security Plan Starter**

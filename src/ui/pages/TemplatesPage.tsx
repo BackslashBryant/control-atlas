@@ -10,7 +10,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   buildTemplateDocument,
-  generateTemplate,
   templateFilename,
 } from "../../app/template-engine.mjs";
 import {
@@ -33,7 +32,6 @@ import {
   SelectField,
   SummaryCard,
   downloadBlobFile,
-  downloadTextFile,
   scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
 import { Panel, Button, ButtonLink } from "../components/lsm";
@@ -45,7 +43,6 @@ type TemplateRecord = {
   description: string;
   artifact_type?: string;
   supported_formats: string[];
-  office_formats?: string[];
   input_options: string[];
   source_refs?: string[];
   official_alternative?: { label: string; url: string };
@@ -520,12 +517,9 @@ function ToolCard(props: { tool: ComplianceTool }) {
 }
 
 const FORMAT_LABELS: Record<string, string> = {
-  markdown: "Markdown",
-  csv: "CSV",
-  json: "JSON",
-  yaml: "YAML",
   xlsx: "Excel (.xlsx)",
   docx: "Word (.docx)",
+  pdf: "PDF (.pdf)",
 };
 
 const INPUT_LABELS: Record<string, string> = {
@@ -538,13 +532,66 @@ const INPUT_LABELS: Record<string, string> = {
 };
 
 const FORMAT_HELP: Record<string, string> = {
-  markdown: "Readable document — open in any editor or paste into a report.",
-  csv: "Spreadsheet-ready data — import into Excel or Google Sheets, one row per control.",
-  json: "Machine-readable data — for scripts, pipelines, or GRC tooling.",
-  yaml: "Machine-readable and human-friendly data — structured, config-style.",
-  xlsx: "Excel workbook — opens directly in Excel, one sheet per table.",
-  docx: "Word document — opens directly in Word with headings and tables.",
+  xlsx: "Excel workbook - an editable working register with print-ready sheets.",
+  docx: "Word document - a branded starter narrative with headings and working tables.",
+  pdf: "PDF document - a branded, print-ready reference copy of this starter template.",
 };
+
+function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) {
+  return (
+    <section aria-labelledby="document-preview-heading" className="template-document-preview">
+      <header className="template-document-preview-header">
+        <div>
+          <p>Control Atlas</p>
+          <h3 id="document-preview-heading">{doc.title}</h3>
+        </div>
+        <span>{FORMAT_LABELS[format] || format}</span>
+      </header>
+      <div className="template-document-preview-body">
+        <p className="template-document-preview-description">{doc.description}</p>
+        <p className="template-document-preview-disclaimer">
+          Starter document - confirm requirements with the official source before use.
+        </p>
+        {(doc.sections || []).map((section: any) => (
+          <section className="template-document-preview-section" key={section.heading}>
+            <h4>{section.heading}</h4>
+            {section.type === "text" ? (
+              <p>{section.content}</p>
+            ) : (
+              <>
+                <div className="template-document-preview-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        {(section.headers || []).map((header: string) => (
+                          <th key={header}>{header}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(section.rows || []).slice(0, 3).map((row: any[], index: number) => (
+                        <tr key={index}>
+                          {(section.headers || []).map((_: string, cellIndex: number) => (
+                            <td key={cellIndex}>{row[cellIndex] || ""}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {section.rows?.length > 3 ? (
+                  <p className="template-document-preview-more">
+                    Plus {section.rows.length - 3} more rows in the downloaded document.
+                  </p>
+                ) : null}
+              </>
+            )}
+          </section>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 const BASELINE_LABELS: Record<string, string> = {
   LOW: "Low",
@@ -707,13 +754,12 @@ export function TemplatesPage(props: {
   const catalogOptions = bundle.runtime
     .getCatalogs()
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
-  const dataFormats = selectedTemplate?.supported_formats || ["markdown"];
-  const officeFormats = selectedTemplate?.office_formats || [];
-  // Data formats (string) + office formats (binary xlsx/docx) share one picker.
-  const supportedFormats = [...dataFormats, ...officeFormats];
+  // The registry is the source of truth: every visible download is a polished
+  // Office or PDF document, never a raw serialization format.
+  const supportedFormats = selectedTemplate?.supported_formats || ["docx"];
   const activeFormat = supportedFormats.includes(state.format || "")
-    ? state.format || dataFormats[0]
-    : dataFormats[0];
+    ? state.format || supportedFormats[0]
+    : supportedFormats[0];
 
   const inputOptions = selectedTemplate?.input_options || [];
   const datasetNodes = (bundle.runtime.dataset?.nodes || []) as any[];
@@ -770,23 +816,42 @@ export function TemplatesPage(props: {
     ? datasetSources.find((source) => source.id === primarySourceRef)
     : null;
 
-  // Static structure preview: call the real engine with no framework selected
-  // (it falls back to a single placeholder control row) so the column layout
-  // is authoritative without requiring the user to generate anything.
-  const structurePreview = useMemo(() => {
+  // The on-screen preview and downloaded files use this exact structured
+  // document, so a practitioner can review real headings, prompts, and rows
+  // before starting a download.
+  const generationOptions = useMemo(() => {
     if (!selectedTemplate) return null;
+    return {
+      templateType: selectedTemplate.name,
+      framework: selectedTemplate.input_options.includes("framework")
+        ? state.framework || "nist-800-53"
+        : "",
+      baseline: selectedTemplate.input_options.includes("baseline")
+        ? activeBaseline
+        : "",
+      controlFamily: selectedTemplate.input_options.includes("control_family")
+        ? state.controlFamily || ""
+        : "",
+      environment: state.environment || "Generic",
+      includePlaceholders: true,
+      includeImplementationPrompts: true,
+      includeEvidenceExpectations: true,
+      includeInheritancePrompts: true,
+      includeReciprocityPrompts: true,
+      includeSourceFootnotes: true,
+      includeStigReferences: true,
+      sourceRefs: selectedTemplate.source_refs || [],
+      sources: bundle.runtime.dataset?.sources || [],
+    };
+  }, [activeBaseline, bundle.runtime.dataset?.sources, selectedTemplate, state.controlFamily, state.environment, state.framework]);
+  const documentPreview = useMemo(() => {
+    if (!generationOptions) return null;
     try {
-      const { doc } = buildTemplateDocument(
-        { templateType: selectedTemplate.name },
-        bundle.runtime.dataset,
-      );
-      return doc.sections.filter(
-        (section: any) => section.type === "table",
-      ) as Array<{ heading: string; headers: string[] }>;
+      return buildTemplateDocument(generationOptions, bundle.runtime.dataset);
     } catch {
       return null;
     }
-  }, [selectedTemplate?.name, bundle.runtime.dataset]);
+  }, [bundle.runtime.dataset, generationOptions]);
 
   useEffect(() => {
     if (!selectedTemplate) {
@@ -819,76 +884,33 @@ export function TemplatesPage(props: {
       );
     };
     try {
-      const options = {
-        templateType: selectedTemplate.name,
-        framework: selectedTemplate.input_options.includes("framework")
-          ? state.framework || "nist-800-53"
-          : "",
-        baseline: selectedTemplate.input_options.includes("baseline")
-          ? activeBaseline
-          : "",
-        controlFamily: selectedTemplate.input_options.includes("control_family")
-          ? state.controlFamily || ""
-          : "",
-        format: activeFormat,
-        environment: state.environment || "Generic",
-        includePlaceholders: true,
-        includeImplementationPrompts: true,
-        includeEvidenceExpectations: true,
-        includeInheritancePrompts: true,
-        includeReciprocityPrompts: true,
-        includeSourceFootnotes: true,
-        includeStigReferences: true,
-        sourceRefs: selectedTemplate.source_refs || [],
-        sources: bundle.runtime.dataset?.sources || [],
-      };
-
-      const isOfficeFormat = officeFormats.includes(activeFormat);
-      if (isOfficeFormat) {
-        // Office formats produce binary payloads (OOXML zips), so they render
-        // client-side from the structured document. fflate + the serializers
-        // are lazily imported so their weight only loads when an office format
-        // is actually chosen (no-upload posture preserved).
-        const { renderOfficeDocument } =
-          await import("../../app/office-export.mjs");
-        const { doc, frameworkResolutionError } = buildTemplateDocument(
-          options,
-          bundle.runtime.dataset,
-        );
-        if (frameworkResolutionError) {
-          setGenerationTone("warning");
-          setGenerationStatus(frameworkResolutionError);
-          return;
-        }
-        const { bytes, mimeType, extension } = renderOfficeDocument(
-          doc,
-          activeFormat as "xlsx" | "docx",
-        );
-        const filename = templateFilename(selectedTemplate.name, extension);
-        downloadBlobFile(
-          filename,
-          // Copy into a fresh ArrayBuffer-backed view so the bytes satisfy the
-          // Blob part type across lib.dom versions.
-          new Blob([new Uint8Array(bytes)], { type: mimeType }),
-          () => confirmDownload(filename),
-        );
-        return;
-      }
-
-      const generated = generateTemplate(options, bundle.runtime.dataset);
-
-      if (generated.frameworkResolutionError) {
+      if (!documentPreview) {
         setGenerationTone("warning");
-        setGenerationStatus(generated.frameworkResolutionError);
+        setGenerationStatus("The document preview could not be prepared. Review the selected options and try again.");
         return;
       }
-
-      downloadTextFile(
-        generated.filename,
-        generated.content,
-        generated.mimeType,
-        () => confirmDownload(generated.filename),
+      const { doc, frameworkResolutionError } = documentPreview;
+      if (frameworkResolutionError) {
+        setGenerationTone("warning");
+        setGenerationStatus(frameworkResolutionError);
+        return;
+      }
+      // Serializers are lazy so the PDF library only loads when a user asks to
+      // create a document; nothing is uploaded or generated server-side.
+      const { renderOfficeDocument, renderPdfDocument } =
+        await import("../../app/office-export.mjs");
+      const rendered = activeFormat === "pdf"
+        ? await renderPdfDocument(doc)
+        : renderOfficeDocument(doc, activeFormat as "xlsx" | "docx");
+      const filename = templateFilename(selectedTemplate.name, rendered.extension);
+      downloadBlobFile(
+        filename,
+        new Blob([new Uint8Array(rendered.bytes)], { type: rendered.mimeType }),
+        () => confirmDownload(filename),
       );
+    } catch {
+      setGenerationTone("warning");
+      setGenerationStatus("The document could not be prepared in this browser. Try again or choose another format.");
     } finally {
       if (downloadDispatched) {
         // Keep the button briefly disabled after a real download so a rapid
@@ -1134,7 +1156,7 @@ export function TemplatesPage(props: {
                           onNavigate("templates", {
                             templateType: template.name,
                             framework: state.framework || "nist-800-53",
-                            format: template.supported_formats?.[0] || "markdown",
+                            format: template.supported_formats?.[0] || "docx",
                             environment: state.environment || "Generic",
                             baseline: "",
                             controlFamily: "",
@@ -1164,7 +1186,7 @@ export function TemplatesPage(props: {
                         onNavigate("templates", {
                           templateType: template.name,
                           framework: state.framework || "nist-800-53",
-                          format: template.supported_formats?.[0] || "markdown",
+                          format: template.supported_formats?.[0] || "docx",
                           environment: state.environment || "Generic",
                           baseline: "",
                           controlFamily: "",
@@ -1337,6 +1359,13 @@ export function TemplatesPage(props: {
                 value={activeFormat}
               />
             </div>
+            {documentPreview?.doc ? (
+              <TemplateDocumentPreview doc={documentPreview.doc} format={activeFormat} />
+            ) : (
+              <p className="generation-status tone-warning" role="status">
+                This preview is unavailable for the current options. Adjust the inputs before downloading.
+              </p>
+            )}
             <div className="card-actions">
               <Button variant="primary" disabled={generating} onClick={createTemplate}>
                 {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
@@ -1404,21 +1433,13 @@ export function TemplatesPage(props: {
           </SummaryCard>
           <SummaryCard title="What it includes">
             <p>
-              Data formats:{" "}
-              {dataFormats
+              Download formats:{" "}
+              {supportedFormats
                 .map((format: string) => FORMAT_LABELS[format] || format)
                 .join(", ")}
               .
             </p>
-            {officeFormats.length > 0 ? (
-              <p>
-                Office formats:{" "}
-                {officeFormats
-                  .map((format: string) => FORMAT_LABELS[format] || format)
-                  .join(", ")}{" "}
-                — opens directly in Excel or Word for review and completion.
-              </p>
-            ) : null}
+            <p>Every download starts from the preview above and carries the same headings, prompts, and source context.</p>
             {selectedTemplate.input_options.length > 0 ? (
               <p>
                 Optional inputs:{" "}
@@ -1429,21 +1450,6 @@ export function TemplatesPage(props: {
               </p>
             ) : null}
           </SummaryCard>
-          {structurePreview && structurePreview.length > 0 ? (
-            <SummaryCard title="Structure preview">
-              <p className="field-hint">
-                Columns this template will include, before you fill in any data.
-              </p>
-              <div className="stack compact">
-                {structurePreview.map((section) => (
-                  <div key={section.heading}>
-                    <strong>{section.heading}</strong>
-                    <p>{section.headers.join(" · ")}</p>
-                  </div>
-                ))}
-              </div>
-            </SummaryCard>
-          ) : null}
           {catalogSource ? (
             <SummaryCard title="Catalog data used">
               <p>
