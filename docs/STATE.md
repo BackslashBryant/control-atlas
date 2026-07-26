@@ -55,22 +55,42 @@ failed priority fetch is never double-attempted by the idle queue. Missing
 `node.metadata.catalog_id` -> the priority effect is a no-op. Node genuinely
 absent from the graph -> unchanged true not-found path.
 
-**NOTED (not done):** a shard that fails outright (network error/404/
-malformed JSON), or one that loads successfully but never contains the
-requested document id, both leave the page on `DetailConnectionsSkeleton`
-indefinitely with no error/retry affordance. Pre-existing limitation of
-`scheduleLazyLibraryShards`'s silent-catch-and-warn handling, shared by the
-normal (non-prioritized) idle-queue path today — not a regression from this
-fix. A bounded-timeout retry UI is separate, larger work better scoped with
-W6.8 (the related loading-race investigation on `/documents`/`/sources`)
-than bundled into this deep-link fix.
+**Follow-up (same session, owner: "if it's not done then finish it... don't
+leave shit open") — shard-failure retry path, DONE, verified.** The gap above
+is closed rather than deferred. `ObjectDetailPage.tsx` now tracks a bounded
+8s stall timer (keyed off the *stable* `bundle.prioritizeLibraryShard`
+function reference, not the `bundle` object itself, so unrelated shards
+finishing in the background — which replace `bundle` via
+`librarySearchRevision` bumps — don't keep resetting the clock). If
+`document` still hasn't resolved when the timer fires, the page shows
+"Couldn't load this record's details" with a "Try again" button instead of
+an indefinite skeleton. This covers all four failure modes uniformly (fetch
+error, 404, malformed shard, id genuinely missing from an otherwise-loaded
+shard) with one mechanism rather than plumbing each separately. Required a
+second fix in `runtimeLoader.ts`: `prioritize()` originally only fetched a
+catalog if it was still in the pending idle-queue array, so a retry after a
+failed first attempt was silently swallowed (found by writing the retry e2e
+test first and watching it fail at the retry step, not by inspection) —
+changed to always attempt the fetch, using the pending-array splice only to
+stop the idle queue double-fetching it, never to gate the retry itself.
 
-Scope audit: `git diff --stat HEAD` -> `src/ui/lib/runtimeLoader.ts` (81
-lines changed), `src/ui/pages/ObjectDetailPage.tsx` (22 lines changed); new
-`tests/e2e/deep-link-shard-priority.spec.mjs`. `data/generated/commons-search-index.json`
-reappeared untracked after `npm run build:site` — the same pre-existing,
-already-documented gotcha noted two entries below; not staged, not part of
-this change.
+New test: `tests/e2e/deep-link-shard-priority.spec.mjs` "a shard that fails
+to load shows a retry affordance, and retry recovers" — aborts the
+`cmmc-2.json` shard request, asserts the retry UI appears within 12s, flips
+the route to succeed, clicks "Try again", asserts the record renders within
+8s. Verified: `npx tsc --noEmit` -> clean, `npm run lint` -> 0 warnings
+(both before and after this follow-up). `npm run build:site` then
+`npx playwright test --config playwright.e2e.config.mjs
+tests/e2e/deep-link-shard-priority.spec.mjs tests/e2e/legacy-url-shim.spec.mjs`
+-> "3 passed (20.8s)" (all 3 specs: happy-path priority fetch, failure+retry,
+eager-catalog regression check).
+
+Scope audit: `git diff --stat HEAD` -> `src/ui/lib/runtimeLoader.ts`,
+`src/ui/pages/ObjectDetailPage.tsx`; `tests/e2e/deep-link-shard-priority.spec.mjs`
+(3 test cases). `data/generated/commons-search-index.json` reappeared
+untracked after `npm run build:site` — the same pre-existing, already-
+documented gotcha noted two entries below; not staged, not part of this
+change.
 
 ## 2026-07-26 (session 3) — W1 hierarchy work, in progress
 Goal this session: execute `docs/plans/sprint-handoff-2026-07-26.md` Part II (W1,

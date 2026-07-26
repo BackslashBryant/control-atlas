@@ -13,7 +13,14 @@ import {
   IconShieldCheck,
   IconSourceCode,
 } from "@tabler/icons-react";
-import { Fragment, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { patternsData } from "../../app/patterns-data.mjs";
@@ -174,15 +181,39 @@ export function ObjectDetailPage(props: {
   // Cold deep link into a non-eager catalog: the node exists but its
   // library-search shard is still queued behind the idle scheduler. Jump it
   // to the front instead of waiting for the shard's turn in the lazy queue.
+  // If the shard still hasn't produced this document after a bounded wait
+  // (fetch failure, malformed shard, or an id genuinely missing from it),
+  // stop waiting silently and offer a manual retry instead of an indefinite
+  // skeleton. Depends on the stable `prioritizeLibraryShard` function
+  // reference, not `bundle` itself, so unrelated shards finishing in the
+  // background (which replace `bundle` via `librarySearchRevision` bumps)
+  // don't keep restarting this timer.
+  const nodeId = node?.id;
+  const catalogIdForShard = node?.metadata?.catalog_id;
+  const documentFound = Boolean(document);
+  const prioritizeLibraryShard = bundle.prioritizeLibraryShard;
+  const shardAttemptRef = useRef<string | null>(null);
+  const [shardRetryTick, setShardRetryTick] = useState(0);
+  const [shardLoadStalled, setShardLoadStalled] = useState(false);
   useEffect(() => {
-    if (!node || document) {
+    setShardLoadStalled(false);
+    if (!nodeId || documentFound || !catalogIdForShard) {
       return;
     }
-    const catalogId = node.metadata?.catalog_id;
-    if (catalogId) {
-      bundle.prioritizeLibraryShard?.(catalogId);
+    const attemptKey = `${nodeId}:${shardRetryTick}`;
+    if (shardAttemptRef.current !== attemptKey) {
+      shardAttemptRef.current = attemptKey;
+      prioritizeLibraryShard?.(catalogIdForShard);
     }
-  }, [bundle, node, document]);
+    const timer = window.setTimeout(() => setShardLoadStalled(true), 8000);
+    return () => window.clearTimeout(timer);
+  }, [
+    prioritizeLibraryShard,
+    nodeId,
+    catalogIdForShard,
+    documentFound,
+    shardRetryTick,
+  ]);
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
     : null;
@@ -249,7 +280,27 @@ export function ObjectDetailPage(props: {
   if (!document) {
     // The record exists in the graph, but its catalog's library-search shard
     // hasn't landed yet — a different condition from "not found" and one
-    // that resolves on its own once the shard (prioritized above) arrives.
+    // that normally resolves on its own once the shard (prioritized above)
+    // arrives. If it still hasn't after a bounded wait, offer a real retry
+    // instead of an indefinite skeleton.
+    if (shardLoadStalled) {
+      return (
+        <section className="notice">
+          <h2>Couldn&apos;t load this record&apos;s details</h2>
+          <p>
+            The record exists, but its data didn&apos;t finish loading. Check
+            your connection and try again.
+          </p>
+          <Button
+            variant="primary"
+            onClick={() => setShardRetryTick((tick) => tick + 1)}
+            type="button"
+          >
+            Try again
+          </Button>
+        </section>
+      );
+    }
     return <DetailConnectionsSkeleton />;
   }
 
