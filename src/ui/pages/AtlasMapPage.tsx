@@ -830,9 +830,11 @@ function SourceCards(props: {
               {source.displayName}
             </button>
           </h3>
-          {source.disposition === "supporting-reference-only" ||
-          source.disposition === "draft-gated" ||
-          source.disposition === "registry-only" ? (
+          {source.plainSummary ? (
+            <p>{source.plainSummary}</p>
+          ) : source.disposition === "supporting-reference-only" ||
+            source.disposition === "draft-gated" ||
+            source.disposition === "registry-only" ? (
             <p>{source.defaultMapReason}</p>
           ) : null}
           {source.canonicalUrl !== "registry-local-only" ? (

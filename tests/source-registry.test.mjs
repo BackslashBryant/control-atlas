@@ -32,7 +32,8 @@ test('every source has the locked Phase 6 synchronization model', () => {
       'dod-cmmc-rule', 'dod-rai-toolkit', 'dod-zt-capabilities',
       'dod-zt-execution-roadmap', 'dod-zt-overlays-2024',
       'dod-zt-reference-architecture-v2', 'dod-zt-strategy', 'isoo-cui-regulation',
-      'nara-cui-registry', 'nist-800-37-rev2', 'nist-fips-199', 'nist-fips-200',
+      'nara-cui-registry', 'nist-800-37-rev2', 'nist-800-53-rev4-rev5-crosswalk',
+      'nist-fips-199', 'nist-fips-200',
     ],
     link_out: [
       'community-cci-research', 'cyber-mil-stig-compilations',

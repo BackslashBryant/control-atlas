@@ -435,35 +435,6 @@ export function ObjectDetailPage(props: {
             query={document.title}
             onNavigate={onNavigate}
           />
-          <Accordion.Root className="accordion-root" collapsible type="single">
-            <DisclosurePanel title="Where it appears" value="where-it-appears">
-              <p>
-                {locationSummary.length ? (
-                  <>
-                    This item appears in{" "}
-                    {locationSummary.map((label, index) => (
-                      <Fragment key={label}>
-                        {index > 0 ? ", " : ""}
-                        {label === "LI-SAAS" ? (
-                          <GlossaryTermChip termId="li-saas">
-                            {label}
-                          </GlossaryTermChip>
-                        ) : (
-                          label
-                        )}
-                      </Fragment>
-                    ))}
-                    .
-                  </>
-                ) : node.node_type === "attack_technique" ||
-                  node.node_type === "defend_countermeasure" ? (
-                  "This MITRE item connects through attack and defense mappings rather than a baseline membership list."
-                ) : (
-                  "This item does not have a published baseline placement summary yet."
-                )}
-              </p>
-            </DisclosurePanel>
-          </Accordion.Root>
           {node.node_type === "attack_technique" ? (
             <SummaryCard title="Threat context">
               <p>
@@ -572,7 +543,38 @@ export function ObjectDetailPage(props: {
             />
           </Panel>
 
+          {/* One grouped disclosure below the payoff, not two lone accordions
+              on either side of it. "Where it appears" is a single line of
+              placement detail — it sat above Connections, putting a click
+              before the reason the page exists. */}
           <Accordion.Root className="accordion-root" collapsible type="single">
+            <DisclosurePanel title="Where it appears" value="where-it-appears">
+              <p>
+                {locationSummary.length ? (
+                  <>
+                    This item appears in{" "}
+                    {locationSummary.map((label, index) => (
+                      <Fragment key={label}>
+                        {index > 0 ? ", " : ""}
+                        {label === "LI-SAAS" ? (
+                          <GlossaryTermChip termId="li-saas">
+                            {label}
+                          </GlossaryTermChip>
+                        ) : (
+                          label
+                        )}
+                      </Fragment>
+                    ))}
+                    .
+                  </>
+                ) : node.node_type === "attack_technique" ||
+                  node.node_type === "defend_countermeasure" ? (
+                  "This MITRE item connects through attack and defense mappings rather than a baseline membership list."
+                ) : (
+                  "This item does not have a published baseline placement summary yet."
+                )}
+              </p>
+            </DisclosurePanel>
             <DisclosurePanel
               title="Official text / source excerpt"
               value="official-text"

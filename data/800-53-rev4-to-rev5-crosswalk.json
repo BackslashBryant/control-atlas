@@ -1,0 +1,1076 @@
+{
+  "schema_version": "1.0",
+  "source_key": "nist-800-53-rev4-rev5-crosswalk",
+  "provenance": "NIST-published SP 800-53 Revision 4 to Revision 5 control correspondences. Withdrawn-control targets come from the comparison workbook; privacy-control targets come from the Appendix J comparison. No mapping here is inferred.",
+  "artifacts": [
+    {
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+      "sheet": "Rev4 Rev5 Compared",
+      "checksum": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570"
+    },
+    {
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-appj-to-r5-comparison.xlsx",
+      "sheet": "SP 800-53 Rev 4 App J to Rev 5",
+      "checksum": "sha256:d6307e5ca1e74863efb0c3fc086f757d431157de76c6e6e664cdf50754f3bf75"
+    }
+  ],
+  "withdrawn": {
+    "AC-2.10": {
+      "targets": [
+        "AC-2"
+      ],
+      "note": "Incorporated into AC-2k"
+    },
+    "AC-3.1": {
+      "targets": [
+        "AC-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-6"
+    },
+    "AC-3.6": {
+      "targets": [
+        "MP-4",
+        "SC-28"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-4 and SC-28"
+    },
+    "AC-4.16": {
+      "targets": [
+        "AC-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-4"
+    },
+    "AC-4.18": {
+      "targets": [
+        "AC-16"
+      ],
+      "note": "Incorporated into AC-16"
+    },
+    "AC-7.1": {
+      "targets": [
+        "AC-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-7"
+    },
+    "AC-13": {
+      "targets": [
+        "AC-2",
+        "AU-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-2 and AU-6"
+    },
+    "AC-14.1": {
+      "targets": [
+        "AC-14"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-14"
+    },
+    "AC-15": {
+      "targets": [
+        "MP-3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-3"
+    },
+    "AC-17.5": {
+      "targets": [
+        "SI-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-4"
+    },
+    "AC-17.7": {
+      "targets": [
+        "AC-3.10"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-3(10)"
+    },
+    "AC-17.8": {
+      "targets": [
+        "CM-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-7"
+    },
+    "AC-18.2": {
+      "targets": [
+        "SI-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-4"
+    },
+    "AC-19.1": {
+      "targets": [
+        "MP-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-7"
+    },
+    "AC-19.2": {
+      "targets": [
+        "MP-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-7"
+    },
+    "AC-19.3": {
+      "targets": [
+        "MP-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-7"
+    },
+    "AT-5": {
+      "targets": [
+        "PM-15"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PM-15"
+    },
+    "AU-2.1": {
+      "targets": [
+        "AU-12"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AU-12"
+    },
+    "AU-2.2": {
+      "targets": [
+        "AU-12"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AU-12"
+    },
+    "AU-2.3": {
+      "targets": [
+        "AU-2"
+      ],
+      "note": "Incorporated into AU-2"
+    },
+    "AU-2.4": {
+      "targets": [
+        "AU-6.9"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AU-6(9)"
+    },
+    "AU-3.2": {
+      "targets": [
+        "PL-9"
+      ],
+      "note": "incorporated into PL-9"
+    },
+    "AU-6.2": {
+      "targets": [
+        "SI-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-4"
+    },
+    "AU-6.10": {
+      "targets": [
+        "AU-6"
+      ],
+      "note": "Incorporated into AU-6"
+    },
+    "AU-7.2": {
+      "targets": [
+        "AU-7.1"
+      ],
+      "note": "Incorporated into AU-7(1)"
+    },
+    "AU-10.5": {
+      "targets": [
+        "SI-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-7"
+    },
+    "AU-14.2": {
+      "targets": [
+        "AU-14"
+      ],
+      "note": "Incorporated into AU-14"
+    },
+    "CA-4": {
+      "targets": [
+        "CA-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CA-2"
+    },
+    "CA-7.2": {
+      "targets": [
+        "CA-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CA-2"
+    },
+    "CM-2.1": {
+      "targets": [
+        "CM-2"
+      ],
+      "note": "Incorporated into CM-2"
+    },
+    "CM-2.4": {
+      "targets": [
+        "CM-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-7"
+    },
+    "CM-2.5": {
+      "targets": [
+        "CM-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-7"
+    },
+    "CM-5.2": {
+      "targets": [
+        "CM-3.7"
+      ],
+      "note": "Incorporated into CM-3(7)"
+    },
+    "CM-5.7": {
+      "targets": [
+        "SI-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-7"
+    },
+    "CM-6.3": {
+      "targets": [
+        "SI-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-7"
+    },
+    "CM-6.4": {
+      "targets": [
+        "CM-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-4"
+    },
+    "CM-8.5": {
+      "targets": [
+        "CM-8"
+      ],
+      "note": "Incorporated into CM-8"
+    },
+    "CM-11.1": {
+      "targets": [
+        "CM-8.3"
+      ],
+      "note": "Incorporated into CM-8(3)"
+    },
+    "CP-2.4": {
+      "targets": [
+        "CP-2.3"
+      ],
+      "note": "Incorporated into CP-2(3)"
+    },
+    "CP-5": {
+      "targets": [
+        "CP-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CP-2"
+    },
+    "CP-7.5": {
+      "targets": [
+        "CP-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CP-7"
+    },
+    "CP-9.4": {
+      "targets": [
+        "CP-9"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CP-9"
+    },
+    "CP-10.1": {
+      "targets": [
+        "CP-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CP-4"
+    },
+    "IA-2.3": {
+      "targets": [
+        "IA-2.1"
+      ],
+      "note": "Incorporated into IA-2(1)"
+    },
+    "IA-2.4": {
+      "targets": [
+        "IA-2.2"
+      ],
+      "note": "Incorporated into IA-2(2)"
+    },
+    "IA-2.7": {
+      "targets": [
+        "IA-2.6"
+      ],
+      "note": "Incorporated into IA-2(6)"
+    },
+    "IA-2.9": {
+      "targets": [
+        "IA-2.8"
+      ],
+      "note": "Incorporated into IA-2(8)"
+    },
+    "IA-2.11": {
+      "targets": [
+        "IA-2.6"
+      ],
+      "note": "Incorporated into IA-2(6)"
+    },
+    "IA-3.2": {
+      "targets": [
+        "IA-3.1"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into IA-3(1)"
+    },
+    "IA-4.2": {
+      "targets": [
+        "IA-12.1"
+      ],
+      "note": "Incorporated into IA-12(1)"
+    },
+    "IA-4.3": {
+      "targets": [
+        "IA-12.2"
+      ],
+      "note": "Incorporated into IA-12(2)"
+    },
+    "IA-4.7": {
+      "targets": [
+        "IA-12.4"
+      ],
+      "note": "Incorporated into IA-12(4)"
+    },
+    "IA-5.3": {
+      "targets": [
+        "IA-12.4"
+      ],
+      "note": "Incorporated into IA-12(4)"
+    },
+    "IA-5.4": {
+      "targets": [
+        "IA-5.1"
+      ],
+      "note": "Incorporated into IA-5(1)"
+    },
+    "IA-5.11": {
+      "targets": [
+        "IA-2.1",
+        "IA-2.2"
+      ],
+      "note": "Incorporated into IA-2(1) and IA-2(2)"
+    },
+    "IA-8.3": {
+      "targets": [
+        "IA-8.2"
+      ],
+      "note": "Incorporated into IA-8(2)"
+    },
+    "IA-9.1": {
+      "targets": [
+        "IA-9"
+      ],
+      "note": "Incorporated into IA-9"
+    },
+    "IA-9.2": {
+      "targets": [
+        "IA-9"
+      ],
+      "note": "Incorporated into IA-9"
+    },
+    "IR-9.1": {
+      "targets": [
+        "IR-9"
+      ],
+      "note": "Incorporated into IR-9"
+    },
+    "MA-2.1": {
+      "targets": [
+        "MA-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MA-2"
+    },
+    "MA-4.2": {
+      "targets": [
+        "MA-1",
+        "MA-4"
+      ],
+      "note": "Incorporated into MA-1 and MA-4"
+    },
+    "MP-2.1": {
+      "targets": [
+        "MP-4.2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-4(2)"
+    },
+    "MP-2.2": {
+      "targets": [
+        "SC-28.1"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-28(1)"
+    },
+    "MP-4.1": {
+      "targets": [
+        "SC-28.1"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-28(1)"
+    },
+    "MP-5.1": {
+      "targets": [
+        "MP-5"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-5"
+    },
+    "MP-5.2": {
+      "targets": [
+        "MP-5"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-5"
+    },
+    "MP-5.4": {
+      "targets": [
+        "SC-28.1"
+      ],
+      "note": "Incorporated into SC-28(1)."
+    },
+    "MP-6.4": {
+      "targets": [
+        "MP-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-6"
+    },
+    "MP-6.5": {
+      "targets": [
+        "MP-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-6"
+    },
+    "MP-6.6": {
+      "targets": [
+        "MP-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-6"
+    },
+    "MP-7.1": {
+      "targets": [
+        "MP-7"
+      ],
+      "note": "Incorporated into MP-7"
+    },
+    "PE-3.6": {
+      "targets": [
+        "CA-8"
+      ],
+      "note": "Incorporated into CA-8"
+    },
+    "PE-5.1": {
+      "targets": [
+        "PE-5"
+      ],
+      "note": "Incorporated into PE-5"
+    },
+    "PE-5.3": {
+      "targets": [
+        "PE-22"
+      ],
+      "note": "Incorporated into PE-22"
+    },
+    "PE-7": {
+      "targets": [
+        "PE-2",
+        "PE-3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PE-2 and PE-3"
+    },
+    "PE-8.2": {
+      "targets": [
+        "PE-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PE-2"
+    },
+    "PE-10.1": {
+      "targets": [
+        "PE-10"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PE-10"
+    },
+    "PE-13.3": {
+      "targets": [
+        "PE-13.2"
+      ],
+      "note": "Incorporated into PE-13(2)"
+    },
+    "PL-2.1": {
+      "targets": [
+        "PL-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PL-7"
+    },
+    "PL-2.2": {
+      "targets": [
+        "PL-8"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PL-8"
+    },
+    "PL-2.3": {
+      "targets": [
+        "PL-2"
+      ],
+      "note": "Incorporated into PL-2"
+    },
+    "PL-3": {
+      "targets": [
+        "PL-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PL-2"
+    },
+    "PL-5": {
+      "targets": [
+        "AR-2"
+      ],
+      "note": "Previously withdrawn in Rev4 Incorporated into App J control AR-2"
+    },
+    "PL-6": {
+      "targets": [
+        "PL-2"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into PL-2"
+    },
+    "PS-6.1": {
+      "targets": [
+        "PS-3"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into PS-3"
+    },
+    "RA-4": {
+      "targets": [
+        "RA-3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into RA-3"
+    },
+    "RA-5.1": {
+      "targets": [
+        "RA-5"
+      ],
+      "note": "Incorporated into RA-5"
+    },
+    "RA-5.7": {
+      "targets": [
+        "CM-8"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into CM-8"
+    },
+    "RA-5.9": {
+      "targets": [
+        "CA-8"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into CA-8"
+    },
+    "SA-4.4": {
+      "targets": [
+        "CM-8.9"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into CM-8(9)"
+    },
+    "SA-5.1": {
+      "targets": [
+        "SA-4.1"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into SA-4(1)"
+    },
+    "SA-5.2": {
+      "targets": [
+        "SA-4.2"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into SA-4(2)"
+    },
+    "SA-5.3": {
+      "targets": [
+        "SA-4.2"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into SA-4(2)"
+    },
+    "SA-5.4": {
+      "targets": [
+        "SA-4.2"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into SA-4(2)"
+    },
+    "SA-5.5": {
+      "targets": [
+        "SA-4.2"
+      ],
+      "note": "Previously withdrawn in Rev4; incorporated into SA-4(2)"
+    },
+    "SA-6": {
+      "targets": [
+        "CM-10",
+        "SI-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-10 and SI-7"
+    },
+    "SA-7": {
+      "targets": [
+        "CM-11",
+        "SI-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into CM-11 and SI-7"
+    },
+    "SA-12.3": {
+      "targets": [
+        "SR-3"
+      ],
+      "note": "Incorporated into SR-3"
+    },
+    "SA-12.8": {
+      "targets": [
+        "RA-3.2"
+      ],
+      "note": "Incorporated into RA-3(2)"
+    },
+    "SA-12.13": {
+      "targets": [
+        "MA-6",
+        "RA-9"
+      ],
+      "note": "Incorporated into MA-6, RA-9"
+    },
+    "SA-12.15": {
+      "targets": [
+        "SR-3"
+      ],
+      "note": "Incorporated into SR-3"
+    },
+    "SA-13": {
+      "targets": [
+        "SA-8"
+      ],
+      "note": "Incorporated into SA-8"
+    },
+    "SA-14": {
+      "targets": [
+        "RA-9"
+      ],
+      "note": "Incorporated into RA-9"
+    },
+    "SA-14.1": {
+      "targets": [
+        "SA-20"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SA-20"
+    },
+    "SA-15.4": {
+      "targets": [
+        "SA-11.2"
+      ],
+      "note": "Incorporated into SA-11(2)"
+    },
+    "SA-15.9": {
+      "targets": [
+        "SA-3.2"
+      ],
+      "note": "Incorporated into SA-3(2)"
+    },
+    "SA-21.1": {
+      "targets": [
+        "SA-21"
+      ],
+      "note": "Incorporated into SA-21"
+    },
+    "SA-22.1": {
+      "targets": [
+        "SA-22"
+      ],
+      "note": "Incorporated into SA-22"
+    },
+    "SC-4.1": {
+      "targets": [
+        "SC-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-4"
+    },
+    "SC-7.1": {
+      "targets": [
+        "SC-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-7"
+    },
+    "SC-7.2": {
+      "targets": [
+        "SC-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-7"
+    },
+    "SC-7.6": {
+      "targets": [
+        "SC-7.18"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-7(18)"
+    },
+    "SC-9": {
+      "targets": [
+        "SC-8"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-8"
+    },
+    "SC-12.4": {
+      "targets": [
+        "SC-12.3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-12(3)."
+    },
+    "SC-12.5": {
+      "targets": [
+        "SC-12.3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-12(3)"
+    },
+    "SC-13.1": {
+      "targets": [
+        "SC-13"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-13"
+    },
+    "SC-13.2": {
+      "targets": [
+        "SC-13"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-13"
+    },
+    "SC-13.3": {
+      "targets": [
+        "SC-13"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-13"
+    },
+    "SC-13.4": {
+      "targets": [
+        "SC-13"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-13"
+    },
+    "SC-14": {
+      "targets": [
+        "AC-2",
+        "AC-3",
+        "AC-5",
+        "AC-6",
+        "SI-3",
+        "SI-4",
+        "SI-5",
+        "SI-7",
+        "SI-10"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-2, AC-3, AC-5, AC-6, SI-3, SI-4, SI-5, SI-7, and SI-10"
+    },
+    "SC-15.2": {
+      "targets": [
+        "SC-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-7"
+    },
+    "SC-20.1": {
+      "targets": [
+        "SC-20"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-20"
+    },
+    "SC-21.1": {
+      "targets": [
+        "SC-21"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-21"
+    },
+    "SC-23.2": {
+      "targets": [
+        "AC-12.1"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-12(1)"
+    },
+    "SC-23.4": {
+      "targets": [
+        "SC-23.3"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-23(3)"
+    },
+    "SC-26.1": {
+      "targets": [
+        "SC-35"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-35"
+    },
+    "SC-30.1": {
+      "targets": [
+        "SC-29.1"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-29(1)"
+    },
+    "SC-33": {
+      "targets": [
+        "SC-8"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SC-8"
+    },
+    "SC-42.3": {
+      "targets": [
+        "SC-42"
+      ],
+      "note": "Incorporated into SC-42"
+    },
+    "SI-2.1": {
+      "targets": [
+        "PL-9"
+      ],
+      "note": "Incorporated into PL-9"
+    },
+    "SI-3.1": {
+      "targets": [
+        "PL-9"
+      ],
+      "note": "Incorporated into PL-9"
+    },
+    "SI-3.2": {
+      "targets": [
+        "SI-3"
+      ],
+      "note": "Incorporated into SI-3"
+    },
+    "SI-3.3": {
+      "targets": [
+        "AC-6.10"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-6(10)"
+    },
+    "SI-3.5": {
+      "targets": [
+        "MP-7"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into MP-7"
+    },
+    "SI-3.7": {
+      "targets": [
+        "SI-3"
+      ],
+      "note": "Incorporated into SI-3"
+    },
+    "SI-4.6": {
+      "targets": [
+        "AC-6.10"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-6(10)"
+    },
+    "SI-4.8": {
+      "targets": [
+        "SI-4"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-4"
+    },
+    "SI-6.1": {
+      "targets": [
+        "SI-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-6"
+    },
+    "SI-7.4": {
+      "targets": [
+        "SA-12",
+        "SR-9"
+      ],
+      "note": "Previously withdrawn and incorporated into SA-12 during Rev4; Incorporated into SR-9 during Rev5"
+    },
+    "SI-8.1": {
+      "targets": [
+        "PL-9"
+      ],
+      "note": "Incorporated into PL-9"
+    },
+    "SI-9": {
+      "targets": [
+        "AC-2",
+        "AC-3",
+        "AC-5",
+        "AC-6"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into AC-2, AC-3, AC-5, and AC-6"
+    },
+    "SI-13.2": {
+      "targets": [
+        "SI-7.16"
+      ],
+      "note": "Previously withdrawn in Rev4; Incorporated into SI-7(16)"
+    }
+  },
+  "appendix_j": {
+    "AP-1": {
+      "targets": [
+        "PT-2"
+      ],
+      "note": "PT-2: Authority to Process Personally Identifiable Information"
+    },
+    "AP-2": {
+      "targets": [
+        "PT-3"
+      ],
+      "note": "PT-3: Personally Identifiable Information Processing Purposes"
+    },
+    "AR-1": {
+      "targets": [
+        "PM-3",
+        "PM-18",
+        "PM-19"
+      ],
+      "note": "PM-3: Information Security and Privacy Resources PM-18: Privacy Program Plan PM-19: Privacy Program Leadership Role"
+    },
+    "AR-2": {
+      "targets": [
+        "RA-3",
+        "RA-8"
+      ],
+      "note": "RA-3: Risk Assessment RA-8: Privacy Impact Assessment"
+    },
+    "AR-3": {
+      "targets": [
+        "SA-1",
+        "SA-4",
+        "SA-9"
+      ],
+      "note": "SA-1: Policies and Procedures SA-4: Acquisition Process SA-9: External System Services"
+    },
+    "AR-4": {
+      "targets": [
+        "CA-2"
+      ],
+      "note": "CA-2: Control Assessments"
+    },
+    "AR-5": {
+      "targets": [
+        "AT-1",
+        "AT-2",
+        "AT-3",
+        "PL-4"
+      ],
+      "note": "AT-1: Policies and Procedures AT-2: Literacy Training and Awareness AT-3: Role-based Training PL-4: Rules of Behavior"
+    },
+    "AR-6": {
+      "targets": [
+        "PM-27"
+      ],
+      "note": "PM-27: Privacy Reporting"
+    },
+    "AR-7": {
+      "targets": [],
+      "note": "No specific control reflects AR-7, but there are discretionary control enhancements that relate to automation."
+    },
+    "AR-8": {
+      "targets": [
+        "PM-21"
+      ],
+      "note": "PM-21: Accounting of Disclosures"
+    },
+    "DI-1": {
+      "targets": [
+        "PM-22",
+        "SI-18"
+      ],
+      "note": "PM-22: Personally Identifiable Information Quality Management SI-18: Personally Identifiable Information Quality Operations"
+    },
+    "DI-2": {
+      "targets": [
+        "PM-24",
+        "SI-1"
+      ],
+      "note": "PM-24: Data Integrity Board SI-1: Policies and Procedures"
+    },
+    "DM-1": {
+      "targets": [
+        "SA-8.33",
+        "PM-5.1",
+        "SI-12.1"
+      ],
+      "note": "SA-8(33): Security and Privacy Engineering Principles | Minimization PM-5(1): System Inventory | Inventory of Personally Identifiable Information SI-12(1): Information Management and Retention | Limit Personally Identifiable Information Elements"
+    },
+    "DM-2": {
+      "targets": [
+        "MP-6",
+        "SI-12",
+        "SI-12.3"
+      ],
+      "note": "MP-6: Media Sanitization SI-12: Information Management and Retention SI-12(3): Information Management and Retention |Information Disposal"
+    },
+    "DM-3": {
+      "targets": [
+        "PM-25",
+        "SI-12.2"
+      ],
+      "note": "PM-25: Minimization of Personally Identifiable Information used in Testing, Training, and Research SI-12(2): Information Management and Retention | Minimize Personally Identifiable Information in Testing, Training and Research"
+    },
+    "IP-1": {
+      "targets": [
+        "PT-4"
+      ],
+      "note": "PT-4: Consent"
+    },
+    "IP-2": {
+      "targets": [
+        "AC-1",
+        "AC-3.14",
+        "PM-20",
+        "PT-5",
+        "PT-6"
+      ],
+      "note": "AC-1: Policies and Procedures AC-3(14): Access Enforcement | Individual Access PM-20: Dissemination of Privacy Program Information PT-5: Privacy Notice PT-6: System of Records Notice"
+    },
+    "IP-3": {
+      "targets": [
+        "PM-22",
+        "SI-18",
+        "SI-18.4",
+        "SI-18.5"
+      ],
+      "note": "PM-22: Personally Identifiable Information Quality Management SI-18: Personally Identifiable Information Quality Operations SI-18(4): Personally Identifiable Information Quality Operations | Individual Requests SI-18(5): Personally Identifiable Information Quality Operations | Notice of Correction or Deletion"
+    },
+    "IP-4": {
+      "targets": [
+        "PM-26"
+      ],
+      "note": "PM-26: Complaint Management"
+    },
+    "SE-1": {
+      "targets": [
+        "PM-5.1"
+      ],
+      "note": "PM-5(1): System Inventory | Inventory of Personally Identifiable Information"
+    },
+    "SE-2": {
+      "targets": [
+        "IR-8",
+        "IR-8.1"
+      ],
+      "note": "IR-8: Incident Response Plan IR-8(1): Incident Response Plan | Breaches"
+    },
+    "TR-1": {
+      "targets": [
+        "PT-5",
+        "PT-5.1"
+      ],
+      "note": "PT-5: Privacy Notice PT-5(1): Privacy Notice | Just-In-Time Notice"
+    },
+    "TR-2": {
+      "targets": [
+        "PT-5.2",
+        "PT-6"
+      ],
+      "note": "PT-5(2): Privacy Notice | Privacy Act Statements PT-6: System of Records Notice"
+    },
+    "TR-3": {
+      "targets": [
+        "PM-20"
+      ],
+      "note": "PM-20: Dissemination of Privacy Program Information"
+    },
+    "UL-1": {
+      "targets": [
+        "PT-3"
+      ],
+      "note": "PT-3: Personally Identifiable Information Processing Purposes"
+    },
+    "UL-2": {
+      "targets": [
+        "AC-21",
+        "AT-3.5",
+        "AU-2",
+        "PT-2",
+        "PT-3"
+      ],
+      "note": "AC-21: Information Sharing AT-3(5): Role-based Training | Processing Personally Identifiable Information AU-2: Event Logging PT-2: Authority to Process Personally Identifiable Information PT-3: Personally Identifiable Information Processing Purposes"
+    }
+  }
+}

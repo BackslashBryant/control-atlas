@@ -117,7 +117,21 @@ test('plain-language summaries and rationales avoid known generation defects', (
   for (const edge of edges.slice(0, 500)) {
     if (!edge.plain_language_rationale) continue;
     assert.doesNotMatch(edge.plain_language_rationale, /^NIST OLIR concept crosswalk associates/i);
-    assert.match(edge.plain_language_rationale, /before|Compare|Review/i, `operational guidance missing for ${edge.id}`);
+    // This used to require /before|Compare|Review/ — "operational guidance
+    // missing" — which mandated a reflexive "review both sides before assuming
+    // coverage transfers" tail on all 22k edges. The owner's copy directive
+    // retires that pattern, and tests/e2e/critical-path-matrix.spec.mjs:152
+    // already asserted the rendered table must NOT show it, so the two
+    // contradicted each other. The rationale must still say something real.
+    assert.doesNotMatch(
+      edge.plain_language_rationale,
+      /Review both sides|Compare both items before/i,
+      `retired reflexive guidance resurfaced on ${edge.id}`,
+    );
+    assert.ok(
+      edge.plain_language_rationale.trim().length >= 20,
+      `plain-language rationale too thin for ${edge.id}`,
+    );
   }
 });
 
@@ -360,6 +374,93 @@ test('ATT&CK sub-techniques nest under their parent technique', () => {
         `${node.id} should have an includes edge from its parent technique ${parentId}`,
       );
       assert.ok(parented.has(node.id), `${node.id} should be parented`);
+    }
+  }
+});
+
+test('every isolated CCI is one NIST genuinely never re-mapped to Revision 5', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const ccis = JSON.parse(readFileSync('data/ccis.json', 'utf8'));
+  const controls = JSON.parse(readFileSync('data/controls-800-53.json', 'utf8'));
+  const crosswalk = JSON.parse(readFileSync('data/800-53-rev4-to-rev5-crosswalk.json', 'utf8'));
+
+  const controlIds = new Set(controls.records.map((record) => record.id));
+  const connected = new Set();
+  for (const edge of edges) {
+    connected.add(edge.source_node_id);
+    connected.add(edge.target_node_id);
+  }
+  const legacyId = (index) => {
+    const match = /^([A-Z]{2,3}-\d+)(?:\s*\((\d+)\))?/.exec(String(index ?? '').trim());
+    if (!match) return null;
+    return match[2] ? `${match[1]}.${Number.parseInt(match[2], 10)}` : match[1];
+  };
+
+  const isolated = nodes.filter(
+    (node) => node.metadata?.catalog_id === 'disa-cci' && !connected.has(node.id),
+  );
+  const byId = new Map(ccis.records.map((record) => [record.id, record]));
+
+  // The point of the crosswalk: a CCI may only stay isolated when NIST publishes
+  // no Revision 5 home for the control it cites. If any legacy control it cites is
+  // in the Rev 5 catalog, or has a published withdrawn/Appendix J target, the
+  // record should have been connected and this catches the regression.
+  for (const node of isolated) {
+    const record = byId.get(node.metadata.item_id);
+    assert.ok(record, `${node.id} has no matching CCI record`);
+    for (const reference of record.references) {
+      if (!reference.title.startsWith('NIST SP 800-53')) continue;
+      const id = legacyId(reference.index);
+      if (!id) continue;
+      assert.ok(
+        !controlIds.has(id),
+        `${node.id} is isolated but cites ${id}, which exists in the Rev 5 catalog`,
+      );
+      assert.ok(
+        !crosswalk.appendix_j[id]?.targets.length,
+        `${node.id} is isolated but ${id} has a published Appendix J mapping`,
+      );
+      assert.ok(
+        !crosswalk.withdrawn[id]?.targets.some((target) => controlIds.has(target)),
+        `${node.id} is isolated but ${id} has a published withdrawn-control mapping`,
+      );
+    }
+  }
+});
+
+test('the Rev 4 crosswalk maps only what NIST published', () => {
+  const controls = JSON.parse(readFileSync('data/controls-800-53.json', 'utf8'));
+  const map = JSON.parse(readFileSync('maps/cci-to-800-53-rev4.json', 'utf8'));
+  const crosswalk = JSON.parse(readFileSync('data/800-53-rev4-to-rev5-crosswalk.json', 'utf8'));
+  const controlIds = new Set(controls.records.map((record) => record.id));
+
+  assert.equal(crosswalk.artifacts.length, 2, 'both NIST workbooks are recorded');
+  for (const artifact of crosswalk.artifacts) {
+    assert.match(artifact.url, /^https:\/\/csrc\.nist\.gov\//, 'artifacts come from NIST CSRC');
+    assert.match(artifact.checksum, /^sha256:[0-9a-f]{64}$/, 'artifacts are checksummed');
+  }
+
+  assert.ok(map.relationships.length > 0, 'the crosswalk produced relationships');
+  for (const relationship of map.relationships) {
+    assert.ok(
+      controlIds.has(relationship.target_id),
+      `${relationship.source_id} maps to ${relationship.target_id}, which is not a Rev 5 control`,
+    );
+    // These edges compose two published documents rather than restating one, so
+    // they must never claim the "direct" confidence a single published mapping gets.
+    assert.equal(relationship.confidence, 'derived', `${relationship.source_id} confidence`);
+    assert.ok(
+      ['carried_forward', 'withdrawn', 'appendix_j'].includes(relationship.basis),
+      `${relationship.source_id} has an unrecognized basis ${relationship.basis}`,
+    );
+    if (relationship.basis === 'appendix_j') {
+      const cited = /Revision [34] ([A-Z]{2,3}-\d+)/.exec(relationship.why);
+      assert.ok(cited, `${relationship.source_id} does not cite its legacy control`);
+      assert.ok(
+        crosswalk.appendix_j[cited[1]]?.targets.includes(relationship.target_id),
+        `${relationship.source_id} claims an Appendix J target NIST did not publish`,
+      );
     }
   }
 });

@@ -321,6 +321,15 @@ const MAPS = [
     "nist-800-171-oscal-mappings",
   ],
   ["cci-to-800-53.json", "disa-cci", "nist-800-53", "disa-cci-nist-references"],
+  // CCIs that DISA's own list never re-mapped past Rev 3/4, resolved through
+  // NIST's published Rev 4 -> Rev 5 correspondences. See
+  // scripts/fetch-800-53-rev4-rev5-crosswalk.mjs for what each edge is based on.
+  [
+    "cci-to-800-53-rev4.json",
+    "disa-cci",
+    "nist-800-53",
+    "nist-800-53-rev4-rev5-crosswalk",
+  ],
   [
     "stig-srg-to-cci.json",
     "disa-stig",
@@ -1538,6 +1547,10 @@ function buildEdges(registry, nodes) {
         sourceNodeId,
         targetNodeId,
         relationshipType: relationship.relationship_type || "maps_to",
+        // A map file may declare how strong its own mapping is. Only the Rev 4
+        // crosswalk does today: its edges compose two published documents rather
+        // than restating one, so they are "derived", not "direct".
+        confidence: relationship.confidence,
         sourceVersion: document.source_version,
         locator:
           relationship.source_locator ||

@@ -143,10 +143,6 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
 
   return (
     <section className="compare-results-panel">
-      <p className="notice-inline compare-trust-note" role="note">
-        Reference aid only — not an official government mapping. Verify every
-        row against the public source before you cite it in workpapers.
-      </p>
       <div className="compare-summary-grid summary-grid">
         <article className="summary-card">
           <h3>{graph.labels.shared}</h3>

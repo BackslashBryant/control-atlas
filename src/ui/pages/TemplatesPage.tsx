@@ -13,7 +13,6 @@ import {
   generateTemplate,
   templateFilename,
 } from "../../app/template-engine.mjs";
-import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import {
   CatalogFilterBar,
   QuickIntentCard,
@@ -1103,8 +1102,8 @@ export function TemplatesPage(props: {
                     : "Starter documents"}
                 </h2>
                 <p className="page-summary">
-                  Create a starter file in your browser. It helps organize the
-                  work; it is not an official form, approval, or proof.
+                  Create a starter file in your browser — sections, prompts, and
+                  structure already laid out, ready to fill in.
                 </p>
               </div>
             </div>
@@ -1390,10 +1389,6 @@ export function TemplatesPage(props: {
             {selectedTemplate.compatibility?.claim ? (
               <p>{selectedTemplate.compatibility.claim}</p>
             ) : null}
-            <p className="support-meta">
-              This is a working aid, not an official form, authorization
-              decision, or guarantee that another system will accept the file.
-            </p>
             {selectedTemplate.limitations?.length ? (
               <ul className="nexus-list">
                 {selectedTemplate.limitations.map((limitation) => (
@@ -1474,14 +1469,6 @@ export function TemplatesPage(props: {
               </div>
             </section>
           ) : null}
-          <div className="notice" role="note">
-            <p
-              className="ca-text-subtle"
-              style={{ fontSize: "var(--ca-text-xs)" }}
-            >
-              {PRODUCT_DISCLAIMER}
-            </p>
-          </div>
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">

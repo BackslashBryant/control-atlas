@@ -74,7 +74,7 @@ function sourceNode(
       item_id: source.displayName,
       title: `${source.publisher} · ${source.subcategory}`,
       hierarchyTier: source.hierarchyTier,
-      description: source.defaultMapReason,
+      description: source.plainSummary || source.defaultMapReason,
     },
   };
 }

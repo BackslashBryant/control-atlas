@@ -1,6 +1,59 @@
 # STATE
 
-## SHIPPED 2026-07-25/26 (this session)
+## 2026-07-26 — seven-item backlog resolved
+Full decision log: [`docs/audits/backlog-resolution-decisions-2026-07-26.md`](audits/backlog-resolution-decisions-2026-07-26.md).
+
+**1. CCI Rev 4 -> Rev 5 crosswalk — DONE. Isolated nodes 1,258 -> 44 (10.8% -> 0.4%).**
+The prior session's "unbridgeable upstream gap" was mostly not a gap: 1,069 of the
+1,301 CCIs without a Rev 5 reference cite a Rev 4 control id that exists verbatim
+in the Rev 5 catalog already in this repo. The residual is closed by two
+NIST-published workbooks (comparison + Appendix J), fetched and checksummed by the
+new `scripts/fetch-800-53-rev4-rev5-crosswalk.mjs` (`npm run fetch:rev4-crosswalk`).
+Nodes unchanged at 11,674 — nothing fabricated; +1,506 edges, matching the derived
+relationship count exactly. The last 44 are enhancements of withdrawn/Appendix J
+controls plus `AR-7`, for which NIST publishes no Rev 5 target; left honestly
+unmapped in `unresolved_legacy_controls`. Two new contract tests lock it, and the
+first was proven red against the pre-change edge set before being accepted.
+
+**2. Disclaimer sweep — DONE.** Cut 4 (3 in TemplatesPage incl. its 4th-on-one-page
+`PRODUCT_DISCLAIMER` block, 1 in CompareResultsPanel that was also factually wrong
+about NIST OLIR rows), kept 9 contextual/per-edge instances. The largest instance
+was in the data: `generatePlainLanguageRationale()` stamped "Review both sides...
+before assuming coverage transfers" onto all 22,261 edges. Removed at source.
+
+**3. Authority summaries — DONE, 20 written and source-verified.** The defect was
+worse than missing text: `AtlasMapPage.tsx` rendered a description only for
+non-default dispositions, so every "Why does this apply?" card showed title+link
+and nothing else. New `plainSummary` on `SourceManifestRecord`; no entry renders
+nothing rather than boilerplate.
+
+**4. ObjectDetailPage de-densified — DONE.** "Where it appears" moved from above
+Connections to a grouped disclosure below it; 3 accordion roots -> 2.
+
+**5. Orbital "Systems" mode — DROPPED, final.** `mode` drives one 8px decorative
+ruler. `docs/PRD.md:522` already groups Mission+Systems under one operational
+treatment, so docs and code already agreed; the prior mismatch note was stale.
+
+**6. Click friction — audited.** Home->Library->catalog->record = 3 clicks; no
+unjustified click found in the landing flows beyond the record-detail one fixed in 4.
+
+**7. Designer QA — 13 routes x 375/768/1440, screenshots eye-inspected.** Zero
+document overflow anywhere. Fixed `.link-action`'s `space-between`, which split
+every icon from its label across the full button width.
+
+**Verified:** `npm run precommit` -> `EXIT:0` (225 data / 31 runtime / 20 graph /
+17 browser tests, a11y+e2e smoke 4/4 each, lint 0 warnings, typecheck clean,
+"Data size check passed: 206 files, 93754886 bytes"). `npm run test:visual` ->
+28/28 with 8 baselines regenerated after inspecting each diff (CCI counts, record
+height, source count 45->46 — all intended). 3 stashes confirmed untouched.
+
+**Budget risk to watch:** the crosswalk pushed `data/` to 91.78 MiB against a
+90 MiB gate. Removing the duplicated rationale string brought it to **89.41 MiB —
+only 0.59 MiB of headroom.** The gate was NOT raised. The next data addition of
+any size will breach it; the next payload work should reduce edge/evidence
+duplication rather than lift the limit.
+
+## SHIPPED 2026-07-25/26 (previous session)
 Live at https://backslashbryant.github.io/control-atlas/ — verified serving the
 new build directly (fetched and read the live page, not just assumed from CI
 green). `main` is at `81ed698` (feature commit `1556202` + a same-session

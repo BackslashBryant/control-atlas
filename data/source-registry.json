@@ -221,6 +221,13 @@
         "hash": "sha256:cbe530bfa300eb783cdae2083e791f719439ef7c15ace8740328f79f10ef985e"
       },
       {
+        "source_id": "nist-800-53-rev4-rev5-crosswalk",
+        "sync_model": "curated",
+        "last_checked": "2026-07-26",
+        "last_imported": "2026-07-26",
+        "hash": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570"
+      },
+      {
         "source_id": "nist-informative-references",
         "sync_model": "link_out",
         "last_checked": "2026-06-09",
@@ -1440,6 +1447,44 @@
           "nist-800-53"
         ],
         "parser": "cci-xml"
+      }
+    },
+    {
+      "id": "nist-800-53-rev4-rev5-crosswalk",
+      "name": "NIST SP 800-53 Revision 4 to Revision 5 Control Correspondence",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "FIPS 200"
+      ],
+      "version": "2026-07-26",
+      "retrieved_at": "2026-07-26",
+      "retrieval_method": "download",
+      "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+      "artifact_type": "spreadsheet",
+      "checksum": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "frameworks": [
+          "disa-cci",
+          "nist-800-53"
+        ],
+        "parser": "rev4-rev5-crosswalk-xlsx",
+        "additional_artifacts": [
+          {
+            "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-appj-to-r5-comparison.xlsx",
+            "checksum": "sha256:d6307e5ca1e74863efb0c3fc086f757d431157de76c6e6e664cdf50754f3bf75",
+            "purpose": "Revision 4 Appendix J privacy controls to Revision 5"
+          }
+        ]
       }
     },
     {
