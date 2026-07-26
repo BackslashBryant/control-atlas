@@ -31,6 +31,7 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/": "home",
   "/menu": "menu",
   "/start": "start-here",
+  "/start-here": "start-here",
   "/atlas-map": "atlas-map",
   "/explore": "search",
   "/library": "catalog-detail",

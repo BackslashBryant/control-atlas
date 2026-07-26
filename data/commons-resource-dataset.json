@@ -39,7 +39,6 @@
       "resourceIds": [
         "official-nist-sp800-171-r2",
         "official-cmmc-32cfr-170",
-        "template-cmmc-ssp-starter",
         "community-reddit-cmmc",
         "community-cmmc-practitioner-discord",
         "tool-compliance-as-code"
@@ -67,7 +66,6 @@
       "resourceIds": [
         "tool-compliance-as-code",
         "tool-powerstig",
-        "tool-evaluate-stig",
         "tool-mitre-saf-cli",
         "tool-ansible-lockdown",
         "tool-hardening-kitty"
@@ -146,9 +144,7 @@
       "whyCurated": "Reduces documentation burden for small agencies and cleared contractors drafting security documentation.",
       "resourceIds": [
         "template-sans-security-policy",
-        "template-cisa-conmon-plan",
-        "template-fedramp-poam-rev5",
-        "template-cmmc-ssp-starter"
+        "template-fedramp-poam-rev5"
       ]
     },
     {
@@ -765,7 +761,7 @@
       "slug": "official-nist-csf-2",
       "summary": "Updated taxonomy organized around Govern, Identify, Protect, Detect, Respond, and Recover core functions.",
       "whyIncluded": "Governing high-level framework for organizational cybersecurity risk management across federal and private sectors.",
-      "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/1280/final",
+      "canonicalUrl": "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20",
       "publisher": "NIST CSRC",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -844,7 +840,7 @@
       "slug": "official-nist-ai-rmf",
       "summary": "Framework to improve the ability to incorporate trustworthiness considerations into AI products and systems.",
       "whyIncluded": "Governing framework for managing AI safety, bias, transparency, and federal AI risk compliance.",
-      "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/1270/final",
+      "canonicalUrl": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
       "publisher": "NIST CSRC",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -1407,7 +1403,7 @@
       "slug": "official-cisa-bod-23-01",
       "summary": "Mandatory operational directive requiring federal civilian agencies to automate asset discovery and vulnerability enumeration.",
       "whyIncluded": "Governing directive for federal asset visibility, active scanning, and automated asset inventory reporting.",
-      "canonicalUrl": "https://www.cisa.gov/news-events/directives/bod-23-01-improving-asset-visibility-and-vulnerability-detection",
+      "canonicalUrl": "https://www.cisa.gov/news-events/directives/bod-23-01-improving-asset-visibility-and-vulnerability-detection-federal-networks",
       "publisher": "CISA",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -2370,7 +2366,7 @@
       "slug": "official-fedramp-baselines",
       "summary": "Control baselines for Low, Moderate, High, and LiSaaS cloud service authorizations based on NIST SP 800-53 Rev. 5.",
       "whyIncluded": "Governing requirements baseline for Cloud Service Providers seeking a FedRAMP ATO.",
-      "canonicalUrl": "https://www.fedramp.gov/baselines/",
+      "canonicalUrl": "https://www.fedramp.gov/docs/rev5/",
       "publisher": "FedRAMP PMO (GSA)",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -2451,7 +2447,7 @@
       "slug": "official-fedramp-20x",
       "summary": "Framework for accelerating cloud authorizations through continuous automation, OSCAL data models, and agency trust.",
       "whyIncluded": "Governing modernization rules for modern cloud-native FedRAMP evaluation workflows.",
-      "canonicalUrl": "https://www.fedramp.gov/modernization/",
+      "canonicalUrl": "https://www.fedramp.gov/20x/",
       "publisher": "FedRAMP PMO (GSA)",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -3088,7 +3084,7 @@
       "slug": "official-eo-14028",
       "summary": "Presidential executive order mandating Zero Trust Architecture, software supply chain security, and SBOM adoption.",
       "whyIncluded": "Governing executive directive driving modern federal cloud security, multi-factor authentication, and SBOM rules.",
-      "canonicalUrl": "https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/",
+      "canonicalUrl": "https://www.federalregister.gov/documents/2021/05/17/2021-10460/improving-the-nations-cybersecurity",
       "publisher": "The White House",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -3488,86 +3484,6 @@
       ],
       "featuredCollections": [
         "col-dod-rmf-starter-kit",
-        "col-stig-automation-toolkit"
-      ]
-    },
-    {
-      "id": "tool-evaluate-stig",
-      "name": "Evaluate-STIG PowerShell Audit Tool",
-      "shortName": "Evaluate-STIG",
-      "slug": "tool-evaluate-stig",
-      "summary": "Lightweight PowerShell tool that audits Windows asset configurations against DISA STIGs and emits `.ckl` checklist files.",
-      "whyIncluded": "Popular practitioner utility for rapidly generating STIG Viewer `.ckl` files without manual GUI checklist clicking.",
-      "canonicalUrl": "https://github.com/cucker/Evaluate-STIG",
-      "publisher": "Open Source Community",
-      "publisherType": "government_or_organization",
-      "resourceLane": "open_source",
-      "resourceType": "tool",
-      "frameworks": [
-        "DISA STIG"
-      ],
-      "programs": [
-        "STIG Checklist",
-        "CKL"
-      ],
-      "controlFamilies": [],
-      "lifecycleStages": [
-        "Implement",
-        "Assess"
-      ],
-      "audiences": [
-        "ISSO",
-        "System Administrator",
-        "SCA"
-      ],
-      "artifactTypes": [
-        "script",
-        "cli"
-      ],
-      "technologyScopes": [
-        "general_it"
-      ],
-      "platforms": [
-        "all"
-      ],
-      "jurisdictions": [
-        "U.S. Federal Civilian"
-      ],
-      "formats": [
-        "PowerShell"
-      ],
-      "accessType": "public",
-      "costType": "free",
-      "accountRequired": false,
-      "authenticationRequired": false,
-      "publicAccessNotes": "Publicly available resource.",
-      "openSource": true,
-      "repositoryUrl": "https://github.com/cucker/Evaluate-STIG",
-      "license": "MIT",
-      "licenseUrl": null,
-      "officialStatus": "community",
-      "maturity": "stable",
-      "maintenanceStatus": "active",
-      "currentVersion": "Current",
-      "publisherUpdatedAt": "2026-07-23",
-      "lastCheckedAt": "2026-07-23",
-      "updateMethod": "manual",
-      "freshnessStatus": "current",
-      "supersedes": null,
-      "supersededBy": null,
-      "legacyReason": null,
-      "officialCounterparts": [],
-      "companionResources": [],
-      "communityLinks": [],
-      "downloadLinks": [],
-      "feedLinks": [],
-      "popularitySignals": {},
-      "editorialRecommendation": false,
-      "editorialNotes": null,
-      "warnings": [],
-      "searchAliases": [],
-      "searchKeywords": [],
-      "featuredCollections": [
         "col-stig-automation-toolkit"
       ]
     },
@@ -4073,7 +3989,7 @@
       "slug": "tool-openscap-workbench",
       "summary": "Graphical utility and scanner for performing SCAP compliance evaluations on Linux systems.",
       "whyIncluded": "The standard open-source SCAP scanner used across Red Hat Enterprise Linux and CentOS federal systems.",
-      "canonicalUrl": "https://www.open-scap.org/tools/openscap-workbench/",
+      "canonicalUrl": "https://www.open-scap.org/tools/scap-workbench/",
       "publisher": "OpenSCAP Project",
       "publisherType": "government_or_organization",
       "resourceLane": "open_source",
@@ -5383,7 +5299,7 @@
       "slug": "tool-lynis",
       "summary": "Battle-tested security auditing tool for Unix/Linux systems supporting ISO 27001 and NIST SP 800-53 audits.",
       "whyIncluded": "Lightweight shell scanner for local security audits, patch verification, and system hardening checks.",
-      "canonicalUrl": "https://github.com/CISOfoundation/lynis",
+      "canonicalUrl": "https://github.com/CISOfy/lynis",
       "publisher": "CISOfoundation / CISOPHY",
       "publisherType": "government_or_organization",
       "resourceLane": "open_source",
@@ -5426,7 +5342,7 @@
       "authenticationRequired": false,
       "publicAccessNotes": "Publicly available resource.",
       "openSource": true,
-      "repositoryUrl": "https://github.com/CISOfoundation/lynis",
+      "repositoryUrl": "https://github.com/CISOfy/lynis",
       "license": "GPL-3.0",
       "licenseUrl": null,
       "officialStatus": "community",
@@ -6571,7 +6487,7 @@
       "slug": "template-fedramp-ssp-rev5",
       "summary": "Official Word document template for authoring a FedRAMP Rev. 5 System Security Plan across Low, Moderate, and High baselines.",
       "whyIncluded": "The required baseline artifact structure for Cloud Service Providers seeking FedRAMP JAB or Agency authorization.",
-      "canonicalUrl": "https://www.fedramp.gov/assets/resources/documents/SSP-Template.docx",
+      "canonicalUrl": "https://www.fedramp.gov/docs/rev5/#legacy-system-security-plan-templates",
       "publisher": "FedRAMP PMO (GSA)",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -6658,7 +6574,7 @@
       "slug": "template-fedramp-poam-rev5",
       "summary": "Official Excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines.",
       "whyIncluded": "Mandatory standardized spreadsheet format required for monthly FedRAMP continuous monitoring submissions.",
-      "canonicalUrl": "https://www.fedramp.gov/assets/resources/documents/POAM-Template.xlsx",
+      "canonicalUrl": "https://www.fedramp.gov/docs/rev5/#legacy-assurance-templates",
       "publisher": "FedRAMP PMO (GSA)",
       "publisherType": "government_or_organization",
       "resourceLane": "official",
@@ -6735,88 +6651,6 @@
       ],
       "featuredCollections": [
         "col-fedramp-authorization-kit",
-        "col-policy-governance-templates"
-      ]
-    },
-    {
-      "id": "template-cmmc-ssp-starter",
-      "name": "CMMC Level 2 System Security Plan Starter Template",
-      "shortName": "CMMC SSP Template",
-      "slug": "template-cmmc-ssp-starter",
-      "summary": "Open-source Word and Markdown template tailored for NIST SP 800-171 and CMMC Level 2 compliance documentation.",
-      "whyIncluded": "Battle-tested community template for defense contractors building their first 800-171 SSP.",
-      "canonicalUrl": "https://github.com/cmmc-practitioners/cmmc-ssp-template",
-      "publisher": "CMMC Practitioner Group",
-      "publisherType": "government_or_organization",
-      "resourceLane": "practitioner",
-      "resourceType": "template",
-      "frameworks": [
-        "CMMC 2.0",
-        "NIST SP 800-171"
-      ],
-      "programs": [
-        "CMMC"
-      ],
-      "controlFamilies": [],
-      "lifecycleStages": [
-        "Implement",
-        "Assess"
-      ],
-      "audiences": [
-        "Defense Contractor",
-        "ISSO",
-        "Consultant"
-      ],
-      "artifactTypes": [
-        "template",
-        "ssp"
-      ],
-      "technologyScopes": [
-        "general_it"
-      ],
-      "platforms": [
-        "all"
-      ],
-      "jurisdictions": [
-        "U.S. Federal Civilian"
-      ],
-      "formats": [
-        "DOCX",
-        "Markdown"
-      ],
-      "accessType": "public",
-      "costType": "free",
-      "accountRequired": false,
-      "authenticationRequired": false,
-      "publicAccessNotes": "Publicly available resource.",
-      "openSource": true,
-      "repositoryUrl": "https://github.com/cmmc-practitioners/cmmc-ssp-template",
-      "license": "CC-BY-4.0",
-      "licenseUrl": null,
-      "officialStatus": "community",
-      "maturity": "stable",
-      "maintenanceStatus": "active",
-      "currentVersion": "Current",
-      "publisherUpdatedAt": "2026-07-23",
-      "lastCheckedAt": "2026-07-23",
-      "updateMethod": "manual",
-      "freshnessStatus": "current",
-      "supersedes": null,
-      "supersededBy": null,
-      "legacyReason": null,
-      "officialCounterparts": [],
-      "companionResources": [],
-      "communityLinks": [],
-      "downloadLinks": [],
-      "feedLinks": [],
-      "popularitySignals": {},
-      "editorialRecommendation": false,
-      "editorialNotes": null,
-      "warnings": [],
-      "searchAliases": [],
-      "searchKeywords": [],
-      "featuredCollections": [
-        "col-cmmc-level2-kit",
         "col-policy-governance-templates"
       ]
     },
@@ -7272,87 +7106,6 @@
       "license": "Open Source",
       "licenseUrl": null,
       "officialStatus": "community",
-      "maturity": "stable",
-      "maintenanceStatus": "active",
-      "currentVersion": "Current",
-      "publisherUpdatedAt": "2026-07-23",
-      "lastCheckedAt": "2026-07-23",
-      "updateMethod": "manual",
-      "freshnessStatus": "current",
-      "supersedes": null,
-      "supersededBy": null,
-      "legacyReason": null,
-      "officialCounterparts": [],
-      "companionResources": [],
-      "communityLinks": [],
-      "downloadLinks": [],
-      "feedLinks": [],
-      "popularitySignals": {},
-      "editorialRecommendation": false,
-      "editorialNotes": null,
-      "warnings": [],
-      "searchAliases": [],
-      "searchKeywords": [],
-      "featuredCollections": [
-        "col-policy-governance-templates"
-      ]
-    },
-    {
-      "id": "template-cisa-conmon-plan",
-      "name": "CISA Federal Continuous Monitoring (ISCM) Plan Template",
-      "shortName": "CISA ISCM Plan Template",
-      "slug": "template-cisa-conmon-plan",
-      "summary": "Official template for authoring an Information Security Continuous Monitoring (ISCM) strategy and operational plan.",
-      "whyIncluded": "Standard template for federal agencies documenting automated vulnerability scanning and asset discovery procedures.",
-      "canonicalUrl": "https://www.cisa.gov/resources-tools/resources/iscm-strategy-template",
-      "publisher": "CISA",
-      "publisherType": "government_or_organization",
-      "resourceLane": "official",
-      "resourceType": "template",
-      "frameworks": [
-        "NIST SP 800-137",
-        "FISMA"
-      ],
-      "programs": [
-        "ISCM",
-        "Continuous Monitoring"
-      ],
-      "controlFamilies": [],
-      "lifecycleStages": [
-        "Implement",
-        "Assess"
-      ],
-      "audiences": [
-        "ISSO",
-        "ISSM",
-        "Security Architect"
-      ],
-      "artifactTypes": [
-        "template",
-        "plan"
-      ],
-      "technologyScopes": [
-        "general_it"
-      ],
-      "platforms": [
-        "all"
-      ],
-      "jurisdictions": [
-        "U.S. Federal Civilian"
-      ],
-      "formats": [
-        "DOCX"
-      ],
-      "accessType": "public",
-      "costType": "free",
-      "accountRequired": false,
-      "authenticationRequired": false,
-      "publicAccessNotes": "Publicly available resource.",
-      "openSource": true,
-      "repositoryUrl": null,
-      "license": "U.S. Government Work",
-      "licenseUrl": null,
-      "officialStatus": "current",
       "maturity": "stable",
       "maintenanceStatus": "active",
       "currentVersion": "Current",
@@ -7929,7 +7682,7 @@
       "slug": "legacy-fedramp-rev4-baselines",
       "summary": "Archived FedRAMP Low, Moderate, and High baselines based on NIST SP 800-53 Rev. 4.",
       "whyIncluded": "Preserved for historical cloud authorization reviews during the 2024-2025 FedRAMP Rev. 5 transition.",
-      "canonicalUrl": "https://www.fedramp.gov/assets/resources/documents/FedRAMP_Security_Controls_Baseline.xlsx",
+      "canonicalUrl": "https://www.fedramp.gov/docs/rev5/#legacy-security-assessment-framework-documents",
       "publisher": "FedRAMP PMO (GSA)",
       "publisherType": "government_or_organization",
       "resourceLane": "legacy",

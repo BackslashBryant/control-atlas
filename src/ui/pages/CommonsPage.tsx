@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import {
   IconSearch,
   IconFilter,
@@ -34,24 +34,17 @@ type CommonsPageProps = {
 };
 
 export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps) {
-  // Extract initial state from URL viewState
-  const initialQuery = viewState.view === "commons" ? viewState.query || "" : "";
-  const initialLane = viewState.view === "commons" ? viewState.lane || "all" : "all";
-  const initialFramework = viewState.view === "commons" ? viewState.framework || "" : "";
-  const initialLifecycle = viewState.view === "commons" ? viewState.lifecycle || "" : "";
-  const initialAudience = viewState.view === "commons" ? viewState.audience || "" : "";
-  const initialResourceType = viewState.view === "commons" ? viewState.resourceType || "" : "";
-  const initialAccessType = viewState.view === "commons" ? viewState.accessType || "" : "";
-  const initialCollection = viewState.view === "commons" ? viewState.collection || "" : "";
-
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [activeLane, setActiveLane] = useState<string>(initialLane);
-  const [selectedFramework, setSelectedFramework] = useState(initialFramework);
-  const [selectedLifecycle, setSelectedLifecycle] = useState(initialLifecycle);
-  const [selectedAudience, setSelectedAudience] = useState(initialAudience);
-  const [selectedResourceType, setSelectedResourceType] = useState(initialResourceType);
-  const [selectedAccessType, setSelectedAccessType] = useState(initialAccessType);
-  const [selectedCollection, setSelectedCollection] = useState(initialCollection);
+  // URL state is the single filter authority. This makes a hash change,
+  // including browser Back/Forward, update both the controls and results.
+  const commonsState = viewState.view === "commons" ? viewState : null;
+  const searchQuery = commonsState?.query || "";
+  const activeLane = commonsState?.lane || "all";
+  const selectedFramework = commonsState?.framework || "";
+  const selectedLifecycle = commonsState?.lifecycle || "";
+  const selectedAudience = commonsState?.audience || "";
+  const selectedResourceType = commonsState?.resourceType || "";
+  const selectedAccessType = commonsState?.accessType || "";
+  const selectedCollection = commonsState?.collection || "";
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   // Shallow-to-deep: the full 99-resource grid is a deliberate "deep" view.
   // It opens only after the visitor expresses intent (search, lane, filter,
@@ -253,7 +246,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     if (q.includes("cmmc") || q.includes("cui") || q.includes("171")) {
       const official = allResources.find((r) => r.id === "official-nist-sp800-171-r2");
       const companions = allResources.filter((r) =>
-        ["official-cmmc-32cfr-170", "template-cmmc-ssp-starter", "community-reddit-cmmc"].includes(r.id)
+        ["official-cmmc-32cfr-170", "community-reddit-cmmc"].includes(r.id)
       );
       if (official) return { official, companions };
     }
@@ -261,7 +254,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     if (q.includes("stig") || q.includes("disa") || q.includes("ckl")) {
       const official = allResources.find((r) => r.id === "official-disa-stig-library");
       const companions = allResources.filter((r) =>
-        ["tool-disa-stig-viewer", "tool-powerstig", "tool-evaluate-stig", "tool-compliance-as-code"].includes(r.id)
+        ["tool-disa-stig-viewer", "tool-powerstig", "tool-compliance-as-code"].includes(r.id)
       );
       if (official) return { official, companions };
     }
@@ -315,14 +308,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     filteredResources.length >= GROUPING_THRESHOLD;
 
   const clearAllFilters = () => {
-    setActiveLane("all");
-    setSelectedFramework("");
-    setSelectedLifecycle("");
-    setSelectedAudience("");
-    setSelectedResourceType("");
-    setSelectedAccessType("");
-    setSelectedCollection("");
-    setSearchQuery("");
     setShowAllResources(false);
     updateParams({
       lane: "all",
@@ -348,7 +333,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           resource={resource}
           onSelectDetail={handleSelectDetail}
           onNavigateSearch={(q) => {
-            setSearchQuery(q);
             updateParams({ query: q });
           }}
         />
@@ -357,10 +341,10 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   );
 
   return (
-    <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
+    <div className="commons-page min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
       {/* Hero Header Section */}
       <header className="border-b border-[var(--ca-border)] bg-gradient-to-b from-[var(--ca-surface)] via-[var(--ca-surface-deep)] to-[var(--ca-surface-deep)] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[90rem]">
+        <div className="ca-content-container">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_15%,transparent)] border border-[color-mix(in_srgb,var(--ca-primary)_60%,transparent)] text-[var(--ca-primary)] text-xs font-semibold uppercase tracking-widest mb-3">
@@ -409,7 +393,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 type="text"
                 value={searchQuery}
                 onChange={(e) => {
-                  setSearchQuery(e.target.value);
                   updateParams({ query: e.target.value });
                 }}
                 placeholder="Search templates, tools, frameworks, communities, datasets, and official guidance..."
@@ -419,7 +402,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 <button
                   aria-label="Clear Commons search"
                   onClick={() => {
-                    setSearchQuery("");
                     updateParams({ query: "" });
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ca-secondary)] hover:text-[var(--ca-text)]"
@@ -435,7 +417,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       {/* Main Surface */}
       <section
         aria-label="Control Commons resources"
-        className="mx-auto max-w-[90rem] px-4 sm:px-6 lg:px-8 mt-8"
+        className="ca-content-container px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Parallel Discovery Lanes Tabs */}
         <nav aria-label="Parallel Discovery Lanes" className="mb-6">
@@ -454,9 +436,9 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 <button
                   key={lane.id}
                   onClick={() => {
-                    setActiveLane(lane.id);
                     updateParams({ lane: lane.id });
                   }}
+                  aria-pressed={active}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-all ${
                     active
                       ? "bg-[var(--ca-primary)] text-[var(--ca-bg)] shadow-md"
@@ -494,7 +476,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 <button
                   key={col.id}
                   onClick={() => {
-                    setSelectedCollection(col.id);
                     updateParams({ collection: col.id });
                   }}
                   className="group cursor-pointer rounded-md border border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_60%,transparent)] p-4 hover:border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)] hover:bg-[var(--ca-surface)] transition-all flex flex-col justify-between text-left"
@@ -548,7 +529,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedCollection ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] border border-[var(--ca-primary)] text-[var(--ca-primary)] text-xs font-medium">
                 Collection: {allCollections.find((c) => c.id === selectedCollection)?.title}
-                <button aria-label="Remove collection filter" onClick={() => { setSelectedCollection(""); updateParams({ collection: "" }); }}>
+                <button aria-label="Remove collection filter" onClick={() => updateParams({ collection: "" })}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -557,7 +538,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedFramework ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Framework: {selectedFramework}
-                <button aria-label="Remove framework filter" onClick={() => { setSelectedFramework(""); updateParams({ framework: "" }); }}>
+                <button aria-label="Remove framework filter" onClick={() => updateParams({ framework: "" })}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -566,7 +547,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedLifecycle ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Lifecycle: {selectedLifecycle}
-                <button aria-label="Remove lifecycle filter" onClick={() => { setSelectedLifecycle(""); updateParams({ lifecycle: "" }); }}>
+                <button aria-label="Remove lifecycle filter" onClick={() => updateParams({ lifecycle: "" })}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -575,7 +556,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
             {selectedAudience ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Audience: {selectedAudience}
-                <button aria-label="Remove audience filter" onClick={() => { setSelectedAudience(""); updateParams({ audience: "" }); }}>
+                <button aria-label="Remove audience filter" onClick={() => updateParams({ audience: "" })}>
                   <IconX size={13} />
                 </button>
               </span>
@@ -610,7 +591,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 id="commons-framework-filter"
                 value={selectedFramework}
                 onChange={(e) => {
-                  setSelectedFramework(e.target.value);
                   updateParams({ framework: e.target.value });
                 }}
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
@@ -636,7 +616,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 id="commons-lifecycle-filter"
                 value={selectedLifecycle}
                 onChange={(e) => {
-                  setSelectedLifecycle(e.target.value);
                   updateParams({ lifecycle: e.target.value });
                 }}
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
@@ -666,7 +645,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 id="commons-audience-filter"
                 value={selectedAudience}
                 onChange={(e) => {
-                  setSelectedAudience(e.target.value);
                   updateParams({ audience: e.target.value });
                 }}
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
@@ -696,7 +674,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 id="commons-resource-type-filter"
                 value={selectedResourceType}
                 onChange={(e) => {
-                  setSelectedResourceType(e.target.value);
                   updateParams({ resourceType: e.target.value });
                 }}
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
@@ -719,7 +696,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 id="commons-access-type-filter"
                 value={selectedAccessType}
                 onChange={(e) => {
-                  setSelectedAccessType(e.target.value);
                   updateParams({ accessType: e.target.value });
                 }}
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"

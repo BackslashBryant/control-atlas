@@ -144,7 +144,7 @@ export function SourcesPage(props: {
   }, [bundle.runtime]);
 
   return (
-    <Panel>
+    <Panel className="sources-page">
       <PageHeader
         eyebrow="Sources"
         summary="Every framework, mapping, and reference in Control Atlas traces back to one of these public sources."
