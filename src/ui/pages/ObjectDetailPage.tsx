@@ -35,6 +35,7 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { DetailConnectionsSkeleton } from "../components/LibrarySkeleton";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
@@ -170,6 +171,18 @@ export function ObjectDetailPage(props: {
   useEffect(() => {
     setOpenRelationshipGroupIds(defaultOpenRelationshipGroups(grouped));
   }, [relationshipGroupSignature]);
+  // Cold deep link into a non-eager catalog: the node exists but its
+  // library-search shard is still queued behind the idle scheduler. Jump it
+  // to the front instead of waiting for the shard's turn in the lazy queue.
+  useEffect(() => {
+    if (!node || document) {
+      return;
+    }
+    const catalogId = node.metadata?.catalog_id;
+    if (catalogId) {
+      bundle.prioritizeLibraryShard?.(catalogId);
+    }
+  }, [bundle, node, document]);
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
     : null;
@@ -217,7 +230,7 @@ export function ObjectDetailPage(props: {
   );
   const plainAction: string | undefined = node?.metadata?.plain_action;
 
-  if (!node || !document) {
+  if (!node) {
     return (
       <section className="notice">
         <h2>Item not found</h2>
@@ -231,6 +244,13 @@ export function ObjectDetailPage(props: {
         </Button>
       </section>
     );
+  }
+
+  if (!document) {
+    // The record exists in the graph, but its catalog's library-search shard
+    // hasn't landed yet — a different condition from "not found" and one
+    // that resolves on its own once the shard (prioritized above) arrives.
+    return <DetailConnectionsSkeleton />;
   }
 
   const locationSummary = [
