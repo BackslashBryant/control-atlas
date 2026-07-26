@@ -1,4 +1,4 @@
-export { Button } from './Button';
+export { Button, ButtonLink } from './Button';
 export { StatusChip } from './StatusChip';
 export { Panel } from './Panel';
 export { Input } from './Input';

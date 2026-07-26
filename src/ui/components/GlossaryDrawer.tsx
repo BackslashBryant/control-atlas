@@ -12,6 +12,7 @@ import {
   PATTERN_RENAMES,
   SummaryCard,
 } from "../lib/pagePrimitives";
+import { Button } from "./lsm/Button";
 
 export type HelpTab = "guide" | "glossary";
 
@@ -173,13 +174,13 @@ export function GlossaryDrawer(props: {
             >
               <SummaryCard title="What do you need to do?" tone="trust">
                 <p>Answer three questions if you are not sure which framework, document, or guide to use first.</p>
-                <button className="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
+                <Button variant="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
                   Find where to start
-                </button>
+                </Button>
               </SummaryCard>
               <div className="card-actions">
-                <button className="secondary" onClick={() => { setOpen(false); onNavigate("search"); }} type="button">Search records</button>
-                <button className="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Compare frameworks</button>
+                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("search"); }} type="button">Search records</Button>
+                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Compare frameworks</Button>
               </div>
               <details className="drawer-all-help">
                 <summary>All help topics ({helpSurfaces.length})</summary>
@@ -187,9 +188,9 @@ export function GlossaryDrawer(props: {
                   {helpSurfaces.map((surface) => (
                     <SummaryCard key={surface.view} title={surface.title}>
                       <p>{surface.body}</p>
-                      <button className="secondary" onClick={() => { setOpen(false); onNavigate(surface.view as ViewState["view"]); }} type="button">
+                      <Button variant="secondary" onClick={() => { setOpen(false); onNavigate(surface.view as ViewState["view"]); }} type="button">
                         {surface.actionLabel}
-                      </button>
+                      </Button>
                     </SummaryCard>
                   ))}
                 </div>

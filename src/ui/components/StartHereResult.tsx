@@ -4,6 +4,7 @@ import type {
   StartHereRecommendations,
 } from "../lib/startHereRecommendations.d.ts";
 import type { ViewState } from "../lib/viewState";
+import { Button } from "./lsm/Button";
 
 type StartHereResultProps = {
   recommendations: StartHereRecommendations;
@@ -58,9 +59,9 @@ export function StartHereResult(props: StartHereResultProps) {
           <p className="eyebrow">Recommended next step</p>
           <h2 id="start-here-primary-title">{primaryRecommendation.label}</h2>
           <p>{primaryRecommendation.rationale}</p>
-          <button className="primary" onClick={() => onFollowLibraryLink(primaryRecommendation)} type="button">
+          <Button variant="primary" onClick={() => onFollowLibraryLink(primaryRecommendation)} type="button">
             View {primaryRecommendation.label}
-          </button>
+          </Button>
           <p className="field-hint">This is a starting reference, not a compliance or applicability determination.</p>
         </section>
       ) : null}

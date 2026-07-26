@@ -1,5 +1,65 @@
 # STATE
 
+## 2026-07-26 (session 2) — design-token pass: type scale + button chrome
+Owner rejected the just-shipped work outright: nav depth ("I click nist 80053
+and see each control immediately... shit like that is everywhere"), layout/
+button design ("not good"), text size ("way too small. Almost everywhere"),
+and named "Commons" a bad name with a "lazy gray highlighter" tab bar. Owner
+chose fix order: **design tokens first**, then nav depth, then Commons
+rename ("Toolkit") + redesign. Three fixes shipped this pass; nav depth and
+Commons remain OPEN (see `## Open items`).
+
+**1. Type scale raised — DONE.** `styles/tokens.css` `--ca-text-*` ladder
+raised across the board (base 0.9375rem/15px -> 1rem/16px; micro/xs/sm/lg/xl/
+2xl/3xl/4xl all raised proportionally). Confirmed zero inline font-size
+overrides in `src/` (107 call sites, all in 5 CSS files) so this is a true
+single-source-of-truth fix, not a per-page patch. Verified: `npm run
+test:visual -- --update-snapshots` -> 28/28 passed, all 28 baselines
+regenerated as intended (font-size-driven) diffs, eye-inspected (home,
+commons list/detail) — no overflow, no clipped text. `npm run precommit` ->
+`PRECOMMIT_EXIT:0` (225 data / 31 runtime / 20+17 graph / 4+4 a11y+e2e smoke,
+all "# fail 0").
+
+**2. "Lazy gray highlighter" root-caused and fixed — DONE.** Not the Commons
+lane-tab bar (that's still open, see below) — it was every unstyled `<button>`
+site-wide rendering native Chromium dark-mode button chrome
+(`rgb(107,107,107)`), because `styles/tailwind.css:7-8` deliberately imports
+only Tailwind's `theme`/`utilities` layers, skipping `preflight` (which
+normally zeroes button background/border). `base.css`'s existing `button {
+cursor: pointer; }` never filled that gap. Fix: added `background:
+transparent; border: none;` to that same rule — safe because every button
+that sets its own background/border does so via a class selector, which
+always outranks the bare-element selector regardless of source order (spot-
+verified: `.primary`, `.secondary`, `lsm/Button`, Commons `Details`/tag
+buttons all unchanged). Verified: same visual-regen (28/28, eye-inspected
+Commons list + detail — gray boxes gone, styled buttons unaffected) + `npm run
+precommit` -> `PRECOMMIT_EXIT:0`.
+
+**3. Button consolidation — DONE.** The `.primary`/`.secondary` CSS classes
+were defined twice, independently, in `orbital.css:213-255` and
+`surfaces.css:420-437` with different fills (confirmed real conflict, not
+just taste — cascade order decided which won per page). A full exhaustive
+re-grep (exact string, dynamic ternary, and compound-class forms) turned up
+64 call sites across 18 files — 8 more than the first pass's estimate found
+(`HomePage.tsx` and `RelationshipExplorer.tsx` were missed entirely by the
+first grep; `ComparePage.tsx` and `CatalogDetailPage.tsx` each had one extra
+compound-class site). All migrated to the shared `lsm/Button` component,
+which gained two additions to cover real call-site shapes: a `ButtonLink`
+sibling (renders `<a>`, not `<button>` — used for the 5 sites that were
+external/navigational links, so open-in-new-tab and screen-reader "link"
+role are preserved) and a `secondary-quiet` variant (4 sites used a
+`"secondary quiet"` compound class for de-emphasized actions). The two dead
+CSS rule-sets were deleted from both files, including splitting them out of
+shared selectors they were combined with (`.header-actions button`,
+`.primary-nav button`) which stay. Verified: `npx tsc --noEmit` clean, `npm
+run lint` -> exit 0 / 0 warnings, `npm run test:visual -- --update-snapshots`
+-> 28/28 passed (eye-inspected Explore/Record-detail/Compare — consistent
+styling, no gray boxes, no overflow), `npm run precommit` -> `PRECOMMIT_EXIT:0`.
+
+Nav-depth fix (family/tier drill-down before leaf records; `nist-800-53a` has
+no `CATALOG_TIERS` row at all) and Commons rename+redesign are both fully
+unstarted.
+
 ## 2026-07-26 — seven-item backlog resolved
 Full decision log: [`docs/audits/backlog-resolution-decisions-2026-07-26.md`](audits/backlog-resolution-decisions-2026-07-26.md).
 
@@ -293,6 +353,11 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - Keep the post-v1 tool and platform evaluations in [`docs/plans/open-source-tool-assessment.md`](plans/open-source-tool-assessment.md) and [`docs/plans/open-source-platform-strengthening-assessment-2026-07-17.md`](plans/open-source-platform-strengthening-assessment-2026-07-17.md) out of the v1.0 dependency set.
 - Real crosswalk sourcing, the 11 graph-health findings, WebPageTest, pen-test, and dependency maintenance remain non-blocking backlog; do not fabricate mappings to close them.
 - Keep GitHub Actions Node runtime deprecation work and `npm ci || npm install` fallback review in separate maintenance changes.
+- **Templates page rejected outright (owner, 2026-07-26).** "Either we do this properly or we don't do it at all... a fucking .md file???" — despite `prd-v3-alignment-backlog.md` marking V1-RR-007 ("Turn Templates default page into a progressive task workflow") shipped, the owner considers the current template quality substandard. Root cause not yet traced this session (`data/template-registry.json` has no obvious `.md`/format field on a quick grep — needs a real investigation pass, not an assumption). Action: either bring every listed template up to a real, complete standard, or delete the substandard ones. Do not leave partial/placeholder templates live.
+- **Atlas Map UX rejected outright (owner, 2026-07-26).** "hairpullingly frustrating... A million options and none really help the user." This lands on top of the already-recorded owner decisions in `## Atlas reshape decisions (owner, 2026-07-19, post-v1.0.0)` (one subject + one forward motion, Path branches one decision per screen, no six-column board) — needs verification that those decisions actually shipped as designed on the live Atlas, since the fresh complaint suggests either they didn't fully land or the option-overload problem is separate from what that reshape addressed. Drive the live feature firsthand before proposing a fix.
+- **Nav depth: catalog detail pages skip the family/tier drill-down (owner-flagged 2026-07-26, systemic — "everywhere").** `CatalogDetailPage.tsx` flattens every catalog straight to its leaf records with only a `<select>` filter (e.g. SP 800-53A Rev. 5 shows "1,014 matching records" on first click, no family step) even where `scripts/build-framework-data.mjs`'s `CATALOG_TIERS` already builds real branch/tier nodes. Worse, `nist-800-53a` has **no `CATALOG_TIERS` row at all**, so there's no tier node to drill through regardless of UI fix. Owner-chosen fix order put this AFTER the design-token pass. NOT STARTED.
+- **Commons rename to "Toolkit" + lane-tab redesign (owner-approved name, 2026-07-26).** Rename touches route name, nav label, page titles/copy, and probably doc references — not yet executed. Separately, `CommonsPage.tsx:441-479`'s lane-filter bar is a hand-rolled, one-off Tailwind tab bar (solid-fill active state) instead of the shared underline-style `lsm/Tabs` component used everywhere else; replace it with the real component. NOT STARTED.
+- ~~Button consolidation (owner-flagged 2026-07-26 via "layout and button design are not good")~~ — **DONE, session 2.** See STATE.md session-2 item 3 above for full detail: 64 call sites across 18 files migrated to `lsm/Button`/new `ButtonLink`/new `secondary-quiet` variant; dead `.primary`/`.secondary` CSS deleted from both `orbital.css` and `surfaces.css`; precommit + 28/28 visual regen clean.
 
 ## Failed attempts
 - ATTEMPT 1 [L1] (Phase 4 gate, 2026-07-19): intermittent 30s timeouts in critical-path-matrix Atlas→record-detail flows (`.relationship-group-trigger` / Purpose open-record) — killed stray static server on :4399 -> still one 9/10 run afterward. Not ELK-related (map mounts only on view=map). Working hypothesis: cold-load latency under parallel Playwright workers; 20/20 on --repeat-each=2 after cleanup.

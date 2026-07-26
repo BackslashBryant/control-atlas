@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import { AtlasConnectionMap } from "./AtlasConnectionMap";
+import { Button } from "./lsm/Button";
 import { CompareExportDisclosure } from "./LoadStatusPanel";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { RelationshipExplorer } from "./RelationshipExplorer";
@@ -196,27 +197,27 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
 
       <div className="card-actions">
         {graph.atlasMapNode ? (
-          <button className="secondary" onClick={openAtlasMap} type="button">
+          <Button variant="secondary" onClick={openAtlasMap} type="button">
             Open in Atlas Map
-          </button>
+          </Button>
         ) : null}
-        <button
+        <Button
           aria-pressed={compareView === "map"}
-          className="secondary"
+          variant="secondary"
           disabled={!graph.mapAvailable}
           onClick={() => setCompareView("map")}
           type="button"
         >
           Map
-        </button>
-        <button
+        </Button>
+        <Button
           aria-pressed={compareView === "list"}
-          className="secondary"
+          variant="secondary"
           onClick={() => setCompareView("list")}
           type="button"
         >
           List
-        </button>
+        </Button>
       </div>
 
       <CompareExportDisclosure onExport={onExport} />
@@ -226,15 +227,15 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           <h2>Map view is not available for this comparison yet.</h2>
           <p>You can still review the detailed list.</p>
           <div className="card-actions">
-            <button
-              className="primary"
+            <Button
+              variant="primary"
               onClick={() => setCompareView("list")}
               type="button"
             >
               View list
-            </button>
-            <button
-              className="secondary"
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() =>
                 onNavigate("matrix", {
                   crosswalk: "relationships",
@@ -244,7 +245,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
               type="button"
             >
               Change comparison
-            </button>
+            </Button>
           </div>
         </section>
       ) : compareView === "map" ? (

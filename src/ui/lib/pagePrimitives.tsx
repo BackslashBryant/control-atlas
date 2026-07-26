@@ -9,6 +9,7 @@ import {
   sourceSyncLabel,
 } from "../../shared/source-freshness.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
+import { ButtonLink } from "../components/lsm/Button";
 import type { ViewState } from "./viewState";
 
 export const PATTERN_RENAMES: Record<string, string> = {
@@ -333,14 +334,14 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
         </div>
       ) : null}
       <div className="card-actions">
-        <a
-          className="secondary"
+        <ButtonLink
+          variant="secondary"
           href={source.artifact_url}
           rel="noopener noreferrer"
           target="_blank"
         >
           Open the original source
-        </a>
+        </ButtonLink>
       </div>
     </article>
   );

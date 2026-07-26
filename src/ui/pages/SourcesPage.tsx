@@ -72,7 +72,7 @@ import {
   PATTERN_RENAMES,
 } from "../lib/pagePrimitives";
 
-import { Panel } from "../components/lsm";
+import { Button, ButtonLink, Panel } from "../components/lsm";
 
 export function SourcesPage(props: {
   bundle: RuntimeBundle;
@@ -181,9 +181,9 @@ export function SourcesPage(props: {
           </div>
           <SourceSummaryCard source={selectedSource} />
           <div className="card-actions">
-            <a className="primary" href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
+            <ButtonLink variant="primary" href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
               Open the official source
-            </a>
+            </ButtonLink>
           </div>
           <SummaryCard title="How Control Atlas uses it">
             <p>{sourceUsageSummary(selectedSource)}.</p>
@@ -409,7 +409,7 @@ export function SourcesPage(props: {
         <section className="empty-state">
           <h2>No sources match your search.</h2>
           <p>Try a publisher name such as NIST, DISA, FedRAMP, or MITRE.</p>
-          <button className="primary" onClick={() => setSourceQuery("")} type="button">Clear source search</button>
+          <Button variant="primary" onClick={() => setSourceQuery("")} type="button">Clear source search</Button>
         </section>
       )}
       </div>

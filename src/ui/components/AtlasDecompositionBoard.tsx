@@ -18,6 +18,7 @@ import {
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
+import { Button } from "./lsm/Button";
 
 type AtlasLens = "purpose" | "rmf";
 
@@ -212,17 +213,17 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
         </div>
         <div className="atlas-selected-path-actions">
           {selectedRow ? (
-            <button
-              className="primary"
+            <Button
+              variant="primary"
               onClick={() => props.onContinueFrom(selectedRow.counterpart.id)}
               type="button"
             >
               <IconArrowRight aria-hidden="true" size={18} />
               Continue from {selectedRow.itemId}
-            </button>
+            </Button>
           ) : null}
-          <button
-            className={selectedRow ? "secondary" : "primary"}
+          <Button
+            variant={selectedRow ? "secondary" : "primary"}
             onClick={() =>
               props.onOpenDetail(selectedRow?.counterpart.id || props.center.id)
             }
@@ -230,10 +231,10 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
           >
             <IconExternalLink aria-hidden="true" size={18} />
             Open full record
-          </button>
+          </Button>
           {selectedRow?.edge.source_refs?.[0]?.source_id ? (
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={() =>
                 props.onOpenSources(selectedRow.edge.source_refs[0].source_id)
               }
@@ -241,7 +242,7 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
             >
               <IconFolderOpen aria-hidden="true" size={18} />
               View source evidence
-            </button>
+            </Button>
           ) : null}
         </div>
       </aside>

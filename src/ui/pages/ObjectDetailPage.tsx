@@ -138,7 +138,7 @@ function isMeaningfullyDifferentSummary(
   return true;
 }
 
-import { Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
@@ -222,13 +222,13 @@ export function ObjectDetailPage(props: {
       <section className="notice">
         <h2>Item not found</h2>
         <p>This deep link does not match a current public library entry.</p>
-        <button
-          className="primary"
+        <Button
+          variant="primary"
           onClick={() => onNavigate("search")}
           type="button"
         >
           Back to Explore
-        </button>
+        </Button>
       </section>
     );
   }
@@ -324,29 +324,29 @@ export function ObjectDetailPage(props: {
         eyebrow={displayNameFor("object_type", document.object_type)}
         action={
           <div className="page-header-actions">
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={returnToOrigin}
               type="button"
             >
               {originLabel}
-            </button>
+            </Button>
             {edges.length ? (
-              <button
-                className="primary"
+              <Button
+                variant="primary"
                 onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                 type="button"
               >
                 Open in Atlas Map
-              </button>
+              </Button>
             ) : null}
             {/* Secondary actions collapse into one affordance so the record
                 opens with a single obvious next step rather than four peers. */}
             <details className="record-actions-menu">
               <summary>More actions</summary>
               <div className="record-actions-popover">
-                <button
-                  className="secondary"
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     onNavigate("matrix", {
                       crosswalk: "relationships",
@@ -357,9 +357,9 @@ export function ObjectDetailPage(props: {
                   type="button"
                 >
                   Compare
-                </button>
-                <button
-                  className="secondary"
+                </Button>
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     void copyText(
                       `${window.location.origin}${window.location.pathname}${serializeHashUrl(state)}`,
@@ -368,7 +368,7 @@ export function ObjectDetailPage(props: {
                   type="button"
                 >
                   Copy link
-                </button>
+                </Button>
               </div>
             </details>
           </div>
@@ -472,8 +472,8 @@ export function ObjectDetailPage(props: {
               </div>
               <div className="section-header-actions">
                 {edges.length ? (
-                  <button
-                    className="secondary"
+                  <Button
+                    variant="secondary"
                     onClick={() =>
                       onNavigate("library-detail", {
                         node: state.node,
@@ -484,7 +484,7 @@ export function ObjectDetailPage(props: {
                     type="button"
                   >
                     View as list
-                  </button>
+                  </Button>
                 ) : null}
                 <Badge tone="info">{edges.length} connections</Badge>
               </div>
@@ -626,15 +626,15 @@ export function ObjectDetailPage(props: {
               </p>
             ) : null}
             <div className="card-actions">
-              <button
-                className="secondary"
+              <Button
+                variant="secondary"
                 onClick={() =>
                   onNavigate("sources", { source: source?.id || "" })
                 }
                 type="button"
               >
                 View data sources
-              </button>
+              </Button>
             </div>
           </SummaryCard>
 

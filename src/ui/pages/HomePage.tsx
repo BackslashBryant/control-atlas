@@ -37,7 +37,7 @@ export function HomePage(props: HomePageProps) {
           </p>
           <Button
             variant="editorial"
-            className="primary landing-primary-action"
+            className="landing-primary-action"
             aria-describedby="landing-primary-hint"
             onClick={() => onNavigate("start-here")}
           >

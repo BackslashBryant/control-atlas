@@ -46,7 +46,7 @@ import {
 } from "../lib/runtimeLoader";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
-import { Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
@@ -579,8 +579,8 @@ function FocusedAtlas(props: {
 
               <div className="atlas-inspector-actions">
                 {selectedRow ? (
-                  <button
-                    className="primary"
+                  <Button
+                    variant="primary"
                     onClick={() => {
                       setSelectedRow(null);
                       patchAtlas({
@@ -594,25 +594,25 @@ function FocusedAtlas(props: {
                   >
                     <IconMap aria-hidden="true" size={18} />
                     Explore from this record
-                  </button>
+                  </Button>
                 ) : null}
-                <button
-                  className="secondary"
+                <Button
+                  variant="secondary"
                   onClick={() => onOpenNode(inspectedId, "atlas-map")}
                   type="button"
                 >
                   <IconExternalLink aria-hidden="true" size={18} />
                   Open full record
-                </button>
+                </Button>
                 {selectedRow ? (
-                  <button
-                    className="secondary quiet"
+                  <Button
+                    variant="secondary-quiet"
                     onClick={() => openSources(selectedSource?.source_id)}
                     type="button"
                   >
                     <IconFolderOpen aria-hidden="true" size={18} />
                     View source
-                  </button>
+                  </Button>
                 ) : null}
               </div>
             </aside>
@@ -975,16 +975,16 @@ function AtlasNoConnections(props: {
       </p>
       <div className="card-actions">
         {props.filtersActive ? (
-          <button className="primary" onClick={props.onClear} type="button">Clear filters</button>
+          <Button variant="primary" onClick={props.onClear} type="button">Clear filters</Button>
         ) : null}
         {!props.includeCandidates && props.candidateCount > 0 ? (
-          <button className="secondary" onClick={props.onIncludeCandidates} type="button">
+          <Button variant="secondary" onClick={props.onIncludeCandidates} type="button">
             Show {props.candidateCount} candidate links
-          </button>
+          </Button>
         ) : null}
-        <button className="secondary" onClick={props.onOpenRecord} type="button">Open record</button>
-        <button className="secondary" onClick={props.onSearch} type="button">Search Atlas</button>
-        <button className="secondary" onClick={props.onSources} type="button">View sources</button>
+        <Button variant="secondary" onClick={props.onOpenRecord} type="button">Open record</Button>
+        <Button variant="secondary" onClick={props.onSearch} type="button">Search Atlas</Button>
+        <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>
       </div>
     </section>
   );
@@ -1000,8 +1000,8 @@ function AtlasLoadFailure(props: {
       <h2>{props.error ? "Connections could not be loaded." : "This record is not in the Atlas."}</h2>
       <p>{props.error ? "The small connection file did not load. Try again or continue through Search." : "The link may be stale or the record may not be part of the current public graph."}</p>
       <div className="card-actions">
-        <button className="primary" onClick={props.onSearch} type="button">Search records</button>
-        <button className="secondary" onClick={props.onSources} type="button">View sources</button>
+        <Button variant="primary" onClick={props.onSearch} type="button">Search records</Button>
+        <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>
       </div>
     </section>
   );

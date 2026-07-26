@@ -21,6 +21,7 @@ import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import { SearchOverlay } from "./components/SearchOverlay";
 import { GlossaryDrawer, type HelpTab } from "./components/GlossaryDrawer";
+import { Button } from "./components/lsm/Button";
 import {
   OrbitalContextBar,
   orbitalRouteContext,
@@ -487,18 +488,18 @@ function AppContent(props: {
           have moved.
         </p>
         <div className="card-actions">
-          <button
-            className="primary"
+          <Button
+            variant="primary"
             onClick={() => onNavigate("home")}
             type="button"
           >
             Go to Home
-          </button>
+          </Button>
           <details>
             <summary>Try another path</summary>
             <div className="card-actions disclosure-actions">
-              <button className="secondary" onClick={() => onNavigate("start-here")} type="button">Start here</button>
-              <button className="secondary" onClick={() => onNavigate("search")} type="button">Search records</button>
+              <Button variant="secondary" onClick={() => onNavigate("start-here")} type="button">Start here</Button>
+              <Button variant="secondary" onClick={() => onNavigate("search")} type="button">Search records</Button>
             </div>
           </details>
         </div>
@@ -639,20 +640,20 @@ function AppContent(props: {
         <h2>We do not have a public map entry for "{state.query}"</h2>
         <p>Try Explore search or Start to find the closest path.</p>
         <div className="card-actions">
-          <button
-            className="primary"
+          <Button
+            variant="primary"
             onClick={() => onNavigate("search", { query: state.query })}
             type="button"
           >
             Search records
-          </button>
-          <button
-            className="secondary"
+          </Button>
+          <Button
+            variant="secondary"
             onClick={() => onNavigate("start-here")}
             type="button"
           >
             Start guided path
-          </button>
+          </Button>
         </div>
       </section>
     );

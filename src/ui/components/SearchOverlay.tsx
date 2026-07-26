@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
+import { Button } from "./lsm/Button";
 
 type SearchOverlayProps = {
   bundle: RuntimeBundle | null;
@@ -186,12 +187,12 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
           {query.trim() ? (
             <div className="card-actions flex gap-2">
-              <button className="secondary" onClick={openExplore} type="button">
+              <Button variant="secondary" onClick={openExplore} type="button">
                 View all Explore records
-              </button>
-              <button className="secondary" onClick={openCommons} type="button">
+              </Button>
+              <Button variant="secondary" onClick={openCommons} type="button">
                 Search in Control Commons
-              </button>
+              </Button>
             </div>
           ) : null}
         </Dialog.Content>

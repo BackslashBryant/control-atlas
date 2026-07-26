@@ -13,6 +13,7 @@ import {
   provenanceCssVar,
 } from "../lib/graphTheme";
 import { ProvenanceTerm } from "./ProvenanceTerm";
+import { Button } from "./lsm/Button";
 import { useClusteredGraph } from "../lib/useClusteredGraph";
 import {
   useRelationshipFilters,
@@ -390,15 +391,15 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
           role="group"
         >
           {collapseLabels.map(({ clusterKey, label }) => (
-            <button
-              className="secondary quiet"
+            <Button
+              variant="secondary-quiet"
               disabled={layoutRunning}
               key={clusterKey}
               onClick={() => clustering.onClusterCollapse?.(clusterKey)}
               type="button"
             >
               Collapse {label}
-            </button>
+            </Button>
           ))}
         </div>
       ) : null}

@@ -124,15 +124,15 @@
   --ca-font-body: Inter, system-ui, sans-serif;
   --ca-font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
-  --ca-text-micro: 0.6875rem;
-  --ca-text-xs: 0.75rem;
-  --ca-text-sm: 0.8125rem;
-  --ca-text-base: 0.9375rem;
-  --ca-text-lg: 1.0625rem;
-  --ca-text-xl: 1.125rem;
-  --ca-text-2xl: 1.5rem;
-  --ca-text-3xl: 2rem;
-  --ca-text-4xl: 3rem;
+  --ca-text-micro: 0.75rem;
+  --ca-text-xs: 0.8125rem;
+  --ca-text-sm: 0.875rem;
+  --ca-text-base: 1rem;
+  --ca-text-lg: 1.125rem;
+  --ca-text-xl: 1.25rem;
+  --ca-text-2xl: 1.625rem;
+  --ca-text-3xl: 2.25rem;
+  --ca-text-4xl: 3.25rem;
   --ca-text-display: clamp(4rem, 8vw, 6rem);
 
   --line-height-tight: 0.92;
