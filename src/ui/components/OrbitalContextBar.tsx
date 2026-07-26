@@ -200,9 +200,7 @@ export function OrbitalContextBar(props: {
             <IconArrowLeft aria-hidden="true" size={16} stroke={1.5} />
             {context.back.label}
           </button>
-        ) : (
-          <span className="orbital-context-state">Public data · local session</span>
-        )}
+        ) : null}
       </div>
     </div>
   );

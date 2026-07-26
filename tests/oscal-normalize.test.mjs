@@ -7,6 +7,7 @@ import {
   parse800171CsvCatalog,
   parse800172Catalog,
   parse80053Catalog,
+  parseCsfCatalog,
 } from '../tools/normalizers/oscal-normalize.mjs';
 
 const sample80053Assessment = JSON.parse(readFileSync('tests/fixtures/oscal/sample-800-53-assessment.json', 'utf8'));
@@ -210,5 +211,42 @@ test('800-172 catalog normalization preserves enhanced requirement identifiers',
     family: 'Access Control',
     description: 'Protect critical CUI functions.',
     plain_language_summary: 'Protect critical CUI functions.',
+  });
+});
+
+test('CSF 2.0 catalog normalization threads Function and Category grouping onto each subcategory', () => {
+  const catalog = {
+    catalog: {
+      groups: [{
+        id: 'GV',
+        class: 'function',
+        title: 'GOVERN',
+        groups: [{
+          id: 'GV.OC',
+          class: 'category',
+          title: 'Organizational Context',
+          controls: [{
+            id: 'GV.OC-01',
+            class: 'subcategory',
+            title: 'GV.OC-01',
+            parts: [{ prose: 'The organizational mission is understood.' }],
+          }],
+        }],
+      }],
+    },
+  };
+  const result = parseCsfCatalog(catalog, 'nist-oscal');
+  assert.equal(result.source_key, 'nist-oscal');
+  assert.deepEqual(result.records[0], {
+    id: 'GV.OC-01',
+    type: 'csf-subcategory',
+    framework: 'csf',
+    title: 'GV.OC-01',
+    description: 'The organizational mission is understood.',
+    plain_language_summary: 'The organizational mission is understood.',
+    function_id: 'GV',
+    function: 'GOVERN',
+    category_id: 'GV.OC',
+    category: 'Organizational Context',
   });
 });

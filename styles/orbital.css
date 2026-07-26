@@ -156,10 +156,29 @@ body {
 }
 
 .primary-nav {
+  display: flex;
+  align-items: flex-end;
   justify-content: center;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: thin;
+}
+
+/* Separates the "framework" tab group (Atlas/Library/Compare — all read the
+   same GRC graph) from the "toolkit" group (Commons/Guides/Documents —
+   practitioner tools) so the two kinds of destination read as two kinds of
+   destination, not one undifferentiated row. */
+.primary-nav-divider {
+  align-self: center;
+  width: 1px;
+  height: 28px;
+  margin-inline: var(--ca-space-2);
+  background: var(--ca-border-strong);
+  flex-shrink: 0;
+}
+
+.primary-nav > div {
+  flex-shrink: 0;
 }
 
 .primary-nav button {
@@ -678,11 +697,14 @@ details > summary {
   display: grid;
   align-content: center;
   justify-items: stretch;
-  gap: var(--ca-space-8);
+  gap: var(--ca-space-5);
   width: 100%;
-  min-height: 100svh;
-  padding: clamp(3.5rem, 8vw, 7rem) clamp(1.25rem, 6vw, 5rem)
-    var(--ca-space-12);
+  /* Reserves room for the minimal site-footer notice rendered right after
+     this section on the home route, so hero + footer together fit one
+     viewport with no scroll instead of each independently claiming 100svh. */
+  min-height: calc(100svh - 3.5rem);
+  padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.25rem, 6vw, 5rem)
+    var(--ca-space-4);
   overflow: hidden;
   border-bottom: 1px solid var(--ca-border);
   background:
@@ -869,6 +891,35 @@ details > summary {
 .landing-primary-action {
   width: 100%;
   min-height: var(--ca-control-lg);
+}
+
+/* Always-visible destination shortcuts for a returning visitor who already
+   knows where they're going — no click through Start Here required. */
+.landing-shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ca-space-2);
+}
+
+.landing-shortcut {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  min-height: var(--ca-control-md);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-border-strong);
+  border-radius: var(--ca-radius-md);
+  background: var(--ca-surface-raised);
+  color: var(--ca-text);
+  font-size: var(--ca-text-sm);
+  font-weight: 500;
+  text-align: left;
+}
+
+.landing-shortcut:hover,
+.landing-shortcut:focus-visible {
+  border-color: var(--ca-primary);
+  color: var(--ca-primary);
 }
 
 .landing-workbench {

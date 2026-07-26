@@ -10,7 +10,7 @@ export function SiteFooter(props: {
 }) {
   if (props.minimal) {
     return (
-      <footer className="mt-[64px] border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[24px] px-[24px] text-center">
+      <footer className="border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[10px] px-[24px] text-center">
         <p className="text-[var(--ca-text-subtle)] text-[12px] max-w-[1280px] mx-auto">{FOOTER_NOTICE}</p>
       </footer>
     );

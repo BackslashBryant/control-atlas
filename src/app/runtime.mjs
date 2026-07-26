@@ -253,6 +253,38 @@ export function createFederalGraphRuntime(dataset) {
   }
 
   let miniSearch = libraryIndexes[0] || null;
+  // A catalog's declared node_type for its grouping tier (see CATALOG_TIERS
+  // in scripts/build-framework-data.mjs) — used to split a catalog's total
+  // node_count into "leaf records" vs "grouping tiers" instead of quoting one
+  // mixed number, and to give the tier a plain-language name in the UI
+  // instead of always calling it a "family". `function` is never a leaf
+  // record's immediate parent (CSF nests Category under it), so it is
+  // excluded from both counts here.
+  const TIER_NODE_TYPES = new Set([
+    "family",
+    "benchmark",
+    "category",
+    "tactic",
+    "group",
+  ]);
+  const NON_LEAF_NODE_TYPES = new Set([...TIER_NODE_TYPES, "function", "catalog"]);
+  const TIER_TYPE_LABELS = {
+    family: ["family", "families"],
+    benchmark: ["benchmark", "benchmarks"],
+    category: ["category", "categories"],
+    tactic: ["tactic", "tactics"],
+    group: ["group", "groups"],
+  };
+  // Plain-language overrides for catalogs whose shared "group" node_type
+  // would otherwise read as vague — each name matches or plainly reflects
+  // that framework's own published vocabulary (SSDF calls these "Practice
+  // Groups"; AI RMF nests them under its four Functions; DoD RAI's are
+  // titled sections, not a named taxonomy).
+  const CATALOG_TIER_LABEL_OVERRIDES = {
+    "nist-ai-rmf": ["function area", "function areas"],
+    "nist-ssdf": ["practice group", "practice groups"],
+    "dod-rai": ["section", "sections"],
+  };
   const CATALOG_DISPLAY_NAMES = {
     "cmmc-2": { name: "CMMC 2.0", group: "Other" },
     "csf-2": { name: "NIST CSF 2.0", group: "NIST" },
@@ -302,11 +334,31 @@ export function createFederalGraphRuntime(dataset) {
       const connectedCount = catalogNodes.filter((node) =>
         connectedNodeIds.has(node.id),
       ).length;
+      const tierNode = catalogNodes.find((node) =>
+        TIER_NODE_TYPES.has(node.node_type),
+      );
+      const tierType = tierNode?.node_type || null;
+      const tierLabels = tierType
+        ? CATALOG_TIER_LABEL_OVERRIDES[id] || TIER_TYPE_LABELS[tierType]
+        : null;
+      const leafRecordCount = catalogNodes.filter(
+        (node) => !NON_LEAF_NODE_TYPES.has(node.node_type),
+      ).length;
+      const tierCount = tierType
+        ? catalogNodes.filter((node) => node.node_type === tierType).length
+        : 0;
       return {
         id,
         name: CATALOG_DISPLAY_NAMES[id]?.name || id,
         display_group: CATALOG_DISPLAY_NAMES[id]?.group || "Other",
         node_count: catalogNodes.length,
+        // Plain-language split of node_count so a UI can say "603 rules
+        // across 11 benchmarks" instead of one mixed "614 records" figure
+        // that silently counts both the leaves and their grouping tiers.
+        leaf_record_count: leafRecordCount,
+        tier_count: tierCount,
+        tier_label: tierLabels?.[0] || null,
+        tier_label_plural: tierLabels?.[1] || null,
         connected_count: connectedCount,
         relationship_count: dataset.edges.filter(
           (edge) =>

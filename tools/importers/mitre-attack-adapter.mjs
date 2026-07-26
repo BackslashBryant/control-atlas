@@ -24,6 +24,29 @@ function platformNames(object) {
   return (object.x_mitre_platforms || []).filter(Boolean);
 }
 
+/**
+ * Build a lookup of ATT&CK tactic shortname (the slug used in
+ * kill_chain_phases[].phase_name, e.g. "credential-access") to its official
+ * display name and TA-code, from the STIX bundle's `x-mitre-tactic` objects.
+ * The bundle already publishes this; techniques only carry the slug.
+ */
+export function tacticLookupFromStixBundle(stixDocument, externalSourceName) {
+  const lookup = new Map();
+  for (const object of stixDocument?.objects || []) {
+    if (object.type !== 'x-mitre-tactic') continue;
+    const shortname = object.x_mitre_shortname;
+    if (!shortname) continue;
+    const reference = (object.external_references || []).find(
+      (entry) => entry.source_name === externalSourceName && entry.external_id,
+    );
+    lookup.set(shortname, {
+      id: reference?.external_id || shortname,
+      title: textValue(object.name) || shortname,
+    });
+  }
+  return lookup;
+}
+
 function normalizeAttackRecord(object, options) {
   const techniqueId = externalId(object, options.externalSourceName);
   if (!techniqueId) return null;
@@ -32,6 +55,10 @@ function normalizeAttackRecord(object, options) {
   const description = textValue(object.description);
   const tactics = tacticNames(object);
   const platforms = platformNames(object);
+  const primaryTactic = tactics[0] ? options.tacticLookup?.get(tactics[0]) : null;
+  const parentTechniqueId = object.x_mitre_is_subtechnique
+    ? techniqueId.split('.')[0]
+    : null;
 
   return {
     id: techniqueId,
@@ -43,8 +70,11 @@ function normalizeAttackRecord(object, options) {
     metadata: {
       attack_domain: options.domain,
       tactics,
+      tactic_id: primaryTactic?.id || null,
+      tactic_title: primaryTactic?.title || null,
       platforms,
       is_subtechnique: Boolean(object.x_mitre_is_subtechnique),
+      parent_technique_id: parentTechniqueId,
       stix_id: object.id,
     },
     source: {
@@ -58,11 +88,15 @@ function normalizeAttackRecord(object, options) {
 
 export function parseAttackStixBundle(stixDocument, options = {}) {
   const objects = stixDocument?.objects || [];
+  const tacticLookup = tacticLookupFromStixBundle(
+    stixDocument,
+    options.externalSourceName,
+  );
   const records = [];
   for (const object of objects) {
     if (object.type !== 'attack-pattern') continue;
     if (object.revoked || object.x_mitre_deprecated) continue;
-    const record = normalizeAttackRecord(object, options);
+    const record = normalizeAttackRecord(object, { ...options, tacticLookup });
     if (record) records.push(record);
   }
   records.sort((left, right) => left.id.localeCompare(right.id));

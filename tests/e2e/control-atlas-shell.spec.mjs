@@ -81,8 +81,8 @@ test("control atlas map-first shell exposes navigation and guided start path", a
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
   expect(navLabels).toEqual([
-    "Library",
     "Atlas",
+    "Library",
     "Compare",
     "Commons",
     "Guides",
@@ -422,7 +422,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await dismissOnboarding(page);
   await expect(
     page.getByRole("heading", {
-      name: "Review sources before you rely on a match",
+      name: "Where the data comes from",
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Refine sources", exact: true }).click();

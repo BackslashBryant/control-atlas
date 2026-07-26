@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-25T15:48:15.592Z",
+  "generated_at": "2026-07-25T23:44:04.118Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -182,9 +182,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1532,
-      "relationship_count": 1514,
-      "evidence_count": 1514,
+      "node_count": 1533,
+      "relationship_count": 1532,
+      "evidence_count": 1532,
       "finding_count": 0
     },
     {
@@ -208,9 +208,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 614,
-      "relationship_count": 603,
-      "evidence_count": 603,
+      "node_count": 615,
+      "relationship_count": 614,
+      "evidence_count": 614,
       "finding_count": 0
     },
     {
@@ -262,9 +262,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 3,
-      "relationship_count": 112,
-      "evidence_count": 112,
+      "node_count": 4,
+      "relationship_count": 115,
+      "evidence_count": 115,
       "finding_count": 0
     },
     {
@@ -288,9 +288,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 11,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 14,
+      "relationship_count": 13,
+      "evidence_count": 13,
       "finding_count": 0
     },
     {
@@ -368,8 +368,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 166,
-      "relationship_count": 963,
-      "evidence_count": 963,
+      "relationship_count": 964,
+      "evidence_count": 964,
       "finding_count": 2
     },
     {
@@ -394,8 +394,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 15,
-      "relationship_count": 1,
-      "evidence_count": 1,
+      "relationship_count": 6,
+      "evidence_count": 6,
       "finding_count": 0
     },
     {
@@ -499,9 +499,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 2,
+      "relationship_count": 1,
+      "evidence_count": 1,
       "finding_count": 0
     },
     {
@@ -525,9 +525,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 697,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 713,
+      "relationship_count": 1187,
+      "evidence_count": 1187,
       "finding_count": 0
     },
     {
@@ -551,9 +551,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 97,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 110,
+      "relationship_count": 127,
+      "evidence_count": 127,
       "finding_count": 0
     },
     {
@@ -631,9 +631,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 271,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 279,
+      "relationship_count": 278,
+      "evidence_count": 278,
       "finding_count": 0
     },
     {
@@ -658,8 +658,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 2,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "relationship_count": 2,
+      "evidence_count": 2,
       "finding_count": 0
     },
     {
@@ -711,8 +711,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 125,
-      "relationship_count": 111,
-      "evidence_count": 111,
+      "relationship_count": 125,
+      "evidence_count": 125,
       "finding_count": 0
     },
     {
@@ -737,8 +737,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 133,
-      "relationship_count": 116,
-      "evidence_count": 116,
+      "relationship_count": 133,
+      "evidence_count": 133,
       "finding_count": 0
     },
     {
@@ -842,9 +842,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 72,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 92,
+      "relationship_count": 91,
+      "evidence_count": 91,
       "finding_count": 0
     },
     {
@@ -1057,9 +1057,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1549,
-      "relationship_count": 2199,
-      "evidence_count": 2199,
+      "node_count": 1591,
+      "relationship_count": 2461,
+      "evidence_count": 2461,
       "finding_count": 0
     },
     {
@@ -1083,9 +1083,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 42,
-      "relationship_count": 0,
-      "evidence_count": 0,
+      "node_count": 47,
+      "relationship_count": 46,
+      "evidence_count": 46,
       "finding_count": 0
     },
     {

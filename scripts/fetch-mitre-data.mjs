@@ -16,6 +16,7 @@ import {
   buildMappingDocument,
   buildSlugToD3fendIdMap,
   parseD3fendTechniques,
+  resolveD3fendTactics,
 } from '../tools/importers/mitre-d3fend-adapter.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -128,9 +129,14 @@ export async function fetchMitreData(options = {}) {
     });
 
     const d3fendRecords = parseD3fendTechniques(d3fendTechniques);
+    const d3fendTactics = resolveD3fendTactics(d3fendOntology);
     for (const record of d3fendRecords) {
       record.source.snapshot_date = snapshotDate;
       record.source.version = String(d3fendVersion);
+      const tactic = d3fendTactics.get(record.id);
+      record.family = tactic?.title || '';
+      record.metadata.tactic_id = tactic?.id || null;
+      record.metadata.tactic_title = tactic?.title || null;
     }
     const d3fend = buildD3fendCatalogDocument(d3fendRecords, {
       artifactUrl: REMOTE.d3fendTechniques,

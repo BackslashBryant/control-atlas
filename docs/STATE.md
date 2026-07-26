@@ -8,6 +8,87 @@ PRIOR (shipped): Realign Control Atlas with Orbital Archive No. 01 **v1.7.0** (t
 PRIOR (superseded/shipped): Execute the owner-approved UX spine remediation (docs/plans/v1-ux-spine-plan-2026-07-18.md); `v1.0.0` tags only after phases 1–5 land. Preserve the static public-data-only architecture.
 
 ## Now
+(2026-07-25, this session — branch `grc-tree-and-orbital-skin`) Owner cleared full
+autonomy mid-session ("run fully autonomous... make the labeling, categorization,
+naming, and tiering calls yourself... you are cleared to ship... take it all the
+way"). Full decision log: [`docs/audits/grc-tree-completion-decisions-2026-07-25.md`](audits/grc-tree-completion-decisions-2026-07-25.md).
+Two disconnects happened mid-session due to usage; this entry is the durable
+handoff point — read it and the decision log before trusting anything else about
+current state.
+
+**Phase A (GRC containment tree steps 4-7) — DONE, verified, tests green.**
+CSF 2.0 Function+Category tiers (walkCsf normalizer fix — the official OSCAL
+groups carried these all along, just discarded), ATT&CK/D3FEND tactic tiers
+(D3FEND's required walking the full ontology's `rdfs:subClassOf`+`d3f:enables`
+chain — 271/271 resolved, verified), sub-technique nesting, `group` tier for
+AI-RMF/SSDF/DoD-RAI, every tiered catalog's top tier parented to its own catalog
+node, zt_tenet/CMMC Level 1/CUI Specified/dod-zt overlay-catalog isolation bugs
+fixed (each a real bug, not fabricated edges — see decision log). Headline:
+unparented 67%→53.3%, isolated 18%→10.8% (1,258 nodes, **100% accounted for** by
+one real upstream gap: DISA's own CCI list lacks a Rev 5 crosswalk for these
+specific items — researched three owner-supplied community-mapping leads, none
+were authoritative enough to use, documented why in the decision log rather than
+fabricate). UI semantics fixed: mixed-tier record counts split ("603 rules across
+11 benchmarks"), "Filter by family" now dynamic per catalog's real tier kind.
+
+**Phase B (Orbital skin / IA) — substantial, in progress.** Primary nav regrouped
+from one flat row of 6 into two real groups ("framework": Atlas/Library/Compare;
+"toolkit": Commons/Guides/Documents) via a new `section` field on `NavItem`
+(`src/ui/lib/navigation.ts`), not positional slicing. Found and fixed a real bug
+in passing: a Tailwind `flex` utility on `.primary-nav` defeated the existing
+`display:none` responsive breakpoint because this project's Tailwind utilities
+carry `!important` — the same bug class already recorded once for `Button`.
+Library index page rewritten (grouped by publisher, new heading, "Try Atlas"
+wayfinding link) after direct owner feedback calling the old flat list "TMI and
+confusing." Home page rebuilt around "land and go": removed the "Access/Sources/
+Output" reassurance table (owner: "dumb"), added always-visible one-click
+shortcuts to all 6 destinations for returning visitors (driven by
+`PRIMARY_NAV_ITEMS`, can't drift out of sync), dropped the "create starter
+documents" tagline clause (owner: "AI-slop kinda"). Cut the two highest-repetition
+"be careful/review before relying" disclaimer instances (home footer line,
+CatalogDetailPage's per-catalog caveat) after owner called out "so much dumb
+patronizing stuff" — **NOT fully swept**, `TemplatesPage.tsx` and a few lower-
+traffic/opt-in spots still have similar phrasing, flagged not fixed. Landing page
+now fits one viewport with zero scroll at 1440×900 and 1440×800 (owner: "There
+should be no scrolling on the landing page" / "respect the scroll") — root cause
+was CSS grid `gap` double-stacking with each child's own margin, plus
+`min-height:100svh` on the hero ignoring the `SiteFooter` sibling rendered right
+after it; fixed via `calc(100svh - 3.5rem)`. Container-width stranding fixed for
+Commons (160px) and Library (320px) in one pass, matching `--ca-content-max`.
+Deliberately did NOT add Orbital's 3rd "Systems" nav mode — its own definition
+doesn't cleanly fit GovFrame's public-reference record pages; forcing it risked
+misrepresenting what those pages are, so left as 2-mode and documented.
+
+**NOT started this session:** Atlas lens/entry-choice work (STATE.md's July-24
+"REMAINING" note below is actually STALE on this point — the 2026-07-19 Atlas
+reshape decision already retired the persistent lens switcher; verified in code
+by an earlier research pass this session, not re-verified since), the ~20 missing
+plain-English "Why does this apply?" summaries, ObjectDetailPage de-densification.
+
+**Test status:** three rounds of stale test references fixed as real UI changes
+landed (nav order in `control-atlas-shell.spec.mjs`, the whole "landing signal
+grid" contract in `a11y-contract.test.mjs` rewritten to match the new shortcut-
+grid design intentionally, home tagline regex in `browser-contract.test.mjs`,
+"Plan the work"/etc. button names in `critical-path-matrix.spec.mjs` replaced
+with the new shortcut assertions) — each documented as an intentional contract
+change, not a weakened test. A 4th `npm run precommit` run was in flight when
+this entry was written; **check its actual result before assuming green** (the
+background-task notification's "exit code 0" is the shell wrapper's exit code,
+NOT precommit's — the real result is the `EXIT:N` line at the end of the log
+file, this bit already caused two false-green misreads this session).
+
+**NOT yet done:** visual baseline regeneration (`npm run test:visual --
+--update-snapshots`) — nav/home/library changed significantly enough that
+most baselines will diff; diffs need eye-inspection before accepting, per this
+project's own doctrine (a visual pass that reports "confirmed" without actually
+looking at overlaps/regressions is a failed audit). Screenshots for the owner's
+final report. The actual `ship:main` / deploy — owner authorized it explicitly
+this session but it has NOT been run yet. The 3 pre-existing stashes (UI WIP,
+visual polish, unrelated data-rebuild experiment) were left untouched all
+session — confirm still present with `git stash list` before shipping.
+
+---
+
 SHIPPED to `main` at `8dfcfdc` (2026-07-24). Two UX commits are live on main: `8759dc8` (nav/Atlas/jargon) and `8dfcfdc` (Start Here width). Deploy note: `ship:main` pushes the task branch for CI, and the Pages workflow deliberately skips those runs (`head_branch == 'main'` guard in .github/workflows/pages.yml). The main-branch push triggers its own Public Repo Checks run, and THAT is what releases the Pages deploy — so after a ship, expect one skipped Pages run per feature-branch check plus one real deploy from the main run. Not a bug.
 
 GOTCHA that blocks `ship:main` every time: `data/generated/commons-search-index.json` is regenerated by every `build:site` (tools/build-static-site.mjs runs scripts/build-commons-index.mjs), is NOT tracked (deliberately removed in 786f10f), and is NOT gitignored (.gitignore:117 un-ignores `data/generated/*.json` because 139 siblings are tracked). So it always leaves the tree dirty and `ensureCleanTree()` aborts the ship. Move it aside before shipping, or add a targeted ignore for that one path.

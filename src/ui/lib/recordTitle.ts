@@ -106,6 +106,10 @@ const TYPE_PLURALS: Record<string, [string, string]> = {
   family: ["control family", "control families"],
   rmf_step: ["RMF step", "RMF steps"],
   impact_category: ["impact level", "impact levels"],
+  function: ["CSF function", "CSF functions"],
+  category: ["CSF category", "CSF categories"],
+  tactic: ["tactic", "tactics"],
+  group: ["group", "groups"],
 };
 
 /** English pluralization for the display-name fallback (avoids "categorys"). */

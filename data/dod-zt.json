@@ -4,7 +4,7 @@
   "records": [
     {
       "id": "OVERLAYS-CATALOG",
-      "type": "zt-overlay-catalog",
+      "type": "zt_overlay_catalog",
       "framework": "dod-zt",
       "title": "DoD Zero Trust Overlays",
       "family": "Control Overlays",

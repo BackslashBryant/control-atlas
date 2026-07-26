@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-25T15:48:15.592Z",
+  "generated_at": "2026-07-25T23:44:04.118Z",
   "library_search_manifest": {
     "eager_shard_ids": [
       "nist-800-53",
@@ -16,15 +16,15 @@
       },
       {
         "catalog_id": "disa-srg",
-        "document_count": 1532,
+        "document_count": 1533,
         "path": "library-search/disa-srg.json",
-        "bytes": 3402668
+        "bytes": 3403585
       },
       {
         "catalog_id": "nist-800-53",
-        "document_count": 1216,
+        "document_count": 1217,
         "path": "library-search/nist-800-53.json",
-        "bytes": 2487936
+        "bytes": 2488849
       },
       {
         "catalog_id": "nist-800-53a",
@@ -34,33 +34,33 @@
       },
       {
         "catalog_id": "mitre-attack",
-        "document_count": 697,
+        "document_count": 713,
         "path": "library-search/mitre-attack.json",
-        "bytes": 2571934
+        "bytes": 2585303
       },
       {
         "catalog_id": "disa-stig",
-        "document_count": 614,
+        "document_count": 615,
         "path": "library-search/disa-stig.json",
-        "bytes": 1370208
+        "bytes": 1371154
       },
       {
         "catalog_id": "mitre-d3fend",
-        "document_count": 271,
+        "document_count": 279,
         "path": "library-search/mitre-d3fend.json",
-        "bytes": 205682
+        "bytes": 214065
       },
       {
         "catalog_id": "dod-zt",
         "document_count": 228,
         "path": "library-search/dod-zt.json",
-        "bytes": 204746
+        "bytes": 204753
       },
       {
         "catalog_id": "csf-2",
-        "document_count": 185,
+        "document_count": 226,
         "path": "library-search/csf-2.json",
-        "bytes": 298906
+        "bytes": 340259
       },
       {
         "catalog_id": "nist-800-171",
@@ -82,21 +82,21 @@
       },
       {
         "catalog_id": "mitre-attack-ics",
-        "document_count": 97,
+        "document_count": 110,
         "path": "library-search/mitre-attack-ics.json",
-        "bytes": 302425
+        "bytes": 313567
       },
       {
         "catalog_id": "nist-ai-rmf",
-        "document_count": 72,
+        "document_count": 92,
         "path": "library-search/nist-ai-rmf.json",
-        "bytes": 404783
+        "bytes": 420819
       },
       {
         "catalog_id": "nist-ssdf",
-        "document_count": 42,
+        "document_count": 47,
         "path": "library-search/nist-ssdf.json",
-        "bytes": 116517
+        "bytes": 121683
       },
       {
         "catalog_id": "fips-200",
@@ -106,15 +106,27 @@
       },
       {
         "catalog_id": "dod-rai",
-        "document_count": 11,
+        "document_count": 14,
         "path": "library-search/dod-rai.json",
-        "bytes": 9879
+        "bytes": 12466
       },
       {
         "catalog_id": "nist-800-37",
         "document_count": 7,
         "path": "library-search/nist-800-37.json",
         "bytes": 9001
+      },
+      {
+        "catalog_id": "cmmc-2",
+        "document_count": 4,
+        "path": "library-search/cmmc-2.json",
+        "bytes": 5100
+      },
+      {
+        "catalog_id": "cui-policy",
+        "document_count": 4,
+        "path": "library-search/cui-policy.json",
+        "bytes": 5297
       },
       {
         "catalog_id": "fedramp-rev5",
@@ -127,18 +139,6 @@
         "document_count": 4,
         "path": "library-search/nist-800-53b.json",
         "bytes": 4018
-      },
-      {
-        "catalog_id": "cmmc-2",
-        "document_count": 3,
-        "path": "library-search/cmmc-2.json",
-        "bytes": 4006
-      },
-      {
-        "catalog_id": "cui-policy",
-        "document_count": 3,
-        "path": "library-search/cui-policy.json",
-        "bytes": 4287
       },
       {
         "catalog_id": "fips-199",

@@ -147,8 +147,8 @@ export function SourcesPage(props: {
     <Panel>
       <PageHeader
         eyebrow="Sources"
-        summary="Review what a source is, how Control Atlas uses it, and how much trust to place in the resulting public mapping."
-        title="Review sources before you rely on a match"
+        summary="Every framework, mapping, and reference in Control Atlas traces back to one of these public sources."
+        title="Where the data comes from"
       />
 
       <div className="rounded-md border border-[color-mix(in_srgb,var(--ca-primary)_30%,transparent)] bg-[color-mix(in_srgb,var(--ca-surface)_90%,transparent)] p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
@@ -216,7 +216,7 @@ export function SourcesPage(props: {
         </div>
       </label>
       <p className="support-meta" aria-live="polite">
-        {sources.length} public source{sources.length === 1 ? "" : "s"}. Search by publisher or source name, then open one to see how it is used and what trust to place in it.
+        {sources.length} public source{sources.length === 1 ? "" : "s"}. Search by publisher or source name to see how each one is used.
       </p>
       <details
         className="canonical-source-links"
@@ -225,8 +225,7 @@ export function SourcesPage(props: {
         <summary>Official source links</summary>
         <div className="disclosure-content">
         <p>
-          Open the official source before relying on a control, mapping, threat
-          technique, or defensive reference.
+          Direct links to the primary publications behind the controls, mappings, and threat and defensive references in Control Atlas.
         </p>
         <ul>
           {[

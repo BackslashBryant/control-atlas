@@ -1887,12 +1887,44 @@ li {
   }
 }
 
-/* Canonical Library pages: framework context first, then a flat record list. */
+/* Canonical Library pages: framework context first, then a flat record list.
+   Matches the shell's own content ceiling (--ca-content-max, styles/tokens.css)
+   instead of stranding 320px of it — the two-column rows here (title+summary
+   vs. a count) read wider, not cramped, so there's no reading-width reason to
+   cap narrower than the rest of the app. */
 .catalog-index,
 .catalog-detail-page,
 .start-here-result-page {
-  max-width: 70rem;
+  max-width: var(--ca-content-max);
   margin-inline: auto;
+}
+
+.catalog-index-group + .catalog-index-group {
+  margin-top: var(--ca-space-6);
+}
+
+.catalog-index-group-label {
+  margin-block-end: var(--ca-space-2);
+  color: var(--ca-text-muted);
+  font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.link-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--ca-secondary);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--ca-primary);
 }
 
 .catalog-index-list,
