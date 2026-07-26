@@ -85,7 +85,10 @@ async function openRouteComposition(page, viewport, path) {
       }
     `,
   });
-  await waitForAppReady(page, { allowPartial: true });
+  // A route screenshot is evidence of its loaded composition. `partial` only
+  // proves that search is available; Documents and Sources still render their
+  // loading notice until the graph arrives.
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await waitForSkeletonsSettled(page);
   await page.evaluate(() => globalThis.document.fonts.ready);

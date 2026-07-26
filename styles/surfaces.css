@@ -1880,6 +1880,13 @@ li {
   margin-inline: auto;
 }
 
+/* Shared content ceiling for full-page surfaces outside the catalog panels. */
+.ca-content-container,
+.sources-page {
+  width: min(100%, var(--ca-content-max));
+  margin-inline: auto;
+}
+
 .catalog-index-group + .catalog-index-group {
   margin-top: var(--ca-space-6);
 }

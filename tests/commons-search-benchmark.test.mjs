@@ -1,17 +1,14 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { resolve } from "path";
 import assert from "assert";
 import { execSync } from "child_process";
 
 const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const INDEX_PATH = resolve("data/generated/commons-search-index.json");
-const BENCHMARK_REPORT_PATH = resolve("docs/COMMONS_SEARCH_BENCHMARK.md");
 
 console.log("⚡ Running Control Commons Search Quality Benchmark...");
 
-if (!existsSync(INDEX_PATH)) {
-  execSync("node scripts/build-commons-index.mjs");
-}
+execSync("node scripts/build-commons-index.mjs");
 
 const dataset = JSON.parse(readFileSync(DATASET_PATH, "utf-8"));
 const index = JSON.parse(readFileSync(INDEX_PATH, "utf-8"));
@@ -181,6 +178,6 @@ ${benchmarkResults.map(r => `| ${r.category} | \`${r.query}\` | \`${r.expectedId
 - **Editorial Curated Recommendation:** +5
 `;
 
-writeFileSync(BENCHMARK_REPORT_PATH, mdReport);
+void mdReport;
 
-console.log(`\n🎉 Benchmark Report Saved to: ${BENCHMARK_REPORT_PATH}`);
+console.log("\nCommons benchmark computed without rewriting the report artifact.");

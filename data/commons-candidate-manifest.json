@@ -2,8 +2,8 @@
   "manifestVersion": "2.0",
   "generatedOn": "2026-07-23",
   "totalEvaluated": 106,
-  "acceptedCount": 99,
-  "rejectedCount": 7,
+  "acceptedCount": 96,
+  "rejectedCount": 10,
   "acceptedCandidates": [
     {
       "candidateName": "NIST SP 800-53 Rev. 5 Security and Privacy Controls",
@@ -252,12 +252,6 @@
       "lane": "open_source"
     },
     {
-      "candidateName": "Evaluate-STIG PowerShell Audit Tool",
-      "url": "https://github.com/cucker/Evaluate-STIG",
-      "status": "accepted",
-      "lane": "open_source"
-    },
-    {
       "candidateName": "Official DISA STIG Viewer 3.x",
       "url": "https://public.cyber.mil/stigs/scca/",
       "status": "accepted",
@@ -492,12 +486,6 @@
       "lane": "official"
     },
     {
-      "candidateName": "CMMC Level 2 System Security Plan Starter Template",
-      "url": "https://github.com/cmmc-practitioners/cmmc-ssp-template",
-      "status": "accepted",
-      "lane": "practitioner"
-    },
-    {
       "candidateName": "I-Assure SSP Workbook & Control Worksheet",
       "url": "https://www.i-assure.com/resources/ssp-template/",
       "status": "accepted",
@@ -532,12 +520,6 @@
       "url": "https://www.sans.org/information-security-policy/",
       "status": "accepted",
       "lane": "practitioner"
-    },
-    {
-      "candidateName": "CISA Federal Continuous Monitoring (ISCM) Plan Template",
-      "url": "https://www.cisa.gov/resources-tools/resources/iscm-strategy-template",
-      "status": "accepted",
-      "lane": "official"
     },
     {
       "candidateName": "CISA KEV Machine-Readable JSON Feed",
@@ -635,6 +617,21 @@
       "candidateName": "Stale 2014 Agency FISMA PDF Guidelines",
       "url": "https://example-agency.gov/historical/2014-fisma-policy.pdf",
       "reason": "Outdated agency guidance superseded by modern CISA FISMA metric guides and OMB memoranda."
+    },
+    {
+      "candidateName": "Evaluate-STIG PowerShell Audit Tool",
+      "url": "https://github.com/cucker/Evaluate-STIG",
+      "reason": "No current project page could be verified; the prior GitHub URL returns not found."
+    },
+    {
+      "candidateName": "CMMC Level 2 System Security Plan Starter Template",
+      "url": "https://github.com/cmmc-practitioners/cmmc-ssp-template",
+      "reason": "No current template could be verified; the prior GitHub URL returns not found."
+    },
+    {
+      "candidateName": "CISA Federal Continuous Monitoring (ISCM) Plan Template",
+      "url": "https://www.cisa.gov/resources-tools/resources/iscm-strategy-template",
+      "reason": "The prior CISA template URL returns not found and no content-matching replacement was verified."
     }
   ]
 }
