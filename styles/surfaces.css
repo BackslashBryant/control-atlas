@@ -1567,7 +1567,10 @@ li {
 .link-action {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* Every call site is either an icon beside its label or "<strong>ID</strong>
+     — Title". space-between blew those two pieces to opposite ends of a
+     full-width button, which read as a layout bug rather than one control. */
+  justify-content: flex-start;
   gap: var(--ca-space-3);
   width: 100%;
   padding: var(--ca-space-3);
@@ -4533,10 +4536,6 @@ button.atlas-leverage-row:hover {
 
 .catalog-coverage-chip-detail {
   color: var(--ca-text-muted);
-}
-
-.compare-trust-note {
-  margin-bottom: var(--ca-space-4);
 }
 
 .catalog-version-chip {

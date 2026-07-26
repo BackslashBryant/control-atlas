@@ -71,9 +71,13 @@ export function generatePlainLanguageRationale(payload, source, rationaleVal) {
   const rel = relationshipLabel(payload.relationshipType);
   const sourceName = source?.name || 'a public source';
 
+  // A published rationale already says what the link is. Restating it and
+  // appending "review both sides before assuming coverage transfers" stamped a
+  // reflexive warning onto every edge in the graph and stored the rationale
+  // twice — the caller drops this field when it just repeats `rationale`.
   if (rationaleVal && !/^NIST OLIR concept crosswalk associates/i.test(rationaleVal)) {
-    return `${rationaleVal} Review both sides of this ${rel} link in ${sourceName} before assuming coverage transfers.`;
+    return rationaleVal;
   }
 
-  return `This ${rel} link connects ${fromLabel} to ${toLabel} using ${sourceName}. Compare both items before you rely on the mapping in an assessment or authorization package.`;
+  return `This ${rel} link connects ${fromLabel} to ${toLabel} using ${sourceName}.`;
 }

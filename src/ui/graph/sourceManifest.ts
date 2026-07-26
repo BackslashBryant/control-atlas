@@ -51,4 +51,10 @@ export type SourceManifestRecord = {
   isDefaultMapEligible: boolean;
   sourceBasis: "official" | "source-backed" | "inferred" | "deprecated";
   defaultMapReason: string;
+  /**
+   * One or two plain sentences answering "why does this apply to me?", written
+   * from the document's own text. Empty when no one has written it yet — the UI
+   * then shows nothing, rather than falling back to generated boilerplate.
+   */
+  plainSummary: string;
 };

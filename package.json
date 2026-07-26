@@ -16,6 +16,7 @@
     "fetch:frameworks": "node ./scripts/fetch-framework-catalogs.mjs",
     "fetch:fedramp-2026": "node ./scripts/fetch-fedramp-2026-rules.mjs",
     "fetch:ccis": "node ./scripts/fetch-ccis.mjs",
+    "fetch:rev4-crosswalk": "node ./scripts/fetch-800-53-rev4-rev5-crosswalk.mjs",
     "fetch:disa-stigs": "node ./scripts/fetch-disa-stigs.mjs",
     "fetch:mitre": "node ./scripts/fetch-mitre-data.mjs",
     "fetch:olir-mappings": "node ./scripts/fetch-olir-mappings.mjs",

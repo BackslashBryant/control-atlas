@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-25T23:44:04.118Z",
+  "generated_at": "2026-07-26T05:04:16.926Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -765,6 +765,33 @@
       "node_count": 7,
       "relationship_count": 14,
       "evidence_count": 14,
+      "finding_count": 0
+    },
+    {
+      "source_id": "nist-800-53-rev4-rev5-crosswalk",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "frameworks": [
+        "disa-cci",
+        "nist-800-53"
+      ],
+      "owner": "NIST",
+      "version": "2026-07-26",
+      "sync_model": "curated",
+      "last_checked": "2026-07-26",
+      "last_imported": "2026-07-26",
+      "hash": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
+      "stale_after_days": 45,
+      "retrieved_at": "2026-07-26",
+      "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+      "artifact_type": "spreadsheet",
+      "checksum": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 0,
+      "relationship_count": 1506,
+      "evidence_count": 1506,
       "finding_count": 0
     },
     {
