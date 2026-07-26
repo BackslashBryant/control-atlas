@@ -1,5 +1,30 @@
 # STATE
 
+## SHIPPED 2026-07-25/26 (this session)
+Live at https://backslashbryant.github.io/control-atlas/ — verified serving the
+new build directly (fetched and read the live page, not just assumed from CI
+green). `main` is at `81ed698` (feature commit `1556202` + a same-session
+follow-up `81ed698` for the item below). Public Repo Checks passed both
+commits; Pages deploy succeeded and Pages Live Smoke passed. Full session
+decision log: [`docs/audits/grc-tree-completion-decisions-2026-07-25.md`](audits/grc-tree-completion-decisions-2026-07-25.md).
+
+One real finding during ship: Secret Scan (gitleaks) failed on the main push —
+`data/generated/atlas-node-index.json` tripped the `generic-api-key` rule on
+`"FAMILY-ACCESS-CONTROL"` (NIST SP 800-171's family tier key/title, now
+repeated across 3 catalogs from this session's tier work; entropy 3.57, nowhere
+near real-secret range). Confirmed it does NOT gate the Pages deploy
+(`pages.yml`'s `workflow_run` trigger only watches "Public Repo Checks", a
+separate workflow). Fixed by extending the pre-existing `.gitleaks.toml`
+allowlist (same pattern already used for 5 other generated catalog files) —
+shipped as `81ed698`, Secret Scan now passes clean. The "2 high" Dependabot
+notice seen during push is pre-existing (react-router RSC-mode CSRF,
+postcss path traversal) — confirmed zero changes to package.json/package-lock.json
+this session, not something introduced here.
+
+3 pre-existing stashes (`60caaff` UI WIP, `wip-orbital-verification`,
+`wip-unrelated-changes` on `agent/vector/source-provenance-hardening`)
+confirmed untouched via `git stash list` before and after shipping.
+
 ## Goal
 CURRENT (2026-07-24, supersedes the Orbital v1.7.0 alignment goal below): "I need this whole site production ready to industry ui/ux standards and shipped" (owner). Owner framing this session: "Orbital was supposed to be the design...not the experience." Execute the already-authorized IA/navigation/payoff restructure, then ship to `main` via `npm run ship:main`.
 
