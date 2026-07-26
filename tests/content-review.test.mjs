@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { patternsData } from '../src/app/patterns-data.mjs';
-import { generateTemplate } from '../src/app/template-engine.mjs';
+import { buildTemplateDocument } from '../src/app/template-engine.mjs';
 import { PRODUCT_DISCLAIMER } from '../src/shared/disclaimer.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -94,23 +94,23 @@ test('template registry requires disclaimers on every artifact', () => {
 
 test('generated templates use plain-language prompts without raw schema slugs', () => {
   for (const template of registry.templates) {
-    const format = template.supported_formats[0];
-    const result = generateTemplate(
+    const { doc } = buildTemplateDocument(
       {
         templateType: template.name,
         framework: 'nist-800-53',
         environment: 'Cloud SaaS',
-        format,
         includePlaceholders: true,
         includeImplementationPrompts: true,
         includeSourceFootnotes: true,
       },
       dataset,
     );
+    const content = JSON.stringify(doc);
 
-    assert.match(result.content, /open-source reference tool/i, `${template.name} must include disclaimer text`);
-    assert.doesNotMatch(result.content, RAW_SCHEMA_SLUGS, `${template.name} exposes raw schema slug in output`);
-    const hasPlainLanguage = /How is|Describe|What|Who|When|Why|List|Document|Assessment Method|Observations|Weakness|Remediation|\[[^\]]+\]/i.test(result.content);
+    assert.match(content, /Source Metadata/, `${template.name} must include source metadata`);
+    assert.match(content, /Limit:/, `${template.name} must state its limitation`);
+    assert.doesNotMatch(content, RAW_SCHEMA_SLUGS, `${template.name} exposes raw schema slug in output`);
+    const hasPlainLanguage = /How is|Describe|What|Who|When|Why|List|Document|Assessment Method|Observations|Weakness|Remediation|\[[^\]]+\]/i.test(content);
     assert.ok(hasPlainLanguage, `${template.name} should include plain-language prompts`);
   }
 });

@@ -12,4 +12,15 @@ test('Template Registry Validation', async (t) => {
     assert.deepEqual(errors, [], `Validation errors found:\n${errors.join('\n')}`);
     assert.ok(registry.templates.length > 0, 'Registry must contain templates');
   });
+
+  await t.test('every template advertises only Word, Excel, or PDF', () => {
+    const { registry } = loadTemplateRegistry(join(ROOT, 'data', 'template-registry.json'));
+    const allowedFormats = new Set(['docx', 'xlsx', 'pdf']);
+    for (const template of registry.templates) {
+      assert.ok(template.supported_formats.length > 0, `${template.name} must offer a document format`);
+      for (const format of template.supported_formats) {
+        assert.ok(allowedFormats.has(format), `${template.name} advertises removed format: ${format}`);
+      }
+    }
+  });
 });

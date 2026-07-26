@@ -154,7 +154,7 @@ try {
       sources: dataset.sources,
     };
     const { doc } = buildTemplateDocument(options, dataset);
-    const format = template.office_formats?.[0] || 'xlsx';
+    const format = template.supported_formats?.[0] || 'xlsx';
     const html = format === 'docx' ? documentHtml(template, doc) : workbookHtml(template, doc);
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'load' });
@@ -167,7 +167,7 @@ try {
       margin: { top: '0.45in', right: '0.45in', bottom: '0.45in', left: '0.45in' },
     });
     await page.close();
-    manifest.push({ template: template.name, filename, office_format: format });
+    manifest.push({ template: template.name, filename, download_format: format });
     console.log(`Rendered ${filename}`);
   }
 } finally {

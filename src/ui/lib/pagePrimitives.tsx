@@ -64,7 +64,10 @@ export function downloadBlobFile(
   // the actual download, not just a successful generate (CATL-V2/67).
   onDispatch?.();
   anchor.remove();
-  URL.revokeObjectURL(url);
+  // Browsers start blob downloads asynchronously. Revoking the object URL in
+  // this same task can cancel larger Office packages before the download
+  // manager reads them.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export function downloadTextFile(
