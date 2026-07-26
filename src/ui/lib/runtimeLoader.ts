@@ -347,12 +347,18 @@ function scheduleLazyLibraryShards(
 
   // Called on a cold deep link into a non-eager catalog: fetch that one
   // shard immediately instead of waiting for its turn in the idle queue.
+  // Always attempts the fetch (not just the first time) so a manual retry
+  // after a failed attempt actually retries — `fetchArtifact`'s cache only
+  // dedupes an in-flight or successfully-resolved request; a failed one is
+  // evicted from that cache and genuinely refetched. Removing the catalog
+  // from `pending` (if it's still queued there) only prevents the idle
+  // queue from fetching it a second time; it never gates whether this call
+  // proceeds.
   return (catalogId: string) => {
     const index = pending.indexOf(catalogId);
-    if (index === -1) {
-      return;
+    if (index !== -1) {
+      pending.splice(index, 1);
     }
-    pending.splice(index, 1);
     void ingestShard(catalogId);
   };
 }

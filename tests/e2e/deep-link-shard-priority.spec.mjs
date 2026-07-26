@@ -30,3 +30,32 @@ test("cold deep link into a non-eager catalog renders the record, not a not-foun
   );
   await expect(page.getByText("Item not found")).toHaveCount(0);
 });
+
+// W5 follow-up: a shard that genuinely fails to load (network error, 404,
+// missing id) must not leave the page on an indefinite loading skeleton.
+// ObjectDetailPage.tsx gives up after a bounded wait and offers a manual
+// retry; this proves both the give-up and the recovery.
+test("a shard that fails to load shows a retry affordance, and retry recovers", async ({
+  page,
+}) => {
+  test.setTimeout(30000);
+  let shouldFail = true;
+  await page.route("**/library-search/cmmc-2.json*", async (route) => {
+    if (shouldFail) {
+      await route.abort("failed");
+      return;
+    }
+    await route.continue();
+  });
+  await gotoApp(page, "/#/record/cmmc-2/LEVEL-2");
+  await waitForAppReady(page);
+  await expect(
+    page.getByText("Couldn't load this record's details"),
+  ).toBeVisible({ timeout: 12000 });
+  shouldFail = false;
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /LEVEL-2|Level 2/i,
+    { timeout: 8000 },
+  );
+});
