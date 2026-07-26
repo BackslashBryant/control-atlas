@@ -36,7 +36,7 @@ import {
   downloadTextFile,
   scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
-import { Panel, Button } from "../components/lsm";
+import { Panel, Button, ButtonLink } from "../components/lsm";
 
 type TemplateRecord = {
   template_id?: string;
@@ -323,15 +323,15 @@ function OfficialArtifactCard(props: {
       ) : null}
       <div className="card-actions">
         {primaryUrl ? (
-          <a
-            className="secondary"
+          <ButtonLink
+            variant="secondary"
             href={primaryUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
             {artifact.download_url ? "Open official file" : "Open official source"}
             <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
-          </a>
+          </ButtonLink>
         ) : null}
         {artifact.download_url && artifact.landing_url ? (
           <a
@@ -492,15 +492,15 @@ function ToolCard(props: { tool: ComplianceTool }) {
       ) : null}
       {primaryUrl ? (
         <div className="card-actions">
-          <a
-            className="secondary"
+          <ButtonLink
+            variant="secondary"
             href={primaryUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
             Open tool page
             <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
-          </a>
+          </ButtonLink>
           {tool.project_url &&
           tool.repository_url &&
           tool.project_url !== tool.repository_url ? (

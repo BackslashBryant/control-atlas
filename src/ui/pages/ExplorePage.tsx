@@ -534,19 +534,19 @@ export function ExplorePage(props: {
                               ) : null}
                             </div>
                             <div className="card-actions">
-                              <button
-                                className="primary"
+                              <Button
+                                variant="primary"
                                 onClick={() => onOpenNode(document.id, "search")}
                                 type="button"
                               >
                                 Open record
-                              </button>
+                              </Button>
                               <details className="result-actions-menu">
                                 <summary>Compare, map, or export</summary>
                                 <div className="result-actions-popover">
                                   {relationshipCount > 0 || !graphReady ? (
-                                    <button
-                                      className="secondary"
+                                    <Button
+                                      variant="secondary"
                                       onClick={() =>
                                         openAtlasMapForNode(
                                           onNavigate,
@@ -556,10 +556,10 @@ export function ExplorePage(props: {
                                       type="button"
                                     >
                                       Open in Atlas Map
-                                    </button>
+                                    </Button>
                                   ) : null}
-                                  <button
-                                    className="secondary"
+                                  <Button
+                                    variant="secondary"
                                     onClick={() =>
                                       onNavigate("matrix", {
                                         crosswalk: "relationships",
@@ -569,9 +569,9 @@ export function ExplorePage(props: {
                                     type="button"
                                   >
                                     Compare
-                                  </button>
-                                  <button
-                                    className="secondary"
+                                  </Button>
+                                  <Button
+                                    variant="secondary"
                                     onClick={() =>
                                       navigator.clipboard?.writeText(
                                         `${window.location.origin}${window.location.pathname}${serializeHashUrl(
@@ -586,7 +586,7 @@ export function ExplorePage(props: {
                                     type="button"
                                   >
                                     Copy link
-                                  </button>
+                                  </Button>
                                 </div>
                               </details>
                             </div>
@@ -612,13 +612,13 @@ export function ExplorePage(props: {
               Matching records exist, but none have published connections in the
               current data.
             </p>
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={() => setConnectionsOnly(false)}
               type="button"
             >
               Show all matching records
-            </button>
+            </Button>
           </section>
         ) : hasQuery || hasFilters ? (
           <section className="empty-state">
@@ -628,8 +628,8 @@ export function ExplorePage(props: {
               Try searching by control ID, topic, baseline, CCI, or source.
             </p>
             <div className="card-actions">
-              <button
-                className="primary"
+              <Button
+                variant="primary"
                 onClick={() =>
                   onNavigate("search", {
                     query: "",
@@ -643,11 +643,11 @@ export function ExplorePage(props: {
                 type="button"
               >
                 Clear search
-              </button>
+              </Button>
               <details>
                 <summary>Try another path</summary>
                 <div className="card-actions disclosure-actions">
-                  <button className="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Atlas Map</button>
+                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Atlas Map</Button>
                 </div>
               </details>
             </div>

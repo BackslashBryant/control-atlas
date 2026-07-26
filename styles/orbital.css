@@ -209,10 +209,7 @@ body {
   align-self: center;
 }
 
-.header-actions button,
-.primary,
-.secondary,
-.button-link {
+.header-actions button {
   min-height: var(--ca-touch-target);
   padding: var(--ca-space-2) var(--ca-space-4);
   border: 1px solid var(--ca-border);
@@ -221,7 +218,6 @@ body {
   font-weight: 600;
 }
 
-.primary,
 .home-search-submit {
   border-color: var(--ca-primary);
   background: var(--ca-primary);
@@ -229,29 +225,11 @@ body {
   box-shadow: 0 8px 22px color-mix(in srgb, var(--ca-primary) 16%, transparent);
 }
 
-.primary:hover,
-.primary:focus-visible,
 .home-search-submit:hover,
 .home-search-submit:focus-visible {
   border-color: var(--ca-primary-hover);
   background: var(--ca-primary-hover);
   color: var(--ca-surface-deep);
-}
-
-.secondary,
-.secondary.quiet {
-  border-color: var(--ca-border);
-  background: color-mix(in srgb, var(--ca-surface-raised) 74%, transparent);
-  color: var(--ca-text);
-}
-
-.secondary:hover,
-.secondary:focus-visible,
-.secondary.quiet:hover,
-.secondary.quiet:focus-visible {
-  border-color: var(--ca-primary);
-  background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface-raised));
-  color: var(--ca-text);
 }
 
 .header-start-here {

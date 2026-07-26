@@ -29,7 +29,7 @@ import {
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareCrosswalk, ViewState } from "../lib/viewState";
-import { Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -484,13 +484,13 @@ export function ComparePage(props: {
               {comparisonCards.find((card) => card.crosswalk === crosswalk)?.title}
             </h2>
           </div>
-          <button
-            className="secondary"
+          <Button
+            variant="secondary"
             onClick={() => onNavigate("matrix", { crosswalk: "intent" })}
             type="button"
           >
             Change comparison
-          </button>
+          </Button>
         </div>
       )}
 
@@ -723,9 +723,9 @@ export function ComparePage(props: {
                     </div>
                     {relationshipPageCount > 1 ? (
                       <nav aria-label="Mapping result pages" className="pagination">
-                        <button className="secondary" disabled={relationshipPage === 1} onClick={() => setRelationshipPage((page) => Math.max(1, page - 1))} type="button">Previous</button>
+                        <Button variant="secondary" disabled={relationshipPage === 1} onClick={() => setRelationshipPage((page) => Math.max(1, page - 1))} type="button">Previous</Button>
                         <span>Page {relationshipPage} of {relationshipPageCount}</span>
-                        <button className="secondary" disabled={relationshipPage === relationshipPageCount} onClick={() => setRelationshipPage((page) => Math.min(relationshipPageCount, page + 1))} type="button">Next</button>
+                        <Button variant="secondary" disabled={relationshipPage === relationshipPageCount} onClick={() => setRelationshipPage((page) => Math.min(relationshipPageCount, page + 1))} type="button">Next</Button>
                       </nav>
                     ) : null}
                   </section>
@@ -755,8 +755,8 @@ export function ComparePage(props: {
               </p>
               <div className="card-actions">
                 {state.source && state.target && pairHasAnyPublishedMapping ? (
-                  <button
-                    className="primary"
+                  <Button
+                    variant="primary"
                     onClick={() =>
                       onNavigate("matrix", {
                         ...state,
@@ -770,20 +770,20 @@ export function ComparePage(props: {
                     type="button"
                   >
                     Reset filters
-                  </button>
+                  </Button>
                 ) : null}
-                <button
-                  className={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
+                <Button
+                  variant={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
                   onClick={() =>
                     onNavigate("matrix", { ...state, crosswalk: "intent" })
                   }
                   type="button"
                 >
                   Choose another comparison
-                </button>
+                </Button>
                 <details>
                   <summary>Check the data source</summary>
-                  <button className="secondary disclosure-actions" onClick={() => onNavigate("sources")} type="button">Review sources</button>
+                  <Button variant="secondary" className="disclosure-actions" onClick={() => onNavigate("sources")} type="button">Review sources</Button>
                 </details>
               </div>
             </section>
@@ -912,8 +912,8 @@ export function ComparePage(props: {
                         <td>{row.nist_control_count}</td>
                         <td>{row.unmapped_cci_count}</td>
                         <td>
-                          <button
-                            className="secondary"
+                          <Button
+                            variant="secondary"
                             onClick={() =>
                               onNavigate("matrix", {
                                 ...state,
@@ -924,7 +924,7 @@ export function ComparePage(props: {
                             type="button"
                           >
                             View mapping trace
-                          </button>
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -1157,8 +1157,8 @@ export function ComparePage(props: {
                           <td>{row.nist_control_count}</td>
                           <td>{row.unmapped_d3fend_count}</td>
                           <td>
-                            <button
-                              className="secondary"
+                            <Button
+                              variant="secondary"
                               onClick={() =>
                                 onNavigate("matrix", {
                                   ...state,
@@ -1169,7 +1169,7 @@ export function ComparePage(props: {
                               type="button"
                             >
                               Trace this technique
-                            </button>
+                            </Button>
                           </td>
                         </tr>
                       ))}

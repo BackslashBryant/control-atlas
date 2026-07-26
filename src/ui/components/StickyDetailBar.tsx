@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "./lsm/Button";
 
 export function StickyDetailBar(props: {
   enabled: boolean;
@@ -35,18 +36,18 @@ export function StickyDetailBar(props: {
       role="navigation"
     >
       <span className="sticky-detail-label">{props.itemLabel}</span>
-      <button className="secondary" onClick={props.onBack} type="button">
+      <Button variant="secondary" onClick={props.onBack} type="button">
         Back to results
-      </button>
+      </Button>
       {props.onOpenAtlasMap ? (
-        <button className="primary" onClick={props.onOpenAtlasMap} type="button">
+        <Button variant="primary" onClick={props.onOpenAtlasMap} type="button">
           Open in Atlas Map
-        </button>
+        </Button>
       ) : null}
       {props.onCompare ? (
-        <button className="secondary" onClick={props.onCompare} type="button">
+        <Button variant="secondary" onClick={props.onCompare} type="button">
           Compare
-        </button>
+        </Button>
       ) : null}
     </div>
   );

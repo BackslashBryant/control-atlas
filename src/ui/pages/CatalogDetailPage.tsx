@@ -1,5 +1,6 @@
 import { IconArrowLeft, IconExternalLink, IconSearch } from "@tabler/icons-react";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { Button, ButtonLink } from "../components/lsm/Button";
 import { useMemo, useState } from "react";
 
 import { catalogProfileFor } from "../lib/catalogProfiles";
@@ -112,9 +113,9 @@ export function CatalogDetailPage(props: {
       <section className="notice">
         <h1>Catalog not found</h1>
         <p>This catalog is not available in the current public data set.</p>
-        <button className="primary" onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button">
+        <Button variant="primary" onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button">
           Browse the Library
-        </button>
+        </Button>
       </section>
     );
   }
@@ -145,9 +146,9 @@ export function CatalogDetailPage(props: {
           {source?.version ? <span>Version <strong>{source.version}</strong></span> : null}
         </div>
         {source?.artifact_url ? (
-          <a className="secondary button-link" href={source.artifact_url} rel="noreferrer" target="_blank">
+          <ButtonLink variant="secondary" href={source.artifact_url} rel="noreferrer" target="_blank">
             View official source <IconExternalLink aria-hidden="true" size={16} />
-          </a>
+          </ButtonLink>
         ) : null}
       </header>
 
@@ -214,7 +215,7 @@ export function CatalogDetailPage(props: {
           <div className="empty-state">
             <h3>No records match “{query}”</h3>
             <p>Try an identifier, title, family, or a broader term.</p>
-            <button className="secondary" onClick={() => { setQuery(""); setFamily(""); }} type="button">Clear catalog filters</button>
+            <Button variant="secondary" onClick={() => { setQuery(""); setFamily(""); }} type="button">Clear catalog filters</Button>
           </div>
         )}
       </section>

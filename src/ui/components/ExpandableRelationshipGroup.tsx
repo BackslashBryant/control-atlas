@@ -4,6 +4,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { useState } from "react";
 
 import { ProvenanceTerm } from "./ProvenanceTerm";
+import { Button } from "./lsm/Button";
 
 const PAGE_SIZE = 10;
 
@@ -140,15 +141,15 @@ function RelationshipGroupItem(props: {
         ) : null}
         {remaining > 0 ? (
           <div className="card-actions">
-            <button
-              className="secondary"
+            <Button
+              variant="secondary"
               onClick={() =>
                 setVisibleCount((current) => current + PAGE_SIZE)
               }
               type="button"
             >
               Show {Math.min(PAGE_SIZE, remaining)} more
-            </button>
+            </Button>
           </div>
         ) : null}
       </Accordion.Content>
@@ -220,13 +221,13 @@ export function ExpandableChipList(props: {
       </div>
       {!expanded && hiddenCount > 0 ? (
         <div className="card-actions">
-          <button
-            className="secondary quiet"
+          <Button
+            variant="secondary-quiet"
             onClick={() => setExpanded(true)}
             type="button"
           >
             Show all {props.items.length} terms
-          </button>
+          </Button>
         </div>
       ) : null}
     </>
@@ -281,13 +282,13 @@ export function ExpandableControlList(props: {
       ) : null}
       {remaining > 0 ? (
         <div className="card-actions">
-          <button
-            className="secondary quiet"
+          <Button
+            variant="secondary-quiet"
             onClick={() => setVisibleCount((current) => current + PAGE_SIZE)}
             type="button"
           >
             Show {Math.min(PAGE_SIZE, remaining)} more
-          </button>
+          </Button>
         </div>
       ) : null}
     </>
