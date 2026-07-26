@@ -33,6 +33,7 @@ export function CatalogDetailPage(props: {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState("");
+  const [browseAll, setBrowseAll] = useState(false);
   const catalogs = bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === state.catalog);
   const records = catalog
@@ -62,6 +63,33 @@ export function CatalogDetailPage(props: {
             .some((value) => String(value).toLowerCase().includes(normalizedQuery))),
       ),
     [family, normalizedQuery, records],
+  );
+  // Whether to show a tier-browsing step before the flat list depends only on
+  // whether leaf records carry more than one distinct metadata.family value —
+  // the same field the pre-existing "Filter by family" dropdown already read.
+  // Deliberately NOT based on catalog.tier_count (whether real family/
+  // benchmark/etc. graph nodes exist, per CATALOG_TIERS in
+  // scripts/build-framework-data.mjs): that would require adding tier nodes
+  // for catalogs that don't have them, and for a 1,000+ leaf catalog that
+  // means one graph edge (with its own duplicated rationale text) per leaf
+  // record — real data-budget cost for a fact this UI can group client-side
+  // for free. Catalogs with only one family value (e.g. disa-cci, which is
+  // genuinely flat upstream) keep today's flat-list-only behavior untouched.
+  const hasTiers = families.length > 1;
+  // Default view is the tier browser; picking a tier (family) or typing a
+  // search query — or the explicit "browse all" escape hatch below — steps
+  // into the flat, searchable list, reusing the Library index's own
+  // catalog-index-row/catalog-index-list card idiom instead of a new one.
+  const showTierBrowser = hasTiers && !browseAll && !family && !normalizedQuery;
+  const tierGroups = useMemo(
+    () =>
+      hasTiers
+        ? families.map((name) => ({
+            name,
+            count: records.filter((record: any) => record.metadata?.family === name).length,
+          }))
+        : [],
+    [hasTiers, families, records],
   );
 
   if (!state.catalog) {
@@ -164,10 +192,14 @@ export function CatalogDetailPage(props: {
         <div className="catalog-records-heading">
           <div>
             <h2 id="catalog-records-title">{catalog.name} {profile.recordLabel}</h2>
-            <p>{matchingRecords.length.toLocaleString()} matching records</p>
+            <p>
+              {showTierBrowser
+                ? `${tierGroups.length.toLocaleString()} ${tierGroups.length === 1 ? (catalog.tier_label || "family") : (catalog.tier_label_plural || "families")}`
+                : `${matchingRecords.length.toLocaleString()} matching records`}
+            </p>
           </div>
           <div className="catalog-record-filters">
-            {families.length ? (
+            {families.length && !showTierBrowser ? (
               <label>
                 <span className="sr-only">Filter by {catalog.tier_label || "family"}</span>
                 <select onChange={(event) => setFamily(event.target.value)} value={family}>
@@ -189,34 +221,68 @@ export function CatalogDetailPage(props: {
           </div>
         </div>
 
-        {matchingRecords.length ? (
-          <div className="catalog-record-list">
-            {matchingRecords.slice(0, RESULT_LIMIT).map((record: any) => {
-              const itemId = record.metadata?.item_id || record.id;
-              const title = record.metadata?.title || itemId;
-              const synopsis =
-                record.plain_language_summary || record.description || "No synopsis is available for this record.";
-              return (
-                <article className="catalog-record-row" key={record.id} aria-labelledby={`title-${record.id}`} aria-describedby={`desc-${record.id}`}>
-                  <button className="catalog-record-title" id={`title-${record.id}`} onClick={() => onOpenNode(record.id, "catalog-detail")} type="button">
-                    <strong>{itemId}</strong>
-                    {title !== itemId ? <span>{title}</span> : null}
-                  </button>
-                  <p id={`desc-${record.id}`}>{synopsis}</p>
-                  {record.metadata?.family ? <small>{record.metadata.family}</small> : null}
-                </article>
-              );
-            })}
-            {matchingRecords.length > RESULT_LIMIT ? (
-              <p className="field-hint">Showing the first {RESULT_LIMIT} records. Refine the catalog search to narrow the list.</p>
-            ) : null}
-          </div>
+        {showTierBrowser ? (
+          <>
+            <div className="catalog-index-list">
+              {tierGroups.map((group) => (
+                <button
+                  className="catalog-index-row"
+                  key={group.name}
+                  onClick={() => setFamily(group.name)}
+                  type="button"
+                >
+                  <span>
+                    <strong>{group.name}</strong>
+                  </span>
+                  <span>{group.count.toLocaleString()} {profile.recordLabel}</span>
+                </button>
+              ))}
+            </div>
+            <button className="link-button" onClick={() => setBrowseAll(true)} type="button">
+              Browse all {(catalog.leaf_record_count ?? catalog.node_count).toLocaleString()} {profile.recordLabel} without choosing a {catalog.tier_label || "family"}
+            </button>
+          </>
         ) : (
-          <div className="empty-state">
-            <h3>No records match “{query}”</h3>
-            <p>Try an identifier, title, family, or a broader term.</p>
-            <Button variant="secondary" onClick={() => { setQuery(""); setFamily(""); }} type="button">Clear catalog filters</Button>
-          </div>
+          <>
+            {hasTiers ? (
+              <button
+                className="link-button"
+                onClick={() => { setFamily(""); setBrowseAll(false); setQuery(""); }}
+                type="button"
+              >
+                <IconArrowLeft aria-hidden="true" size={14} /> Back to {catalog.tier_label_plural || "families"}
+              </button>
+            ) : null}
+            {matchingRecords.length ? (
+              <div className="catalog-record-list">
+                {matchingRecords.slice(0, RESULT_LIMIT).map((record: any) => {
+                  const itemId = record.metadata?.item_id || record.id;
+                  const title = record.metadata?.title || itemId;
+                  const synopsis =
+                    record.plain_language_summary || record.description || "No synopsis is available for this record.";
+                  return (
+                    <article className="catalog-record-row" key={record.id} aria-labelledby={`title-${record.id}`} aria-describedby={`desc-${record.id}`}>
+                      <button className="catalog-record-title" id={`title-${record.id}`} onClick={() => onOpenNode(record.id, "catalog-detail")} type="button">
+                        <strong>{itemId}</strong>
+                        {title !== itemId ? <span>{title}</span> : null}
+                      </button>
+                      <p id={`desc-${record.id}`}>{synopsis}</p>
+                      {record.metadata?.family ? <small>{record.metadata.family}</small> : null}
+                    </article>
+                  );
+                })}
+                {matchingRecords.length > RESULT_LIMIT ? (
+                  <p className="field-hint">Showing the first {RESULT_LIMIT} records. Refine the catalog search to narrow the list.</p>
+                ) : null}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <h3>No records match “{query}”</h3>
+                <p>Try an identifier, title, {(catalog.tier_label || "family").toLowerCase()}, or a broader term.</p>
+                <Button variant="secondary" onClick={() => { setQuery(""); setFamily(""); setBrowseAll(false); }} type="button">Clear catalog filters</Button>
+              </div>
+            )}
+          </>
         )}
       </section>
     </section>
