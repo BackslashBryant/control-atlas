@@ -44,6 +44,14 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
     if (typeof node.plain_language_summary !== 'string' || !node.plain_language_summary.trim()) {
       errors.push(`node ${node.id} is missing required plain_language_summary`);
     }
+    if (node.parent_id !== undefined && node.parent_id !== null) {
+      if (!nodeIds.has(node.parent_id)) {
+        errors.push(`node ${node.id} parent_id ${node.parent_id} references unknown node`);
+      }
+      if (typeof node.parent_derivation !== 'string' || !node.parent_derivation.trim()) {
+        errors.push(`node ${node.id} has parent_id but is missing parent_derivation`);
+      }
+    }
   }
 
   for (const entry of evidence) {

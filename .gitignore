@@ -71,6 +71,7 @@ scripts/*
 !scripts/fetch-disa-stigs.mjs
 !scripts/fetch-mitre-data.mjs
 !scripts/fetch-800-53-rev4-rev5-crosswalk.mjs
+!scripts/hierarchy-derivation.mjs
 !scripts/extract-dod-zt.mjs
 !scripts/fetch-stig-source-observations.mjs
 !scripts/refresh-data.mjs

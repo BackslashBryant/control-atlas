@@ -482,3 +482,94 @@ test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pill
     );
   }
 });
+
+test('W1.3a: every SP 800-53A assessment procedure has a real, resolvable parent', () => {
+  const nodes = generated('nodes').nodes;
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const procedures = nodes.filter((node) => node.node_type === 'assessment_procedure');
+  assert.equal(procedures.length, 1014, 'assessment procedure count');
+  for (const node of procedures) {
+    assert.ok(node.parent_id, `${node.id} is missing parent_id`);
+    assert.ok(nodeIds.has(node.parent_id), `${node.id} parent_id ${node.parent_id} does not exist`);
+    assert.equal(node.parent_derivation, 'nist_control_metadata', `${node.id} parent_derivation`);
+  }
+});
+
+test('W1.3b: CCI structural parenting resolves the promotable majority and reports the genuine residue honestly', () => {
+  const nodes = generated('nodes').nodes;
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const ccis = nodes.filter((node) => node.metadata?.catalog_id === 'disa-cci');
+  assert.equal(ccis.length, 5137, 'CCI count');
+
+  const parented = ccis.filter((node) => node.parent_id);
+  const unparented = ccis.filter((node) => !node.parent_id);
+
+  // Proven red first (2026-07-26): before this session, zero CCIs had parent_id
+  // at all, since the field did not exist. This asserts the promotion actually
+  // ran, not just that the field is technically optional.
+  assert.ok(parented.length >= 5093, `expected >= 5093 CCIs parented, got ${parented.length}`);
+  assert.ok(
+    unparented.length <= 44,
+    `expected <= 44 genuinely unmappable CCIs, got ${unparented.length}`,
+  );
+
+  for (const node of parented) {
+    assert.ok(nodeIds.has(node.parent_id), `${node.id} parent_id ${node.parent_id} does not exist`);
+    assert.ok(
+      ['cci_promoted_ap', 'cci_promoted_control'].includes(node.parent_derivation),
+      `${node.id} has an unrecognized parent_derivation ${node.parent_derivation}`,
+    );
+    const parentCatalog = node.parent_derivation === 'cci_promoted_ap' ? 'nist-800-53a' : 'nist-800-53';
+    assert.ok(
+      node.parent_id.startsWith(`${parentCatalog}:`),
+      `${node.id} parent_derivation ${node.parent_derivation} does not match its parent_id ${node.parent_id}`,
+    );
+  }
+
+  // Every genuinely unmappable CCI must still show up in maps/cci-to-800-53.json
+  // and maps/cci-to-800-53-rev4.json as unresolved, not merely absent — this
+  // catches the module silently dropping a CCI it should have resolved.
+  const direct = JSON.parse(readFileSync('maps/cci-to-800-53.json', 'utf8'));
+  const crosswalkMap = JSON.parse(readFileSync('maps/cci-to-800-53-rev4.json', 'utf8'));
+  const hasCandidate = new Set([
+    ...direct.relationships.map((r) => r.source_id),
+    ...crosswalkMap.relationships.map((r) => r.source_id),
+  ]);
+  for (const node of unparented) {
+    assert.ok(
+      !hasCandidate.has(node.metadata.item_id) ||
+        ![...direct.relationships, ...crosswalkMap.relationships].some(
+          (r) =>
+            r.source_id === node.metadata.item_id &&
+            nodes.some(
+              (n) =>
+                (n.node_type === 'assessment_procedure' || n.node_type === 'control' || n.node_type === 'control_enhancement') &&
+                n.metadata?.item_id === r.target_id &&
+                n.metadata?.catalog_id === 'nist-800-53',
+            ),
+        ),
+      `${node.id} has a resolvable candidate but was left unparented`,
+    );
+  }
+});
+
+test('every node with a parent_id carries a class-1 structural relationship, never applicability or correlation', () => {
+  const nodes = generated('nodes').nodes;
+  const APPLICABILITY_OR_CORRELATION_DERIVATIONS = new Set([
+    'selected_by_baseline',
+    'included_in_profile',
+    'modified_by_overlay',
+    'applicable_to',
+    'maps_to',
+    'implements',
+    'mitigates',
+    'assessed_by',
+  ]);
+  for (const node of nodes) {
+    if (!node.parent_id) continue;
+    assert.ok(
+      !APPLICABILITY_OR_CORRELATION_DERIVATIONS.has(node.parent_derivation),
+      `${node.id} parent_derivation "${node.parent_derivation}" names a Class 2/3 relationship, not a structural one`,
+    );
+  }
+});
