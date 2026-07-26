@@ -81,7 +81,6 @@ scripts/*
 !scripts/spikes/**
 !scripts/build-commons-index.mjs
 !scripts/check-commons-health.mjs
-!scripts/generate-expanded-commons-dataset.mjs
 !scripts/lib/
 !scripts/lib/plain-language.mjs
 !scripts/security/
