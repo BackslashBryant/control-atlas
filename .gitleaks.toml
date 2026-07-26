@@ -11,4 +11,5 @@ paths = [
   '''data/d3fend-countermeasures.json''',
   '''maps/attack-to-d3fend.json''',
   '''maps/d3fend-to-800-53.json''',
+  '''data/generated/atlas-node-index.json''',
 ]
