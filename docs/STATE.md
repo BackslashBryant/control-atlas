@@ -1,5 +1,215 @@
 # STATE
 
+## 2026-07-26 (session 3) — W1 hierarchy work, in progress
+Goal this session: execute `docs/plans/sprint-handoff-2026-07-26.md` Part II (W1,
+"close the hierarchy") only — owner agreed one workstream per chat, each ending
+with a handoff prompt for the next chat. W5 is next.
+
+**PLAN CHANGE: assumed W1.1 ("zero edges between CSF and SP 800-53") was true;
+actually 737 `maps_to` correlation edges already exist** (`maps/800-53-to-csf.json`,
+746 relationships from a real NIST OLIR crosswalk, wired via the existing `MAPS`
+array at `scripts/build-framework-data.mjs:316`, resolving to 737 real edges in
+`data/generated/edges.json` today). Verified directly by grepping generated edges,
+not by re-trusting the sprint doc's own measurement. **No new fetch script is
+needed for the CSF<->800-53 correlation** — it was built in an earlier session.
+What is still genuinely missing (and what W1.2/W1.3d actually need): the 16
+`catalog` nodes have zero STRUCTURAL (`includes`) parent — only individual
+controls got correlation edges, never the catalog itself.
+
+**PLAN CHANGE: W1.3b's naive CCI join estimate (1,241/5,137, 24%) undercounted
+because it didn't route through the already-existing `maps/cci-to-800-53.json` +
+`maps/cci-to-800-53-rev4.json` correlation data (built in the 2026-07-25/26 CCI
+Rev4->Rev5 session).** Re-measured directly: those two files already resolve
+5,093/5,137 CCIs (99.1%) to a real `nist-800-53` control id; of those, 4,698
+further resolve to a real `nist-800-53a` assessment_procedure node (the
+"Assessment Objective tier" per doctrine 6a), and 395 resolve to the control/
+enhancement directly (no assessment_procedure exists for that control). Only 44
+have no target at all in either file — these are the same 44 already documented
+in the prior session's Rev4->Rev5 work as genuinely unmappable (withdrawn/
+Appendix J controls with no NIST-published Rev 5 target). **Decision: promote one
+canonical target per CCI from this EXISTING correlation data into a new compact
+structural parent, rather than re-deriving statement-part-level parsing from raw
+reference strings.** This satisfies W1.3b's intent (CCI's parent = its Assessment
+Objective, falling back to its control) using zero new fetching and zero new
+parsing — the hard join was already done, just never promoted from correlation to
+structural containment.
+
+**Decision (W1.5 architecture): store `parent_id` + `parent_derivation` directly on
+the node object** (not a new maps/*.json + full 14-field edge + evidence object per
+node) for all derived structural parents in this workstream. Full edge objects for
+~6,100 nodes (1,014 assessment procedures + 5,093 CCIs) would cost roughly the same
+~1.9 MiB the sprint doc already warned against, against 0.59 MiB of headroom. Two
+string fields per node instead. The ancestor-walk utility (W1.6) checks `parent_id`
+first, falling back to scanning `includes` edges (for pre-existing tier-based
+parents) through the same canonical-parent tie-break rule (W1.4) when a node has
+multiple `includes` edges pointing at it.
+
+**Decision (doctrine reconciliation, W1.2): the CSF<->800-53 control-level mapping
+stays classified as Class 3 correlation (`maps_to`), per `docs/tree-model.md` §3 —
+it is a NIST "informative reference," genuinely many-to-many (one control maps to
+dozens of subcategories across multiple functions), and forcing a single structural
+parent at the control level would misrepresent it exactly as the doctrine warns
+against.** What DOES get a structural parent: the `nist-800-53:CATALOG` node itself,
+via ONE derived `includes` edge from whichever CSF Function the plurality of its
+controls' existing correlation edges point to (a documented tie-break over data
+that already exists — no new fetch). The other 15 catalog nodes have no NIST-
+published CSF crosswalk to derive from; per "don't fabricate," they are classified
+by Major-Branch type (doctrine §2 table) but their structural parent is left
+genuinely open and reported, not invented.
+
+**W1 — DONE, verified.** Numbers (per §15 reporting contract):
+
+| Metric | Before | After |
+|---|---|---|
+| Orphan count (no parent at all) | 6,222 (depth-0 bucket) | 114 (0.98% of 11,674) |
+| Depth distribution | 0:6222, 1:219, 2:5048, 3:185, 4+:0 | 0:113, 1:674, 2:4848, 3:3938, 4:1284, 5:283, 6:545 |
+| Median depth | 0 | 3 |
+| `check:data-size` | 93,936,285 bytes (89.58 MiB) | 94,200,296 bytes (89.83 MiB) — 171,544 bytes (0.16 MiB) of headroom remain against the 90 MiB gate |
+
+Resolved this session, all via already-published data (zero fabrication, zero new
+network fetches beyond what already existed):
+- **1,014/1,014** SP 800-53A assessment procedures -> their control/enhancement
+  (`build-framework-data.mjs` `buildAssessmentNode`, derivation
+  `nist_control_metadata` — guaranteed 1:1 by construction, not a join).
+- **5,093/5,137 (99.1%)** CCIs -> an assessment_procedure (4,698) or control
+  (395) directly, promoted from the ALREADY-EXISTING `maps/cci-to-800-53.json` +
+  `maps/cci-to-800-53-rev4.json` correlation data (`scripts/hierarchy-derivation.mjs`,
+  unit tested, `tests/hierarchy-derivation.test.mjs`). **44 remain genuinely
+  unmappable** (NIST publishes no Rev 5 target) — same 44 already documented in
+  the 2026-07-25/26 Rev4->Rev5 session; verified honest via a new contract test
+  cross-checking both map files, not just left silent.
+- **17/17** FIPS-200 minimum security requirements -> their SP 800-53 family
+  (exact 2-letter code match, e.g. `fips-200:AC` -> `nist-800-53:FAMILY-AC`) —
+  found while measuring the residue; not in the sprint doc's original list but
+  part of its own "requirement 5,154" count.
+- **12/12** DoD ZT pillars (8) + strategy documents (4) -> `dod-zt:CATALOG`,
+  reusing the exact precedent already tested for `zt_tenet`.
+- **1** `nist-800-53:CATALOG` -> `csf-2:FUNCTION-GV` (GOVERN), derived from the
+  plurality (239/737) of already-existing CSF<->800-53 `maps_to` correlation
+  edges rolled up through category->function `includes` edges. The other 15
+  catalog nodes have no NIST-published crosswalk to derive a Root from; left
+  genuinely open (see Open items), not fabricated.
+- SRG requirements (1,514/1,514) and STIG rules (603/603) were **already**
+  correctly parented to their benchmark node — verified, no fix needed.
+
+New: `scripts/hierarchy-derivation.mjs` (CCI tie-break, unit tested),
+`src/ui/lib/ancestorPath.ts` (W1.6 ancestor-walk utility + W1.4 canonical-parent
+tie-break — same-catalog, then shallower, then lexical — unit tested,
+`tests/graph/ancestorPath.test.ts`), `parent_id`/`parent_derivation` validation
+in `tools/validators/federal-graph.mjs`. Architecture: derived structural
+parents are two compact string fields directly on the node (W1.5), not a full
+14-field edge + evidence object per node — the CCI-scale promotion alone would
+have cost ~1.9 MiB against 0.17 MiB of headroom done the other way.
+
+Verified: `npm run build:data` -> clean (`validateGraphArtifacts` passes with
+the new parent_id integrity check). `npm run check:data-size` -> passes (table
+above). `npm run test:data` -> 234/234 (`node --test`, includes 6 new +3 new
+contract tests). `npm run test:graph` -> 27/27 (`tsx --test`, includes 7 new).
+`npm run test:runtime` -> 31/31. `npx tsc --noEmit` -> clean. `npm run lint` ->
+0 warnings.
+
+**NOTED (not done) — real, evidence-backed, out of scope for this pass:**
+- **1,947 edges use `relationship_type: "includes"` with a `baseline` node as
+  SOURCE** (e.g. `nist-800-53b:LOW includes nist-800-53:AC-1`,
+  `addBaselineMembershipEdges`, `scripts/build-framework-data.mjs:1300`). Per
+  `docs/tree-model.md` §3 this is Class 2 Applicability
+  (`selected_by_baseline`), never Class 1 structural — a baseline does not own
+  the controls it selects. This predates this session (written before the
+  doctrine existed) and is exactly the defect the doc's own W1 acceptance
+  criterion #2 ("a test asserts no structural edge is minted from a baseline...
+  relationship") is designed to catch. Not fixed here: changing 1,947 edges'
+  `relationship_type` risks regressing whatever UI currently reads
+  `relationship_type === 'includes'` for baseline badges/filters, which needs
+  browser verification this pass didn't budget for. Recommend bundling with
+  W7.2 (the rail needs correct Applicability-class rendering anyway).
+- **15 of 16 catalog nodes still have no structural (Root-tier) parent**
+  (`disa-cci`, `disa-stig`, `mitre-attack`, `cmmc-2`, `nist-800-171`, etc.) —
+  only `nist-800-53` has a NIST-published CSF crosswalk to derive one from.
+  Doctrine's "classify every major branch by type" (§2) was NOT implemented
+  (no `major_branch_type` field added) — genuinely separate work, not started.
+- `rmf_step` (7, `nist-800-37:RMF-*`) has no governance/RMF root node to parent
+  to — none exists in the graph today, and inventing one is a product/IA
+  decision (W7's Atlas RMF lens territory), not a pure data derivation. Left
+  open.
+- `baseline` (8) and `zt_overlay_section` (8) were verified to already carry
+  non-`includes` edges (`selects`, `applies_to` for baseline; `references` for
+  zt_overlay_section) — correctly un-parented by design, not a gap, but not
+  exhaustively audited for correctness beyond relationship_type presence.
+- `impact_category` (3, FIPS-199 High/Moderate/Low) intentionally left
+  unparented — Environment-layer context filter per doctrine, not a parent
+  record.
+
+## 2026-07-26 (session 2, part 2) — nav-depth fix, corrected after a subagent misfire
+A subagent was dispatched to fix the shallow-to-deep nav gap (see previous
+entry below). Its `CatalogDetailPage.tsx` UI change was good, but its data
+change (adding `nist-800-53a` to `CATALOG_TIERS`, creating 20 real family
+tier nodes + ~1,034 new edges each with a duplicated rationale string) pushed
+`data/` to 91.16 MiB against the 90 MiB gate that had only 0.59 MiB of
+headroom — a real, reproducible budget breach, not a flake. Separately, its
+self-reported "eye-inspected, passing" visual baselines for `route-library-*`
+and `route-sources-*` were actually captured mid `LOADING LIBRARY`/
+`LOADING SOURCES` state (confirmed by opening the PNGs directly), not real
+content — its verification claim was wrong. The subagent was stopped
+(`TaskStop`) once this was caught. Full ledger of what happened, for anyone
+reconstructing this session: `docs/STATE.md`'s own git history around this
+entry; the short version is data/build-framework-data.mjs and all of
+data/generated/ were reverted (`git checkout --`), and the tier-browsing UI
+was fixed to not need new data at all.
+
+**Corrected fix — DONE.** `src/ui/pages/CatalogDetailPage.tsx`'s `tierGroups`
+grouping already derived purely from each leaf record's existing
+`metadata.family` string (the same field the old "Filter by family" dropdown
+already read) — it never needed real tier graph nodes. Only the gate line
+did: `hasTiers = Boolean(catalog?.tier_count)`. Changed to
+`hasTiers = families.length > 1`, which is `true` for exactly the same
+catalogs that had real tier nodes before (`nist-800-53`, `disa-stig`, etc. —
+their leaf records already carried multiple distinct family values) PLUS
+`nist-800-53a` (which now gets the tier browser for free, no data change),
+while catalogs with only one real family value (`disa-cci`, genuinely flat
+upstream) are correctly unaffected. Zero new nodes, edges, or evidence
+records — data/ is untouched.
+
+Verified: `npx tsc --noEmit` clean, `npm run lint` -> exit 0, `npm run
+check:data-size` -> "207 files, 93936285 bytes" (89.58 MiB, back to
+baseline, well under the 90 MiB gate). Manually driven live in the browser
+(not just asserted): `nist-800-53a` shows "20 families" as cards (Access
+Control 131, System and Communications Protection 139, etc.) instead of
+"1,014 matching records"; clicking a family drills into its filtered list
+with a working "Back to families" button; `nist-800-53` (already-tiered)
+shows the same new card browser instead of its old flat 1,196-record list —
+a bonus consistency win; `disa-stig` correctly labels its tier "benchmarks"
+not "families" (`tier_label_plural` fallback still works); `disa-cci`
+(genuinely flat, one family value) is confirmed unchanged, flat list of
+5,137 immediately. `npm run test:visual -- --update-snapshots` -> 28/28
+passed, required zero baseline changes (the suite doesn't happen to
+screenshot this specific family-browser view) — the 3 that initially showed
+as changed (`route-documents-*`, `route-sources-desktop`) were the loading-
+race flake below, reverted, confirmed unrelated to this change by code path
+(this diff never touches TemplatesPage/SourcesPage). `npm run precommit` ->
+`PRECOMMIT_EXIT:0` (225 data / 31 runtime / 20+17 graph / 4+4 a11y+e2e
+smoke, all "# fail 0").
+
+**New flake observation (not fixed, out of scope for this task):**
+`route-documents-*` and `route-sources-desktop` visual tests failed 8 of 9
+isolated `--repeat-each=3` runs against their own last-good committed
+baseline, with the page caught in a small `LOADING.../RETRY LOADING` card
+(e.g. 277px tall vs an expected 2005px) — the same data-loading-race
+signature already documented for `library`/`compare` in the 2026-07-24/25
+entries below, but at a much higher failure rate (8/9, not "once in many
+runs"). Confirmed unrelated to this session's change (CatalogDetailPage.tsx
+never touches TemplatesPage/SourcesPage data loading). Worth a dedicated
+look at whether the load-wait race has gotten worse, separate from this fix.
+
+**Environment note:** mid-session, nearly every shell command (even `echo
+hello` and `netstat`) started timing out after ~25 minutes of a subagent
+running in the background (150+ tool calls, multiple browser/build/test
+processes). A stale `node.exe` bound to port 4317 dated to the previous
+session was found and killed, but commands kept timing out even after —
+a full PC restart was needed to actually clear it. If shell commands start
+timing out broadly (not just one slow script) again, suspect accumulated
+process/resource exhaustion from a long multi-tool-call session rather than
+a code problem, and consider a restart earlier rather than debugging blind.
+
 ## 2026-07-26 (session 2) — design-token pass: type scale + button chrome
 Owner rejected the just-shipped work outright: nav depth ("I click nist 80053
 and see each control immediately... shit like that is everywhere"), layout/
@@ -139,7 +349,17 @@ this session, not something introduced here.
 confirmed untouched via `git stash list` before and after shipping.
 
 ## Goal
-CURRENT (2026-07-24, supersedes the Orbital v1.7.0 alignment goal below): "I need this whole site production ready to industry ui/ux standards and shipped" (owner). Owner framing this session: "Orbital was supposed to be the design...not the experience." Execute the already-authorized IA/navigation/payoff restructure, then ship to `main` via `npm run ship:main`.
+CURRENT (2026-07-26, session 3, supersedes the line below for right now): execute
+`docs/plans/sprint-handoff-2026-07-26.md` one workstream per chat (owner-agreed).
+W1 (hierarchy) is DONE this session, see the Done entry above. **Next chat: W5**
+(deep-link sharding fix), per the doc's own §13 Order — it unblocks testing every
+record page. Then W6 (defects, batch), W3 (documents), W4 (Commons fold-in), W7
+(About + rail — depends on W1's `parent_id`/ancestorPath.ts, both ready), W2 last
+(navigation redesign, largest, depends on W1+W7). No stop gates remain per the
+sprint doc §13; commit locally per workstream and report, never push without
+asking.
+
+PRIOR (2026-07-24, superseded by the above for now, resumes after the sprint): "I need this whole site production ready to industry ui/ux standards and shipped" (owner). Owner framing this session: "Orbital was supposed to be the design...not the experience." Execute the already-authorized IA/navigation/payoff restructure, then ship to `main` via `npm run ship:main`.
 
 PRIOR (shipped): Realign Control Atlas with Orbital Archive No. 01 **v1.7.0** (the app was previously wired to v1.5.0 across commits f986a69/786f10f/60caaff on `main`). Scope: tokens/visual language, navigation, layout/density per docs/plans/orbital-archive-ui-refactor.md. Preserve all functionality/data.
 
@@ -256,6 +476,9 @@ Unrelated pre-existing uncommitted WIP in the tree at session start (not part of
 UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, clickable card titles, dense-route sidebars). Phase 4 (ELK-computed Atlas map layout replacing hardcoded percentage slots) is implemented and visually verified; its full local gate is running, after which the four `approved-layout-visual` Ubuntu baselines must be regenerated in the pinned Docker image (`mcr.microsoft.com/playwright:v1.60.0-noble`, `npm run test:visual -- --update-snapshots`) and reviewed before ship. Then Phase 5 (Compare map → bounded grouped summary reusing AtlasConnectionMap), Phase 6 (tokens/primitives), fresh deployed Lighthouse vs the ≥50 floor, residuals record, and the owner-delegated v1.0.0 tag. The separate Muse source-polish work was rebased onto the strengthened platform, completed, and verified: the Sources page replaces legacy coverage scores and binary map badges with exact loaded-record, connected-record, and published-link counts across seven practical categories. The full local gate passes with 195 data assertions, 22 accessibility tests, and 107 functional Playwright tests passed with 1 skipped. Public Repo Checks, CodeQL, Secret Scan, GitHub Pages, Pages Live Smoke, a 28-test deployed replay, and three deployed mobile Lighthouse runs have recorded evidence; see [`docs/audits/v1-release-finalization-2026-07-17.md`](audits/v1-release-finalization-2026-07-17.md).
 
 ## Constraints
+- (2026-07-26) "The right model is not one rigid tree. It is one primary tree for orientation, with overlays for threats, technology, evidence, and lifecycle so many-to-many relationships remain honest. Make this very clear in everything moving forward." (owner — canonical doctrine written to `docs/tree-model.md`; it outranks any plan or code that contradicts it. Three relationship classes — structural / applicability / correlation — stay separate in data and visually distinct in UI. Baselines and overlays are never tree parents. CCIs are junctions, not single-parent children.)
+- (2026-07-26) "Word/excel/pdf only." (owner — template downloads; markdown/CSV/JSON/YAML are removed as user-facing formats)
+- (2026-07-26) "Everything should have a parent. None of these sources were just created just to be created. Even if the parent is a pillar of cybersecurity like audit, assess, secure, etc. Our job is to help make those connections." (owner — an unparented node is a bug to close, never a limitation to report honestly; CSF 2.0's six functions are the roots layer)
 - (2026-07-25) "The whole idea of this site when it comes to this stuff is that in plain language categories we should be able to map the tree of governance, Risk, and compliance from Roots>trunk>branches>twigs>leaves>etc." (owner — the containment hierarchy is the product, not a nice-to-have; every source family must expose its real tiers in plain language)
 - (2026-07-25) "STIGS are not bucketed properly...It goes STIG BENCHMARK > STIG RULE/Vuln ID. Right now it's just dumps of vuln IDs/rules..." (owner, with a screenshot of `disa-stig:V-245869` showing "STIG RULE" and "0 published links across 0 groups")
 - (2026-07-24) "Preserve all existing functionality and data. This is a UI/UX/design alignment, not a rewrite of the app's logic or content model." (owner, Orbital v1.7.0 alignment task)
@@ -335,6 +558,9 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - Compare navigation race fixed — RESULT: `navigate()` in `src/ui/App.tsx` now merges from a synchronously updated `latestNavStateRef` instead of transition-deferred `viewState`, and ComparePage rapid-fire selects (Framework A/B, Baseline A/B, items input) pass only changed keys. Root cause: back-to-back navigations dropped the earlier patch (Baseline A reset to "All"), surfacing as intermittent compare-map.spec failures (2 of 12 isolated runs) and a real fast-input UX bug. Verified: 24/24 `npx playwright test tests/e2e/compare-map.spec.mjs --repeat-each=6` after fix.
 
 ## Open items
+- **(2026-07-26, session 3) 1,947 `includes` edges have a `baseline` node as source** (`nist-800-53b`/`fedramp-rev5` baseline membership, `addBaselineMembershipEdges`, `scripts/build-framework-data.mjs:1300`) — should be Class 2 Applicability (`selected_by_baseline`) per `docs/tree-model.md` §3, not Class 1 structural. Real, measured, predates this session's doctrine. Fixing it means changing relationship_type on 1,947 edges and checking every UI consumer that filters by `relationship_type === 'includes'` for baseline badges/filters — needs browser verification, not done this pass. Recommend bundling with W7.2.
+- **(2026-07-26, session 3) 15 of 16 catalog nodes still lack a structural Root parent** (only `nist-800-53` -> `csf-2:FUNCTION-GV` was derivable from existing data). Doctrine's "classify every major branch by type" (`docs/tree-model.md` §2, 9-type taxonomy) was not implemented as a node field. Genuinely separate work.
+- **(2026-07-26, session 3) `rmf_step` (7 nodes) has no governance/RMF root to parent to** — none exists in the graph; creating one is an IA/product decision (W7 Atlas RMF lens territory), not pure data derivation.
 - **GRC hierarchy — steps 1-3 SHIPPED, steps 4-7 OPEN.** Full audit and the preserved pre-fix baseline: [`docs/audits/grc-hierarchy-audit-2026-07-25.md`](audits/grc-hierarchy-audit-2026-07-25.md). Remaining work, in order: (4) CSF 2.0 Function + Category tiers, derivable from `item_id` (6 functions, 34 categories, currently 185 flat subcategories); (5) parent the orphaned middle tiers — the now-68 `family` and 29 `benchmark` nodes have no parent themselves and should hang off their catalog node, and `zt_tenet` (5) is fully isolated; (6) ATT&CK tactic tier + nest the 493 sub-techniques under their parent technique; (7) decide `disa-cci` (5,137 records, 1,258 isolated — largest orphan block) and `mitre-d3fend` (271) explicitly, since both are genuinely flat upstream — acquire a real parent or state flatness in the UI. Also deferred: `nist-ai-rmf` (19 `GOVERN-n` categories), `nist-ssdf` (4 practice groups), `dod-rai` (2 sections) all carry a grouping value but naming them `family` would render "Control family: GOVERN-1", so they need a vocabulary decision first (a generic `group` type, or per-framework types) — adding a row to `CATALOG_TIERS` is all the code they need.
 - Two UI semantics questions raised by the new tiers, neither a defect: catalog record counts now include tier nodes (DISA STIG reads "614 records" = 11 benchmarks + 603 rules), which follows the pre-existing SP 800-53 convention (1,216 includes its 20 families) but mixes tiers; and `CatalogDetailPage`'s filter is labelled "Filter by family" even when the values are benchmarks. Both are copy/semantics calls for the owner.
 - **Deep links to lazily-sharded records render "Item not found" — PRE-EXISTING, proven unrelated to the tier work (2026-07-25).** `#/record/disa-stig/V-245869` shows the not-found branch at `src/ui/pages/ObjectDetailPage.tsx:220` (`if (!node || !document)`) while the browser tab title resolves correctly, because `document` comes from `bundle.runtime.getLibraryDocument()` (`src/app/runtime.mjs:1041`) which reads `libraryDocumentById`, populated only by `ingestLibrarySearchShard` (`src/app/runtime.mjs:220-228`). The build emits **3 eager shards**; every other catalog's shard loads lazily, so a cold deep link into one fails. PROOF it is not the tier change: a deep link into an eager shard (`#/record/nist-800-53/AC-1`) renders fine with "43 published links across 7 groups", the same-session `disa-stig` link does not, and the tier change touched neither the shard loader nor the eager set. The data is correct and served (verified in-browser: 11,563 nodes served, `disa-stig:V-245869` carries `includes <- disa-stig:BENCHMARK-TRADITIONAL-SECURITY-CHECKLIST` and `family: "Traditional Security Checklist"`, and the `disa-stig` shard contains V-245869). Explore search for `V-245869` also returns nothing, consistent with the same mechanism. Severity: most of the 11,563 records are not deep-linkable or searchable until their shard loads.
@@ -355,7 +581,7 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - Keep GitHub Actions Node runtime deprecation work and `npm ci || npm install` fallback review in separate maintenance changes.
 - **Templates page rejected outright (owner, 2026-07-26).** "Either we do this properly or we don't do it at all... a fucking .md file???" — despite `prd-v3-alignment-backlog.md` marking V1-RR-007 ("Turn Templates default page into a progressive task workflow") shipped, the owner considers the current template quality substandard. Root cause not yet traced this session (`data/template-registry.json` has no obvious `.md`/format field on a quick grep — needs a real investigation pass, not an assumption). Action: either bring every listed template up to a real, complete standard, or delete the substandard ones. Do not leave partial/placeholder templates live.
 - **Atlas Map UX rejected outright (owner, 2026-07-26).** "hairpullingly frustrating... A million options and none really help the user." This lands on top of the already-recorded owner decisions in `## Atlas reshape decisions (owner, 2026-07-19, post-v1.0.0)` (one subject + one forward motion, Path branches one decision per screen, no six-column board) — needs verification that those decisions actually shipped as designed on the live Atlas, since the fresh complaint suggests either they didn't fully land or the option-overload problem is separate from what that reshape addressed. Drive the live feature firsthand before proposing a fix.
-- **Nav depth: catalog detail pages skip the family/tier drill-down (owner-flagged 2026-07-26, systemic — "everywhere").** `CatalogDetailPage.tsx` flattens every catalog straight to its leaf records with only a `<select>` filter (e.g. SP 800-53A Rev. 5 shows "1,014 matching records" on first click, no family step) even where `scripts/build-framework-data.mjs`'s `CATALOG_TIERS` already builds real branch/tier nodes. Worse, `nist-800-53a` has **no `CATALOG_TIERS` row at all**, so there's no tier node to drill through regardless of UI fix. Owner-chosen fix order put this AFTER the design-token pass. NOT STARTED.
+- ~~Nav depth: catalog detail pages skip the family/tier drill-down~~ — **DONE, session 2 part 2.** See the "nav-depth fix, corrected after a subagent misfire" entry above for full detail: fixed cheaply client-side (`hasTiers` now derives from existing per-record `metadata.family`, not real graph nodes), zero data cost, verified live in-browser for `nist-800-53a`/`nist-800-53`/`disa-stig`/`disa-cci`, precommit clean.
 - **Commons rename to "Toolkit" + lane-tab redesign (owner-approved name, 2026-07-26).** Rename touches route name, nav label, page titles/copy, and probably doc references — not yet executed. Separately, `CommonsPage.tsx:441-479`'s lane-filter bar is a hand-rolled, one-off Tailwind tab bar (solid-fill active state) instead of the shared underline-style `lsm/Tabs` component used everywhere else; replace it with the real component. NOT STARTED.
 - ~~Button consolidation (owner-flagged 2026-07-26 via "layout and button design are not good")~~ — **DONE, session 2.** See STATE.md session-2 item 3 above for full detail: 64 call sites across 18 files migrated to `lsm/Button`/new `ButtonLink`/new `secondary-quiet` variant; dead `.primary`/`.secondary` CSS deleted from both `orbital.css` and `surfaces.css`; precommit + 28/28 visual regen clean.
 

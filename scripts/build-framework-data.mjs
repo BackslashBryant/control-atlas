@@ -22,6 +22,7 @@ import {
   buildAtlasNodeIndex,
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
+import { deriveCciHierarchyParents } from "./hierarchy-derivation.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -513,7 +514,7 @@ const identifier = (value) => String(value).replace(/[^A-Za-z0-9:_-]+/g, "-");
 // "AC-2.3"). Normalize at the mapping read site so endpoints resolve against
 // the node set; anything that is not an 800-53-style control ID (CSF
 // "GV.OC-03", CCI "CCI-000015", 800-171 "3.1.1") passes through unchanged.
-function normalizeControlId(recordId) {
+export function normalizeControlId(recordId) {
   const match = String(recordId ?? "").match(
     /^([A-Za-z]{2})-0*(\d+)(?:\.0*(\d+)|\(0*(\d+)\))?$/,
   );
@@ -642,6 +643,11 @@ function buildAssessmentNode(record) {
     label: `${record.id} Assessment Procedure`,
     source_id: assessment.source_key,
     lifecycle_status: record.status === "deprecated" ? "deprecated" : "active",
+    // W1.3a: the assessment procedure is generated from this same control/
+    // enhancement record, so record.id IS its parent's item_id by construction
+    // — no join needed, no risk of a stale match.
+    parent_id: nodeId("nist-800-53", record.id),
+    parent_derivation: "nist_control_metadata",
     metadata: {
       catalog_id: "nist-800-53a",
       item_id: record.id,
@@ -744,6 +750,122 @@ function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, recor
       references: null,
     },
   });
+}
+
+/**
+ * W1.3b — mutates CCI (`disa-cci`) nodes in place, setting `parent_id` +
+ * `parent_derivation` from the already-published correlation data in
+ * `maps/cci-to-800-53.json` and `maps/cci-to-800-53-rev4.json`. See
+ * scripts/hierarchy-derivation.mjs for the tie-break rule and why no new
+ * fetch is needed. Returns a summary for the build log; never throws on an
+ * unresolved CCI — a genuine residue is expected and reported, not fabricated.
+ */
+function applyCciHierarchyParents(nodes) {
+  const cciNodes = nodes.filter(
+    (node) =>
+      node.node_type === "requirement" &&
+      node.metadata?.catalog_id === "disa-cci",
+  );
+  if (cciNodes.length === 0) return { resolved: 0, unresolved: [] };
+
+  const directPath = join(ROOT, "maps", "cci-to-800-53.json");
+  const crosswalkPath = join(ROOT, "maps", "cci-to-800-53-rev4.json");
+  const directRelationships = existsSync(directPath)
+    ? readJson(directPath).relationships || []
+    : [];
+  const crosswalkRelationships = existsSync(crosswalkPath)
+    ? readJson(crosswalkPath).relationships || []
+    : [];
+
+  const assessmentProcedureItemIds = new Set(
+    nodes
+      .filter((node) => node.node_type === "assessment_procedure")
+      .map((node) => node.metadata.item_id),
+  );
+  const controlItemIds = new Set(
+    nodes
+      .filter(
+        (node) =>
+          (node.node_type === "control" ||
+            node.node_type === "control_enhancement") &&
+          node.metadata?.catalog_id === "nist-800-53",
+      )
+      .map((node) => node.metadata.item_id),
+  );
+
+  const { parents, unresolved } = deriveCciHierarchyParents({
+    cciItemIds: cciNodes.map((node) => node.metadata.item_id),
+    directRelationships,
+    crosswalkRelationships,
+    assessmentProcedureItemIds,
+    controlItemIds,
+  });
+
+  for (const node of cciNodes) {
+    const picked = parents.get(node.metadata.item_id);
+    if (!picked) continue;
+    const catalogId =
+      picked.tier === "assessment_procedure" ? "nist-800-53a" : "nist-800-53";
+    node.parent_id = nodeId(catalogId, picked.controlId);
+    node.parent_derivation =
+      picked.tier === "assessment_procedure"
+        ? "cci_promoted_ap"
+        : "cci_promoted_control";
+  }
+
+  return { resolved: parents.size, unresolved };
+}
+
+/**
+ * FIPS 200's 17 minimum security requirement areas are literally the basis
+ * for SP 800-53's 17(+3 added since) control families — each one's item_id
+ * (e.g. "AC") is the same 2-letter code as its 800-53 family. Found while
+ * measuring W1's orphan residue: these 17 were part of the sprint doc's own
+ * "requirement 5,154" count (5,137 CCI + 17 here) but never separately named.
+ * Zero new data; the match is exact by construction, not inferred.
+ */
+function applyFips200Parents(nodes) {
+  const familyIds = new Set(
+    nodes
+      .filter(
+        (node) =>
+          node.node_type === "family" &&
+          node.metadata?.catalog_id === "nist-800-53",
+      )
+      .map((node) => node.metadata.item_id),
+  );
+  let resolved = 0;
+  for (const node of nodes) {
+    if (node.metadata?.catalog_id !== "fips-200") continue;
+    const familyItemId = `FAMILY-${node.metadata.item_id}`;
+    if (!familyIds.has(familyItemId)) continue;
+    node.parent_id = nodeId("nist-800-53", familyItemId);
+    node.parent_derivation = "fips_200_family_code_match";
+    resolved += 1;
+  }
+  return { resolved };
+}
+
+/**
+ * W1.3d — DoD Zero Trust's pillars and strategy documents are the top of ZT's
+ * OWN native hierarchy (doctrine: "preserve each source's native hierarchy,
+ * do not remap onto NIST families"), so their structural parent is their own
+ * catalog node — the same pattern already established and tested for
+ * zt_tenet (`dod-zt:CATALOG`, see the "DoD Zero Trust tenets" contract test).
+ * Not derived from new data; reusing an already-verified precedent.
+ */
+function applyDodZtNativeParents(nodes) {
+  const catalogId = nodeId("dod-zt", "CATALOG");
+  const hasCatalog = nodes.some((node) => node.id === catalogId);
+  if (!hasCatalog) return { resolved: 0 };
+  let resolved = 0;
+  for (const node of nodes) {
+    if (node.node_type !== "zt_pillar" && node.node_type !== "zt_document") continue;
+    node.parent_id = catalogId;
+    node.parent_derivation = "dod_zt_native_catalog";
+    resolved += 1;
+  }
+  return { resolved };
 }
 
 function buildNodes(registry) {
@@ -1514,6 +1636,79 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
   }
 }
 
+/**
+ * W1.2/W1.3d — the `nist-800-53:CATALOG` node's structural parent, derived
+ * from the already-published CSF<->800-53 OLIR correlation edges (no new
+ * fetch: see docs/STATE.md 2026-07-26 session 3 for why the sprint doc's
+ * "zero edges" premise was disproven). The individual control<->subcategory
+ * correlation stays Class 3 (`maps_to`) per docs/tree-model.md §3 — one
+ * control maps to dozens of subcategories across every function, so no
+ * single function can honestly "contain" a control. What CAN take a single
+ * structural parent is the catalog as a whole: the CSF Function that the
+ * plurality of its controls' correlation edges point to.
+ */
+function applyCatalogFunctionParent(nodes, edges) {
+  const includesParentsOf = new Map();
+  for (const edge of edges) {
+    if (edge.relationship_type !== "includes") continue;
+    const list = includesParentsOf.get(edge.target_node_id) || [];
+    list.push(edge.source_node_id);
+    includesParentsOf.set(edge.target_node_id, list);
+  }
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+
+  function functionOf(csfNodeId) {
+    let current = csfNodeId;
+    for (let hop = 0; hop < 5; hop += 1) {
+      const node = nodesById.get(current);
+      if (!node) return null;
+      if (node.node_type === "function") return node.id;
+      const parents = includesParentsOf.get(current) || [];
+      if (parents.length === 0) return null;
+      [current] = parents;
+    }
+    return null;
+  }
+
+  const tally = new Map();
+  for (const edge of edges) {
+    if (edge.relationship_type !== "maps_to") continue;
+    const csfSide = edge.source_node_id.startsWith("csf-2:")
+      ? edge.source_node_id
+      : edge.target_node_id.startsWith("csf-2:")
+        ? edge.target_node_id
+        : null;
+    const nistSide = edge.source_node_id.startsWith("nist-800-53:")
+      ? edge.source_node_id
+      : edge.target_node_id.startsWith("nist-800-53:")
+        ? edge.target_node_id
+        : null;
+    if (!csfSide || !nistSide) continue;
+    const functionId = functionOf(csfSide);
+    if (!functionId) continue;
+    tally.set(functionId, (tally.get(functionId) || 0) + 1);
+  }
+
+  let winner = null;
+  let winnerCount = -1;
+  for (const [functionId, count] of [...tally.entries()].sort((a, b) =>
+    a[0] < b[0] ? -1 : 1,
+  )) {
+    if (count > winnerCount) {
+      winner = functionId;
+      winnerCount = count;
+    }
+  }
+  if (!winner) return { winner: null, count: 0 };
+
+  const catalogNode = nodesById.get("nist-800-53:CATALOG");
+  if (catalogNode) {
+    catalogNode.parent_id = winner;
+    catalogNode.parent_derivation = "csf_function_plurality";
+  }
+  return { winner, count: winnerCount };
+}
+
 function buildEdges(registry, nodes) {
   const nodeIds = new Set(nodes.map((node) => node.id));
   const state = { edges: [], evidence: [], findings: [] };
@@ -1794,7 +1989,25 @@ export function buildFrameworkData() {
     readJson(join(ROOT, "data", "source-registry.json")),
   );
   const nodeState = buildNodes(registry);
+  const fips200Summary = applyFips200Parents(nodeState.nodes);
+  console.log(`FIPS 200 requirements parented: ${fips200Summary.resolved}/17`);
+  const dodZtSummary = applyDodZtNativeParents(nodeState.nodes);
+  console.log(`DoD ZT pillars+documents parented: ${dodZtSummary.resolved}/12`);
+  const cciParentSummary = applyCciHierarchyParents(nodeState.nodes);
   const edgeState = buildEdges(registry, nodeState.nodes);
+  console.log(
+    `CCI hierarchy parents: ${cciParentSummary.resolved} resolved, ` +
+      `${cciParentSummary.unresolved.length} genuinely unmappable ` +
+      `(${cciParentSummary.unresolved.slice(0, 5).join(", ")}${cciParentSummary.unresolved.length > 5 ? ", ..." : ""})`,
+  );
+  const catalogParentSummary = applyCatalogFunctionParent(
+    nodeState.nodes,
+    edgeState.edges,
+  );
+  console.log(
+    `nist-800-53 catalog parented to ${catalogParentSummary.winner} ` +
+      `(${catalogParentSummary.count} correlation edges rolled up)`,
+  );
   const findings = [...nodeState.findings, ...edgeState.findings];
   const graph = {
     sources: registry.sources,

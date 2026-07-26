@@ -1,0 +1,420 @@
+# The Control Atlas Tree Model
+
+**Status: canonical. Owner-authored doctrine, 2026-07-26.**
+
+This is the foundation of the data layer, the navigation model, and the product's
+explanation of itself. The About page derives from it. `scripts/build-framework-data.mjs`
+derives from it. Every surface derives from it. When something else in this repo
+contradicts this document, this document wins and the other thing is a bug.
+
+---
+
+## 0. The one-sentence rule
+
+**A tree for hierarchy, a graph for relationships.**
+
+One primary tree for orientation, with overlays for threats, technology, evidence,
+and lifecycle, so that many-to-many relationships stay honest.
+
+Do not force every cybersecurity object into one literal hierarchy. Some
+relationships are true parent-child containment; others are selections, mappings,
+or implementation links. Present a simple tree first, then reveal the underlying
+graph as the user goes deeper.
+
+## 1. Why this model exists
+
+The owner's framing, which is the product's actual thesis:
+
+> A bunch of orgs and people made shit, wrote shit down, and then made others
+> accountable for doing it.
+
+Federal cybersecurity is not incoherent — it is *layered*, and nobody publishes the
+map of the layers. Every requirement a practitioner is held to traces back to
+somebody's authority, through somebody's risk process, into somebody's framework,
+down to somebody's technical check. That chain exists. It is just never shown.
+
+**Showing that chain is the product.** A gap in the chain is a defect to close, not
+a limitation to report honestly. Reporting the gap is the same trap this product
+exists to get people out of.
+
+---
+
+## 2. The tree
+
+```text
+ENVIRONMENT
+Mission • Systems • Data • Technology • Threats
+                         │
+                         ▼
+ROOTS — WHY
+Authorities and authoritative sources
+                         │
+                         ▼
+TRUNK — HOW RISK IS MANAGED
+Governance and the RMF lifecycle
+                         │
+                         ▼
+MAJOR BRANCHES — ORGANIZING SYSTEMS
+Frameworks, standards, and compliance programs
+                         │
+                         ▼
+BRANCHES — SECURITY DOMAINS
+Functions, categories, domains, and control families
+                         │
+                         ▼
+TWIGS — REQUIREMENTS
+Controls, enhancements, practices, and assessment objectives
+                         │
+                         ▼
+JUNCTIONS — CORRELATION
+CCIs, crosswalks, mappings, and references
+                         │
+                         ▼
+LEAVES — IMPLEMENTATION
+SRGs, STIGs, rules, checks, procedures, and countermeasures
+                         │
+                         ▼
+FRUIT — ASSURANCE
+Evidence, assessments, findings, POA&Ms, and risk decisions
+                         │
+                         ▼
+ACORNS — REUSABLE WORK
+Templates, patterns, common controls, inheritance, and reciprocity
+```
+
+### Layer by layer
+
+**ENVIRONMENT — the conditions around the tree.** Mission and business purpose,
+system type and authorization boundary, information types and impact levels,
+operational environment, technology and hosting model, threats and adversary
+behavior.
+
+These are **context filters, not parent records.** Control Atlas holds generic
+public contexts only — Cloud SaaS, DoD enclave, federal civilian system, CUI
+environment, FedRAMP cloud service, national security system. **This is where
+Start Here belongs.**
+
+**ROOTS — authority and provenance.** Answers: *why does this requirement exist,
+and who says so?* Law (statute, regulation, executive order, contractual
+requirement); government policy (OMB memoranda, DoD instructions, CNSSI, agency
+policy, federal acquisition requirements); authoritative publications (NIST, DISA,
+CISA, FedRAMP, DoD CIO, MITRE).
+
+**Every record must be traceable downward to implementation and upward to one or
+more roots.**
+
+**TRUNK — governance and RMF.** The common operating process connecting policy to
+work: Prepare → Categorize → Select → Implement → Assess → Authorize → Monitor.
+Also holds the cross-cutting concepts — system boundary, roles and
+responsibilities, common controls, control inheritance, shared responsibility,
+reciprocity, continuous monitoring, risk acceptance, authorization.
+
+**MAJOR BRANCHES — frameworks and programs.** These are not all the same kind of
+object, and the product must say so. Classify every one:
+
+| Type | Examples |
+|---|---|
+| Control catalog | NIST SP 800-53 |
+| Risk framework | NIST RMF |
+| Outcome framework | NIST CSF |
+| Authorization program | FedRAMP |
+| Certification program | CMMC |
+| Control-selection method | CNSSI 1253 |
+| Implementation standard | DISA SRG / STIG |
+| Threat knowledge base | MITRE ATT&CK |
+| Defensive knowledge base | MITRE D3FEND |
+
+This classification is load-bearing: without it users assume FedRAMP, RMF, CMMC,
+and a STIG are interchangeable frameworks. They are not.
+
+**BRANCHES — internal framework structure. Preserve each source's native
+hierarchy. Do not make every source pretend to follow the NIST control-family
+model.**
+
+```text
+NIST SP 800-53   family → control → enhancement
+NIST CSF         function → category → subcategory
+CMMC             domain → practice → assessment objective
+MITRE ATT&CK     tactic → technique → sub-technique
+DISA             SRG → requirement → STIG → rule
+```
+
+**TWIGS — atomic requirements.** Controls, enhancements, practices, requirements,
+organization-defined parameters, discussion elements, assessment objectives,
+determination statements. The lowest level that is still about *what must happen*
+rather than which technology does it.
+
+**JUNCTIONS — correlation.** CCIs, crosswalks, mappings, references. See §4.
+
+**LEAVES — implementation.** SRG requirements, STIG rules, benchmark
+recommendations, check procedures, fix procedures, configuration settings,
+administrative procedures, technical countermeasures, operational processes. One
+requirement has many leaves, because Windows, Linux, databases, cloud services,
+and applications implement the same requirement differently.
+
+**FRUIT — assurance.** Configuration output, screenshots, logs, policy documents,
+account listings, scan results, interview responses, test results, findings,
+vulnerabilities, POA&M entries, residual-risk statements, authorization decisions.
+
+**Control Atlas does not ingest organizational evidence.** It publishes evidence
+*expectations*: example evidence types, validation questions, blank evidence
+matrices, and links between requirements and expected proof. **It must never imply
+that evidence exists or that a control is compliant.**
+
+**ACORNS — reusable work.** Templates, control implementation patterns,
+common-control packages, inheritance worksheets, shared-responsibility matrices,
+reciprocity packages, assessment procedures, continuous-monitoring calendars,
+reusable implementation examples, machine-readable exports. These seed the next
+system, assessment, or organization.
+
+---
+
+## 3. Three relationship classes — keep them separate in data AND in the UI
+
+This is the part most likely to be violated by accident. Conflating these is what
+makes a graph unreadable and a hierarchy dishonest.
+
+### Class 1 — Structural (real tree edges)
+
+```text
+contains · parent_of · decomposes_into
+```
+
+These and only these form the spine. They are what the breadcrumb walks.
+
+### Class 2 — Applicability (selections and overlays)
+
+```text
+selected_by_baseline · included_in_profile · modified_by_overlay · applicable_to
+```
+
+**Render as badges or filters. Never as parent branches.** A FedRAMP baseline does
+not *own* AC-2 — it selects and modifies requirements from a catalog. Putting
+baselines in the spine misrepresents how control selection works.
+
+### Class 3 — Correlation (graph edges)
+
+```text
+maps_to · implements · supports · references · overlaps
+mitigates · assessed_by · evidenced_by · supersedes
+```
+
+CCIs, crosswalks, ATT&CK mappings, and framework equivalencies live here.
+
+**Going *down* the tree and going *sideways* to another framework must never look
+alike.**
+
+---
+
+## 4. CCIs are junctions, not ordinary children
+
+A CCI is the lowest-level decomposition layer used to normalize and correlate
+individual requirements from RMF controls and other authoritative sources. It is
+**a bridge in the middle, not the root of its own family tree.**
+
+CCI identifiers encode no hierarchy. `CCI-000123` is not a child of `CCI-000122`,
+and the number tells you nothing about family or control. The hierarchy lives
+entirely in the CCI's references and mappings.
+
+```text
+Control or enhancement
+        │
+Assessment objective
+        │
+        ├──────── CCI ──────── SRG requirement
+        │                         │
+        │                         └── STIG rule
+        │
+        └──────── Other mappings or assessment content
+```
+
+**Do not render:**
+
+```text
+AC-2
+└── CCI-000123        ← implies one permanent parent. Wrong.
+```
+
+**Render:**
+
+```text
+CCI-000123
+Connected to:
+├── AC-2
+├── AC-2 assessment objective…
+├── SRG requirement…
+└── STIG rules…
+```
+
+A CCI page shows: the normalized requirement statement; authoritative source
+references; related control or enhancement; related assessment objectives; SRGs
+using it; STIG rules using it; version and status history; related evidence
+expectations.
+
+One CCI appears in many SRGs, STIGs, rules, and technologies. One STIG rule may
+reference many CCIs. The relationship is many-to-many and must stay that way.
+
+---
+
+## 5. The chain the product teaches
+
+```text
+Mission and system context
+        ↓
+Law, regulation, and government policy
+        ↓
+Risk-management framework
+        ↓
+Control catalog or compliance program
+        ↓
+Baseline, profile, or overlay selection
+        ↓
+Family, domain, function, or category
+        ↓
+Control, practice, or requirement
+        ↓
+Enhancement or subrequirement
+        ↓
+Assessment objective
+        ↕
+CCI correlation junction
+        ↕
+SRG requirement
+        ↓
+STIG rule
+        ↓
+Check, fix, procedure, or countermeasure
+        ↓
+Expected evidence
+        ↓
+Assessment result or finding
+        ↓
+POA&M and residual-risk treatment
+        ↓
+Authorization and continuous monitoring
+```
+
+Baselines, profiles, CCIs, and crosswalks appear as **selection or connection
+layers**, never forced into the parent-child spine.
+
+---
+
+## 6. How the surfaces map to the tree
+
+Navigation keeps professional, plain-language labels. **The tree metaphor lives
+inside Atlas — it is not the nav vocabulary.** Roots/Twigs/Acorns never appear as
+menu items.
+
+| Surface | Job | Tree relationship |
+|---|---|---|
+| **Start Here** | Situation → what applies to you | ENVIRONMENT layer |
+| **Atlas** | Understand the whole tree | The tree itself, through lenses |
+| **Library** | Find any object | The complete object catalog |
+| **Compare** | See across branches | Class-3 correlation edges |
+| **Commons** | External ecosystem | Supporting resources *linked to* tree nodes, never members of the tree |
+| **Guides** | Explain how the forest works | Process layer over the trunk |
+| **Documents** | Produce fruit and acorns | FRUIT + ACORNS layers |
+
+> **Naming note.** This document is a doctrine call, not a naming and branding
+> call (owner, 2026-07-26). The user-facing labels are decided separately; see
+> `docs/plans/sprint-handoff-2026-07-26.md` §10. The *jobs* above are doctrine and
+> do not change with the labels.
+
+### Atlas lenses — the same records, viewed differently
+
+Atlas opens by asking what the user is trying to understand:
+
+```text
+1. Why does this requirement exist?
+2. What applies to my type of system?
+3. What does a framework require?
+4. How is a control implemented?
+5. How is something assessed?
+6. What document or evidence do I need?
+```
+
+Then offers lenses over one canonical dataset — **additional lenses, never
+separate datasets**:
+
+- **Structure**: Authority → Framework → Domain/family → Requirement → Implementation → Assurance
+- **RMF**: Prepare → Categorize → Select → Implement → Assess → Authorize → Monitor
+- **Implementation**: Control → Assessment objective ↔ CCI → SRG → STIG → Rule → Check/fix
+- **Threat and defense**: ATT&CK tactic → technique → sub-technique ↔ D3FEND countermeasure ↔ Control ↔ Implementation guidance
+- **Artifact**: RMF activity → Required work product → Inputs → Owner → Template → Validation → Related controls
+
+### Documents organizes by the work, not by the publisher
+
+Lead with *what are you trying to produce?* Framework selection comes after.
+
+```text
+Plan       — security plan, system boundary worksheet, roles and responsibilities
+Implement  — control implementation statements, inheritance matrix, shared-responsibility matrix
+Assess     — assessment plan, evidence expectation matrix, STIG evidence checklist, test worksheet
+Remediate  — POA&M, risk statement, exception request
+Monitor    — continuous-monitoring strategy, monitoring calendar, change-impact worksheet
+```
+
+### Guides organizes by practitioner question, not by publication
+
+Starting an authorization · Understanding RMF · Selecting controls · Implementing
+controls · Preparing evidence · Conducting assessments · Managing findings ·
+Continuous monitoring · Inheritance and common controls · Reciprocity · Cloud and
+shared responsibility · STIG lifecycle.
+
+Each guide: what this means → where it sits in the tree → when it matters →
+common mistakes → what good looks like → related tree nodes → related documents →
+authoritative sources → next action.
+
+---
+
+## 7. Record page anatomy — every record, same shape
+
+```text
+1.  What this is
+2.  Where it sits in the tree          ← persistent, always visible
+3.  Why it exists
+4.  Where it applies
+5.  What it requires
+6.  What decomposes beneath it
+7.  What implements it
+8.  How it is assessed
+9.  What evidence normally supports it
+10. Related frameworks and threats
+11. What to do next
+12. Official text, provenance, and version
+```
+
+Item 2 is the **"Where this sits" tree path** — the single most important
+addition to the current record pages:
+
+```text
+NIST › SP 800-53 Rev. 5 › Access Control › AC-2 Account Management
+      › AC-2(1) Automated System Account Management
+```
+
+Underneath it, the three relationship classes, visually distinct:
+
+```text
+Selected by        [Moderate] [High] [FedRAMP Moderate]      ← applicability
+Correlated through [CCI-xxxxxx] [CCI-yyyyyy]                 ← correlation
+Implemented by     [Windows STIG] [Linux STIG] [App SRG]     ← correlation
+Assessed through   [Assessment objectives] [Evidence expectations]
+```
+
+---
+
+## 8. The disclosure order — every surface, every time
+
+```text
+Tree path → plain explanation → nearby connections → implementation
+          → evidence → source detail
+```
+
+This is the existing translation-first rule (intent, meaning, relationships,
+trust, action, then raw detail) and the existing Shallow → Wading → Deep
+constraint, expressed as one sequence. A newcomer gets a stable mental model; a
+practitioner is not misled about how the data actually relates.
+
+The canonical data remains one node-and-edge graph. The user experiences it as a
+tree with overlays. **Both statements must stay true at once** — that is the whole
+design.
