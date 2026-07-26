@@ -1,5 +1,77 @@
 # STATE
 
+## 2026-07-26 (session 4) — W5 deep-link sharding fix, DONE
+Goal this session: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §11
+(W5, deep-link sharding) only, per the doc's own §13 Order (W5 second, right
+after W1). One workstream per chat; **W6 is next.**
+
+Root cause (per the sprint doc, re-confirmed by reading both functions this
+session): `data/generated/library-search-manifest.json` eager-loads only 3 of 23
+catalog shards (`nist-800-53`, `csf-2`, `fedramp-rev5`); the other 20 load
+lazily, one at a time, via `requestIdleCallback`/`setTimeout` fallback
+(`src/ui/lib/runtimeLoader.ts` `scheduleLazyLibraryShards`).
+`src/ui/pages/ObjectDetailPage.tsx:220` collapsed "node exists but its catalog's
+shard hasn't loaded yet" and "node genuinely absent" into one
+`if (!node || !document)` guard, rendering "Item not found" for both.
+
+**Fix — DONE, verified.**
+1. `scheduleLazyLibraryShards` now returns a `prioritize(catalogId)` closure
+   that splices the catalog out of the pending idle-queue array and fetches it
+   immediately (out-of-band, not gated behind `requestIdleCallback`), leaving
+   the sequential queue for every other catalog untouched. Wired through the
+   new `RuntimeBundle.prioritizeLibraryShard` field from all three call sites
+   (`createSearchRuntime`, `loadFullGraphPhase`, `loadRuntimeDatasetStaged`).
+2. `ObjectDetailPage.tsx`'s guard is split: `!node` -> true not-found
+   (unchanged copy/behavior); `node && !document` -> reuses the existing
+   `DetailConnectionsSkeleton` loading panel (no new component, calm-design
+   constraint) plus a `useEffect` that calls
+   `bundle.prioritizeLibraryShard?.(node.metadata.catalog_id)` once. The
+   shard landing bumps `bundle.librarySearchRevision` (pre-existing
+   mechanism), which re-renders the page and resolves `document`.
+
+New e2e test: `tests/e2e/deep-link-shard-priority.spec.mjs`, using `cmmc-2`
+(17th of 20 in the lazy queue) rather than the sprint doc's other suggested
+example `disa-cci` — `disa-cci` is first in the manifest's own shard list and
+loads immediately even without this fix (verified: it did not reproduce the
+bug). Also throttles every `library-search/*` fetch 300ms via `page.route`,
+because on the local Playwright server the whole 20-shard queue drains in
+~2-3s regardless of position, so an un-throttled test never reproduces the
+real "stuck behind N idle-deferred fetches" symptom either.
+
+Verified: `npx tsc --noEmit` -> clean (before and after). `npm run lint` -> 0
+warnings (before and after). Proved the new test genuinely red on the pre-fix
+code first (`git stash push` the 2 source files, `npm run build:site`, run):
+"1 failed ... toContainText ... Timeout: 4000ms ... element(s) not found" for
+`/#/record/cmmc-2/LEVEL-2`. Restored the fix (`git stash pop`), rebuilt,
+reran the new spec plus the pre-existing `tests/e2e/legacy-url-shim.spec.mjs`
+(eager-catalog deep link, regression check): `npx playwright test --config
+playwright.e2e.config.mjs tests/e2e/deep-link-shard-priority.spec.mjs
+tests/e2e/legacy-url-shim.spec.mjs` -> "2 passed (7.2s)".
+
+HANDLED FAILURES: shard fetch error inside the new `prioritize()` path reuses
+the pre-existing `.catch` (logs via `console.warn`, never throws); the
+catalogId is spliced from the pending queue before the fetch starts, so a
+failed priority fetch is never double-attempted by the idle queue. Missing
+`node.metadata.catalog_id` -> the priority effect is a no-op. Node genuinely
+absent from the graph -> unchanged true not-found path.
+
+**NOTED (not done):** a shard that fails outright (network error/404/
+malformed JSON), or one that loads successfully but never contains the
+requested document id, both leave the page on `DetailConnectionsSkeleton`
+indefinitely with no error/retry affordance. Pre-existing limitation of
+`scheduleLazyLibraryShards`'s silent-catch-and-warn handling, shared by the
+normal (non-prioritized) idle-queue path today — not a regression from this
+fix. A bounded-timeout retry UI is separate, larger work better scoped with
+W6.8 (the related loading-race investigation on `/documents`/`/sources`)
+than bundled into this deep-link fix.
+
+Scope audit: `git diff --stat HEAD` -> `src/ui/lib/runtimeLoader.ts` (81
+lines changed), `src/ui/pages/ObjectDetailPage.tsx` (22 lines changed); new
+`tests/e2e/deep-link-shard-priority.spec.mjs`. `data/generated/commons-search-index.json`
+reappeared untracked after `npm run build:site` — the same pre-existing,
+already-documented gotcha noted two entries below; not staged, not part of
+this change.
+
 ## 2026-07-26 (session 3) — W1 hierarchy work, in progress
 Goal this session: execute `docs/plans/sprint-handoff-2026-07-26.md` Part II (W1,
 "close the hierarchy") only — owner agreed one workstream per chat, each ending
@@ -349,15 +421,14 @@ this session, not something introduced here.
 confirmed untouched via `git stash list` before and after shipping.
 
 ## Goal
-CURRENT (2026-07-26, session 3, supersedes the line below for right now): execute
+CURRENT (2026-07-26, session 4, supersedes the line below for right now): execute
 `docs/plans/sprint-handoff-2026-07-26.md` one workstream per chat (owner-agreed).
-W1 (hierarchy) is DONE this session, see the Done entry above. **Next chat: W5**
-(deep-link sharding fix), per the doc's own §13 Order — it unblocks testing every
-record page. Then W6 (defects, batch), W3 (documents), W4 (Commons fold-in), W7
-(About + rail — depends on W1's `parent_id`/ancestorPath.ts, both ready), W2 last
-(navigation redesign, largest, depends on W1+W7). No stop gates remain per the
-sprint doc §13; commit locally per workstream and report, never push without
-asking.
+W1 (hierarchy) and W5 (deep-link sharding fix) are DONE, see the Done entries
+above. **Next chat: W6** (10-item defects batch, incl. junk removal), per the
+doc's own §13 Order. Then W3 (documents), W4 (Commons fold-in), W7 (About + rail
+— depends on W1's `parent_id`/ancestorPath.ts, both ready), W2 last (navigation
+redesign, largest, depends on W1+W7). No stop gates remain per the sprint doc
+§13; commit locally per workstream and report, never push without asking.
 
 PRIOR (2026-07-24, superseded by the above for now, resumes after the sprint): "I need this whole site production ready to industry ui/ux standards and shipped" (owner). Owner framing this session: "Orbital was supposed to be the design...not the experience." Execute the already-authorized IA/navigation/payoff restructure, then ship to `main` via `npm run ship:main`.
 
@@ -563,7 +634,13 @@ UX spine phases 1–3 are shipped and on `main` at `f1ac91b` (tagline/copy/IA, c
 - **(2026-07-26, session 3) `rmf_step` (7 nodes) has no governance/RMF root to parent to** — none exists in the graph; creating one is an IA/product decision (W7 Atlas RMF lens territory), not pure data derivation.
 - **GRC hierarchy — steps 1-3 SHIPPED, steps 4-7 OPEN.** Full audit and the preserved pre-fix baseline: [`docs/audits/grc-hierarchy-audit-2026-07-25.md`](audits/grc-hierarchy-audit-2026-07-25.md). Remaining work, in order: (4) CSF 2.0 Function + Category tiers, derivable from `item_id` (6 functions, 34 categories, currently 185 flat subcategories); (5) parent the orphaned middle tiers — the now-68 `family` and 29 `benchmark` nodes have no parent themselves and should hang off their catalog node, and `zt_tenet` (5) is fully isolated; (6) ATT&CK tactic tier + nest the 493 sub-techniques under their parent technique; (7) decide `disa-cci` (5,137 records, 1,258 isolated — largest orphan block) and `mitre-d3fend` (271) explicitly, since both are genuinely flat upstream — acquire a real parent or state flatness in the UI. Also deferred: `nist-ai-rmf` (19 `GOVERN-n` categories), `nist-ssdf` (4 practice groups), `dod-rai` (2 sections) all carry a grouping value but naming them `family` would render "Control family: GOVERN-1", so they need a vocabulary decision first (a generic `group` type, or per-framework types) — adding a row to `CATALOG_TIERS` is all the code they need.
 - Two UI semantics questions raised by the new tiers, neither a defect: catalog record counts now include tier nodes (DISA STIG reads "614 records" = 11 benchmarks + 603 rules), which follows the pre-existing SP 800-53 convention (1,216 includes its 20 families) but mixes tiers; and `CatalogDetailPage`'s filter is labelled "Filter by family" even when the values are benchmarks. Both are copy/semantics calls for the owner.
-- **Deep links to lazily-sharded records render "Item not found" — PRE-EXISTING, proven unrelated to the tier work (2026-07-25).** `#/record/disa-stig/V-245869` shows the not-found branch at `src/ui/pages/ObjectDetailPage.tsx:220` (`if (!node || !document)`) while the browser tab title resolves correctly, because `document` comes from `bundle.runtime.getLibraryDocument()` (`src/app/runtime.mjs:1041`) which reads `libraryDocumentById`, populated only by `ingestLibrarySearchShard` (`src/app/runtime.mjs:220-228`). The build emits **3 eager shards**; every other catalog's shard loads lazily, so a cold deep link into one fails. PROOF it is not the tier change: a deep link into an eager shard (`#/record/nist-800-53/AC-1`) renders fine with "43 published links across 7 groups", the same-session `disa-stig` link does not, and the tier change touched neither the shard loader nor the eager set. The data is correct and served (verified in-browser: 11,563 nodes served, `disa-stig:V-245869` carries `includes <- disa-stig:BENCHMARK-TRADITIONAL-SECURITY-CHECKLIST` and `family: "Traditional Security Checklist"`, and the `disa-stig` shard contains V-245869). Explore search for `V-245869` also returns nothing, consistent with the same mechanism. Severity: most of the 11,563 records are not deep-linkable or searchable until their shard loads.
+- ~~Deep links to lazily-sharded records render "Item not found"~~ — **DONE,
+  session 4 (this is W5).** See the "W5 deep-link sharding fix" entry at the
+  top of this file for full detail: `scheduleLazyLibraryShards` now exposes a
+  `prioritize(catalogId)` jump-the-queue fetch, and `ObjectDetailPage.tsx`'s
+  guard is split into true-not-found vs. shard-still-loading. The trace below
+  (PRE-EXISTING, proven unrelated to the tier work, 2026-07-25) is kept as the
+  original root-cause evidence. `#/record/disa-stig/V-245869` shows the not-found branch at `src/ui/pages/ObjectDetailPage.tsx:220` (`if (!node || !document)`) while the browser tab title resolves correctly, because `document` comes from `bundle.runtime.getLibraryDocument()` (`src/app/runtime.mjs:1041`) which reads `libraryDocumentById`, populated only by `ingestLibrarySearchShard` (`src/app/runtime.mjs:220-228`). The build emits **3 eager shards**; every other catalog's shard loads lazily, so a cold deep link into one fails. PROOF it is not the tier change: a deep link into an eager shard (`#/record/nist-800-53/AC-1`) renders fine with "43 published links across 7 groups", the same-session `disa-stig` link does not, and the tier change touched neither the shard loader nor the eager set. The data is correct and served (verified in-browser: 11,563 nodes served, `disa-stig:V-245869` carries `includes <- disa-stig:BENCHMARK-TRADITIONAL-SECURITY-CHECKLIST` and `family: "Traditional Security Checklist"`, and the `disa-stig` shard contains V-245869). Explore search for `V-245869` also returns nothing, consistent with the same mechanism. Severity: most of the 11,563 records are not deep-linkable or searchable until their shard loads.
 - FLAKE: 3/3 pass isolated — `compact compare composition` (tests/e2e/approved-layout-visual.spec.mjs) failed once in the full visual run on 2026-07-25; the diff showed the page captured mid `LOADING COMPARE DATA / RETRY LOADING` rather than any layout change. Same documented data-loading race as the library flake below. Note the tier work grew the generated payload from 83.4 MB to 89.3 MB (205 files), which makes this race likelier — if it starts failing in CI, fix the load wait, never the budget.
 - Container-width stranding, measured 2026-07-25 at a 1783px viewport: Commons strands **160px** (its hero and results section are Tailwind `max-w-7xl` = 1280px inside the 1440px shell from `--ca-content-max: 90rem`), and Library strands **320px** (`.catalog-index / .catalog-detail-page / .start-here-result-page { max-width: 70rem }` in `styles/surfaces.css`). Same root-cause class as the Start Here 640px fix. Do both in ONE pass so `route-commons-*` and `route-library-*` visual baselines regenerate once.
 - `#/start-here` renders "Page not found"; the canonical route is `/start` (`src/ui/lib/hashRoutes.ts`). One-line alias or redirect.

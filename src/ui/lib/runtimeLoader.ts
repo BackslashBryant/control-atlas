@@ -59,6 +59,9 @@ export type RuntimeBundle = {
   commonsDataset?: CommonsResourceDataset;
   graphReady: boolean;
   librarySearchRevision?: number;
+  /** Jump a lazily-queued library-search shard ahead of the idle queue. No-op
+   * if the catalog is already loaded, in flight, or was never queued. */
+  prioritizeLibraryShard?: (catalogId: string) => void;
 };
 
 export type AtlasNeighborhoodNode = {
@@ -307,17 +310,19 @@ function scheduleLazyLibraryShards(
   runtime: ReturnType<typeof createFederalGraphRuntime>,
   lazyShardIds: string[],
   onShardLoaded?: () => void,
-) {
+): (catalogId: string) => void {
+  const noopPrioritize = () => {};
   if (lazyShardIds.length === 0) {
-    return;
+    return noopPrioritize;
   }
 
+  const scheduler =
+    typeof window !== "undefined" && "requestIdleCallback" in window
+      ? window.requestIdleCallback.bind(window)
+      : (callback: () => void) => window.setTimeout(callback, 100);
+
   const pending = [...lazyShardIds];
-  const loadNext = () => {
-    const catalogId = pending.shift();
-    if (!catalogId) {
-      return;
-    }
+  const ingestShard = (catalogId: string) =>
     fetchArtifact(artifactPath(`library-search/${catalogId}.json`))
       .then((artifact: { library_search_shard: LibrarySearchShard }) => {
         runtime.appendLibrarySearchShard(artifact.library_search_shard);
@@ -325,23 +330,31 @@ function scheduleLazyLibraryShards(
       })
       .catch((error) => {
         console.warn(`Failed to lazy-load library shard ${catalogId}:`, error);
-      })
-      .finally(() => {
-        if (pending.length > 0) {
-          const scheduler =
-            typeof window !== "undefined" && "requestIdleCallback" in window
-              ? window.requestIdleCallback.bind(window)
-              : (callback: () => void) => window.setTimeout(callback, 100);
-          scheduler(loadNext);
-        }
       });
-  };
 
-  const scheduler =
-    typeof window !== "undefined" && "requestIdleCallback" in window
-      ? window.requestIdleCallback.bind(window)
-      : (callback: () => void) => window.setTimeout(callback, 100);
+  const loadNext = () => {
+    const catalogId = pending.shift();
+    if (!catalogId) {
+      return;
+    }
+    ingestShard(catalogId).finally(() => {
+      if (pending.length > 0) {
+        scheduler(loadNext);
+      }
+    });
+  };
   scheduler(loadNext);
+
+  // Called on a cold deep link into a non-eager catalog: fetch that one
+  // shard immediately instead of waiting for its turn in the idle queue.
+  return (catalogId: string) => {
+    const index = pending.indexOf(catalogId);
+    if (index === -1) {
+      return;
+    }
+    pending.splice(index, 1);
+    void ingestShard(catalogId);
+  };
 }
 
 async function loadLibrarySearchBootstrap(): Promise<LibrarySearchBootstrap> {
@@ -399,12 +412,12 @@ function createSearchRuntime(
     librarySearch: libraryBootstrap.librarySearch,
     librarySearchShards: libraryBootstrap.librarySearchShards,
   });
-  scheduleLazyLibraryShards(
+  const prioritizeLibraryShard = scheduleLazyLibraryShards(
     runtime,
     libraryBootstrap.lazyShardIds,
     onShardLoaded,
   );
-  return runtime;
+  return { runtime, prioritizeLibraryShard };
 }
 
 export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
@@ -428,9 +441,14 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
+  const { runtime, prioritizeLibraryShard } = createSearchRuntime(
+    libraryBootstrap,
+    templateRegistry,
+  );
 
   return {
-    runtime: createSearchRuntime(libraryBootstrap, templateRegistry),
+    runtime,
+    prioritizeLibraryShard,
     templateRegistry,
     officialArtifactRegistry:
       officialArtifactRegistryRaw as OfficialArtifactRegistry,
@@ -474,7 +492,7 @@ export async function loadFullGraphPhase(
     librarySearch: libraryBootstrap.librarySearch,
     librarySearchShards: libraryBootstrap.librarySearchShards,
   });
-  scheduleLazyLibraryShards(
+  const prioritizeLibraryShard = scheduleLazyLibraryShards(
     runtime,
     libraryBootstrap.lazyShardIds,
     onShardLoaded,
@@ -482,6 +500,7 @@ export async function loadFullGraphPhase(
 
   return {
     runtime,
+    prioritizeLibraryShard,
     templateRegistry,
     officialArtifactRegistry,
     complianceWorkflowRegistry,
@@ -566,13 +585,15 @@ export async function loadRuntimeDatasetStaged(handlers: {
     const commonsSearchIndex = (commonsSearchIndexRaw as CommonsSearchIndex) || undefined;
     const commonsDataset = (commonsDatasetRaw as CommonsResourceDataset) || undefined;
 
-    const searchRuntime = createSearchRuntime(
-      libraryBootstrap,
-      templateRegistry,
-      handlers.onShardLoaded,
-    );
+    const { runtime: searchRuntime, prioritizeLibraryShard } =
+      createSearchRuntime(
+        libraryBootstrap,
+        templateRegistry,
+        handlers.onShardLoaded,
+      );
     handlers.onSearchReady({
       runtime: searchRuntime,
+      prioritizeLibraryShard,
       templateRegistry,
       officialArtifactRegistry,
       complianceWorkflowRegistry,
