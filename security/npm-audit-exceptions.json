@@ -3,14 +3,6 @@
   "threshold": "high",
   "exceptions": [
     {
-      "package": "react-router",
-      "id": 1124282,
-      "advisory": "GHSA-qwww-vcr4-c8h2",
-      "reason": "CSRF bypass is specific to RSC (React Server Components) mode. This app is a static, client-side-only SPA using HashRouter (src/main.tsx) with no server actions or RSC — the vector does not exist here. npm's suggested fix (react-router-dom@7.11.0) is a downgrade from the installed 7.18.0.",
-      "recordedAt": "2026-07-24",
-      "reviewBy": "2026-10-24"
-    },
-    {
       "package": "postcss",
       "id": 1124288,
       "advisory": "GHSA-r28c-9q8g-f849",
