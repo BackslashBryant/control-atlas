@@ -79,6 +79,10 @@
   --ca-success: var(--lsm-signal);
   --ca-warning: var(--lsm-rust);
   --ca-danger: var(--lsm-fault);
+  /* Applicability (selections/overlays) must read as visually distinct from
+     correlation (tone-info) per docs/tree-model.md #3 — gold is otherwise
+     unused as a badge tone. */
+  --ca-applicability: var(--lsm-gold);
   --ca-badge-info-text: var(--lsm-bone);
   --ca-badge-warning-text: var(--lsm-bone);
   --ca-badge-success-text: var(--lsm-bone);

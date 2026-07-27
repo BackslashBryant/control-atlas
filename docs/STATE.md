@@ -10,6 +10,103 @@
   each stage. Not leaving backlog behind us. Get those fixed." — the four
   pre-existing defects noted at end of session 7 (W4) must be fixed before
   handoff, not carried forward. (2026-07-26 session 7)
+- "Execute docs/plans/sprint-handoff-2026-07-26.md Part III §12a (W7 — Make
+  the model visible: About page philosophy + "Where this sits" record-page
+  rail) only." (2026-07-27 session 8)
+- "One workstream per chat; do not push or merge." (2026-07-27 session 8,
+  reaffirmed)
+
+## 2026-07-27 (session 8) - W7 make the model visible
+
+Goal: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §12a (W7)
+only. W1, W3, W4, W5, W6 were committed locally and clean per session 7.
+
+### Completed changes
+
+- **W7.1 — About page philosophy.** Added "Why this exists" (the owner's
+  layered-not-incoherent thesis, in plain terms) and "How the model works"
+  (the ten `docs/tree-model.md` §2 layers, Environment through Acorns, each
+  with a one-line plain-language blurb) to `AboutPage.tsx`. This is the only
+  surface where the Roots/Trunk/Twigs/Acorns vocabulary is named directly —
+  it is not used as a nav label anywhere.
+- **W7.2 — "Where this sits" rail.** New `WhereThisSitsRail.tsx` walks the
+  already-shipped W1.6 `ancestorChain`/`buildAncestorGraph`
+  (`src/ui/lib/ancestorPath.ts`, previously written but never called from any
+  page) against the full `bundle.runtime.dataset` and renders the canonical
+  structural chain root-first, reusing the existing `atlas-path-breadcrumb`
+  idiom (`AtlasDecompositionBoard.tsx`) rather than inventing a new
+  breadcrumb. Replaces the old two-level `Explore / {item_id}` breadcrumb in
+  `ObjectDetailPage.tsx`. Verified live: AC-2 renders `CSF 2.0 Catalog ›
+  GOVERN › SP 800-53 Rev. 5 Catalog › AC Access Control Family › AC-2
+  Account Management`; a non-eager-shard CCI (`disa-cci:CCI-000015`) renders
+  the full canonical chain down through `AC-2.1 Assessment Procedure ›
+  CCI-000015`, confirming the rail composes correctly with W1's CSF bridge
+  and W5's priority-shard-fetch.
+- **W7.2 — relationship-class strip.** Added a compact, conditionally
+  rendered overview beneath the rail in `ObjectDetailPage.tsx`: "Selected
+  by" (Class-2 applicability — NIST/FedRAMP baseline membership, new
+  `tone-applicability` badge, gold) and "Correlated through" / "Implemented
+  by" / "Assessed through" (Class-3 correlation — CCI/MITRE/CSF/171
+  mappings, STIG/SRG, assessment procedures respectively; plain
+  `tone-default` chips) built from the existing `groupRelationships` output.
+  The two classes are visually distinct by color alone (verified via
+  computed-style check: gold `rgb(203,174,103)` vs. muted
+  `rgb(179,187,194)`), and the rail above is a third, distinct look
+  (breadcrumb, not a badge) — satisfying the "must never look alike"
+  constraint without adding new color noise for its own sake (only the one
+  new `tone-applicability` token was needed). The exhaustive per-group list
+  stays in the existing `RelationshipGroupsSection` Connections panel below,
+  unchanged; the strip caps each row at 6 items with a "+N more in
+  Connections below" pointer to it.
+- **W7.4 — evidence boundary.** No evidence-expectations section exists yet
+  (see gaps below), so there was nothing to violate; the new "Assessed
+  through" bucket links only to `assessment_procedure` nodes (objectives),
+  never anything implying evidence exists.
+
+### W7.3 — anatomy audit (light touch, not a rebuild)
+
+Checked `ObjectDetailPage.tsx` against the twelve-item anatomy in
+`docs/tree-model.md` §7. Items 1 (what this is), 2 (now closed above), 4
+(where it applies — new "Selected by" badges), 5 (what it requires), 7/8
+(now closed above), 10 (related frameworks/threats), 11 (what to do next),
+and 12 (official text/provenance) are present. Three gaps found and left
+open, not carried as done:
+
+- **NOTED (not done):** item 3, "why it exists" — no per-record root-authority
+  explanation; only the About page states the philosophy generically.
+- **NOTED (not done):** item 6, "what decomposes beneath it" — enhancements
+  and the base-control link are still inside the generic Connections list
+  (`ObjectDetailPage.tsx` `enhancements`/`baseControl` groups) rather than
+  shown as a distinct structural block; per doctrine these are Class-1, not
+  correlation, and grouping them with CCIs/MITRE mixes classes.
+- **NOTED (not done):** item 9, "what evidence normally supports it" — the
+  FRUIT-layer evidence-expectations feature (example evidence types,
+  validation questions, blank matrices) does not exist on record pages yet;
+  this is net-new content, not a wiring gap, and was out of this session's
+  budget.
+
+### Verification
+
+- `npm run typecheck` (both projects) — clean, both before and after each
+  edit step.
+- `npm run lint` (full project lint, `--max-warnings=0`) — clean.
+- `npm run test:graph` (27/27, includes the pre-existing
+  `tests/graph/ancestorPath.test.ts` unit tests for the W1.6 utility this
+  session finally wires up) — pass.
+- `npm run test:data` (243/243) and `npm run test:runtime` (31/31) — pass.
+- `npm run build:site` — clean build (11,674 nodes, 22,261 edges).
+- Live verification via the browser preview (`control-atlas-static`, port
+  4173, per launch.json): `/about` renders both new sections and the
+  ten-layer list; `#/record/nist-800-53/AC-2` and
+  `#/record/disa-cci/CCI-000015` both render the rail and the
+  relationship-class strip as described above; console had no errors on
+  either page.
+
+### Next workstream
+
+W1, W3, W4, W5, W6, W7 are committed locally, clean. Per sprint doc order
+(§13), only W2 (navigation model redesign — largest, depends on W1 and W7)
+remains.
 
 ## 2026-07-26 (session 7) - W4 fold Commons + rebrand
 

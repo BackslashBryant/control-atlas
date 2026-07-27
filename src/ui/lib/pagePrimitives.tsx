@@ -184,7 +184,7 @@ export function SummaryCard(props: {
 
 export function Badge(props: {
   children: ReactNode;
-  tone?: "default" | "info" | "warning" | "success";
+  tone?: "default" | "info" | "warning" | "success" | "applicability";
 }) {
   return (
     <span className={`badge tone-${props.tone || "default"}`}>

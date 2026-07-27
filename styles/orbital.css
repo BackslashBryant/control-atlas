@@ -610,6 +610,14 @@ textarea:disabled {
   color: var(--ca-success);
 }
 
+/* Applicability class (selections/overlays) — must never look like
+   correlation (tone-info) per docs/tree-model.md #3. */
+.badge.tone-applicability {
+  border-color: color-mix(in srgb, var(--ca-applicability) 54%, transparent);
+  background: color-mix(in srgb, var(--ca-applicability) 10%, transparent);
+  color: var(--ca-applicability);
+}
+
 .table-wrap,
 .relationship-table-wrap,
 .compare-table-wrap {
