@@ -108,6 +108,11 @@ console.log(`  ✓ Candidate Manifest Audit Passed (${manifest.totalEvaluated} t
 
 // 6. Search Index Relevance & Benchmark Audits
 assert.strictEqual(index.documents.length, dataset.resources.length, "Index document count matches dataset");
+assert.strictEqual(
+  index.builtAt,
+  new Date(`${dataset.lastUpdated}T00:00:00.000Z`).toISOString(),
+  "Index build stamp is deterministic and follows the source dataset freshness date",
+);
 
 function testSearch(query, expectedId) {
   const q = query.toLowerCase();

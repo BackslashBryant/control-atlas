@@ -14,7 +14,9 @@ interface TabsProps {
 
 export function Tabs({ tabs, activeId, onChange, className = '' }: TabsProps) {
   return (
-    <div className={`flex border-b border-[var(--ca-border-strong)] gap-[16px] ${className}`}>
+    <div
+      className={`grid grid-cols-2 sm:flex sm:flex-nowrap sm:overflow-x-auto border-b border-[var(--ca-border-strong)] gap-[16px] ${className}`}
+    >
       {tabs.map((tab) => {
         const isActive = tab.id === activeId;
         return (
@@ -23,7 +25,7 @@ export function Tabs({ tabs, activeId, onChange, className = '' }: TabsProps) {
             type="button"
             aria-current={isActive ? "page" : undefined}
             onClick={() => onChange(tab.id)}
-            className={`px-[16px] py-[8px] bg-transparent border-0 border-b-2 cursor-pointer transition-colors ${
+            className={`shrink-0 whitespace-nowrap px-[16px] py-[8px] bg-transparent border-0 border-b-2 cursor-pointer transition-colors ${
               isActive 
                 ? 'border-[var(--ca-primary)] text-[var(--ca-primary)] font-bold' 
                 : 'border-transparent text-[var(--ca-text)] hover:border-[var(--ca-border-strong)]'
