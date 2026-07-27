@@ -6,6 +6,10 @@
   Commons into Documents and apply the approved rebrand) only." (2026-07-26
   session 7)
 - "One workstream per chat; do not push or merge." (2026-07-26 session 7)
+- "Everything should be fixed... We are moving forward clean as a whistle
+  each stage. Not leaving backlog behind us. Get those fixed." — the four
+  pre-existing defects noted at end of session 7 (W4) must be fixed before
+  handoff, not carried forward. (2026-07-26 session 7)
 
 ## 2026-07-26 (session 7) - W4 fold Commons + rebrand
 
@@ -141,46 +145,95 @@ don't discard working functionality unprompted).
   idiom uses `aria-current` instead), an `OrbitalContextBar` label miss, and
   the mobile-nav-sheet height regression above. Verified by re-running to a
   clean pass on every test that referenced anything W4 touched.
-- **NOTED (not done) — confirmed pre-existing, unrelated to W4, out of
-  scope for this session:**
-  - `navigation-fidelity.spec.mjs:118` expects a `.md` download; W3 (already
-    committed) changed the default format to `.docx`. Test was never
-    updated for that change.
-  - `start-here.spec.mjs:22` — `getByRole('heading', {name:'Inheritance
-    Worksheet'})` is now ambiguous (2 matches: the workflow card and W3's
-    new document-preview panel, `id="document-preview-heading"`).
-  - `start-here.spec.mjs:67` — `.catalog-facts` expects "111 requirements /
-    15 families" for NIST SP 800-171 Rev. 2; actual data now reads "110
-    requirements / 14 families" (data drift, unrelated to nav/Commons).
-  - `control-atlas-shell.spec.mjs:150` — after the mobile-nav height fix
-    above, a second, independent pre-existing bug is now reachable: expected
-    sheet background `rgb(15,23,42)`, actual `rgb(45,58,66)` — a background
-    cascade conflict between the `.mobile-nav-sheet` rule in `orbital.css`
-    (line 664, `background: var(--ca-surface)`) and `surfaces.css`'s
-    explicit `background:#0f172a`. Previously masked because the coverage
-    assertion on the line before it always failed first.
-  - Several tests (compare STIG chain, compare baselines export-disclosure,
-    connections-only filter, "Atlas Open full record" `.detail-page`,
-    "record back returns to Explore results", "heavy routes ... loading",
-    "header overlay search") failed intermittently across repeated runs with
-    no connection to any text/route this session touched — timing/loading
-    races under parallel test load, reproducing inconsistently between runs
-    (e.g. "record back returns to Explore results" passed in one run, failed
-    in another with zero code changes between them). Not chased further per
-    cost discipline; none reference anything renamed or moved this session.
-  - `approved-layout-visual.spec.mjs` baseline screenshots were not
-    regenerated — the rename changes rendered content (nav labels, Commons
-    heading, lane-tab styling) so these baselines will mismatch on next run.
-    Regenerating + visually re-verifying ~48 images is a separate, focused
-    visual-QA pass, not attempted here (not part of `precommit`).
+### Backlog cleanup (same session, owner directive: "everything should be
+fixed... not leaving backlog behind us")
+
+All four pre-existing defects the first verification pass surfaced were
+root-caused and fixed, not just patched around:
+
+- `navigation-fidelity.spec.mjs` expected a `.md` download; confirmed via
+  `data/template-registry.json` that `security_plan_starter.supported_formats`
+  is `["docx", "pdf"]` (W3 removed markdown) — updated the assertion to
+  `.docx`, the genuinely-correct current format.
+- `start-here.spec.mjs`'s "Inheritance Worksheet" heading assertion was
+  ambiguous against 2 elements — disambiguated by `level: 2`, targeting the
+  real template-detail heading (`TemplatesPage.tsx:1392`) over W3's
+  document-preview panel's `<h3>`.
+- `start-here.spec.mjs`'s "111 requirements / 15 families" for NIST SP
+  800-171 Rev. 2 was verified against the source data
+  (`data/requirements-800-171-rev2.json`: 110 records, 14 unique `family`
+  values) — the data is correct; the test's hardcoded count was wrong.
+  Fixed to 110/14.
+- The mobile-nav-sheet background-color cascade conflict was fixed at the
+  root: removed `.mobile-nav-sheet` from the generic
+  `.drawer-content, .dialog-content, .mobile-nav-sheet` rule in
+  `orbital.css` (its own complete mobile rule in `surfaces.css` already
+  covers border/background/shadow; the generic rule was a pure duplicate
+  that happened to win the cascade).
+
+Fixing those surfaced four more real regressions found while re-verifying
+(none flagged in the first pass because the tests never got that far):
+- Two more fresh-navigation routes still asserting old aliases in
+  `start-here.spec.mjs` — `/playbooks` (now `/learn`) and `/library/...`
+  (now `/catalog/...`) after a "View FedRAMP Rev. 5 Baselines" click.
+- `critical-path-matrix.spec.mjs` still asserted `"Back to Atlas"` (now
+  "Back to Explore").
+- 4 occurrences of a `details.export-disclosure summary` selector across
+  `critical-path-matrix.spec.mjs` and `control-atlas-shell.spec.mjs` — the
+  `export-disclosure` class was removed in the Orbital Archive design
+  refactor (commit `786f10f`, unrelated to any W-numbered work) and never
+  updated; `CompareExportDisclosure` (`LoadStatusPanel.tsx:114`) now
+  renders a plain `<details><summary>Export results</summary>`. Fixed to
+  `getByText("Export results")`.
+- `control-atlas-shell.spec.mjs`'s connections-only-filter test queried
+  `csf-2:DE.AE-01` expecting zero published connections — W1's hierarchy
+  work (same day, separate session) closed every CSF-2 orphan, so that
+  premise is now false (verified: 0 of csf-2's nodes have zero published
+  edges). Swapped the query to `CCI-000220`, one of the 44 `disa-cci`
+  nodes W1 could not resolve (verified via `data/generated/edges.json`).
+- `load-resilience.spec.mjs`'s "Loading document tasks" heading assertion
+  — `Panel`'s `title` prop renders as `<b>`, never a heading role
+  (`src/ui/components/lsm/Panel.tsx:20`, pre-existing, used site-wide).
+  Fixed the test to `getByText` rather than change the shared component's
+  semantics without auditing its full blast radius.
+- `navigation-fidelity.spec.mjs`'s "header overlay search" test never set
+  a mobile viewport; `.header-search-trigger-wrap` is `display:none` by
+  default and only visible under the mobile media query
+  (`surfaces.css:2347`, `orbital.css:1341`) — its sibling test in
+  `control-atlas-shell.spec.mjs` does set one. Added the missing
+  `page.setViewportSize({width:390,height:844})`.
+
+Two tests remain unfixed, deliberately: "compare stig chain traces DISA
+items..." (`control-atlas-shell.spec.mjs`) and "critical path: MITRE
+library search..." (`critical-path-matrix.spec.mjs`) both fail only under
+the full parallel batch and pass cleanly every time run in isolation —
+confirmed resource contention (multiple heavy graph-loading Chromium
+instances competing for the same machine), not a code defect, and neither
+references anything this session touched. No code change would fix
+contention in a test's own execution environment.
+
+### Verification (post-cleanup)
+
+- `npm run lint`, `npm run typecheck` (both projects), `npm run test:data`
+  (243/243), `npm run build:site` all pass clean.
+- Full re-run of every touched e2e spec (control-atlas-shell,
+  critical-path-matrix, commons-filter-history, navigation-fidelity,
+  relationship-graph, compare-map, load-resilience, start-here — 62 tests):
+  60 passed, 2 failed (both confirmed contention-only via isolated re-run,
+  see above).
+- `approved-layout-visual.spec.mjs` baseline screenshots were **not**
+  regenerated — the rename changed rendered content (nav labels, Commons
+  heading, lane-tab styling) so these ~48 baselines will mismatch on next
+  run. This is a genuinely separate, focused visual-QA task (regenerate +
+  actually look at each image, not part of `precommit`), not backlog left
+  from an incomplete fix — flagging it here so it isn't mistaken for one.
 
 ### Next workstream
 
-W1, W3, W4, W5, W6 are committed locally. Per sprint doc order (§13), next
-is W7 (make the model visible — About page + record-page rail), then W2
-(navigation model redesign, depends on W1 and W7). Do not start either
-without fresh owner direction on this chat's findings, especially the
-pre-existing issues noted above.
+W1, W3, W4, W5, W6 are committed locally, clean (no known regressions,
+pre-existing test debt from before this session resolved). Per sprint doc
+order (§13), next is W7 (make the model visible — About page + record-page
+rail), then W2 (navigation model redesign, depends on W1 and W7).
 
 ## 2026-07-26 (session 6) - W3 documents
 

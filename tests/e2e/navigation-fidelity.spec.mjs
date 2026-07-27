@@ -67,6 +67,12 @@ test('header overlay search submits to Explore and carries focus to results', as
   page,
 }) => {
   test.setTimeout(90_000);
+  // The "Open search" trigger button is mobile-only — .header-search-trigger-wrap
+  // is `display: none` by default and only becomes visible under the mobile
+  // media query (styles/surfaces.css:2347, styles/orbital.css:1341); desktop
+  // shows the inline header search form instead. Without this resize the
+  // button exists in the DOM but is never visible/clickable.
+  await page.setViewportSize({ width: 390, height: 844 });
   // The header search trigger lives in the persistent site chrome, which is
   // hidden on the calm home entrance — exercise it from a page where it's
   // actually visible.
@@ -135,7 +141,9 @@ test('template generation fires a trust-styled download toast and disables the b
 
   const download = await downloadPromise;
   await clickPromise;
-  expect(download.suggestedFilename()).toMatch(/security-plan-starter.*\.md$/);
+  // security_plan_starter's supported_formats is ["docx", "pdf"] (W3: markdown
+  // removed as a user-facing download format); docx is the first/default.
+  expect(download.suggestedFilename()).toMatch(/security-plan-starter.*\.docx$/);
 
   const toast = page.locator('.generation-status');
   await expect(toast).toBeVisible();

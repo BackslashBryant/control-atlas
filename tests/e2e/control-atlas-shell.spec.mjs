@@ -288,7 +288,13 @@ test("explore groups results and filters out records without connections", async
 test("explore explains when the connections-only filter removes every record", async ({
   page,
 }) => {
-  await page.goto("/?view=explore&q=DE.AE-01");
+  // csf-2:DE.AE-01 previously had zero published connections, but W1's
+  // hierarchy work (2026-07-26) closed every CSF-2 orphan — it now has a
+  // structural `includes` edge, so the connections-only filter no longer
+  // zeroes it out. CCI-000220 is one of the 44 disa-cci requirements W1
+  // could not resolve an Assessment Objective for (data/generated/edges.json
+  // has zero published edges touching it).
+  await page.goto("/?view=explore&q=CCI-000220");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -340,8 +346,12 @@ test("compare starts with intent cards and opens summary-first framework results
   await expect(
     page.getByRole("button", { name: "List", exact: true }),
   ).toBeVisible();
+  // The `export-disclosure` class was removed in the Orbital Archive design
+  // refactor (786f10f); CompareExportDisclosure now renders a plain
+  // <details><summary>Export results</summary>.
   await page
-    .locator("#compare-results details.export-disclosure summary")
+    .locator("#compare-results")
+    .getByText("Export results", { exact: true })
     .click();
   await expect(
     page.getByRole("button", { name: "Export CSV", exact: true }),
@@ -387,7 +397,8 @@ test("compare stig chain traces DISA items through CCI to NIST controls", async 
   ).toBeVisible();
   await expect(chainPanel.getByText("Published mapping").first()).toBeVisible();
   await page
-    .locator(".compare-results-panel details.export-disclosure summary")
+    .locator(".compare-results-panel")
+    .getByText("Export results", { exact: true })
     .click();
   await expect(
     page.getByRole("button", { name: "Export CSV", exact: true }),
@@ -412,7 +423,7 @@ test("compare baselines shows delta controls and source versions", async ({
     page.getByText("Only in B", { exact: true }).first(),
   ).toBeVisible();
   await expect(page.locator(".chain-grid")).toContainText("AC-");
-  await page.locator("details.export-disclosure summary").click();
+  await page.getByText("Export results", { exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Export Markdown", exact: true }),
   ).toBeVisible();
