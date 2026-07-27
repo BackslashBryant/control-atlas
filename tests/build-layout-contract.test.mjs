@@ -14,6 +14,7 @@ const tailwindStyles = readFileSync('styles/tailwind.css', 'utf8');
 const siteBuilder = existsSync('tools/build-static-site.mjs')
   ? readFileSync('tools/build-static-site.mjs', 'utf8')
   : '';
+const frameworkBuilder = readFileSync('scripts/build-framework-data.mjs', 'utf8');
 
 test('control atlas source of truth builds through Vite into the staged static output', () => {
   for (const path of [
@@ -41,6 +42,10 @@ test('control atlas source of truth builds through Vite into the staged static o
   assert.match(viteConfig, /base:\s*'\.\/'/);
   assert.match(publicSyncTool, /dist-public/);
   assert.match(publicSyncTool, /dist\/site/);
+});
+
+test('framework rebuilds preserve the Commons generator output', () => {
+  assert.match(frameworkBuilder, /entry === "commons-search-index\.json"/);
 });
 
 test('Commons Tailwind utilities are compiled without replacing Control Atlas global styles', () => {
