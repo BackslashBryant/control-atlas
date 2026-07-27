@@ -2045,6 +2045,11 @@ export function buildFrameworkData() {
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
     const entryPath = join(GENERATED, entry);
+    // This sibling artifact is owned by build-commons-index.mjs. Framework
+    // rebuilds must not erase another generator's committed output.
+    if (entry === "commons-search-index.json") {
+      continue;
+    }
     if (entry === "library-search" || entry === "atlas-neighborhood") {
       rmSync(entryPath, { recursive: true, force: true });
       continue;
