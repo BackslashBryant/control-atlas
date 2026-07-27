@@ -41,17 +41,17 @@ test('shell identifies Control Atlas and boots a React root', () => {
   assert.match(mainEntrypoint, /from 'react-dom\/client'/);
 });
 
-test('shell removes the old mode toggle and uses the translation-first nav order', () => {
+test('shell removes the old mode toggle and uses the current translation-first nav order', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
   assert.match(navigation, /PRIMARY_NAV_ITEMS/);
-  assert.match(navigation, /Library/);
-  assert.match(navigation, /Atlas/);
+  assert.match(navigation, /Explore/);
+  assert.match(navigation, /Catalog/);
   assert.match(navigation, /Compare/);
-  assert.match(navigation, /Guides/);
-  assert.match(navigation, /Documents/);
+  assert.match(navigation, /Learn/);
+  assert.match(navigation, /Build/);
   assert.match(navigation, /Start here/);
   assert.match(navigation, /Sources/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
