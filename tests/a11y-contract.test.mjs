@@ -173,14 +173,14 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing presents one guided primary action alongside direct destination shortcuts", () => {
-  // Owner directive (2026-07-25): returning visitors get immediate buttons to
-  // real destinations instead of everything funneled through Start Here, so
-  // this is a deliberately different shape from the old "one primary action,
-  // secondary paths behind a collapsed <details>" pattern it replaces.
+test("landing presents three ancestry entry points alongside direct destination shortcuts", () => {
+  // W2 directive (2026-07-27): visitors choose a framework lineage, the RMF
+  // process, or their own situation before following one branch at a time.
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /landing-primary-action/);
-  assert.match(homePage, /Start here/);
+  assert.match(homePage, /landing-ancestry-grid/);
+  assert.match(homePage, /Trace a framework/);
+  assert.match(homePage, /Follow the RMF process/);
+  assert.match(homePage, /Start with my situation/);
   assert.match(homePage, /landing-shortcut-grid/);
   // Shortcuts are driven by the real nav config, not a hand-copied list, so
   // they can't silently drift out of sync with the actual site destinations.
