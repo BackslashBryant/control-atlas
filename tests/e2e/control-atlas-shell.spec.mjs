@@ -37,7 +37,7 @@ test("reduced motion bypasses the brand entrance without an artificial hold", as
   await context.close();
 });
 
-test("control atlas map-first shell exposes navigation and guided start path", async ({
+test("control atlas ancestry shell exposes navigation and guided situation path", async ({
   page,
 }) => {
   await page.goto("/");
@@ -51,11 +51,12 @@ test("control atlas map-first shell exposes navigation and guided start path", a
 
   // Home is a calm, chrome-free entrance (its own wordmark/search/buttons
   // cover navigation there) — the persistent primary nav is hidden until the
-  // user has gone somewhere else. The primary action goes to Start Here.
+  // user has gone somewhere else. One ancestry entry starts from the visitor's
+  // situation and opens the guided questionnaire.
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
   ).toBeHidden();
-  await page.getByRole("button", { name: "Start here" }).click();
+  await page.getByRole("button", { name: "Start with my situation" }).click();
   await expect(
     page.getByRole("heading", { name: "Find the best place to start" }),
   ).toBeVisible();
