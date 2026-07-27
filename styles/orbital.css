@@ -660,8 +660,7 @@ details > summary {
 }
 
 .drawer-content,
-.dialog-content,
-.mobile-nav-sheet {
+.dialog-content {
   border-color: var(--ca-border);
   border-radius: var(--ca-radius-lg);
   background: var(--ca-surface);

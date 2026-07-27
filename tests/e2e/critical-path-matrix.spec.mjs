@@ -73,7 +73,7 @@ test("critical path: Atlas Open full record leaves the path for record detail", 
   await expect(page).toHaveURL(/#\/record\//);
   await expect(page.locator(".detail-page")).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Back to Atlas" }),
+    page.getByRole("button", { name: "Back to Explore" }),
   ).toBeVisible();
 });
 
@@ -220,7 +220,10 @@ test("critical path: baseline compare surfaces delta controls with export action
     page.getByText("Only in B", { exact: true }).first(),
   ).toBeVisible();
   await expect(page.locator(".chain-grid")).toContainText("AC-");
-  await page.locator("details.export-disclosure summary").click();
+  // The `export-disclosure` class was removed in the Orbital Archive design
+  // refactor (786f10f); CompareExportDisclosure now renders a plain
+  // <details><summary>Export results</summary>.
+  await page.getByText("Export results", { exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Export Markdown", exact: true }),
   ).toBeVisible();

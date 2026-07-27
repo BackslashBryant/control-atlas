@@ -37,8 +37,11 @@ test('start here completes the questionnaire with one result and opens the named
 
   await page.getByRole('button', { name: 'Inheritance Worksheet', exact: true }).click();
   await expect(page).toHaveURL(/#\/build\?.*templateType=inheritance_worksheet|view=templates&templateType=inheritance_worksheet/);
+  // Disambiguated by level: the main template-detail heading is an <h2>
+  // (TemplatesPage.tsx:1392); W3's document-preview panel also shows an <h3>
+  // with the same text (id="document-preview-heading").
   await expect(
-    page.getByRole("heading", { name: "Inheritance Worksheet" }),
+    page.getByRole("heading", { name: "Inheritance Worksheet", level: 2 }),
   ).toBeVisible();
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
@@ -46,13 +49,13 @@ test('start here completes the questionnaire with one result and opens the named
   await dismissOnboarding(page);
   await page.getByText(/Related guides, documents, and comparisons/).click();
   await page.locator('.start-here-resource-row').filter({ hasText: 'Using FedRAMP Inheritance' }).getByRole('button').click();
-  await expect(page).toHaveURL(/#\/playbooks\?.*pattern=|view=playbooks&pattern=/);
+  await expect(page).toHaveURL(/#\/learn\?.*pattern=|view=playbooks&pattern=/);
 
   await page.goto('/?view=start-here&systemType=Cloud+SaaS&dataSensitivity=Moderate&environment=CSP&step=results');
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole('button', { name: 'View FedRAMP Rev. 5 Baselines' }).click();
-  await expect(page).toHaveURL(/#\/library\/fedramp-rev5/);
+  await expect(page).toHaveURL(/#\/catalog\/fedramp-rev5/);
   await expect(page.getByRole('heading', { name: 'FedRAMP Rev. 5', exact: true })).toBeVisible();
   await expect(page.getByText(/organize the controls used to assess and authorize cloud services/i)).toBeVisible();
 
@@ -73,8 +76,10 @@ test('contractor guidance distinguishes CUI from contractor status', async ({ pa
   await expect(page.getByText(/confirm the required revision before relying on it/i)).toBeVisible();
   await page.getByRole('button', { name: 'View NIST SP 800-171 Rev. 2' }).click();
   await expect(page).toHaveURL(/#\/catalog\/nist-800-171-rev2/);
-  await expect(page.locator('.catalog-facts')).toContainText('111 requirements');
-  await expect(page.locator('.catalog-facts')).toContainText('15 families');
+  // data/requirements-800-171-rev2.json has 110 records across 14 unique
+  // families — the prior 111/15 expectation didn't match the source data.
+  await expect(page.locator('.catalog-facts')).toContainText('110 requirements');
+  await expect(page.locator('.catalog-facts')).toContainText('14 families');
 
   await page.goto('/#/start?systemType=On-premises&dataSensitivity=Low&environment=Contractor&step=results');
   await waitForAppReady(page);

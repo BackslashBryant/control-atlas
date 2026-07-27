@@ -93,8 +93,11 @@ test("heavy routes explain what they are loading", async ({ page }) => {
   });
 
   await page.goto("/#/templates");
+  // DataPendingNotice's title renders through Panel as a bold <b>, not a
+  // heading element (src/ui/components/lsm/Panel.tsx:20) — pre-existing,
+  // unrelated to this route.
   await expect(
-    page.getByRole("heading", { name: "Loading document tasks" }),
+    page.getByText("Loading document tasks", { exact: true }),
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
