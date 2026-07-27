@@ -70,10 +70,19 @@ function sanitizeSheetName(name, used) {
   return candidate;
 }
 
-/** Map the typed document sections to worksheets (one per table + a Notes sheet). */
+function worksheetCell(value) {
+  const text = String(value ?? "");
+  const placeholder = /^\[[\s\S]*\]$/.test(text.trim());
+  return {
+    value: placeholder ? "" : text,
+    editable: placeholder || text === "",
+  };
+}
+
+/** Map the typed document sections to one authoritative sheet per table. */
 export function officeDocumentToSheets(doc) {
   const used = new Set();
-  const sheets = [];
+  const dataSheets = [];
   const fieldGuideRows = [["Table", "Field", "Starter value or expected entry"]];
   for (const section of doc.sections || []) {
     if (section.type === "table") {
@@ -89,69 +98,56 @@ export function officeDocumentToSheets(doc) {
           representative[index] || "Enter the value named by this field.",
         ]);
       });
-      const preserveSingleSheet = section.heading === "STIG Viewer CSV Import Rows";
-      const maxColumns = preserveSingleSheet ? Number.POSITIVE_INFINITY : 8;
-      if (headers.length <= maxColumns) {
-        sheets.push({
-          name: sanitizeSheetName(section.heading, used),
-          kind: "data",
+      const normalizedRows = rows.map((row) =>
+        headers.map((_, index) => worksheetCell(row?.[index])),
+      );
+      dataSheets.push({
+        name: sanitizeSheetName(section.heading, used),
+        kind: "data",
+        headers,
+        rows: [
           headers,
-          rows: [headers, ...rows],
-        });
-        continue;
-      }
-
-      // Wide operational registers remain convenient on screen but become
-      // illegible when printed at one page wide. Split them into keyed views:
-      // the first identity column repeats on every sheet, followed by at most
-      // seven related fields. CSV/JSON exports retain the complete flat schema.
-      const detailCount = headers.length - 1;
-      const partCount = Math.ceil(detailCount / 7);
-      const baseSize = Math.floor(detailCount / partCount);
-      const largerParts = detailCount % partCount;
-      let start = 1;
-      for (let partIndex = 0; partIndex < partCount; partIndex += 1) {
-        const size = baseSize + (partIndex < largerParts ? 1 : 0);
-        const indexes = [0];
-        for (let index = start; index < start + size; index += 1) {
-          indexes.push(index);
-        }
-        const splitHeaders = indexes.map((index) => headers[index]);
-        const splitRows = rows.map((row) => indexes.map((index) => row[index] ?? ""));
-        sheets.push({
-          name: sanitizeSheetName(`${section.heading} ${partIndex + 1}`, used),
-          kind: "data",
-          headers: splitHeaders,
-          rows: [splitHeaders, ...splitRows],
-        });
-        start += size;
-      }
+          ...normalizedRows.map((row) => row.map((cell) => cell.value)),
+        ],
+        editableRows: [
+          headers.map(() => false),
+          ...normalizedRows.map((row) => row.map((cell) => cell.editable)),
+        ],
+      });
     }
   }
-  sheets.push({
+  const fieldGuide = {
     name: sanitizeSheetName("Field Guide", used),
     kind: "guide",
     headers: fieldGuideRows[0],
     rows: fieldGuideRows,
-  });
+  };
   const notesRows = [
     ["Field", "Value"],
     ["Title", doc.title],
     ["Description", doc.description],
     ["Disclaimer", DISCLAIMER],
+    [
+      "How to start",
+      "Read the guidance below, then complete the working sheet. Blank pale-blue cells are intended for user input; preserve the supplied identifiers and reference values.",
+    ],
+    [
+      "Workbook structure",
+      "Each working register has one authoritative row set. The Field Guide defines every column without duplicating operational records.",
+    ],
   ];
   for (const section of doc.sections || []) {
     if (section.type === "text") {
       notesRows.push([section.heading, section.content]);
     }
   }
-  sheets.push({
+  const readMe = {
     name: sanitizeSheetName("Read Me", used),
     kind: "notes",
     headers: notesRows[0],
     rows: notesRows,
-  });
-  return sheets;
+  };
+  return [readMe, ...dataSheets, fieldGuide];
 }
 
 /**
@@ -172,25 +168,34 @@ function columnWidths(rows) {
 
 /**
  * A restrained federal-workbook palette. CellXfs:
- * 0 body, 1 table header, 2 notes label, 3 notes value.
+ * 0 reference/body, 1 table header, 2 notes label, 3 notes value, 4 user input.
  */
 const XLSX_STYLES_XML =
   `${XML_DECL}<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
-  '<fonts count="2"><font><sz val="10"/><name val="Aptos"/><family val="2"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="10"/><name val="Aptos Display"/><family val="2"/></font></fonts>' +
-  '<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF17365D"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF5"/><bgColor indexed="64"/></patternFill></fill></fills>' +
-  '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD6DEE8"/></left><right style="thin"><color rgb="FFD6DEE8"/></right><top style="thin"><color rgb="FFD6DEE8"/></top><bottom style="thin"><color rgb="FFD6DEE8"/></bottom><diagonal/></border></borders>' +
+  '<fonts count="3"><font><sz val="10"/><name val="Aptos"/><family val="2"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="10"/><name val="Aptos Display"/><family val="2"/></font><font><b/><color rgb="FF17365D"/><sz val="10"/><name val="Aptos"/><family val="2"/></font></fonts>' +
+  '<fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF17365D"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF5"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF4F8FC"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+  '<borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFD6DEE8"/></bottom><diagonal/></border><border><left style="thin"><color rgb="FFB8C5D6"/></left><right style="thin"><color rgb="FFB8C5D6"/></right><top style="thin"><color rgb="FFB8C5D6"/></top><bottom style="thin"><color rgb="FFB8C5D6"/></bottom><diagonal/></border></borders>' +
   '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-  '<cellXfs count="4">' +
+  '<cellXfs count="5">' +
   '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
-  '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' +
-  '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+  '<xf numFmtId="0" fontId="1" fillId="2" borderId="2" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' +
+  '<xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
   '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+  '<xf numFmtId="0" fontId="0" fillId="4" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
   "</cellXfs>" +
   '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
   "</styleSheet>";
 
 const VALIDATION_VALUES = {
   status: ["Not Started", "Draft", "Planned", "Ready", "In Progress", "Implemented", "Inherited", "Open", "Ongoing", "Blocked", "Complete", "Completed", "Closed", "Risk Accepted", "Not Applicable"],
+  implementationstatus: ["Planned", "Implemented", "Inherited", "Not Applicable", "Manually Inherited"],
+  controldesignation: ["Common", "System-Specific", "Hybrid"],
+  "inheritance decision": ["Fully Inherited", "Hybrid", "System-Specific", "Not Applicable"],
+  "evidence freshness status": ["Current", "Aging", "Expired", "Unknown"],
+  "review status": ["Needed", "Requested", "Received", "Reviewed", "Accepted", "Gap"],
+  "lifecycle status": ["Active", "Spare", "Maintenance", "Retiring", "Retired"],
+  "requested action": ["Register", "Update", "Retire", "Validate"],
+  "public / external exposure": ["None", "DoD external", "Internet", "Partner"],
   severity: ["Very High", "Critical", "High", "Moderate", "Low", "Very Low"],
   priority: ["Critical", "High", "Moderate", "Low"],
   confidence: ["High", "Medium", "Low"],
@@ -224,11 +229,15 @@ function sheetXml(sheet) {
   // sheet properties. This keeps every keyed view on one landscape page wide
   // while allowing as many vertical pages as its records require.
   out += '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>';
-  // Freeze the header row so it stays visible while scrolling the data rows.
+  // Wide working registers keep both the header and identity column visible.
+  // Guidance sheets only need their header row frozen.
+  const pane = sheet.kind === "data"
+    ? '<pane xSplit="1" ySplit="1" topLeftCell="B2" activePane="bottomRight" state="frozen"/>'
+    : '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>';
   out +=
     '<sheetViews><sheetView workbookViewId="0">' +
     '<showGridLines val="0"/>' +
-    '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>' +
+    pane +
     "</sheetView></sheetViews>";
   out += '<sheetFormatPr defaultRowHeight="18"/>';
   const widths = columnWidths(rows);
@@ -241,7 +250,7 @@ function sheetXml(sheet) {
   }
   out += "<sheetData>";
   rows.forEach((row, rowIndex) => {
-    const height = rowIndex === 0 ? ' ht="30" customHeight="1"' : "";
+    const height = rowIndex === 0 ? ' ht="34" customHeight="1"' : "";
     out += `<row r="${rowIndex + 1}"${height}>`;
     // Row 1 is always the header row; style it bold + wrapped (cellXf 1).
     const style = rowIndex === 0 ? ' s="1"' : "";
@@ -249,7 +258,9 @@ function sheetXml(sheet) {
       const ref = `${columnLetter(colIndex)}${rowIndex + 1}`;
       const notesStyle = sheet.kind !== "data" && rowIndex > 0
         ? ` s="${colIndex === 0 ? 2 : 3}"`
-        : style;
+        : sheet.editableRows?.[rowIndex]?.[colIndex]
+          ? ' s="4"'
+          : style;
       out += `<c r="${ref}"${notesStyle} t="inlineStr"><is><t xml:space="preserve">${escapeXml(
         cell,
       )}</t></is></c>`;
@@ -314,7 +325,7 @@ export function docToXlsx(doc) {
   );
   files["xl/workbook.xml"] = strToU8(
     `${XML_DECL}<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">` +
-      `<sheets>${workbookSheets}</sheets><definedNames>${definedNames}</definedNames></workbook>`,
+      `<bookViews><workbookView activeTab="0"/></bookViews><sheets>${workbookSheets}</sheets><definedNames>${definedNames}</definedNames></workbook>`,
   );
   files["xl/_rels/workbook.xml.rels"] = strToU8(
     `${XML_DECL}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${workbookRels}</Relationships>`,
@@ -334,7 +345,7 @@ function cleanInlineMarkdown(text) {
 }
 
 function docxParagraph(text, opts = {}) {
-  const runProps = ['<w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>'];
+  const runProps = ['<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>'];
   if (opts.bold) runProps.push("<w:b/>");
   if (opts.italic) runProps.push("<w:i/>");
   if (opts.size) {
@@ -441,7 +452,7 @@ function docxColumnWidths(headers, rows) {
   return widths;
 }
 
-function docxTable(headers, rows) {
+function docxTable(headers, rows, opts = {}) {
   const borders = ["top", "left", "bottom", "right", "insideH", "insideV"]
     .map(
       (edge) =>
@@ -449,28 +460,31 @@ function docxTable(headers, rows) {
     )
     .join("");
   const widths = docxColumnWidths(headers, rows);
-  const cell = (text, colIndex, isHeader) => {
+  const cell = (text, colIndex, isHeader, keepNext = false) => {
     const rPr = isHeader
-      ? '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:color w:val="FFFFFF"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr>'
-      : '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="17"/><w:szCs w:val="17"/></w:rPr>';
+      ? '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:color w:val="FFFFFF"/><w:sz w:val="19"/><w:szCs w:val="19"/></w:rPr>'
+      : '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="19"/><w:szCs w:val="19"/></w:rPr>';
     const shd = isHeader
       ? '<w:shd w:val="clear" w:color="auto" w:fill="17365D"/>'
       : "";
-    const tcPr = `<w:tcPr><w:tcW w:w="${widths[colIndex] ?? 0}" w:type="dxa"/><w:tcMar><w:top w:w="90" w:type="dxa"/><w:left w:w="110" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="110" w:type="dxa"/></w:tcMar><w:vAlign w:val="center"/>${shd}</w:tcPr>`;
-    return `<w:tc>${tcPr}<w:p><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r>${rPr}<w:t xml:space="preserve">${escapeXml(
+    const tcPr = `<w:tcPr><w:tcW w:w="${widths[colIndex] ?? 0}" w:type="dxa"/><w:tcMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar><w:vAlign w:val="center"/>${shd}</w:tcPr>`;
+    return `<w:tc>${tcPr}<w:p><w:pPr>${keepNext ? "<w:keepNext/>" : ""}<w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r>${rPr}<w:t xml:space="preserve">${escapeXml(
       cleanInlineMarkdown(text),
     )}</w:t></w:r></w:p></w:tc>`;
   };
   // Fixed layout + explicit grid: Word renders the table at page width instead
   // of auto-sizing ~1,000-row tables (which collapses/clips columns).
-  let out = `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblInd w:w="120" w:type="dxa"/><w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="110" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="110" w:type="dxa"/></w:tblCellMar><w:tblBorders>${borders}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr>`;
+  let out = `<w:tbl><w:tblPr><w:tblW w:w="${DOCX_CONTENT_WIDTH_TWIPS}" w:type="dxa"/><w:tblInd w:w="120" w:type="dxa"/><w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar><w:tblBorders>${borders}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr>`;
   out += `<w:tblGrid>${widths.map((w) => `<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>`;
   // <w:tblHeader/> repeats the header row at the top of every page.
-  out += `<w:tr><w:trPr><w:tblHeader/></w:trPr>${(headers || [])
-    .map((h, i) => cell(h, i, true))
+  out += `<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>${(headers || [])
+    .map((h, i) => cell(h, i, true, opts.keepTogether))
     .join("")}</w:tr>`;
-  for (const row of rows || []) {
-    out += `<w:tr>${(row || []).map((c, i) => cell(c, i, false)).join("")}</w:tr>`;
+  for (const [rowIndex, row] of (rows || []).entries()) {
+    const keepNext = opts.keepTogether && rowIndex < rows.length - 1;
+    out += `<w:tr><w:trPr><w:cantSplit/></w:trPr>${(row || [])
+      .map((c, i) => cell(c, i, false, keepNext))
+      .join("")}</w:tr>`;
   }
   out += "</w:tbl>";
   return out;
@@ -483,9 +497,10 @@ function docxRecordCards(section) {
   for (const [index, row] of rows.entries()) {
     const titleBits = [row[0], row[1]].filter(Boolean);
     out += docxParagraph(titleBits.join(" — ") || `Record ${index + 1}`, {
+      style: "Heading2",
       bold: true,
-      color: "17365D",
-      size: 20,
+      color: "1F4D78",
+      size: 26,
       spacingBefore: index === 0 ? 40 : 160,
       spacingAfter: 60,
       keepNext: true,
@@ -495,29 +510,54 @@ function docxRecordCards(section) {
       header,
       row[detailIndex + 2] ?? "",
     ]);
-    out += docxTable(detailHeaders, detailRows);
+    out += docxTable(detailHeaders, detailRows, { keepTogether: true });
   }
   return out;
 }
 
 const DOCX_STYLES_XML =
   `${XML_DECL}<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
-  '<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:color w:val="20242C"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="100" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>' +
+  '<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:color w:val="20242C"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>' +
   '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>' +
-  '<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="100"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:color w:val="17365D"/><w:sz w:val="44"/><w:szCs w:val="44"/></w:rPr></w:style>' +
-  '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="320" w:after="140"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:color w:val="17365D"/><w:sz w:val="30"/><w:szCs w:val="30"/></w:rPr></w:style>' +
+  '<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="120"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:color w:val="17365D"/><w:sz w:val="44"/><w:szCs w:val="44"/></w:rPr></w:style>' +
+  '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="360" w:after="200"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:color w:val="2E74B5"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:style>' +
+  '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="280" w:after="140"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:color w:val="1F4D78"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr></w:style>' +
+  '<w:style w:type="paragraph" w:styleId="TOC1"><w:name w:val="toc 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:tabs><w:tab w:val="right" w:leader="dot" w:pos="9000"/></w:tabs><w:spacing w:after="80"/></w:pPr></w:style>' +
   '</w:styles>';
 
 const DOCX_NUMBERING_XML =
   `${XML_DECL}<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
-  '<w:abstractNum w:abstractNumId="0"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:tabs><w:tab w:val="num" w:pos="360"/></w:tabs><w:ind w:left="360" w:hanging="180"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr></w:lvl></w:abstractNum>' +
+  '<w:abstractNum w:abstractNumId="0"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:tabs><w:tab w:val="num" w:pos="360"/></w:tabs><w:ind w:left="360" w:hanging="180"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/></w:rPr></w:lvl></w:abstractNum>' +
   '<w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num></w:numbering>';
 
 const DOCX_HEADER_XML =
-  `${XML_DECL}<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:spacing w:after="0"/><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:color w:val="667085"/><w:sz w:val="16"/></w:rPr><w:t>CONTROL ATLAS  |  REFERENCE AID</w:t></w:r></w:p></w:hdr>`;
+  `${XML_DECL}<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:spacing w:after="0"/><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:color w:val="667085"/><w:sz w:val="16"/></w:rPr><w:t>CONTROL ATLAS  |  REFERENCE AID</w:t></w:r></w:p></w:hdr>`;
 
 const DOCX_FOOTER_XML =
-  `${XML_DECL}<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:spacing w:after="0"/><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:color w:val="667085"/><w:sz w:val="16"/></w:rPr><w:t>Page </w:t></w:r><w:fldSimple w:instr="PAGE"><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple></w:p></w:ftr>`;
+  `${XML_DECL}<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:spacing w:after="0"/><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:color w:val="667085"/><w:sz w:val="16"/></w:rPr><w:t>Page </w:t></w:r><w:fldSimple w:instr="PAGE"><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple></w:p></w:ftr>`;
+
+const DOCX_SETTINGS_XML =
+  `${XML_DECL}<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+  '<w:compat><w:compatSetting w:name="compatibilityMode" w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat>' +
+  '<w:defaultTabStop w:val="720"/>' +
+  '</w:settings>';
+
+function docxPageBreak() {
+  return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+}
+
+function docxContents(sections) {
+  return (sections || [])
+    .map((section) =>
+      docxParagraph(section.heading, {
+        style: "TOC1",
+        color: "1F4D78",
+        size: 22,
+        spacingAfter: 80,
+      }),
+    )
+    .join("");
+}
 
 /**
  * Serialize the document to a `.docx` word-processing file.
@@ -541,15 +581,25 @@ export function docToDocx(doc) {
       spacingAfter: 220,
     });
   }
-  body += `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblInd w:w="120" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6" w:color="D6DEE8"/><w:left w:val="single" w:sz="6" w:color="D6DEE8"/><w:bottom w:val="single" w:sz="6" w:color="D6DEE8"/><w:right w:val="single" w:sz="6" w:color="D6DEE8"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid><w:tr><w:trPr><w:tblHeader/></w:trPr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/><w:shd w:val="clear" w:fill="F4F6F9"/><w:tcMar><w:top w:w="140" w:type="dxa"/><w:left w:w="160" w:type="dxa"/><w:bottom w:w="140" w:type="dxa"/><w:right w:w="160" w:type="dxa"/></w:tcMar></w:tcPr>${docxParagraph(`Important: ${DISCLAIMER}`, { size: 17, color: "475467", spacingAfter: 0 })}</w:tc></w:tr></w:tbl><w:p/>`;
+  body += `<w:tbl><w:tblPr><w:tblW w:w="${DOCX_CONTENT_WIDTH_TWIPS}" w:type="dxa"/><w:tblInd w:w="120" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6" w:color="D6DEE8"/><w:left w:val="single" w:sz="6" w:color="D6DEE8"/><w:bottom w:val="single" w:sz="6" w:color="D6DEE8"/><w:right w:val="single" w:sz="6" w:color="D6DEE8"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid><w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/><w:shd w:val="clear" w:fill="F4F6F9"/><w:tcMar><w:top w:w="140" w:type="dxa"/><w:left w:w="160" w:type="dxa"/><w:bottom w:w="140" w:type="dxa"/><w:right w:w="160" w:type="dxa"/></w:tcMar></w:tcPr>${docxParagraph(`Important: ${DISCLAIMER}`, { size: 18, color: "475467", spacingAfter: 0 })}</w:tc></w:tr></w:tbl>`;
+  body += docxPageBreak();
+  body += docxParagraph("Contents", {
+    style: "Heading1",
+    bold: true,
+    size: 32,
+    color: "2E74B5",
+    spacingAfter: 200,
+  });
+  body += docxContents(doc.sections);
+  body += docxPageBreak();
   for (const section of doc.sections || []) {
     body += docxParagraph(section.heading, {
       style: "Heading1",
       bold: true,
-      size: 30,
-      color: "17365D",
-      spacingBefore: 320,
-      spacingAfter: 140,
+      size: 32,
+      color: "2E74B5",
+      spacingBefore: 360,
+      spacingAfter: 200,
       keepNext: true,
     });
     if (section.type === "text") {
@@ -584,6 +634,7 @@ export function docToDocx(doc) {
       '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
       '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
       '<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>' +
+      '<Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>' +
       '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' +
       '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' +
       "</Types>",
@@ -599,11 +650,13 @@ export function docToDocx(doc) {
       '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>' +
       '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>' +
       '<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>' +
+      '<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>' +
       "</Relationships>",
   );
   files["word/document.xml"] = strToU8(documentXmlWithRelationships);
   files["word/styles.xml"] = strToU8(DOCX_STYLES_XML);
   files["word/numbering.xml"] = strToU8(DOCX_NUMBERING_XML);
+  files["word/settings.xml"] = strToU8(DOCX_SETTINGS_XML);
   files["word/header1.xml"] = strToU8(DOCX_HEADER_XML);
   files["word/footer1.xml"] = strToU8(DOCX_FOOTER_XML);
 

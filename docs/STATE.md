@@ -18,6 +18,14 @@ Goal: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §9 (W3) only.
   enough for the browser's download manager to read the generated package.
 - Kept the legacy text generator for documented internal/legacy callers; it is
   no longer advertised in the current Documents UI.
+- Reattacked Office quality against the current NIST SP 800-18 Rev. 2 security
+  plan outline and the legacy FedRAMP SSP/POA&M templates as layout references.
+  Word now has a populated contents map, navigable control headings, fixed-width
+  tables, non-splitting record rows, and current Word compatibility metadata.
+- Excel workbooks now open on a Read Me sheet and keep one authoritative working
+  register per logical table. Bracketed guidance moved to a Field Guide instead
+  of occupying live cells; blank pale-blue cells identify user input, while
+  supplied identifiers and reference values remain populated.
 
 ### Verification
 
@@ -30,6 +38,19 @@ Goal: execute `docs/plans/sprint-handoff-2026-07-26.md` Part III §9 (W3) only.
   `npm run smoke:dom`, `npm run verify:public`, `npm run test:e2e:smoke`, and
   `npm run test:a11y:smoke` passed. The full `npm run precommit` was also
   rerun locally after the final type fix; no push or merge occurred.
+- Native Microsoft Word inspection covered the cover, contents map, Navigation
+  pane, and representative control records. Native Microsoft Excel inspection
+  covered the Read Me and every working sheet across all 11 workbooks.
+- Independent OOXML/PDF inspection confirmed 287 Word Heading 2 control
+  records, compatibility mode 15, one working sheet per logical table, active
+  Read Me sheets, frozen identifiers/headings, filters, and validation rules.
+
+### Owner note
+
+- The owner questioned whether PDFs add value for editable templates. PDF
+  export remains unchanged in this commit because the observation was tentative
+  and W3 explicitly included PDF; removal can be decided as a separate scoped
+  change.
 
 ### Next workstream
 
