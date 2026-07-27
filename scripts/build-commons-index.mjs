@@ -94,7 +94,10 @@ const indexDocuments = dataset.resources.map((res) => {
 });
 
 const generatedArtifact = {
-  builtAt: new Date().toISOString(),
+  // Keep the committed artifact reproducible. The source dataset owns the
+  // freshness date; wall-clock build time would dirty the repository on every
+  // otherwise identical build.
+  builtAt: new Date(`${dataset.lastUpdated}T00:00:00.000Z`).toISOString(),
   totalCount: indexDocuments.length,
   collections: dataset.collections,
   documents: indexDocuments
