@@ -35,6 +35,23 @@ export function WhereThisSitsRail(props: {
     [nodeId, graph],
   );
   const chain = links || derivedChain;
+  const selectedNode = nodeId ? bundle?.runtime.getNode(nodeId) : null;
+  const unavailable =
+    !links &&
+    Boolean(nodeId) &&
+    (chain.length === 0 ||
+      (chain.length === 1 &&
+        chain[0]?.id === nodeId &&
+        selectedNode?.node_type !== "catalog"));
+
+  if (unavailable) {
+    return (
+      <p className="tree-path-unavailable" role="status">
+        Structural path unavailable. Control Atlas will not infer a parent from
+        applicability, mappings, implementation, assessment, or evidence links.
+      </p>
+    );
+  }
 
   if (chain.length === 0) return null;
 

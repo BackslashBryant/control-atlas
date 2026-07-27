@@ -21,7 +21,11 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**v1.0.0 release finalization — RELEASE APPROVED.** All 7 post-v1 backlog tasks complete. Doc sync, slow-device layout shift prevention (`min-height` reservation), route-state handler sweeps, GitHub Actions Node 22 migration, 11 graph-health warning lineage documentation, search benchmark expansion, and release audit evidence complete. Full local precommit gate green (`npm run precommit`). Evidence record: [`docs/audits/v1-0-0-release-decision-2026-07-22.md`](audits/v1-0-0-release-decision-2026-07-22.md). Tag `v1.0.0` is authorized for release.
+**2026 correction program - Epic 1 complete locally.** Structural truth and
+Atlas correctness now satisfy Features 1.1-1.5 and milestone M1 "Truthful
+core." The branch is intentionally local-only pending a separately authorized
+ship task. Epic 2 - Navigation and route identity is next; see the
+[`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)
 

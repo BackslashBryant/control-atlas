@@ -3,8 +3,23 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { CATALOG_TIERS } from '../scripts/build-framework-data.mjs';
+import {
+  RELATIONSHIP_CLASSES,
+  isValidatedStructuralEdge,
+  isValidatedStructuralPointer,
+} from '../src/app/structural-hierarchy.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
+const isNativeStructuralEdge = (edge, nodeById) =>
+  isValidatedStructuralEdge(
+    edge,
+    nodeById.get(edge.source_node_id),
+    nodeById.get(edge.target_node_id),
+  );
+const structuralEdges = (nodes, edges) => {
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  return edges.filter((edge) => isNativeStructuralEdge(edge, nodeById));
+};
 const expectedArtifacts = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];
 const retiredArtifacts = [
   'bootstrap',
@@ -59,6 +74,10 @@ test('displayable edges separate semantics, provenance, confidence, and evidence
   assert.ok(edges.length > 0);
   for (const edge of edges) {
     assert.ok(edge.relationship_type);
+    assert.ok(
+      Object.values(RELATIONSHIP_CLASSES).includes(edge.relationship_class),
+      `invalid relationship class for ${edge.id}`,
+    );
     assert.ok(edge.provenance_class);
     assert.ok(edge.confidence);
     assert.ok(['published', 'candidate'].includes(edge.publication_status));
@@ -225,9 +244,8 @@ test('graph validation rejects duplicates, non-public leakage, missing edge evid
 test('every catalog with a declared parent tier has all of its records parented', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const parented = new Set(
-    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
-  );
+  const nativeStructure = structuralEdges(nodes, edges);
+  const parented = new Set(nativeStructure.map((edge) => edge.target_node_id));
   const tierNodeTypes = new Set(Object.values(CATALOG_TIERS).map((tier) => tier.nodeType));
 
   for (const catalogId of Object.keys(CATALOG_TIERS)) {
@@ -245,7 +263,7 @@ test('every catalog with a declared parent tier has all of its records parented'
     assert.deepEqual(
       unparented,
       [],
-      `${catalogId} declares a parent tier, so every record must have an includes edge from it`,
+      `${catalogId} declares a parent tier, so every record must have a structural parent edge`,
     );
   }
 });
@@ -253,9 +271,10 @@ test('every catalog with a declared parent tier has all of its records parented'
 test('declared parent tiers materialize real tier nodes with plain-language titles', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
   const childCount = new Map();
   for (const edge of edges) {
-    if (edge.relationship_type !== 'includes') continue;
+    if (!isNativeStructuralEdge(edge, nodeById)) continue;
     childCount.set(edge.source_node_id, (childCount.get(edge.source_node_id) ?? 0) + 1);
   }
 
@@ -302,9 +321,8 @@ test('DISA STIG and SRG records carry their benchmark as the grouping label', ()
 test('every tiered catalog has its outermost tier parented to the catalog node, not floating', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const parented = new Set(
-    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
-  );
+  const nativeStructure = structuralEdges(nodes, edges);
+  const parented = new Set(nativeStructure.map((edge) => edge.target_node_id));
   for (const [catalogId, tier] of Object.entries(CATALOG_TIERS)) {
     const catalogNode = nodes.find((node) => node.id === `${catalogId}:CATALOG`);
     assert.ok(catalogNode, `${catalogId} needs a catalog node for its tier to hang off`);
@@ -324,9 +342,9 @@ test('every tiered catalog has its outermost tier parented to the catalog node, 
 test('CSF 2.0 subcategories chain up through Category to Function', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const includesEdges = edges.filter((edge) => edge.relationship_type === 'includes');
+  const nativeStructure = structuralEdges(nodes, edges);
   const childrenOf = new Map();
-  for (const edge of includesEdges) {
+  for (const edge of nativeStructure) {
     if (!childrenOf.has(edge.source_node_id)) childrenOf.set(edge.source_node_id, []);
     childrenOf.get(edge.source_node_id).push(edge.target_node_id);
   }
@@ -353,9 +371,8 @@ test('CSF 2.0 subcategories chain up through Category to Function', () => {
 test('ATT&CK sub-techniques nest under their parent technique', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const parented = new Set(
-    edges.filter((edge) => edge.relationship_type === 'includes').map((edge) => edge.target_node_id),
-  );
+  const nativeStructure = structuralEdges(nodes, edges);
+  const parented = new Set(nativeStructure.map((edge) => edge.target_node_id));
 
   for (const catalogId of ['mitre-attack', 'mitre-attack-ics']) {
     const subtechniques = nodes.filter(
@@ -365,13 +382,12 @@ test('ATT&CK sub-techniques nest under their parent technique', () => {
     for (const node of subtechniques) {
       const parentId = `${catalogId}:${node.metadata.item_id.split('.')[0]}`;
       assert.ok(
-        edges.some(
+        nativeStructure.some(
           (edge) =>
-            edge.relationship_type === 'includes' &&
             edge.source_node_id === parentId &&
             edge.target_node_id === node.id,
         ),
-        `${node.id} should have an includes edge from its parent technique ${parentId}`,
+        `${node.id} should have a structural edge from its parent technique ${parentId}`,
       );
       assert.ok(parented.has(node.id), `${node.id} should be parented`);
     }
@@ -471,9 +487,9 @@ test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pill
   const tenets = nodes.filter((node) => node.node_type === 'zt_tenet');
   assert.equal(tenets.length, 5, 'DoD Zero Trust has 5 tenets');
 
-  const includesEdges = edges.filter((edge) => edge.relationship_type === 'includes');
+  const nativeStructure = structuralEdges(nodes, edges);
   for (const tenet of tenets) {
-    const parentEdge = includesEdges.find((edge) => edge.target_node_id === tenet.id);
+    const parentEdge = nativeStructure.find((edge) => edge.target_node_id === tenet.id);
     assert.ok(parentEdge, `${tenet.id} should not be isolated`);
     assert.equal(
       parentEdge.source_node_id,
@@ -483,93 +499,65 @@ test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pill
   }
 });
 
-test('W1.3a: every SP 800-53A assessment procedure has a real, resolvable parent', () => {
+test('assessment procedures remain correlation records rather than structural children of controls', () => {
   const nodes = generated('nodes').nodes;
-  const nodeIds = new Set(nodes.map((node) => node.id));
+  const edges = generated('edges').edges;
   const procedures = nodes.filter((node) => node.node_type === 'assessment_procedure');
   assert.equal(procedures.length, 1014, 'assessment procedure count');
   for (const node of procedures) {
-    assert.ok(node.parent_id, `${node.id} is missing parent_id`);
-    assert.ok(nodeIds.has(node.parent_id), `${node.id} parent_id ${node.parent_id} does not exist`);
-    assert.equal(node.parent_derivation, 'nist_control_metadata', `${node.id} parent_derivation`);
+    assert.equal(node.parent_id, undefined, `${node.id} must not acquire a cross-catalog parent`);
+    assert.ok(
+      edges.some(
+        (edge) =>
+          edge.source_node_id === node.id &&
+          edge.relationship_type === 'assesses' &&
+          edge.relationship_class === RELATIONSHIP_CLASSES.correlation,
+      ),
+      `${node.id} needs an explicit assessment correlation`,
+    );
   }
 });
 
-test('W1.3b: CCI structural parenting resolves the promotable majority and reports the genuine residue honestly', () => {
+test('CCI mappings remain correlation edges and never become structural parents', () => {
   const nodes = generated('nodes').nodes;
-  const nodeIds = new Set(nodes.map((node) => node.id));
+  const edges = generated('edges').edges;
   const ccis = nodes.filter((node) => node.metadata?.catalog_id === 'disa-cci');
   assert.equal(ccis.length, 5137, 'CCI count');
 
-  const parented = ccis.filter((node) => node.parent_id);
-  const unparented = ccis.filter((node) => !node.parent_id);
-
-  // Proven red first (2026-07-26): before this session, zero CCIs had parent_id
-  // at all, since the field did not exist. This asserts the promotion actually
-  // ran, not just that the field is technically optional.
-  assert.ok(parented.length >= 5093, `expected >= 5093 CCIs parented, got ${parented.length}`);
-  assert.ok(
-    unparented.length <= 44,
-    `expected <= 44 genuinely unmappable CCIs, got ${unparented.length}`,
+  assert.ok(ccis.every((node) => node.parent_id === undefined));
+  const cciEdges = edges.filter(
+    (edge) =>
+      edge.source_node_id.startsWith('disa-cci:') ||
+      edge.target_node_id.startsWith('disa-cci:'),
   );
+  assert.ok(
+    cciEdges.length > 5000,
+    `expected the published CCI bridge to remain available, got ${cciEdges.length} edges`,
+  );
+  assert.ok(
+    cciEdges.every(
+      (edge) => edge.relationship_class === RELATIONSHIP_CLASSES.correlation,
+    ),
+    'CCI bridge edges must stay out of structural ancestry',
+  );
+});
 
-  for (const node of parented) {
-    assert.ok(nodeIds.has(node.parent_id), `${node.id} parent_id ${node.parent_id} does not exist`);
+test('every parent_id is explicitly structural and stays inside its native catalog', () => {
+  const nodes = generated('nodes').nodes;
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  for (const node of nodes) {
+    if (!node.parent_id) continue;
     assert.ok(
-      ['cci_promoted_ap', 'cci_promoted_control'].includes(node.parent_derivation),
-      `${node.id} has an unrecognized parent_derivation ${node.parent_derivation}`,
-    );
-    const parentCatalog = node.parent_derivation === 'cci_promoted_ap' ? 'nist-800-53a' : 'nist-800-53';
-    assert.ok(
-      node.parent_id.startsWith(`${parentCatalog}:`),
-      `${node.id} parent_derivation ${node.parent_derivation} does not match its parent_id ${node.parent_id}`,
-    );
-  }
-
-  // Every genuinely unmappable CCI must still show up in maps/cci-to-800-53.json
-  // and maps/cci-to-800-53-rev4.json as unresolved, not merely absent — this
-  // catches the module silently dropping a CCI it should have resolved.
-  const direct = JSON.parse(readFileSync('maps/cci-to-800-53.json', 'utf8'));
-  const crosswalkMap = JSON.parse(readFileSync('maps/cci-to-800-53-rev4.json', 'utf8'));
-  const hasCandidate = new Set([
-    ...direct.relationships.map((r) => r.source_id),
-    ...crosswalkMap.relationships.map((r) => r.source_id),
-  ]);
-  for (const node of unparented) {
-    assert.ok(
-      !hasCandidate.has(node.metadata.item_id) ||
-        ![...direct.relationships, ...crosswalkMap.relationships].some(
-          (r) =>
-            r.source_id === node.metadata.item_id &&
-            nodes.some(
-              (n) =>
-                (n.node_type === 'assessment_procedure' || n.node_type === 'control' || n.node_type === 'control_enhancement') &&
-                n.metadata?.item_id === r.target_id &&
-                n.metadata?.catalog_id === 'nist-800-53',
-            ),
-        ),
-      `${node.id} has a resolvable candidate but was left unparented`,
+      isValidatedStructuralPointer(node, nodeById.get(node.parent_id)),
+      `${node.id} has an invalid structural parent pointer`,
     );
   }
 });
 
-test('every node with a parent_id carries a class-1 structural relationship, never applicability or correlation', () => {
-  const nodes = generated('nodes').nodes;
-  const APPLICABILITY_OR_CORRELATION_DERIVATIONS = new Set([
-    'selected_by_baseline',
-    'included_in_profile',
-    'modified_by_overlay',
-    'applicable_to',
-    'maps_to',
-    'implements',
-    'mitigates',
-    'assessed_by',
-  ]);
-  for (const node of nodes) {
-    if (!node.parent_id) continue;
-    assert.ok(
-      !APPLICABILITY_OR_CORRELATION_DERIVATIONS.has(node.parent_derivation),
-      `${node.id} parent_derivation "${node.parent_derivation}" names a Class 2/3 relationship, not a structural one`,
-    );
-  }
+test('graph health reports zero invalid structural-parent findings', () => {
+  const findings = generated('graph-health').findings;
+  assert.equal(
+    findings.filter((finding) => finding.finding_type === 'invalid_structural_parent').length,
+    0,
+  );
 });

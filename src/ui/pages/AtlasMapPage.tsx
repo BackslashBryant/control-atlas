@@ -32,8 +32,8 @@ import {
 import {
   buildAtlasDrilldownModel,
   NIST_FRAMEWORK_ID,
-  NIST_FRAMEWORK_LABEL,
 } from "../lib/atlasDrilldown";
+import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import {
   loadAtlasNeighborhood,
@@ -72,13 +72,6 @@ function atlasView(value: string, focused: boolean): AtlasView {
     return value as AtlasView;
   }
   return "path";
-}
-
-// The lens is an entry choice carried in the route, not a view toggle.
-function atlasLens(state: { relationshipView?: string; sourceView?: string }) {
-  return state.relationshipView === "rmf" || state.sourceView === "rmf-lifecycle"
-    ? "rmf"
-    : "purpose";
 }
 
 function handleTabKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>) {
@@ -159,6 +152,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
+  const [searchAnnouncement, setSearchAnnouncement] = useState("");
+  const [noMatchQuery, setNoMatchQuery] = useState("");
 
   useEffect(() => {
     setMapSearchDraft(state.relationshipSearch || "");
@@ -202,13 +197,19 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     event.preventDefault();
     const query = mapSearchDraft.trim();
     if (!query) return;
-    const resolved = nodeIdFromItemId(bundle.runtime, query);
-    if (!resolved) {
-      onNavigate("search", { query });
+    const transition = resolveAtlasSearchTransition(bundle.runtime, query);
+    setSearchAnnouncement(transition.announcement);
+    if (transition.kind === "search") {
+      onNavigate("search", { query: transition.query });
       return;
     }
+    if (transition.kind === "no-match") {
+      setNoMatchQuery(transition.query);
+      return;
+    }
+    setNoMatchQuery("");
     patchAtlas({
-      node: resolved,
+      node: transition.nodeId,
       relationshipSearch: "",
       relationshipGroup: "",
       atlasStage: "",
@@ -251,6 +252,36 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </div>
         <button className="visually-hidden" type="submit">Search</button>
       </form>
+      <span
+        aria-atomic="true"
+        className="visually-hidden"
+        role="status"
+      >
+        {searchAnnouncement}
+      </span>
+      {noMatchQuery ? (
+        <div className="atlas-search-recovery">
+          <p>
+            No Atlas record matches <strong>{noMatchQuery}</strong>.
+          </p>
+          <div className="card-actions">
+            <Button
+              variant="secondary"
+              onClick={() => onNavigate("search", { query: noMatchQuery })}
+              type="button"
+            >
+              Search all records
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => onNavigate("browse")}
+              type="button"
+            >
+              Browse the Catalog
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {/* No view switcher before a record exists: Map and List are views OF a
           chosen record. Offering them with nothing selected produced a
@@ -356,6 +387,26 @@ function FocusedAtlas(props: {
     "No public synopsis is available for this record.";
   const inspectedAction = inspectedNode?.metadata?.plain_action || "";
   const selectedSource = selectedRow?.edge.source_refs?.[0];
+  const choiceLabels = [
+    state.atlasFramework
+      ? bundle.runtime.getNode(`${state.atlasFramework}:CATALOG`)?.metadata
+          ?.title ||
+        bundle.runtime.getNode(`${state.atlasFramework}:CATALOG`)?.label ||
+        state.atlasFramework
+      : "",
+    state.atlasBaseline
+      ? state.atlasBaseline === "all"
+        ? "All records"
+        : bundle.runtime.getNode(state.atlasBaseline)?.metadata?.title ||
+          bundle.runtime.getNode(state.atlasBaseline)?.label ||
+          state.atlasBaseline
+      : "",
+    state.atlasFamily
+      ? bundle.runtime.getNode(state.atlasFamily)?.metadata?.title ||
+        bundle.runtime.getNode(state.atlasFamily)?.label ||
+        state.atlasFamily
+      : "",
+  ].filter(Boolean);
   const selectedGroup = selectedRow
     ? groups.find((group) =>
         group.items.some(
@@ -408,6 +459,27 @@ function FocusedAtlas(props: {
 
   return (
     <div className="atlas-focused-shell">
+      <section className="atlas-structural-position">
+        <p className="eyebrow">Structural position</p>
+        <h2>Where this sits</h2>
+        <WhereThisSitsRail
+          bundle={bundle}
+          links={
+            record.structural_path.length > 1 ||
+            record.center_node.node_type === "catalog"
+              ? record.structural_path
+              : undefined
+          }
+          nodeId={record.center_node.id}
+          onOpenNode={(node) => patchAtlas({ node, atlasStage: "" })}
+        />
+        {choiceLabels.length ? (
+          <nav aria-label="Your choices" className="atlas-choice-trail">
+            <strong>Your choices</strong>
+            <span>{choiceLabels.join(" > ")}</span>
+          </nav>
+        ) : null}
+      </section>
       <div className="atlas-focused-toolbar">
         <div aria-label="Atlas views" className="atlas-view-tabs" role="tablist">
           {/* Three views of ONE record. The lens (Purpose vs RMF) is chosen
@@ -490,7 +562,6 @@ function FocusedAtlas(props: {
               <AtlasDecompositionBoard
                 center={record.center_node}
                 groups={groups}
-                lens={atlasLens(state)}
                 onContinueFrom={(node) => {
                   setSelectedRow(null);
                   patchAtlas({
@@ -527,6 +598,7 @@ function FocusedAtlas(props: {
 
             {view === "list" ? (
               <RelationshipGraphTable
+                centerNodeId={record.center_node.id}
                 conciseTrust
                 onOpenNode={(node) =>
                   setSelectedRow(
@@ -653,6 +725,7 @@ function AtlasGuidedPath(props: {
     () => buildAtlasDrilldownModel(bundle.runtime.dataset),
     [bundle.runtime.dataset],
   );
+  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const axis =
     state.atlasAxis ||
     (state.sourceView === "rmf" ||
@@ -660,38 +733,59 @@ function AtlasGuidedPath(props: {
     state.relationshipView === "rmf"
       ? "process"
       : "");
+  const framework = frameworks.find(
+    (choice) => choice.id === state.atlasFramework,
+  );
   const baseline = model.baselines.find(
     (choice) => choice.id === state.atlasBaseline,
   );
-  const family = baseline?.families.find(
+  const frameworkUnits = useMemo(() => {
+    if (!framework) return [];
+    if (framework.id !== NIST_FRAMEWORK_ID || state.atlasBaseline === "all") {
+      return framework.units;
+    }
+    if (!baseline) return framework.units;
+    const selectedByUnit = new Map(
+      baseline.families.map((unit) => [unit.id, unit.records]),
+    );
+    return framework.units
+      .map((unit) => ({
+        ...unit,
+        records: selectedByUnit.get(unit.id) || [],
+      }))
+      .filter((unit) => unit.records.length > 0);
+  }, [baseline, framework, state.atlasBaseline]);
+  const family = frameworkUnits.find(
     (choice) => choice.id === state.atlasFamily,
   );
   const rmfStep = model.rmfSteps.find(
     (choice) => choice.id === state.atlasRmfStep,
   );
 
-  const ancestryLinks = useMemo(() => {
+  const choiceLinks = useMemo(() => {
     const links = [
-      { id: "atlas:root", label: "Atlas", node_type: "atlas_root" },
+      { id: "atlas:root", label: "Explore" },
     ];
     if (axis === "framework") {
-      links.push({
-        id: `framework:${NIST_FRAMEWORK_ID}`,
-        label: NIST_FRAMEWORK_LABEL,
-        node_type: "framework",
-      });
-      if (baseline) {
+      if (framework) {
         links.push({
-          id: `baseline:${baseline.id}`,
-          label: baseline.itemId.replace("nist-800-53b:", ""),
-          node_type: "baseline",
+          id: `framework:${framework.id}`,
+          label: framework.label,
+        });
+      }
+      if (state.atlasBaseline) {
+        links.push({
+          id: `baseline:${state.atlasBaseline}`,
+          label:
+            state.atlasBaseline === "all"
+              ? "All records"
+              : baseline?.label || state.atlasBaseline,
         });
       }
       if (family) {
         links.push({
           id: `family:${family.id}`,
-          label: family.itemId,
-          node_type: "family",
+          label: family.label,
         });
       }
     }
@@ -699,18 +793,16 @@ function AtlasGuidedPath(props: {
       links.push({
         id: "process:rmf",
         label: "Risk Management Framework",
-        node_type: "process",
       });
       if (rmfStep) {
         links.push({
           id: `rmf-step:${rmfStep.id}`,
           label: rmfStep.itemId.replace("RMF-", ""),
-          node_type: "process_step",
         });
       }
     }
     return links;
-  }, [axis, baseline, family, rmfStep]);
+  }, [axis, baseline, family, framework, rmfStep, state.atlasBaseline]);
 
   function resetDrill(patch: Partial<AtlasMapPageProps["state"]>) {
     patchAtlas({
@@ -732,7 +824,7 @@ function AtlasGuidedPath(props: {
     if (id.startsWith("framework:")) {
       resetDrill({
         atlasAxis: "framework",
-        atlasFramework: NIST_FRAMEWORK_ID,
+        atlasFramework: id.slice("framework:".length),
       });
       return;
     }
@@ -765,10 +857,7 @@ function AtlasGuidedPath(props: {
 
   return (
     <section className="atlas-ancestry">
-      <WhereThisSitsRail
-        links={ancestryLinks}
-        onOpenNode={openAncestor}
-      />
+      <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
 
       {!axis ? (
         <>
@@ -779,7 +868,6 @@ function AtlasGuidedPath(props: {
               onClick={() =>
                 resetDrill({
                   atlasAxis: "framework",
-                  atlasFramework: NIST_FRAMEWORK_ID,
                 })
               }
               type="button"
@@ -787,7 +875,7 @@ function AtlasGuidedPath(props: {
               <IconBinaryTree aria-hidden="true" size={24} />
               <span>
                 <strong>A framework family tree</strong>
-                <small>Framework → baseline → family → control</small>
+                <small>Framework → native groups → records</small>
               </span>
               <IconChevronRight aria-hidden="true" size={20} />
             </button>
@@ -819,12 +907,66 @@ function AtlasGuidedPath(props: {
         </>
       ) : null}
 
-      {axis === "framework" && !baseline ? (
+      {axis === "framework" && !framework ? (
         <>
           <p className="atlas-path-prompt">
-            Which NIST SP 800-53 baseline should this branch follow?
+            Which supported framework do you want to trace?
           </p>
           <ul className="atlas-path-stage-list">
+            {model.frameworkGroups.flatMap((group) =>
+              group.frameworks.map((choice) => (
+                <li key={choice.id}>
+                  <button
+                    className="atlas-path-stage-option"
+                    onClick={() =>
+                      patchAtlas({
+                        atlasFramework: choice.id,
+                        atlasBaseline: "",
+                        atlasFamily: "",
+                      })
+                    }
+                    type="button"
+                  >
+                    <IconBinaryTree aria-hidden="true" size={20} />
+                    <span className="atlas-path-stage-option-text">
+                      <strong>{choice.label}</strong>
+                      <small>
+                        {group.label}: {group.description}
+                      </small>
+                    </span>
+                    <IconChevronRight aria-hidden="true" size={20} />
+                  </button>
+                </li>
+              )),
+            )}
+          </ul>
+        </>
+      ) : null}
+
+      {axis === "framework" &&
+      framework?.id === NIST_FRAMEWORK_ID &&
+      !state.atlasBaseline ? (
+        <>
+          <p className="atlas-path-prompt">
+            Which applicability scope do you want to use?
+          </p>
+          <ul className="atlas-path-stage-list">
+            <li>
+              <button
+                className="atlas-path-stage-option"
+                onClick={() =>
+                  patchAtlas({ atlasBaseline: "all", atlasFamily: "" })
+                }
+                type="button"
+              >
+                <IconBinaryTree aria-hidden="true" size={20} />
+                <span className="atlas-path-stage-option-text">
+                  <strong>All SP 800-53 records</strong>
+                  <small>No baseline filter</small>
+                </span>
+                <IconChevronRight aria-hidden="true" size={20} />
+              </button>
+            </li>
             {model.baselines.map((choice) => (
               <li key={choice.id}>
                 <button
@@ -839,9 +981,7 @@ function AtlasGuidedPath(props: {
                 >
                   <IconBinaryTree aria-hidden="true" size={20} />
                   <span className="atlas-path-stage-option-text">
-                    <strong>
-                      {choice.itemId.replace("nist-800-53b:", "")} impact
-                    </strong>
+                    <strong>{choice.itemId} impact</strong>
                     <small>
                       {choice.recordCount} controls across {choice.families.length} families
                     </small>
@@ -854,17 +994,28 @@ function AtlasGuidedPath(props: {
         </>
       ) : null}
 
-      {axis === "framework" && baseline && !family ? (
+      {axis === "framework" &&
+      framework &&
+      (framework.id !== NIST_FRAMEWORK_ID || state.atlasBaseline) &&
+      !family ? (
         <>
           <p className="atlas-path-prompt">
-            Which control family do you want to open?
+            Which part of this framework do you want to open?
           </p>
           <div className="atlas-ancestry-family-grid">
-            {baseline.families.map((choice) => (
+            {frameworkUnits.map((choice) => (
               <button
                 className="atlas-ancestry-family"
                 key={choice.id}
-                onClick={() => patchAtlas({ atlasFamily: choice.id })}
+                onClick={() =>
+                  choice.records.length
+                    ? patchAtlas({ atlasFamily: choice.id })
+                    : patchAtlas({
+                        node: choice.id,
+                        relationshipGroup: "",
+                        relationshipView: "path",
+                      })
+                }
                 type="button"
               >
                 <span>
@@ -884,7 +1035,13 @@ function AtlasGuidedPath(props: {
             <div>
               <p className="eyebrow">{family.itemId} family</p>
               <h2>{family.label}</h2>
-              <p>{family.records.length} controls selected by this baseline.</p>
+              <p>
+                {family.records.length} structural child
+                {family.records.length === 1 ? "" : "ren"}
+                {state.atlasBaseline && state.atlasBaseline !== "all"
+                  ? " selected by this applicability scope."
+                  : "."}
+              </p>
             </div>
             <label>
               Filter this family
@@ -901,7 +1058,13 @@ function AtlasGuidedPath(props: {
               <li key={record.id}>
                 <button
                   className="atlas-path-record"
-                  onClick={() => onOpenNode(record.id, "atlas-map")}
+                  onClick={() =>
+                    patchAtlas({
+                      node: record.id,
+                      relationshipGroup: "",
+                      relationshipView: "path",
+                    })
+                  }
                   type="button"
                 >
                   <span className="atlas-path-record-text">
@@ -914,7 +1077,7 @@ function AtlasGuidedPath(props: {
             ))}
           </ul>
           {!filteredRecords.length ? (
-            <p className="muted">No controls match that filter.</p>
+            <p className="muted">No structural children match that filter.</p>
           ) : null}
         </>
       ) : null}
@@ -1000,6 +1163,31 @@ function AtlasGuidedPath(props: {
         </div>
       ) : null}
     </section>
+  );
+}
+
+function ChoiceTrail(props: {
+  links: Array<{ id: string; label: string }>;
+  onOpen: (id: string) => void;
+}) {
+  return (
+    <nav aria-label="Your choices" className="atlas-choice-trail">
+      <strong>Your choices</strong>
+      {props.links.map((link, index) => (
+        <span key={link.id}>
+          {index > 0 ? (
+            <IconChevronRight aria-hidden="true" size={15} />
+          ) : null}
+          {index === props.links.length - 1 ? (
+            <span>{link.label}</span>
+          ) : (
+            <button onClick={() => props.onOpen(link.id)} type="button">
+              {link.label}
+            </button>
+          )}
+        </span>
+      ))}
+    </nav>
   );
 }
 

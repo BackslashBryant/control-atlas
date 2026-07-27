@@ -10,9 +10,14 @@
 
 ## Current Objective
 
-**V1.0 publication decision** — release verification and source-polish reconciliation are complete on deployed `main`; hold the verified candidate without creating or publishing `v1.0.0` until the owner explicitly approves that action.
+**2026 correction program** - Epic 1, Structural truth and Atlas correctness,
+is complete on local branch `agent/forge/epic-1-atlas-structural-truth`.
+Features 1.1-1.5 and M1 "Truthful core" are verified. No push, merge, deploy,
+tag, or release is authorized by this work.
 
-**Active sprint:** v1.0 release finalization — verification complete; see [`docs/Plan.md`](Plan.md), [`docs/PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), and the dated [finalization audit](audits/v1-release-finalization-2026-07-17.md).
+**Active sprint:** none. The next recommended milestone is Epic 2 - Navigation
+and route identity - from the
+[`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Shipped on `main` (do not re-plan)
 
@@ -38,9 +43,10 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Owner reviews the finalization evidence and decides whether to accept the documented human screen-reader and real-device residuals
-2. Create/publish `v1.0.0` only after a new, explicit owner approval for that final action
-3. Keep Node runtime notices and install-fallback cleanup in separate maintenance work
+1. Begin Epic 2 on a new task branch only after explicit authorization.
+2. Preserve Epic 1's structural/applicability/correlation contract and the
+   local-only proof boundary.
+3. Keep push, merge, deploy, tag, and release actions separately authorized.
 
 ## Status Docs
 

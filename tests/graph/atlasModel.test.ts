@@ -5,7 +5,7 @@ import {
   buildAtlasGroups,
   buildAtlasRows,
   selectAtlasOverviewGroups,
-  resolveAtlasPathStage,
+  resolveAtlasRelationshipLens,
   type AtlasFilterState,
 } from "../../src/ui/lib/atlasModel";
 import type { AtlasNeighborhoodRecord } from "../../src/ui/lib/runtimeLoader";
@@ -39,6 +39,7 @@ const record: AtlasNeighborhoodRecord = {
       source_node_id: "nist-800-53:AC-2",
       target_node_id: "csf-2:PR.AA-01",
       relationship_type: "maps_to",
+      relationship_class: "correlation",
       provenance_class: "federal_published",
       publication_status: "published",
       confidence: "direct",
@@ -48,6 +49,7 @@ const record: AtlasNeighborhoodRecord = {
       source_node_id: "nist-800-53:AC-2",
       target_node_id: "disa-cci:CCI-000001",
       relationship_type: "related_to",
+      relationship_class: "correlation",
       provenance_class: "inferred",
       publication_status: "candidate",
       confidence: "low",
@@ -76,8 +78,7 @@ test("Atlas Path, Map groups, and List rows derive from one published edge set",
   );
   assert.equal(groups[0]?.id, "csf");
   assert.equal(groups[0]?.placement, "lateral");
-  assert.equal(groups[0]?.stage, "requirement");
-  assert.equal(groups[0]?.rmfStage, "select");
+  assert.equal(groups[0]?.lens, "cross-framework");
 });
 
 test("candidate links appear only after the explicit toggle", () => {
@@ -104,8 +105,7 @@ test("bounded Map keeps every available direction before filling six slots", () 
     label: id,
     description: id,
     placement,
-    stage: "requirement" as const,
-    rmfStage: "select" as const,
+    lens: "structure" as const,
     items: [],
   });
   const groups = [
@@ -125,21 +125,79 @@ test("bounded Map keeps every available direction before filling six slots", () 
   );
 });
 
-test("legacy stage links resolve to the renamed decomposition stages", () => {
+test("relationship lens resolution chooses the first populated explicit lens", () => {
   const implementOnly = [
     {
       id: "disa",
       label: "DISA implementation",
       description: "Implementation link",
       placement: "downstream" as const,
-      stage: "implementation" as const,
-      rmfStage: "implement" as const,
+      lens: "implementation" as const,
       items: [{} as never],
     },
   ];
-  assert.equal(resolveAtlasPathStage(implementOnly, ""), "implementation");
+  assert.equal(resolveAtlasRelationshipLens(implementOnly, ""), "implementation");
   assert.equal(
-    resolveAtlasPathStage(implementOnly, "control"),
-    "control",
+    resolveAtlasRelationshipLens(implementOnly, "control"),
+    "implementation",
+  );
+});
+
+test("CA-ATL-004: enhancements remain structural while applicability is a separate lens", () => {
+  const explicit: AtlasNeighborhoodRecord = {
+    center_node: record.center_node,
+    nodes: [
+      record.center_node,
+      {
+        id: "nist-800-53:AC-2.1",
+        node_type: "control_enhancement",
+        metadata: { item_id: "AC-2.1", title: "Automated system accounts" },
+      },
+      {
+        id: "nist-800-53b:MODERATE",
+        node_type: "baseline",
+        metadata: { item_id: "MODERATE", title: "Moderate baseline" },
+      },
+    ],
+    edges: [
+      {
+        id: "edge:enhancement",
+        source_node_id: "nist-800-53:AC-2",
+        target_node_id: "nist-800-53:AC-2.1",
+        relationship_type: "contains",
+        relationship_class: "structural",
+        provenance_class: "federal_published",
+        publication_status: "published",
+        confidence: "direct",
+      },
+      {
+        id: "edge:baseline",
+        source_node_id: "nist-800-53b:MODERATE",
+        target_node_id: "nist-800-53:AC-2",
+        relationship_type: "selects",
+        relationship_class: "applicability",
+        provenance_class: "federal_published",
+        publication_status: "published",
+        confidence: "direct",
+      },
+    ],
+    published_connection_count: 2,
+    candidate_connection_count: 0,
+  };
+
+  const groups = buildAtlasGroups(explicit, publishedOnly);
+  assert.equal(
+    groups.find((group) => group.id === "enhancements")?.lens,
+    "structure",
+  );
+  assert.equal(
+    groups.find((group) => group.id === "nistBaseline")?.lens,
+    "applicability",
+  );
+  assert.deepEqual(
+    new Set(buildAtlasRows(explicit, publishedOnly).map((row) => row.edge.id)),
+    new Set(
+      groups.flatMap((group) => group.items.map((item) => item.edge.id)),
+    ),
   );
 });

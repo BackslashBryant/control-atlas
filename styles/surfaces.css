@@ -1265,6 +1265,58 @@ li {
   font-size: var(--font-size-sm);
 }
 
+.atlas-search-recovery,
+.atlas-structural-position {
+  display: grid;
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-lg);
+  background: var(--ca-surface);
+}
+
+.atlas-search-recovery p,
+.atlas-structural-position h2,
+.atlas-structural-position p,
+.tree-path-unavailable {
+  margin: 0;
+}
+
+.atlas-choice-trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2);
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.atlas-choice-trail > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+}
+
+.atlas-choice-trail button {
+  min-height: 44px;
+  padding-inline: var(--ca-space-2);
+  border: 0;
+  background: none;
+  color: var(--ca-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.atlas-choice-trail button:hover,
+.atlas-choice-trail button:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tree-path-unavailable {
+  color: var(--ca-text-muted);
+}
+
 .atlas-path-crumb-subject {
   font-weight: 800;
   color: var(--ca-text);

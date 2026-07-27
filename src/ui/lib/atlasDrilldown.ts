@@ -33,6 +33,7 @@ export type AtlasDrillEdge = {
   source_node_id: string;
   target_node_id: string;
   relationship_type: string;
+  relationship_class: string;
   publication_status: string;
 };
 
@@ -61,10 +62,54 @@ export type AtlasRmfStepChoice = AtlasRecordChoice & {
   results: AtlasRmfResult[];
 };
 
+export type AtlasFrameworkChoice = AtlasRecordChoice & {
+  groupId: string;
+  units: AtlasFamilyChoice[];
+};
+
+export type AtlasFrameworkGroup = {
+  id: string;
+  label: string;
+  description: string;
+  frameworks: AtlasFrameworkChoice[];
+};
+
 export type AtlasDrilldownModel = {
   baselines: AtlasBaselineChoice[];
   rmfSteps: AtlasRmfStepChoice[];
+  frameworkGroups: AtlasFrameworkGroup[];
 };
+
+const SUPPORTED_FRAMEWORKS = [
+  {
+    id: "nist-800-53",
+    rootId: "nist-800-53:CATALOG",
+    groupId: "control-catalog",
+    groupLabel: "Control catalog",
+    groupDescription: "Families, controls, and enhancements.",
+  },
+  {
+    id: "csf-2",
+    rootId: "csf-2:CATALOG",
+    groupId: "outcome-framework",
+    groupLabel: "Outcome framework",
+    groupDescription: "Functions, categories, and subcategories.",
+  },
+  {
+    id: "cmmc-2",
+    rootId: "cmmc-2:CATALOG",
+    groupId: "certification-program",
+    groupLabel: "Certification program",
+    groupDescription: "Program levels and their published requirements.",
+  },
+  {
+    id: "mitre-attack",
+    rootId: "mitre-attack:CATALOG",
+    groupId: "threat-knowledge",
+    groupLabel: "Threat knowledge",
+    groupDescription: "Tactics, techniques, and sub-techniques.",
+  },
+] as const;
 
 function toChoice(node: AtlasDrillNode): AtlasRecordChoice {
   const itemId = node.metadata?.item_id || node.id;
@@ -101,6 +146,43 @@ export function buildAtlasDrilldownModel(dataset: {
   const publishedEdges = dataset.edges.filter(
     (edge) => edge.publication_status === "published",
   );
+  const structuralEdges = publishedEdges.filter(
+    (edge) =>
+      edge.relationship_class === "structural" &&
+      edge.relationship_type === "contains",
+  );
+  const frameworkGroups = SUPPORTED_FRAMEWORKS.map((supported) => {
+    const root = nodesById.get(supported.rootId);
+    if (!root) return null;
+    const units = structuralEdges
+      .filter((edge) => edge.source_node_id === supported.rootId)
+      .map((edge) => nodesById.get(edge.target_node_id))
+      .filter((node): node is AtlasDrillNode => Boolean(node))
+      .map((unit) => ({
+        ...toChoice(unit),
+        records: structuralEdges
+          .filter((edge) => edge.source_node_id === unit.id)
+          .map((edge) => nodesById.get(edge.target_node_id))
+          .filter((node): node is AtlasDrillNode => Boolean(node))
+          .map(toChoice)
+          .sort(byItemId),
+      }))
+      .sort(byItemId);
+    if (!units.length) return null;
+    return {
+      id: supported.groupId,
+      label: supported.groupLabel,
+      description: supported.groupDescription,
+      frameworks: [
+        {
+          ...toChoice(root),
+          id: supported.id,
+          groupId: supported.groupId,
+          units,
+        },
+      ],
+    };
+  }).filter(Boolean) as AtlasFrameworkGroup[];
   const familyNodes = dataset.nodes
     .filter(
       (node) =>
@@ -120,7 +202,8 @@ export function buildAtlasDrilldownModel(dataset: {
         publishedEdges
           .filter(
             (edge) =>
-              edge.relationship_type === "includes" &&
+              edge.relationship_class === "structural" &&
+              edge.relationship_type === "contains" &&
               edge.source_node_id === family.id,
           )
           .map((edge) => edge.target_node_id),
@@ -135,7 +218,8 @@ export function buildAtlasDrilldownModel(dataset: {
       publishedEdges
         .filter(
           (edge) =>
-            edge.relationship_type === "includes" &&
+            edge.relationship_class === "applicability" &&
+            edge.relationship_type === "selects" &&
             edge.source_node_id === baselineId,
         )
         .map((edge) => edge.target_node_id),
@@ -191,5 +275,5 @@ export function buildAtlasDrilldownModel(dataset: {
     };
   }).filter((step): step is AtlasRmfStepChoice => Boolean(step));
 
-  return { baselines, rmfSteps };
+  return { baselines, rmfSteps, frameworkGroups };
 }

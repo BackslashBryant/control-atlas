@@ -2,6 +2,13 @@
 
 ## Constraints
 
+- "Execute and fully complete Control Atlas Epic 1 - Structural truth and
+  Atlas correctness ... Do not push, merge, deploy, or modify remote state."
+  (2026-07-27 current session; supersedes session 9's direct-ship instruction
+  for this task)
+- "That 90mb budget isn't real." The obsolete aggregate data-directory cap is
+  removed; the 3.2 MB initial-search payload and 20 MiB per-artifact safeguards
+  remain enforced. (2026-07-27 current session)
 - "Execute docs/plans/w2-and-ship-2026-07-27.md in full: build W2, close out
   the listed debt, and ship — direct push to main, no PR, per the doc's §3."
   (2026-07-27 current session; supersedes older local-only constraints below)
@@ -29,6 +36,35 @@
   rail) only." (2026-07-27 session 8)
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
+
+## 2026-07-27 (session 10) - Epic 1 structural truth
+
+### Goal
+
+Complete Features 1.1-1.5 and milestone M1 "Truthful core" without remote
+operations.
+
+### Completed
+
+- Structural ancestry now admits only validated native-catalog structural
+  edges. Applicability, mappings, assessment, implementation, evidence, and
+  Resources links cannot become parents.
+- Generated edges carry an explicit structural, applicability, or correlation
+  class. Cold Atlas deep links carry their validated canonical structural path.
+- Atlas search focuses unique identifiers, hands ambiguous text to canonical
+  Search, and keeps no-match recovery local with an announced status.
+- Focused Path, Map, and List use one published edge set and seven explicit
+  relationship lenses; List exposes class and direction.
+- Guided framework navigation offers only NIST SP 800-53, CSF 2.0, CMMC 2.0,
+  and MITRE ATT&CK, each with a real next structural step.
+- Focused contracts, static build, and responsive Playwright checks are green.
+  Screenshots at 375, 768, and 1440 pixels were personally inspected.
+
+### Next
+
+Epic 2 - Navigation and route identity - after separate authorization. Use a
+route round-trip matrix as the fast inner loop and preserve legacy links until
+the compatibility acceptance criteria pass.
 
 ## 2026-07-27 (session 9) - W2 and final ship
 
