@@ -81,7 +81,8 @@ test("issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2
       (edge) =>
         edge.source_node_id === "nist-800-53b:MODERATE" &&
         edge.target_node_id === "nist-800-53:AC-2" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "selects" &&
+        edge.relationship_class === "applicability",
     ),
   );
   assert.ok(
@@ -215,7 +216,8 @@ test("issue 12 graph build emits Release 2 program context without a synthetic r
       (edge) =>
         edge.source_node_id === "fedramp-rev5:MODERATE" &&
         edge.target_node_id === "nist-800-53:AC-2" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "selects" &&
+        edge.relationship_class === "applicability",
     ),
   );
   assert.ok(
@@ -484,7 +486,8 @@ test("dod-zt graph build emits pillars, capabilities, and overlay crosswalk edge
       (edge) =>
         edge.source_node_id === "dod-zt:PILLAR-1" &&
         edge.target_node_id === "dod-zt:CAP-1-1" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "contains" &&
+        edge.relationship_class === "structural",
     ),
   );
   assert.ok(
@@ -512,7 +515,7 @@ test("lifecycleStatus maps withdrawn and deprecated record statuses to node life
   assert.equal(lifecycleStatus({}), "active");
 });
 
-test("graph build derives control-enhancement includes edges with derived confidence", () => {
+test("graph build derives structural control-enhancement edges with derived confidence", () => {
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
 
@@ -526,9 +529,10 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:AC-2" &&
       edge.target_node_id === "nist-800-53:AC-2.1" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   );
-  assert.ok(enhancementEdge, "expected AC-2 -> AC-2.1 includes edge");
+  assert.ok(enhancementEdge, "expected AC-2 -> AC-2.1 structural edge");
   assert.equal(enhancementEdge.confidence, "derived");
   assert.match(enhancementEdge.rationale, /control enhancement of AC-2/);
 
@@ -539,7 +543,8 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:FAMILY-AC" &&
       edge.target_node_id === "nist-800-53:AC-2" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   );
   assert.ok(familyEdge);
   assert.equal(familyEdge.confidence, "derived");
@@ -551,12 +556,13 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:AC-2" &&
       edge.target_node_id === "nist-800-53:AC-2.1" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   ).length;
   assert.equal(
     enhancementEdgeCount,
     1,
-    "expected exactly one AC-2 -> AC-2.1 includes edge, no duplicates",
+    "expected exactly one AC-2 -> AC-2.1 structural edge, no duplicates",
   );
 });
 

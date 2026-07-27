@@ -666,7 +666,8 @@ export function createFederalGraphRuntime(dataset) {
         .filter(
           (edge) =>
             edge.publication_status === "published" &&
-            edge.relationship_type === "includes" &&
+            edge.relationship_class === "applicability" &&
+            edge.relationship_type === "selects" &&
             edge.source_node_id === baselineId &&
             nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
               "nist-800-53",
@@ -1686,7 +1687,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const baselineMembership = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "applicability" &&
+              edge.relationship_type === "selects",
+          )
           .map((membershipEdge) => ({
             baselineNode: counterpartFor(membershipEdge, nodeId),
             membershipEdge,
@@ -1701,7 +1706,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const fedrampBaselineContext = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "applicability" &&
+              edge.relationship_type === "selects",
+          )
           .map((membershipEdge) => ({
             baselineNode: counterpartFor(membershipEdge, nodeId),
             membershipEdge,
@@ -1716,7 +1725,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const familyMembership = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "structural" &&
+              edge.relationship_type === "contains",
+          )
           .map((familyEdge) => ({
             familyNode: counterpartFor(familyEdge, nodeId),
             familyEdge,

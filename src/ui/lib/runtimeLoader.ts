@@ -81,6 +81,7 @@ export type AtlasNeighborhoodEdge = {
   source_node_id: string;
   target_node_id: string;
   relationship_type: string;
+  relationship_class: "structural" | "applicability" | "correlation";
   provenance_class: string;
   publication_status: string;
   confidence: string;
@@ -98,6 +99,11 @@ export type AtlasNeighborhoodRecord = {
   center_node: AtlasNeighborhoodNode;
   nodes: AtlasNeighborhoodNode[];
   edges: AtlasNeighborhoodEdge[];
+  structural_path: Array<{
+    id: string;
+    label: string;
+    node_type: string;
+  }>;
   published_connection_count: number;
   candidate_connection_count: number;
 };
@@ -108,11 +114,13 @@ type AtlasNeighborhoodShardRecord = {
     string,
     string,
     string,
+    "structural" | "applicability" | "correlation",
     string,
     string,
     string,
     Array<[string, string, string]>,
   ]>;
+  structural_path: string[];
   published_connection_count: number;
   candidate_connection_count: number;
 };
@@ -176,6 +184,8 @@ const RELATIONSHIP_GUIDANCE: Record<string, string> = {
     "Compare the two records; this mapping does not transfer compliance by itself.",
   supports: "Use this as supporting context, not proof that the requirement is met.",
   implements: "This describes one way to put the selected requirement into practice.",
+  contains: "This is a publisher-defined structural child of the selected record.",
+  selects: "This applicability scope selects the connected requirement.",
   includes: "The selected record contains or selects this item.",
   assesses: "Use this procedure to examine the selected requirement.",
   overlaps: "The records cover some of the same ground but are not interchangeable.",
@@ -247,6 +257,7 @@ export async function loadAtlasNeighborhood(
       sourceNodeId,
       targetNodeId,
       relationshipType,
+      relationshipClass,
       provenanceClass,
       publicationStatus,
       confidence,
@@ -257,6 +268,7 @@ export async function loadAtlasNeighborhood(
       source_node_id: sourceNodeId,
       target_node_id: targetNodeId,
       relationship_type: relationshipType,
+      relationship_class: relationshipClass,
       provenance_class: provenanceClass,
       publication_status: publicationStatus,
       confidence,
@@ -293,6 +305,16 @@ export async function loadAtlasNeighborhood(
     center_node: centerNode,
     nodes,
     edges,
+    structural_path: (shardRecord.structural_path || []).flatMap((id) => {
+      const node = nodeById.get(id);
+      return node
+        ? [{
+            id,
+            label: node.metadata?.title || id,
+            node_type: node.node_type || "",
+          }]
+        : [];
+    }),
     published_connection_count: shardRecord.published_connection_count,
     candidate_connection_count: shardRecord.candidate_connection_count,
   };

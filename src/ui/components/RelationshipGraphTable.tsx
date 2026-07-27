@@ -5,7 +5,10 @@ import { ProvenanceBadge } from "../lib/compareHelpers";
 type TableRow = {
   edge: {
     id?: string;
+    source_node_id?: string;
+    target_node_id?: string;
     relationship_type: string;
+    relationship_class?: string;
     provenance_class: string;
     publication_status: string;
     confidence: string;
@@ -32,8 +35,9 @@ export function RelationshipGraphTable(props: {
   rows: TableRow[];
   onOpenNode: (nodeId: string) => void;
   conciseTrust?: boolean;
+  centerNodeId?: string;
 }) {
-  const { rows, onOpenNode, conciseTrust = false } = props;
+  const { rows, onOpenNode, conciseTrust = false, centerNodeId = "" } = props;
 
   if (!rows.length) {
     return (
@@ -54,6 +58,7 @@ export function RelationshipGraphTable(props: {
           <tr>
             <th scope="col">Connected item</th>
             <th scope="col">Connection</th>
+            <th scope="col">Class and direction</th>
             <th scope="col">Source basis</th>
             <th scope="col">Trust level</th>
             <th scope="col">Why it matters</th>
@@ -73,6 +78,21 @@ export function RelationshipGraphTable(props: {
               </td>
               <td data-label="Connection">
                 {displayNameFor("relationship_type", edge.relationship_type)}
+              </td>
+              <td data-label="Class and direction">
+                <strong>
+                  {edge.relationship_class === "structural"
+                    ? "Structure"
+                    : edge.relationship_class === "applicability"
+                      ? "Applicability"
+                      : "Correlation"}
+                </strong>
+                <br />
+                {centerNodeId && edge.source_node_id === centerNodeId
+                  ? "From selected record"
+                  : centerNodeId && edge.target_node_id === centerNodeId
+                    ? "To selected record"
+                    : "Connected records"}
               </td>
               <td data-label="Source basis">
                 {conciseTrust ? (

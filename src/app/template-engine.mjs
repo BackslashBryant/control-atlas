@@ -1257,7 +1257,7 @@ function collectCatalogControls(nodes, catalogId) {
  *
  * Edge shape observed in data/generated/edges.json: baseline nodes are
  * `${catalogId}:${baselineItemId}` (e.g. "fedramp-rev5:LOW"); each has an
- * `includes` edge with `source_node_id` = the baseline node and
+ * applicability `selects` edge with `source_node_id` = the baseline node and
  * `target_node_id` = the member `nist-800-53:<CONTROL_ID>` control node.
  * Membership is unioned across every baseline node in the catalog.
  *
@@ -1279,7 +1279,10 @@ function resolveControlsViaBaselineEdges(dataset, catalogId) {
 
   const memberNodeIds = new Set();
   for (const edge of edges) {
-    if (edge.relationship_type !== "includes") continue;
+    if (
+      edge.relationship_class !== "applicability" ||
+      edge.relationship_type !== "selects"
+    ) continue;
     if (baselineNodeIds.has(edge.source_node_id)) {
       memberNodeIds.add(edge.target_node_id);
     } else if (baselineNodeIds.has(edge.target_node_id)) {
@@ -1394,7 +1397,7 @@ function crossRefForControl(index, controlNodeId) {
  * Collect the control node IDs that belong to a named baseline (Low / Moderate
  * / High / Privacy / LI-SaaS). Baseline membership lives in `baseline` nodes
  * (e.g. `nist-800-53b:LOW`, `fedramp-rev5:MODERATE`) linked to their member
- * controls with `includes` edges. Baseline nodes are matched by item_id,
+ * controls with applicability `selects` edges. Baseline nodes are matched by item_id,
  * preferring the catalog that fits the selected framework so a NIST 800-53
  * template scopes to 800-53B membership rather than FedRAMP's.
  *
@@ -1429,7 +1432,10 @@ function collectBaselineMemberIds(dataset, baselineItemId, frameworkCatalogId) {
 
   const members = new Set();
   for (const edge of edges) {
-    if (edge.relationship_type !== "includes") continue;
+    if (
+      edge.relationship_class !== "applicability" ||
+      edge.relationship_type !== "selects"
+    ) continue;
     if (baselineNodeIds.has(edge.source_node_id)) {
       members.add(edge.target_node_id);
     } else if (baselineNodeIds.has(edge.target_node_id)) {

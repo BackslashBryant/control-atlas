@@ -96,7 +96,7 @@ test("release evidence: the Path offers every stage as one choice on desktop", a
 
   // The six-column board is retired: the Path asks which stage first, so all
   // six stages are offered but none of their records are dumped on screen.
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
   await assertNoPageOverflow(page);

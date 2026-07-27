@@ -9,10 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const PORT = parseInt(process.env.HTTP_PORT || '3000', 10);
 
-function hasDevScript() {
+function hasStaticServerScript() {
   const pkgPath = path.join(repoRoot, 'package.json');
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
-  return pkg.scripts && pkg.scripts.dev;
+  return pkg.scripts && pkg.scripts['serve:static'];
 }
 
 function checkPort(port) {
@@ -34,13 +34,14 @@ if (isPortBusy) {
   process.exit(0);
 }
 
-if (!hasDevScript()) {
-  console.log('No "dev" script defined in package.json. Please add one before running dev:guarded.');
+if (!hasStaticServerScript()) {
+  console.log('No "serve:static" script defined in package.json. Add one before running dev:guarded.');
   process.exit(0);
 }
 
-const child = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'dev', '--', '-p', String(PORT)], {
+const child = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'serve:static'], {
   cwd: repoRoot,
+  env: { ...process.env, PORT: String(PORT) },
   stdio: 'inherit',
   shell: process.platform === 'win32'
 });

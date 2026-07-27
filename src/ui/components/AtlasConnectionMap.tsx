@@ -361,7 +361,10 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
               <GroupIcon aria-hidden="true" size={28} stroke={1.7} />
               <span>
                 <strong>{group.label}</strong>
-                <small>{group.items.length} related</small>
+                <small>
+                  {group.lens.replaceAll("-", " ")} / {group.placement} /{" "}
+                  {group.items.length} related
+                </small>
               </span>
               <span aria-hidden="true" className="atlas-spatial-expand">
                 {expanded ? "−" : "+"}

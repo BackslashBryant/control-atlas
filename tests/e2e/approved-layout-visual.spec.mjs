@@ -63,7 +63,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   } else {
     // The six-column board is retired: the Path asks which stage first, so
     // all six stages are offered as choices and no records are dumped.
-    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(6);
+    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(7);
     await expect(
       page.getByRole('complementary', { name: 'Selected path' }),
     ).toBeVisible();
