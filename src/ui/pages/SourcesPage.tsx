@@ -158,7 +158,7 @@ export function SourcesPage(props: {
             Looking for practical compliance tools, templates, or communities?
           </h3>
           <p className="text-xs text-[var(--ca-text-muted)] mt-1">
-            <strong>Sources</strong> tracks data provenance used inside Control Atlas. Visit <strong>Control Commons</strong> for external working tools, SCAP/STIG software, SSP templates, and practitioner communities.
+            <strong>Sources</strong> tracks data provenance used inside Control Atlas. Visit <strong>Build</strong> for external working tools, SCAP/STIG software, SSP templates, and practitioner communities.
           </p>
         </div>
         <button
@@ -166,7 +166,7 @@ export function SourcesPage(props: {
           className="px-3.5 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-semibold text-xs shrink-0 shadow transition-colors"
           type="button"
         >
-          Explore Control Commons →
+          Explore Build →
         </button>
       </div>
 

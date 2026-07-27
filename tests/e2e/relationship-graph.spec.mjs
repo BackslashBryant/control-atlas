@@ -40,7 +40,7 @@ test("relationship graph on detail page retains its accessible List fallback", a
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Atlas Map" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Explore" })).toBeVisible();
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 
@@ -59,7 +59,7 @@ test("record detail opens the same record in the new Atlas", async ({ page }) =>
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "Open in Atlas Map" }).first().click();
+  await page.getByRole("button", { name: "Open in Explore" }).first().click();
   await expect(page).toHaveURL(/atlas-map/);
   await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
 });

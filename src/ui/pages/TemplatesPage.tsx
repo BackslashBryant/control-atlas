@@ -23,6 +23,8 @@ import {
 } from "../lib/catalogGroups.mjs";
 
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { CommonsResourceCard } from "../components/CommonsResourceCard";
+import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -653,6 +655,19 @@ export function TemplatesPage(props: {
     ? officialArtifactPool
     : officialArtifactPool.slice(0, 8);
   const visibleTools = showAllTools ? workflowTools : workflowTools.slice(0, 8);
+  // Commons folded in (W4): every non-tool Commons resource, grouped by kind,
+  // as the third peer section alongside official resources and tools above.
+  // Tool-type Commons resources are excluded — they already surface in the
+  // Tools section so the same resource does not appear twice.
+  const communityResources = (bundle.commonsDataset?.resources || []).filter(
+    (resource) => resource.resourceType !== "tool",
+  );
+  const communityResourceGroups = groupResourcesByKind(communityResources).map(
+    (group: { id: string; label: string; blurb: string; resources: typeof communityResources }) => ({
+      ...group,
+      resources: group.resources.slice(0, 3),
+    }),
+  );
   const workflowReferenceIds = new Set([
     ...(selectedWorkflow?.artifact_ids || []),
     ...(selectedWorkflow?.tool_ids || []),
@@ -1200,7 +1215,7 @@ export function TemplatesPage(props: {
             ) : null}
           </section>
           <details className="workflow-reference">
-            <summary>Official sources and tools for this task</summary>
+            <summary>Official sources, tools, and community resources for this task</summary>
             <div className="stack disclosure-content">
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
@@ -1301,6 +1316,63 @@ export function TemplatesPage(props: {
                   : `Show all ${workflowTools.length} tools`}
               </Button>
             ) : null}
+          </section>
+
+          <section aria-labelledby="community-heading" className="nexus-section">
+            <div className="section-header nexus-section-header">
+              <div>
+                <p className="eyebrow">Ask people who have done this</p>
+                <h2 id="community-heading">Community resources</h2>
+                <p className="page-summary">
+                  Official-adjacent references, communities, and training —
+                  folded in here from the former Commons surface — organized
+                  by kind alongside the resources and tools above.
+                </p>
+              </div>
+            </div>
+            {communityResourceGroups.length === 0 ? (
+              <div className="notice" role="status">
+                <p>No community resources are loaded yet.</p>
+              </div>
+            ) : (
+              <>
+                {communityResourceGroups.map((group) => (
+                  <div className="commons-group" key={group.id}>
+                    <div className="commons-group-header">
+                      <h3 className="commons-group-title">{group.label}</h3>
+                      <span className="commons-group-count">
+                        {group.resources.length}
+                      </span>
+                    </div>
+                    <p className="commons-group-blurb">{group.blurb}</p>
+                    <div className="nexus-grid">
+                      {group.resources.map((resource) => (
+                        <CommonsResourceCard
+                          key={resource.id}
+                          onNavigateSearch={(query) =>
+                            onNavigate("commons", { query })
+                          }
+                          onSelectDetail={(id) =>
+                            onNavigate("commons-detail", {
+                              id,
+                              from: "templates",
+                            })
+                          }
+                          resource={resource}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                <Button
+                  variant="secondary"
+                  className="nexus-show-more"
+                  onClick={() => onNavigate("commons", {})}
+                >
+                  Browse all {communityResources.length} community resources
+                </Button>
+              </>
+            )}
           </section>
             </div>
           </details>

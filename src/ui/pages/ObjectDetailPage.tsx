@@ -322,7 +322,7 @@ export function ObjectDetailPage(props: {
     state.from === "search"
       ? "Back to results"
       : state.from === "atlas-map"
-        ? "Back to Atlas"
+        ? "Back to Explore"
         : state.from === "start-here"
           ? "Back to recommendation"
           : state.from === "patterns"
@@ -330,7 +330,7 @@ export function ObjectDetailPage(props: {
       : state.from === "matrix"
               ? "Back to comparison"
               : state.from === "catalog-detail"
-                ? "Back to Library"
+                ? "Back to Catalog"
               : "Explore records";
 
   function returnToOrigin() {
@@ -408,7 +408,7 @@ export function ObjectDetailPage(props: {
                 onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                 type="button"
               >
-                Open in Atlas Map
+                Open in Explore
               </Button>
             ) : null}
             {/* Secondary actions collapse into one affordance so the record
@@ -568,7 +568,7 @@ export function ObjectDetailPage(props: {
                 centerItemId={document.item_id}
                 centerNodeId={node.id}
                 filters={relationshipFiltersFromState(state)}
-                heading="Atlas Map"
+                heading="Explore"
                 introCopy={`Connections around ${document.item_id}.`}
                 onFilterChange={(patch) =>
                   onNavigate("library-detail", {

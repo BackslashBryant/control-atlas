@@ -58,13 +58,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
           <IconAlertTriangle size={48} className="mx-auto text-[var(--ca-warning)] mb-3" />
           <h2 className="text-xl font-bold">Resource Not Found</h2>
           <p className="text-sm text-[var(--ca-secondary)] mt-2 mb-6">
-            The resource ID "{resourceId}" could not be found in Control Commons.
+            The resource ID "{resourceId}" could not be found among community resources.
           </p>
           <button
             onClick={() => onNavigate("commons")}
             className="px-4 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-xs shadow"
           >
-            Return to Commons Hub
+            Return to community resources
           </button>
         </div>
       </div>
@@ -81,7 +81,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
             className="inline-flex items-center gap-2 bg-transparent text-xs font-semibold text-[var(--ca-primary)] hover:text-[var(--ca-primary)] transition-colors"
           >
             <IconArrowLeft size={16} />
-            Back to Commons Hub
+            Back to community resources
           </button>
 
           <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
       </div>
 
       <section
-        aria-label="Control Commons resource detail"
+        aria-label="Community resource detail"
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Header Block */}

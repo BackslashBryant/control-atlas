@@ -270,7 +270,7 @@ export function App() {
     const currentState = latestNavStateRef.current;
     const returnTo =
       currentState.view === "library-detail"
-        ? currentState.returnTo || "/library"
+        ? currentState.returnTo || "/catalog"
         : serializeHashLocation(currentState);
     navigate("library-detail", { node: nodeId, from, returnTo });
   }
@@ -510,7 +510,7 @@ function AppContent(props: {
   if (state.view === "atlas-map") {
     if (!bundle) {
       return (
-        <DataPendingNotice onRetry={onRetryLoad} title="Loading Atlas Map" />
+        <DataPendingNotice onRetry={onRetryLoad} title="Loading Explore" />
       );
     }
     return (
@@ -540,7 +540,7 @@ function AppContent(props: {
 
   if (state.view === "catalog-detail") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Library" />;
+      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Catalog" />;
     }
     return (
       <CatalogDetailPage
@@ -554,7 +554,7 @@ function AppContent(props: {
 
   if (state.view === "browse") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Library" />;
+      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Catalog" />;
     }
     return (
       <CatalogDetailPage
@@ -638,7 +638,7 @@ function AppContent(props: {
     return (
       <section className="notice">
         <h2>We do not have a public map entry for "{state.query}"</h2>
-        <p>Try Explore search or Start to find the closest path.</p>
+        <p>Try Search or Start to find the closest path.</p>
         <div className="card-actions">
           <Button
             variant="primary"
@@ -688,7 +688,7 @@ function routeLoadingCopy(view: ViewState["view"]) {
       };
     case "catalog-detail":
       return {
-        title: "Loading Library",
+        title: "Loading Catalog",
         description:
           "We are loading the selected catalog, its public records, and source details.",
       };
@@ -706,9 +706,9 @@ function routeLoadingCopy(view: ViewState["view"]) {
       };
     case "atlas-map":
       return {
-        title: "Loading Atlas",
+        title: "Loading Explore",
         description:
-          "Atlas is preparing the selected record and its real published connections.",
+          "Explore is preparing the selected record and its real published connections.",
       };
     default:
       return {

@@ -6,21 +6,29 @@ import {
   type ViewState,
 } from "./viewState";
 
-/** Map internal view keys to hash path segments (user-facing routes). */
+/**
+ * Map internal view keys to hash path segments (user-facing routes).
+ * View key "atlas-map" -> user-facing "Explore" nav label (rename kept its
+ * existing path — see PLAN CHANGE in docs/STATE.md: "/explore" is already
+ * the ExplorePage's own path). "catalog-detail" -> "Catalog", "patterns" ->
+ * "Learn", "templates" -> "Build". "commons"/"commons-detail" no longer have
+ * a top-nav entry (folded into Build) but keep their own routes, now nested
+ * under /build.
+ */
 const VIEW_TO_PATH: Record<AppView, string> = {
   home: "/",
   menu: "/menu",
   "start-here": "/start",
   "atlas-map": "/atlas-map",
   search: "/explore",
-  "catalog-detail": "/library",
+  "catalog-detail": "/catalog",
   "library-detail": "/record",
   matrix: "/compare",
-  patterns: "/playbooks",
-  templates: "/templates",
+  patterns: "/learn",
+  templates: "/build",
   sources: "/sources",
-  commons: "/commons",
-  "commons-detail": "/commons-detail",
+  commons: "/build/community",
+  "commons-detail": "/build/community-detail",
   about: "/about",
   retired: "/retired",
   browse: "/explore",
@@ -34,14 +42,14 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/start-here": "start-here",
   "/atlas-map": "atlas-map",
   "/explore": "search",
-  "/library": "catalog-detail",
+  "/catalog": "catalog-detail",
   "/record": "library-detail",
   "/compare": "matrix",
-  "/playbooks": "patterns",
-  "/templates": "templates",
+  "/learn": "patterns",
+  "/build": "templates",
   "/sources": "sources",
-  "/commons": "commons",
-  "/commons-detail": "commons-detail",
+  "/build/community": "commons",
+  "/build/community-detail": "commons-detail",
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
@@ -52,9 +60,16 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/search": "search",
   "/browse": "search",
   "/compare-controls": "matrix",
-  "/playbook": "patterns",
-  "/template": "templates",
   "/source": "sources",
+  // Pre-rename canonical routes, kept working as redirects (W4: old routes
+  // must keep resolving).
+  "/library": "catalog-detail",
+  "/playbooks": "patterns",
+  "/playbook": "patterns",
+  "/templates": "templates",
+  "/template": "templates",
+  "/commons": "commons",
+  "/commons-detail": "commons-detail",
   "/resource-bazaar": "commons",
   "/bazaar": "commons",
   "/hub": "commons",
@@ -65,12 +80,14 @@ function parseNodeIdFromPath(pathname: string): {
   nodeId: string;
   catalogId: string;
 } {
-  const catalogMatch = pathname.match(/^\/library\/([^/]+)$/);
+  // Accepts both the canonical "/catalog/:id" and the pre-rename "/library/:id"
+  // (kept as a redirect alias) so either resolves to the same catalog-detail view.
+  const catalogMatch = pathname.match(/^\/(catalog|library)\/([^/]+)$/);
   if (catalogMatch) {
     return {
-      basePath: "/library",
+      basePath: `/${catalogMatch[1]}`,
       nodeId: "",
-      catalogId: decodeURIComponent(catalogMatch[1]),
+      catalogId: decodeURIComponent(catalogMatch[2]),
     };
   }
   const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
@@ -145,7 +162,7 @@ export function serializeHashLocation(state: ViewState): string {
   }
 
   if (state.view === "catalog-detail" && state.catalog) {
-    return `/library/${encodeURIComponent(state.catalog)}`;
+    return `/catalog/${encodeURIComponent(state.catalog)}`;
   }
 
   const path = VIEW_TO_PATH[state.view] ?? "/";

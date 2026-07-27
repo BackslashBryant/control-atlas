@@ -99,7 +99,7 @@ export function ContextualCommonsModule({
             <IconBook2 size={16} />
           </span>
           <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text)]">
-            Control Commons · {moduleTitle}
+            Community resources · {moduleTitle}
           </h3>
         </div>
 
@@ -108,7 +108,7 @@ export function ContextualCommonsModule({
             onClick={() => onNavigate("commons", { query: query || contextId || framework })}
             className="text-[11px] font-semibold bg-transparent text-[var(--ca-text)] hover:underline inline-flex items-center gap-1"
           >
-            <span>Explore all Commons ({dataset?.resources.length})</span>
+            <span>See all community resources ({dataset?.resources.length})</span>
             <IconChevronRight size={12} />
           </button>
         ) : null}

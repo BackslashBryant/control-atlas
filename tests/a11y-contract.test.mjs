@@ -43,7 +43,7 @@ test("relationship graph surfaces include accessible table fallback and provenan
     "src/ui/components/RelationshipGraphTable.tsx",
     "utf8",
   );
-  assert.match(explorer, /Atlas Map/);
+  assert.match(explorer, /Explore/);
   assert.match(explorer, /role="tablist"/);
   assert.match(explorer, /Map legend/);
   assert.match(table, /aria-label="Relationship table"/);

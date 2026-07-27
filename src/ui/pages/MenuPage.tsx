@@ -20,21 +20,23 @@ const MENU_CARDS = [
   {
     title: "Search",
     body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
-    actionLabel: "Explore",
+    actionLabel: "Search results",
     icon: IconSearch,
     view: "search" as const,
   },
   {
-    title: "Learn",
-    body: "Answer three questions and get a plain-language starting point. Browse playbooks and sources.",
+    // Retitled from "Learn" (was already the card that opens Start here) to
+    // avoid colliding with the Guides->Learn nav rename.
+    title: "Start here",
+    body: "Answer three questions and get a plain-language starting point. Browse guides and sources.",
     actionLabel: "Start",
     icon: IconCompass,
     view: "start-here" as const,
   },
   {
     title: "Navigate",
-    body: "See how controls, baselines, CCIs, STIGs, templates, and playbooks connect across frameworks.",
-    actionLabel: "Atlas Map",
+    body: "See how controls, baselines, CCIs, STIGs, templates, and guides connect across frameworks.",
+    actionLabel: "Explore",
     icon: IconMap,
     view: "atlas-map" as const,
   },

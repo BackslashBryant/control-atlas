@@ -22,13 +22,14 @@ test("critical path: landing hero and primary entry cards are visible", async ({
 
   await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
   const shortcuts = page.locator(".landing-shortcut-grid .landing-shortcut");
-  await expect(shortcuts).toHaveCount(6);
-  await expect(shortcuts.filter({ hasText: "Atlas" })).toBeVisible();
-  await expect(shortcuts.filter({ hasText: "Library" })).toBeVisible();
+  // Commons was folded into Build (W4) and no longer has its own nav entry —
+  // 6 primary nav items became 5.
+  await expect(shortcuts).toHaveCount(5);
+  await expect(shortcuts.filter({ hasText: "Explore" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Catalog" })).toBeVisible();
   await expect(shortcuts.filter({ hasText: "Compare" })).toBeVisible();
-  await expect(shortcuts.filter({ hasText: "Commons" })).toBeVisible();
-  await expect(shortcuts.filter({ hasText: "Guides" })).toBeVisible();
-  await expect(shortcuts.filter({ hasText: "Documents" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Learn" })).toBeVisible();
+  await expect(shortcuts.filter({ hasText: "Build" })).toBeVisible();
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({
@@ -240,7 +241,7 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
     name: "Primary navigation",
   });
   const library = primaryNav.getByRole("button", {
-    name: "Library",
+    name: "Catalog",
     exact: true,
   });
   await library.focus();

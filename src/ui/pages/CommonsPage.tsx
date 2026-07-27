@@ -26,6 +26,7 @@ import type {
 import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { OfficialPracticalPairing } from "../components/OfficialPracticalPairing";
+import { Tabs } from "../components/lsm";
 
 type CommonsPageProps = {
   bundle: RuntimeBundle | null;
@@ -347,12 +348,14 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         <div className="ca-content-container">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
+              {/* Folded into Build (no top-nav entry of its own); internal
+                  view key stays "commons". */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_15%,transparent)] border border-[color-mix(in_srgb,var(--ca-primary)_60%,transparent)] text-[var(--ca-primary)] text-xs font-semibold uppercase tracking-widest mb-3">
                 <IconBook2 size={14} />
-                Control Commons
+                Part of Build
               </div>
               <h1 className="text-3xl font-bold tracking-tight text-[var(--ca-text)] sm:text-4xl">
-                Control Commons
+                Community resources
               </h1>
               <p className="text-lg font-medium text-[var(--ca-primary)] mt-1">
                 Official sources. Working tools. Practitioner knowledge.
@@ -400,7 +403,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               />
               {searchQuery ? (
                 <button
-                  aria-label="Clear Commons search"
+                  aria-label="Clear search"
                   onClick={() => {
                     updateParams({ query: "" });
                   }}
@@ -416,13 +419,17 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
       {/* Main Surface */}
       <section
-        aria-label="Control Commons resources"
+        aria-label="Community resources"
         className="ca-content-container px-4 sm:px-6 lg:px-8 mt-8"
       >
-        {/* Parallel Discovery Lanes Tabs */}
+        {/* Parallel Discovery Lanes — reuses the shared underline Tabs idiom
+            (src/ui/components/lsm/Tabs.tsx) instead of a filled/gray-pill
+            button set, which was rejected. */}
         <nav aria-label="Parallel Discovery Lanes" className="mb-6">
-          <div className="flex flex-wrap items-center gap-2 border-b border-[var(--ca-border)] pb-3">
-            {[
+          <Tabs
+            activeId={activeLane}
+            onChange={(id) => updateParams({ lane: id })}
+            tabs={[
               { id: "all", label: "All Lanes", icon: IconBook2, count: allResources.length },
               { id: "official", label: "Official", icon: IconShieldCheck, count: allResources.filter(r => r.resourceLane === "official").length },
               { id: "open_source", label: "Open Source", icon: IconCode, count: allResources.filter(r => r.resourceLane === "open_source").length },
@@ -431,33 +438,20 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               { id: "legacy", label: "Legacy", icon: IconArchive, count: allResources.filter(r => r.resourceLane === "legacy").length }
             ].map((lane) => {
               const Icon = lane.icon;
-              const active = activeLane === lane.id;
-              return (
-                <button
-                  key={lane.id}
-                  onClick={() => {
-                    updateParams({ lane: lane.id });
-                  }}
-                  aria-pressed={active}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-all ${
-                    active
-                      ? "bg-[var(--ca-primary)] text-[var(--ca-bg)] shadow-md"
-                      : "bg-[var(--ca-surface)] border border-[var(--ca-border)] text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] hover:text-[var(--ca-text)]"
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span>{lane.label}</span>
-                  <span
-                    className={`ml-1 rounded px-2 py-0.5 text-xs font-semibold ${
-                      active ? "bg-[color-mix(in_srgb,var(--ca-primary)_70%,transparent)] text-[var(--ca-bg)]" : "bg-[var(--ca-surface-raised)] text-[var(--ca-text)]"
-                    }`}
-                  >
-                    {lane.count}
+              return {
+                id: lane.id,
+                label: (
+                  <span className="inline-flex items-center gap-2">
+                    <Icon size={16} />
+                    <span>{lane.label}</span>
+                    <span className="rounded px-2 py-0.5 text-xs font-semibold bg-[var(--ca-surface-raised)] text-[var(--ca-text)]">
+                      {lane.count}
+                    </span>
                   </span>
-                </button>
-              );
+                ),
+              };
             })}
-          </div>
+          />
         </nav>
 
         {/* Featured Starter Collections Carousel / Grid */}

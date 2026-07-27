@@ -104,11 +104,11 @@ export function CatalogDetailPage(props: {
     return (
       <section className="panel catalog-index">
         <header className="page-header">
-          <p className="eyebrow">Library</p>
+          <p className="eyebrow">Catalog</p>
           <h1>Official rules and frameworks</h1>
           <p className="page-summary">
             These are the source documents themselves, grouped by the agency that publishes them.
-            Not sure where to start? <button className="link-button" onClick={() => onNavigate("atlas-map")} type="button">Try Atlas</button> — it asks what you're working on and finds the record for you.
+            Not sure where to start? <button className="link-button" onClick={() => onNavigate("atlas-map")} type="button">Try Explore</button> — it asks what you're working on and finds the record for you.
           </p>
         </header>
         {catalogsByGroup.map((section) => (
@@ -157,7 +157,7 @@ export function CatalogDetailPage(props: {
   return (
     <section className="panel catalog-detail-page">
       <button className="back-link" onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button">
-        <IconArrowLeft aria-hidden="true" size={17} /> Back to Library
+        <IconArrowLeft aria-hidden="true" size={17} /> Back to Catalog
       </button>
 
       <header className="catalog-detail-hero">
