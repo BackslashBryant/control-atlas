@@ -518,6 +518,7 @@ function AppContent(props: {
         bundle={bundle}
         onNavigate={onNavigate}
         onOpenNode={onOpenNode}
+        onRequestFullGraph={onRequestFullGraph}
         state={state}
       />
     );

@@ -36,8 +36,7 @@ export const FRAMEWORK_SECTION_LABEL = "The framework";
 export const TOOLKIT_SECTION_LABEL = "Practitioner toolkit";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
-  // Internal view key stays "atlas-map" (W2 will redesign what's behind it);
-  // only the user-facing label and route change.
+  // Internal view key stays "atlas-map"; the user-facing route is Explore.
   { label: "Explore", view: "atlas-map", path: "/atlas-map", icon: IconMap, section: "framework" },
   {
     label: "Catalog",

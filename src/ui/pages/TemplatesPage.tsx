@@ -521,7 +521,6 @@ function ToolCard(props: { tool: ComplianceTool }) {
 const FORMAT_LABELS: Record<string, string> = {
   xlsx: "Excel (.xlsx)",
   docx: "Word (.docx)",
-  pdf: "PDF (.pdf)",
 };
 
 const INPUT_LABELS: Record<string, string> = {
@@ -536,7 +535,6 @@ const INPUT_LABELS: Record<string, string> = {
 const FORMAT_HELP: Record<string, string> = {
   xlsx: "Excel workbook - an editable working register with print-ready sheets.",
   docx: "Word document - a branded starter narrative with headings and working tables.",
-  pdf: "PDF document - a branded, print-ready reference copy of this starter template.",
 };
 
 function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) {
@@ -770,7 +768,7 @@ export function TemplatesPage(props: {
     .getCatalogs()
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
   // The registry is the source of truth: every visible download is a polished
-  // Office or PDF document, never a raw serialization format.
+  // Word or Excel document, never a raw serialization format.
   const supportedFormats = selectedTemplate?.supported_formats || ["docx"];
   const activeFormat = supportedFormats.includes(state.format || "")
     ? state.format || supportedFormats[0]
@@ -910,13 +908,14 @@ export function TemplatesPage(props: {
         setGenerationStatus(frameworkResolutionError);
         return;
       }
-      // Serializers are lazy so the PDF library only loads when a user asks to
-      // create a document; nothing is uploaded or generated server-side.
-      const { renderOfficeDocument, renderPdfDocument } =
+      // Serializers are loaded only when a user asks to create a document;
+      // nothing is uploaded or generated server-side.
+      const { renderOfficeDocument } =
         await import("../../app/office-export.mjs");
-      const rendered = activeFormat === "pdf"
-        ? await renderPdfDocument(doc)
-        : renderOfficeDocument(doc, activeFormat as "xlsx" | "docx");
+      const rendered = renderOfficeDocument(
+        doc,
+        activeFormat as "xlsx" | "docx",
+      );
       const filename = templateFilename(selectedTemplate.name, rendered.extension);
       downloadBlobFile(
         filename,

@@ -1,8 +1,14 @@
-import { IconSearch } from "@tabler/icons-react";
+import {
+  IconBinaryTree,
+  IconRoute,
+  IconSearch,
+  IconSparkles,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { BrandFlourish, BrandMark } from "../components/BrandLockup";
 import { Button, Input } from "../components/lsm";
 import { PRIMARY_NAV_ITEMS } from "../lib/navigation";
+import { NIST_FRAMEWORK_ID } from "../lib/atlasDrilldown";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -30,45 +36,59 @@ export function HomePage(props: HomePageProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[32px]">
-        <div>
-          <p className="font-mono text-[11px] text-[var(--ca-secondary)] uppercase tracking-[0.14em] font-bold mb-[12px]">
-            New here?
-          </p>
-          <Button
-            variant="editorial"
-            className="landing-primary-action"
-            aria-describedby="landing-primary-hint"
-            onClick={() => onNavigate("start-here")}
-          >
-            Start here
-          </Button>
-          <p id="landing-primary-hint" className="text-[12px] text-[var(--ca-text-muted)] mt-[8px]">
-            Three quick questions, then a practical starting point.
-          </p>
-        </div>
+      <div className="landing-ancestry-intro">
+        <p className="eyebrow">Choose how you want to trace the system</p>
+        <h2>Follow one branch at a time</h2>
+        <p>
+          Like a family tree, the Atlas shows what each item belongs to and
+          where its related branches lead.
+        </p>
+      </div>
 
-        <div>
-          <p className="font-mono text-[11px] text-[var(--ca-secondary)] uppercase tracking-[0.14em] font-bold mb-[12px]">
-            Know where you're going?
-          </p>
-          <div className="landing-shortcut-grid">
-            {PRIMARY_NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  className="landing-shortcut"
-                  key={item.view}
-                  onClick={() => onNavigate(item.view, item.patch)}
-                  type="button"
-                >
-                  <Icon aria-hidden="true" size={18} stroke={1.6} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      <div className="landing-ancestry-grid">
+        <button
+          className="landing-ancestry-card"
+          onClick={() =>
+            onNavigate("atlas-map", {
+              atlasAxis: "framework",
+              atlasFramework: NIST_FRAMEWORK_ID,
+            })
+          }
+          type="button"
+        >
+          <IconBinaryTree aria-hidden="true" size={24} stroke={1.7} />
+          <span>
+            <strong>Trace a framework</strong>
+            <small>NIST SP 800-53 → baseline → family → control</small>
+          </span>
+        </button>
+        <button
+          className="landing-ancestry-card"
+          onClick={() =>
+            onNavigate("atlas-map", {
+              atlasAxis: "process",
+              atlasRmfStep: "",
+            })
+          }
+          type="button"
+        >
+          <IconRoute aria-hidden="true" size={24} stroke={1.7} />
+          <span>
+            <strong>Follow the RMF process</strong>
+            <small>Choose a lifecycle step, then see its published results</small>
+          </span>
+        </button>
+        <button
+          className="landing-ancestry-card"
+          onClick={() => onNavigate("start-here")}
+          type="button"
+        >
+          <IconSparkles aria-hidden="true" size={24} stroke={1.7} />
+          <span>
+            <strong>Start with my situation</strong>
+            <small>Answer three questions for a practical starting point</small>
+          </span>
+        </button>
       </div>
 
       <div className="max-w-[640px]">
@@ -99,6 +119,26 @@ export function HomePage(props: HomePageProps) {
             </Button>
           </div>
         </form>
+      </div>
+
+      <div className="landing-shortcuts">
+        <p className="eyebrow">More ways to explore</p>
+        <div className="landing-shortcut-grid">
+          {PRIMARY_NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                className="landing-shortcut"
+                key={item.view}
+                onClick={() => onNavigate(item.view, item.patch)}
+                type="button"
+              >
+                <Icon aria-hidden="true" size={18} stroke={1.6} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-[16px] max-w-[1000px] pt-[16px] border-t border-[var(--ca-border)]">

@@ -349,8 +349,10 @@ const RelationshipGraphInner = forwardRef<
     null,
   );
   const layoutRunRef = useRef(0);
+  const lastArrangedKeyRef = useRef("");
   const layoutShowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [layout, setLayout] = useState<ElkGraph | null>(null);
+  const [layoutRevision, setLayoutRevision] = useState(0);
   const [layoutRunning, setLayoutRunning] = useState(false);
   const [layoutVisible, setLayoutVisible] = useState(false);
   const [liveMessage, setLiveMessage] = useState("");
@@ -372,6 +374,7 @@ const RelationshipGraphInner = forwardRef<
       ),
     [centerNodeId, graphData],
   );
+  const arrangementKey = `${topologyKey}|${layoutMode}|${narrowViewport ? "narrow" : "wide"}|${layoutRevision}`;
 
   const diagramNodes = useMemo(
     () =>
@@ -418,7 +421,7 @@ const RelationshipGraphInner = forwardRef<
     resetView() {
       setLayout(null);
       setLiveMessage("Rebuilding relationship diagram.");
-      void reactFlow.fitView({ padding: 0.18, duration: reducedMotion ? 0 : 180 });
+      setLayoutRevision((current) => current + 1);
     },
     zoomIn() {
       void reactFlow.zoomIn({ duration: reducedMotion ? 0 : 120 });
@@ -430,6 +433,8 @@ const RelationshipGraphInner = forwardRef<
 
   useEffect(() => {
     if (!graphData.nodes.length) return;
+    if (lastArrangedKeyRef.current === arrangementKey) return;
+    lastArrangedKeyRef.current = arrangementKey;
 
     const runId = layoutRunRef.current + 1;
     layoutRunRef.current = runId;
@@ -467,6 +472,7 @@ const RelationshipGraphInner = forwardRef<
         }
       });
   }, [
+    arrangementKey,
     graphData.links,
     graphData.nodes,
     layoutMode,
@@ -560,7 +566,7 @@ const RelationshipGraphInner = forwardRef<
           minZoom={0.4}
           nodes={diagramNodes}
           nodeTypes={nodeTypes}
-          nodesDraggable={!reducedMotion}
+          nodesDraggable={false}
           nodesFocusable
           onInit={(instance) => {
             instanceRef.current = instance;
@@ -569,9 +575,10 @@ const RelationshipGraphInner = forwardRef<
             setZoomLevel(viewport.zoom);
           }}
           onNodeClick={(_, node) => selectNode(node.id)}
-          panOnScroll
+          panOnScroll={false}
           preventScrolling
           proOptions={{ hideAttribution: true }}
+          zoomOnScroll
         >
           <Background color="rgba(148, 163, 184, 0.18)" gap={24} />
           <Controls showInteractive={false} />

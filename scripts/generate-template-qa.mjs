@@ -4,7 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { buildTemplateDocument } from '../src/app/template-engine.mjs';
-import { renderOfficeDocument, renderPdfDocument } from '../src/app/office-export.mjs';
+import { renderOfficeDocument } from '../src/app/office-export.mjs';
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
@@ -44,9 +44,7 @@ for (const template of registry.templates) {
     if (frameworkResolutionError) {
       throw new Error(`${template.name}: ${frameworkResolutionError}`);
     }
-    const rendered = format === 'pdf'
-      ? await renderPdfDocument(doc)
-      : renderOfficeDocument(doc, format);
+    const rendered = renderOfficeDocument(doc, format);
     const filename = `${template.name}.${rendered.extension}`;
     writeFileSync(resolve(outputDirectory, filename), rendered.bytes);
     manifest.push({

@@ -13,9 +13,9 @@ test('Template Registry Validation', async (t) => {
     assert.ok(registry.templates.length > 0, 'Registry must contain templates');
   });
 
-  await t.test('every template advertises only Word, Excel, or PDF', () => {
+  await t.test('every template advertises only Word or Excel', () => {
     const { registry } = loadTemplateRegistry(join(ROOT, 'data', 'template-registry.json'));
-    const allowedFormats = new Set(['docx', 'xlsx', 'pdf']);
+    const allowedFormats = new Set(['docx', 'xlsx']);
     for (const template of registry.templates) {
       assert.ok(template.supported_formats.length > 0, `${template.name} must offer a document format`);
       for (const format of template.supported_formats) {

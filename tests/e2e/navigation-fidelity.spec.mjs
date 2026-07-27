@@ -141,8 +141,8 @@ test('template generation fires a trust-styled download toast and disables the b
 
   const download = await downloadPromise;
   await clickPromise;
-  // security_plan_starter's supported_formats is ["docx", "pdf"] (W3: markdown
-  // removed as a user-facing download format); docx is the first/default.
+  // security_plan_starter offers Word only; raw and PDF formats are not
+  // user-facing template downloads.
   expect(download.suggestedFilename()).toMatch(/security-plan-starter.*\.docx$/);
 
   const toast = page.locator('.generation-status');

@@ -1,7 +1,11 @@
 import { Fragment, useMemo } from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 
-import { ancestorChain, buildAncestorGraph } from "../lib/ancestorPath";
+import {
+  ancestorChain,
+  buildAncestorGraph,
+  type AncestorLink,
+} from "../lib/ancestorPath";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 
 /**
@@ -12,20 +16,25 @@ import type { RuntimeBundle } from "../lib/runtimeLoader";
  * the Atlas decomposition board instead of inventing a new breadcrumb.
  */
 export function WhereThisSitsRail(props: {
-  bundle: RuntimeBundle;
-  nodeId: string;
+  bundle?: RuntimeBundle;
+  nodeId?: string;
+  links?: AncestorLink[];
   onOpenNode: (nodeId: string) => void;
 }) {
-  const { bundle, nodeId, onOpenNode } = props;
+  const { bundle, nodeId = "", links, onOpenNode } = props;
   const graph = useMemo(
     () =>
       buildAncestorGraph(
-        bundle.runtime.dataset.nodes,
-        bundle.runtime.dataset.edges,
+        bundle?.runtime.dataset.nodes || [],
+        bundle?.runtime.dataset.edges || [],
       ),
-    [bundle.runtime],
+    [bundle?.runtime],
   );
-  const chain = useMemo(() => ancestorChain(nodeId, graph), [nodeId, graph]);
+  const derivedChain = useMemo(
+    () => ancestorChain(nodeId, graph),
+    [nodeId, graph],
+  );
+  const chain = links || derivedChain;
 
   if (chain.length === 0) return null;
 
