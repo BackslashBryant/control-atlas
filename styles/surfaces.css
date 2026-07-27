@@ -820,6 +820,45 @@ li {
   margin-top: var(--ca-space-1);
 }
 
+/* W7.2 — the compact relationship-class overview beneath the tree path.
+   Applicability ("Selected by") renders as tone-applicability badges;
+   correlation ("Correlated through" / "Implemented by" / "Assessed
+   through") renders as plain chips — two distinct looks so the classes
+   read apart without reading the row labels (docs/tree-model.md #3). */
+.tree-relationship-classes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2);
+  margin: var(--ca-space-4) 0;
+}
+
+.tree-relationship-class-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ca-space-3);
+}
+
+.tree-relationship-class-label {
+  flex: 0 0 auto;
+  min-width: 9rem;
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.tree-relationship-class-more {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.badge-button {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
 .source-ref-list {
   margin: var(--ca-space-1) 0 0;
   padding-left: 1.1rem;

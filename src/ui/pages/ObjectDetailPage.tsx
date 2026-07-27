@@ -44,6 +44,7 @@ import {
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { DetailConnectionsSkeleton } from "../components/LibrarySkeleton";
 import { StickyDetailBar } from "../components/StickyDetailBar";
+import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { StartHereResult } from "../components/StartHereResult";
@@ -92,6 +93,46 @@ import {
 } from "../lib/pagePrimitives";
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
+
+/**
+ * W7.2 — the compact relationship-class overview rendered beneath the
+ * "Where this sits" rail. Groups from `groupRelationships` are Class-3
+ * correlation except nistBaseline/fedrampBaseline, which are Class-2
+ * applicability (a baseline selects from a catalog, it does not own the
+ * control — docs/tree-model.md #3) and get the distinct tone-applicability
+ * badge so the two classes never look alike.
+ */
+const RELATIONSHIP_CLASS_BUCKETS: Array<{
+  id: string;
+  label: string;
+  tone: "applicability" | "default";
+  groupIds: string[];
+}> = [
+  {
+    id: "selected-by",
+    label: "Selected by",
+    tone: "applicability",
+    groupIds: ["nistBaseline", "fedrampBaseline"],
+  },
+  {
+    id: "correlated-through",
+    label: "Correlated through",
+    tone: "default",
+    groupIds: ["disa", "mitre", "csf", "sp171", "other"],
+  },
+  {
+    id: "implemented-by",
+    label: "Implemented by",
+    tone: "default",
+    groupIds: ["stig"],
+  },
+  {
+    id: "assessed-through",
+    label: "Assessed through",
+    tone: "default",
+    groupIds: ["assessment"],
+  },
+];
 
 /**
  * Split text on ODP bracket markers (e.g. "[Assignment: organization-defined
@@ -172,6 +213,23 @@ export function ObjectDetailPage(props: {
   const relationshipGroupSignature = grouped
     .map((group) => `${group.id}:${group.items.length}`)
     .join("|");
+  const classBuckets = useMemo(
+    () =>
+      RELATIONSHIP_CLASS_BUCKETS.map((bucket) => ({
+        id: bucket.id,
+        label: bucket.label,
+        tone: bucket.tone,
+        items: grouped
+          .filter((group) => bucket.groupIds.includes(group.id))
+          .flatMap((group) =>
+            group.items.map((item: any) => ({
+              id: item.counterpart.id,
+              label: item.counterpart.metadata?.item_id || item.counterpart.id,
+            })),
+          ),
+      })).filter((bucket) => bucket.items.length > 0),
+    [relationshipGroupSignature],
+  );
   const [openRelationshipGroupIds, setOpenRelationshipGroupIds] = useState<
     string[]
   >([]);
@@ -383,13 +441,11 @@ export function ObjectDetailPage(props: {
         }
         onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
       />
-      <div className="breadcrumbs">
-        <button onClick={() => onNavigate("search")} type="button">
-          Explore
-        </button>
-        <span>/</span>
-        <span>{document.item_id}</span>
-      </div>
+      <WhereThisSitsRail
+        bundle={bundle}
+        nodeId={node.id}
+        onOpenNode={(id) => onOpenNode(id, state.from || "search")}
+      />
 
       <PageHeader
         eyebrow={displayNameFor("object_type", document.object_type)}
@@ -483,6 +539,39 @@ export function ObjectDetailPage(props: {
               ))}
             </span>
           ) : null}
+        </div>
+      ) : null}
+
+      {classBuckets.length ? (
+        <div className="tree-relationship-classes" aria-label="Relationship classes">
+          {classBuckets.map((bucket) => (
+            <div className="tree-relationship-class-row" key={bucket.id}>
+              <span className="tree-relationship-class-label">{bucket.label}</span>
+              <div className="badge-row">
+                {bucket.items.slice(0, 6).map((item) => (
+                  <button
+                    className="badge-button"
+                    key={item.id}
+                    onClick={() => onOpenNode(item.id, state.from || "search")}
+                    type="button"
+                  >
+                    <Badge
+                      tone={
+                        bucket.tone === "applicability" ? "applicability" : undefined
+                      }
+                    >
+                      {item.label}
+                    </Badge>
+                  </button>
+                ))}
+                {bucket.items.length > 6 ? (
+                  <span className="tree-relationship-class-more">
+                    +{bucket.items.length - 6} more in Connections below
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          ))}
         </div>
       ) : null}
 
