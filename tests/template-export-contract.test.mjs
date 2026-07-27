@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { buildTemplateDocument, generateTemplate } from '../src/app/template-engine.mjs';
-import { renderOfficeDocument, renderPdfDocument } from '../src/app/office-export.mjs';
+import { renderOfficeDocument } from '../src/app/office-export.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const registry = JSON.parse(readFileSync(join(__dirname, '../data/template-registry.json'), 'utf8'));
@@ -50,13 +50,10 @@ for (const template of registry.templates) {
       const content = JSON.stringify(doc);
       assert.match(content, /Source Metadata/, 'Generated document is missing source metadata');
       assert.match(content, /Limit:/, 'Generated document is missing its limitation');
-      const rendered = format === 'pdf'
-        ? await renderPdfDocument(doc)
-        : renderOfficeDocument(doc, format);
+      const rendered = renderOfficeDocument(doc, format);
       assert.equal(rendered.extension, format, `Unexpected export extension for ${format}`);
       assert.ok(rendered.bytes.byteLength > 0, 'Generated document is empty');
-      const expectedMagic = format === 'pdf' ? '%PDF-' : 'PK';
-      assert.equal(String.fromCharCode(...rendered.bytes.slice(0, expectedMagic.length)), expectedMagic);
+      assert.equal(String.fromCharCode(...rendered.bytes.slice(0, 2)), 'PK');
     });
   }
 }

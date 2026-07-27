@@ -33,6 +33,11 @@ export type ViewState =
   | {
       view: "atlas-map";
       node: string;
+      atlasAxis: string;
+      atlasFramework: string;
+      atlasBaseline: string;
+      atlasFamily: string;
+      atlasRmfStep: string;
       relationshipView: string;
       relationshipType: string;
       provenance: string;
@@ -173,6 +178,11 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
   return {
     view: "atlas-map",
     node: "",
+    atlasAxis: "",
+    atlasFramework: "",
+    atlasBaseline: "",
+    atlasFamily: "",
+    atlasRmfStep: "",
     relationshipView: "path",
     relationshipType: "",
     provenance: "",
@@ -250,6 +260,11 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       node: params.get("node") || "",
+      atlasAxis: params.get("atlasAxis") || "",
+      atlasFramework: params.get("atlasFramework") || "",
+      atlasBaseline: params.get("atlasBaseline") || "",
+      atlasFamily: params.get("atlasFamily") || "",
+      atlasRmfStep: params.get("atlasRmfStep") || "",
       relationshipView:
         normalizeRelationshipView(params.get("relationshipView") || "") || "path",
       relationshipType: params.get("relationshipType") || "",
@@ -603,6 +618,11 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "atlas-map") {
     params.set("view", "atlas-map");
     setIfValue(params, "node", state.node);
+    setIfValue(params, "atlasAxis", state.atlasAxis);
+    setIfValue(params, "atlasFramework", state.atlasFramework);
+    setIfValue(params, "atlasBaseline", state.atlasBaseline);
+    setIfValue(params, "atlasFamily", state.atlasFamily);
+    setIfValue(params, "atlasRmfStep", state.atlasRmfStep);
     if (state.relationshipView === "path") {
       params.set("relationshipView", "path");
     } else if (state.relationshipView === "map") {
@@ -742,6 +762,11 @@ export function serializeViewState(state: ViewState): string {
 
 export type AtlasMapUrlOptions = {
   node?: string;
+  atlasAxis?: string;
+  atlasFramework?: string;
+  atlasBaseline?: string;
+  atlasFamily?: string;
+  atlasRmfStep?: string;
   sourceView?: "novice" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
@@ -774,6 +799,11 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
   const state = normalizeViewState("atlas-map", {
     view: "atlas-map",
     node: options.node || "",
+    atlasAxis: options.atlasAxis || "",
+    atlasFramework: options.atlasFramework || "",
+    atlasBaseline: options.atlasBaseline || "",
+    atlasFamily: options.atlasFamily || "",
+    atlasRmfStep: options.atlasRmfStep || "",
     sourceView: options.sourceView || "novice",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",

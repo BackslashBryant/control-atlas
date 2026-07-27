@@ -61,4 +61,12 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
   assert.match(relationshipGraph, /<MiniMap/);
   assert.match(relationshipGraph, /<Controls/);
   assert.match(relationshipGraph, /Arranging/);
+  assert.match(relationshipGraph, /nodesDraggable=\{false\}/);
+  assert.match(relationshipGraph, /panOnScroll=\{false\}/);
+  assert.match(relationshipGraph, /zoomOnScroll/);
+  assert.match(
+    relationshipGraph,
+    /lastArrangedKeyRef\.current === arrangementKey/,
+  );
+  assert.match(relationshipGraph, /setLayoutRevision/);
 });

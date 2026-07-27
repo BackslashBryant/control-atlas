@@ -77,7 +77,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
         mode: "operational",
         // Internal view key stays "atlas-map"; nav label renamed to Explore.
         label: "Explore",
-        scope: state.node || "Choose a source path",
+        scope: state.node || "Choose a branch",
       };
     case "search":
       return {

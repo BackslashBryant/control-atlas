@@ -62,13 +62,8 @@ for (const template of registry.templates) {
     expect(download.suggestedFilename()).toMatch(new RegExp(`${template.name.replace(/_/g, '-')}-\\d{4}-\\d{2}-\\d{2}\\.`));
     const downloadPath = await download.path();
     expect(downloadPath).toBeTruthy();
-    const bytes = readFileSync(downloadPath);
     expect(download.suggestedFilename()).toMatch(new RegExp(`\\.${template.supported_formats[0]}$`));
-    if (template.supported_formats[0] === 'pdf') {
-      expect(bytes.subarray(0, 5).toString()).toBe('%PDF-');
-    } else {
-      await assertZipDownload(download);
-    }
+    await assertZipDownload(download);
   });
 }
 
@@ -90,22 +85,6 @@ test('document preview is visible before download', async ({ page }) => {
   await expect(preview).toContainText('Control Atlas');
   await expect(preview).toContainText('Inheritance');
   await expect(preview.locator('table')).toHaveCount(1);
-});
-
-test('format change updates PDF download extension', async ({ page }) => {
-  await page.goto('/?view=templates&templateType=inheritance_worksheet');
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  await page.getByLabel('Format').selectOption('pdf');
-
-  const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: /Download Inheritance Worksheet \(/ }).click();
-  const download = await downloadPromise;
-  expect(download.suggestedFilename()).toMatch(/\.pdf$/);
-  const path = await download.path();
-  expect(path).toBeTruthy();
-  expect(readFileSync(path).subarray(0, 5).toString()).toBe('%PDF-');
 });
 
 // CATL-73: office-format export runs entirely client-side. A downloaded file

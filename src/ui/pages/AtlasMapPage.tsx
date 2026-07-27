@@ -7,6 +7,8 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import {
+  IconBinaryTree,
+  IconChevronRight,
   IconExternalLink,
   IconFolderOpen,
   IconListDetails,
@@ -19,18 +21,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasDecompositionBoard } from "../components/AtlasDecompositionBoard";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
-import {
-  DEFAULT_MAP_WARNINGS,
-  isVisibleWithOptionalFilters,
-} from "../graph/defaultMapFilter";
-import { SOURCE_RUNTIME_ANCHORS } from "../graph/sourceRuntimeAnchors";
-import { SOURCE_SEED_MANIFEST } from "../graph/sourceSeedManifest";
-import {
-  SOURCE_VIEW_DEFINITIONS,
-  normalizeSourceViewId,
-  sourceViewGroupsFor,
-  type SourceViewId,
-} from "../graph/sourceViews";
+import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
   atlasFilterOptions,
   buildAtlasGroups,
@@ -38,6 +29,11 @@ import {
   type AtlasFilterState,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
+import {
+  buildAtlasDrilldownModel,
+  NIST_FRAMEWORK_ID,
+  NIST_FRAMEWORK_LABEL,
+} from "../lib/atlasDrilldown";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import {
   loadAtlasNeighborhood,
@@ -53,6 +49,7 @@ type AtlasMapPageProps = {
   state: Extract<ViewState, { view: "atlas-map" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
+  onRequestFullGraph: () => void;
 };
 
 type AtlasView = "path" | "map" | "list";
@@ -142,7 +139,13 @@ function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
-  const { bundle, state, onNavigate, onOpenNode } = props;
+  const {
+    bundle,
+    state,
+    onNavigate,
+    onOpenNode,
+    onRequestFullGraph,
+  } = props;
   const compact = useCompactAtlas();
   const nodeId = useMemo(
     () => requestedNodeId(bundle, state.node),
@@ -160,6 +163,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   useEffect(() => {
     setMapSearchDraft(state.relationshipSearch || "");
   }, [state.relationshipSearch]);
+
+  useEffect(() => {
+    if (!nodeId && !bundle.graphReady) {
+      onRequestFullGraph();
+    }
+  }, [bundle.graphReady, nodeId, onRequestFullGraph]);
 
   useEffect(() => {
     let cancelled = false;
@@ -217,7 +226,9 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </h1>
           {!record ? (
             <p className="page-summary">
-              Start with a question or lifecycle step, then open a record to see its published connections.
+              Navigate the system like a family tree: choose a branch, move one
+              generation at a time, then open a record to see its published
+              connections.
             </p>
           ) : null}
         </div>
@@ -273,13 +284,19 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           state={state}
           view={view}
         />
-      ) : recordStatus === "idle" ? (
-        <SourceAtlas
+      ) : recordStatus === "idle" && bundle.graphReady ? (
+        <AtlasGuidedPath
+          bundle={bundle}
           onNavigate={onNavigate}
+          onOpenNode={onOpenNode}
           patchAtlas={patchAtlas}
           state={state}
-          view={view}
         />
+      ) : recordStatus === "idle" ? (
+        <div className="atlas-loading" role="status">
+          <div aria-hidden="true" className="atlas-loading-block" />
+          Preparing the Atlas family tree…
+        </div>
       ) : null}
       </div>
     </Panel>
@@ -623,233 +640,366 @@ function FocusedAtlas(props: {
   );
 }
 
-function SourceAtlas(props: {
+function AtlasGuidedPath(props: {
+  bundle: RuntimeBundle;
   state: AtlasMapPageProps["state"];
-  view: AtlasView;
   patchAtlas: (patch: Partial<AtlasMapPageProps["state"]>) => void;
   onNavigate: AtlasMapPageProps["onNavigate"];
+  onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { state, view, patchAtlas, onNavigate } = props;
-  const oldDrill = state.node.startsWith("hierarchy:")
-    ? state.node.slice("hierarchy:".length)
-    : "";
-  const requestedSourceView = normalizeSourceViewId(state.sourceView);
-  const sourceView =
-    oldDrill &&
-    !SOURCE_VIEW_DEFINITIONS[requestedSourceView].groups.some(
-      (group) => group.id === oldDrill,
-    ) &&
-    SOURCE_VIEW_DEFINITIONS.purpose.groups.some(
-      (group) => group.id === oldDrill,
-    )
-      ? "purpose"
-      : requestedSourceView;
-  const definition = SOURCE_VIEW_DEFINITIONS[sourceView];
-  const initialGroup = definition.groups.some((group) => group.id === oldDrill)
-    ? oldDrill
-    : definition.groups[0]?.id || "";
-  const [activeGroup, setActiveGroup] = useState(initialGroup);
-  const visibility = {
-    showSupportingReferences: state.showSupportingReferences === "true",
-    showDraftOrLegacy: state.showDraftOrLegacy === "true",
-    showRegistryOnly: state.showRegistryOnly === "true",
-  };
-
-  useEffect(() => {
-    setActiveGroup(initialGroup);
-  }, [initialGroup]);
-
-  const sourcesByGroup = useMemo(
-    () =>
-      new Map(
-        definition.groups.map((group) => [
-          group.id,
-          SOURCE_SEED_MANIFEST.filter(
-            (source) =>
-              sourceViewGroupsFor(source, sourceView).includes(group.id) &&
-              isVisibleWithOptionalFilters(source, visibility),
-          ),
-        ]),
-      ),
-    [definition.groups, sourceView, state.showDraftOrLegacy, state.showRegistryOnly, state.showSupportingReferences],
+  const { bundle, state, patchAtlas, onNavigate, onOpenNode } = props;
+  const [recordFilter, setRecordFilter] = useState("");
+  const model = useMemo(
+    () => buildAtlasDrilldownModel(bundle.runtime.dataset),
+    [bundle.runtime.dataset],
   );
-  const activeDefinition =
-    definition.groups.find((group) => group.id === activeGroup) || definition.groups[0];
-  const activeSources = sourcesByGroup.get(activeDefinition?.id || "") || [];
+  const axis =
+    state.atlasAxis ||
+    (state.sourceView === "rmf" ||
+    state.sourceView === "rmf-lifecycle" ||
+    state.relationshipView === "rmf"
+      ? "process"
+      : "");
+  const baseline = model.baselines.find(
+    (choice) => choice.id === state.atlasBaseline,
+  );
+  const family = baseline?.families.find(
+    (choice) => choice.id === state.atlasFamily,
+  );
+  const rmfStep = model.rmfSteps.find(
+    (choice) => choice.id === state.atlasRmfStep,
+  );
 
-  function openSource(sourceId: string) {
-    const anchor = SOURCE_RUNTIME_ANCHORS[sourceId];
-    if (anchor) {
-      patchAtlas({
-        node: anchor,
-        relationshipView: "path",
-        relationshipGroup: "",
-        atlasStage: "",
+  const ancestryLinks = useMemo(() => {
+    const links = [
+      { id: "atlas:root", label: "Atlas", node_type: "atlas_root" },
+    ];
+    if (axis === "framework") {
+      links.push({
+        id: `framework:${NIST_FRAMEWORK_ID}`,
+        label: NIST_FRAMEWORK_LABEL,
+        node_type: "framework",
+      });
+      if (baseline) {
+        links.push({
+          id: `baseline:${baseline.id}`,
+          label: baseline.itemId.replace("nist-800-53b:", ""),
+          node_type: "baseline",
+        });
+      }
+      if (family) {
+        links.push({
+          id: `family:${family.id}`,
+          label: family.itemId,
+          node_type: "family",
+        });
+      }
+    }
+    if (axis === "process") {
+      links.push({
+        id: "process:rmf",
+        label: "Risk Management Framework",
+        node_type: "process",
+      });
+      if (rmfStep) {
+        links.push({
+          id: `rmf-step:${rmfStep.id}`,
+          label: rmfStep.itemId.replace("RMF-", ""),
+          node_type: "process_step",
+        });
+      }
+    }
+    return links;
+  }, [axis, baseline, family, rmfStep]);
+
+  function resetDrill(patch: Partial<AtlasMapPageProps["state"]>) {
+    patchAtlas({
+      atlasAxis: "",
+      atlasFramework: "",
+      atlasBaseline: "",
+      atlasFamily: "",
+      atlasRmfStep: "",
+      node: "",
+      ...patch,
+    });
+  }
+
+  function openAncestor(id: string) {
+    if (id === "atlas:root") {
+      resetDrill({});
+      return;
+    }
+    if (id.startsWith("framework:")) {
+      resetDrill({
+        atlasAxis: "framework",
+        atlasFramework: NIST_FRAMEWORK_ID,
       });
       return;
     }
-    onNavigate("sources", { source: sourceId });
+    if (id.startsWith("baseline:")) {
+      patchAtlas({
+        atlasBaseline: id.slice("baseline:".length),
+        atlasFamily: "",
+      });
+      return;
+    }
+    if (id.startsWith("family:")) {
+      patchAtlas({ atlasFamily: id.slice("family:".length) });
+      return;
+    }
+    if (id === "process:rmf") {
+      resetDrill({ atlasAxis: "process" });
+    }
   }
 
+  const filteredRecords = family
+    ? family.records.filter((record) => {
+        const query = recordFilter.trim().toLowerCase();
+        return (
+          !query ||
+          record.itemId.toLowerCase().includes(query) ||
+          record.label.toLowerCase().includes(query)
+        );
+      })
+    : [];
+
   return (
-    <section className="atlas-source-path">
-      <div aria-label="Browse sources by" className="source-view-toggle" role="group">
-        {(["novice", "purpose", "rmf"] as SourceViewId[]).map((viewId) => (
-          <button
-            aria-pressed={sourceView === viewId}
-            className={sourceView === viewId ? "active" : ""}
-            key={viewId}
-            onClick={() => patchAtlas({ sourceView: viewId, node: "" })}
-            type="button"
-          >
-            {SOURCE_VIEW_DEFINITIONS[viewId].label}
-          </button>
-        ))}
-      </div>
-      <p className="atlas-source-summary">{definition.summary}</p>
+    <section className="atlas-ancestry">
+      <WhereThisSitsRail
+        links={ancestryLinks}
+        onOpenNode={openAncestor}
+      />
 
-      <details className="atlas-display-options">
-        <summary>Source options</summary>
-        <div aria-label="Source visibility filters" className="atlas-source-filters" role="group">
-          <SourceFilter
-            checked={visibility.showSupportingReferences}
-            label="Show supporting references"
-            onChange={(checked) =>
-              patchAtlas({ showSupportingReferences: checked ? "true" : "" })
-            }
-          />
-          <SourceFilter
-            checked={visibility.showDraftOrLegacy}
-            label="Show draft / legacy sources"
-            onChange={(checked) =>
-              patchAtlas({ showDraftOrLegacy: checked ? "true" : "" })
-            }
-          />
-          <SourceFilter
-            checked={visibility.showRegistryOnly}
-            label="Show registry-only entries"
-            onChange={(checked) =>
-              patchAtlas({ showRegistryOnly: checked ? "true" : "" })
-            }
-          />
-        </div>
-        <div aria-live="polite" className="atlas-source-warnings">
-          {visibility.showSupportingReferences ? <p>{DEFAULT_MAP_WARNINGS.supportingReferences}</p> : null}
-          {visibility.showDraftOrLegacy ? <p>{DEFAULT_MAP_WARNINGS.draftOrLegacy}</p> : null}
-          {visibility.showRegistryOnly ? <p>{DEFAULT_MAP_WARNINGS.registryOnly}</p> : null}
-        </div>
-      </details>
-
-      {/* No "Map is unavailable" branch here by design: atlasView() resolves
-          `map` to `path` whenever no record is selected, so this component can
-          never be asked to render a Map it has no data for. */}
-      {view === "path" ? (
+      {!axis ? (
         <>
-          <div aria-label={`${definition.label} path`} className="atlas-path-stage-nav atlas-source-stage-nav" role="tablist">
-            {definition.groups.map((group, index) => (
-              <button
-                aria-controls="atlas-source-stage-panel"
-                aria-selected={activeDefinition?.id === group.id}
-                className={activeDefinition?.id === group.id ? "active" : ""}
-                id={`atlas-source-tab-${sourceView}-${group.id}`}
-                key={group.id}
-                onClick={() => setActiveGroup(group.id)}
-                onKeyDown={handleTabKeyDown}
-                role="tab"
-                tabIndex={activeDefinition?.id === group.id ? 0 : -1}
-                type="button"
-              >
-                <span>{index + 1}</span>
-                <strong>{group.label}</strong>
-                <small>{sourcesByGroup.get(group.id)?.length || 0} sources</small>
-              </button>
-            ))}
-          </div>
-          <div
-            aria-labelledby={`atlas-source-tab-${sourceView}-${activeDefinition?.id}`}
-            className="atlas-source-stage-panel"
-            id="atlas-source-stage-panel"
-            role="tabpanel"
-          >
-            <header>
-              <div>
-                <p className="eyebrow">Selected path</p>
-                <h2>{activeDefinition?.label}</h2>
-              </div>
-              <p>{activeDefinition?.description}</p>
-            </header>
-            <SourceCards onOpen={openSource} sources={activeSources} />
+          <p className="atlas-path-prompt">What do you want to trace?</p>
+          <div className="atlas-ancestry-choice-grid">
+            <button
+              className="atlas-ancestry-choice"
+              onClick={() =>
+                resetDrill({
+                  atlasAxis: "framework",
+                  atlasFramework: NIST_FRAMEWORK_ID,
+                })
+              }
+              type="button"
+            >
+              <IconBinaryTree aria-hidden="true" size={24} />
+              <span>
+                <strong>A framework family tree</strong>
+                <small>Framework → baseline → family → control</small>
+              </span>
+              <IconChevronRight aria-hidden="true" size={20} />
+            </button>
+            <button
+              className="atlas-ancestry-choice"
+              onClick={() => resetDrill({ atlasAxis: "process" })}
+              type="button"
+            >
+              <IconRoute aria-hidden="true" size={24} />
+              <span>
+                <strong>The RMF process</strong>
+                <small>Lifecycle step → published results</small>
+              </span>
+              <IconChevronRight aria-hidden="true" size={20} />
+            </button>
+            <button
+              className="atlas-ancestry-choice"
+              onClick={() => onNavigate("start-here")}
+              type="button"
+            >
+              <IconSearch aria-hidden="true" size={24} />
+              <span>
+                <strong>My situation</strong>
+                <small>Answer three questions for a starting point</small>
+              </span>
+              <IconChevronRight aria-hidden="true" size={20} />
+            </button>
           </div>
         </>
       ) : null}
 
-      {view === "list" ? (
-        <div className="atlas-source-list">
-          {definition.groups.map((group) => {
-            const sources = sourcesByGroup.get(group.id) || [];
-            if (!sources.length) return null;
-            return (
-              <section key={group.id}>
-                <header>
-                  <h2>{group.label}</h2>
-                  <p>{group.description}</p>
-                </header>
-                <SourceCards onOpen={openSource} sources={sources} />
-              </section>
-            );
-          })}
+      {axis === "framework" && !baseline ? (
+        <>
+          <p className="atlas-path-prompt">
+            Which NIST SP 800-53 baseline should this branch follow?
+          </p>
+          <ul className="atlas-path-stage-list">
+            {model.baselines.map((choice) => (
+              <li key={choice.id}>
+                <button
+                  className="atlas-path-stage-option"
+                  onClick={() =>
+                    patchAtlas({
+                      atlasBaseline: choice.id,
+                      atlasFamily: "",
+                    })
+                  }
+                  type="button"
+                >
+                  <IconBinaryTree aria-hidden="true" size={20} />
+                  <span className="atlas-path-stage-option-text">
+                    <strong>
+                      {choice.itemId.replace("nist-800-53b:", "")} impact
+                    </strong>
+                    <small>
+                      {choice.recordCount} controls across {choice.families.length} families
+                    </small>
+                  </span>
+                  <IconChevronRight aria-hidden="true" size={20} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+
+      {axis === "framework" && baseline && !family ? (
+        <>
+          <p className="atlas-path-prompt">
+            Which control family do you want to open?
+          </p>
+          <div className="atlas-ancestry-family-grid">
+            {baseline.families.map((choice) => (
+              <button
+                className="atlas-ancestry-family"
+                key={choice.id}
+                onClick={() => patchAtlas({ atlasFamily: choice.id })}
+                type="button"
+              >
+                <span>
+                  <strong>{choice.itemId}</strong>
+                  <small>{choice.label}</small>
+                </span>
+                <span>{choice.records.length}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      {axis === "framework" && family ? (
+        <>
+          <div className="atlas-ancestry-record-header">
+            <div>
+              <p className="eyebrow">{family.itemId} family</p>
+              <h2>{family.label}</h2>
+              <p>{family.records.length} controls selected by this baseline.</p>
+            </div>
+            <label>
+              Filter this family
+              <input
+                onChange={(event) => setRecordFilter(event.target.value)}
+                placeholder="ID or title"
+                type="search"
+                value={recordFilter}
+              />
+            </label>
+          </div>
+          <ul className="atlas-path-record-list">
+            {filteredRecords.map((record) => (
+              <li key={record.id}>
+                <button
+                  className="atlas-path-record"
+                  onClick={() => onOpenNode(record.id, "atlas-map")}
+                  type="button"
+                >
+                  <span className="atlas-path-record-text">
+                    <strong>{record.itemId}</strong>
+                    <small>{record.label}</small>
+                  </span>
+                  <IconChevronRight aria-hidden="true" size={20} />
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!filteredRecords.length ? (
+            <p className="muted">No controls match that filter.</p>
+          ) : null}
+        </>
+      ) : null}
+
+      {axis === "process" && !rmfStep ? (
+        <>
+          <p className="atlas-path-prompt">
+            Which Risk Management Framework step are you working in?
+          </p>
+          <ol className="atlas-rmf-step-list">
+            {model.rmfSteps.map((step, index) => (
+              <li key={step.id}>
+                <button
+                  className="atlas-ancestry-choice"
+                  onClick={() => patchAtlas({ atlasRmfStep: step.id })}
+                  type="button"
+                >
+                  <span className="atlas-rmf-step-number">{index + 1}</span>
+                  <span>
+                    <strong>{step.itemId.replace("RMF-", "")}</strong>
+                    <small>{step.label}</small>
+                  </span>
+                  <IconChevronRight aria-hidden="true" size={20} />
+                </button>
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : null}
+
+      {axis === "process" && rmfStep ? (
+        <div className="atlas-rmf-results">
+          <header>
+            <p className="eyebrow">Published relationships</p>
+            <h2>{rmfStep.label}</h2>
+            <p>
+              These are the records the public graph directly connects to this
+              step. A program may require additional work products.
+            </p>
+          </header>
+          {rmfStep.results.length ? (
+            <ul className="atlas-path-record-list">
+              {rmfStep.results.map((result) => (
+                <li key={`${result.id}:${result.relationshipType}`}>
+                  <button
+                    className="atlas-path-record"
+                    onClick={() => onOpenNode(result.id, "atlas-map")}
+                    type="button"
+                  >
+                    <span className="atlas-path-record-text">
+                      <strong>{result.itemId}</strong>
+                      <small>{result.label}</small>
+                    </span>
+                    <span className="badge tone-applicability">
+                      {displayNameFor("relationship_type", result.relationshipType)}
+                    </span>
+                    <IconChevronRight aria-hidden="true" size={20} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="muted">
+              No direct published result is mapped to this step yet.
+            </p>
+          )}
+          <aside className="atlas-rmf-template-note">
+            <div>
+              <strong>Need a document or work product?</strong>
+              <p>
+                Choose from the Word and Excel templates based on your program,
+                not an invented one-template-per-step rule.
+              </p>
+            </div>
+            <Button
+              variant="secondary"
+              onClick={() => onNavigate("templates")}
+              type="button"
+            >
+              Browse templates
+            </Button>
+          </aside>
         </div>
       ) : null}
     </section>
-  );
-}
-
-function SourceCards(props: {
-  sources: typeof SOURCE_SEED_MANIFEST;
-  onOpen: (sourceId: string) => void;
-}) {
-  if (!props.sources.length) {
-    return <p className="muted">No sources are visible in this step with the current options.</p>;
-  }
-  return (
-    <div className="atlas-source-cards">
-      {props.sources.map((source) => (
-        <article key={source.sourceId}>
-          <p className="eyebrow">{source.publisher}</p>
-          {/* Title is the click target — twenty cards each repeating a
-              "View source details" button and an "Official source" link was
-              forty identical labels on one screen. One quiet external link
-              stays; boilerplate disposition text stays gone (only cautionary
-              dispositions carry information worth a line). */}
-          <h3>
-            <button
-              className="card-title-action"
-              onClick={() => props.onOpen(source.sourceId)}
-              type="button"
-            >
-              {source.displayName}
-            </button>
-          </h3>
-          {source.plainSummary ? (
-            <p>{source.plainSummary}</p>
-          ) : source.disposition === "supporting-reference-only" ||
-            source.disposition === "draft-gated" ||
-            source.disposition === "registry-only" ? (
-            <p>{source.defaultMapReason}</p>
-          ) : null}
-          {source.canonicalUrl !== "registry-local-only" ? (
-            <a
-              className="support-meta"
-              href={source.canonicalUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Official source
-            </a>
-          ) : null}
-        </article>
-      ))}
-    </div>
   );
 }
 
@@ -933,23 +1083,6 @@ function AtlasSelect(props: {
           </option>
         ))}
       </select>
-    </label>
-  );
-}
-
-function SourceFilter(props: {
-  checked: boolean;
-  label: string;
-  onChange: (checked: boolean) => void;
-}) {
-  return (
-    <label>
-      <input
-        checked={props.checked}
-        onChange={(event) => props.onChange(event.target.checked)}
-        type="checkbox"
-      />
-      {props.label}
     </label>
   );
 }

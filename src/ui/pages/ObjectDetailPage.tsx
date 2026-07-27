@@ -659,6 +659,7 @@ export function ObjectDetailPage(props: {
                 filters={relationshipFiltersFromState(state)}
                 heading="Explore"
                 introCopy={`Connections around ${document.item_id}.`}
+                mapControls
                 onFilterChange={(patch) =>
                   onNavigate("library-detail", {
                     node: state.node,
