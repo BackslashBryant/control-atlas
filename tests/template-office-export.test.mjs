@@ -7,7 +7,7 @@ import { strFromU8, unzipSync } from 'fflate';
 import { PDFDocument } from 'pdf-lib';
 import readXlsxFile from 'read-excel-file/node';
 import { buildTemplateDocument } from '../src/app/template-engine.mjs';
-import { docToDocx, docToPdf, docToXlsx, renderOfficeDocument, renderPdfDocument } from '../src/app/office-export.mjs';
+import { docToDocx, docToPdf, docToXlsx, officeDocumentToSheets, renderOfficeDocument, renderPdfDocument } from '../src/app/office-export.mjs';
 
 const dataset = {
   nodes: [
@@ -46,7 +46,56 @@ function isZip(bytes) {
   return bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04;
 }
 
-test('xlsx export is a valid zip with a workbook, a data sheet, and a Notes sheet', () => {
+const spreadsheetTemplateTypes = [
+  'implementation_statement_worksheet',
+  'evidence_expectation_matrix',
+  'stig_evidence_checklist',
+  'inheritance_worksheet',
+  'reciprocity_checklist',
+  'poam_starter',
+  'assessment_planning_worksheet',
+  'conmon_calendar',
+  'hardware_baseline',
+  'software_baseline',
+  'ppsm_preparation_worksheet',
+];
+
+test('every spreadsheet template has one authoritative sheet per logical table and blank working cells', () => {
+  for (const templateType of spreadsheetTemplateTypes) {
+    const doc = buildDoc(templateType);
+    const sheets = officeDocumentToSheets(doc);
+    const tableSections = doc.sections.filter((section) => section.type === 'table');
+    const dataSheets = sheets.filter((sheet) => sheet.kind === 'data');
+
+    assert.equal(sheets[0].name, 'Read Me', `${templateType}: instructions must open first`);
+    assert.equal(sheets.at(-1).name, 'Field Guide', `${templateType}: field guide must remain available`);
+    assert.equal(
+      dataSheets.length,
+      tableSections.length,
+      `${templateType}: logical tables must not be split or duplicated`,
+    );
+    assert.equal(
+      new Set(sheets.map((sheet) => sheet.name.toLowerCase())).size,
+      sheets.length,
+      `${templateType}: worksheet names must be unique`,
+    );
+    for (const sheet of dataSheets) {
+      assert.equal(sheet.rows[0].length, sheet.headers.length, `${templateType}/${sheet.name}: header width`);
+      for (const row of sheet.rows.slice(1)) {
+        assert.equal(row.length, sheet.headers.length, `${templateType}/${sheet.name}: row width`);
+        for (const cell of row) {
+          assert.doesNotMatch(
+            String(cell),
+            /^\[[\s\S]*\]$/,
+            `${templateType}/${sheet.name}: placeholders belong in the field guide, not working rows`,
+          );
+        }
+      }
+    }
+  }
+});
+
+test('xlsx export is a valid zip with instructions, one authoritative register, and a field guide', () => {
   const bytes = docToXlsx(buildDoc('poam_starter'));
   assert.ok(isZip(bytes), 'xlsx must be a ZIP package');
 
@@ -59,6 +108,8 @@ test('xlsx export is a valid zip with a workbook, a data sheet, and a Notes shee
 
   const workbook = strFromU8(entries['xl/workbook.xml']);
   assert.match(workbook, /<sheet /, 'workbook must declare at least one sheet');
+  assert.match(workbook, /<sheet name="Read Me" sheetId="1"/, 'instructions must be the first sheet users see');
+  assert.match(workbook, /<sheet name="POA&amp;M Working Register" sheetId="2"/, 'the working register must remain one authoritative sheet');
   assert.match(workbook, /name="Field Guide"/, 'workbook must include a compact field dictionary');
   assert.match(workbook, /name="Read Me"/, 'workbook must include instructions and provenance');
 
@@ -136,9 +187,7 @@ test('xlsx round-trips through a real spreadsheet reader (Excel-compatible)', as
     // read-excel-file is an independent OOXML parser; a clean parse proves the
     // workbook is genuinely spreadsheet-readable, not just well-formed XML.
     const parsed = await readXlsxFile(file);
-    // This reader returns either a flat rows array (single sheet) or an array of
-    // { sheet, data } objects (multi-sheet); normalize to the first sheet's rows.
-    const rows = Array.isArray(parsed[0]) ? parsed : parsed[0].data;
+    const rows = parsed.find((sheet) => sheet.sheet === 'POA&M Working Register')?.data || [];
     // The POA&M tracker ships 10 intentionally blank rows; readers drop empty
     // rows, so the contract is that the header row survives the round-trip.
     assert.ok(rows.length >= 1, 'reader must recover the header row');
@@ -151,10 +200,10 @@ test('xlsx round-trips through a real spreadsheet reader (Excel-compatible)', as
   }
 });
 
-test('xlsx worksheets set bounded column widths, freeze the header row, and style headers', () => {
+test('xlsx working registers set bounded widths, freeze row and key column, and distinguish editable cells', () => {
   const bytes = docToXlsx(buildDoc('poam_starter'));
   const entries = unzipSync(bytes);
-  const sheet1 = strFromU8(entries['xl/worksheets/sheet1.xml']);
+  const sheet1 = strFromU8(entries['xl/worksheets/sheet2.xml']);
 
   // Per-column widths, declared before sheetData in schema order.
   assert.match(sheet1, /<cols><col min="1" max="1" width="\d+" customWidth="1"\/>/, 'missing <cols> declaration');
@@ -168,12 +217,16 @@ test('xlsx worksheets set bounded column widths, freeze the header row, and styl
   // Frozen top row.
   assert.match(
     sheet1,
-    /<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"\/>/,
-    'header row must be frozen',
+    /<pane xSplit="1" ySplit="1" topLeftCell="B2" activePane="bottomRight" state="frozen"\/>/,
+    'header row and identity column must be frozen',
   );
 
   // Header cells reference the bold + wrapped cellXf (s="1").
   assert.match(sheet1, /<c r="A1" s="1" t="inlineStr">/, 'header cells must use the header style');
+  assert.match(sheet1, /<c r="A2" s="4" t="inlineStr">/, 'blank user-entry cells must use the input style');
+  assert.doesNotMatch(sheet1, /\[Stable external tracking ID\]/, 'instructional placeholders must not masquerade as entered records');
+  const fieldGuide = strFromU8(entries['xl/worksheets/sheet3.xml']);
+  assert.match(fieldGuide, /\[Stable external tracking ID\]/, 'placeholder guidance must remain available once in the field guide');
 
   // Styles part wired through content types and workbook rels.
   const styles = strFromU8(entries['xl/styles.xml']);
@@ -194,22 +247,24 @@ test('xlsx worksheets set bounded column widths, freeze the header row, and styl
   assert.match(workbook, /\$1:\$1/, 'row 1 must be the repeated print title');
 });
 
-test('wide XLSX registers split into print-readable keyed sheets', () => {
+test('wide XLSX registers stay on one source-of-truth sheet', () => {
   const bytes = docToXlsx(buildDoc('poam_starter'));
   const entries = unzipSync(bytes);
   const workbook = strFromU8(entries['xl/workbook.xml']);
   const sheetNames = [...workbook.matchAll(/<sheet name="([^"]+)"/g)].map((match) => match[1]);
-  assert.ok(sheetNames.length >= 5, '27-column POA&M register should split into keyed views plus Read Me');
-
-  const dataSheets = Object.keys(entries)
-    .filter((name) => name.startsWith('xl/worksheets/'))
-    .map((name) => strFromU8(entries[name]))
-    .filter((xml) => /<autoFilter ref=/.test(xml));
-  for (const xml of dataSheets) {
-    const firstRow = xml.match(/<row r="1".*?<\/row>/)?.[0] || '';
-    const columns = [...firstRow.matchAll(/<c r="([A-Z]+)1"/g)].map((match) => match[1]);
-    assert.ok(columns.length <= 8, `print view exposes ${columns.length} columns instead of at most 8`);
-  }
+  assert.deepEqual(
+    sheetNames,
+    ['Read Me', 'POA&amp;M Working Register', 'Field Guide'],
+    'POA&M must not duplicate records across synchronized slice sheets',
+  );
+  const register = strFromU8(entries['xl/worksheets/sheet2.xml']);
+  const firstRow = register.match(/<row r="1".*?<\/row>/)?.[0] || '';
+  assert.equal(
+    [...firstRow.matchAll(/<c r="([A-Z]+)1"/g)].length,
+    27,
+    'all 27 POA&M fields must remain in the canonical working register',
+  );
+  assert.match(register, /<c r="AA1" s="1"/, 'the final POA&M field must remain present');
 });
 
 test('docx tables declare a fixed-width grid and a repeating header row', () => {
@@ -218,13 +273,14 @@ test('docx tables declare a fixed-width grid and a repeating header row', () => 
 
   const tblCount = (document.match(/<w:tbl>/g) || []).length;
   const gridCount = (document.match(/<w:tblGrid>/g) || []).length;
-  const headerCount = (document.match(/<w:trPr><w:tblHeader\/><\/w:trPr>/g) || []).length;
+  const headerCount = (document.match(/<w:tblHeader\/>/g) || []).length;
   assert.ok(tblCount > 0, 'SSP docx must contain tables');
   assert.equal(gridCount, tblCount, 'every table must declare a tblGrid');
   assert.equal(headerCount, tblCount, 'every table must repeat its header row across pages');
 
-  assert.match(document, /<w:tblW w:w="5000" w:type="pct"\/>/, 'tables must span the page width (pct)');
+  assert.match(document, /<w:tblW w:w="9360" w:type="dxa"\/>/, 'tables must use the exact usable page width');
   assert.match(document, /<w:tblLayout w:type="fixed"\/>/, 'tables must use fixed layout');
+  assert.match(document, /<w:cantSplit\/>/, 'table rows must not split across pages');
   assert.match(document, /<w:gridCol w:w="\d+"\/>/, 'grid columns must carry explicit widths');
   assert.match(document, /<w:tcW w:w="\d+" w:type="dxa"\/>/, 'cells must carry explicit widths');
   assert.doesNotMatch(document, /<w:tblW w:w="0" w:type="auto"\/>/, 'auto-width tables clip in Word');
@@ -237,13 +293,21 @@ test('docx tables declare a fixed-width grid and a repeating header row', () => 
 
   assert.match(document, /w:pStyle w:val="Title"/, 'DOCX must use a real title style');
   assert.match(document, /w:pStyle w:val="Heading1"/, 'DOCX must use a heading hierarchy');
+  assert.match(document, /w:pStyle w:val="Heading2"/, 'control records must be navigable as second-level headings');
+  assert.match(document, /w:pStyle w:val="TOC1"/, 'long Word templates must include a static contents map');
+  assert.match(document, /Document Purpose/, 'the contents map must name major document sections');
   assert.doesNotMatch(document, /\*\*/, 'DOCX must not expose markdown emphasis markers');
 
   const entries = unzipSync(bytes);
   assert.ok(entries['word/styles.xml'], 'DOCX must include styles.xml');
   assert.ok(entries['word/numbering.xml'], 'DOCX must include real list numbering');
+  assert.ok(entries['word/settings.xml'], 'DOCX must include Word compatibility settings');
   assert.ok(entries['word/header1.xml'], 'DOCX must include a running header');
   assert.ok(entries['word/footer1.xml'], 'DOCX must include a page-number footer');
+  const settings = strFromU8(entries['word/settings.xml']);
+  assert.match(settings, /w:name="compatibilityMode"/, 'DOCX must declare a modern Word compatibility mode');
+  assert.match(settings, /w:val="15"/, 'DOCX must avoid opening in legacy Compatibility Mode');
+  assert.doesNotMatch(settings, /<w:updateFields/, 'opening the template must not trigger Word field-update warnings');
   assert.match(document, /<w:numPr>/, 'instruction lists must use native Word bullets');
   assert.doesNotMatch(document, /<w:t[^>]*>• /, 'bullet glyphs must not be embedded as body text');
   assert.match(document, /<w:t[^>]*>Response<\/w:t>/, 'pipe-delimited SSP prompts must render as fillable field tables');
@@ -255,7 +319,7 @@ test('xml special characters in cell values are escaped, not injected', () => {
     description: 'x',
     sections: [{ type: 'table', heading: 'T', headers: ['A & B'], rows: [['<script>']] }],
   };
-  const xlsx = strFromU8(unzipSync(docToXlsx(doc))['xl/worksheets/sheet1.xml']);
+  const xlsx = strFromU8(unzipSync(docToXlsx(doc))['xl/worksheets/sheet2.xml']);
   assert.match(xlsx, /A &amp; B/);
   assert.match(xlsx, /&lt;script&gt;/);
   assert.doesNotMatch(xlsx, /<script>/);
