@@ -20,7 +20,9 @@ test("critical path: landing hero and primary entry cards are visible", async ({
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
 
-  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Trace a framework/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Follow the RMF process/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Start with my situation/ })).toBeVisible();
   const shortcuts = page.locator(".landing-shortcut-grid .landing-shortcut");
   // Commons was folded into Build (W4) and no longer has its own nav entry —
   // 6 primary nav items became 5.

@@ -14,7 +14,7 @@ test("brand entrance is immediate and does not interrupt the user", async ({
 }) => {
   await page.goto("/");
   await expect(page.getByRole("dialog", { name: "Control Atlas introduction" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Start here" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Trace a framework/ })).toBeVisible();
   const flourishKeys = page.locator(".landing-hero .brand-key");
   await expect(flourishKeys).toHaveCount(3);
   await expect(flourishKeys.nth(0)).toHaveText("Ctrl");
@@ -382,7 +382,7 @@ test("compare stig chain traces DISA items through CCI to NIST controls", async 
   const itemSelect = page.getByLabel("STIG or SRG item");
   const firstTraceableItem = await itemSelect
     .locator("option")
-    .nth(1)
+    .filter({ hasText: "V-222387" })
     .getAttribute("value");
   expect(firstTraceableItem).toBeTruthy();
   await itemSelect.selectOption(firstTraceableItem || "");

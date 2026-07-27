@@ -95,9 +95,9 @@ test('header overlay search submits to Explore and carries focus to results', as
   await expect(page.locator('#library-results')).toBeFocused({ timeout: 15000 });
 });
 
-// CATL-25: the Atlas route renders a bounded starter cluster quickly; the full
-// 11k-node graph stays behind the route via the staged loader.
-test('Atlas source Path does not request the full graph stack', async ({
+// W2: the ancestry chooser derives its branches from published data, but keeps
+// the heavy interactive relationship graph chunk behind an explicit record Map.
+test('Atlas ancestry chooser derives from data without hydrating the graph UI', async ({
   page,
 }) => {
   test.setTimeout(90_000);
@@ -107,14 +107,16 @@ test('Atlas source Path does not request the full graph stack', async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // Navigate through the preset menu to the framework map
-  await expect(page.getByRole('tablist', { name: 'Novice questions path' })).toBeVisible();
+  // The calm ancestry chooser renders before any graph stack is requested.
+  await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /A framework family tree/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /My situation/ })).toBeVisible();
   await expect(page.locator('.react-flow')).toHaveCount(0);
-  // A bounded focused/starter cluster — proof the route did not hydrate every
-  // node in the catalog on cold load.
-  expect(requests.some((url) => /\/nodes\.json/.test(url))).toBe(false);
-  expect(requests.some((url) => /\/edges\.json/.test(url))).toBe(false);
-  expect(requests.some((url) => /\/evidence\.json/.test(url))).toBe(false);
+  // The chooser uses the published node and edge set instead of a hand-authored
+  // menu. It still avoids the interactive React Flow/ELK graph bundle.
+  expect(requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
+  expect(requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });
 
