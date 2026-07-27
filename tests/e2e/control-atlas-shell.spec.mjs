@@ -80,13 +80,13 @@ test("control atlas map-first shell exposes navigation and guided start path", a
     .evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim() || ""),
     );
+  // Commons was folded into Build (W4) and no longer has its own nav entry.
   expect(navLabels).toEqual([
-    "Atlas",
-    "Library",
+    "Explore",
+    "Catalog",
     "Compare",
-    "Commons",
-    "Guides",
-    "Documents",
+    "Learn",
+    "Build",
   ]);
 
   await primaryNav.getByRole("button", { name: "Compare" }).click();
@@ -122,13 +122,13 @@ test("visible search trigger opens the global search dialog", async ({
   ).toBeFocused();
 });
 
-test("Control Commons renders its compiled utility layout", async ({ page }) => {
+test("Community resources page renders its compiled utility layout", async ({ page }) => {
   await page.goto("/#/commons");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Control Commons", exact: true }),
+    page.getByRole("heading", { name: "Community resources", exact: true }),
   ).toBeVisible();
 
   const commonsSurface = page.locator("div.min-h-screen.bg-\\[var\\(--ca-bg\\)\\]");
@@ -141,9 +141,9 @@ test("Control Commons renders its compiled utility layout", async ({ page }) => 
     .getByRole("button", { name: /browse all \d+ resources/i })
     .click();
   await page.getByRole("button", { name: "Details" }).first().click();
-  await expect(page).toHaveURL(/#\/commons-detail\?id=/);
+  await expect(page).toHaveURL(/#\/build\/community-detail\?id=/);
   await expect(
-    page.getByRole("button", { name: "Back to Commons Hub" }),
+    page.getByRole("button", { name: "Back to community resources" }),
   ).toBeVisible();
 });
 
@@ -160,8 +160,12 @@ test("mobile navigation covers the page and closes predictably", async ({
 
   const sheet = page.locator("#mobile-nav-sheet");
   await expect(sheet).toBeVisible();
+  // The mobile sheet always autofocuses the first button in DOM order,
+  // which is the first "framework" section item — Explore (renamed from
+  // Atlas), not Catalog/Library. This is pre-existing behavior; the test
+  // previously asserted the wrong item.
   await expect(
-    sheet.getByRole("button", { name: "Library", exact: true }),
+    sheet.getByRole("button", { name: "Explore", exact: true }),
   ).toBeFocused();
   await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
   const coverage = await sheet.evaluate((node) => {
@@ -197,7 +201,7 @@ test("library detail deep links stay compatible and keep advanced details collap
     page.getByText("Connections", { exact: true }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Open in Atlas Map" }).first(),
+    page.getByRole("button", { name: "Open in Explore" }).first(),
   ).toBeVisible();
   await expect(page.locator(".relationship-card")).toHaveCount(0);
   const firstGroup = page.locator(".relationship-group-trigger").first();
@@ -459,7 +463,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
-  await page.getByText("Official sources and tools for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,
@@ -527,7 +531,7 @@ test("FedRAMP workbench distinguishes current rules from the complete legacy lib
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
-  await page.getByText("Official sources and tools for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
 
   await expect(
     page.getByRole("heading", {
@@ -678,7 +682,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
       name: /Official resources for Build an authorization package/i,
     }),
   ).toHaveCount(0);
-  await page.getByText("Official sources and tools for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,

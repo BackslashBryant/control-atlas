@@ -41,7 +41,7 @@ export function StickyDetailBar(props: {
       </Button>
       {props.onOpenAtlasMap ? (
         <Button variant="primary" onClick={props.onOpenAtlasMap} type="button">
-          Open in Atlas Map
+          Open in Explore
         </Button>
       ) : null}
       {props.onCompare ? (

@@ -1365,8 +1365,16 @@ details > summary {
   }
 
   .mobile-nav-sheet {
-    inset: 64px var(--ca-space-3) auto;
-    max-height: calc(100dvh - 76px);
+    /* This rule wins the cascade over the equal-specificity `.mobile-nav-sheet`
+       rule in surfaces.css (same file load order), so its sizing is what
+       actually governs. The old `bottom: auto` shrink-wrapped to content
+       height — with 5 nav items post-Commons-fold (W4) that no longer
+       reached the viewport edge the way `max-height: calc(100dvh - 76px)`
+       alone implied. An explicit height (not just top+bottom inset, which
+       measured short on this grid container) guarantees full-page coverage
+       regardless of item count. */
+    inset: 64px var(--ca-space-3) 0;
+    height: calc(100dvh - 64px);
     overflow-y: auto;
   }
 

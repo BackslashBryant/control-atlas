@@ -84,7 +84,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     openExplore();
                   }
                 }}
-                placeholder="Search controls, STIGs, tools, templates, or Commons..."
+                placeholder="Search controls, STIGs, tools, templates, or community resources..."
                 type="search"
                 value={query}
               />
@@ -100,8 +100,8 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
             <p className="field-hint">
-              Type to search records. Press Enter for templates, tools, and
-              official resources in Commons and Explore.
+              Type to search records. Press Enter for full search results,
+              plus templates, tools, and community resources in Build.
             </p>
           ) : results.libraryResults.length === 0 && results.commonsResults.length === 0 ? (
             <p className="field-hint">No records match &quot;{query.trim()}&quot;.</p>
@@ -110,7 +110,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
               {results.commonsResults.length > 0 ? (
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
-                    Control Commons Resources ({results.commonsResults.length})
+                    Community Resources ({results.commonsResults.length})
                   </div>
                   <ul className="search-overlay-results">
                     {results.commonsResults.map((doc) => (
@@ -123,7 +123,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           <span className="search-overlay-result-title flex items-center justify-between">
                             <span>{doc.name}</span>
                             <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
-                              Commons · {doc.resourceLane}
+                              Community · {doc.resourceLane}
                             </span>
                           </span>
                           <span className="search-overlay-result-meta">
@@ -188,10 +188,10 @@ export function SearchOverlay(props: SearchOverlayProps) {
           {query.trim() ? (
             <div className="card-actions flex gap-2">
               <Button variant="secondary" onClick={openExplore} type="button">
-                View all Explore records
+                View all search results
               </Button>
               <Button variant="secondary" onClick={openCommons} type="button">
-                Search in Control Commons
+                Search community resources
               </Button>
             </div>
           ) : null}

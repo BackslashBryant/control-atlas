@@ -39,7 +39,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
         label: "Record",
         scope: state.node || "Record detail",
         back: {
-          label: "Library",
+          label: "Catalog",
           view: "catalog-detail",
           patch: { view: "catalog-detail", catalog },
         },
@@ -51,7 +51,9 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
         mode: "operational",
         label: "Resource",
         scope: state.id || "Resource detail",
-        back: { label: "Commons", view: "commons" },
+        // Commons is folded into Build (no top-nav entry) — back-link reads
+        // "Build" though the internal view key stays "commons".
+        back: { label: "Build", view: "commons" },
       };
     case "not-found":
       return {
@@ -67,20 +69,23 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
         mode: "operational",
         label: "Retired identifier",
         scope: state.query || "Retired identifier",
-        back: { label: "Explore", view: "search" },
+        back: { label: "Search results", view: "search" },
       };
     case "atlas-map":
       return {
         depth: 1,
         mode: "operational",
-        label: "Atlas",
+        // Internal view key stays "atlas-map"; nav label renamed to Explore.
+        label: "Explore",
         scope: state.node || "Choose a source path",
       };
     case "search":
       return {
         depth: 1,
         mode: "operational",
-        label: "Explore",
+        // Renamed from "Explore" so it no longer shares a name with the
+        // atlas-map nav item (see PLAN CHANGE in docs/STATE.md).
+        label: "Search results",
         scope: state.query || "All public records",
       };
     case "catalog-detail":
@@ -88,7 +93,7 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Library",
+        label: "Catalog",
         scope:
           state.view === "catalog-detail"
             ? state.catalog || "All catalogs"
@@ -105,14 +110,14 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Guides",
+        label: "Learn",
         scope: state.pattern || "All guides",
       };
     case "templates":
       return {
         depth: 1,
         mode: "operational",
-        label: "Documents",
+        label: "Build",
         scope: state.templateType || "Choose a document task",
       };
     case "sources":
@@ -133,7 +138,8 @@ export function orbitalRouteContext(state: ViewState): RouteContext {
       return {
         depth: 1,
         mode: "operational",
-        label: "Commons",
+        // Folded into Build (no top-nav entry); internal view key unchanged.
+        label: "Build",
         scope: state.query || state.lane || "All resources",
       };
     case "start-here":

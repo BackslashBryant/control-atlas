@@ -24,9 +24,9 @@ test("load resilience shows library skeleton and allows offline navigation", asy
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Guides", exact: true })
+    .getByRole("button", { name: "Learn", exact: true })
     .click();
-  await expect(page).toHaveURL(/#\/playbooks|view=playbooks/);
+  await expect(page).toHaveURL(/#\/learn|view=playbooks/);
   await expect(
     page.getByRole("heading", { name: "Guides for common compliance jobs" }),
   ).toBeVisible();

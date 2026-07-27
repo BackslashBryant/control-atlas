@@ -51,15 +51,19 @@ const BASE_TITLE = "Control Atlas";
 
 // Per-view suffixes for document.title (CATL-61). Wayfinding + honest browser
 // history/bookmark labels; record pages use the official record name.
+// "atlas-map" -> "Explore" (nav rename); the pre-existing "search"/"browse"
+// view (a distinct, already-shipped full-text results page) is renamed away
+// from its old "Explore" label to "Search results" so the two do not share a
+// name — see PLAN CHANGE in docs/STATE.md.
 const VIEW_TITLE_LABELS: Record<string, string> = {
   "start-here": "Start",
-  "atlas-map": "Atlas Map",
-  search: "Explore",
-  "catalog-detail": "Library",
-  browse: "Explore",
+  "atlas-map": "Explore",
+  search: "Search results",
+  "catalog-detail": "Catalog",
+  browse: "Search results",
   matrix: "Compare",
-  patterns: "Playbooks",
-  templates: "Templates",
+  patterns: "Learn",
+  templates: "Build",
   sources: "Sources",
   about: "About",
   retired: "Retired",

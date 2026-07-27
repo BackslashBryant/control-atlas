@@ -555,7 +555,7 @@ export function ExplorePage(props: {
                                       }
                                       type="button"
                                     >
-                                      Open in Atlas Map
+                                      Open in Explore
                                     </Button>
                                   ) : null}
                                   <Button
@@ -647,7 +647,7 @@ export function ExplorePage(props: {
               <details>
                 <summary>Try another path</summary>
                 <div className="card-actions disclosure-actions">
-                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Atlas Map</Button>
+                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Explore</Button>
                 </div>
               </details>
             </div>

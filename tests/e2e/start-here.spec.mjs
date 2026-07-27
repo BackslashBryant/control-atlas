@@ -36,7 +36,7 @@ test('start here completes the questionnaire with one result and opens the named
   await page.getByText(/Related guides, documents, and comparisons/).click();
 
   await page.getByRole('button', { name: 'Inheritance Worksheet', exact: true }).click();
-  await expect(page).toHaveURL(/#\/templates\?.*templateType=inheritance_worksheet|view=templates&templateType=inheritance_worksheet/);
+  await expect(page).toHaveURL(/#\/build\?.*templateType=inheritance_worksheet|view=templates&templateType=inheritance_worksheet/);
   await expect(
     page.getByRole("heading", { name: "Inheritance Worksheet" }),
   ).toBeVisible();
@@ -72,7 +72,7 @@ test('contractor guidance distinguishes CUI from contractor status', async ({ pa
   await expect(page.getByRole('heading', { name: 'Contractor handling CUI' })).toBeVisible();
   await expect(page.getByText(/confirm the required revision before relying on it/i)).toBeVisible();
   await page.getByRole('button', { name: 'View NIST SP 800-171 Rev. 2' }).click();
-  await expect(page).toHaveURL(/#\/library\/nist-800-171-rev2/);
+  await expect(page).toHaveURL(/#\/catalog\/nist-800-171-rev2/);
   await expect(page.locator('.catalog-facts')).toContainText('111 requirements');
   await expect(page.locator('.catalog-facts')).toContainText('15 families');
 
@@ -97,8 +97,11 @@ test('catalog detail keeps framework context and opens a specific record', async
   await expect(row).toContainText('Limit system access');
   await row.getByRole('button').click();
   await expect(page).toHaveURL(/#\/record\/nist-800-171-rev2\/3.1.1/);
-  await expect(page.getByRole('button', { name: 'Back to Library' })).toBeVisible();
-  await page.getByRole('button', { name: 'Back to Library' }).click();
+  await expect(page.getByRole('button', { name: 'Back to Catalog' })).toBeVisible();
+  await page.getByRole('button', { name: 'Back to Catalog' }).click();
+  // "Back to Catalog" here returns via browser history (returnToOrigin), which
+  // lands on the exact prior URL — the pre-rename /library/ alias this test's
+  // own page.goto() used, not the new canonical /catalog/ path.
   await expect(page).toHaveURL(/#\/library\/nist-800-171-rev2/);
 });
 

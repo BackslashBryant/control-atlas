@@ -120,7 +120,7 @@ export function PlaybooksPage(props: {
     return (
       <Panel>
         <PageHeader
-          eyebrow="Playbooks"
+          eyebrow="Learn"
           summary="Choose the job in front of you. Each guide shows the decision to make, common mistakes, and the records or starter documents to open next."
           title="Guides for common compliance jobs"
         />
@@ -221,7 +221,7 @@ export function PlaybooksPage(props: {
             Back to playbooks
           </Button>
         }
-        eyebrow="Playbooks"
+        eyebrow="Learn"
         summary={selectedPattern.summary}
         title={PATTERN_RENAMES[selectedPattern.id] || selectedPattern.title}
       />

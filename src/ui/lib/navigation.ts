@@ -26,20 +26,23 @@ export type NavSection = {
 
 // Two real, plain-language groups instead of one flat list. "Framework" is
 // every surface that reads the SAME underlying GRC graph (roots > trunk >
-// branches > twigs > leaves), ordered shallow to deep: Atlas is the guided
-// one-subject entry point, Library is the full raw catalog browse, Compare
+// branches > twigs > leaves), ordered shallow to deep: Explore is the guided
+// one-subject entry point, Catalog is the full raw catalog browse, Compare
 // is deep side-by-side analysis. "Toolkit" is what a practitioner reaches
-// for WHILE doing the work — external tools/communities, how-to guides, and
-// downloadable artifacts — not the graph itself.
+// for WHILE doing the work — how-to guides, and downloadable artifacts plus
+// official tools and community resources (folded in from the former Commons
+// surface) — not the graph itself.
 export const FRAMEWORK_SECTION_LABEL = "The framework";
 export const TOOLKIT_SECTION_LABEL = "Practitioner toolkit";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
-  { label: "Atlas", view: "atlas-map", path: "/atlas-map", icon: IconMap, section: "framework" },
+  // Internal view key stays "atlas-map" (W2 will redesign what's behind it);
+  // only the user-facing label and route change.
+  { label: "Explore", view: "atlas-map", path: "/atlas-map", icon: IconMap, section: "framework" },
   {
-    label: "Library",
+    label: "Catalog",
     view: "catalog-detail",
-    path: "/library",
+    path: "/catalog",
     icon: IconLibrary,
     patch: { catalog: "" },
     section: "framework",
@@ -52,23 +55,19 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     section: "framework",
   },
   {
-    label: "Commons",
-    view: "commons",
-    path: "/commons",
-    icon: IconBook2,
-    section: "toolkit",
-  },
-  {
-    label: "Guides",
+    label: "Learn",
     view: "patterns",
-    path: "/playbooks",
+    path: "/learn",
     icon: IconBook2,
     section: "toolkit",
   },
   {
-    label: "Documents",
+    // Commons folded in: starter documents, official artifacts, tools, and
+    // community resources are now all under Build. Internal view key stays
+    // "templates".
+    label: "Build",
     view: "templates",
-    path: "/templates",
+    path: "/build",
     icon: IconClipboardList,
     section: "toolkit",
   },
@@ -123,8 +122,10 @@ export function activeNavForState(state: ViewState): ViewState["view"] | null {
   ) {
     return "catalog-detail";
   }
-  if (state.view === "commons-detail") {
-    return "commons";
+  // Commons is folded into Build (no top nav entry of its own) — being on
+  // either commons view highlights the Build tab instead.
+  if (state.view === "commons" || state.view === "commons-detail") {
+    return "templates";
   }
   return state.view;
 }

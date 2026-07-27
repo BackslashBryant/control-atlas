@@ -11,9 +11,9 @@ test('each route sets an honest, human-readable document.title', async ({ page }
   /** @type {Array<[string, RegExp]>} */
   const cases = [
     ['/#/', /Control Atlas — The public map for federal cyber compliance/],
-    ['/#/atlas-map', /^Atlas Map — Control Atlas$/],
-    ['/#/explore?q=AC-2', /^AC-2 — Explore — Control Atlas$/],
-    ['/#/templates', /^Templates — Control Atlas$/],
+    ['/#/atlas-map', /^Explore — Control Atlas$/],
+    ['/#/explore?q=AC-2', /^AC-2 — Search results — Control Atlas$/],
+    ['/#/templates', /^Build — Control Atlas$/],
     ['/#/compare', /^Compare — Control Atlas$/],
     ['/#/about', /^About — Control Atlas$/],
     ['/#/total-nonsense-xyz', /^Page not found — Control Atlas$/],

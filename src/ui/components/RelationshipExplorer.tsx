@@ -134,7 +134,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
     onFilterChange,
     onViewChange,
     onOpenNode,
-    heading = "Atlas Map",
+    heading = "Explore",
     introCopy,
     listLabel = "List",
     mapControls = false,
