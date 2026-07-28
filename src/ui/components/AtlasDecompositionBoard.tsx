@@ -188,7 +188,7 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
               : `${centerLabel} — ${centerTitle}`}
           </h2>
           <p>
-            {selectedRow?.edge.plain_language_rationale ||
+            {selectedRow?.edge.rationale || selectedRow?.edge.navigation_note ||
               (activeStage
                 ? `Choose a record above to continue the path from it.`
                 : `Pick a stage to see what ${centerLabel} connects to.`)}

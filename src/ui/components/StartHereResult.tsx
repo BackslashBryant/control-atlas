@@ -1,39 +1,22 @@
-import type {
-  StartHereCompareLink,
-  StartHereLibraryLink,
-  StartHereRecommendations,
-} from "../lib/startHereRecommendations.d.ts";
-import type { ViewState } from "../lib/viewState";
-import { Button } from "./lsm/Button";
+import type { StartHereLibraryLink, StartHereRecommendations } from "../lib/startHereRecommendations.d.ts";
 
 type StartHereResultProps = {
   recommendations: StartHereRecommendations;
-  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onFollowLibraryLink: (link: StartHereLibraryLink) => void;
-  onFollowCompareLink: (link: StartHereCompareLink) => void;
   onRestart: () => void;
 };
 
 export function StartHereResult(props: StartHereResultProps) {
   const {
     recommendations,
-    onNavigate,
     onFollowLibraryLink,
-    onFollowCompareLink,
     onRestart,
   } = props;
   const { situation } = recommendations;
-  const primaryRecommendation = recommendations.library[0];
-  const alternativeCount =
-    Math.max(0, recommendations.library.length - 1) +
-    recommendations.compare.length +
-    recommendations.patterns.length +
-    recommendations.templates.length;
-
   return (
     <div className="start-here-result">
       <header className="start-here-result-hero">
-        <p className="eyebrow">Your starting point</p>
+        <p className="eyebrow">Source navigator</p>
         <h1>{situation.pathLabel}</h1>
         <p className="start-here-result-summary">{situation.narrative}</p>
 
@@ -54,23 +37,11 @@ export function StartHereResult(props: StartHereResultProps) {
         ) : null}
       </header>
 
-      {primaryRecommendation ? (
-        <section className="start-here-primary" aria-labelledby="start-here-primary-title">
-          <p className="eyebrow">Recommended next step</p>
-          <h2 id="start-here-primary-title">{primaryRecommendation.label}</h2>
-          <p>{primaryRecommendation.rationale}</p>
-          <Button variant="primary" onClick={() => onFollowLibraryLink(primaryRecommendation)} type="button">
-            View {primaryRecommendation.label}
-          </Button>
-          <p className="field-hint">This is a starting reference, not a compliance or applicability determination.</p>
-        </section>
-      ) : null}
-
-      {alternativeCount ? (
-        <details className="start-here-alternatives">
-          <summary>Related guides, documents, and comparisons ({alternativeCount})</summary>
+      {recommendations.library.length ? (
+        <section className="start-here-alternatives" aria-labelledby="source-catalogs-title">
+          <h2 id="source-catalogs-title">Public sources to browse</h2>
           <div className="start-here-resource-list">
-            {recommendations.library.slice(1).map((link) => (
+            {recommendations.library.map((link) => (
               <ResourceAction
                 key={`${link.kind}-${link.kind === "library-catalog" ? link.catalogId : link.nodeId}`}
                 label={link.label}
@@ -78,17 +49,8 @@ export function StartHereResult(props: StartHereResultProps) {
                 rationale={link.rationale}
               />
             ))}
-            {recommendations.compare.map((link) => (
-              <ResourceAction key={`compare-${link.label}`} label={link.label} onOpen={() => onFollowCompareLink(link)} rationale={link.rationale} />
-            ))}
-            {recommendations.patterns.map((link) => (
-              <ResourceAction key={link.patternId} label={link.label} onOpen={() => onNavigate("patterns", { pattern: link.patternId })} rationale={link.rationale} />
-            ))}
-            {recommendations.templates.map((link) => (
-              <ResourceAction key={link.templateType} label={link.label} onOpen={() => onNavigate("templates", { templateType: link.templateType })} rationale={link.rationale} />
-            ))}
           </div>
-        </details>
+        </section>
       ) : null}
     </div>
   );

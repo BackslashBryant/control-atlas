@@ -510,9 +510,7 @@ export function ExplorePage(props: {
                               </div>
                             </div>
                             <p className="result-summary" id={`desc-${document.id}`}>
-                              {document.plain_language_summary ||
-                                node?.plain_language_summary ||
-                                document.description}
+                              {document.description || "No narrative description was published for this record."}
                             </p>
                             <div className="result-support">
                               <span>

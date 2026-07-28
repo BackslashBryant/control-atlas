@@ -124,25 +124,11 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
       const cciReferences = [...new Set(cciIds(rule))];
       const titleVal = textValue(rule.title);
       const discussionVal = extractSection(description, 'VulnDiscussion') || stripMarkup(description);
-      let plSummary = `STIG Rule: ${titleVal}`;
-      if (!plSummary.endsWith('.')) plSummary += '.';
-      if (discussionVal) {
-        let cleanDisc = discussionVal.split('. ')[0].replace(/^The\s+/i, '');
-        if (cleanDisc.endsWith('.')) {
-          cleanDisc = cleanDisc.slice(0, -1);
-        }
-        plSummary = `STIG Rule: Ensure ${cleanDisc.charAt(0).toLowerCase() + cleanDisc.slice(1)}.`;
-      }
-      if (plSummary.length > 200) {
-        plSummary = plSummary.slice(0, 197) + '...';
-      }
-
       records.push({
         id: vulnId,
         type: catalogKind === 'stig' ? 'stig_rule' : 'srg_requirement',
         title: titleVal,
         description: truncateProse(discussionVal),
-        plain_language_summary: plSummary,
         severity: rule.severity || '',
         rule_id: rule.id || '',
         vuln_id: vulnId,

@@ -150,9 +150,6 @@ export function SearchOverlay(props: SearchOverlayProps) {
                   ) : null}
                   <ul className="search-overlay-results">
                     {results.libraryResults.map((document: any) => {
-                      const missingSummary = !(
-                        document.plain_language_summary || document.description
-                      );
                       return (
                         <li key={document.id}>
                           <button
@@ -169,11 +166,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               {displayNameFor("object_type", document.object_type)}
                             </span>
                             <span className="search-overlay-result-summary">
-                              {document.plain_language_summary ||
-                                document.description ||
-                                (missingSummary
-                                  ? "Plain-language summary missing for this record."
-                                  : "")}
+                              {document.description || "No narrative description was published for this record."}
                             </span>
                           </button>
                         </li>

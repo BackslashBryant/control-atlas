@@ -92,7 +92,7 @@ function viewSequenceEdge(
     provenance_class: "curated_navigation",
     publication_status: "projection",
     confidence: "high",
-    plain_language_rationale: `This guided view moves from ${source.label} to ${target.label}.`,
+    navigation_note: `This guided view moves from ${source.label} to ${target.label}.`,
   };
 }
 
@@ -175,7 +175,7 @@ export function buildTierDrillModel(
     provenance_class: "curated_navigation",
     publication_status: "projection",
     confidence: "high",
-    plain_language_rationale: `${source.displayName} helps answer “${group.label}” in the ${SOURCE_VIEW_DEFINITIONS[sourceView].label.toLowerCase()} view.`,
+    navigation_note: `${source.displayName} helps answer “${group.label}” in the ${SOURCE_VIEW_DEFINITIONS[sourceView].label.toLowerCase()} view.`,
   }));
 
   return {

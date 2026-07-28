@@ -19,17 +19,12 @@ type TableRow = {
       locator?: string;
     }>;
     rationale?: string;
-    plain_language_rationale?: string;
+    navigation_note?: string;
   };
   counterpart: { id: string };
   itemId: string;
   title: string;
 };
-
-function conciseRationale(value?: string) {
-  if (!value) return "No plain-language rationale recorded.";
-  return value.replace(/\s+Review both sides of this .*$/i, "").trim() || value;
-}
 
 export function RelationshipGraphTable(props: {
   rows: TableRow[];
@@ -61,7 +56,7 @@ export function RelationshipGraphTable(props: {
             <th scope="col">Class and direction</th>
             <th scope="col">Source basis</th>
             <th scope="col">Trust level</th>
-            <th scope="col">Why it matters</th>
+            <th scope="col">Relationship explanation</th>
           </tr>
         </thead>
         <tbody>
@@ -114,8 +109,14 @@ export function RelationshipGraphTable(props: {
               <td data-label="Trust level">
                 {displayNameFor("confidence", edge.confidence)}
               </td>
-              <td data-label="Why it matters">
-                {conciseRationale(edge.plain_language_rationale)}
+              <td data-label="Relationship explanation">
+                {edge.rationale ? (
+                  <><strong>Published rationale:</strong> {edge.rationale}</>
+                ) : edge.navigation_note ? (
+                  <><strong>Navigation note:</strong> {edge.navigation_note}</>
+                ) : (
+                  "No published rationale was supplied for this relationship."
+                )}
                 {edge.source_refs?.length ? (
                   <details className="relationship-source-refs">
                     <summary>

@@ -201,8 +201,8 @@ test("high-density task surfaces bound results and name download actions", () =>
   assert.match(comparePage, /View evidence/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
-  assert.match(startHereResult, /Recommended next step/);
-  assert.match(startHereResult, /Related guides, documents, and comparisons/);
+  assert.match(startHereResult, /Source navigator/);
+  assert.match(startHereResult, /Public sources to browse/);
 });
 
 test("compact icon and chip controls retain 44 pixel touch targets", () => {

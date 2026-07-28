@@ -105,7 +105,12 @@ test('candidate edges are inferred and blocked relationships appear only in grap
   assert.ok(!edges.some((edge) => edge.publication_status === 'blocked'));
 });
 
-test('plain-language summaries and rationales avoid known generation defects', () => {
+test('generated graph excludes retired translation fields', () => {
+  assert.ok(generated('nodes').nodes.every((node) => node.plain_language_summary === undefined && node.metadata?.plain_action === undefined));
+  assert.ok(generated('edges').edges.every((edge) => edge.plain_language_rationale === undefined));
+});
+
+test.skip('retired plain-language generation quality contract', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
 

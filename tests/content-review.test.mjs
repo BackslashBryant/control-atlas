@@ -85,7 +85,7 @@ test('pattern advisory copy avoids prohibited compliance or authorization claims
 
 test('Start Here treats mappings and recommendations as references requiring validation', () => {
   const startHere = readFileSync('src/ui/lib/startHereRecommendations.mjs', 'utf8');
-  assert.match(startHere, /candidate overlap/i);
+  assert.match(startHere, /do not determine a classification, baseline, authorization path, or applicability result/i);
   assert.match(startHere, /confirm .*governing program/i);
   for (const claim of DETERMINATION_BOUNDARY) {
     assert.doesNotMatch(startHere, claim, `Start Here contains a determination-like claim: ${claim}`);

@@ -159,34 +159,6 @@ function renderOdpText(text: string): ReactNode {
   return nodes;
 }
 
-function normalizeForCompare(text: string): string {
-  return text.trim().replace(/\s+/g, " ").toLowerCase();
-}
-
-/**
- * A curated/derived plain-language summary is worth showing only when it
- * exists and is meaningfully different from the official description — not
- * merely a whitespace-normalized prefix of it (a sign the summary is just a
- * mechanically truncated copy of the description).
- */
-function isMeaningfullyDifferentSummary(
-  summary: string | undefined | null,
-  description: string | undefined | null,
-): summary is string {
-  if (!summary) return false;
-  const normalizedSummary = normalizeForCompare(summary);
-  const normalizedDescription = normalizeForCompare(description || "");
-  if (!normalizedSummary) return false;
-  if (normalizedSummary === normalizedDescription) return false;
-  if (normalizedDescription.startsWith(normalizedSummary)) return false;
-  if (
-    normalizedSummary.startsWith(normalizedDescription) &&
-    normalizedDescription
-  )
-    return false;
-  return true;
-}
-
 import { Button, Panel } from "../components/lsm";
 
 export function ObjectDetailPage(props: {
@@ -310,14 +282,6 @@ export function ObjectDetailPage(props: {
     baseItemId && node?.metadata?.catalog_id
       ? bundle.runtime.getNode(`${node.metadata.catalog_id}:${baseItemId}`)
       : null;
-
-  const rawSummary: string | undefined =
-    node?.plain_language_summary || document?.plain_language_summary;
-  const showSummary = isMeaningfullyDifferentSummary(
-    rawSummary,
-    document?.description,
-  );
-  const plainAction: string | undefined = node?.metadata?.plain_action;
 
   if (!node) {
     return (
@@ -538,20 +502,14 @@ export function ObjectDetailPage(props: {
 
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard title="What this is" tone="trust">
-            {showSummary ? <p>{rawSummary}</p> : null}
-            {plainAction ? (
-              <p>
-                <strong>What to do:</strong> {plainAction}
-              </p>
-            ) : null}
-            {!showSummary && !plainAction ? (
-              <p>{document.description}</p>
-            ) : null}
+          <SummaryCard title="Official description" tone="trust">
+            <p className="support-meta">
+              Source excerpt from {source?.display_name || source?.name || "the published source"}
+            </p>
             <p>
-              <strong>Why it matters:</strong> Use the published record and
-              source links to understand the requirement before deciding how it
-              applies to your work.
+              {document.description
+                ? renderOdpText(document.description)
+                : "No narrative description was published for this record."}
             </p>
           </SummaryCard>
           <WhereThisSitsRail
@@ -798,7 +756,7 @@ export function ObjectDetailPage(props: {
             </div>
           </SummaryCard>
 
-          <SummaryCard title="What to do next">
+          <SummaryCard title="Browse related records">
             <div className="stack compact">
               {node.node_type === "attack_technique" ? (
                 <button

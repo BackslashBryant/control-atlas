@@ -358,10 +358,8 @@ test("epic 2 graph build emits sharded library search artifacts with filter face
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");
-  assert.ok(
-    ac2.plain_language_summary?.trim(),
-    "AC-2 library document must include plain_language_summary",
-  );
+  assert.ok(ac2.description?.trim(), "AC-2 library document must retain its official description");
+  assert.equal(ac2.plain_language_summary, undefined);
 });
 
 test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
@@ -566,35 +564,8 @@ test("graph build derives structural control-enhancement edges with derived conf
   );
 });
 
-test("graph build merges curated plain-language entries onto matching 800-53 nodes", () => {
-  const curatedPath = "data/curated/plain-language/controls-800-53.json";
-  if (!existsSync(curatedPath)) {
-    // Task 5's curated data file is authored by another workstream; treat its
-    // absence as a no-op per the merge hook contract rather than failing here.
-    return;
-  }
-  const curated = JSON.parse(readFileSync(curatedPath, "utf8"));
-  const curatedControlId = Object.keys(curated.entries || {})[0];
-  if (!curatedControlId) return;
-
+test("graph build removes the retired curated translation path", () => {
+  assert.equal(existsSync("data/curated/plain-language/controls-800-53.json"), false);
   const nodes = generated("nodes").nodes;
-  const node = nodes.find((n) => n.id === `nist-800-53:${curatedControlId}`);
-  assert.ok(node, `expected node for curated control ${curatedControlId}`);
-
-  const entry = curated.entries[curatedControlId];
-  assert.equal(node.plain_language_summary, entry.plain_language_summary);
-  if (entry.plain_action) {
-    assert.equal(node.metadata.plain_action, entry.plain_action);
-  }
-
-  // A control absent from the curated file must not receive a plain_action.
-  const uncuratedNode = nodes.find(
-    (n) =>
-      n.metadata?.catalog_id === "nist-800-53" &&
-      n.node_type === "control" &&
-      !(n.metadata.item_id in (curated.entries || {})),
-  );
-  if (uncuratedNode) {
-    assert.equal(uncuratedNode.metadata.plain_action, undefined);
-  }
+  assert.ok(nodes.every((node) => node.plain_language_summary === undefined && node.metadata?.plain_action === undefined));
 });

@@ -263,13 +263,12 @@ test('landing page states what the product is before asking for action', () => {
   assert.doesNotMatch(homePage, /source-backed/i);
 });
 
-test('record detail explains the record before exposing position and relationship counts', () => {
+test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
   const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
-  const meaning = detailPage.indexOf('title="What this is"');
-  const why = detailPage.indexOf('Why it matters:');
-  const position = detailPage.indexOf('<WhereThisSitsRail');
-  const connections = detailPage.indexOf('aria-label="Relationship classes"');
-  assert.ok(meaning >= 0 && why > meaning && position > why && connections > position);
+  const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
+  assert.match(detailPage, /Official description/);
+  assert.match(surfaces, /No narrative description was published for this record/);
+  assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
 });
 
 test('Build local navigation stays subordinate and identifies the current Build branch', () => {
@@ -318,15 +317,11 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 
-test('playbooks use task-first guidance instead of generic feature copy', () => {
+test('public playbooks are quarantined until source-registry provenance exists', () => {
   const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
   assert.doesNotMatch(playbooksPage, /Use task-focused guidance/);
-  assert.match(playbooksPage, /summary=\{selectedPattern\.summary\}/);
-  assert.match(playbooksPage, /title="Use this when"/);
-  assert.match(playbooksPage, /title="What to do"/);
-  assert.match(playbooksPage, /title="What to avoid"/);
-  assert.match(playbooksPage, /title="Limits of this guide"/);
-  assert.match(playbooksPage, /No playbooks match this search and category/);
+  assert.match(playbooksPage, /No public playbooks are available yet/);
+  assert.match(playbooksPage, /source-registry IDs and canonical public source URLs/);
   assert.match(playbooksPage, /Clear filters/);
   assert.match(playbooksPage, /displayNameFor\("template_type", templateId\)/);
 });

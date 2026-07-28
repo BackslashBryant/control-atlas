@@ -169,7 +169,7 @@ export function filterAtlasEdges(
     if (!needle) return true;
     const itemId = counterpart?.metadata?.item_id || counterpart?.id || "";
     const title = counterpart?.metadata?.title || counterpart?.label || "";
-    return [itemId, title, edge.plain_language_rationale || ""]
+    return [itemId, title, edge.rationale || "", edge.navigation_note || ""]
       .join(" ")
       .toLowerCase()
       .includes(needle);
