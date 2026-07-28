@@ -20,7 +20,7 @@ const MENU_CARDS = [
   {
     title: "Search",
     body: "Find a control, CCI, baseline, STIG, or term with plain-language context.",
-    actionLabel: "Search results",
+    actionLabel: "Search",
     icon: IconSearch,
     view: "search" as const,
   },

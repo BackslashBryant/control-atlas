@@ -7,7 +7,7 @@ import {
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
-  await page.goto("/#/atlas-map");
+  await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 });
@@ -38,7 +38,7 @@ test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {
   await page.getByRole("searchbox", { name: "Search Atlas" }).fill("account");
   await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
 
-  await expect(page).toHaveURL(/\/explore\?q=account/);
+  await expect(page).toHaveURL(/\/search\?q=account/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Search everything in one place",
   );
@@ -51,7 +51,7 @@ test("no-match Atlas search stays local with announced recovery actions", async 
   await page.getByRole("searchbox", { name: "Search Atlas" }).fill(query);
   await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
 
-  await expect(page).toHaveURL(/\/atlas-map/);
+  await expect(page).toHaveURL(/\/explore/);
   await expect(
     page.getByText(`No Atlas record matches ${query}.`, { exact: true }),
   ).toBeVisible();
@@ -65,7 +65,7 @@ test("no-match Atlas search stays local with announced recovery actions", async 
 test("focused Atlas exposes explicit lenses and class-direction List semantics", async ({
   page,
 }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
 
   await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);

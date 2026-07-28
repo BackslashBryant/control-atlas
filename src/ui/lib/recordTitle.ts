@@ -7,6 +7,7 @@
  */
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { routeIdentityFor } from "./routeIdentity";
 
 type TitledNode = {
   id: string;
@@ -55,24 +56,10 @@ const BASE_TITLE = "Control Atlas";
 // view (a distinct, already-shipped full-text results page) is renamed away
 // from its old "Explore" label to "Search results" so the two do not share a
 // name — see PLAN CHANGE in docs/STATE.md.
-const VIEW_TITLE_LABELS: Record<string, string> = {
-  "start-here": "Start",
-  "atlas-map": "Explore",
-  search: "Search results",
-  "catalog-detail": "Catalog",
-  browse: "Search results",
-  matrix: "Compare",
-  patterns: "Learn",
-  templates: "Build",
-  sources: "Sources",
-  about: "About",
-  retired: "Retired",
-  "not-found": "Page not found",
-};
-
 export function routeDocumentTitle(
   state: { view: string; node?: string; query?: string },
   node?: TitledNode | null,
+  entityName = "",
 ): string {
   if (state.view === "home") {
     return `${BASE_TITLE} — The public map for federal cyber compliance`;
@@ -81,10 +68,10 @@ export function routeDocumentTitle(
     const recordName = recordDisplayTitle(node) || "Record";
     return `${recordName} — ${BASE_TITLE}`;
   }
-  const base = VIEW_TITLE_LABELS[state.view];
-  if (!base) {
-    return BASE_TITLE;
+  if (state.view === "commons-detail") {
+    return `${entityName || routeIdentityFor("commons-detail").title} â€” ${BASE_TITLE}`;
   }
+  const base = routeIdentityFor(state.view as import("./viewState").AppView).title;
   const label =
     (state.view === "search" || state.view === "browse") && state.query
       ? `${state.query} — ${base}`

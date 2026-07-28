@@ -13,7 +13,7 @@ test("framework choices survive refresh and the rail steps back one generation",
   page,
 }) => {
   await page.goto(
-    "/#/atlas-map?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
+    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -46,7 +46,7 @@ test("family filtering is local and an empty result explains itself", async ({
   page,
 }) => {
   await page.goto(
-    "/#/atlas-map?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
+    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);

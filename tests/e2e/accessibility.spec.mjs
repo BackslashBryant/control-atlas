@@ -39,31 +39,31 @@ const ROUTES = [
     label: "record detail",
     path: "/#/record/nist-800-53/AC-2",
   },
-  { label: "commons", path: "/#/commons" },
+  { label: "resources", path: "/#/build/resources" },
   // Deep card grid (opened via a lane) is where badge/tag contrast lives.
-  { label: "commons resources", path: "/#/commons?lane=official" },
+  { label: "resources directory", path: "/#/build/resources?lane=official" },
   {
-    label: "commons detail",
-    path: "/#/commons-detail?id=official-nist-sp800-53-r5",
+    label: "resource detail",
+    path: "/#/build/resources/official-nist-sp800-53-r5",
   },
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },
-  { label: "atlas map", path: "/?view=atlas-map" },
+  { label: "explore", path: "/#/explore" },
   {
     label: "focused Atlas Purpose",
-    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=purpose",
+    path: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=purpose",
   },
   {
     label: "focused Atlas Map",
-    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=map",
+    path: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
   },
   {
     label: "focused Atlas List",
-    path: "/?view=atlas-map&node=nist-800-53%3AAC-2&relationshipView=list",
+    path: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
   },
   {
     label: "Atlas zero connections",
-    path: "/?view=atlas-map&node=csf-2%3ADE.AE-01&relationshipView=map",
+    path: "/#/explore?node=csf-2%3ADE.AE-01&relationshipView=map",
   },
   { label: "explore search", path: "/?view=explore&q=AC-2" },
   {

@@ -1214,7 +1214,7 @@ export function TemplatesPage(props: {
             ) : null}
           </section>
           <details className="workflow-reference">
-            <summary>Official sources, tools, and community resources for this task</summary>
+            <summary>Official sources, tools, and resources for this task</summary>
             <div className="stack disclosure-content">
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
@@ -1321,7 +1321,7 @@ export function TemplatesPage(props: {
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">Ask people who have done this</p>
-                <h2 id="community-heading">Community resources</h2>
+                <h2 id="community-heading">Resources</h2>
                 <p className="page-summary">
                   Official-adjacent references, communities, and training —
                   folded in here from the former Commons surface — organized
@@ -1331,7 +1331,7 @@ export function TemplatesPage(props: {
             </div>
             {communityResourceGroups.length === 0 ? (
               <div className="notice" role="status">
-                <p>No community resources are loaded yet.</p>
+                <p>No resources are loaded yet.</p>
               </div>
             ) : (
               <>
@@ -1368,7 +1368,7 @@ export function TemplatesPage(props: {
                   className="nexus-show-more"
                   onClick={() => onNavigate("commons", {})}
                 >
-                  Browse all {communityResources.length} community resources
+                  Browse all {communityResources.length} resources
                 </Button>
               </>
             )}

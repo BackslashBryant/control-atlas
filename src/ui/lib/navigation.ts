@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 
 import type { ViewState } from "./viewState";
+import { routeIdentityFor } from "./routeIdentity";
 
 export type NavItem = {
   label: string;
@@ -37,26 +38,26 @@ export const TOOLKIT_SECTION_LABEL = "Practitioner toolkit";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   // Internal view key stays "atlas-map"; the user-facing route is Explore.
-  { label: "Explore", view: "atlas-map", path: "/atlas-map", icon: IconMap, section: "framework" },
+  { label: routeIdentityFor("atlas-map").label, view: "atlas-map", path: routeIdentityFor("atlas-map").path, icon: IconMap, section: "framework" },
   {
-    label: "Catalog",
+    label: routeIdentityFor("catalog-detail").label,
     view: "catalog-detail",
-    path: "/catalog",
+    path: routeIdentityFor("catalog-detail").path,
     icon: IconLibrary,
     patch: { catalog: "" },
     section: "framework",
   },
   {
-    label: "Compare",
+    label: routeIdentityFor("matrix").label,
     view: "matrix",
-    path: "/compare",
+    path: routeIdentityFor("matrix").path,
     icon: IconGitCompare,
     section: "framework",
   },
   {
-    label: "Learn",
+    label: routeIdentityFor("patterns").label,
     view: "patterns",
-    path: "/learn",
+    path: routeIdentityFor("patterns").path,
     icon: IconBook2,
     section: "toolkit",
   },
@@ -64,9 +65,9 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     // Commons folded in: starter documents, official artifacts, tools, and
     // community resources are now all under Build. Internal view key stays
     // "templates".
-    label: "Build",
+    label: routeIdentityFor("templates").label,
     view: "templates",
-    path: "/build",
+    path: routeIdentityFor("templates").path,
     icon: IconClipboardList,
     section: "toolkit",
   },
@@ -74,16 +75,16 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
 
 export const UTILITY_NAV_ITEMS: NavItem[] = [
   {
-    label: "Start here",
+    label: routeIdentityFor("start-here").label,
     view: "start-here",
-    path: "/start",
+    path: routeIdentityFor("start-here").path,
     icon: IconCompass,
     section: "utility",
   },
   {
-    label: "Sources",
+    label: routeIdentityFor("sources").label,
     view: "sources",
-    path: "/sources",
+    path: routeIdentityFor("sources").path,
     icon: IconSourceCode,
     section: "utility",
   },

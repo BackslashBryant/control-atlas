@@ -118,7 +118,7 @@ test('header search surfaces glossary results from any page', async ({ page }) =
   await page.getByLabel('Search records and glossary').fill('reciprocity');
   await page.getByLabel('Search records and glossary').press('Enter');
 
-  await expect(page).toHaveURL(/#\/explore\?.*q=reciprocity|view=explore&q=reciprocity/);
+  await expect(page).toHaveURL(/#\/search\?.*q=reciprocity/);
   await expect(page.getByRole('button', { name: /^Glossary \(\d+\)$/ })).toBeVisible();
   await expect(page.locator('.result-card .card-title-action').first()).toBeVisible();
 });

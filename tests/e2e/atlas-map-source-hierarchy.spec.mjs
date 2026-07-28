@@ -35,7 +35,7 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/atlas-map");
+    await page.goto("/#/explore");
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
@@ -115,7 +115,7 @@ for (const viewport of VIEWPORTS) {
 test("Atlas root offers three plain entry axes without a canvas", async ({
   page,
 }) => {
-  await page.goto("/#/atlas-map");
+  await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -128,7 +128,7 @@ test("Atlas root offers three plain entry axes without a canvas", async ({
 });
 
 test("a legacy RMF route recovers into the process branch", async ({ page }) => {
-  await page.goto("/#/atlas-map?sourceView=rmf");
+  await page.goto("/#/explore?sourceView=rmf");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

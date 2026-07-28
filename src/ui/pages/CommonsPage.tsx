@@ -355,7 +355,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 Part of Build
               </div>
               <h1 className="text-3xl font-bold tracking-tight text-[var(--ca-text)] sm:text-4xl">
-                Community resources
+                Resources
               </h1>
               <p className="text-lg font-medium text-[var(--ca-primary)] mt-1">
                 Official sources. Working tools. Practitioner knowledge.
@@ -419,7 +419,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
       {/* Main Surface */}
       <section
-        aria-label="Community resources"
+        aria-label="Resources"
         className="ca-content-container px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Parallel Discovery Lanes — reuses the shared underline Tabs idiom

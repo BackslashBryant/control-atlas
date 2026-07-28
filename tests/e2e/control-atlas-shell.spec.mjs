@@ -123,13 +123,13 @@ test("visible search trigger opens the global search dialog", async ({
   ).toBeFocused();
 });
 
-test("Community resources page renders its compiled utility layout", async ({ page }) => {
-  await page.goto("/#/commons");
+test("Resources page renders its compiled utility layout", async ({ page }) => {
+  await page.goto("/#/build/resources");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Community resources", exact: true }),
+    page.getByRole("heading", { name: "Resources", exact: true }),
   ).toBeVisible();
 
   const commonsSurface = page.locator("div.min-h-screen.bg-\\[var\\(--ca-bg\\)\\]");
@@ -142,9 +142,9 @@ test("Community resources page renders its compiled utility layout", async ({ pa
     .getByRole("button", { name: /browse all \d+ resources/i })
     .click();
   await page.getByRole("button", { name: "Details" }).first().click();
-  await expect(page).toHaveURL(/#\/build\/community-detail\?id=/);
+  await expect(page).toHaveURL(/#\/build\/resources\//);
   await expect(
-    page.getByRole("button", { name: "Back to community resources" }),
+    page.getByRole("button", { name: "Back to Resources" }),
   ).toBeVisible();
 });
 
@@ -475,7 +475,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
-  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and resources for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,
@@ -543,7 +543,7 @@ test("FedRAMP workbench distinguishes current rules from the complete legacy lib
   await page
     .getByRole("button", { name: /Build an authorization package/i })
     .click();
-  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and resources for this task", { exact: true }).click();
 
   await expect(
     page.getByRole("heading", {
@@ -578,7 +578,7 @@ test("legacy view query redirects to hash route on boot", async ({ page }) => {
   await page.goto("/?view=atlas-map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page).toHaveURL(/#\/atlas-map/);
+  await expect(page).toHaveURL(/#\/explore/);
   await expect(
     page
       .locator("main")
@@ -595,7 +595,7 @@ test("hash deep route survives refresh on built site", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
-    page.getByRole("heading", { name: "Search everything in one place" }),
+    page.getByRole("heading", { name: "Control Atlas" }),
   ).toBeVisible();
   await page.reload();
   // Mirror the pre-reload order: wait for the app to finish booting (the
@@ -606,7 +606,7 @@ test("hash deep route survives refresh on built site", async ({ page }) => {
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/explore/);
   await expect(
-    page.getByRole("heading", { name: "Search everything in one place" }),
+    page.getByRole("heading", { name: "Control Atlas" }),
   ).toBeVisible({
     timeout: 15000,
   });
@@ -694,7 +694,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
       name: /Official resources for Build an authorization package/i,
     }),
   ).toHaveCount(0);
-  await page.getByText("Official sources, tools, and community resources for this task", { exact: true }).click();
+  await page.getByText("Official sources, tools, and resources for this task", { exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /Official resources for Build an authorization package/i,

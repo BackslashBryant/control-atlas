@@ -1,7 +1,7 @@
 # Control Atlas prioritized correction backlog
 
 Date: 2026-07-27  
-Status: Approved correction program; Epic 1 complete locally  
+Status: Approved correction program; Epics 1-2 complete locally
 Audit: [Current-state audit](../audits/control-atlas-current-state-audit-2026-07-27.md)  
 Specification: [Correction specification](control-atlas-correction-spec-2026-07-27.md)
 
@@ -93,6 +93,14 @@ performed.
 
 Priority: P0/P1  
 Risk: Medium, because compatibility mistakes can break saved links.
+
+**Status (2026-07-27): Complete locally.** Features 2.1-2.3 and milestone M2
+passed route-matrix, browser-contract, static build, accessibility-smoke, and
+navigation-smoke verification. `/explore`, `/search`, and `/build/resources`
+are canonical; legacy paths replace to their canonical destinations while
+preserving valid state. Compatibility aliases are owned by Control Atlas
+maintainers and retained through 2026-10-27 pending deployed deep-link smoke.
+No push, merge, deploy, tag, or release was performed.
 
 ### Feature 2.1 — Canonicalize Explore and Search
 

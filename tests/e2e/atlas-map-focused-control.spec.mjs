@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("focused Atlas opens structural position before explicit relationship lenses", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -34,7 +34,7 @@ test("focused Atlas opens structural position before explicit relationship lense
 });
 
 test("choosing a relationship lens shows only that lens and can continue from a record", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -47,7 +47,7 @@ test("choosing a relationship lens shows only that lens and can continue from a 
 });
 
 test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -63,7 +63,7 @@ test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
 });
 
 test("focused Map is absolutely bounded and restores focus after collapse", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -81,7 +81,7 @@ test("focused Map is absolutely bounded and restores focus after collapse", asyn
 });
 
 test("selecting a Map item reveals its real record brief without leaving Atlas", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-1&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-1&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -114,7 +114,7 @@ test("selecting a Map item reveals its real record brief without leaving Atlas",
 });
 
 test("List uses the same published set and exposes traceable source references", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=list");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=list");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -127,7 +127,7 @@ test("List uses the same published set and exposes traceable source references",
 });
 
 test("zero-published-edge records render an honest empty state instead of Map", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=disa-cci%3ACCI-000220&relationshipView=map");
+  await page.goto("/#/explore?node=disa-cci%3ACCI-000220&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -137,7 +137,7 @@ test("zero-published-edge records render an honest empty state instead of Map", 
 });
 
 test("a sparse STIG still offers all seven lenses and its real implementation connection", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=disa-stig%3AV-222387");
+  await page.goto("/#/explore?node=disa-stig%3AV-222387");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -154,7 +154,7 @@ test("a sparse STIG still offers all seven lenses and its real implementation co
 
 test("compact Map expands to no more than seven visible nodes", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -176,7 +176,7 @@ test("compact Map expands to no more than seven visible nodes", async ({ page })
 
 test("compact Path stacks its stage choices and keeps the selected path below them", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

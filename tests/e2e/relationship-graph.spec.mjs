@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Atlas standalone route exposes Path, bounded Map, and List", async ({ page }) => {
-  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -24,7 +24,7 @@ test("Atlas standalone route exposes Path, bounded Map, and List", async ({ page
 });
 
 test("Atlas default route is the guided ancestry path, not an empty graph", async ({ page }) => {
-  await page.goto("/?view=atlas-map");
+  await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -74,6 +74,6 @@ test("record detail opens the same record in the new Atlas", async ({ page }) =>
   await dismissOnboarding(page);
 
   await page.getByRole("button", { name: "Open in Explore" }).first().click();
-  await expect(page).toHaveURL(/atlas-map/);
+  await expect(page).toHaveURL(/#\/explore/);
   await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
 });

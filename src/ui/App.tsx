@@ -39,7 +39,8 @@ import {
 } from "./lib/navigation";
 import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
-import { routeDocumentTitle } from "./lib/recordTitle";
+import { canonicalizeHashLocation } from "./lib/routeIdentity";
+import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
 
 const AboutPage = lazy(() =>
   import("./pages/AboutPage").then((module) => ({
@@ -107,6 +108,10 @@ const CommonsDetailPage = lazy(() =>
   })),
 );
 
+// A replace redirect can remount the route shell. Keep its recovery notice
+// through that one transition so discarded invalid link settings are visible.
+let pendingRouteRecovery = "";
+
 export function App() {
   const location = useLocation();
   const routerNavigate = useNavigate();
@@ -130,6 +135,7 @@ export function App() {
   );
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
+  const [routeRecovery, setRouteRecovery] = useState("");
 
   function requestFullGraph() {
     setGraphRequested((current) => (current ? current : true));
@@ -222,25 +228,47 @@ export function App() {
   }
 
   useEffect(() => {
+    const canonical = canonicalizeHashLocation(`${location.pathname}${location.search}`);
+    if (canonical.recoveryMessage) {
+      pendingRouteRecovery = canonical.recoveryMessage;
+    }
+    if (canonical.requiresReplace) {
+      routerNavigate(canonical.canonicalPath, { replace: true });
+      return;
+    }
+    setRouteRecovery(pendingRouteRecovery);
+    pendingRouteRecovery = "";
     const parsed = parseHashLocation(location.pathname, location.search);
     latestNavStateRef.current = parsed;
     startTransition(() => {
       setViewState(parsed);
     });
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.search, routerNavigate]);
 
   // Per-route document.title (CATL-61): honest browser-history/bookmark labels,
   // with record pages resolving to the official record name once the graph is
   // loaded.
-  useEffect(() => {
+  const routeEntityName = (() => {
     const node =
       viewState.view === "library-detail" &&
       viewState.node &&
       bundle?.graphReady
         ? bundle.runtime.getNode(viewState.node)
         : null;
-    document.title = routeDocumentTitle(viewState, node);
-  }, [viewState, bundle]);
+    if (node) return recordDisplayTitle(node);
+    if (viewState.view === "commons-detail") {
+      return bundle?.commonsDataset?.resources.find((resource) => resource.id === viewState.id)?.name || "";
+    }
+    return "";
+  })();
+
+  useEffect(() => {
+    const node =
+      viewState.view === "library-detail" && viewState.node && bundle?.graphReady
+        ? bundle.runtime.getNode(viewState.node)
+        : null;
+    document.title = routeDocumentTitle(viewState, node, routeEntityName);
+  }, [viewState, bundle, routeEntityName]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -321,7 +349,7 @@ export function App() {
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const showWorkspaceContent =
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
-  const routeContext = orbitalRouteContext(viewState);
+  const routeContext = orbitalRouteContext(viewState, routeEntityName);
 
   return (
     <>
@@ -337,9 +365,12 @@ export function App() {
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}
       />
-      <OrbitalContextBar onNavigate={navigate} state={viewState} />
+      <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} />
 
       <main id="workspace">
+        {routeRecovery ? (
+          <p className="route-recovery" role="status">{routeRecovery}</p>
+        ) : null}
         <section
           aria-busy={readyState === "false"}
           aria-live="polite"

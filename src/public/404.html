@@ -9,8 +9,8 @@
   <script>
       (function () {
         // GitHub Pages has no server-side routing. For this HashRouter SPA we
-        // rewrite a hard-typed path URL (…/atlas-map) into its hash form
-        // (…/#/atlas-map) so the app boots on the right view (CATL-62).
+        // Rewrite a hard-typed path URL into its hash form so the route
+        // resolver can canonicalize it after the app boots (CATL-62).
         var l = window.location;
         var segments = l.pathname.split("/").filter(Boolean);
         // Project pages (user.github.io/repo/…) keep the repo segment as the
