@@ -66,6 +66,11 @@ requires its fresh remote artifact.
 - Promote `v1.0.0` after RC feedback
 - Run the staged ingestion/search experiments in [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no listed tool is approved as a v1.0 dependency
 - Run the post-v1 UI/performance/copy/data strengthening sequence in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md), beginning with Playwright golden routes, Lighthouse CI, and a project-owned Vale style
-- Dependabot PR review (Nexus)
+- Dependabot review is complete locally: accepted the current workflow updates
+  and `@playwright/test`, `@types/node`, `globals`, `fast-xml-parser`, and
+  `pdf-parse` updates (with a tested v2 importer migration). PR #1 is
+  superseded because its requested CycloneDX version is already below the
+  current v5 dependency; close all reviewed PRs after the final branch is
+  published.
 - Source real crosswalks for DoD RAI, ATT&CK ICS, AI RMF, SSDF, SP 800-172, and remaining sparse catalogs; never infer them merely to raise coverage. The v1.0.1 audit found no reproducibly extractable official direct mapping for these catalogs in the current source artifacts, so none was invented or promoted.
 - The 11 `graph-health.json` findings now have exact, machine-checked upstream provenance in [`data/graph-health-provenance.json`](../../data/graph-health-provenance.json). Nine NIST OLIR draft entries use family/category-level identifiers; two DoD ZT overlay entries use invalid control IDs. All remain blocked from displayable edges.
