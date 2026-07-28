@@ -19,6 +19,7 @@ import type { ViewState } from "../lib/viewState";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { CommonsLaneBadge } from "../components/CommonsLaneBadge";
 import { serializeHashLocation } from "../lib/hashRoutes";
+import { PRIMARY_BROWSE_CATEGORIES, primaryBrowseCategory } from "../lib/resourcesDirectory.mjs";
 
 type CommonsDetailPageProps = {
   bundle: RuntimeBundle | null;
@@ -109,7 +110,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
       </div>
 
       <section
-        aria-label="Community resource detail"
+        aria-label="Resource detail"
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Header Block */}
@@ -272,6 +273,11 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text-muted)] border-b border-[var(--ca-border)] pb-2">
                 Metadata & Access
               </h3>
+
+              <div>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Browse Category</span>
+                <span className="font-semibold text-[var(--ca-text)]">{PRIMARY_BROWSE_CATEGORIES.find((category) => category.id === primaryBrowseCategory(resource))?.label}</span>
+              </div>
 
               <div>
                 <span className="text-[var(--ca-secondary)] block mb-0.5">Resource Lane</span>

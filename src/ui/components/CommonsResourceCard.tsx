@@ -15,6 +15,7 @@ import type { CommonsResource } from "../lib/commonsTypes";
 import { hostIdentity } from "../lib/commonsPresentation.mjs";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { CommonsLaneBadge, commonsLaneLabel } from "./CommonsLaneBadge";
+import { PRIMARY_BROWSE_CATEGORIES, primaryBrowseCategory } from "../lib/resourcesDirectory.mjs";
 
 type CommonsResourceCardProps = {
   resource: CommonsResource;
@@ -107,6 +108,9 @@ export function CommonsResourceCard({
 
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <CommonsLaneBadge lane={resource.resourceLane} />
+          <span className="commons-neutral-badge">
+            {PRIMARY_BROWSE_CATEGORIES.find((category) => category.id === primaryBrowseCategory(resource))?.label}
+          </span>
 
           {visibleBadges.slice(1).map((b, idx) => (
             <span

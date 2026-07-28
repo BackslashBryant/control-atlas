@@ -79,7 +79,12 @@ const ATLAS_PARAMS = new Set([
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
 const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "costType", "resourceType", "platform", "format", "collection", "selectedId"]);
+const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "costType", "resourceType", "platform", "format", "collection", "category", "selectedId"]);
+const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
+  category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
+  lifecycle: ["Implement", "Assess"],
+  resourceType: ["catalog", "community_forum", "dataset", "documentation", "historical_reference", "instruction", "matrix", "policy", "specification", "template", "tool", "training"],
+};
 const DETAIL_PARAMS = new Set(["from", "returnTo", "relationshipView", "relationshipType", "provenance", "confidence", "nodeType", "includeCandidates", "relationshipSearch"]);
 const START_PARAMS = new Set(["step", "systemType", "dataSensitivity", "environment"]);
 const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView"]);
@@ -113,6 +118,18 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
     next.set(key, value);
   }
   return { params: next, discarded };
+}
+
+function validateResourceFacetValues(params: URLSearchParams): boolean {
+  let discarded = false;
+  for (const [key, allowed] of Object.entries(RESOURCE_FACET_VALUES)) {
+    const value = params.get(key);
+    if (value && !allowed.includes(value)) {
+      params.delete(key);
+      discarded = true;
+    }
+  }
+  return discarded;
 }
 
 function safeResourceId(value: string): string {
@@ -183,6 +200,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     const result = permittedParams(params, permitted);
     params = result.params;
     discarded ||= result.discarded;
+    if (path === "/build/resources") discarded ||= validateResourceFacetValues(params);
   } else if (params.size > 0 && !path.startsWith("/catalog/")) {
     params = new URLSearchParams();
     discarded = true;

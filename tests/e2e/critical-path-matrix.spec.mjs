@@ -231,7 +231,7 @@ test("critical path: baseline compare surfaces delta controls with export action
   ).toBeVisible();
 });
 
-test("critical path: keyboard focus reaches primary nav and header search", async ({
+test("critical path: keyboard focus reaches primary nav and search", async ({
   page,
 }) => {
   // The home view is a self-contained calm entrance without the persistent
@@ -262,7 +262,9 @@ test("critical path: keyboard focus reaches primary nav and header search", asyn
     page.getByRole("heading", { name: "Find the best place to start" }),
   ).toBeVisible();
 
-  const search = page.getByLabel("Search records and glossary");
-  await search.click();
+  const search = page.getByRole("button", { name: "Open search" });
+  await search.focus();
   await expect(search).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("searchbox", { name: "Search records" })).toBeFocused();
 });

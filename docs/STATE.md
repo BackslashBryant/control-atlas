@@ -61,6 +61,50 @@ Complete Features 2.1-2.3 and milestone M2 without remote operations.
 Epic 3 - Resources directory. Keep this completed routing boundary intact;
 do not begin the taxonomy, eligibility, facet, or recommendation work here.
 
+## 2026-07-27 (session 12) - Epic 3 Resources directory
+
+### Goal
+
+Complete Features 3.1-3.5 and milestone M3 without remote operations.
+
+### Completed
+
+- Resources retains Epic 2's canonical `/build/resources` and
+  `/build/resources/:id` boundary across browse, detail, and copy-link flows;
+  Sources remains a separate identity.
+- The established six type-derived browse categories reconcile all 96 resources
+  exactly once: Rules and policy 17, Catalogs and data 26, Templates and
+  starters 8, Tools and automation 33, Communities and training 6, and
+  Reference and history 6.
+- Search establishes evidence eligibility before editorial ordering, so nonsense
+  queries have no results and clearing a query restores the existing browse
+  scope. Categories, lane, and data-backed facets compose through URL state.
+- Invalid category/lifecycle/type URL state replaces to the valid canonical
+  scope with a visible recovery message. Detail metadata exposes the browse
+  category and keeps the canonical copy-link action.
+- Contextual suggestions are explicitly derived from existing resource metadata
+  and expose target, relation, reason, provenance, review date, and
+  `structural: false`; they do not create graph children.
+- The shared header now presents one uninterrupted primary navigation path;
+  Search, Sources, and Help are utility actions. Build makes related resources
+  supporting context: a 1440px side rail that follows task selection at 768px
+  and below.
+
+### Verification
+
+- Focused category/search/provenance contracts, Commons integrity/presentation,
+  route identity, and Commons history E2E passed.
+- Browser walkthrough passed at 375px (category plus facets), 768px (invalid
+  state recovery and stacked related resources), and 1440px (contextual
+  recommendation traceability and support rail). The copy-link control showed
+  the canonical detail route and success state.
+
+### Next
+
+Epic 4 - Record and Build progressive disclosure. Preserve M3's canonical
+Resources state and traceability contract; do not push, merge, deploy, tag, or
+release without fresh authorization.
+
 ## 2026-07-27 (session 10) - Epic 1 structural truth
 
 ### Goal

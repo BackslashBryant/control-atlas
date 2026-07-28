@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
-import { Button, Input, Tabs } from "./lsm";
+import { Button, Tabs } from "./lsm";
 
 import { BrandFlourish, BrandMark } from "./BrandLockup";
 import {
@@ -9,16 +9,10 @@ import {
   PRIMARY_NAV_ITEMS,
 } from "../lib/navigation";
 
-const FRAMEWORK_NAV_ITEMS = PRIMARY_NAV_ITEMS.filter((item) => item.section === "framework");
-const TOOLKIT_NAV_ITEMS = PRIMARY_NAV_ITEMS.filter((item) => item.section === "toolkit");
 import type { ViewState } from "../lib/viewState";
-import type { RuntimeBundle } from "../lib/runtimeLoader";
 
 type TopNavProps = {
-  bundle: RuntimeBundle | null;
   viewState: ViewState;
-  headerSearchDraft: string;
-  onHeaderSearchDraftChange: (value: string) => void;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenSearch: () => void;
   onOpenHelp: () => void;
@@ -26,10 +20,7 @@ type TopNavProps = {
 
 export function TopNav(props: TopNavProps) {
   const {
-    bundle,
     viewState,
-    headerSearchDraft,
-    onHeaderSearchDraftChange,
     onNavigate,
     onOpenSearch,
     onOpenHelp,
@@ -146,17 +137,7 @@ export function TopNav(props: TopNavProps) {
 
       <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
         <Tabs
-          tabs={FRAMEWORK_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
-          activeId={activeView as string}
-          onChange={(id) => {
-            const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
-            if (item) navigate(item.view, item.patch);
-          }}
-          className="border-b-0 h-full gap-[8px]"
-        />
-        <span aria-hidden="true" className="primary-nav-divider" />
-        <Tabs
-          tabs={TOOLKIT_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
+          tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
           activeId={activeView as string}
           onChange={(id) => {
             const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
@@ -167,50 +148,7 @@ export function TopNav(props: TopNavProps) {
       </nav>
 
       <div className="header-actions">
-        {bundle ? (
-          <form
-            className="header-search"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const query = headerSearchDraft.trim();
-              onHeaderSearchDraftChange(query);
-              onNavigate("search", {
-                query,
-                filter: "",
-                objectType: "",
-                sourceClass: "",
-                controlFamily: "",
-                severity: "",
-              });
-            }}
-          >
-            <label className="visually-hidden" htmlFor="header-search">
-              Search records and glossary
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-[12px] flex items-center pointer-events-none text-[var(--ca-text-muted)]">
-                <IconSearch aria-hidden="true" size={16} stroke={2} />
-              </div>
-              <Input
-                aria-label="Search records and glossary"
-                id="header-search"
-                onChange={(event) => onHeaderSearchDraftChange(event.target.value)}
-                placeholder="Search records"
-                type="search"
-                value={headerSearchDraft}
-                className="pl-[36px] rounded-full min-h-[36px] !bg-[color-mix(in_srgb,var(--ca-surface-raised)_40%,transparent)] focus-visible:!bg-[var(--ca-surface-raised)]"
-              />
-            </div>
-          </form>
-        ) : null}
-        {/* Plain wrapper div carries the responsive show/hide. The Button
-            component's base class includes Tailwind's `inline-flex`, and this
-            project imports Tailwind utilities with the `important` flag
-            (styles/tailwind.css), so a display rule on the button itself can
-            never win. Mirrors the `.header-actions-text` wrapper below. */}
-        <div
-          className={`header-search-trigger-wrap${!bundle ? " header-search-trigger-wrap--no-bundle" : ""}`}
-        >
+        <div className="header-search-trigger-wrap">
           <Button
             aria-label="Open search"
             variant="secondary"
@@ -222,13 +160,6 @@ export function TopNav(props: TopNavProps) {
           </Button>
         </div>
         <div className="header-actions-text">
-          <Button
-            variant="primary"
-            className="!min-h-[36px]"
-            onClick={() => onNavigate("start-here")}
-          >
-            Start here
-          </Button>
           <Button
             variant="secondary"
             className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
@@ -242,6 +173,13 @@ export function TopNav(props: TopNavProps) {
             onClick={onOpenHelp}
           >
             Help
+          </Button>
+          <Button
+            variant="primary"
+            className="!min-h-[36px]"
+            onClick={() => onNavigate("start-here")}
+          >
+            Start here
           </Button>
         </div>
         <button

@@ -130,6 +130,7 @@ export type ViewState =
       platform: string;
       format: string;
       collection: string;
+      category: string;
       selectedId: string;
     }
   | {
@@ -374,6 +375,7 @@ export function parseViewState(search: string): ViewState {
       platform: params.get("platform") || "",
       format: params.get("format") || "",
       collection: params.get("collection") || "",
+      category: params.get("category") || "",
       selectedId: params.get("selectedId") || "",
     };
   }
@@ -544,6 +546,7 @@ export function normalizeViewState(
       platform: incoming.platform || "",
       format: incoming.format || "",
       collection: incoming.collection || "",
+      category: incoming.category || "",
       selectedId: incoming.selectedId || "",
     };
   }
@@ -733,6 +736,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "platform", state.platform);
     setIfValue(params, "format", state.format);
     setIfValue(params, "collection", state.collection);
+    setIfValue(params, "category", state.category);
     setIfValue(params, "selectedId", state.selectedId);
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
