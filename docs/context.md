@@ -10,13 +10,15 @@
 
 ## Current Objective
 
-**2026 correction program** - Epic 1, Structural truth and Atlas correctness,
-is complete on local branch `agent/forge/epic-1-atlas-structural-truth`.
-Features 1.1-1.5 and M1 "Truthful core" are verified. No push, merge, deploy,
-tag, or release is authorized by this work.
+**2026 correction program** - Epic 2, Navigation and route identity, is
+complete locally on `agent/forge/epic-2-navigation-route-identity`. Features
+2.1-2.3 and M2 are verified. Canonical Explore/Search/Resources routes,
+route labels/titles/context, and legacy replace redirects are covered by the
+route matrix and browser smoke. No push, merge, deploy, tag, or release is
+authorized by this work.
 
-**Active sprint:** none. The next recommended milestone is Epic 2 - Navigation
-and route identity - from the
+**Active sprint:** none. The next recommended milestone is Epic 3 - Resources
+directory - from the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Shipped on `main` (do not re-plan)
@@ -43,8 +45,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Begin Epic 2 on a new task branch only after explicit authorization.
-2. Preserve Epic 1's structural/applicability/correlation contract and the
+1. Begin Epic 3 on a new task branch only after explicit authorization.
+2. Preserve Epic 1's structural/applicability/correlation contract and Epic 2's
+   canonical route and compatibility boundary, plus the
    local-only proof boundary.
 3. Keep push, merge, deploy, tag, and release actions separately authorized.
 

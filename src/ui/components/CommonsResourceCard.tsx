@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { hostIdentity } from "../lib/commonsPresentation.mjs";
+import { serializeHashLocation } from "../lib/hashRoutes";
 import { CommonsLaneBadge, commonsLaneLabel } from "./CommonsLaneBadge";
 
 type CommonsResourceCardProps = {
@@ -66,7 +67,7 @@ export function CommonsResourceCard({
 
   const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const url = `${window.location.origin}${window.location.pathname}#/commons-detail?id=${encodeURIComponent(resource.id)}`;
+    const url = `${window.location.origin}${window.location.pathname}#${serializeHashLocation({ view: "commons-detail", id: resource.id })}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

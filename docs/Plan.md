@@ -21,10 +21,10 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**2026 correction program - Epic 1 complete locally.** Structural truth and
-Atlas correctness now satisfy Features 1.1-1.5 and milestone M1 "Truthful
-core." The branch is intentionally local-only pending a separately authorized
-ship task. Epic 2 - Navigation and route identity is next; see the
+**2026 correction program - Epic 2 complete locally.** Navigation and route
+identity now satisfy Features 2.1-2.3 and milestone M2. The branch is
+intentionally local-only pending a separately authorized ship task. Epic 3 -
+Resources directory is next; see the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)

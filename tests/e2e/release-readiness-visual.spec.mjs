@@ -6,7 +6,7 @@ import {
   waitForAppReady,
 } from "./support.mjs";
 
-const FOCUSED_ATLAS = "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map";
+const FOCUSED_ATLAS = "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map";
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -89,7 +89,7 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
 test("release evidence: the Path offers every stage as one choice on desktop", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(
-    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=path",
+    "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -112,7 +112,7 @@ test("release evidence: Atlas reflows at the 200 percent zoom equivalent", async
   // A 1440px desktop viewport at 200% browser zoom exposes 720 CSS pixels.
   await page.setViewportSize({ width: 720, height: 500 });
   await page.goto(
-    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=path",
+    "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);

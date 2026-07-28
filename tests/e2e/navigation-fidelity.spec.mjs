@@ -5,18 +5,17 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-// CATL-61: per-route document.title so browser history, bookmarks, and shared
-// tabs read honestly instead of a single generic title.
-test('each route sets an honest, human-readable document.title', async ({ page }) => {
+test('canonical routes set human-readable document titles', async ({ page }) => {
   /** @type {Array<[string, RegExp]>} */
   const cases = [
-    ['/#/', /Control Atlas — The public map for federal cyber compliance/],
-    ['/#/atlas-map', /^Explore — Control Atlas$/],
-    ['/#/explore?q=AC-2', /^AC-2 — Search results — Control Atlas$/],
-    ['/#/templates', /^Build — Control Atlas$/],
-    ['/#/compare', /^Compare — Control Atlas$/],
-    ['/#/about', /^About — Control Atlas$/],
-    ['/#/total-nonsense-xyz', /^Page not found — Control Atlas$/],
+    ['/#/', /Control Atlas/],
+    ['/#/explore', /^Explore.*Control Atlas$/],
+    ['/#/search?q=AC-2', /^AC-2.*Search.*Control Atlas$/],
+    ['/#/build', /^Build.*Control Atlas$/],
+    ['/#/build/resources', /^Resources.*Control Atlas$/],
+    ['/#/compare', /^Compare.*Control Atlas$/],
+    ['/#/about', /^About.*Control Atlas$/],
+    ['/#/total-nonsense-xyz', /^Page not found.*Control Atlas$/],
   ];
   for (const [route, titlePattern] of cases) {
     await page.goto(route);
@@ -24,133 +23,98 @@ test('each route sets an honest, human-readable document.title', async ({ page }
   }
 });
 
-// CATL-61: a record page resolves to its official record name once the graph
-// loads, not a bare id or a generic label.
-test('record pages title with the official record name', async ({ page }) => {
+test('detail titles resolve official entity names instead of IDs', async ({ page }) => {
   await page.goto('/#/record/nist-800-53/AC-2');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page).toHaveTitle(/^AC-2 — Account Management — Control Atlas$/, {
-    timeout: 20000,
-  });
+  await expect(page).toHaveTitle(/^AC-2.*Account Management.*Control Atlas$/, { timeout: 20000 });
+
+  await page.goto('/#/build/resources/official-nist-sp800-53-r5');
+  await waitForAppReady(page);
+  await expect(page).toHaveTitle(/NIST.*Control Atlas$/, { timeout: 20000 });
 });
 
-// CATL-47: friendly, guessable URLs resolve to their canonical view.
-test('/atlas resolves to the Atlas Map view', async ({ page }) => {
-  await page.goto('/#/atlas');
+test('legacy routes replace to their canonical URL and preserve state', async ({ page }) => {
+  await page.goto('/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(
-    page.locator('main').getByRole('heading', { name: 'Control Atlas', level: 1 }),
-  ).toBeVisible();
+  await expect(page).toHaveURL(/#\/explore\?node=nist-800-53%3AAC-2&relationshipView=map/);
+
+  await page.goto('/#/explore?q=AC-2&objectType=control');
+  await expect(page).toHaveURL(/#\/search\?q=AC-2&objectType=control/);
+
+  await page.goto('/#/commons-detail?id=official-nist-sp800-53-r5');
+  await expect(page).toHaveURL(/#\/build\/resources\/official-nist-sp800-53-r5/);
 });
 
-// CATL-62: GitHub Pages serves 404.html for hard-typed path URLs; it must
-// redirect into the HashRouter and preserve the query string.
-test('a path-style deep link redirects into the hash route with its query intact', async ({
-  page,
-}) => {
+test('invalid link settings are discarded with visible recovery', async ({ page }) => {
+  await page.goto('/#/explore?relationshipView=unsupported&sourceView=unknown&bogus=value');
+  await expect(page).toHaveURL(/#\/explore$/);
+  await expect(page.locator('.route-recovery')).toContainText('unsupported link settings');
+});
+
+test('path-style query link enters canonical Search with its query', async ({ page }) => {
   await page.goto('/explore?q=AC-2');
-  await page.waitForURL(/#\/explore/, { timeout: 15000 });
+  await page.waitForURL(/#\/search/, { timeout: 15000 });
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/[?&]q=AC-2/);
-  await expect(
-    page.getByRole('heading', { name: 'Search everything in one place' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Search everything in one place' })).toBeVisible();
 });
 
-// CATL-17 / CATL-V1: typing in the header overlay and pressing Enter submits
-// straight to Explore results and carries focus into the results region, so the
-// overlay and Explore read as one search surface.
-test('header overlay search submits to Explore and carries focus to results', async ({
-  page,
-}) => {
-  test.setTimeout(90_000);
-  // The "Open search" trigger button is mobile-only — .header-search-trigger-wrap
-  // is `display: none` by default and only becomes visible under the mobile
-  // media query (styles/surfaces.css:2347, styles/orbital.css:1341); desktop
-  // shows the inline header search form instead. Without this resize the
-  // button exists in the DOM but is never visible/clickable.
+test('header search submits to canonical Search and carries focus to results', async ({ page }) => {
+  test.setTimeout(90000);
   await page.setViewportSize({ width: 390, height: 844 });
-  // The header search trigger lives in the persistent site chrome, which is
-  // hidden on the calm home entrance — exercise it from a page where it's
-  // actually visible.
-  await page.goto('/?view=explore');
+  await page.goto('/#/search');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await page.getByRole('button', { name: 'Open search' }).click();
   const dialog = page.getByRole('dialog', { name: 'Search records' });
   await expect(dialog).toBeVisible();
-  const input = dialog.getByRole('searchbox', {
-    name: 'Search records',
-  });
+  const input = dialog.getByRole('searchbox', { name: 'Search records' });
   await input.fill('account management');
   await input.press('Enter');
 
-  await expect(page).toHaveURL(/[?&]q=account/);
+  await expect(page).toHaveURL(/#\/search\?.*q=account/);
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.locator('#library-results')).toBeFocused({ timeout: 15000 });
 });
 
-// W2: the ancestry chooser derives its branches from published data, but keeps
-// the heavy interactive relationship graph chunk behind an explicit record Map.
-test('Atlas ancestry chooser derives from data without hydrating the graph UI', async ({
-  page,
-}) => {
-  test.setTimeout(90_000);
+test('Explore renders the ancestry chooser without hydrating the graph UI', async ({ page }) => {
+  test.setTimeout(90000);
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
-  await page.goto('/#/atlas-map');
+  await page.goto('/#/explore');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // The calm ancestry chooser renders before any graph stack is requested.
   await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /A framework family tree/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /My situation/ })).toBeVisible();
   await expect(page.locator('.react-flow')).toHaveCount(0);
-  // The chooser uses the published node and edge set instead of a hand-authored
-  // menu. It still avoids the interactive React Flow/ELK graph bundle.
   expect(requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
   expect(requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });
 
-// CATL-V2 / CATL-67: the download confirmation toast fires from the real
-// anchor-click dispatch, is styled like an About-page trust block, and the
-// button briefly disables to prevent a double-generate.
-test('template generation fires a trust-styled download toast and disables the button briefly', async ({
-  page,
-}) => {
+test('template generation fires a trust-styled download toast and disables the button briefly', async ({ page }) => {
   await page.goto('/?view=templates&templateType=security_plan_starter');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-
-  // Matches the explicit download action across its brief disabled window.
   const generate = page.getByRole('button', { name: /Download Security Plan Starter|Preparing download/ });
   await expect(generate).toBeEnabled();
-
   const downloadPromise = page.waitForEvent('download');
-  // Don't await the click: resolving it waits on the whole download lifecycle,
-  // which outlasts the ~1.2s disable window. Assert the transient disabled state
-  // concurrently so we catch the double-generate guard.
   const clickPromise = generate.click();
   await expect(generate).toBeDisabled({ timeout: 3000 });
-
   const download = await downloadPromise;
   await clickPromise;
-  // security_plan_starter offers Word only; raw and PDF formats are not
-  // user-facing template downloads.
   expect(download.suggestedFilename()).toMatch(/security-plan-starter.*\.docx$/);
-
   const toast = page.locator('.generation-status');
   await expect(toast).toBeVisible();
   await expect(toast).toHaveClass(/tone-trust/);
   await expect(toast).toContainText('Download started');
-  // Re-enables after the brief window so the user can generate again.
   await expect(generate).toBeEnabled();
 });

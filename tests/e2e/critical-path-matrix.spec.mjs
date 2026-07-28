@@ -37,7 +37,7 @@ test("critical path: landing hero and primary entry cards are visible", async ({
 test("critical path: the Atlas Path walks to a published connected record", async ({
   page,
 }) => {
-  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -61,7 +61,7 @@ test("critical path: the Atlas Path walks to a published connected record", asyn
 test("critical path: Atlas Open full record leaves the path for record detail", async ({
   page,
 }) => {
-  await page.goto("/?view=atlas-map&node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -82,7 +82,7 @@ test("critical path: Atlas Open full record leaves the path for record detail", 
 test("critical path: record back returns to the original Explore results", async ({
   page,
 }) => {
-  await page.goto("/#/explore?q=AC-2");
+  await page.goto("/#/search?q=AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -93,7 +93,7 @@ test("critical path: record back returns to the original Explore results", async
     .getByRole("button", { name: "Back to results" })
     .click();
 
-  await expect(page).toHaveURL(/#\/explore\?q=AC-2/);
+  await expect(page).toHaveURL(/#\/search\?q=AC-2/);
   await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
     "AC-2",
   );

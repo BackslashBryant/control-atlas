@@ -37,6 +37,30 @@
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
 
+## 2026-07-27 (session 11) - Epic 2 navigation and route identity
+
+### Goal
+
+Complete Features 2.1-2.3 and milestone M2 without remote operations.
+
+### Completed
+
+- Canonical paths now distinguish guided Explore (`/explore`) from universal
+  Search (`/search`), preserve durable route state, and replace legacy paths
+  without creating additional history entries.
+- One route-identity registry now owns approved paths, labels, document titles,
+  context labels, analytics names, compatibility aliases, and the alias owner
+  and removal date.
+- Resource list and detail links emit `/build/resources` and
+  `/build/resources/:id`; legacy Commons paths recover to those URLs.
+- Route matrix, browser contracts, static build, a11y smoke, and navigation
+  smoke are green. Local-only branch; no push, merge, deploy, tag, or release.
+
+### Next
+
+Epic 3 - Resources directory. Keep this completed routing boundary intact;
+do not begin the taxonomy, eligibility, facet, or recommendation work here.
+
 ## 2026-07-27 (session 10) - Epic 1 structural truth
 
 ### Goal
