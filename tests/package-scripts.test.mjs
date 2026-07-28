@@ -70,6 +70,8 @@ test('release scripts cover staged builds, static checks, and focused browser sm
   assert.match(packageJson.scripts.precommit, /npm run typecheck/);
   assert.equal(typeof packageJson.scripts['test:a11y:smoke'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e:smoke'], 'string');
+  assert.match(packageJson.scripts['test:a11y:smoke'], /a11y: focused Atlas Map/);
+  assert.match(packageJson.scripts['test:a11y:smoke'], /a11y: Atlas zero connections/);
   assert.match(packageJson.scripts.precommit, /npm run test:a11y:smoke/);
   assert.match(packageJson.scripts.precommit, /npm run test:e2e:smoke/);
   assert.match(packageJson.scripts.test, /test:graph/);
