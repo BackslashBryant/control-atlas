@@ -57,6 +57,15 @@ the accessibility tree.
 - `npm run test:a11y` — passed (31/31) on July 28, 2026, including reduced-motion route scans and detailed comparison-table coverage.
 - `npm run precommit` — passed (exit 0) on July 28, 2026, after the source-navigator smoke contract replaced the retired recommendation assertion.
 
+### Epic 7 local regression note - July 28, 2026
+
+`npm run test:correction:local` passed 28/28 local Playwright checks for Atlas
+workflows, canonical route/title behavior, source-first records, and
+Compare/Resources responsive behavior. No visual snapshot was refreshed. This
+does not change E6-H1: human NVDA, VoiceOver, or TalkBack evidence is still
+pending and local Chromium automation is not deployed-site or real-device
+proof.
+
 ---
 
 ## Release gate

@@ -659,3 +659,32 @@ authorization.
 
 The previous long-form session log and superseded open-item snapshots are
 preserved at `docs/audits/state-history-through-2026-07-26.md`.
+
+## 2026-07-28 (session 16) - Epic 7 regression, deployment proof, and compatibility closeout
+
+### Completed locally
+
+- Added the focused `test:correction:contracts` gate for structural ancestry,
+  Atlas transitions/lenses/framework choices, route identity and durable Build
+  state, Resources eligibility/categories, and source-first record surfaces.
+  The local integration companion covers Epic 1 route behavior, source-first
+  records, route/title identity, and Compare/Resources responsive behavior.
+- Split the broad responsive suite into entry/guidance, catalog/records,
+  Build/Resources, and workbenches/trust route groups at mobile and tablet
+  widths. A group failure captures its route/viewport/page state and the live
+  configuration preserves first-failure screenshot, video, trace, and existing
+  console/request diagnostics.
+- Inventoried the 19 compatibility aliases in `routeIdentity.ts`. They remain
+  owned by Control Atlas maintainers through 2026-10-27, conditional on green
+  deployed deep-link smoke. No alias was removed.
+- No visual snapshots were refreshed. The manual accessibility checklist still
+  records local automated evidence only and retains pending human NVDA,
+  VoiceOver, or TalkBack review.
+
+### Owner-gated next work
+
+Fresh authorization is required to push, merge, and deploy the reviewed commit
+and then run the bounded Pages route groups, exact deployed cache/commit check,
+and representative primary/deep-link smoke. Human assistive-technology evidence
+and an owner decision on alias removal remain separate; local automation is not
+deployed, real-device, or human screen-reader proof.

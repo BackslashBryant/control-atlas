@@ -1,7 +1,7 @@
 # Control Atlas prioritized correction backlog
 
 Date: 2026-07-27  
-Status: Approved correction program; Epics 1-6 implementation complete locally; Epic 7 next
+Status: Approved correction program; Epics 1-7 local implementation complete; deployed proof owner-gated
 Audit: [Current-state audit](../audits/control-atlas-current-state-audit-2026-07-27.md)  
 Specification: [Correction specification](control-atlas-correction-spec-2026-07-27.md)
 
@@ -21,7 +21,7 @@ Specification: [Correction specification](control-atlas-correction-spec-2026-07-
 3. Epic 3 — Resources directory.
 4. Epic 4 — Record and Build progressive disclosure.
 5. Epic 5 — Responsive and accessibility completion.
-6. Epic 6 — Regression, deployment proof, and compatibility closeout.
+6. Epic 7 — Regression, deployment proof, and compatibility closeout.
 
 ## Epic 1 — Structural truth and Atlas correctness
 
@@ -371,6 +371,16 @@ VoiceOver, or TalkBack review remains an explicitly documented release residual.
 
 Priority: P2, required before declaring the correction shipped  
 Risk: Low/Medium.
+
+**Status (2026-07-28): Local preparation complete; deployment proof remains
+owner-gated.** The local correction gate maps every Critical/High audit finding
+to focused semantic contracts, including source-first records, route identity,
+Resources state, durable Build state, and Compare responsive behavior. The
+broad live responsive sweep is split into independently retryable route groups
+with first-failure screenshot, video, trace, route, and diagnostic artifacts.
+No Pages test has run, no visual baseline changed, and no compatibility alias
+was removed. Human NVDA, VoiceOver, or TalkBack evidence remains an explicit
+release residual.
 
 ### Feature 7.1 — Add semantic release contracts
 

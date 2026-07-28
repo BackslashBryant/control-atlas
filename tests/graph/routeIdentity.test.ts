@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   COMPATIBILITY_ALIAS_POLICY,
+  COMPATIBILITY_ROUTE_ALIASES,
   canonicalizeHashLocation,
   routeIdentityFor,
 } from "../../src/ui/lib/routeIdentity";
@@ -91,4 +92,29 @@ test("every routable state has one approved display identity", () => {
   assert.equal(routeIdentityFor("commons").label, "Resources");
   assert.equal(COMPATIBILITY_ALIAS_POLICY.owner, "Control Atlas maintainers");
   assert.match(COMPATIBILITY_ALIAS_POLICY.removalDate, /^2026-10-27$/);
+});
+
+test("compatibility inventory retains every alias through its owner-gated removal date", () => {
+  assert.deepEqual(COMPATIBILITY_ROUTE_ALIASES, {
+    "/menu": "/",
+    "/home": "/",
+    "/start-here": "/start",
+    "/atlas-map": "/explore",
+    "/atlas": "/explore",
+    "/map": "/explore",
+    "/browse": "/search",
+    "/compare-controls": "/compare",
+    "/source": "/sources",
+    "/library": "/catalog",
+    "/playbooks": "/learn",
+    "/playbook": "/learn",
+    "/templates": "/build",
+    "/template": "/build",
+    "/build/community": "/build/resources",
+    "/commons": "/build/resources",
+    "/resource-bazaar": "/build/resources",
+    "/bazaar": "/build/resources",
+    "/hub": "/build/resources",
+  });
+  assert.match(COMPATIBILITY_ALIAS_POLICY.removalCondition, /deployed deep-link smoke/i);
 });
