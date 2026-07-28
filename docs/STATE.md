@@ -724,3 +724,38 @@ technology review remains a separate residual.
 - Dependabot PR #1 is superseded: its requested CycloneDX v4 update is older
   than the existing v5 dependency. Remote PR closure remains part of release
   publication because the GitHub API credential must be valid for that action.
+
+## 2026-07-28 (session 18) - v1.0.2 published closeout
+
+### Shipped result
+
+- Published `v1.0.2` at `e46a122` without moving or rewriting the existing
+  `v1.0.1` tag. GitHub Release:
+  `https://github.com/BackslashBryant/control-atlas/releases/tag/v1.0.2`.
+- Upgraded every tracked `actions/checkout` and `actions/setup-node` use to v6
+  (Node 24 action runtime) while jobs continue to test the product on Node 22.
+  Strict `npm ci` remains the only workflow install path.
+- Corrected the Lighthouse A/B route after alias retirement, retained valid
+  scored reports when Lighthouse exits after a post-report DevTools timeout,
+  and kept malformed/missing reports fail-closed.
+- Added a focused mobile loading-height contract and reserved the focused Atlas
+  workspace from first paint. Comparative run `30405723781` improved the
+  candidate median from 31 to 49 and held CLS at 0.125 in all three runs.
+- Closed all twelve reviewed/superseded Dependabot PRs.
+
+### Verification
+
+- Final local `npm run precommit`: exit 0; 229 automated tests, 20 browser
+  contracts, 5 focused accessibility checks, and 4 E2E smoke checks passed.
+- Main Public Repo Checks `30406084837`, Secret Scan `30406084833`, CodeQL
+  `30406084913`, and Pages deployment `30406191399` passed for `e46a122`.
+- Deployed run `30406243846` passed 43/43 tests, including cache-version,
+  canonical/deep routes, retired-route not-found behavior, responsive route
+  coverage, and automated accessibility.
+- Dependency audit passed with two documented scoped exceptions.
+
+### Residual boundary
+
+No human drove NVDA, VoiceOver, or TalkBack, and no physical iOS/Android,
+WebPageTest, or penetration-test evidence was produced. Those remain external
+residuals and are not implied by automated browser or Lighthouse results.

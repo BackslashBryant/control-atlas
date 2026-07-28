@@ -56,16 +56,15 @@ review remains pending in
 [`a11y-manual-checklist.md`](a11y-manual-checklist.md); automated axe and local
 Chromium checks do not satisfy it.
 
-## Owner-gated deployment proof
+## Deployment closeout
 
-After explicit authorization to push, merge, and deploy the reviewed commit:
+The owner-gated automated deployment work subsequently completed in `v1.0.2`.
+Pages run `30406191399` deployed tag commit `e46a122`; deployed run
+`30406243846` passed 43/43 checks across the smoke, cache-version, responsive
+route groups, automated accessibility, canonical/deep routes, and retired-route
+not-found behavior. Comparative Lighthouse run `30405723781` passed.
 
-1. Run `npm run test:e2e:live:smoke` and the four bounded route groups:
-   `test:e2e:live:entry`, `test:e2e:live:catalog`, `test:e2e:live:build`, and
-   `test:e2e:live:workbench`.
-2. Run `npm run test:e2e:live:a11y` and record the saved first-failure
-   artifacts if any group fails.
-3. Verify the exact deployed commit/cache version plus representative canonical
-   deep links and retired-alias static-404 behavior, then save the closeout
-   evidence.
-4. Obtain human assistive-technology evidence.
+The final release record is
+[`v1-0-2-release-2026-07-28.md`](v1-0-2-release-2026-07-28.md).
+Human assistive-technology evidence remains outstanding and is not replaced by
+the automated closeout.

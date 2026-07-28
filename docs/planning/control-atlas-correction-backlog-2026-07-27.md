@@ -1,7 +1,7 @@
 # Control Atlas prioritized correction backlog
 
 Date: 2026-07-27  
-Status: v1.0.1 local closeout candidate complete; deployed proof and release publication execution-gated
+Status: shipped in v1.0.2; human assistive-technology proof remains external
 Audit: [Current-state audit](../audits/control-atlas-current-state-audit-2026-07-27.md)  
 Specification: [Correction specification](control-atlas-correction-spec-2026-07-27.md)
 
@@ -373,22 +373,23 @@ VoiceOver, or TalkBack review remains an explicitly documented release residual.
 Priority: P2, required before declaring the correction shipped  
 Risk: Low/Medium.
 
-**Status (2026-07-28): Local closeout candidate complete; deployment proof
-remains execution-gated.** The local correction gate maps every Critical/High audit finding
+**Status (2026-07-28): Shipped in `v1.0.2`.** The correction gate maps every Critical/High audit finding
 to focused semantic contracts, including source-first records, route identity,
 Resources state, durable Build state, and Compare responsive behavior. The
 broad live responsive sweep is split into independently retryable route groups
 with first-failure screenshot, video, trace, route, and diagnostic artifacts.
-No Pages test has run and no visual baseline changed. Legacy route aliases were
-retired locally by owner direction and are covered by local not-found contracts.
+The exact release code deployed successfully, and the 43-test live suite passed
+the canonical, deep-link, responsive, accessibility, cache-version, and
+retired-alias cases. No visual baseline changed. Legacy route aliases are
+retired and covered by local and deployed not-found contracts.
 Human NVDA, VoiceOver, or TalkBack evidence remains an explicit release
 residual.
 
-The v1.0.1 candidate also records exact upstream provenance for all eleven
+The v1.0.2 release also records exact upstream provenance for all eleven
 blocked graph-health findings, removes stale Compare navigation-state patches,
 and turns the same-runner mobile Lighthouse comparison into a three-run,
-median-based release gate against `v1.0.0`. Those local changes do not replace
-the required deployed evidence.
+median-based release gate against `v1.0.0`. Run `30405723781` passed at median
+49 versus 31 and held candidate CLS at 0.125 across all three runs.
 
 ### Feature 7.1 — Add semantic release contracts
 
@@ -444,7 +445,7 @@ the required deployed evidence.
 | M4 — Complete workflows | Epic 4 record/Build flows green |
 | M5 — Source-first records | Epic 5 record/source/provenance contracts green and legacy renderer removed |
 | M6 — Inclusive UI | Epic 6 responsive automation and accessibility matrix complete; human assistive-technology sign-off remains a release residual |
-| M7 — Shipped correction | Epic 7 deployed commit, route groups, cache, and compatibility evidence green |
+| M7 — Shipped correction | **Pass** - `v1.0.2` deployed; 43/43 live tests, cache-version, compatibility/static-404, and Lighthouse A/B green |
 
 ## Explicitly deferred
 

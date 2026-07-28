@@ -2,18 +2,17 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 28, 2026 (v1.0.1 local closeout candidate complete;
-deployed verification and remote publication remain execution-gated)
+**Last synced:** July 28, 2026 (`v1.0.2` published; automated correction and
+maintenance closeout complete)
 
 ## 2026 correction program
 
 Structural truth, navigation, Resources, progressive disclosure, source-first
-records, responsive/accessibility implementation, and Epic 7's local semantic
-regression/compatibility work are complete in the v1.0.1 candidate. Epic 7
-remains execution-gated in the
+records, responsive/accessibility implementation, and Epic 7 regression,
+deployment, and compatibility work are shipped in `v1.0.2`. The
 [`2026-07-27 correction backlog`](../planning/control-atlas-correction-backlog-2026-07-27.md)
-for deployed-route, exact cache/commit, and static-404 proof. Legacy route
-aliases are retired locally; the human NVDA/VoiceOver/TalkBack residual remains
+records deployed-route, cache-version, static-404, and release proof. Legacy
+route aliases are retired. The human NVDA/VoiceOver/TalkBack residual remains
 open.
 
 ## Release verification record
@@ -51,26 +50,29 @@ open.
 
 ### Maintenance debt register (owner: Bryant; solo repo)
 
-The first four historical rows below are closed locally: workflow actions use
-Node 22, strict `npm ci` is the only install behavior, loading regions reserve
-their layout space, and page handlers no longer carry stale `...state` patches.
-The final comparative Lighthouse row is the only remaining maintenance item and
-requires its fresh remote artifact.
+All historical rows below are closed in `v1.0.2`: workflow jobs use Node 22,
+JavaScript actions use the Node 24 runtime, strict `npm ci` is the only install
+behavior, focused Atlas loading reserves mobile layout space, page handlers no
+longer carry stale `...state` patches, and the comparative Lighthouse artifact
+passed.
 
 | Item | Consequence of leaving it | Trigger / deadline |
 | --- | --- | --- |
 | Deployed mobile Lighthouse performance gate | Performance regressions land undetected because tooling is report-only | Superseded 2026-07-19: the absolute `>= 50` floor was laptop-measured and does not reproduce on CI hardware (same code scores 34–44 there). Gate is now comparative — run the `Lighthouse A/B` workflow against the previous released ref on the same runner and require no material regression |
 | Layout shift on slow hardware: `footer.site-footer` moves ~1.5 CLS as late content grows the page | Users on slow connections/devices see the page jump while it loads; the score penalty is severe | Pre-existing (identical in `743dcde` and `9f687d7`), exposed by CI measurement on 2026-07-19. Fix by reserving height for loading regions (skeleton/content height parity in `src/ui/App.tsx`, `LibrarySkeleton.tsx`, and the compact Atlas map block in `styles/surfaces.css`). Trigger: first post-v1 UX maintenance pass, before any accessibility-conformance claim |
-| Comparative deployed mobile Lighthouse gate | The configured three-run same-runner v1.0.0 comparison has not yet produced the v1.0.1 release artifact | Run `Lighthouse A/B` for the final candidate; fail if the candidate median is more than three points below the v1.0.0 median |
+| Comparative deployed mobile Lighthouse gate | Closed in `v1.0.2`; run `30405723781` recorded v1.0.0 median 31 and candidate median 49, with candidate CLS 0.125 in all three runs | Keep the three-run same-runner gate for later releases; fail if the candidate median is more than three points below the previous release |
 
-- Promote `v1.0.0` after RC feedback
-- Run the staged ingestion/search experiments in [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no listed tool is approved as a v1.0 dependency
-- Run the post-v1 UI/performance/copy/data strengthening sequence in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md), beginning with Playwright golden routes, Lighthouse CI, and a project-owned Vale style
-- Dependabot review is complete locally: accepted the current workflow updates
-  and `@playwright/test`, `@types/node`, `globals`, `fast-xml-parser`, and
-  `pdf-parse` updates (with a tested v2 importer migration). PR #1 is
-  superseded because its requested CycloneDX version is already below the
-  current v5 dependency; close all reviewed PRs after the final branch is
-  published.
-- Source real crosswalks for DoD RAI, ATT&CK ICS, AI RMF, SSDF, SP 800-172, and remaining sparse catalogs; never infer them merely to raise coverage. The v1.0.1 audit found no reproducibly extractable official direct mapping for these catalogs in the current source artifacts, so none was invented or promoted.
+- `v1.0.0` was promoted after RC feedback; `v1.0.2` is the final v1 patch.
+- The staged ingestion/search experiments are complete in
+  [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no held or
+  rejected tool became a v1 runtime dependency.
+- The post-v1 UI/performance/copy/data strengthening sequence is shipped and
+  recorded in
+  [`post-v1-platform-strengthening-implementation-2026-07-17.md`](../audits/post-v1-platform-strengthening-implementation-2026-07-17.md).
+- Dependabot review and closure are complete. All twelve superseded open PRs
+  were closed after the integrated dependency/workflow versions were verified.
+- Official-source crosswalk review for DoD RAI, ATT&CK ICS, AI RMF, SSDF,
+  SP 800-172, and remaining sparse catalogs is complete for v1. The available
+  source artifacts contain no reproducibly extractable direct mappings, so
+  none was invented or promoted. Recheck only when upstream sources change.
 - The 11 `graph-health.json` findings now have exact, machine-checked upstream provenance in [`data/graph-health-provenance.json`](../../data/graph-health-provenance.json). Nine NIST OLIR draft entries use family/category-level identifiers; two DoD ZT overlay entries use invalid control IDs. All remain blocked from displayable edges.
