@@ -43,8 +43,8 @@ test('security workflows exist for CodeQL and secret scanning', () => {
   assert.ok(existsSync('.github/workflows/secret-scan.yml'));
   const codeql = readFileSync('.github/workflows/codeql.yml', 'utf8');
   const secrets = readFileSync('.github/workflows/secret-scan.yml', 'utf8');
-  assert.match(codeql, /github\/codeql-action\/init@v3/);
-  assert.match(codeql, /github\/codeql-action\/analyze@v3/);
+  assert.match(codeql, /github\/codeql-action\/init@v4/);
+  assert.match(codeql, /github\/codeql-action\/analyze@v4/);
   assert.match(secrets, /gitleaks/gim);
 });
 

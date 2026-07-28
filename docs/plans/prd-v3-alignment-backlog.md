@@ -2,7 +2,19 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 17, 2026 (v1.0 verification complete; publication owner-gated)
+**Last synced:** July 28, 2026 (v1.0.1 local closeout candidate complete;
+deployed verification and remote publication remain execution-gated)
+
+## 2026 correction program
+
+Structural truth, navigation, Resources, progressive disclosure, source-first
+records, responsive/accessibility implementation, and Epic 7's local semantic
+regression/compatibility work are complete in the v1.0.1 candidate. Epic 7
+remains execution-gated in the
+[`2026-07-27 correction backlog`](../planning/control-atlas-correction-backlog-2026-07-27.md)
+for deployed-route, exact cache/commit, and static-404 proof. Legacy route
+aliases are retired locally; the human NVDA/VoiceOver/TalkBack residual remains
+open.
 
 ## Release verification record
 
@@ -39,17 +51,26 @@ Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
 ### Maintenance debt register (owner: Bryant; solo repo)
 
+The first four historical rows below are closed locally: workflow actions use
+Node 22, strict `npm ci` is the only install behavior, loading regions reserve
+their layout space, and page handlers no longer carry stale `...state` patches.
+The final comparative Lighthouse row is the only remaining maintenance item and
+requires its fresh remote artifact.
+
 | Item | Consequence of leaving it | Trigger / deadline |
 | --- | --- | --- |
-| GitHub Actions Node 20-runtime deprecation annotations | Workflows fail when GitHub removes the Node 20 runtime | Before GitHub's announced Node 20 Actions runtime removal date; check on the first Dependabot review after an annotation escalates to a warning of removal |
-| `npm ci \|\| npm install` fallbacks in workflows | Lockfile drift can pass CI silently | Next workflow-touching maintenance change |
 | Deployed mobile Lighthouse performance gate | Performance regressions land undetected because tooling is report-only | Superseded 2026-07-19: the absolute `>= 50` floor was laptop-measured and does not reproduce on CI hardware (same code scores 34–44 there). Gate is now comparative — run the `Lighthouse A/B` workflow against the previous released ref on the same runner and require no material regression |
 | Layout shift on slow hardware: `footer.site-footer` moves ~1.5 CLS as late content grows the page | Users on slow connections/devices see the page jump while it loads; the score penalty is severe | Pre-existing (identical in `743dcde` and `9f687d7`), exposed by CI measurement on 2026-07-19. Fix by reserving height for loading regions (skeleton/content height parity in `src/ui/App.tsx`, `LibrarySkeleton.tsx`, and the compact Atlas map block in `styles/surfaces.css`). Trigger: first post-v1 UX maintenance pass, before any accessibility-conformance claim |
-| Route-state patch idiom still spreads `...state` in remaining page handlers | Redundant now that `navigate()` merges the latest state; rapid paired interactions elsewhere could revive the dropped-patch race | Next UI maintenance pass; sweep `onNavigate` callers to pass only changed keys |
+| Comparative deployed mobile Lighthouse gate | The configured three-run same-runner v1.0.0 comparison has not yet produced the v1.0.1 release artifact | Run `Lighthouse A/B` for the final candidate; fail if the candidate median is more than three points below the v1.0.0 median |
 
 - Promote `v1.0.0` after RC feedback
 - Run the staged ingestion/search experiments in [`open-source-tool-assessment.md`](open-source-tool-assessment.md); no listed tool is approved as a v1.0 dependency
 - Run the post-v1 UI/performance/copy/data strengthening sequence in [`open-source-platform-strengthening-assessment-2026-07-17.md`](open-source-platform-strengthening-assessment-2026-07-17.md), beginning with Playwright golden routes, Lighthouse CI, and a project-owned Vale style
-- Dependabot PR review (Nexus)
-- Source real crosswalks for DoD RAI, ATT&CK ICS, AI RMF, SSDF, SP 800-172, and remaining sparse catalogs; never infer them merely to raise coverage
-- Documented upstream provenance for the 11 `graph-health.json` findings: 9 NIST OLIR CSF 2.0 draft crosswalk entries targeting family/category-level nodes (`CP`, `IR`, `PT`, `RC.RP`, `RS.MA`) and 2 DoD ZT overlay entries with invalid control IDs (`EC-1`, `SAC-16`). All 11 are safely blocked from displayable edges as designed.
+- Dependabot review is complete locally: accepted the current workflow updates
+  and `@playwright/test`, `@types/node`, `globals`, `fast-xml-parser`, and
+  `pdf-parse` updates (with a tested v2 importer migration). PR #1 is
+  superseded because its requested CycloneDX version is already below the
+  current v5 dependency; close all reviewed PRs after the final branch is
+  published.
+- Source real crosswalks for DoD RAI, ATT&CK ICS, AI RMF, SSDF, SP 800-172, and remaining sparse catalogs; never infer them merely to raise coverage. The v1.0.1 audit found no reproducibly extractable official direct mapping for these catalogs in the current source artifacts, so none was invented or promoted.
+- The 11 `graph-health.json` findings now have exact, machine-checked upstream provenance in [`data/graph-health-provenance.json`](../../data/graph-health-provenance.json). Nine NIST OLIR draft entries use family/category-level identifiers; two DoD ZT overlay entries use invalid control IDs. All remain blocked from displayable edges.

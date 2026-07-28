@@ -10,30 +10,16 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("header search clears when leaving Explore after an empty result", async ({
+test("search overlay starts clean after closing an unfinished search", async ({
   page,
 }) => {
-  await page.goto("/?view=explore&q=zzzznotfound");
+  await page.goto("/?view=explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(
-    page.getByRole("heading", { name: "No matching records found." }),
-  ).toBeVisible();
-
-  await page
-    .getByRole("navigation", { name: "Primary navigation" })
-    .getByRole("button", { name: "Compare", exact: true })
-    .click();
-  await expect(page).toHaveURL(/view=matrix|#\/compare/);
-  await expect(page.locator("#header-search")).toHaveValue("");
-});
-
-test("header search clears when Explore empty state uses Clear search", async ({
-  page,
-}) => {
-  await page.goto("/?view=explore&q=zzzznotfound");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-  await page.getByRole("button", { name: "Clear search" }).click();
-  await expect(page.locator("#header-search")).toHaveValue("");
+  await page.getByRole("button", { name: "Open search" }).click();
+  const input = page.getByRole("searchbox", { name: "Search records" });
+  await input.fill("zzzznotfound");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Open search" }).click();
+  await expect(input).toHaveValue("");
 });

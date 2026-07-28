@@ -14,15 +14,14 @@ import MiniSearch from "minisearch";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
-  generatePlainLanguageRationale,
-  generatePlainLanguageSummary,
-} from "./lib/plain-language.mjs";
-import {
   ATLAS_NEIGHBORHOOD_SHARD_COUNT,
   buildAtlasNodeIndex,
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
-import { deriveCciHierarchyParents } from "./hierarchy-derivation.mjs";
+import {
+  defaultRelationshipClass,
+  RELATIONSHIP_CLASSES,
+} from "../src/app/structural-hierarchy.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -623,14 +622,6 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
-  // Curated plain-language overrides (see loadCuratedPlainLanguage) are hand-authored
-  // and should win outright. Everything else is regenerated from metadata.description
-  // so pre-baked record.plain_language_summary values (which can carry truncation
-  // artifacts from upstream normalizers) never leak through uncorrected.
-  node.plain_language_summary =
-    node.curated_plain_language_summary ||
-    generatePlainLanguageSummary({ ...node, plain_language_summary: null });
-  delete node.curated_plain_language_summary;
   state.nodes.push(node);
 }
 
@@ -646,8 +637,6 @@ function buildAssessmentNode(record) {
     // W1.3a: the assessment procedure is generated from this same control/
     // enhancement record, so record.id IS its parent's item_id by construction
     // — no join needed, no risk of a stale match.
-    parent_id: nodeId("nist-800-53", record.id),
-    parent_derivation: "nist_control_metadata",
     metadata: {
       catalog_id: "nist-800-53a",
       item_id: record.id,
@@ -699,34 +688,6 @@ export function lifecycleStatus(record) {
   return "active";
 }
 
-let curatedPlainLanguageCache;
-
-function loadCuratedPlainLanguage() {
-  if (curatedPlainLanguageCache !== undefined) return curatedPlainLanguageCache;
-  const path = join(
-    ROOT,
-    "data",
-    "curated",
-    "plain-language",
-    "controls-800-53.json",
-  );
-  if (!existsSync(path)) {
-    curatedPlainLanguageCache = null;
-    return curatedPlainLanguageCache;
-  }
-  try {
-    curatedPlainLanguageCache = readJson(path);
-  } catch {
-    curatedPlainLanguageCache = null;
-  }
-  return curatedPlainLanguageCache;
-}
-
-function curatedEntryFor(itemId) {
-  const curated = loadCuratedPlainLanguage();
-  return curated?.entries?.[itemId] || null;
-}
-
 /** Add a resolved tier's node to the dedup map, once per distinct tier node id. */
 function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, record) {
   if (!resolved || tierNodes.has(resolved.nodeId)) return;
@@ -752,122 +713,6 @@ function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, recor
   });
 }
 
-/**
- * W1.3b — mutates CCI (`disa-cci`) nodes in place, setting `parent_id` +
- * `parent_derivation` from the already-published correlation data in
- * `maps/cci-to-800-53.json` and `maps/cci-to-800-53-rev4.json`. See
- * scripts/hierarchy-derivation.mjs for the tie-break rule and why no new
- * fetch is needed. Returns a summary for the build log; never throws on an
- * unresolved CCI — a genuine residue is expected and reported, not fabricated.
- */
-function applyCciHierarchyParents(nodes) {
-  const cciNodes = nodes.filter(
-    (node) =>
-      node.node_type === "requirement" &&
-      node.metadata?.catalog_id === "disa-cci",
-  );
-  if (cciNodes.length === 0) return { resolved: 0, unresolved: [] };
-
-  const directPath = join(ROOT, "maps", "cci-to-800-53.json");
-  const crosswalkPath = join(ROOT, "maps", "cci-to-800-53-rev4.json");
-  const directRelationships = existsSync(directPath)
-    ? readJson(directPath).relationships || []
-    : [];
-  const crosswalkRelationships = existsSync(crosswalkPath)
-    ? readJson(crosswalkPath).relationships || []
-    : [];
-
-  const assessmentProcedureItemIds = new Set(
-    nodes
-      .filter((node) => node.node_type === "assessment_procedure")
-      .map((node) => node.metadata.item_id),
-  );
-  const controlItemIds = new Set(
-    nodes
-      .filter(
-        (node) =>
-          (node.node_type === "control" ||
-            node.node_type === "control_enhancement") &&
-          node.metadata?.catalog_id === "nist-800-53",
-      )
-      .map((node) => node.metadata.item_id),
-  );
-
-  const { parents, unresolved } = deriveCciHierarchyParents({
-    cciItemIds: cciNodes.map((node) => node.metadata.item_id),
-    directRelationships,
-    crosswalkRelationships,
-    assessmentProcedureItemIds,
-    controlItemIds,
-  });
-
-  for (const node of cciNodes) {
-    const picked = parents.get(node.metadata.item_id);
-    if (!picked) continue;
-    const catalogId =
-      picked.tier === "assessment_procedure" ? "nist-800-53a" : "nist-800-53";
-    node.parent_id = nodeId(catalogId, picked.controlId);
-    node.parent_derivation =
-      picked.tier === "assessment_procedure"
-        ? "cci_promoted_ap"
-        : "cci_promoted_control";
-  }
-
-  return { resolved: parents.size, unresolved };
-}
-
-/**
- * FIPS 200's 17 minimum security requirement areas are literally the basis
- * for SP 800-53's 17(+3 added since) control families — each one's item_id
- * (e.g. "AC") is the same 2-letter code as its 800-53 family. Found while
- * measuring W1's orphan residue: these 17 were part of the sprint doc's own
- * "requirement 5,154" count (5,137 CCI + 17 here) but never separately named.
- * Zero new data; the match is exact by construction, not inferred.
- */
-function applyFips200Parents(nodes) {
-  const familyIds = new Set(
-    nodes
-      .filter(
-        (node) =>
-          node.node_type === "family" &&
-          node.metadata?.catalog_id === "nist-800-53",
-      )
-      .map((node) => node.metadata.item_id),
-  );
-  let resolved = 0;
-  for (const node of nodes) {
-    if (node.metadata?.catalog_id !== "fips-200") continue;
-    const familyItemId = `FAMILY-${node.metadata.item_id}`;
-    if (!familyIds.has(familyItemId)) continue;
-    node.parent_id = nodeId("nist-800-53", familyItemId);
-    node.parent_derivation = "fips_200_family_code_match";
-    resolved += 1;
-  }
-  return { resolved };
-}
-
-/**
- * W1.3d — DoD Zero Trust's pillars and strategy documents are the top of ZT's
- * OWN native hierarchy (doctrine: "preserve each source's native hierarchy,
- * do not remap onto NIST families"), so their structural parent is their own
- * catalog node — the same pattern already established and tested for
- * zt_tenet (`dod-zt:CATALOG`, see the "DoD Zero Trust tenets" contract test).
- * Not derived from new data; reusing an already-verified precedent.
- */
-function applyDodZtNativeParents(nodes) {
-  const catalogId = nodeId("dod-zt", "CATALOG");
-  const hasCatalog = nodes.some((node) => node.id === catalogId);
-  if (!hasCatalog) return { resolved: 0 };
-  let resolved = 0;
-  for (const node of nodes) {
-    if (node.node_type !== "zt_pillar" && node.node_type !== "zt_document") continue;
-    node.parent_id = catalogId;
-    node.parent_derivation = "dod_zt_native_catalog";
-    resolved += 1;
-  }
-  return { resolved };
-}
-
 function buildNodes(registry) {
   const state = { nodes: [], findings: [] };
   const tierNodes = new Map();
@@ -878,8 +723,6 @@ function buildNodes(registry) {
     for (const record of document.records || []) {
       const sourceId = record.source?.key || defaultSourceId;
       const id = nodeId(catalogId, record.id);
-      const curatedEntry =
-        catalogId === "nist-800-53" ? curatedEntryFor(record.id) : null;
       const resolvedTier = tierFor(catalogId, record);
       pushEligibleNode(
         state,
@@ -894,9 +737,6 @@ function buildNodes(registry) {
             : String(record.id),
           source_id: sourceId,
           lifecycle_status: lifecycleStatus(record),
-          plain_language_summary: record.plain_language_summary || null,
-          curated_plain_language_summary:
-            curatedEntry?.plain_language_summary || null,
           metadata: {
             catalog_id: catalogId,
             item_id: record.id,
@@ -919,9 +759,6 @@ function buildNodes(registry) {
             type: record.type || null,
             references: record.references || null,
             superseded_by: record.metadata?.superseded_by || null,
-            ...(curatedEntry?.plain_action
-              ? { plain_action: curatedEntry.plain_action }
-              : {}),
           },
         },
         sourceId,
@@ -1009,12 +846,6 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     }
   }
 
-  const plainLanguageRationale = generatePlainLanguageRationale(
-    payload,
-    source,
-    rationaleVal,
-  );
-
   const sourceRefs = payload.sourceRefs || [
     {
       source_id: payload.sourceId,
@@ -1038,6 +869,9 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     source_node_id: payload.sourceNodeId,
     target_node_id: payload.targetNodeId,
     relationship_type: payload.relationshipType,
+    relationship_class:
+      payload.relationshipClass ||
+      defaultRelationshipClass(payload.relationshipType),
     provenance_class: provenanceClass,
     confidence:
       payload.confidence ||
@@ -1050,7 +884,6 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     warning: warningVal,
     inference_rule_id: ruleIdVal,
     rationale: rationaleVal,
-    plain_language_rationale: plainLanguageRationale,
     source_refs: sourceRefs,
   });
 }
@@ -1093,8 +926,8 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
 }
 
 /**
- * Join every record to its parent tier with an `includes` edge — the containment
- * verb this graph already uses. Driven entirely by CATALOG_TIERS, so a catalog
+ * Join every record to its parent tier with a structural `contains` edge.
+ * Driven entirely by CATALOG_TIERS, so a catalog
  * gains its branch level by adding a row, not by editing this function.
  */
 function addTierMembershipEdges(state, registry, nodeIds) {
@@ -1112,14 +945,15 @@ function addTierMembershipEdges(state, registry, nodeIds) {
         tier.edgeDataset,
         sourceNodeId,
         targetNodeId,
-        "includes",
+        "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || defaultSourceId,
         sourceNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `${filename}#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
@@ -1151,7 +985,7 @@ function addTierParentEdges(state, registry, nodeIds) {
         parent.tier.edgeDataset,
         parent.nodeId,
         resolved.nodeId,
-        "includes",
+        "contains",
       );
       if (seen.has(subjectId)) continue;
       seen.add(subjectId);
@@ -1160,7 +994,8 @@ function addTierParentEdges(state, registry, nodeIds) {
         sourceId: record.source?.key || defaultSourceId,
         sourceNodeId: parent.nodeId,
         targetNodeId: resolved.nodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `${filename}#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
@@ -1194,7 +1029,7 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
         `${catalogId}-catalog-membership`,
         catalogNodeId,
         top.nodeId,
-        "includes",
+        "contains",
       );
       if (seen.has(subjectId)) continue;
       seen.add(subjectId);
@@ -1203,7 +1038,8 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
         sourceId: record.source?.key || defaultSourceId,
         sourceNodeId: catalogNodeId,
         targetNodeId: top.nodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `${filename}#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
@@ -1237,7 +1073,7 @@ function addEnhancementMembershipEdges(state, registry, nodeIds) {
       "800-53-enhancement-membership",
       sourceNodeId,
       targetNodeId,
-      "includes",
+      "contains",
     );
     if (existingEdgeIds.has(`edge:${subjectId}`)) continue;
     addPublishedEdge(state, registry, nodeIds, {
@@ -1245,7 +1081,8 @@ function addEnhancementMembershipEdges(state, registry, nodeIds) {
       sourceId: record.source?.key || "nist-oscal",
       sourceNodeId,
       targetNodeId,
-      relationshipType: "includes",
+      relationshipType: "contains",
+      relationshipClass: RELATIONSHIP_CLASSES.structural,
       confidence: "derived",
       locator: record.source?.locator || `controls-800-53.json#${record.id}`,
       retrievedAt: record.source?.snapshot_date,
@@ -1280,14 +1117,15 @@ function addAttackSubtechniqueMembershipEdges(state, registry, nodeIds) {
         `${catalogId}-subtechnique-membership`,
         sourceNodeId,
         targetNodeId,
-        "includes",
+        "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || defaultSourceId,
         sourceNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `${filename}#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
@@ -1316,14 +1154,15 @@ function addBaselineMembershipEdges(state, registry, nodeIds) {
         "800-53b-membership",
         sourceNodeId,
         targetNodeId,
-        "includes",
+        "selects",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: "nist-800-53b-baselines",
         sourceNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "selects",
+        relationshipClass: RELATIONSHIP_CLASSES.applicability,
         locator: `sp800-53b#${baselineId}:${record.id}`,
         rationale: `NIST SP 800-53B ${baselineId} baseline membership includes ${record.id}.`,
       });
@@ -1343,14 +1182,15 @@ function addFedrampMembershipEdges(state, registry, nodeIds) {
         "fedramp-membership",
         sourceNodeId,
         targetNodeId,
-        "includes",
+        "selects",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "fedramp-rev5",
         sourceNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "selects",
+        relationshipClass: RELATIONSHIP_CLASSES.applicability,
         locator: `${record.source?.locator || `fedramp#${record.id}`}:${controlId}`,
         retrievedAt: record.source?.snapshot_date,
         rationale: `${record.title} includes ${controlId} in the published FedRAMP Rev. 5 baseline membership.`,
@@ -1458,14 +1298,15 @@ function addCmmcProgramEdges(state, registry, nodeIds, nodes) {
       "cmmc-program-membership",
       catalogNodeId,
       targetNodeId,
-      "includes",
+      "contains",
     );
     addPublishedEdge(state, registry, nodeIds, {
       subjectId,
       sourceId: record.source?.key || "dod-cmmc-rule",
       sourceNodeId: catalogNodeId,
       targetNodeId,
-      relationshipType: "includes",
+      relationshipType: "contains",
+      relationshipClass: RELATIONSHIP_CLASSES.structural,
       confidence: "derived",
       locator: record.source?.locator || "32-CFR-170.14",
       retrievedAt: record.source?.snapshot_date,
@@ -1489,14 +1330,15 @@ function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
         "dod-zt-overlay-catalog-membership",
         catalogNodeId,
         targetNodeId,
-        "includes",
+        "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "dod-zt-overlays-2024",
         sourceNodeId: catalogNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `dod-zt.json#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
@@ -1519,18 +1361,42 @@ function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
         "dod-zt-tenet-membership",
         catalogNodeId,
         targetNodeId,
-        "includes",
+        "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "dod-zt-reference-architecture-v2",
         sourceNodeId: catalogNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || `dod-zt.json#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
         rationale: `${record.id} is one of the foundational tenets of the DoD Zero Trust model.`,
+      });
+      continue;
+    }
+    if (record.type === "zt_pillar" || record.type === "zt_document") {
+      const catalogNodeId = "dod-zt:CATALOG";
+      const targetNodeId = nodeId("dod-zt", record.id);
+      const subjectId = relationshipId(
+        "dod-zt-catalog-membership",
+        catalogNodeId,
+        targetNodeId,
+        "contains",
+      );
+      addPublishedEdge(state, registry, nodeIds, {
+        subjectId,
+        sourceId: record.source?.key || "dod-zt-reference-architecture-v2",
+        sourceNodeId: catalogNodeId,
+        targetNodeId,
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
+        confidence: "derived",
+        locator: record.source?.locator || `dod-zt.json#${record.id}`,
+        retrievedAt: record.source?.snapshot_date,
+        rationale: `${record.title} is part of the native DoD Zero Trust structure.`,
       });
       continue;
     }
@@ -1547,14 +1413,15 @@ function addDodZeroTrustHierarchyEdges(state, registry, nodeIds) {
       "dod-zt-hierarchy",
       sourceNodeId,
       targetNodeId,
-      "includes",
+      "contains",
     );
     addPublishedEdge(state, registry, nodeIds, {
       subjectId,
       sourceId: record.source?.key || "dod-zt-reference-architecture-v2",
       sourceNodeId,
       targetNodeId,
-      relationshipType: "includes",
+      relationshipType: "contains",
+      relationshipClass: RELATIONSHIP_CLASSES.structural,
       confidence: "derived",
       locator: record.source?.locator || `dod-zt.json#${record.id}`,
       retrievedAt: record.source?.snapshot_date,
@@ -1619,14 +1486,15 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
         "cui-policy-program-membership",
         catalogNodeId,
         targetNodeId,
-        "includes",
+        "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "isoo-cui-regulation",
         sourceNodeId: catalogNodeId,
         targetNodeId,
-        relationshipType: "includes",
+        relationshipType: "contains",
+        relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || "32-CFR-2002",
         retrievedAt: record.source?.snapshot_date,
@@ -1647,68 +1515,6 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
  * structural parent is the catalog as a whole: the CSF Function that the
  * plurality of its controls' correlation edges point to.
  */
-function applyCatalogFunctionParent(nodes, edges) {
-  const includesParentsOf = new Map();
-  for (const edge of edges) {
-    if (edge.relationship_type !== "includes") continue;
-    const list = includesParentsOf.get(edge.target_node_id) || [];
-    list.push(edge.source_node_id);
-    includesParentsOf.set(edge.target_node_id, list);
-  }
-  const nodesById = new Map(nodes.map((node) => [node.id, node]));
-
-  function functionOf(csfNodeId) {
-    let current = csfNodeId;
-    for (let hop = 0; hop < 5; hop += 1) {
-      const node = nodesById.get(current);
-      if (!node) return null;
-      if (node.node_type === "function") return node.id;
-      const parents = includesParentsOf.get(current) || [];
-      if (parents.length === 0) return null;
-      [current] = parents;
-    }
-    return null;
-  }
-
-  const tally = new Map();
-  for (const edge of edges) {
-    if (edge.relationship_type !== "maps_to") continue;
-    const csfSide = edge.source_node_id.startsWith("csf-2:")
-      ? edge.source_node_id
-      : edge.target_node_id.startsWith("csf-2:")
-        ? edge.target_node_id
-        : null;
-    const nistSide = edge.source_node_id.startsWith("nist-800-53:")
-      ? edge.source_node_id
-      : edge.target_node_id.startsWith("nist-800-53:")
-        ? edge.target_node_id
-        : null;
-    if (!csfSide || !nistSide) continue;
-    const functionId = functionOf(csfSide);
-    if (!functionId) continue;
-    tally.set(functionId, (tally.get(functionId) || 0) + 1);
-  }
-
-  let winner = null;
-  let winnerCount = -1;
-  for (const [functionId, count] of [...tally.entries()].sort((a, b) =>
-    a[0] < b[0] ? -1 : 1,
-  )) {
-    if (count > winnerCount) {
-      winner = functionId;
-      winnerCount = count;
-    }
-  }
-  if (!winner) return { winner: null, count: 0 };
-
-  const catalogNode = nodesById.get("nist-800-53:CATALOG");
-  if (catalogNode) {
-    catalogNode.parent_id = winner;
-    catalogNode.parent_derivation = "csf_function_plurality";
-  }
-  return { winner, count: winnerCount };
-}
-
 function buildEdges(registry, nodes) {
   const nodeIds = new Set(nodes.map((node) => node.id));
   const state = { edges: [], evidence: [], findings: [] };
@@ -1890,7 +1696,6 @@ function buildLibraryDocuments(graph) {
       item_id: node.metadata?.item_id || node.id,
       title: node.metadata?.title || node.label,
       description: node.metadata?.description || "",
-      plain_language_summary: node.plain_language_summary || "",
       object_type: node.node_type,
       source_id: node.source_id,
       source_name: source?.display_name || source?.name || "",
@@ -1904,15 +1709,14 @@ function buildLibraryDocuments(graph) {
 
 function buildMiniSearchIndex(documents) {
   const index = new MiniSearch({
-    fields: ["item_id", "title", "plain_language_summary", "description"],
+    fields: ["item_id", "title", "description"],
     storeFields: ["id"],
     searchOptions: {
       prefix: true,
       boost: {
         item_id: 5,
         title: 3,
-        plain_language_summary: 2,
-        description: 1,
+        description: 2,
       },
     },
   });
@@ -1989,25 +1793,7 @@ export function buildFrameworkData() {
     readJson(join(ROOT, "data", "source-registry.json")),
   );
   const nodeState = buildNodes(registry);
-  const fips200Summary = applyFips200Parents(nodeState.nodes);
-  console.log(`FIPS 200 requirements parented: ${fips200Summary.resolved}/17`);
-  const dodZtSummary = applyDodZtNativeParents(nodeState.nodes);
-  console.log(`DoD ZT pillars+documents parented: ${dodZtSummary.resolved}/12`);
-  const cciParentSummary = applyCciHierarchyParents(nodeState.nodes);
   const edgeState = buildEdges(registry, nodeState.nodes);
-  console.log(
-    `CCI hierarchy parents: ${cciParentSummary.resolved} resolved, ` +
-      `${cciParentSummary.unresolved.length} genuinely unmappable ` +
-      `(${cciParentSummary.unresolved.slice(0, 5).join(", ")}${cciParentSummary.unresolved.length > 5 ? ", ..." : ""})`,
-  );
-  const catalogParentSummary = applyCatalogFunctionParent(
-    nodeState.nodes,
-    edgeState.edges,
-  );
-  console.log(
-    `nist-800-53 catalog parented to ${catalogParentSummary.winner} ` +
-      `(${catalogParentSummary.count} correlation edges rolled up)`,
-  );
   const findings = [...nodeState.findings, ...edgeState.findings];
   const graph = {
     sources: registry.sources,

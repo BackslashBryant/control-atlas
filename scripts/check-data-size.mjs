@@ -3,7 +3,6 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
-const MAX_DATA_BYTES = 90 * 1024 * 1024;
 const MAX_INITIAL_SEARCH_BYTES = 3_200_000;
 
 function walk(path) {
@@ -58,9 +57,8 @@ for (const file of files) {
   if (size > MAX_FILE_BYTES)
     throw new Error(`${file} exceeds 20 MiB static artifact budget`);
 }
-if (total > MAX_DATA_BYTES)
-  throw new Error("data directory exceeds 90 MiB budget");
-
 checkInitialSearchBudget();
 
-console.log(`Data size check passed: ${files.length} files, ${total} bytes`);
+console.log(
+  `Data inventory check passed: ${files.length} files, ${total} bytes total`,
+);

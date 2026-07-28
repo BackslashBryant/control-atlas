@@ -41,6 +41,7 @@ const DISPLAY_NAMES = {
     supersedes: 'Supersedes',
     related_to: 'Related to',
     includes: 'Includes',
+    contains: 'Contains',
     selects: 'Selects',
     assesses: 'Assesses',
     requires: 'Requires',

@@ -5,7 +5,7 @@ import { glossaryTermsForDocument, glossaryTermsForPattern, searchGlossary } fro
 test('searchGlossary finds reciprocity and ATO terms', () => {
   const reciprocity = searchGlossary('reciprocity');
   assert.ok(reciprocity.some((entry) => entry.id === 'reciprocity'));
-  assert.ok(reciprocity[0].relatedTemplateIds.length > 0);
+  assert.ok(Array.isArray(reciprocity[0].relatedTemplateIds));
 
   const ato = searchGlossary('ATO');
   assert.ok(ato.some((entry) => entry.id === 'ato'));

@@ -102,6 +102,8 @@ export type ViewState =
     }
   | {
       view: "templates";
+      buildSection: "tasks" | "documents";
+      task: string;
       templateType: string;
       framework: string;
       format: string;
@@ -130,6 +132,7 @@ export type ViewState =
       platform: string;
       format: string;
       collection: string;
+      category: string;
       selectedId: string;
     }
   | {
@@ -340,6 +343,9 @@ export function parseViewState(search: string): ViewState {
   if (view === "templates") {
     return {
       view,
+      buildSection:
+        params.get("buildSection") === "documents" ? "documents" : "tasks",
+      task: params.get("task") || "",
       templateType: params.get("templateType") || "",
       framework: params.get("framework") || "",
       format: params.get("format") || "markdown",
@@ -374,6 +380,7 @@ export function parseViewState(search: string): ViewState {
       platform: params.get("platform") || "",
       format: params.get("format") || "",
       collection: params.get("collection") || "",
+      category: params.get("category") || "",
       selectedId: params.get("selectedId") || "",
     };
   }
@@ -508,6 +515,8 @@ export function normalizeViewState(
     const incoming = state as Extract<ViewState, { view: "templates" }>;
     return {
       view,
+      buildSection: incoming.buildSection === "documents" ? "documents" : "tasks",
+      task: incoming.task || "",
       templateType: incoming.templateType || "",
       framework: incoming.framework || "",
       format: incoming.format || "markdown",
@@ -544,6 +553,7 @@ export function normalizeViewState(
       platform: incoming.platform || "",
       format: incoming.format || "",
       collection: incoming.collection || "",
+      category: incoming.category || "",
       selectedId: incoming.selectedId || "",
     };
   }
@@ -707,6 +717,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "pattern", state.pattern);
   } else if (state.view === "templates") {
     params.set("view", state.view);
+    setIfValue(params, "buildSection", state.buildSection === "documents" ? "documents" : "");
+    setIfValue(params, "task", state.task);
     setIfValue(params, "templateType", state.templateType);
     setIfValue(params, "framework", state.framework);
     setIfValue(params, "format", state.format);
@@ -733,6 +745,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "platform", state.platform);
     setIfValue(params, "format", state.format);
     setIfValue(params, "collection", state.collection);
+    setIfValue(params, "category", state.category);
     setIfValue(params, "selectedId", state.selectedId);
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);

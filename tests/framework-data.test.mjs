@@ -81,7 +81,8 @@ test("issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2
       (edge) =>
         edge.source_node_id === "nist-800-53b:MODERATE" &&
         edge.target_node_id === "nist-800-53:AC-2" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "selects" &&
+        edge.relationship_class === "applicability",
     ),
   );
   assert.ok(
@@ -215,7 +216,8 @@ test("issue 12 graph build emits Release 2 program context without a synthetic r
       (edge) =>
         edge.source_node_id === "fedramp-rev5:MODERATE" &&
         edge.target_node_id === "nist-800-53:AC-2" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "selects" &&
+        edge.relationship_class === "applicability",
     ),
   );
   assert.ok(
@@ -356,10 +358,8 @@ test("epic 2 graph build emits sharded library search artifacts with filter face
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");
-  assert.ok(
-    ac2.plain_language_summary?.trim(),
-    "AC-2 library document must include plain_language_summary",
-  );
+  assert.ok(ac2.description?.trim(), "AC-2 library document must retain its official description");
+  assert.equal(ac2.plain_language_summary, undefined);
 });
 
 test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
@@ -484,7 +484,8 @@ test("dod-zt graph build emits pillars, capabilities, and overlay crosswalk edge
       (edge) =>
         edge.source_node_id === "dod-zt:PILLAR-1" &&
         edge.target_node_id === "dod-zt:CAP-1-1" &&
-        edge.relationship_type === "includes",
+        edge.relationship_type === "contains" &&
+        edge.relationship_class === "structural",
     ),
   );
   assert.ok(
@@ -512,7 +513,7 @@ test("lifecycleStatus maps withdrawn and deprecated record statuses to node life
   assert.equal(lifecycleStatus({}), "active");
 });
 
-test("graph build derives control-enhancement includes edges with derived confidence", () => {
+test("graph build derives structural control-enhancement edges with derived confidence", () => {
   const nodes = generated("nodes").nodes;
   const edges = generated("edges").edges;
 
@@ -526,9 +527,10 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:AC-2" &&
       edge.target_node_id === "nist-800-53:AC-2.1" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   );
-  assert.ok(enhancementEdge, "expected AC-2 -> AC-2.1 includes edge");
+  assert.ok(enhancementEdge, "expected AC-2 -> AC-2.1 structural edge");
   assert.equal(enhancementEdge.confidence, "derived");
   assert.match(enhancementEdge.rationale, /control enhancement of AC-2/);
 
@@ -539,7 +541,8 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:FAMILY-AC" &&
       edge.target_node_id === "nist-800-53:AC-2" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   );
   assert.ok(familyEdge);
   assert.equal(familyEdge.confidence, "derived");
@@ -551,44 +554,18 @@ test("graph build derives control-enhancement includes edges with derived confid
     (edge) =>
       edge.source_node_id === "nist-800-53:AC-2" &&
       edge.target_node_id === "nist-800-53:AC-2.1" &&
-      edge.relationship_type === "includes",
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
   ).length;
   assert.equal(
     enhancementEdgeCount,
     1,
-    "expected exactly one AC-2 -> AC-2.1 includes edge, no duplicates",
+    "expected exactly one AC-2 -> AC-2.1 structural edge, no duplicates",
   );
 });
 
-test("graph build merges curated plain-language entries onto matching 800-53 nodes", () => {
-  const curatedPath = "data/curated/plain-language/controls-800-53.json";
-  if (!existsSync(curatedPath)) {
-    // Task 5's curated data file is authored by another workstream; treat its
-    // absence as a no-op per the merge hook contract rather than failing here.
-    return;
-  }
-  const curated = JSON.parse(readFileSync(curatedPath, "utf8"));
-  const curatedControlId = Object.keys(curated.entries || {})[0];
-  if (!curatedControlId) return;
-
+test("graph build removes the retired curated translation path", () => {
+  assert.equal(existsSync("data/curated/plain-language/controls-800-53.json"), false);
   const nodes = generated("nodes").nodes;
-  const node = nodes.find((n) => n.id === `nist-800-53:${curatedControlId}`);
-  assert.ok(node, `expected node for curated control ${curatedControlId}`);
-
-  const entry = curated.entries[curatedControlId];
-  assert.equal(node.plain_language_summary, entry.plain_language_summary);
-  if (entry.plain_action) {
-    assert.equal(node.metadata.plain_action, entry.plain_action);
-  }
-
-  // A control absent from the curated file must not receive a plain_action.
-  const uncuratedNode = nodes.find(
-    (n) =>
-      n.metadata?.catalog_id === "nist-800-53" &&
-      n.node_type === "control" &&
-      !(n.metadata.item_id in (curated.entries || {})),
-  );
-  if (uncuratedNode) {
-    assert.equal(uncuratedNode.metadata.plain_action, undefined);
-  }
+  assert.ok(nodes.every((node) => node.plain_language_summary === undefined && node.metadata?.plain_action === undefined));
 });

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { dismissOnboarding, waitForAppReady } from "./support.mjs";
 
 test("Commons filters resync after browser Back", async ({ page }) => {
-  await page.goto("/#/commons?lane=official");
+  await page.goto("/#/build/resources?lane=official");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

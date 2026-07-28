@@ -1,11 +1,15 @@
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { ProvenanceBadge } from "../lib/compareHelpers";
+import { relationshipExplanation } from "../lib/relationshipProvenance";
 
 type TableRow = {
   edge: {
     id?: string;
+    source_node_id?: string;
+    target_node_id?: string;
     relationship_type: string;
+    relationship_class?: string;
     provenance_class: string;
     publication_status: string;
     confidence: string;
@@ -16,24 +20,20 @@ type TableRow = {
       locator?: string;
     }>;
     rationale?: string;
-    plain_language_rationale?: string;
+    navigation_note?: string;
   };
   counterpart: { id: string };
   itemId: string;
   title: string;
 };
 
-function conciseRationale(value?: string) {
-  if (!value) return "No plain-language rationale recorded.";
-  return value.replace(/\s+Review both sides of this .*$/i, "").trim() || value;
-}
-
 export function RelationshipGraphTable(props: {
   rows: TableRow[];
   onOpenNode: (nodeId: string) => void;
   conciseTrust?: boolean;
+  centerNodeId?: string;
 }) {
-  const { rows, onOpenNode, conciseTrust = false } = props;
+  const { rows, onOpenNode, conciseTrust = false, centerNodeId = "" } = props;
 
   if (!rows.length) {
     return (
@@ -54,14 +54,17 @@ export function RelationshipGraphTable(props: {
           <tr>
             <th scope="col">Connected item</th>
             <th scope="col">Connection</th>
+            <th scope="col">Class and direction</th>
             <th scope="col">Source basis</th>
             <th scope="col">Trust level</th>
-            <th scope="col">Why it matters</th>
+            <th scope="col">Relationship explanation</th>
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ edge, counterpart, itemId, title }) => (
-            <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
+          {rows.map(({ edge, counterpart, itemId, title }) => {
+            const explanation = relationshipExplanation(edge);
+            return (
+              <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
               <td data-label="Connected item">
                 <button
                   className="link-action"
@@ -73,6 +76,21 @@ export function RelationshipGraphTable(props: {
               </td>
               <td data-label="Connection">
                 {displayNameFor("relationship_type", edge.relationship_type)}
+              </td>
+              <td data-label="Class and direction">
+                <strong>
+                  {edge.relationship_class === "structural"
+                    ? "Structure"
+                    : edge.relationship_class === "applicability"
+                      ? "Applicability"
+                      : "Correlation"}
+                </strong>
+                <br />
+                {centerNodeId && edge.source_node_id === centerNodeId
+                  ? "From selected record"
+                  : centerNodeId && edge.target_node_id === centerNodeId
+                    ? "To selected record"
+                    : "Connected records"}
               </td>
               <td data-label="Source basis">
                 {conciseTrust ? (
@@ -94,8 +112,8 @@ export function RelationshipGraphTable(props: {
               <td data-label="Trust level">
                 {displayNameFor("confidence", edge.confidence)}
               </td>
-              <td data-label="Why it matters">
-                {conciseRationale(edge.plain_language_rationale)}
+              <td data-label="Relationship explanation">
+                <strong>{explanation.label}:</strong> {explanation.text}
                 {edge.source_refs?.length ? (
                   <details className="relationship-source-refs">
                     <summary>
@@ -118,7 +136,8 @@ export function RelationshipGraphTable(props: {
                 ) : null}
               </td>
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>

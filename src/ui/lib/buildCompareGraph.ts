@@ -18,7 +18,8 @@ export type CompareGraphEdge = {
   provenance_class: string;
   publication_status: string;
   confidence: string;
-  plain_language_rationale?: string;
+  rationale?: string;
+  navigation_note?: string;
 };
 
 export type CompareSummaryCounts = {
@@ -132,7 +133,8 @@ function edgeFromRuntime(edge: any, id?: string): CompareGraphEdge {
     provenance_class: edge.provenance_class,
     publication_status: edge.publication_status,
     confidence: edge.confidence,
-    plain_language_rationale: edge.plain_language_rationale || "",
+    rationale: edge.rationale || "",
+    navigation_note: edge.navigation_note || "",
   };
 }
 
@@ -224,7 +226,8 @@ function buildRelationshipCompareGraph(
       provenance_class: row.provenance_class,
       publication_status: row.publication_status,
       confidence: row.confidence,
-      plain_language_rationale: row.plain_language_rationale,
+      rationale: row.rationale,
+      navigation_note: row.navigation_note,
     });
   }
 
@@ -316,7 +319,7 @@ function buildBaselineCompareGraph(comparison: any): CompareGraphResult {
     provenance_class: "federal_published",
     publication_status: "published",
     confidence: "direct",
-    plain_language_rationale: "Baseline comparison anchor",
+    navigation_note: "Baseline comparison anchor",
   });
   addNode(nodes, comparison.baseline_a, "neutral");
   addNode(nodes, comparison.baseline_b, "neutral");

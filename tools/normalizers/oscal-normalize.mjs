@@ -7,23 +7,6 @@ const MAX_DESCRIPTION = 1200;
 const ASSESSMENT_SOURCE_KEY = 'nist-800-53a-assessment-procedures';
 const SUPPORTED_OSCAL_MODELS = ['catalog', 'profile', 'component-definition', 'assessment-plan'];
 
-function recordPlainLanguageSummary(title, description) {
-  const desc = description || title || '';
-  let summary = desc
-    .replace(/^The organization\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits)\s+/i, 'Ensure we ')
-    .replace(/^The information system\s+(?:shall|must|establishes|implements|defines|identifies|requires|reviews|authorizes|develops|documents|disseminates|coordinates|assigns|establishes and administers|manages|monitors|audits|restricts|prevents|limits|enforces|uniquely identifies|authenticates|records|generates|protects|detects)\s+/i, 'The system must ')
-    .trim();
-  summary = summary.charAt(0).toUpperCase() + summary.slice(1);
-  const firstSentenceEnd = summary.indexOf('. ');
-  if (firstSentenceEnd !== -1) {
-    summary = summary.slice(0, firstSentenceEnd + 1);
-  }
-  if (summary.length > 200) {
-    summary = summary.slice(0, 197) + '...';
-  }
-  return summary || `Verify requirements for ${title}`;
-}
-
 const ASSESSMENT_PART_NAMES = new Set(['assessment-objective', 'assessment-method', 'assessment-objects', 'objective']);
 const INSERT_PATTERN = /\{\{\s*insert:\s*param,\s*([\w.-]+)\s*\}\}/g;
 const UNRESOLVED_ASSIGNMENT = '[Assignment: organization-defined value]';
@@ -228,7 +211,6 @@ function buildControlRecord(node, family, sourceKey, resolveInserts) {
     title: node.title || normalize80053Id(node.id),
     family: family || 'General',
     description: desc,
-    plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
     source: { key: sourceKey },
     status: withdrawn ? 'withdrawn' : undefined,
     metadata: Object.keys(metadata).length ? metadata : undefined,
@@ -290,7 +272,6 @@ function walkCsf(nodes, functionCtx, categoryCtx, records) {
         framework: 'csf',
         title: node.title || node.id,
         description: desc,
-        plain_language_summary: recordPlainLanguageSummary(node.title || node.id, desc),
         function_id: nextFunctionCtx?.id || null,
         function: nextFunctionCtx?.title || null,
         category_id: nextCategoryCtx?.id || null,
@@ -328,7 +309,6 @@ function walk800171(nodes, familyTitle, records) {
         title: node.title || id,
         family: family || 'Requirements',
         description: desc,
-        plain_language_summary: recordPlainLanguageSummary(node.title || id, desc),
       });
     }
   }
@@ -404,7 +384,6 @@ export function parse800171CsvCatalog(csvText, sourceKey) {
         title: id,
         family: cleanText(row[familyColumn]) || 'Requirements',
         description: desc,
-        plain_language_summary: recordPlainLanguageSummary(id, desc),
       };
     });
 
@@ -430,7 +409,6 @@ function walk800172(nodes, familyTitle, records) {
         title: node.title || id,
         family: family || 'Requirements',
         description: desc,
-        plain_language_summary: recordPlainLanguageSummary(node.title || id, desc),
       });
     }
   }

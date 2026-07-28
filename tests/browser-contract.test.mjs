@@ -30,8 +30,8 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and boots a React root', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /Ctrl\+Alt\+Comply/);
-  assert.match(html, /The public map for federal cyber compliance/);
-  assert.match(html, /Search controls, trace framework connections/);
+  assert.match(html, /Public reference for federal cyber requirements/);
+  assert.match(html, /Find published federal cyber requirements/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -46,14 +46,16 @@ test('shell removes the old mode toggle and uses the current translation-first n
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
+  const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   assert.match(navigation, /PRIMARY_NAV_ITEMS/);
-  assert.match(navigation, /Explore/);
-  assert.match(navigation, /Catalog/);
-  assert.match(navigation, /Compare/);
-  assert.match(navigation, /Learn/);
-  assert.match(navigation, /Build/);
-  assert.match(navigation, /Start here/);
-  assert.match(navigation, /Sources/);
+  assert.match(navigation, /routeIdentityFor/);
+  assert.match(routeIdentity, /Explore/);
+  assert.match(routeIdentity, /Catalog/);
+  assert.match(routeIdentity, /Compare/);
+  assert.match(routeIdentity, /Learn/);
+  assert.match(routeIdentity, /Build/);
+  assert.match(routeIdentity, /Start here/);
+  assert.match(routeIdentity, /Sources/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
 });
@@ -177,6 +179,14 @@ test('query-string deep link compatibility moves into typed React adapters', () 
   assert.match(router, /applyLegacyQueryRedirect/);
 });
 
+test('path-style legacy URLs stop at the static not-found page instead of redirecting', () => {
+  const redirectPage = readFileSync('src/public/404.html', 'utf8');
+  assert.match(redirectPage, /<title>Page not found \| Control Atlas<\/title>/);
+  assert.match(redirectPage, /current link/);
+  assert.doesNotMatch(redirectPage, /<script/);
+  assert.doesNotMatch(redirectPage, /l\.replace\(/);
+});
+
 test('Orbital Archive visual system remains active in the shared stylesheet', () => {
   assert.match(html, /Content-Security-Policy/);
   assert.doesNotMatch(html, /fonts\.googleapis\.com/);
@@ -243,17 +253,45 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {
   const topNav = readFileSync('src/ui/components/TopNav.tsx', 'utf8');
+  const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
   assert.match(topNav, /onClick=\{onOpenSearch\}/);
   assert.match(topNav, /aria-label="Open search"/);
+  assert.equal((topNav.match(/<Tabs/g) || []).length, 1);
+  assert.match(topNav, /tabs=\{PRIMARY_NAV_ITEMS\.map/);
+  assert.match(templatesPage, /className="build-start-layout"/);
+  assert.match(templatesPage, /className="build-resource-rail"/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
 });
 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(homePage, /The public map for federal cyber compliance/);
-  assert.match(homePage, /Search controls and trace how\s+frameworks connect/);
+  assert.match(homePage, /Public reference for federal cyber requirements/);
+  assert.match(homePage, /Find published controls, source material, and starter documents/);
   assert.doesNotMatch(homePage, /source-backed/i);
+});
+
+test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
+  const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
+  assert.match(detailPage, /Official description/);
+  assert.match(surfaces, /No narrative description was published for this record/);
+  assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
+});
+
+test('Build local navigation stays subordinate and identifies the current Build branch', () => {
+  const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
+  const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
+  const resourcesPage = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
+  const resourceDetail = readFileSync('src/ui/pages/CommonsDetailPage.tsx', 'utf8');
+  assert.match(localNav, /aria-label="Build sections"/);
+  assert.match(localNav, /aria-current/);
+  assert.match(localNav, /Tasks/);
+  assert.match(localNav, /Starter documents/);
+  assert.match(localNav, /Resources/);
+  assert.match(buildPage, /<BuildLocalNav/);
+  assert.match(resourcesPage, /<BuildLocalNav active="resources"/);
+  assert.match(resourceDetail, /<BuildLocalNav active="resources"/);
 });
 
 test('route interactions keep canonical context and synchronize visible state', () => {
@@ -287,15 +325,11 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 
-test('playbooks use task-first guidance instead of generic feature copy', () => {
+test('public playbooks are quarantined until source-registry provenance exists', () => {
   const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
   assert.doesNotMatch(playbooksPage, /Use task-focused guidance/);
-  assert.match(playbooksPage, /summary=\{selectedPattern\.summary\}/);
-  assert.match(playbooksPage, /title="Use this when"/);
-  assert.match(playbooksPage, /title="What to do"/);
-  assert.match(playbooksPage, /title="What to avoid"/);
-  assert.match(playbooksPage, /title="Limits of this guide"/);
-  assert.match(playbooksPage, /No playbooks match this search and category/);
+  assert.match(playbooksPage, /No public playbooks are available yet/);
+  assert.match(playbooksPage, /source-registry IDs and canonical public source URLs/);
   assert.match(playbooksPage, /Clear filters/);
   assert.match(playbooksPage, /displayNameFor\("template_type", templateId\)/);
 });

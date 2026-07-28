@@ -44,7 +44,8 @@ assert.ok(assets.some((asset) => asset.endsWith('.js')), 'built JavaScript asset
 assert.ok(assets.some((asset) => asset.endsWith('.css')), 'built CSS asset must exist');
 
 const notFoundHtml = readFileSync('dist/site/404.html', 'utf8');
-assert.match(notFoundHtml, /l\.replace\(l\.origin \+ base \+ "#\/"/, '404.html must redirect path URLs into the HashRouter');
-assert.match(notFoundHtml, /script-src 'sha256-/, '404.html inline redirect must be CSP-pinned');
+assert.match(notFoundHtml, /<title>Page not found \| Control Atlas<\/title>/, '404.html must identify the static not-found state');
+assert.match(notFoundHtml, /the Control Atlas home page/, '404.html must offer a canonical recovery link');
+assert.doesNotMatch(notFoundHtml, /<script/, '404.html must not redirect retired path URLs into the HashRouter');
 
 console.log(`Static smoke passed: ${registry.sources.length} sources, ${nodes.length} nodes, ${edges.length} edges, ${findings.length} findings`);

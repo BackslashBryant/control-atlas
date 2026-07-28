@@ -18,6 +18,9 @@ import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { CommonsLaneBadge } from "../components/CommonsLaneBadge";
+import { serializeHashLocation } from "../lib/hashRoutes";
+import { PRIMARY_BROWSE_CATEGORIES, primaryBrowseCategory } from "../lib/resourcesDirectory.mjs";
+import { BuildLocalNav } from "../components/BuildLocalNav";
 
 type CommonsDetailPageProps = {
   bundle: RuntimeBundle | null;
@@ -46,7 +49,9 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
   }, [resource, dataset]);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(
+      `${window.location.origin}${window.location.pathname}#${serializeHashLocation({ view: "commons-detail", id: resourceId })}`,
+    );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -58,13 +63,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
           <IconAlertTriangle size={48} className="mx-auto text-[var(--ca-warning)] mb-3" />
           <h2 className="text-xl font-bold">Resource Not Found</h2>
           <p className="text-sm text-[var(--ca-secondary)] mt-2 mb-6">
-            The resource ID "{resourceId}" could not be found among community resources.
+            The resource ID "{resourceId}" could not be found in Resources.
           </p>
           <button
             onClick={() => onNavigate("commons")}
             className="px-4 py-2 rounded-sm bg-[var(--ca-primary)] text-[var(--ca-bg)] hover:brightness-110 font-medium text-xs shadow"
           >
-            Return to community resources
+            Return to Resources
           </button>
         </div>
       </div>
@@ -73,6 +78,9 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
   return (
     <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
+      <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+        <BuildLocalNav active="resources" onNavigate={onNavigate} />
+      </div>
       {/* Back Navigation */}
       <div className="border-b border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_50%,transparent)] px-4 py-3 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
@@ -81,7 +89,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
             className="inline-flex items-center gap-2 bg-transparent text-xs font-semibold text-[var(--ca-primary)] hover:text-[var(--ca-primary)] transition-colors"
           >
             <IconArrowLeft size={16} />
-            Back to community resources
+            Back to Resources
           </button>
 
           <div className="flex items-center gap-2">
@@ -106,7 +114,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
       </div>
 
       <section
-        aria-label="Community resource detail"
+        aria-label="Resource detail"
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8"
       >
         {/* Header Block */}
@@ -269,6 +277,11 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text-muted)] border-b border-[var(--ca-border)] pb-2">
                 Metadata & Access
               </h3>
+
+              <div>
+                <span className="text-[var(--ca-secondary)] block mb-0.5">Browse Category</span>
+                <span className="font-semibold text-[var(--ca-text)]">{PRIMARY_BROWSE_CATEGORIES.find((category) => category.id === primaryBrowseCategory(resource))?.label}</span>
+              </div>
 
               <div>
                 <span className="text-[var(--ca-secondary)] block mb-0.5">Resource Lane</span>

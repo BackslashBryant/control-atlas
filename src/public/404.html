@@ -4,29 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-P6GRAJJ1UALBTm2f4Z6TrcDiTNfmzcb+SZ4F9cbgpTE='; style-src 'unsafe-inline'; base-uri 'self'">
-  <title>Redirecting… | Control Atlas</title>
-  <script>
-      (function () {
-        // GitHub Pages has no server-side routing. For this HashRouter SPA we
-        // rewrite a hard-typed path URL (…/atlas-map) into its hash form
-        // (…/#/atlas-map) so the app boots on the right view (CATL-62).
-        var l = window.location;
-        var segments = l.pathname.split("/").filter(Boolean);
-        // Project pages (user.github.io/repo/…) keep the repo segment as the
-        // base; apex/custom domains and local previews serve from the root.
-        var keep = l.hostname.endsWith(".github.io") ? 1 : 0;
-        var base = "/" + segments.slice(0, keep).join("/");
-        if (base.length > 1) base += "/";
-        var route = segments.slice(keep).join("/");
-        l.replace(l.origin + base + "#/" + route + l.search);
-      })();
-    </script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; base-uri 'self'">
+  <title>Page not found | Control Atlas</title>
 </head>
 <body>
   <main style="font-family: system-ui, sans-serif; max-width: 32rem; margin: 4rem auto; padding: 0 1rem; color: #e5e7eb; background: #0B1020;">
-    <h1 style="font-size: 1.25rem;">Redirecting…</h1>
-    <p>If you are not redirected automatically, open <a href="./#/" style="color: #22D3EE;">the Control Atlas home page</a>.</p>
+    <h1 style="font-size: 1.25rem;">Page not found</h1>
+    <p>Use <a href="./#/" style="color: #22D3EE;">the Control Atlas home page</a> to navigate with a current link.</p>
   </main>
 </body>
 </html>

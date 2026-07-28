@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
@@ -22,6 +22,20 @@ const PROHIBITED_CLAIMS = [
 const ADVISORY_FIELDS = ['title', 'summary', 'explanation', 'friction'];
 const RAW_SCHEMA_SLUGS = /\b(includePlaceholders|artifact_type|templateType|security_plan_starter|implementation_statement_worksheet)\b/;
 const ABSTRACT_SUMMARY_LEADS = /^(understand|leverage|utilize|establish|centralize|facilitate|use task-focused)\b/i;
+const DETERMINATION_BOUNDARY = [
+  /controls?\s+you\s+can\s+inherit/i,
+  /claim\s+the\s+controls?/i,
+  /reuse\s+another\s+team['’]s\s+authorization/i,
+  /before\s+you\s+inherit/i,
+  /assessors?\s+expect/i,
+];
+const BANNED_SITE_COPY = [
+  /the public map for federal cyber compliance/i,
+  /like a family tree/i,
+  /family tree/i,
+  /what do you need to get done/i,
+  /start with a compliance task/i,
+];
 
 const dataset = {
   nodes: [
@@ -66,6 +80,26 @@ test('pattern advisory copy avoids prohibited compliance or authorization claims
         assert.doesNotMatch(String(entry), claim, `Pattern ${pattern.id}.dos contains prohibited claim`);
       }
     }
+  }
+});
+
+test('Start Here treats mappings and recommendations as references requiring validation', () => {
+  const startHere = readFileSync('src/ui/lib/startHereRecommendations.mjs', 'utf8');
+  assert.match(startHere, /do not determine a classification, baseline, authorization path, or applicability result/i);
+  assert.match(startHere, /confirm .*governing program/i);
+  for (const claim of DETERMINATION_BOUNDARY) {
+    assert.doesNotMatch(startHere, claim, `Start Here contains a determination-like claim: ${claim}`);
+  }
+});
+
+test('site-wide UI copy rule rejects canned metaphors and compliance-only prompts', () => {
+  const uiFiles = readdirSync('src/ui', { recursive: true })
+    .map(String)
+    .filter((path) => /\.(?:ts|tsx|html)$/.test(path))
+    .map((path) => readFileSync(`src/ui/${path}`, 'utf8'));
+  const siteCopy = [readFileSync('src/index.html', 'utf8'), ...uiFiles].join('\n');
+  for (const phrase of BANNED_SITE_COPY) {
+    assert.doesNotMatch(siteCopy, phrase, `Banned canned or compliance-only copy: ${phrase}`);
   }
 });
 

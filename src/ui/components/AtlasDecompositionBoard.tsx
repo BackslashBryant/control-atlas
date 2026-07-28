@@ -12,20 +12,17 @@ import {
 } from "@tabler/icons-react";
 
 import {
-  ATLAS_PATH_STAGES,
-  ATLAS_RMF_STAGES,
+  ATLAS_RELATIONSHIP_LENSES,
   type AtlasConnectionGroup,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
+import { relationshipExplanation } from "../lib/relationshipProvenance";
 import { Button } from "./lsm/Button";
-
-type AtlasLens = "purpose" | "rmf";
 
 type AtlasDecompositionBoardProps = {
   center: AtlasNeighborhoodNode;
   groups: AtlasConnectionGroup[];
-  lens: AtlasLens;
   stageId: string;
   selectedItemId: string;
   onOpenList: () => void;
@@ -36,54 +33,41 @@ type AtlasDecompositionBoardProps = {
   onStageChange: (stageId: string) => void;
 };
 
-const PURPOSE_ICONS = [
+const LENS_ICONS = [
   IconFileDescription,
   IconShield,
   IconSettings,
   IconFolderOpen,
   IconSearch,
   IconGavel,
-];
-
-const RMF_ICONS = [
-  IconFileDescription,
   IconChecklist,
-  IconShield,
-  IconSettings,
-  IconSearch,
-  IconGavel,
 ];
 
 const STAGE_PREVIEW_LIMIT = 12;
 
 /**
- * The Path is a walk, not a board. Previously all six stages rendered at once
+ * The Path is a walk, not a board. Previously every lens rendered at once
  * with three items each, so it read as a dump of everything rather than a
  * route through anything. Now it asks one question at a time:
  *
- *   1. which stage of the path do you want?   (shallow — stages + counts)
- *   2. which record in that stage?            (wading  — that stage only)
+ *   1. which relationship lens do you want?   (shallow — lenses + counts)
+ *   2. which record in that lens?              (wading  — that lens only)
  *   3. either continue the path from it or open its full record
  */
 export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
   const centerLabel = props.center.metadata?.item_id || props.center.id;
   const centerTitle =
     props.center.metadata?.title || props.center.label || centerLabel;
-  const definitions =
-    props.lens === "rmf" ? ATLAS_RMF_STAGES : ATLAS_PATH_STAGES;
-  const icons = props.lens === "rmf" ? RMF_ICONS : PURPOSE_ICONS;
-  const lensLabel = props.lens === "rmf" ? "RMF lifecycle" : "Purpose";
+  const definitions = ATLAS_RELATIONSHIP_LENSES;
+  const icons = LENS_ICONS;
+  const lensLabel = "Relationship lenses";
 
   const stagesWithRows = definitions.map((stage, index) => ({
     stage,
     index,
     Icon: icons[index] || IconFileDescription,
     rows: props.groups
-      .filter((group) =>
-        props.lens === "rmf"
-          ? group.rmfStage === stage.id
-          : group.stage === stage.id,
-      )
+      .filter((group) => group.lens === stage.id)
       .flatMap((group) => group.items),
   }));
 
@@ -205,7 +189,7 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
               : `${centerLabel} — ${centerTitle}`}
           </h2>
           <p>
-            {selectedRow?.edge.plain_language_rationale ||
+            {selectedRow ? relationshipExplanation(selectedRow.edge).text :
               (activeStage
                 ? `Choose a record above to continue the path from it.`
                 : `Pick a stage to see what ${centerLabel} connects to.`)}

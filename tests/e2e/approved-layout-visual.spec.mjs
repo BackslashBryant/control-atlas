@@ -7,7 +7,7 @@ import {
   waitForSkeletonsSettled,
 } from './support.mjs';
 
-const FOCUSED_ATLAS = '/#/atlas-map?node=nist-800-53%3AAC-2';
+const FOCUSED_ATLAS = '/#/explore?node=nist-800-53%3AAC-2';
 const VIEWPORTS = {
   desktop: { width: 1440, height: 1000 },
   compact: { width: 390, height: 844 },
@@ -15,14 +15,14 @@ const VIEWPORTS = {
 const ROUTE_COMPOSITIONS = [
   { slug: 'home', path: '/#/' },
   { slug: 'guided-start', path: '/#/start' },
-  { slug: 'explore', path: '/#/explore?q=AC-2' },
+  { slug: 'search', path: '/#/search?q=AC-2' },
   { slug: 'library', path: '/#/library' },
   { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
   { slug: 'compare', path: '/#/compare' },
-  { slug: 'commons', path: '/#/commons?collection=col-oscal-starter-kit' },
+  { slug: 'resources', path: '/#/build/resources?collection=col-oscal-starter-kit' },
   {
-    slug: 'commons-detail',
-    path: '/#/commons-detail?id=official-nist-sp800-53-r5',
+    slug: 'resource-detail',
+    path: '/#/build/resources/official-nist-sp800-53-r5',
   },
   { slug: 'guides', path: '/#/playbooks' },
   { slug: 'documents', path: '/#/templates' },
@@ -63,7 +63,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   } else {
     // The six-column board is retired: the Path asks which stage first, so
     // all six stages are offered as choices and no records are dumped.
-    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(6);
+    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(7);
     await expect(
       page.getByRole('complementary', { name: 'Selected path' }),
     ).toBeVisible();

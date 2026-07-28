@@ -50,6 +50,7 @@ test("Atlas neighborhood sharding is deterministic and preserves canonical edges
     .records.a;
   assert.equal(record.published_connection_count, 1);
   assert.equal(record.candidate_connection_count, 1);
+  assert.deepEqual(record.structural_path, ["a"]);
   assert.deepEqual(record.edges.map((edge) => edge[0]), ["edge:published", "edge:candidate"]);
 
   const zeroRecord = first
@@ -57,6 +58,45 @@ test("Atlas neighborhood sharding is deterministic and preserves canonical edges
     .records.c;
   assert.equal(zeroRecord.published_connection_count, 0);
   assert.equal(zeroRecord.candidate_connection_count, 1);
+});
+
+test("Atlas neighborhood records carry the canonical structural path for cold deep links", () => {
+  const graph = {
+    nodes: [
+      { id: "x:root", node_type: "catalog", label: "Catalog", metadata: { catalog_id: "x" } },
+      { id: "x:family", node_type: "family", label: "Family", metadata: { catalog_id: "x" } },
+      { id: "x:item", node_type: "control", label: "Item", metadata: { catalog_id: "x" } },
+    ],
+    edges: [
+      {
+        id: "root-family",
+        source_node_id: "x:root",
+        target_node_id: "x:family",
+        relationship_type: "contains",
+        relationship_class: "structural",
+        publication_status: "published",
+        source_refs: [],
+      },
+      {
+        id: "family-item",
+        source_node_id: "x:family",
+        target_node_id: "x:item",
+        relationship_type: "contains",
+        relationship_class: "structural",
+        publication_status: "published",
+        source_refs: [],
+      },
+    ],
+  };
+  const shards = buildAtlasNeighborhoodShards(graph, 8);
+  const record = shards
+    .find((shard) => shard.shard_id === atlasNeighborhoodShardId("x:item", 8))
+    .records["x:item"];
+  assert.deepEqual(record.structural_path, [
+    "x:root",
+    "x:family",
+    "x:item",
+  ]);
 });
 
 test("generated Atlas shards contain only incident canonical edges", () => {
