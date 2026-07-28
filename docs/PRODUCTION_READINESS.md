@@ -9,7 +9,11 @@
 
 ## Current Status
 
-**v1.0.0 RELEASE APPROVED.** Remaining backlog items 1–7 executed and verified on `agent/nexus/uuid-advisory`. Full precommit suite green (`npm run precommit`), GitHub Actions workflows migrated to Node 22 with strict `npm ci`, slow-device layout shift fixed, route-state handler sweeps complete, 11 graph-health findings documented, search evaluation benchmark expanded, and audit evidence compiled in [`docs/audits/v1-0-0-release-decision-2026-07-22.md`](audits/v1-0-0-release-decision-2026-07-22.md). Tag `v1.0.0` is authorized.
+**v1.0.2 PUBLISHED.** The final v1 correction and maintenance patch is deployed
+at `e46a122`. Full precommit, main CI/security, Pages, 43 deployed browser
+checks, cache-version agreement, and the comparative mobile Lighthouse gate
+are green. Release evidence:
+[`docs/audits/v1-0-2-release-2026-07-28.md`](audits/v1-0-2-release-2026-07-28.md).
 
 ## Phase 0 Development Readiness
 
@@ -50,7 +54,12 @@ Dated files under `docs/audits/` remain historical evidence for prior GovFrame-e
 
 ## Recommended Next Implementation Task
 
-Await the owner's release decision. The code, CI, deployment, live browser replay, and deployed Lighthouse evidence are complete. The owner must explicitly accept or defer human screen-reader and real-device residuals and separately approve creation/publication of `v1.0.0`. Lighthouse remains report-only, Vale remains a focused copy-debt check, and NIST OSCAL validation remains a monthly additive cross-check.
+No v1 code or publication gate remains. Human screen-reader, physical-device,
+WebPageTest, and penetration-test evidence remain explicitly unverified and
+must not be inferred from the automated release record. The comparative
+Lighthouse workflow remains the synthetic performance gate; Vale remains a
+focused copy-debt check, and NIST OSCAL validation remains a monthly additive
+cross-check.
 
 ## Post-v1 strengthening status
 

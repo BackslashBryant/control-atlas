@@ -10,29 +10,16 @@
 
 ## Current Objective
 
-**2026 correction program** - Epics 4 and 5 are complete locally on
-`agent/forge/epic-5-source-first-record-integrity`; Epic 6 responsive and
-accessibility implementation is complete locally on
-`agent/pixel/epic-6-responsive-accessibility`. Record detail
-now leads with official source content, an honest absence state where no
-narrative was published, reachable source links, and provenance-labelled
-relationships. Synthetic record translation, recommendation defaults, unsourced
-public playbooks, and the unmounted legacy renderer are retired.
-Build now uses subordinate Tasks/Starter documents/Resources navigation with
-canonical task and document paths, validated configuration, and visible
-recovery that preserves valid state. Resources retains Epic 3's canonical
-URL-backed browse contract. No push, merge, deploy, tag, or release is
-authorized by this work.
+**v1 closeout complete.** The correction program, maintenance pass, dependency
+review, source-provenance review, deployment verification, and release
+publication are complete. `v1.0.2` is the final v1 patch and points to
+`e46a122`; it supersedes `v1.0.1` without rewriting that published tag. The
+pre-hash query-state adapter remains because it preserves application state,
+not a retired route.
 
-**Active sprint:** v1.0.1 final closeout on
-`agent/nexus/v1-0-1-final-closeout`. The local candidate includes Epic 7
-semantic/compatibility contracts, retired aliases, graph-health provenance,
-Node 22 and strict-install workflow verification, a comparative mobile
-Lighthouse gate, and the remaining Compare navigation-state cleanup. Pages
-route groups, the comparative workflow result, exact deployed commit/cache,
-canonical routes, static-404 evidence, and release publication require fresh
-remote execution. The pre-hash query-state adapter remains because it preserves
-persisted state rather than a retired route.
+**Active sprint:** None. New work must be a separately scoped post-v1
+maintenance or product increment. Human NVDA/VoiceOver/TalkBack and physical
+iOS/Android checks remain external evidence, not an unfinished code epic.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -58,13 +45,13 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Run final local gates, integrate reviewed dependency updates, and push the
-   v1.0.1 candidate.
-2. Run the bounded Pages route groups, same-runner v1.0.0 comparison, exact
-   cache/commit check, and representative canonical/deep-link/static-404 smoke.
-   Do not treat local automation as deployed, real-device, or human
-   screen-reader proof.
-3. Preserve the explicit human NVDA/VoiceOver/TalkBack residual after release.
+1. Preserve the v1.0.2 release evidence and the explicit human
+   NVDA/VoiceOver/TalkBack/physical-device residual.
+2. Revisit sparse-catalog crosswalks only when an official upstream source
+   publishes direct, reproducible mappings.
+3. Reopen staged ingestion/search tools only against the checked-in benchmark
+   and a concrete product failure; the July 17 experiments and strengthening
+   sequence are complete.
 
 ## Status Docs
 
