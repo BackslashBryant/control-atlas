@@ -689,3 +689,27 @@ and then run the bounded Pages route groups, exact deployed cache/commit check,
 and representative primary/deep-link plus retired-alias static-404 smoke. Human
 assistive-technology evidence remains separate; local automation is not
 deployed, real-device, or human screen-reader proof.
+
+## 2026-07-28 (session 17) - v1.0.1 final closeout
+
+### Local candidate additions
+
+- Replaced report-only, fixed-ref Lighthouse A/B setup with a v1.0.0 baseline
+  and workflow-commit candidate measured three times each on the same mobile
+  runner. The workflow fails when the candidate median falls more than three
+  points below the baseline.
+- Added `data/graph-health-provenance.json` and a graph contract that covers
+  exactly the eleven blocked findings, verifies their official upstream URLs,
+  and asserts that none is promoted into displayable edges.
+- Removed remaining stale `...state` page patches from Compare. `navigate()`
+  already merges the latest state, so callers now submit only their changed
+  keys.
+- Prepared the package metadata for v1.0.1. No remote publication has occurred
+  from this local record.
+
+### Remaining release evidence
+
+Remote execution must still demonstrate the v1.0.0-versus-candidate Lighthouse
+result, Pages deployment commit/cache identity, bounded live route groups, and
+canonical/deep-link/retired-alias static-404 behavior. Human assistive-
+technology review remains a separate residual.
