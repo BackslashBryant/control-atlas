@@ -158,25 +158,14 @@ body {
 .primary-nav {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: thin;
 }
 
-/* Separates the "framework" tab group (Atlas/Library/Compare — all read the
-   same GRC graph) from the "toolkit" group (Commons/Guides/Documents —
-   practitioner tools) so the two kinds of destination read as two kinds of
-   destination, not one undifferentiated row. */
-.primary-nav-divider {
-  align-self: center;
-  width: 1px;
-  height: 28px;
-  margin-inline: var(--ca-space-2);
-  background: var(--ca-border-strong);
-  flex-shrink: 0;
-}
-
+/* One continuous navigation path keeps destinations distinct without
+   introducing a second hierarchy inside the shared header. */
 .primary-nav > div {
   flex-shrink: 0;
 }
@@ -207,6 +196,12 @@ body {
 
 .header-actions {
   align-self: center;
+}
+
+/* Search, sources, and help are utilities. Keeping them together at the end
+   leaves one uninterrupted global navigation path in the center. */
+.header-search-trigger-wrap {
+  display: flex;
 }
 
 .header-actions button {

@@ -34,6 +34,10 @@ test("route matrix canonicalizes current and legacy destinations without losing 
       canonical: "/build/resources/official-nist-sp800-53-r5?from=templates",
     },
     {
+      input: "/build/resources?category=tools&lane=open_source&resourceType=tool",
+      canonical: "/build/resources?category=tools&lane=open_source&resourceType=tool",
+    },
+    {
       input: "/start?step=dataSensitivity&systemType=Cloud+SaaS",
       canonical: "/start?step=dataSensitivity&systemType=Cloud+SaaS",
     },
@@ -57,6 +61,12 @@ test("invalid parameters are discarded with a visible recovery contract", () => 
   );
 
   assert.equal(resolved.canonicalPath, "/explore");
+  assert.match(resolved.recoveryMessage, /removed|could not/i);
+});
+
+test("invalid Resources facet state recovers to the valid canonical browse scope", () => {
+  const resolved = canonicalizeHashLocation("/build/resources?category=made-up&lifecycle=Monitor");
+  assert.equal(resolved.canonicalPath, "/build/resources");
   assert.match(resolved.recoveryMessage, /removed|could not/i);
 });
 

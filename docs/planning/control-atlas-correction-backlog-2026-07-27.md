@@ -140,6 +140,15 @@ No push, merge, deploy, tag, or release was performed.
 Priority: P1, with search correction treated as P0 bug work  
 Risk: Medium, because taxonomy migration touches all 96 records and contextual modules.
 
+**Status (2026-07-27): Complete locally.** Features 3.1-3.5 and milestone M3
+passed focused category/search/provenance and route contracts, Commons history
+E2E, static build, and a 375/768/1440 local browser walkthrough. Shared
+navigation is one continuous primary path; related resources are supporting
+context, not a second navigation layer. The six
+existing type-derived categories reconcile all 96 resources; contextual
+recommendations are derived from existing metadata and cannot be structural
+graph children. No push, merge, deploy, tag, or release was performed.
+
 ### Feature 3.1 — Establish Resources page identity and routes
 
 - **Priority:** P1.

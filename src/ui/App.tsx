@@ -130,9 +130,6 @@ export function App() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [helpTab, setHelpTab] = useState<HelpTab>("glossary");
   const [glossaryFocusTermId, setGlossaryFocusTermId] = useState("");
-  const [headerSearchDraft, setHeaderSearchDraft] = useState(() =>
-    viewState.view === "search" ? viewState.query : "",
-  );
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
   const [routeRecovery, setRouteRecovery] = useState("");
@@ -331,14 +328,6 @@ export function App() {
     setHelpOpen(true);
   }
 
-  useEffect(() => {
-    if (viewState.view === "search") {
-      setHeaderSearchDraft(viewState.query);
-    } else {
-      setHeaderSearchDraft("");
-    }
-  }, [viewState]);
-
   const readyState = loadError
     ? "error"
     : bundle?.graphReady || (bundle && !requiresFullGraph(viewState.view))
@@ -357,9 +346,6 @@ export function App() {
         Skip to workspace
       </a>
       <TopNav
-        bundle={bundle}
-        headerSearchDraft={headerSearchDraft}
-        onHeaderSearchDraftChange={setHeaderSearchDraft}
         onNavigate={navigate}
         onOpenHelp={() => openHelp()}
         onOpenSearch={() => setSearchOverlayOpen(true)}

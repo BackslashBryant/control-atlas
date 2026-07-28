@@ -3,30 +3,26 @@ import {
   IconSearch,
   IconFilter,
   IconX,
-  IconShieldCheck,
-  IconCode,
-  IconUsers,
-  IconBuildingStore,
-  IconArchive,
   IconSparkles,
-  IconRefresh,
   IconPlus,
   IconFlag,
   IconBook2,
-  IconChevronRight,
-  IconCheck
+  IconChevronRight
 } from "@tabler/icons-react";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import type {
   CommonsResource,
-  CommonsResourceLane,
   CommonsCollection
 } from "../lib/commonsTypes";
-import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
+import {
+  PRIMARY_BROWSE_CATEGORIES,
+  filterDirectoryResources,
+  primaryBrowseCategoryCounts,
+  searchDirectoryResources,
+} from "../lib/resourcesDirectory.mjs";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { OfficialPracticalPairing } from "../components/OfficialPracticalPairing";
-import { Tabs } from "../components/lsm";
 
 type CommonsPageProps = {
   bundle: RuntimeBundle | null;
@@ -46,6 +42,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   const selectedResourceType = commonsState?.resourceType || "";
   const selectedAccessType = commonsState?.accessType || "";
   const selectedCollection = commonsState?.collection || "";
+  const selectedCategory = commonsState?.category || "";
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   // Shallow-to-deep: the full 99-resource grid is a deliberate "deep" view.
   // It opens only after the visitor expresses intent (search, lane, filter,
@@ -71,6 +68,10 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         .sort(),
     [allResources],
   );
+
+  const frameworkOptions = useMemo(() => [...new Set(allResources.flatMap((resource) => resource.frameworks))].sort(), [allResources]);
+  const lifecycleOptions = useMemo(() => [...new Set(allResources.flatMap((resource) => resource.lifecycleStages))].sort(), [allResources]);
+  const audienceOptions = useMemo(() => [...new Set(allResources.flatMap((resource) => resource.audiences))].sort(), [allResources]);
 
   // Derived from the data, never hand-listed: a hardcoded list previously
   // offered "advisory" (which matched nothing) while omitting four real types
@@ -121,115 +122,26 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       resourceType: selectedResourceType,
       accessType: selectedAccessType,
       collection: selectedCollection,
+      category: selectedCategory,
       ...patch
     });
   };
 
-  // Filter & Rank Resources deterministically
   const filteredResources = useMemo(() => {
-    let result = [...allResources];
+    const scoped = filterDirectoryResources(allResources, {
+      category: selectedCategory,
+      lane: activeLane,
+      collection: selectedCollection,
+      framework: selectedFramework,
+      lifecycle: selectedLifecycle,
+      audience: selectedAudience,
+      resourceType: selectedResourceType,
+      accessType: selectedAccessType,
+    }, allCollections);
+    return searchDirectoryResources(scoped, searchQuery);
+  }, [allResources, allCollections, activeLane, searchQuery, selectedAccessType, selectedAudience, selectedCategory, selectedCollection, selectedFramework, selectedLifecycle, selectedResourceType]);
 
-    // Filter by Lane
-    if (activeLane && activeLane !== "all") {
-      result = result.filter((r) => r.resourceLane === activeLane);
-    }
-
-    // Filter by Collection
-    if (selectedCollection) {
-      const col = allCollections.find((c) => c.id === selectedCollection);
-      if (col) {
-        result = result.filter((r) => col.resourceIds.includes(r.id));
-      }
-    }
-
-    // Filter by Framework
-    if (selectedFramework) {
-      result = result.filter((r) =>
-        r.frameworks.some((f) => f.toLowerCase().includes(selectedFramework.toLowerCase()))
-      );
-    }
-
-    // Filter by Lifecycle Stage
-    if (selectedLifecycle) {
-      result = result.filter((r) =>
-        r.lifecycleStages.some((l) => l.toLowerCase() === selectedLifecycle.toLowerCase())
-      );
-    }
-
-    // Filter by Audience
-    if (selectedAudience) {
-      result = result.filter((r) =>
-        r.audiences.some((a) => a.toLowerCase().includes(selectedAudience.toLowerCase()))
-      );
-    }
-
-    // Filter by Resource Type
-    if (selectedResourceType) {
-      result = result.filter((r) => r.resourceType === selectedResourceType);
-    }
-
-    // Filter by Access Type
-    if (selectedAccessType) {
-      result = result.filter((r) => r.accessType === selectedAccessType);
-    }
-
-    // Search Query Matching & Deterministic Ranking
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result
-        .map((resource) => {
-          let score = 0;
-
-          const nameMatch = resource.name.toLowerCase().includes(q);
-          const shortNameMatch = resource.shortName.toLowerCase().includes(q);
-          const aliasMatch = (resource.searchAliases || []).some((a) => a.toLowerCase().includes(q));
-          const idMatch = resource.id.toLowerCase().includes(q);
-
-          if (idMatch || nameMatch || shortNameMatch || aliasMatch) {
-            score += 100;
-          }
-
-          const keywordMatch = (resource.searchKeywords || []).some((k) => k.toLowerCase().includes(q));
-          if (keywordMatch) score += 50;
-
-          const frameworkMatch = resource.frameworks.some((f) => f.toLowerCase().includes(q));
-          if (frameworkMatch) score += 40;
-
-          const summaryMatch = resource.summary.toLowerCase().includes(q);
-          const whyMatch = resource.whyIncluded.toLowerCase().includes(q);
-          if (summaryMatch || whyMatch) score += 20;
-
-          // Intent-aware boost
-          if (q.includes("template") || q.includes("ssp") || q.includes("poam")) {
-            if (resource.resourceType === "template") score += 30;
-          } else if (q.includes("tool") || q.includes("stig") || q.includes("scan") || q.includes("automate")) {
-            if (resource.resourceLane === "open_source" || resource.resourceType === "tool") score += 30;
-          } else if (q.includes("require") || q.includes("policy") || q.includes("standard")) {
-            if (resource.resourceLane === "official") score += 30;
-          }
-
-          if (resource.editorialRecommendation) score += 10;
-
-          return { resource, score };
-        })
-        .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .map((item) => item.resource);
-    }
-
-    return result;
-  }, [
-    allResources,
-    activeLane,
-    selectedCollection,
-    selectedFramework,
-    selectedLifecycle,
-    selectedAudience,
-    selectedResourceType,
-    selectedAccessType,
-    searchQuery,
-    allCollections
-  ]);
+  const categoryCounts = useMemo(() => primaryBrowseCategoryCounts(allResources), [allResources]);
 
   // Pairing module detector for major queries
   const pairing = useMemo(() => {
@@ -286,7 +198,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
     (selectedAudience ? 1 : 0) +
     (selectedResourceType ? 1 : 0) +
     (selectedAccessType ? 1 : 0) +
-    (selectedCollection ? 1 : 0);
+    (selectedCollection ? 1 : 0) +
+    (selectedCategory ? 1 : 0);
 
   const hasIntent = Boolean(searchQuery.trim()) || activeFilterCount > 0;
   const showResults = hasIntent || showAllResources;
@@ -295,19 +208,9 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
   // communities at a glance. Searching is NOT: `filteredResources` is already
   // ranked by relevance there, and sectioning would push the best match below
   // whatever section happens to sort first.
-  const resourceGroups = useMemo(
-    () => groupResourcesByKind(filteredResources),
-    [filteredResources],
-  );
   // Section headings have to earn their space. Below roughly four rows of cards
   // the headings outnumber the content they organize — a 5-result collection
   // rendered three headings for five cards — so small result sets stay flat.
-  const GROUPING_THRESHOLD = 12;
-  const groupResults =
-    !searchQuery.trim() &&
-    resourceGroups.length > 1 &&
-    filteredResources.length >= GROUPING_THRESHOLD;
-
   const clearAllFilters = () => {
     setShowAllResources(false);
     updateParams({
@@ -318,6 +221,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
       resourceType: "",
       accessType: "",
       collection: "",
+      category: "",
       query: ""
     });
   };
@@ -425,37 +329,23 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         {/* Parallel Discovery Lanes — reuses the shared underline Tabs idiom
             (src/ui/components/lsm/Tabs.tsx) instead of a filled/gray-pill
             button set, which was rejected. */}
-        <nav aria-label="Parallel Discovery Lanes" className="mb-6">
-          <Tabs
-            activeId={activeLane}
-            onChange={(id) => updateParams({ lane: id })}
-            tabs={[
-              { id: "all", label: "All Lanes", icon: IconBook2, count: allResources.length },
-              { id: "official", label: "Official", icon: IconShieldCheck, count: allResources.filter(r => r.resourceLane === "official").length },
-              { id: "open_source", label: "Open Source", icon: IconCode, count: allResources.filter(r => r.resourceLane === "open_source").length },
-              { id: "practitioner", label: "Practitioner", icon: IconUsers, count: allResources.filter(r => r.resourceLane === "practitioner").length },
-              { id: "commercial", label: "Commercial", icon: IconBuildingStore, count: allResources.filter(r => r.resourceLane === "commercial").length },
-              { id: "legacy", label: "Legacy", icon: IconArchive, count: allResources.filter(r => r.resourceLane === "legacy").length }
-            ].map((lane) => {
-              const Icon = lane.icon;
-              return {
-                id: lane.id,
-                label: (
-                  <span className="inline-flex items-center gap-2">
-                    <Icon size={16} />
-                    <span>{lane.label}</span>
-                    <span className="rounded px-2 py-0.5 text-xs font-semibold bg-[var(--ca-surface-raised)] text-[var(--ca-text)]">
-                      {lane.count}
-                    </span>
-                  </span>
-                ),
-              };
-            })}
-          />
-        </nav>
+        <section aria-labelledby="resource-categories" className="mb-8">
+          <h2 id="resource-categories" className="text-xl font-bold text-[var(--ca-text)]">Browse resources by purpose</h2>
+          <p className="text-sm text-[var(--ca-secondary)] mt-1">Choose one category first, then refine by trust lane or other details.</p>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {categoryCounts.map((category) => (
+              <button key={category.id} type="button" onClick={() => updateParams({ category: category.id })}
+                aria-pressed={selectedCategory === category.id}
+                className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-4 text-left hover:bg-[var(--ca-surface-raised)] focus:outline-none focus:ring-2 focus:ring-[var(--ca-primary)]">
+                <span className="font-semibold text-[var(--ca-text)]">{category.label} ({category.count})</span>
+                <span className="mt-1 block text-xs text-[var(--ca-secondary)]">{category.blurb}</span>
+              </button>
+            ))}
+          </div>
+        </section>
 
         {/* Featured Starter Collections Carousel / Grid */}
-        {!searchQuery && !selectedCollection && activeLane === "all" ? (
+        {!searchQuery && !selectedCollection && !selectedCategory && activeLane === "all" ? (
           <section className="mb-10">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-[var(--ca-text)] flex items-center gap-2">
@@ -529,6 +419,13 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               </span>
             ) : null}
 
+            {selectedCategory ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
+                Category: {PRIMARY_BROWSE_CATEGORIES.find((category) => category.id === selectedCategory)?.label}
+                <button aria-label="Remove category filter" onClick={() => updateParams({ category: "" })}><IconX size={13} /></button>
+              </span>
+            ) : null}
+
             {selectedFramework ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text)] text-xs font-medium">
                 Framework: {selectedFramework}
@@ -576,6 +473,14 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         {/* Filter Drawer / Facets Panel */}
         {filterDrawerOpen ? (
           <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div>
+              <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-lane-filter">Trust lane</label>
+              <select id="commons-lane-filter" value={activeLane} onChange={(e) => updateParams({ lane: e.target.value })}
+                className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none">
+                <option value="all">All trust lanes</option>
+                <option value="official">Official</option><option value="open_source">Open source</option><option value="practitioner">Practitioner</option><option value="commercial">Commercial</option><option value="legacy">Legacy</option>
+              </select>
+            </div>
             {/* Framework Filter */}
             <div>
               <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-framework-filter">
@@ -590,14 +495,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Frameworks</option>
-                <option value="NIST SP 800-53">NIST SP 800-53</option>
-                <option value="NIST SP 800-171">NIST SP 800-171</option>
-                <option value="FedRAMP">FedRAMP</option>
-                <option value="CMMC">CMMC 2.0</option>
-                <option value="DoD RMF">DoD RMF</option>
-                <option value="DISA STIG">DISA STIG</option>
-                <option value="OSCAL">OSCAL</option>
-                <option value="CIS Benchmarks">CIS Benchmarks</option>
+                {frameworkOptions.map((framework) => <option key={framework} value={framework}>{framework}</option>)}
               </select>
             </div>
 
@@ -615,18 +513,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Stages</option>
-                <option value="Learn">Learn</option>
-                <option value="Govern">Govern</option>
-                <option value="Scope">Scope</option>
-                <option value="Categorize">Categorize</option>
-                <option value="Select">Select</option>
-                <option value="Implement">Implement</option>
-                <option value="Harden">Harden</option>
-                <option value="Assess">Assess</option>
-                <option value="Authorize">Authorize</option>
-                <option value="Monitor">Monitor</option>
-                <option value="Automate">Automate</option>
-                <option value="Train">Train</option>
+                {lifecycleOptions.map((lifecycle) => <option key={lifecycle} value={lifecycle}>{lifecycle}</option>)}
               </select>
             </div>
 
@@ -644,18 +531,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
                 className="w-full rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-bg)] py-2 px-3 text-xs text-[var(--ca-text)] focus:border-[var(--ca-primary)] focus:outline-none"
               >
                 <option value="">All Audiences</option>
-                <option value="ISSO">ISSO</option>
-                <option value="ISSM">ISSM</option>
-                <option value="Authorizing Official">Authorizing Official</option>
-                <option value="Security Control Assessor">Security Control Assessor</option>
-                <option value="3PAO">3PAO</option>
-                <option value="Engineer">Engineer</option>
-                <option value="Administrator">Administrator</option>
-                <option value="Developer">Developer</option>
-                <option value="DevSecOps">DevSecOps</option>
-                <option value="Defense Contractor">Defense Contractor</option>
-                <option value="Cloud Service Provider">Cloud Service Provider</option>
-                <option value="CMMC Practitioner">CMMC Practitioner</option>
+                {audienceOptions.map((audience) => <option key={audience} value={audience}>{audience}</option>)}
               </select>
             </div>
 
@@ -738,23 +614,6 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
               Reset All Filters
             </button>
           </div>
-        ) : groupResults ? (
-          resourceGroups.map((group) => (
-            <section
-              aria-labelledby={`commons-group-${group.id}`}
-              className="commons-group"
-              key={group.id}
-            >
-              <div className="commons-group-header">
-                <h2 className="commons-group-title" id={`commons-group-${group.id}`}>
-                  <span>{group.label}</span>
-                  <span className="commons-group-count">{group.resources.length}</span>
-                </h2>
-                <p className="commons-group-blurb">{group.blurb}</p>
-              </div>
-              {renderResourceGrid(group.resources)}
-            </section>
-          ))
         ) : (
           renderResourceGrid(filteredResources)
         )}

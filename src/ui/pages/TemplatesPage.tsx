@@ -955,15 +955,9 @@ export function TemplatesPage(props: {
       />
 
       {!selectedTemplate ? (
-        <>
-        <div>
         <div className="stack">
-          <ContextualCommonsModule
-            bundle={bundle}
-            contextType="template"
-            onNavigate={onNavigate}
-          />
           {!selectedWorkflow ? (
+          <div className="build-start-layout">
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
@@ -1033,6 +1027,24 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
           </section>
+            <aside aria-labelledby="optional-resources-heading" className="build-resource-rail">
+              <div className="section-header nexus-section-header">
+                <div>
+                  <p className="eyebrow">Optional reference</p>
+                  <h2 id="optional-resources-heading">Related resources</h2>
+                  <p className="page-summary">
+                    Choose a task first. Keep these source-backed references nearby when you need a template or model.
+                  </p>
+                </div>
+              </div>
+              <ContextualCommonsModule
+                bundle={bundle}
+                contextType="template"
+                onNavigate={onNavigate}
+                title="Optional reference material"
+              />
+            </aside>
+          </div>
           ) : null}
 
           {selectedWorkflow ? (
@@ -1379,8 +1391,6 @@ export function TemplatesPage(props: {
             </>
           ) : null}
         </div>
-        </div>
-        </>
       ) : null}
 
       {selectedTemplate ? (

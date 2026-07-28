@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import { IconBook2, IconExternalLink, IconSparkles, IconChevronRight, IconShieldCheck, IconCode, IconUsers } from "@tabler/icons-react";
+import { IconBook2, IconExternalLink, IconChevronRight } from "@tabler/icons-react";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import type { CommonsResource } from "../lib/commonsTypes";
+import { contextualResourceRecommendations } from "../lib/contextualResourceRecommendations.mjs";
 
 type ContextualCommonsModuleProps = {
   bundle: RuntimeBundle | null;
@@ -25,84 +25,36 @@ export function ContextualCommonsModule({
   title,
   maxItems = 3
 }: ContextualCommonsModuleProps) {
-  const index = bundle?.commonsSearchIndex;
   const dataset = bundle?.commonsDataset;
 
-  const matchingResources = useMemo(() => {
+  const recommendations = useMemo(() => {
     if (!dataset?.resources) return [];
-
-    let results = [...dataset.resources];
-    const q = (query || contextId || framework).toLowerCase().trim();
-
-    if (contextType === "stig") {
-      results = results.filter((r) =>
-        r.id.includes("stig") ||
-        r.frameworks.some((f) => f.toLowerCase().includes("stig")) ||
-        r.searchKeywords.some((k) => k.toLowerCase().includes("stig"))
-      );
-    } else if (contextType === "template") {
-      results = results.filter((r) =>
-        r.resourceType === "template" ||
-        r.artifactTypes.includes("template") ||
-        r.id.includes("template") ||
-        r.id.includes("ssp") ||
-        r.id.includes("poam")
-      );
-    } else if (contextType === "workforce") {
-      results = results.filter((r) =>
-        r.id.includes("8140") ||
-        r.id.includes("nice") ||
-        r.id.includes("dcwf") ||
-        r.frameworks.some((f) => f.toLowerCase().includes("8140"))
-      );
-    } else if (q) {
-      results = results.filter((r) =>
-        r.name.toLowerCase().includes(q) ||
-        r.shortName.toLowerCase().includes(q) ||
-        r.summary.toLowerCase().includes(q) ||
-        r.frameworks.some((f) => f.toLowerCase().includes(q)) ||
-        (r.searchKeywords && r.searchKeywords.some((k) => k.toLowerCase().includes(q)))
-      );
-    }
-
-    // Sort: Editorial recommendations first, then official, then open source
-    return results
-      .sort((a, b) => {
-        if (a.editorialRecommendation && !b.editorialRecommendation) return -1;
-        if (!a.editorialRecommendation && b.editorialRecommendation) return 1;
-        if (a.resourceLane === "official" && b.resourceLane !== "official") return -1;
-        if (a.resourceLane !== "official" && b.resourceLane === "official") return 1;
-        return 0;
-      })
-      .slice(0, maxItems);
+    return contextualResourceRecommendations({ resources: dataset.resources, contextType, contextId, query, framework, maxItems });
   }, [dataset, contextType, contextId, query, framework, maxItems]);
 
-  if (matchingResources.length === 0) return null;
+  if (recommendations.length === 0) return null;
 
-  const defaultTitles: Record<typeof contextType, string> = {
-    control: "Working Tools & Implementation Guidance",
-    catalog: "Framework Tools & Official Resources",
-    stig: "STIG Viewers, Automated Scripts & Checklist Tools",
-    template: "Related Compliance Templates & OSCAL Models",
-    compare: "Crosswalk Tools & Reference Datasets",
-    guide: "Practitioner Guides & Community Channels",
-    workforce: "Workforce Qualification & Skilling Resources"
+  const defaultContextLabels: Record<typeof contextType, string> = {
+    control: "Implementation guidance for this control",
+    catalog: "Official and practitioner material for this framework",
+    stig: "Supporting material for this STIG",
+    template: "Templates and OSCAL models that may help",
+    compare: "Crosswalks and reference datasets for this comparison",
+    guide: "Practitioner guides and community channels",
+    workforce: "Workforce qualification and skilling material"
   };
 
-  const moduleTitle = title || defaultTitles[contextType];
+  const contextLabel = title || defaultContextLabels[contextType];
 
   return (
-    <aside aria-label={moduleTitle} className="rounded-md border border-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] bg-[var(--ca-surface-deep)] p-4 shadow-md my-4">
+    <aside aria-label={`Related resources: ${contextLabel}`} className="contextual-resources rounded-md border border-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] bg-[var(--ca-surface-deep)] p-4 shadow-md">
       <div className="flex items-center justify-between mb-3 border-b border-[var(--ca-border)] pb-2">
         <div className="flex items-center gap-2">
           <span className="p-1 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)]">
             <IconBook2 size={16} />
           </span>
           <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text)]">
-            {/* Legacy surface wording retained only in source history:
-            Community resources · {moduleTitle}
-            */}
-            Resources · {moduleTitle}
+            Related resources
           </h3>
         </div>
 
@@ -116,9 +68,10 @@ export function ContextualCommonsModule({
           </button>
         ) : null}
       </div>
+      <p className="contextual-resources-label">{contextLabel}</p>
 
       <div className="space-y-2.5">
-        {matchingResources.map((res) => (
+        {recommendations.map(({ resource: res, target, relation, reason, provenance, reviewDate }) => (
           <div
             key={res.id}
             className="p-2.5 rounded-sm border border-[var(--ca-border)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)] transition-colors flex items-start justify-between gap-3"
@@ -135,9 +88,15 @@ export function ContextualCommonsModule({
                   {res.resourceLane.replace("_", " ")}
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--ca-secondary)] line-clamp-1 mt-0.5">
-                {res.whyIncluded}
+              <p className="text-[11px] text-[var(--ca-secondary)] mt-0.5">
+                {reason}
               </p>
+              <dl className="mt-2 grid gap-1 text-[10px] text-[var(--ca-text-muted)]">
+                <div><dt className="inline font-semibold">Target: </dt><dd className="inline">{target}</dd></div>
+                <div><dt className="inline font-semibold">Relation: </dt><dd className="inline">{relation}</dd></div>
+                <div><dt className="inline font-semibold">Provenance: </dt><dd className="inline">{provenance}</dd></div>
+                <div><dt className="inline font-semibold">Reviewed: </dt><dd className="inline">{reviewDate}</dd></div>
+              </dl>
             </div>
 
             <a

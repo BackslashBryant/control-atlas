@@ -245,9 +245,14 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {
   const topNav = readFileSync('src/ui/components/TopNav.tsx', 'utf8');
+  const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
   assert.match(topNav, /onClick=\{onOpenSearch\}/);
   assert.match(topNav, /aria-label="Open search"/);
+  assert.equal((topNav.match(/<Tabs/g) || []).length, 1);
+  assert.match(topNav, /tabs=\{PRIMARY_NAV_ITEMS\.map/);
+  assert.match(templatesPage, /className="build-start-layout"/);
+  assert.match(templatesPage, /className="build-resource-rail"/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
 });
 

@@ -382,7 +382,7 @@ a {
    can override it at any specificity. The wrapper is a plain div with no
    utility classes, so ordinary CSS applies. */
 .header-search-trigger-wrap {
-  display: none;
+  display: flex;
 }
 
 .header-actions .mobile-nav-toggle {
@@ -1251,6 +1251,40 @@ li {
 
 .nexus-section-header {
   margin-bottom: var(--ca-space-1);
+}
+
+/* Primary task selection owns the page. Related material is a quiet support
+   rail on wide screens and follows the task list in reading order on smaller
+   screens. */
+.build-start-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  align-items: start;
+  gap: var(--ca-space-6);
+}
+
+.build-start-layout .nexus-section {
+  padding-top: var(--ca-space-6);
+}
+
+.build-resource-rail {
+  display: grid;
+  gap: var(--ca-space-3);
+  margin-top: var(--ca-space-6);
+  padding-left: var(--ca-space-5);
+  border-left: 1px solid var(--ca-border-subtle);
+}
+
+.contextual-resources {
+  display: grid;
+  gap: var(--ca-space-3);
+}
+
+.contextual-resources-label {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  line-height: 1.45;
 }
 
 /* ── Atlas Path: one question per screen ───────────────────────────── */
@@ -2595,6 +2629,20 @@ a:focus-visible {
   .detail-grid,
   .search-form {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .build-start-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .build-resource-rail {
+    margin-top: 0;
+    padding-top: var(--ca-space-5);
+    padding-left: 0;
+    border-top: 1px solid var(--ca-border-subtle);
+    border-left: 0;
   }
 }
 

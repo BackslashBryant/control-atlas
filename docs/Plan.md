@@ -21,10 +21,14 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**2026 correction program - Epic 2 complete locally.** Navigation and route
-identity now satisfy Features 2.1-2.3 and milestone M2. The branch is
-intentionally local-only pending a separately authorized ship task. Epic 3 -
-Resources directory is next; see the
+**2026 correction program - Epic 3 complete locally.** Resources now has six
+reconciled primary browse categories, eligibility-first search, URL-backed
+facets with recovery, and traceable derived contextual recommendations.
+Features 3.1-3.5 and milestone M3 are verified on the local task branch only.
+The shared header now keeps one continuous primary navigation path and groups
+Search, Sources, and Help as utilities; Build presents related resources as a
+desktop support rail that stacks after task selection at narrower widths.
+Epic 4 - Record and Build progressive disclosure is next; see the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)
