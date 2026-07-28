@@ -227,9 +227,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </h1>
           {!record ? (
             <p className="page-summary">
-              Navigate the system like a family tree: choose a branch, move one
-              generation at a time, then open a record to see its published
-              connections.
+              Choose a framework or process, then open published records and
+              relationships as your question becomes more specific.
             </p>
           ) : null}
         </div>
@@ -326,7 +325,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ) : recordStatus === "idle" ? (
         <div className="atlas-loading" role="status">
           <div aria-hidden="true" className="atlas-loading-block" />
-          Preparing the Atlas family tree…
+          Preparing the Atlas relationship map…
         </div>
       ) : null}
       </div>
@@ -874,7 +873,7 @@ function AtlasGuidedPath(props: {
             >
               <IconBinaryTree aria-hidden="true" size={24} />
               <span>
-                <strong>A framework family tree</strong>
+                <strong>A framework path</strong>
                 <small>Framework → native groups → records</small>
               </span>
               <IconChevronRight aria-hidden="true" size={20} />

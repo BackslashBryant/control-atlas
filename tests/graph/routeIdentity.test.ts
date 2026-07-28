@@ -34,6 +34,10 @@ test("route matrix canonicalizes current and legacy destinations without losing 
       canonical: "/build/resources/official-nist-sp800-53-r5?from=templates",
     },
     {
+      input: "/build?templateType=security_plan_starter&format=docx",
+      canonical: "/build/documents/security_plan_starter?format=docx",
+    },
+    {
       input: "/build/resources?category=tools&lane=open_source&resourceType=tool",
       canonical: "/build/resources?category=tools&lane=open_source&resourceType=tool",
     },

@@ -598,5 +598,18 @@ PDF, and preview) — per §13. Do not start W4, W7, or W2 first.
 
 ## Historical record
 
+## 2026-07-27 (session 13) - Epic 4 Record and Build progressive disclosure
+
+### Completed
+
+- Record detail now places the available record explanation before structural position and relationship classes; dense connection groups remain keyboard-operable and source-traceable below that explanation. Epic 5 will make the explanation source-first rather than generated guidance.
+- Build has subordinate local navigation for Tasks, Starter documents, and Resources. Canonical task and document identity paths are `/build/tasks/:workflowId` and `/build/documents/:templateType`; Resources retains the Epic 3 canonical routes and URL-backed browse state.
+- Build validates known task/document identities and document format/framework configuration. A malformed value is removed with visible recovery while valid path/query state remains shareable.
+- Start Here now frames mappings, crosswalks, and recommendations as candidate overlap requiring governing-program validation. A site-wide copy contract blocks canned metaphors, compliance-only prompts, and determination claims.
+
+### Next
+
+Epic 5 is the source-first record integrity and legacy-cleanup pass. It supersedes the record-translation implication in Epic 4: public records must show official text, source, and relationship provenance unless a separately approved human-authored guidance dataset exists. Do not push, merge, deploy, tag, or release this local-only work without fresh authorization.
+
 The previous long-form session log and superseded open-item snapshots are
 preserved at `docs/audits/state-history-through-2026-07-26.md`.

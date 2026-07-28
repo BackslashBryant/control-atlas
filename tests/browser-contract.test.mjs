@@ -30,8 +30,8 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and boots a React root', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /Ctrl\+Alt\+Comply/);
-  assert.match(html, /The public map for federal cyber compliance/);
-  assert.match(html, /Search controls, trace framework connections/);
+  assert.match(html, /Public reference for federal cyber requirements/);
+  assert.match(html, /Find published federal cyber requirements/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -258,9 +258,33 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(homePage, /The public map for federal cyber compliance/);
-  assert.match(homePage, /Search controls and trace how\s+frameworks connect/);
+  assert.match(homePage, /Public reference for federal cyber requirements/);
+  assert.match(homePage, /Find published controls, source material, and starter documents/);
   assert.doesNotMatch(homePage, /source-backed/i);
+});
+
+test('record detail explains the record before exposing position and relationship counts', () => {
+  const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const meaning = detailPage.indexOf('title="What this is"');
+  const why = detailPage.indexOf('Why it matters:');
+  const position = detailPage.indexOf('<WhereThisSitsRail');
+  const connections = detailPage.indexOf('aria-label="Relationship classes"');
+  assert.ok(meaning >= 0 && why > meaning && position > why && connections > position);
+});
+
+test('Build local navigation stays subordinate and identifies the current Build branch', () => {
+  const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
+  const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
+  const resourcesPage = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
+  const resourceDetail = readFileSync('src/ui/pages/CommonsDetailPage.tsx', 'utf8');
+  assert.match(localNav, /aria-label="Build sections"/);
+  assert.match(localNav, /aria-current/);
+  assert.match(localNav, /Tasks/);
+  assert.match(localNav, /Starter documents/);
+  assert.match(localNav, /Resources/);
+  assert.match(buildPage, /<BuildLocalNav/);
+  assert.match(resourcesPage, /<BuildLocalNav active="resources"/);
+  assert.match(resourceDetail, /<BuildLocalNav active="resources"/);
 });
 
 test('route interactions keep canonical context and synchronize visible state', () => {

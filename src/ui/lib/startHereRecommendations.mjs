@@ -27,27 +27,27 @@ const TEMPLATE_LABELS = {
 // Per-item plain-language "why this one" strings. Keep acronyms spelled out on
 // first mention so a newcomer never hits an unexplained term.
 const PATTERN_RATIONALES = {
-  'csp-inheritance': 'How to claim the controls your cloud provider already runs, so you are not re-documenting work FedRAMP has already covered.',
+  'csp-inheritance': 'How to identify provider responsibilities that may overlap with your work, then confirm the boundary with the governing program.',
   'shared-responsibility': "Spells out which security controls are yours versus your cloud provider's — the line people most often get wrong.",
-  'reciprocity-basics': "How to reuse another team's authorization work instead of building your evidence from scratch.",
+  'reciprocity-basics': "How to review prior authorization material as a reference, then confirm whether it is usable for your situation.",
   'conmon-cadence': 'What you have to keep doing after authorization to keep your evidence current.',
   'boundary-patterns': 'How to draw the line around what your system includes — the boundary decision that scopes everything else.',
   'boe-reuse': 'How to package evidence once so it can be reused across audits.',
-  'enterprise-inheritance': 'How a shared enterprise service passes common controls down to the systems that run on it.',
+  'enterprise-inheritance': 'How a shared enterprise service can create candidate responsibility overlap that the receiving system must validate.',
   'ato-vs-fedramp': 'Explains the difference between a single-agency Authorization to Operate (ATO) and a FedRAMP authorization, so you pursue the right one.',
   'rmf-lifecycle': 'Walks the Risk Management Framework (RMF) end to end so you know which step you are actually on.',
-  'evidence-patterns': 'What assessors expect your evidence to look like, before they ask for it.',
-  'control-inheritance': 'How controls get inherited between systems so you only document what is truly yours.',
+  'evidence-patterns': 'Questions to use when reviewing whether available material supports the work you need to document.',
+  'control-inheritance': 'How to identify candidate shared-control responsibilities and confirm what each system must document.',
   'poam-concepts': 'How to handle findings you cannot fix immediately without stalling your authorization.',
 };
 
 const TEMPLATE_RATIONALES = {
   security_plan_starter: 'A starter system security plan scaffold — the core document every authorization package is built around.',
   assessment_planning_worksheet: 'Plans out how your controls will be tested before an assessor arrives.',
-  inheritance_worksheet: 'Records which controls you inherit from a provider versus own yourself, so nothing falls through the cracks.',
+  inheritance_worksheet: 'Records candidate provider and customer responsibilities for validation against the governing program.',
   stig_evidence_checklist: 'Tracks which DISA Security Technical Implementation Guide (STIG) checks you have evidence for — the technical proof DoD assessors ask for.',
   poam_starter: 'A Plan of Action & Milestones (POA&M) scaffold for tracking findings you have not closed yet.',
-  reciprocity_checklist: 'Walks the steps to reuse a prior authorization so you are not redoing already-accepted work.',
+  reciprocity_checklist: 'Lists questions for deciding whether prior authorization material is relevant to the current work.',
 };
 
 function systemTypePhrase(systemType) {
@@ -233,14 +233,14 @@ export function buildStartHereRecommendations(answers) {
     effectiveEnvironment !== 'Contractor' &&
     (effectiveEnvironment === 'CSP' || systemType === 'Cloud SaaS')
   ) {
-    pathLabel = 'FedRAMP authorization path';
-    narrative = `You're authorizing ${systemTypePhrase(systemType)} that handles ${sensitivityPhrase(effectiveSensitivity)}${effectiveEnvironment === 'CSP' ? ' as a cloud service provider (CSP)' : ''}. Cloud systems that serve federal agencies get authorized against FedRAMP baselines, which build on the underlying NIST SP 800-53 controls. Start with the FedRAMP baseline below, then compare it against NIST to see which controls you can inherit rather than build yourself.`;
+    pathLabel = 'FedRAMP reference path';
+    narrative = `You selected ${systemTypePhrase(systemType)} that handles ${sensitivityPhrase(effectiveSensitivity)}${effectiveEnvironment === 'CSP' ? ' as a cloud service provider (CSP)' : ''}. FedRAMP and NIST references can help identify candidate overlap. Confirm the applicable baseline, responsibility boundaries, and any reuse decision with the governing program before applying them.`;
 
     library.push({
       kind: 'library-catalog',
       catalogId: 'fedramp-rev5',
       label: 'FedRAMP Rev. 5 Baselines',
-      rationale: 'Cloud and CSP paths usually start with the public FedRAMP baseline catalog before you map inheritance.',
+      rationale: 'Use the public FedRAMP baseline catalog as a reference, then confirm which material applies with the governing program.',
     });
 
     const fedrampBaseline = fedrampBaselineId(effectiveSensitivity);
@@ -262,7 +262,7 @@ export function buildStartHereRecommendations(answers) {
         crosswalk: 'baseline-compare',
         patch: { baselineA: fedrampBaseline, baselineB: nistBaseline },
         label: 'Compare FedRAMP and NIST baselines',
-        rationale: 'See what your FedRAMP baseline shares with the matching NIST baseline before you plan controls.',
+        rationale: 'Inspect published overlap between these references, then validate whether it applies to the current work.',
       });
     }
   } else if (effectiveEnvironment === 'Contractor' && isCui) {
@@ -284,7 +284,7 @@ export function buildStartHereRecommendations(answers) {
       crosswalk: 'relationships',
       patch: { source: 'nist-800-171-rev2', target: 'nist-800-53' },
       label: 'Compare 800-171 to NIST controls',
-      rationale: 'See how contractor-facing requirements map to the broader NIST control catalog you may inherit later.',
+      rationale: 'Inspect published relationships to the broader NIST catalog; do not treat the mapping as a determination for the current work.',
     });
   } else if (effectiveEnvironment === 'Contractor') {
     pathLabel = 'Confirm the contract requirements';
@@ -323,7 +323,7 @@ export function buildStartHereRecommendations(answers) {
         crosswalk: 'baseline-compare',
         patch: { baselineA: nistBaseline, baselineB: 'fedramp-rev5:MODERATE' },
         label: 'Compare your NIST baseline to FedRAMP Moderate',
-        rationale: 'Check overlap with a common cloud authorization baseline before you inherit or tailor controls.',
+        rationale: 'Inspect candidate overlap with a common cloud baseline, then validate scope and responsibility before acting on it.',
       });
     } else {
       compare.push({

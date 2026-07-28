@@ -470,7 +470,7 @@ test("sources, templates, and playbooks follow trust-first, artifact-first, and 
   await page.goto("/?view=templates");
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "What do you need to get done?" }),
+    page.getByRole("heading", { name: "What are you working on?" }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: /Build an authorization package/i })
@@ -678,7 +678,7 @@ test("release-readiness content stays calm, progressive, and de-duplicated", asy
   await page.goto("/#/templates");
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "Start with a compliance task" }),
+    page.getByRole("heading", { name: "Start with a task" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Official federal resources" }),

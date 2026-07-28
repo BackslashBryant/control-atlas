@@ -253,7 +253,78 @@ Risk: Medium.
 - **Acceptance criteria:** no mapping, crosswalk, or recommendation claims compliance, inheritance, authorization, or assessment outcome.
 - **Verification:** prohibited-claim copy test plus human review.
 
-## Epic 5 — Responsive and accessibility completion
+## Epic 5 — Source-first record integrity and legacy cleanup
+
+Priority: P0
+Risk: Medium.
+
+### Feature 5.1 — Render official record content without synthetic translation
+
+- **Priority:** P0.
+- **Risk level:** High — every record surface must remain useful without implying editorial coverage that does not exist.
+- **Scope:** mounted React record detail, catalog rows, Atlas record inspector, record-choice drilldowns, Explore results, and Search results.
+- **Affected systems:** `ObjectDetailPage.tsx`, `CatalogDetailPage.tsx`, `AtlasMapPage.tsx`, `atlasDrilldown.ts`, Explore/Search surfaces, runtime search/display adapters, and record-content contracts.
+- **Dependencies:** Epic 4 layout and route work.
+- **Implementation guidance:** make the default presentation an official title, record type, unmodified official description/excerpt, source, and published relationships. Do not derive or display `What this is`, `What to do`, or `Why it matters` from `plain_language_summary`, first-sentence truncation, title text, or a generic fallback. When a source has no narrative description, say that plainly.
+- **Acceptance criteria:** no mounted record UI reads `plain_language_summary` or `plain_action`; source text is visibly distinguished from product navigation; records without a description show an honest absence state; search continues to find title, identifier, and official description.
+- **Verification:** schema/display contract that forbids synthetic fields in mounted record components; representative controls, STIG/SRG rules, ATT&CK techniques, assessment procedures, and no-description records at 375/1440.
+
+### Feature 5.2 — Retire the abandoned translation pipeline
+
+- **Priority:** P0.
+- **Risk level:** Medium — stale data and fallback generators can silently reintroduce false guidance.
+- **Scope:** generated node contract and the removed 800-53 curated translation set.
+- **Affected systems:** `scripts/build-framework-data.mjs`, `scripts/lib/plain-language.mjs`, generated-node validation, search indexing, template inputs, and `data/curated/plain-language/controls-800-53.json`.
+- **Dependencies:** Feature 5.1.
+- **Implementation guidance:** remove the curated override and automatic summary generation from the runtime record contract. Retain official source descriptions for search and export only; do not substitute generated prose when an official description is absent. A future human-authored guidance program requires a separately approved provenance/review schema and is not part of this epic.
+- **Acceptance criteria:** a clean build contains no generated record translation/action field; existing templates and search preserve source-backed behavior; deleted curated data cannot be reloaded by the build.
+- **Verification:** clean-build fixture, negative test for removed generator/curated path, search/export regression tests, and generated-artifact inspection.
+
+### Feature 5.3 — Label relationship explanation by provenance
+
+- **Priority:** P1.
+- **Risk level:** Medium — a useful navigation explanation must not masquerade as an official mapping rationale.
+- **Scope:** Atlas inspector, relationship table/graph, and comparison relationship copy.
+- **Affected systems:** relationship adapters, `runtimeLoader.ts`, Atlas/Compare components, and provenance tests.
+- **Dependencies:** Feature 5.1.
+- **Implementation guidance:** present published rationale as such. Present product-authored grouping or navigation notes with a distinct label such as `Navigation note`; never call either a record translation or use it as an applicability conclusion.
+- **Acceptance criteria:** every visible relationship explanation declares whether it is published or product-authored; no derived note appears as source text; source references remain reachable.
+- **Verification:** fixtures for published rationale, derived navigation note, and absent rationale; DOM/copy contract and keyboard workflow.
+
+### Feature 5.4 — Demote Start Here to a source navigator
+
+- **Priority:** P0.
+- **Risk level:** High — a three-question prompt cannot make an applicability, baseline, or authorization recommendation.
+- **Scope:** Start Here questions, result framing, defaults, and recommendation tests.
+- **Affected systems:** `StartHereResult.tsx`, `startHereRecommendations.mjs`, Start Here fixtures, and copy contracts.
+- **Dependencies:** Feature 5.1.
+- **Implementation guidance:** retain the user’s stated purpose as a browsing aid, but replace `Your starting point`, default baseline selection, and `Recommended next step` with source categories and questions to take to the governing program. Never infer a system classification, baseline, or path from an incomplete prompt.
+- **Acceptance criteria:** no answer combination yields an applicability conclusion, default baseline, or recommendation; every listed source or navigation aid has a declared public-source basis; users can continue without accepting a suggested path.
+- **Verification:** answer-matrix tests, prohibited-claim copy test, and 375/1440 Start Here workflow.
+
+### Feature 5.5 — Quarantine unsourced Playbook advice
+
+- **Priority:** P1.
+- **Risk level:** Medium — first-party advice without a traceable basis conflicts with the product’s public-source claim.
+- **Scope:** Playbook/pattern guidance and Sources-page traceability language.
+- **Affected systems:** `patterns-data.mjs`, `PlaybooksPage.tsx`, Sources page, source registry, and content contracts.
+- **Dependencies:** Feature 5.1.
+- **Implementation guidance:** retain a guide only when it has source-registry identifiers and canonical public URLs that support the shown advice. Otherwise remove it from the public product or clearly isolate it as product-authored guidance outside the source-truth surface; do not label `Practitioner-consensus` as a source basis.
+- **Acceptance criteria:** every visible Playbook has inspectable public-source provenance or is absent; Sources-page traceability claims match the product; no guide implies a compliance or authorization outcome.
+- **Verification:** provenance schema test, UI contract, and source-link review fixture.
+
+### Feature 5.6 — Remove the unmounted legacy renderer
+
+- **Priority:** P1.
+- **Risk level:** Low — the renderer is not mounted, but its duplicate copy and synthetic-summary behavior create a false maintenance surface.
+- **Scope:** obsolete `src/app/app.mjs` and its unmounted page-intro dependency, plus tests/docs that currently preserve them.
+- **Affected systems:** legacy renderer files, retired-concept contracts, and relevant repository documentation.
+- **Dependencies:** Features 5.1–5.5 confirm the mounted React equivalents.
+- **Implementation guidance:** prove no production entrypoint imports the renderer, remove it and dead-only dependencies, and narrow tests to active runtime surfaces.
+- **Acceptance criteria:** no production bundle or test requires the legacy renderer; no dead renderer retains prohibited synthetic-record guidance.
+- **Verification:** import/reference scan, production build inspection, focused retired-surface test, and `npm run precommit`.
+
+## Epic 6 — Responsive and accessibility completion
 
 Priority: P1  
 Risk: Medium.
@@ -286,12 +357,12 @@ Risk: Medium.
 - **Risk level:** Medium — unresolved human-only failures can block release closeout.
 - **Scope:** all meaningful inventory routes and dynamic states.
 - **Affected systems:** `docs/audits/a11y-manual-checklist.md`, release evidence.
-- **Dependencies:** Epics 1–5 code complete.
+- **Dependencies:** Epics 1–6 code complete.
 - **Implementation guidance:** record browser, OS, screen reader, route, state, expected/observed, and evidence.
 - **Acceptance criteria:** keyboard-only, NVDA or VoiceOver, 200% zoom, reduced motion, errors, result changes, mode switches, and mobile menu pass or have owned blockers.
 - **Verification:** signed manual artifact plus automated axe gates.
 
-## Epic 6 — Regression, deployment proof, and compatibility closeout
+## Epic 7 — Regression, deployment proof, and compatibility closeout
 
 Priority: P2, required before declaring the correction shipped  
 Risk: Low/Medium.
@@ -324,7 +395,7 @@ Risk: Low/Medium.
 - **Risk level:** Low — the main hazard is approving unintended baseline drift.
 - **Scope:** changed-route baselines and manual audit.
 - **Affected systems:** Playwright snapshots, audit docs.
-- **Dependencies:** Features 5.1–5.3.
+- **Dependencies:** Features 6.1–6.3.
 - **Implementation guidance:** update only reviewed intended changes; do not approve wholesale baseline drift.
 - **Acceptance criteria:** 375/768/1440 and reduced-motion baselines reviewed; manual accessibility evidence linked.
 - **Verification:** visual diff report and checklist.
@@ -348,10 +419,18 @@ Risk: Low/Medium.
 | M2 — Coherent navigation | Epic 2 route matrix green; refresh/back/share verified |
 | M3 — Useful Resources | Epic 3 counts/search/details/recommendations green |
 | M4 — Complete workflows | Epic 4 record/Build flows green |
-| M5 — Inclusive UI | Epic 5 responsive automation and manual accessibility complete |
-| M6 — Shipped correction | Epic 6 deployed commit, route groups, cache, and compatibility evidence green |
+| M5 — Source-first records | Epic 5 record/source/provenance contracts green and legacy renderer removed |
+| M6 — Inclusive UI | Epic 6 responsive automation and manual accessibility complete |
+| M7 — Shipped correction | Epic 7 deployed commit, route groups, cache, and compatibility evidence green |
 
 ## Explicitly deferred
+
+## Epic 4 local completion record (2026-07-27)
+
+Features 4.1-4.4 and M4 are complete locally on
+`agent/forge/epic-4-record-build-progressive-disclosure`. Focused route, DOM,
+and copy contracts passed. No push, merge, deploy, tag, or release was
+performed; browser proof is local-only.
 
 - New framework content.
 - Authenticated workspaces or saved user projects.

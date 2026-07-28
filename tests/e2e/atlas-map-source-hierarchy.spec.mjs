@@ -39,7 +39,7 @@ for (const viewport of VIEWPORTS) {
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    await page.getByRole("button", { name: /A framework family tree/ }).click();
+    await page.getByRole("button", { name: /A framework path/ }).click();
     await expect(page.getByText("SP 800-53 Rev. 5 Catalog", { exact: true })).toBeVisible();
     await expect(page.locator(".atlas-path-stage-option")).toHaveCount(4);
 
