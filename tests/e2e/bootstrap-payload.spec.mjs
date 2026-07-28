@@ -91,3 +91,37 @@ test("focused Atlas loads one neighborhood without monolithic graph JSON", async
     requested.some((url) => url.includes("RelationshipGraph-")),
   ).toBeFalsy();
 });
+
+test("focused Atlas reserves its mobile workspace while the neighborhood loads", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 412, height: 823 });
+  let releaseNeighborhood;
+  const neighborhoodGate = new Promise((resolve) => {
+    releaseNeighborhood = resolve;
+  });
+
+  await page.route("**/data/generated/atlas-neighborhood/32.json*", async (route) => {
+    await neighborhoodGate;
+    await route.continue();
+  });
+
+  await page.goto(
+    "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+  );
+  await expect(page.locator("#app")).toHaveAttribute("data-has-subject", "true");
+  await expect(page.locator(".atlas-loading")).toBeVisible();
+  const loadingHeight = await page.locator("#app").evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+
+  releaseNeighborhood();
+  await expect(page.locator(".atlas-spatial-map")).toBeVisible({
+    timeout: 30000,
+  });
+  const loadedHeight = await page.locator("#app").evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+
+  expect(loadingHeight).toBeGreaterThanOrEqual(loadedHeight - 48);
+});

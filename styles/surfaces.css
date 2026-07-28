@@ -2986,6 +2986,15 @@ a:focus-visible {
   min-width: 0;
 }
 
+/* A focused Atlas record expands from a compact loading notice into a tall,
+   stacked map on phone viewports. Reserve that known workspace footprint from
+   first paint so the footer does not repeatedly jump while the shard loads. */
+@media (max-width: 768px) {
+  .app-shell[data-view="atlas-map"][data-has-subject="true"] {
+    min-height: 132rem;
+  }
+}
+
 .atlas-workspace-header {
   display: flex;
   align-items: end;
