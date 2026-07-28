@@ -140,7 +140,8 @@ export function buildGraphData(
     provenance_class: string;
     publication_status: string;
     confidence: string;
-    plain_language_rationale?: string;
+    rationale?: string;
+    navigation_note?: string;
   }>,
   centerNodeId: string,
   clusterMeta?: Map<string, import("./graphClustering").ClusterNodeMeta>,
@@ -165,7 +166,7 @@ export function buildGraphData(
       provenanceClass: edge.provenance_class,
       publicationStatus: edge.publication_status,
       confidence: edge.confidence,
-      plainLanguageRationale: edge.plain_language_rationale || "",
+      plainLanguageRationale: edge.rationale || edge.navigation_note || "",
     })),
   };
 }

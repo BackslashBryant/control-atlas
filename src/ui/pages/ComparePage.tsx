@@ -711,7 +711,7 @@ export function ComparePage(props: {
                                   <dl>
                                     <div><dt>Trust level</dt><dd>{displayNameFor("confidence", row.confidence)}</dd></div>
                                     <div><dt>Official rationale</dt><dd>{row.rationale || "No public rationale recorded."}</dd></div>
-                                    <div><dt>Plain-language rationale</dt><dd>{row.plain_language_rationale || "No plain-language rationale recorded."}</dd></div>
+                                    <div><dt>{row.navigation_note ? "Navigation note" : "Relationship explanation"}</dt><dd>{row.navigation_note || "No product-authored navigation note."}</dd></div>
                                     <div><dt>Source references</dt><dd><SourceRefList refs={row.source_refs} /></dd></div>
                                   </dl>
                                 </details>

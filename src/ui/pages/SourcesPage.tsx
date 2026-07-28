@@ -147,7 +147,7 @@ export function SourcesPage(props: {
     <Panel className="sources-page">
       <PageHeader
         eyebrow="Sources"
-        summary="Every framework, mapping, and reference in Control Atlas traces back to one of these public sources."
+        summary="This page lists the public sources used for the framework records and relationship evidence shown in Control Atlas."
         title="Where the data comes from"
       />
 

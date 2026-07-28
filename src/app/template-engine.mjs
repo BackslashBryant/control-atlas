@@ -278,7 +278,7 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
   const baselineRows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[How is this implemented for this system?]"),
     ph("[Name of provider if inherited]"),
     ph("[Artifact name(s)]"),
@@ -426,7 +426,7 @@ function generateImplementationStatementWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Draft statement — describe how this control is implemented]"),
     ph("[Name of provider if inherited]"),
     ph("[Role responsible for maintaining this control]"),
@@ -475,7 +475,7 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
     return [
       c.id,
       c.title,
-      truncatePlain(c.plain),
+      truncatePlain(c.description),
       refs && refs.cciIds.length ? refs.cciIds.join("; ") : "—",
       refs && refs.stigIds.length ? refs.stigIds.join("; ") : "—",
       ph("[Artifact type + name]"),
@@ -573,7 +573,7 @@ function generateInheritanceWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Fully inherited | Hybrid | System-specific | Not inherited]"),
     ph("[Provider name — CSP, agency shared service, etc.]"),
     ph("[What your program must still implement or verify locally]"),
@@ -744,7 +744,7 @@ function generateAssessmentPlanningWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Examine | Interview | Test]"),
     ph("[Artifacts to request before the assessment]"),
     ph("[Notes]"),
@@ -1560,7 +1560,7 @@ export function buildTemplateDocument(options, dataset) {
         id: n.metadata?.item_id || n.id,
         title: n.metadata?.title || n.label || n.id,
         family: familyOf(n),
-        plain: n.plain_language_summary || "",
+        description: n.metadata?.description || "",
       }));
     }
   }

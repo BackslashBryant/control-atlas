@@ -14,10 +14,6 @@ import MiniSearch from "minisearch";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
-  generatePlainLanguageRationale,
-  generatePlainLanguageSummary,
-} from "./lib/plain-language.mjs";
-import {
   ATLAS_NEIGHBORHOOD_SHARD_COUNT,
   buildAtlasNodeIndex,
   buildAtlasNeighborhoodShards,
@@ -626,14 +622,6 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
-  // Curated plain-language overrides (see loadCuratedPlainLanguage) are hand-authored
-  // and should win outright. Everything else is regenerated from metadata.description
-  // so pre-baked record.plain_language_summary values (which can carry truncation
-  // artifacts from upstream normalizers) never leak through uncorrected.
-  node.plain_language_summary =
-    node.curated_plain_language_summary ||
-    generatePlainLanguageSummary({ ...node, plain_language_summary: null });
-  delete node.curated_plain_language_summary;
   state.nodes.push(node);
 }
 
@@ -700,34 +688,6 @@ export function lifecycleStatus(record) {
   return "active";
 }
 
-let curatedPlainLanguageCache;
-
-function loadCuratedPlainLanguage() {
-  if (curatedPlainLanguageCache !== undefined) return curatedPlainLanguageCache;
-  const path = join(
-    ROOT,
-    "data",
-    "curated",
-    "plain-language",
-    "controls-800-53.json",
-  );
-  if (!existsSync(path)) {
-    curatedPlainLanguageCache = null;
-    return curatedPlainLanguageCache;
-  }
-  try {
-    curatedPlainLanguageCache = readJson(path);
-  } catch {
-    curatedPlainLanguageCache = null;
-  }
-  return curatedPlainLanguageCache;
-}
-
-function curatedEntryFor(itemId) {
-  const curated = loadCuratedPlainLanguage();
-  return curated?.entries?.[itemId] || null;
-}
-
 /** Add a resolved tier's node to the dedup map, once per distinct tier node id. */
 function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, record) {
   if (!resolved || tierNodes.has(resolved.nodeId)) return;
@@ -763,8 +723,6 @@ function buildNodes(registry) {
     for (const record of document.records || []) {
       const sourceId = record.source?.key || defaultSourceId;
       const id = nodeId(catalogId, record.id);
-      const curatedEntry =
-        catalogId === "nist-800-53" ? curatedEntryFor(record.id) : null;
       const resolvedTier = tierFor(catalogId, record);
       pushEligibleNode(
         state,
@@ -779,9 +737,6 @@ function buildNodes(registry) {
             : String(record.id),
           source_id: sourceId,
           lifecycle_status: lifecycleStatus(record),
-          plain_language_summary: record.plain_language_summary || null,
-          curated_plain_language_summary:
-            curatedEntry?.plain_language_summary || null,
           metadata: {
             catalog_id: catalogId,
             item_id: record.id,
@@ -804,9 +759,6 @@ function buildNodes(registry) {
             type: record.type || null,
             references: record.references || null,
             superseded_by: record.metadata?.superseded_by || null,
-            ...(curatedEntry?.plain_action
-              ? { plain_action: curatedEntry.plain_action }
-              : {}),
           },
         },
         sourceId,
@@ -894,12 +846,6 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     }
   }
 
-  const plainLanguageRationale = generatePlainLanguageRationale(
-    payload,
-    source,
-    rationaleVal,
-  );
-
   const sourceRefs = payload.sourceRefs || [
     {
       source_id: payload.sourceId,
@@ -938,7 +884,6 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     warning: warningVal,
     inference_rule_id: ruleIdVal,
     rationale: rationaleVal,
-    plain_language_rationale: plainLanguageRationale,
     source_refs: sourceRefs,
   });
 }
@@ -1751,7 +1696,6 @@ function buildLibraryDocuments(graph) {
       item_id: node.metadata?.item_id || node.id,
       title: node.metadata?.title || node.label,
       description: node.metadata?.description || "",
-      plain_language_summary: node.plain_language_summary || "",
       object_type: node.node_type,
       source_id: node.source_id,
       source_name: source?.display_name || source?.name || "",
@@ -1765,15 +1709,14 @@ function buildLibraryDocuments(graph) {
 
 function buildMiniSearchIndex(documents) {
   const index = new MiniSearch({
-    fields: ["item_id", "title", "plain_language_summary", "description"],
+    fields: ["item_id", "title", "description"],
     storeFields: ["id"],
     searchOptions: {
       prefix: true,
       boost: {
         item_id: 5,
         title: 3,
-        plain_language_summary: 2,
-        description: 1,
+        description: 2,
       },
     },
   });

@@ -49,8 +49,8 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
     else if (source.access_status !== 'public') {
       errors.push(`node ${node.id} defining source ${node.source_id} must remain public for displayable graph content`);
     }
-    if (typeof node.plain_language_summary !== 'string' || !node.plain_language_summary.trim()) {
-      errors.push(`node ${node.id} is missing required plain_language_summary`);
+    if (node.plain_language_summary !== undefined || node.metadata?.plain_action !== undefined) {
+      errors.push(`node ${node.id} retains retired synthetic record guidance`);
     }
     if (node.parent_id !== undefined && node.parent_id !== null) {
       if (!nodeIds.has(node.parent_id)) {
@@ -109,8 +109,8 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
       if (edge.confidence?.startsWith('inferred_')) errors.push(`published edge ${edge.id} cannot use inferred confidence`);
     }
 
-    if (typeof edge.plain_language_rationale !== 'string' || !edge.plain_language_rationale.trim()) {
-      errors.push(`edge ${edge.id} is missing required plain_language_rationale`);
+    if (edge.plain_language_rationale !== undefined) {
+      errors.push(`edge ${edge.id} retains retired synthetic relationship rationale`);
     }
     if (!Array.isArray(edge.source_refs) || edge.source_refs.length === 0) {
       errors.push(`edge ${edge.id} is missing required source_refs`);

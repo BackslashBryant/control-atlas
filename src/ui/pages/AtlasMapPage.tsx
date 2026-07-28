@@ -377,14 +377,9 @@ function FocusedAtlas(props: {
     inspectedTitle.trim().toLocaleLowerCase() !==
     inspectedItemId.trim().toLocaleLowerCase();
   const inspectedSynopsis =
-    (inspectedDocument?.catalog_id === "disa-cci"
-      ? inspectedDocument?.description
-      : inspectedNode?.plain_language_summary ||
-        inspectedDocument?.plain_language_summary) ||
     inspectedDocument?.description ||
     inspectedNode?.metadata?.description ||
-    "No public synopsis is available for this record.";
-  const inspectedAction = inspectedNode?.metadata?.plain_action || "";
+    "No narrative description was published for this record.";
   const selectedSource = selectedRow?.edge.source_refs?.[0];
   const choiceLabels = [
     state.atlasFramework
@@ -631,20 +626,15 @@ function FocusedAtlas(props: {
               </div>
 
               <section className="atlas-inspector-synopsis">
-                <h3>{selectedRow ? "What this record says" : "About this record"}</h3>
+                <h3>Official description</h3>
                 <p>{inspectedSynopsis}</p>
-                {inspectedAction ? (
-                  <p>
-                    <strong>What to do:</strong> {inspectedAction}
-                  </p>
-                ) : null}
               </section>
 
               {selectedRow ? (
                 <>
                   <section>
-                    <h3>Why it appears here</h3>
-                    <p>{selectedRow.edge.plain_language_rationale}</p>
+                    <h3>{selectedRow.edge.provenance_class === "curated_navigation" ? "Navigation note" : "Published rationale"}</h3>
+                    <p>{selectedRow.edge.rationale || "No published rationale was supplied for this relationship."}</p>
                   </section>
                   <section className="atlas-inspector-source">
                     <h3>Source basis</h3>

@@ -45,7 +45,8 @@ type StaticGraph = {
     provenance_class: string;
     publication_status: string;
     confidence: string;
-    plain_language_rationale?: string;
+    rationale?: string;
+    navigation_note?: string;
   }>;
   stats: {
     nodeCount: number;
@@ -79,7 +80,8 @@ type RelationshipExplorerProps = {
       provenance_class: string;
       publication_status: string;
       confidence: string;
-      plain_language_rationale?: string;
+      rationale?: string;
+      navigation_note?: string;
     };
     counterpart: { id: string };
     itemId: string;

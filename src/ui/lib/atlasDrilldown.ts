@@ -19,7 +19,6 @@ export type AtlasDrillNode = {
   id: string;
   node_type?: string;
   label?: string;
-  plain_language_summary?: string;
   metadata?: {
     catalog_id?: string;
     item_id?: string;
@@ -118,9 +117,8 @@ function toChoice(node: AtlasDrillNode): AtlasRecordChoice {
     itemId,
     label: node.metadata?.title || node.label || itemId,
     description:
-      node.plain_language_summary ||
       node.metadata?.description ||
-      "No public summary is available for this record.",
+      "No narrative description was published for this record.",
     nodeType: node.node_type || "",
   };
 }

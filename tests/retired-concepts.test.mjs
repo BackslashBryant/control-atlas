@@ -17,7 +17,6 @@ test('retired vulnerability data and ingestion files are removed', () => {
 test('runtime surfaces do not implement prohibited operational capabilities', () => {
   const paths = [
     'src/app/runtime.mjs',
-    'src/app/app.mjs',
     'src/ui/App.tsx',
     'package.json',
     '.github/workflows/nightly-refresh.yml',
@@ -33,11 +32,17 @@ test('runtime surfaces do not collect, upload, or store user data', () => {
   const runtime = [
     readFileSync('src/index.html', 'utf8'),
     readFileSync('src/app/runtime.mjs', 'utf8'),
-    readFileSync('src/app/app.mjs', 'utf8'),
     readFileSync('src/ui/App.tsx', 'utf8'),
   ].join('\n');
 
   assert.doesNotMatch(runtime, /<input[^>]+type=["']file["']/i);
   assert.doesNotMatch(runtime, /\b(localStorage|sessionStorage|WebSocket|XMLHttpRequest)\b/);
   assert.doesNotMatch(runtime, /fetch\([^)]*(?:POST|PUT|PATCH|DELETE)/i);
+});
+
+test('the unmounted legacy renderer and page-intro dependency are removed', () => {
+  assert.equal(existsSync('src/app/app.mjs'), false);
+  assert.equal(existsSync('src/content/pageIntros.mjs'), false);
+  const active = [readFileSync('src/main.tsx', 'utf8'), readFileSync('src/ui/App.tsx', 'utf8'), readFileSync('vite.config.ts', 'utf8')].join('\n');
+  assert.doesNotMatch(active, /app\.mjs|pageIntros/);
 });

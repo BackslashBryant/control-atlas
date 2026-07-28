@@ -92,7 +92,7 @@ export type AtlasNeighborhoodEdge = {
     locator?: string;
   }>;
   rationale?: string;
-  plain_language_rationale?: string;
+  navigation_note?: string;
 };
 
 export type AtlasNeighborhoodRecord = {
@@ -179,36 +179,6 @@ function artifactPath(name: string) {
   return `./data/generated/${name}?v=${CACHE_VERSION}`;
 }
 
-const RELATIONSHIP_GUIDANCE: Record<string, string> = {
-  maps_to:
-    "Compare the two records; this mapping does not transfer compliance by itself.",
-  supports: "Use this as supporting context, not proof that the requirement is met.",
-  implements: "This describes one way to put the selected requirement into practice.",
-  contains: "This is a publisher-defined structural child of the selected record.",
-  selects: "This applicability scope selects the connected requirement.",
-  includes: "The selected record contains or selects this item.",
-  assesses: "Use this procedure to examine the selected requirement.",
-  overlaps: "The records cover some of the same ground but are not interchangeable.",
-  references: "The selected record points to this item for additional context.",
-  derived_from: "This item was derived from the selected source record.",
-  supersedes: "This item replaces an earlier record; confirm the effective version.",
-  mitigates: "This item can reduce the threat or weakness described by the selected record.",
-  protects: "This item identifies protection related to the selected record.",
-  related_to: "The source records a relationship without claiming equivalence.",
-};
-
-function atlasRelationshipGuidance(
-  relationshipType: string,
-  publicationStatus: string,
-) {
-  const guidance =
-    RELATIONSHIP_GUIDANCE[relationshipType] ||
-    "Use the source reference to understand how these records are connected.";
-  return publicationStatus === "published"
-    ? guidance
-    : `Candidate only: ${guidance.charAt(0).toLowerCase()}${guidance.slice(1)}`;
-}
-
 export async function loadAtlasNeighborhood(
   nodeId: string,
 ): Promise<AtlasNeighborhoodRecord | null> {
@@ -285,13 +255,7 @@ export async function loadAtlasNeighborhood(
         ? edge.target_node_id
         : edge.source_node_id,
     );
-    return {
-      ...edge,
-      plain_language_rationale: atlasRelationshipGuidance(
-        relationshipType,
-        publicationStatus,
-      ),
-    };
+    return edge;
   });
   const nodes = [
     centerNode,
