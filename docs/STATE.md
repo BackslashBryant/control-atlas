@@ -713,3 +713,14 @@ Remote execution must still demonstrate the v1.0.0-versus-candidate Lighthouse
 result, Pages deployment commit/cache identity, bounded live route groups, and
 canonical/deep-link/retired-alias static-404 behavior. Human assistive-
 technology review remains a separate residual.
+
+### Dependency closeout
+
+- Reviewed the eleven open Dependabot heads. Integrated current action updates
+  (artifact upload v7, Pages v6/v5, Gitleaks v3, CodeQL v4), and current
+  `@playwright/test`, `@types/node`, `globals`, `fast-xml-parser`, and
+  `pdf-parse` versions. The `pdf-parse` v2 importer uses its supported
+  `PDFParse` lifecycle and is covered by the DoD extraction contract.
+- Dependabot PR #1 is superseded: its requested CycloneDX v4 update is older
+  than the existing v5 dependency. Remote PR closure remains part of release
+  publication because the GitHub API credential must be valid for that action.
