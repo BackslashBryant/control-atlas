@@ -23,28 +23,8 @@ test('glossary contains 26 required federal terms with source citations', () => 
   }
 });
 
-test('pattern library contains 15 required authorization and risk patterns', () => {
-  const requiredPatterns = [
-    'rmf-lifecycle', 'ato-vs-atc', 'ato-vs-fedramp', 'reciprocity-basics', 'reciprocity-failures',
-    'control-inheritance', 'common-control-provider', 'shared-responsibility', 'csp-inheritance',
-    'enterprise-inheritance', 'boundary-patterns', 'boe-reuse', 'poam-concepts', 'conmon-cadence', 'evidence-patterns'
-  ];
-
-  assert.equal(patternsData.length >= 15, true);
-  for (const id of requiredPatterns) {
-    const pattern = patternsData.find(p => p.id === id);
-    assert.ok(pattern, `Patterns library is missing pattern with ID: ${id}`);
-    assert.ok(pattern.title, `Pattern details missing title for ID: ${id}`);
-    assert.ok(pattern.summary, `Pattern details missing summary for ID: ${id}`);
-    assert.ok(pattern.explanation, `Pattern details missing explanation for ID: ${id}`);
-    assert.ok(pattern.friction, `Pattern details missing friction for ID: ${id}`);
-    assert.ok(Array.isArray(pattern.sources), `Pattern details missing sources array for ID: ${id}`);
-    assert.ok(Array.isArray(pattern.controls), `Pattern details missing controls array for ID: ${id}`);
-    assert.ok(Array.isArray(pattern.templates), `Pattern details missing templates array for ID: ${id}`);
-    assert.ok(Array.isArray(pattern.dos), `Pattern details missing dos array for ID: ${id}`);
-    assert.ok(Array.isArray(pattern.donts), `Pattern details missing donts array for ID: ${id}`);
-    assert.ok(pattern.limitations, `Pattern details missing limitations for ID: ${id}`);
-  }
+test('public Playbooks remain absent until every displayed guide has inspectable source provenance', () => {
+  assert.deepEqual(patternsData, []);
 });
 
 test('template factory implements all conditional include flags and bug fixes', () => {

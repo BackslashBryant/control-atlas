@@ -77,7 +77,7 @@ No backend or user, organization, or system data is part of this product directi
 ### 2026 correction program
 
 - [x] Epic 4 - Record and Build progressive disclosure (local branch only): record pages place the available record explanation before structural position, Build has subordinate Tasks/Starter documents/Resources navigation, and task/document paths recover invalid state without losing valid configuration.
-- [ ] Epic 5 - Source-first record integrity and legacy cleanup: remove synthetic record translation, distinguish published rationale from navigation notes, and retire the unmounted legacy renderer before further release work.
+- [x] Epic 5 - Source-first record integrity and legacy cleanup (local branch only): official descriptions and source links are the default record surface; synthetic translation and its curated data are removed; relationships declare published rationale, Navigation note, or absence; Start Here is a source navigator; unsourced Playbooks are absent; and the legacy renderer is deleted.
 - [x] Copy contract: user-facing copy must name a concrete action or source boundary; canned metaphors, compliance-only prompts, and determination-like mapping claims are prohibited by test.
 
 - Static GitHub Pages application (React shell in `src/ui/`)

@@ -50,7 +50,6 @@ test('800-171 Rev. 2 CSV normalization preserves requirement identifiers and dis
     title: '3.1.1',
     family: 'Access Control',
     description: 'Limit system access to authorized users. Access control discussion.',
-    plain_language_summary: 'Limit system access to authorized users.',
   });
 });
 
@@ -210,7 +209,6 @@ test('800-172 catalog normalization preserves enhanced requirement identifiers',
     title: 'Dual Authorization',
     family: 'Access Control',
     description: 'Protect critical CUI functions.',
-    plain_language_summary: 'Protect critical CUI functions.',
   });
 });
 
@@ -243,7 +241,6 @@ test('CSF 2.0 catalog normalization threads Function and Category grouping onto 
     framework: 'csf',
     title: 'GV.OC-01',
     description: 'The organizational mission is understood.',
-    plain_language_summary: 'The organizational mission is understood.',
     function_id: 'GV',
     function: 'GOVERN',
     category_id: 'GV.OC',

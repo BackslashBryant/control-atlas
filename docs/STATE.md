@@ -609,7 +609,27 @@ PDF, and preview) — per §13. Do not start W4, W7, or W2 first.
 
 ### Next
 
-Epic 5 is the source-first record integrity and legacy-cleanup pass. It supersedes the record-translation implication in Epic 4: public records must show official text, source, and relationship provenance unless a separately approved human-authored guidance dataset exists. Do not push, merge, deploy, tag, or release this local-only work without fresh authorization.
+Epic 5 is complete locally on `agent/forge/epic-5-source-first-record-integrity`.
+It supersedes the record-translation implication in Epic 4: public records show
+official text, source, and relationship provenance unless a separately approved
+human-authored guidance dataset exists. The next milestone is Epic 6 responsive
+and accessibility completion. Do not push, merge, deploy, tag, or release this
+local-only work without fresh authorization.
+
+## 2026-07-28 (session 14) - Epic 5 source-first record integrity
+
+### Completed
+
+- Mounted record details, catalog/search results, Explore, and Atlas drilldowns no longer render synthetic translation/action fields. They show official descriptions or an explicit no-description state, official source links, and published connections.
+- The curated 800-53 translation dataset and generator are deleted. Generated record, search, template, and export contracts use official source descriptions only.
+- Relationship displays label a published rationale, a product-authored Navigation note, or the absence of published rationale; source references remain reachable.
+- Start Here is a source navigator with no classification, baseline, authorization-path, or applicability inference. Public Playbooks are absent until their displayed guidance has registry-backed canonical source URLs.
+- `src/app/app.mjs` and its dead page-intro dependency are deleted. The active React application remains the only mounted runtime.
+
+### Verification
+
+- Focused source/provenance contracts and 375px/1440px representative record workflows cover a control, STIG rule, SRG rule, ATT&CK technique, assessment procedure, and an official no-description record.
+- Full local verification remains required before any later release authorization; this branch is not pushed, merged, deployed, tagged, or released.
 
 The previous long-form session log and superseded open-item snapshots are
 preserved at `docs/audits/state-history-through-2026-07-26.md`.

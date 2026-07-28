@@ -1,6 +1,7 @@
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { ProvenanceBadge } from "../lib/compareHelpers";
+import { relationshipExplanation } from "../lib/relationshipProvenance";
 
 type TableRow = {
   edge: {
@@ -60,8 +61,10 @@ export function RelationshipGraphTable(props: {
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ edge, counterpart, itemId, title }) => (
-            <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
+          {rows.map(({ edge, counterpart, itemId, title }) => {
+            const explanation = relationshipExplanation(edge);
+            return (
+              <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
               <td data-label="Connected item">
                 <button
                   className="link-action"
@@ -110,13 +113,7 @@ export function RelationshipGraphTable(props: {
                 {displayNameFor("confidence", edge.confidence)}
               </td>
               <td data-label="Relationship explanation">
-                {edge.rationale ? (
-                  <><strong>Published rationale:</strong> {edge.rationale}</>
-                ) : edge.navigation_note ? (
-                  <><strong>Navigation note:</strong> {edge.navigation_note}</>
-                ) : (
-                  "No published rationale was supplied for this relationship."
-                )}
+                <strong>{explanation.label}:</strong> {explanation.text}
                 {edge.source_refs?.length ? (
                   <details className="relationship-source-refs">
                     <summary>
@@ -139,7 +136,8 @@ export function RelationshipGraphTable(props: {
                 ) : null}
               </td>
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>
