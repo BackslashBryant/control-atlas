@@ -96,9 +96,9 @@ test("focused Atlas reserves its mobile workspace while the neighborhood loads",
   page,
 }) => {
   await page.setViewportSize({ width: 412, height: 823 });
-  let releaseNeighborhood;
+  let releaseNeighborhood = () => {};
   const neighborhoodGate = new Promise((resolve) => {
-    releaseNeighborhood = resolve;
+    releaseNeighborhood = () => resolve();
   });
 
   await page.route("**/data/generated/atlas-neighborhood/32.json*", async (route) => {
