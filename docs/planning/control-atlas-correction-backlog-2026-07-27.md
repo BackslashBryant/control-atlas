@@ -1,7 +1,7 @@
 # Control Atlas prioritized correction backlog
 
 Date: 2026-07-27  
-Status: Approved correction program; Epics 1-7 local implementation complete; deployed proof owner-gated
+Status: v1.0.1 local closeout candidate complete; deployed proof and release publication execution-gated
 Audit: [Current-state audit](../audits/control-atlas-current-state-audit-2026-07-27.md)  
 Specification: [Correction specification](control-atlas-correction-spec-2026-07-27.md)
 
@@ -373,8 +373,8 @@ VoiceOver, or TalkBack review remains an explicitly documented release residual.
 Priority: P2, required before declaring the correction shipped  
 Risk: Low/Medium.
 
-**Status (2026-07-28): Local preparation complete; deployment proof remains
-owner-gated.** The local correction gate maps every Critical/High audit finding
+**Status (2026-07-28): Local closeout candidate complete; deployment proof
+remains execution-gated.** The local correction gate maps every Critical/High audit finding
 to focused semantic contracts, including source-first records, route identity,
 Resources state, durable Build state, and Compare responsive behavior. The
 broad live responsive sweep is split into independently retryable route groups
@@ -383,6 +383,12 @@ No Pages test has run and no visual baseline changed. Legacy route aliases were
 retired locally by owner direction and are covered by local not-found contracts.
 Human NVDA, VoiceOver, or TalkBack evidence remains an explicit release
 residual.
+
+The v1.0.1 candidate also records exact upstream provenance for all eleven
+blocked graph-health findings, removes stale Compare navigation-state patches,
+and turns the same-runner mobile Lighthouse comparison into a three-run,
+median-based release gate against `v1.0.0`. Those local changes do not replace
+the required deployed evidence.
 
 ### Feature 7.1 — Add semantic release contracts
 

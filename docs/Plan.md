@@ -21,16 +21,16 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**2026 correction program - Epic 7 local regression and compatibility work
-complete.** The local correction gate now names and runs the Critical/High
-semantic contracts, source-first record coverage, durable route/resource state,
-and Compare/Resources responsive behavior. The broad responsive Pages sweep is
-split into independently retryable route groups with first-failure artifacts.
-Visual baselines were not changed; the manual accessibility matrix retains the
-explicit pending human assistive-technology residual. Legacy route aliases were
-retired by owner direction; deployed commit, cache, live-route, and static-404
-proof remain owner-gated; see the
-[`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
+**v1.0.1 final closeout candidate.** The 2026 correction program is complete
+locally, including Critical/High semantic contracts, source-first record
+coverage, durable route/resource state, responsive Compare behavior, retired
+legacy route aliases, graph-health provenance, a Node 22/strict-install
+workflow audit, comparative mobile Lighthouse enforcement, and the remaining
+page-level `...state` navigation patches. The bounded deployed route groups,
+same-runner Lighthouse comparison, Pages cache/commit proof, and release
+publication remain pending their fresh remote execution. Visual baselines were
+not changed; the manual accessibility matrix retains the explicit human
+assistive-technology residual.
 
 ## Epic Status (July 9, 2026)
 

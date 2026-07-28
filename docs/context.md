@@ -24,13 +24,15 @@ recovery that preserves valid state. Resources retains Epic 3's canonical
 URL-backed browse contract. No push, merge, deploy, tag, or release is
 authorized by this work.
 
-**Active sprint:** none. Epic 7 local regression and compatibility preparation
-is complete on `agent/pixel/epic-7-regression-deployment-compatibility`.
-Critical/High contracts, source-first records, durable route/resource state,
-and Compare/Resources responsive behavior are grouped in a local gate. Pages
-route-group, exact deployed commit/cache, canonical-route, and static-404
-evidence remain separately owner-gated. Legacy route aliases are retired; the
-pre-hash query-state adapter remains as a persisted-state compatibility layer.
+**Active sprint:** v1.0.1 final closeout on
+`agent/nexus/v1-0-1-final-closeout`. The local candidate includes Epic 7
+semantic/compatibility contracts, retired aliases, graph-health provenance,
+Node 22 and strict-install workflow verification, a comparative mobile
+Lighthouse gate, and the remaining Compare navigation-state cleanup. Pages
+route groups, the comparative workflow result, exact deployed commit/cache,
+canonical routes, static-404 evidence, and release publication require fresh
+remote execution. The pre-hash query-state adapter remains because it preserves
+persisted state rather than a retired route.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -56,15 +58,13 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. With explicit shipping authorization, deploy the reviewed commit and run the
-   bounded live route groups, exact cache/commit check, and representative deep
-   link smoke. Preserve source-first record presentation and the responsive
-   375px/1440px contracts; do not treat local automation as deployed,
-   real-device, or human screen-reader proof.
-2. Preserve Epic 1's structural/applicability/correlation contract and Epics 2
-   and 3's canonical route, Resources state, and traceability boundary, plus the
-   local-only proof boundary.
-3. Keep push, merge, deploy, tag, and release actions separately authorized.
+1. Run final local gates, integrate reviewed dependency updates, and push the
+   v1.0.1 candidate.
+2. Run the bounded Pages route groups, same-runner v1.0.0 comparison, exact
+   cache/commit check, and representative canonical/deep-link/static-404 smoke.
+   Do not treat local automation as deployed, real-device, or human
+   screen-reader proof.
+3. Preserve the explicit human NVDA/VoiceOver/TalkBack residual after release.
 
 ## Status Docs
 

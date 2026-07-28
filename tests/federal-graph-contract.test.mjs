@@ -567,3 +567,28 @@ test('graph health reports zero invalid structural-parent findings', () => {
     0,
   );
 });
+
+test('every blocked graph-health relationship has checked upstream provenance and remains unpublished', () => {
+  const findings = generated('graph-health').findings
+    .filter((finding) => finding.finding_type === 'blocked_relationship');
+  const provenance = JSON.parse(readFileSync('data/graph-health-provenance.json', 'utf8'));
+  const provenanceByFindingId = new Map(provenance.findings.map((entry) => [entry.finding_id, entry]));
+  const edges = generated('edges').edges;
+
+  assert.equal(provenance.schema_version, '1.0');
+  assert.match(provenance.policy, /do not infer/i);
+  assert.deepEqual(
+    [...provenanceByFindingId.keys()].sort(),
+    findings.map((finding) => finding.id).sort(),
+    'provenance inventory must cover exactly the current blocked findings',
+  );
+  for (const finding of findings) {
+    const entry = provenanceByFindingId.get(finding.id);
+    assert.equal(entry.source_id, finding.source_id, `${finding.id} source`);
+    assert.match(entry.upstream_url, /^https:\/\//, `${finding.id} upstream URL`);
+    assert.ok(entry.rejected_reference?.trim(), `${finding.id} rejected reference`);
+    assert.ok(entry.reason?.trim(), `${finding.id} reason`);
+    assert.equal(entry.disposition, 'blocked_not_published', `${finding.id} disposition`);
+    assert.ok(!edges.some((edge) => edge.id === `edge:${finding.subject_id}`));
+  }
+});

@@ -12,11 +12,11 @@ on:
       before_ref:
         description: Baseline git ref
         required: false
-        default: "743dcde"
+        default: "v1.0.0"
       after_ref:
-        description: Candidate git ref
+        description: Candidate git ref (defaults to the workflow commit)
         required: false
-        default: "9f687d7"
+        default: ""
   push:
     branches:
       - "evidence/lighthouse-ab*"
@@ -28,8 +28,9 @@ jobs:
   compare:
     runs-on: ubuntu-latest
     env:
-      BEFORE_REF: ${{ github.event.inputs.before_ref || '743dcde' }}
-      AFTER_REF: ${{ github.event.inputs.after_ref || '9f687d7' }}
+      BEFORE_REF: ${{ github.event.inputs.before_ref || 'v1.0.0' }}
+      AFTER_REF: ${{ github.event.inputs.after_ref || github.sha }}
+      MAX_MEDIAN_DROP: "3"
       ROUTE: "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
     steps:
       - uses: actions/checkout@v4
@@ -89,9 +90,12 @@ jobs:
             const before = summarize('before');
             const after = summarize('after');
             console.table([...before, ...after]);
-            const min = (rows) => Math.min(...rows.map((r) => r.performance));
-            console.log('BEFORE(' + process.env.BEFORE_REF + ') lowest: ' + min(before));
-            console.log('AFTER (' + process.env.AFTER_REF + ') lowest: ' + min(after));
+            const median = (rows) => [...rows.map((r) => r.performance)].sort((a, b) => a - b)[1];
+            const beforeMedian = median(before);
+            const afterMedian = median(after);
+            const allowedMinimum = beforeMedian - Number(process.env.MAX_MEDIAN_DROP);
+            console.log('BEFORE(' + process.env.BEFORE_REF + ') median: ' + beforeMedian);
+            console.log('AFTER (' + process.env.AFTER_REF + ') median: ' + afterMedian);
             const shifts = read('after', 3).audits['layout-shifts'];
             for (const item of (shifts?.details?.items || []).slice(0, 5)) {
               const sel = item.subItems?.items?.[0]?.node?.selector || item.node?.selector || '';
@@ -99,8 +103,12 @@ jobs:
             }
             require('fs').writeFileSync(
               'artifacts/lighthouse-ab/summary.json',
-              JSON.stringify({ before, after }, null, 2),
+              JSON.stringify({ before, after, beforeMedian, afterMedian, allowedMinimum }, null, 2),
             );
+            if (afterMedian < allowedMinimum) {
+              console.error('Performance regression: candidate median ' + afterMedian + ' is below allowed minimum ' + allowedMinimum + '.');
+              process.exit(1);
+            }
           "
 
       - name: Upload reports

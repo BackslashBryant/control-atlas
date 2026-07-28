@@ -553,7 +553,6 @@ export function ComparePage(props: {
                     <input
                       onChange={(event) =>
                         onNavigate("matrix", {
-                          ...state,
                           crosswalk,
                           items: event.target.value,
                         })
@@ -570,7 +569,6 @@ export function ComparePage(props: {
                     label="Connection type"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         relationshipType: value,
                       })
@@ -586,7 +584,6 @@ export function ComparePage(props: {
                     label="Source basis"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         provenance: value,
                       })
@@ -604,7 +601,6 @@ export function ComparePage(props: {
                     label="Trust level"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         confidence: value,
                       })
@@ -623,7 +619,6 @@ export function ComparePage(props: {
                         checked={state.includeCandidates === "true"}
                         onChange={(event) =>
                           onNavigate("matrix", {
-                            ...state,
                             crosswalk,
                             includeCandidates: event.target.checked
                               ? "true"
@@ -759,7 +754,6 @@ export function ComparePage(props: {
                     variant="primary"
                     onClick={() =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         relationshipType: "",
                         provenance: "",
@@ -775,7 +769,7 @@ export function ComparePage(props: {
                 <Button
                   variant={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
                   onClick={() =>
-                    onNavigate("matrix", { ...state, crosswalk: "intent" })
+                    onNavigate("matrix", { crosswalk: "intent" })
                   }
                   type="button"
                 >
@@ -798,7 +792,6 @@ export function ComparePage(props: {
               label="Catalog"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainCatalog: value,
                   chainBenchmark: "",
@@ -816,7 +809,6 @@ export function ComparePage(props: {
               label="Benchmark scope"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainBenchmark: value,
                   chainItem: "",
@@ -830,7 +822,6 @@ export function ComparePage(props: {
               label="STIG or SRG item"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainItem: value,
                 })
@@ -854,7 +845,6 @@ export function ComparePage(props: {
                   checked={state.includeCandidates === "true"}
                   onChange={(event) =>
                     onNavigate("matrix", {
-                      ...state,
                       crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
@@ -916,7 +906,6 @@ export function ComparePage(props: {
                             variant="secondary"
                             onClick={() =>
                               onNavigate("matrix", {
-                                ...state,
                                 crosswalk,
                                 chainItem: row.node_id,
                               })
@@ -1060,7 +1049,6 @@ export function ComparePage(props: {
               label="ATT&CK domain"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainCatalog: value,
                   chainItem: "",
@@ -1077,7 +1065,6 @@ export function ComparePage(props: {
               label="ATT&CK technique"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainItem: value,
                 })
@@ -1094,7 +1081,6 @@ export function ComparePage(props: {
                   checked={state.includeCandidates === "true"}
                   onChange={(event) =>
                     onNavigate("matrix", {
-                      ...state,
                       crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
@@ -1161,7 +1147,6 @@ export function ComparePage(props: {
                               variant="secondary"
                               onClick={() =>
                                 onNavigate("matrix", {
-                                  ...state,
                                   crosswalk,
                                   chainItem: row.node_id,
                                 })
