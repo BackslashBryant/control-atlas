@@ -17,6 +17,7 @@ import {
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
+import { relationshipExplanation } from "../lib/relationshipProvenance";
 import { Button } from "./lsm/Button";
 
 type AtlasDecompositionBoardProps = {
@@ -188,7 +189,7 @@ export function AtlasDecompositionBoard(props: AtlasDecompositionBoardProps) {
               : `${centerLabel} — ${centerTitle}`}
           </h2>
           <p>
-            {selectedRow?.edge.rationale || selectedRow?.edge.navigation_note ||
+            {selectedRow ? relationshipExplanation(selectedRow.edge).text :
               (activeStage
                 ? `Choose a record above to continue the path from it.`
                 : `Pick a stage to see what ${centerLabel} connects to.`)}

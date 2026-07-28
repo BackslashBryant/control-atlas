@@ -1342,7 +1342,7 @@ test("relationship exports mirror the current visible rows", () => {
 
   assert.match(
     csv,
-    /"From ID","To ID","Relationship type","Source basis","Confidence","Rationale","Plain-Language Rationale","Source references"/,
+    /"From ID","To ID","Relationship type","Source basis","Confidence","Rationale","Navigation note","Source references"/,
   );
   assert.match(csv, /V-100001/);
   assert.match(markdown, /\| From ID \| To ID \| Relationship type \|/);

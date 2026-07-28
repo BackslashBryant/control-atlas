@@ -115,7 +115,7 @@ Navigation order reflects practitioner workflow, not alphabetical or architectur
 A short client-side question flow — system type, data sensitivity, operational environment — that outputs a plain-language starting point: which framework applies, which baseline fits, what templates to generate first, and which pattern pages to read. No data stored. No profile created. Output is a recommendation, not a determination.
 
 ### Library
-Searchable public reference objects: NIST controls, FedRAMP baselines, DISA STIGs/SRGs, CCIs, MITRE ATT&CK techniques, D3FEND countermeasures, and the compliance glossary. Every object page leads with a plain-language summary before showing formal source text. Related objects, applicable templates, and "what to do next" actions are surfaced on every detail page.
+Searchable public reference objects: NIST controls, FedRAMP baselines, DISA STIGs/SRGs, CCIs, MITRE ATT&CK techniques, D3FEND countermeasures, and the compliance glossary. Every object page leads with official source content or an honest absence state, then shows related objects and source-traceable relationships.
 
 ### Compare
 How frameworks map to each other: NIST ↔ FedRAMP, STIG → CCI → NIST, ATT&CK → D3FEND → control, baseline-to-baseline comparisons. Every mapping shows relationship type, provenance class, and confidence. Inferred mappings are clearly labeled. Export to CSV/Markdown/JSON.
@@ -157,7 +157,7 @@ A guided entry point for practitioners who don't know where to begin. Plain-lang
 
 ### Library Browser
 
-Every object page leads with a plain-language summary. Formal source text is present but secondary. The page answers "what does this mean?" before it answers "what is this?"
+Every object page leads with official source content. When no official narrative is published, the page says so plainly rather than substituting product-generated guidance.
 
 **Object types:** NIST controls, control families, baselines/profiles, FedRAMP overlays, STIG rules, SRG requirements, CCIs, ATT&CK techniques, D3FEND countermeasures
 
@@ -380,8 +380,7 @@ control_atlas_node:
   type: control | control_family | baseline | profile | stig_rule | srg_requirement | cci | attack_technique | defend_countermeasure | template | source
   canonical_id: string
   title: string
-  plain_language_summary: string   # required — the translation layer
-  description: string              # formal source text
+  description: string              # official source text or excerpt
   source_id: string
   source_class: string
   version: string
@@ -394,7 +393,7 @@ control_atlas_node:
   normalized_at: string
 ```
 
-> `plain_language_summary` is a required field. It is the translation layer — what this object means in practice before the formal text. It must be populated for every node before that node is displayed to users.
+> Record surfaces render official source content by default. A missing official narrative description is shown as an honest absence state; it is never replaced with generated guidance.
 
 ### Edge Schema
 
@@ -406,8 +405,8 @@ control_atlas_edge:
   relationship_type: maps_to | supports | implements | overlaps | references | derived_from | supersedes | related_to
   provenance_class: official | federal_published | dod_published | nist_published | disa_published | fedramp_published | mitre_published | community_open_source | inferred
   confidence: high | medium | low
-  rationale: string                # required for inferred; recommended for all
-  plain_language_rationale: string # required — plain-language explanation of why this connection matters
+  rationale: string                # published relationship rationale when supplied
+  navigation_note: string          # product-authored browsing context when needed
   source_refs:
     - source_id: string
       ref_type: string
@@ -417,7 +416,7 @@ control_atlas_edge:
   normalized_at: string
 ```
 
-> `plain_language_rationale` is required on every edge. It is the translation layer for relationships — why does this connection matter to a practitioner?
+> A relationship explanation is labelled `Published rationale` when supplied by the publication, `Navigation note` when authored for product navigation, or as absent. A navigation note is not source text or an applicability result.
 
 ### Source Schema
 
@@ -684,8 +683,8 @@ Complete before any new feature work.
 - No GovFrame visual identity remains
 
 **Story 0.3 — Extend node/edge schema**
-- Node schema extended to include `plain_language_summary` (required)
-- Edge schema extended to include `provenance_class`, `confidence`, `relationship_type`, `source_refs`, `plain_language_rationale` (required)
+- Node schema preserves official descriptions without a synthetic translation field
+- Edge schema includes provenance, source references, and provenance-labelled explanation fields
 - Build fails on invalid or missing required fields
 - Existing GovFrame data migrated to new schema
 
@@ -703,18 +702,18 @@ Complete before any new feature work.
 ### Epic 1: Data Backbone
 
 **Story 1.1 — NIST OSCAL importer**
-- Controls and baselines normalized as nodes with `plain_language_summary` populated
+- Controls and baselines normalized as nodes with official descriptions where published
 - Control-to-baseline edges created with provenance
 
 **Story 1.2 — STIG/SRG importer**
-- Rules normalized with severity, IDs, check/fix text, CCI refs, `plain_language_summary`
+- Rules normalized with severity, IDs, check/fix text, CCI refs, and official descriptions where published
 
 **Story 1.3 — CCI mapping importer**
 - CCI-to-control and STIG-to-CCI relationships with provenance class and confidence
 
 **Story 1.4 — Relationship builder**
 - Official mappings marked correctly
-- Inferred mappings require non-empty `rationale` and `plain_language_rationale`
+- Published mappings retain source references and published rationale where supplied; product navigation notes are labelled separately
 - Build fails on malformed relationships
 
 **Story 1.5 — Provenance registry seed**
@@ -726,12 +725,12 @@ Complete before any new feature work.
 ### Epic 2: Library + Search
 
 **Story 2.1 — MiniSearch index**
-- Built at compile time, field-weighted for IDs and plain language
+- Built at compile time, field-weighted for identifiers, titles, and official descriptions
 - Accessible from every page
 
 **Story 2.2 — Object detail pages**
-- Plain-language summary displayed before formal source text
-- Related objects, provenance, and "What to do next" section on every page
+- Official description or source excerpt displayed with an honest absence state when unavailable
+- Related objects, provenance, and source links on every page
 - Stable deep links with copyable IDs
 
 **Story 2.3 — Library filters**
@@ -743,7 +742,7 @@ Complete before any new feature work.
 ### Epic 3: Compare
 
 **Story 3.1 — Relationship table**
-- Displays all edge fields including `plain_language_rationale`
+- Displays source references and labels published rationale separately from Navigation note
 - Filter by type, provenance, confidence
 - Export with provenance metadata included
 
@@ -855,10 +854,10 @@ Each template story acceptance criteria: correct columns/sections per spec, plai
 The MVP is done when:
 
 1. Site deploys as a static site. No login, no backend.
-2. Every object page leads with a plain-language summary before formal source text.
-3. Every relationship has a visible `plain_language_rationale`.
-4. Start Here flow produces an actionable reference recommendation in under 60 seconds without storing data.
-5. Library is searchable by ID and plain language from any page.
+2. Every object page leads with official source content or an honest absence state.
+3. Every visible relationship explanation declares published rationale, Navigation note, or absence.
+4. Start Here helps browse public sources without inferring a classification, baseline, or authorization path.
+5. Library is searchable by ID, title, and official description from any page.
 6. STIG → CCI → NIST trace is reachable in three clicks.
 7. Baseline comparator works for NIST and FedRAMP baselines.
 8. Template Factory generates all twelve artifact companions with plain-language field prompts and links each family to authoritative resources.
@@ -878,7 +877,7 @@ The MVP is done when:
 | Risk | Impact | Mitigation |
 |---|---|---|
 | Scope creep into GRC/evidence tooling | High | Product boundary stated in README; non-goals explicit |
-| Plain-language summaries become stale or wrong | High | `plain_language_summary` required field; content review in every release |
+| Synthetic record guidance becomes stale or wrong | High | Default to official source content; require an approved reviewable provenance schema before adding guidance |
 | Inferred mappings mistaken as official | High | Mandatory provenance labels with text — never color alone |
 | Public source changes break importers | Medium | Schema validation, source snapshots, parser tests |
 | Users assume templates guarantee compliance | High | Prominent disclaimers; plain-language limitation notes in every template |

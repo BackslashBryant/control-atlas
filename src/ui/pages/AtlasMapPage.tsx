@@ -35,6 +35,7 @@ import {
 } from "../lib/atlasDrilldown";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
+import { relationshipExplanation } from "../lib/relationshipProvenance";
 import {
   loadAtlasNeighborhood,
   type AtlasNeighborhoodRecord,
@@ -633,8 +634,8 @@ function FocusedAtlas(props: {
               {selectedRow ? (
                 <>
                   <section>
-                    <h3>{selectedRow.edge.provenance_class === "curated_navigation" ? "Navigation note" : "Published rationale"}</h3>
-                    <p>{selectedRow.edge.rationale || "No published rationale was supplied for this relationship."}</p>
+                    <h3>{relationshipExplanation(selectedRow.edge).label}</h3>
+                    <p>{relationshipExplanation(selectedRow.edge).text}</p>
                   </section>
                   <section className="atlas-inspector-source">
                     <h3>Source basis</h3>

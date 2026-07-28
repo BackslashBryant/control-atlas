@@ -11,18 +11,20 @@
 ## Current Objective
 
 **2026 correction program** - Epic 4, Record and Build progressive disclosure,
-is complete locally on `agent/forge/epic-4-record-build-progressive-disclosure`.
-Record detail places its current explanation before structural position and
-relationship detail without losing source traceability; Epic 5 will make record
-content source-first and remove synthetic translation.
+and Epic 5, source-first record integrity and legacy cleanup, are complete
+locally on `agent/forge/epic-5-source-first-record-integrity`. Record detail
+now leads with official source content, an honest absence state where no
+narrative was published, reachable source links, and provenance-labelled
+relationships. Synthetic record translation, recommendation defaults, unsourced
+public playbooks, and the unmounted legacy renderer are retired.
 Build now uses subordinate Tasks/Starter documents/Resources navigation with
 canonical task and document paths, validated configuration, and visible
 recovery that preserves valid state. Resources retains Epic 3's canonical
 URL-backed browse contract. No push, merge, deploy, tag, or release is
 authorized by this work.
 
-**Active sprint:** none. The next recommended milestone is Epic 5 - source-first
-record integrity and legacy cleanup - from the
+**Active sprint:** none. The next recommended milestone is Epic 6 - responsive
+and accessibility completion - from the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Shipped on `main` (do not re-plan)
@@ -49,9 +51,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Begin Epic 5 on a new task branch only after explicit authorization. Keep
-   record presentation source-first; do not generate or imply record-level
-   plain-language guidance from source descriptions.
+1. Begin Epic 6 on a new task branch only after explicit authorization. Preserve
+   source-first record presentation and the responsive 375px/1440px contracts.
 2. Preserve Epic 1's structural/applicability/correlation contract and Epics 2
    and 3's canonical route, Resources state, and traceability boundary, plus the
    local-only proof boundary.

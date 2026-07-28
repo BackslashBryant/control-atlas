@@ -110,7 +110,7 @@ test('generated graph excludes retired translation fields', () => {
   assert.ok(generated('edges').edges.every((edge) => edge.plain_language_rationale === undefined));
 });
 
-test.skip('retired plain-language generation quality contract', () => {
+/* Retired with the source-first record contract.
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
 
@@ -159,6 +159,7 @@ test.skip('retired plain-language generation quality contract', () => {
   }
 });
 
+*/
 test('graph validation rejects duplicates, non-public leakage, missing edge evidence, inferred published edges, and blocked edges', () => {
   const artifacts = {
     sources: [{

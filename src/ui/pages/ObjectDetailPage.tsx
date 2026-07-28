@@ -511,6 +511,17 @@ export function ObjectDetailPage(props: {
                 ? renderOdpText(document.description)
                 : "No narrative description was published for this record."}
             </p>
+            {source?.artifact_url || source?.catalog_browse_url ? (
+              <p>
+                <a
+                  href={source.artifact_url || source.catalog_browse_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Open official source
+                </a>
+              </p>
+            ) : null}
           </SummaryCard>
           <WhereThisSitsRail
             bundle={bundle}

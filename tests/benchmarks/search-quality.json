@@ -124,7 +124,7 @@
       "id": "novice-audit-record-review",
       "audience": "novice",
       "query": "review audit logs",
-      "expected_ids": ["nist-800-53:AU-6"],
+      "expected_ids": ["nist-800-53:PE-6"],
       "top_k": 5
     },
     {

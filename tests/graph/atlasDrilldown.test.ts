@@ -52,8 +52,13 @@ function node(
     id,
     node_type: nodeType,
     label: `${itemId} ${title}`,
-    plain_language_summary: `${title} summary`,
-    metadata: { catalog_id: catalogId, item_id: itemId, title },
+    description: `${title} official description`,
+    metadata: {
+      catalog_id: catalogId,
+      item_id: itemId,
+      title,
+      description: `${title} official description`,
+    },
   };
 }
 
@@ -108,7 +113,7 @@ test("RMF choices expose only published graph results and preserve relationship 
         id: "nist-800-53b:MODERATE",
         itemId: "MODERATE",
         label: "Moderate Impact Baseline",
-        description: "Moderate Impact Baseline summary",
+        description: "Moderate Impact Baseline official description",
         nodeType: "baseline",
         relationshipType: "selects",
       },
