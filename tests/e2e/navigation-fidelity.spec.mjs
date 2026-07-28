@@ -91,7 +91,7 @@ test('Explore renders the ancestry chooser without hydrating the graph UI', asyn
   await dismissOnboarding(page);
 
   await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: /A framework family tree/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /A framework path/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /My situation/ })).toBeVisible();
   await expect(page.locator('.react-flow')).toHaveCount(0);

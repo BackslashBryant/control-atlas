@@ -106,6 +106,6 @@ test("heavy routes explain what they are loading", async ({ page }) => {
   ).toBeVisible();
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "What do you need to get done?" }),
+    page.getByRole("heading", { name: "What are you working on?" }),
   ).toBeVisible();
 });

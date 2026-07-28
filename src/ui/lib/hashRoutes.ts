@@ -59,6 +59,9 @@ function parseNodeIdFromPath(pathname: string): {
   nodeId: string;
   catalogId: string;
   resourceId: string;
+  taskId: string;
+  documentId: string;
+  buildSection: "tasks" | "documents" | "";
 } {
   const catalogMatch = pathname.match(/^\/catalog\/([^/]+)$/);
   if (catalogMatch) {
@@ -67,6 +70,9 @@ function parseNodeIdFromPath(pathname: string): {
       nodeId: "",
       catalogId: decodeURIComponent(catalogMatch[1]),
       resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
   const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
@@ -76,6 +82,9 @@ function parseNodeIdFromPath(pathname: string): {
       nodeId: `${decodeURIComponent(recordMatch[1])}:${decodeURIComponent(recordMatch[2])}`,
       catalogId: "",
       resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
   // Fallback for flat /object/ID without catalog (legacy)
@@ -86,6 +95,9 @@ function parseNodeIdFromPath(pathname: string): {
       nodeId: decodeURIComponent(legacyObjectMatch[1]),
       catalogId: "",
       resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
   const resourceMatch = pathname.match(/^\/build\/resources\/([^/]+)$/);
@@ -95,15 +107,42 @@ function parseNodeIdFromPath(pathname: string): {
       nodeId: "",
       catalogId: "",
       resourceId: decodeURIComponent(resourceMatch[1]),
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
-  return { basePath: pathname, nodeId: "", catalogId: "", resourceId: "" };
+  const taskMatch = pathname.match(/^\/build\/tasks\/([^/]+)$/);
+  if (taskMatch) {
+    return {
+      basePath: "/build",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: decodeURIComponent(taskMatch[1]),
+      documentId: "",
+      buildSection: "tasks",
+    };
+  }
+  const documentMatch = pathname.match(/^\/build\/documents(?:\/([^/]+))?$/);
+  if (documentMatch) {
+    return {
+      basePath: "/build",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: documentMatch[1] ? decodeURIComponent(documentMatch[1]) : "",
+      buildSection: "documents",
+    };
+  }
+  return { basePath: pathname, nodeId: "", catalogId: "", resourceId: "", taskId: "", documentId: "", buildSection: "" };
 }
 
 export function parseHashLocation(pathname: string, search: string): ViewState {
   const canonical = canonicalizeHashLocation(`${pathname}${search}`);
   const [normalizedPath, canonicalSearch = ""] = canonical.canonicalPath.split("?", 2);
-  const { basePath, nodeId, catalogId, resourceId } = parseNodeIdFromPath(normalizedPath);
+  const { basePath, nodeId, catalogId, resourceId, taskId, documentId, buildSection } = parseNodeIdFromPath(normalizedPath);
   // Root resolves to home; any other unrecognized path is an honest not-found
   // rather than silently rendering home.
   const view =
@@ -119,6 +158,11 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
   }
   if (view === "commons-detail" && resourceId) {
     params.set("id", resourceId);
+  }
+  if (view === "templates") {
+    if (taskId) params.set("task", taskId);
+    if (documentId) params.set("templateType", documentId);
+    if (buildSection) params.set("buildSection", buildSection);
   }
 
   if (view !== "home") {
@@ -156,6 +200,27 @@ export function serializeHashLocation(state: ViewState): string {
     params.delete("id");
     const qs = params.toString();
     return `/build/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
+  }
+
+  if (state.view === "templates") {
+    params.delete("templateType");
+    params.delete("task");
+    params.delete("buildSection");
+    const qs = params.toString();
+    if (state.templateType) {
+      return `/build/documents/${encodeURIComponent(state.templateType)}${qs ? `?${qs}` : ""}`;
+    }
+    if (state.buildSection === "documents") {
+      return `/build/documents${qs ? `?${qs}` : ""}`;
+    }
+    if (state.task) {
+      params.delete("framework");
+      params.delete("format");
+      params.delete("environment");
+      params.delete("baseline");
+      params.delete("controlFamily");
+      return `/build/tasks/${encodeURIComponent(state.task)}`;
+    }
   }
 
   const path = VIEW_TO_PATH[state.view] ?? "/";

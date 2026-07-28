@@ -10,18 +10,19 @@
 
 ## Current Objective
 
-**2026 correction program** - Epic 3, Resources directory, is complete locally
-on `agent/forge/epic-3-resources-directory`. Features 3.1-3.5 and M3 are
-verified. The six source-derived primary browse categories reconcile all 96
-resources; search filters eligibility before editorial order; category/facet
-state is URL-backed and invalid state visibly recovers; contextual suggestions
-are derived and traceable without graph parentage. No push, merge, deploy, tag,
-or release is authorized by this work. The shared header now has one primary
-navigation path, and Build treats related resources as supporting context in a
-responsive side rail rather than a competing page-level destination.
+**2026 correction program** - Epic 4, Record and Build progressive disclosure,
+is complete locally on `agent/forge/epic-4-record-build-progressive-disclosure`.
+Record detail places its current explanation before structural position and
+relationship detail without losing source traceability; Epic 5 will make record
+content source-first and remove synthetic translation.
+Build now uses subordinate Tasks/Starter documents/Resources navigation with
+canonical task and document paths, validated configuration, and visible
+recovery that preserves valid state. Resources retains Epic 3's canonical
+URL-backed browse contract. No push, merge, deploy, tag, or release is
+authorized by this work.
 
-**Active sprint:** none. The next recommended milestone is Epic 4 - Record and
-Build progressive disclosure - from the
+**Active sprint:** none. The next recommended milestone is Epic 5 - source-first
+record integrity and legacy cleanup - from the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Shipped on `main` (do not re-plan)
@@ -48,7 +49,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Begin Epic 4 on a new task branch only after explicit authorization.
+1. Begin Epic 5 on a new task branch only after explicit authorization. Keep
+   record presentation source-first; do not generate or imply record-level
+   plain-language guidance from source descriptions.
 2. Preserve Epic 1's structural/applicability/correlation contract and Epics 2
    and 3's canonical route, Resources state, and traceability boundary, plus the
    local-only proof boundary.

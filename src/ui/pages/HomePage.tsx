@@ -32,16 +32,16 @@ export function HomePage(props: HomePageProps) {
           <BrandFlourish />
         </div>
         <p className="text-[clamp(1rem,1.6vw,1.15rem)] text-[var(--ca-text-muted)] leading-relaxed max-w-[640px]">
-          The public map for federal cyber compliance. Search controls and trace how frameworks connect.
+          Public reference for federal cyber requirements. Find published controls, source material, and starter documents.
         </p>
       </div>
 
       <div className="landing-ancestry-intro">
-        <p className="eyebrow">Choose how you want to trace the system</p>
-        <h2>Follow one branch at a time</h2>
+        <p className="eyebrow">Choose a starting point</p>
+        <h2>Trace a published relationship</h2>
         <p>
-          Like a family tree, the Atlas shows what each item belongs to and
-          where its related branches lead.
+          Start with a framework or process, then open the published records
+          and relationships that are relevant to your question.
         </p>
       </div>
 

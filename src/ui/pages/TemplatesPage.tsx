@@ -23,6 +23,7 @@ import {
 } from "../lib/catalogGroups.mjs";
 
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -612,7 +613,6 @@ export function TemplatesPage(props: {
   const workflowDetailRef = useRef<HTMLElement | null>(null);
   const [categoryFilter, setCategoryFilter] = useState("");
   const [queryFilter, setQueryFilter] = useState("");
-  const [selectedWorkflowId, setSelectedWorkflowId] = useState("");
   const [showAllOfficialResources, setShowAllOfficialResources] =
     useState(false);
   const [showCompleteOfficialCatalog, setShowCompleteOfficialCatalog] =
@@ -634,8 +634,9 @@ export function TemplatesPage(props: {
     bundle.fedrampTransitionIndex as FedrampTransitionIndex | undefined;
   const selectedWorkflow =
     workflows.find(
-      (workflow) => workflow.workflow_id === selectedWorkflowId,
+      (workflow) => workflow.workflow_id === state.task,
     ) || null;
+  const documentBrowser = state.buildSection === "documents";
   const workflowArtifacts = selectedWorkflow
     ? officialArtifacts.filter((artifact) =>
         selectedWorkflow.artifact_ids?.includes(artifact.artifact_id),
@@ -938,6 +939,10 @@ export function TemplatesPage(props: {
 
   return (
     <Panel>
+      <BuildLocalNav
+        active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
+        onNavigate={onNavigate}
+      />
       <PageHeader
         action={
           selectedTemplate ? (
@@ -945,24 +950,26 @@ export function TemplatesPage(props: {
               variant="secondary"
               onClick={() => onNavigate("templates", { templateType: "" })}
             >
-              Back to document tasks
+              Back to starter documents
             </Button>
           ) : undefined
         }
-        eyebrow="Create a compliance document"
-        summary="Pick the job in front of you. We will show the official materials, practical tools, and starter documents that fit it."
-        title="What do you need to get done?"
+        eyebrow={documentBrowser || selectedTemplate ? "Starter documents" : "Build from a task"}
+        summary={documentBrowser || selectedTemplate
+          ? "Review a starter document and its public references before adapting it to your work."
+          : "Choose a task to see related public references, tools, and starter documents."}
+        title={documentBrowser || selectedTemplate ? "Choose a starter document" : "What are you working on?"}
       />
 
       {!selectedTemplate ? (
         <div className="stack">
-          {!selectedWorkflow ? (
+          {!selectedWorkflow && !documentBrowser ? (
           <div className="build-start-layout">
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">Choose the work</p>
-                <h2 id="workflow-heading">Start with a compliance task</h2>
+                <h2 id="workflow-heading">Start with a task</h2>
                 <p className="page-summary">
                   Pick the outcome you are working toward — you do not need to
                   know the document name.
@@ -977,12 +984,12 @@ export function TemplatesPage(props: {
                   body={workflow.summary}
                   icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
                   actionLabel="Choose this task"
-                  selected={selectedWorkflowId === workflow.workflow_id}
+                  selected={state.task === workflow.workflow_id}
                   onClick={() => {
-                    setSelectedWorkflowId(workflow.workflow_id);
                     setShowAllOfficialResources(false);
                     setShowCompleteOfficialCatalog(false);
                     setShowAllTools(false);
+                    onNavigate("templates", { buildSection: "tasks", task: workflow.workflow_id, templateType: "" });
                     window.setTimeout(
                       () => workflowDetailRef.current?.focus(),
                       0,
@@ -1002,12 +1009,12 @@ export function TemplatesPage(props: {
                       body={workflow.summary}
                       icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
                       actionLabel="Choose this task"
-                      selected={selectedWorkflowId === workflow.workflow_id}
+                      selected={state.task === workflow.workflow_id}
                       onClick={() => {
-                        setSelectedWorkflowId(workflow.workflow_id);
                         setShowAllOfficialResources(false);
                         setShowCompleteOfficialCatalog(false);
                         setShowAllTools(false);
+                        onNavigate("templates", { buildSection: "tasks", task: workflow.workflow_id, templateType: "" });
                         window.setTimeout(
                           () => workflowDetailRef.current?.focus(),
                           0,
@@ -1047,7 +1054,7 @@ export function TemplatesPage(props: {
           </div>
           ) : null}
 
-          {selectedWorkflow ? (
+          {selectedWorkflow || documentBrowser ? (
             <section
               aria-labelledby="selected-workflow-heading"
               className="nexus-section workflow-detail"
@@ -1064,7 +1071,7 @@ export function TemplatesPage(props: {
                 </div>
                 <Button
                   variant="secondary"
-                  onClick={() => setSelectedWorkflowId("")}
+                  onClick={() => onNavigate("templates", { buildSection: "tasks", task: "", templateType: "" })}
                 >
                   Choose a different task
                 </Button>
@@ -1180,6 +1187,8 @@ export function TemplatesPage(props: {
                         key={template.name}
                         onClick={() =>
                           onNavigate("templates", {
+                            buildSection: "documents",
+                            task: "",
                             templateType: template.name,
                             framework: state.framework || "nist-800-53",
                             format: template.supported_formats?.[0] || "docx",
@@ -1209,8 +1218,10 @@ export function TemplatesPage(props: {
                       icon={<IconFileDescription size={20} stroke={1.8} />}
                       key={template.name}
                       onClick={() =>
-                        onNavigate("templates", {
-                          templateType: template.name,
+                          onNavigate("templates", {
+                            buildSection: "documents",
+                            task: "",
+                            templateType: template.name,
                           framework: state.framework || "nist-800-53",
                           format: template.supported_formats?.[0] || "docx",
                           environment: state.environment || "Generic",
@@ -1226,7 +1237,7 @@ export function TemplatesPage(props: {
             ) : null}
           </section>
           <details className="workflow-reference">
-            <summary>Official sources, tools, and resources for this task</summary>
+            <summary>{selectedWorkflow ? "Official sources, tools, and resources for this task" : "Official sources, tools, and related resources"}</summary>
             <div className="stack disclosure-content">
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">

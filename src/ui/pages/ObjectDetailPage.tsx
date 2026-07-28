@@ -441,12 +441,6 @@ export function ObjectDetailPage(props: {
         }
         onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
       />
-      <WhereThisSitsRail
-        bundle={bundle}
-        nodeId={node.id}
-        onOpenNode={(id) => onOpenNode(id, state.from || "search")}
-      />
-
       <PageHeader
         eyebrow={displayNameFor("object_type", document.object_type)}
         action={
@@ -542,39 +536,6 @@ export function ObjectDetailPage(props: {
         </div>
       ) : null}
 
-      {classBuckets.length ? (
-        <div className="tree-relationship-classes" aria-label="Relationship classes">
-          {classBuckets.map((bucket) => (
-            <div className="tree-relationship-class-row" key={bucket.id}>
-              <span className="tree-relationship-class-label">{bucket.label}</span>
-              <div className="badge-row">
-                {bucket.items.slice(0, 6).map((item) => (
-                  <button
-                    className="badge-button"
-                    key={item.id}
-                    onClick={() => onOpenNode(item.id, state.from || "search")}
-                    type="button"
-                  >
-                    <Badge
-                      tone={
-                        bucket.tone === "applicability" ? "applicability" : undefined
-                      }
-                    >
-                      {item.label}
-                    </Badge>
-                  </button>
-                ))}
-                {bucket.items.length > 6 ? (
-                  <span className="tree-relationship-class-more">
-                    +{bucket.items.length - 6} more in Connections below
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
       <div className="detail-grid">
         <section className="stack">
           <SummaryCard title="What this is" tone="trust">
@@ -587,7 +548,45 @@ export function ObjectDetailPage(props: {
             {!showSummary && !plainAction ? (
               <p>{document.description}</p>
             ) : null}
+            <p>
+              <strong>Why it matters:</strong> Use the published record and
+              source links to understand the requirement before deciding how it
+              applies to your work.
+            </p>
           </SummaryCard>
+          <WhereThisSitsRail
+            bundle={bundle}
+            nodeId={node.id}
+            onOpenNode={(id) => onOpenNode(id, state.from || "search")}
+          />
+          {classBuckets.length ? (
+            <div className="tree-relationship-classes" aria-label="Relationship classes">
+              {classBuckets.map((bucket) => (
+                <div className="tree-relationship-class-row" key={bucket.id}>
+                  <span className="tree-relationship-class-label">{bucket.label}</span>
+                  <div className="badge-row">
+                    {bucket.items.slice(0, 6).map((item) => (
+                      <button
+                        className="badge-button"
+                        key={item.id}
+                        onClick={() => onOpenNode(item.id, state.from || "search")}
+                        type="button"
+                      >
+                        <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
+                          {item.label}
+                        </Badge>
+                      </button>
+                    ))}
+                    {bucket.items.length > 6 ? (
+                      <span className="tree-relationship-class-more">
+                        +{bucket.items.length - 6} more in Connections below
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
           <ContextualCommonsModule
             bundle={bundle}
             contextType="control"

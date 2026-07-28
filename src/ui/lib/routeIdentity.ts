@@ -1,4 +1,10 @@
 import type { AppView } from "./viewState";
+import {
+  isKnownBuildDocument,
+  isKnownBuildTask,
+  isValidBuildFormat,
+  isValidBuildFramework,
+} from "./buildRouteState";
 
 export type RouteIdentity = {
   path: string;
@@ -184,6 +190,16 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     path = COMPATIBILITY_ROUTE_ALIASES[path] ?? path;
   }
 
+  const legacyTemplate = path === "/build" ? params.get("templateType") || "" : "";
+  if (legacyTemplate) {
+    params.delete("templateType");
+    if (isKnownBuildDocument(legacyTemplate)) {
+      path = `/build/documents/${encodeURIComponent(legacyTemplate)}`;
+    } else {
+      discarded = true;
+    }
+  }
+
   let permitted: Set<string> | null = null;
   if (path === "/explore") permitted = ATLAS_PARAMS;
   if (path === "/search") permitted = SEARCH_PARAMS;
@@ -193,7 +209,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare") permitted = COMPARE_PARAMS;
   if (path === "/learn") permitted = LEARN_PARAMS;
-  if (path === "/build") permitted = BUILD_PARAMS;
+  if (path === "/build" || /^\/build\/(?:tasks\/[^/]+|documents(?:\/[^/]+)?)$/.test(path)) permitted = BUILD_PARAMS;
   if (path === "/sources") permitted = SOURCE_PARAMS;
   if (path === "/retired") permitted = RETIRED_PARAMS;
   if (permitted) {
@@ -204,6 +220,31 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   } else if (params.size > 0 && !path.startsWith("/catalog/")) {
     params = new URLSearchParams();
     discarded = true;
+  }
+
+  const taskMatch = path.match(/^\/build\/tasks\/([^/]+)$/);
+  if (taskMatch && !isKnownBuildTask(decodeURIComponent(taskMatch[1]))) {
+    path = "/build";
+    discarded = true;
+  }
+  const documentMatch = path.match(/^\/build\/documents\/([^/]+)$/);
+  if (documentMatch) {
+    const documentName = decodeURIComponent(documentMatch[1]);
+    if (!isKnownBuildDocument(documentName)) {
+      path = "/build/documents";
+      discarded = true;
+    } else {
+      const format = params.get("format") || "";
+      if (format && !isValidBuildFormat(documentName, format)) {
+        params.delete("format");
+        discarded = true;
+      }
+      const framework = params.get("framework") || "";
+      if (!isValidBuildFramework(framework)) {
+        params.delete("framework");
+        discarded = true;
+      }
+    }
   }
 
   const canonicalPath = withParams(path, params);

@@ -23,6 +23,7 @@ import {
 } from "../lib/resourcesDirectory.mjs";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { OfficialPracticalPairing } from "../components/OfficialPracticalPairing";
+import { BuildLocalNav } from "../components/BuildLocalNav";
 
 type CommonsPageProps = {
   bundle: RuntimeBundle | null;
@@ -247,6 +248,9 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
   return (
     <div className="commons-page min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
+      <div className="ca-content-container pt-6 px-4 sm:px-6 lg:px-8">
+        <BuildLocalNav active="resources" onNavigate={onNavigate} />
+      </div>
       {/* Hero Header Section */}
       <header className="border-b border-[var(--ca-border)] bg-gradient-to-b from-[var(--ca-surface)] via-[var(--ca-surface-deep)] to-[var(--ca-surface-deep)] px-4 py-10 sm:px-6 lg:px-8">
         <div className="ca-content-container">

@@ -62,7 +62,7 @@ export function routeDocumentTitle(
   entityName = "",
 ): string {
   if (state.view === "home") {
-    return `${BASE_TITLE} — The public map for federal cyber compliance`;
+    return `${BASE_TITLE} — Public reference for federal cyber requirements`;
   }
   if (state.view === "library-detail") {
     const recordName = recordDisplayTitle(node) || "Record";

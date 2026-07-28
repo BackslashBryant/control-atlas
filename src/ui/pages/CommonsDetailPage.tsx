@@ -20,6 +20,7 @@ import type { CommonsResource } from "../lib/commonsTypes";
 import { CommonsLaneBadge } from "../components/CommonsLaneBadge";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { PRIMARY_BROWSE_CATEGORIES, primaryBrowseCategory } from "../lib/resourcesDirectory.mjs";
+import { BuildLocalNav } from "../components/BuildLocalNav";
 
 type CommonsDetailPageProps = {
   bundle: RuntimeBundle | null;
@@ -77,6 +78,9 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
 
   return (
     <div className="min-h-screen bg-[var(--ca-bg)] text-[var(--ca-text)] pb-16">
+      <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+        <BuildLocalNav active="resources" onNavigate={onNavigate} />
+      </div>
       {/* Back Navigation */}
       <div className="border-b border-[var(--ca-border)] bg-[color-mix(in_srgb,var(--ca-surface)_50%,transparent)] px-4 py-3 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
