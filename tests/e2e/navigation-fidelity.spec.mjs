@@ -34,17 +34,19 @@ test('detail titles resolve official entity names instead of IDs', async ({ page
   await expect(page).toHaveTitle(/NIST.*Control Atlas$/, { timeout: 20000 });
 });
 
-test('legacy routes replace to their canonical URL and preserve state', async ({ page }) => {
+test('retired aliases resolve to an honest not-found state instead of a canonical redirect', async ({ page }) => {
   await page.goto('/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page).toHaveURL(/#\/explore\?node=nist-800-53%3AAC-2&relationshipView=map/);
+  await expect(page).toHaveURL(/#\/atlas-map/);
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
 
   await page.goto('/#/explore?q=AC-2&objectType=control');
-  await expect(page).toHaveURL(/#\/search\?q=AC-2&objectType=control/);
+  await expect(page).toHaveURL(/#\/explore$/);
+  await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
 
   await page.goto('/#/commons-detail?id=official-nist-sp800-53-r5');
-  await expect(page).toHaveURL(/#\/build\/resources\/official-nist-sp800-53-r5/);
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
 });
 
 test('invalid link settings are discarded with visible recovery', async ({ page }) => {
@@ -53,13 +55,11 @@ test('invalid link settings are discarded with visible recovery', async ({ page 
   await expect(page.locator('.route-recovery')).toContainText('unsupported link settings');
 });
 
-test('path-style query link enters canonical Search with its query', async ({ page }) => {
+test('path-style legacy link remains on the static not-found page', async ({ page }) => {
   await page.goto('/explore?q=AC-2');
-  await page.waitForURL(/#\/search/, { timeout: 15000 });
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-  await expect(page).toHaveURL(/[?&]q=AC-2/);
-  await expect(page.getByRole('heading', { name: 'Search everything in one place' })).toBeVisible();
+  await expect(page).toHaveTitle('Page not found | Control Atlas');
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'the Control Atlas home page' })).toBeVisible();
 });
 
 test('header search submits to canonical Search and carries focus to results', async ({ page }) => {

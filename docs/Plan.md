@@ -27,8 +27,9 @@ semantic contracts, source-first record coverage, durable route/resource state,
 and Compare/Resources responsive behavior. The broad responsive Pages sweep is
 split into independently retryable route groups with first-failure artifacts.
 Visual baselines were not changed; the manual accessibility matrix retains the
-explicit pending human assistive-technology residual. Deployed commit, cache,
-live-route, and compatibility-window proof remain owner-gated; see the
+explicit pending human assistive-technology residual. Legacy route aliases were
+retired by owner direction; deployed commit, cache, live-route, and static-404
+proof remain owner-gated; see the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)
@@ -82,8 +83,8 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 7 - Regression and compatibility closeout (local branch only): the
   correction semantic gate maps every Critical/High audit finding to focused
   contracts; bounded live route-group commands and failure artifacts are ready
-  but intentionally unexecuted pending deployment authorization. No aliases or
-  visual baselines were removed or refreshed.
+  but intentionally unexecuted pending deployment authorization. Legacy route
+  aliases were retired; no visual baselines were refreshed.
 - [x] Copy contract: user-facing copy must name a concrete action or source boundary; canned metaphors, compliance-only prompts, and determination-like mapping claims are prohibited by test.
 
 - Static GitHub Pages application (React shell in `src/ui/`)

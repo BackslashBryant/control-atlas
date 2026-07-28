@@ -12,8 +12,9 @@ records, responsive/accessibility implementation, and Epic 7's local semantic
 regression/compatibility preparation are complete on local task branches. Epic
 7 remains owner-gated in the
 [`2026-07-27 correction backlog`](../planning/control-atlas-correction-backlog-2026-07-27.md)
-for deployed-route, exact cache/commit, and compatibility-window proof. The
-human NVDA/VoiceOver/TalkBack residual remains open.
+for deployed-route, exact cache/commit, and static-404 proof. Legacy route
+aliases are retired locally; the human NVDA/VoiceOver/TalkBack residual remains
+open.
 
 ## Release verification record
 

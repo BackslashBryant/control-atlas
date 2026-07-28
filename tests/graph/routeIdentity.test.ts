@@ -2,33 +2,16 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  COMPATIBILITY_ALIAS_POLICY,
-  COMPATIBILITY_ROUTE_ALIASES,
   canonicalizeHashLocation,
   routeIdentityFor,
 } from "../../src/ui/lib/routeIdentity";
+import { parseHashLocation } from "../../src/ui/lib/hashRoutes";
 
-test("route matrix canonicalizes current and legacy destinations without losing durable state", () => {
+test("route matrix preserves current durable destinations", () => {
   const cases = [
     {
       input: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
       canonical: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
-    },
-    {
-      input: "/atlas-map?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
-      canonical: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
-    },
-    {
-      input: "/explore?q=account+management&objectType=control",
-      canonical: "/search?q=account+management&objectType=control",
-    },
-    {
-      input: "/build/community?lane=implement&framework=nist-800-53",
-      canonical: "/build/resources?lane=implement&framework=nist-800-53",
-    },
-    {
-      input: "/commons-detail?id=official-nist-sp800-53-r5",
-      canonical: "/build/resources/official-nist-sp800-53-r5",
     },
     {
       input: "/build/resources/official-nist-sp800-53-r5?from=templates",
@@ -46,10 +29,6 @@ test("route matrix canonicalizes current and legacy destinations without losing 
       input: "/start?step=dataSensitivity&systemType=Cloud+SaaS",
       canonical: "/start?step=dataSensitivity&systemType=Cloud+SaaS",
     },
-    { input: "/menu", canonical: "/" },
-    { input: "/library/nist-800-53", canonical: "/catalog/nist-800-53" },
-    { input: "/templates", canonical: "/build" },
-    { input: "/playbooks", canonical: "/learn" },
     { input: "/?view=templates&templateType=security_plan_starter", canonical: "/?view=templates&templateType=security_plan_starter" },
   ];
 
@@ -90,31 +69,30 @@ test("every routable state has one approved display identity", () => {
   assert.equal(routeIdentityFor("atlas-map").label, "Explore");
   assert.equal(routeIdentityFor("search").label, "Search");
   assert.equal(routeIdentityFor("commons").label, "Resources");
-  assert.equal(COMPATIBILITY_ALIAS_POLICY.owner, "Control Atlas maintainers");
-  assert.match(COMPATIBILITY_ALIAS_POLICY.removalDate, /^2026-10-27$/);
 });
 
-test("compatibility inventory retains every alias through its owner-gated removal date", () => {
-  assert.deepEqual(COMPATIBILITY_ROUTE_ALIASES, {
-    "/menu": "/",
-    "/home": "/",
-    "/start-here": "/start",
-    "/atlas-map": "/explore",
-    "/atlas": "/explore",
-    "/map": "/explore",
-    "/browse": "/search",
-    "/compare-controls": "/compare",
-    "/source": "/sources",
-    "/library": "/catalog",
-    "/playbooks": "/learn",
-    "/playbook": "/learn",
-    "/templates": "/build",
-    "/template": "/build",
-    "/build/community": "/build/resources",
-    "/commons": "/build/resources",
-    "/resource-bazaar": "/build/resources",
-    "/bazaar": "/build/resources",
-    "/hub": "/build/resources",
-  });
-  assert.match(COMPATIBILITY_ALIAS_POLICY.removalCondition, /deployed deep-link smoke/i);
+test("retired aliases no longer redirect and resolve to the not-found state", () => {
+  for (const legacyPath of [
+    "/menu", "/home", "/start-here", "/atlas-map", "/atlas", "/map",
+    "/browse", "/compare-controls", "/source", "/library", "/playbooks",
+    "/playbook", "/templates", "/template", "/build/community", "/commons",
+    "/resource-bazaar", "/bazaar", "/hub", "/library/nist-800-53",
+    "/object/nist-800-53/AC-2",
+  ]) {
+    const canonical = canonicalizeHashLocation(legacyPath);
+    assert.equal(canonical.canonicalPath, legacyPath, legacyPath);
+    assert.equal(canonical.requiresReplace, false, legacyPath);
+    assert.equal(parseHashLocation(legacyPath, "").view, "not-found", legacyPath);
+  }
+
+  const legacyDetail = canonicalizeHashLocation("/commons-detail?id=official-nist-sp800-53-r5");
+  assert.equal(legacyDetail.canonicalPath, "/commons-detail");
+  assert.equal(parseHashLocation("/commons-detail", "").view, "not-found");
+});
+
+test("query-bearing Explore links do not transfer into Search after alias retirement", () => {
+  const canonical = canonicalizeHashLocation("/explore?q=account+management&objectType=control");
+  assert.equal(canonical.canonicalPath, "/explore");
+  assert.match(canonical.recoveryMessage, /removed/i);
+  assert.equal(parseHashLocation("/explore", "").view, "atlas-map");
 });

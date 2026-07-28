@@ -28,8 +28,9 @@ authorized by this work.
 is complete on `agent/pixel/epic-7-regression-deployment-compatibility`.
 Critical/High contracts, source-first records, durable route/resource state,
 and Compare/Resources responsive behavior are grouped in a local gate. Pages
-route-group, exact deployed commit/cache, and compatibility-window evidence
-remain separately owner-gated; no alias retirement is authorized.
+route-group, exact deployed commit/cache, canonical-route, and static-404
+evidence remain separately owner-gated. Legacy route aliases are retired; the
+pre-hash query-state adapter remains as a persisted-state compatibility layer.
 
 ## Shipped on `main` (do not re-plan)
 
