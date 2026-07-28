@@ -159,34 +159,6 @@ function renderOdpText(text: string): ReactNode {
   return nodes;
 }
 
-function normalizeForCompare(text: string): string {
-  return text.trim().replace(/\s+/g, " ").toLowerCase();
-}
-
-/**
- * A curated/derived plain-language summary is worth showing only when it
- * exists and is meaningfully different from the official description — not
- * merely a whitespace-normalized prefix of it (a sign the summary is just a
- * mechanically truncated copy of the description).
- */
-function isMeaningfullyDifferentSummary(
-  summary: string | undefined | null,
-  description: string | undefined | null,
-): summary is string {
-  if (!summary) return false;
-  const normalizedSummary = normalizeForCompare(summary);
-  const normalizedDescription = normalizeForCompare(description || "");
-  if (!normalizedSummary) return false;
-  if (normalizedSummary === normalizedDescription) return false;
-  if (normalizedDescription.startsWith(normalizedSummary)) return false;
-  if (
-    normalizedSummary.startsWith(normalizedDescription) &&
-    normalizedDescription
-  )
-    return false;
-  return true;
-}
-
 import { Button, Panel } from "../components/lsm";
 
 export function ObjectDetailPage(props: {
@@ -311,14 +283,6 @@ export function ObjectDetailPage(props: {
       ? bundle.runtime.getNode(`${node.metadata.catalog_id}:${baseItemId}`)
       : null;
 
-  const rawSummary: string | undefined =
-    node?.plain_language_summary || document?.plain_language_summary;
-  const showSummary = isMeaningfullyDifferentSummary(
-    rawSummary,
-    document?.description,
-  );
-  const plainAction: string | undefined = node?.metadata?.plain_action;
-
   if (!node) {
     return (
       <section className="notice">
@@ -441,12 +405,6 @@ export function ObjectDetailPage(props: {
         }
         onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
       />
-      <WhereThisSitsRail
-        bundle={bundle}
-        nodeId={node.id}
-        onOpenNode={(id) => onOpenNode(id, state.from || "search")}
-      />
-
       <PageHeader
         eyebrow={displayNameFor("object_type", document.object_type)}
         action={
@@ -542,52 +500,62 @@ export function ObjectDetailPage(props: {
         </div>
       ) : null}
 
-      {classBuckets.length ? (
-        <div className="tree-relationship-classes" aria-label="Relationship classes">
-          {classBuckets.map((bucket) => (
-            <div className="tree-relationship-class-row" key={bucket.id}>
-              <span className="tree-relationship-class-label">{bucket.label}</span>
-              <div className="badge-row">
-                {bucket.items.slice(0, 6).map((item) => (
-                  <button
-                    className="badge-button"
-                    key={item.id}
-                    onClick={() => onOpenNode(item.id, state.from || "search")}
-                    type="button"
-                  >
-                    <Badge
-                      tone={
-                        bucket.tone === "applicability" ? "applicability" : undefined
-                      }
-                    >
-                      {item.label}
-                    </Badge>
-                  </button>
-                ))}
-                {bucket.items.length > 6 ? (
-                  <span className="tree-relationship-class-more">
-                    +{bucket.items.length - 6} more in Connections below
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard title="What this is" tone="trust">
-            {showSummary ? <p>{rawSummary}</p> : null}
-            {plainAction ? (
+          <SummaryCard title="Official description" tone="trust">
+            <p className="support-meta">
+              Source excerpt from {source?.display_name || source?.name || "the published source"}
+            </p>
+            <p>
+              {document.description
+                ? renderOdpText(document.description)
+                : "No narrative description was published for this record."}
+            </p>
+            {source?.artifact_url || source?.catalog_browse_url ? (
               <p>
-                <strong>What to do:</strong> {plainAction}
+                <a
+                  href={source.artifact_url || source.catalog_browse_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Open official source
+                </a>
               </p>
             ) : null}
-            {!showSummary && !plainAction ? (
-              <p>{document.description}</p>
-            ) : null}
           </SummaryCard>
+          <WhereThisSitsRail
+            bundle={bundle}
+            nodeId={node.id}
+            onOpenNode={(id) => onOpenNode(id, state.from || "search")}
+          />
+          {classBuckets.length ? (
+            <div className="tree-relationship-classes" aria-label="Relationship classes">
+              {classBuckets.map((bucket) => (
+                <div className="tree-relationship-class-row" key={bucket.id}>
+                  <span className="tree-relationship-class-label">{bucket.label}</span>
+                  <div className="badge-row">
+                    {bucket.items.slice(0, 6).map((item) => (
+                      <button
+                        className="badge-button"
+                        key={item.id}
+                        onClick={() => onOpenNode(item.id, state.from || "search")}
+                        type="button"
+                      >
+                        <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
+                          {item.label}
+                        </Badge>
+                      </button>
+                    ))}
+                    {bucket.items.length > 6 ? (
+                      <span className="tree-relationship-class-more">
+                        +{bucket.items.length - 6} more in Connections below
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
           <ContextualCommonsModule
             bundle={bundle}
             contextType="control"
@@ -799,7 +767,7 @@ export function ObjectDetailPage(props: {
             </div>
           </SummaryCard>
 
-          <SummaryCard title="What to do next">
+          <SummaryCard title="Browse related records">
             <div className="stack compact">
               {node.node_type === "attack_technique" ? (
                 <button

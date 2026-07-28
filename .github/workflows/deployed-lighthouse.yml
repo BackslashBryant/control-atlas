@@ -67,7 +67,7 @@ jobs:
             console.log(min >= floor ? 'AT OR ABOVE FLOOR' : 'BELOW FLOOR');
           "
       - name: Upload reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: deployed-lighthouse
           path: artifacts/deployed-lighthouse

@@ -13,7 +13,9 @@ import {
 } from "@tabler/icons-react";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { hostIdentity } from "../lib/commonsPresentation.mjs";
+import { serializeHashLocation } from "../lib/hashRoutes";
 import { CommonsLaneBadge, commonsLaneLabel } from "./CommonsLaneBadge";
+import { PRIMARY_BROWSE_CATEGORIES, primaryBrowseCategory } from "../lib/resourcesDirectory.mjs";
 
 type CommonsResourceCardProps = {
   resource: CommonsResource;
@@ -66,7 +68,7 @@ export function CommonsResourceCard({
 
   const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const url = `${window.location.origin}${window.location.pathname}#/commons-detail?id=${encodeURIComponent(resource.id)}`;
+    const url = `${window.location.origin}${window.location.pathname}#${serializeHashLocation({ view: "commons-detail", id: resource.id })}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -106,6 +108,9 @@ export function CommonsResourceCard({
 
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <CommonsLaneBadge lane={resource.resourceLane} />
+          <span className="commons-neutral-badge">
+            {PRIMARY_BROWSE_CATEGORIES.find((category) => category.id === primaryBrowseCategory(resource))?.label}
+          </span>
 
           {visibleBadges.slice(1).map((b, idx) => (
             <span

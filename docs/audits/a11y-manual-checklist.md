@@ -34,6 +34,40 @@ The final row cannot be claimed from source inspection, axe, or an accessibility
 
 ---
 
+## Epic 6 local accessibility evidence — July 28, 2026
+
+**Evidence boundary:** this is local static-build and automated browser evidence
+on the task branch. It is not deployed-site, real-device, or human screen-reader
+proof. The matrix is complete as a release-evidence record; rows requiring a
+human assistive-technology user remain pending rather than inferred from axe or
+the accessibility tree.
+
+| ID | Route / state | Method and environment | Result | Evidence / residual |
+| --- | --- | --- | --- | --- |
+| E6-R1 | Compare relationship mappings at 375px | Local Playwright Chromium, 375x812 | Pass | Labelled record layout retains all five relation/source fields with no document-level horizontal overflow. |
+| E6-R2 | Compare relationship mappings at 200% zoom equivalent | Local Playwright Chromium, 720x900 CSS viewport (1440px at 200% approximation) | Pass | No document-level horizontal overflow; desktop table semantics remain available. Browser zoom itself was not manually operated. |
+| E6-R3 | Resources categories and filters at 375px / 768px | Local Playwright Chromium, 375x812 and 768x1024 | Pass | Six categories are discoverable; the labelled filter region opens with Enter, preserves `lane=official`, and exposes a live result count. |
+| E6-A1 | Resources filter disclosure | Automated keyboard and targeted axe WCAG 2 A/AA scan | Pass | Enter opens the labelled region; no serious or critical violation in the filter region. Human keyboard-only traversal remains pending. |
+| E6-A2 | Meaningful routes under reduced motion | Local Playwright Chromium with `prefers-reduced-motion: reduce` | Pass | `npm run test:a11y` passed 31/31 on July 28, 2026; it sets reduced motion before every route scan. |
+| E6-H1 | NVDA, VoiceOver, or TalkBack landmarks, selected state, result changes, and source disclosures | Human assistive-technology reviewer on a supported platform | **Pending human review** | Required before an accessibility-conformance or production release claim. Automated checks cannot satisfy this row. |
+
+### Automated evidence to record for this local branch
+
+- `npx playwright test tests/e2e/epic6-responsive-accessibility.spec.mjs --config playwright.e2e.config.mjs --reporter=line` — passed (4/4) on July 28, 2026.
+- `npm run test:a11y` — passed (31/31) on July 28, 2026, including reduced-motion route scans and detailed comparison-table coverage.
+- `npm run precommit` — passed (exit 0) on July 28, 2026, after the source-navigator smoke contract replaced the retired recommendation assertion.
+
+### Epic 7 local regression note - July 28, 2026
+
+`npm run test:correction:local` passed 28/28 local Playwright checks for Atlas
+workflows, canonical route/title behavior, source-first records, and
+Compare/Resources responsive behavior. No visual snapshot was refreshed. This
+does not change E6-H1: human NVDA, VoiceOver, or TalkBack evidence is still
+pending and local Chromium automation is not deployed-site or real-device
+proof.
+
+---
+
 ## Release gate
 
 Before merging public-shell changes to `main`:

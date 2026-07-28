@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const workflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
 const refreshScript = readFileSync('scripts/refresh-data.mjs', 'utf8');
+const lighthouseAb = readFileSync('.github/workflows/lighthouse-ab.yml', 'utf8');
 
 test('source refresh runs weekly and remains manually dispatchable', () => {
   assert.match(workflow, /cron: '17 7 \* \* 3'/);
@@ -33,4 +34,22 @@ test('obsolete Tenable refresh cannot run outside the current registry pipeline'
 
 test('source refresh ingests the current structured FedRAMP rules before rebuilding', () => {
   assert.match(refreshScript, /fetch-fedramp-2026-rules\.mjs/);
+});
+
+test('Lighthouse A/B gates a candidate against v1.0.0 on the same mobile runner', () => {
+  assert.match(lighthouseAb, /default: "v1\.0\.0"/);
+  assert.match(lighthouseAb, /AFTER_REF: \$\{\{ github\.event\.inputs\.after_ref \|\| github\.sha \}\}/);
+  assert.match(lighthouseAb, /MAX_MEDIAN_DROP: "3"/);
+  assert.match(lighthouseAb, /const median/);
+  assert.match(lighthouseAb, /process\.exit\(1\)/);
+  assert.match(lighthouseAb, /actions\/upload-artifact@v7/);
+  assert.match(lighthouseAb, /npm ci/);
+  assert.doesNotMatch(lighthouseAb, /npm ci\s*\|\|\s*npm install/);
+});
+
+test('workflow artifacts use the Node-20-deprecation-safe upload action', () => {
+  for (const filename of readdirSync('.github/workflows').filter((name) => name.endsWith('.yml'))) {
+    const content = readFileSync(`.github/workflows/${filename}`, 'utf8');
+    assert.doesNotMatch(content, /actions\/upload-artifact@v(?:[1-6])\b/, filename);
+  }
 });

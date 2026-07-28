@@ -32,7 +32,7 @@ jobs:
         run: npm run precommit
       - name: Generate review SBOM
         run: npm run sbom:generate
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: source-refresh-sbom-cdx-json
           path: artifacts/sbom.cdx.json

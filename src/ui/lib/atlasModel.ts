@@ -26,98 +26,58 @@ export type AtlasConnectionGroup = {
   label: string;
   description: string;
   placement: "upstream" | "lateral" | "downstream";
-  stage: AtlasPathStageId;
-  rmfStage: AtlasRmfStageId;
+  lens: AtlasRelationshipLensId;
   items: AtlasRelationshipRow[];
 };
 
-export type AtlasPathStageId =
-  | "requirement"
-  | "control"
+export type AtlasRelationshipLensId =
+  | "structure"
+  | "applicability"
   | "implementation"
-  | "evidence"
-  | "assessment"
-  | "decision";
+  | "assessment-evidence"
+  | "process-artifacts"
+  | "cross-framework"
+  | "threat-defense";
 
-export type AtlasRmfStageId =
-  | "prepare"
-  | "categorize"
-  | "select"
-  | "implement"
-  | "assess"
-  | "authorize-monitor";
-
-export const ATLAS_PATH_STAGES: Array<{
-  id: AtlasPathStageId;
+export const ATLAS_RELATIONSHIP_LENSES: Array<{
+  id: AtlasRelationshipLensId;
   label: string;
   description: string;
 }> = [
   {
-    id: "requirement",
-    label: "Requirement",
-    description: "Published baselines and crosswalks that establish why this work applies.",
+    id: "structure",
+    label: "Structure",
+    description: "Publisher-defined parents and children in this framework.",
   },
   {
-    id: "control",
-    label: "Control",
-    description: "The selected control and directly related controls in the public map.",
+    id: "applicability",
+    label: "Applicability",
+    description: "Baselines, profiles, and overlays that select or modify scope.",
   },
   {
     id: "implementation",
-    label: "Implementation",
-    description: "Enhancements, CCIs, STIGs, and SRGs that turn the requirement into work.",
+    label: "Implementation and technical requirements",
+    description: "CCIs, SRGs, STIGs, rules, and other implementation connections.",
   },
   {
-    id: "evidence",
-    label: "Evidence",
-    description: "Identify what should demonstrate that the requirement is in place.",
+    id: "assessment-evidence",
+    label: "Assessment and evidence",
+    description: "Published assessment procedures and expected evidence connections.",
   },
   {
-    id: "assessment",
-    label: "Assessment",
-    description: "Use published assessment procedures and scoping references.",
+    id: "process-artifacts",
+    label: "Process and artifacts",
+    description: "RMF activities, required work products, and supporting artifacts.",
   },
   {
-    id: "decision",
-    label: "Decision",
-    description: "Use related risk and threat context to support a review decision.",
-  },
-];
-
-export const ATLAS_RMF_STAGES: Array<{
-  id: AtlasRmfStageId;
-  label: string;
-  description: string;
-}> = [
-  {
-    id: "prepare",
-    label: "Prepare",
-    description: "Establish context, ownership, and the records that frame the work.",
+    id: "cross-framework",
+    label: "Cross-framework mappings",
+    description: "Mappings and overlaps that connect this record to another framework.",
   },
   {
-    id: "categorize",
-    label: "Categorize",
-    description: "Review the baselines and program context that establish impact.",
-  },
-  {
-    id: "select",
-    label: "Select",
-    description: "Use published mappings and related controls to determine coverage.",
-  },
-  {
-    id: "implement",
-    label: "Implement",
-    description: "Follow enhancements and technical requirements that put controls in place.",
-  },
-  {
-    id: "assess",
-    label: "Assess",
-    description: "Use the published procedures connected to this record.",
-  },
-  {
-    id: "authorize-monitor",
-    label: "Authorize / monitor",
-    description: "Carry assessment and risk context into decisions and ongoing review.",
+    id: "threat-defense",
+    label: "Threat and defensive relationships",
+    description: "Threat techniques, mitigations, and defensive countermeasures.",
   },
 ];
 
@@ -125,23 +85,22 @@ const GROUP_META: Record<
   string,
   {
     placement: AtlasConnectionGroup["placement"];
-    stage: AtlasPathStageId;
-    rmfStage: AtlasRmfStageId;
+    lens: AtlasRelationshipLensId;
     rank: number;
   }
 > = {
-  baseControl: { placement: "upstream", stage: "control", rmfStage: "prepare", rank: 0 },
-  nistBaseline: { placement: "upstream", stage: "requirement", rmfStage: "categorize", rank: 1 },
-  fedrampBaseline: { placement: "upstream", stage: "requirement", rmfStage: "categorize", rank: 2 },
-  csf: { placement: "lateral", stage: "requirement", rmfStage: "select", rank: 3 },
-  sp171: { placement: "lateral", stage: "requirement", rmfStage: "select", rank: 4 },
-  nistControl: { placement: "lateral", stage: "control", rmfStage: "select", rank: 5 },
-  enhancements: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 6 },
-  disa: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 7 },
-  stig: { placement: "downstream", stage: "implementation", rmfStage: "implement", rank: 8 },
-  assessment: { placement: "downstream", stage: "assessment", rmfStage: "assess", rank: 9 },
-  mitre: { placement: "downstream", stage: "decision", rmfStage: "authorize-monitor", rank: 10 },
-  other: { placement: "lateral", stage: "control", rmfStage: "prepare", rank: 11 },
+  baseControl: { placement: "upstream", lens: "structure", rank: 0 },
+  enhancements: { placement: "downstream", lens: "structure", rank: 1 },
+  nistBaseline: { placement: "upstream", lens: "applicability", rank: 2 },
+  fedrampBaseline: { placement: "upstream", lens: "applicability", rank: 3 },
+  disa: { placement: "downstream", lens: "implementation", rank: 4 },
+  stig: { placement: "downstream", lens: "implementation", rank: 5 },
+  assessment: { placement: "downstream", lens: "assessment-evidence", rank: 6 },
+  csf: { placement: "lateral", lens: "cross-framework", rank: 7 },
+  sp171: { placement: "lateral", lens: "cross-framework", rank: 8 },
+  nistControl: { placement: "lateral", lens: "cross-framework", rank: 9 },
+  mitre: { placement: "lateral", lens: "threat-defense", rank: 10 },
+  other: { placement: "lateral", lens: "cross-framework", rank: 11 },
 };
 
 function counterpartFor(
@@ -153,6 +112,33 @@ function counterpartFor(
       ? edge.target_node_id
       : edge.source_node_id;
   return record.nodes.find((node) => node.id === counterpartId) || null;
+}
+
+function declaredLensFor(
+  items: Array<{ edge: AtlasNeighborhoodEdge }>,
+  fallback: AtlasRelationshipLensId,
+): AtlasRelationshipLensId {
+  const classes = new Set(items.map(({ edge }) => edge.relationship_class));
+  if (classes.size === 1 && classes.has("structural")) return "structure";
+  if (classes.size === 1 && classes.has("applicability")) return "applicability";
+  return fallback;
+}
+
+function declaredPlacementFor(
+  record: AtlasNeighborhoodRecord,
+  items: Array<{ edge: AtlasNeighborhoodEdge }>,
+  fallback: AtlasConnectionGroup["placement"],
+): AtlasConnectionGroup["placement"] {
+  if (!items.length || items.some(({ edge }) => edge.relationship_class === "correlation")) {
+    return fallback;
+  }
+  return items.every(
+    ({ edge }) => edge.source_node_id === record.center_node.id,
+  )
+    ? "downstream"
+    : items.every(({ edge }) => edge.target_node_id === record.center_node.id)
+      ? "upstream"
+      : fallback;
 }
 
 export function filterAtlasEdges(
@@ -183,7 +169,7 @@ export function filterAtlasEdges(
     if (!needle) return true;
     const itemId = counterpart?.metadata?.item_id || counterpart?.id || "";
     const title = counterpart?.metadata?.title || counterpart?.label || "";
-    return [itemId, title, edge.plain_language_rationale || ""]
+    return [itemId, title, edge.rationale || "", edge.navigation_note || ""]
       .join(" ")
       .toLowerCase()
       .includes(needle);
@@ -234,9 +220,8 @@ export function buildAtlasGroups(
         id: group.id,
         label: group.label,
         description: group.description,
-        placement: meta.placement,
-        stage: meta.stage,
-        rmfStage: meta.rmfStage,
+        placement: declaredPlacementFor(record, group.items, meta.placement),
+        lens: declaredLensFor(group.items, meta.lens),
         items: group.items
           .map(({ edge, counterpart }) => ({
             edge,
@@ -299,18 +284,18 @@ export function selectAtlasOverviewGroups(
   return selected;
 }
 
-export function resolveAtlasPathStage(
+export function resolveAtlasRelationshipLens(
   groups: AtlasConnectionGroup[],
   requestedStage: string,
-): AtlasPathStageId {
+): AtlasRelationshipLensId {
   if (
-    ATLAS_PATH_STAGES.some((stage) => stage.id === requestedStage)
+    ATLAS_RELATIONSHIP_LENSES.some((lens) => lens.id === requestedStage)
   ) {
-    return requestedStage as AtlasPathStageId;
+    return requestedStage as AtlasRelationshipLensId;
   }
   return (
-    ATLAS_PATH_STAGES.find((stage) =>
-      groups.some((group) => group.stage === stage.id && group.items.length > 0),
-    )?.id || "requirement"
+    ATLAS_RELATIONSHIP_LENSES.find((lens) =>
+      groups.some((group) => group.lens === lens.id && group.items.length > 0),
+    )?.id || "structure"
   );
 }

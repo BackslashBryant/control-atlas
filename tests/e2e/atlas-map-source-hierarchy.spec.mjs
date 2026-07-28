@@ -31,32 +31,59 @@ async function expectNoHorizontalOverflow(page) {
 }
 
 for (const viewport of VIEWPORTS) {
-  test(`NIST reaches a control in four choices at ${viewport.width}px`, async ({
+  test(`NIST reaches a focused control with choices separate from structure at ${viewport.width}px`, async ({
     page,
   }) => {
-    await openHome(page, viewport);
+    await page.setViewportSize(viewport);
+    await page.goto("/#/explore");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
 
-    await page.getByRole("button", { name: /Trace a framework/ }).click();
-    await expect(page.getByText("NIST SP 800-53", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: /A framework path/ }).click();
+    await expect(page.getByText("SP 800-53 Rev. 5 Catalog", { exact: true })).toBeVisible();
+    await expect(page.locator(".atlas-path-stage-option")).toHaveCount(4);
 
-    await page.locator(".atlas-path-stage-option").first().click();
+    await page
+      .locator(".atlas-path-stage-option")
+      .filter({ hasText: "SP 800-53 Rev. 5 Catalog" })
+      .click();
     await expect(
-      page.getByText("Which control family do you want to open?"),
+      page.getByText("Which applicability scope do you want to use?"),
     ).toBeVisible();
-    await expect(page.locator(".tree-path-rail")).toContainText("LOW");
+    await expect(page).not.toHaveURL(/atlasBaseline=/);
+
+    await page
+      .locator(".atlas-path-stage-option")
+      .filter({ hasText: "LOW impact" })
+      .click();
+    await expect(
+      page.getByText("Which part of this framework do you want to open?"),
+    ).toBeVisible();
+    await expect(page.locator(".atlas-choice-trail")).toContainText(
+      "Low Impact Baseline",
+    );
 
     await page.locator(".atlas-ancestry-family").first().click();
     await expect(page.getByLabel("Filter this family")).toBeVisible();
-    await expect(page.locator(".tree-path-rail")).toContainText("FAMILY-AC");
+    await expect(page.locator(".atlas-choice-trail")).toContainText(
+      "Access Control",
+    );
+    await expectNoHorizontalOverflow(page);
+    await page.locator(".atlas-path-record").first().click();
+    await expect(page).toHaveURL(/node=nist-800-53/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/AC-/);
+    await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Where this sits" })).not.toContainText(
+      "Low Impact Baseline",
+    );
+    await expect(page.getByRole("navigation", { name: "Your choices" })).toContainText(
+      "Low Impact Baseline",
+    );
     await expectNoHorizontalOverflow(page);
     await page.screenshot({
       fullPage: true,
-      path: `artifacts/w2-navigation/nist-${viewport.width}.png`,
+      path: `artifacts/w2-navigation/epic1-focused-${viewport.width}.png`,
     });
-
-    await page.locator(".atlas-path-record").first().click();
-    await expect(page).toHaveURL(/\/record\//);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(/AC-/);
   });
 
   test(`RMF reaches a published result in three choices at ${viewport.width}px`, async ({
@@ -71,7 +98,7 @@ for (const viewport of VIEWPORTS) {
 
     await page.locator(".atlas-rmf-step-list button").first().click();
     await expect(page.getByText("Published relationships")).toBeVisible();
-    await expect(page.locator(".tree-path-rail")).toContainText("PREPARE");
+    await expect(page.locator(".atlas-choice-trail")).toContainText("PREPARE");
     await expect(page.locator(".badge.tone-applicability")).toBeVisible();
     await expectNoHorizontalOverflow(page);
     await page.screenshot({
@@ -88,7 +115,7 @@ for (const viewport of VIEWPORTS) {
 test("Atlas root offers three plain entry axes without a canvas", async ({
   page,
 }) => {
-  await page.goto("/#/atlas-map");
+  await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -101,14 +128,14 @@ test("Atlas root offers three plain entry axes without a canvas", async ({
 });
 
 test("a legacy RMF route recovers into the process branch", async ({ page }) => {
-  await page.goto("/#/atlas-map?sourceView=rmf");
+  await page.goto("/#/explore?sourceView=rmf");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(
     page.getByText("Which Risk Management Framework step are you working in?"),
   ).toBeVisible();
-  await expect(page.locator(".tree-path-rail")).toContainText(
+  await expect(page.locator(".atlas-choice-trail")).toContainText(
     "Risk Management Framework",
   );
 });

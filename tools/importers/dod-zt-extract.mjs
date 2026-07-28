@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import pdf from 'pdf-parse/lib/pdf-parse.js';
+import { PDFParse } from 'pdf-parse';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const CURATED = join(ROOT, 'data', 'curated', 'dod-zt');
@@ -74,8 +74,12 @@ function sha256File(path) {
 
 async function readPdfText(path) {
   if (!existsSync(path)) throw new Error(`Missing PDF: ${path}`);
-  const parsed = await pdf(readFileSync(path));
-  return parsed.text;
+  const parser = new PDFParse({ data: readFileSync(path) });
+  try {
+    return (await parser.getText()).text;
+  } finally {
+    await parser.destroy();
+  }
 }
 
 export function normalizeControlId(raw) {

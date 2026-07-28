@@ -84,7 +84,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     openExplore();
                   }
                 }}
-                placeholder="Search controls, STIGs, tools, templates, or community resources..."
+                placeholder="Search controls, STIGs, tools, templates, or resources..."
                 type="search"
                 value={query}
               />
@@ -101,7 +101,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
           ) : !query.trim() ? (
             <p className="field-hint">
               Type to search records. Press Enter for full search results,
-              plus templates, tools, and community resources in Build.
+              plus templates, tools, and Resources in Build.
             </p>
           ) : results.libraryResults.length === 0 && results.commonsResults.length === 0 ? (
             <p className="field-hint">No records match &quot;{query.trim()}&quot;.</p>
@@ -110,7 +110,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
               {results.commonsResults.length > 0 ? (
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
-                    Community Resources ({results.commonsResults.length})
+                    Resources ({results.commonsResults.length})
                   </div>
                   <ul className="search-overlay-results">
                     {results.commonsResults.map((doc) => (
@@ -150,9 +150,6 @@ export function SearchOverlay(props: SearchOverlayProps) {
                   ) : null}
                   <ul className="search-overlay-results">
                     {results.libraryResults.map((document: any) => {
-                      const missingSummary = !(
-                        document.plain_language_summary || document.description
-                      );
                       return (
                         <li key={document.id}>
                           <button
@@ -169,11 +166,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               {displayNameFor("object_type", document.object_type)}
                             </span>
                             <span className="search-overlay-result-summary">
-                              {document.plain_language_summary ||
-                                document.description ||
-                                (missingSummary
-                                  ? "Plain-language summary missing for this record."
-                                  : "")}
+                              {document.description || "No narrative description was published for this record."}
                             </span>
                           </button>
                         </li>
@@ -191,7 +184,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 View all search results
               </Button>
               <Button variant="secondary" onClick={openCommons} type="button">
-                Search community resources
+                Search resources
               </Button>
             </div>
           ) : null}

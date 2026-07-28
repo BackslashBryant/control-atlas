@@ -9,8 +9,8 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("focused Atlas opens the Path asking one question, not a six-stage dump", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+test("focused Atlas opens structural position before explicit relationship lenses", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -22,28 +22,32 @@ test("focused Atlas opens the Path asking one question, not a six-stage dump", a
   await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Purpose" })).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "RMF" })).toHaveCount(0);
-  // The Path asks which stage first; it does not render every stage's records.
+  await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Where this sits" })).toContainText(
+    "SP 800-53 Rev. 5",
+  );
+  // The Path asks which lens first; it does not render every lens's records.
   await expect(page.getByText("Where do you want to go from")).toBeVisible();
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(6);
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
 });
 
-test("choosing a Path stage shows only that stage and can continue from a record", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+test("choosing a relationship lens shows only that lens and can continue from a record", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.locator(".atlas-path-stage-option").filter({ hasText: "Control" }).first().click();
+  await page.locator(".atlas-path-stage-option").filter({ hasText: "Structure" }).first().click();
   await expect(page.locator(".atlas-path-record").first()).toBeVisible();
   await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
-  // Breadcrumb records where the walk is: subject > lens > stage.
+  // Breadcrumb records where the walk is: subject > relationship lens.
   await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("AC-2");
-  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("Control");
+  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("Structure");
 });
 
 test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -59,7 +63,7 @@ test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
 });
 
 test("focused Map is absolutely bounded and restores focus after collapse", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -77,7 +81,7 @@ test("focused Map is absolutely bounded and restores focus after collapse", asyn
 });
 
 test("selecting a Map item reveals its real record brief without leaving Atlas", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-1&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-1&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -110,7 +114,7 @@ test("selecting a Map item reveals its real record brief without leaving Atlas",
 });
 
 test("List uses the same published set and exposes traceable source references", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=list");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=list");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -123,7 +127,7 @@ test("List uses the same published set and exposes traceable source references",
 });
 
 test("zero-published-edge records render an honest empty state instead of Map", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=disa-cci%3ACCI-000220&relationshipView=map");
+  await page.goto("/#/explore?node=disa-cci%3ACCI-000220&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -132,17 +136,17 @@ test("zero-published-edge records render an honest empty state instead of Map", 
   await expect(page.locator(".react-flow")).toHaveCount(0);
 });
 
-test("a sparse STIG still offers all six stages and its real implementation connection", async ({ page }) => {
-  await page.goto("/#/atlas-map?node=disa-stig%3AV-222387");
+test("a sparse STIG still offers all seven lenses and its real implementation connection", async ({ page }) => {
+  await page.goto("/#/explore?node=disa-stig%3AV-222387");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
-  // Every stage is still offered; empty ones say so honestly and are disabled
+  // Every lens is still offered; empty ones say so honestly and are disabled
   // rather than hidden, so the gap stays visible.
-  const stages = page.locator(".atlas-path-stage-option");
-  await expect(stages).toHaveCount(6);
-  const implementation = stages.filter({ hasText: "Implementation" }).first();
+  const lenses = page.locator(".atlas-path-stage-option");
+  await expect(lenses).toHaveCount(7);
+  const implementation = lenses.filter({ hasText: "Implementation" }).first();
   await expect(implementation).toBeEnabled();
   await expect(implementation).not.toContainText("No published connection yet");
   await expect(page.getByText("No published connections to show.")).toHaveCount(0);
@@ -150,7 +154,7 @@ test("a sparse STIG still offers all six stages and its real implementation conn
 
 test("compact Map expands to no more than seven visible nodes", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -172,7 +176,7 @@ test("compact Map expands to no more than seven visible nodes", async ({ page })
 
 test("compact Path stacks its stage choices and keeps the selected path below them", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/#/atlas-map?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

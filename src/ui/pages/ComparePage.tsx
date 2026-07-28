@@ -553,7 +553,6 @@ export function ComparePage(props: {
                     <input
                       onChange={(event) =>
                         onNavigate("matrix", {
-                          ...state,
                           crosswalk,
                           items: event.target.value,
                         })
@@ -570,7 +569,6 @@ export function ComparePage(props: {
                     label="Connection type"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         relationshipType: value,
                       })
@@ -586,7 +584,6 @@ export function ComparePage(props: {
                     label="Source basis"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         provenance: value,
                       })
@@ -604,7 +601,6 @@ export function ComparePage(props: {
                     label="Trust level"
                     onChange={(value) =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         confidence: value,
                       })
@@ -623,7 +619,6 @@ export function ComparePage(props: {
                         checked={state.includeCandidates === "true"}
                         onChange={(event) =>
                           onNavigate("matrix", {
-                            ...state,
                             crosswalk,
                             includeCandidates: event.target.checked
                               ? "true"
@@ -711,7 +706,7 @@ export function ComparePage(props: {
                                   <dl>
                                     <div><dt>Trust level</dt><dd>{displayNameFor("confidence", row.confidence)}</dd></div>
                                     <div><dt>Official rationale</dt><dd>{row.rationale || "No public rationale recorded."}</dd></div>
-                                    <div><dt>Plain-language rationale</dt><dd>{row.plain_language_rationale || "No plain-language rationale recorded."}</dd></div>
+                                    <div><dt>{row.navigation_note ? "Navigation note" : "Relationship explanation"}</dt><dd>{row.navigation_note || "No product-authored navigation note."}</dd></div>
                                     <div><dt>Source references</dt><dd><SourceRefList refs={row.source_refs} /></dd></div>
                                   </dl>
                                 </details>
@@ -759,7 +754,6 @@ export function ComparePage(props: {
                     variant="primary"
                     onClick={() =>
                       onNavigate("matrix", {
-                        ...state,
                         crosswalk,
                         relationshipType: "",
                         provenance: "",
@@ -775,7 +769,7 @@ export function ComparePage(props: {
                 <Button
                   variant={state.source && state.target && pairHasAnyPublishedMapping ? "secondary" : "primary"}
                   onClick={() =>
-                    onNavigate("matrix", { ...state, crosswalk: "intent" })
+                    onNavigate("matrix", { crosswalk: "intent" })
                   }
                   type="button"
                 >
@@ -798,7 +792,6 @@ export function ComparePage(props: {
               label="Catalog"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainCatalog: value,
                   chainBenchmark: "",
@@ -816,7 +809,6 @@ export function ComparePage(props: {
               label="Benchmark scope"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainBenchmark: value,
                   chainItem: "",
@@ -830,7 +822,6 @@ export function ComparePage(props: {
               label="STIG or SRG item"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainItem: value,
                 })
@@ -854,7 +845,6 @@ export function ComparePage(props: {
                   checked={state.includeCandidates === "true"}
                   onChange={(event) =>
                     onNavigate("matrix", {
-                      ...state,
                       crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
@@ -902,21 +892,20 @@ export function ComparePage(props: {
                         }
                         key={row.node_id}
                       >
-                        <td>
+                        <td data-label="Item">
                           <strong>{row.item_id}</strong>
                           <br />
                           <span className="muted">{row.title}</span>
                         </td>
-                        <td>{row.benchmark_title}</td>
-                        <td>{row.cci_count}</td>
-                        <td>{row.nist_control_count}</td>
-                        <td>{row.unmapped_cci_count}</td>
-                        <td>
+                        <td data-label="Benchmark">{row.benchmark_title}</td>
+                        <td data-label="CCIs">{row.cci_count}</td>
+                        <td data-label="NIST controls">{row.nist_control_count}</td>
+                        <td data-label="Unmapped CCIs">{row.unmapped_cci_count}</td>
+                        <td data-label="Action">
                           <Button
                             variant="secondary"
                             onClick={() =>
                               onNavigate("matrix", {
-                                ...state,
                                 crosswalk,
                                 chainItem: row.node_id,
                               })
@@ -1060,7 +1049,6 @@ export function ComparePage(props: {
               label="ATT&CK domain"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainCatalog: value,
                   chainItem: "",
@@ -1077,7 +1065,6 @@ export function ComparePage(props: {
               label="ATT&CK technique"
               onChange={(value) =>
                 onNavigate("matrix", {
-                  ...state,
                   crosswalk,
                   chainItem: value,
                 })
@@ -1094,7 +1081,6 @@ export function ComparePage(props: {
                   checked={state.includeCandidates === "true"}
                   onChange={(event) =>
                     onNavigate("matrix", {
-                      ...state,
                       crosswalk,
                       includeCandidates: event.target.checked ? "true" : "",
                     })
@@ -1147,21 +1133,20 @@ export function ComparePage(props: {
                           }
                           key={row.node_id}
                         >
-                          <td>
+                          <td data-label="Technique">
                             <strong>{row.item_id}</strong>
                             <br />
                             <span className="muted">{row.title}</span>
                           </td>
-                          <td>{row.domain}</td>
-                          <td>{row.d3fend_count}</td>
-                          <td>{row.nist_control_count}</td>
-                          <td>{row.unmapped_d3fend_count}</td>
-                          <td>
+                          <td data-label="Domain">{row.domain}</td>
+                          <td data-label="D3FEND countermeasures">{row.d3fend_count}</td>
+                          <td data-label="NIST controls">{row.nist_control_count}</td>
+                          <td data-label="Unmapped D3FEND">{row.unmapped_d3fend_count}</td>
+                          <td data-label="Action">
                             <Button
                               variant="secondary"
                               onClick={() =>
                                 onNavigate("matrix", {
-                                  ...state,
                                   crosswalk,
                                   chainItem: row.node_id,
                                 })

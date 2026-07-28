@@ -31,7 +31,8 @@ export type NeighborhoodRuntime = {
       provenance_class: string;
       publication_status: string;
       confidence: string;
-      plain_language_rationale?: string;
+      rationale?: string;
+      navigation_note?: string;
     }>;
     stats: {
       total: number;
@@ -110,7 +111,8 @@ export function useRelationshipFilters(
           needle &&
           !itemId.toLowerCase().includes(needle) &&
           !title.toLowerCase().includes(needle) &&
-          !edge.plain_language_rationale?.toLowerCase().includes(needle)
+          !edge.rationale?.toLowerCase().includes(needle) &&
+          !edge.navigation_note?.toLowerCase().includes(needle)
         ) {
           return null;
         }

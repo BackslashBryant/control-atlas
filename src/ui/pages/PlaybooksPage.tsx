@@ -193,7 +193,8 @@ export function PlaybooksPage(props: {
           : null}
         {filteredPatterns.length === 0 ? (
           <div className="p-[24px] bg-[color-mix(in_srgb,var(--ca-surface-raised),white_5%)] border border-[var(--ca-border-strong)] rounded-[3px] text-center" role="status">
-            <p className="mb-[16px] text-[var(--ca-text)] font-medium">No playbooks match this search and category.</p>
+            <p className="mb-[16px] text-[var(--ca-text)] font-medium">No public playbooks are available yet.</p>
+            <p className="mb-[16px] text-[var(--ca-text)] text-sm">Playbooks appear here only after their displayed guidance has source-registry IDs and canonical public source URLs.</p>
             <Button
               variant="primary"
               onClick={() => {

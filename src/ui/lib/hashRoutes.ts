@@ -5,6 +5,7 @@ import {
   type AppView,
   type ViewState,
 } from "./viewState";
+import { canonicalizeHashLocation, routeIdentityFor } from "./routeIdentity";
 
 /**
  * Map internal view keys to hash path segments (user-facing routes).
@@ -16,114 +17,125 @@ import {
  * under /build.
  */
 const VIEW_TO_PATH: Record<AppView, string> = {
-  home: "/",
-  menu: "/menu",
-  "start-here": "/start",
-  "atlas-map": "/atlas-map",
-  search: "/explore",
-  "catalog-detail": "/catalog",
-  "library-detail": "/record",
-  matrix: "/compare",
-  patterns: "/learn",
-  templates: "/build",
-  sources: "/sources",
-  commons: "/build/community",
-  "commons-detail": "/build/community-detail",
-  about: "/about",
-  retired: "/retired",
-  browse: "/explore",
-  "not-found": "/not-found",
+  home: routeIdentityFor("home").path,
+  menu: routeIdentityFor("menu").path,
+  "start-here": routeIdentityFor("start-here").path,
+  "atlas-map": routeIdentityFor("atlas-map").path,
+  search: routeIdentityFor("search").path,
+  "catalog-detail": routeIdentityFor("catalog-detail").path,
+  "library-detail": routeIdentityFor("library-detail").path,
+  matrix: routeIdentityFor("matrix").path,
+  patterns: routeIdentityFor("patterns").path,
+  templates: routeIdentityFor("templates").path,
+  sources: routeIdentityFor("sources").path,
+  commons: routeIdentityFor("commons").path,
+  "commons-detail": routeIdentityFor("commons-detail").path,
+  about: routeIdentityFor("about").path,
+  retired: routeIdentityFor("retired").path,
+  browse: routeIdentityFor("browse").path,
+  "not-found": routeIdentityFor("not-found").path,
 };
 
 const PATH_TO_VIEW: Record<string, AppView> = {
   "/": "home",
-  "/menu": "menu",
   "/start": "start-here",
-  "/start-here": "start-here",
-  "/atlas-map": "atlas-map",
-  "/explore": "search",
+  "/explore": "atlas-map",
+  "/search": "search",
   "/catalog": "catalog-detail",
   "/record": "library-detail",
   "/compare": "matrix",
   "/learn": "patterns",
   "/build": "templates",
   "/sources": "sources",
-  "/build/community": "commons",
-  "/build/community-detail": "commons-detail",
+  "/build/resources": "commons",
+  "/build/resources-detail": "commons-detail",
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
-  // Guessable aliases: resolve friendly URLs people type by hand
-  "/home": "home",
-  "/atlas": "atlas-map",
-  "/map": "atlas-map",
-  "/search": "search",
-  "/browse": "search",
-  "/compare-controls": "matrix",
-  "/source": "sources",
-  // Pre-rename canonical routes, kept working as redirects (W4: old routes
-  // must keep resolving).
-  "/library": "catalog-detail",
-  "/playbooks": "patterns",
-  "/playbook": "patterns",
-  "/templates": "templates",
-  "/template": "templates",
-  "/commons": "commons",
-  "/commons-detail": "commons-detail",
-  "/resource-bazaar": "commons",
-  "/bazaar": "commons",
-  "/hub": "commons",
 };
 
 function parseNodeIdFromPath(pathname: string): {
   basePath: string;
   nodeId: string;
   catalogId: string;
+  resourceId: string;
+  taskId: string;
+  documentId: string;
+  buildSection: "tasks" | "documents" | "";
 } {
-  // Accepts both the canonical "/catalog/:id" and the pre-rename "/library/:id"
-  // (kept as a redirect alias) so either resolves to the same catalog-detail view.
-  const catalogMatch = pathname.match(/^\/(catalog|library)\/([^/]+)$/);
+  const catalogMatch = pathname.match(/^\/catalog\/([^/]+)$/);
   if (catalogMatch) {
     return {
-      basePath: `/${catalogMatch[1]}`,
+      basePath: "/catalog",
       nodeId: "",
-      catalogId: decodeURIComponent(catalogMatch[2]),
+      catalogId: decodeURIComponent(catalogMatch[1]),
+      resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
-  const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
+  const recordMatch = pathname.match(/^\/record\/([^/]+)\/(.+)$/);
   if (recordMatch) {
     return {
       basePath: "/record",
       nodeId: `${decodeURIComponent(recordMatch[1])}:${decodeURIComponent(recordMatch[2])}`,
       catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
-  // Fallback for flat /object/ID without catalog (legacy)
-  const legacyObjectMatch = pathname.match(/^\/object\/(.+)$/);
-  if (legacyObjectMatch) {
+  const resourceMatch = pathname.match(/^\/build\/resources\/([^/]+)$/);
+  if (resourceMatch) {
     return {
-      basePath: "/record",
-      nodeId: decodeURIComponent(legacyObjectMatch[1]),
+      basePath: "/build/resources-detail",
+      nodeId: "",
       catalogId: "",
+      resourceId: decodeURIComponent(resourceMatch[1]),
+      taskId: "",
+      documentId: "",
+      buildSection: "",
     };
   }
-  return { basePath: pathname, nodeId: "", catalogId: "" };
+  const taskMatch = pathname.match(/^\/build\/tasks\/([^/]+)$/);
+  if (taskMatch) {
+    return {
+      basePath: "/build",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: decodeURIComponent(taskMatch[1]),
+      documentId: "",
+      buildSection: "tasks",
+    };
+  }
+  const documentMatch = pathname.match(/^\/build\/documents(?:\/([^/]+))?$/);
+  if (documentMatch) {
+    return {
+      basePath: "/build",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: documentMatch[1] ? decodeURIComponent(documentMatch[1]) : "",
+      buildSection: "documents",
+    };
+  }
+  return { basePath: pathname, nodeId: "", catalogId: "", resourceId: "", taskId: "", documentId: "", buildSection: "" };
 }
 
 export function parseHashLocation(pathname: string, search: string): ViewState {
-  let normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  // Tolerate a trailing slash on interior routes (e.g. "/atlas-map/") so they
-  // resolve instead of falling through to the not-found view.
-  if (normalizedPath.length > 1) {
-    normalizedPath = normalizedPath.replace(/\/+$/, "");
-  }
-  const { basePath, nodeId, catalogId } = parseNodeIdFromPath(normalizedPath);
+  const canonical = canonicalizeHashLocation(`${pathname}${search}`);
+  const [normalizedPath, canonicalSearch = ""] = canonical.canonicalPath.split("?", 2);
+  const { basePath, nodeId, catalogId, resourceId, taskId, documentId, buildSection } = parseNodeIdFromPath(normalizedPath);
   // Root resolves to home; any other unrecognized path is an honest not-found
   // rather than silently rendering home.
   const view =
     PATH_TO_VIEW[basePath] ?? (basePath === "/" ? "home" : "not-found");
 
-  const params = new URLSearchParams(search.replace(/^\?/, ""));
+  const params = new URLSearchParams(canonicalSearch);
 
   if (view === "library-detail" && nodeId) {
     params.set("node", nodeId);
@@ -131,10 +143,16 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
   if (view === "catalog-detail" && catalogId) {
     params.set("catalog", catalogId);
   }
+  if (view === "commons-detail" && resourceId) {
+    params.set("id", resourceId);
+  }
+  if (view === "templates") {
+    if (taskId) params.set("task", taskId);
+    if (documentId) params.set("templateType", documentId);
+    if (buildSection) params.set("buildSection", buildSection);
+  }
 
-  if (view === "search" && basePath === "/explore") {
-    params.set("view", "explore");
-  } else if (view !== "home") {
+  if (view !== "home") {
     params.set("view", legacyViewParam(view));
   }
 
@@ -163,6 +181,33 @@ export function serializeHashLocation(state: ViewState): string {
 
   if (state.view === "catalog-detail" && state.catalog) {
     return `/catalog/${encodeURIComponent(state.catalog)}`;
+  }
+
+  if (state.view === "commons-detail" && state.id) {
+    params.delete("id");
+    const qs = params.toString();
+    return `/build/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
+  }
+
+  if (state.view === "templates") {
+    params.delete("templateType");
+    params.delete("task");
+    params.delete("buildSection");
+    const qs = params.toString();
+    if (state.templateType) {
+      return `/build/documents/${encodeURIComponent(state.templateType)}${qs ? `?${qs}` : ""}`;
+    }
+    if (state.buildSection === "documents") {
+      return `/build/documents${qs ? `?${qs}` : ""}`;
+    }
+    if (state.task) {
+      params.delete("framework");
+      params.delete("format");
+      params.delete("environment");
+      params.delete("baseline");
+      params.delete("controlFamily");
+      return `/build/tasks/${encodeURIComponent(state.task)}`;
+    }
   }
 
   const path = VIEW_TO_PATH[state.view] ?? "/";

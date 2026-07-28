@@ -81,8 +81,7 @@ function buildCompareMapGroups(
       label: labelFor(role),
       description: labelFor(role),
       placement: "lateral" as const,
-      stage: "control" as const,
-      rmfStage: "select" as const,
+      lens: "cross-framework" as const,
       items: byRole.get(role) || [],
     }),
   );

@@ -2,6 +2,13 @@
 
 ## Constraints
 
+- "Execute and fully complete Control Atlas Epic 1 - Structural truth and
+  Atlas correctness ... Do not push, merge, deploy, or modify remote state."
+  (2026-07-27 current session; supersedes session 9's direct-ship instruction
+  for this task)
+- "That 90mb budget isn't real." The obsolete aggregate data-directory cap is
+  removed; the 3.2 MB initial-search payload and 20 MiB per-artifact safeguards
+  remain enforced. (2026-07-27 current session)
 - "Execute docs/plans/w2-and-ship-2026-07-27.md in full: build W2, close out
   the listed debt, and ship — direct push to main, no PR, per the doc's §3."
   (2026-07-27 current session; supersedes older local-only constraints below)
@@ -29,6 +36,103 @@
   rail) only." (2026-07-27 session 8)
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
+
+## 2026-07-27 (session 11) - Epic 2 navigation and route identity
+
+### Goal
+
+Complete Features 2.1-2.3 and milestone M2 without remote operations.
+
+### Completed
+
+- Canonical paths now distinguish guided Explore (`/explore`) from universal
+  Search (`/search`), preserve durable route state, and replace legacy paths
+  without creating additional history entries.
+- One route-identity registry now owns approved paths, labels, document titles,
+  context labels, analytics names, compatibility aliases, and the alias owner
+  and removal date.
+- Resource list and detail links emit `/build/resources` and
+  `/build/resources/:id`; legacy Commons paths recover to those URLs.
+- Route matrix, browser contracts, static build, a11y smoke, and navigation
+  smoke are green. Local-only branch; no push, merge, deploy, tag, or release.
+
+### Next
+
+Epic 3 - Resources directory. Keep this completed routing boundary intact;
+do not begin the taxonomy, eligibility, facet, or recommendation work here.
+
+## 2026-07-27 (session 12) - Epic 3 Resources directory
+
+### Goal
+
+Complete Features 3.1-3.5 and milestone M3 without remote operations.
+
+### Completed
+
+- Resources retains Epic 2's canonical `/build/resources` and
+  `/build/resources/:id` boundary across browse, detail, and copy-link flows;
+  Sources remains a separate identity.
+- The established six type-derived browse categories reconcile all 96 resources
+  exactly once: Rules and policy 17, Catalogs and data 26, Templates and
+  starters 8, Tools and automation 33, Communities and training 6, and
+  Reference and history 6.
+- Search establishes evidence eligibility before editorial ordering, so nonsense
+  queries have no results and clearing a query restores the existing browse
+  scope. Categories, lane, and data-backed facets compose through URL state.
+- Invalid category/lifecycle/type URL state replaces to the valid canonical
+  scope with a visible recovery message. Detail metadata exposes the browse
+  category and keeps the canonical copy-link action.
+- Contextual suggestions are explicitly derived from existing resource metadata
+  and expose target, relation, reason, provenance, review date, and
+  `structural: false`; they do not create graph children.
+- The shared header now presents one uninterrupted primary navigation path;
+  Search, Sources, and Help are utility actions. Build makes related resources
+  supporting context: a 1440px side rail that follows task selection at 768px
+  and below.
+
+### Verification
+
+- Focused category/search/provenance contracts, Commons integrity/presentation,
+  route identity, and Commons history E2E passed.
+- Browser walkthrough passed at 375px (category plus facets), 768px (invalid
+  state recovery and stacked related resources), and 1440px (contextual
+  recommendation traceability and support rail). The copy-link control showed
+  the canonical detail route and success state.
+
+### Next
+
+Epic 4 - Record and Build progressive disclosure. Preserve M3's canonical
+Resources state and traceability contract; do not push, merge, deploy, tag, or
+release without fresh authorization.
+
+## 2026-07-27 (session 10) - Epic 1 structural truth
+
+### Goal
+
+Complete Features 1.1-1.5 and milestone M1 "Truthful core" without remote
+operations.
+
+### Completed
+
+- Structural ancestry now admits only validated native-catalog structural
+  edges. Applicability, mappings, assessment, implementation, evidence, and
+  Resources links cannot become parents.
+- Generated edges carry an explicit structural, applicability, or correlation
+  class. Cold Atlas deep links carry their validated canonical structural path.
+- Atlas search focuses unique identifiers, hands ambiguous text to canonical
+  Search, and keeps no-match recovery local with an announced status.
+- Focused Path, Map, and List use one published edge set and seven explicit
+  relationship lenses; List exposes class and direction.
+- Guided framework navigation offers only NIST SP 800-53, CSF 2.0, CMMC 2.0,
+  and MITRE ATT&CK, each with a real next structural step.
+- Focused contracts, static build, and responsive Playwright checks are green.
+  Screenshots at 375, 768, and 1440 pixels were personally inspected.
+
+### Next
+
+Epic 2 - Navigation and route identity - after separate authorization. Use a
+route round-trip matrix as the fast inner loop and preserve legacy links until
+the compatibility acceptance criteria pass.
 
 ## 2026-07-27 (session 9) - W2 and final ship
 
@@ -494,5 +598,129 @@ PDF, and preview) — per §13. Do not start W4, W7, or W2 first.
 
 ## Historical record
 
+## 2026-07-27 (session 13) - Epic 4 Record and Build progressive disclosure
+
+### Completed
+
+- Record detail now places the available record explanation before structural position and relationship classes; dense connection groups remain keyboard-operable and source-traceable below that explanation. Epic 5 will make the explanation source-first rather than generated guidance.
+- Build has subordinate local navigation for Tasks, Starter documents, and Resources. Canonical task and document identity paths are `/build/tasks/:workflowId` and `/build/documents/:templateType`; Resources retains the Epic 3 canonical routes and URL-backed browse state.
+- Build validates known task/document identities and document format/framework configuration. A malformed value is removed with visible recovery while valid path/query state remains shareable.
+- Start Here now frames mappings, crosswalks, and recommendations as candidate overlap requiring governing-program validation. A site-wide copy contract blocks canned metaphors, compliance-only prompts, and determination claims.
+
+### Next
+
+Epic 5 is complete locally on `agent/forge/epic-5-source-first-record-integrity`.
+It supersedes the record-translation implication in Epic 4: public records show
+official text, source, and relationship provenance unless a separately approved
+human-authored guidance dataset exists. The next milestone is Epic 6 responsive
+and accessibility completion. Do not push, merge, deploy, tag, or release this
+local-only work without fresh authorization.
+
+## 2026-07-28 (session 14) - Epic 5 source-first record integrity
+
+### Completed
+
+- Mounted record details, catalog/search results, Explore, and Atlas drilldowns no longer render synthetic translation/action fields. They show official descriptions or an explicit no-description state, official source links, and published connections.
+- The curated 800-53 translation dataset and generator are deleted. Generated record, search, template, and export contracts use official source descriptions only.
+- Relationship displays label a published rationale, a product-authored Navigation note, or the absence of published rationale; source references remain reachable.
+- Start Here is a source navigator with no classification, baseline, authorization-path, or applicability inference. Public Playbooks are absent until their displayed guidance has registry-backed canonical source URLs.
+- `src/app/app.mjs` and its dead page-intro dependency are deleted. The active React application remains the only mounted runtime.
+
+### Verification
+
+- Focused source/provenance contracts and 375px/1440px representative record workflows cover a control, STIG rule, SRG rule, ATT&CK technique, assessment procedure, and an official no-description record.
+- Full local verification remains required before any later release authorization; this branch is not pushed, merged, deployed, tagged, or released.
+
+## 2026-07-28 (session 15) - Epic 6 responsive and accessibility completion
+
+### Completed
+
+- Compare relationship mappings now reflow from the desktop table into labelled
+  records at 375px and a 200%-zoom-equivalent width without document-level
+  horizontal scrolling. STIG and threat-chain summaries carry the same labels.
+- Resources preserves six discoverable categories, URL-backed filters, a
+  keyboard-operable labelled filter region, and an announced visible result
+  count at 375px and 768px.
+- The manual accessibility matrix now separates local automated evidence from
+  the outstanding human NVDA/VoiceOver/TalkBack review. It makes no deployed,
+  real-device, or human screen-reader claim.
+- The focused responsive suite passed 4/4, the full reduced-motion accessibility
+  suite passed 31/31, and `npm run precommit` passed with exit 0. The smoke
+  contract now asserts the source navigator rather than the retired Start Here
+  recommendation prompt.
+
+### Next
+
+Epic 7 - regression, deployment proof, and compatibility closeout - is next
+after separate authorization. It must retain the human assistive-technology
+review as a release residual until a human reviewer supplies evidence. Do not
+push, merge, deploy, tag, or release this local-only work without fresh
+authorization.
+
 The previous long-form session log and superseded open-item snapshots are
 preserved at `docs/audits/state-history-through-2026-07-26.md`.
+
+## 2026-07-28 (session 16) - Epic 7 regression, deployment proof, and compatibility closeout
+
+### Completed locally
+
+- Added the focused `test:correction:contracts` gate for structural ancestry,
+  Atlas transitions/lenses/framework choices, route identity and durable Build
+  state, Resources eligibility/categories, and source-first record surfaces.
+  The local integration companion covers Epic 1 route behavior, source-first
+  records, route/title identity, and Compare/Resources responsive behavior.
+- Split the broad responsive suite into entry/guidance, catalog/records,
+  Build/Resources, and workbenches/trust route groups at mobile and tablet
+  widths. A group failure captures its route/viewport/page state and the live
+  configuration preserves first-failure screenshot, video, trace, and existing
+  console/request diagnostics.
+- Retired the 19 compatibility aliases in `routeIdentity.ts` by owner direction.
+  They now resolve to the honest not-found state rather than redirecting. The
+  pre-hash query-state adapter remains because it preserves persisted state,
+  not a retired route.
+- No visual snapshots were refreshed. The manual accessibility checklist still
+  records local automated evidence only and retains pending human NVDA,
+  VoiceOver, or TalkBack review.
+
+### Owner-gated next work
+
+Fresh authorization is required to push, merge, and deploy the reviewed commit
+and then run the bounded Pages route groups, exact deployed cache/commit check,
+and representative primary/deep-link plus retired-alias static-404 smoke. Human
+assistive-technology evidence remains separate; local automation is not
+deployed, real-device, or human screen-reader proof.
+
+## 2026-07-28 (session 17) - v1.0.1 final closeout
+
+### Local candidate additions
+
+- Replaced report-only, fixed-ref Lighthouse A/B setup with a v1.0.0 baseline
+  and workflow-commit candidate measured three times each on the same mobile
+  runner. The workflow fails when the candidate median falls more than three
+  points below the baseline.
+- Added `data/graph-health-provenance.json` and a graph contract that covers
+  exactly the eleven blocked findings, verifies their official upstream URLs,
+  and asserts that none is promoted into displayable edges.
+- Removed remaining stale `...state` page patches from Compare. `navigate()`
+  already merges the latest state, so callers now submit only their changed
+  keys.
+- Prepared the package metadata for v1.0.1. No remote publication has occurred
+  from this local record.
+
+### Remaining release evidence
+
+Remote execution must still demonstrate the v1.0.0-versus-candidate Lighthouse
+result, Pages deployment commit/cache identity, bounded live route groups, and
+canonical/deep-link/retired-alias static-404 behavior. Human assistive-
+technology review remains a separate residual.
+
+### Dependency closeout
+
+- Reviewed the eleven open Dependabot heads. Integrated current action updates
+  (artifact upload v7, Pages v6/v5, Gitleaks v3, CodeQL v4), and current
+  `@playwright/test`, `@types/node`, `globals`, `fast-xml-parser`, and
+  `pdf-parse` versions. The `pdf-parse` v2 importer uses its supported
+  `PDFParse` lifecycle and is covered by the DoD extraction contract.
+- Dependabot PR #1 is superseded: its requested CycloneDX v4 update is older
+  than the existing v5 dependency. Remote PR closure remains part of release
+  publication because the GitHub API credential must be valid for that action.

@@ -10,9 +10,29 @@
 
 ## Current Objective
 
-**V1.0 publication decision** — release verification and source-polish reconciliation are complete on deployed `main`; hold the verified candidate without creating or publishing `v1.0.0` until the owner explicitly approves that action.
+**2026 correction program** - Epics 4 and 5 are complete locally on
+`agent/forge/epic-5-source-first-record-integrity`; Epic 6 responsive and
+accessibility implementation is complete locally on
+`agent/pixel/epic-6-responsive-accessibility`. Record detail
+now leads with official source content, an honest absence state where no
+narrative was published, reachable source links, and provenance-labelled
+relationships. Synthetic record translation, recommendation defaults, unsourced
+public playbooks, and the unmounted legacy renderer are retired.
+Build now uses subordinate Tasks/Starter documents/Resources navigation with
+canonical task and document paths, validated configuration, and visible
+recovery that preserves valid state. Resources retains Epic 3's canonical
+URL-backed browse contract. No push, merge, deploy, tag, or release is
+authorized by this work.
 
-**Active sprint:** v1.0 release finalization — verification complete; see [`docs/Plan.md`](Plan.md), [`docs/PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), and the dated [finalization audit](audits/v1-release-finalization-2026-07-17.md).
+**Active sprint:** v1.0.1 final closeout on
+`agent/nexus/v1-0-1-final-closeout`. The local candidate includes Epic 7
+semantic/compatibility contracts, retired aliases, graph-health provenance,
+Node 22 and strict-install workflow verification, a comparative mobile
+Lighthouse gate, and the remaining Compare navigation-state cleanup. Pages
+route groups, the comparative workflow result, exact deployed commit/cache,
+canonical routes, static-404 evidence, and release publication require fresh
+remote execution. The pre-hash query-state adapter remains because it preserves
+persisted state rather than a retired route.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -38,9 +58,13 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Owner reviews the finalization evidence and decides whether to accept the documented human screen-reader and real-device residuals
-2. Create/publish `v1.0.0` only after a new, explicit owner approval for that final action
-3. Keep Node runtime notices and install-fallback cleanup in separate maintenance work
+1. Run final local gates, integrate reviewed dependency updates, and push the
+   v1.0.1 candidate.
+2. Run the bounded Pages route groups, same-runner v1.0.0 comparison, exact
+   cache/commit check, and representative canonical/deep-link/static-404 smoke.
+   Do not treat local automation as deployed, real-device, or human
+   screen-reader proof.
+3. Preserve the explicit human NVDA/VoiceOver/TalkBack residual after release.
 
 ## Status Docs
 

@@ -56,7 +56,6 @@ export function CatalogDetailPage(props: {
             record.metadata?.item_id,
             record.metadata?.title,
             record.metadata?.family,
-            record.plain_language_summary,
             record.description,
           ]
             .filter(Boolean)
@@ -259,7 +258,7 @@ export function CatalogDetailPage(props: {
                   const itemId = record.metadata?.item_id || record.id;
                   const title = record.metadata?.title || itemId;
                   const synopsis =
-                    record.plain_language_summary || record.description || "No synopsis is available for this record.";
+                    record.description || "No narrative description was published for this record.";
                   return (
                     <article className="catalog-record-row" key={record.id} aria-labelledby={`title-${record.id}`} aria-describedby={`desc-${record.id}`}>
                       <button className="catalog-record-title" id={`title-${record.id}`} onClick={() => onOpenNode(record.id, "catalog-detail")} type="button">

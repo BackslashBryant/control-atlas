@@ -28,6 +28,7 @@ function compactEdge(edge) {
     edge.source_node_id,
     edge.target_node_id,
     edge.relationship_type,
+    edge.relationship_class,
     edge.provenance_class,
     edge.publication_status,
     edge.confidence,
@@ -47,6 +48,7 @@ export function buildAtlasNeighborhoodShards(
   graph,
   shardCount = ATLAS_NEIGHBORHOOD_SHARD_COUNT,
 ) {
+  const ancestorGraph = buildAncestorGraph(graph.nodes, graph.edges);
   const edgesByNode = new Map(graph.nodes.map((node) => [node.id, []]));
 
   for (const edge of graph.edges) {
@@ -63,11 +65,14 @@ export function buildAtlasNeighborhoodShards(
     const records = shardRecords.get(shardId) || {};
     records[node.id] = {
       edges,
+      structural_path: ancestorChain(node.id, ancestorGraph).map(
+        (link) => link.id,
+      ),
       published_connection_count: edges.filter(
-        (edge) => edge[5] === "published",
+        (edge) => edge[6] === "published",
       ).length,
       candidate_connection_count: edges.filter(
-        (edge) => edge[5] !== "published",
+        (edge) => edge[6] !== "published",
       ).length,
     };
     shardRecords.set(shardId, records);
@@ -81,3 +86,7 @@ export function buildAtlasNeighborhoodShards(
     }))
     .sort((left, right) => left.shard_id.localeCompare(right.shard_id));
 }
+import {
+  ancestorChain,
+  buildAncestorGraph,
+} from "./ancestor-path.mjs";

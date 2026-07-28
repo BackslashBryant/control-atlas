@@ -204,15 +204,14 @@ export function createFederalGraphRuntime(dataset) {
   const libraryIndexes = [];
 
   const miniSearchOptions = {
-    fields: ["item_id", "title", "plain_language_summary", "description"],
+    fields: ["item_id", "title", "description"],
     storeFields: ["id"],
     searchOptions: {
       prefix: true,
       boost: {
         item_id: 5,
         title: 3,
-        plain_language_summary: 2,
-        description: 1,
+        description: 2,
       },
     },
   };
@@ -431,7 +430,7 @@ export function createFederalGraphRuntime(dataset) {
     confidence: edge.confidence,
     publication_status: edge.publication_status,
     rationale: edge.rationale || "",
-    plain_language_rationale: edge.plain_language_rationale || "",
+    navigation_note: edge.navigation_note || "",
     warning: edge.warning || "",
     inference_rule_id: edge.inference_rule_id || "",
     source_refs: resolveSourceRefs(edge),
@@ -666,7 +665,8 @@ export function createFederalGraphRuntime(dataset) {
         .filter(
           (edge) =>
             edge.publication_status === "published" &&
-            edge.relationship_type === "includes" &&
+            edge.relationship_class === "applicability" &&
+            edge.relationship_type === "selects" &&
             edge.source_node_id === baselineId &&
             nodeById.get(edge.target_node_id)?.metadata?.catalog_id ===
               "nist-800-53",
@@ -885,7 +885,7 @@ export function createFederalGraphRuntime(dataset) {
         provenance_class: "federal_published",
         publication_status: "published",
         confidence: "high",
-        plain_language_rationale: "Starter group in the Atlas Map.",
+        navigation_note: "Starter group in the Atlas Map.",
       });
     }
 
@@ -1054,11 +1054,8 @@ export function createFederalGraphRuntime(dataset) {
         .map((document) => {
           const itemId = normalize(document.item_id);
           const title = normalize(document.title);
-          const plainLanguage = normalize(
-            document.plain_language_summary || "",
-          );
           const description = normalize(document.description);
-          const searchableText = [itemId, title, plainLanguage, description].join(
+          const searchableText = [itemId, title, description].join(
             " ",
           );
           const matchesAllTerms = searchTerms.every((term) =>
@@ -1072,11 +1069,9 @@ export function createFederalGraphRuntime(dataset) {
                 ? 1
                 : title.includes(needle)
                   ? 2
-                  : plainLanguage.includes(needle)
+                  : description.includes(needle)
                     ? 3
-                    : description.includes(needle)
-                      ? 4
-                      : 99;
+                    : 99;
           return { document, score };
         })
         .filter((entry) => entry.score < 99)
@@ -1194,7 +1189,7 @@ export function createFederalGraphRuntime(dataset) {
             "Source basis",
             "Confidence",
             "Rationale",
-            "Plain-Language Rationale",
+            "Navigation note",
             "Source references",
           ],
           rows.map((row) => [
@@ -1204,7 +1199,7 @@ export function createFederalGraphRuntime(dataset) {
             row.provenance_class,
             row.confidence,
             row.rationale,
-            row.plain_language_rationale,
+            row.navigation_note,
             row.source_refs.map(sourceRefLabel).join("; "),
           ]),
         );
@@ -1217,7 +1212,7 @@ export function createFederalGraphRuntime(dataset) {
           "Source basis",
           "Confidence",
           "Rationale",
-          "Plain-Language Rationale",
+          "Navigation note",
           "Source references",
         ],
       ];
@@ -1229,7 +1224,7 @@ export function createFederalGraphRuntime(dataset) {
           row.provenance_class,
           row.confidence,
           row.rationale,
-          row.plain_language_rationale,
+          row.navigation_note,
           row.source_refs.map(sourceRefLabel).join(" | "),
         ]);
       }
@@ -1686,7 +1681,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const baselineMembership = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "applicability" &&
+              edge.relationship_type === "selects",
+          )
           .map((membershipEdge) => ({
             baselineNode: counterpartFor(membershipEdge, nodeId),
             membershipEdge,
@@ -1701,7 +1700,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const fedrampBaselineContext = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "applicability" &&
+              edge.relationship_type === "selects",
+          )
           .map((membershipEdge) => ({
             baselineNode: counterpartFor(membershipEdge, nodeId),
             membershipEdge,
@@ -1716,7 +1719,11 @@ export function createFederalGraphRuntime(dataset) {
 
       const familyMembership = uniqueBy(
         directEdges
-          .filter((edge) => edge.relationship_type === "includes")
+          .filter(
+            (edge) =>
+              edge.relationship_class === "structural" &&
+              edge.relationship_type === "contains",
+          )
           .map((familyEdge) => ({
             familyNode: counterpartFor(familyEdge, nodeId),
             familyEdge,

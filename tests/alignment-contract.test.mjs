@@ -106,7 +106,7 @@ test('translation-first governance docs and templates enforce clarity and action
     'docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md',
   ]) {
     const content = readFileSync(path, 'utf8');
-    assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard)/i, `${path} must carry the translation-first doctrine`);
+    assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard|Source-First Product Standard)/i, `${path} must carry the product clarity doctrine`);
   }
 
   const plan = readFileSync('docs/Plan.md', 'utf8');

@@ -550,7 +550,8 @@ const fixture = {
       id: "edge:family-ac2",
       source_node_id: "nist-800-53:FAMILY-AC",
       target_node_id: "nist-800-53:AC-2",
-      relationship_type: "includes",
+      relationship_type: "contains",
+      relationship_class: "structural",
       provenance_class: "federal_published",
       confidence: "direct",
       publication_status: "published",
@@ -564,7 +565,8 @@ const fixture = {
       id: "edge:baseline-ac2",
       source_node_id: "nist-800-53b:MODERATE",
       target_node_id: "nist-800-53:AC-2",
-      relationship_type: "includes",
+      relationship_type: "selects",
+      relationship_class: "applicability",
       provenance_class: "federal_published",
       confidence: "direct",
       publication_status: "published",
@@ -578,7 +580,8 @@ const fixture = {
       id: "edge:baseline-ac3",
       source_node_id: "nist-800-53b:MODERATE",
       target_node_id: "nist-800-53:AC-3",
-      relationship_type: "includes",
+      relationship_type: "selects",
+      relationship_class: "applicability",
       provenance_class: "federal_published",
       confidence: "direct",
       publication_status: "published",
@@ -648,7 +651,8 @@ const fixture = {
       id: "edge:fedramp-ac2",
       source_node_id: "fedramp-rev5:MODERATE",
       target_node_id: "nist-800-53:AC-2",
-      relationship_type: "includes",
+      relationship_type: "selects",
+      relationship_class: "applicability",
       provenance_class: "federal_program",
       confidence: "direct",
       publication_status: "published",
@@ -662,7 +666,8 @@ const fixture = {
       id: "edge:fedramp-ac4",
       source_node_id: "fedramp-rev5:MODERATE",
       target_node_id: "nist-800-53:AC-4",
-      relationship_type: "includes",
+      relationship_type: "selects",
+      relationship_class: "applicability",
       provenance_class: "federal_program",
       confidence: "direct",
       publication_status: "published",
@@ -1337,7 +1342,7 @@ test("relationship exports mirror the current visible rows", () => {
 
   assert.match(
     csv,
-    /"From ID","To ID","Relationship type","Source basis","Confidence","Rationale","Plain-Language Rationale","Source references"/,
+    /"From ID","To ID","Relationship type","Source basis","Confidence","Rationale","Navigation note","Source references"/,
   );
   assert.match(csv, /V-100001/);
   assert.match(markdown, /\| From ID \| To ID \| Relationship type \|/);
@@ -1757,13 +1762,15 @@ test("groupRelationships routes a control's own enhancement counterparts into th
       id: "edge:ac2-ac2.1",
       source_node_id: "nist-800-53:AC-2",
       target_node_id: "nist-800-53:AC-2.1",
-      relationship_type: "includes",
+      relationship_type: "contains",
+      relationship_class: "structural",
     },
     {
       id: "edge:ac2-ac2.2",
       source_node_id: "nist-800-53:AC-2",
       target_node_id: "nist-800-53:AC-2.2",
-      relationship_type: "includes",
+      relationship_type: "contains",
+      relationship_class: "structural",
     },
     {
       id: "edge:ac2-ac3",
@@ -1798,7 +1805,8 @@ test("groupRelationships routes an enhancement's base control counterpart into t
       id: "edge:ac2.1-ac2",
       source_node_id: "nist-800-53:AC-2.1",
       target_node_id: "nist-800-53:AC-2",
-      relationship_type: "includes",
+      relationship_type: "contains",
+      relationship_class: "structural",
     },
   ];
 

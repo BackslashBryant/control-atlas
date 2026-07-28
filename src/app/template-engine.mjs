@@ -278,7 +278,7 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
   const baselineRows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[How is this implemented for this system?]"),
     ph("[Name of provider if inherited]"),
     ph("[Artifact name(s)]"),
@@ -426,7 +426,7 @@ function generateImplementationStatementWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Draft statement — describe how this control is implemented]"),
     ph("[Name of provider if inherited]"),
     ph("[Role responsible for maintaining this control]"),
@@ -475,7 +475,7 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
     return [
       c.id,
       c.title,
-      truncatePlain(c.plain),
+      truncatePlain(c.description),
       refs && refs.cciIds.length ? refs.cciIds.join("; ") : "—",
       refs && refs.stigIds.length ? refs.stigIds.join("; ") : "—",
       ph("[Artifact type + name]"),
@@ -573,7 +573,7 @@ function generateInheritanceWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Fully inherited | Hybrid | System-specific | Not inherited]"),
     ph("[Provider name — CSP, agency shared service, etc.]"),
     ph("[What your program must still implement or verify locally]"),
@@ -744,7 +744,7 @@ function generateAssessmentPlanningWorksheet(options, controls) {
   const rows = controls.map((c) => [
     c.id,
     c.title,
-    truncatePlain(c.plain),
+    truncatePlain(c.description),
     ph("[Examine | Interview | Test]"),
     ph("[Artifacts to request before the assessment]"),
     ph("[Notes]"),
@@ -1257,7 +1257,7 @@ function collectCatalogControls(nodes, catalogId) {
  *
  * Edge shape observed in data/generated/edges.json: baseline nodes are
  * `${catalogId}:${baselineItemId}` (e.g. "fedramp-rev5:LOW"); each has an
- * `includes` edge with `source_node_id` = the baseline node and
+ * applicability `selects` edge with `source_node_id` = the baseline node and
  * `target_node_id` = the member `nist-800-53:<CONTROL_ID>` control node.
  * Membership is unioned across every baseline node in the catalog.
  *
@@ -1279,7 +1279,10 @@ function resolveControlsViaBaselineEdges(dataset, catalogId) {
 
   const memberNodeIds = new Set();
   for (const edge of edges) {
-    if (edge.relationship_type !== "includes") continue;
+    if (
+      edge.relationship_class !== "applicability" ||
+      edge.relationship_type !== "selects"
+    ) continue;
     if (baselineNodeIds.has(edge.source_node_id)) {
       memberNodeIds.add(edge.target_node_id);
     } else if (baselineNodeIds.has(edge.target_node_id)) {
@@ -1394,7 +1397,7 @@ function crossRefForControl(index, controlNodeId) {
  * Collect the control node IDs that belong to a named baseline (Low / Moderate
  * / High / Privacy / LI-SaaS). Baseline membership lives in `baseline` nodes
  * (e.g. `nist-800-53b:LOW`, `fedramp-rev5:MODERATE`) linked to their member
- * controls with `includes` edges. Baseline nodes are matched by item_id,
+ * controls with applicability `selects` edges. Baseline nodes are matched by item_id,
  * preferring the catalog that fits the selected framework so a NIST 800-53
  * template scopes to 800-53B membership rather than FedRAMP's.
  *
@@ -1429,7 +1432,10 @@ function collectBaselineMemberIds(dataset, baselineItemId, frameworkCatalogId) {
 
   const members = new Set();
   for (const edge of edges) {
-    if (edge.relationship_type !== "includes") continue;
+    if (
+      edge.relationship_class !== "applicability" ||
+      edge.relationship_type !== "selects"
+    ) continue;
     if (baselineNodeIds.has(edge.source_node_id)) {
       members.add(edge.target_node_id);
     } else if (baselineNodeIds.has(edge.target_node_id)) {
@@ -1554,7 +1560,7 @@ export function buildTemplateDocument(options, dataset) {
         id: n.metadata?.item_id || n.id,
         title: n.metadata?.title || n.label || n.id,
         family: familyOf(n),
-        plain: n.plain_language_summary || "",
+        description: n.metadata?.description || "",
       }));
     }
   }

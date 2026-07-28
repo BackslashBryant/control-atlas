@@ -4,11 +4,7 @@ import {
   buildStartHereRecommendations,
   hasCompleteStartHereContext,
 } from "../lib/startHereRecommendations.mjs";
-import type {
-  StartHereCompareLink,
-  StartHereLibraryLink,
-  StartHereRecommendations,
-} from "../lib/startHereRecommendations.d.ts";
+import type { StartHereLibraryLink, StartHereRecommendations } from "../lib/startHereRecommendations.d.ts";
 import type { ViewState } from "../lib/viewState";
 import { StartHereResult } from "../components/StartHereResult";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
@@ -53,13 +49,6 @@ export function StartHerePage(props: {
     onNavigate("library-detail", { node: link.nodeId, from: "start-here" });
   }
 
-  function followCompareLink(link: StartHereCompareLink) {
-    onNavigate("matrix", {
-      crosswalk: link.crosswalk,
-      ...link.patch,
-    });
-  }
-
   function restartQuestionnaire() {
     onNavigate("start-here", {
       step: "",
@@ -73,9 +62,7 @@ export function StartHerePage(props: {
     return (
       <Panel className="start-here-result-page">
         <StartHereResult
-          onFollowCompareLink={followCompareLink}
           onFollowLibraryLink={followLibraryLink}
-          onNavigate={onNavigate}
           onRestart={restartQuestionnaire}
           recommendations={recommendations}
         />
@@ -87,8 +74,8 @@ export function StartHerePage(props: {
     <Panel className="max-w-[70rem] mx-auto">
       <PageHeader
         eyebrow="Start Here"
-        summary="Answer three short questions, then get a starting path with the framework, template, and playbook most likely to help first."
-        title="Find the best place to start"
+        summary="Use three prompts to record context, browse public sources, and prepare questions for the governing program. The prompts do not classify a system or choose a baseline."
+        title="Browse public sources"
       />
 
       <div className="start-here-steps" aria-label="Start Here progress">
@@ -235,8 +222,7 @@ export function StartHerePage(props: {
       state.dataSensitivity === "Not sure" ||
       state.environment === "Not sure" ? (
         <p className="p-[12px] bg-[color-mix(in_srgb,var(--ca-warning)_20%,transparent)] border border-[color-mix(in_srgb,var(--ca-warning)_50%,transparent)] text-[var(--ca-text)] rounded-[3px] mt-[16px] text-[13px]" role="status">
-          "Not sure" is fine — we will use a safe, common default and tell you
-          exactly what we assumed in the result.
+          "Not sure" is fine. No default classification, baseline, or authorization path will be inferred.
         </p>
       ) : null}
 
@@ -248,7 +234,7 @@ export function StartHerePage(props: {
               onNavigate("start-here", { step: "results" })
             }
           >
-            Show recommendation
+            Browse sources
           </Button>
         </div>
       ) : null}

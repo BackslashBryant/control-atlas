@@ -77,7 +77,7 @@ test("focused Atlas loads one neighborhood without monolithic graph JSON", async
   });
 
   await page.goto(
-    "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map",
+    "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);

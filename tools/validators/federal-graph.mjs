@@ -1,3 +1,9 @@
+import {
+  RELATIONSHIP_CLASSES,
+  isValidatedStructuralEdge,
+  isValidatedStructuralPointer,
+} from "../../src/app/structural-hierarchy.mjs";
+
 const PROVENANCE_CLASSES = new Set([
   'mandated',
   'federal_published',
@@ -9,6 +15,7 @@ const PROVENANCE_CLASSES = new Set([
 ]);
 const CONFIDENCE_VALUES = new Set(['direct', 'derived', 'inferred', 'inferred_high', 'inferred_medium', 'inferred_low']);
 const PUBLICATION_STATUSES = new Set(['published', 'candidate']);
+const RELATIONSHIP_CLASS_VALUES = new Set(Object.values(RELATIONSHIP_CLASSES));
 
 function pushDuplicateErrors(errors, label, items) {
   const seen = new Set();
@@ -31,7 +38,8 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
   pushDuplicateErrors(errors, 'evidence', evidence);
 
   const sourceById = new Map(sources.map((source) => [source.id, source]));
-  const nodeIds = new Set(nodes.map((node) => node.id));
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+  const nodeIds = new Set(nodesById.keys());
   const evidenceIds = new Set(evidence.map((entry) => entry.id));
 
   for (const node of nodes) {
@@ -41,8 +49,8 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
     else if (source.access_status !== 'public') {
       errors.push(`node ${node.id} defining source ${node.source_id} must remain public for displayable graph content`);
     }
-    if (typeof node.plain_language_summary !== 'string' || !node.plain_language_summary.trim()) {
-      errors.push(`node ${node.id} is missing required plain_language_summary`);
+    if (node.plain_language_summary !== undefined || node.metadata?.plain_action !== undefined) {
+      errors.push(`node ${node.id} retains retired synthetic record guidance`);
     }
     if (node.parent_id !== undefined && node.parent_id !== null) {
       if (!nodeIds.has(node.parent_id)) {
@@ -50,6 +58,9 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
       }
       if (typeof node.parent_derivation !== 'string' || !node.parent_derivation.trim()) {
         errors.push(`node ${node.id} has parent_id but is missing parent_derivation`);
+      }
+      if (!isValidatedStructuralPointer(node, nodesById.get(node.parent_id))) {
+        errors.push(`node ${node.id} has an invalid structural parent ${node.parent_id}`);
       }
     }
   }
@@ -63,12 +74,25 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
   }
 
   for (const edge of edges) {
+    if (!RELATIONSHIP_CLASS_VALUES.has(edge.relationship_class)) {
+      errors.push(`edge ${edge.id} has invalid relationship_class`);
+    }
     if (edge.publication_status === 'blocked') errors.push(`edge ${edge.id} cannot use blocked publication_status`);
     else if (!PUBLICATION_STATUSES.has(edge.publication_status)) errors.push(`edge ${edge.id} has invalid publication_status`);
     if (!PROVENANCE_CLASSES.has(edge.provenance_class)) errors.push(`edge ${edge.id} has invalid provenance_class`);
     if (!CONFIDENCE_VALUES.has(edge.confidence)) errors.push(`edge ${edge.id} has invalid confidence`);
     if (!nodeIds.has(edge.source_node_id) || !nodeIds.has(edge.target_node_id)) {
       errors.push(`edge ${edge.id} references unknown node`);
+    }
+    if (
+      edge.relationship_class === RELATIONSHIP_CLASSES.structural &&
+      !isValidatedStructuralEdge(
+        edge,
+        nodesById.get(edge.source_node_id),
+        nodesById.get(edge.target_node_id),
+      )
+    ) {
+      errors.push(`edge ${edge.id} is an invalid structural parent relationship`);
     }
     if (!edge.evidence_ids?.length) errors.push(`edge ${edge.id} must reference evidence`);
     else if (edge.evidence_ids.some((id) => !evidenceIds.has(id))) errors.push(`edge ${edge.id} references unknown evidence`);
@@ -85,8 +109,8 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
       if (edge.confidence?.startsWith('inferred_')) errors.push(`published edge ${edge.id} cannot use inferred confidence`);
     }
 
-    if (typeof edge.plain_language_rationale !== 'string' || !edge.plain_language_rationale.trim()) {
-      errors.push(`edge ${edge.id} is missing required plain_language_rationale`);
+    if (edge.plain_language_rationale !== undefined) {
+      errors.push(`edge ${edge.id} retains retired synthetic relationship rationale`);
     }
     if (!Array.isArray(edge.source_refs) || edge.source_refs.length === 0) {
       errors.push(`edge ${edge.id} is missing required source_refs`);

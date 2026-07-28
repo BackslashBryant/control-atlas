@@ -13,14 +13,14 @@ test("framework choices survive refresh and the rail steps back one generation",
   page,
 }) => {
   await page.goto(
-    "/#/atlas-map?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
+    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByLabel("Filter this family")).toBeVisible();
-  await expect(page.locator(".tree-path-rail")).toContainText(
-    "AtlasNIST SP 800-53LOWFAMILY-AC",
+  await expect(page.locator(".atlas-choice-trail")).toContainText(
+    "ExploreSP 800-53 Rev. 5 CatalogLow Impact BaselineAccess Control",
   );
 
   await page.reload();
@@ -30,11 +30,11 @@ test("framework choices survive refresh and the rail steps back one generation",
   });
 
   await page
-    .locator(".tree-path-rail")
+    .locator(".atlas-choice-trail")
     .getByRole("button", { name: "LOW" })
     .click();
   await expect(
-    page.getByText("Which control family do you want to open?"),
+    page.getByText("Which part of this framework do you want to open?"),
   ).toBeVisible();
   await expect(page).not.toHaveURL(/atlasFamily=/);
 
@@ -46,7 +46,7 @@ test("family filtering is local and an empty result explains itself", async ({
   page,
 }) => {
   await page.goto(
-    "/#/atlas-map?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
+    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -55,5 +55,7 @@ test("family filtering is local and an empty result explains itself", async ({
   await filter.fill("AC-2");
   await expect(page.locator(".atlas-path-record")).not.toHaveCount(0);
   await filter.fill("definitely-not-a-control");
-  await expect(page.getByText("No controls match that filter.")).toBeVisible();
+  await expect(
+    page.getByText("No structural children match that filter."),
+  ).toBeVisible();
 });
