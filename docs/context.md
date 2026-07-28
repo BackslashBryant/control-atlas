@@ -10,9 +10,10 @@
 
 ## Current Objective
 
-**2026 correction program** - Epic 4, Record and Build progressive disclosure,
-and Epic 5, source-first record integrity and legacy cleanup, are complete
-locally on `agent/forge/epic-5-source-first-record-integrity`. Record detail
+**2026 correction program** - Epics 4 and 5 are complete locally on
+`agent/forge/epic-5-source-first-record-integrity`; Epic 6 responsive and
+accessibility implementation is complete locally on
+`agent/pixel/epic-6-responsive-accessibility`. Record detail
 now leads with official source content, an honest absence state where no
 narrative was published, reachable source links, and provenance-labelled
 relationships. Synthetic record translation, recommendation defaults, unsourced
@@ -23,8 +24,8 @@ recovery that preserves valid state. Resources retains Epic 3's canonical
 URL-backed browse contract. No push, merge, deploy, tag, or release is
 authorized by this work.
 
-**Active sprint:** none. The next recommended milestone is Epic 6 - responsive
-and accessibility completion - from the
+**Active sprint:** none. The next recommended milestone is Epic 7 - regression,
+deployment proof, and compatibility closeout - from the
 [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Shipped on `main` (do not re-plan)
@@ -51,8 +52,9 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Begin Epic 6 on a new task branch only after explicit authorization. Preserve
-   source-first record presentation and the responsive 375px/1440px contracts.
+1. Begin Epic 7 on a new task branch only after explicit authorization. Preserve
+   source-first record presentation and the responsive 375px/1440px contracts;
+   do not treat local automation as deployed, real-device, or human screen-reader proof.
 2. Preserve Epic 1's structural/applicability/correlation contract and Epics 2
    and 3's canonical route, Resources state, and traceability boundary, plus the
    local-only proof boundary.

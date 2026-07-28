@@ -21,15 +21,15 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**2026 correction program - Epic 3 complete locally.** Resources now has six
-reconciled primary browse categories, eligibility-first search, URL-backed
-facets with recovery, and traceable derived contextual recommendations.
-Features 3.1-3.5 and milestone M3 are verified on the local task branch only.
-The shared header now keeps one continuous primary navigation path and groups
-Search, Sources, and Help as utilities; Build presents related resources as a
-desktop support rail that stacks after task selection at narrower widths.
-Epic 4 - Record and Build progressive disclosure is next; see the
-[`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
+**2026 correction program - Epic 6 implementation complete locally.** Compare
+relationship results reflow into labelled records at 375px and a 200%-zoom
+equivalent without page-level horizontal scrolling. Resources preserves its
+URL-backed filters, announced result count, and keyboard-operable labelled
+filter disclosure at 375px and 768px. The manual accessibility matrix records
+the local automated evidence and explicitly retains human assistive-technology
+review as a release residual. Epic 7 - regression, deployment proof, and
+compatibility closeout - is next and requires separate shipping authorization;
+see the [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)
 
@@ -78,6 +78,7 @@ No backend or user, organization, or system data is part of this product directi
 
 - [x] Epic 4 - Record and Build progressive disclosure (local branch only): record pages place the available record explanation before structural position, Build has subordinate Tasks/Starter documents/Resources navigation, and task/document paths recover invalid state without losing valid configuration.
 - [x] Epic 5 - Source-first record integrity and legacy cleanup (local branch only): official descriptions and source links are the default record surface; synthetic translation and its curated data are removed; relationships declare published rationale, Navigation note, or absence; Start Here is a source navigator; unsourced Playbooks are absent; and the legacy renderer is deleted.
+- [x] Epic 6 - Responsive and accessibility completion (local branch only): Compare and Resources retain their meaning and controls at the required narrow/zoom-equivalent widths; the accessibility matrix records automated evidence and the pending human assistive-technology review.
 - [x] Copy contract: user-facing copy must name a concrete action or source boundary; canned metaphors, compliance-only prompts, and determination-like mapping claims are prohibited by test.
 
 - Static GitHub Pages application (React shell in `src/ui/`)

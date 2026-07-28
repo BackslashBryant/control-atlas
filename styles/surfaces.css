@@ -6149,6 +6149,15 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 720px) {
+  .compare-table-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .compare-table-scroll .detail-table {
+    min-width: 0;
+  }
+
   .detail-table tr {
     border-bottom: 1px solid var(--ca-border);
     padding: var(--ca-space-3) 0;

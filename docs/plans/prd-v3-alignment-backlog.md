@@ -2,14 +2,15 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 27, 2026 (2026 correction Epic 1 complete locally; Epic 2
-next; remote publication remains separately owner-gated)
+**Last synced:** July 28, 2026 (2026 correction Epics 1-6 implementation
+complete locally; Epic 7 next; remote publication remains separately owner-gated)
 
 ## 2026 correction program
 
-Structural truth and Atlas correctness (Features 1.1-1.5, M1) are complete on
-the local task branch. Epics 2-6 remain open in the
-[`2026-07-27 correction backlog`](../planning/control-atlas-correction-backlog-2026-07-27.md).
+Structural truth, navigation, Resources, progressive disclosure, source-first
+records, and responsive/accessibility implementation (M1-M6) are complete on
+local task branches. Epic 7 remains open in the
+[`2026-07-27 correction backlog`](../planning/control-atlas-correction-backlog-2026-07-27.md): it owns semantic regression gates, deployed-route proof, and compatibility closeout.
 
 ## Release verification record
 

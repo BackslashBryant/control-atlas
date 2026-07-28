@@ -401,6 +401,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex flex-wrap items-center gap-2">
             <button
+              aria-controls="resources-filter-panel"
+              aria-expanded={filterDrawerOpen}
               onClick={() => setFilterDrawerOpen(!filterDrawerOpen)}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-[var(--ca-text)] text-xs font-medium hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
@@ -468,7 +470,7 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
           </div>
 
           {showResults ? (
-            <div aria-live="polite" className="text-xs text-[var(--ca-secondary)]">
+            <div aria-live="polite" className="text-xs text-[var(--ca-secondary)]" role="status">
               Showing <span className="font-semibold text-[var(--ca-text)]">{filteredResources.length}</span> of {allResources.length} resources
             </div>
           ) : null}
@@ -476,7 +478,8 @@ export function CommonsPage({ bundle, viewState, onNavigate }: CommonsPageProps)
 
         {/* Filter Drawer / Facets Panel */}
         {filterDrawerOpen ? (
-          <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div aria-labelledby="resources-filter-heading" className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 mb-8 shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="resources-filter-panel" role="region">
+            <h2 className="sr-only" id="resources-filter-heading">Resource filters</h2>
             <div>
               <label className="block text-xs font-semibold text-[var(--ca-text-muted)] uppercase tracking-wider mb-2" htmlFor="commons-lane-filter">Trust lane</label>
               <select id="commons-lane-filter" value={activeLane} onChange={(e) => updateParams({ lane: e.target.value })}
