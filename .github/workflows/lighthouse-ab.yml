@@ -56,16 +56,25 @@ jobs:
               curl -sf http://localhost:4317/ >/dev/null && break || sleep 2
             done
             for i in 1 2 3; do
-              npx lighthouse "http://localhost:4317${ROUTE}" \
-                --verbose \
-                --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
-                --form-factor=mobile \
-                --screenEmulation.mobile \
-                --only-categories=performance \
-                --max-wait-for-load=90000 \
-                --output=json \
-                --output-path="artifacts/lighthouse-ab/$label-$i.json" \
-                2>&1 | tee "artifacts/lighthouse-ab/$label-$i.log"
+              local report="artifacts/lighthouse-ab/$label-$i.json"
+              if ! npx lighthouse "http://localhost:4317${ROUTE}" \
+                  --verbose \
+                  --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+                  --form-factor=mobile \
+                  --screenEmulation.mobile \
+                  --only-categories=performance \
+                  --max-wait-for-load=90000 \
+                  --output=json \
+                  --output-path="$report" \
+                  2>&1 | tee "artifacts/lighthouse-ab/$label-$i.log"; then
+                REPORT="$report" node -e "
+                  const report = require('./' + process.env.REPORT);
+                  if (typeof report.categories?.performance?.score !== 'number') {
+                    process.exit(1);
+                  }
+                "
+                echo "::warning::Lighthouse exited after writing a valid scored report; preserving the report for the comparative gate."
+              fi
             done
             kill "$server_pid" 2>/dev/null || true
             echo "::endgroup::"
