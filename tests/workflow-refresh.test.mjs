@@ -51,6 +51,7 @@ test('Lighthouse A/B gates a candidate against v1.0.0 on the same mobile runner'
   assert.match(lighthouseAb, /--only-categories=performance/);
   assert.match(lighthouseAb, /--max-wait-for-load=90000/);
   assert.match(lighthouseAb, /--disable-dev-shm-usage/);
+  assert.match(lighthouseAb, /typeof report\.categories\?\.performance\?\.score !== 'number'/);
   assert.match(lighthouseAb, /if: always\(\)/);
   assert.match(lighthouseAb, /const median/);
   assert.match(lighthouseAb, /process\.exit\(1\)/);
