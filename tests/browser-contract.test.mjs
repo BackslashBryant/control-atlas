@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
@@ -180,14 +179,12 @@ test('query-string deep link compatibility moves into typed React adapters', () 
   assert.match(router, /applyLegacyQueryRedirect/);
 });
 
-test('path-style compatibility redirect keeps its CSP hash aligned with the redirect script', () => {
+test('path-style legacy URLs stop at the static not-found page instead of redirecting', () => {
   const redirectPage = readFileSync('src/public/404.html', 'utf8');
-  const redirectScript = redirectPage.match(/<script>([\s\S]*?)<\/script>/)?.[1];
-  assert.ok(redirectScript, '404 redirect script must exist');
-  const hash = createHash('sha256').update(redirectScript, 'utf8').digest('base64');
-  assert.match(redirectPage, new RegExp(`script-src 'sha256-${hash}'`));
-  assert.match(redirectScript, /l\.replace\(/);
-  assert.match(redirectScript, /#\//);
+  assert.match(redirectPage, /<title>Page not found \| Control Atlas<\/title>/);
+  assert.match(redirectPage, /current link/);
+  assert.doesNotMatch(redirectPage, /<script/);
+  assert.doesNotMatch(redirectPage, /l\.replace\(/);
 });
 
 test('Orbital Archive visual system remains active in the shared stylesheet', () => {

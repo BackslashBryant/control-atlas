@@ -674,9 +674,10 @@ preserved at `docs/audits/state-history-through-2026-07-26.md`.
   widths. A group failure captures its route/viewport/page state and the live
   configuration preserves first-failure screenshot, video, trace, and existing
   console/request diagnostics.
-- Inventoried the 19 compatibility aliases in `routeIdentity.ts`. They remain
-  owned by Control Atlas maintainers through 2026-10-27, conditional on green
-  deployed deep-link smoke. No alias was removed.
+- Retired the 19 compatibility aliases in `routeIdentity.ts` by owner direction.
+  They now resolve to the honest not-found state rather than redirecting. The
+  pre-hash query-state adapter remains because it preserves persisted state,
+  not a retired route.
 - No visual snapshots were refreshed. The manual accessibility checklist still
   records local automated evidence only and retains pending human NVDA,
   VoiceOver, or TalkBack review.
@@ -685,6 +686,6 @@ preserved at `docs/audits/state-history-through-2026-07-26.md`.
 
 Fresh authorization is required to push, merge, and deploy the reviewed commit
 and then run the bounded Pages route groups, exact deployed cache/commit check,
-and representative primary/deep-link smoke. Human assistive-technology evidence
-and an owner decision on alias removal remain separate; local automation is not
+and representative primary/deep-link plus retired-alias static-404 smoke. Human
+assistive-technology evidence remains separate; local automation is not
 deployed, real-device, or human screen-reader proof.

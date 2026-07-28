@@ -75,24 +75,11 @@ function parseNodeIdFromPath(pathname: string): {
       buildSection: "",
     };
   }
-  const recordMatch = pathname.match(/^\/(?:record|object)\/([^/]+)\/(.+)$/);
+  const recordMatch = pathname.match(/^\/record\/([^/]+)\/(.+)$/);
   if (recordMatch) {
     return {
       basePath: "/record",
       nodeId: `${decodeURIComponent(recordMatch[1])}:${decodeURIComponent(recordMatch[2])}`,
-      catalogId: "",
-      resourceId: "",
-      taskId: "",
-      documentId: "",
-      buildSection: "",
-    };
-  }
-  // Fallback for flat /object/ID without catalog (legacy)
-  const legacyObjectMatch = pathname.match(/^\/object\/(.+)$/);
-  if (legacyObjectMatch) {
-    return {
-      basePath: "/record",
-      nodeId: decodeURIComponent(legacyObjectMatch[1]),
       catalogId: "",
       resourceId: "",
       taskId: "",

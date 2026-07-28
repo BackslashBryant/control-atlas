@@ -7,8 +7,8 @@ Scope: local task branch only; no Pages, device, or human assistive-technology v
 
 Epic 7 prepares the correction release gate locally. It does not prove a
 deployed commit, real-device behavior, human screen-reader use, cache state, or
-compatibility-window traffic. No visual baseline was changed and no alias was
-removed.
+compatibility-window traffic. No visual baseline was changed. Legacy route
+aliases were retired locally by owner direction; that is not deployed proof.
 
 ## Critical/High semantic contract map
 
@@ -29,23 +29,24 @@ removed.
 records, canonical route/title behavior, Atlas workflows, and responsive
 Compare/Resources behavior. It starts a local static test server only.
 
-Local result: `test:correction:contracts` passed 54/54 assertions and
-`test:correction:local` passed 28/28 Playwright checks. The browser run found
-and corrected one pre-hash compatibility defect: the 404 redirect script's CSP
-hash was stale. A browser contract now recalculates that hash before the
-precommit gate can pass.
+Local result: `test:correction:contracts` passed 55/55 assertions and
+`test:correction:local` passed 28/28 Playwright checks. Alias retirement
+removes the static 404 redirect script; browser and static-smoke contracts now
+require the explicit not-found page and canonical recovery link instead.
 
-## Compatibility inventory
+## Alias retirement inventory
 
-The 19 aliases in `COMPATIBILITY_ROUTE_ALIASES` remain intact: `/menu`,
-`/home`, `/start-here`, `/atlas-map`, `/atlas`, `/map`, `/browse`,
+The 19 legacy aliases formerly in `COMPATIBILITY_ROUTE_ALIASES` are retired:
+`/menu`, `/home`, `/start-here`, `/atlas-map`, `/atlas`, `/map`, `/browse`,
 `/compare-controls`, `/source`, `/library`, `/playbooks`, `/playbook`,
 `/templates`, `/template`, `/build/community`, `/commons`,
-`/resource-bazaar`, `/bazaar`, and `/hub`.
+`/resource-bazaar`, `/bazaar`, and `/hub`. Legacy catalog/object/resource-detail
+paths and query-bearing Explore links also no longer redirect into canonical
+routes. They resolve to the app or static not-found state; they do not silently
+transfer state to a different destination.
 
-Owner: Control Atlas maintainers. Removal date: 2026-10-27. Removal condition:
-the deployed deep-link smoke must remain green through that date. This branch
-does not remove aliases or claim that condition is met.
+The pre-hash `?view=...` query-state adapter remains intact. It is a persisted
+application-state format, not a legacy route alias.
 
 ## Intended visual and accessibility evidence
 
@@ -65,6 +66,6 @@ After explicit authorization to push, merge, and deploy the reviewed commit:
 2. Run `npm run test:e2e:live:a11y` and record the saved first-failure
    artifacts if any group fails.
 3. Verify the exact deployed commit/cache version plus representative canonical
-   and legacy deep links, then save the closeout evidence.
-4. Obtain human assistive-technology evidence and an owner decision before any
-   alias removal.
+   deep links and retired-alias static-404 behavior, then save the closeout
+   evidence.
+4. Obtain human assistive-technology evidence.

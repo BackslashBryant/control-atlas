@@ -42,35 +42,6 @@ export function routeIdentityFor(view: AppView): RouteIdentity {
   return ROUTE_IDENTITIES[view];
 }
 
-/** Compatibility protection for saved links. No navigation control may emit these paths. */
-export const COMPATIBILITY_ALIAS_POLICY = {
-  owner: "Control Atlas maintainers",
-  removalDate: "2026-10-27",
-  removalCondition: "Retain until the deployed deep-link smoke remains green through this date.",
-} as const;
-
-export const COMPATIBILITY_ROUTE_ALIASES: Readonly<Record<string, string>> = {
-  "/menu": "/",
-  "/home": "/",
-  "/start-here": "/start",
-  "/atlas-map": "/explore",
-  "/atlas": "/explore",
-  "/map": "/explore",
-  "/browse": "/search",
-  "/compare-controls": "/compare",
-  "/source": "/sources",
-  "/library": "/catalog",
-  "/playbooks": "/learn",
-  "/playbook": "/learn",
-  "/templates": "/build",
-  "/template": "/build",
-  "/build/community": "/build/resources",
-  "/commons": "/build/resources",
-  "/resource-bazaar": "/build/resources",
-  "/bazaar": "/build/resources",
-  "/hub": "/build/resources",
-};
-
 export type CanonicalRoute = {
   canonicalPath: string;
   requiresReplace: boolean;
@@ -138,10 +109,6 @@ function validateResourceFacetValues(params: URLSearchParams): boolean {
   return discarded;
 }
 
-function safeResourceId(value: string): string {
-  return /^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(value) ? value : "";
-}
-
 function withParams(path: string, params: URLSearchParams): string {
   const query = params.toString();
   return query ? `${path}?${query}` : path;
@@ -161,33 +128,6 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   // moves the full query into the HashRouter instead of discarding state first.
   if (path === "/" && (params.has("view") || params.has("q"))) {
     return { canonicalPath: withParams(path, params), requiresReplace: false, recoveryMessage: "" };
-  }
-
-  const legacyCatalog = path.match(/^\/library\/([^/]+)$/);
-  if (legacyCatalog) {
-    path = `/catalog/${encodeURIComponent(decodeURIComponent(legacyCatalog[1]))}`;
-  }
-
-  const legacyRecord = path.match(/^\/(?:object)\/(.+)$/);
-  if (legacyRecord) {
-    const segments = legacyRecord[1].split("/");
-    path = segments.length > 1
-      ? `/record/${encodeURIComponent(decodeURIComponent(segments[0]))}/${encodeURIComponent(decodeURIComponent(segments.slice(1).join("/")))}`
-      : `/record/item/${encodeURIComponent(decodeURIComponent(segments[0]))}`;
-  }
-
-  const legacyResourceDetail = path === "/build/community-detail" || path === "/commons-detail";
-  if (legacyResourceDetail) {
-    const id = safeResourceId(params.get("id") || "");
-    params.delete("id");
-    path = id ? `/build/resources/${encodeURIComponent(id)}` : "/build/resources";
-    discarded ||= !id;
-  }
-
-  if (path === "/explore" && params.has("q")) {
-    path = "/search";
-  } else {
-    path = COMPATIBILITY_ROUTE_ALIASES[path] ?? path;
   }
 
   const legacyTemplate = path === "/build" ? params.get("templateType") || "" : "";

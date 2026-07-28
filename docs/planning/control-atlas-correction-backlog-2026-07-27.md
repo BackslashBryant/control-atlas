@@ -97,10 +97,11 @@ Risk: Medium, because compatibility mistakes can break saved links.
 **Status (2026-07-27): Complete locally.** Features 2.1-2.3 and milestone M2
 passed route-matrix, browser-contract, static build, accessibility-smoke, and
 navigation-smoke verification. `/explore`, `/search`, and `/build/resources`
-are canonical; legacy paths replace to their canonical destinations while
-preserving valid state. Compatibility aliases are owned by Control Atlas
-maintainers and retained through 2026-10-27 pending deployed deep-link smoke.
-No push, merge, deploy, tag, or release was performed.
+are canonical. On 2026-07-28, the owner directed retirement of the legacy
+route aliases: those paths now resolve to the honest not-found state rather
+than redirecting. The pre-hash query-state adapter remains because it preserves
+persisted application state, not a retired route. No push, merge, deploy, tag,
+or release was performed.
 
 ### Feature 2.1 — Canonicalize Explore and Search
 
@@ -109,8 +110,8 @@ No push, merge, deploy, tag, or release was performed.
 - **Scope:** route table, primary nav, header search, Home links, current-section state.
 - **Affected systems:** `App.tsx`, `hashRoutes.ts`, `viewState.ts`, Search/Explore pages, tests.
 - **Dependencies:** owner approval of route migration; coordinate with Feature 1.3.
-- **Implementation guidance:** `/explore` becomes guided Explore; `/search` becomes universal search; query-bearing legacy `/explore` resolves to Search; `/atlas-map` remains a temporary alias.
-- **Acceptance criteria:** visible labels and destinations are one-to-one; legacy queries and focused-node links retain state; generated links are canonical.
+- **Implementation guidance:** `/explore` becomes guided Explore and `/search` becomes universal search; generated links are canonical. Retired route aliases do not transfer state into a different route.
+- **Acceptance criteria:** visible labels and destinations are one-to-one; canonical queries and focused-node links retain state; generated links are canonical.
 - **Verification:** route round-trip matrix plus history/back/refresh E2E.
 
 ### Feature 2.2 — Add one title and display-name registry
@@ -131,9 +132,9 @@ No push, merge, deploy, tag, or release was performed.
 - **Scope:** `/menu`, `browse`, old Commons routes, copied links.
 - **Affected systems:** route aliases, retired-route page, share-link helper.
 - **Dependencies:** Features 2.1 and 3.1.
-- **Implementation guidance:** keep a documented alias table with owner and removal date; use replace redirects.
-- **Acceptance criteria:** every legacy route resolves once to a canonical URL; no visible action generates a legacy route; `/menu` is retired or explicitly exposed.
-- **Verification:** alias contract and deployed deep-link smoke.
+- **Implementation guidance:** aliases were retired by owner direction; preserve an explicit not-found state and do not generate legacy routes. Keep the pre-hash query-state adapter separate from route aliases.
+- **Acceptance criteria:** every retired alias stops at not-found; no visible action generates a legacy route; `/menu` is retired.
+- **Verification:** alias-retirement contract and deployed static-404 smoke.
 
 ## Epic 3 — Resources directory
 
@@ -378,9 +379,10 @@ to focused semantic contracts, including source-first records, route identity,
 Resources state, durable Build state, and Compare responsive behavior. The
 broad live responsive sweep is split into independently retryable route groups
 with first-failure screenshot, video, trace, route, and diagnostic artifacts.
-No Pages test has run, no visual baseline changed, and no compatibility alias
-was removed. Human NVDA, VoiceOver, or TalkBack evidence remains an explicit
-release residual.
+No Pages test has run and no visual baseline changed. Legacy route aliases were
+retired locally by owner direction and are covered by local not-found contracts.
+Human NVDA, VoiceOver, or TalkBack evidence remains an explicit release
+residual.
 
 ### Feature 7.1 — Add semantic release contracts
 
@@ -418,12 +420,12 @@ release residual.
 ### Feature 7.4 — Verify production and retire aliases deliberately
 
 - **Priority:** P2.
-- **Risk level:** Medium — deployment and alias removal affect live deep links.
-- **Scope:** Pages deployment, deep links, cache version, alias lifecycle.
+- **Risk level:** Medium — deployment and retired deep links affect external bookmarks.
+- **Scope:** Pages deployment, canonical deep links, cache version, static-404 behavior.
 - **Affected systems:** deployment smoke, route documentation.
 - **Dependencies:** all prior features and explicit shipping authorization.
-- **Implementation guidance:** verify the exact deployed commit; retain aliases for the approved compatibility window; create a dated removal item.
-- **Acceptance criteria:** live primary/deep routes, cache version, and representative workflows pass; no alias is removed without usage/owner review.
+- **Implementation guidance:** verify the exact deployed commit; check canonical routes and representative retired aliases, which must render the static not-found page rather than redirecting.
+- **Acceptance criteria:** live primary/deep routes, cache version, and representative workflows pass; retired aliases do not redirect.
 - **Verification:** bounded live smoke and saved closeout evidence.
 
 ## Milestone gates
