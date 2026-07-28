@@ -902,16 +902,16 @@ export function ComparePage(props: {
                         }
                         key={row.node_id}
                       >
-                        <td>
+                        <td data-label="Item">
                           <strong>{row.item_id}</strong>
                           <br />
                           <span className="muted">{row.title}</span>
                         </td>
-                        <td>{row.benchmark_title}</td>
-                        <td>{row.cci_count}</td>
-                        <td>{row.nist_control_count}</td>
-                        <td>{row.unmapped_cci_count}</td>
-                        <td>
+                        <td data-label="Benchmark">{row.benchmark_title}</td>
+                        <td data-label="CCIs">{row.cci_count}</td>
+                        <td data-label="NIST controls">{row.nist_control_count}</td>
+                        <td data-label="Unmapped CCIs">{row.unmapped_cci_count}</td>
+                        <td data-label="Action">
                           <Button
                             variant="secondary"
                             onClick={() =>
@@ -1147,16 +1147,16 @@ export function ComparePage(props: {
                           }
                           key={row.node_id}
                         >
-                          <td>
+                          <td data-label="Technique">
                             <strong>{row.item_id}</strong>
                             <br />
                             <span className="muted">{row.title}</span>
                           </td>
-                          <td>{row.domain}</td>
-                          <td>{row.d3fend_count}</td>
-                          <td>{row.nist_control_count}</td>
-                          <td>{row.unmapped_d3fend_count}</td>
-                          <td>
+                          <td data-label="Domain">{row.domain}</td>
+                          <td data-label="D3FEND countermeasures">{row.d3fend_count}</td>
+                          <td data-label="NIST controls">{row.nist_control_count}</td>
+                          <td data-label="Unmapped D3FEND">{row.unmapped_d3fend_count}</td>
+                          <td data-label="Action">
                             <Button
                               variant="secondary"
                               onClick={() =>

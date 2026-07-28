@@ -1,7 +1,7 @@
 # Control Atlas prioritized correction backlog
 
 Date: 2026-07-27  
-Status: Approved correction program; Epics 1-2 complete locally
+Status: Approved correction program; Epics 1-6 implementation complete locally; Epic 7 next
 Audit: [Current-state audit](../audits/control-atlas-current-state-audit-2026-07-27.md)  
 Specification: [Correction specification](control-atlas-correction-spec-2026-07-27.md)
 
@@ -329,7 +329,12 @@ Risk: Medium.
 Priority: P1  
 Risk: Medium.
 
-### Feature 5.1 — Reflow Compare for narrow screens
+**Status (2026-07-28): Implementation complete locally.** Compare and Resources
+responsive/keyboard/accessibility contracts pass at the required local
+viewports. The manual matrix is complete as an evidence record; human NVDA,
+VoiceOver, or TalkBack review remains an explicitly documented release residual.
+
+### Feature 6.1 — Reflow Compare for narrow screens
 
 - **Priority:** P1.
 - **Risk level:** Medium — two presentations must preserve identical comparison meaning.
@@ -340,7 +345,7 @@ Risk: Medium.
 - **Acceptance criteria:** all comparison meaning is available at 375px and 200% zoom without unannounced horizontal scrolling.
 - **Verification:** responsive assertions, keyboard flow, screen-reader reading order.
 
-### Feature 5.2 — Reflow Resources controls
+### Feature 6.2 — Reflow Resources controls
 
 - **Priority:** P1.
 - **Risk level:** Low — layout changes must preserve URL-backed filter behavior.
@@ -351,7 +356,7 @@ Risk: Medium.
 - **Acceptance criteria:** all categories are discoverable without horizontal scrolling; filter state and result count are announced.
 - **Verification:** 375/768/200% automated assertions and manual keyboard check.
 
-### Feature 5.3 — Complete the manual accessibility matrix
+### Feature 6.3 — Complete the manual accessibility matrix
 
 - **Priority:** P1.
 - **Risk level:** Medium — unresolved human-only failures can block release closeout.
@@ -367,7 +372,7 @@ Risk: Medium.
 Priority: P2, required before declaring the correction shipped  
 Risk: Low/Medium.
 
-### Feature 6.1 — Add semantic release contracts
+### Feature 7.1 — Add semantic release contracts
 
 - **Priority:** P1.
 - **Risk level:** Low — test additions are isolated but must avoid brittle implementation coupling.
@@ -378,7 +383,7 @@ Risk: Low/Medium.
 - **Acceptance criteria:** structural truth, route identity, Atlas search/lenses, resource no-result/category, and durable state are required gates.
 - **Verification:** focused test report mapped to finding IDs.
 
-### Feature 6.2 — Split broad live verification into bounded route groups
+### Feature 7.2 — Split broad live verification into bounded route groups
 
 - **Priority:** P2.
 - **Risk level:** Low — test orchestration changes must retain full route coverage.
@@ -389,7 +394,7 @@ Risk: Low/Medium.
 - **Acceptance criteria:** each route group has a bounded runtime and useful artifact; a group can retry without rerunning unrelated routes.
 - **Verification:** CI run on a deployed candidate.
 
-### Feature 6.3 — Update visual and accessibility evidence
+### Feature 7.3 — Update visual and accessibility evidence
 
 - **Priority:** P2.
 - **Risk level:** Low — the main hazard is approving unintended baseline drift.
@@ -400,7 +405,7 @@ Risk: Low/Medium.
 - **Acceptance criteria:** 375/768/1440 and reduced-motion baselines reviewed; manual accessibility evidence linked.
 - **Verification:** visual diff report and checklist.
 
-### Feature 6.4 — Verify production and retire aliases deliberately
+### Feature 7.4 — Verify production and retire aliases deliberately
 
 - **Priority:** P2.
 - **Risk level:** Medium — deployment and alias removal affect live deep links.
@@ -420,7 +425,7 @@ Risk: Low/Medium.
 | M3 — Useful Resources | Epic 3 counts/search/details/recommendations green |
 | M4 — Complete workflows | Epic 4 record/Build flows green |
 | M5 — Source-first records | Epic 5 record/source/provenance contracts green and legacy renderer removed |
-| M6 — Inclusive UI | Epic 6 responsive automation and manual accessibility complete |
+| M6 — Inclusive UI | Epic 6 responsive automation and accessibility matrix complete; human assistive-technology sign-off remains a release residual |
 | M7 — Shipped correction | Epic 7 deployed commit, route groups, cache, and compatibility evidence green |
 
 ## Explicitly deferred

@@ -631,5 +631,31 @@ local-only work without fresh authorization.
 - Focused source/provenance contracts and 375px/1440px representative record workflows cover a control, STIG rule, SRG rule, ATT&CK technique, assessment procedure, and an official no-description record.
 - Full local verification remains required before any later release authorization; this branch is not pushed, merged, deployed, tagged, or released.
 
+## 2026-07-28 (session 15) - Epic 6 responsive and accessibility completion
+
+### Completed
+
+- Compare relationship mappings now reflow from the desktop table into labelled
+  records at 375px and a 200%-zoom-equivalent width without document-level
+  horizontal scrolling. STIG and threat-chain summaries carry the same labels.
+- Resources preserves six discoverable categories, URL-backed filters, a
+  keyboard-operable labelled filter region, and an announced visible result
+  count at 375px and 768px.
+- The manual accessibility matrix now separates local automated evidence from
+  the outstanding human NVDA/VoiceOver/TalkBack review. It makes no deployed,
+  real-device, or human screen-reader claim.
+- The focused responsive suite passed 4/4, the full reduced-motion accessibility
+  suite passed 31/31, and `npm run precommit` passed with exit 0. The smoke
+  contract now asserts the source navigator rather than the retired Start Here
+  recommendation prompt.
+
+### Next
+
+Epic 7 - regression, deployment proof, and compatibility closeout - is next
+after separate authorization. It must retain the human assistive-technology
+review as a release residual until a human reviewer supplies evidence. Do not
+push, merge, deploy, tag, or release this local-only work without fresh
+authorization.
+
 The previous long-form session log and superseded open-item snapshots are
 preserved at `docs/audits/state-history-through-2026-07-26.md`.
