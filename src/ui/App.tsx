@@ -363,6 +363,11 @@ export function App() {
           className="app-shell"
           data-app-ready={readyState}
           data-depth={routeContext.depth}
+          data-has-subject={
+            viewState.view === "atlas-map" && Boolean(viewState.node)
+              ? "true"
+              : "false"
+          }
           data-mode={routeContext.mode}
           data-view={viewState.view}
           id="app"
