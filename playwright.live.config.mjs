@@ -17,6 +17,10 @@ export default defineConfig({
   workers: 1,
   use: {
     baseURL,
-    trace: "on-first-retry",
+    // Persist first-failure evidence for each bounded route group. This is
+    // intentionally configured, not proof that a live run has occurred.
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
+    trace: "retain-on-failure",
   },
 });

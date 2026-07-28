@@ -21,15 +21,15 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**2026 correction program - Epic 6 implementation complete locally.** Compare
-relationship results reflow into labelled records at 375px and a 200%-zoom
-equivalent without page-level horizontal scrolling. Resources preserves its
-URL-backed filters, announced result count, and keyboard-operable labelled
-filter disclosure at 375px and 768px. The manual accessibility matrix records
-the local automated evidence and explicitly retains human assistive-technology
-review as a release residual. Epic 7 - regression, deployment proof, and
-compatibility closeout - is next and requires separate shipping authorization;
-see the [`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
+**2026 correction program - Epic 7 local regression and compatibility work
+complete.** The local correction gate now names and runs the Critical/High
+semantic contracts, source-first record coverage, durable route/resource state,
+and Compare/Resources responsive behavior. The broad responsive Pages sweep is
+split into independently retryable route groups with first-failure artifacts.
+Visual baselines were not changed; the manual accessibility matrix retains the
+explicit pending human assistive-technology residual. Deployed commit, cache,
+live-route, and compatibility-window proof remain owner-gated; see the
+[`2026-07-27 correction backlog`](planning/control-atlas-correction-backlog-2026-07-27.md).
 
 ## Epic Status (July 9, 2026)
 
@@ -79,6 +79,11 @@ No backend or user, organization, or system data is part of this product directi
 - [x] Epic 4 - Record and Build progressive disclosure (local branch only): record pages place the available record explanation before structural position, Build has subordinate Tasks/Starter documents/Resources navigation, and task/document paths recover invalid state without losing valid configuration.
 - [x] Epic 5 - Source-first record integrity and legacy cleanup (local branch only): official descriptions and source links are the default record surface; synthetic translation and its curated data are removed; relationships declare published rationale, Navigation note, or absence; Start Here is a source navigator; unsourced Playbooks are absent; and the legacy renderer is deleted.
 - [x] Epic 6 - Responsive and accessibility completion (local branch only): Compare and Resources retain their meaning and controls at the required narrow/zoom-equivalent widths; the accessibility matrix records automated evidence and the pending human assistive-technology review.
+- [x] Epic 7 - Regression and compatibility closeout (local branch only): the
+  correction semantic gate maps every Critical/High audit finding to focused
+  contracts; bounded live route-group commands and failure artifacts are ready
+  but intentionally unexecuted pending deployment authorization. No aliases or
+  visual baselines were removed or refreshed.
 - [x] Copy contract: user-facing copy must name a concrete action or source boundary; canned metaphors, compliance-only prompts, and determination-like mapping claims are prohibited by test.
 
 - Static GitHub Pages application (React shell in `src/ui/`)

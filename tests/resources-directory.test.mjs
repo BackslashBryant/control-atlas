@@ -15,7 +15,7 @@ import { contextualResourceRecommendations } from "../src/ui/lib/contextualResou
 const dataset = JSON.parse(readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"));
 const resources = dataset.resources;
 
-test("all 96 resources reconcile to exactly one approved primary browse category", () => {
+test("CA-RES-001/002: Resources retains its directory identity and six primary browse categories", () => {
   assert.equal(resources.length, 96);
   const categories = resources.map(primaryBrowseCategory);
   assert.equal(categories.filter(Boolean).length, resources.length);
@@ -26,7 +26,7 @@ test("all 96 resources reconcile to exactly one approved primary browse category
   assert.equal(new Set(PRIMARY_BROWSE_CATEGORIES.map(({ id }) => id)).size, 6);
 });
 
-test("directory search establishes evidence eligibility before recommendation ranking", () => {
+test("CA-RES-003: directory search establishes evidence eligibility before recommendation ranking", () => {
   const recommended = resources.filter((resource) => resource.editorialRecommendation);
   assert.ok(recommended.length > 0);
   assert.deepEqual(searchDirectoryResources(resources, "zzzzqqqq"), []);
