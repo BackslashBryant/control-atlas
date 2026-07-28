@@ -31,18 +31,18 @@ jobs:
       BEFORE_REF: ${{ github.event.inputs.before_ref || 'v1.0.0' }}
       AFTER_REF: ${{ github.event.inputs.after_ref || github.sha }}
       MAX_MEDIAN_DROP: "3"
-      ROUTE: "/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
+      ROUTE: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
 
       - name: Measure both refs on identical hardware
         run: |
-          set -e
+          set -euo pipefail
           mkdir -p artifacts/lighthouse-ab
           measure () {
             local label="$1" ref="$2"
@@ -57,12 +57,15 @@ jobs:
             done
             for i in 1 2 3; do
               npx lighthouse "http://localhost:4317${ROUTE}" \
-                --quiet \
-                --chrome-flags="--headless --no-sandbox" \
+                --verbose \
+                --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
                 --form-factor=mobile \
                 --screenEmulation.mobile \
+                --only-categories=performance \
+                --max-wait-for-load=90000 \
                 --output=json \
-                --output-path="artifacts/lighthouse-ab/$label-$i.json"
+                --output-path="artifacts/lighthouse-ab/$label-$i.json" \
+                2>&1 | tee "artifacts/lighthouse-ab/$label-$i.log"
             done
             kill "$server_pid" 2>/dev/null || true
             echo "::endgroup::"
@@ -112,8 +115,9 @@ jobs:
           "
 
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: lighthouse-ab
           path: artifacts/lighthouse-ab
-          if-no-files-found: error
+          if-no-files-found: warn

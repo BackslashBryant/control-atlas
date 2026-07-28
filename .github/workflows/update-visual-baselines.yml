@@ -20,7 +20,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.60.0-noble
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: npm ci
       - run: npm run build:site
       - run: npx playwright test --config playwright.visual.config.mjs --update-snapshots

@@ -1,6 +1,6 @@
 {
   "name": "control-atlas",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "private": true,
   "description": "The public map for federal cyber compliance.",

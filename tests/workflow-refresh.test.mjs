@@ -1,10 +1,17 @@
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const workflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
 const refreshScript = readFileSync('scripts/refresh-data.mjs', 'utf8');
 const lighthouseAb = readFileSync('.github/workflows/lighthouse-ab.yml', 'utf8');
+const trackedWorkflows = execFileSync('git', ['ls-files', '.github/workflows/*.yml'], {
+  encoding: 'utf8',
+})
+  .trim()
+  .split(/\r?\n/)
+  .filter(Boolean);
 
 test('source refresh runs weekly and remains manually dispatchable', () => {
   assert.match(workflow, /cron: '17 7 \* \* 3'/);
@@ -40,6 +47,11 @@ test('Lighthouse A/B gates a candidate against v1.0.0 on the same mobile runner'
   assert.match(lighthouseAb, /default: "v1\.0\.0"/);
   assert.match(lighthouseAb, /AFTER_REF: \$\{\{ github\.event\.inputs\.after_ref \|\| github\.sha \}\}/);
   assert.match(lighthouseAb, /MAX_MEDIAN_DROP: "3"/);
+  assert.match(lighthouseAb, /ROUTE: "\/#\/explore\?node=/);
+  assert.match(lighthouseAb, /--only-categories=performance/);
+  assert.match(lighthouseAb, /--max-wait-for-load=90000/);
+  assert.match(lighthouseAb, /--disable-dev-shm-usage/);
+  assert.match(lighthouseAb, /if: always\(\)/);
   assert.match(lighthouseAb, /const median/);
   assert.match(lighthouseAb, /process\.exit\(1\)/);
   assert.match(lighthouseAb, /actions\/upload-artifact@v7/);
@@ -48,8 +60,16 @@ test('Lighthouse A/B gates a candidate against v1.0.0 on the same mobile runner'
 });
 
 test('workflow artifacts use the Node-20-deprecation-safe upload action', () => {
-  for (const filename of readdirSync('.github/workflows').filter((name) => name.endsWith('.yml'))) {
-    const content = readFileSync(`.github/workflows/${filename}`, 'utf8');
+  for (const filename of trackedWorkflows) {
+    const content = readFileSync(filename, 'utf8');
     assert.doesNotMatch(content, /actions\/upload-artifact@v(?:[1-6])\b/, filename);
+  }
+});
+
+test('workflow JavaScript actions no longer use the Node 20 checkout or setup runtimes', () => {
+  for (const filename of trackedWorkflows) {
+    const content = readFileSync(filename, 'utf8');
+    assert.doesNotMatch(content, /actions\/checkout@v(?:[1-5])\b/, filename);
+    assert.doesNotMatch(content, /actions\/setup-node@v(?:[1-5])\b/, filename);
   }
 });
