@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -9,10 +10,43 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
+test("choosing a published structure loads choices instead of an empty Atlas", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  let releaseGraph = () => {};
+  const graphGate = new Promise((resolve) => {
+    releaseGraph = () => resolve();
+  });
+  await page.route("**/data/generated/{nodes,edges}.json*", async (route) => {
+    await graphGate;
+    await route.continue();
+  });
+
+  await gotoApp(page, "/#/explore");
+  await waitForAppReady(page);
+  await page
+    .getByRole("button", { name: /A published structure/i })
+    .click();
+
+  await expect(
+    page.getByText("Loading Explore", { exact: true }),
+  ).toBeVisible();
+  releaseGraph();
+
+  await waitForAppReady(page);
+  await expect(
+    page.getByText("Which published structure do you want to trace?"),
+  ).toBeVisible();
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(4);
+});
+
 test("framework choices survive refresh and the rail steps back one generation", async ({
   page,
 }) => {
-  await page.goto(
+  test.setTimeout(120_000);
+  await gotoApp(
+    page,
     "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
@@ -53,7 +87,9 @@ test("framework choices survive refresh and the rail steps back one generation",
 test("family filtering is local and an empty result explains itself", async ({
   page,
 }) => {
-  await page.goto(
+  test.setTimeout(120_000);
+  await gotoApp(
+    page,
     "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);

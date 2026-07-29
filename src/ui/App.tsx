@@ -176,6 +176,8 @@ export function App() {
   const runtimeScopeKey =
     viewState.view === "library-detail"
       ? `${viewState.view}:${viewState.node}`
+      : viewState.view === "atlas-map"
+        ? `${viewState.view}:${viewState.atlasAxis || "landing"}`
       : viewState.view === "catalog-detail"
         ? `${viewState.view}:${viewState.catalog}`
         : viewState.view === "matrix"
@@ -582,6 +584,13 @@ function AppContent(props: {
   }
 
   if (bundle && !graphReady && requiresFullGraph(state)) {
+    if (loadError) {
+      return (
+        <LoadErrorPanel message={loadError} onRetry={onRetryLoad}>
+          <OfflineFallbackActions onNavigate={(view) => onNavigate(view)} />
+        </LoadErrorPanel>
+      );
+    }
     if (state.view === "library-detail") {
       return <DetailConnectionsSkeleton />;
     }
@@ -637,7 +646,6 @@ function AppContent(props: {
         bundle={bundle}
         onNavigate={onNavigate}
         onOpenNode={onOpenNode}
-        onRequestFullGraph={onRequestFullGraph}
         state={state}
       />
     );

@@ -18,6 +18,7 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 
 export function requiresFullGraph(state: ViewState) {
   return (
+    (state.view === "atlas-map" && Boolean(state.atlasAxis)) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

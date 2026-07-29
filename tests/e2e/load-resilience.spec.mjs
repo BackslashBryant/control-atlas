@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -18,7 +19,7 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
     await route.continue();
   });
 
-  await page.goto("/#/search");
+  await gotoApp(page, "/#/search");
   await expect(page.locator(".skeleton-card").first()).toBeVisible();
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
@@ -38,7 +39,7 @@ test("load resilience surfaces retry after timeout", async ({ page }) => {
     await route.continue();
   });
 
-  await page.goto("/#/search");
+  await gotoApp(page, "/#/search");
   await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible(
     {
       timeout: 15000,
@@ -47,20 +48,35 @@ test("load resilience surfaces retry after timeout", async ({ page }) => {
   await expect(page.getByText("Record data unavailable")).toBeVisible();
 });
 
+test("Explore graph failure replaces loading with a retry path", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.route("**/data/generated/{nodes,edges}.json*", async (route) => {
+    await route.fulfill({ status: 503, body: "graph unavailable" });
+  });
+
+  await gotoApp(page, "/#/explore?atlasAxis=framework");
+  await expect(
+    page.getByRole("button", { name: "Retry loading" }),
+  ).toBeVisible({ timeout: 15000 });
+  await expect(page.getByText("Record data unavailable")).toBeVisible();
+});
+
 test("staged library search enables results before detail pages", async ({
   page,
 }) => {
-  let graphRequests = 0;
+  let detailRequests = 0;
   await page.route("**/data/generated/**", async (route) => {
     const url = route.request().url();
-    if (url.includes("nodes.json") || url.includes("edges.json")) {
-      graphRequests += 1;
+    if (url.includes("atlas-neighborhood/")) {
+      detailRequests += 1;
       await new Promise((resolve) => setTimeout(resolve, 4000));
     }
     await route.continue();
   });
 
-  await page.goto("/#/search?q=AC-2");
+  await gotoApp(page, "/#/search?q=AC-2");
   await expect(
     page.getByRole("heading", { name: "Search everything in one place" }),
   ).toBeVisible({
@@ -71,7 +87,7 @@ test("staged library search enables results before detail pages", async ({
   ).toBeVisible({
     timeout: 15000,
   });
-  expect(graphRequests).toBe(0);
+  expect(detailRequests).toBe(0);
   const openDetail = page
     .locator("#library-results .result-card .card-title-action")
     .first();
@@ -80,28 +96,26 @@ test("staged library search enables results before detail pages", async ({
   await expect(page).toHaveURL(/library-detail|record\//);
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect.poll(() => graphRequests, { timeout: 15000 }).toBeGreaterThan(0);
+  await expect.poll(() => detailRequests, { timeout: 15000 }).toBeGreaterThan(0);
 });
 
 test("heavy routes explain what they are loading", async ({ page }) => {
-  await page.route("**/data/generated/**", async (route) => {
+  await page.route("**/data/**", async (route) => {
     const url = route.request().url();
-    if (url.includes("nodes.json") || url.includes("edges.json")) {
+    if (url.includes("compliance-workflows.json")) {
       await new Promise((resolve) => setTimeout(resolve, 3000));
     }
     await route.continue();
   });
 
-  await page.goto("/#/build/tasks");
-  // DataPendingNotice's title renders through Panel as a bold <b>, not a
-  // heading element (src/ui/components/lsm/Panel.tsx:20) — pre-existing,
-  // unrelated to this route.
+  await gotoApp(page, "/#/build/tasks");
   await expect(
-    page.getByText("Loading document tasks", { exact: true }),
+    page.getByRole("heading", { name: "Opening workspace", exact: true }),
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "We are preparing starter documents and the official sources that support them.",
+      "Control Atlas is opening this public workspace with publisher and source identity attached.",
+      { exact: false },
     ),
   ).toBeVisible();
   await waitForAppReady(page);
