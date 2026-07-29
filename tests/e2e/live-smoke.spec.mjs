@@ -6,7 +6,7 @@ import {
   gotoApp,
   waitForAppReady,
 } from "./support.mjs";
-import { readFileSync } from "node:fs";
+import { RUNTIME_CACHE_VERSION } from "../../src/shared/runtime-cache-version.mjs";
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -62,17 +62,11 @@ test("live smoke: deployed runtime cache version matches source", async ({
     !process.env.PLAYWRIGHT_BASE_URL,
     "deployed runtime version check only runs against the live site",
   );
-  const source = readFileSync("src/ui/lib/runtimeLoader.ts", "utf8");
-  const expectedVersion = source.match(/CACHE_VERSION = "([^"]+)"/)?.[1];
-  expect(expectedVersion).toBeTruthy();
-
   const home = await request.get(process.env.PLAYWRIGHT_BASE_URL);
   expect(home.ok()).toBeTruthy();
   const html = await home.text();
-  const asset = html.match(/assets\/index-[^"']+\.js/)?.[0];
-  expect(asset).toBeTruthy();
-
-  const script = await request.get(new URL(asset, `${process.env.PLAYWRIGHT_BASE_URL}/`).toString());
-  expect(script.ok()).toBeTruthy();
-  await expect(script.text()).resolves.toContain(expectedVersion);
+  const deployedVersion = html.match(
+    /<meta name="control-atlas-runtime-cache-version" content="([^"]+)">/,
+  )?.[1];
+  expect(deployedVersion).toBe(RUNTIME_CACHE_VERSION);
 });

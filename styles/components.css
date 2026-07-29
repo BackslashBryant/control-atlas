@@ -1,3 +1,16 @@
+.ca-button-primary {
+  border-color: var(--ca-primary);
+  background: var(--ca-primary);
+  color: var(--ca-on-primary);
+}
+
+.ca-button-primary:hover,
+.ca-button-primary:focus-visible {
+  border-color: var(--ca-primary-hover);
+  background: var(--ca-primary-hover);
+  color: var(--ca-on-primary);
+}
+
 /* ── Layout ── */
 .ca-page {
   width: 100%;

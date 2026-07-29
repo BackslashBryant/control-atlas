@@ -44,6 +44,7 @@
   /* Operational interaction and editorial hierarchy */
   --ca-primary: var(--lsm-relay);
   --ca-primary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
+  --ca-on-primary: var(--lsm-orbit);
   --ca-secondary: var(--lsm-relay);
   --ca-secondary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
   --ca-priority: var(--lsm-gold);
