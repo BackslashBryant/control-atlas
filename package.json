@@ -59,6 +59,8 @@
     "qa:templates": "node ./scripts/generate-template-qa.mjs",
     "typecheck": "tsc --project tsconfig.json --noEmit && tsc --project tsconfig.app.json --noEmit",
     "verify:public": "npm run check:data-size && npm run smoke:static && npm run audit:coverage",
+    "prepush:audit": "tsx --test ./tests/graph/brandRotation.test.ts && node --test ./tests/ui-copy-speakers.test.mjs ./tests/content-review.test.mjs ./tests/browser-contract.test.mjs && npm run style:check",
+    "pregit:push": "npm run prepush:audit",
     "git:push": "node ./tools/git-push-with-retry.mjs",
     "checks:wait": "node ./tools/wait-for-checks.mjs",
     "ship:main": "node ./tools/ship-to-main.mjs",

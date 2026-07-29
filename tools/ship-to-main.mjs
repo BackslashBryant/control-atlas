@@ -66,6 +66,9 @@ async function main() {
     console.log('[ship] Skipping local precommit (--skip-local).');
   }
 
+  console.log('[ship] Running the protected brand, copy, and disclaimer audit...');
+  run('npm', ['run', 'prepush:audit']);
+
   console.log(`[ship] Pushing ${ciBranch} to trigger remote checks...`);
   if (taskBranch === 'main') {
     run('git', ['push', '-u', 'origin', `HEAD:${ciBranch}`]);

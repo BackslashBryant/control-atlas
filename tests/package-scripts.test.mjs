@@ -63,6 +63,7 @@ test('release scripts cover staged builds, static checks, and focused browser sm
   assert.equal(typeof packageJson.scripts['test:style'], 'string');
   assert.equal(typeof packageJson.scripts['style:check'], 'string');
   assert.equal(typeof packageJson.scripts['test:oscal:independent'], 'string');
+  assert.equal(typeof packageJson.scripts['prepush:audit'], 'string');
   assert.equal(typeof packageJson.scripts['ports:free:win'], 'string');
   assert.equal(typeof packageJson.scripts['test:graph'], 'string');
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
@@ -140,6 +141,13 @@ test('direct ship scripts cover push retry, remote checks wait, and main ship fl
   assert.ok(existsSync('tools/wait-for-checks.mjs'));
   assert.ok(existsSync('tools/ship-to-main.mjs'));
   assert.ok(existsSync('.gitleaks.toml'));
+  assert.match(packageJson.scripts['prepush:audit'], /brandRotation\.test\.ts/);
+  assert.match(packageJson.scripts['prepush:audit'], /ui-copy-speakers\.test\.mjs/);
+  assert.match(packageJson.scripts['prepush:audit'], /content-review\.test\.mjs/);
+  assert.match(packageJson.scripts['prepush:audit'], /style:check/);
+  assert.equal(packageJson.scripts['pregit:push'], 'npm run prepush:audit');
+  const shipToMain = readFileSync('tools/ship-to-main.mjs', 'utf8');
+  assert.match(shipToMain, /run\('npm', \['run', 'prepush:audit'\]\)/);
 });
 
 test('documented port status command checks the Playwright site port', () => {
