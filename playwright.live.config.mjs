@@ -12,6 +12,7 @@ export default defineConfig({
     "frontend-responsive.spec.mjs",
     "live-smoke.spec.mjs",
     "legacy-url-shim.spec.mjs",
+    "publication-identity.spec.mjs",
   ],
   timeout: 120000,
   workers: 1,

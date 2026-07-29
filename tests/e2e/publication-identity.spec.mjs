@@ -49,7 +49,11 @@ test("a missing publication identity fails closed without guessed attribution", 
   attachPageDiagnostics(page);
   await page.route("**/data/generated/sources.json*", async (route) => {
     if (route.request().url().includes(".json.gz")) {
-      await route.abort();
+      await route.fulfill({
+        status: 200,
+        contentType: "application/gzip",
+        body: "invalid gzip fixture",
+      });
       return;
     }
     const response = await route.fetch();
