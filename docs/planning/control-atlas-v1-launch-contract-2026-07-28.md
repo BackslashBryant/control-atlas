@@ -1,7 +1,7 @@
 # Control Atlas V1 launch contract
 
-Date: 2026-07-28  
-Status: proposed launch authority for the holistic correction  
+Date: 2026-07-28
+Status: proposed launch authority for the holistic correction
 Decision: V1 is an evidenced product state, not a version number or closed backlog.
 
 ## V1 outcome
@@ -214,4 +214,3 @@ The small tool stack keeps context and operational ownership bounded.
 `NO-GO` means any Critical/High truth, core-workflow, accessibility, security, or participant-comprehension failure remains.
 
 Polish can iterate after launch. Misattribution, unsafe determination, inaccessible core work, broken defining workflows, and false product identity cannot.
-
