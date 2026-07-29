@@ -3,6 +3,10 @@ import {
   BRAND_ROTATION_TRANSITION_MS,
   BRAND_WORDS,
 } from './shared/brand-rotation';
+import {
+  ROUTE_COMMITTED_EVENT,
+  SEARCH_RESULTS_FOCUS_EVENT,
+} from './shared/navigation-events';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -252,6 +256,11 @@ async function start() {
   syncProgressiveShell();
   window.addEventListener('hashchange', syncProgressiveShell);
   window.addEventListener('popstate', syncProgressiveShell);
+  window.addEventListener(ROUTE_COMMITTED_EVENT, syncProgressiveShell);
+  window.addEventListener(
+    SEARCH_RESULTS_FOCUS_EVENT,
+    focusSearchResultsWhenReady,
+  );
 
   if (isHomeHash()) {
     connectStaticHome();

@@ -3,6 +3,7 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { requestSearchResultsFocus } from "../../shared/navigation-events";
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -52,6 +53,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
   function openExplore() {
     onOpenChange(false);
+    requestSearchResultsFocus();
     onNavigate("search", { query: query.trim() });
   }
 

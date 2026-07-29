@@ -1631,3 +1631,36 @@ test("runtime complete search artifact returns exact and plain-language results"
     "SP 800-53 Rev. 5",
   );
 });
+
+test("full graph runtime hydrates compact search documents with official source text", () => {
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    nodes: [
+      {
+        id: "test:AC-1",
+        label: "Policy and Procedures",
+        metadata: {
+          item_id: "AC-1",
+          description: "Publisher-authored control text.",
+        },
+      },
+    ],
+    edges: [],
+    evidence: [],
+    findings: [],
+    librarySearch: {
+      documents: [
+        {
+          id: "test:AC-1",
+          item_id: "AC-1",
+          title: "Policy and Procedures",
+        },
+      ],
+    },
+  });
+
+  assert.equal(
+    runtime.getLibraryDocument("test:AC-1").description,
+    "Publisher-authored control text.",
+  );
+});

@@ -38,7 +38,9 @@ export function resolveAtlasSearchTransition(
   const results = runtime.searchLibrary(query);
   const normalizedQuery = normalizedIdentifier(query);
   const exact = results.filter(
-    (entry) => normalizedIdentifier(entry.item_id || "") === normalizedQuery,
+    (entry) =>
+      normalizedIdentifier(entry.id) === normalizedQuery ||
+      normalizedIdentifier(entry.item_id || "") === normalizedQuery,
   );
 
   if (exact.length === 1) {

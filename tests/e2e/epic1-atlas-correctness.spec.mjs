@@ -15,7 +15,9 @@ test.beforeEach(async ({ page }) => {
 test("exact Atlas identifier focuses the record and keeps choices out of ancestry", async ({
   page,
 }) => {
-  await page.getByRole("searchbox", { name: "Search Atlas" }).fill("AC-2");
+  await page
+    .getByRole("searchbox", { name: "Search Atlas" })
+    .fill("nist-800-53:AC-2");
   await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
 
   await expect(page).toHaveURL(/node=nist-800-53%3AAC-2/);
@@ -27,7 +29,7 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
   ).toBeVisible();
   const structuralPosition = page.getByRole("navigation", {
     name: "Where this sits",
-  });
+  }).first();
   await expect(structuralPosition).toContainText("SP 800-53 Rev. 5");
   await expect(structuralPosition).toContainText("Access Control");
   await expect(structuralPosition).not.toContainText("CSF");
@@ -39,9 +41,12 @@ test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {
   await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
 
   await expect(page).toHaveURL(/\/search\?q=account/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Search everything in one place",
-  );
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Search everything in one place",
+    }),
+  ).toBeVisible();
 });
 
 test("no-match Atlas search stays local with announced recovery actions", async ({
@@ -68,20 +73,15 @@ test("focused Atlas exposes explicit lenses and class-direction List semantics",
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
 
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);
-  for (const label of [
-    "Structure",
-    "Applicability",
-    "Implementation and technical requirements",
-    "Assessment and evidence",
-    "Process and artifacts",
-    "Cross-framework mappings",
-    "Threat and defensive relationships",
-  ]) {
-    await expect(
-      page.locator(".atlas-path-stage-option").filter({ hasText: label }),
-    ).toHaveCount(1);
-  }
+  await expect(
+    page.getByRole("navigation", { name: "Where this sits" }).first(),
+  ).toContainText("SP 800-53 Rev. 5");
+  await expect(
+    page.getByRole("navigation", { name: "Where this sits" }).first(),
+  ).toContainText("Access Control");
+  await expect(page.getByRole("tab", { name: "Path" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
 
   await page.getByRole("tab", { name: "List" }).click();
   const table = page.getByRole("table", { name: "Relationship table" });

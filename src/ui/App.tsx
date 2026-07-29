@@ -38,6 +38,7 @@ import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
 import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
+import { notifyRouteCommitted } from "../shared/navigation-events";
 
 const AboutPage = lazy(() =>
   import("./pages/AboutPage").then((module) => ({
@@ -134,6 +135,7 @@ export function App() {
       } else {
         window.history.pushState(null, "", target);
       }
+      notifyRouteCommitted();
       setLocation(readHashLocation());
     },
     [],
