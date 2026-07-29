@@ -1,6 +1,6 @@
 # Codex prompt — holistic Control Atlas correction
 
-Date: 2026-07-28  
+Date: 2026-07-28
 Purpose: one continuous implementation pass through the complete 2026-07-28 audit and correction backlog
 
 ## Exact Codex setting
@@ -15,7 +15,6 @@ Why: this is a large, quality-first correction involving source integrity, data 
 ## Paste this prompt into Codex
 
 ---
-
 You are implementing the complete, approved Control Atlas holistic correction in:
 
 `D:\DevOps\1. Projects\GovFrame`
@@ -285,4 +284,3 @@ Lead with the product outcome, then report:
 Do not provide a generic progress narrative. Provide evidence that the holistic correction is complete.
 
 ---
-
