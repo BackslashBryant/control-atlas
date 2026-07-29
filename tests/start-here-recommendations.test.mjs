@@ -11,7 +11,9 @@ test("Start here exposes fixed public source starting points without a questionn
   assert.ok(
     SOURCE_STARTING_POINTS.every(
       (point) =>
-        point.catalogId && point.label && /Included because/.test(point.inclusionReason),
+        point.catalogId &&
+        point.label &&
+        /^Listed because Control Atlas has public /.test(point.inclusionReason),
     ),
   );
   assert.ok(

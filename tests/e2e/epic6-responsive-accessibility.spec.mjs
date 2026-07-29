@@ -8,7 +8,8 @@ import {
   waitForAppReady,
 } from "./support.mjs";
 
-const compareRoute = "/?view=matrix&crosswalk=relationships&source=nist-800-53&target=csf-2";
+const compareRoute =
+  "/#/compare?intent=frameworks&workbench=relationships&source=nist-800-53&target=csf-2&mappingSource=nist-olir-csf2-to-sp800-53";
 
 async function expectNoPageOverflow(page, label) {
   const overflow = await page.evaluate(() => ({
@@ -24,11 +25,13 @@ for (const viewport of [
   { label: "200% zoom equivalent", width: 720, height: 900 },
 ]) {
   test(`Compare mapping cards retain all meaning at ${viewport.label}`, async ({ page }) => {
+    test.setTimeout(90000);
     await page.setViewportSize(viewport);
     attachPageDiagnostics(page);
     await gotoApp(page, compareRoute);
     await waitForAppReady(page);
     await dismissOnboarding(page);
+    await page.getByRole("button", { name: "Show mappings" }).click();
 
     const table = page.getByRole("table", { name: "Relationship mappings" });
     await expect(table).toBeVisible({ timeout: 60000 });

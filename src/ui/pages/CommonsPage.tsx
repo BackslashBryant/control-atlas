@@ -4,27 +4,20 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import type { CommonsResource } from "../lib/commonsTypes";
 import {
   filterDirectoryResources,
+  primaryBrowseCategoryCounts,
   searchDirectoryResources,
 } from "../lib/resourcesDirectory.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
 type CommonsState = Extract<ViewState, { view: "commons" }>;
-
-const PRIMARY_TYPES = [
-  { value: "tool", label: "Tools" },
-  { value: "template", label: "Templates" },
-  { value: "dataset", label: "Datasets" },
-  { value: "training", label: "Training" },
-  { value: "community_forum", label: "Communities" },
-] as const;
 
 export function CommonsPage(props: {
   bundle: RuntimeBundle | null;
@@ -48,6 +41,7 @@ export function CommonsPage(props: {
           showAll: "",
         };
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const update = (patch: Partial<CommonsState>) =>
     onNavigate("commons", { ...state, ...patch });
 
@@ -78,7 +72,12 @@ export function CommonsPage(props: {
   );
   const audiences = distinct(resources.flatMap((resource) => resource.audiences));
   const accessTypes = distinct(resources.map((resource) => resource.accessType));
+  const browseCategories = useMemo(
+    () => primaryBrowseCategoryCounts(resources),
+    [resources],
+  );
   const activeFilterCount = [
+    state.category,
     state.lane !== "all" ? state.lane : "",
     state.framework,
     state.lifecycle,
@@ -154,35 +153,49 @@ export function CommonsPage(props: {
           ) : null}
         </label>
 
-        <div aria-label="Primary resource types" className="resource-type-chips">
-          {PRIMARY_TYPES.map((type) => {
-            const count = resources.filter(
-              (resource) => resource.resourceType === type.value,
-            ).length;
-            return (
+        <section aria-labelledby="resource-categories">
+          <h2 className="visually-hidden" id="resource-categories">
+            Browse by category
+          </h2>
+          <div className="resource-type-chips">
+            {browseCategories.map((category) => (
               <button
-                aria-pressed={state.resourceType === type.value}
-                key={type.value}
+                aria-pressed={state.category === category.id}
+                key={category.id}
                 onClick={() =>
                   update({
-                    resourceType:
-                      state.resourceType === type.value ? "" : type.value,
+                    category:
+                      state.category === category.id ? "" : category.id,
                   })
                 }
+                title={category.blurb}
                 type="button"
               >
-                {type.label} <span>{count}</span>
+                {category.label} <span>{category.count}</span>
               </button>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        </section>
 
-        <details className="resources-facets">
-          <summary>
-            More filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
-          </summary>
-          <div className="resources-facet-grid">
+        <div className="resources-facets">
+          <button
+            aria-controls="resources-filter-panel"
+            aria-expanded={filtersOpen}
+            className="resources-filter-toggle"
+            onClick={() => setFiltersOpen((open) => !open)}
+            type="button"
+          >
+            Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
+          </button>
+          <div
+            aria-label="Resource filters"
+            className="resources-facet-grid"
+            hidden={!filtersOpen}
+            id="resources-filter-panel"
+            role="region"
+          >
             <ResourceSelect
+              id="commons-lane-filter"
               label="Owner type"
               onChange={(lane) => update({ lane })}
               options={lanes}
@@ -214,11 +227,11 @@ export function CommonsPage(props: {
               value={state.accessType}
             />
           </div>
-        </details>
+        </div>
 
         <div className="resources-result-status">
-          <p aria-live="polite">
-            {filtered.length} of {resources.length} resources
+          <p aria-live="polite" role="status">
+            Showing {filtered.length} of {resources.length} resources
           </p>
           {(state.query || activeFilterCount) ? (
             <button onClick={reset} type="button">Clear all filters</button>
@@ -251,17 +264,22 @@ export function CommonsPage(props: {
 }
 
 function ResourceSelect(props: {
+  id?: string;
   label: string;
   value: string;
   options: string[];
   emptyValue?: string;
   onChange: (value: string) => void;
 }) {
-  const { label, value, options, emptyValue = "", onChange } = props;
+  const { id, label, value, options, emptyValue = "", onChange } = props;
   return (
     <label>
       <span>{label}</span>
-      <select onChange={(event) => onChange(event.target.value)} value={value}>
+      <select
+        id={id}
+        onChange={(event) => onChange(event.target.value)}
+        value={value}
+      >
         <option value={emptyValue}>All</option>
         {options
           .filter((option) => option !== emptyValue)

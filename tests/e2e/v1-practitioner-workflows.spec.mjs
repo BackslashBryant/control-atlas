@@ -135,12 +135,13 @@ test("V1 workflow 11 — refresh and browser history preserve valid URL state", 
   page,
 }) => {
   await open(page, "/#/build/resources?lane=official");
-  await page.getByText(/More filters/).click();
+  const filters = page.getByRole("button", { name: /^Filters/ });
+  await filters.click();
   const ownerType = page.getByLabel("Owner type");
   await expect(ownerType).toHaveValue("official");
   await page.reload();
   await expect(ownerType).toHaveValue("official");
-  await page.getByText(/More filters/).click();
+  await filters.click();
   await ownerType.selectOption("all");
   await page.goBack();
   await expect(ownerType).toHaveValue("official");

@@ -5340,9 +5340,12 @@ button.atlas-leverage-row:hover {
   border-radius: 4px;
 }
 
-.resources-facets summary {
+.resources-filter-toggle {
+  width: 100%;
   min-height: 44px;
   padding: 11px 12px;
+  color: var(--ca-text);
+  text-align: left;
   cursor: pointer;
 }
 
@@ -5649,6 +5652,12 @@ button.atlas-leverage-row:hover {
     order: -1;
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .resources-facet-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

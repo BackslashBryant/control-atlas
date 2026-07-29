@@ -210,8 +210,12 @@ export function createFederalGraphRuntime(dataset) {
       if (libraryDocumentById.has(document.id)) {
         continue;
       }
-      libraryDocumentById.set(document.id, document);
-      libraryDocuments.push(document);
+      const node = nodeById.get(document.id);
+      const hydratedDocument = node?.metadata?.description
+        ? { ...document, description: node.metadata.description }
+        : document;
+      libraryDocumentById.set(document.id, hydratedDocument);
+      libraryDocuments.push(hydratedDocument);
     }
   }
 
