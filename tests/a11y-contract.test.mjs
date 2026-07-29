@@ -7,6 +7,10 @@ const tokens = readFileSync("styles/tokens.css", "utf8");
 const baseCss = readFileSync("styles/base.css", "utf8");
 const componentsCss = readFileSync("styles/components.css", "utf8");
 const surfacesCss = readFileSync("styles/surfaces.css", "utf8");
+const buttonComponent = readFileSync(
+  "src/ui/components/lsm/Button.tsx",
+  "utf8",
+);
 const provenanceBadge = readFileSync(
   "src/ui/components/ProvenanceBadge.tsx",
   "utf8",
@@ -130,6 +134,21 @@ function tokenValue(name, seen = new Set()) {
   assert.ok(aliasMatch, `${name} must resolve to a solid color token`);
   return tokenValue(aliasMatch[1], seen);
 }
+
+test("primary actions use one authored AA contrast pair", () => {
+  assert.ok(
+    contrastRatio(
+      tokenValue("--ca-on-primary"),
+      tokenValue("--ca-primary"),
+    ) >= 4.5,
+    "Primary action text must meet 4.5:1",
+  );
+  assert.match(buttonComponent, /primary:\s*"ca-button-primary"/);
+  assert.match(
+    componentsCss,
+    /\.ca-button-primary\s*\{[^}]*background:\s*var\(--ca-primary\)[^}]*color:\s*var\(--ca-on-primary\)/s,
+  );
+});
 
 test("secondary text and provenance badge text meet WCAG AA contrast", () => {
   const surface = tokenValue("--ca-surface");

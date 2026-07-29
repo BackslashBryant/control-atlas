@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -30,7 +31,7 @@ test("OSCAL-fed records display exact publication identity, not ingestion identi
   attachPageDiagnostics(page);
 
   for (const [catalog, item, publication, ingestion] of publicationRecords) {
-    await page.goto(`/#/record/${catalog}/${item}`);
+    await gotoApp(page, `/#/record/${catalog}/${item}`);
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
@@ -64,7 +65,7 @@ test("a missing publication identity fails closed without guessed attribution", 
     await route.fulfill({ response, json: artifact });
   });
 
-  await page.goto("/#/record/csf-2/CATEGORY-DE.AE");
+  await gotoApp(page, "/#/record/csf-2/CATEGORY-DE.AE");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

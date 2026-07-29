@@ -1,12 +1,13 @@
 import { createFederalGraphRuntime } from "../../app/runtime.mjs";
 import { atlasNeighborhoodShardId } from "../../app/atlas-neighborhood.mjs";
+import { RUNTIME_CACHE_VERSION } from "../../shared/runtime-cache-version.mjs";
 import type {
   CommonsResourceDataset,
   CommonsSearchIndex,
 } from "./commonsTypes";
 import type { ViewState } from "./viewState";
 
-const CACHE_VERSION = "20260716-2";
+const CACHE_VERSION = RUNTIME_CACHE_VERSION;
 const artifactCache = new Map<string, Promise<unknown>>();
 
 export type TemplateRegistry = {
