@@ -51,7 +51,6 @@ type AtlasMapPageProps = {
   state: Extract<ViewState, { view: "atlas-map" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
-  onRequestFullGraph: () => void;
 };
 
 type AtlasView = "path" | "map" | "list";
@@ -139,7 +138,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     state,
     onNavigate,
     onOpenNode,
-    onRequestFullGraph,
   } = props;
   const compact = useCompactAtlas();
   const nodeId = useMemo(
@@ -160,17 +158,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   useEffect(() => {
     setMapSearchDraft(state.relationshipSearch || "");
   }, [state.relationshipSearch]);
-
-  useEffect(() => {
-    if (!nodeId && state.atlasFramework && !bundle.graphReady) {
-      onRequestFullGraph();
-    }
-  }, [
-    bundle.graphReady,
-    nodeId,
-    onRequestFullGraph,
-    state.atlasFramework,
-  ]);
 
   useEffect(() => {
     let cancelled = false;

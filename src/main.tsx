@@ -82,10 +82,13 @@ function syncStaticRouteShell() {
 
 function observeRouteHydration() {
   let settleTimer = 0;
+  const reactRouteOwnsSurface = (app: HTMLElement) =>
+    ['true', 'partial', 'error'].includes(app.dataset.appReady || '');
   const markHydrated = () => {
     const app = reactRootElement.querySelector<HTMLElement>('#app');
-    if (!app || app.dataset.appReady !== 'true') return false;
+    if (!app || !reactRouteOwnsSurface(app)) return false;
     if (
+      app.dataset.appReady !== 'error' &&
       app.dataset.view === 'atlas-map' &&
       app.dataset.hasSubject === 'true' &&
       !reactRootElement.querySelector('[data-route-content-ready="true"]')
@@ -101,7 +104,7 @@ function observeRouteHydration() {
   };
   const scheduleHydration = () => {
     const app = reactRootElement.querySelector<HTMLElement>('#app');
-    if (!app || app.dataset.appReady !== 'true') return;
+    if (!app || !reactRouteOwnsSurface(app)) return;
     window.clearTimeout(settleTimer);
     settleTimer = window.setTimeout(() => {
       if (markHydrated()) observer.disconnect();

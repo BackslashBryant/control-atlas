@@ -163,6 +163,7 @@ export function runtimeArtifactPlan(
       Boolean(state.templateType));
   const fullGraph =
     Boolean(options.graphRequested) ||
+    (state.view === "atlas-map" && Boolean(state.atlasAxis)) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

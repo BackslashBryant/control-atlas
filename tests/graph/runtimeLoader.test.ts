@@ -51,6 +51,24 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
     "the visible Atlas search needs the complete compact search corpus",
   );
   assert.equal(atlasLanding.fullGraph, false);
+
+  const atlasStructure = runtimeArtifactPlan(
+    normalizeViewState("atlas-map", { atlasAxis: "framework" }),
+  );
+  assert.equal(
+    atlasStructure.fullGraph,
+    true,
+    "published-structure choices require the structural graph",
+  );
+
+  const atlasProcess = runtimeArtifactPlan(
+    normalizeViewState("atlas-map", { atlasAxis: "process" }),
+  );
+  assert.equal(
+    atlasProcess.fullGraph,
+    true,
+    "RMF process choices require the relationship graph",
+  );
 });
 
 test("expensive graph scope begins only after an explicit graph-dependent action", () => {
