@@ -1,2 +1,2 @@
 export const PRODUCT_DISCLAIMER =
-  'This starter uses the public sources and choices named above. It is a working draft, not an official form. The team using it decides applicability and baseline selection and owns any compliance, inheritance, authorization, or ATO conclusions.';
+  'This starter uses the public sources and choices shown above. It is a working draft, not an official form. The people using it decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.';

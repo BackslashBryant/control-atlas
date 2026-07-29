@@ -241,11 +241,7 @@ export function GlossaryDrawer(props: {
                         </span>
                       ) : null}
                     </h3>
-                    <Badge tone={entry.consensus ? "warning" : "success"}>
-                      {entry.consensus
-                        ? "Practitioner consensus"
-                        : "Official source"}
-                    </Badge>
+                    <Badge tone="info">Control Atlas explanation</Badge>
                   </div>
                   <p>{entry.definition}</p>
                   <p className="drawer-support">
@@ -289,7 +285,7 @@ export function GlossaryDrawer(props: {
                       </button>
                     ))}
                   </div>
-                  <p className="drawer-link">Official source: {entry.source}</p>
+                  <p className="drawer-link">Reference: {entry.source}</p>
                 </article>
               );
             })}

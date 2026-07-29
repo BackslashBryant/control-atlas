@@ -1,8 +1,8 @@
 export const PRODUCT_DEFINITION =
-  "Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.";
+  "Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.";
 
 export const PRODUCT_DECISION_BOUNDARY =
-  "Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.";
+  "Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.";
 
 export const PRODUCT_FOOTER_NOTICE =
-  "Independent, open-source, and not an official government system. Every record keeps its publisher and source attached.";
+  "Free and open source, not a government system. Every record keeps its publisher and source attached.";

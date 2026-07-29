@@ -24,6 +24,7 @@
     },
     {
       "files": [
+        "src/app/glossary-data.mjs",
         "src/app/help-data.mjs",
         "src/app/learn-content.mjs",
         "src/ui/lib/source-navigator.mjs",

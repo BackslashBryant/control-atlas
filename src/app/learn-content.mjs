@@ -20,7 +20,7 @@ export const learnArticles = Object.freeze([
     explanation:
       "Official titles, identifiers, text, and publication links retain their source identity. Labels that explain navigation or relationship classes are Control Atlas explanations, not publisher language.",
     limitations:
-      "A Control Atlas explanation is a reading aid. Verify substantive decisions against the cited publication and responsible authority.",
+      "A Control Atlas explanation is a reading aid. Use the cited publication and responsible authority for substantive decisions.",
     nextAction: { label: "Review Sources", view: "sources" },
     citations: [
       { sourceId: "nist-csf-2", role: "official-subject-source", label: "NIST Cybersecurity Framework 2.0", url: "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20", supports: "The official publication identity and subject matter used in the example; it does not author Control Atlas notes." },
