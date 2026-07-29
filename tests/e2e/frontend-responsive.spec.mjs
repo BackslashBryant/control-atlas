@@ -25,6 +25,7 @@ const ROUTE_GROUPS = [
     routes: [
       "/#/catalog",
       "/#/catalog/nist-800-53",
+      "/#/catalog/nist-800-53?browseAll=true",
       "/#/record/nist-800-53/AC-2",
     ],
   },
@@ -53,6 +54,7 @@ const ROUTE_GROUPS = [
 const VIEWPORTS = [
   { label: "mobile", width: 375, height: 812 },
   { label: "tablet", width: 768, height: 1024 },
+  { label: "laptop", width: 1280, height: 800 },
   { label: "desktop", width: 1440, height: 900 },
 ];
 
@@ -77,7 +79,10 @@ for (const viewport of VIEWPORTS) {
             await gotoApp(page, route);
             await waitForAppReady(page);
             await dismissOnboarding(page);
-            await expect(page.locator("main h1, main h2").first(), route).toBeVisible();
+            await expect(
+              page.locator("main h1:visible, main h2:visible").first(),
+              route,
+            ).toBeVisible();
 
             if (route === "/#/") {
               const search = page.getByRole("search");
@@ -102,6 +107,46 @@ for (const viewport of VIEWPORTS) {
               overflow,
               `${route} must not create document-level horizontal overflow`,
             ).toEqual({ body: 0, document: 0 });
+
+            const controlOwners = await page.evaluate(() =>
+              [...globalThis.document.querySelectorAll("[data-controls-for]")].map(
+                (surface) => {
+                  const targetId = surface.getAttribute("data-controls-for") || "";
+                  const targets = globalThis.document.querySelectorAll(
+                    `#${globalThis.CSS.escape(targetId)}`,
+                  );
+                  const target = targets[0];
+                  const surfaceBox = surface.getBoundingClientRect();
+                  const targetBox = target?.getBoundingClientRect();
+                  return {
+                    targetId,
+                    targetCount: targets.length,
+                    visiblyOwned:
+                      Boolean(target) &&
+                      (surface.contains(target) ||
+                        target.contains(surface) ||
+                        (targetBox?.top || 0) >= surfaceBox.bottom - 1),
+                  };
+                },
+              ),
+            );
+            for (const owner of controlOwners) {
+              expect(owner.targetCount, `${owner.targetId} must exist once`).toBe(1);
+              expect(
+                owner.visiblyOwned,
+                `${owner.targetId} must stay attached to its control surface`,
+              ).toBe(true);
+            }
+
+            if (route.includes("/#/catalog/nist-800-53")) {
+              const sourceAction = page.locator(".catalog-source-link");
+              const toolbar = page.locator(".catalog-record-toolbar");
+              await expect(sourceAction).toBeVisible();
+              await expect(toolbar).toBeVisible();
+              expect((await sourceAction.boundingBox())?.width).toBeLessThanOrEqual(
+                320,
+              );
+            }
           });
         } catch (error) {
           await testInfo.attach("route-group-failure.json", {

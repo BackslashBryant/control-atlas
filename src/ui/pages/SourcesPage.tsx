@@ -1,14 +1,15 @@
-import { IconExternalLink, IconSearch } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import { useMemo } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
-import { Button, ButtonLink, Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 import {
   PageHeader,
   SelectField,
   SourceSummaryCard,
   SummaryCard,
+  WorkbenchControlSurface,
   sourceUsageSummary,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -62,17 +63,6 @@ export function SourcesPage(props: {
           title={selectedSource.display_name || selectedSource.name}
         />
         <SourceSummaryCard source={selectedSource} />
-        <div className="card-actions">
-          <ButtonLink
-            href={selectedSource.artifact_url}
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="primary"
-          >
-            Open official source
-            <IconExternalLink aria-hidden="true" size={16} />
-          </ButtonLink>
-        </div>
         <SummaryCard title="How Control Atlas uses it">
           <p>{sourceUsageSummary(selectedSource)}.</p>
         </SummaryCard>
@@ -103,71 +93,83 @@ export function SourcesPage(props: {
         </button>
       </p>
 
-      <section aria-label="Source register controls" className="source-register-controls">
-        <label className="field source-register-search" htmlFor="source-search">
-          <span>Search sources</span>
-          <div className="search-input">
-            <IconSearch aria-hidden="true" size={18} stroke={1.8} />
-            <input
-              id="source-search"
-              onChange={(event) =>
-                onNavigate("sources", { ...state, query: event.target.value })
-              }
-              placeholder="Publication, publisher, or catalog"
-              type="search"
-              value={state.query}
+      <WorkbenchControlSurface
+        className="source-register-control-surface"
+        label="Find a source"
+        targetId="source-register-results"
+      >
+        <div className="source-register-controls">
+          <label className="field source-register-search" htmlFor="source-search">
+            <span>Search sources</span>
+            <div className="search-input">
+              <IconSearch aria-hidden="true" size={18} stroke={1.8} />
+              <input
+                id="source-search"
+                onChange={(event) =>
+                  onNavigate("sources", { ...state, query: event.target.value })
+                }
+                placeholder="Publication, publisher, or catalog"
+                type="search"
+                value={state.query}
+              />
+            </div>
+          </label>
+          <div className="source-register-filters">
+            <SelectField
+              emptyLabel="All source types"
+              label="Source type"
+              onChange={(provenance) => onNavigate("sources", { ...state, provenance })}
+              options={distinct("provenance_class").map((value) => ({
+                value,
+                label: displayNameFor("provenance_class", value),
+              }))}
+              value={state.provenance}
+            />
+            <SelectField
+              emptyLabel="All statuses"
+              label="Status"
+              onChange={(lifecycle) => onNavigate("sources", { ...state, lifecycle })}
+              options={distinct("lifecycle_status").map((value) => ({
+                value,
+                label: displayNameFor("lifecycle_status", value),
+              }))}
+              value={state.lifecycle}
+            />
+            <SelectField
+              emptyLabel="All map states"
+              label="Map inclusion"
+              onChange={(eligibility) => onNavigate("sources", { ...state, eligibility })}
+              options={distinct("eligibility_status").map((value) => ({
+                value,
+                label: displayNameFor("eligibility_status", value),
+              }))}
+              value={state.eligibility}
+            />
+            <SelectField
+              emptyLabel="All access levels"
+              label="Access"
+              onChange={(access) => onNavigate("sources", { ...state, access })}
+              options={distinct("access_status").map((value) => ({
+                value,
+                label: displayNameFor("access_status", value),
+              }))}
+              value={state.access}
             />
           </div>
-        </label>
-        <div className="source-register-filters">
-          <SelectField
-            emptyLabel="All source types"
-            label="Source type"
-            onChange={(provenance) => onNavigate("sources", { ...state, provenance })}
-            options={distinct("provenance_class").map((value) => ({
-              value,
-              label: displayNameFor("provenance_class", value),
-            }))}
-            value={state.provenance}
-          />
-          <SelectField
-            emptyLabel="All statuses"
-            label="Status"
-            onChange={(lifecycle) => onNavigate("sources", { ...state, lifecycle })}
-            options={distinct("lifecycle_status").map((value) => ({
-              value,
-              label: displayNameFor("lifecycle_status", value),
-            }))}
-            value={state.lifecycle}
-          />
-          <SelectField
-            emptyLabel="All map states"
-            label="Map inclusion"
-            onChange={(eligibility) => onNavigate("sources", { ...state, eligibility })}
-            options={distinct("eligibility_status").map((value) => ({
-              value,
-              label: displayNameFor("eligibility_status", value),
-            }))}
-            value={state.eligibility}
-          />
-          <SelectField
-            emptyLabel="All access levels"
-            label="Access"
-            onChange={(access) => onNavigate("sources", { ...state, access })}
-            options={distinct("access_status").map((value) => ({
-              value,
-              label: displayNameFor("access_status", value),
-            }))}
-            value={state.access}
-          />
+          <p aria-live="polite" className="source-register-total">
+            {rows.length} of {allSources.length} sources
+          </p>
         </div>
-        <p aria-live="polite" className="source-register-total">
-          {rows.length} of {allSources.length} sources
-        </p>
-      </section>
+      </WorkbenchControlSurface>
 
       {rows.length ? (
-        <div className="source-register" role="table" aria-label="Control Atlas source register">
+        <div
+          aria-label="Control Atlas source register"
+          className="source-register"
+          data-control-results
+          id="source-register-results"
+          role="table"
+        >
           <div className="source-register-heading" role="row">
             <span role="columnheader">Source / publication</span>
             <span role="columnheader">Publisher</span>
@@ -197,7 +199,11 @@ export function SourcesPage(props: {
           ))}
         </div>
       ) : (
-        <section className="empty-state">
+        <section
+          className="empty-state"
+          data-control-results
+          id="source-register-results"
+        >
           <h2>No sources match these filters.</h2>
           <p>Clear the search or status filters to return to the full register.</p>
           <Button

@@ -169,6 +169,25 @@ export function PageHeader(props: {
   );
 }
 
+export function WorkbenchControlSurface(props: {
+  children: ReactNode;
+  className?: string;
+  label: string;
+  targetId: string;
+}) {
+  return (
+    <section
+      aria-controls={props.targetId}
+      aria-label={props.label}
+      className={`workbench-controls ${props.className || ""}`.trim()}
+      data-controls-for={props.targetId}
+    >
+      <p className="workbench-controls-title">{props.label}</p>
+      {props.children}
+    </section>
+  );
+}
+
 export function SummaryCard(props: {
   title: string;
   children: ReactNode;

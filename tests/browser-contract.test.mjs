@@ -45,6 +45,10 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.match(html, /data-static-home hidden/);
   assert.match(html, /data-app-ready="false"/);
   assert.match(mainEntrypoint, /setAttribute\('data-app-ready', 'true'\)/);
+  assert.match(
+    mainEntrypoint,
+    /\['true', 'partial', 'error'\]\.includes\(app\.dataset\.appReady/,
+  );
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
@@ -324,6 +328,57 @@ test('mounted record surfaces render official descriptions rather than synthetic
   assert.match(detailPage, /Official description/);
   assert.match(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
+});
+
+test('Catalog controls stay anchored to the records section', () => {
+  const catalogPage = readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8');
+  const surfaces = readFileSync('styles/surfaces.css', 'utf8');
+  assert.match(catalogPage, /aria-label="Catalog record controls"/);
+  assert.match(catalogPage, /className="catalog-record-toolbar"/);
+  assert.match(catalogPage, />Published group</);
+  assert.match(catalogPage, />Search records</);
+  assert.match(catalogPage, /className="catalog-source-link"/);
+  assert.match(surfaces, /\.catalog-record-toolbar\s*\{/);
+  assert.match(surfaces, /\.catalog-source-link\s*\{[^}]*justify-self:\s*start;/s);
+});
+
+test('result-affecting controls have one visible workbench owner', () => {
+  const primitives = readFileSync('src/ui/lib/pagePrimitives.tsx', 'utf8');
+  const catalog = readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8');
+  const compare = readFileSync('src/ui/pages/ComparePage.tsx', 'utf8');
+  const compareResults = readFileSync(
+    'src/ui/components/CompareResultsPanel.tsx',
+    'utf8',
+  );
+  const resources = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
+  const sources = readFileSync('src/ui/pages/SourcesPage.tsx', 'utf8');
+  const record = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const surfaces = readFileSync('styles/surfaces.css', 'utf8');
+
+  assert.match(primitives, /export function WorkbenchControlSurface/);
+  assert.match(primitives, /aria-controls=\{props\.targetId\}/);
+  assert.match(primitives, /data-controls-for=\{props\.targetId\}/);
+  assert.match(primitives, /workbench-controls-title/);
+  assert.match(surfaces, /\.workbench-controls\s*\{[^}]*border:/s);
+
+  for (const [source, target] of [
+    [catalog, 'catalog-inventory-results'],
+    [resources, 'resources-results'],
+    [sources, 'source-register-results'],
+  ]) {
+    assert.match(source, new RegExp(`targetId="${target}"`));
+    assert.match(source, new RegExp(`id="${target}"`));
+    assert.match(source, /data-control-results/);
+  }
+
+  assert.match(compare, /targetId="compare-workspace"/);
+  assert.match(compare, /data-control-results id="compare-workspace"/);
+  assert.doesNotMatch(compare, /function (?:Field|SelectField)\(/);
+  assert.match(compareResults, /aria-label="Comparison result controls"/);
+  assert.match(
+    record,
+    /!\["map", "list", "table"\]\.includes\(\s*state\.relationshipView/,
+  );
 });
 
 test('Build local navigation stays subordinate and identifies the current Build branch', () => {

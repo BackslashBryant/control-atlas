@@ -194,32 +194,37 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
         rely on it.
       </p>
 
-      <div className="card-actions">
-        {graph.atlasMapNode ? (
-          <Button variant="secondary" onClick={openAtlasMap} type="button">
-            Open in Explore
+      <div
+        aria-label="Comparison result controls"
+        className="compare-result-toolbar"
+        role="group"
+      >
+        <div className="card-actions">
+          {graph.atlasMapNode ? (
+            <Button variant="secondary" onClick={openAtlasMap} type="button">
+              Open in Explore
+            </Button>
+          ) : null}
+          <Button
+            aria-pressed={compareView === "map"}
+            variant="secondary"
+            disabled={!graph.mapAvailable}
+            onClick={() => setCompareView("map")}
+            type="button"
+          >
+            Map
           </Button>
-        ) : null}
-        <Button
-          aria-pressed={compareView === "map"}
-          variant="secondary"
-          disabled={!graph.mapAvailable}
-          onClick={() => setCompareView("map")}
-          type="button"
-        >
-          Map
-        </Button>
-        <Button
-          aria-pressed={compareView === "list"}
-          variant="secondary"
-          onClick={() => setCompareView("list")}
-          type="button"
-        >
-          List
-        </Button>
+          <Button
+            aria-pressed={compareView === "list"}
+            variant="secondary"
+            onClick={() => setCompareView("list")}
+            type="button"
+          >
+            List
+          </Button>
+        </div>
+        <CompareExportDisclosure onExport={onExport} />
       </div>
-
-      <CompareExportDisclosure onExport={onExport} />
 
       {compareView === "map" && !graph.mapAvailable ? (
         <section className="empty-state compare-map-unavailable">
