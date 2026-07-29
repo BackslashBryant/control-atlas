@@ -10,7 +10,6 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import MiniSearch from "minisearch";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
@@ -22,6 +21,10 @@ import {
   defaultRelationshipClass,
   RELATIONSHIP_CLASSES,
 } from "../src/app/structural-hierarchy.mjs";
+import {
+  resolveCatalogPublicationIdentity,
+  validateCatalogPublicationIdentity,
+} from "../src/app/catalog-publication-identity.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -36,14 +39,11 @@ const GOVERNANCE_FILES = [
   "build-manifest.json",
   "source-manifests.json",
   "graph-diff-summary.json",
-  "library-search-manifest.json",
+  "library-search.json",
   "atlas-neighborhood-manifest.json",
   "atlas-node-index.json",
 ];
-const LIBRARY_SEARCH_DIR = join(GENERATED, "library-search");
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
-const EAGER_CATALOG_IDS = ["nist-800-53", "csf-2", "fedramp-rev5"];
-const MAX_INITIAL_SEARCH_BYTES = 3_200_000;
 
 const CATALOGS = [
   ["controls-800-53.json", "nist-800-53", "nist-oscal", "control"],
@@ -360,7 +360,7 @@ const CATALOG_SUMMARIES = new Map([
   [
     "nist-800-53",
     {
-      sourceId: "nist-oscal",
+      sourceId: "nist-800-53",
       title: "SP 800-53 Rev. 5 Catalog",
       description:
         "Catalog summary for NIST SP 800-53 Rev. 5 security and privacy controls.",
@@ -369,7 +369,7 @@ const CATALOG_SUMMARIES = new Map([
   [
     "csf-2",
     {
-      sourceId: "nist-oscal",
+      sourceId: "nist-csf-2",
       title: "CSF 2.0 Catalog",
       description:
         "Catalog summary for the NIST Cybersecurity Framework 2.0 Functions, Categories, and Subcategories.",
@@ -432,7 +432,7 @@ const CATALOG_SUMMARIES = new Map([
   [
     "nist-ssdf",
     {
-      sourceId: "nist-ssdf-oscal",
+      sourceId: "nist-ssdf",
       title: "NIST SSDF Catalog",
       description:
         "Catalog summary for NIST SP 800-218, the Secure Software Development Framework.",
@@ -459,7 +459,7 @@ const CATALOG_SUMMARIES = new Map([
   [
     "nist-800-171",
     {
-      sourceId: "nist-oscal",
+      sourceId: "nist-800-171",
       title: "SP 800-171 Rev. 3 Catalog",
       description:
         "Catalog summary for NIST SP 800-171 Rev. 3 controlled unclassified information security requirements.",
@@ -625,7 +625,7 @@ function pushEligibleNode(state, registry, node, sourceId) {
   state.nodes.push(node);
 }
 
-function buildAssessmentNode(record) {
+function buildAssessmentNode(record, ingestionSourceId) {
   const assessment = record.metadata?.assessment;
   if (!assessment?.source_key) return null;
   return {
@@ -639,6 +639,7 @@ function buildAssessmentNode(record) {
     // — no join needed, no risk of a stale match.
     metadata: {
       catalog_id: "nist-800-53a",
+      ingestion_source_id: ingestionSourceId,
       item_id: record.id,
       title: `${record.title || record.id} Assessment Procedure`,
       description:
@@ -656,15 +657,21 @@ function buildAssessmentNode(record) {
   };
 }
 
-function buildCatalogSummaryNode(catalogId, sourceId, summary) {
+function buildCatalogSummaryNode(
+  catalogId,
+  publicationSourceId,
+  ingestionSourceId,
+  summary,
+) {
   return {
     id: nodeId(catalogId, "CATALOG"),
     node_type: "catalog",
     label: summary.title,
-    source_id: sourceId,
+    source_id: publicationSourceId,
     lifecycle_status: "active",
     metadata: {
       catalog_id: catalogId,
+      ingestion_source_id: ingestionSourceId,
       item_id: "CATALOG",
       title: summary.title,
       description: summary.description,
@@ -689,17 +696,25 @@ export function lifecycleStatus(record) {
 }
 
 /** Add a resolved tier's node to the dedup map, once per distinct tier node id. */
-function registerTierNode(tierNodes, catalogId, resolved, defaultSourceId, record) {
+function registerTierNode(
+  tierNodes,
+  catalogId,
+  resolved,
+  publicationSourceId,
+  ingestionSourceId,
+  record,
+) {
   if (!resolved || tierNodes.has(resolved.nodeId)) return;
   const { tier, key, title, nodeId: tierNodeId, itemId } = resolved;
   tierNodes.set(tierNodeId, {
     id: tierNodeId,
     node_type: tier.nodeType,
     label: tier.label ? tier.label(key, title) : title,
-    source_id: defaultSourceId,
+    source_id: publicationSourceId,
     lifecycle_status: "active",
     metadata: {
       catalog_id: catalogId,
+      ingestion_source_id: ingestionSourceId,
       item_id: itemId,
       title,
       description: tier.description(record, title),
@@ -721,8 +736,25 @@ function buildNodes(registry) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const record of document.records || []) {
-      const sourceId = record.source?.key || defaultSourceId;
+      const ingestionSourceId = record.source?.key || defaultSourceId;
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId,
+        sourceById: registry.byId,
+      });
       const id = nodeId(catalogId, record.id);
+      if (!identity) {
+        state.findings.push({
+          id: `finding:missing-publication-identity:${id}`,
+          finding_type: "missing_publication_identity",
+          severity: "error",
+          source_id: ingestionSourceId,
+          subject_id: id,
+          message: `Node ${id} was not published because its exact publication identity is unavailable.`,
+        });
+        continue;
+      }
+      const sourceId = identity.publicationSourceId;
       const resolvedTier = tierFor(catalogId, record);
       pushEligibleNode(
         state,
@@ -739,6 +771,7 @@ function buildNodes(registry) {
           lifecycle_status: lifecycleStatus(record),
           metadata: {
             catalog_id: catalogId,
+            ingestion_source_id: ingestionSourceId,
             item_id: record.id,
             title: record.title || record.id,
             description: record.description || "",
@@ -765,7 +798,7 @@ function buildNodes(registry) {
       );
 
       if (catalogId === "nist-800-53") {
-        const assessmentNode = buildAssessmentNode(record);
+        const assessmentNode = buildAssessmentNode(record, ingestionSourceId);
         if (assessmentNode) {
           pushEligibleNode(
             state,
@@ -777,13 +810,21 @@ function buildNodes(registry) {
 
       }
 
-      registerTierNode(tierNodes, catalogId, resolvedTier, defaultSourceId, record);
+      registerTierNode(
+        tierNodes,
+        catalogId,
+        resolvedTier,
+        sourceId,
+        ingestionSourceId,
+        record,
+      );
       if (resolvedTier) {
         registerTierNode(
           tierNodes,
           catalogId,
           parentTierFor(catalogId, record, resolvedTier.tier),
-          defaultSourceId,
+          sourceId,
+          ingestionSourceId,
           record,
         );
       }
@@ -791,10 +832,21 @@ function buildNodes(registry) {
 
     const summary = CATALOG_SUMMARIES.get(catalogId);
     if (summary && (document.records || []).length) {
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId: defaultSourceId,
+        sourceById: registry.byId,
+      });
+      if (!identity) continue;
       pushEligibleNode(
         state,
         registry,
-        buildCatalogSummaryNode(catalogId, summary.sourceId, summary),
+        buildCatalogSummaryNode(
+          catalogId,
+          identity.publicationSourceId,
+          identity.ingestionSourceId,
+          summary,
+        ),
         summary.sourceId,
       );
     }
@@ -862,6 +914,7 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     retrieved_at: payload.retrievedAt || source.retrieved_at,
     checksum: payload.checksum || source.checksum,
     evidence_quality: payload.evidenceQuality || "primary",
+    ingestion_source_id: payload.ingestionSourceId || payload.sourceId,
   });
 
   state.edges.push({
@@ -894,6 +947,13 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const record of document.records || []) {
+      const ingestionSourceId = record.source?.key || defaultSourceId;
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId,
+        sourceById: registry.byId,
+      });
+      if (!identity) continue;
       for (const relationship of record.metadata?.relationships || []) {
         const sourceNodeId = nodeId(catalogId, record.id);
         const targetNodeId = nodeId(
@@ -908,7 +968,8 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
         );
         addPublishedEdge(state, registry, nodeIds, {
           subjectId,
-          sourceId: record.source?.key || defaultSourceId,
+          sourceId: identity.publicationSourceId,
+          ingestionSourceId,
           sourceNodeId,
           targetNodeId,
           relationshipType: relationship.relationship_type || "references",
@@ -937,6 +998,13 @@ function addTierMembershipEdges(state, registry, nodeIds) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const record of document.records || []) {
+      const ingestionSourceId = record.source?.key || defaultSourceId;
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId,
+        sourceById: registry.byId,
+      });
+      if (!identity) continue;
       const resolved = tierFor(catalogId, record);
       if (!resolved) continue;
       const { tier, title, nodeId: sourceNodeId } = resolved;
@@ -949,7 +1017,8 @@ function addTierMembershipEdges(state, registry, nodeIds) {
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
-        sourceId: record.source?.key || defaultSourceId,
+        sourceId: identity.publicationSourceId,
+        ingestionSourceId,
         sourceNodeId,
         targetNodeId,
         relationshipType: "contains",
@@ -977,6 +1046,13 @@ function addTierParentEdges(state, registry, nodeIds) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const record of document.records || []) {
+      const ingestionSourceId = record.source?.key || defaultSourceId;
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId,
+        sourceById: registry.byId,
+      });
+      if (!identity) continue;
       const resolved = tierFor(catalogId, record);
       if (!resolved) continue;
       const parent = parentTierFor(catalogId, record, resolved.tier);
@@ -991,7 +1067,8 @@ function addTierParentEdges(state, registry, nodeIds) {
       seen.add(subjectId);
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
-        sourceId: record.source?.key || defaultSourceId,
+        sourceId: identity.publicationSourceId,
+        ingestionSourceId,
         sourceNodeId: parent.nodeId,
         targetNodeId: resolved.nodeId,
         relationshipType: "contains",
@@ -1023,6 +1100,13 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
     if (!existsSync(path)) continue;
     const document = readJson(path);
     for (const record of document.records || []) {
+      const ingestionSourceId = record.source?.key || defaultSourceId;
+      const identity = resolveCatalogPublicationIdentity({
+        catalogId,
+        ingestionSourceId,
+        sourceById: registry.byId,
+      });
+      if (!identity) continue;
       const top = topTierFor(catalogId, record);
       if (!top) continue;
       const subjectId = relationshipId(
@@ -1035,7 +1119,8 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
       seen.add(subjectId);
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
-        sourceId: record.source?.key || defaultSourceId,
+        sourceId: identity.publicationSourceId,
+        ingestionSourceId,
         sourceNodeId: catalogNodeId,
         targetNodeId: top.nodeId,
         relationshipType: "contains",
@@ -1078,7 +1163,8 @@ function addEnhancementMembershipEdges(state, registry, nodeIds) {
     if (existingEdgeIds.has(`edge:${subjectId}`)) continue;
     addPublishedEdge(state, registry, nodeIds, {
       subjectId,
-      sourceId: record.source?.key || "nist-oscal",
+      sourceId: "nist-800-53",
+      ingestionSourceId: record.source?.key || "nist-oscal",
       sourceNodeId,
       targetNodeId,
       relationshipType: "contains",
@@ -1445,7 +1531,8 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
     },
     {
       subjectId: "issue12-171r3-cui-basic",
-      sourceId: "nist-oscal",
+      sourceId: "nist-800-171",
+      ingestionSourceId: "nist-oscal",
       sourceNodeId: "nist-800-171:CATALOG",
       targetNodeId: "cui-policy:CUI-BASIC",
       relationshipType: "protects",
@@ -1666,8 +1753,7 @@ function createBuildManifest(graph) {
     kind: "build_manifest",
     runtime_artifacts: [
       ...RUNTIME_COLLECTIONS.map((name) => `${name}.json`),
-      "library-search-manifest.json",
-      "library-search/",
+      "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-neighborhood/",
       "atlas-node-index.json",
@@ -1695,7 +1781,7 @@ function buildLibraryDocuments(graph) {
       id: node.id,
       item_id: node.metadata?.item_id || node.id,
       title: node.metadata?.title || node.label,
-      description: node.metadata?.description || "",
+      description_available: Boolean(node.metadata?.description?.trim()),
       object_type: node.node_type,
       source_id: node.source_id,
       source_name: source?.display_name || source?.name || "",
@@ -1707,62 +1793,11 @@ function buildLibraryDocuments(graph) {
   });
 }
 
-function buildMiniSearchIndex(documents) {
-  const index = new MiniSearch({
-    fields: ["item_id", "title", "description"],
-    storeFields: ["id"],
-    searchOptions: {
-      prefix: true,
-      boost: {
-        item_id: 5,
-        title: 3,
-        description: 2,
-      },
-    },
-  });
-  index.addAll(documents);
-  return JSON.stringify(index.toJSON());
-}
-
-function buildLibrarySearchShards(graph) {
+function buildLibrarySearch(graph) {
   const documents = buildLibraryDocuments(graph);
-  const byCatalog = new Map();
-
-  for (const document of documents) {
-    const catalogId = document.catalog_id || "_core";
-    const bucket = byCatalog.get(catalogId) || [];
-    bucket.push(document);
-    byCatalog.set(catalogId, bucket);
-  }
-
-  const shards = [...byCatalog.entries()]
-    .map(([catalog_id, catalogDocuments]) => ({
-      catalog_id,
-      document_count: catalogDocuments.length,
-      documents: catalogDocuments,
-      serialized_index: buildMiniSearchIndex(catalogDocuments),
-    }))
-    .sort((left, right) => right.document_count - left.document_count);
-
-  const eagerSet = new Set(
-    EAGER_CATALOG_IDS.filter((catalogId) => byCatalog.has(catalogId)),
-  );
-  let eagerBytes = 0;
-  for (const shard of shards) {
-    if (eagerSet.has(shard.catalog_id)) {
-      continue;
-    }
-    const shardBytes = Buffer.byteLength(JSON.stringify(shard));
-    if (eagerBytes + shardBytes > MAX_INITIAL_SEARCH_BYTES) {
-      break;
-    }
-    eagerSet.add(shard.catalog_id);
-    eagerBytes += shardBytes;
-  }
-
   return {
-    shards,
-    eager_shard_ids: [...eagerSet],
+    document_count: documents.length,
+    documents,
   };
 }
 
@@ -1802,7 +1837,10 @@ export function buildFrameworkData() {
     evidence: edgeState.evidence,
     findings,
   };
-  const errors = validateGraphArtifacts(graph);
+  const errors = [
+    ...validateGraphArtifacts(graph),
+    ...validateCatalogPublicationIdentity(graph.nodes, graph.sources),
+  ];
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);
 
@@ -1824,7 +1862,7 @@ export function buildFrameworkData() {
     collections,
     generatedAt,
   );
-  const librarySearchShards = buildLibrarySearchShards(graph);
+  const librarySearch = buildLibrarySearch(graph);
   const atlasNeighborhoodShards = buildAtlasNeighborhoodShards(graph);
   const atlasNodeIndex = buildAtlasNodeIndex(graph);
 
@@ -1870,47 +1908,10 @@ export function buildFrameworkData() {
     "utf8",
   );
 
-  mkdirSync(LIBRARY_SEARCH_DIR, { recursive: true });
-  const shardManifest = [];
-  for (const shard of librarySearchShards.shards) {
-    const shardPath = `library-search/${shard.catalog_id}.json`;
-    writeFileSync(
-      join(GENERATED, shardPath),
-      `${JSON.stringify(
-        artifact(
-          "library_search_shard",
-          {
-            catalog_id: shard.catalog_id,
-            document_count: shard.document_count,
-            documents: shard.documents,
-            serialized_index: shard.serialized_index,
-          },
-          generatedAt,
-        ),
-      )}\n`,
-      "utf8",
-    );
-    shardManifest.push({
-      catalog_id: shard.catalog_id,
-      document_count: shard.document_count,
-      path: shardPath,
-      bytes: statSync(join(GENERATED, shardPath)).size,
-    });
-  }
-
   writeFileSync(
-    join(GENERATED, "library-search-manifest.json"),
+    join(GENERATED, "library-search.json"),
     `${JSON.stringify(
-      artifact(
-        "library_search_manifest",
-        {
-          eager_shard_ids: librarySearchShards.eager_shard_ids,
-          shards: shardManifest,
-        },
-        generatedAt,
-      ),
-      null,
-      2,
+      artifact("library_search", librarySearch, generatedAt),
     )}\n`,
     "utf8",
   );

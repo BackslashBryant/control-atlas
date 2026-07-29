@@ -31,6 +31,92 @@ body {
   background-size: 24px 24px, 24px 24px, auto, auto, auto;
 }
 
+#root[data-react-active="true"] {
+  display: grid;
+  align-content: start;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto auto;
+  min-height: 100vh;
+}
+
+#root[data-react-active="true"] > [data-react-root] {
+  display: contents;
+}
+
+#root[data-react-active="true"] > [data-static-header-reserve],
+#root[data-react-active="true"] .site-header {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#root[data-react-active="true"] > [data-static-context-reserve],
+#root[data-react-active="true"] .orbital-context {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#root[data-react-active="true"] > [data-static-search] {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#root[data-react-active="true"] #workspace {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+#root[data-react-active="true"] footer {
+  grid-column: 1;
+  grid-row: 5;
+}
+
+[data-static-header-reserve] {
+  min-height: 68px;
+}
+
+[data-static-context-reserve] {
+  min-height: var(--ca-control-md);
+}
+
+.static-search-shell {
+  padding-top: var(--ca-space-8);
+}
+
+.static-search-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--ca-space-4);
+  margin-bottom: 0;
+}
+
+[data-static-search-status] {
+  min-block-size: calc(3.4em + 24px);
+}
+
+.static-search-form label > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--ca-text-muted);
+  font: 500 10px / 1.2 var(--ca-font-mono);
+  text-transform: uppercase;
+}
+
+.static-search-form input {
+  width: 100%;
+  min-height: var(--ca-touch-target);
+  padding-inline: var(--ca-space-3);
+  border: 1px solid var(--ca-border-strong);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface-raised);
+  color: var(--ca-text);
+}
+
+.static-search-form input:focus-visible {
+  outline: 2px solid var(--ca-primary);
+  outline-offset: 3px;
+}
+
 .ca-page,
 .app-shell,
 #workspace {
@@ -1072,7 +1158,6 @@ details > summary {
 
 /* Graph surfaces retain function while adopting the shared materials. */
 .ca-flow-wrap .react-flow,
-.atlas-spatial-map,
 .relationship-graph {
   background:
     linear-gradient(
@@ -1351,6 +1436,14 @@ details > summary {
 }
 
 @media (max-width: 880px) {
+  [data-static-context-reserve] {
+    min-height: 79px;
+  }
+
+  .static-search-form {
+    grid-template-columns: 1fr;
+  }
+
   .site-header {
     grid-template-columns: minmax(0, 1fr) auto;
     min-height: 64px;
@@ -1430,10 +1523,6 @@ details > summary {
 
   .app-shell[data-mode="operational"]::before,
   .site-header::after {
-    display: none;
-  }
-
-  .brand-kbd {
     display: none;
   }
 

@@ -1,6 +1,6 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { IconSearch, IconSparkles } from "@tabler/icons-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
@@ -19,12 +19,11 @@ import {
   Badge,
   CardTitle,
   DisclosurePanel,
-  PageHeader,
   PATTERN_RENAMES,
   SelectField,
   openAtlasMapForNode,
 } from "../lib/pagePrimitives";
-import { Button, Input, Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 
 export function ExplorePage(props: {
   bundle: RuntimeBundle;
@@ -46,13 +45,8 @@ export function ExplorePage(props: {
     onRequestFullGraph,
     onOpenGlossary,
   } = props;
-  const [queryDraft, setQueryDraft] = useState(state.query);
-  const [connectionsOnly, setConnectionsOnly] = useState(false);
+  const connectionsOnly = state.connectedOnly === "true";
   const resultsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setQueryDraft(state.query);
-  }, [state.query]);
 
   const filters = {
     catalog_id: state.filter || undefined,
@@ -78,7 +72,6 @@ export function ExplorePage(props: {
       : [];
   }, [
     bundle.runtime,
-    bundle.librarySearchRevision,
     searchStarted,
     state.query,
     state.filter,
@@ -160,14 +153,6 @@ export function ExplorePage(props: {
     resourceMatches.templates.length > 0 ||
     resourceMatches.artifacts.length > 0;
 
-  // CATL-17: wait until asynchronous search shards have produced a results
-  // region before carrying focus out of the header overlay.
-  useEffect(() => {
-    if (state.query.trim() && hasVisibleResults) {
-      resultsRef.current?.focus();
-    }
-  }, [hasVisibleResults, state.query]);
-
   // Bound the DOM: an empty query matches the whole library (9k+ records).
   // Open every group only for small result sets; always cap the cards
   // rendered per group so browsing stays responsive.
@@ -186,52 +171,7 @@ export function ExplorePage(props: {
 
   return (
     <>
-      <Panel className="search-panel border-0 !bg-transparent p-0">
-        <PageHeader
-          eyebrow="Explore"
-          action={
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("start-here")}
-            >
-              Start guided path
-            </Button>
-          }
-          summary="Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources."
-          title="Search everything in one place"
-        />
-
-        {!graphReady ? (
-          <p className="notice-inline" role="status">
-            Search is ready. Opening a record loads connection data when you
-            need it.
-          </p>
-        ) : null}
-
-        <form
-          className="search-form mb-[32px]"
-          onSubmit={(event) => {
-            event.preventDefault();
-            onNavigate("search", { query: queryDraft.trim() });
-          }}
-        >
-          <div className="flex gap-[16px] items-end">
-            <div className="grow">
-              <Input
-                id="search-query"
-                label="Search by ID, title, or topic"
-                onChange={(event) => setQueryDraft(event.target.value)}
-                placeholder="encryption, access control, passwords"
-                type="search"
-                value={queryDraft}
-              />
-            </div>
-            <Button variant="primary" type="submit" className="min-h-[36px]">
-              Search
-            </Button>
-          </div>
-        </form>
-
+      <Panel className="search-results-panel border-0 !bg-transparent p-0">
         <Accordion.Root className="accordion-root" collapsible type="single">
           <DisclosurePanel title="Refine results" value="filters">
             <div className="filter-grid">
@@ -296,7 +236,10 @@ export function ExplorePage(props: {
                   id="connections-only"
                   onChange={(event) => {
                     const checked = event.target.checked;
-                    setConnectionsOnly(checked);
+                    onNavigate("search", {
+                      ...state,
+                      connectedOnly: checked ? "true" : "",
+                    });
                     if (checked && !graphReady) {
                       onRequestFullGraph();
                     }
@@ -510,7 +453,9 @@ export function ExplorePage(props: {
                               </div>
                             </div>
                             <p className="result-summary" id={`desc-${document.id}`}>
-                              {document.description || "No narrative description was published for this record."}
+                              {document.description_available
+                                ? "Open this record to read the published text."
+                                : "No narrative description was published for this record."}
                             </p>
                             <div className="result-support">
                               <span>
@@ -612,7 +557,9 @@ export function ExplorePage(props: {
             </p>
             <Button
               variant="secondary"
-              onClick={() => setConnectionsOnly(false)}
+              onClick={() =>
+                onNavigate("search", { ...state, connectedOnly: "" })
+              }
               type="button"
             >
               Show all matching records

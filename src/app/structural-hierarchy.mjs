@@ -10,8 +10,29 @@ export const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
   "decomposes_into",
 ]);
 
+// These node kinds may be connected to native records, but they are lenses,
+// selections, aids, or process context. They can never own structural
+// descendants in the publisher-declared tree.
+export const NON_STRUCTURAL_PARENT_NODE_TYPES = new Set([
+  "assessment_procedure",
+  "baseline",
+  "mapping",
+  "evidence",
+  "implementation_aid",
+  "process",
+  "resource",
+  "rmf_step",
+]);
+
 export function catalogIdOf(node) {
   return String(node?.metadata?.catalog_id || "").trim();
+}
+
+export function canOwnStructuralChildren(node) {
+  return Boolean(
+    node?.node_type &&
+      !NON_STRUCTURAL_PARENT_NODE_TYPES.has(String(node.node_type)),
+  );
 }
 
 export function sharesNativeStructuralDomain(parent, child) {
@@ -24,6 +45,7 @@ export function isValidatedStructuralEdge(edge, parent, child) {
   return Boolean(
     edge?.relationship_class === RELATIONSHIP_CLASSES.structural &&
       STRUCTURAL_RELATIONSHIP_TYPES.has(edge?.relationship_type) &&
+      canOwnStructuralChildren(parent) &&
       sharesNativeStructuralDomain(parent, child),
   );
 }
@@ -31,6 +53,7 @@ export function isValidatedStructuralEdge(edge, parent, child) {
 export function isValidatedStructuralPointer(child, parent) {
   return Boolean(
     child?.parent_relationship_class === RELATIONSHIP_CLASSES.structural &&
+      canOwnStructuralChildren(parent) &&
       sharesNativeStructuralDomain(parent, child),
   );
 }

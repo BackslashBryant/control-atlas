@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { glossaryData } from '../src/app/glossary-data.mjs';
-import { patternsData } from '../src/app/patterns-data.mjs';
+import { learnArticles } from '../src/app/learn-content.mjs';
 import { generateTemplate } from '../src/app/template-engine.mjs';
 
 test('glossary contains 26 required federal terms with source citations', () => {
@@ -23,8 +23,18 @@ test('glossary contains 26 required federal terms with source citations', () => 
   }
 });
 
-test('public Playbooks remain absent until every displayed guide has inspectable source provenance', () => {
-  assert.deepEqual(patternsData, []);
+test('Learn contains the six launch-contract explanation topics', () => {
+  assert.deepEqual(
+    learnArticles.map((article) => article.id),
+    [
+      'hierarchy-and-relationships',
+      'source-truth-and-notes',
+      'search-eligibility-and-ranking',
+      'read-a-record',
+      'published-mappings-in-compare',
+      'starter-documents-and-judgment',
+    ],
+  );
 });
 
 test('template factory implements all conditional include flags and bug fixes', () => {
@@ -91,6 +101,9 @@ test('template factory implements all conditional include flags and bug fixes', 
 
   const resultWithFootnotes = generateTemplate(optionsWithFootnotes, dataset);
   assert.match(resultWithFootnotes.content, /Source Metadata/);
-  assert.match(resultWithFootnotes.content, /Framework context: nist-800-53/);
+  assert.match(
+    resultWithFootnotes.content,
+    /Catalog or program context: nist-800-53/,
+  );
   assert.match(resultWithFootnotes.content, /Environment archetype: Cloud SaaS/);
 });

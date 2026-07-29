@@ -16,16 +16,16 @@ const ROUTE_COMPOSITIONS = [
   { slug: 'home', path: '/#/' },
   { slug: 'guided-start', path: '/#/start' },
   { slug: 'search', path: '/#/search?q=AC-2' },
-  { slug: 'library', path: '/#/library' },
+  { slug: 'catalog', path: '/#/catalog' },
   { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
   { slug: 'compare', path: '/#/compare' },
-  { slug: 'resources', path: '/#/build/resources?collection=col-oscal-starter-kit' },
+  { slug: 'resources', path: '/#/build/resources?lane=official' },
   {
     slug: 'resource-detail',
     path: '/#/build/resources/official-nist-sp800-53-r5',
   },
-  { slug: 'guides', path: '/#/playbooks' },
-  { slug: 'documents', path: '/#/templates' },
+  { slug: 'learn', path: '/#/learn' },
+  { slug: 'documents', path: '/#/build/documents' },
   { slug: 'sources', path: '/#/sources' },
   { slug: 'about', path: '/#/about' },
 ];
@@ -56,7 +56,9 @@ async function openApprovedComposition(page, viewport, relationshipView) {
   const main = page.locator('.atlas-focused-main');
   await expect(main).toBeVisible();
   if (relationshipView === 'map') {
-    await expect(main.locator('.atlas-spatial-map')).toBeVisible();
+    await expect(
+      main.getByRole('region', { name: 'Relationship map' }),
+    ).toBeVisible();
     await expect(
       page.getByRole('complementary', { name: 'Current record overview' }),
     ).toBeVisible();

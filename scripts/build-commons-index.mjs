@@ -83,7 +83,6 @@ const indexDocuments = dataset.resources.map((res) => {
     costType: res.costType,
     maintenanceStatus: res.maintenanceStatus,
     openSource: res.openSource || false,
-    editorialRecommendation: res.editorialRecommendation || false,
     popularitySignals: res.popularitySignals || {},
     companionResources: res.companionResources || [],
     featuredCollections: res.featuredCollections || [],

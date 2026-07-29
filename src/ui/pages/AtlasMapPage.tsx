@@ -19,7 +19,6 @@ import {
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
-import { AtlasDecompositionBoard } from "../components/AtlasDecompositionBoard";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
@@ -228,7 +227,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </h1>
           {!record ? (
             <p className="page-summary">
-              Choose a framework or process, then open published records and
+              Choose a published structure or lifecycle process, then open records and
               relationships as your question becomes more specific.
             </p>
           ) : null}
@@ -274,7 +273,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             </Button>
             <Button
               variant="secondary"
-              onClick={() => onNavigate("browse")}
+              onClick={() => onNavigate("catalog-detail")}
               type="button"
             >
               Browse the Catalog
@@ -554,26 +553,28 @@ function FocusedAtlas(props: {
             className="atlas-focused-main"
           >
             {boardView ? (
-              <AtlasDecompositionBoard
-                center={record.center_node}
-                groups={groups}
-                onContinueFrom={(node) => {
-                  setSelectedRow(null);
-                  patchAtlas({
-                    node,
-                    atlasStage: "",
-                    relationshipGroup: "",
-                    relationshipView: "path",
-                  });
-                }}
-                onOpenDetail={(node) => onOpenNode(node, "atlas-map")}
-                onOpenList={() => patchAtlas({ relationshipView: "list" })}
-                onOpenSources={openSources}
-                onSelect={setSelectedRow}
-                onStageChange={(atlasStage) => patchAtlas({ atlasStage })}
-                selectedItemId={selectedRow?.counterpart.id || ""}
-                stageId={state.atlasStage}
-              />
+              <section className="atlas-path-summary">
+                <p className="eyebrow">Publisher-declared structural path</p>
+                <h3>{centerLabel}</h3>
+                <WhereThisSitsRail
+                  bundle={bundle}
+                  links={
+                    record.structural_path.length > 1 ||
+                    record.center_node.node_type === "catalog"
+                      ? record.structural_path
+                      : undefined
+                  }
+                  nodeId={record.center_node.id}
+                  onOpenNode={(node) =>
+                    patchAtlas({ node, atlasStage: "", relationshipGroup: "" })
+                  }
+                />
+                <p>
+                  Relationship classes are shown in Map and List. Baselines and
+                  process lenses remain separate choices rather than
+                  structural parents.
+                </p>
+              </section>
             ) : null}
 
             {view === "map" ? (
@@ -763,15 +764,6 @@ function AtlasGuidedPath(props: {
           label: framework.label,
         });
       }
-      if (state.atlasBaseline) {
-        links.push({
-          id: `baseline:${state.atlasBaseline}`,
-          label:
-            state.atlasBaseline === "all"
-              ? "All records"
-              : baseline?.label || state.atlasBaseline,
-        });
-      }
       if (family) {
         links.push({
           id: `family:${family.id}`,
@@ -792,7 +784,7 @@ function AtlasGuidedPath(props: {
       }
     }
     return links;
-  }, [axis, baseline, family, framework, rmfStep, state.atlasBaseline]);
+  }, [axis, family, framework, rmfStep]);
 
   function resetDrill(patch: Partial<AtlasMapPageProps["state"]>) {
     patchAtlas({
@@ -815,13 +807,6 @@ function AtlasGuidedPath(props: {
       resetDrill({
         atlasAxis: "framework",
         atlasFramework: id.slice("framework:".length),
-      });
-      return;
-    }
-    if (id.startsWith("baseline:")) {
-      patchAtlas({
-        atlasBaseline: id.slice("baseline:".length),
-        atlasFamily: "",
       });
       return;
     }
@@ -864,8 +849,8 @@ function AtlasGuidedPath(props: {
             >
               <IconBinaryTree aria-hidden="true" size={24} />
               <span>
-                <strong>A framework path</strong>
-                <small>Framework → native groups → records</small>
+                <strong>A published structure</strong>
+                <small>Publisher-declared groups → records</small>
               </span>
               <IconChevronRight aria-hidden="true" size={20} />
             </button>
@@ -888,8 +873,8 @@ function AtlasGuidedPath(props: {
             >
               <IconSearch aria-hidden="true" size={24} />
               <span>
-                <strong>My situation</strong>
-                <small>Answer three questions for a starting point</small>
+                <strong>Source starting points</strong>
+                <small>Browse public sources without an applicability decision</small>
               </span>
               <IconChevronRight aria-hidden="true" size={20} />
             </button>
@@ -900,7 +885,7 @@ function AtlasGuidedPath(props: {
       {axis === "framework" && !framework ? (
         <>
           <p className="atlas-path-prompt">
-            Which supported framework do you want to trace?
+            Which published structure do you want to trace?
           </p>
           <ul className="atlas-path-stage-list">
             {model.frameworkGroups.flatMap((group) =>
@@ -938,7 +923,7 @@ function AtlasGuidedPath(props: {
       !state.atlasBaseline ? (
         <>
           <p className="atlas-path-prompt">
-            Which applicability scope do you want to use?
+            Optional display filter: which published baseline selection should narrow the records?
           </p>
           <ul className="atlas-path-stage-list">
             <li>
@@ -990,7 +975,7 @@ function AtlasGuidedPath(props: {
       !family ? (
         <>
           <p className="atlas-path-prompt">
-            Which part of this framework do you want to open?
+            Which publisher-declared group do you want to open?
           </p>
           <div className="atlas-ancestry-family-grid">
             {frameworkUnits.map((choice) => (
@@ -1029,7 +1014,7 @@ function AtlasGuidedPath(props: {
                 {family.records.length} structural child
                 {family.records.length === 1 ? "" : "ren"}
                 {state.atlasBaseline && state.atlasBaseline !== "all"
-                  ? " selected by this applicability scope."
+                  ? " shown by this optional baseline filter."
                   : "."}
               </p>
             </div>

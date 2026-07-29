@@ -26,16 +26,13 @@ test("CA-RES-001/002: Resources retains its directory identity and six primary b
   assert.equal(new Set(PRIMARY_BROWSE_CATEGORIES.map(({ id }) => id)).size, 6);
 });
 
-test("CA-RES-003: directory search establishes evidence eligibility before recommendation ranking", () => {
-  const recommended = resources.filter((resource) => resource.editorialRecommendation);
-  assert.ok(recommended.length > 0);
+test("CA-RES-003: directory search establishes match eligibility before ordering", () => {
   assert.deepEqual(searchDirectoryResources(resources, "zzzzqqqq"), []);
-  assert.deepEqual(searchDirectoryResources(recommended, "zzzzqqqq"), []);
   assert.ok(searchDirectoryResources(resources, "OSCAL").some((resource) => resource.id === "official-nist-oscal"));
 });
 
 test("clearing a query restores the previous browse scope", () => {
-  const scope = filterDirectoryResources(resources, { category: "tools", lane: "open_source" }, dataset.collections);
+  const scope = filterDirectoryResources(resources, { category: "tools", lane: "open_source" });
   const searched = searchDirectoryResources(scope, "STIG");
   assert.ok(searched.length > 0);
   assert.deepEqual(searchDirectoryResources(scope, "").map((resource) => resource.id), scope.map((resource) => resource.id));

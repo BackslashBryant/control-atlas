@@ -1,6 +1,5 @@
 export type AppView =
   | "home"
-  | "menu"
   | "atlas-map"
   | "search"
   | "catalog-detail"
@@ -14,7 +13,6 @@ export type AppView =
   | "start-here"
   | "about"
   | "retired"
-  | "browse"
   | "not-found";
 
 export type CompareCrosswalk =
@@ -60,10 +58,18 @@ export type ViewState =
       sourceClass: string;
       controlFamily: string;
       severity: string;
+      connectedOnly: string;
     }
   | {
       view: "catalog-detail";
       catalog: string;
+      query: string;
+      family: string;
+      browseAll: string;
+      type: string;
+      publisher: string;
+      lifecycle: string;
+      page: string;
     }
   | {
       view: "library-detail";
@@ -95,6 +101,8 @@ export type ViewState =
       baselineB: string;
       intent: string;
       compareView: string;
+      mappingSource: string;
+      compareRun: string;
     }
   | {
       view: "patterns";
@@ -102,7 +110,7 @@ export type ViewState =
     }
   | {
       view: "templates";
-      buildSection: "tasks" | "documents";
+      buildSection: "overview" | "tasks" | "documents";
       task: string;
       templateType: string;
       framework: string;
@@ -110,9 +118,12 @@ export type ViewState =
       environment: string;
       baseline: string;
       controlFamily: string;
+      category: string;
+      query: string;
     }
   | {
       view: "sources";
+      query: string;
       source: string;
       provenance: string;
       eligibility: string;
@@ -127,39 +138,22 @@ export type ViewState =
       lifecycle: string;
       audience: string;
       accessType: string;
-      costType: string;
       resourceType: string;
-      platform: string;
-      format: string;
-      collection: string;
       category: string;
-      selectedId: string;
+      showAll: string;
     }
   | {
       view: "commons-detail";
       id: string;
       from?: string;
     }
-  | {
-      view: "start-here";
-      step: string;
-      systemType: string;
-      dataSensitivity: string;
-      environment: string;
-    }
+  | { view: "start-here" }
   | {
       view: "about";
     }
   | {
-      view: "menu";
-    }
-  | {
       view: "retired";
       query: string;
-    }
-  | {
-      view: "browse";
-      framework: string;
     }
   | {
       view: "not-found";
@@ -174,6 +168,7 @@ function searchState(): ViewState {
     sourceClass: "",
     controlFamily: "",
     severity: "",
+    connectedOnly: "",
   };
 }
 
@@ -220,6 +215,8 @@ function compareState(): Extract<ViewState, { view: "matrix" }> {
     baselineB: "",
     intent: "",
     compareView: "list",
+    mappingSource: "",
+    compareRun: "",
   };
 }
 
@@ -308,6 +305,13 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       catalog: params.get("catalog") || params.get("framework") || "",
+      query: params.get("q") || "",
+      family: params.get("family") || "",
+      browseAll: params.get("browseAll") === "true" ? "true" : "",
+      type: params.get("type") || "",
+      publisher: params.get("publisher") || "",
+      lifecycle: params.get("lifecycle") || "",
+      page: params.get("page") || "",
     };
   }
 
@@ -333,6 +337,8 @@ export function parseViewState(search: string): ViewState {
       intent: params.get("intent") || "",
       compareView:
         normalizeCompareView(params.get("compareView") || "") || "list",
+      mappingSource: params.get("mappingSource") || "",
+      compareRun: params.get("compareRun") === "true" ? "true" : "",
     };
   }
 
@@ -344,20 +350,27 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       buildSection:
-        params.get("buildSection") === "documents" ? "documents" : "tasks",
+        params.get("buildSection") === "documents"
+          ? "documents"
+          : params.get("buildSection") === "tasks"
+            ? "tasks"
+            : "overview",
       task: params.get("task") || "",
       templateType: params.get("templateType") || "",
       framework: params.get("framework") || "",
-      format: params.get("format") || "markdown",
-      environment: params.get("environment") || "Generic",
+      format: params.get("format") || "",
+      environment: params.get("environment") || "",
       baseline: params.get("baseline") || "",
       controlFamily: params.get("controlFamily") || "",
+      category: params.get("category") || "",
+      query: params.get("q") || "",
     };
   }
 
   if (view === "sources") {
     return {
       view,
+      query: params.get("q") || "",
       source: params.get("source") || "",
       provenance: params.get("provenance") || "",
       eligibility: params.get("eligibility") || "",
@@ -375,13 +388,9 @@ export function parseViewState(search: string): ViewState {
       lifecycle: params.get("lifecycle") || "",
       audience: params.get("audience") || "",
       accessType: params.get("accessType") || "",
-      costType: params.get("costType") || "",
       resourceType: params.get("resourceType") || "",
-      platform: params.get("platform") || "",
-      format: params.get("format") || "",
-      collection: params.get("collection") || "",
       category: params.get("category") || "",
-      selectedId: params.get("selectedId") || "",
+      showAll: params.get("showAll") === "true" ? "true" : "",
     };
   }
 
@@ -394,32 +403,15 @@ export function parseViewState(search: string): ViewState {
   }
 
   if (view === "start-here") {
-    return {
-      view,
-      step: params.get("step") || "",
-      systemType: params.get("systemType") || "",
-      dataSensitivity: params.get("dataSensitivity") || "",
-      environment: params.get("environment") || "",
-    };
+    return { view };
   }
 
   if (view === "about") {
     return { view: "about" };
   }
 
-  if (view === "menu") {
-    return { view: "menu" };
-  }
-
   if (view === "not-found") {
     return { view: "not-found" };
-  }
-
-  if (view === "browse") {
-    return {
-      view,
-      framework: params.get("framework") || "",
-    };
   }
 
   return {
@@ -430,6 +422,7 @@ export function parseViewState(search: string): ViewState {
     sourceClass: params.get("sourceClass") || "",
     controlFamily: params.get("controlFamily") || "",
     severity: params.get("severity") || "",
+    connectedOnly: params.get("connectedOnly") === "true" ? "true" : "",
   };
 }
 
@@ -485,11 +478,17 @@ export function normalizeViewState(
   }
 
   if (view === "catalog-detail") {
+    const incoming = state as Extract<ViewState, { view: "catalog-detail" }>;
     return {
       view,
-      catalog:
-        (state as Extract<ViewState, { view: "catalog-detail" }>).catalog ||
-        "",
+      catalog: incoming.catalog || "",
+      query: incoming.query || "",
+      family: incoming.family || "",
+      browseAll: incoming.browseAll === "true" ? "true" : "",
+      type: incoming.type || "",
+      publisher: incoming.publisher || "",
+      lifecycle: incoming.lifecycle || "",
+      page: incoming.page || "",
     };
   }
 
@@ -515,14 +514,21 @@ export function normalizeViewState(
     const incoming = state as Extract<ViewState, { view: "templates" }>;
     return {
       view,
-      buildSection: incoming.buildSection === "documents" ? "documents" : "tasks",
+      buildSection:
+        incoming.buildSection === "documents"
+          ? "documents"
+          : incoming.buildSection === "tasks"
+            ? "tasks"
+            : "overview",
       task: incoming.task || "",
       templateType: incoming.templateType || "",
       framework: incoming.framework || "",
-      format: incoming.format || "markdown",
-      environment: incoming.environment || "Generic",
+      format: incoming.format || "",
+      environment: incoming.environment || "",
       baseline: incoming.baseline || "",
       controlFamily: incoming.controlFamily || "",
+      category: incoming.category || "",
+      query: incoming.query || "",
     };
   }
 
@@ -530,6 +536,7 @@ export function normalizeViewState(
     const incoming = state as Extract<ViewState, { view: "sources" }>;
     return {
       view,
+      query: incoming.query || "",
       source: incoming.source || "",
       provenance: incoming.provenance || "",
       eligibility: incoming.eligibility || "",
@@ -548,13 +555,9 @@ export function normalizeViewState(
       lifecycle: incoming.lifecycle || "",
       audience: incoming.audience || "",
       accessType: incoming.accessType || "",
-      costType: incoming.costType || "",
       resourceType: incoming.resourceType || "",
-      platform: incoming.platform || "",
-      format: incoming.format || "",
-      collection: incoming.collection || "",
       category: incoming.category || "",
-      selectedId: incoming.selectedId || "",
+      showAll: incoming.showAll === "true" ? "true" : "",
     };
   }
 
@@ -568,22 +571,11 @@ export function normalizeViewState(
   }
 
   if (view === "start-here") {
-    const incoming = state as Extract<ViewState, { view: "start-here" }>;
-    return {
-      view,
-      step: incoming.step || "",
-      systemType: incoming.systemType || "",
-      dataSensitivity: incoming.dataSensitivity || "",
-      environment: incoming.environment || "",
-    };
+    return { view };
   }
 
   if (view === "about") {
     return { view: "about" };
-  }
-
-  if (view === "menu") {
-    return { view: "menu" };
   }
 
   if (view === "not-found") {
@@ -594,14 +586,6 @@ export function normalizeViewState(
     return {
       view,
       query: (state as Extract<ViewState, { view: "retired" }>).query || "",
-    };
-  }
-
-  if (view === "browse") {
-    return {
-      view,
-      framework:
-        (state as Extract<ViewState, { view: "browse" }>).framework || "",
     };
   }
 
@@ -663,16 +647,24 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "showDraftOrLegacy", state.showDraftOrLegacy);
     setIfValue(params, "showRegistryOnly", state.showRegistryOnly);
   } else if (state.view === "search") {
-    setIfValue(params, "view", "explore");
+    setIfValue(params, "view", "search");
     setIfValue(params, "q", state.query);
     setIfValue(params, "filter", state.filter);
     setIfValue(params, "objectType", state.objectType);
     setIfValue(params, "sourceClass", state.sourceClass);
     setIfValue(params, "controlFamily", state.controlFamily);
     setIfValue(params, "severity", state.severity);
+    setIfValue(params, "connectedOnly", state.connectedOnly);
   } else if (state.view === "catalog-detail") {
     params.set("view", state.view);
     setIfValue(params, "catalog", state.catalog);
+    setIfValue(params, "q", state.query);
+    setIfValue(params, "family", state.family);
+    setIfValue(params, "browseAll", state.browseAll);
+    setIfValue(params, "type", state.type);
+    setIfValue(params, "publisher", state.publisher);
+    setIfValue(params, "lifecycle", state.lifecycle);
+    setIfValue(params, "page", state.page);
   } else if (state.view === "library-detail") {
     params.set("view", state.view);
     setIfValue(params, "node", state.node);
@@ -709,15 +701,21 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "baselineA", state.baselineA);
     setIfValue(params, "baselineB", state.baselineB);
     setIfValue(params, "intent", state.intent);
+    setIfValue(params, "mappingSource", state.mappingSource);
+    setIfValue(params, "compareRun", state.compareRun);
     if (state.compareView === "map") {
       params.set("compareView", "map");
     }
   } else if (state.view === "patterns") {
-    params.set("view", "playbooks");
+    params.set("view", "patterns");
     setIfValue(params, "pattern", state.pattern);
   } else if (state.view === "templates") {
     params.set("view", state.view);
-    setIfValue(params, "buildSection", state.buildSection === "documents" ? "documents" : "");
+    setIfValue(
+      params,
+      "buildSection",
+      state.buildSection === "overview" ? "" : state.buildSection,
+    );
     setIfValue(params, "task", state.task);
     setIfValue(params, "templateType", state.templateType);
     setIfValue(params, "framework", state.framework);
@@ -725,8 +723,11 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "environment", state.environment);
     setIfValue(params, "baseline", state.baseline);
     setIfValue(params, "controlFamily", state.controlFamily);
+    setIfValue(params, "category", state.category);
+    setIfValue(params, "q", state.query);
   } else if (state.view === "sources") {
     params.set("view", state.view);
+    setIfValue(params, "q", state.query);
     setIfValue(params, "source", state.source);
     setIfValue(params, "provenance", state.provenance);
     setIfValue(params, "eligibility", state.eligibility);
@@ -740,33 +741,20 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "lifecycle", state.lifecycle);
     setIfValue(params, "audience", state.audience);
     setIfValue(params, "accessType", state.accessType);
-    setIfValue(params, "costType", state.costType);
     setIfValue(params, "resourceType", state.resourceType);
-    setIfValue(params, "platform", state.platform);
-    setIfValue(params, "format", state.format);
-    setIfValue(params, "collection", state.collection);
     setIfValue(params, "category", state.category);
-    setIfValue(params, "selectedId", state.selectedId);
+    setIfValue(params, "showAll", state.showAll);
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
     setIfValue(params, "id", state.id);
     setIfValue(params, "from", state.from || "");
   } else if (state.view === "start-here") {
     params.set("view", state.view);
-    setIfValue(params, "step", state.step);
-    setIfValue(params, "systemType", state.systemType);
-    setIfValue(params, "dataSensitivity", state.dataSensitivity);
-    setIfValue(params, "environment", state.environment);
   } else if (state.view === "about") {
-    params.set("view", state.view);
-  } else if (state.view === "menu") {
     params.set("view", state.view);
   } else if (state.view === "retired") {
     params.set("view", state.view);
     setIfValue(params, "q", state.query);
-  } else if (state.view === "browse") {
-    params.set("view", state.view);
-    setIfValue(params, "framework", state.framework);
   }
 
   const serialized = params.toString();

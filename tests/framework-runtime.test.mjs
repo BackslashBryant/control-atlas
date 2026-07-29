@@ -1,13 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import MiniSearch from "minisearch";
 
 import {
   createFederalGraphRuntime,
   getFederalContext,
-  normalizeViewState,
-  parseViewState,
-  serializeViewState,
 } from "../src/app/runtime.mjs";
 import { groupRelationships } from "../src/app/relationship-groups.mjs";
 
@@ -1418,281 +1414,6 @@ test("runtime composes issue 12 program and CUI context without implying a rev3 
   assert.deepEqual(rev3Context.programRequirementContext, []);
 });
 
-test("view state preserves supported queries and identifies retired query types", () => {
-  assert.deepEqual(parseViewState("?q=AC-2"), {
-    view: "search",
-    query: "AC-2",
-    filter: "",
-    objectType: "",
-    sourceClass: "",
-    controlFamily: "",
-    severity: "",
-  });
-  assert.deepEqual(parseViewState("?q=ABC-2024-0001"), {
-    view: "retired",
-    query: "ABC-2024-0001",
-    retired_type: "retired identifier",
-  });
-  assert.equal(
-    serializeViewState({ view: "search", query: "AC-2" }),
-    "?view=search&q=AC-2",
-  );
-  assert.deepEqual(
-    parseViewState("?view=library-detail&node=nist-800-53%3AAC-2"),
-    {
-      view: "library-detail",
-      node: "nist-800-53:AC-2",
-      from: "",
-      relationshipView: "",
-      relationshipType: "",
-      provenance: "",
-      confidence: "",
-      nodeType: "",
-      includeCandidates: "",
-      relationshipSearch: "",
-    },
-  );
-  assert.equal(
-    serializeViewState({ view: "library-detail", node: "nist-800-53:AC-2" }),
-    "?view=library-detail&node=nist-800-53%3AAC-2",
-  );
-  assert.deepEqual(
-    parseViewState(
-      "?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=table&relationshipType=maps_to&provenance=federal_published",
-    ),
-    {
-      view: "library-detail",
-      node: "nist-800-53:AC-2",
-      from: "",
-      relationshipView: "table",
-      relationshipType: "maps_to",
-      provenance: "federal_published",
-      confidence: "",
-      nodeType: "",
-      includeCandidates: "",
-      relationshipSearch: "",
-    },
-  );
-  assert.deepEqual(
-    parseViewState(
-      "?view=matrix&source=nist-800-53&target=csf-2&items=AC-2%2CAC-3",
-    ),
-    {
-      view: "matrix",
-      workbench: "relationships",
-      source: "nist-800-53",
-      target: "csf-2",
-      items: "AC-2,AC-3",
-      relationshipType: "",
-      provenance: "",
-      confidence: "",
-      includeCandidates: "",
-      chainCatalog: "",
-      chainBenchmark: "",
-      chainItem: "",
-      baselineA: "",
-      baselineB: "",
-    },
-  );
-  assert.deepEqual(
-    parseViewState(
-      "?view=sources&source=nist-oscal&provenance=federal_published&eligibility=eligible&lifecycle=active&access=public",
-    ),
-    {
-      view: "sources",
-      source: "nist-oscal",
-      provenance: "federal_published",
-      eligibility: "eligible",
-      lifecycle: "active",
-      access: "public",
-    },
-  );
-});
-
-test("matrix workbench view state preserves Epic 4 mode-specific params", () => {
-  assert.deepEqual(
-    parseViewState(
-      "?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2&items=AC-2&relationshipType=maps_to&provenance=federal_published&confidence=direct&includeCandidates=true",
-    ),
-    {
-      view: "matrix",
-      workbench: "relationships",
-      source: "nist-800-53",
-      target: "csf-2",
-      items: "AC-2",
-      relationshipType: "maps_to",
-      provenance: "federal_published",
-      confidence: "direct",
-      includeCandidates: "true",
-      chainCatalog: "",
-      chainBenchmark: "",
-      chainItem: "",
-      baselineA: "",
-      baselineB: "",
-    },
-  );
-  assert.equal(
-    serializeViewState({
-      view: "matrix",
-      workbench: "relationships",
-      source: "nist-800-53",
-      target: "csf-2",
-      items: "AC-2",
-      relationshipType: "maps_to",
-      provenance: "federal_published",
-      confidence: "direct",
-      includeCandidates: "true",
-    }),
-    "?view=matrix&workbench=relationships&source=nist-800-53&target=csf-2&items=AC-2&relationshipType=maps_to&provenance=federal_published&confidence=direct&includeCandidates=true",
-  );
-  assert.deepEqual(
-    parseViewState(
-      "?view=matrix&workbench=stig-chain&chainCatalog=disa-stig&chainBenchmark=win11&chainItem=disa-stig%3AV-100001",
-    ),
-    {
-      view: "matrix",
-      workbench: "stig-chain",
-      source: "",
-      target: "",
-      items: "",
-      relationshipType: "",
-      provenance: "",
-      confidence: "",
-      includeCandidates: "",
-      chainCatalog: "disa-stig",
-      chainBenchmark: "win11",
-      chainItem: "disa-stig:V-100001",
-      baselineA: "",
-      baselineB: "",
-    },
-  );
-  assert.deepEqual(
-    parseViewState(
-      "?view=matrix&workbench=baseline-compare&baselineA=nist-800-53b%3AMODERATE&baselineB=fedramp-rev5%3AMODERATE",
-    ),
-    {
-      view: "matrix",
-      workbench: "baseline-compare",
-      source: "",
-      target: "",
-      items: "",
-      relationshipType: "",
-      provenance: "",
-      confidence: "",
-      includeCandidates: "",
-      chainCatalog: "",
-      chainBenchmark: "",
-      chainItem: "",
-      baselineA: "nist-800-53b:MODERATE",
-      baselineB: "fedramp-rev5:MODERATE",
-    },
-  );
-});
-
-test("normalizeViewState strips stale params per view", () => {
-  assert.deepEqual(
-    normalizeViewState("browse", {
-      view: "search",
-      query: "AC-2",
-      framework: "disa-cci",
-      mode: "expert",
-    }),
-    {
-      mode: "expert",
-      view: "browse",
-      framework: "disa-cci",
-    },
-  );
-  assert.deepEqual(
-    normalizeViewState("sources", {
-      query: "AC-2",
-      source: "nist-oscal",
-      provenance: "federal_published",
-      eligibility: "eligible",
-      lifecycle: "active",
-      access: "public",
-      mode: "expert",
-    }),
-    {
-      mode: "expert",
-      view: "sources",
-      source: "nist-oscal",
-      provenance: "federal_published",
-      eligibility: "eligible",
-      lifecycle: "active",
-      access: "public",
-    },
-  );
-  assert.deepEqual(
-    normalizeViewState("matrix", {
-      view: "search",
-      workbench: "stig-chain",
-      chainCatalog: "disa-stig",
-      chainBenchmark: "win11",
-      chainItem: "disa-stig:V-100001",
-      source: "nist-800-53",
-      target: "csf-2",
-      items: "AC-2",
-      relationshipType: "maps_to",
-      provenance: "federal_published",
-      confidence: "direct",
-      includeCandidates: "true",
-      baselineA: "nist-800-53b:MODERATE",
-      baselineB: "fedramp-rev5:MODERATE",
-      mode: "expert",
-    }),
-    {
-      mode: "expert",
-      view: "matrix",
-      workbench: "stig-chain",
-      source: "",
-      target: "",
-      items: "",
-      relationshipType: "",
-      provenance: "federal_published",
-      confidence: "direct",
-      includeCandidates: "true",
-      chainCatalog: "disa-stig",
-      chainBenchmark: "win11",
-      chainItem: "disa-stig:V-100001",
-      baselineA: "",
-      baselineB: "",
-    },
-  );
-});
-
-test("source view state serializes detail and filter params", () => {
-  assert.equal(
-    serializeViewState({
-      view: "sources",
-      source: "nist-oscal",
-      provenance: "federal_published",
-      eligibility: "eligible",
-      lifecycle: "active",
-      access: "public",
-    }),
-    "?view=sources&source=nist-oscal&provenance=federal_published&eligibility=eligible&lifecycle=active&access=public",
-  );
-});
-
-test("view state preserves epic 0 navigation-only surfaces", () => {
-  assert.deepEqual(parseViewState("?view=patterns"), { view: "patterns" });
-  assert.deepEqual(parseViewState("?view=templates&mode=expert"), {
-    mode: "expert",
-    view: "templates",
-  });
-  assert.deepEqual(
-    normalizeViewState("start-here", { query: "AC-2", mode: "expert" }),
-    { mode: "expert", view: "start-here" },
-  );
-  assert.equal(serializeViewState({ view: "patterns" }), "?view=patterns");
-  assert.deepEqual(parseViewState("?view=about"), { view: "about" });
-  assert.equal(serializeViewState({ view: "about" }), "?view=about");
-  assert.deepEqual(normalizeViewState("about", { query: "AC-2" }), {
-    view: "about",
-  });
-});
-
 // ---------------------------------------------------------------------------
 // Relationship grouping: enhancements / baseControl groups (Task 3)
 // ---------------------------------------------------------------------------
@@ -1819,7 +1540,7 @@ test("groupRelationships routes an enhancement's base control counterpart into t
   assert.equal(baseControlGroup.items[0].counterpart.id, "nist-800-53:AC-2");
 });
 
-test("runtime federated search returns AC-2 from a loaded shard without monolithic index", () => {
+test("runtime complete search artifact returns exact and plain-language results", () => {
   const documents = [
     {
       id: "nist-800-53:AC-2",
@@ -1879,34 +1600,15 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
       severity: "",
     },
   ];
-  const index = new MiniSearch({
-    fields: ["item_id", "title", "plain_language_summary", "description"],
-    storeFields: ["id"],
-    searchOptions: {
-      prefix: true,
-      boost: {
-        item_id: 5,
-        title: 3,
-        plain_language_summary: 2,
-        description: 1,
-      },
-    },
-  });
-  index.addAll(documents);
-
   const runtime = createFederalGraphRuntime({
     sources: [],
     nodes: [],
     edges: [],
     evidence: [],
     findings: [],
-    librarySearchShards: [
-      {
-        catalog_id: "nist-800-53",
-        documents,
-        serialized_index: JSON.stringify(index.toJSON()),
-      },
-    ],
+    librarySearch: {
+      documents,
+    },
   });
 
   assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
@@ -1923,7 +1625,7 @@ test("runtime federated search returns AC-2 from a loaded shard without monolith
     ["test:fedramp-2026"],
   );
   // The search-phase runtime has no sources loaded; the result card falls
-  // back to the source_name embedded in the shard document.
+  // back to the source_name embedded in the complete search artifact.
   assert.equal(
     runtime.searchLibrary("AC-2")[0].source_name,
     "SP 800-53 Rev. 5",

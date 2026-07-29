@@ -109,15 +109,20 @@ test("pickCanonicalParent prefers a candidate in the child's own catalog_id", ()
 
 test("pickCanonicalParent falls back to the shallower candidate, then lexical order", () => {
   const nodes: AncestorNode[] = [
-    { id: "root", metadata: { catalog_id: "y" } },
+    { id: "root", node_type: "catalog", metadata: { catalog_id: "y" } },
     {
       id: "deep-parent",
+      node_type: "group",
       metadata: { catalog_id: "y" },
       parent_id: "root",
       parent_relationship_class: "structural",
     },
-    { id: "shallow-parent", metadata: { catalog_id: "y" } },
-    { id: "child", metadata: { catalog_id: "z" } },
+    {
+      id: "shallow-parent",
+      node_type: "group",
+      metadata: { catalog_id: "y" },
+    },
+    { id: "child", node_type: "control", metadata: { catalog_id: "z" } },
   ];
   const graph = graphFrom(nodes);
   const picked = pickCanonicalParent(
@@ -128,9 +133,9 @@ test("pickCanonicalParent falls back to the shallower candidate, then lexical or
   assert.equal(picked, "shallow-parent");
 
   const tiedNodes: AncestorNode[] = [
-    { id: "b-parent", metadata: { catalog_id: "y" } },
-    { id: "a-parent", metadata: { catalog_id: "y" } },
-    { id: "child2", metadata: { catalog_id: "z" } },
+    { id: "b-parent", node_type: "group", metadata: { catalog_id: "y" } },
+    { id: "a-parent", node_type: "group", metadata: { catalog_id: "y" } },
+    { id: "child2", node_type: "control", metadata: { catalog_id: "z" } },
   ];
   const tiedGraph = graphFrom(tiedNodes);
   assert.equal(
@@ -238,6 +243,40 @@ test("CA-ATL-001: cross-catalog parent_id fails closed even when marked structur
       (link) => link.id,
     ),
     ["nist-800-53:CATALOG"],
+  );
+});
+
+test("tree doctrine: a baseline cannot become a structural parent", () => {
+  const nodes: AncestorNode[] = [
+    {
+      id: "nist-800-53b:MODERATE",
+      label: "Moderate",
+      node_type: "baseline",
+      metadata: { catalog_id: "nist-800-53b" },
+    },
+    {
+      id: "nist-800-53b:AC-2",
+      label: "AC-2",
+      node_type: "control",
+      parent_id: "nist-800-53b:MODERATE",
+      parent_relationship_class: "structural",
+      metadata: { catalog_id: "nist-800-53b" },
+    },
+  ];
+  const edges: AncestorEdge[] = [
+    {
+      source_node_id: "nist-800-53b:MODERATE",
+      target_node_id: "nist-800-53b:AC-2",
+      relationship_type: "contains",
+      relationship_class: "structural",
+    },
+  ];
+
+  assert.deepEqual(
+    ancestorChain("nist-800-53b:AC-2", graphFrom(nodes, edges)).map(
+      (link) => link.id,
+    ),
+    ["nist-800-53b:AC-2"],
   );
 });
 

@@ -89,7 +89,7 @@ Do not fix only the quoted example. Do not leave known sibling instances. Do not
 - Trees contain only publisher-declared hierarchy. Baselines, mappings, applicability, evidence, implementation aids, processes, and Resources are never parents. RMF is optional.
 - Search eligibility precedes ranking. Exact unique identifiers may navigate directly; ambiguous text goes to Search; zero remains zero.
 - Keep and consolidate MiniSearch and React Flow/ELK unless a measured blocker proves replacement necessary. Delete duplicate ownership.
-- Apply the copy register by defect class. Official text is not rewritten. Remove patronizing labels, platitudes, slogans, metaphors, generic marketing, vague actions, unsupported recommendations, and disclaimer repetition.
+- Apply the copy register by defect class. Official text is not rewritten. Preserve the owner-protected rotating Ctrl+Alt brand flourish while removing other patronizing labels, platitudes, slogans, metaphors, generic marketing, vague actions, unsupported recommendations, and disclaimer repetition.
 - Implement the target layouts, density, and responsive sequence—not only replacement words. Mobile and 200% zoom retain every control, warning, source field, and piece of information.
 
 ## Efficiency rules

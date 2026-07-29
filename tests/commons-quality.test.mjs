@@ -82,18 +82,21 @@ for (const r of dataset.resources) {
   assert.ok(r.whyIncluded && r.whyIncluded.trim().length > 10, `Resource ${r.id} missing valid whyIncluded statement`);
   assert.ok(r.resourceLane, `Resource ${r.id} missing resourceLane`);
   assert.ok(r.publisher, `Resource ${r.id} missing publisher`);
+  assert.equal(
+    Object.hasOwn(r, "editorialRecommendation"),
+    false,
+    `Resource ${r.id} must not carry an editorial recommendation`,
+  );
+  assert.doesNotMatch(
+    r.whyIncluded,
+    /\b(?:authoritative|essential|governing|leading|mandatory|popular|recommended|widely used|widely recognized|industry-standard|battle-tested|pioneering)\b/i,
+    `Resource ${r.id} whyIncluded must state an observable inclusion reason`,
+  );
 }
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
 
 // 4. Validate collection integrity
-assert.ok(dataset.collections.length >= 10, `Expected >= 10 collections, found ${dataset.collections.length}`);
-for (const col of dataset.collections) {
-  assert.ok(col.id && col.title && col.whyCurated, `Collection ${col.id} missing metadata`);
-  assert.ok(col.resourceIds.length >= 2, `Collection ${col.id} has too few resources`);
-  for (const rid of col.resourceIds) {
-    assert.ok(idSet.has(rid), `Collection ${col.id} references invalid resource ID: ${rid}`);
-  }
-}
+assert.deepEqual(dataset.collections, [], "Superseded editorial collections stay removed");
 console.log(`  ✓ Collection Integrity Audit Passed (${dataset.collections.length} collections verified)`);
 
 // 5. Candidate Manifest & Rejection Audit

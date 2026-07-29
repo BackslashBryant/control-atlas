@@ -9,41 +9,54 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("focused Atlas opens structural position before explicit relationship lenses", async ({ page }) => {
+test("focused Atlas opens publisher-declared structure before relationship views", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
-  // Three views of ONE record. Purpose/RMF are no longer peer tabs: the lens
-  // is an entry choice shown as a breadcrumb inside Path.
+  // Three views of one record. Path owns structural position; relationship
+  // classes stay in Map and List instead of becoming structural parents.
   await expect(page.getByRole("tab", { name: "Path" })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Purpose" })).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "RMF" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Where this sits" })).toContainText(
-    "SP 800-53 Rev. 5",
-  );
-  // The Path asks which lens first; it does not render every lens's records.
-  await expect(page.getByText("Where do you want to go from")).toBeVisible();
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);
+  await expect(
+    page
+      .getByRole("tabpanel", { name: "Path" })
+      .getByRole("navigation", { name: "Where this sits" }),
+  ).toContainText("SP 800-53 Rev. 5");
+  await expect(
+    page.getByText(/Publisher-declared structural path/i),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Baselines and process lenses remain separate choices/i),
+  ).toBeVisible();
+  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
-  await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
 });
 
-test("choosing a relationship lens shows only that lens and can continue from a record", async ({ page }) => {
+test("focused Path opens its publisher-declared parent without inventing another parent", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.locator(".atlas-path-stage-option").filter({ hasText: "Structure" }).first().click();
-  await expect(page.locator(".atlas-path-record").first()).toBeVisible();
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
-  // Breadcrumb records where the walk is: subject > relationship lens.
-  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("AC-2");
-  await expect(page.getByRole("navigation", { name: "Path position" })).toContainText("Structure");
+  await page
+    .getByRole("tabpanel", { name: "Path" })
+    .getByRole("button", { name: "Access Control" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "FAMILY-AC â€” Access Control", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole("tabpanel", { name: "Path" })
+      .getByRole("navigation", { name: "Where this sits" }),
+  ).toContainText("SP 800-53 Rev. 5");
+  await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
+  await expect(page).not.toHaveURL(/atlasBaseline=/);
 });
 
 test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
@@ -62,55 +75,25 @@ test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
   await expect(pathTab).toHaveAttribute("aria-selected", "true");
 });
 
-test("focused Map is absolutely bounded and restores focus after collapse", async ({ page }) => {
+test("focused Map uses the shared bounded graph and exposes the complete List", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.getByRole("group", { name: /connection groups around AC-2/i });
+  const map = page.getByRole("region", { name: "Relationship map" });
   await expect(map).toBeVisible();
-  expect(await map.locator('[data-map-node="true"]').count()).toBeLessThanOrEqual(7);
-
-  const group = map.getByRole("button", { name: /NIST baselines/i });
-  await group.click();
-  const expanded = page.getByRole("region", { name: "NIST baselines records" });
-  await expect(expanded).toBeVisible();
-  expect(await expanded.getByRole("button").count()).toBeLessThanOrEqual(5);
-  await page.keyboard.press("Escape");
-  await expect(group).toBeFocused();
-});
-
-test("selecting a Map item reveals its real record brief without leaving Atlas", async ({ page }) => {
-  await page.goto("/#/explore?node=nist-800-53%3AAC-1&relationshipView=map");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  const map = page.getByRole("group", { name: /connection groups around AC-1/i });
-  await map.getByRole("button", { name: /DISA CCIs/i }).click();
-  const item = page.getByRole("button", { name: /CCI-000001/i });
-  await item.click();
-  await expect(item).toHaveAttribute("aria-pressed", "true");
-
-  const brief = page.getByRole("complementary", { name: /CCI-000001 record brief/i });
-  await expect(brief).toBeVisible();
-  const headerBox = await page.locator(".site-header").boundingBox();
-  expect(headerBox).not.toBeNull();
-  await expect
-    .poll(async () => (await brief.boundingBox())?.y || 0)
-    .toBeGreaterThanOrEqual(headerBox.y + headerBox.height - 1);
-  await expect(brief.getByRole("heading", { name: "CCI-000001" })).toBeVisible();
-  await expect(brief.getByRole("heading", { name: "What this record says" })).toBeVisible();
-  await expect(brief.getByRole("heading", { name: "Why it appears here" })).toBeVisible();
-  await expect(brief.getByRole("heading", { name: "Source basis" })).toBeVisible();
-  await expect(brief).not.toContainText("Open the related record to review its source support");
-  await expect(brief).toContainText(
-    "The organization develops an access control policy",
+  await expect(map.locator(".atlas-scope-count")).toContainText(
+    "List contains the complete same scope",
   );
-  const synopsis = (await brief.locator(".atlas-inspector-synopsis p").first().textContent()) || "";
-  expect(synopsis.trim().length).toBeGreaterThan(40);
+  const visibleNodes = map
+    .getByRole("group", { name: "Map nodes" })
+    .getByRole("button");
+  expect(await visibleNodes.count()).toBeLessThanOrEqual(7);
 
-  await brief.getByRole("button", { name: "Explore from this record" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("CCI-000001");
+  await page.getByRole("tab", { name: "List", exact: true }).click();
+  await expect(
+    page.getByRole("table", { name: "Relationship table" }),
+  ).toBeVisible();
 });
 
 test("List uses the same published set and exposes traceable source references", async ({ page }) => {
@@ -132,37 +115,38 @@ test("zero-published-edge records render an honest empty state instead of Map", 
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "No published connections to show." })).toBeVisible();
-  await expect(page.locator(".atlas-spatial-map")).toHaveCount(0);
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toHaveCount(0);
   await expect(page.locator(".react-flow")).toHaveCount(0);
 });
 
-test("a sparse STIG still offers all seven lenses and its real implementation connection", async ({ page }) => {
+test("a sparse STIG keeps structural position separate from its published connections", async ({ page }) => {
   await page.goto("/#/explore?node=disa-stig%3AV-222387");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
-  // Every lens is still offered; empty ones say so honestly and are disabled
-  // rather than hidden, so the gap stays visible.
-  const lenses = page.locator(".atlas-path-stage-option");
-  await expect(lenses).toHaveCount(7);
-  const implementation = lenses.filter({ hasText: "Implementation" }).first();
-  await expect(implementation).toBeEnabled();
-  await expect(implementation).not.toContainText("No published connection yet");
-  await expect(page.getByText("No published connections to show.")).toHaveCount(0);
+  await expect(
+    page.getByRole("tabpanel", { name: "Path" }),
+  ).toContainText("Publisher-declared structural path");
+  await page.getByRole("tab", { name: "List", exact: true }).click();
+  const table = page.getByRole("table", { name: "Relationship table" });
+  await expect(table).toBeVisible();
+  await expect(table).toContainText(/implementation/i);
 });
 
-test("compact Map expands to no more than seven visible nodes", async ({ page }) => {
+test("compact Map keeps the shared graph bounded without page overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.getByRole("group", { name: /connection groups around AC-2/i });
-  const group = map.getByRole("button", { name: /NIST baselines/i });
-  await group.click();
-  const expanded = page.getByRole("region", { name: "NIST baselines records" });
-  expect(await expanded.getByRole("button").count()).toBeLessThanOrEqual(4);
+  const map = page.getByRole("region", { name: "Relationship map" });
+  const visibleNodes = map
+    .getByRole("group", { name: "Map nodes" })
+    .getByRole("button");
+  expect(await visibleNodes.count()).toBeLessThanOrEqual(5);
   const overflow = await page.evaluate(() => ({
     body:
       globalThis.document.body.scrollWidth -
@@ -174,20 +158,22 @@ test("compact Map expands to no more than seven visible nodes", async ({ page })
   expect(overflow).toEqual({ body: 0, document: 0 });
 });
 
-test("compact Path stacks its stage choices and keeps the selected path below them", async ({ page }) => {
+test("compact Path preserves structural position without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const stageColumns = await page.locator(".atlas-path-stage-list").evaluate(
-    (element) =>
-      globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length,
-  );
-  expect(stageColumns).toBe(1);
-  const stages = await page.locator(".atlas-path-stage-list").boundingBox();
-  const selectedPath = await page.getByRole("complementary", { name: "Selected path" }).boundingBox();
-  expect(stages).not.toBeNull();
-  expect(selectedPath).not.toBeNull();
-  expect(selectedPath.y).toBeGreaterThanOrEqual(stages.y + stages.height - 1);
+  await expect(
+    page.getByRole("tabpanel", { name: "Path" }),
+  ).toContainText("Publisher-declared structural path");
+  const overflow = await page.evaluate(() => ({
+    body:
+      globalThis.document.body.scrollWidth -
+      globalThis.document.body.clientWidth,
+    document:
+      globalThis.document.documentElement.scrollWidth -
+      globalThis.document.documentElement.clientWidth,
+  }));
+  expect(overflow).toEqual({ body: 0, document: 0 });
 });

@@ -98,7 +98,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-xs font-medium text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
               {copied ? <IconCheck size={14} className="text-[var(--ca-success)]" /> : <IconCopy size={14} />}
-              <span>{copied ? "Link Copied!" : "Copy Link"}</span>
+              <span>{copied ? "Link copied" : "Copy link"}</span>
             </button>
             <a
               href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml"
@@ -107,7 +107,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-[var(--ca-surface)] text-xs font-medium text-[var(--ca-text-muted)] hover:bg-[var(--ca-surface-raised)] transition-colors"
             >
               <IconFlag size={14} />
-              <span>Report Issue</span>
+              <span>Report a problem</span>
             </a>
           </div>
         </div>
@@ -121,13 +121,6 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
         <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <CommonsLaneBadge full lane={resource.resourceLane} />
-
-            {resource.editorialRecommendation ? (
-              <span className="commons-priority-badge">
-                <IconSparkles size={13} />
-                Editorially Recommended
-              </span>
-            ) : null}
 
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium bg-[var(--ca-surface-raised)] text-[var(--ca-text)] border border-[var(--ca-border-strong)] capitalize">
               Status: {resource.maintenanceStatus}
@@ -206,14 +199,14 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
             <section className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md">
               <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--ca-primary)] flex items-center gap-2 mb-3">
                 <IconInfoCircle size={18} />
-                Why This Resource Is Included
+                Why this resource is here
               </h2>
               <p className="text-sm text-[var(--ca-text)] leading-relaxed">
                 {resource.whyIncluded}
               </p>
               {resource.editorialNotes ? (
                 <div className="mt-4 p-3 rounded-sm bg-[var(--ca-bg)] border border-[var(--ca-border)] text-xs text-[var(--ca-text-muted)]">
-                  <span className="font-semibold text-[var(--ca-primary)] block mb-1">Editorial Note:</span>
+                  <span className="font-semibold text-[var(--ca-primary)] block mb-1">Control Atlas note:</span>
                   {resource.editorialNotes}
                 </div>
               ) : null}
@@ -224,7 +217,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
               <section className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md">
                 <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--ca-text)] flex items-center gap-2 mb-4">
                   <IconSparkles size={18} className="text-[var(--ca-primary)]" />
-                  Recommended Companion Tools & Templates
+                  Related tools and templates
                 </h2>
                 <div className="space-y-4">
                   {companionResources.map((comp) => (

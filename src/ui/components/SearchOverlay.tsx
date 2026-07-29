@@ -3,6 +3,7 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import { Button } from "./lsm/Button";
@@ -29,17 +30,12 @@ export function SearchOverlay(props: SearchOverlayProps) {
     if (!bundle || !query.trim()) {
       return { libraryResults: [], commonsResults: [] };
     }
-    const q = query.trim().toLowerCase();
     const libraryResults = bundle.runtime.searchLibrary(query.trim()).slice(0, 8);
-    const commonsResults = (bundle.commonsSearchIndex?.documents || [])
-      .filter(
-        (doc) =>
-          doc.name.toLowerCase().includes(q) ||
-          doc.shortName.toLowerCase().includes(q) ||
-          doc.summary.toLowerCase().includes(q) ||
-          doc.searchableText.includes(q)
-      )
-      .slice(0, 4);
+    const commonsResults = searchResourceDocuments(
+      bundle.commonsSearchIndex?.documents || [],
+      query,
+      4,
+    ).map((entry) => entry.document);
 
     return { libraryResults, commonsResults };
   }, [bundle, query]);

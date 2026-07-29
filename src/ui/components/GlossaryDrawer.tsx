@@ -172,15 +172,15 @@ export function GlossaryDrawer(props: {
               id="help-drawer-panel"
               role="tabpanel"
             >
-              <SummaryCard title="What do you need to do?" tone="trust">
-                <p>Answer three questions if you are not sure which framework, document, or guide to use first.</p>
+              <SummaryCard title="Browse source starting points" tone="trust">
+                <p>Review the fixed public-source list and the rule used to include each source. This is navigation, not an applicability recommendation.</p>
                 <Button variant="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
-                  Find where to start
+                  Browse source starting points
                 </Button>
               </SummaryCard>
               <div className="card-actions">
                 <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("search"); }} type="button">Search records</Button>
-                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Compare frameworks</Button>
+                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Open Compare</Button>
               </div>
               <details className="drawer-all-help">
                 <summary>All help topics ({helpSurfaces.length})</summary>

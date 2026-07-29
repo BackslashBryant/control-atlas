@@ -24,14 +24,6 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         label: routeIdentityFor("home").contextLabel,
         scope: "Control Atlas",
       };
-    case "menu":
-      return {
-        depth: 0,
-        mode: "editorial",
-        label: routeIdentityFor("menu").contextLabel,
-        scope: "Control Atlas",
-        back: { label: "Home", view: "home" },
-      };
     case "library-detail": {
       const [catalog = ""] = state.node.split(":", 1);
       return {
@@ -90,15 +82,11 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         scope: state.query || "All public records",
       };
     case "catalog-detail":
-    case "browse":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("catalog-detail").contextLabel,
-        scope:
-          state.view === "catalog-detail"
-            ? "Selected catalog"
-            : "All catalogs",
+        scope: "Selected catalog",
       };
     case "matrix":
       return {
@@ -148,7 +136,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("start-here").contextLabel,
-        scope: state.step ? `Step ${state.step}` : "Orientation",
+        scope: "Source starting points",
       };
     case "about":
       return {

@@ -9,9 +9,10 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("landing presents the ancestry-first hero and primary entry paths", async ({
+test("landing presents search first, the rotating brand item, and exactly three other entrances", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -20,10 +21,46 @@ test("landing presents the ancestry-first hero and primary entry paths", async (
     page.getByRole("heading", { name: "Control Atlas", exact: true }),
   ).toBeVisible();
 
-  await expect(page.getByRole("button", { name: /Trace a framework/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Follow the RMF process/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Start with my situation/ })).toBeVisible();
-  await expect(page.locator(".landing-ancestry-card")).toHaveCount(3);
+  await expect(page.getByRole("search")).toBeVisible();
+  await expect(page.locator(".home-entry .brand-kbd")).toBeVisible();
+  await expect(page.locator("[data-brand-word]")).toHaveText("Trace");
+  await expect(page.getByRole("button", { name: /Open the Atlas/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Browse Catalog/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Find Tools & Resources/ })).toBeVisible();
+  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+
+  const urlBeforeSkip = page.url();
+  await page.locator(".skip-link").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#workspace")).toBeFocused();
+  expect(page.url()).toBe(urlBeforeSkip);
+});
+
+test("protected Ctrl+Alt slogan rotates and native Home history remains coherent", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await waitForAppReady(page);
+
+  await expect
+    .poll(() => page.locator("[data-brand-word]").textContent(), {
+      timeout: 5000,
+    })
+    .not.toBe("Trace");
+
+  await page.getByRole("button", { name: /Browse Catalog/ }).click();
+  await waitForAppReady(page);
+  await expect(page).toHaveURL(/#\/catalog/);
+
+  await page.goBack();
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("heading", { name: "Control Atlas", exact: true }),
+  ).toBeVisible();
+
+  await page.goForward();
+  await waitForAppReady(page);
+  await expect(page).toHaveURL(/#\/catalog/);
 });
 
 test("landing search and brand-home flow work without legacy onboarding surfaces", async ({

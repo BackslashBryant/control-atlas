@@ -41,7 +41,6 @@ const REQUIRED_FIELDS = [
   'retrieval_method',
   'artifact_url',
   'artifact_type',
-  'checksum',
   'access_status',
   'license_or_use',
   'lifecycle_status',
@@ -84,6 +83,13 @@ export function validateSourceRegistry(registry) {
     requireAllowed(errors, source, 'access_status', ACCESS_STATUSES);
     requireAllowed(errors, source, 'retrieval_method', RETRIEVAL_METHODS);
     requireAllowed(errors, source, 'artifact_type', ARTIFACT_TYPES);
+    if (source.retrieval_method === 'manual_review') {
+      if (source.checksum !== null && !SHA256.test(String(source.checksum || ''))) {
+        errors.push(`manual-review source ${source.id} checksum must be null or a sha256 digest`);
+      }
+    } else if (source.checksum === undefined || source.checksum === null || source.checksum === '') {
+      errors.push(`source ${source.id} missing required field: checksum`);
+    }
 
     if (!Array.isArray(source.mandate_basis)) errors.push(`source ${source.id} mandate_basis must be an array`);
     if (!Array.isArray(source.federal_referenced_by)) errors.push(`source ${source.id} federal_referenced_by must be an array`);

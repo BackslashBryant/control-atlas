@@ -117,7 +117,7 @@ test('xlsx export is a valid zip with instructions, one authoritative register, 
     .filter((n) => n.startsWith('xl/worksheets/'))
     .map((n) => strFromU8(entries[n]))
     .join('\n');
-  assert.match(allSheets, /open-source reference tool/, 'disclaimer must be present in the workbook');
+  assert.match(allSheets, /uses the public sources and choices named above/, 'disclaimer must be present in the workbook');
   assert.match(allSheets, /inlineStr/, 'cells should be written as inline strings');
 });
 
@@ -145,7 +145,7 @@ test('docx export is a valid zip with a document body, a table, and the disclaim
   assert.match(document, /<w:document/, 'document must be wordprocessingml');
   assert.match(document, /<w:tbl>/, 'SSP docx must contain a table');
   assert.match(document, /Account Management|AC-2/, 'control content must be present');
-  assert.match(document, /open-source reference tool/, 'disclaimer must be present');
+  assert.match(document, /uses the public sources and choices named above/, 'disclaimer must be present');
   assert.match(document, /<w:sectPr>/, 'body must end with section properties');
 });
 

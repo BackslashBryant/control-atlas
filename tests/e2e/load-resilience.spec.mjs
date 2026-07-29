@@ -9,16 +9,16 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("load resilience shows library skeleton and allows offline navigation", async ({
+test("load resilience shows Search skeleton and allows offline navigation", async ({
   page,
 }) => {
   test.setTimeout(60000);
-  await page.route("**/library-search-manifest.json**", async (route) => {
+  await page.route("**/library-search.json**", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 3500));
     await route.continue();
   });
 
-  await page.goto("/?view=explore");
+  await page.goto("/#/search");
   await expect(page.locator(".skeleton-card").first()).toBeVisible();
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
@@ -26,9 +26,9 @@ test("load resilience shows library skeleton and allows offline navigation", asy
   await primaryNav
     .getByRole("button", { name: "Learn", exact: true })
     .click();
-  await expect(page).toHaveURL(/#\/learn|view=playbooks/);
+  await expect(page).toHaveURL(/#\/learn/);
   await expect(
-    page.getByRole("heading", { name: "Guides for common compliance jobs" }),
+    page.getByRole("heading", { name: "Learn" }),
   ).toBeVisible();
 });
 
@@ -38,7 +38,7 @@ test("load resilience surfaces retry after timeout", async ({ page }) => {
     await route.continue();
   });
 
-  await page.goto("/?view=explore");
+  await page.goto("/#/search");
   await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible(
     {
       timeout: 15000,
@@ -60,7 +60,7 @@ test("staged library search enables results before detail pages", async ({
     await route.continue();
   });
 
-  await page.goto("/?view=explore&q=AC-2");
+  await page.goto("/#/search?q=AC-2");
   await expect(
     page.getByRole("heading", { name: "Search everything in one place" }),
   ).toBeVisible({
@@ -92,7 +92,7 @@ test("heavy routes explain what they are loading", async ({ page }) => {
     await route.continue();
   });
 
-  await page.goto("/#/templates");
+  await page.goto("/#/build/tasks");
   // DataPendingNotice's title renders through Panel as a bold <b>, not a
   // heading element (src/ui/components/lsm/Panel.tsx:20) — pre-existing,
   // unrelated to this route.
@@ -106,6 +106,6 @@ test("heavy routes explain what they are loading", async ({ page }) => {
   ).toBeVisible();
   await waitForAppReady(page);
   await expect(
-    page.getByRole("heading", { name: "What are you working on?" }),
+    page.getByRole("heading", { name: "Tasks", exact: true }),
   ).toBeVisible();
 });

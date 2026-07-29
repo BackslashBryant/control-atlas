@@ -18,7 +18,9 @@ test("Atlas standalone route exposes Path, bounded Map, and List", async ({ page
   // Purpose/RMF are lenses inside Path now, not peer tabs.
   await expect(page.getByRole("tab", { name: "Path", exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "Map" }).click();
-  await expect(page.getByRole("group", { name: /connection groups around AC-2/i })).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible();
   await page.getByRole("tab", { name: "List" }).click();
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
@@ -36,7 +38,7 @@ test("Atlas default route is the guided ancestry path, not an empty graph", asyn
 
 test("relationship graph on detail page retains its accessible List fallback", async ({ page }) => {
   await page.goto(
-    "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=list",
+    "/#/record/nist-800-53/AC-2?relationshipView=list",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -45,8 +47,8 @@ test("relationship graph on detail page retains its accessible List fallback", a
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 
-test("legacy detail Map still clusters large groups outside the Atlas route", async ({ page }) => {
-  await page.goto("/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=map");
+test("record detail Map uses the shared graph and keeps its controls stable", async ({ page }) => {
+  await page.goto("/#/record/nist-800-53/AC-2?relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -69,7 +71,7 @@ test("legacy detail Map still clusters large groups outside the Atlas route", as
 });
 
 test("record detail opens the same record in the new Atlas", async ({ page }) => {
-  await page.goto("/?view=library-detail&node=nist-800-53%3AAC-2");
+  await page.goto("/#/record/nist-800-53/AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

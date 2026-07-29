@@ -3,9 +3,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { patternsData } from '../src/app/patterns-data.mjs';
+import { learnArticles } from '../src/app/learn-content.mjs';
 import { buildTemplateDocument } from '../src/app/template-engine.mjs';
-import { PRODUCT_DISCLAIMER } from '../src/shared/disclaimer.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const registry = JSON.parse(readFileSync(join(__dirname, '../data/template-registry.json'), 'utf8'));
@@ -19,7 +18,7 @@ const PROHIBITED_CLAIMS = [
   /makes?\s+authorization\s+decisions/i,
 ];
 
-const ADVISORY_FIELDS = ['title', 'summary', 'explanation', 'friction'];
+const ADVISORY_FIELDS = ['title', 'summary', 'explanation', 'limitations'];
 const RAW_SCHEMA_SLUGS = /\b(includePlaceholders|artifact_type|templateType|security_plan_starter|implementation_statement_worksheet)\b/;
 const ABSTRACT_SUMMARY_LEADS = /^(understand|leverage|utilize|establish|centralize|facilitate|use task-focused)\b/i;
 const DETERMINATION_BOUNDARY = [
@@ -60,33 +59,29 @@ const dataset = {
   ],
 };
 
-test('pattern pages include limitations and cautionary donts', () => {
-  for (const pattern of patternsData) {
-    assert.ok(pattern.limitations?.trim(), `Pattern ${pattern.id} must include limitations`);
-    assert.ok(Array.isArray(pattern.donts) && pattern.donts.length > 0, `Pattern ${pattern.id} must include donts`);
+test('Learn articles include limitations, citations, and a concrete next action', () => {
+  for (const article of learnArticles) {
+    assert.ok(article.limitations?.trim(), `Article ${article.id} must include limitations`);
+    assert.ok(article.citations?.length, `Article ${article.id} must include citations`);
+    assert.ok(article.nextAction?.label, `Article ${article.id} must include a next action`);
   }
 });
 
-test('pattern advisory copy avoids prohibited compliance or authorization claims', () => {
-  for (const pattern of patternsData) {
+test('Learn explanation copy avoids prohibited compliance or authorization claims', () => {
+  for (const pattern of learnArticles) {
     for (const field of ADVISORY_FIELDS) {
       const text = String(pattern[field] || '');
       for (const claim of PROHIBITED_CLAIMS) {
         assert.doesNotMatch(text, claim, `Pattern ${pattern.id}.${field} contains prohibited claim`);
       }
     }
-    for (const entry of pattern.dos || []) {
-      for (const claim of PROHIBITED_CLAIMS) {
-        assert.doesNotMatch(String(entry), claim, `Pattern ${pattern.id}.dos contains prohibited claim`);
-      }
-    }
   }
 });
 
-test('Start Here treats mappings and recommendations as references requiring validation', () => {
-  const startHere = readFileSync('src/ui/lib/startHereRecommendations.mjs', 'utf8');
-  assert.match(startHere, /do not determine a classification, baseline, authorization path, or applicability result/i);
-  assert.match(startHere, /confirm .*governing program/i);
+test('Start here is a source navigator without determination questions', () => {
+  const startHere = readFileSync('src/ui/pages/StartHerePage.tsx', 'utf8');
+  assert.match(startHere, /source list—not a framework or baseline, and not an applicability/i);
+  assert.doesNotMatch(startHere, /System type|Data sensitivity|Operational environment/);
   for (const claim of DETERMINATION_BOUNDARY) {
     assert.doesNotMatch(startHere, claim, `Start Here contains a determination-like claim: ${claim}`);
   }
@@ -103,8 +98,8 @@ test('site-wide UI copy rule rejects canned metaphors and compliance-only prompt
   }
 });
 
-test('playbook summaries name a concrete task or decision', () => {
-  for (const pattern of patternsData) {
+test('Learn summaries name a concrete reading job', () => {
+  for (const pattern of learnArticles) {
     const summary = String(pattern.summary || '').trim();
     const wordCount = summary.split(/\s+/).filter(Boolean).length;
     assert.ok(summary, `Pattern ${pattern.id} must have a summary`);
@@ -151,17 +146,19 @@ test('generated templates use plain-language prompts without raw schema slugs', 
 
 test('react shell footer uses the approved open-source guidance disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
-  assert.match(
-    footer,
-    /Control Atlas is an open-source reference tool\. It does not replace official guidance\./,
-  );
+  const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
+  assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
+  assert.match(identity, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
 });
 
-test('about page includes full product disclaimer', () => {
+test('about page states the exact product boundary without a decorative hierarchy', () => {
   const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
   assert.match(appShell, /AboutPage/);
-  assert.match(aboutPage, /About & trust/);
-  assert.match(aboutPage, /PRODUCT_DISCLAIMER/);
-  assert.match(PRODUCT_DISCLAIMER, /not an official government system/i);
-  assert.match(PRODUCT_DISCLAIMER, /reference aids based on public sources/i);
+  assert.match(aboutPage, /eyebrow="About"/);
+  assert.match(aboutPage, /PRODUCT_DEFINITION/);
+  assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
+  assert.match(aboutPage, /Structure follows the publisher/i);
+  assert.match(aboutPage, /hierarchy declared by the source/i);
+  assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
+  assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
 });

@@ -32,6 +32,16 @@ const retiredArtifacts = [
   'candidates',
   'source-health',
 ];
+const forbiddenStructuralParentTypes = new Set([
+  'assessment_procedure',
+  'baseline',
+  'mapping',
+  'evidence',
+  'implementation_aid',
+  'process',
+  'resource',
+  'rmf_step',
+]);
 
 test('generated output uses only the federal graph artifact contract', () => {
   for (const name of expectedArtifacts) {
@@ -64,6 +74,28 @@ test('every graph node has an eligible defining federal source', () => {
     assert.equal(source.graph_eligible, true, `ineligible defining source for ${node.id}`);
     assert.notEqual(source.eligibility_status, 'excluded');
   }
+});
+
+test('tree doctrine keeps baselines and other lenses out of structural parentage', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+
+  const invalidEdges = edges.filter(
+    (edge) =>
+      edge.relationship_class === RELATIONSHIP_CLASSES.structural &&
+      forbiddenStructuralParentTypes.has(
+        nodeById.get(edge.source_node_id)?.node_type,
+      ),
+  );
+  const invalidPointers = nodes.filter(
+    (node) =>
+      node.parent_id &&
+      forbiddenStructuralParentTypes.has(nodeById.get(node.parent_id)?.node_type),
+  );
+
+  assert.deepEqual(invalidEdges, []);
+  assert.deepEqual(invalidPointers, []);
 });
 
 test('displayable edges separate semantics, provenance, confidence, and evidence quality', () => {

@@ -173,36 +173,42 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("landing presents three ancestry entry points alongside direct destination shortcuts", () => {
-  // W2 directive (2026-07-27): visitors choose a framework lineage, the RMF
-  // process, or their own situation before following one branch at a time.
+test("Home makes Search the sole primary action and keeps RMF optional", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /landing-ancestry-grid/);
-  assert.match(homePage, /Trace a framework/);
-  assert.match(homePage, /Follow the RMF process/);
-  assert.match(homePage, /Start with my situation/);
-  assert.match(homePage, /landing-shortcut-grid/);
-  // Shortcuts are driven by the real nav config, not a hand-copied list, so
-  // they can't silently drift out of sync with the actual site destinations.
-  assert.match(homePage, /PRIMARY_NAV_ITEMS/);
-  assert.doesNotMatch(homePage, /className="[^"]*landing-launch[^"]*"/);
-  assert.doesNotMatch(homePage, /className="[^"]*landing-orb[^"]*"/);
-  assert.doesNotMatch(homePage, /Click to start/);
-  assert.doesNotMatch(homePage, /<h3 aria-hidden/);
-  assert.doesNotMatch(homePage, /<p aria-hidden/);
+  assert.match(homePage, /className="home-search"/);
+  assert.match(homePage, /Search published records/);
+  assert.match(homePage, /Open the Atlas/);
+  assert.match(homePage, /Browse Catalog/);
+  assert.match(homePage, /Find Tools & Resources/);
+  assert.match(homePage, /Browse source starting points/);
+  assert.match(homePage, /BrandFlourish/);
+  assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
+  assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
+  assert.doesNotMatch(homePage, /Choose a starting point/);
 });
 
 test("high-density task surfaces bound results and name download actions", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
   const templatesPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
-  const startHereResult = readFileSync("src/ui/components/StartHereResult.tsx", "utf8");
+  const startHere = readFileSync("src/ui/pages/StartHerePage.tsx", "utf8");
   assert.match(comparePage, /relationshipPageSize = 25/);
   assert.match(comparePage, /Showing \{/);
   assert.match(comparePage, /View evidence/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
-  assert.match(startHereResult, /Source navigator/);
-  assert.match(startHereResult, /Public sources to browse/);
+  assert.match(startHere, /Source starting points/);
+  assert.match(startHere, /Search all records/);
+});
+
+test("Build overview exposes Tasks, Starter documents, and Resources as equal lanes", () => {
+  const buildPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
+  const buildState = readFileSync("src/ui/lib/buildRouteState.ts", "utf8");
+  assert.match(buildPage, /className="build-lane-grid"/);
+  assert.match(buildPage, /BUILD_LANES\.map/);
+  assert.match(buildState, /label: "Tasks"/);
+  assert.match(buildState, /label: "Starter documents"/);
+  assert.match(buildState, /label: "Resources"/);
+  assert.doesNotMatch(buildPage, /Choose a task first/);
 });
 
 test("compact icon and chip controls retain 44 pixel touch targets", () => {
@@ -254,12 +260,11 @@ test("connection transparency distinguishes inventory from completeness", () => 
   assert.match(catalogCoverage, /export function isLowCatalogCoverage/);
   assert.match(catalogCoverage, /coverage\.pct\s*<=\s*75/);
 
-  // SourcesPage lists factual loaded/connected/link counts without presenting
-  // a percentage, warning badge, or traffic-light completeness judgment.
-  assert.match(sourcesPage, /Connection inventory/);
-  assert.match(sourcesPage, /records connected/);
-  assert.match(sourcesPage, /published links/);
-  assert.match(sourcesPage, /not completeness scores/);
+  // SourcesPage is a factual trust register and never presents a traffic-light
+  // completeness judgment.
+  assert.match(sourcesPage, /buildSourceRegister/);
+  assert.match(sourcesPage, /Source \/ publication/);
+  assert.match(sourcesPage, /Version \/ current through/);
   assert.doesNotMatch(sourcesPage, /Preview \/ low coverage/);
   assert.doesNotMatch(sourcesPage, /data-level=/);
   assert.doesNotMatch(sourcesPage, /catalog\.pct/);

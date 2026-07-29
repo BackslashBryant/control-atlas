@@ -1,2 +1,2 @@
 export const PRODUCT_DISCLAIMER =
-  'Control Atlas is an open-source reference tool. It is not an official government system and does not make compliance, authorization, or risk decisions. All mappings and templates are reference aids based on public sources. Official decisions remain with the applicable Authorizing Official, agency, or program office.';
+  'This starter uses the public sources and choices named above. It is a working draft, not an official form. The team using it decides applicability and baseline selection and owns any compliance, inheritance, authorization, or ATO conclusions.';

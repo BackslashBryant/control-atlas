@@ -1,32 +1,5 @@
 /** Derived UI categories for patterns and templates (no schema migration). */
 
-/** Curated patterns for new users (UI-only). */
-export const RECOMMENDED_PATTERN_IDS = [
-  "rmf-lifecycle",
-  "shared-responsibility",
-  "reciprocity-basics",
-];
-
-export const PATTERN_CATEGORIES = {
-  Authorization: [
-    "rmf-lifecycle",
-    "ato-vs-atc",
-    "ato-vs-fedramp",
-    "reciprocity-basics",
-    "reciprocity-failures",
-    "control-inheritance",
-    "boundary-patterns",
-  ],
-  Cloud: [
-    "shared-responsibility",
-    "csp-inheritance",
-    "enterprise-inheritance",
-    "common-control-provider",
-  ],
-  Assessment: ["evidence-patterns", "poam-concepts"],
-  Monitoring: ["conmon-cadence", "boe-reuse"],
-};
-
 export const TEMPLATE_CATEGORIES = {
   Authorization: [
     "security_plan_starter",

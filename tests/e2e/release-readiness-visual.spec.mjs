@@ -45,7 +45,7 @@ test("release evidence: focused Atlas stays bounded on desktop", async ({ page }
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.locator(".atlas-spatial-map");
+  const map = page.getByRole("region", { name: "Relationship map" });
   const inspector = page.getByRole("complementary", { name: "Current record overview" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
@@ -68,7 +68,7 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.locator(".atlas-spatial-map");
+  const map = page.getByRole("region", { name: "Relationship map" });
   const inspector = page.getByRole("complementary", { name: "Current record overview" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
@@ -137,7 +137,7 @@ test("release evidence: Atlas fits a 375 by 667 compact viewport", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.locator(".atlas-spatial-map");
+  const map = page.getByRole("region", { name: "Relationship map" });
   const inspector = page.getByRole("complementary", {
     name: "Current record overview",
   });
@@ -158,7 +158,9 @@ test("release evidence: reduced motion keeps every Atlas control available", asy
   await dismissOnboarding(page);
 
   await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
-  await expect(page.locator(".atlas-spatial-map")).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible();
   const duration = await page.getByRole("tab", { name: "Map" }).evaluate(
     (element) => globalThis.getComputedStyle(element).transitionDuration,
   );

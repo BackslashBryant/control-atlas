@@ -56,15 +56,3 @@ export const publicationDescriptionMap = {
   published: "Published mapping from the named catalog.",
   candidate: "Candidate mapping that still needs review before you rely on it.",
 };
-
-export const productCopy = {
-  tagline: "The public map for federal cyber compliance.",
-  productDescription:
-    "Control Atlas helps you find a requirement, see how it connects, and open the next useful record, comparison, playbook, template, or source.",
-  homepageDescription:
-    "Find a requirement, see its published connections, and open the next useful step.",
-  exploreDescription:
-    "Search controls, baselines, CCIs, STIGs, terms, templates, playbooks, and sources. Open a record to see what it means and how it connects.",
-  atlasMapDescription:
-    "Explore how controls, baselines, CCIs, STIGs, sources, templates, and playbooks connect.",
-};

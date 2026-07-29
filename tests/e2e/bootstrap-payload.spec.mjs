@@ -18,11 +18,13 @@ test.beforeEach(async ({ page }) => {
 
 test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
   const requested = [];
+  const scripts = [];
   page.on("request", (request) => {
     const url = request.url();
     if (url.includes("/data/generated/")) {
       requested.push(url);
     }
+    if (request.resourceType() === "script") scripts.push(url);
   });
 
   await page.goto("/");
@@ -30,7 +32,13 @@ test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
   await dismissOnboarding(page);
 
   expect(graphArtifactUrls(requested)).toEqual([]);
-  expect(requested.some((url) => url.includes("library-search"))).toBeTruthy();
+  expect(requested).toEqual([]);
+  expect(scripts).toHaveLength(1);
+
+  await page.getByRole("button", { name: /Browse Catalog/ }).click();
+  await waitForAppReady(page);
+  await expect(page).toHaveURL(/#\/catalog/);
+  expect(scripts.length).toBeGreaterThan(1);
 });
 
 test("explore bootstrap avoids graph JSON until record open", async ({
@@ -81,18 +89,17 @@ test("focused Atlas loads one neighborhood without monolithic graph JSON", async
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.locator(".atlas-spatial-map")).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible();
 
   expect(graphArtifactUrls(requested)).toEqual([]);
   expect(
     requested.some((url) => url.includes("atlas-neighborhood/32.json")),
   ).toBeTruthy();
-  expect(
-    requested.some((url) => url.includes("RelationshipGraph-")),
-  ).toBeFalsy();
 });
 
-test("focused Atlas reserves its mobile workspace while the neighborhood loads", async ({
+test("focused Atlas loading state avoids a content-agnostic mobile minimum height", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 412, height: 823 });
@@ -116,12 +123,15 @@ test("focused Atlas reserves its mobile workspace while the neighborhood loads",
   );
 
   releaseNeighborhood();
-  await expect(page.locator(".atlas-spatial-map")).toBeVisible({
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible({
     timeout: 30000,
   });
   const loadedHeight = await page.locator("#app").evaluate(
     (element) => element.getBoundingClientRect().height,
   );
 
-  expect(loadingHeight).toBeGreaterThanOrEqual(loadedHeight - 48);
+  expect(loadingHeight).toBeLessThanOrEqual(823);
+  expect(loadedHeight).toBeGreaterThan(loadingHeight);
 });

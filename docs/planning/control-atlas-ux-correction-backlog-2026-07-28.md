@@ -179,7 +179,7 @@ Every canonical route and state round-trips; retired paths are only in recovery 
   - Search field and button are visible at 375×812 without scrolling.
   - Only one primary visual action exists.
   - RMF is absent from Home and available as an optional Explore lens.
-  - Home has no rotating slogan or repeated section scaffold.
+  - Home preserves the rotating slogan as a brand element without displacing Search or creating a repeated section scaffold.
 - Regression: screenshot/layout bounds at 375, 768, 1440 and semantic heading/action assertions.
 - Owner persona: Muse lead, Forge implementation.
 - Effort: M.
@@ -358,7 +358,7 @@ The twelve practitioner jobs pass across desktop and mobile, with actual 200% zo
 - Target reference: all wireframes.
 - Dependencies: CA-P4-001 and destination restructures.
 - Acceptance:
-  - No banned audience label, rotating slogan, empty choose/start/understand opening, or ungrounded recommendation remains.
+  - No banned audience label, empty choose/start/understand opening, or ungrounded recommendation remains. The protected rotating slogan remains a brand flourish, not an action or product determination.
   - No repeated non-global four-word phrase appears across three major surfaces without a documented functional reason.
   - Disclaimers appear once per risk boundary.
 - Regression: copy gate plus human surface review.

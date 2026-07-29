@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "speakerClasses": {
+    "product-interface": "Control Atlas authored interface and accessibility copy.",
+    "product-explanation": "Control Atlas authored explanation of its own behavior.",
+    "generated-artifact": "Control Atlas authored prompts and boundaries emitted into starter documents.",
+    "resource-register": "Control Atlas maintained descriptions of third-party resources.",
+    "control_atlas_brand": "Owner-approved Control Atlas identity and rotating Ctrl+Alt flourish.",
+    "official-source": "Publisher text preserved as source material; exempt from product-voice determinations."
+  },
+  "rules": [
+    {
+      "root": "src/ui",
+      "extensions": [".tsx"],
+      "speaker": "product-interface",
+      "extraction": "jsx-visible"
+    },
+    {
+      "files": [
+        "src/shared/brand-rotation.ts"
+      ],
+      "speaker": "control_atlas_brand",
+      "extraction": "module-literals"
+    },
+    {
+      "files": [
+        "src/app/help-data.mjs",
+        "src/app/learn-content.mjs",
+        "src/ui/lib/source-navigator.mjs",
+        "src/shared/disclaimer.mjs",
+        "src/shared/product-identity.ts"
+      ],
+      "speaker": "product-explanation",
+      "extraction": "module-literals"
+    },
+    {
+      "files": ["data/template-registry.json"],
+      "speaker": "generated-artifact",
+      "extraction": "json-values"
+    },
+    {
+      "files": ["data/commons-resource-dataset.json"],
+      "speaker": "resource-register",
+      "extraction": "json-values"
+    }
+  ],
+  "exemptions": [
+    {
+      "root": "data/generated",
+      "speaker": "official-source",
+      "reason": "Generated publisher records are validated through source identity and corpus attribution gates."
+    }
+  ]
+}

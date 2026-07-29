@@ -1,5 +1,5 @@
 import { glossaryData } from '../../app/glossary-data.mjs';
-import { patternsData } from '../../app/patterns-data.mjs';
+import { learnArticles } from '../../app/learn-content.mjs';
 
 function normalize(value) {
   return value.trim().toLowerCase();
@@ -7,7 +7,7 @@ function normalize(value) {
 
 export function templatesForPatterns(patternIds) {
   const templateIds = patternIds.flatMap((patternId) => {
-    const pattern = patternsData.find((entry) => entry.id === patternId);
+    const pattern = learnArticles.find((entry) => entry.id === patternId);
     return pattern?.templates || [];
   });
   return [...new Set(templateIds)];

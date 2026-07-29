@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-28T04:20:06.118Z",
+  "generated_at": "2026-07-29T01:35:49.122Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -9,8 +9,7 @@
       "edges.json",
       "evidence.json",
       "graph-health.json",
-      "library-search-manifest.json",
-      "library-search/",
+      "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-neighborhood/",
       "atlas-node-index.json"
@@ -19,14 +18,14 @@
       "build-manifest.json",
       "source-manifests.json",
       "graph-diff-summary.json",
-      "library-search-manifest.json",
+      "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-node-index.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
     "counts": {
-      "sources": 46,
+      "sources": 50,
       "nodes": 11674,
       "edges": 22273,
       "evidence": 22273,

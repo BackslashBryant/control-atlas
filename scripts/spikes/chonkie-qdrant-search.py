@@ -19,13 +19,23 @@ MODEL = "BAAI/bge-small-en-v1.5"
 MIN_SCORE = 0.48
 
 
-def load_shard(name: str) -> list[dict]:
-    payload = json.loads(
-        (ROOT / "data" / "generated" / "library-search" / f"{name}.json").read_text(
+def load_documents() -> list[dict]:
+    search_payload = json.loads(
+        (ROOT / "data" / "generated" / "library-search.json").read_text(
             encoding="utf-8"
         )
     )
-    return payload["library_search_shard"]["documents"]
+    graph_payload = json.loads(
+        (ROOT / "data" / "generated" / "nodes.json").read_text(encoding="utf-8")
+    )
+    description_by_id = {
+        node["id"]: node.get("metadata", {}).get("description", "")
+        for node in graph_payload["nodes"]
+    }
+    return [
+        {**document, "description": description_by_id.get(document["id"], "")}
+        for document in search_payload["library_search"]["documents"]
+    ]
 
 
 def normalize_control_notation(value: str) -> str:
@@ -39,8 +49,13 @@ def normalize_control_notation(value: str) -> str:
 
 
 started = time.perf_counter()
-nist_documents = load_shard("nist-800-53")
-cci_documents = load_shard("disa-cci")
+all_documents = load_documents()
+nist_documents = [
+    document for document in all_documents if document["catalog_id"] == "nist-800-53"
+]
+cci_documents = [
+    document for document in all_documents if document["catalog_id"] == "disa-cci"
+]
 benchmark = json.loads(
     (ROOT / "tests" / "benchmarks" / "search-quality.json").read_text(
         encoding="utf-8"

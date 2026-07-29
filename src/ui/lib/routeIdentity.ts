@@ -3,7 +3,7 @@ import {
   isKnownBuildDocument,
   isKnownBuildTask,
   isValidBuildFormat,
-  isValidBuildFramework,
+  isValidBuildSourceContext,
 } from "./buildRouteState";
 
 export type RouteIdentity = {
@@ -20,8 +20,7 @@ export type RouteIdentity = {
  */
 const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   home: { path: "/", label: "Home", title: "Home", contextLabel: "Home", analyticsName: "home" },
-  menu: { path: "/", label: "Home", title: "Home", contextLabel: "Home", analyticsName: "home" },
-  "start-here": { path: "/start", label: "Start here", title: "Start", contextLabel: "Start here", analyticsName: "start_here" },
+  "start-here": { path: "/start", label: "Start here", title: "Start here", contextLabel: "Start here", analyticsName: "start_here" },
   "atlas-map": { path: "/explore", label: "Explore", title: "Explore", contextLabel: "Explore", analyticsName: "explore" },
   search: { path: "/search", label: "Search", title: "Search", contextLabel: "Search", analyticsName: "search" },
   "catalog-detail": { path: "/catalog", label: "Catalog", title: "Catalog", contextLabel: "Catalog", analyticsName: "catalog" },
@@ -34,12 +33,76 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   "commons-detail": { path: "/build/resources", label: "Resource", title: "Resource", contextLabel: "Resource", analyticsName: "resource_detail" },
   about: { path: "/about", label: "About", title: "About", contextLabel: "About", analyticsName: "about" },
   retired: { path: "/retired", label: "Retired identifier", title: "Retired identifier", contextLabel: "Retired identifier", analyticsName: "retired_identifier" },
-  browse: { path: "/catalog", label: "Catalog", title: "Catalog", contextLabel: "Catalog", analyticsName: "catalog" },
   "not-found": { path: "/not-found", label: "Page not found", title: "Page not found", contextLabel: "Page not found", analyticsName: "not_found" },
 };
 
+const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
+  home: null,
+  "start-here": "start-here",
+  "atlas-map": "atlas-map",
+  search: null,
+  "catalog-detail": "catalog-detail",
+  "library-detail": "catalog-detail",
+  matrix: "matrix",
+  patterns: "patterns",
+  templates: "templates",
+  sources: "sources",
+  commons: "templates",
+  "commons-detail": "templates",
+  about: null,
+  retired: "catalog-detail",
+  "not-found": null,
+};
+
+const RECOVERY_VIEW_BY_VIEW: Record<AppView, AppView> = {
+  home: "home",
+  "start-here": "sources",
+  "atlas-map": "atlas-map",
+  search: "search",
+  "catalog-detail": "catalog-detail",
+  "library-detail": "catalog-detail",
+  matrix: "matrix",
+  patterns: "patterns",
+  templates: "templates",
+  sources: "sources",
+  commons: "commons",
+  "commons-detail": "commons",
+  about: "about",
+  retired: "catalog-detail",
+  "not-found": "home",
+};
+
+export const CANONICAL_DESTINATION_VIEWS = Object.freeze([
+  "home",
+  "search",
+  "atlas-map",
+  "catalog-detail",
+  "library-detail",
+  "matrix",
+  "patterns",
+  "templates",
+  "commons",
+  "sources",
+  "about",
+] satisfies AppView[]);
+
+export const CANONICAL_DESTINATIONS = Object.freeze(
+  CANONICAL_DESTINATION_VIEWS.map((view) => ({
+    view,
+    ...ROUTE_IDENTITIES[view],
+  })),
+);
+
 export function routeIdentityFor(view: AppView): RouteIdentity {
   return ROUTE_IDENTITIES[view];
+}
+
+export function selectedNavFor(view: AppView): AppView | null {
+  return SELECTED_NAV_BY_VIEW[view];
+}
+
+export function recoveryViewFor(view: AppView): AppView {
+  return RECOVERY_VIEW_BY_VIEW[view];
 }
 
 export type CanonicalRoute = {
@@ -55,19 +118,20 @@ const ATLAS_PARAMS = new Set([
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
-const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "costType", "resourceType", "platform", "format", "collection", "category", "selectedId"]);
+const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly"]);
+const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "publisher", "lifecycle", "page"]);
+const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "showAll"]);
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
   category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
   lifecycle: ["Implement", "Assess"],
   resourceType: ["catalog", "community_forum", "dataset", "documentation", "historical_reference", "instruction", "matrix", "policy", "specification", "template", "tool", "training"],
 };
 const DETAIL_PARAMS = new Set(["from", "returnTo", "relationshipView", "relationshipType", "provenance", "confidence", "nodeType", "includeCandidates", "relationshipSearch"]);
-const START_PARAMS = new Set(["step", "systemType", "dataSensitivity", "environment"]);
-const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView"]);
+const START_PARAMS = new Set<string>();
+const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
 const LEARN_PARAMS = new Set(["pattern"]);
-const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily"]);
-const SOURCE_PARAMS = new Set(["source", "provenance", "eligibility", "lifecycle", "access"]);
+const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
+const SOURCE_PARAMS = new Set(["q", "source", "provenance", "eligibility", "lifecycle", "access"]);
 const RETIRED_PARAMS = new Set(["q"]);
 
 function normalizedPath(input: string): { path: string; params: URLSearchParams } {
@@ -89,6 +153,24 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       continue;
     }
     if (key === "sourceView" && !["purpose", "rmf"].includes(value)) {
+      discarded = true;
+      continue;
+    }
+    if (
+      (key === "crosswalk" || key === "workbench") &&
+      !["intent", "relationships", "stig-chain", "baseline-compare", "threat-chain"].includes(value)
+    ) {
+      discarded = true;
+      continue;
+    }
+    if (
+      ["browseAll", "showAll", "connectedOnly", "includeCandidates", "compareRun"].includes(key) &&
+      value !== "true"
+    ) {
+      discarded = true;
+      continue;
+    }
+    if (key === "page" && !/^[1-9]\d*$/.test(value)) {
       discarded = true;
       continue;
     }
@@ -143,13 +225,14 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   let permitted: Set<string> | null = null;
   if (path === "/explore") permitted = ATLAS_PARAMS;
   if (path === "/search") permitted = SEARCH_PARAMS;
+  if (path === "/catalog" || /^\/catalog\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
   if (path === "/build/resources") permitted = RESOURCE_PARAMS;
   if (/^\/build\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare") permitted = COMPARE_PARAMS;
   if (path === "/learn") permitted = LEARN_PARAMS;
-  if (path === "/build" || /^\/build\/(?:tasks\/[^/]+|documents(?:\/[^/]+)?)$/.test(path)) permitted = BUILD_PARAMS;
+  if (path === "/build" || /^\/build\/(?:tasks(?:\/[^/]+)?|documents(?:\/[^/]+)?)$/.test(path)) permitted = BUILD_PARAMS;
   if (path === "/sources") permitted = SOURCE_PARAMS;
   if (path === "/retired") permitted = RETIRED_PARAMS;
   if (permitted) {
@@ -180,7 +263,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
         discarded = true;
       }
       const framework = params.get("framework") || "";
-      if (!isValidBuildFramework(framework)) {
+      if (!isValidBuildSourceContext(framework)) {
         params.delete("framework");
         discarded = true;
       }

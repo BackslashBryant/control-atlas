@@ -32,9 +32,6 @@ export function contextualResourceRecommendations({ resources, contextType, cont
     .map((resource) => ({ resource, match: metadataMatch(resource, contextType, normalizedQuery) }))
     .filter(({ match }) => Boolean(match))
     .sort((left, right) => {
-      if (Boolean(right.resource.editorialRecommendation) !== Boolean(left.resource.editorialRecommendation)) {
-        return right.resource.editorialRecommendation ? 1 : -1;
-      }
       if (left.resource.resourceLane === "official" && right.resource.resourceLane !== "official") return -1;
       if (right.resource.resourceLane === "official" && left.resource.resourceLane !== "official") return 1;
       return left.resource.name.localeCompare(right.resource.name);

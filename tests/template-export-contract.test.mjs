@@ -35,7 +35,7 @@ const dataset = {
 for (const template of registry.templates) {
   for (const format of template.supported_formats) {
     test(`export contract: ${template.name} (${format}) is a generated document with source context`, async () => {
-      const { doc, frameworkResolutionError } = buildTemplateDocument(
+      const { doc } = buildTemplateDocument(
         {
           templateType: template.name,
           framework: 'nist-800-53',
@@ -46,7 +46,6 @@ for (const template of registry.templates) {
         },
         dataset,
       );
-      assert.equal(frameworkResolutionError, null, 'Template should resolve the selected framework');
       const content = JSON.stringify(doc);
       assert.match(content, /Source Metadata/, 'Generated document is missing source metadata');
       assert.match(content, /Limit:/, 'Generated document is missing its limitation');
@@ -223,8 +222,6 @@ test('fedramp-rev5 resolves member controls via baseline edges instead of a plac
   // starter rows; "[Control Title]" only appears in the placeholder-control
   // fallback row, so it is the fallback detector.
   assert.doesNotMatch(result.content, /\[Control Title\]/, 'Should not fall back to placeholder row when resolution succeeds');
-  assert.equal(result.frameworkResolutionError, null);
-
   // Natural/sorted order: AC-1 before AC-2.
   const ac1Index = result.content.indexOf('AC-1');
   const ac2Index = result.content.indexOf('AC-2');
@@ -385,25 +382,42 @@ test('no-baseline generation excludes enhancements unless includeEnhancements is
   assert.doesNotMatch(moderate.content, /## Baseline Notice/, 'a recognized baseline emits no notice');
 });
 
-test('unrecognized baseline emits a Baseline Notice instead of silently including everything', () => {
-  const result = generateTemplate(
-    {
-      templateType: 'security_plan_starter',
-      framework: 'nist-800-53',
-      environment: 'Generic',
-      format: 'markdown',
-      baseline: 'BOGUS',
-      sourceRefs: ['nist-oscal'],
-      sources: enhancementDataset.sources,
-    },
-    enhancementDataset,
+test('unrecognized baseline fails closed without generating a document', () => {
+  assert.throws(
+    () =>
+      generateTemplate(
+        {
+          templateType: 'security_plan_starter',
+          framework: 'nist-800-53',
+          environment: 'Generic',
+          format: 'markdown',
+          baseline: 'BOGUS',
+          sourceRefs: ['nist-oscal'],
+          sources: enhancementDataset.sources,
+        },
+        enhancementDataset,
+      ),
+    /Baseline "BOGUS" is not a published selection under source context "nist-800-53"\. No document was generated\./,
   );
-  assert.match(result.content, /## Baseline Notice/, 'notice section must be present');
-  assert.match(
-    result.content,
-    /Baseline "BOGUS" was not recognized for nist-800-53 — this template includes the full catalog\. Valid values include LOW, MODERATE, HIGH\./,
+});
+
+test('unrecognized control family fails closed without generating a document', () => {
+  assert.throws(
+    () =>
+      generateTemplate(
+        {
+          templateType: 'security_plan_starter',
+          framework: 'nist-800-53',
+          environment: 'Generic',
+          format: 'markdown',
+          controlFamily: 'NOT-A-FAMILY',
+          sourceRefs: ['nist-oscal'],
+          sources: enhancementDataset.sources,
+        },
+        enhancementDataset,
+      ),
+    /Control family "NOT-A-FAMILY" is not available under source context "nist-800-53"\. No document was generated\./,
   );
-  assert.match(result.content, /AC-2\b/, 'fallback still includes the catalog controls');
 });
 
 const cciDataset = {
@@ -460,7 +474,7 @@ test('evidence matrix cites real CCI and STIG/SRG cross-references for a control
   }
 });
 
-test('framework with zero resolvable controls emits an honest notice and flags the error', () => {
+test('source context with zero resolvable controls fails closed', () => {
   const emptyDataset = {
     nodes: [
       {
@@ -475,19 +489,19 @@ test('framework with zero resolvable controls emits an honest notice and flags t
     sources: dataset.sources,
   };
 
-  const result = generateTemplate(
-    {
-      templateType: 'security_plan_starter',
-      framework: 'fedramp-rev5',
-      environment: 'Generic',
-      format: 'markdown',
-      sourceRefs: ['nist-oscal'],
-      sources: emptyDataset.sources,
-    },
-    emptyDataset,
+  assert.throws(
+    () =>
+      generateTemplate(
+        {
+          templateType: 'security_plan_starter',
+          framework: 'fedramp-rev5',
+          environment: 'Generic',
+          format: 'markdown',
+          sourceRefs: ['nist-oscal'],
+          sources: emptyDataset.sources,
+        },
+        emptyDataset,
+      ),
+    /No published control data is available for source context "fedramp-rev5"\. No document was generated\./,
   );
-
-  assert.match(result.content, /No control data is ingested for fedramp-rev5 yet — generation unavailable\./);
-  assert.ok(result.frameworkResolutionError, 'Expected frameworkResolutionError to be set');
-  assert.match(result.frameworkResolutionError, /No control data is ingested for fedramp-rev5/);
 });

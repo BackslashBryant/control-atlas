@@ -91,30 +91,11 @@ test('Explore renders the ancestry chooser without hydrating the graph UI', asyn
   await dismissOnboarding(page);
 
   await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: /A framework path/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /A published structure/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: /My situation/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Source starting points/ })).toBeVisible();
   await expect(page.locator('.react-flow')).toHaveCount(0);
   expect(requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
   expect(requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
-});
-
-test('template generation fires a trust-styled download toast and disables the button briefly', async ({ page }) => {
-  await page.goto('/?view=templates&templateType=security_plan_starter');
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-  const generate = page.getByRole('button', { name: /Download Security Plan Starter|Preparing download/ });
-  await expect(generate).toBeEnabled();
-  const downloadPromise = page.waitForEvent('download');
-  const clickPromise = generate.click();
-  await expect(generate).toBeDisabled({ timeout: 3000 });
-  const download = await downloadPromise;
-  await clickPromise;
-  expect(download.suggestedFilename()).toMatch(/security-plan-starter.*\.docx$/);
-  const toast = page.locator('.generation-status');
-  await expect(toast).toBeVisible();
-  await expect(toast).toHaveClass(/tone-trust/);
-  await expect(toast).toContainText('Download started');
-  await expect(generate).toBeEnabled();
 });
