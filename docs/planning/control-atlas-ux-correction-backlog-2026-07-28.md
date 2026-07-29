@@ -3,6 +3,7 @@
 Date: 2026-07-28  
 Source audit: [Full surface audit](../audits/control-atlas-full-surface-audit-2026-07-28.md)  
 Target: [Target experience](../design/control-atlas-target-experience-2026-07-28.md)  
+V1 launch authority: [V1 launch contract](control-atlas-v1-launch-contract-2026-07-28.md)
 Status: recommended sequence, not implemented
 
 ## Delivery rule
@@ -453,4 +454,3 @@ The copy manifest and repetition gate cover all user-facing classes; one search 
 | Duplicate search/index ownership | Delete after consolidation |
 | Vendored MiniSearch copy | Delete or generated/hash-check |
 | React Flow + ELK | Keep |
-

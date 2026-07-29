@@ -33,6 +33,8 @@ Read completely before editing:
 6. `artifacts/audits/control-atlas-2026-07-28/surface-matrix.csv`
 7. `artifacts/audits/control-atlas-2026-07-28/copy-register.csv`
 8. `artifacts/audits/control-atlas-2026-07-28/oss-evaluation.md`
+9. `docs/planning/control-atlas-v1-launch-contract-2026-07-28.md`
+10. `docs/research/control-atlas-v1-practitioner-validation-protocol-2026-07-28.md`
 
 Treat those files as the execution contract. Read other project documents only when the package or the current code points to them. Do not repeat their contents in chat or create another plan.
 
@@ -106,6 +108,7 @@ Do not fix only the quoted example. Do not leave known sibling instances. Do not
 Do not call the pass complete until:
 
 - every correction-backlog milestone gate passes;
+- every locally achievable V1 launch-contract gate passes and the remaining external gates are recorded without false completion;
 - all Critical findings are fixed systemically and no known Critical/High residual remains;
 - the catalog-wide publication identity audit has zero mismatches;
 - all twelve practitioner workflows pass;
