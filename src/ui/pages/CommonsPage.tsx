@@ -14,6 +14,7 @@ import {
   primaryBrowseCategoryCounts,
   searchDirectoryResources,
 } from "../lib/resourcesDirectory.mjs";
+import { WorkbenchControlSurface } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -133,113 +134,124 @@ export function CommonsPage(props: {
           </div>
         </header>
 
-        <label className="resources-search" htmlFor="resources-query">
-          <IconSearch aria-hidden="true" size={20} />
-          <input
-            id="resources-query"
-            onChange={(event) => update({ query: event.target.value })}
-            placeholder="Search external resources"
-            type="search"
-            value={state.query}
-          />
-          {state.query ? (
-            <button
-              aria-label="Clear resource search"
-              onClick={() => update({ query: "" })}
-              type="button"
-            >
-              <IconX aria-hidden="true" size={18} />
-            </button>
-          ) : null}
-        </label>
-
-        <section aria-labelledby="resource-categories">
-          <h2 className="visually-hidden" id="resource-categories">
-            Browse by category
-          </h2>
-          <div className="resource-type-chips">
-            {browseCategories.map((category) => (
+        <WorkbenchControlSurface
+          className="resources-control-surface"
+          label="Find resources"
+          targetId="resources-results"
+        >
+          <label className="resources-search" htmlFor="resources-query">
+            <IconSearch aria-hidden="true" size={20} />
+            <input
+              id="resources-query"
+              onChange={(event) => update({ query: event.target.value })}
+              placeholder="Search external resources"
+              type="search"
+              value={state.query}
+            />
+            {state.query ? (
               <button
-                aria-pressed={state.category === category.id}
-                key={category.id}
-                onClick={() =>
-                  update({
-                    category:
-                      state.category === category.id ? "" : category.id,
-                  })
-                }
-                title={category.blurb}
+                aria-label="Clear resource search"
+                onClick={() => update({ query: "" })}
                 type="button"
               >
-                {category.label} <span>{category.count}</span>
+                <IconX aria-hidden="true" size={18} />
               </button>
-            ))}
-          </div>
-        </section>
+            ) : null}
+          </label>
 
-        <div className="resources-facets">
-          <button
-            aria-controls="resources-filter-panel"
-            aria-expanded={filtersOpen}
-            className="resources-filter-toggle"
-            onClick={() => setFiltersOpen((open) => !open)}
-            type="button"
-          >
-            Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
-          </button>
-          <div
-            aria-label="Resource filters"
-            className="resources-facet-grid"
-            hidden={!filtersOpen}
-            id="resources-filter-panel"
-            role="region"
-          >
-            <ResourceSelect
-              id="commons-lane-filter"
-              label="Owner type"
-              onChange={(lane) => update({ lane })}
-              options={lanes}
-              value={state.lane}
-              emptyValue="all"
-            />
-            <ResourceSelect
-              label="Catalog or program"
-              onChange={(framework) => update({ framework })}
-              options={frameworks}
-              value={state.framework}
-            />
-            <ResourceSelect
-              label="Lifecycle"
-              onChange={(lifecycle) => update({ lifecycle })}
-              options={lifecycleStages}
-              value={state.lifecycle}
-            />
-            <ResourceSelect
-              label="Audience"
-              onChange={(audience) => update({ audience })}
-              options={audiences}
-              value={state.audience}
-            />
-            <ResourceSelect
-              label="Access / cost"
-              onChange={(accessType) => update({ accessType })}
-              options={accessTypes}
-              value={state.accessType}
-            />
-          </div>
-        </div>
+          <section aria-labelledby="resource-categories">
+            <h2 className="visually-hidden" id="resource-categories">
+              Browse by category
+            </h2>
+            <div className="resource-type-chips">
+              {browseCategories.map((category) => (
+                <button
+                  aria-pressed={state.category === category.id}
+                  key={category.id}
+                  onClick={() =>
+                    update({
+                      category:
+                        state.category === category.id ? "" : category.id,
+                    })
+                  }
+                  title={category.blurb}
+                  type="button"
+                >
+                  {category.label} <span>{category.count}</span>
+                </button>
+              ))}
+            </div>
+          </section>
 
-        <div className="resources-result-status">
-          <p aria-live="polite" role="status">
-            Showing {filtered.length} of {resources.length} resources
-          </p>
-          {(state.query || activeFilterCount) ? (
-            <button onClick={reset} type="button">Clear all filters</button>
-          ) : null}
-        </div>
+          <div className="resources-facets">
+            <button
+              aria-controls="resources-filter-panel"
+              aria-expanded={filtersOpen}
+              className="resources-filter-toggle"
+              onClick={() => setFiltersOpen((open) => !open)}
+              type="button"
+            >
+              Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
+            </button>
+            <div
+              aria-label="Resource filters"
+              className="resources-facet-grid"
+              hidden={!filtersOpen}
+              id="resources-filter-panel"
+              role="region"
+            >
+              <ResourceSelect
+                id="commons-lane-filter"
+                label="Owner type"
+                onChange={(lane) => update({ lane })}
+                options={lanes}
+                value={state.lane}
+                emptyValue="all"
+              />
+              <ResourceSelect
+                label="Catalog or program"
+                onChange={(framework) => update({ framework })}
+                options={frameworks}
+                value={state.framework}
+              />
+              <ResourceSelect
+                label="Lifecycle"
+                onChange={(lifecycle) => update({ lifecycle })}
+                options={lifecycleStages}
+                value={state.lifecycle}
+              />
+              <ResourceSelect
+                label="Audience"
+                onChange={(audience) => update({ audience })}
+                options={audiences}
+                value={state.audience}
+              />
+              <ResourceSelect
+                label="Access / cost"
+                onChange={(accessType) => update({ accessType })}
+                options={accessTypes}
+                value={state.accessType}
+              />
+            </div>
+          </div>
+
+          <div className="resources-result-status">
+            <p aria-live="polite" role="status">
+              Showing {filtered.length} of {resources.length} resources
+            </p>
+            {(state.query || activeFilterCount) ? (
+              <button onClick={reset} type="button">Clear all filters</button>
+            ) : null}
+          </div>
+        </WorkbenchControlSurface>
 
         {filtered.length ? (
-          <section aria-label="Resource results" className="resources-result-grid">
+          <section
+            aria-label="Resource results"
+            className="resources-result-grid"
+            data-control-results
+            id="resources-results"
+          >
             {filtered.map((resource) => (
               <CommonsResourceCard
                 key={resource.id}
@@ -252,7 +264,11 @@ export function CommonsPage(props: {
             ))}
           </section>
         ) : (
-          <section className="empty-state">
+          <section
+            className="empty-state"
+            data-control-results
+            id="resources-results"
+          >
             <h2>No resources match these filters.</h2>
             <p>Clear or change the search and filters to return to the directory.</p>
             <button onClick={reset} type="button">Clear all filters</button>

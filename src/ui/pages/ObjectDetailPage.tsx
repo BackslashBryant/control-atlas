@@ -556,7 +556,10 @@ export function ObjectDetailPage(props: {
                 ) : null}
               </div>
               <div className="section-header-actions">
-                {edges.length ? (
+                {edges.length &&
+                !["map", "list", "table"].includes(
+                  state.relationshipView || "",
+                ) ? (
                   <Button
                     variant="secondary"
                     onClick={() =>

@@ -29,8 +29,11 @@ import {
   nextMissingCompareInput,
 } from "../lib/compareModeState";
 import {
+  Field,
   PageHeader,
+  SelectField,
   SummaryCard,
+  WorkbenchControlSurface,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareCrosswalk, ViewState } from "../lib/viewState";
@@ -68,45 +71,6 @@ function DisclosurePanel(props: {
         {props.children}
       </Accordion.Content>
     </Accordion.Item>
-  );
-}
-
-function Field(props: { label: string; children: ReactNode }) {
-  return (
-    <label className="field">
-      <span>{props.label}</span>
-      {props.children}
-    </label>
-  );
-}
-
-function SelectField(props: {
-  emptyLabel?: string;
-  hint?: string;
-  label: string;
-  value: string;
-  options: Array<{ value: string; label: string }>;
-  onChange: (value: string) => void;
-}) {
-  const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
-
-  return (
-    <label className="field" htmlFor={fieldId}>
-      <span>{props.label}</span>
-      <select
-        id={fieldId}
-        onChange={(event) => props.onChange(event.target.value)}
-        value={props.value}
-      >
-        <option value="">{props.emptyLabel || "All"}</option>
-        {props.options.map((option) => (
-          <option key={`${props.label}-${option.value}`} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {props.hint ? <p className="field-hint">{props.hint}</p> : null}
-    </label>
   );
 }
 
@@ -501,7 +465,7 @@ export function ComparePage(props: {
   );
 
   return (
-    <Panel>
+    <Panel data-control-results id="compare-workspace">
       <PageHeader
         eyebrow="Compare"
         summary="Choose the kind of comparison. Then pick the two things you need to reconcile."
@@ -562,7 +526,12 @@ export function ComparePage(props: {
 
       {crosswalk === "relationships" ? (
         <>
-          <div className="filter-grid">
+          <WorkbenchControlSurface
+            className="compare-control-surface"
+            label="Choose comparison inputs"
+            targetId="compare-workspace"
+          >
+            <div className="filter-grid">
             {state.intent === "item-mapping" ? (
               <>
                 <SelectField
@@ -671,34 +640,34 @@ export function ComparePage(props: {
                 value={state.mappingSource}
               />
             </div>
-          </div>
-          <p className="compare-boundary">
-            A published mapping records a cited relationship. It does not establish
-            equivalence, applicability, implementation, compliance, or authorization.
-          </p>
-          {compareReady ? (
-            <Button
-              onClick={() =>
-                onNavigate("matrix", { crosswalk, compareRun: "true" })
-              }
-              type="button"
-              variant="primary"
-            >
-              Show mappings
-            </Button>
-          ) : (
-            <p className="generation-status tone-warning" role="status">
-              Choose {missingCompareInput} to configure this comparison.
+            </div>
+            <p className="compare-boundary">
+              A published mapping records a cited relationship. It does not establish
+              equivalence, applicability, implementation, compliance, or authorization.
             </p>
-          )}
-          {hasComparisonScope ? (
-            <Accordion.Root
-              className="accordion-root"
-              collapsible
-              type="single"
-            >
-              <DisclosurePanel title="Refine comparison" value="refine">
-                <div className="filter-grid">
+            {compareReady ? (
+              <Button
+                onClick={() =>
+                  onNavigate("matrix", { crosswalk, compareRun: "true" })
+                }
+                type="button"
+                variant="primary"
+              >
+                Show mappings
+              </Button>
+            ) : (
+              <p className="generation-status tone-warning" role="status">
+                Choose {missingCompareInput} to configure this comparison.
+              </p>
+            )}
+            {hasComparisonScope ? (
+              <Accordion.Root
+                className="accordion-root"
+                collapsible
+                type="single"
+              >
+                <DisclosurePanel title="Refine comparison" value="refine">
+                  <div className="filter-grid">
                   {state.intent !== "item-mapping" ? (
                   <Field label="Specific control or rule (optional)">
                     <input
@@ -782,14 +751,15 @@ export function ComparePage(props: {
                       <span>Include candidate and inferred links</span>
                     </label>
                   </Field>
-                </div>
-                <p className="compare-legend">
-                  Published mappings come from named sources. Candidate mappings
-                  still need review.
-                </p>
-              </DisclosurePanel>
-            </Accordion.Root>
-          ) : null}
+                  </div>
+                  <p className="compare-legend">
+                    Published mappings come from named sources. Candidate mappings
+                    still need review.
+                  </p>
+                </DisclosurePanel>
+              </Accordion.Root>
+            ) : null}
+          </WorkbenchControlSurface>
           {state.compareRun === "true" && relationshipRows?.rows?.length ? (
             <section
               className="compare-results"
@@ -939,7 +909,12 @@ export function ComparePage(props: {
 
       {crosswalk === "stig-chain" ? (
         <>
-          <div className="filter-grid">
+          <WorkbenchControlSurface
+            className="compare-control-surface"
+            label="Choose STIG or SRG chain inputs"
+            targetId="compare-workspace"
+          >
+            <div className="filter-grid">
             <SelectField
               label="Catalog"
               onChange={(value) =>
@@ -1006,15 +981,16 @@ export function ComparePage(props: {
                 <span>Include candidate and inferred links</span>
               </label>
             </Field>
-          </div>
-          <p className="compare-legend">
-            Published mappings come from named sources. Candidate mappings still
-            need review. Pick a STIG rule, review its CCI (Control Correlation
-            Identifier) connections, then open the related NIST control.
-            {chainPayload?.rows?.length
-              ? ` ${chainPayload.rows.length} STIG or SRG item${chainPayload.rows.length === 1 ? "" : "s"} visible in the current chain scope.`
-              : ""}
-          </p>
+            </div>
+            <p className="compare-legend">
+              Published mappings come from named sources. Candidate mappings still
+              need review. Pick a STIG rule, review its CCI (Control Correlation
+              Identifier) connections, then open the related NIST control.
+              {chainPayload?.rows?.length
+                ? ` ${chainPayload.rows.length} STIG or SRG item${chainPayload.rows.length === 1 ? "" : "s"} visible in the current chain scope.`
+                : ""}
+            </p>
+          </WorkbenchControlSurface>
           {chainPayload?.rows?.length ? (
             <div className="stack">
               <CompareExportDisclosure
@@ -1195,7 +1171,12 @@ export function ComparePage(props: {
               Review sources
             </button>
           </p>
-          <div className="filter-grid">
+          <WorkbenchControlSurface
+            className="compare-control-surface"
+            label="Choose threat-chain inputs"
+            targetId="compare-workspace"
+          >
+            <div className="filter-grid">
             <SelectField
               emptyLabel="All ATT&CK domains"
               label="ATT&CK domain"
@@ -1242,14 +1223,15 @@ export function ComparePage(props: {
                 <span>Include candidate and inferred links</span>
               </label>
             </Field>
-          </div>
-          <p className="compare-legend">
-            Published mappings come from MITRE. Pick a technique, review
-            D3FEND countermeasures, then open the related NIST controls.
-            {threatChainPayload?.rows?.length
-              ? ` ${threatChainPayload.rows.length} ATT&CK technique${threatChainPayload.rows.length === 1 ? "" : "s"} visible in the current threat chain scope.`
-              : ""}
-          </p>
+            </div>
+            <p className="compare-legend">
+              Published mappings come from MITRE. Pick a technique, review
+              D3FEND countermeasures, then open the related NIST controls.
+              {threatChainPayload?.rows?.length
+                ? ` ${threatChainPayload.rows.length} ATT&CK technique${threatChainPayload.rows.length === 1 ? "" : "s"} visible in the current threat chain scope.`
+                : ""}
+            </p>
+          </WorkbenchControlSurface>
           {threatChainPayload?.rows?.length ? (
             <div className="stack">
               <CompareExportDisclosure
@@ -1435,30 +1417,36 @@ export function ComparePage(props: {
 
       {crosswalk === "baseline-compare" ? (
         <>
-          <div className="filter-grid">
-            <SelectField
-              label="Baseline A"
-              onChange={(value) =>
-                onNavigate("matrix", {
-                  crosswalk,
-                  baselineA: value,
-                })
-              }
-              options={baselineOptions}
-              value={state.baselineA}
-            />
-            <SelectField
-              label="Baseline B"
-              onChange={(value) =>
-                onNavigate("matrix", {
-                  crosswalk,
-                  baselineB: value,
-                })
-              }
-              options={baselineOptions}
-              value={state.baselineB}
-            />
-          </div>
+          <WorkbenchControlSurface
+            className="compare-control-surface"
+            label="Choose published baselines to compare"
+            targetId="compare-workspace"
+          >
+            <div className="filter-grid">
+              <SelectField
+                label="Baseline A"
+                onChange={(value) =>
+                  onNavigate("matrix", {
+                    crosswalk,
+                    baselineA: value,
+                  })
+                }
+                options={baselineOptions}
+                value={state.baselineA}
+              />
+              <SelectField
+                label="Baseline B"
+                onChange={(value) =>
+                  onNavigate("matrix", {
+                    crosswalk,
+                    baselineB: value,
+                  })
+                }
+                options={baselineOptions}
+                value={state.baselineB}
+              />
+            </div>
+          </WorkbenchControlSurface>
           {baselineComparison ? (
             <>
               {baselineComparison.baseline_a_source ? (

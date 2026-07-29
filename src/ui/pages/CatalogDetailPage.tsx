@@ -11,6 +11,7 @@ import {
   publicationSourceForCatalog,
 } from "../lib/catalogInventory";
 import { catalogProfileFor } from "../lib/catalogProfiles";
+import { WorkbenchControlSurface } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -150,6 +151,7 @@ export function CatalogDetailPage(props: {
         </div>
         {source?.artifact_url ? (
           <ButtonLink
+            className="catalog-source-link"
             href={source.artifact_url}
             rel="noreferrer"
             target="_blank"
@@ -173,11 +175,18 @@ export function CatalogDetailPage(props: {
                 : `${matchingRecords.length.toLocaleString()} matching records`}
             </p>
           </div>
+        </div>
+        <div
+          aria-label="Catalog record controls"
+          className="catalog-record-toolbar"
+          role="group"
+        >
           <div className="catalog-record-filters">
             {families.length > 1 && !showTierBrowser ? (
-              <label>
-                <span className="sr-only">Filter by published group</span>
+              <label className="catalog-record-filter">
+                <span>Published group</span>
                 <select
+                  aria-label="Filter by published group"
                   onChange={(event) =>
                     update({
                       family: event.target.value,
@@ -194,21 +203,24 @@ export function CatalogDetailPage(props: {
                 </select>
               </label>
             ) : null}
-            <label className="catalog-search">
-              <span className="sr-only">Search this catalog</span>
-              <IconSearch aria-hidden="true" size={18} />
-              <input
-                onChange={(event) =>
-                  update({
-                    query: event.target.value,
-                    browseAll: "true",
-                    page: "",
-                  })
-                }
-                placeholder={`Search ${catalog.name}`}
-                type="search"
-                value={state.query}
-              />
+            <label className="catalog-record-filter catalog-record-search-filter">
+              <span>Search records</span>
+              <span className="catalog-search">
+                <IconSearch aria-hidden="true" size={18} />
+                <input
+                  aria-label="Search this catalog"
+                  onChange={(event) =>
+                    update({
+                      query: event.target.value,
+                      browseAll: "true",
+                      page: "",
+                    })
+                  }
+                  placeholder={`Identifier or title in ${catalog.name}`}
+                  type="search"
+                  value={state.query}
+                />
+              </span>
             </label>
           </div>
         </div>
@@ -398,7 +410,12 @@ function CatalogInventory(props: {
           publications, implementation guides, and knowledge bases by record type.
         </p>
       </header>
-      <div className="catalog-inventory-controls">
+      <WorkbenchControlSurface
+        className="catalog-inventory-control-surface"
+        label="Filter published structures"
+        targetId="catalog-inventory-results"
+      >
+        <div className="catalog-inventory-controls">
         <label className="catalog-search">
           <IconSearch aria-hidden="true" size={18} />
           <input
@@ -427,11 +444,13 @@ function CatalogInventory(props: {
           options={[...new Set(rows.map((row) => row.lifecycle))].sort()}
           value={state.lifecycle}
         />
-      </div>
-      <p className="catalog-inventory-total" aria-live="polite">
-        {eligible.length} of {rows.length} published structures
-      </p>
-      {grouped.map((group) => (
+        </div>
+        <p className="catalog-inventory-total" aria-live="polite">
+          {eligible.length} of {rows.length} published structures
+        </p>
+      </WorkbenchControlSurface>
+      <div data-control-results id="catalog-inventory-results">
+        {grouped.map((group) => (
         <section className="catalog-index-group" key={group.label}>
           <h2 className="catalog-index-group-label">{group.label}</h2>
           <div className="catalog-index-list">
@@ -461,19 +480,20 @@ function CatalogInventory(props: {
             ))}
           </div>
         </section>
-      ))}
-      {eligible.length === 0 ? (
-        <div className="empty-state">
-          <h2>No published structures match these filters.</h2>
-          <Button
-            onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
-            type="button"
-            variant="secondary"
-          >
-            Clear catalog filters
-          </Button>
-        </div>
-      ) : null}
+        ))}
+        {eligible.length === 0 ? (
+          <div className="empty-state">
+            <h2>No published structures match these filters.</h2>
+            <Button
+              onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
+              type="button"
+              variant="secondary"
+            >
+              Clear catalog filters
+            </Button>
+          </div>
+        ) : null}
+      </div>
     </section>
   );
 }
