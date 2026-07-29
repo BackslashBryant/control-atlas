@@ -19,6 +19,8 @@
   --lsm-dust: #b3bbc2;
   --lsm-bone: #e7e1d5;
   --lsm-relay: #54bcd9;
+  --lsm-relay-deep: #205f78;
+  --lsm-relay-deep-hover: #25677f;
   --lsm-gold: #cbae67;
   --lsm-orange: #e66a2c;
   --lsm-signal: #7eb79e;
@@ -44,7 +46,9 @@
   /* Operational interaction and editorial hierarchy */
   --ca-primary: var(--lsm-relay);
   --ca-primary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
-  --ca-on-primary: var(--lsm-orbit);
+  --ca-action-primary: var(--lsm-relay-deep);
+  --ca-action-primary-hover: var(--lsm-relay-deep-hover);
+  --ca-on-primary: var(--lsm-bone);
   --ca-secondary: var(--lsm-relay);
   --ca-secondary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
   --ca-priority: var(--lsm-gold);

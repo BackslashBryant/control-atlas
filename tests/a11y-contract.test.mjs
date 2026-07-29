@@ -139,14 +139,21 @@ test("primary actions use one authored AA contrast pair", () => {
   assert.ok(
     contrastRatio(
       tokenValue("--ca-on-primary"),
-      tokenValue("--ca-primary"),
+      tokenValue("--ca-action-primary"),
     ) >= 4.5,
     "Primary action text must meet 4.5:1",
+  );
+  assert.ok(
+    contrastRatio(
+      tokenValue("--ca-on-primary"),
+      tokenValue("--ca-action-primary-hover"),
+    ) >= 4.5,
+    "Primary action hover text must meet 4.5:1",
   );
   assert.match(buttonComponent, /primary:\s*"ca-button-primary"/);
   assert.match(
     componentsCss,
-    /\.ca-button-primary\s*\{[^}]*background:\s*var\(--ca-primary\)[^}]*color:\s*var\(--ca-on-primary\)/s,
+    /\.ca-button-primary\s*\{[^}]*background:\s*var\(--ca-action-primary\)[^}]*color:\s*var\(--ca-on-primary\)/s,
   );
 });
 
