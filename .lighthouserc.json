@@ -7,20 +7,39 @@
       "startServerReadyTimeout": 120000,
       "url": [
         "http://localhost:4317/",
-        "http://localhost:4317/#/explore?q=AC-2",
-        "http://localhost:4317/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map",
-        "http://localhost:4317/#/templates"
+        "http://localhost:4317/#/search?q=AC-2",
+        "http://localhost:4317/#/search?q=access%20control",
+        "http://localhost:4317/#/search?q=definitely-no-such-control",
+        "http://localhost:4317/#/explore",
+        "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
+        "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+        "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
+        "http://localhost:4317/#/catalog",
+        "http://localhost:4317/#/catalog/nist-800-53",
+        "http://localhost:4317/#/record/nist-800-53/AC-2",
+        "http://localhost:4317/#/record/mitre-attack/T1033",
+        "http://localhost:4317/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+        "http://localhost:4317/#/build",
+        "http://localhost:4317/#/build/resources",
+        "http://localhost:4317/#/sources"
       ],
       "settings": {
         "chromeFlags": "--headless --no-sandbox",
-        "formFactor": "desktop",
+        "formFactor": "mobile",
         "screenEmulation": {
-          "mobile": false,
-          "width": 1440,
-          "height": 1000,
-          "deviceScaleFactor": 1,
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75,
           "disabled": false
         }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 200 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
       }
     },
     "upload": {

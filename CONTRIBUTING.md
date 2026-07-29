@@ -3,28 +3,26 @@
 ## Product Identity
 
 - Public product name: **Control Atlas**
-- Campaign line: **Ctrl+Alt+Comply**
-- Tagline: **The public map for federal cyber compliance.**
-- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates - no login, no evidence upload, no organizational data required.
+- Protected brand item: **the rotating Ctrl+Alt flourish**, using real Control Atlas actions from `src/shared/brand-rotation.ts`
+- Product definition: **Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.**
+- Decision boundary: **Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.**
 
 Control Atlas is a static, public-data-only reference workbench. Contributions must preserve that boundary and the active Control Atlas implementation baseline unless an ADR says otherwise.
 
 No backend or user, organization, or system data may be introduced.
 
-## Translation-First Product Standard
+## Source-First Product Standard
 
 Build for translation, not complexity.
 
-Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
-
 Future work must preserve this order:
 
-1. User intent
-2. Plain-language meaning
-3. Visible relationships
-4. Source trust
-5. Recommended next action
-6. Raw technical detail only on demand
+1. Exact publication identity and official source text
+2. Publisher-declared hierarchy
+3. Labeled, source-traceable relationships
+4. Concrete retrieval, comparison, navigation, or document action
+5. Product-authored notes and limitations
+6. Raw technical detail on demand
 
 No roadmap item may be accepted unless it identifies the user confusion it reduces and the action it enables.
 
@@ -39,7 +37,7 @@ No roadmap item may be accepted unless it identifies the user confusion it reduc
 
 ## Prohibited Contributions
 
-Do not add backend services, authentication, user uploads, evidence or scan ingestion, operational-system integrations, user, organization, or system data storage, compliance scoring, real asset/package tracking, authorization decisions, or stored generated templates.
+Do not add backend services, authentication, user uploads, evidence or scan ingestion, operational-system integrations, user, organization, or system data storage, compliance scoring, real asset/package tracking, applicability or baseline selection, inheritance conclusions, authorization or ATO decisions, or stored generated templates.
 
 ## Verification
 

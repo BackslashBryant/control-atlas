@@ -1,27 +1,16 @@
 import { ALL_NAV_ITEMS } from "../lib/navigation";
+import { PRODUCT_FOOTER_NOTICE } from "../../shared/product-identity";
 import type { ViewState } from "../lib/viewState";
 
-const FOOTER_NOTICE =
-  "Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system.";
-
 export function SiteFooter(props: {
-  minimal?: boolean;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
-  if (props.minimal) {
-    return (
-      <footer className="border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[10px] px-[24px] text-center">
-        <p className="text-[var(--ca-text-subtle)] text-[12px] max-w-[1280px] mx-auto">{FOOTER_NOTICE}</p>
-      </footer>
-    );
-  }
-
   return (
     <footer className="mt-[64px] border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[48px] px-[24px]">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-[48px] w-full max-w-[1280px] mx-auto mb-[48px]">
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[12px] text-[var(--ca-text)]">Control Atlas</strong>
-          <p className="text-[var(--ca-text-muted)] text-[13px] max-w-[400px]">See how federal cybersecurity requirements connect.</p>
+          <p className="text-[var(--ca-text-muted)] text-[13px] max-w-[400px]">Public federal cybersecurity records, source text, and published relationships.</p>
         </div>
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[16px] text-[var(--ca-text)]">Navigate</strong>
@@ -49,12 +38,12 @@ export function SiteFooter(props: {
             role="link"
             type="button"
           >
-            About &amp; trust
+            About
           </button>
         </div>
       </div>
       <div className="max-w-[1280px] mx-auto border-t border-[var(--ca-border)] pt-[24px]">
-        <p className="text-[var(--ca-text-subtle)] text-[12px]">{FOOTER_NOTICE}</p>
+        <p className="text-[var(--ca-text-subtle)] text-[12px]">{PRODUCT_FOOTER_NOTICE}</p>
       </div>
     </footer>
   );

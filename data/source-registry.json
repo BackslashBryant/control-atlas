@@ -11,6 +11,34 @@
         "hash": "sha256:d11a20c2c7fba8a5dc83c1323d1a9d93108111ab22bba3041d44dc574422af3a"
       },
       {
+        "source_id": "nist-800-53",
+        "sync_model": "curated",
+        "last_checked": "2026-07-28",
+        "last_imported": "2026-07-16",
+        "hash": null
+      },
+      {
+        "source_id": "nist-800-171",
+        "sync_model": "curated",
+        "last_checked": "2026-07-28",
+        "last_imported": "2026-07-16",
+        "hash": null
+      },
+      {
+        "source_id": "nist-csf-2",
+        "sync_model": "curated",
+        "last_checked": "2026-07-28",
+        "last_imported": "2026-07-16",
+        "hash": null
+      },
+      {
+        "source_id": "nist-ssdf",
+        "sync_model": "curated",
+        "last_checked": "2026-07-28",
+        "last_imported": "2026-07-16",
+        "hash": null
+      },
+      {
         "source_id": "nist-800-171-rev2",
         "sync_model": "auto_synced",
         "last_checked": "2026-07-16",
@@ -331,7 +359,7 @@
     {
       "id": "nist-oscal",
       "name": "NIST OSCAL Content",
-      "display_name": "SP 800-53 Rev. 5",
+      "display_name": "NIST OSCAL Content",
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
@@ -351,8 +379,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "federal_referenced_by": [],
-      "graph_eligible": true,
+      "graph_eligible": false,
       "metadata": {
+        "identity_kind": "ingestion",
         "frameworks": [
           "nist-800-53",
           "nist-800-171",
@@ -360,6 +389,122 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
+      }
+    },
+    {
+      "id": "nist-800-53",
+      "name": "NIST SP 800-53 Rev. 5",
+      "display_name": "SP 800-53 Rev. 5",
+      "display_group": "NIST",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "FISMA",
+        "FIPS 200"
+      ],
+      "version": "Revision 5, Release 5.2.0",
+      "retrieved_at": "2026-07-28",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+      "catalog_browse_url": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/home",
+      "artifact_type": "publication",
+      "checksum": null,
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "frameworks": [
+          "nist-800-53"
+        ]
+      }
+    },
+    {
+      "id": "nist-800-171",
+      "name": "NIST SP 800-171 Rev. 3",
+      "display_name": "SP 800-171 Rev. 3",
+      "display_group": "NIST",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [
+        "Federal Acquisition Regulation",
+        "Executive Order 13556"
+      ],
+      "version": "Revision 3",
+      "retrieved_at": "2026-07-28",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
+      "artifact_type": "publication",
+      "checksum": null,
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "frameworks": [
+          "nist-800-171"
+        ]
+      }
+    },
+    {
+      "id": "nist-csf-2",
+      "name": "NIST Cybersecurity Framework 2.0",
+      "display_name": "Cybersecurity Framework 2.0",
+      "display_group": "NIST",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [],
+      "version": "2.0",
+      "retrieved_at": "2026-07-28",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20",
+      "catalog_browse_url": "https://www.nist.gov/cyberframework",
+      "artifact_type": "publication",
+      "checksum": null,
+      "access_status": "public",
+      "license_or_use": "NIST Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "frameworks": [
+          "csf-2"
+        ]
+      }
+    },
+    {
+      "id": "nist-ssdf",
+      "name": "NIST SP 800-218 Secure Software Development Framework",
+      "display_name": "SP 800-218 SSDF Version 1.1",
+      "display_group": "NIST",
+      "owner": "NIST",
+      "provenance_class": "federal_published",
+      "mandate_basis": [],
+      "version": "1.1",
+      "retrieved_at": "2026-07-28",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "artifact_type": "publication",
+      "checksum": null,
+      "access_status": "public",
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "frameworks": [
+          "nist-ssdf"
+        ]
       }
     },
     {
@@ -438,7 +583,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_isoo_cui_regulation_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "eCFR Public Domain",
       "lifecycle_status": "active",
@@ -468,7 +613,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_nara_cui_registry_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "National Archives Public Domain",
       "lifecycle_status": "active",
@@ -1026,7 +1171,7 @@
     {
       "id": "nist-ssdf-oscal",
       "name": "NIST SSDF OSCAL Catalog",
-      "display_name": "SSDF",
+      "display_name": "NIST SSDF OSCAL Content",
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
@@ -1045,8 +1190,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "federal_referenced_by": [],
-      "graph_eligible": true,
+      "graph_eligible": false,
       "metadata": {
+        "identity_kind": "ingestion",
         "frameworks": [
           "nist-ssdf"
         ],
@@ -1068,7 +1214,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_dod_cmmc_rule_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "32 CFR Part 170 CMMC Program Rule Public Domain",
       "lifecycle_status": "active",
@@ -1163,7 +1309,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://rai.acqbot.com/executive-summary",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_dod_rai_toolkit_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "DoD Responsible AI Toolkit Public Domain",
       "lifecycle_status": "active",
@@ -1223,7 +1369,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://csrc.nist.gov/pubs/fips/199/final",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_nist_fips_199_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1252,7 +1398,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://csrc.nist.gov/pubs/fips/200/final",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_nist_fips_200_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1282,7 +1428,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
       "artifact_type": "publication",
-      "checksum": "sha256:catalog_nist_800_37_rev2_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1503,7 +1649,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://www.nist.gov/cyberframework/informative-references",
       "artifact_type": "publication",
-      "checksum": "sha256:mapping_nist_informative_references_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "NIST CSRC Terms of Use (Manual Seed Fallback)",
       "lifecycle_status": "draft",
@@ -1668,7 +1814,7 @@
       "retrieval_method": "manual_review",
       "artifact_url": "https://www.reddit.com/r/NISTControls/comments/wg8bit/comprehensive_list_of_ccis/",
       "artifact_type": "publication",
-      "checksum": "sha256:mapping_community_cci_research_placeholder_checksum",
+      "checksum": null,
       "access_status": "public",
       "license_or_use": "Public Forum Contribution (Reddit Content Policy)",
       "lifecycle_status": "draft",

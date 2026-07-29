@@ -84,7 +84,7 @@ The desktop and mobile first screen contains:
 
 RMF is not a Home-level card. Start Here is not a personalized questionnaire. If a source navigator remains valuable, place it as a compact Search/Explore secondary path called `Browse source starting points`, and expose the inclusion rule for every source it shows.
 
-Remove rotating Ctrl+Alt slogans, `Choose a starting point`, card-introduction paragraphs, and duplicated About/Sources buttons.
+Preserve the rotating Ctrl+Alt slogan as a protected brand element. Remove `Choose a starting point`, card-introduction paragraphs, and duplicated About/Sources buttons. The slogan must not displace Search from the first mobile viewport or compete with Search as an action.
 
 Target desktop first-screen budget:
 
@@ -389,7 +389,7 @@ Major-surface copy must pass:
 Banned product-voice patterns:
 
 - novice, beginner, new here;
-- Ctrl+Alt slogans;
+- unapproved slogans other than the protected rotating Ctrl+Alt brand flourish;
 - choose/start/understand as empty openings;
 - practical starting point;
 - generic `Why it is useful`;
@@ -414,4 +414,3 @@ The target experience is achieved only when:
 - Learn contains useful explanation or is not exposed;
 - Resources is findable from Home and as an equal Build lane;
 - the regression suite exercises canonical live routes, not retired recovery surfaces.
-

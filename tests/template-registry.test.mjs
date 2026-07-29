@@ -23,4 +23,14 @@ test('Template Registry Validation', async (t) => {
       }
     }
   });
+
+  await t.test('required inputs are explicit subsets of visible inputs', () => {
+    const { registry } = loadTemplateRegistry(join(ROOT, 'data', 'template-registry.json'));
+    for (const template of registry.templates) {
+      assert.ok(Array.isArray(template.required_input_options));
+      for (const option of template.required_input_options) {
+        assert.ok(template.input_options.includes(option));
+      }
+    }
+  });
 });

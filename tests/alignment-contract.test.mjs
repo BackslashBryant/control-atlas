@@ -30,24 +30,37 @@ test('alignment deliverables exist', () => {
   for (const path of requiredDocs) assert.ok(existsSync(path), `${path} must exist`);
 });
 
-test('core product docs state the canonical Control Atlas boundary', () => {
-  for (const path of [
-    'README.md',
-    'docs/context.md',
-    'docs/vision.md',
-    'docs/Plan.md',
-    'docs/PRODUCTION_READINESS.md',
-    'docs/architecture/ARCHITECTURE.md',
-    'CONTRIBUTING.md',
-    'SECURITY.md',
-  ]) {
+test('public product surfaces share one canonical identity and decision boundary', () => {
+  const definition =
+    'Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.';
+  const boundary =
+    'Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.';
+
+  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/index.html']) {
     const content = readFileSync(path, 'utf8');
-    assert.match(content, /Control Atlas/);
-    assert.match(content, /Ctrl\+Alt\+Comply/);
-    assert.match(content, /The public map for federal cyber compliance\./);
-    assert.match(content, /Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF\/ATO templates/i);
-    assert.match(content, /public.data.only/i);
-    assert.match(content, /no (?:backend|user\/org\/system data|user, organization, or system data)/i);
+    assert.match(content, new RegExp(definition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/product-identity.ts']) {
+    const content = readFileSync(path, 'utf8');
+    assert.match(content, new RegExp(boundary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+
+  const packageManifest = JSON.parse(readFileSync('package.json', 'utf8'));
+  assert.equal(packageManifest.description, definition);
+
+  const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
+  const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
+  assert.match(aboutPage, /PRODUCT_DEFINITION/);
+  assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
+  assert.match(homePage, /PRODUCT_DEFINITION/);
+
+  const index = readFileSync('src/index.html', 'utf8');
+  assert.match(index, /name="application-name" content="Control Atlas"/);
+  assert.match(index, /property="og:title" content="Control Atlas"/);
+  assert.doesNotMatch(index, /application-name" content="[^"]*\|/);
+
+  for (const path of ['README.md', 'CONTRIBUTING.md']) {
+    assert.match(readFileSync(path, 'utf8'), /Ctrl\+Alt/);
   }
 });
 

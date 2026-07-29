@@ -120,7 +120,6 @@
               "citations": { "type": "number" }
             }
           },
-          "editorialRecommendation": { "type": "boolean" },
           "editorialNotes": { "type": ["string", "null"] },
           "warnings": { "type": "array", "items": { "type": "string" } },
           "searchAliases": { "type": "array", "items": { "type": "string" } },

@@ -1,8 +1,8 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { HashRouter } from 'react-router';
-import { App } from './ui/App';
-import { applyLegacyQueryRedirect } from './ui/lib/hashRoutes';
+import {
+  BRAND_ROTATION_INTERVAL_MS,
+  BRAND_ROTATION_TRANSITION_MS,
+  BRAND_WORDS,
+} from './shared/brand-rotation';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -22,18 +22,261 @@ if (window.top !== null && window.self !== window.top) {
   }
 }
 
-applyLegacyQueryRedirect();
-
 const rootElement = document.getElementById('root');
+const reactRootElement = rootElement?.querySelector<HTMLElement>('[data-react-root]');
 
-if (!rootElement) {
-  throw new Error('Control Atlas root element is missing.');
+if (!rootElement || !reactRootElement) {
+  throw new Error('Control Atlas root elements are missing.');
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </StrictMode>,
-);
+let brandRotationInterval = 0;
+let brandRotationTransition = 0;
+let reactBoot: Promise<void> | null = null;
+let brandMotionMedia: MediaQueryList | null = null;
+
+function isHomeHash() {
+  const route = window.location.hash.replace(/^#/, '');
+  return route === '' || route === '/' || route.startsWith('/?');
+}
+
+function isSearchHash() {
+  return window.location.hash.replace(/^#/, '').startsWith('/search');
+}
+
+function staticSearchQuery() {
+  const hash = window.location.hash.replace(/^#/, '');
+  const queryIndex = hash.indexOf('?');
+  if (queryIndex === -1) return '';
+  return new URLSearchParams(hash.slice(queryIndex + 1)).get('q') || '';
+}
+
+function stopBrandRotation() {
+  window.clearInterval(brandRotationInterval);
+  window.clearTimeout(brandRotationTransition);
+  brandMotionMedia?.removeEventListener('change', onBrandMotionChange);
+  brandMotionMedia = null;
+}
+
+function startBrandRotation() {
+  const wordElement = rootElement.querySelector<HTMLElement>('[data-brand-word]');
+  if (!wordElement) {
+    return;
+  }
+
+  brandMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+  brandMotionMedia.addEventListener('change', onBrandMotionChange);
+  if (brandMotionMedia.matches) return;
+
+  let wordIndex = 0;
+  brandRotationInterval = window.setInterval(() => {
+    wordElement.classList.remove('word-enter');
+    wordElement.classList.add('word-exit');
+    brandRotationTransition = window.setTimeout(() => {
+      wordIndex = (wordIndex + 1) % BRAND_WORDS.length;
+      wordElement.textContent = BRAND_WORDS[wordIndex];
+      wordElement.classList.remove('word-exit');
+      wordElement.classList.add('word-enter');
+    }, BRAND_ROTATION_TRANSITION_MS);
+  }, BRAND_ROTATION_INTERVAL_MS);
+}
+
+function onBrandMotionChange() {
+  const wordElement = rootElement.querySelector<HTMLElement>('[data-brand-word]');
+  if (!wordElement) return;
+  stopBrandRotation();
+  wordElement.textContent = BRAND_WORDS[0];
+  wordElement.classList.remove('word-exit');
+  wordElement.classList.add('word-enter');
+  startBrandRotation();
+}
+
+function navigateFromStaticHome(target: string) {
+  if (window.location.hash !== target) {
+    window.location.hash = target.slice(1);
+  }
+  void bootReactApp();
+}
+
+function focusSearchResultsWhenReady() {
+  const focusResults = () => {
+    const results = reactRootElement.querySelector<HTMLElement>('#library-results');
+    if (!results) return false;
+    results.focus();
+    return true;
+  };
+  if (focusResults()) return;
+
+  const observer = new MutationObserver(() => {
+    if (focusResults()) observer.disconnect();
+  });
+  observer.observe(reactRootElement, { childList: true, subtree: true });
+  window.setTimeout(() => observer.disconnect(), 15_000);
+}
+
+function connectStaticSearch() {
+  rootElement
+    .querySelector<HTMLElement>('[data-static-search-start]')
+    ?.addEventListener('click', () => navigateFromStaticHome('#/start'));
+  rootElement
+    .querySelector<HTMLFormElement>('[data-static-search-form]')
+    ?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = rootElement.querySelector<HTMLInputElement>(
+        '[data-static-search-input]',
+      );
+      const query = input?.value.trim() || '';
+      const target = `#/search${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+      focusSearchResultsWhenReady();
+      navigateFromStaticHome(target);
+    });
+}
+
+function syncProgressiveShell() {
+  const home = isHomeHash();
+  const search = isSearchHash();
+  rootElement.dataset.reactActive = reactBoot && !home ? 'true' : 'false';
+  if (search) {
+    rootElement.dataset.staticSearchActive = 'true';
+  } else {
+    delete rootElement.dataset.staticSearchActive;
+  }
+
+  for (const selector of [
+    '[data-static-header-reserve]',
+    '[data-static-context-reserve]',
+  ]) {
+    rootElement
+      .querySelector<HTMLElement>(selector)
+      ?.toggleAttribute('hidden', home);
+  }
+  rootElement
+    .querySelector<HTMLElement>('[data-static-search]')
+    ?.toggleAttribute('hidden', !search);
+  const input = rootElement.querySelector<HTMLInputElement>(
+    '[data-static-search-input]',
+  );
+  if (input && document.activeElement !== input) {
+    input.value = staticSearchQuery();
+  }
+}
+
+function connectStaticHome() {
+  rootElement.querySelector<HTMLElement>('[data-static-home]')?.removeAttribute('hidden');
+  rootElement
+    .querySelector<HTMLElement>('[data-skip-workspace]')
+    ?.addEventListener('click', (event) => {
+      event.preventDefault();
+      rootElement.querySelector<HTMLElement>('#workspace')?.focus();
+    });
+
+  rootElement.querySelectorAll<HTMLElement>('[data-route]').forEach((control) => {
+    control.addEventListener('click', () => {
+      const target = control.dataset.route;
+      if (target) navigateFromStaticHome(target);
+    });
+  });
+
+  rootElement
+    .querySelector<HTMLFormElement>('[data-home-search]')
+    ?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = new FormData(event.currentTarget as HTMLFormElement).get('query');
+      if (typeof query === 'string' && query.trim()) {
+        navigateFromStaticHome(`#/search?q=${encodeURIComponent(query.trim())}`);
+      }
+    });
+
+  startBrandRotation();
+  rootElement
+    .querySelector<HTMLElement>('.app-shell')
+    ?.setAttribute('data-app-ready', 'true');
+}
+
+async function bootReactApp() {
+  if (reactBoot) return reactBoot;
+
+  stopBrandRotation();
+  const staticHome = rootElement.querySelector<HTMLElement>('[data-static-home]');
+  staticHome?.setAttribute('hidden', '');
+  const staticHomeApp = staticHome?.querySelector<HTMLElement>('#app');
+  if (staticHomeApp) staticHomeApp.id = 'static-home-app';
+  syncProgressiveShell();
+  window.removeEventListener('hashchange', onLocationChange);
+  window.removeEventListener('popstate', onLocationChange);
+
+  reactBoot = Promise.all([
+    import('react'),
+    import('react-dom/client'),
+    import('./ui/App'),
+  ])
+    .then(([react, reactDom, appModule]) => {
+      reactDom.createRoot(reactRootElement).render(
+        react.createElement(
+          react.StrictMode,
+          null,
+          react.createElement(appModule.App),
+        ),
+      );
+    })
+    .catch((error: unknown) => {
+      reactBoot = null;
+      const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
+      if (boundary) {
+        boundary.setAttribute('role', 'alert');
+        boundary.insertAdjacentText(
+          'beforeend',
+          ' The interactive workspace could not load. Reload this page to try again.',
+        );
+      }
+      throw error;
+    });
+
+  syncProgressiveShell();
+  return reactBoot;
+}
+
+function onLocationChange() {
+  if (!isHomeHash()) void bootReactApp();
+}
+
+async function start() {
+  const hasLegacyQuery =
+    window.location.search.length > 1 &&
+    !window.location.hash.replace(/^#\/?/, '').length;
+  if (hasLegacyQuery) {
+    const { applyLegacyQueryRedirect } = await import('./ui/lib/hashRoutes');
+    applyLegacyQueryRedirect();
+  }
+
+  connectStaticSearch();
+  syncProgressiveShell();
+  window.addEventListener('hashchange', syncProgressiveShell);
+  window.addEventListener('popstate', syncProgressiveShell);
+
+  if (isHomeHash()) {
+    connectStaticHome();
+    window.addEventListener('hashchange', onLocationChange);
+    window.addEventListener('popstate', onLocationChange);
+  } else {
+    // Let the server-rendered route shell reach the screen before parsing the
+    // interactive workspace. This is the progressive-render boundary: the
+    // static Search form works immediately, then React adds results after the
+    // initial document has loaded. Any user action boots the workspace at once.
+    const bootAfterInitialPaint = () => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          window.setTimeout(() => {
+            void bootReactApp();
+          }, 0);
+        });
+      });
+    };
+    if (document.readyState === 'complete') {
+      bootAfterInitialPaint();
+    } else {
+      window.addEventListener('load', bootAfterInitialPaint, { once: true });
+    }
+  }
+}
+
+void start();

@@ -18,7 +18,6 @@ import { canonicalizeHashLocation, routeIdentityFor } from "./routeIdentity";
  */
 const VIEW_TO_PATH: Record<AppView, string> = {
   home: routeIdentityFor("home").path,
-  menu: routeIdentityFor("menu").path,
   "start-here": routeIdentityFor("start-here").path,
   "atlas-map": routeIdentityFor("atlas-map").path,
   search: routeIdentityFor("search").path,
@@ -32,7 +31,6 @@ const VIEW_TO_PATH: Record<AppView, string> = {
   "commons-detail": routeIdentityFor("commons-detail").path,
   about: routeIdentityFor("about").path,
   retired: routeIdentityFor("retired").path,
-  browse: routeIdentityFor("browse").path,
   "not-found": routeIdentityFor("not-found").path,
 };
 
@@ -111,6 +109,17 @@ function parseNodeIdFromPath(pathname: string): {
       buildSection: "tasks",
     };
   }
+  if (pathname === "/build/tasks") {
+    return {
+      basePath: "/build",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "tasks",
+    };
+  }
   const documentMatch = pathname.match(/^\/build\/documents(?:\/([^/]+))?$/);
   if (documentMatch) {
     return {
@@ -160,8 +169,6 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
 }
 
 function legacyViewParam(view: AppView): string {
-  if (view === "search") return "explore";
-  if (view === "patterns") return "playbooks";
   return view;
 }
 
@@ -180,7 +187,9 @@ export function serializeHashLocation(state: ViewState): string {
   }
 
   if (state.view === "catalog-detail" && state.catalog) {
-    return `/catalog/${encodeURIComponent(state.catalog)}`;
+    params.delete("catalog");
+    const qs = params.toString();
+    return `/catalog/${encodeURIComponent(state.catalog)}${qs ? `?${qs}` : ""}`;
   }
 
   if (state.view === "commons-detail" && state.id) {
@@ -207,6 +216,9 @@ export function serializeHashLocation(state: ViewState): string {
       params.delete("baseline");
       params.delete("controlFamily");
       return `/build/tasks/${encodeURIComponent(state.task)}`;
+    }
+    if (state.buildSection === "tasks") {
+      return `/build/tasks${qs ? `?${qs}` : ""}`;
     }
   }
 

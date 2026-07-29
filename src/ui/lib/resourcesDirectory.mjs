@@ -1,4 +1,5 @@
 import { COMMONS_GROUPS } from "./commonsPresentation.mjs";
+import { searchResourceDocuments } from "./resourceSearch.mjs";
 
 /**
  * The approved browse taxonomy is derived from the existing, complete
@@ -48,14 +49,10 @@ export function resourceSearchEvidence(resource, query) {
   return fields.filter(([, ...values]) => values.some((value) => includesQuery(value, normalized))).map(([field]) => field);
 }
 
-export function filterDirectoryResources(resources, filters = {}, collections = []) {
-  const collection = filters.collection
-    ? collections.find((candidate) => candidate.id === filters.collection)
-    : null;
+export function filterDirectoryResources(resources, filters = {}) {
   return resources.filter((resource) => {
     if (filters.category && primaryBrowseCategory(resource) !== filters.category) return false;
     if (filters.lane && filters.lane !== "all" && resource.resourceLane !== filters.lane) return false;
-    if (collection && !collection.resourceIds.includes(resource.id)) return false;
     if (filters.framework && !resource.frameworks.some((value) => includesQuery(value, filters.framework))) return false;
     if (filters.lifecycle && !resource.lifecycleStages.some((value) => value.toLowerCase() === filters.lifecycle.toLowerCase())) return false;
     if (filters.audience && !resource.audiences.some((value) => includesQuery(value, filters.audience))) return false;
@@ -67,19 +64,7 @@ export function filterDirectoryResources(resources, filters = {}, collections = 
 
 /** Filter eligibility before applying editorial ordering. */
 export function searchDirectoryResources(resources, query) {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return resources;
-  return resources
-    .map((resource) => ({ resource, evidence: resourceSearchEvidence(resource, normalized) }))
-    .filter(({ evidence }) => evidence.length > 0)
-    .sort((left, right) => {
-      const evidenceDelta = right.evidence.length - left.evidence.length;
-      if (evidenceDelta) return evidenceDelta;
-      // Recommendation is a ranking tiebreaker only; it never creates eligibility.
-      if (Boolean(right.resource.editorialRecommendation) !== Boolean(left.resource.editorialRecommendation)) {
-        return right.resource.editorialRecommendation ? 1 : -1;
-      }
-      return left.resource.name.localeCompare(right.resource.name);
-    })
-    .map(({ resource }) => resource);
+  return searchResourceDocuments(resources, query).map(
+    ({ document }) => document,
+  );
 }

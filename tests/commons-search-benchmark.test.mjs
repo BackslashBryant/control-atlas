@@ -52,9 +52,6 @@ function executeSearch(queryStr) {
       if (doc.whyIncluded.toLowerCase().includes(term)) score += 5;
     }
 
-    // Editorial boost
-    if (doc.editorialRecommendation) score += 5;
-
     return { doc, score };
   });
 

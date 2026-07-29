@@ -2,11 +2,11 @@ import {
   lazy,
   startTransition,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { useLocation, useNavigate } from "react-router";
 import {
   DataPendingNotice,
   LoadErrorPanel,
@@ -17,26 +17,23 @@ import {
   DetailConnectionsSkeleton,
   LibrarySkeleton,
 } from "./components/LibrarySkeleton";
+import { HomeFooter } from "./components/HomeFooter";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
-import { SearchOverlay } from "./components/SearchOverlay";
-import { GlossaryDrawer, type HelpTab } from "./components/GlossaryDrawer";
+import type { HelpTab } from "./components/GlossaryDrawer";
 import { Button } from "./components/lsm/Button";
 import {
   OrbitalContextBar,
   orbitalRouteContext,
 } from "./components/OrbitalContextBar";
 import { userFacingLoadError } from "../app/display-names.mjs";
-import {
-  loadRuntimeDatasetStaged,
-  type RuntimeBundle,
-} from "./lib/runtimeLoader";
+import type { RuntimeBundle } from "./lib/runtimeLoader";
 import { HomePage } from "./pages/HomePage";
 import {
   activeNavForState,
   isStaticViewWithoutBundle,
   requiresFullGraph,
-} from "./lib/navigation";
+} from "./lib/navigationState";
 import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
@@ -72,11 +69,6 @@ const ObjectDetailPage = lazy(() =>
     default: module.ObjectDetailPage,
   })),
 );
-const MenuPage = lazy(() =>
-  import("./pages/MenuPage").then((module) => ({
-    default: module.MenuPage,
-  })),
-);
 const PlaybooksPage = lazy(() =>
   import("./pages/PlaybooksPage").then((module) => ({
     default: module.PlaybooksPage,
@@ -107,14 +99,45 @@ const CommonsDetailPage = lazy(() =>
     default: module.CommonsDetailPage,
   })),
 );
+const SearchOverlay = lazy(() =>
+  import("./components/SearchOverlay").then((module) => ({
+    default: module.SearchOverlay,
+  })),
+);
+const GlossaryDrawer = lazy(() =>
+  import("./components/GlossaryDrawer").then((module) => ({
+    default: module.GlossaryDrawer,
+  })),
+);
 
 // A replace redirect can remount the route shell. Keep its recovery notice
 // through that one transition so discarded invalid link settings are visible.
 let pendingRouteRecovery = "";
 
+function readHashLocation() {
+  const value = window.location.hash.replace(/^#/, "") || "/";
+  const queryIndex = value.indexOf("?");
+  return {
+    pathname: queryIndex === -1 ? value : value.slice(0, queryIndex),
+    search: queryIndex === -1 ? "" : value.slice(queryIndex),
+  };
+}
+
 export function App() {
-  const location = useLocation();
-  const routerNavigate = useNavigate();
+  const [location, setLocation] = useState(readHashLocation);
+  const routerNavigate = useCallback(
+    (to: string, options?: { replace?: boolean }) => {
+      const hash = `#${to.startsWith("/") ? to : `/${to}`}`;
+      const target = `${window.location.pathname}${window.location.search}${hash}`;
+      if (options?.replace) {
+        window.history.replaceState(null, "", target);
+      } else {
+        window.history.pushState(null, "", target);
+      }
+      setLocation(readHashLocation());
+    },
+    [],
+  );
   const [viewState, setViewState] = useState<ViewState>(() =>
     parseHashLocation(location.pathname, location.search),
   );
@@ -134,6 +157,16 @@ export function App() {
   const [graphRequested, setGraphRequested] = useState(false);
   const [routeRecovery, setRouteRecovery] = useState("");
 
+  useEffect(() => {
+    const syncLocation = () => setLocation(readHashLocation());
+    window.addEventListener("hashchange", syncLocation);
+    window.addEventListener("popstate", syncLocation);
+    return () => {
+      window.removeEventListener("hashchange", syncLocation);
+      window.removeEventListener("popstate", syncLocation);
+    };
+  }, []);
+
   function requestFullGraph() {
     setGraphRequested((current) => (current ? current : true));
   }
@@ -143,6 +176,15 @@ export function App() {
     setLoadSlow(false);
     setLoadError("");
 
+    const needsRuntime =
+      viewState.view === "search" ||
+      !isStaticViewWithoutBundle(viewState.view) ||
+      searchOverlayOpen;
+    if (!needsRuntime) {
+      return () => {
+        cancelled = true;
+      };
+    }
     const slowTimer = window.setTimeout(() => {
       if (!cancelled) {
         setLoadSlow(true);
@@ -157,64 +199,55 @@ export function App() {
       }
     }, 10000);
 
-    loadRuntimeDatasetStaged({
-      includeFullGraph: requiresFullGraph(viewState.view) || graphRequested,
-      onSearchReady: (result) => {
+    import("./lib/runtimeLoader")
+      .then(({ loadRuntimeDatasetStaged }) =>
+        loadRuntimeDatasetStaged({
+          includeFullGraph: requiresFullGraph(viewState.view) || graphRequested,
+          onSearchReady: (result) => {
+            if (!cancelled) {
+              // A delivered stage proves the connection works: cancel the hard
+              // load timers so slow full-graph fetches degrade to the partial
+              // bundle instead of stamping an error over usable content.
+              window.clearTimeout(slowTimer);
+              window.clearTimeout(timeoutTimer);
+              setLoadSlow(false);
+              setBundle((current) => (current?.graphReady ? current : result));
+              setLoadError("");
+            }
+          },
+          onFullReady: (result) => {
+            if (!cancelled) {
+              window.clearTimeout(slowTimer);
+              window.clearTimeout(timeoutTimer);
+              setLoadSlow(false);
+              setBundle(result);
+              setLoadError("");
+            }
+          },
+          onError: (error) => {
+            if (!cancelled) {
+              setLoadError(
+                userFacingLoadError(
+                  error instanceof Error ? error : new Error(String(error)),
+                ),
+              );
+            }
+          },
+        }),
+      )
+      .finally(() => {
         if (!cancelled) {
-          // A delivered stage proves the connection works: cancel the hard
-          // load timers so slow full-graph fetches degrade to the partial
-          // bundle instead of stamping an error over usable content.
           window.clearTimeout(slowTimer);
           window.clearTimeout(timeoutTimer);
-          setLoadSlow(false);
-          setBundle((current) => (current?.graphReady ? current : result));
-          setLoadError("");
         }
-      },
-      onFullReady: (result) => {
-        if (!cancelled) {
-          window.clearTimeout(slowTimer);
-          window.clearTimeout(timeoutTimer);
-          setLoadSlow(false);
-          setBundle(result);
-          setLoadError("");
-        }
-      },
-      onError: (error) => {
-        if (!cancelled) {
-          setLoadError(
-            userFacingLoadError(
-              error instanceof Error ? error : new Error(String(error)),
-            ),
-          );
-        }
-      },
-      onShardLoaded: () => {
-        if (!cancelled) {
-          setBundle((current) =>
-            current
-              ? {
-                  ...current,
-                  librarySearchRevision:
-                    (current.librarySearchRevision ?? 0) + 1,
-                }
-              : current,
-          );
-        }
-      },
-    }).finally(() => {
-      if (!cancelled) {
-        window.clearTimeout(slowTimer);
-        window.clearTimeout(timeoutTimer);
-      }
-    });
+      });
 
     return () => {
       cancelled = true;
       window.clearTimeout(slowTimer);
       window.clearTimeout(timeoutTimer);
     };
-  }, [graphRequested, loadAttempt, viewState.view]);
+  }, [graphRequested, loadAttempt, searchOverlayOpen, viewState.view]);
 
   function retryLoad() {
     setBundle(null);
@@ -268,6 +301,19 @@ export function App() {
   }, [viewState, bundle, routeEntityName]);
 
   useEffect(() => {
+    if (viewState.view !== "search") return;
+    const status = document.querySelector<HTMLElement>(
+      "[data-static-search-status]",
+    );
+    if (!status) return;
+    status.textContent = loadError
+      ? "The published record index is unavailable. Use the retry control below."
+      : bundle
+        ? "Search is ready. Opening a record loads connection data when you need it."
+        : "Loading the published record index…";
+  }, [bundle, loadError, viewState.view]);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -302,6 +348,7 @@ export function App() {
 
   function openNodeByItemId(itemId: string) {
     if (!bundle) {
+      navigate("search", { query: itemId });
       return;
     }
     const match =
@@ -328,32 +375,43 @@ export function App() {
     setHelpOpen(true);
   }
 
+  const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const readyState = loadError
     ? "error"
+    : canRenderWithoutBundle && viewState.view !== "search"
+      ? "true"
     : bundle?.graphReady || (bundle && !requiresFullGraph(viewState.view))
       ? "true"
       : bundle
         ? "partial"
         : "false";
-  const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const showWorkspaceContent =
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
   const routeContext = orbitalRouteContext(viewState, routeEntityName);
 
   return (
     <>
-      <a className="skip-link" href="#workspace">
+      <a
+        className="skip-link"
+        href="#workspace"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById("workspace")?.focus();
+        }}
+      >
         Skip to workspace
       </a>
-      <TopNav
-        onNavigate={navigate}
-        onOpenHelp={() => openHelp()}
-        onOpenSearch={() => setSearchOverlayOpen(true)}
-        viewState={viewState}
-      />
+      {viewState.view !== "home" ? (
+        <TopNav
+          onNavigate={navigate}
+          onOpenHelp={() => openHelp()}
+          onOpenSearch={() => setSearchOverlayOpen(true)}
+          viewState={viewState}
+        />
+      ) : null}
       <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} />
 
-      <main id="workspace">
+      <main id="workspace" tabIndex={-1}>
         {routeRecovery ? (
           <p className="route-recovery" role="status">{routeRecovery}</p>
         ) : null}
@@ -400,31 +458,43 @@ export function App() {
         </section>
       </main>
 
-      <SiteFooter minimal={viewState.view === "home"} onNavigate={navigate} />
+      {viewState.view === "home" ? (
+        <HomeFooter />
+      ) : (
+        <SiteFooter onNavigate={navigate} />
+      )}
 
-      <SearchOverlay
-        bundle={bundle}
-        onNavigate={navigate}
-        onOpenChange={setSearchOverlayOpen}
-        onOpenNode={openNode}
-        open={searchOverlayOpen}
-      />
+      {searchOverlayOpen ? (
+        <Suspense fallback={null}>
+          <SearchOverlay
+            bundle={bundle}
+            onNavigate={navigate}
+            onOpenChange={setSearchOverlayOpen}
+            onOpenNode={openNode}
+            open
+          />
+        </Suspense>
+      ) : null}
 
-      <GlossaryDrawer
-        bundle={bundle}
-        focusTermId={glossaryFocusTermId}
-        helpTab={helpTab}
-        onNavigate={navigate}
-        onOpenNode={openNode}
-        onTabChange={setHelpTab}
-        open={helpOpen}
-        setOpen={(open) => {
-          setHelpOpen(open);
-          if (!open) {
-            setGlossaryFocusTermId("");
-          }
-        }}
-      />
+      {helpOpen ? (
+        <Suspense fallback={null}>
+          <GlossaryDrawer
+            bundle={bundle}
+            focusTermId={glossaryFocusTermId}
+            helpTab={helpTab}
+            onNavigate={navigate}
+            onOpenNode={openNode}
+            onTabChange={setHelpTab}
+            open
+            setOpen={(open) => {
+              setHelpOpen(open);
+              if (!open) {
+                setGlossaryFocusTermId("");
+              }
+            }}
+          />
+        </Suspense>
+      ) : null}
     </>
   );
 }
@@ -495,10 +565,6 @@ function AppContent(props: {
 
   if (state.view === "home") {
     return <HomePage onNavigate={onNavigate} />;
-  }
-
-  if (state.view === "menu") {
-    return <MenuPage onNavigate={onNavigate} />;
   }
 
   if (state.view === "not-found") {
@@ -575,20 +641,6 @@ function AppContent(props: {
     );
   }
 
-  if (state.view === "browse") {
-    if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Catalog" />;
-    }
-    return (
-      <CatalogDetailPage
-        bundle={bundle}
-        onNavigate={onNavigate}
-        onOpenNode={onOpenNode}
-        state={{ view: "catalog-detail", catalog: state.framework }}
-      />
-    );
-  }
-
   if (state.view === "matrix") {
     if (!bundle) {
       return <DataPendingNotice onRetry={onRetryLoad} />;
@@ -660,7 +712,7 @@ function AppContent(props: {
     }
     return (
       <section className="notice">
-        <h2>We do not have a public map entry for "{state.query}"</h2>
+        <h2>No public map entry for "{state.query}"</h2>
         <p>Try Search or Start to find the closest path.</p>
         <div className="card-actions">
           <Button

@@ -19,9 +19,14 @@ test("framework choices survive refresh and the rail steps back one generation",
   await dismissOnboarding(page);
 
   await expect(page.getByLabel("Filter this family")).toBeVisible();
+  await expect(page).toHaveURL(/atlasBaseline=/);
+  await expect(
+    page.getByText(/shown by this optional baseline filter/i),
+  ).toBeVisible();
   await expect(page.locator(".atlas-choice-trail")).toContainText(
-    "ExploreSP 800-53 Rev. 5 CatalogLow Impact BaselineAccess Control",
+    "ExploreSP 800-53 Rev. 5 CatalogAccess Control",
   );
+  await expect(page.locator(".atlas-choice-trail")).not.toContainText("LOW");
 
   await page.reload();
   await waitForAppReady(page);
@@ -31,12 +36,15 @@ test("framework choices survive refresh and the rail steps back one generation",
 
   await page
     .locator(".atlas-choice-trail")
-    .getByRole("button", { name: "LOW" })
+    .getByRole("button", { name: "SP 800-53 Rev. 5 Catalog" })
     .click();
   await expect(
-    page.getByText("Which part of this framework do you want to open?"),
+    page.getByText(
+      "Optional display filter: which published baseline selection should narrow the records?",
+    ),
   ).toBeVisible();
   await expect(page).not.toHaveURL(/atlasFamily=/);
+  await expect(page).not.toHaveURL(/atlasBaseline=/);
 
   await page.goBack();
   await expect(page.getByLabel("Filter this family")).toBeVisible();
@@ -46,7 +54,7 @@ test("family filtering is local and an empty result explains itself", async ({
   page,
 }) => {
   await page.goto(
-    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
+    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasFamily=nist-800-53%3AFAMILY-AC",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);

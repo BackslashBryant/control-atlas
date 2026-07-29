@@ -3,9 +3,13 @@
 ## Product Identity
 
 - Public product name: **Control Atlas**
-- Campaign line: **Ctrl+Alt+Comply**
-- Tagline: **The public map for federal cyber compliance.**
-- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates - no login, no evidence upload, no organizational data required.
+- Protected brand flourish: **Ctrl+Alt+** followed by a rotating, real product
+  action such as **Trace**, **Search**, **Explore**, **Compare**, or **Build**.
+- Product definition: A public, no-account workbench for finding, reading,
+  comparing, and tracing federal cybersecurity material back to its source.
+- Boundary: Control Atlas organizes public material. The people responsible
+  for the work decide applicability, baseline selection, compliance and
+  inheritance claims, and authorization or ATO outcomes.
 - Design principle: **Build for translation, not complexity.** See [`docs/DESIGN_PRINCIPLES.md`](DESIGN_PRINCIPLES.md).
 
 ## Current Objective
@@ -27,11 +31,14 @@ iOS/Android checks remain external evidence, not an unfinished code epic.
 - **SPR-20260708 remediation:** deferred graph on Explore, sharded `library-search-manifest` + per-catalog shards, `bootstrap-payload` / `load-resilience` E2E, home About/Sources trust row, header search draft clear, Compare coverage chips, mobile overflow fixes, live Pages smoke workflow (`.github/workflows/pages-live-smoke.yml`), federated search shard refresh on lazy load, connections-only filter triggers on-demand graph
 - **Newbie-Reframe Phase 7:** 40 official artifacts, 11 supporting tools, 12 companions, FedRAMP rules `2026.07.14.01`, 27 indexed legacy downloads, ten explicit legacy-to-current transitions, and official-workbook FedRAMP baseline ingestion
 
-## Adopted Baseline
+## Implementation foundation
 
 - React shell in `src/ui/App.tsx` is the active UI; legacy `src/app/app.mjs` is not mounted
 - Build-time importers and `data/generated/*` bundles are the runtime contract
-- Library search loads `library-search-manifest.json` + eager shards first; remaining catalog shards lazy-load with UI refresh via `librarySearchRevision`
+- Library search loads one complete compact `library-search.json` artifact.
+  Full published text stays on record payloads; the search bootstrap carries
+  only identity, source, facets, text-availability disclosure, and its
+  build-time MiniSearch index.
 - Atlas record views load a compact node index and one deterministic incident-edge shard; they do not load the monolithic graph artifacts
 - Atlas defaults to a semantic DOM Path, offers a bounded real-edge Map, and keeps List as an equal accessible view; desktop progression is horizontal and mobile progression is vertical
 - React Flow and ELK remain lazy for other legacy bounded relationship diagrams, not the primary Atlas route

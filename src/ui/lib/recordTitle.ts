@@ -73,7 +73,7 @@ export function routeDocumentTitle(
   }
   const base = routeIdentityFor(state.view as import("./viewState").AppView).title;
   const label =
-    (state.view === "search" || state.view === "browse") && state.query
+    state.view === "search" && state.query
       ? `${state.query} — ${base}`
       : base;
   return `${label} — ${BASE_TITLE}`;

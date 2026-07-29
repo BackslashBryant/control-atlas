@@ -1,165 +1,7 @@
 {
   "builtAt": "2026-07-23T00:00:00.000Z",
   "totalCount": 96,
-  "collections": [
-    {
-      "id": "col-isso-starter-kit",
-      "title": "New ISSO Starter Kit",
-      "summary": "Essential authoritative publications, templates, assessment guides, and community channels for federal Information System Security Officers.",
-      "whyCurated": "Provides the immediate baseline needed by a new ISSO navigating RMF, NIST SP 800-53, and agency ATO packages.",
-      "resourceIds": [
-        "official-nist-sp800-53-r5",
-        "official-nist-sp800-37-r2",
-        "template-fedramp-ssp-rev5",
-        "tool-disa-stig-viewer",
-        "community-reddit-nistcontrols",
-        "official-cisa-kev-catalog"
-      ]
-    },
-    {
-      "id": "col-dod-rmf-starter-kit",
-      "title": "DoD RMF & Cyber Exchange Starter Kit",
-      "summary": "DoD instructions, STIG libraries, eMASS tools, and qualification matrices for Defense Information Assurance practitioners.",
-      "whyCurated": "Bundles core DISA/DoD policy (DoDI 8510.01, CNSSI 1253) with practical STIG assessment and checklist conversion utilities.",
-      "resourceIds": [
-        "official-dodi-8510-01",
-        "official-cnssi-1253",
-        "official-disa-stig-library",
-        "tool-disa-stig-viewer",
-        "tool-powerstig",
-        "tool-mitre-emass-client",
-        "official-dod-8140-matrix"
-      ]
-    },
-    {
-      "id": "col-cmmc-level2-kit",
-      "title": "CMMC Level 2 Defense Contractor Kit",
-      "summary": "NIST SP 800-171, 32 CFR Part 170 CMMC rules, scoping guides, SSP templates, and active contractor practitioner groups.",
-      "whyCurated": "Brings together mandatory DoD CUI standards with open-source scoping worksheets, evidence templates, and peer support communities.",
-      "resourceIds": [
-        "official-nist-sp800-171-r2",
-        "official-cmmc-32cfr-170",
-        "community-reddit-cmmc",
-        "community-cmmc-practitioner-discord",
-        "tool-compliance-as-code"
-      ]
-    },
-    {
-      "id": "col-fedramp-authorization-kit",
-      "title": "FedRAMP Cloud Authorization Kit",
-      "summary": "FedRAMP Rev. 5 baselines, 20x modernization rules, official SSP/POA&M templates, and OSCAL automation tooling.",
-      "whyCurated": "Everything Cloud Service Providers need to design, document, and automate a FedRAMP JAB or Agency authorization package.",
-      "resourceIds": [
-        "official-fedramp-baselines",
-        "official-fedramp-20x",
-        "template-fedramp-ssp-rev5",
-        "template-fedramp-poam-rev5",
-        "tool-compliance-trestle",
-        "community-reddit-fedramp"
-      ]
-    },
-    {
-      "id": "col-stig-automation-toolkit",
-      "title": "STIG & Hardening Automation Toolkit",
-      "summary": "Open-source SCAP content, Ansible playbooks, PowerShell modules, and validation tools for automated STIG compliance.",
-      "whyCurated": "Equips Linux and Windows engineers to replace slow manual STIG audits with executable hardening scripts.",
-      "resourceIds": [
-        "tool-compliance-as-code",
-        "tool-powerstig",
-        "tool-mitre-saf-cli",
-        "tool-ansible-lockdown",
-        "tool-hardening-kitty"
-      ]
-    },
-    {
-      "id": "col-oscal-starter-kit",
-      "title": "NIST OSCAL Machine-Readable Compliance Kit",
-      "summary": "NIST OSCAL XML/JSON schemas, CLI validators, conversion libraries, and component definition repositories.",
-      "whyCurated": "Essential starter resources for software developers building compliance-as-code pipelines and digital authorization engines.",
-      "resourceIds": [
-        "official-nist-oscal",
-        "tool-compliance-trestle",
-        "tool-gsa-oscal-ssp-word",
-        "tool-awesome-oscal",
-        "community-oscal-slack"
-      ]
-    },
-    {
-      "id": "col-cloud-compliance-automation",
-      "title": "Cloud & Kubernetes Security Posture Kit",
-      "summary": "Multi-cloud infrastructure scanners, policy engines, and container vulnerability tools for AWS, Azure, GCP, and Kubernetes.",
-      "whyCurated": "Direct open-source software tools for continuous cloud security posture management (CSPM) and IaC auditing.",
-      "resourceIds": [
-        "tool-prowler-cloud-security",
-        "tool-scoutsuite",
-        "tool-cloud-custodian",
-        "tool-steampipe",
-        "tool-open-policy-agent",
-        "tool-checkov"
-      ]
-    },
-    {
-      "id": "col-continuous-monitoring-toolkit",
-      "title": "Continuous Monitoring & Threat Data Feeds",
-      "summary": "Machine-readable CISA KEV feeds, NVD APIs, threat vulnerability catalogs, and automated POA&M tracking scripts.",
-      "whyCurated": "Provides continuous vulnerability intelligence and data feeds required for ongoing ATO monitoring and vulnerability disclosure.",
-      "resourceIds": [
-        "official-cisa-kev-catalog",
-        "official-nist-nvd-api",
-        "dataset-cisa-known-exploited-vulnerabilities-json",
-        "tool-dependency-track",
-        "tool-trivy"
-      ]
-    },
-    {
-      "id": "col-dod-8140-workforce",
-      "title": "DoD 8140 & Cyber Workforce Hub",
-      "summary": "Workforce qualification matrices, NICE Framework roles, NICCS training catalog, and skilling resources.",
-      "whyCurated": "Helps managers and cybersecurity staff verify compliance with DoD 8140 qualification requirements and career pathing.",
-      "resourceIds": [
-        "official-dod-8140-matrix",
-        "official-dodi-8510-01",
-        "official-disa-stig-library",
-        "tool-disa-stig-viewer",
-        "community-reddit-nistcontrols"
-      ]
-    },
-    {
-      "id": "col-supply-chain-sbom-kit",
-      "title": "Software Supply Chain & SBOM Toolkit",
-      "summary": "Generators, analyzers, and validation engines for CycloneDX and SPDX Software Bill of Materials (SBOM).",
-      "whyCurated": "Essential tools for meeting Executive Order 14028 software supply chain security requirements.",
-      "resourceIds": [
-        "tool-cyclonedx-cli",
-        "tool-syft-sbom-generator",
-        "tool-grype-vulnerability-scanner",
-        "tool-dependency-track",
-        "tool-openssf-scorecard"
-      ]
-    },
-    {
-      "id": "col-policy-governance-templates",
-      "title": "Federal Security Policy & Plan Templates",
-      "summary": "Pre-authored Word, Excel, and Markdown templates for Contingency Plans, Incident Response, and GRC policies.",
-      "whyCurated": "Reduces documentation burden for small agencies and cleared contractors drafting security documentation.",
-      "resourceIds": [
-        "template-sans-security-policy",
-        "template-fedramp-poam-rev5"
-      ]
-    },
-    {
-      "id": "col-legacy-standards-archive",
-      "title": "Historical Security Standards & Legacy Baselines",
-      "summary": "Archived standards, Rev 4 baselines, DIACAP guides, and OpenControl precursors retained for audit continuity.",
-      "whyCurated": "Provides historical context for ongoing legacy system migrations and historical compliance comparisons.",
-      "resourceIds": [
-        "legacy-nist-sp800-53-r4",
-        "legacy-fedramp-rev4-baselines",
-        "legacy-diacap-transition",
-        "legacy-opencontrol-compliance-masonry"
-      ]
-    }
-  ],
+  "collections": [],
   "documents": [
     {
       "id": "official-nist-sp800-53-r5",
@@ -167,7 +9,7 @@
       "shortName": "NIST SP 800-53 Rev. 5",
       "slug": "official-nist-sp800-53-r5",
       "summary": "The foundational catalog of security and privacy controls for U.S. federal information systems and organizations.",
-      "whyIncluded": "Governing catalog for FISMA, FedRAMP, DoD RMF, and federal cloud security baselines.",
+      "whyIncluded": "Published catalog for FISMA, FedRAMP, DoD RMF, and federal cloud security baselines.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -200,7 +42,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -217,7 +58,7 @@
         "NIST SP 800-53",
         "800-53"
       ],
-      "searchableText": "nist sp 800-53 rev. 5 security and privacy controls nist sp 800-53 rev. 5 the foundational catalog of security and privacy controls for u.s. federal information systems and organizations. governing catalog for fisma, fedramp, dod rmf, and federal cloud security baselines. nist csrc catalog nist sp 800-53 nist rmf fisma fedramp dod rmf isso issm authorizing official sca engineer nist 800-53 sp 800-53 ac-2 account management how to implement ac-2 nist sp 800-53 800-53"
+      "searchableText": "nist sp 800-53 rev. 5 security and privacy controls nist sp 800-53 rev. 5 the foundational catalog of security and privacy controls for u.s. federal information systems and organizations. published catalog for fisma, fedramp, dod rmf, and federal cloud security baselines. nist csrc catalog nist sp 800-53 nist rmf fisma fedramp dod rmf isso issm authorizing official sca engineer nist 800-53 sp 800-53 ac-2 account management how to implement ac-2 nist sp 800-53 800-53"
     },
     {
       "id": "official-nist-sp800-53a-r5",
@@ -225,7 +66,7 @@
       "shortName": "NIST SP 800-53A Rev. 5",
       "slug": "official-nist-sp800-53a-r5",
       "summary": "Assessment procedures and evaluation methods for verifying NIST SP 800-53 Rev. 5 control effectiveness.",
-      "whyIncluded": "Governing standard for Security Control Assessors (SCAs) and 3PAOs creating assessment plans and testing controls.",
+      "whyIncluded": "Published standard for Security Control Assessors (SCAs) and 3PAOs creating assessment plans and testing controls.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -255,13 +96,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-53a rev. 5 assessing security and privacy controls nist sp 800-53a rev. 5 assessment procedures and evaluation methods for verifying nist sp 800-53 rev. 5 control effectiveness. governing standard for security control assessors (scas) and 3paos creating assessment plans and testing controls. nist csrc catalog nist sp 800-53a nist rmf fisma fedramp security control assessor 3pao isso"
+      "searchableText": "nist sp 800-53a rev. 5 assessing security and privacy controls nist sp 800-53a rev. 5 assessment procedures and evaluation methods for verifying nist sp 800-53 rev. 5 control effectiveness. published standard for security control assessors (scas) and 3paos creating assessment plans and testing controls. nist csrc catalog nist sp 800-53a nist rmf fisma fedramp security control assessor 3pao isso"
     },
     {
       "id": "official-nist-sp800-53b",
@@ -269,7 +109,7 @@
       "shortName": "NIST SP 800-53B",
       "slug": "official-nist-sp800-53b",
       "summary": "Control baselines for Low-Impact, Moderate-Impact, and High-Impact federal information systems.",
-      "whyIncluded": "Governing specification for selecting initial security control baselines prior to system tailoring.",
+      "whyIncluded": "Published specification for selecting initial security control baselines prior to system tailoring.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -297,13 +137,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-53b control baselines for information systems nist sp 800-53b control baselines for low-impact, moderate-impact, and high-impact federal information systems. governing specification for selecting initial security control baselines prior to system tailoring. nist csrc catalog nist sp 800-53b nist rmf fisma isso issm engineer"
+      "searchableText": "nist sp 800-53b control baselines for information systems nist sp 800-53b control baselines for low-impact, moderate-impact, and high-impact federal information systems. published specification for selecting initial security control baselines prior to system tailoring. nist csrc catalog nist sp 800-53b nist rmf fisma isso issm engineer"
     },
     {
       "id": "official-nist-sp800-37-r2",
@@ -311,7 +150,7 @@
       "shortName": "NIST SP 800-37 Rev. 2",
       "slug": "official-nist-sp800-37-r2",
       "summary": "Comprehensive guide for applying the Risk Management Framework (RMF) to federal systems, including privacy considerations.",
-      "whyIncluded": "Governing lifecycle policy for Prepare, Categorize, Select, Implement, Assess, Authorize, and Monitor steps.",
+      "whyIncluded": "Published lifecycle policy for Prepare, Categorize, Select, Implement, Assess, Authorize, and Monitor steps.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -342,7 +181,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -356,7 +194,7 @@
         "Risk Management Framework",
         "800-37"
       ],
-      "searchableText": "nist sp 800-37 rev. 2 risk management framework for information systems nist sp 800-37 rev. 2 comprehensive guide for applying the risk management framework (rmf) to federal systems, including privacy considerations. governing lifecycle policy for prepare, categorize, select, implement, assess, authorize, and monitor steps. nist csrc instruction nist rmf nist sp 800-37 fisma dod rmf authorizing official issm isso system owner rmf guide rmf risk management framework 800-37"
+      "searchableText": "nist sp 800-37 rev. 2 risk management framework for information systems nist sp 800-37 rev. 2 comprehensive guide for applying the risk management framework (rmf) to federal systems, including privacy considerations. published lifecycle policy for prepare, categorize, select, implement, assess, authorize, and monitor steps. nist csrc instruction nist rmf nist sp 800-37 fisma dod rmf authorizing official issm isso system owner rmf guide rmf risk management framework 800-37"
     },
     {
       "id": "official-nist-sp800-171-r2",
@@ -364,7 +202,7 @@
       "shortName": "NIST SP 800-171 Rev. 2",
       "slug": "official-nist-sp800-171-r2",
       "summary": "Requirements for protecting Controlled Unclassified Information (CUI) in defense contractor and nonfederal systems.",
-      "whyIncluded": "Governing baseline standard for DFARS 252.204-7012, CMMC Level 2, and nonfederal supplier security.",
+      "whyIncluded": "Published baseline standard for DFARS 252.204-7012, CMMC Level 2, and nonfederal supplier security.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -396,7 +234,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -410,7 +247,7 @@
         "CMMC Level 2",
         "800-171"
       ],
-      "searchableText": "nist sp 800-171 rev. 2 protecting cui in nonfederal systems nist sp 800-171 rev. 2 requirements for protecting controlled unclassified information (cui) in defense contractor and nonfederal systems. governing baseline standard for dfars 252.204-7012, cmmc level 2, and nonfederal supplier security. nist csrc catalog nist sp 800-171 cmmc 2.0 cmmc dfars cui defense contractor isso 3pao auditor 800-171 rev 2 cmmc level 2 scoping guide cmmc level 2 800-171"
+      "searchableText": "nist sp 800-171 rev. 2 protecting cui in nonfederal systems nist sp 800-171 rev. 2 requirements for protecting controlled unclassified information (cui) in defense contractor and nonfederal systems. published baseline standard for dfars 252.204-7012, cmmc level 2, and nonfederal supplier security. nist csrc catalog nist sp 800-171 cmmc 2.0 cmmc dfars cui defense contractor isso 3pao auditor 800-171 rev 2 cmmc level 2 scoping guide cmmc level 2 800-171"
     },
     {
       "id": "official-nist-sp800-171a",
@@ -418,7 +255,7 @@
       "shortName": "NIST SP 800-171A",
       "slug": "official-nist-sp800-171a",
       "summary": "Assessment procedures and test objectives for evaluating NIST SP 800-171 compliance.",
-      "whyIncluded": "Governing assessment guide for C3PAO assessors and defense contractors conducting self-assessments.",
+      "whyIncluded": "Published assessment guide for C3PAO assessors and defense contractors conducting self-assessments.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-171a/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -447,13 +284,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-171a assessing security requirements for cui nist sp 800-171a assessment procedures and test objectives for evaluating nist sp 800-171 compliance. governing assessment guide for c3pao assessors and defense contractors conducting self-assessments. nist csrc catalog nist sp 800-171a cmmc 2.0 cmmc sprs 3pao cmmc practitioner isso"
+      "searchableText": "nist sp 800-171a assessing security requirements for cui nist sp 800-171a assessment procedures and test objectives for evaluating nist sp 800-171 compliance. published assessment guide for c3pao assessors and defense contractors conducting self-assessments. nist csrc catalog nist sp 800-171a cmmc 2.0 cmmc sprs 3pao cmmc practitioner isso"
     },
     {
       "id": "official-nist-sp800-172",
@@ -461,7 +297,7 @@
       "shortName": "NIST SP 800-172",
       "slug": "official-nist-sp800-172",
       "summary": "Enhanced security requirements for protecting CUI against Advanced Persistent Threats (APTs).",
-      "whyIncluded": "Governing baseline for CMMC Level 3 and high-value defense contractor systems handling critical CUI.",
+      "whyIncluded": "Published baseline for CMMC Level 3 and high-value defense contractor systems handling critical CUI.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -490,13 +326,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-172 enhanced security requirements for cui nist sp 800-172 enhanced security requirements for protecting cui against advanced persistent threats (apts). governing baseline for cmmc level 3 and high-value defense contractor systems handling critical cui. nist csrc catalog nist sp 800-172 cmmc level 3 cmmc dod defense contractor engineer issm"
+      "searchableText": "nist sp 800-172 enhanced security requirements for cui nist sp 800-172 enhanced security requirements for protecting cui against advanced persistent threats (apts). published baseline for cmmc level 3 and high-value defense contractor systems handling critical cui. nist csrc catalog nist sp 800-172 cmmc level 3 cmmc dod defense contractor engineer issm"
     },
     {
       "id": "official-nist-csf-2",
@@ -504,7 +339,7 @@
       "shortName": "NIST CSF 2.0",
       "slug": "official-nist-csf-2",
       "summary": "Updated taxonomy organized around Govern, Identify, Protect, Detect, Respond, and Recover core functions.",
-      "whyIncluded": "Governing high-level framework for organizational cybersecurity risk management across federal and private sectors.",
+      "whyIncluded": "Published high-level framework for organizational cybersecurity risk management across federal and private sectors.",
       "canonicalUrl": "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -532,13 +367,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist cybersecurity framework (csf) 2.0 nist csf 2.0 updated taxonomy organized around govern, identify, protect, detect, respond, and recover core functions. governing high-level framework for organizational cybersecurity risk management across federal and private sectors. nist csrc catalog nist csf 2.0 federal civilian critical infrastructure ciso issm executive"
+      "searchableText": "nist cybersecurity framework (csf) 2.0 nist csf 2.0 updated taxonomy organized around govern, identify, protect, detect, respond, and recover core functions. published high-level framework for organizational cybersecurity risk management across federal and private sectors. nist csrc catalog nist csf 2.0 federal civilian critical infrastructure ciso issm executive"
     },
     {
       "id": "official-nist-ai-rmf",
@@ -546,7 +380,7 @@
       "shortName": "NIST AI RMF 1.0",
       "slug": "official-nist-ai-rmf",
       "summary": "Framework to improve the ability to incorporate trustworthiness considerations into AI products and systems.",
-      "whyIncluded": "Governing framework for managing AI safety, bias, transparency, and federal AI risk compliance.",
+      "whyIncluded": "Published framework for managing AI safety, bias, transparency, and federal AI risk compliance.",
       "canonicalUrl": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -575,13 +409,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist artificial intelligence risk management framework (ai rmf 1.0) nist ai rmf 1.0 framework to improve the ability to incorporate trustworthiness considerations into ai products and systems. governing framework for managing ai safety, bias, transparency, and federal ai risk compliance. nist csrc instruction nist ai rmf federal ai executive order 14110 ai engineer ciso isso"
+      "searchableText": "nist artificial intelligence risk management framework (ai rmf 1.0) nist ai rmf 1.0 framework to improve the ability to incorporate trustworthiness considerations into ai products and systems. published framework for managing ai safety, bias, transparency, and federal ai risk compliance. nist csrc instruction nist ai rmf federal ai executive order 14110 ai engineer ciso isso"
     },
     {
       "id": "official-nist-privacy-framework",
@@ -589,7 +422,7 @@
       "shortName": "NIST Privacy Framework",
       "slug": "official-nist-privacy-framework",
       "summary": "Voluntary tool designed to help organizations identify and manage privacy risk.",
-      "whyIncluded": "Governing framework for privacy control integration under NIST SP 800-53 Rev. 5 Appendix C.",
+      "whyIncluded": "Published framework for privacy control integration under NIST SP 800-53 Rev. 5 Appendix C.",
       "canonicalUrl": "https://www.nist.gov/privacy-framework",
       "publisher": "NIST",
       "resourceLane": "official",
@@ -615,13 +448,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist privacy framework 1.0 nist privacy framework voluntary tool designed to help organizations identify and manage privacy risk. governing framework for privacy control integration under nist sp 800-53 rev. 5 appendix c. nist catalog nist privacy framework fisma privacy privacy officer isso"
+      "searchableText": "nist privacy framework 1.0 nist privacy framework voluntary tool designed to help organizations identify and manage privacy risk. published framework for privacy control integration under nist sp 800-53 rev. 5 appendix c. nist catalog nist privacy framework fisma privacy privacy officer isso"
     },
     {
       "id": "official-nist-ssdf",
@@ -629,7 +461,7 @@
       "shortName": "NIST SSDF 1.1",
       "slug": "official-nist-ssdf",
       "summary": "Recommendations for mitigating software vulnerability risk throughout the software development lifecycle.",
-      "whyIncluded": "Governing standard for Executive Order 14028 software vendor self-attestation mandates.",
+      "whyIncluded": "Published standard for Executive Order 14028 software vendor self-attestation mandates.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -659,13 +491,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-218 secure software development framework (ssdf) nist ssdf 1.1 recommendations for mitigating software vulnerability risk throughout the software development lifecycle. governing standard for executive order 14028 software vendor self-attestation mandates. nist csrc instruction nist ssdf nist sp 800-218 software supply chain eo 14028 developer devsecops isso"
+      "searchableText": "nist sp 800-218 secure software development framework (ssdf) nist ssdf 1.1 recommendations for mitigating software vulnerability risk throughout the software development lifecycle. published standard for executive order 14028 software vendor self-attestation mandates. nist csrc instruction nist ssdf nist sp 800-218 software supply chain eo 14028 developer devsecops isso"
     },
     {
       "id": "official-nist-oscal",
@@ -673,7 +504,7 @@
       "shortName": "NIST OSCAL Standard",
       "slug": "official-nist-oscal",
       "summary": "Standardized machine-readable XML, JSON, and YAML schemas for control catalogs, baselines, SSPs, and SAPs.",
-      "whyIncluded": "The federal digital compliance standard replacing manual Word/Excel compliance document authoring.",
+      "whyIncluded": "Public machine-readable specification for control catalogs, baselines, SSPs, and assessment plans.",
       "canonicalUrl": "https://pages.nist.gov/OSCAL/",
       "publisher": "NIST OSCAL Team",
       "resourceLane": "official",
@@ -703,7 +534,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -711,7 +541,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist open security controls assessment language (oscal) nist oscal standard standardized machine-readable xml, json, and yaml schemas for control catalogs, baselines, ssps, and saps. the federal digital compliance standard replacing manual word/excel compliance document authoring. nist oscal team specification oscal fedramp fisma oscal developer data architect isso"
+      "searchableText": "nist open security controls assessment language (oscal) nist oscal standard standardized machine-readable xml, json, and yaml schemas for control catalogs, baselines, ssps, and saps. public machine-readable specification for control catalogs, baselines, ssps, and assessment plans. nist oscal team specification oscal fedramp fisma oscal developer data architect isso"
     },
     {
       "id": "official-nist-nvd-api",
@@ -719,7 +549,7 @@
       "shortName": "NVD API v2.0",
       "slug": "official-nist-nvd-api",
       "summary": "Public REST API providing machine-readable CVE vulnerability data, CVSS scores, and CPE mappings.",
-      "whyIncluded": "Authoritative public data feed for continuous vulnerability identification and CVE risk scoring.",
+      "whyIncluded": "Public data feed for continuous vulnerability identification and CVE risk scoring.",
       "canonicalUrl": "https://nvd.nist.gov/developers/vulnerabilities",
       "publisher": "NIST NVD",
       "resourceLane": "official",
@@ -750,7 +580,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -758,15 +587,15 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist national vulnerability database (nvd) api v2.0 nvd api v2.0 public rest api providing machine-readable cve vulnerability data, cvss scores, and cpe mappings. authoritative public data feed for continuous vulnerability identification and cve risk scoring. nist nvd dataset cve cvss cpe nvd continuous monitoring vulnerability analyst engineer isso"
+      "searchableText": "nist national vulnerability database (nvd) api v2.0 nvd api v2.0 public rest api providing machine-readable cve vulnerability data, cvss scores, and cpe mappings. public data feed for continuous vulnerability identification and cve risk scoring. nist nvd dataset cve cvss cpe nvd continuous monitoring vulnerability analyst engineer isso"
     },
     {
       "id": "official-cisa-kev-catalog",
       "name": "CISA Known Exploited Vulnerabilities (KEV) Catalog",
       "shortName": "CISA KEV Catalog",
       "slug": "official-cisa-kev-catalog",
-      "summary": "Authoritative list of vulnerabilities known to be exploited in the wild, with mandatory federal remediation deadlines.",
-      "whyIncluded": "Governing directive list for Binding Operational Directive 22-01 vulnerability patching timelines.",
+      "summary": "CISA list of vulnerabilities known to be exploited in the wild, with federal remediation due dates.",
+      "whyIncluded": "Published directive list for Binding Operational Directive 22-01 vulnerability patching timelines.",
       "canonicalUrl": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "publisher": "CISA",
       "resourceLane": "official",
@@ -796,7 +625,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -805,7 +633,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cisa known exploited vulnerabilities (kev) catalog cisa kev catalog authoritative list of vulnerabilities known to be exploited in the wild, with mandatory federal remediation deadlines. governing directive list for binding operational directive 22-01 vulnerability patching timelines. cisa dataset cisa kev bod 22-01 bod 22-01 fisma isso vulnerability analyst administrator"
+      "searchableText": "cisa known exploited vulnerabilities (kev) catalog cisa kev catalog cisa list of vulnerabilities known to be exploited in the wild, with federal remediation due dates. published directive list for binding operational directive 22-01 vulnerability patching timelines. cisa dataset cisa kev bod 22-01 bod 22-01 fisma isso vulnerability analyst administrator"
     },
     {
       "id": "official-cisa-cpgs",
@@ -813,7 +641,7 @@
       "shortName": "CISA CPGs 2.0",
       "slug": "official-cisa-cpgs",
       "summary": "Prioritized set of IT and OT cybersecurity practices focused on critical infrastructure protection.",
-      "whyIncluded": "Governing guidance for essential baseline risk reduction across federal and critical infrastructure entities.",
+      "whyIncluded": "Published guidance for baseline risk reduction across federal and critical infrastructure entities.",
       "canonicalUrl": "https://www.cisa.gov/cross-sector-cybersecurity-performance-goals",
       "publisher": "CISA",
       "resourceLane": "official",
@@ -840,21 +668,20 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cisa cross-sector cybersecurity performance goals (cpgs) cisa cpgs 2.0 prioritized set of it and ot cybersecurity practices focused on critical infrastructure protection. governing guidance for essential baseline risk reduction across federal and critical infrastructure entities. cisa instruction cisa cpg critical infrastructure ciso isso engineer"
+      "searchableText": "cisa cross-sector cybersecurity performance goals (cpgs) cisa cpgs 2.0 prioritized set of it and ot cybersecurity practices focused on critical infrastructure protection. published guidance for baseline risk reduction across federal and critical infrastructure entities. cisa instruction cisa cpg critical infrastructure ciso isso engineer"
     },
     {
       "id": "official-cisa-bod-23-01",
       "name": "CISA Binding Operational Directive 23-01 Asset Discovery",
       "shortName": "CISA BOD 23-01",
       "slug": "official-cisa-bod-23-01",
-      "summary": "Mandatory operational directive requiring federal civilian agencies to automate asset discovery and vulnerability enumeration.",
-      "whyIncluded": "Governing directive for federal asset visibility, active scanning, and automated asset inventory reporting.",
+      "summary": "Binding Operational Directive covering automated asset discovery and vulnerability enumeration for federal civilian agencies.",
+      "whyIncluded": "Published directive for federal asset visibility, active scanning, and automated asset inventory reporting.",
       "canonicalUrl": "https://www.cisa.gov/news-events/directives/bod-23-01-improving-asset-visibility-and-vulnerability-detection-federal-networks",
       "publisher": "CISA",
       "resourceLane": "official",
@@ -883,13 +710,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cisa binding operational directive 23-01 asset discovery cisa bod 23-01 mandatory operational directive requiring federal civilian agencies to automate asset discovery and vulnerability enumeration. governing directive for federal asset visibility, active scanning, and automated asset inventory reporting. cisa policy bod 23-01 fisma asset management isso issm network administrator"
+      "searchableText": "cisa binding operational directive 23-01 asset discovery cisa bod 23-01 binding operational directive covering automated asset discovery and vulnerability enumeration for federal civilian agencies. published directive for federal asset visibility, active scanning, and automated asset inventory reporting. cisa policy bod 23-01 fisma asset management isso issm network administrator"
     },
     {
       "id": "official-cisa-services-catalog",
@@ -897,7 +723,7 @@
       "shortName": "CISA Services Catalog",
       "slug": "official-cisa-services-catalog",
       "summary": "Comprehensive directory of free cybersecurity services, vulnerability scanning, and incident response tools provided by CISA.",
-      "whyIncluded": "Authoritative catalog of free government cybersecurity assessments and hygiene scanning services for federal/SLTT entities.",
+      "whyIncluded": "Public catalog of free government cybersecurity assessments and hygiene scanning services for federal/SLTT entities.",
       "canonicalUrl": "https://www.cisa.gov/resources-tools/services",
       "publisher": "CISA",
       "resourceLane": "official",
@@ -925,13 +751,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cisa cybersecurity services & tools catalog cisa services catalog comprehensive directory of free cybersecurity services, vulnerability scanning, and incident response tools provided by cisa. authoritative catalog of free government cybersecurity assessments and hygiene scanning services for federal/sltt entities. cisa catalog cisa services cisa federal civilian isso issm it director"
+      "searchableText": "cisa cybersecurity services & tools catalog cisa services catalog comprehensive directory of free cybersecurity services, vulnerability scanning, and incident response tools provided by cisa. public catalog of free government cybersecurity assessments and hygiene scanning services for federal/sltt entities. cisa catalog cisa services cisa federal civilian isso issm it director"
     },
     {
       "id": "official-niccs-training-catalog",
@@ -939,7 +764,7 @@
       "shortName": "CISA NICCS Portal",
       "slug": "official-niccs-training-catalog",
       "summary": "Central hub for cybersecurity education, training courses, and NICE framework mapping resources.",
-      "whyIncluded": "Authoritative federal training directory for mapping cybersecurity workforce skill sets to NICE roles.",
+      "whyIncluded": "Public federal training directory for mapping cybersecurity workforce skill sets to NICE roles.",
       "canonicalUrl": "https://niccs.cisa.gov/",
       "publisher": "CISA NICCS",
       "resourceLane": "official",
@@ -969,13 +794,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cisa national initiative for cybersecurity careers & studies (niccs) cisa niccs portal central hub for cybersecurity education, training courses, and nice framework mapping resources. authoritative federal training directory for mapping cybersecurity workforce skill sets to nice roles. cisa niccs training nice framework dod 8140 niccs workforce cybersecurity professional isso manager"
+      "searchableText": "cisa national initiative for cybersecurity careers & studies (niccs) cisa niccs portal central hub for cybersecurity education, training courses, and nice framework mapping resources. public federal training directory for mapping cybersecurity workforce skill sets to nice roles. cisa niccs training nice framework dod 8140 niccs workforce cybersecurity professional isso manager"
     },
     {
       "id": "official-disa-stig-library",
@@ -983,7 +807,7 @@
       "shortName": "DISA STIG Library",
       "slug": "official-disa-stig-library",
       "summary": "Comprehensive library of cybersecurity configuration benchmarks for operating systems, applications, and network devices.",
-      "whyIncluded": "Governing technical baseline for DoD systems, eMASS authorization packages, and SCAP automation.",
+      "whyIncluded": "Published technical baseline for DoD systems, eMASS authorization packages, and SCAP automation.",
       "canonicalUrl": "https://public.cyber.mil/stigs/downloads/",
       "publisher": "DISA Cyber Exchange",
       "resourceLane": "official",
@@ -1015,7 +839,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1023,7 +846,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "disa security technical implementation guides (stigs) disa stig library comprehensive library of cybersecurity configuration benchmarks for operating systems, applications, and network devices. governing technical baseline for dod systems, emass authorization packages, and scap automation. disa cyber exchange catalog disa stig dod rmf dod emass stig administrator engineer isso sca"
+      "searchableText": "disa security technical implementation guides (stigs) disa stig library comprehensive library of cybersecurity configuration benchmarks for operating systems, applications, and network devices. published technical baseline for dod systems, emass authorization packages, and scap automation. disa cyber exchange catalog disa stig dod rmf dod emass stig administrator engineer isso sca"
     },
     {
       "id": "official-disa-srg-library",
@@ -1031,7 +854,7 @@
       "shortName": "DISA SRG Library",
       "slug": "official-disa-srg-library",
       "summary": "High-level security requirements guides for cloud computing, network infrastructure, and application development.",
-      "whyIncluded": "Governing requirements baseline for vendor Cloud Service Providers seeking DoD Impact Level 4/5/6 authorization.",
+      "whyIncluded": "Published requirements baseline for vendor Cloud Service Providers seeking DoD Impact Level 4/5/6 authorization.",
       "canonicalUrl": "https://public.cyber.mil/stigs/srgs/",
       "publisher": "DISA Cyber Exchange",
       "resourceLane": "official",
@@ -1061,13 +884,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "disa security requirements guides (srgs) disa srg library high-level security requirements guides for cloud computing, network infrastructure, and application development. governing requirements baseline for vendor cloud service providers seeking dod impact level 4/5/6 authorization. disa cyber exchange catalog disa srg dod cc srg dod cloud impact level 5 cloud architect isso 3pao"
+      "searchableText": "disa security requirements guides (srgs) disa srg library high-level security requirements guides for cloud computing, network infrastructure, and application development. published requirements baseline for vendor cloud service providers seeking dod impact level 4/5/6 authorization. disa cyber exchange catalog disa srg dod cc srg dod cloud impact level 5 cloud architect isso 3pao"
     },
     {
       "id": "official-dodi-8510-01",
@@ -1075,7 +897,7 @@
       "shortName": "DoDI 8510.01 (DoD RMF)",
       "slug": "official-dodi-8510-01",
       "summary": "The overarching Department of Defense policy establishing RMF governance, ATO roles, and lifecycle requirements.",
-      "whyIncluded": "Governing authority policy for all DoD military services, defense agencies, and cleared contractors executing RMF.",
+      "whyIncluded": "Published authority policy for all DoD military services, defense agencies, and cleared contractors executing RMF.",
       "canonicalUrl": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf",
       "publisher": "DoD CIO",
       "resourceLane": "official",
@@ -1106,7 +928,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1123,7 +944,7 @@
         "eMASS",
         "Authority to Operate"
       ],
-      "searchableText": "dod instruction 8510.01 risk management framework (rmf) for dod it dodi 8510.01 (dod rmf) the overarching department of defense policy establishing rmf governance, ato roles, and lifecycle requirements. governing authority policy for all dod military services, defense agencies, and cleared contractors executing rmf. dod cio policy dod rmf nist sp 800-37 dod rmf emass authorizing official issm isso 3pao dodi 8510.01 dod rmf ato rmf dod rmf emass authority to operate"
+      "searchableText": "dod instruction 8510.01 risk management framework (rmf) for dod it dodi 8510.01 (dod rmf) the overarching department of defense policy establishing rmf governance, ato roles, and lifecycle requirements. published authority policy for all dod military services, defense agencies, and cleared contractors executing rmf. dod cio policy dod rmf nist sp 800-37 dod rmf emass authorizing official issm isso 3pao dodi 8510.01 dod rmf ato rmf dod rmf emass authority to operate"
     },
     {
       "id": "official-dodi-8500-01",
@@ -1131,7 +952,7 @@
       "shortName": "DoDI 8500.01",
       "slug": "official-dodi-8500-01",
       "summary": "Foundational DoD policy establishing cybersecurity requirements across all Department of Defense information technology.",
-      "whyIncluded": "Governing policy defining DoD cybersecurity roles, operational mandates, and information assurance principles.",
+      "whyIncluded": "Published policy defining DoD cybersecurity roles, operational mandates, and information assurance principles.",
       "canonicalUrl": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/850001p.pdf",
       "publisher": "DoD CIO",
       "resourceLane": "official",
@@ -1157,13 +978,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dod instruction 8500.01 cybersecurity dodi 8500.01 foundational dod policy establishing cybersecurity requirements across all department of defense information technology. governing policy defining dod cybersecurity roles, operational mandates, and information assurance principles. dod cio policy dod cybersecurity dod issm authorizing official"
+      "searchableText": "dod instruction 8500.01 cybersecurity dodi 8500.01 foundational dod policy establishing cybersecurity requirements across all department of defense information technology. published policy defining dod cybersecurity roles, operational mandates, and information assurance principles. dod cio policy dod cybersecurity dod issm authorizing official"
     },
     {
       "id": "official-cnssi-1253",
@@ -1171,7 +991,7 @@
       "shortName": "CNSSI 1253",
       "slug": "official-cnssi-1253",
       "summary": "Instruction providing baseline security controls for National Security Systems (NSS), including overlay definitions.",
-      "whyIncluded": "Governing overlay standard for DoD and Intelligence Community systems processing classified data.",
+      "whyIncluded": "Published overlay standard for DoD and Intelligence Community systems processing classified data.",
       "canonicalUrl": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm",
       "publisher": "CNSS",
       "resourceLane": "official",
@@ -1201,7 +1021,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1209,7 +1028,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cnssi 1253 security categorization & control selection for national security systems cnssi 1253 instruction providing baseline security controls for national security systems (nss), including overlay definitions. governing overlay standard for dod and intelligence community systems processing classified data. cnss instruction cnssi 1253 nss overlays dod rmf nss isso issm sca"
+      "searchableText": "cnssi 1253 security categorization & control selection for national security systems cnssi 1253 instruction providing baseline security controls for national security systems (nss), including overlay definitions. published overlay standard for dod and intelligence community systems processing classified data. cnss instruction cnssi 1253 nss overlays dod rmf nss isso issm sca"
     },
     {
       "id": "official-dod-zero-trust-strategy",
@@ -1217,7 +1036,7 @@
       "shortName": "DoD Zero Trust Strategy",
       "slug": "official-dod-zero-trust-strategy",
       "summary": "Department of Defense roadmap defining 45 capability outcomes across 7 Zero Trust pillars.",
-      "whyIncluded": "Governing strategic requirements guide for DoD components implementing Zero Trust Architecture by FY2027.",
+      "whyIncluded": "Published strategic requirements guide for DoD components implementing Zero Trust Architecture by FY2027.",
       "canonicalUrl": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZeroTrustStrategy.pdf",
       "publisher": "DoD CIO",
       "resourceLane": "official",
@@ -1245,13 +1064,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dod zero trust strategy and execution roadmap dod zero trust strategy department of defense roadmap defining 45 capability outcomes across 7 zero trust pillars. governing strategic requirements guide for dod components implementing zero trust architecture by fy2027. dod cio instruction dod zero trust dod zt enterprise architect ciso isso"
+      "searchableText": "dod zero trust strategy and execution roadmap dod zero trust strategy department of defense roadmap defining 45 capability outcomes across 7 zero trust pillars. published strategic requirements guide for dod components implementing zero trust architecture by fy2027. dod cio instruction dod zero trust dod zt enterprise architect ciso isso"
     },
     {
       "id": "official-cmmc-32cfr-170",
@@ -1259,7 +1077,7 @@
       "shortName": "CMMC 32 CFR Part 170",
       "slug": "official-cmmc-32cfr-170",
       "summary": "Title 32 CFR Part 170 establishing the Cybersecurity Maturity Model Certification (CMMC) Program framework.",
-      "whyIncluded": "Governing federal regulation for DoD contractor cybersecurity assessment requirements and C3PAO certifications.",
+      "whyIncluded": "Published federal regulation for DoD contractor cybersecurity assessment requirements and C3PAO certifications.",
       "canonicalUrl": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
       "publisher": "DoD OUSD(A&S)",
       "resourceLane": "official",
@@ -1290,7 +1108,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1298,7 +1115,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cmmc program 32 cfr part 170 final rule cmmc 32 cfr part 170 title 32 cfr part 170 establishing the cybersecurity maturity model certification (cmmc) program framework. governing federal regulation for dod contractor cybersecurity assessment requirements and c3pao certifications. dod ousd(a&s) policy cmmc 2.0 32 cfr 170 cmmc dfars defense contractor c3pao isso legal counsel"
+      "searchableText": "cmmc program 32 cfr part 170 final rule cmmc 32 cfr part 170 title 32 cfr part 170 establishing the cybersecurity maturity model certification (cmmc) program framework. published federal regulation for dod contractor cybersecurity assessment requirements and c3pao certifications. dod ousd(a&s) policy cmmc 2.0 32 cfr 170 cmmc dfars defense contractor c3pao isso legal counsel"
     },
     {
       "id": "official-dfars-252-204-7012",
@@ -1306,7 +1123,7 @@
       "shortName": "DFARS 204.7012",
       "slug": "official-dfars-252-204-7012",
       "summary": "Defense Federal Acquisition Regulation Supplement clause requiring NIST SP 800-171 compliance and incident reporting.",
-      "whyIncluded": "Mandatory contract clause for all DoD prime and subcontractors processing Covered Defense Information (CDI).",
+      "whyIncluded": "Published contract clause for all DoD prime and subcontractors processing Covered Defense Information (CDI).",
       "canonicalUrl": "https://www.acquisition.gov/dfars/252.204-7012-safeguarding-covered-defense-information-and-cyber-incident-reporting.",
       "publisher": "DoD Acquisition",
       "resourceLane": "official",
@@ -1336,13 +1153,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dfars 252.204-7012 safeguarding covered defense information dfars 204.7012 defense federal acquisition regulation supplement clause requiring nist sp 800-171 compliance and incident reporting. mandatory contract clause for all dod prime and subcontractors processing covered defense information (cdi). dod acquisition policy dfars 7012 nist sp 800-171 dfars cui defense contractor contracting officer isso"
+      "searchableText": "dfars 252.204-7012 safeguarding covered defense information dfars 204.7012 defense federal acquisition regulation supplement clause requiring nist sp 800-171 compliance and incident reporting. published contract clause for all dod prime and subcontractors processing covered defense information (cdi). dod acquisition policy dfars 7012 nist sp 800-171 dfars cui defense contractor contracting officer isso"
     },
     {
       "id": "official-cui-registry",
@@ -1350,7 +1166,7 @@
       "shortName": "NARA CUI Registry",
       "slug": "official-cui-registry",
       "summary": "Official federal registry of Covered Unclassified Information (CUI) categories, organizational index, and marking rules.",
-      "whyIncluded": "Governing baseline for identifying CUI categories (Specified vs Basic) and applying mandatory federal marking banners.",
+      "whyIncluded": "Published baseline for identifying CUI categories (Specified vs Basic) and applying federal marking banners.",
       "canonicalUrl": "https://www.archives.gov/cui",
       "publisher": "NARA",
       "resourceLane": "official",
@@ -1379,13 +1195,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nara national cui registry nara cui registry official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. governing baseline for identifying cui categories (specified vs basic) and applying mandatory federal marking banners. nara catalog cui registry cui nara isso security manager contractor"
+      "searchableText": "nara national cui registry nara cui registry official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. published baseline for identifying cui categories (specified vs basic) and applying federal marking banners. nara catalog cui registry cui nara isso security manager contractor"
     },
     {
       "id": "official-fedramp-baselines",
@@ -1393,7 +1208,7 @@
       "shortName": "FedRAMP Baselines Rev. 5",
       "slug": "official-fedramp-baselines",
       "summary": "Control baselines for Low, Moderate, High, and LiSaaS cloud service authorizations based on NIST SP 800-53 Rev. 5.",
-      "whyIncluded": "Governing requirements baseline for Cloud Service Providers seeking a FedRAMP ATO.",
+      "whyIncluded": "Published requirements baseline for Cloud Service Providers seeking a FedRAMP ATO.",
       "canonicalUrl": "https://www.fedramp.gov/docs/rev5/",
       "publisher": "FedRAMP PMO (GSA)",
       "resourceLane": "official",
@@ -1422,7 +1237,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1430,7 +1244,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "fedramp security controls baselines (rev. 5) fedramp baselines rev. 5 control baselines for low, moderate, high, and lisaas cloud service authorizations based on nist sp 800-53 rev. 5. governing requirements baseline for cloud service providers seeking a fedramp ato. fedramp pmo (gsa) catalog fedramp rev5 nist sp 800-53 fedramp cloud service provider 3pao isso"
+      "searchableText": "fedramp security controls baselines (rev. 5) fedramp baselines rev. 5 control baselines for low, moderate, high, and lisaas cloud service authorizations based on nist sp 800-53 rev. 5. published requirements baseline for cloud service providers seeking a fedramp ato. fedramp pmo (gsa) catalog fedramp rev5 nist sp 800-53 fedramp cloud service provider 3pao isso"
     },
     {
       "id": "official-fedramp-20x",
@@ -1438,7 +1252,7 @@
       "shortName": "FedRAMP 20x",
       "slug": "official-fedramp-20x",
       "summary": "Framework for accelerating cloud authorizations through continuous automation, OSCAL data models, and agency trust.",
-      "whyIncluded": "Governing modernization rules for modern cloud-native FedRAMP evaluation workflows.",
+      "whyIncluded": "Published modernization rules for modern cloud-native FedRAMP evaluation workflows.",
       "canonicalUrl": "https://www.fedramp.gov/20x/",
       "publisher": "FedRAMP PMO (GSA)",
       "resourceLane": "official",
@@ -1466,7 +1280,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1474,7 +1287,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "fedramp 20x modernization framework & guidance fedramp 20x framework for accelerating cloud authorizations through continuous automation, oscal data models, and agency trust. governing modernization rules for modern cloud-native fedramp evaluation workflows. fedramp pmo (gsa) instruction fedramp 20x fedramp modernization cloud architect 3pao isso"
+      "searchableText": "fedramp 20x modernization framework & guidance fedramp 20x framework for accelerating cloud authorizations through continuous automation, oscal data models, and agency trust. published modernization rules for modern cloud-native fedramp evaluation workflows. fedramp pmo (gsa) instruction fedramp 20x fedramp modernization cloud architect 3pao isso"
     },
     {
       "id": "official-fedramp-marketplace",
@@ -1482,7 +1295,7 @@
       "shortName": "FedRAMP Marketplace",
       "slug": "official-fedramp-marketplace",
       "summary": "Public portal listing all Authorized, In-Process, and Ready Cloud Service Offerings (CSOs) with 3PAO contacts.",
-      "whyIncluded": "Authoritative public database of federal cloud service authorizations and agency reuse documentation.",
+      "whyIncluded": "Public database of federal cloud service authorizations and agency reuse documentation.",
       "canonicalUrl": "https://marketplace.fedramp.gov/",
       "publisher": "FedRAMP PMO (GSA)",
       "resourceLane": "official",
@@ -1510,13 +1323,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "fedramp marketplace public directory fedramp marketplace public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. authoritative public database of federal cloud service authorizations and agency reuse documentation. fedramp pmo (gsa) dataset fedramp marketplace fedramp fedramp pmo agency isso procurement officer"
+      "searchableText": "fedramp marketplace public directory fedramp marketplace public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. public database of federal cloud service authorizations and agency reuse documentation. fedramp pmo (gsa) dataset fedramp marketplace fedramp fedramp pmo agency isso procurement officer"
     },
     {
       "id": "official-dod-8140-matrix",
@@ -1524,7 +1336,7 @@
       "shortName": "DoD 8140 Matrices",
       "slug": "official-dod-8140-matrix",
       "summary": "Workforce qualification requirements mapping certifications, degrees, and training to DCWF work roles.",
-      "whyIncluded": "Governing workforce mandate replacing DoD 8570 for defense cybersecurity personnel qualification.",
+      "whyIncluded": "Published workforce mandate replacing DoD 8570 for defense cybersecurity personnel qualification.",
       "canonicalUrl": "https://public.cyber.mil/dod-workforce-innovation-directorate/dod8140/qualification-matrices/",
       "publisher": "DoD CIO",
       "resourceLane": "official",
@@ -1555,7 +1367,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1564,7 +1375,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dod 8140 cyber workforce qualification matrices dod 8140 matrices workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. governing workforce mandate replacing dod 8570 for defense cybersecurity personnel qualification. dod cio matrix dod 8140 dcwf nice dod 8140 isso issm cybersecurity specialist hr"
+      "searchableText": "dod 8140 cyber workforce qualification matrices dod 8140 matrices workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. published workforce mandate replacing dod 8570 for defense cybersecurity personnel qualification. dod cio matrix dod 8140 dcwf nice dod 8140 isso issm cybersecurity specialist hr"
     },
     {
       "id": "official-dcwf-work-roles",
@@ -1572,7 +1383,7 @@
       "shortName": "DCWF Work Roles",
       "slug": "official-dcwf-work-roles",
       "summary": "Directory of 54 standardized DoD cyber work role definitions, knowledge requirements, and skill descriptions.",
-      "whyIncluded": "Governing taxonomy for DoD cybersecurity position coding and workforce management.",
+      "whyIncluded": "Published taxonomy for DoD cybersecurity position coding and workforce management.",
       "canonicalUrl": "https://public.cyber.mil/dod-workforce-innovation-directorate/dcwf/",
       "publisher": "DoD CIO",
       "resourceLane": "official",
@@ -1600,13 +1411,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dod cyber workforce framework (dcwf) work roles dcwf work roles directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. governing taxonomy for dod cybersecurity position coding and workforce management. dod cio catalog dcwf dod 8140 dod cyber workforce cybersecurity manager isso hr"
+      "searchableText": "dod cyber workforce framework (dcwf) work roles dcwf work roles directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. published taxonomy for dod cybersecurity position coding and workforce management. dod cio catalog dcwf dod 8140 dod cyber workforce cybersecurity manager isso hr"
     },
     {
       "id": "official-csfc-capability-packages",
@@ -1614,7 +1424,7 @@
       "shortName": "NSA CSfC Packages",
       "slug": "official-csfc-capability-packages",
       "summary": "Architectural capability packages for building double-layer commercial encryption solutions for classified data.",
-      "whyIncluded": "Governing standard for deploying commercial NSA-approved encryption for Secret/Top Secret communication.",
+      "whyIncluded": "Published standard for deploying commercial NSA-approved encryption for Secret/Top Secret communication.",
       "canonicalUrl": "https://www.nsa.gov/Government-In-the-Loop/Commercial-Solutions-for-Classified-Program/",
       "publisher": "NSA CSfC Office",
       "resourceLane": "official",
@@ -1644,13 +1454,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nsa commercial solutions for classified (csfc) capability packages nsa csfc packages architectural capability packages for building double-layer commercial encryption solutions for classified data. governing standard for deploying commercial nsa-approved encryption for secret/top secret communication. nsa csfc office catalog csfc nsa classified systems nss network architect isso sca"
+      "searchableText": "nsa commercial solutions for classified (csfc) capability packages nsa csfc packages architectural capability packages for building double-layer commercial encryption solutions for classified data. published standard for deploying commercial nsa-approved encryption for secret/top secret communication. nsa csfc office catalog csfc nsa classified systems nss network architect isso sca"
     },
     {
       "id": "official-niap-ccevs",
@@ -1658,7 +1467,7 @@
       "shortName": "NIAP Common Criteria",
       "slug": "official-niap-ccevs",
       "summary": "U.S. government scheme for evaluating commercial IT products against Common Criteria protection profiles.",
-      "whyIncluded": "Governing certification list for hardware and software cryptographic and boundary protection products.",
+      "whyIncluded": "Published certification list for hardware and software cryptographic and boundary protection products.",
       "canonicalUrl": "https://www.niap-ccevs.org/",
       "publisher": "NIAP",
       "resourceLane": "official",
@@ -1687,13 +1496,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "niap common criteria evaluation & validation scheme (ccevs) niap common criteria u.s. government scheme for evaluating commercial it products against common criteria protection profiles. governing certification list for hardware and software cryptographic and boundary protection products. niap catalog niap common criteria fisma dod security engineer procurement officer isso"
+      "searchableText": "niap common criteria evaluation & validation scheme (ccevs) niap common criteria u.s. government scheme for evaluating commercial it products against common criteria protection profiles. published certification list for hardware and software cryptographic and boundary protection products. niap catalog niap common criteria fisma dod security engineer procurement officer isso"
     },
     {
       "id": "official-fisma-44-usc-3551",
@@ -1701,7 +1509,7 @@
       "shortName": "FISMA (44 U.S.C. 3551)",
       "slug": "official-fisma-44-usc-3551",
       "summary": "Title 44 U.S.C. Chapter 35 Subchapter II establishing federal agency information security program mandates.",
-      "whyIncluded": "Governing federal statute requiring RMF compliance, annual audits, and OMB/CISA oversight across civilian agencies.",
+      "whyIncluded": "Published federal statute covering RMF, annual audits, and OMB/CISA oversight across civilian agencies.",
       "canonicalUrl": "https://www.govinfo.gov/app/details/USCODE-2014-title44/USCODE-2014-title44-chap35-subchapII-sec3551",
       "publisher": "U.S. Congress",
       "resourceLane": "official",
@@ -1731,13 +1539,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "federal information security modernization act (fisma 2014) fisma (44 u.s.c. 3551) title 44 u.s.c. chapter 35 subchapter ii establishing federal agency information security program mandates. governing federal statute requiring rmf compliance, annual audits, and omb/cisa oversight across civilian agencies. u.s. congress policy fisma fisma federal civilian ciso cio inspector general issm"
+      "searchableText": "federal information security modernization act (fisma 2014) fisma (44 u.s.c. 3551) title 44 u.s.c. chapter 35 subchapter ii establishing federal agency information security program mandates. published federal statute covering rmf, annual audits, and omb/cisa oversight across civilian agencies. u.s. congress policy fisma fisma federal civilian ciso cio inspector general issm"
     },
     {
       "id": "official-omb-a130",
@@ -1745,7 +1552,7 @@
       "shortName": "OMB Circular A-130",
       "slug": "official-omb-a130",
       "summary": "Office of Management and Budget policy directing federal agency governance of IT, privacy, and cybersecurity programs.",
-      "whyIncluded": "Governing executive policy mandating continuous monitoring, NIST standards adoption, and privacy impact assessments.",
+      "whyIncluded": "Published executive policy covering continuous monitoring, NIST standards adoption, and privacy impact assessments.",
       "canonicalUrl": "https://www.whitehouse.gov/omb/information-for-agencies/circulars/",
       "publisher": "OMB",
       "resourceLane": "official",
@@ -1774,13 +1581,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "omb circular a-130 managing information as a strategic resource omb circular a-130 office of management and budget policy directing federal agency governance of it, privacy, and cybersecurity programs. governing executive policy mandating continuous monitoring, nist standards adoption, and privacy impact assessments. omb policy omb a-130 fisma federal governance cio ciso issm"
+      "searchableText": "omb circular a-130 managing information as a strategic resource omb circular a-130 office of management and budget policy directing federal agency governance of it, privacy, and cybersecurity programs. published executive policy covering continuous monitoring, nist standards adoption, and privacy impact assessments. omb policy omb a-130 fisma federal governance cio ciso issm"
     },
     {
       "id": "official-eo-14028",
@@ -1788,7 +1594,7 @@
       "shortName": "EO 14028",
       "slug": "official-eo-14028",
       "summary": "Presidential executive order mandating Zero Trust Architecture, software supply chain security, and SBOM adoption.",
-      "whyIncluded": "Governing executive directive driving modern federal cloud security, multi-factor authentication, and SBOM rules.",
+      "whyIncluded": "Published executive directive covering modern federal cloud security, multi-factor authentication, and SBOM rules.",
       "canonicalUrl": "https://www.federalregister.gov/documents/2021/05/17/2021-10460/improving-the-nations-cybersecurity",
       "publisher": "The White House",
       "resourceLane": "official",
@@ -1816,13 +1622,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "executive order 14028 improving the nation's cybersecurity eo 14028 presidential executive order mandating zero trust architecture, software supply chain security, and sbom adoption. governing executive directive driving modern federal cloud security, multi-factor authentication, and sbom rules. the white house policy eo 14028 zero trust federal cybersecurity ciso devsecops isso"
+      "searchableText": "executive order 14028 improving the nation's cybersecurity eo 14028 presidential executive order mandating zero trust architecture, software supply chain security, and sbom adoption. published executive directive covering modern federal cloud security, multi-factor authentication, and sbom rules. the white house policy eo 14028 zero trust federal cybersecurity ciso devsecops isso"
     },
     {
       "id": "official-dicsa-nispom-32cfr117",
@@ -1830,7 +1635,7 @@
       "shortName": "NISPOM (32 CFR Part 117)",
       "slug": "official-dicsa-nispom-32cfr117",
       "summary": "Federal regulation governing protection of classified information by defense contractors and cleared facilities.",
-      "whyIncluded": "Governing security regulation for DCSA facility security clearances (FSC) and classified processing.",
+      "whyIncluded": "Published security regulation for DCSA facility security clearances (FSC) and classified processing.",
       "canonicalUrl": "https://www.ecfr.gov/current/title-32/chapter-I/subchapter-D/part-117",
       "publisher": "DCSA",
       "resourceLane": "official",
@@ -1859,13 +1664,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nispom 32 cfr part 117 national industrial security program nispom (32 cfr part 117) federal regulation governing protection of classified information by defense contractors and cleared facilities. governing security regulation for dcsa facility security clearances (fsc) and classified processing. dcsa policy nispom 32 cfr 117 dcsa classified contractor fso issm defense contractor"
+      "searchableText": "nispom 32 cfr part 117 national industrial security program nispom (32 cfr part 117) federal regulation governing protection of classified information by defense contractors and cleared facilities. published security regulation for dcsa facility security clearances (fsc) and classified processing. dcsa policy nispom 32 cfr 117 dcsa classified contractor fso issm defense contractor"
     },
     {
       "id": "official-gao-green-book",
@@ -1873,7 +1677,7 @@
       "shortName": "GAO Green Book",
       "slug": "official-gao-green-book",
       "summary": "Internal control standards providing the framework for establishing and maintaining effective internal control systems.",
-      "whyIncluded": "Governing audit framework used by Inspectors General and GAO to evaluate federal agency IT management.",
+      "whyIncluded": "Published audit framework used by Inspectors General and GAO to evaluate federal agency IT management.",
       "canonicalUrl": "https://www.gao.gov/products/gao-14-704g",
       "publisher": "GAO",
       "resourceLane": "official",
@@ -1901,13 +1705,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "gao green book standards for internal control in federal government gao green book internal control standards providing the framework for establishing and maintaining effective internal control systems. governing audit framework used by inspectors general and gao to evaluate federal agency it management. gao instruction gao green book federal audit fisma inspector general auditor issm"
+      "searchableText": "gao green book standards for internal control in federal government gao green book internal control standards providing the framework for establishing and maintaining effective internal control systems. published audit framework used by inspectors general and gao to evaluate federal agency it management. gao instruction gao green book federal audit fisma inspector general auditor issm"
     },
     {
       "id": "tool-compliance-as-code",
@@ -1915,7 +1718,7 @@
       "shortName": "ComplianceAsCode/content",
       "slug": "tool-compliance-as-code",
       "summary": "Open-source SCAP and Ansible content repository providing automated security profiles for Linux and cloud OS.",
-      "whyIncluded": "The primary open-source engine for generating DISA STIG, NIST SP 800-53, and CIS SCAP benchmarks and Ansible playbooks.",
+      "whyIncluded": "Open-source engine for generating DISA STIG, NIST SP 800-53, and CIS SCAP benchmarks and Ansible playbooks.",
       "canonicalUrl": "https://github.com/ComplianceAsCode/content",
       "publisher": "ComplianceAsCode Project",
       "resourceLane": "open_source",
@@ -1947,7 +1750,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -1960,7 +1762,7 @@
         "ComplianceAsCode",
         "OpenSCAP STIG"
       ],
-      "searchableText": "complianceascode/content hardening engine complianceascode/content open-source scap and ansible content repository providing automated security profiles for linux and cloud os. the primary open-source engine for generating disa stig, nist sp 800-53, and cis scap benchmarks and ansible playbooks. complianceascode project tool disa stig nist sp 800-53 cis benchmarks scap openscap security engineer devsecops administrator automated stig scanner complianceascode openscap stig"
+      "searchableText": "complianceascode/content hardening engine complianceascode/content open-source scap and ansible content repository providing automated security profiles for linux and cloud os. open-source engine for generating disa stig, nist sp 800-53, and cis scap benchmarks and ansible playbooks. complianceascode project tool disa stig nist sp 800-53 cis benchmarks scap openscap security engineer devsecops administrator automated stig scanner complianceascode openscap stig"
     },
     {
       "id": "tool-powerstig",
@@ -1968,7 +1770,7 @@
       "shortName": "PowerSTIG",
       "slug": "tool-powerstig",
       "summary": "PowerShell Desired State Configuration (DSC) module for automating DISA STIG compliance on Windows and Active Directory.",
-      "whyIncluded": "Essential open-source tool for automating Windows Server, IIS, and SQL Server STIG enforcement via PowerShell DSC.",
+      "whyIncluded": "Open-source tool for automating Windows Server, IIS, and SQL Server STIG enforcement via PowerShell DSC.",
       "canonicalUrl": "https://github.com/microsoft/PowerSTIG",
       "publisher": "Microsoft Open Source",
       "resourceLane": "open_source",
@@ -1998,7 +1800,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2011,7 +1812,7 @@
         "PowerSTIG",
         "Windows 2022 hardening"
       ],
-      "searchableText": "powerstig powershell hardening module powerstig powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. essential open-source tool for automating windows server, iis, and sql server stig enforcement via powershell dsc. microsoft open source tool disa stig nist sp 800-53 stig automation windows windows administrator engineer isso windows server hardening powerstig windows 2022 hardening"
+      "searchableText": "powerstig powershell hardening module powerstig powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. open-source tool for automating windows server, iis, and sql server stig enforcement via powershell dsc. microsoft open source tool disa stig nist sp 800-53 stig automation windows windows administrator engineer isso windows server hardening powerstig windows 2022 hardening"
     },
     {
       "id": "tool-disa-stig-viewer",
@@ -2019,7 +1820,7 @@
       "shortName": "DISA STIG Viewer",
       "slug": "tool-disa-stig-viewer",
       "summary": "Java GUI application for opening, editing, and managing DISA STIG XCCDF benchmarks and `.ckl` checklist files.",
-      "whyIncluded": "The mandatory tool used by DoD assessors and ISSOs to compile system STIG checklists for eMASS ATO submission.",
+      "whyIncluded": "A tool used by DoD assessors and ISSOs to compile system STIG checklists for eMASS ATO submission.",
       "canonicalUrl": "https://public.cyber.mil/stigs/scca/",
       "publisher": "DISA",
       "resourceLane": "official",
@@ -2047,7 +1848,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2056,7 +1856,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "official disa stig viewer 3.x disa stig viewer java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. the mandatory tool used by dod assessors and issos to compile system stig checklists for emass ato submission. disa tool disa stig emass dod stig isso sca system administrator"
+      "searchableText": "official disa stig viewer 3.x disa stig viewer java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. a tool used by dod assessors and issos to compile system stig checklists for emass ato submission. disa tool disa stig emass dod stig isso sca system administrator"
     },
     {
       "id": "tool-stig-manager",
@@ -2095,7 +1895,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
@@ -2109,7 +1908,7 @@
       "shortName": "Compliance-Trestle",
       "slug": "tool-compliance-trestle",
       "summary": "Python framework for orchestrating NIST OSCAL document models, catalog transformations, and SSP generation.",
-      "whyIncluded": "Leading open-source engine for building OSCAL-native compliance-as-code automation pipelines.",
+      "whyIncluded": "Open-source engine for building OSCAL-native compliance-as-code automation pipelines.",
       "canonicalUrl": "https://github.com/IBM/compliance-trestle",
       "publisher": "IBM Open Source",
       "resourceLane": "open_source",
@@ -2140,7 +1939,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2149,7 +1947,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "ibm compliance trestle oscal engine compliance-trestle python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. leading open-source engine for building oscal-native compliance-as-code automation pipelines. ibm open source tool oscal nist sp 800-53 fedramp rev5 oscal compliance as code developer data architect devsecops"
+      "searchableText": "ibm compliance trestle oscal engine compliance-trestle python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. open-source engine for building oscal-native compliance-as-code automation pipelines. ibm open source tool oscal nist sp 800-53 fedramp rev5 oscal compliance as code developer data architect devsecops"
     },
     {
       "id": "tool-mitre-saf-cli",
@@ -2157,7 +1955,7 @@
       "shortName": "MITRE SAF CLI",
       "slug": "tool-mitre-saf-cli",
       "summary": "Command-line tool for attestation, STIG conversion, and streaming vulnerability data into Heimdall dashboards.",
-      "whyIncluded": "Primary CLI tool for converting SCAP, InSpec, and Nessus test outputs into unified compliance reports.",
+      "whyIncluded": "CLI tool for converting SCAP, InSpec, and Nessus test outputs into unified compliance reports.",
       "canonicalUrl": "https://github.com/mitre/saf",
       "publisher": "MITRE",
       "resourceLane": "open_source",
@@ -2187,7 +1985,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2195,7 +1992,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "mitre security automation framework (saf) cli mitre saf cli command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. primary cli tool for converting scap, inspec, and nessus test outputs into unified compliance reports. mitre tool mitre saf nist sp 800-53 disa stig saf heimdall devsecops sca isso"
+      "searchableText": "mitre security automation framework (saf) cli mitre saf cli command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. cli tool for converting scap, inspec, and nessus test outputs into unified compliance reports. mitre tool mitre saf nist sp 800-53 disa stig saf heimdall devsecops sca isso"
     },
     {
       "id": "tool-mitre-heimdall",
@@ -2203,7 +2000,7 @@
       "shortName": "Heimdall Visualizer",
       "slug": "tool-mitre-heimdall",
       "summary": "Open-source web application for visualizing security evaluation results from InSpec, SCAP, and vulnerability scanners.",
-      "whyIncluded": "Leading open-source dashboard for presenting automated STIG and baseline evaluation results to assessors.",
+      "whyIncluded": "Open-source dashboard for presenting automated STIG and baseline evaluation results to assessors.",
       "canonicalUrl": "https://github.com/mitre/heimdall2",
       "publisher": "MITRE",
       "resourceLane": "open_source",
@@ -2232,7 +2029,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
@@ -2242,7 +2038,7 @@
         "Heimdall",
         "MITRE Heimdall"
       ],
-      "searchableText": "mitre heimdall server visualizer heimdall visualizer open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. leading open-source dashboard for presenting automated stig and baseline evaluation results to assessors. mitre tool mitre saf nist sp 800-53 heimdall inspec isso sca issm heimdall saf visualizer heimdall mitre heimdall"
+      "searchableText": "mitre heimdall server visualizer heimdall visualizer open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. open-source dashboard for presenting automated stig and baseline evaluation results to assessors. mitre tool mitre saf nist sp 800-53 heimdall inspec isso sca issm heimdall saf visualizer heimdall mitre heimdall"
     },
     {
       "id": "tool-mitre-emass-client",
@@ -2250,7 +2046,7 @@
       "shortName": "MITRE eMASS Client",
       "slug": "tool-mitre-emass-client",
       "summary": "Open-source Python client wrapper for interacting programmatically with the DoD eMASS REST API.",
-      "whyIncluded": "Essential tool for automation engineers pushing assessment results and POA&Ms directly into DoD eMASS.",
+      "whyIncluded": "Open-source tool for automation engineers pushing assessment results and POA&Ms directly into DoD eMASS.",
       "canonicalUrl": "https://github.com/mitre/emass_client",
       "publisher": "MITRE",
       "resourceLane": "open_source",
@@ -2279,7 +2075,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2291,7 +2086,7 @@
         "eMASS client",
         "mitre emass client"
       ],
-      "searchableText": "mitre emass rest api python client mitre emass client open-source python client wrapper for interacting programmatically with the dod emass rest api. essential tool for automation engineers pushing assessment results and poa&ms directly into dod emass. mitre tool dod rmf emass api emass automation devsecops isso engineer emass python client emass client mitre emass client"
+      "searchableText": "mitre emass rest api python client mitre emass client open-source python client wrapper for interacting programmatically with the dod emass rest api. open-source tool for automation engineers pushing assessment results and poa&ms directly into dod emass. mitre tool dod rmf emass api emass automation devsecops isso engineer emass python client emass client mitre emass client"
     },
     {
       "id": "tool-openscap-workbench",
@@ -2299,7 +2094,7 @@
       "shortName": "OpenSCAP Workbench",
       "slug": "tool-openscap-workbench",
       "summary": "Graphical utility and scanner for performing SCAP compliance evaluations on Linux systems.",
-      "whyIncluded": "The standard open-source SCAP scanner used across Red Hat Enterprise Linux and CentOS federal systems.",
+      "whyIncluded": "Open-source SCAP scanner used across Red Hat Enterprise Linux and CentOS federal systems.",
       "canonicalUrl": "https://www.open-scap.org/tools/scap-workbench/",
       "publisher": "OpenSCAP Project",
       "resourceLane": "open_source",
@@ -2330,13 +2125,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "openscap workbench gui & scanner openscap workbench graphical utility and scanner for performing scap compliance evaluations on linux systems. the standard open-source scap scanner used across red hat enterprise linux and centos federal systems. openscap project tool scap nist sp 800-53 disa stig openscap rhel linux administrator isso sca"
+      "searchableText": "openscap workbench gui & scanner openscap workbench graphical utility and scanner for performing scap compliance evaluations on linux systems. open-source scap scanner used across red hat enterprise linux and centos federal systems. openscap project tool scap nist sp 800-53 disa stig openscap rhel linux administrator isso sca"
     },
     {
       "id": "tool-prowler-cloud-security",
@@ -2344,7 +2138,7 @@
       "shortName": "Prowler Security",
       "slug": "tool-prowler-cloud-security",
       "summary": "Open-source security assessment tool for AWS, Azure, GCP, and Kubernetes aligned with NIST SP 800-53 and CIS.",
-      "whyIncluded": "The most widely deployed open-source CLI scanner for multi-cloud federal compliance auditing.",
+      "whyIncluded": "Open-source CLI scanner for multi-cloud federal compliance auditing.",
       "canonicalUrl": "https://github.com/prowler-cloud/prowler",
       "publisher": "Prowler Open Source",
       "resourceLane": "open_source",
@@ -2376,7 +2170,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2388,7 +2181,7 @@
         "multi cloud audit",
         "Prowler"
       ],
-      "searchableText": "prowler multi-cloud security engine prowler security open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. the most widely deployed open-source cli scanner for multi-cloud federal compliance auditing. prowler open source tool nist sp 800-53 cis benchmarks fedramp cloud security aws azure cloud engineer isso devsecops multi cloud security audit multi cloud audit prowler"
+      "searchableText": "prowler multi-cloud security engine prowler security open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. open-source cli scanner for multi-cloud federal compliance auditing. prowler open source tool nist sp 800-53 cis benchmarks fedramp cloud security aws azure cloud engineer isso devsecops multi cloud security audit multi cloud audit prowler"
     },
     {
       "id": "tool-scoutsuite",
@@ -2396,7 +2189,7 @@
       "shortName": "Scout Suite",
       "slug": "tool-scoutsuite",
       "summary": "Open-source multi-cloud security auditing tool for AWS, Azure, GCP, Alibaba, and Oracle Cloud.",
-      "whyIncluded": "Popular multi-cloud audit tool producing self-contained offline HTML assessment reports.",
+      "whyIncluded": "Multi-cloud audit tool producing self-contained offline HTML assessment reports.",
       "canonicalUrl": "https://github.com/nccgroup/ScoutSuite",
       "publisher": "NCC Group",
       "resourceLane": "open_source",
@@ -2425,7 +2218,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2433,7 +2225,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "scout suite multi-cloud auditing tool scout suite open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. popular multi-cloud audit tool producing self-contained offline html assessment reports. ncc group tool nist sp 800-53 cis multi-cloud auditing cloud auditor isso sca"
+      "searchableText": "scout suite multi-cloud auditing tool scout suite open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. multi-cloud audit tool producing self-contained offline html assessment reports. ncc group tool nist sp 800-53 cis multi-cloud auditing cloud auditor isso sca"
     },
     {
       "id": "tool-cloud-custodian",
@@ -2441,7 +2233,7 @@
       "shortName": "Cloud Custodian",
       "slug": "tool-cloud-custodian",
       "summary": "Rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies.",
-      "whyIncluded": "Essential open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift.",
+      "whyIncluded": "Open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift.",
       "canonicalUrl": "https://github.com/cloud-custodian/cloud-custodian",
       "publisher": "CNCF Incubating",
       "resourceLane": "open_source",
@@ -2471,7 +2263,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2479,7 +2270,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cloud custodian rules engine cloud custodian rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. essential open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift. cncf incubating tool nist sp 800-53 fedramp policy as code cloud guardrails devsecops cloud architect isso"
+      "searchableText": "cloud custodian rules engine cloud custodian rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift. cncf incubating tool nist sp 800-53 fedramp policy as code cloud guardrails devsecops cloud architect isso"
     },
     {
       "id": "tool-steampipe",
@@ -2487,7 +2278,7 @@
       "shortName": "Steampipe Engine",
       "slug": "tool-steampipe",
       "summary": "Open-source SQL engine for querying cloud APIs, Kubernetes, and security tools like PostgreSQL tables.",
-      "whyIncluded": "Pioneering SQL tool allowing compliance engineers to write SQL queries against AWS, Azure, and GitHub controls.",
+      "whyIncluded": "Open-source SQL tool allowing compliance engineers to write SQL queries against AWS, Azure, and GitHub controls.",
       "canonicalUrl": "https://github.com/turbot/steampipe",
       "publisher": "Turbot",
       "resourceLane": "open_source",
@@ -2517,7 +2308,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2525,7 +2315,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "steampipe sql infrastructure auditing engine steampipe engine open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. pioneering sql tool allowing compliance engineers to write sql queries against aws, azure, and github controls. turbot tool nist sp 800-53 cis benchmarks compliance sql cloud audit cloud engineer isso devsecops"
+      "searchableText": "steampipe sql infrastructure auditing engine steampipe engine open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. open-source sql tool allowing compliance engineers to write sql queries against aws, azure, and github controls. turbot tool nist sp 800-53 cis benchmarks compliance sql cloud audit cloud engineer isso devsecops"
     },
     {
       "id": "tool-open-policy-agent",
@@ -2533,7 +2323,7 @@
       "shortName": "OPA Engine",
       "slug": "tool-open-policy-agent",
       "summary": "General-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack.",
-      "whyIncluded": "The industry-standard policy-as-code engine for Kubernetes admission control, Terraform scanning, and API authorization.",
+      "whyIncluded": "Open-source policy-as-code engine for Kubernetes admission control, Terraform scanning, and API authorization.",
       "canonicalUrl": "https://github.com/open-policy-agent/opa",
       "publisher": "CNCF Graduated",
       "resourceLane": "open_source",
@@ -2564,7 +2354,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2572,7 +2361,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "open policy agent (opa) opa engine general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. the industry-standard policy-as-code engine for kubernetes admission control, terraform scanning, and api authorization. cncf graduated tool policy as code nist sp 800-53 kubernetes opa devsecops devsecops cloud architect engineer"
+      "searchableText": "open policy agent (opa) opa engine general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. open-source policy-as-code engine for kubernetes admission control, terraform scanning, and api authorization. cncf graduated tool policy as code nist sp 800-53 kubernetes opa devsecops devsecops cloud architect engineer"
     },
     {
       "id": "tool-checkov",
@@ -2580,7 +2369,7 @@
       "shortName": "Checkov IaC Scanner",
       "slug": "tool-checkov",
       "summary": "Static code analysis tool for infrastructure-as-code (Terraform, CloudFormation, Helm, Kubernetes).",
-      "whyIncluded": "Popular open-source tool for catching misconfigurations in IaC before deployment to cloud environments.",
+      "whyIncluded": "Open-source tool for catching misconfigurations in IaC before deployment to cloud environments.",
       "canonicalUrl": "https://github.com/bridgecrewio/checkov",
       "publisher": "Palo Alto Networks / Bridgecrew",
       "resourceLane": "open_source",
@@ -2610,7 +2399,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2618,7 +2406,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "checkov infrastructure as code scanner checkov iac scanner static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). popular open-source tool for catching misconfigurations in iac before deployment to cloud environments. palo alto networks / bridgecrew tool nist sp 800-53 cis benchmarks iac scanning terraform devsecops cloud engineer developer"
+      "searchableText": "checkov infrastructure as code scanner checkov iac scanner static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). open-source tool for catching misconfigurations in iac before deployment to cloud environments. palo alto networks / bridgecrew tool nist sp 800-53 cis benchmarks iac scanning terraform devsecops cloud engineer developer"
     },
     {
       "id": "tool-trivy",
@@ -2626,7 +2414,7 @@
       "shortName": "Trivy Scanner",
       "slug": "tool-trivy",
       "summary": "Comprehensive security scanner for container images, file systems, Git repositories, and Kubernetes.",
-      "whyIncluded": "Leading open-source container and SBOM vulnerability scanner used in federal DevSecOps pipelines.",
+      "whyIncluded": "Open-source container and SBOM vulnerability scanner used in federal DevSecOps pipelines.",
       "canonicalUrl": "https://github.com/aquasecurity/trivy",
       "publisher": "Aqua Security",
       "resourceLane": "open_source",
@@ -2657,7 +2445,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2666,7 +2453,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "trivy vulnerability & misconfiguration scanner trivy scanner comprehensive security scanner for container images, file systems, git repositories, and kubernetes. leading open-source container and sbom vulnerability scanner used in federal devsecops pipelines. aqua security tool cve nist sp 800-53 sbom container security devsecops devsecops container administrator isso"
+      "searchableText": "trivy vulnerability & misconfiguration scanner trivy scanner comprehensive security scanner for container images, file systems, git repositories, and kubernetes. open-source container and sbom vulnerability scanner used in federal devsecops pipelines. aqua security tool cve nist sp 800-53 sbom container security devsecops devsecops container administrator isso"
     },
     {
       "id": "tool-cyclonedx-cli",
@@ -2674,7 +2461,7 @@
       "shortName": "CycloneDX CLI",
       "slug": "tool-cyclonedx-cli",
       "summary": "Official utility for analyzing, merging, diffing, and validating CycloneDX Software Bill of Materials (SBOM).",
-      "whyIncluded": "Essential open-source utility for federal SBOM validation under Executive Order 14028.",
+      "whyIncluded": "Open-source utility for federal SBOM validation under Executive Order 14028.",
       "canonicalUrl": "https://github.com/CycloneDX/cyclonedx-cli",
       "publisher": "OWASP CycloneDX",
       "resourceLane": "open_source",
@@ -2705,7 +2492,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2713,7 +2499,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cyclonedx sbom command line tool cyclonedx cli official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). essential open-source utility for federal sbom validation under executive order 14028. owasp cyclonedx tool cyclonedx sbom eo 14028 sbom supply chain developer devsecops isso"
+      "searchableText": "cyclonedx sbom command line tool cyclonedx cli official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). open-source utility for federal sbom validation under executive order 14028. owasp cyclonedx tool cyclonedx sbom eo 14028 sbom supply chain developer devsecops isso"
     },
     {
       "id": "tool-syft-sbom-generator",
@@ -2721,7 +2507,7 @@
       "shortName": "Syft SBOM Generator",
       "slug": "tool-syft-sbom-generator",
       "summary": "CLI tool and library for generating a Software Bill of Materials (SBOM) from container images and filesystems.",
-      "whyIncluded": "Leading open-source SBOM generation tool supporting CycloneDX and SPDX output formats.",
+      "whyIncluded": "Open-source SBOM generation tool supporting CycloneDX and SPDX output formats.",
       "canonicalUrl": "https://github.com/anchore/syft",
       "publisher": "Anchore",
       "resourceLane": "open_source",
@@ -2751,7 +2537,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2759,7 +2544,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "anchore syft sbom generator syft sbom generator cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. leading open-source sbom generation tool supporting cyclonedx and spdx output formats. anchore tool sbom cyclonedx spdx sbom container security devsecops developer"
+      "searchableText": "anchore syft sbom generator syft sbom generator cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. open-source sbom generation tool supporting cyclonedx and spdx output formats. anchore tool sbom cyclonedx spdx sbom container security devsecops developer"
     },
     {
       "id": "tool-grype-vulnerability-scanner",
@@ -2797,7 +2582,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2813,7 +2597,7 @@
       "shortName": "OpenSSF Scorecard",
       "slug": "tool-openssf-scorecard",
       "summary": "Automated security tool that assesses open-source projects for risk, maintenance, and security best practices.",
-      "whyIncluded": "Essential tool for verifying open-source package health and supply chain risk under EO 14028.",
+      "whyIncluded": "Open-source tool for verifying open-source package health and supply chain risk under EO 14028.",
       "canonicalUrl": "https://github.com/ossf/scorecard",
       "publisher": "OpenSSF",
       "resourceLane": "open_source",
@@ -2843,7 +2627,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2851,7 +2634,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "openssf scorecard automated security tool openssf scorecard automated security tool that assesses open-source projects for risk, maintenance, and security best practices. essential tool for verifying open-source package health and supply chain risk under eo 14028. openssf tool openssf eo 14028 sbom supply chain devsecops developer isso"
+      "searchableText": "openssf scorecard automated security tool openssf scorecard automated security tool that assesses open-source projects for risk, maintenance, and security best practices. open-source tool for verifying open-source package health and supply chain risk under eo 14028. openssf tool openssf eo 14028 sbom supply chain devsecops developer isso"
     },
     {
       "id": "tool-dependency-track",
@@ -2890,7 +2673,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2907,7 +2689,7 @@
       "shortName": "Ansible Lockdown",
       "slug": "tool-ansible-lockdown",
       "summary": "Curated open-source Ansible roles for applying DISA STIG and CIS hardening baselines across RHEL, Ubuntu, and Windows.",
-      "whyIncluded": "Battle-tested automated configuration management playbooks for applying OS hardening controls.",
+      "whyIncluded": "Automated configuration management playbooks for applying OS hardening controls.",
       "canonicalUrl": "https://github.com/ansible-lockdown",
       "publisher": "Ansible Lockdown Project",
       "resourceLane": "open_source",
@@ -2936,7 +2718,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2944,7 +2725,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "ansible lockdown hardening roles ansible lockdown curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. battle-tested automated configuration management playbooks for applying os hardening controls. ansible lockdown project tool disa stig cis benchmarks ansible hardening system administrator devsecops engineer"
+      "searchableText": "ansible lockdown hardening roles ansible lockdown curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. automated configuration management playbooks for applying os hardening controls. ansible lockdown project tool disa stig cis benchmarks ansible hardening system administrator devsecops engineer"
     },
     {
       "id": "tool-hardening-kitty",
@@ -2952,7 +2733,7 @@
       "shortName": "HardeningKitty",
       "slug": "tool-hardening-kitty",
       "summary": "PowerShell script for auditing and hardening Windows configurations against CIS benchmarks and DoD guidance.",
-      "whyIncluded": "Popular open-source PowerShell script providing detailed scorecards for Windows workstation and server hardening.",
+      "whyIncluded": "Open-source PowerShell script providing detailed scorecards for Windows workstation and server hardening.",
       "canonicalUrl": "https://github.com/scipag/HardeningKitty",
       "publisher": "scip AG",
       "resourceLane": "open_source",
@@ -2979,7 +2760,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -2991,7 +2771,7 @@
         "HardeningKitty",
         "Windows hardening script"
       ],
-      "searchableText": "hardeningkitty powershell windows audit hardeningkitty powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. popular open-source powershell script providing detailed scorecards for windows workstation and server hardening. scip ag tool cis benchmarks windows hardening windows security system administrator security auditor hardeningkitty powershell hardeningkitty windows hardening script"
+      "searchableText": "hardeningkitty powershell windows audit hardeningkitty powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. open-source powershell script providing detailed scorecards for windows workstation and server hardening. scip ag tool cis benchmarks windows hardening windows security system administrator security auditor hardeningkitty powershell hardeningkitty windows hardening script"
     },
     {
       "id": "tool-wazuh-siem",
@@ -2999,7 +2779,7 @@
       "shortName": "Wazuh SIEM & XDR",
       "slug": "tool-wazuh-siem",
       "summary": "Free open-source SIEM, security monitoring, and regulatory compliance assessment engine.",
-      "whyIncluded": "Leading open-source SIEM for active log monitoring, file integrity monitoring, and NIST SP 800-53 audit compliance.",
+      "whyIncluded": "Open-source SIEM for active log monitoring, file integrity monitoring, and NIST SP 800-53 audit compliance.",
       "canonicalUrl": "https://github.com/wazuh/wazuh",
       "publisher": "Wazuh Inc.",
       "resourceLane": "open_source",
@@ -3030,20 +2810,19 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "wazuh open source security platform wazuh siem & xdr free open-source siem, security monitoring, and regulatory compliance assessment engine. leading open-source siem for active log monitoring, file integrity monitoring, and nist sp 800-53 audit compliance. wazuh inc. tool nist sp 800-53 siem log auditing wazuh fim isso soc analyst system administrator"
+      "searchableText": "wazuh open source security platform wazuh siem & xdr free open-source siem, security monitoring, and regulatory compliance assessment engine. open-source siem for active log monitoring, file integrity monitoring, and nist sp 800-53 audit compliance. wazuh inc. tool nist sp 800-53 siem log auditing wazuh fim isso soc analyst system administrator"
     },
     {
       "id": "tool-lynis",
       "name": "Lynis System Auditing Tool",
       "shortName": "Lynis Hardening Tool",
       "slug": "tool-lynis",
-      "summary": "Battle-tested security auditing tool for Unix/Linux systems supporting ISO 27001 and NIST SP 800-53 audits.",
+      "summary": "Security auditing tool for Unix/Linux systems supporting ISO 27001 and NIST SP 800-53 audits.",
       "whyIncluded": "Lightweight shell scanner for local security audits, patch verification, and system hardening checks.",
       "canonicalUrl": "https://github.com/CISOfy/lynis",
       "publisher": "CISOfoundation / CISOPHY",
@@ -3072,13 +2851,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "lynis system auditing tool lynis hardening tool battle-tested security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. lightweight shell scanner for local security audits, patch verification, and system hardening checks. cisofoundation / cisophy tool nist sp 800-53 linux security lynis linux audit system administrator auditor"
+      "searchableText": "lynis system auditing tool lynis hardening tool security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. lightweight shell scanner for local security audits, patch verification, and system hardening checks. cisofoundation / cisophy tool nist sp 800-53 linux security lynis linux audit system administrator auditor"
     },
     {
       "id": "tool-osquery",
@@ -3086,7 +2864,7 @@
       "shortName": "osquery",
       "slug": "tool-osquery",
       "summary": "OS instrumentation framework that exposes operating systems as relational databases for SQL queries.",
-      "whyIncluded": "Fundamental open-source security tool for querying system configuration, active processes, and compliance state.",
+      "whyIncluded": "Open-source security tool for querying system configuration, active processes, and compliance state.",
       "canonicalUrl": "https://github.com/osquery/osquery",
       "publisher": "Linux Foundation",
       "resourceLane": "open_source",
@@ -3115,13 +2893,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "osquery sql-based operating system instrumentation osquery os instrumentation framework that exposes operating systems as relational databases for sql queries. fundamental open-source security tool for querying system configuration, active processes, and compliance state. linux foundation tool nist sp 800-53 endpoint security osquery sql devsecops security engineer isso"
+      "searchableText": "osquery sql-based operating system instrumentation osquery os instrumentation framework that exposes operating systems as relational databases for sql queries. open-source security tool for querying system configuration, active processes, and compliance state. linux foundation tool nist sp 800-53 endpoint security osquery sql devsecops security engineer isso"
     },
     {
       "id": "tool-falco-runtime-security",
@@ -3129,7 +2906,7 @@
       "shortName": "Falco Runtime Engine",
       "slug": "tool-falco-runtime-security",
       "summary": "Open-source cloud-native runtime security tool for threat detection across Kubernetes and Linux containers.",
-      "whyIncluded": "The standard CNCF runtime threat detection engine for monitoring container syscall anomalies in real time.",
+      "whyIncluded": "Open-source CNCF runtime threat detection engine for monitoring container syscall anomalies in real time.",
       "canonicalUrl": "https://github.com/falcosecurity/falco",
       "publisher": "CNCF Graduated",
       "resourceLane": "open_source",
@@ -3158,13 +2935,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "falco cloud-native runtime security falco runtime engine open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. the standard cncf runtime threat detection engine for monitoring container syscall anomalies in real time. cncf graduated tool kubernetes security runtime threat detection falco devsecops devsecops kubernetes administrator"
+      "searchableText": "falco cloud-native runtime security falco runtime engine open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. open-source cncf runtime threat detection engine for monitoring container syscall anomalies in real time. cncf graduated tool kubernetes security runtime threat detection falco devsecops devsecops kubernetes administrator"
     },
     {
       "id": "tool-kube-bench",
@@ -3172,7 +2948,7 @@
       "shortName": "kube-bench",
       "slug": "tool-kube-bench",
       "summary": "Go application that checks whether Kubernetes is deployed securely according to the CIS Kubernetes Benchmark.",
-      "whyIncluded": "Essential open-source tool for checking Kubernetes cluster master and worker node compliance.",
+      "whyIncluded": "Open-source tool for checking Kubernetes cluster master and worker node compliance.",
       "canonicalUrl": "https://github.com/aquasecurity/kube-bench",
       "publisher": "Aqua Security",
       "resourceLane": "open_source",
@@ -3200,13 +2976,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "kube-bench cis kubernetes benchmark scanner kube-bench go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. essential open-source tool for checking kubernetes cluster master and worker node compliance. aqua security tool cis benchmarks kubernetes security kubernetes cis kubernetes administrator devsecops"
+      "searchableText": "kube-bench cis kubernetes benchmark scanner kube-bench go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. open-source tool for checking kubernetes cluster master and worker node compliance. aqua security tool cis benchmarks kubernetes security kubernetes cis kubernetes administrator devsecops"
     },
     {
       "id": "tool-kubescape",
@@ -3214,7 +2989,7 @@
       "shortName": "Kubescape",
       "slug": "tool-kubescape",
       "summary": "Open-source Kubernetes security platform for risk analysis, security compliance, and RBAC visualizer.",
-      "whyIncluded": "Comprehensive open-source Kubernetes scanner evaluating clusters against NSA-CISA Kubernetes Hardening Guidance.",
+      "whyIncluded": "Open-source Kubernetes scanner evaluating clusters against NSA-CISA Kubernetes Hardening Guidance.",
       "canonicalUrl": "https://github.com/kubescape/kubescape",
       "publisher": "CNCF Sandbox",
       "resourceLane": "open_source",
@@ -3241,13 +3016,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "kubescape kubernetes security platform kubescape open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. comprehensive open-source kubernetes scanner evaluating clusters against nsa-cisa kubernetes hardening guidance. cncf sandbox tool nsa-cisa guidance cis benchmarks kubernetes devsecops kubernetes administrator"
+      "searchableText": "kubescape kubernetes security platform kubescape open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. open-source kubernetes scanner evaluating clusters against nsa-cisa kubernetes hardening guidance. cncf sandbox tool nsa-cisa guidance cis benchmarks kubernetes devsecops kubernetes administrator"
     },
     {
       "id": "tool-kics",
@@ -3255,7 +3029,7 @@
       "shortName": "KICS Scanner",
       "slug": "tool-kics",
       "summary": "Open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in IaC.",
-      "whyIncluded": "Leading open-source IaC scanner for Terraform, Ansible, CloudFormation, and Dockerfiles.",
+      "whyIncluded": "Open-source IaC scanner for Terraform, Ansible, CloudFormation, and Dockerfiles.",
       "canonicalUrl": "https://github.com/Checkmarx/kics",
       "publisher": "Checkmarx",
       "resourceLane": "open_source",
@@ -3283,13 +3057,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "kics keeping infrastructure as code secure kics scanner open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. leading open-source iac scanner for terraform, ansible, cloudformation, and dockerfiles. checkmarx tool iac scanning nist sp 800-53 devsecops terraform devsecops cloud architect"
+      "searchableText": "kics keeping infrastructure as code secure kics scanner open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. open-source iac scanner for terraform, ansible, cloudformation, and dockerfiles. checkmarx tool iac scanning nist sp 800-53 devsecops terraform devsecops cloud architect"
     },
     {
       "id": "tool-terrascan",
@@ -3325,7 +3098,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
@@ -3339,7 +3111,7 @@
       "shortName": "GSA OSCAL Word Gen",
       "slug": "tool-gsa-oscal-ssp-word",
       "summary": "Tool for converting machine-readable NIST OSCAL System Security Plans into human-readable Word document packages.",
-      "whyIncluded": "Practical open-source tool bridging machine-readable OSCAL JSON data back into federal Word document review packages.",
+      "whyIncluded": "Open-source tool bridging machine-readable OSCAL JSON data back into federal Word document review packages.",
       "canonicalUrl": "https://github.com/GSA/oscal-ssp-to-word",
       "publisher": "GSA Technology Transformation Services",
       "resourceLane": "open_source",
@@ -3369,7 +3141,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3381,7 +3152,7 @@
         "OSCAL Word Generator",
         "OSCAL to Word"
       ],
-      "searchableText": "gsa oscal ssp to word generator gsa oscal word gen tool for converting machine-readable nist oscal system security plans into human-readable word document packages. practical open-source tool bridging machine-readable oscal json data back into federal word document review packages. gsa technology transformation services tool oscal fedramp ssp oscal fedramp isso developer 3pao oscal xml to word oscal word generator oscal to word"
+      "searchableText": "gsa oscal ssp to word generator gsa oscal word gen tool for converting machine-readable nist oscal system security plans into human-readable word document packages. open-source tool bridging machine-readable oscal json data back into federal word document review packages. gsa technology transformation services tool oscal fedramp ssp oscal fedramp isso developer 3pao oscal xml to word oscal word generator oscal to word"
     },
     {
       "id": "tool-awesome-oscal",
@@ -3416,7 +3187,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3432,7 +3202,7 @@
       "shortName": "Platform One Iron Bank",
       "slug": "tool-platform-one-ironbank",
       "summary": "DoD repository of hardened, containerized applications accredited for Defense Department deployment.",
-      "whyIncluded": "Authoritative source for pre-hardened, STIG-compliant enterprise container images.",
+      "whyIncluded": "Public source for pre-hardened, STIG-compliant enterprise container images.",
       "canonicalUrl": "https://p1.dso.mil/services/iron-bank",
       "publisher": "DoD Platform One",
       "resourceLane": "official",
@@ -3461,13 +3231,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": true,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "dod platform one iron bank container registry platform one iron bank dod repository of hardened, containerized applications accredited for defense department deployment. authoritative source for pre-hardened, stig-compliant enterprise container images. dod platform one catalog dod hardening container security platform one devsecops devsecops software developer isso"
+      "searchableText": "dod platform one iron bank container registry platform one iron bank dod repository of hardened, containerized applications accredited for defense department deployment. public source for pre-hardened, stig-compliant enterprise container images. dod platform one catalog dod hardening container security platform one devsecops devsecops software developer isso"
     },
     {
       "id": "community-reddit-nistcontrols",
@@ -3475,7 +3244,7 @@
       "shortName": "r/NISTControls",
       "slug": "community-reddit-nistcontrols",
       "summary": "Active public forum for federal cybersecurity practitioners, ISSOs, and contractors discussing NIST SP 800-53 and 800-171.",
-      "whyIncluded": "Top community for practical advice, ATO hurdles, STIG interpretation, and CMMC preparation.",
+      "whyIncluded": "Public community for practical advice, ATO hurdles, STIG interpretation, and CMMC preparation.",
       "canonicalUrl": "https://www.reddit.com/r/NISTControls/",
       "publisher": "Reddit / Community",
       "resourceLane": "practitioner",
@@ -3508,7 +3277,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": true,
       "popularitySignals": {
         "subscribers": 18500
       },
@@ -3518,7 +3286,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "reddit /r/nistcontrols practitioner community r/nistcontrols active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. top community for practical advice, ato hurdles, stig interpretation, and cmmc preparation. reddit / community community_forum nist sp 800-53 nist sp 800-171 cmmc fisma cmmc rmf isso issm defense contractor consultant"
+      "searchableText": "reddit /r/nistcontrols practitioner community r/nistcontrols active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. public community for practical advice, ato hurdles, stig interpretation, and cmmc preparation. reddit / community community_forum nist sp 800-53 nist sp 800-171 cmmc fisma cmmc rmf isso issm defense contractor consultant"
     },
     {
       "id": "community-reddit-cmmc",
@@ -3526,7 +3294,7 @@
       "shortName": "r/CMMC Forum",
       "slug": "community-reddit-cmmc",
       "summary": "Dedicated community for defense industrial base contractors, C3PAOs, and consultants navigating CMMC 2.0.",
-      "whyIncluded": "Essential practitioner community for real-world CMMC 32 CFR 170 compliance discussions and assessment lessons learned.",
+      "whyIncluded": "Public practitioner community for real-world CMMC 32 CFR 170 compliance discussions and assessment lessons learned.",
       "canonicalUrl": "https://www.reddit.com/r/CMMC/",
       "publisher": "Reddit / Community",
       "resourceLane": "practitioner",
@@ -3555,7 +3323,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {
         "subscribers": 14200
       },
@@ -3565,7 +3332,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "reddit /r/cmmc defense contractor community r/cmmc forum dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. essential practitioner community for real-world cmmc 32 cfr 170 compliance discussions and assessment lessons learned. reddit / community community_forum cmmc 2.0 nist sp 800-171 cmmc dfars defense contractor 3pao isso"
+      "searchableText": "reddit /r/cmmc defense contractor community r/cmmc forum dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. public practitioner community for real-world cmmc 32 cfr 170 compliance discussions and assessment lessons learned. reddit / community community_forum cmmc 2.0 nist sp 800-171 cmmc dfars defense contractor 3pao isso"
     },
     {
       "id": "community-reddit-fedramp",
@@ -3600,7 +3367,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {
         "subscribers": 3500
       },
@@ -3618,7 +3384,7 @@
       "shortName": "CMMC Discord",
       "slug": "community-cmmc-practitioner-discord",
       "summary": "Real-time Discord community for certified CMMC assessors, defense contractors, and cybersecurity engineers.",
-      "whyIncluded": "Leading real-time discussion channel for rapid feedback on CMMC scoping and SPRS score calculations.",
+      "whyIncluded": "Real-time discussion channel for rapid feedback on CMMC scoping and SPRS score calculations.",
       "canonicalUrl": "https://cooey.life/",
       "publisher": "CMMC Practitioner Group",
       "resourceLane": "practitioner",
@@ -3646,7 +3412,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3654,7 +3419,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cmmc practitioner community discord cmmc discord real-time discord community for certified cmmc assessors, defense contractors, and cybersecurity engineers. leading real-time discussion channel for rapid feedback on cmmc scoping and sprs score calculations. cmmc practitioner group community_forum cmmc 2.0 cmmc c3pao isso defense contractor"
+      "searchableText": "cmmc practitioner community discord cmmc discord real-time discord community for certified cmmc assessors, defense contractors, and cybersecurity engineers. real-time discussion channel for rapid feedback on cmmc scoping and sprs score calculations. cmmc practitioner group community_forum cmmc 2.0 cmmc c3pao isso defense contractor"
     },
     {
       "id": "community-oscal-slack",
@@ -3689,7 +3454,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3705,7 +3469,7 @@
       "shortName": "FedRAMP Rev. 5 SSP Template",
       "slug": "template-fedramp-ssp-rev5",
       "summary": "Official Word document template for authoring a FedRAMP Rev. 5 System Security Plan across Low, Moderate, and High baselines.",
-      "whyIncluded": "The required baseline artifact structure for Cloud Service Providers seeking FedRAMP JAB or Agency authorization.",
+      "whyIncluded": "Published baseline artifact structure for Cloud Service Providers seeking FedRAMP JAB or Agency authorization.",
       "canonicalUrl": "https://www.fedramp.gov/docs/rev5/#legacy-system-security-plan-templates",
       "publisher": "FedRAMP PMO (GSA)",
       "resourceLane": "official",
@@ -3734,7 +3498,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3749,7 +3512,7 @@
         "System Security Plan",
         "FedRAMP SSP"
       ],
-      "searchableText": "fedramp system security plan (ssp) template (rev. 5) fedramp rev. 5 ssp template official word document template for authoring a fedramp rev. 5 system security plan across low, moderate, and high baselines. the required baseline artifact structure for cloud service providers seeking fedramp jab or agency authorization. fedramp pmo (gsa) template fedramp rev5 nist sp 800-53 fedramp cloud service provider isso 3pao fedramp ssp template ssp system security plan fedramp ssp"
+      "searchableText": "fedramp system security plan (ssp) template (rev. 5) fedramp rev. 5 ssp template official word document template for authoring a fedramp rev. 5 system security plan across low, moderate, and high baselines. published baseline artifact structure for cloud service providers seeking fedramp jab or agency authorization. fedramp pmo (gsa) template fedramp rev5 nist sp 800-53 fedramp cloud service provider isso 3pao fedramp ssp template ssp system security plan fedramp ssp"
     },
     {
       "id": "template-fedramp-poam-rev5",
@@ -3757,7 +3520,7 @@
       "shortName": "FedRAMP POA&M Template",
       "slug": "template-fedramp-poam-rev5",
       "summary": "Official Excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines.",
-      "whyIncluded": "Mandatory standardized spreadsheet format required for monthly FedRAMP continuous monitoring submissions.",
+      "whyIncluded": "Published standardized spreadsheet format used for monthly FedRAMP continuous monitoring submissions.",
       "canonicalUrl": "https://www.fedramp.gov/docs/rev5/#legacy-assurance-templates",
       "publisher": "FedRAMP PMO (GSA)",
       "resourceLane": "official",
@@ -3785,7 +3548,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3801,7 +3563,7 @@
         "Plan of Action and Milestones",
         "FedRAMP POAM"
       ],
-      "searchableText": "fedramp plan of action and milestones (poa&m) template fedramp poa&m template official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. mandatory standardized spreadsheet format required for monthly fedramp continuous monitoring submissions. fedramp pmo (gsa) template fedramp rev5 fedramp conmon isso vulnerability manager 3pao fedramp poam template poam poa&m plan of action and milestones fedramp poam"
+      "searchableText": "fedramp plan of action and milestones (poa&m) template fedramp poa&m template official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. published standardized spreadsheet format used for monthly fedramp continuous monitoring submissions. fedramp pmo (gsa) template fedramp rev5 fedramp conmon isso vulnerability manager 3pao fedramp poam template poam poa&m plan of action and milestones fedramp poam"
     },
     {
       "id": "template-i-assure-ssp-worksheet",
@@ -3809,7 +3571,7 @@
       "shortName": "I-Assure SSP Worksheet",
       "slug": "template-i-assure-ssp-worksheet",
       "summary": "Comprehensive Excel workbook for organizing NIST SP 800-53 control implementation statements and evidence attachments.",
-      "whyIncluded": "Widely used practitioner template for compiling control responses across federal authorization packages.",
+      "whyIncluded": "Practitioner template for compiling control responses across federal authorization packages.",
       "canonicalUrl": "https://www.i-assure.com/resources/ssp-template/",
       "publisher": "I-Assure",
       "resourceLane": "practitioner",
@@ -3837,7 +3599,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3845,7 +3606,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "i-assure ssp workbook & control worksheet i-assure ssp worksheet comprehensive excel workbook for organizing nist sp 800-53 control implementation statements and evidence attachments. widely used practitioner template for compiling control responses across federal authorization packages. i-assure template nist sp 800-53 nist rmf fisma isso consultant"
+      "searchableText": "i-assure ssp workbook & control worksheet i-assure ssp worksheet comprehensive excel workbook for organizing nist sp 800-53 control implementation statements and evidence attachments. practitioner template for compiling control responses across federal authorization packages. i-assure template nist sp 800-53 nist rmf fisma isso consultant"
     },
     {
       "id": "template-contingency-plan-fisma",
@@ -3853,7 +3614,7 @@
       "shortName": "Contingency Plan Template",
       "slug": "template-contingency-plan-fisma",
       "summary": "Standard Word template for authoring IT Contingency Plans and Business Continuity Plans aligned with NIST SP 800-34.",
-      "whyIncluded": "Essential template for fulfilling CP family requirements across federal information systems.",
+      "whyIncluded": "Template for fulfilling CP family requirements across federal information systems.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-34/rev-1/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -3881,7 +3642,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3889,7 +3649,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-34 contingency plan & bcp template contingency plan template standard word template for authoring it contingency plans and business continuity plans aligned with nist sp 800-34. essential template for fulfilling cp family requirements across federal information systems. nist csrc template nist sp 800-34 nist sp 800-53 fisma isso issm"
+      "searchableText": "nist sp 800-34 contingency plan & bcp template contingency plan template standard word template for authoring it contingency plans and business continuity plans aligned with nist sp 800-34. template for fulfilling cp family requirements across federal information systems. nist csrc template nist sp 800-34 nist sp 800-53 fisma isso issm"
     },
     {
       "id": "template-incident-response-plan",
@@ -3897,7 +3657,7 @@
       "shortName": "Incident Response Plan Template",
       "slug": "template-incident-response-plan",
       "summary": "Standard operational template for defining incident handling, escalation pathways, and CISA reporting timelines.",
-      "whyIncluded": "Mandatory baseline template for fulfilling IR family requirements under federal guidance.",
+      "whyIncluded": "Baseline template for fulfilling IR family requirements under federal guidance.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -3926,7 +3686,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3934,7 +3693,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-61 incident response plan template incident response plan template standard operational template for defining incident handling, escalation pathways, and cisa reporting timelines. mandatory baseline template for fulfilling ir family requirements under federal guidance. nist csrc template nist sp 800-61 nist sp 800-53 fisma cisa isso incident handler"
+      "searchableText": "nist sp 800-61 incident response plan template incident response plan template standard operational template for defining incident handling, escalation pathways, and cisa reporting timelines. baseline template for fulfilling ir family requirements under federal guidance. nist csrc template nist sp 800-61 nist sp 800-53 fisma cisa isso incident handler"
     },
     {
       "id": "template-configuration-management-plan",
@@ -3942,7 +3701,7 @@
       "shortName": "CM Plan Template",
       "slug": "template-configuration-management-plan",
       "summary": "Template for defining baseline configuration management, change control boards (CCB), and automated scanning.",
-      "whyIncluded": "Essential baseline template for fulfilling CM family controls.",
+      "whyIncluded": "Baseline template for fulfilling CM family controls.",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-128/final",
       "publisher": "NIST CSRC",
       "resourceLane": "official",
@@ -3970,7 +3729,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -3978,7 +3736,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "nist sp 800-128 configuration management plan template cm plan template template for defining baseline configuration management, change control boards (ccb), and automated scanning. essential baseline template for fulfilling cm family controls. nist csrc template nist sp 800-128 nist sp 800-53 fisma isso system administrator"
+      "searchableText": "nist sp 800-128 configuration management plan template cm plan template template for defining baseline configuration management, change control boards (ccb), and automated scanning. baseline template for fulfilling cm family controls. nist csrc template nist sp 800-128 nist sp 800-53 fisma isso system administrator"
     },
     {
       "id": "template-privacy-impact-assessment",
@@ -3986,7 +3744,7 @@
       "shortName": "PIA Template",
       "slug": "template-privacy-impact-assessment",
       "summary": "Standardized questionnaire template for assessing PII processing and privacy compliance under OMB M-03-22.",
-      "whyIncluded": "Mandatory template for federal systems collecting or processing Personally Identifiable Information.",
+      "whyIncluded": "Template for federal systems collecting or processing Personally Identifiable Information.",
       "canonicalUrl": "https://www.dhs.gov/privacy-impact-assessments",
       "publisher": "DHS Privacy Office",
       "resourceLane": "official",
@@ -4014,7 +3772,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4022,7 +3779,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "federal privacy impact assessment (pia) template pia template standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. mandatory template for federal systems collecting or processing personally identifiable information. dhs privacy office template nist privacy framework omb m-03-22 privacy privacy officer isso"
+      "searchableText": "federal privacy impact assessment (pia) template pia template standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. template for federal systems collecting or processing personally identifiable information. dhs privacy office template nist privacy framework omb m-03-22 privacy privacy officer isso"
     },
     {
       "id": "template-sans-security-policy",
@@ -4030,7 +3787,7 @@
       "shortName": "SANS Policy Templates",
       "slug": "template-sans-security-policy",
       "summary": "Consensus-developed security policy templates covering Acceptable Use, Incident Response, Access Control, and Data Protection.",
-      "whyIncluded": "Authoritative free security policy templates easily customized for federal and defense enterprise policies.",
+      "whyIncluded": "Public free security policy templates easily customized for federal and defense enterprise policies.",
       "canonicalUrl": "https://www.sans.org/information-security-policy/",
       "publisher": "SANS Institute",
       "resourceLane": "practitioner",
@@ -4059,7 +3816,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4067,7 +3823,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "sans information security policy templates sans policy templates consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. authoritative free security policy templates easily customized for federal and defense enterprise policies. sans institute template nist sp 800-53 sans top 20 policy governance isso issm policy writer"
+      "searchableText": "sans information security policy templates sans policy templates consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. public free security policy templates easily customized for federal and defense enterprise policies. sans institute template nist sp 800-53 sans top 20 policy governance isso issm policy writer"
     },
     {
       "id": "dataset-cisa-known-exploited-vulnerabilities-json",
@@ -4104,7 +3860,6 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4120,7 +3875,7 @@
       "shortName": "MITRE ATT&CK STIX Feed",
       "slug": "dataset-mitre-attack-json",
       "summary": "Official STIX 2.1 JSON representation of the entire MITRE ATT&CK Enterprise knowledge base of adversary tactics.",
-      "whyIncluded": "Authoritative machine-readable feed for mapping defensive security controls to adversary techniques.",
+      "whyIncluded": "Public machine-readable feed for mapping defensive security controls to adversary techniques.",
       "canonicalUrl": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json",
       "publisher": "MITRE CTI",
       "resourceLane": "official",
@@ -4148,13 +3903,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "mitre att&ck enterprise stix 2.1 data feed mitre att&ck stix feed official stix 2.1 json representation of the entire mitre att&ck enterprise knowledge base of adversary tactics. authoritative machine-readable feed for mapping defensive security controls to adversary techniques. mitre cti dataset mitre att&ck threat intelligence threat hunter soc analyst isso"
+      "searchableText": "mitre att&ck enterprise stix 2.1 data feed mitre att&ck stix feed official stix 2.1 json representation of the entire mitre att&ck enterprise knowledge base of adversary tactics. public machine-readable feed for mapping defensive security controls to adversary techniques. mitre cti dataset mitre att&ck threat intelligence threat hunter soc analyst isso"
     },
     {
       "id": "dataset-mitre-d3fend-json",
@@ -4162,7 +3916,7 @@
       "shortName": "MITRE D3FEND JSON",
       "slug": "dataset-mitre-d3fend-json",
       "summary": "Machine-readable graph ontology representing defensive cybersecurity countermeasures and technical relationships.",
-      "whyIncluded": "Authoritative digital ontology for programmatically linking NIST controls to technical defensive countermeasures.",
+      "whyIncluded": "Public digital ontology for programmatically linking NIST controls to technical defensive countermeasures.",
       "canonicalUrl": "https://d3fend.mitre.org/ontologies/d3fend.json",
       "publisher": "MITRE D3FEND",
       "resourceLane": "official",
@@ -4189,13 +3943,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": true,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "mitre d3fend countermeasure ontology json mitre d3fend json machine-readable graph ontology representing defensive cybersecurity countermeasures and technical relationships. authoritative digital ontology for programmatically linking nist controls to technical defensive countermeasures. mitre d3fend dataset mitre d3fend defensive countermeasures security architect data engineer"
+      "searchableText": "mitre d3fend countermeasure ontology json mitre d3fend json machine-readable graph ontology representing defensive cybersecurity countermeasures and technical relationships. public digital ontology for programmatically linking nist controls to technical defensive countermeasures. mitre d3fend dataset mitre d3fend defensive countermeasures security architect data engineer"
     },
     {
       "id": "commercial-cis-benchmarks-free",
@@ -4203,7 +3956,7 @@
       "shortName": "CIS Benchmarks Free",
       "slug": "commercial-cis-benchmarks-free",
       "summary": "Consensus-developed secure configuration benchmarks for OS, cloud, and network platforms.",
-      "whyIncluded": "Widely recognized commercial security benchmarks freely available for personal and internal organizational use.",
+      "whyIncluded": "Commercial security benchmarks freely available for personal and internal organizational use.",
       "canonicalUrl": "https://www.cisecurity.org/cis-benchmarks",
       "publisher": "Center for Internet Security (CIS)",
       "resourceLane": "commercial",
@@ -4232,13 +3985,12 @@
       "costType": "freemium",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. widely recognized commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog cis benchmarks nist sp 800-53 cis hardening security engineer system administrator"
+      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog cis benchmarks nist sp 800-53 cis hardening security engineer system administrator"
     },
     {
       "id": "commercial-aws-govcloud-docs",
@@ -4246,7 +3998,7 @@
       "shortName": "AWS GovCloud Guide",
       "slug": "commercial-aws-govcloud-docs",
       "summary": "Technical documentation and compliance alignment guides for architecting FedRAMP High and DoD IL5 workloads on AWS.",
-      "whyIncluded": "Essential vendor documentation for configuring AWS GovCloud services to meet federal compliance controls.",
+      "whyIncluded": "Vendor documentation for configuring AWS GovCloud services to meet federal compliance controls.",
       "canonicalUrl": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/welcome.html",
       "publisher": "Amazon Web Services",
       "resourceLane": "commercial",
@@ -4275,13 +4027,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. essential vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer"
+      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer"
     },
     {
       "id": "commercial-azure-government-docs",
@@ -4289,7 +4040,7 @@
       "shortName": "Azure Gov Compliance",
       "slug": "commercial-azure-government-docs",
       "summary": "Architecture blueprints, compliance coverage matrices, and FedRAMP High implementation guides for Azure Government.",
-      "whyIncluded": "Essential vendor guidance for deploying compliant federal workloads on Azure Government.",
+      "whyIncluded": "Vendor guidance for deploying compliant federal workloads on Azure Government.",
       "canonicalUrl": "https://learn.microsoft.com/en-us/azure/azure-government/",
       "publisher": "Microsoft",
       "resourceLane": "commercial",
@@ -4318,13 +4069,12 @@
       "costType": "free",
       "maintenanceStatus": "active",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "microsoft azure government compliance documentation azure gov compliance architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. essential vendor guidance for deploying compliant federal workloads on azure government. microsoft documentation fedramp high dod il5 nist sp 800-53 azure government cloud architect isso engineer"
+      "searchableText": "microsoft azure government compliance documentation azure gov compliance architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. vendor guidance for deploying compliant federal workloads on azure government. microsoft documentation fedramp high dod il5 nist sp 800-53 azure government cloud architect isso engineer"
     },
     {
       "id": "legacy-nist-sp800-53-r4",
@@ -4358,7 +4108,6 @@
       "costType": "free",
       "maintenanceStatus": "archived",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4401,7 +4150,6 @@
       "costType": "free",
       "maintenanceStatus": "archived",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4417,7 +4165,7 @@
       "shortName": "DIACAP Archive",
       "slug": "legacy-diacap-transition",
       "summary": "Historical reference library documenting the legacy DoD Information Assurance Certification and Accreditation Process (DIACAP).",
-      "whyIncluded": "Preserves essential historical context for legacy DoD system migrations and historical audit trail references.",
+      "whyIncluded": "Preserves historical context for legacy DoD system migrations and historical audit trail references.",
       "canonicalUrl": "https://public.cyber.mil/stigs/faqs/",
       "publisher": "DISA Cyber Exchange",
       "resourceLane": "legacy",
@@ -4445,7 +4193,6 @@
       "costType": "free",
       "maintenanceStatus": "archived",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [
@@ -4453,7 +4200,7 @@
       ],
       "searchAliases": [],
       "searchKeywords": [],
-      "searchableText": "diacap to rmf transition archive diacap archive historical reference library documenting the legacy dod information assurance certification and accreditation process (diacap). preserves essential historical context for legacy dod system migrations and historical audit trail references. disa cyber exchange historical_reference diacap dod rmf diacap isso auditor"
+      "searchableText": "diacap to rmf transition archive diacap archive historical reference library documenting the legacy dod information assurance certification and accreditation process (diacap). preserves historical context for legacy dod system migrations and historical audit trail references. disa cyber exchange historical_reference diacap dod rmf diacap isso auditor"
     },
     {
       "id": "legacy-opencontrol-compliance-masonry",
@@ -4489,7 +4236,6 @@
       "costType": "free",
       "maintenanceStatus": "archived",
       "openSource": false,
-      "editorialRecommendation": false,
       "popularitySignals": {},
       "companionResources": [],
       "featuredCollections": [

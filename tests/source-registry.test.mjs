@@ -32,7 +32,8 @@ test('every source has the locked Phase 6 synchronization model', () => {
       'dod-cmmc-rule', 'dod-rai-toolkit', 'dod-zt-capabilities',
       'dod-zt-execution-roadmap', 'dod-zt-overlays-2024',
       'dod-zt-reference-architecture-v2', 'dod-zt-strategy', 'isoo-cui-regulation',
-      'nara-cui-registry', 'nist-800-37-rev2', 'nist-800-53-rev4-rev5-crosswalk',
+      'nara-cui-registry', 'nist-800-171', 'nist-800-37-rev2', 'nist-800-53',
+      'nist-800-53-rev4-rev5-crosswalk', 'nist-csf-2', 'nist-ssdf',
       'nist-fips-199', 'nist-fips-200',
     ],
     link_out: [
@@ -79,12 +80,49 @@ test('source registry rejects invalid or incomplete freshness metadata', () => {
   assert.ok(errors.some((error) => error.includes('missing freshness entry')));
 });
 
+test('manual review records never fabricate content checksums', () => {
+  const invalid = structuredClone(registry);
+  const manual = invalid.sources.find(
+    (source) => source.retrieval_method === 'manual_review',
+  );
+  manual.checksum = 'sha256:publication_identity_placeholder';
+  const errors = validateSourceRegistry(invalid);
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.includes(`manual-review source ${manual.id}`) &&
+        error.includes('null or a sha256 digest'),
+    ),
+  );
+
+  for (const source of registry.sources.filter(
+    (entry) => entry.retrieval_method === 'manual_review',
+  )) {
+    assert.ok(
+      source.checksum === null || /^sha256:[a-f0-9]{64}$/.test(source.checksum),
+      `${source.id} has a fabricated checksum`,
+    );
+  }
+});
+
 test('source provenance and eligibility remain separate', () => {
   const { sources } = loadSourceRegistry(registry);
   assert.ok(sources.length >= 35);
   assert.ok(!sources.some((source) => source.provenance_class === 'inferred'));
   assert.ok(!sources.some((source) => source.provenance_class === 'excluded'));
   assert.ok(sources.some((source) => source.eligibility_status === 'excluded'));
+});
+
+test('ingestion sources cannot publish records as publication identities', () => {
+  const { byId } = loadSourceRegistry(registry);
+  for (const id of ['nist-oscal', 'nist-ssdf-oscal']) {
+    assert.equal(byId.get(id).metadata.identity_kind, 'ingestion');
+    assert.equal(byId.get(id).graph_eligible, false);
+  }
+  for (const id of ['nist-800-53', 'nist-800-171', 'nist-csf-2', 'nist-ssdf']) {
+    assert.equal(byId.get(id).metadata.identity_kind, 'publication');
+    assert.equal(byId.get(id).graph_eligible, true);
+  }
 });
 
 test('required federal sources are registered', () => {

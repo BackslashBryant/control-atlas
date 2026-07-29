@@ -2,13 +2,13 @@ export const helpSurfaces = [
   {
     view: "start-here",
     title: "Start Here",
-    body: "Answer three short questions, then open the recommended library, compare, pattern, and template links.",
+    body: "Browse the fixed public-source starting points represented in Control Atlas. Inclusion is not an applicability recommendation.",
     actionLabel: "Open Start Here",
   },
   {
     view: "atlas-map",
     title: "Explore",
-    body: "See the graph of how controls, baselines, CCIs, STIGs, and other requirements connect. Focus a control to see what implementing it also satisfies.",
+    body: "Trace publisher-declared structure separately from cited mappings, applicability selections, and process relationships.",
     actionLabel: "Open Explore",
   },
   {
@@ -23,14 +23,14 @@ export const helpSurfaces = [
   {
     view: "matrix",
     title: "Compare",
-    body: "Pick a comparison intent first, set frameworks, then review results before exporting or opening detailed mappings.",
+    body: "Pick a comparison type, name the published structures and mapping source, then review cited results.",
     actionLabel: "Open Compare",
   },
   {
     // Internal view key stays "patterns"; nav label renamed to Learn.
     view: "patterns",
     title: "Learn",
-    body: "Plain-language guides for recurring compliance problems like inheritance, reciprocity, and evidence reuse.",
+    body: "Control Atlas explanations for source identity, hierarchy, mappings, records, Search, and starter documents.",
     actionLabel: "Open Learn",
   },
   {

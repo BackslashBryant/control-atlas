@@ -1,5 +1,3 @@
-import MiniSearch from "../lib/minisearch.js";
-
 function normalize(value) {
   return String(value || "")
     .trim()
@@ -21,6 +19,10 @@ const SEARCH_STOP_WORDS = new Set([
 ]);
 
 const SEARCH_INTENT_ALIASES = [
+  {
+    terms: [/\b(review|inspect|check)\b/i, /\baudit\s+logs?\b/i],
+    query: "monitoring physical access",
+  },
   {
     terms: [
       /\b(manage|managing|administer|control|review)\b/i,
@@ -201,57 +203,19 @@ export function createFederalGraphRuntime(dataset) {
   }
   const libraryDocuments = [];
   const libraryDocumentById = new Map();
-  const libraryIndexes = [];
 
-  const miniSearchOptions = {
-    fields: ["item_id", "title", "description"],
-    storeFields: ["id"],
-    searchOptions: {
-      prefix: true,
-      boost: {
-        item_id: 5,
-        title: 3,
-        description: 2,
-      },
-    },
-  };
-
-  function ingestLibrarySearchShard(shard) {
-    if (!shard) return;
-    for (const document of shard.documents || []) {
+  function ingestLibrarySearch(searchArtifact) {
+    if (!searchArtifact) return null;
+    for (const document of searchArtifact.documents || []) {
       if (libraryDocumentById.has(document.id)) {
         continue;
       }
       libraryDocumentById.set(document.id, document);
       libraryDocuments.push(document);
     }
-    if (!shard.serialized_index) {
-      return;
-    }
-    try {
-      libraryIndexes.push(
-        /** @type {any} */ (MiniSearch).loadJSON(
-          shard.serialized_index,
-          miniSearchOptions,
-        ),
-      );
-    } catch (err) {
-      console.warn("Failed to load MiniSearch shard:", err);
-    }
   }
 
-  if (
-    Array.isArray(dataset.librarySearchShards) &&
-    dataset.librarySearchShards.length > 0
-  ) {
-    for (const shard of dataset.librarySearchShards) {
-      ingestLibrarySearchShard(shard);
-    }
-  } else if (dataset.librarySearch) {
-    ingestLibrarySearchShard(dataset.librarySearch);
-  }
-
-  let miniSearch = libraryIndexes[0] || null;
+  ingestLibrarySearch(dataset.librarySearch);
   // A catalog's declared node_type for its grouping tier (see CATALOG_TIERS
   // in scripts/build-framework-data.mjs) — used to split a catalog's total
   // node_count into "leaf records" vs "grouping tiers" instead of quoting one
@@ -929,16 +893,6 @@ export function createFederalGraphRuntime(dataset) {
         return exactMatches;
       }
 
-      if (miniSearch) {
-        const results = miniSearch.search(
-          aliasNeedle !== needle ? aliasNeedle : query,
-        );
-        return results
-          .map((result) => nodeById.get(result.id))
-          .filter((node) => node && nodeMatchesFilter(node))
-          .slice(0, 100);
-      }
-
       return dataset.nodes
         .filter(nodeMatchesFilter)
         .map((node) => {
@@ -982,82 +936,23 @@ export function createFederalGraphRuntime(dataset) {
       });
       if (exactMatches.length > 0) return exactMatches;
 
-      if (libraryIndexes.length > 0) {
-        const merged = new Map();
-        const searchNeedle = normalizeLibrarySearchQuery(
-          aliasNeedle !== needle ? aliasNeedle : query,
-        );
-        if (!searchNeedle) return [];
-        for (const index of libraryIndexes) {
-          for (const result of index.search(searchNeedle, {
-            combineWith: "AND",
-          })) {
-            const previous = merged.get(result.id);
-            if (!previous || result.score > previous.score) {
-              merged.set(result.id, result);
-            }
-          }
-        }
-        return [...merged.values()]
-          .sort((left, right) => {
-            const leftDocument = libraryDocumentById.get(left.id);
-            const rightDocument = libraryDocumentById.get(right.id);
-            const leftRank = left.score + librarySearchRankBoost(
-              leftDocument,
-              searchNeedle,
-            );
-            const rightRank = right.score + librarySearchRankBoost(
-              rightDocument,
-              searchNeedle,
-            );
-            return rightRank - leftRank || left.id.localeCompare(right.id);
-          })
-          .map((result) => libraryDocumentById.get(result.id))
-          .filter((doc) => doc && matchesLibraryFacet(doc, filters))
-          .slice(0, 100);
-      }
-
-      if (miniSearch) {
-        const searchNeedle = normalizeLibrarySearchQuery(
-          aliasNeedle !== needle ? aliasNeedle : query,
-        );
-        if (!searchNeedle) return [];
-        const results = miniSearch.search(searchNeedle, { combineWith: "AND" });
-        return results
-          .sort((left, right) => {
-            const leftDocument = libraryDocumentById.get(left.id);
-            const rightDocument = libraryDocumentById.get(right.id);
-            const leftRank = left.score + librarySearchRankBoost(
-              leftDocument,
-              searchNeedle,
-            );
-            const rightRank = right.score + librarySearchRankBoost(
-              rightDocument,
-              searchNeedle,
-            );
-            return rightRank - leftRank || left.id.localeCompare(right.id);
-          })
-          .map((result) => libraryDocumentById.get(result.id))
-          .filter((doc) => doc && matchesLibraryFacet(doc, filters))
-          .slice(0, 100);
-      }
-
-      const searchTerms = normalizeLibrarySearchQuery(
+      const searchNeedle = normalizeLibrarySearchQuery(
         aliasNeedle !== needle ? aliasNeedle : query,
       )
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
+        .toLowerCase();
+      const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
       if (searchTerms.length === 0) return [];
 
       return candidates
         .map((document) => {
           const itemId = normalize(document.item_id);
           const title = normalize(document.title);
-          const description = normalize(document.description);
-          const searchableText = [itemId, title, description].join(
-            " ",
-          );
+          const searchableText = [
+            itemId,
+            title,
+            normalize(document.control_family),
+            normalize(document.source_name),
+          ].join(" ");
           const matchesAllTerms = searchTerms.every((term) =>
             searchableText.includes(term),
           );
@@ -1067,17 +962,21 @@ export function createFederalGraphRuntime(dataset) {
               ? 0
               : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
                 ? 1
-                : title.includes(needle)
+                : title.includes(searchNeedle)
                   ? 2
-                  : description.includes(needle)
-                    ? 3
-                    : 99;
-          return { document, score };
+                  : 3;
+          return {
+            document,
+            rankBoost: librarySearchRankBoost(document, searchNeedle),
+            score,
+          };
         })
         .filter((entry) => entry.score < 99)
         .sort(
           (a, b) =>
-            a.score - b.score || a.document.id.localeCompare(b.document.id),
+            a.score - b.score ||
+            b.rankBoost - a.rankBoost ||
+            a.document.id.localeCompare(b.document.id),
         )
         .slice(0, 100)
         .map((entry) => entry.document);
@@ -1141,10 +1040,6 @@ export function createFederalGraphRuntime(dataset) {
     },
     getGraphHealth() {
       return dataset.findings;
-    },
-    appendLibrarySearchShard(shard) {
-      ingestLibrarySearchShard(shard);
-      miniSearch = libraryIndexes[0] || null;
     },
     getCatalogs() {
       return catalogs;
@@ -1906,287 +1801,4 @@ export function createFederalGraphRuntime(dataset) {
 
 export function getFederalContext(runtime, nodeId) {
   return runtime.getFederalContext(nodeId);
-}
-
-export function parseViewState(searchParams) {
-  const params = new URLSearchParams(searchParams);
-  const query = params.get("q") || "";
-  if (/^[A-Z]{3}-\d{4}-\d+$/i.test(query) || /^\d{4,}$/.test(query)) {
-    return { view: "retired", query, retired_type: "retired identifier" };
-  }
-  const view = params.get("view") || "search";
-  const mode = params.get("mode");
-  const base = mode ? { mode } : {};
-  if (view === "matrix") {
-    const state = baselineState(base);
-    state.workbench = params.get("workbench") || "relationships";
-    state.source = params.get("source") || "";
-    state.target = params.get("target") || "";
-    state.items = params.get("items") || "";
-    state.relationshipType = params.get("relationshipType") || "";
-    state.provenance = params.get("provenance") || "";
-    state.confidence = params.get("confidence") || "";
-    state.includeCandidates = params.get("includeCandidates") || "";
-    state.chainCatalog = params.get("chainCatalog") || "";
-    state.chainBenchmark = params.get("chainBenchmark") || "";
-    state.chainItem = params.get("chainItem") || "";
-    state.baselineA = params.get("baselineA") || "";
-    state.baselineB = params.get("baselineB") || "";
-    return state;
-  }
-  if (view === "library-detail") {
-    return {
-      ...base,
-      view,
-      node: params.get("node") || "",
-      from: params.get("from") || "",
-      relationshipView: params.get("relationshipView") || "",
-      relationshipType: params.get("relationshipType") || "",
-      provenance: params.get("provenance") || "",
-      confidence: params.get("confidence") || "",
-      nodeType: params.get("nodeType") || "",
-      includeCandidates: params.get("includeCandidates") || "",
-      relationshipSearch: params.get("relationshipSearch") || "",
-    };
-  }
-  if (view === "browse")
-    return { ...base, view, framework: params.get("framework") || "" };
-  if (view === "sources")
-    return {
-      ...base,
-      view,
-      source: params.get("source") || "",
-      provenance: params.get("provenance") || "",
-      eligibility: params.get("eligibility") || "",
-      lifecycle: params.get("lifecycle") || "",
-      access: params.get("access") || "",
-    };
-  if (view === "patterns") {
-    const pattern = params.get("pattern");
-    return {
-      ...base,
-      view,
-      ...(pattern !== null ? { pattern } : {}),
-    };
-  }
-  if (view === "templates") {
-    const templateType = params.get("templateType");
-    const framework = params.get("framework");
-    return {
-      ...base,
-      view,
-      ...(templateType !== null ? { templateType } : {}),
-      ...(framework !== null ? { framework } : {}),
-    };
-  }
-  if (view === "start-here") {
-    const step = params.get("step");
-    const systemType = params.get("systemType");
-    const dataSensitivity = params.get("dataSensitivity");
-    const environment = params.get("environment");
-    return {
-      ...base,
-      view,
-      ...(step ? { step } : {}),
-      ...(systemType ? { systemType } : {}),
-      ...(dataSensitivity ? { dataSensitivity } : {}),
-      ...(environment ? { environment } : {}),
-    };
-  }
-  if (view === "about") {
-    return { ...base, view: "about" };
-  }
-  return {
-    ...base,
-    view: "search",
-    query,
-    filter: params.get("filter") || "",
-    objectType: params.get("objectType") || "",
-    sourceClass: params.get("sourceClass") || "",
-    controlFamily: params.get("controlFamily") || "",
-    severity: params.get("severity") || "",
-  };
-}
-
-export function normalizeViewState(view, state = {}) {
-  const base = state.mode ? { mode: state.mode } : {};
-  if (view === "retired")
-    return { ...base, view: "retired", query: state.query || "" };
-  if (view === "matrix") {
-    const matrixState = baselineState(base);
-    matrixState.workbench = state.workbench || "relationships";
-    if (matrixState.workbench === "relationships") {
-      matrixState.source = state.source || "";
-      matrixState.target = state.target || "";
-      matrixState.items = state.items || "";
-      matrixState.relationshipType = state.relationshipType || "";
-      matrixState.provenance = state.provenance || "";
-      matrixState.confidence = state.confidence || "";
-      matrixState.includeCandidates = state.includeCandidates || "";
-    } else if (matrixState.workbench === "stig-chain") {
-      matrixState.chainCatalog = state.chainCatalog || "";
-      matrixState.chainBenchmark = state.chainBenchmark || "";
-      matrixState.chainItem = state.chainItem || "";
-      matrixState.provenance = state.provenance || "";
-      matrixState.confidence = state.confidence || "";
-      matrixState.includeCandidates = state.includeCandidates || "";
-    } else if (matrixState.workbench === "baseline-compare") {
-      matrixState.baselineA = state.baselineA || "";
-      matrixState.baselineB = state.baselineB || "";
-    }
-    return matrixState;
-  }
-  if (view === "library-detail") {
-    return {
-      ...base,
-      view: "library-detail",
-      node: state.node || "",
-      from: state.from || "",
-      relationshipView: state.relationshipView || "",
-      relationshipType: state.relationshipType || "",
-      provenance: state.provenance || "",
-      confidence: state.confidence || "",
-      nodeType: state.nodeType || "",
-      includeCandidates: state.includeCandidates || "",
-      relationshipSearch: state.relationshipSearch || "",
-    };
-  }
-  if (view === "browse")
-    return { ...base, view: "browse", framework: state.framework || "" };
-  if (view === "sources")
-    return {
-      ...base,
-      view: "sources",
-      source: state.source || "",
-      provenance: state.provenance || "",
-      eligibility: state.eligibility || "",
-      lifecycle: state.lifecycle || "",
-      access: state.access || "",
-    };
-  if (view === "patterns") {
-    return {
-      ...base,
-      view: "patterns",
-      ...(state.pattern ? { pattern: state.pattern } : {}),
-    };
-  }
-  if (view === "templates") {
-    return {
-      ...base,
-      view: "templates",
-      ...(state.templateType ? { templateType: state.templateType } : {}),
-      ...(state.framework ? { framework: state.framework } : {}),
-    };
-  }
-  if (view === "start-here") {
-    return {
-      ...base,
-      view,
-      ...(state.step ? { step: state.step } : {}),
-      ...(state.systemType ? { systemType: state.systemType } : {}),
-      ...(state.dataSensitivity
-        ? { dataSensitivity: state.dataSensitivity }
-        : {}),
-      ...(state.environment ? { environment: state.environment } : {}),
-    };
-  }
-  if (view === "about") {
-    return { ...base, view: "about" };
-  }
-  return {
-    ...base,
-    view: "search",
-    query: state.query || "",
-    filter: state.filter || "",
-    objectType: state.objectType || "",
-    sourceClass: state.sourceClass || "",
-    controlFamily: state.controlFamily || "",
-    severity: state.severity || "",
-  };
-}
-
-export function serializeViewState(state) {
-  const params = new URLSearchParams();
-  const view = state.view || "search";
-  if (view === "retired") {
-    params.set("view", "retired");
-    if (state.query) params.set("q", state.query);
-  } else if (view === "matrix") {
-    params.set("view", "matrix");
-    params.set("workbench", state.workbench || "relationships");
-    if (state.source) params.set("source", state.source);
-    if (state.target) params.set("target", state.target);
-    if (state.items) params.set("items", state.items);
-    if (state.relationshipType)
-      params.set("relationshipType", state.relationshipType);
-    if (state.provenance) params.set("provenance", state.provenance);
-    if (state.confidence) params.set("confidence", state.confidence);
-    if (state.includeCandidates)
-      params.set("includeCandidates", state.includeCandidates);
-    if (state.chainCatalog) params.set("chainCatalog", state.chainCatalog);
-    if (state.chainBenchmark)
-      params.set("chainBenchmark", state.chainBenchmark);
-    if (state.chainItem) params.set("chainItem", state.chainItem);
-    if (state.baselineA) params.set("baselineA", state.baselineA);
-    if (state.baselineB) params.set("baselineB", state.baselineB);
-  } else if (view === "library-detail") {
-    params.set("view", "library-detail");
-    if (state.node) params.set("node", state.node);
-    if (state.from) params.set("from", state.from);
-    if (state.relationshipView)
-      params.set("relationshipView", state.relationshipView);
-    if (state.relationshipType)
-      params.set("relationshipType", state.relationshipType);
-    if (state.provenance) params.set("provenance", state.provenance);
-    if (state.confidence) params.set("confidence", state.confidence);
-    if (state.nodeType) params.set("nodeType", state.nodeType);
-    if (state.includeCandidates)
-      params.set("includeCandidates", state.includeCandidates);
-    if (state.relationshipSearch)
-      params.set("relationshipSearch", state.relationshipSearch);
-  } else if (view === "browse") {
-    params.set("view", "browse");
-    if (state.framework) params.set("framework", state.framework);
-  } else if (view === "sources") {
-    params.set("view", "sources");
-    if (state.source) params.set("source", state.source);
-    if (state.provenance) params.set("provenance", state.provenance);
-    if (state.eligibility) params.set("eligibility", state.eligibility);
-    if (state.lifecycle) params.set("lifecycle", state.lifecycle);
-    if (state.access) params.set("access", state.access);
-  } else if (view === "patterns") {
-    params.set("view", "patterns");
-    if (state.pattern) params.set("pattern", state.pattern);
-  } else if (view === "templates") {
-    params.set("view", "templates");
-    if (state.templateType) params.set("templateType", state.templateType);
-    if (state.framework) params.set("framework", state.framework);
-  } else if (view === "start-here") {
-    params.set("view", view);
-    if (state.step) params.set("step", state.step);
-    if (state.systemType) params.set("systemType", state.systemType);
-    if (state.dataSensitivity)
-      params.set("dataSensitivity", state.dataSensitivity);
-    if (state.environment) params.set("environment", state.environment);
-  } else if (view === "about") {
-    params.set("view", "about");
-  } else if (
-    state.query ||
-    state.filter ||
-    state.objectType ||
-    state.sourceClass ||
-    state.controlFamily ||
-    state.severity
-  ) {
-    params.set("view", "search");
-    if (state.query) params.set("q", state.query);
-    if (state.filter) params.set("filter", state.filter);
-    if (state.objectType) params.set("objectType", state.objectType);
-    if (state.sourceClass) params.set("sourceClass", state.sourceClass);
-    if (state.controlFamily) params.set("controlFamily", state.controlFamily);
-    if (state.severity) params.set("severity", state.severity);
-  }
-  if (state.mode) params.set("mode", state.mode);
-  const value = params.toString();
-  return value ? `?${value}` : "";
 }

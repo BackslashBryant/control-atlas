@@ -2,14 +2,9 @@ import { readFileSync } from "node:fs";
 
 import { createFederalGraphRuntime } from "../../src/app/runtime.mjs";
 
-const manifest = JSON.parse(
-  readFileSync("data/generated/library-search-manifest.json", "utf8"),
-).library_search_manifest;
-const shards = manifest.shards.map((entry) =>
-  JSON.parse(
-    readFileSync(`data/generated/${entry.path}`, "utf8"),
-  ).library_search_shard,
-);
+const librarySearch = JSON.parse(
+  readFileSync("data/generated/library-search.json", "utf8"),
+).library_search;
 const benchmark = JSON.parse(
   readFileSync("tests/benchmarks/search-quality.json", "utf8"),
 );
@@ -19,7 +14,7 @@ const runtime = createFederalGraphRuntime({
   edges: [],
   evidence: [],
   findings: [],
-  librarySearchShards: shards,
+  librarySearch,
 });
 
 const startedAt = performance.now();
@@ -63,10 +58,7 @@ process.stdout.write(
   `${JSON.stringify(
     {
       engine: "current-minisearch",
-      corpus_documents: shards.reduce(
-        (total, shard) => total + shard.documents.length,
-        0,
-      ),
+      corpus_documents: librarySearch.documents.length,
       elapsed_ms: Number((performance.now() - startedAt).toFixed(2)),
       summary: byAudience,
       results,

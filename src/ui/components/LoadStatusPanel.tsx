@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { PRODUCT_DISCLAIMER } from "../../shared/disclaimer.mjs";
 import { Panel, Button, StatusChip } from "./lsm";
 
 export function LoadingStatusPanel(props: {
@@ -60,32 +59,32 @@ export function OfflineFallbackActions(props: {
         onClick={() => props.onNavigate("patterns")}
         type="button"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Explore playbooks</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Step-by-step guidance for common compliance work.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read explanations</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Cited explanations of source identity, structure, search, mappings, records, and starter documents.</span>
       </button>
       <button
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("templates")}
         type="button"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse templates</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Blank planning and assessment starters.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Open starter documents</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Create a blank starter file from explicit inputs.</span>
       </button>
       <button
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("start-here")}
         type="button"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Get a recommendation</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Answer three questions to find a practical starting path.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse source starting points</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Review the fixed public-source list and its inclusion rule.</span>
       </button>
       <button
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onClick={() => props.onNavigate("about")}
         type="button"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">About &amp; trust</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">How Control Atlas sources and limits its advice.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read the product boundary</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">How sources are attributed and which decisions remain with practitioners and responsible authorities.</span>
       </button>
     </div>
   );
@@ -145,7 +144,8 @@ export function CompareExportDisclosure(props: {
           </Button>
         </div>
         <p className="text-[var(--ca-text-subtle)] text-[11px]">
-          {PRODUCT_DISCLAIMER}
+          Exports preserve source references and the Control Atlas boundary
+          included in generated files.
         </p>
       </div>
     </details>

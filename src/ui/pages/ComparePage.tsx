@@ -9,7 +9,6 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ExpandableControlList } from "../components/ExpandableRelationshipGroup";
 import { CompareResultsPanel } from "../components/CompareResultsPanel";
-import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { CompareExportDisclosure } from "../components/LoadStatusPanel";
 import { CatalogVersionChip } from "../components/CatalogVersionChip";
 import {
@@ -23,6 +22,12 @@ import {
   SourceRefList,
 } from "../lib/compareHelpers";
 import { buildCrosswalkCompareGraph } from "../lib/buildCompareGraph";
+import {
+  activateCompareMode,
+  compareConfigurationReady,
+  COMPARE_MODES,
+  nextMissingCompareInput,
+} from "../lib/compareModeState";
 import {
   PageHeader,
   SummaryCard,
@@ -155,7 +160,7 @@ export function ComparePage(props: {
     () => parseCatalogItemIds(state.items, state.source),
     [state.items, state.source],
   );
-  const relationshipRows =
+  const relationshipRowsRaw =
     crosswalk === "relationships"
       ? bundle.runtime.buildRelationshipRows({
           source_catalog: state.source,
@@ -167,6 +172,36 @@ export function ComparePage(props: {
           node_ids: relationshipNodeIds,
         })
       : null;
+  const mappingSourceOptions = useMemo(() => {
+    const sources = new Map<string, string>();
+    for (const row of relationshipRowsRaw?.rows || []) {
+      for (const reference of row.source_refs || []) {
+        const sourceId = reference.source_id || reference.sourceId;
+        if (!sourceId) continue;
+        const source = bundle.runtime.getSource(sourceId);
+        sources.set(
+          sourceId,
+          source?.display_name || source?.name || sourceId,
+        );
+      }
+    }
+    return [...sources.entries()]
+      .map(([value, label]) => ({ value, label }))
+      .sort((left, right) => left.label.localeCompare(right.label));
+  }, [bundle.runtime, relationshipRowsRaw]);
+  const relationshipRows =
+    relationshipRowsRaw && state.mappingSource
+      ? {
+          ...relationshipRowsRaw,
+          rows: relationshipRowsRaw.rows.filter((row: any) =>
+            (row.source_refs || []).some(
+              (reference: any) =>
+                (reference.source_id || reference.sourceId) ===
+                state.mappingSource,
+            ),
+          ),
+        }
+      : relationshipRowsRaw;
   // A record-handoff link (e.g. "Compare this item against other public
   // mappings") sets `items` but no framework pair — the runtime already
   // returns cross-catalog rows for that case, so show results/empty-state
@@ -195,6 +230,7 @@ export function ComparePage(props: {
     state.provenance,
     state.confidence,
     state.includeCandidates,
+    state.mappingSource,
   ]);
   // Distinguish "this framework pair has zero published edges at all" (a
   // real data gap — resetting filters won't help) from "your filters
@@ -348,31 +384,37 @@ export function ComparePage(props: {
   );
 
   const comparisonCards: Array<{
+    id: (typeof COMPARE_MODES)[number]["id"];
     title: string;
     body: string;
     crosswalk: CompareCrosswalk;
   }> = [
     {
-      title: "Framework to framework",
-      body: "Compare two public catalogs and start with a summary before drilling into detailed mappings.",
+      id: "frameworks",
+      title: "Catalog to catalog",
+      body: "Compare two published structures using one explicitly selected mapping source.",
       crosswalk: "relationships",
     },
     {
+      id: "stig-chain",
       title: "STIG/SRG to controls",
       body: "Trace Security Technical Implementation Guide (STIG) and Security Requirements Guide (SRG) items through CCI links to related NIST controls.",
       crosswalk: "stig-chain",
     },
     {
+      id: "threat-chain",
       title: "Threat to controls",
       body: "Trace an ATT&CK technique through D3FEND countermeasures to related NIST controls.",
       crosswalk: "threat-chain",
     },
     {
+      id: "baseline-compare",
       title: "Baseline to baseline",
       body: "See what two public baselines share and what is only present in one of them.",
       crosswalk: "baseline-compare",
     },
     {
+      id: "item-mapping",
       title: "Find what maps to this item",
       body: "Open the framework comparison view with one known item in mind instead of blank filters.",
       crosswalk: "relationships",
@@ -427,18 +469,17 @@ export function ComparePage(props: {
     }
   }
 
-  const compareStep: 1 | 2 | 3 =
-    crosswalk === "intent"
-      ? 1
-      : crosswalk === "relationships" && relationshipRows?.rows?.length
-        ? 3
-        : crosswalk === "baseline-compare" && baselineComparison
-          ? 3
-          : crosswalk === "stig-chain" && selectedChain
-            ? 3
-            : crosswalk === "threat-chain" && selectedThreatChain
-              ? 3
-              : 2;
+  const eligibleMappingSources = mappingSourceOptions.map(
+    (option) => option.value,
+  );
+  const missingCompareInput = nextMissingCompareInput(
+    state,
+    eligibleMappingSources,
+  );
+  const compareReady = compareConfigurationReady(
+    state,
+    eligibleMappingSources,
+  );
 
   return (
     <Panel>
@@ -456,17 +497,16 @@ export function ComparePage(props: {
           <h2 className="visually-hidden" id="compare-kind-heading">
             Choose a comparison type
           </h2>
-          <div className="intent-grid compare-intent-grid">
+          <div aria-label="Comparison modes" className="compare-mode-tabs" role="tablist">
             {comparisonCards.map((card) => (
               <button
                 className="intent-card intent-card-button"
+                aria-selected={false}
                 key={card.title}
                 onClick={() =>
-                  onNavigate("matrix", {
-                    crosswalk: card.crosswalk,
-                    intent: card.title,
-                  })
+                  onNavigate("matrix", activateCompareMode(card.id))
                 }
+                role="tab"
                 type="button"
               >
                 <span className="intent-card-title">{card.title}</span>
@@ -481,12 +521,19 @@ export function ComparePage(props: {
           <div>
             <p className="eyebrow">Comparison type</p>
             <h2>
-              {comparisonCards.find((card) => card.crosswalk === crosswalk)?.title}
+              {comparisonCards.find((card) => card.id === state.intent)?.title ||
+                comparisonCards.find((card) => card.crosswalk === crosswalk)?.title}
             </h2>
           </div>
           <Button
             variant="secondary"
-            onClick={() => onNavigate("matrix", { crosswalk: "intent" })}
+            onClick={() =>
+              onNavigate("matrix", {
+                ...activateCompareMode("frameworks"),
+                crosswalk: "intent",
+                intent: "",
+              })
+            }
             type="button"
           >
             Change comparison
@@ -497,12 +544,54 @@ export function ComparePage(props: {
       {crosswalk === "relationships" ? (
         <>
           <div className="filter-grid">
+            {state.intent === "item-mapping" ? (
+              <>
+                <SelectField
+                  hint="Required so identifiers such as AC-2 are resolved inside one named published structure."
+                  label="Published structure"
+                  onChange={(source) =>
+                    onNavigate("matrix", {
+                      crosswalk,
+                      source,
+                      items: "",
+                      mappingSource: "",
+                      compareRun: "",
+                    })
+                  }
+                  options={catalogs.map((catalog: any) => ({
+                    value: catalog.id,
+                    label: catalog.name,
+                  }))}
+                  value={state.source}
+                />
+                <Field label="Published record identifier">
+                  <input
+                    onChange={(event) =>
+                      onNavigate("matrix", {
+                        crosswalk,
+                        items: event.target.value,
+                        mappingSource: "",
+                        compareRun: "",
+                      })
+                    }
+                    placeholder="For example, AC-2"
+                    value={state.items}
+                  />
+                </Field>
+              </>
+            ) : (
+              <>
             <div className="field-stack">
               <SelectField
-                hint="The first framework or catalog you want to compare from."
-                label="Compare from"
+                hint="The first published catalog, framework, or program structure."
+                label="Published structure A"
                 onChange={(value) =>
-                  onNavigate("matrix", { crosswalk, source: value })
+                  onNavigate("matrix", {
+                    crosswalk,
+                    source: value,
+                    mappingSource: "",
+                    compareRun: "",
+                  })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -518,10 +607,15 @@ export function ComparePage(props: {
             </div>
             <div className="field-stack">
               <SelectField
-                hint="The second framework or catalog you want to compare against."
-                label="Compare against"
+                hint="The second published catalog, framework, or program structure."
+                label="Published structure B"
                 onChange={(value) =>
-                  onNavigate("matrix", { crosswalk, target: value })
+                  onNavigate("matrix", {
+                    crosswalk,
+                    target: value,
+                    mappingSource: "",
+                    compareRun: "",
+                  })
                 }
                 options={catalogs.map((catalog: any) => ({
                   value: catalog.id,
@@ -535,12 +629,49 @@ export function ComparePage(props: {
                 onNavigateSources={() => onNavigate("sources")}
               />
             </div>
+              </>
+            )}
+            <div className="field-stack">
+              <SelectField
+                emptyLabel={
+                  (state.intent === "item-mapping" && state.items) ||
+                  (state.source && state.target)
+                    ? "Select a published mapping source"
+                    : "Complete the comparison scope first"
+                }
+                hint="Required. Results are limited to relationships cited to this source."
+                label="Mapping source"
+                onChange={(mappingSource) =>
+                  onNavigate("matrix", {
+                    crosswalk,
+                    mappingSource,
+                    compareRun: "",
+                  })
+                }
+                options={mappingSourceOptions}
+                value={state.mappingSource}
+              />
+            </div>
           </div>
-          <ContextualCommonsModule
-            bundle={bundle}
-            contextType="compare"
-            onNavigate={onNavigate}
-          />
+          <p className="compare-boundary">
+            A published mapping records a cited relationship. It does not establish
+            equivalence, applicability, implementation, compliance, or authorization.
+          </p>
+          {compareReady ? (
+            <Button
+              onClick={() =>
+                onNavigate("matrix", { crosswalk, compareRun: "true" })
+              }
+              type="button"
+              variant="primary"
+            >
+              Show mappings
+            </Button>
+          ) : (
+            <p className="generation-status tone-warning" role="status">
+              Choose {missingCompareInput} to configure this comparison.
+            </p>
+          )}
           {hasComparisonScope ? (
             <Accordion.Root
               className="accordion-root"
@@ -549,6 +680,7 @@ export function ComparePage(props: {
             >
               <DisclosurePanel title="Refine comparison" value="refine">
                 <div className="filter-grid">
+                  {state.intent !== "item-mapping" ? (
                   <Field label="Specific control or rule (optional)">
                     <input
                       onChange={(event) =>
@@ -564,6 +696,7 @@ export function ComparePage(props: {
                       Leave blank to compare every published mapping in this pair.
                     </p>
                   </Field>
+                  ) : null}
                   <SelectField
                     emptyLabel="All connection types"
                     label="Connection type"
@@ -638,7 +771,7 @@ export function ComparePage(props: {
               </DisclosurePanel>
             </Accordion.Root>
           ) : null}
-          {hasComparisonScope && relationshipRows?.rows?.length ? (
+          {state.compareRun === "true" && relationshipRows?.rows?.length ? (
             <section
               className="compare-results"
               id="compare-results"
@@ -731,7 +864,7 @@ export function ComparePage(props: {
                 onOpenNode={onOpenNode}
               />
             </section>
-          ) : hasComparisonScope ? (
+          ) : state.compareRun === "true" && hasComparisonScope ? (
             <section className="empty-state">
               <IconFilter aria-hidden="true" size={24} stroke={1.8} />
               <h2>

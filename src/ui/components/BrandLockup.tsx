@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 
+import {
+  BRAND_ROTATION_INTERVAL_MS,
+  BRAND_ROTATION_TRANSITION_MS,
+  BRAND_WORDS,
+  LONGEST_BRAND_WORD,
+} from "../../shared/brand-rotation";
+
 // Real logo geometry from the user's brand asset export (components/logo/logo-icon.tsx):
 // a 270° "C" arc (gap on the east side) with a navigation-arrow dart centered on it.
 const ARC_PATH = "M 61.2 61.2 A 30 30 0 1 1 61.2 18.8";
@@ -51,18 +58,14 @@ export function BrandFlourish() {
       transitionTimer = window.setTimeout(() => {
         setWordIndex((current) => (current + 1) % BRAND_WORDS.length);
         setWordPhase("enter");
-      }, 320);
-    }, 2400);
+      }, BRAND_ROTATION_TRANSITION_MS);
+    }, BRAND_ROTATION_INTERVAL_MS);
 
     return () => {
       window.clearInterval(rotationTimer);
       window.clearTimeout(transitionTimer);
     };
   }, [reduceMotion]);
-
-  const longestWord = BRAND_WORDS.reduce((longest, word) =>
-    word.length > longest.length ? word : longest,
-  );
 
   return (
     <span aria-hidden="true" className="brand-kbd">
@@ -71,7 +74,7 @@ export function BrandFlourish() {
       <span className="brand-key">Alt</span>
       <span className="brand-plus">+</span>
       <span className="brand-key brand-key--active">
-        <span className="brand-key-sizer">{longestWord}</span>
+        <span className="brand-key-sizer">{LONGEST_BRAND_WORD}</span>
         <span className={`brand-key-word word-${wordPhase}`}>
           {BRAND_WORDS[wordIndex]}
         </span>
@@ -79,22 +82,3 @@ export function BrandFlourish() {
     </span>
   );
 }
-
-const BRAND_WORDS = [
-  "Comply",
-  "Map",
-  "Navigate",
-  "Audit",
-  "Assess",
-  "Trace",
-  "Compare",
-  "Verify",
-  "Authorize",
-  "Inherit",
-  "Reconcile",
-  "Baseline",
-  "Crosswalk",
-  "Simplify",
-  "Clarify",
-  "Demystify",
-];

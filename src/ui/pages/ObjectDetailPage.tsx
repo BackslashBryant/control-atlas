@@ -17,13 +17,11 @@ import {
   Fragment,
   useEffect,
   useMemo,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
-import { patternsData } from "../../app/patterns-data.mjs";
 import { groupRelationships } from "../../app/relationship-groups.mjs";
 import { generateTemplate } from "../../app/template-engine.mjs";
 import {
@@ -42,34 +40,14 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
-import { DetailConnectionsSkeleton } from "../components/LibrarySkeleton";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
-import { StartHereResult } from "../components/StartHereResult";
-import {
-  CatalogFilterBar,
-  QuickIntentCard,
-} from "../components/QuickIntentCard";
-import {
-  filterByCategoryAndQuery,
-  groupItemsByCategory,
-  PATTERN_CATEGORIES,
-  RECOMMENDED_PATTERN_IDS,
-  TEMPLATE_CATEGORIES,
-} from "../lib/catalogGroups.mjs";
+import { QuickIntentCard } from "../components/QuickIntentCard";
 import {
   glossaryTermsForDocument,
-  glossaryTermsForPattern,
-  templatesForPatterns,
 } from "../lib/glossarySearch.mjs";
-import { buildStartHereRecommendations } from "../lib/startHereRecommendations.mjs";
-import type {
-  StartHereCompareLink,
-  StartHereLibraryLink,
-  StartHereRecommendations,
-} from "../lib/startHereRecommendations.d.ts";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -208,42 +186,6 @@ export function ObjectDetailPage(props: {
   useEffect(() => {
     setOpenRelationshipGroupIds(defaultOpenRelationshipGroups(grouped));
   }, [relationshipGroupSignature]);
-  // Cold deep link into a non-eager catalog: the node exists but its
-  // library-search shard is still queued behind the idle scheduler. Jump it
-  // to the front instead of waiting for the shard's turn in the lazy queue.
-  // If the shard still hasn't produced this document after a bounded wait
-  // (fetch failure, malformed shard, or an id genuinely missing from it),
-  // stop waiting silently and offer a manual retry instead of an indefinite
-  // skeleton. Depends on the stable `prioritizeLibraryShard` function
-  // reference, not `bundle` itself, so unrelated shards finishing in the
-  // background (which replace `bundle` via `librarySearchRevision` bumps)
-  // don't keep restarting this timer.
-  const nodeId = node?.id;
-  const catalogIdForShard = node?.metadata?.catalog_id;
-  const documentFound = Boolean(document);
-  const prioritizeLibraryShard = bundle.prioritizeLibraryShard;
-  const shardAttemptRef = useRef<string | null>(null);
-  const [shardRetryTick, setShardRetryTick] = useState(0);
-  const [shardLoadStalled, setShardLoadStalled] = useState(false);
-  useEffect(() => {
-    setShardLoadStalled(false);
-    if (!nodeId || documentFound || !catalogIdForShard) {
-      return;
-    }
-    const attemptKey = `${nodeId}:${shardRetryTick}`;
-    if (shardAttemptRef.current !== attemptKey) {
-      shardAttemptRef.current = attemptKey;
-      prioritizeLibraryShard?.(catalogIdForShard);
-    }
-    const timer = window.setTimeout(() => setShardLoadStalled(true), 8000);
-    return () => window.clearTimeout(timer);
-  }, [
-    prioritizeLibraryShard,
-    nodeId,
-    catalogIdForShard,
-    documentFound,
-    shardRetryTick,
-  ]);
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
     : null;
@@ -300,30 +242,22 @@ export function ObjectDetailPage(props: {
   }
 
   if (!document) {
-    // The record exists in the graph, but its catalog's library-search shard
-    // hasn't landed yet — a different condition from "not found" and one
-    // that normally resolves on its own once the shard (prioritized above)
-    // arrives. If it still hasn't after a bounded wait, offer a real retry
-    // instead of an indefinite skeleton.
-    if (shardLoadStalled) {
-      return (
-        <section className="notice">
-          <h2>Couldn&apos;t load this record&apos;s details</h2>
-          <p>
-            The record exists, but its data didn&apos;t finish loading. Check
-            your connection and try again.
-          </p>
-          <Button
-            variant="primary"
-            onClick={() => setShardRetryTick((tick) => tick + 1)}
-            type="button"
-          >
-            Try again
-          </Button>
-        </section>
-      );
-    }
-    return <DetailConnectionsSkeleton />;
+    return (
+      <section className="notice">
+        <h2>Record metadata unavailable</h2>
+        <p>
+          This graph record is not present in the current search catalog, so
+          its identity cannot be shown reliably.
+        </p>
+        <Button
+          variant="primary"
+          onClick={() => onNavigate("search")}
+          type="button"
+        >
+          Return to Search
+        </Button>
+      </section>
+    );
   }
 
   const locationSummary = [
@@ -346,9 +280,9 @@ export function ObjectDetailPage(props: {
       : state.from === "atlas-map"
         ? "Back to Explore"
         : state.from === "start-here"
-          ? "Back to recommendation"
+          ? "Back to source navigator"
           : state.from === "patterns"
-            ? "Back to playbook"
+            ? "Back to Learn"
       : state.from === "matrix"
               ? "Back to comparison"
               : state.from === "catalog-detail"
@@ -502,16 +436,29 @@ export function ObjectDetailPage(props: {
 
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard title="Official description" tone="trust">
-            <p className="support-meta">
-              Source excerpt from {source?.display_name || source?.name || "the published source"}
-            </p>
-            <p>
-              {document.description
-                ? renderOdpText(document.description)
-                : "No narrative description was published for this record."}
-            </p>
-            {source?.artifact_url || source?.catalog_browse_url ? (
+          <SummaryCard
+            title={source ? "Official description" : "Source identity unavailable"}
+            tone="trust"
+          >
+            {source ? (
+              <>
+                <p className="support-meta">
+                  Source excerpt from {source.display_name || source.name}
+                </p>
+                <p>
+                  {document.description
+                    ? renderOdpText(document.description)
+                    : "No narrative description was published for this record."}
+                </p>
+              </>
+            ) : (
+              <p>
+                Official source identity unavailable. This record is not shown
+                as official content until its publication identity can be
+                verified.
+              </p>
+            )}
+            {source && (source.artifact_url || source.catalog_browse_url) ? (
               <p>
                 <a
                   href={source.artifact_url || source.catalog_browse_url}
@@ -592,9 +539,9 @@ export function ObjectDetailPage(props: {
                     counts; this header just states the total. */}
                 {edges.length > 20 ? (
                   <p className="notice-inline" role="note">
-                    New here? Start with baselines or your primary source
-                    framework group — those links are usually the fastest path
-                    for authorization research.
+                    This record has many cited connections. Use the relationship
+                    and source filters to narrow the visible set without changing
+                    the underlying record.
                   </p>
                 ) : null}
               </div>

@@ -51,6 +51,10 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
     "src/ui/components/RelationshipGraph.tsx",
     "utf8",
   );
+  const atlasConnectionMap = readFileSync(
+    "src/ui/components/AtlasConnectionMap.tsx",
+    "utf8",
+  );
 
   assert.match(graphLayout, /topologyFingerprint/);
   assert.match(graphLayout, /truncateCanvasLabel/);
@@ -69,4 +73,6 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
     /lastArrangedKeyRef\.current === arrangementKey/,
   );
   assert.match(relationshipGraph, /setLayoutRevision/);
+  assert.match(atlasConnectionMap, /import\("\.\/RelationshipGraph"\)/);
+  assert.doesNotMatch(atlasConnectionMap, /elkjs|@xyflow\/react|<ReactFlow/);
 });

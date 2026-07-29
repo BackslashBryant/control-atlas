@@ -1,49 +1,46 @@
 # Control Atlas
 
-**Ctrl+Alt+Comply**
+**Ctrl+Alt+Trace · Search · Explore · Compare · Build**
 
-The public map for federal cyber compliance.
-
-Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates. This is a public-data-only application.
-
-Control Atlas translates federal security frameworks, controls, STIGs, and
-RMF artifacts into plain language — connecting what things mean, how they
-relate, and what to do next. Built for small teams without dedicated
-compliance staff.
+Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.
 
 Uses public NIST, DISA, FedRAMP, MITRE, and CISA data only.
 No login. No evidence upload. No organizational data stored.
 
-## Translation-First Product Standard
+Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.
 
-Control Atlas is not a data explorer first. It is a public reference workbench that translates complex cybersecurity guidance into clear, traceable user action.
+## Source-First Product Standard
 
 Future work must preserve this order:
 
-1. User intent
-2. Plain-language meaning
-3. Visible relationships
-4. Source trust
-5. Recommended next action
-6. Raw technical detail only on demand
+1. Exact publication identity and official source text
+2. Publisher-declared hierarchy
+3. Labeled, source-traceable relationships
+4. Concrete retrieval, comparison, navigation, or document action
+5. Product-authored notes and limitations
+6. Raw technical detail on demand
 
 ## What it does
 
-- Translates controls, STIGs, and compliance terms into plain language
-- Shows how frameworks, baselines, and requirements connect
-- Traces every mapping back to its public source
-- Generates blank RMF/ATO planning templates in your browser
-- Guides you to the right starting point for your system type
+- Finds published records by identifier or topic
+- Shows exact publisher, publication, official text, and declared structure
+- Traces published and candidate relationships with their provenance
+- Compares records through explicitly selected published mapping sources
+- Generates blank starter documents from explicitly selected inputs
+- Lists external tools, templates, data, training, and communities with owner and provenance
 
 ## What it does not do
 
 - Ingest evidence or process authorization packages
 - Store user, organization, or system data
 - Connect to eMASS, STIG Manager, or any operational system
-- Determine compliance status or recommend authorization decisions
-- Replace an assessor, ISSO, or AO
+- Determine applicability, baselines, compliance, inheritance, authorization, or ATO outcomes
+- Replace a practitioner, assessor, ISSO, responsible authority, or AO
 
-## Not an official government system. All mappings and templates are reference aids based on public sources.
+## Independent, open-source, and not an official government system
+
+Mappings and starter documents are based on public sources, with their owners
+and limitations attached.
 
 This application has no backend.
 

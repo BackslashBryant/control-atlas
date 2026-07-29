@@ -7,6 +7,7 @@ const REQUIRED_FIELDS = [
   'artifact_type',
   'supported_formats',
   'input_options',
+  'required_input_options',
   'source_refs',
   'official_resource_ids',
   'compatibility',
@@ -83,6 +84,18 @@ export function validateTemplateRegistry(registry) {
       }
     } else {
       errors.push(`template ${template.template_id} input_options must be an array`);
+    }
+    if (Array.isArray(template.required_input_options)) {
+      for (const opt of template.required_input_options) {
+        if (!INPUT_OPTIONS.has(opt)) {
+          errors.push(`template ${template.template_id} has unsupported required_input_option: ${opt}`);
+        }
+        if (!template.input_options.includes(opt)) {
+          errors.push(`template ${template.template_id} requires undeclared input_option: ${opt}`);
+        }
+      }
+    } else {
+      errors.push(`template ${template.template_id} required_input_options must be an array`);
     }
 
     if (!Array.isArray(template.source_refs)) errors.push(`template ${template.template_id} source_refs must be an array`);

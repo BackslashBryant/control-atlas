@@ -25,7 +25,7 @@ Analysis date: 2026-06-14
 | npm audit | `npm run audit:deps` in CI, Pages, and nightly refresh |
 | CodeQL | `codeql.yml` |
 | CycloneDX SBOM | `npm run sbom:generate` plus artifact upload |
-| Playwright E2E tests | `tests/e2e/control-atlas-shell.spec.mjs` in local, CI, Pages, and precommit flows |
+| Playwright E2E tests | Canonical workflow, responsive, accessibility, navigation, resilience, and focused feature specs in local, CI, Pages, and precommit flows |
 | Dependency review | `.github/workflows/dependency-review.yml` |
 | Dependabot | `.github/dependabot.yml` for npm and GitHub Actions |
 | License check | `npm run license:check` in local, CI, Pages, nightly, and precommit flows |

@@ -29,6 +29,16 @@ import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
+  buildTemplateGenerationSnapshot,
+  resolveTemplateGenerationState,
+  type TemplateInputOption,
+} from "../lib/templateGenerationState";
+import {
+  baselineCatalogForBuildContext,
+  BUILD_LANES,
+  BUILD_SOURCE_CONTEXTS,
+} from "../lib/buildRouteState";
+import {
   Badge,
   DisclosurePanel,
   PageHeader,
@@ -46,7 +56,8 @@ type TemplateRecord = {
   description: string;
   artifact_type?: string;
   supported_formats: string[];
-  input_options: string[];
+  input_options: TemplateInputOption[];
+  required_input_options?: TemplateInputOption[];
   source_refs?: string[];
   official_alternative?: { label: string; url: string };
   official_artifact_ids?: string[];
@@ -392,8 +403,8 @@ function FedrampCurrentTruthPanel(props: {
         <div>
           <strong>20x and Rev5 are both mapped</strong>
           <span>
-            Applicability and effective dates are rule-specific. Do not treat a
-            legacy workbook as the current path for either profile.
+            Current paths depend on the applicable rules and effective dates.
+            The linked legacy workbook is kept for migration and comparison.
           </span>
         </div>
       </div>
@@ -525,7 +536,7 @@ const FORMAT_LABELS: Record<string, string> = {
 };
 
 const INPUT_LABELS: Record<string, string> = {
-  framework: "Framework context",
+  framework: "Catalog or program context",
   baseline: "Baseline selection",
   control_family: "Control family filter",
   selected_controls: "Specific controls",
@@ -551,7 +562,7 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
       <div className="template-document-preview-body">
         <p className="template-document-preview-description">{doc.description}</p>
         <p className="template-document-preview-disclaimer">
-          Starter document - confirm requirements with the official source before use.
+          Starter document. The selected inputs and cited sources appear in the file.
         </p>
         {(doc.sections || []).map((section: any) => (
           <section className="template-document-preview-section" key={section.heading}>
@@ -611,8 +622,8 @@ export function TemplatesPage(props: {
   const generationRef = useRef<HTMLElement | null>(null);
   const generateButtonRef = useRef<HTMLButtonElement | null>(null);
   const workflowDetailRef = useRef<HTMLElement | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [queryFilter, setQueryFilter] = useState("");
+  const categoryFilter = state.category;
+  const queryFilter = state.query;
   const [showAllOfficialResources, setShowAllOfficialResources] =
     useState(false);
   const [showCompleteOfficialCatalog, setShowCompleteOfficialCatalog] =
@@ -637,6 +648,7 @@ export function TemplatesPage(props: {
       (workflow) => workflow.workflow_id === state.task,
     ) || null;
   const documentBrowser = state.buildSection === "documents";
+  const buildOverview = state.buildSection === "overview";
   const workflowArtifacts = selectedWorkflow
     ? officialArtifacts.filter((artifact) =>
         selectedWorkflow.artifact_ids?.includes(artifact.artifact_id),
@@ -765,8 +777,12 @@ export function TemplatesPage(props: {
         );
       })
     : [];
+  const buildContextIds = new Set(
+    BUILD_SOURCE_CONTEXTS.map((context) => context.id),
+  );
   const catalogOptions = bundle.runtime
     .getCatalogs()
+    .filter((catalog: any) => buildContextIds.has(catalog.id))
     .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
   // The registry is the source of truth: every visible download is a polished
   // Word or Excel document, never a raw serialization format.
@@ -778,13 +794,11 @@ export function TemplatesPage(props: {
   const inputOptions = selectedTemplate?.input_options || [];
   const datasetNodes = (bundle.runtime.dataset?.nodes || []) as any[];
   const datasetSources = (bundle.runtime.dataset?.sources || []) as any[];
-  const activeFramework = state.framework || "nist-800-53";
+  const activeFramework = state.framework || "";
 
-  // Baseline membership lives in a companion catalog (NIST 800-53B for the
-  // 800-53 framework; FedRAMP carries its own baselines), so scope the options
-  // there rather than to the framework catalog itself.
-  const baselineCatalog =
-    activeFramework === "fedramp-rev5" ? "fedramp-rev5" : "nist-800-53b";
+  // A baseline is an applicability selection under the chosen catalog or
+  // program context, never a peer context and never a tree parent.
+  const baselineCatalog = baselineCatalogForBuildContext(activeFramework);
   const baselineOptions = useMemo(() => {
     const seen = new Map<string, string>();
     for (const node of datasetNodes) {
@@ -799,18 +813,6 @@ export function TemplatesPage(props: {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([value, label]) => ({ value, label }));
   }, [datasetNodes, baselineCatalog]);
-
-  // Default to the Moderate baseline when the framework offers one — the full
-  // catalog is rarely what someone starting a plan wants. An empty
-  // state.baseline means "not chosen yet"; the explicit all-controls choice is
-  // stored as the "ALL" sentinel so it survives the default.
-  const defaultBaseline = baselineOptions.some(
-    (option) => option.value === "MODERATE",
-  )
-    ? "MODERATE"
-    : "";
-  const activeBaseline =
-    state.baseline === "ALL" ? "" : state.baseline || defaultBaseline;
 
   const familyOptions = useMemo(() => {
     const families = new Set<string>();
@@ -833,20 +835,49 @@ export function TemplatesPage(props: {
   // The on-screen preview and downloaded files use this exact structured
   // document, so a practitioner can review real headings, prompts, and rows
   // before starting a download.
-  const generationOptions = useMemo(() => {
+  const generationSnapshot = useMemo(() => {
     if (!selectedTemplate) return null;
+    return buildTemplateGenerationSnapshot({
+      template: selectedTemplate,
+      routeState: {
+        framework: state.framework || "",
+        baseline: state.baseline || "",
+        controlFamily: state.controlFamily || "",
+        environment: state.environment || "",
+        format: activeFormat,
+      },
+      selectionOptions: {
+        framework: BUILD_SOURCE_CONTEXTS.map((context) => context.id),
+        baseline: ["ALL", ...baselineOptions.map((option) => option.value)],
+        control_family: familyOptions.map((option) => option.value),
+      },
+    });
+  }, [
+    activeFormat,
+    baselineOptions,
+    familyOptions,
+    selectedTemplate,
+    state.baseline,
+    state.controlFamily,
+    state.environment,
+    state.framework,
+  ]);
+  const selectedFrameworkSourceId = activeFramework
+    ? datasetNodes.find(
+        (node) => node.metadata?.catalog_id === activeFramework,
+      )?.source_id
+    : "";
+  const generationOptions = useMemo(() => {
+    if (!selectedTemplate || !generationSnapshot?.validation.valid) return null;
+    const sourceRefs = [
+      selectedFrameworkSourceId,
+      ...(selectedTemplate.source_refs || []),
+    ].filter(
+      (sourceId, index, values) =>
+        sourceId && values.indexOf(sourceId) === index,
+    );
     return {
-      templateType: selectedTemplate.name,
-      framework: selectedTemplate.input_options.includes("framework")
-        ? state.framework || "nist-800-53"
-        : "",
-      baseline: selectedTemplate.input_options.includes("baseline")
-        ? activeBaseline
-        : "",
-      controlFamily: selectedTemplate.input_options.includes("control_family")
-        ? state.controlFamily || ""
-        : "",
-      environment: state.environment || "Generic",
+      ...generationSnapshot.options,
       includePlaceholders: true,
       includeImplementationPrompts: true,
       includeEvidenceExpectations: true,
@@ -854,18 +885,36 @@ export function TemplatesPage(props: {
       includeReciprocityPrompts: true,
       includeSourceFootnotes: true,
       includeStigReferences: true,
-      sourceRefs: selectedTemplate.source_refs || [],
+      sourceRefs,
       sources: bundle.runtime.dataset?.sources || [],
     };
-  }, [activeBaseline, bundle.runtime.dataset?.sources, selectedTemplate, state.controlFamily, state.environment, state.framework]);
-  const documentPreview = useMemo(() => {
-    if (!generationOptions) return null;
+  }, [
+    bundle.runtime.dataset?.sources,
+    generationSnapshot,
+    selectedFrameworkSourceId,
+    selectedTemplate,
+  ]);
+  const generationResult = useMemo(() => {
+    if (!generationOptions) return { preview: null, error: "" };
     try {
-      return buildTemplateDocument(generationOptions, bundle.runtime.dataset);
-    } catch {
-      return null;
+      return {
+        preview: buildTemplateDocument(generationOptions, bundle.runtime.dataset),
+        error: "",
+      };
+    } catch (error) {
+      return {
+        preview: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : "The document could not be prepared.",
+      };
     }
   }, [bundle.runtime.dataset, generationOptions]);
+  const documentPreview = generationResult.preview;
+  const generationState = generationSnapshot
+    ? resolveTemplateGenerationState(generationSnapshot, generationResult)
+    : null;
 
   useEffect(() => {
     if (!selectedTemplate) {
@@ -898,17 +947,15 @@ export function TemplatesPage(props: {
       );
     };
     try {
-      if (!documentPreview) {
+      if (!documentPreview || !generationState?.downloadEnabled) {
         setGenerationTone("warning");
-        setGenerationStatus("The document preview could not be prepared. Review the selected options and try again.");
+        setGenerationStatus(
+          generationState?.status ||
+            "The document preview could not be prepared. Review the selected options and try again.",
+        );
         return;
       }
-      const { doc, frameworkResolutionError } = documentPreview;
-      if (frameworkResolutionError) {
-        setGenerationTone("warning");
-        setGenerationStatus(frameworkResolutionError);
-        return;
-      }
+      const { doc } = documentPreview;
       // Serializers are loaded only when a user asks to create a document;
       // nothing is uploaded or generated server-side.
       const { renderOfficeDocument } =
@@ -939,10 +986,12 @@ export function TemplatesPage(props: {
 
   return (
     <Panel>
-      <BuildLocalNav
-        active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
-        onNavigate={onNavigate}
-      />
+      {!buildOverview ? (
+        <BuildLocalNav
+          active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
+          onNavigate={onNavigate}
+        />
+      ) : null}
       <PageHeader
         action={
           selectedTemplate ? (
@@ -954,25 +1003,70 @@ export function TemplatesPage(props: {
             </Button>
           ) : undefined
         }
-        eyebrow={documentBrowser || selectedTemplate ? "Starter documents" : "Build from a task"}
-        summary={documentBrowser || selectedTemplate
+        eyebrow={
+          buildOverview
+            ? "Build"
+            : documentBrowser || selectedTemplate
+              ? "Starter documents"
+              : "Build from a task"
+        }
+        summary={buildOverview
+          ? "Open a task, start a document, or find an external resource."
+          : documentBrowser || selectedTemplate
           ? "Review a starter document and its public references before adapting it to your work."
           : "Choose a task to see related public references, tools, and starter documents."}
-        title={documentBrowser || selectedTemplate ? "Choose a starter document" : "What are you working on?"}
+        title={
+          buildOverview
+            ? "Build"
+            : documentBrowser || selectedTemplate
+              ? "Choose a starter document"
+              : "Tasks"
+        }
       />
 
-      {!selectedTemplate ? (
+      {buildOverview ? (
+        <section aria-label="Build lanes" className="build-lane-grid">
+          {BUILD_LANES.map((lane) => {
+            const Icon =
+              lane.id === "tasks"
+                ? IconCompass
+                : lane.id === "documents"
+                  ? IconFileDescription
+                  : IconExternalLink;
+            return (
+              <QuickIntentCard
+                actionLabel={`Open ${lane.label}`}
+                body={lane.description}
+                icon={<Icon aria-hidden="true" size={22} stroke={1.8} />}
+                key={lane.id}
+                onClick={() =>
+                  lane.id === "resources"
+                    ? onNavigate("commons")
+                    : onNavigate("templates", {
+                        buildSection: lane.id,
+                        task: "",
+                        templateType: "",
+                      })
+                }
+                title={lane.label}
+              />
+            );
+          })}
+        </section>
+      ) : null}
+
+      {!selectedTemplate && !buildOverview ? (
         <div className="stack">
           {!selectedWorkflow && !documentBrowser ? (
           <div className="build-start-layout">
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">Choose the work</p>
-                <h2 id="workflow-heading">Start with a task</h2>
+                <p className="eyebrow">Task workflows</p>
+                <h2 id="workflow-heading">Tasks by outcome</h2>
                 <p className="page-summary">
-                  Pick the outcome you are working toward — you do not need to
-                  know the document name.
+                  Each task groups related public sources, starter documents,
+                  and external tools.
                 </p>
               </div>
             </div>
@@ -983,7 +1077,7 @@ export function TemplatesPage(props: {
                   title={workflow.title}
                   body={workflow.summary}
                   icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
-                  actionLabel="Choose this task"
+                  actionLabel="Open task"
                   selected={state.task === workflow.workflow_id}
                   onClick={() => {
                     setShowAllOfficialResources(false);
@@ -1008,7 +1102,7 @@ export function TemplatesPage(props: {
                       title={workflow.title}
                       body={workflow.summary}
                       icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
-                      actionLabel="Choose this task"
+                      actionLabel="Open task"
                       selected={state.task === workflow.workflow_id}
                       onClick={() => {
                         setShowAllOfficialResources(false);
@@ -1040,7 +1134,7 @@ export function TemplatesPage(props: {
                   <p className="eyebrow">Optional reference</p>
                   <h2 id="optional-resources-heading">Related resources</h2>
                   <p className="page-summary">
-                    Choose a task first. Keep these source-backed references nearby when you need a template or model.
+                    These external references remain available independently of any task.
                   </p>
                 </div>
               </div>
@@ -1054,7 +1148,7 @@ export function TemplatesPage(props: {
           </div>
           ) : null}
 
-          {selectedWorkflow || documentBrowser ? (
+          {selectedWorkflow ? (
             <section
               aria-labelledby="selected-workflow-heading"
               className="nexus-section workflow-detail"
@@ -1063,7 +1157,7 @@ export function TemplatesPage(props: {
             >
               <div className="section-header nexus-section-header">
                 <div>
-                  <p className="eyebrow">Your path</p>
+                  <p className="eyebrow">Selected task</p>
                   <h2 id="selected-workflow-heading">
                     {selectedWorkflow.title}
                   </h2>
@@ -1073,7 +1167,7 @@ export function TemplatesPage(props: {
                   variant="secondary"
                   onClick={() => onNavigate("templates", { buildSection: "tasks", task: "", templateType: "" })}
                 >
-                  Choose a different task
+                  Browse tasks
                 </Button>
               </div>
               {/* The method — outcomes, steps, readiness — is reference, not a
@@ -1081,9 +1175,9 @@ export function TemplatesPage(props: {
                   artifact they asked for, so choosing "Create a POA&M" meant
                   reading an essay before reaching anything buildable. */}
               <details className="workflow-method">
-                <summary>How this work is done — steps and what good looks like</summary>
+                <summary>Reference steps and handoff checks</summary>
               {selectedWorkflow.outcomes?.length ? (
-                <SummaryCard title="What you will have">
+                <SummaryCard title="Intended output">
                   <ul className="nexus-list">
                     {selectedWorkflow.outcomes.map((outcome) => (
                       <li key={outcome}>{outcome}</li>
@@ -1108,7 +1202,7 @@ export function TemplatesPage(props: {
                           <p>{step.action}</p>
                           {step.completion_signal ? (
                             <p className="support-meta">
-                              Ready when: {step.completion_signal}
+                              Handoff check: {step.completion_signal}
                             </p>
                           ) : null}
                         </div>
@@ -1117,7 +1211,7 @@ export function TemplatesPage(props: {
                 </ol>
               ) : null}
               {selectedWorkflow.readiness_checks?.length ? (
-                <SummaryCard title="Before you hand it off" tone="trust">
+                <SummaryCard title="Handoff checks" tone="trust">
                   <ul className="nexus-list">
                     {selectedWorkflow.readiness_checks.map((check) => (
                       <li key={check}>{check}</li>
@@ -1139,7 +1233,7 @@ export function TemplatesPage(props: {
             </section>
           ) : null}
 
-          {selectedWorkflow ? (
+          {selectedWorkflow || documentBrowser ? (
             <>
           <section
             aria-labelledby="companion-heading"
@@ -1149,16 +1243,16 @@ export function TemplatesPage(props: {
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">
-                  {selectedWorkflow ? "Build it" : "Starter documents"}
+                  Starter document
                 </p>
                 <h2 id="companion-heading">
                   {selectedWorkflow && declaredCompanions.length === 1
-                    ? `Build your ${declaredCompanions[0].display_name}`
+                    ? `Create ${declaredCompanions[0].display_name}`
                     : "Starter documents"}
                 </h2>
                 <p className="page-summary">
-                  Create a starter file in your browser — sections, prompts, and
-                  structure already laid out, ready to fill in.
+                  Generate a starter file with its headings, prompts, and source
+                  context ready for your team to complete.
                 </p>
               </div>
             </div>
@@ -1167,8 +1261,12 @@ export function TemplatesPage(props: {
                 category={categoryFilter}
                 categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
                 countLabel={`${filteredTemplates.length} starter document${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
-                onCategoryChange={setCategoryFilter}
-                onQueryChange={setQueryFilter}
+                onCategoryChange={(category) =>
+                  onNavigate("templates", { ...state, category })
+                }
+                onQueryChange={(query) =>
+                  onNavigate("templates", { ...state, query })
+                }
                 query={queryFilter}
                 queryPlaceholder="Search starter documents by name or purpose"
               />
@@ -1181,7 +1279,7 @@ export function TemplatesPage(props: {
                   <div className="intent-grid">
                     {categoryTemplates.map((template: TemplateRecord) => (
                       <QuickIntentCard
-                        actionLabel="Review and generate"
+                        actionLabel="Open document"
                         body={template.description}
                         icon={<IconFileDescription size={20} stroke={1.8} />}
                         key={template.name}
@@ -1190,9 +1288,9 @@ export function TemplatesPage(props: {
                             buildSection: "documents",
                             task: "",
                             templateType: template.name,
-                            framework: state.framework || "nist-800-53",
+                            framework: state.framework || "",
                             format: template.supported_formats?.[0] || "docx",
-                            environment: state.environment || "Generic",
+                            environment: state.environment || "",
                             baseline: "",
                             controlFamily: "",
                           })
@@ -1213,7 +1311,7 @@ export function TemplatesPage(props: {
                 <div className="intent-grid">
                   {otherTemplates.map((template: TemplateRecord) => (
                     <QuickIntentCard
-                      actionLabel="Review and generate"
+                      actionLabel="Open document"
                       body={template.description}
                       icon={<IconFileDescription size={20} stroke={1.8} />}
                       key={template.name}
@@ -1222,9 +1320,9 @@ export function TemplatesPage(props: {
                             buildSection: "documents",
                             task: "",
                             templateType: template.name,
-                          framework: state.framework || "nist-800-53",
+                          framework: state.framework || "",
                           format: template.supported_formats?.[0] || "docx",
-                          environment: state.environment || "Generic",
+                          environment: state.environment || "",
                           baseline: "",
                           controlFamily: "",
                         })
@@ -1242,16 +1340,15 @@ export function TemplatesPage(props: {
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">Verify the rule</p>
+                <p className="eyebrow">Published sources</p>
                 <h2 id="official-heading">
                   {selectedWorkflow
                     ? `Official resources for ${selectedWorkflow.title}`
                     : "Official federal resources"}
                 </h2>
                 <p className="page-summary">
-                  Use the publisher's material first. Current, legacy, and
-                  guidance-only resources are labeled separately so useful does
-                  not get confused with current.
+                  Publisher material and lifecycle labels are shown together.
+                  Current, legacy, and guidance-only items remain distinct.
                 </p>
               </div>
             </div>
@@ -1280,9 +1377,8 @@ export function TemplatesPage(props: {
             {workflowArtifacts.length === 0 ? (
               <div className="notice" role="status">
                 <p>
-                  No official resource is joined to this workflow yet. Use the
-                  complete catalog or a starter document below, and verify against
-                  your authorizing organization's direction.
+                  No published source is linked to this task yet. The full
+                  source list and starter documents remain available.
                 </p>
               </div>
             ) : null}
@@ -1302,15 +1398,15 @@ export function TemplatesPage(props: {
           <section aria-labelledby="tools-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">Use proven tooling</p>
+                <p className="eyebrow">Working tools</p>
                 <h2 id="tools-heading">
                   {selectedWorkflow
                     ? "Tools for this workflow"
                     : "Federal and open-source tools"}
                 </h2>
                 <p className="page-summary">
-                  See what each tool accepts, produces, and requires before you
-                  build another converter or tracker.
+                  See each tool's owner, inputs, outputs, and access
+                  requirements.
                 </p>
               </div>
             </div>
@@ -1343,12 +1439,11 @@ export function TemplatesPage(props: {
           <section aria-labelledby="community-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">Ask people who have done this</p>
-                <h2 id="community-heading">Resources</h2>
+                <p className="eyebrow">External resources</p>
+                <h2 id="community-heading">Training and communities</h2>
                 <p className="page-summary">
-                  Official-adjacent references, communities, and training —
-                  folded in here from the former Commons surface — organized
-                  by kind alongside the resources and tools above.
+                  Training, communities, and other external material, grouped
+                  by type and linked to its owner.
                 </p>
               </div>
             </div>
@@ -1423,13 +1518,47 @@ export function TemplatesPage(props: {
               )}
             </Badge>
           </div>
-          <SummaryCard title="Download this starter document" tone="trust">
+          <SummaryCard title="Configure this starter document" tone="trust">
             <p>{selectedTemplate.description}</p>
             <div className="filter-grid template-essential-options">
+              {inputOptions.includes("framework") ? (
+                <SelectField
+                  hint="Which control catalog the starter document should reference."
+                  label="Catalog or program"
+                  emptyLabel="Select a catalog or program"
+                  onChange={(value) =>
+                    onNavigate("templates", {
+                      framework: value,
+                      baseline: "",
+                      controlFamily: "",
+                    })
+                  }
+                  options={catalogOptions}
+                  value={state.framework || ""}
+                />
+              ) : null}
+              {inputOptions.includes("baseline") ? (
+                <SelectField
+                  emptyLabel="Select a baseline"
+                  hint="Required: choose a published baseline or All controls. There is no default."
+                  label="Baseline"
+                  onChange={(value) =>
+                    onNavigate("templates", {
+                      baseline: value,
+                    })
+                  }
+                  options={[
+                    { value: "ALL", label: "All controls" },
+                    ...baselineOptions,
+                  ]}
+                  value={state.baseline || ""}
+                />
+              ) : null}
               {inputOptions.includes("environment_archetype") ? (
                 <SelectField
                   hint="Where the system runs — cloud, on-premises, or hybrid."
                   label="Environment"
+                  emptyLabel="Not selected"
                   onChange={(value) => onNavigate("templates", { environment: value })}
                   options={[
                     { value: "Generic", label: "Generic" },
@@ -1440,7 +1569,7 @@ export function TemplatesPage(props: {
                     { value: "Hybrid", label: "Hybrid" },
                     { value: "Enterprise service", label: "Enterprise service" },
                   ]}
-                  value={state.environment || "Generic"}
+                  value={state.environment || ""}
                 />
               ) : null}
               <SelectField
@@ -1451,15 +1580,20 @@ export function TemplatesPage(props: {
                 value={activeFormat}
               />
             </div>
-            {documentPreview?.doc ? (
+            {documentPreview?.doc && generationState?.previewAvailable ? (
               <TemplateDocumentPreview doc={documentPreview.doc} format={activeFormat} />
             ) : (
               <p className="generation-status tone-warning" role="status">
-                This preview is unavailable for the current options. Adjust the inputs before downloading.
+                {generationState?.status ||
+                  "Select the required inputs before previewing or downloading."}
               </p>
             )}
             <div className="card-actions">
-              <Button variant="primary" disabled={generating} onClick={createTemplate}>
+              <Button
+                variant="primary"
+                disabled={generating || !generationState?.downloadEnabled}
+                onClick={createTemplate}
+              >
                 {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
               </Button>
             </div>
@@ -1467,11 +1601,11 @@ export function TemplatesPage(props: {
           </SummaryCard>
           {selectedTemplateArtifacts.length > 0 ? (
             <details className="template-supporting-details">
-            <summary>Verify against official sources</summary>
+            <summary>Sources used by this document</summary>
             <section aria-labelledby="template-official-heading" className="stack disclosure-content">
               <div>
-                <p className="eyebrow">Check the source first</p>
-                <h3 id="template-official-heading">Official resources</h3>
+                <p className="eyebrow">Published sources</p>
+                <h3 id="template-official-heading">Sources used by this document</h3>
               </div>
               <div className="nexus-grid">
                 {selectedTemplateArtifacts.map((artifact) => (
@@ -1487,7 +1621,7 @@ export function TemplatesPage(props: {
           ) : selectedTemplate.official_alternative ? (
             <SummaryCard title="Official resource">
               <p>
-                Review the publisher's material before using this starter document: {" "}
+                Publisher material for this document:{" "}
                 <a
                   href={selectedTemplate.official_alternative.url}
                   rel="noopener noreferrer"
@@ -1570,35 +1704,6 @@ export function TemplatesPage(props: {
           <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="More options" value="options">
               <div className="filter-grid">
-                {inputOptions.includes("framework") ? (
-                  <SelectField
-                    hint="Which control catalog the template should reference."
-                    label="Framework"
-                    onChange={(value) =>
-                      onNavigate("templates", {
-                        framework: value,
-                        baseline: "",
-                        controlFamily: "",
-                      })
-                    }
-                    options={catalogOptions}
-                    value={state.framework || "nist-800-53"}
-                  />
-                ) : null}
-                {inputOptions.includes("baseline") ? (
-                  <SelectField
-                    emptyLabel="All controls"
-                    hint="Defaults to the Moderate baseline when available; pick All controls for the full catalog."
-                    label="Baseline"
-                    onChange={(value) =>
-                      onNavigate("templates", {
-                        baseline: value === "" ? "ALL" : value,
-                      })
-                    }
-                    options={baselineOptions}
-                    value={activeBaseline}
-                  />
-                ) : null}
                 {inputOptions.includes("control_family") ? (
                   <SelectField
                     emptyLabel="All families"

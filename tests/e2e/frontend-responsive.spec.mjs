@@ -12,49 +12,48 @@ const ROUTE_GROUPS = [
     label: "entry and guidance",
     routes: [
       "/#/",
-      "/#/menu",
       "/#/start",
+      "/#/search?q=AC-2",
       "/#/explore",
       "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
       "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
       "/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
-      "/#/explore?node=csf-2%3ADE.AE-01&relationshipView=map",
-      "/?view=explore&q=AC-2",
     ],
   },
   {
     label: "catalog and records",
     routes: [
-      "/#/library",
-      "/#/library/nist-800-53",
+      "/#/catalog",
+      "/#/catalog/nist-800-53",
       "/#/record/nist-800-53/AC-2",
-      "/?view=library-detail&node=nist-800-53%3AAC-2",
     ],
   },
   {
     label: "build and resources",
     routes: [
+      "/#/build",
+      "/#/build/documents",
+      "/#/build/documents/security_plan_starter",
       "/#/build/resources",
       "/#/build/resources/official-nist-sp800-53-r5",
-      "/?view=templates",
     ],
   },
   {
     label: "workbenches and trust",
     routes: [
-      "/?view=matrix",
-      "/?view=playbooks",
-      "/?view=sources",
-      "/?view=about",
-      "/#/retired?q=old-control",
+      "/#/compare",
+      "/#/learn",
+      "/#/sources",
+      "/#/about",
       "/#/does-not-exist",
     ],
   },
 ];
 
 const VIEWPORTS = [
-  { label: "mobile", width: 390, height: 844 },
+  { label: "mobile", width: 375, height: 812 },
   { label: "tablet", width: 768, height: 1024 },
+  { label: "desktop", width: 1440, height: 900 },
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -79,6 +78,17 @@ for (const viewport of VIEWPORTS) {
             await waitForAppReady(page);
             await dismissOnboarding(page);
             await expect(page.locator("main h1, main h2").first(), route).toBeVisible();
+
+            if (route === "/#/") {
+              const search = page.getByRole("search");
+              const flourish = page.locator(".home-entry .brand-key-word");
+              await expect(search).toBeVisible();
+              await expect(flourish).toBeVisible();
+              expect(
+                (await search.boundingBox())?.y,
+                "Home Search must start inside the first viewport",
+              ).toBeLessThan(viewport.height);
+            }
 
             const overflow = await page.evaluate(() => ({
               body:

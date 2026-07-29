@@ -41,11 +41,9 @@ export type FedrampTransitionIndex = {
   legacy_assets?: Array<Record<string, unknown>>;
 };
 
-export type LibrarySearchShard = {
-  catalog_id: string;
+export type LibrarySearchArtifact = {
   document_count?: number;
   documents: Array<Record<string, unknown>>;
-  serialized_index: string;
 };
 
 export type RuntimeBundle = {
@@ -58,10 +56,6 @@ export type RuntimeBundle = {
   commonsSearchIndex?: CommonsSearchIndex;
   commonsDataset?: CommonsResourceDataset;
   graphReady: boolean;
-  librarySearchRevision?: number;
-  /** Jump a lazily-queued library-search shard ahead of the idle queue. No-op
-   * if the catalog is already loaded, in flight, or was never queued. */
-  prioritizeLibraryShard?: (catalogId: string) => void;
 };
 
 export type AtlasNeighborhoodNode = {
@@ -126,12 +120,7 @@ type AtlasNeighborhoodShardRecord = {
 };
 
 type LibrarySearchBootstrap = {
-  librarySearch: {
-    documents: Array<Record<string, unknown>>;
-    serialized_index: string;
-  };
-  librarySearchShards: LibrarySearchShard[];
-  lazyShardIds: string[];
+  librarySearch: LibrarySearchArtifact;
 };
 
 export async function fetchArtifact(path: string) {
@@ -140,7 +129,7 @@ export async function fetchArtifact(path: string) {
     return cached;
   }
 
-  const request = fetch(path + ".gz").then(async (response) => {
+  const request = fetch(compressedArtifactPath(path)).then(async (response) => {
     if (response.ok && typeof DecompressionStream !== "undefined") {
       try {
         const ds = new DecompressionStream("gzip");
@@ -165,6 +154,14 @@ export async function fetchArtifact(path: string) {
     artifactCache.delete(path);
     throw error;
   }
+}
+
+export function compressedArtifactPath(path: string) {
+  const queryIndex = path.indexOf("?");
+  if (queryIndex === -1) {
+    return `${path}.gz`;
+  }
+  return `${path.slice(0, queryIndex)}.gz${path.slice(queryIndex)}`;
 }
 
 async function fetchCollection(path: string, key: string) {
@@ -284,117 +281,23 @@ export async function loadAtlasNeighborhood(
   };
 }
 
-function mergeLibraryShards(shards: LibrarySearchShard[]) {
-  const documents = shards.flatMap((shard) => shard.documents);
-  return {
-    documents,
-    serialized_index: shards[0]?.serialized_index || "",
-  };
-}
-
-function scheduleLazyLibraryShards(
-  runtime: ReturnType<typeof createFederalGraphRuntime>,
-  lazyShardIds: string[],
-  onShardLoaded?: () => void,
-): (catalogId: string) => void {
-  const noopPrioritize = () => {};
-  if (lazyShardIds.length === 0) {
-    return noopPrioritize;
-  }
-
-  const scheduler =
-    typeof window !== "undefined" && "requestIdleCallback" in window
-      ? window.requestIdleCallback.bind(window)
-      : (callback: () => void) => window.setTimeout(callback, 100);
-
-  const pending = [...lazyShardIds];
-  const ingestShard = (catalogId: string) =>
-    fetchArtifact(artifactPath(`library-search/${catalogId}.json`))
-      .then((artifact: { library_search_shard: LibrarySearchShard }) => {
-        runtime.appendLibrarySearchShard(artifact.library_search_shard);
-        onShardLoaded?.();
-      })
-      .catch((error) => {
-        console.warn(`Failed to lazy-load library shard ${catalogId}:`, error);
-      });
-
-  const loadNext = () => {
-    const catalogId = pending.shift();
-    if (!catalogId) {
-      return;
-    }
-    ingestShard(catalogId).finally(() => {
-      if (pending.length > 0) {
-        scheduler(loadNext);
-      }
-    });
-  };
-  scheduler(loadNext);
-
-  // Called on a cold deep link into a non-eager catalog: fetch that one
-  // shard immediately instead of waiting for its turn in the idle queue.
-  // Always attempts the fetch (not just the first time) so a manual retry
-  // after a failed attempt actually retries — `fetchArtifact`'s cache only
-  // dedupes an in-flight or successfully-resolved request; a failed one is
-  // evicted from that cache and genuinely refetched. Removing the catalog
-  // from `pending` (if it's still queued there) only prevents the idle
-  // queue from fetching it a second time; it never gates whether this call
-  // proceeds.
-  return (catalogId: string) => {
-    const index = pending.indexOf(catalogId);
-    if (index !== -1) {
-      pending.splice(index, 1);
-    }
-    void ingestShard(catalogId);
-  };
-}
-
 async function loadLibrarySearchBootstrap(): Promise<LibrarySearchBootstrap> {
   try {
-    const manifestArtifact = (await fetchArtifact(
-      artifactPath("library-search-manifest.json"),
+    const artifact = (await fetchArtifact(
+      artifactPath("library-search.json"),
     )) as {
-      library_search_manifest: {
-        eager_shard_ids: string[];
-        shards: Array<{ catalog_id: string }>;
-      };
+      library_search: LibrarySearchArtifact;
     };
-    const manifest = manifestArtifact.library_search_manifest;
-    const eagerShardIds = manifest.eager_shard_ids || [];
-    const shardArtifacts = await Promise.all(
-      eagerShardIds.map((catalogId) =>
-        fetchArtifact(artifactPath(`library-search/${catalogId}.json`)),
-      ),
-    );
-    const librarySearchShards = shardArtifacts.map((artifact, index) => {
-      const payload = artifact as { library_search_shard: LibrarySearchShard };
-      return {
-        catalog_id: eagerShardIds[index],
-        ...payload.library_search_shard,
-      };
-    });
-    const lazyShardIds = (manifest.shards || [])
-      .map((shard) => shard.catalog_id)
-      .filter((catalogId) => !eagerShardIds.includes(catalogId));
-
-    return {
-      librarySearch: mergeLibraryShards(librarySearchShards),
-      librarySearchShards,
-      lazyShardIds,
-    };
+    return { librarySearch: artifact.library_search };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Unable to load library search manifest: ${message}`, {
+    throw new Error(`Unable to load the library search artifact: ${message}`, {
       cause: error,
     });
   }
 }
 
-function createSearchRuntime(
-  libraryBootstrap: LibrarySearchBootstrap,
-  _templateRegistry: TemplateRegistry,
-  onShardLoaded?: () => void,
-) {
+function createSearchRuntime(libraryBootstrap: LibrarySearchBootstrap) {
   const runtime = createFederalGraphRuntime({
     sources: [],
     nodes: [],
@@ -402,14 +305,8 @@ function createSearchRuntime(
     evidence: [],
     findings: [],
     librarySearch: libraryBootstrap.librarySearch,
-    librarySearchShards: libraryBootstrap.librarySearchShards,
   });
-  const prioritizeLibraryShard = scheduleLazyLibraryShards(
-    runtime,
-    libraryBootstrap.lazyShardIds,
-    onShardLoaded,
-  );
-  return { runtime, prioritizeLibraryShard };
+  return runtime;
 }
 
 export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
@@ -433,14 +330,10 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
-  const { runtime, prioritizeLibraryShard } = createSearchRuntime(
-    libraryBootstrap,
-    templateRegistry,
-  );
+  const runtime = createSearchRuntime(libraryBootstrap);
 
   return {
     runtime,
-    prioritizeLibraryShard,
     templateRegistry,
     officialArtifactRegistry:
       officialArtifactRegistryRaw as OfficialArtifactRegistry,
@@ -452,7 +345,6 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     commonsSearchIndex: (commonsSearchIndexRaw as CommonsSearchIndex) || undefined,
     commonsDataset: (commonsDatasetRaw as CommonsResourceDataset) || undefined,
     graphReady: false,
-    librarySearchRevision: 0,
   };
 }
 
@@ -465,7 +357,6 @@ export async function loadFullGraphPhase(
   fedrampTransitionIndex: FedrampTransitionIndex,
   commonsSearchIndex?: CommonsSearchIndex,
   commonsDataset?: CommonsResourceDataset,
-  onShardLoaded?: () => void,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
     fetchCollection(artifactPath("sources.json"), "sources"),
@@ -482,17 +373,10 @@ export async function loadFullGraphPhase(
     evidence,
     findings,
     librarySearch: libraryBootstrap.librarySearch,
-    librarySearchShards: libraryBootstrap.librarySearchShards,
   });
-  const prioritizeLibraryShard = scheduleLazyLibraryShards(
-    runtime,
-    libraryBootstrap.lazyShardIds,
-    onShardLoaded,
-  );
 
   return {
     runtime,
-    prioritizeLibraryShard,
     templateRegistry,
     officialArtifactRegistry,
     complianceWorkflowRegistry,
@@ -501,7 +385,6 @@ export async function loadFullGraphPhase(
     commonsSearchIndex,
     commonsDataset,
     graphReady: true,
-    librarySearchRevision: 0,
   };
 }
 
@@ -542,7 +425,6 @@ export async function loadRuntimeDatasetStaged(handlers: {
   onSearchReady: (bundle: RuntimeBundle) => void;
   onFullReady: (bundle: RuntimeBundle) => void;
   onError: (error: unknown) => void;
-  onShardLoaded?: () => void;
   includeFullGraph: boolean;
 }) {
   try {
@@ -577,15 +459,9 @@ export async function loadRuntimeDatasetStaged(handlers: {
     const commonsSearchIndex = (commonsSearchIndexRaw as CommonsSearchIndex) || undefined;
     const commonsDataset = (commonsDatasetRaw as CommonsResourceDataset) || undefined;
 
-    const { runtime: searchRuntime, prioritizeLibraryShard } =
-      createSearchRuntime(
-        libraryBootstrap,
-        templateRegistry,
-        handlers.onShardLoaded,
-      );
+    const searchRuntime = createSearchRuntime(libraryBootstrap);
     handlers.onSearchReady({
       runtime: searchRuntime,
-      prioritizeLibraryShard,
       templateRegistry,
       officialArtifactRegistry,
       complianceWorkflowRegistry,
@@ -594,7 +470,6 @@ export async function loadRuntimeDatasetStaged(handlers: {
       commonsSearchIndex,
       commonsDataset,
       graphReady: false,
-      librarySearchRevision: 0,
     });
     if (!handlers.includeFullGraph) {
       return;
@@ -608,7 +483,6 @@ export async function loadRuntimeDatasetStaged(handlers: {
       fedrampTransitionIndex,
       commonsSearchIndex,
       commonsDataset,
-      handlers.onShardLoaded,
     );
     handlers.onFullReady(fullBundle);
   } catch (error) {

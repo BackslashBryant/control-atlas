@@ -5,15 +5,9 @@ import test from "node:test";
 import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 
 function loadSearchRuntime() {
-  const manifest = JSON.parse(
-    readFileSync("data/generated/library-search-manifest.json", "utf8"),
-  ).library_search_manifest;
-  const shards = manifest.shards.map(
-    (entry) =>
-      JSON.parse(
-        readFileSync(`data/generated/${entry.path}`, "utf8"),
-      ).library_search_shard,
-  );
+  const librarySearch = JSON.parse(
+    readFileSync("data/generated/library-search.json", "utf8"),
+  ).library_search;
 
   return createFederalGraphRuntime({
     sources: [],
@@ -21,7 +15,7 @@ function loadSearchRuntime() {
     edges: [],
     evidence: [],
     findings: [],
-    librarySearchShards: shards,
+    librarySearch,
   });
 }
 

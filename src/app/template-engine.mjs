@@ -25,7 +25,11 @@ const EVIDENCE_TYPE_HINT = "Policy | Procedure | Config screenshot | System repo
 /** @type {Record<string, { display_name: string, version: string }>} */
 const SOURCE_FALLBACK = {
   "fedramp-2026-rules": { display_name: "FedRAMP Consolidated Rules for 2026", version: "2026.07.14.01" },
-  "nist-oscal": { display_name: "SP 800-53 Rev. 5", version: "2026-06-09" },
+  "nist-oscal": { display_name: "NIST OSCAL Content", version: "2026-06-09" },
+  "nist-800-53": { display_name: "SP 800-53 Rev. 5", version: "Revision 5" },
+  "nist-800-171": { display_name: "SP 800-171 Rev. 3", version: "Revision 3" },
+  "nist-csf-2": { display_name: "Cybersecurity Framework 2.0", version: "2.0" },
+  "nist-ssdf": { display_name: "SP 800-218 SSDF", version: "1.1" },
   "disa-stig-library": { display_name: "DISA STIG Library", version: "2026-06-09" },
   "disa-cci-list": { display_name: "DISA CCI List", version: "2026-06-09" },
   "nist-800-37-rev2": { display_name: "NIST SP 800-37 Rev. 2", version: "2026-06-09" },
@@ -42,7 +46,7 @@ const TEMPLATE_COMPATIBILITY = {
   security_plan_starter: [
     "Classification: Control Atlas starter document.",
     "Basis: NIST RMF concepts plus the current FedRAMP Certification Package Overview and Security Decision Record transition path.",
-    "Limit: This is not an official SSP or FedRAMP package and is not directly importable into FedRAMP or eMASS.",
+    "Limit: Working draft, not an official SSP or FedRAMP package and not directly importable into FedRAMP or eMASS.",
   ],
   implementation_statement_worksheet: [
     "Classification: eMASS API v3.22 schema-aligned preparation aid.",
@@ -97,7 +101,7 @@ const TEMPLATE_COMPATIBILITY = {
   ppsm_preparation_worksheet: [
     "Classification: Control Atlas starter document.",
     "Basis: DoDI 8551.01 and public DISA PPSM Registry training.",
-    "Limit: This is not an official PPSM worksheet, registry receipt, or import file.",
+    "Limit: Working worksheet, not an official PPSM form, registry receipt, or import file.",
   ],
 };
 
@@ -195,7 +199,14 @@ function resolveSourceLines(sourceRefs, sources) {
     if (src) {
       const name = src.display_name || src.name || id;
       const version = src.version || "unknown";
-      lines.push(`${name} (version ${version})`);
+      const identityKind = src.metadata?.identity_kind;
+      const role =
+        identityKind === "ingestion"
+          ? "ingestion provenance"
+          : identityKind === "publication"
+            ? "publication"
+            : "source";
+      lines.push(`${name} (${role}; version ${version})`);
     } else if (id) {
       lines.push(id);
     }
@@ -210,9 +221,9 @@ function resolveSourceLines(sourceRefs, sources) {
 export function buildSourceMetadata(options) {
   const lines = [];
   if (options.framework) {
-    lines.push(`Framework context: ${options.framework}`);
+    lines.push(`Catalog or program context: ${options.framework}`);
   }
-  lines.push(`Environment archetype: ${options.environment || "Generic"}`);
+  lines.push(`Environment archetype: ${options.environment || "Not selected"}`);
   const refLines = resolveSourceLines(options.sourceRefs, options.sources);
   if (refLines.length) {
     lines.push("Reference sources:");
@@ -272,7 +283,7 @@ function appendSourceMetadata(doc, options) {
  */
 function generateSecurityPlanStarter(options, controls, crossRef) {
   const ph = placeholder(options);
-  const env = options.environment || "Generic";
+  const env = options.environment || "Not selected";
 
   const baselineHeaders = ["Control ID", "Control Title", "What It Means", "Implementation Statement", "Common Control Provider", "Evidence", "Status"];
   const baselineRows = controls.map((c) => [
@@ -834,7 +845,7 @@ function blankRows(count, width, ph, values = []) {
 
 function generateProfessionalSecurityPlan(options, controls, crossRef) {
   const ph = placeholder(options);
-  const env = options.environment || "Generic";
+  const env = options.environment || "Not selected";
   const baselineHeaders = ["Control ID", "Control Title", "Implementation Status", "Implementation Narrative", "Evidence References", "Responsible Role"];
   const baselineRows = controls.map((c) => [
     c.id,
@@ -1398,15 +1409,15 @@ function crossRefForControl(index, controlNodeId) {
  * / High / Privacy / LI-SaaS). Baseline membership lives in `baseline` nodes
  * (e.g. `nist-800-53b:LOW`, `fedramp-rev5:MODERATE`) linked to their member
  * controls with applicability `selects` edges. Baseline nodes are matched by item_id,
- * preferring the catalog that fits the selected framework so a NIST 800-53
+ * preferring the catalog that fits the selected source context so a NIST 800-53
  * template scopes to 800-53B membership rather than FedRAMP's.
  *
  * @param {{ nodes?: any[], edges?: any[] }} dataset
  * @param {string} baselineItemId
- * @param {string} frameworkCatalogId
+ * @param {string} sourceCatalogId
  * @returns {Set<string>}
  */
-function collectBaselineMemberIds(dataset, baselineItemId, frameworkCatalogId) {
+function collectBaselineMemberIds(dataset, baselineItemId, sourceCatalogId) {
   const nodes = dataset?.nodes || [];
   const edges = dataset?.edges || [];
   const target = String(baselineItemId).toUpperCase();
@@ -1418,10 +1429,10 @@ function collectBaselineMemberIds(dataset, baselineItemId, frameworkCatalogId) {
   );
   if (baselineNodes.length === 0) return new Set();
 
-  // Prefer baseline nodes from the framework's own catalog; otherwise fall back
+  // Prefer baseline nodes from the selected source context's catalog; otherwise fall back
   // to the canonical NIST SP 800-53B baselines.
   const sameCatalog = baselineNodes.filter(
-    (n) => n.metadata?.catalog_id === frameworkCatalogId,
+    (n) => n.metadata?.catalog_id === sourceCatalogId,
   );
   const nist80053b = baselineNodes.filter(
     (n) => n.metadata?.catalog_id === "nist-800-53b",
@@ -1466,9 +1477,18 @@ function familyOf(node) {
  *
  * @param {any} options
  * @param {any} dataset
- * @returns {{ doc: any, templateType: string, frameworkResolutionError: string | null }}
+ * @returns {{ doc: any, templateType: string }}
  */
 export function buildTemplateDocument(options, dataset) {
+  const frameworkSourceId = options.framework
+    ? dataset?.nodes?.find(
+        (node) => node.metadata?.catalog_id === options.framework,
+      )?.source_id
+    : "";
+  const sourceRefs = [
+    frameworkSourceId,
+    ...(options.sourceRefs || []),
+  ].filter((sourceId, index, values) => sourceId && values.indexOf(sourceId) === index);
   const normalized = {
     ...options,
     includeSourceFootnotes: true,
@@ -1479,14 +1499,12 @@ export function buildTemplateDocument(options, dataset) {
     includeReciprocityPrompts: options.includeReciprocityPrompts !== false,
     includeStigReferences: options.includeStigReferences !== false,
     includeEnhancements: options.includeEnhancements === true,
-    environment: options.environment || "Generic",
-    sourceRefs: options.sourceRefs || [],
+    environment: options.environment || "",
+    sourceRefs,
     sources: options.sources || dataset?.sources || [],
   };
 
   let controls = [];
-  let unresolvedFramework = false;
-  let unrecognizedBaseline = false;
   if (normalized.framework) {
     // Resolve the raw control nodes for the framework, either directly or (for
     // catalogs that only carry `baseline` nodes, e.g. fedramp-rev5) via
@@ -1499,7 +1517,9 @@ export function buildTemplateDocument(options, dataset) {
     }
 
     if (controlNodes.length === 0) {
-      unresolvedFramework = true;
+      throw new Error(
+        `No published control data is available for source context "${normalized.framework}". No document was generated.`,
+      );
     } else {
       // Optional baseline filter (Low / Moderate / High / ...).
       let baselineApplied = false;
@@ -1513,9 +1533,9 @@ export function buildTemplateDocument(options, dataset) {
           controlNodes = controlNodes.filter((n) => memberIds.has(n.id));
           baselineApplied = true;
         } else {
-          // Keep the full-catalog fallback, but never silently — the Baseline
-          // Notice section below tells the reader what happened.
-          unrecognizedBaseline = true;
+          throw new Error(
+            `Baseline "${normalized.baseline}" is not a published selection under source context "${normalized.framework}". No document was generated.`,
+          );
         }
       }
       // Without a baseline scoping the set, the full catalog's ~900 control
@@ -1539,6 +1559,11 @@ export function buildTemplateDocument(options, dataset) {
             .toLowerCase();
           return fam === wanted || prefix === wanted || fam.includes(wanted);
         });
+        if (controlNodes.length === 0) {
+          throw new Error(
+            `Control family "${normalized.controlFamily}" is not available under source context "${normalized.framework}". No document was generated.`,
+          );
+        }
       }
 
       // Natural (numeric-aware) order so control IDs read AC-1, AC-2, AC-10 —
@@ -1552,9 +1577,6 @@ export function buildTemplateDocument(options, dataset) {
         ),
       );
 
-      // A framework that resolved control nodes but whose baseline/family
-      // filter excluded them all falls through to the placeholder row below —
-      // the framework itself is not "unresolved".
       controls = controlNodes.map((n) => ({
         nodeId: n.id,
         id: n.metadata?.item_id || n.id,
@@ -1564,15 +1586,8 @@ export function buildTemplateDocument(options, dataset) {
       }));
     }
   }
-  if (controls.length === 0 && !unresolvedFramework) {
+  if (controls.length === 0) {
     controls = [{ nodeId: null, id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
-  }
-
-  const frameworkNoticeText = unresolvedFramework
-    ? `No control data is ingested for ${normalized.framework} yet — generation unavailable.`
-    : null;
-  if (unresolvedFramework) {
-    controls = [{ id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
   }
 
   // Cross-reference index (control → CCI → STIG/SRG) is only needed by the two
@@ -1625,26 +1640,9 @@ export function buildTemplateDocument(options, dataset) {
       doc = generateProfessionalSecurityPlan(normalized, controls, crossRef);
   }
 
-  if (unrecognizedBaseline) {
-    doc.sections.unshift({
-      type: "text",
-      heading: "Baseline Notice",
-      content: `Baseline "${normalized.baseline}" was not recognized for ${normalized.framework} — this template includes the full catalog. Valid values include LOW, MODERATE, HIGH.`,
-    });
-  }
-
-  if (frameworkNoticeText) {
-    doc.sections.unshift({
-      type: "text",
-      heading: "Framework Data Notice",
-      content: frameworkNoticeText,
-    });
-  }
-
   return {
     doc,
     templateType: normalized.templateType,
-    frameworkResolutionError: unresolvedFramework ? frameworkNoticeText : null,
   };
 }
 
@@ -1667,7 +1665,7 @@ export function templateFilename(templateType, extension) {
  * payload is binary, not a string.
  */
 export function generateTemplate(options, dataset) {
-  const { doc, templateType, frameworkResolutionError } = buildTemplateDocument(
+  const { doc, templateType } = buildTemplateDocument(
     options,
     dataset,
   );
@@ -1704,6 +1702,5 @@ export function generateTemplate(options, dataset) {
     content,
     filename: templateFilename(templateType, extension),
     mimeType,
-    frameworkResolutionError,
   };
 }

@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import test, { before } from "node:test";
+import { gzipSync } from "node:zlib";
 import { parseCciXml } from "../tools/importers/cci-adapter.mjs";
 import {
   parseOlirCsv,
@@ -57,7 +58,7 @@ test("OLIR adapter parses workbook rows from official-style crosswalk sheets", a
 test("federal graph build emits graph contract counts", () => {
   const generatedAt = generated("sources").generated_at;
   buildFrameworkData();
-  assert.equal(buildResult.sources, 46);
+  assert.equal(buildResult.sources, 50);
   assert.ok(buildResult.nodes > 9000);
   assert.ok(buildResult.edges > 12000);
   assert.equal(buildResult.edges, buildResult.evidence);
@@ -329,28 +330,34 @@ test("epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
   );
 });
 
-test("epic 2 graph build emits sharded library search artifacts with filter facets", () => {
-  const manifest = generated("library-search-manifest");
-  const nistShard = JSON.parse(
-    readFileSync(
-      join("data", "generated", "library-search", "nist-800-53.json"),
-      "utf8",
-    ),
+test("epic 2 graph build emits one complete compact library search artifact", () => {
+  const artifact = generated("library-search");
+
+  assert.equal(artifact.schema_version, "1.0");
+  assert.equal(artifact.library_search.document_count, buildResult.nodes);
+  assert.ok(Array.isArray(artifact.library_search.documents));
+  assert.equal(
+    artifact.library_search.serialized_index,
+    undefined,
+    "the complete document register is the search owner; a duplicate serialized index must not block startup",
+  );
+  assert.equal(
+    existsSync(join("data", "generated", "library-search")),
+    false,
+    "per-catalog search shards are superseded by the complete compact artifact",
+  );
+  assert.equal(
+    existsSync(join("data", "generated", "library-search-manifest.json")),
+    false,
+    "the shard scheduler manifest must not survive the global-index migration",
   );
 
-  assert.equal(manifest.schema_version, "1.0");
-  assert.ok(Array.isArray(manifest.library_search_manifest.shards));
-  assert.ok(Array.isArray(nistShard.library_search_shard.documents));
-  assert.ok(
-    typeof nistShard.library_search_shard.serialized_index === "string",
-  );
-
-  const ac2 = nistShard.library_search_shard.documents.find(
+  const ac2 = artifact.library_search.documents.find(
     (entry) => entry.id === "nist-800-53:AC-2",
   );
   assert.ok(ac2, "missing AC-2 library document");
   assert.equal(ac2.object_type, "control");
-  assert.equal(ac2.source_id, "nist-oscal");
+  assert.equal(ac2.source_id, "nist-800-53");
   assert.equal(
     ac2.source_name,
     "SP 800-53 Rev. 5",
@@ -358,7 +365,16 @@ test("epic 2 graph build emits sharded library search artifacts with filter face
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");
-  assert.ok(ac2.description?.trim(), "AC-2 library document must retain its official description");
+  assert.equal(
+    ac2.description_available,
+    true,
+    "search must disclose when published record text is available without duplicating it in the bootstrap",
+  );
+  assert.equal(
+    ac2.description,
+    undefined,
+    "full published text belongs to the record payload, not the search bootstrap",
+  );
   assert.equal(ac2.plain_language_summary, undefined);
 });
 
@@ -415,31 +431,15 @@ test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
   );
 });
 
-test("library search manifest emits eager shards under bootstrap budget", () => {
-  const manifest = generated("library-search-manifest");
-  const eagerShardIds = manifest.library_search_manifest.eager_shard_ids;
+test("complete library search bootstrap stays within its compressed transfer budget", () => {
+  const artifactPath = join("data", "generated", "library-search.json");
+  const compressedBytes = gzipSync(readFileSync(artifactPath), {
+    level: 9,
+  }).byteLength;
 
-  assert.ok(Array.isArray(eagerShardIds));
-  assert.ok(eagerShardIds.includes("nist-800-53"));
-  assert.ok(eagerShardIds.length > 0);
-
-  let totalBytes = 0;
-  for (const catalogId of eagerShardIds) {
-    const shardPath = join(
-      "data",
-      "generated",
-      "library-search",
-      `${catalogId}.json`,
-    );
-    assert.ok(existsSync(shardPath), `missing shard ${catalogId}`);
-    const shard = JSON.parse(readFileSync(shardPath, "utf8"));
-    assert.equal(shard.library_search_shard.catalog_id, catalogId);
-    assert.ok(shard.library_search_shard.documents.length > 0);
-    totalBytes += statSync(shardPath).size;
-  }
   assert.ok(
-    totalBytes <= 3_200_000,
-    `eager shards exceed bootstrap budget: ${totalBytes}`,
+    compressedBytes <= 750_000,
+    `complete search artifact exceeds 750 KB compressed: ${compressedBytes}`,
   );
 });
 

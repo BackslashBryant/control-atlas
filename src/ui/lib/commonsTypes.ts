@@ -91,7 +91,6 @@ export type CommonsResource = {
   apiLinks?: string[];
   feedLinks?: string[];
   popularitySignals?: CommonsPopularitySignals;
-  editorialRecommendation?: boolean;
   editorialNotes?: string | null;
   warnings?: string[];
   searchAliases?: string[];
@@ -102,18 +101,10 @@ export type CommonsResource = {
   manualFields?: string[];
 };
 
-export type CommonsCollection = {
-  id: string;
-  title: string;
-  summary: string;
-  whyCurated: string;
-  resourceIds: string[];
-};
-
 export type CommonsResourceDataset = {
   schemaVersion: string;
   lastUpdated: string;
-  collections: CommonsCollection[];
+  collections: [];
   resources: CommonsResource[];
 };
 
@@ -137,7 +128,6 @@ export type CommonsSearchIndexDoc = {
   costType: string;
   maintenanceStatus: CommonsMaintenanceStatus;
   openSource: boolean;
-  editorialRecommendation: boolean;
   popularitySignals: CommonsPopularitySignals;
   companionResources: string[];
   featuredCollections: string[];
@@ -147,6 +137,6 @@ export type CommonsSearchIndexDoc = {
 export type CommonsSearchIndex = {
   builtAt: string;
   totalCount: number;
-  collections: CommonsCollection[];
+  collections: [];
   documents: CommonsSearchIndexDoc[];
 };

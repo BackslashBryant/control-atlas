@@ -27,18 +27,25 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
   ? readFileSync('src/ui/lib/graphLayout.ts', 'utf8')
   : '';
 
-test('shell identifies Control Atlas and boots a React root', () => {
+test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);
-  assert.match(html, /Ctrl\+Alt\+Comply/);
-  assert.match(html, /Public reference for federal cyber requirements/);
-  assert.match(html, /Find published federal cyber requirements/);
+  assert.match(html, /name="application-name" content="Control Atlas"/);
+  assert.match(html, /public, no-account workbench/);
+  assert.match(html, /tracing federal cybersecurity material back to its source/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
   assert.match(mainEntrypoint, /createRoot/);
   assert.match(mainEntrypoint, /StrictMode/);
-  assert.match(mainEntrypoint, /from 'react'/);
-  assert.match(mainEntrypoint, /from 'react-dom\/client'/);
+  assert.match(mainEntrypoint, /import\('react'\)/);
+  assert.match(mainEntrypoint, /import\('react-dom\/client'\)/);
+  assert.doesNotMatch(mainEntrypoint, /from ['"]react['"]/);
+  assert.doesNotMatch(mainEntrypoint, /from ['"]react-dom\/client['"]/);
+  assert.match(html, /data-view="home"/);
+  assert.match(html, /data-static-home hidden/);
+  assert.match(html, /data-app-ready="false"/);
+  assert.match(mainEntrypoint, /setAttribute\('data-app-ready', 'true'\)/);
+  assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
 test('shell removes the old mode toggle and uses the current translation-first nav order', () => {
@@ -73,12 +80,35 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
 test('brand identity is immediate, animated, and does not use an entrance gate', () => {
   const app = readFileSync('src/ui/App.tsx', 'utf8');
   const brand = readFileSync('src/ui/components/BrandLockup.tsx', 'utf8');
+  const rotation = readFileSync('src/shared/brand-rotation.ts', 'utf8');
   assert.doesNotMatch(app, /BrandEntranceOverlay/);
   assert.match(brand, /BRAND_WORDS/);
-  assert.match(brand, /"Comply"/);
+  for (const featureWord of [
+    "Trace",
+    "Search",
+    "Explore",
+    "Compare",
+    "Build",
+    "Crosswalk",
+    "Source",
+    "Export",
+  ]) {
+    assert.match(rotation, new RegExp(`"${featureWord}"`));
+  }
+  assert.doesNotMatch(
+    rotation,
+    /word: "(?:Comply|Authorize|Inherit|Baseline|Assess|Audit|Simplify|Clarify|Demystify|Verify)"/,
+  );
+  assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
   assert.match(brand, /brand-key">Ctrl/);
   assert.match(brand, /prefers-reduced-motion/);
   assert.match(brand, /setInterval/);
+  assert.match(html, /class="brand-key">Ctrl/);
+  assert.match(html, /class="brand-key">Alt/);
+  assert.match(html, /data-brand-word>Trace/);
+  assert.match(mainEntrypoint, /prefers-reduced-motion: reduce/);
+  assert.match(mainEntrypoint, /BRAND_WORDS/);
+  assert.match(mainEntrypoint, /addEventListener\('change', onBrandMotionChange\)/);
   assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
   assert.equal(typeof packageJson.dependencies.elkjs, 'string');
   assert.equal(packageJson.dependencies.cytoscape, undefined);
@@ -165,10 +195,10 @@ test('secondary route pages are lazy loaded behind a suspense fallback', () => {
 
 test('persistent footer uses the approved short disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
-  assert.match(
-    footer,
-    /Control Atlas is an open-source reference tool\. It does not replace official guidance\./,
-  );
+  const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
+  assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
+  assert.match(identity, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
+  assert.match(html, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
 });
 
 test('query-string deep link compatibility moves into typed React adapters', () => {
@@ -216,7 +246,6 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
   );
   for (const view of [
     'home',
-    'menu',
     'start-here',
     'atlas-map',
     'search',
@@ -230,7 +259,6 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
     'commons-detail',
     'about',
     'retired',
-    'browse',
     'not-found',
   ]) {
     assert.match(contextBar, new RegExp(`case "${view}"`));
@@ -266,9 +294,23 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(homePage, /Public reference for federal cyber requirements/);
-  assert.match(homePage, /Find published controls, source material, and starter documents/);
+  assert.match(homePage, /PRODUCT_DEFINITION/);
+  assert.match(homePage, /aria-label="Search published records"/);
+  assert.match(html, /aria-label="Search published records"/);
+  assert.match(html, />Open the Atlas</);
+  assert.match(html, />Browse Catalog</);
+  assert.match(html, />Find Tools &amp; Resources</);
+  assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 3);
   assert.doesNotMatch(homePage, /source-backed/i);
+});
+
+test('skip links focus the workspace without turning the target into an application route', () => {
+  assert.match(html, /data-skip-workspace href="#workspace"/);
+  assert.match(html, /id="workspace" tabindex="-1"/);
+  assert.match(mainEntrypoint, /event\.preventDefault\(\)/);
+  assert.match(mainEntrypoint, /querySelector<HTMLElement>\('#workspace'\)\?\.focus\(\)/);
+  assert.match(reactApp, /document\.getElementById\("workspace"\)\?\.focus\(\)/);
+  assert.match(reactApp, /<main id="workspace" tabIndex=\{-1\}>/);
 });
 
 test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
@@ -281,14 +323,16 @@ test('mounted record surfaces render official descriptions rather than synthetic
 
 test('Build local navigation stays subordinate and identifies the current Build branch', () => {
   const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
+  const buildRouteState = readFileSync('src/ui/lib/buildRouteState.ts', 'utf8');
   const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const resourcesPage = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
   const resourceDetail = readFileSync('src/ui/pages/CommonsDetailPage.tsx', 'utf8');
   assert.match(localNav, /aria-label="Build sections"/);
   assert.match(localNav, /aria-current/);
-  assert.match(localNav, /Tasks/);
-  assert.match(localNav, /Starter documents/);
-  assert.match(localNav, /Resources/);
+  assert.match(localNav, /BUILD_LANES/);
+  assert.match(buildRouteState, /label: "Tasks"/);
+  assert.match(buildRouteState, /label: "Starter documents"/);
+  assert.match(buildRouteState, /label: "Resources"/);
   assert.match(buildPage, /<BuildLocalNav/);
   assert.match(resourcesPage, /<BuildLocalNav active="resources"/);
   assert.match(resourceDetail, /<BuildLocalNav active="resources"/);
@@ -325,11 +369,11 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 
-test('public playbooks are quarantined until source-registry provenance exists', () => {
+test('Learn is a real explanation product with visible provenance boundaries', () => {
   const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
-  assert.doesNotMatch(playbooksPage, /Use task-focused guidance/);
-  assert.match(playbooksPage, /No public playbooks are available yet/);
-  assert.match(playbooksPage, /source-registry IDs and canonical public source URLs/);
-  assert.match(playbooksPage, /Clear filters/);
-  assert.match(playbooksPage, /displayNameFor\("template_type", templateId\)/);
+  assert.match(playbooksPage, /Control Atlas explanation/);
+  assert.match(playbooksPage, /Official references/);
+  assert.match(playbooksPage, /Limitations/);
+  assert.match(playbooksPage, /learnArticles\.map/);
+  assert.doesNotMatch(playbooksPage, /Recommended for new users|No public playbooks are available yet/);
 });

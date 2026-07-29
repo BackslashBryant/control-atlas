@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { gzipSync } from "node:zlib";
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
-const MAX_INITIAL_SEARCH_BYTES = 3_200_000;
+const MAX_COMPLETE_SEARCH_GZIP_BYTES = 300_000;
 
 function walk(path) {
   return readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
@@ -12,40 +13,23 @@ function walk(path) {
   });
 }
 
-function checkInitialSearchBudget() {
-  const manifestPath = join(
-    "data",
-    "generated",
-    "library-search-manifest.json",
-  );
-  if (!existsSync(manifestPath)) {
+function checkCompleteSearchBudget() {
+  const artifactPath = join("data", "generated", "library-search.json");
+  if (!existsSync(artifactPath)) {
     return;
   }
 
-  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-  const eagerShardIds = manifest.library_search_manifest?.eager_shard_ids || [];
-  let total = statSync(manifestPath).size;
-  for (const catalogId of eagerShardIds) {
-    const shardPath = join(
-      "data",
-      "generated",
-      "library-search",
-      `${catalogId}.json`,
-    );
-    if (!existsSync(shardPath)) {
-      throw new Error(`Missing eager library search shard: ${shardPath}`);
-    }
-    total += statSync(shardPath).size;
-  }
-
-  if (total > MAX_INITIAL_SEARCH_BYTES) {
+  const compressedBytes = gzipSync(readFileSync(artifactPath), {
+    level: 9,
+  }).byteLength;
+  if (compressedBytes > MAX_COMPLETE_SEARCH_GZIP_BYTES) {
     throw new Error(
-      `Initial library search bootstrap exceeds ${MAX_INITIAL_SEARCH_BYTES} bytes: ${total}`,
+      `Complete library search artifact exceeds ${MAX_COMPLETE_SEARCH_GZIP_BYTES} compressed bytes: ${compressedBytes}`,
     );
   }
 
   console.log(
-    `Initial search budget check passed: ${eagerShardIds.length} eager shards, ${total} bytes`,
+    `Complete search budget check passed: ${compressedBytes} compressed bytes`,
   );
 }
 
@@ -57,7 +41,7 @@ for (const file of files) {
   if (size > MAX_FILE_BYTES)
     throw new Error(`${file} exceeds 20 MiB static artifact budget`);
 }
-checkInitialSearchBudget();
+checkCompleteSearchBudget();
 
 console.log(
   `Data inventory check passed: ${files.length} files, ${total} bytes total`,
