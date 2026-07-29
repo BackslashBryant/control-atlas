@@ -30,8 +30,8 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /name="application-name" content="Control Atlas"/);
-  assert.match(html, /public, no-account workbench/);
-  assert.match(html, /tracing federal cybersecurity material back to its source/);
+  assert.match(html, /Federal cyber guidance is scattered and hard to use/);
+  assert.match(html, /people doing the work can find what they need and keep moving/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -97,7 +97,7 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   }
   assert.doesNotMatch(
     rotation,
-    /word: "(?:Comply|Authorize|Inherit|Baseline|Assess|Audit|Simplify|Clarify|Demystify|Verify)"/,
+    /word: "(?:Approve|Comply|Authorize|Inherit|Baseline|Assess|Audit|Recommend|Secure|Simplify|Clarify|Demystify)"/,
   );
   assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
   assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 8000/);
@@ -202,8 +202,8 @@ test('persistent footer uses the approved short disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
   assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
-  assert.match(identity, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
-  assert.match(html, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
+  assert.match(identity, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
+  assert.match(html, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
 });
 
 test('query-string deep link compatibility moves into typed React adapters', () => {

@@ -32,9 +32,9 @@ test('alignment deliverables exist', () => {
 
 test('public product surfaces share one canonical identity and decision boundary', () => {
   const definition =
-    'Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.';
+    'Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.';
   const boundary =
-    'Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.';
+    'Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.';
 
   for (const path of ['README.md', 'CONTRIBUTING.md', 'src/index.html']) {
     const content = readFileSync(path, 'utf8');
@@ -53,6 +53,7 @@ test('public product surfaces share one canonical identity and decision boundary
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
   assert.match(homePage, /PRODUCT_DEFINITION/);
+  assert.match(homePage, /PRODUCT_DECISION_BOUNDARY/);
 
   const index = readFileSync('src/index.html', 'utf8');
   assert.match(index, /name="application-name" content="Control Atlas"/);

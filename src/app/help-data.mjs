@@ -50,7 +50,7 @@ export const helpSurfaces = [
   {
     view: "about",
     title: "About & trust",
-    body: "Understand what Control Atlas is (and isn't): an open-source reference tool, not an official government system.",
+    body: "See how Control Atlas handles sources, product notes, and decisions—and where the workbench stops.",
     actionLabel: "Open About",
   },
   {

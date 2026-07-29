@@ -148,7 +148,16 @@ test('react shell footer uses the approved open-source guidance disclaimer', () 
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
   assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
-  assert.match(identity, /Independent, open-source, and not an official government system\. Every record keeps its publisher and source attached\./);
+  assert.match(identity, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
+});
+
+test('starter documents use the same direct decision boundary as the public product', () => {
+  const disclaimer = readFileSync('src/shared/disclaimer.mjs', 'utf8');
+  assert.match(
+    disclaimer,
+    /The people using it decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO\./,
+  );
+  assert.doesNotMatch(disclaimer, /owns any .* conclusions/i);
 });
 
 test('about page states the exact product boundary without a decorative hierarchy', () => {

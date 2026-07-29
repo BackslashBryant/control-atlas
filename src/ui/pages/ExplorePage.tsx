@@ -351,13 +351,10 @@ export function ExplorePage(props: {
                             {entry.expansion ? ` · ${entry.expansion}` : ""}
                           </CardTitle>
                         </div>
-                        <Badge tone={entry.consensus ? "warning" : "success"}>
-                          {entry.consensus
-                            ? "Practitioner consensus"
-                            : "Official source"}
-                        </Badge>
+                        <Badge tone="info">Control Atlas explanation</Badge>
                       </div>
                       <p className="result-summary" id={`desc-${entry.id}`}>{entry.definition}</p>
+                      <p className="result-meta">Reference: {entry.source}</p>
                       <div className="chip-row">
                         {entry.related_patterns.map((patternId) => (
                           <button

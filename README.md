@@ -2,12 +2,12 @@
 
 **Ctrl+Alt+Trace · Search · Explore · Compare · Build**
 
-Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.
+Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.
 
 Uses public NIST, DISA, FedRAMP, MITRE, and CISA data only.
 No login. No evidence upload. No organizational data stored.
 
-Control Atlas organizes the material. The team doing the work decides applicability and baseline selection, and owns compliance, inheritance, authorization, and ATO conclusions.
+Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.
 
 ## Source-First Product Standard
 
@@ -37,7 +37,7 @@ Future work must preserve this order:
 - Determine applicability, baselines, compliance, inheritance, authorization, or ATO outcomes
 - Replace a practitioner, assessor, ISSO, responsible authority, or AO
 
-## Independent, open-source, and not an official government system
+## Free, open source, and independent
 
 Mappings and starter documents are based on public sources, with their owners
 and limitations attached.

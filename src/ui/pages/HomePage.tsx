@@ -6,7 +6,10 @@ import {
 } from "@tabler/icons-react";
 import { useState } from "react";
 
-import { PRODUCT_DEFINITION } from "../../shared/product-identity";
+import {
+  PRODUCT_DECISION_BOUNDARY,
+  PRODUCT_DEFINITION,
+} from "../../shared/product-identity";
 import { BrandFlourish, BrandMark } from "../components/BrandLockup";
 import { Button, Input } from "../components/lsm";
 import type { ViewState } from "../lib/viewState";
@@ -24,7 +27,7 @@ const HOME_ENTRANCES = [
   },
   {
     label: "Browse Catalog",
-    description: "Open the complete published-record inventory.",
+    description: "Browse every published record in the catalog.",
     icon: IconBooks,
     view: "catalog-detail",
   },
@@ -93,10 +96,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </nav>
 
       <aside className="home-trust-boundary">
-        <p>
-          Public, no account, no uploads. Records keep their publisher and
-          source attached; the team doing the work owns the decisions.
-        </p>
+        <p>No account or uploads. {PRODUCT_DECISION_BOUNDARY}</p>
         <button onClick={() => onNavigate("start-here")} type="button">
           Browse source starting points
         </button>

@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "type": "module",
   "private": true,
-  "description": "Control Atlas is a public, no-account workbench for finding, reading, comparing, and tracing federal cybersecurity material back to its source.",
+  "description": "Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.",
   "scripts": {
     "build:site": "node ./tools/build-static-site.mjs",
     "build:data": "node ./scripts/build-framework-data.mjs",

@@ -17,13 +17,43 @@ const PRODUCT_SURFACES = new Set([
 ]);
 
 const DECISION_OR_SELF_PRAISE_WORDS =
-  /^(?:Assess|Audit|Authorize|Baseline|Clarify|Comply|Demystify|Inherit|Recommend|Simplify|Verify)$/i;
+  /^(?:Approve|Assess|Audit|Authorize|Baseline|Clarify|Comply|Demystify|Inherit|Recommend|Secure|Simplify)$/i;
+
+const EXPECTED_BRAND_WORDS = [
+  "Trace",
+  "Find",
+  "Search",
+  "Browse",
+  "Read",
+  "Explore",
+  "Map",
+  "Compare",
+  "Connect",
+  "Relate",
+  "Filter",
+  "Inspect",
+  "Crosswalk",
+  "Verify",
+  "Cite",
+  "Source",
+  "Build",
+  "Create",
+  "Preview",
+  "Download",
+  "Export",
+  "Document",
+  "Reconcile",
+  "Navigate",
+  "Learn",
+  "Share",
+  "Recover",
+] as const;
 
 test("every rotating brand action names a real Control Atlas surface", () => {
-  assert.equal(BRAND_ACTIONS.length, 20);
+  assert.equal(BRAND_ACTIONS.length, EXPECTED_BRAND_WORDS.length);
   assert.deepEqual(
     BRAND_WORDS,
-    BRAND_ACTIONS.map(({ word }) => word),
+    EXPECTED_BRAND_WORDS,
   );
   assert.equal(new Set(BRAND_WORDS).size, BRAND_WORDS.length);
 
