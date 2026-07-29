@@ -1,0 +1,57 @@
+surface_id,route_or_state,purpose,viewport_or_input,status,severity,disposition,evidence_summary,evidence_type
+S001,#/,Home orientation and primary entry,1440x900,Fail,High,Replace,"Three equal cards and rotating slogan precede universal Search; no single primary action",Live
+S002,#/,Home responsive hierarchy,375x812,Fail,High,Replace,"Search falls below all three choice cards; initial screen is orientation copy and choices",Live
+S003,#/start,Start Here questions,1440x900,Fail,High,Replace,"Three answers produce a URL but do not change result eligibility or order",Live+Code-derived
+S004,#/start?step=results...,Start Here result,1440x900,Fail,High,Replace,"Says Based on answers while every complete combination returns the same seven sources",Live+Code-derived
+S005,#/search,Universal Search identity,1440x900,Fail,High,Consolidate,"URL/title are Search; eyebrow is Explore; Catalog can be selected",Live+Code-derived
+S006,#/search?q=AC-2,Exact identifier retrieval,1440x900,Pass,Low,Configure,"Eligible control and assessment result appear; direct exact-ID transition not used",Live
+S007,#/search?q=encryption,Ambiguous topic retrieval,1440x900,Pass,Medium,Configure,"Honest eligible matches; legacy resource category precedes control records",Live
+S008,#/search?q=zzzz-no-such-control,Zero results,1440x900,Pass,None,Keep,"Honest zero result with no editorial non-matches",Live
+S009,Global Search overlay,Universal retrieval accelerator,Keyboard shortcut,Fail,High,Consolidate,"Separate raw resource index labels every resource Community and leaks resourceLane",Code-derived
+S010,#/explore,Explore landing,1440x900,Fail,High,Replace,"No atlas overview; Path/Map/List are unavailable until a record is selected",Live+Code-derived
+S011,#/explore?node=nist-800-53%3AAC-2,Explore Path,1440x900,Fail,High,Replace,"Seven relationship-purpose stages masquerade as a path; stages can be empty or disabled",Live
+S012,#/explore?node=...&relationshipView=map,Explore Map,1440x900,Fail,High,Finish,"Bounded AC-2 neighborhood is useful but not an atlas-level framework/topic overview",Live
+S013,#/explore?node=...&relationshipView=list,Explore List,1440x900,Pass,Medium,Configure,"Accessible 95-row parity exists but columns repeat source/trust/rationale boilerplate",Live
+S014,#/explore?node=...&relationshipView=map,Explore tablet layout,768x1024,Fail,High,Finish,"Filter controls extend offscreen to about x=980 on a 753px client width",Live
+S015,#/catalog,Catalog inventory,1440x900,Fail,High,Replace,"Publisher wall, no first-screen inventory search, 2545px main height",Live
+S016,#/catalog,Catalog mobile inventory,375x812,Fail,High,Replace,"Publisher wall grows to roughly 5654px",Live
+S017,#/catalog/nist-800-53,Catalog detail,1440x900,Fail,High,Finish,"1196 records but local search/filter state is not shareable and results truncate at 100",Live+Code-derived
+S018,#/catalog/nist-800-53,Catalog applicability copy,1440x900,Fail,High,Replace,"Unlabelled product-authored When to use it can be read as official applicability advice",Live+Code-derived
+S019,#/record/nist-800-53/AC-2,Record identity and source,1440x900,Pass,Medium,Configure,"Official identifier/title/source are present but first screen is action-heavy",Live
+S020,#/record/nist-800-53/AC-2,Record connections,1440x900,Fail,Medium,Consolidate,"95 connections across 8 groups repeat counts and generic provenance/confidence text",Live
+S021,#/record/nist-800-53/AC-2,Record practitioner copy,1440x900,Fail,Medium,Replace,"New here prompt presumes expertise and pushes baselines/authorization research",Live+Code-derived
+S022,#/record/csf-2/DE.AE-08,CSF record source identity,1440x900,Fail,Critical,Replace,"Official CSF text is labeled Source excerpt from SP 800-53 Rev. 5",Live+Code-derived
+S023,#/record/csf-2/DE.AE-08,CSF record title,1440x900,Fail,High,Finish,"Only DE.AE-08 is shown; no descriptive title or explicit unavailable-title statement",Live
+S024,#/record/csf-2/DE.AE-08,CSF record mobile loading,375x812,Fail,Medium,Finish,"Skeleton and footer appear before record content, then content inserts above",Live
+S025,#/compare,Compare chooser,1440x900,Fail,High,Finish,"Five large cards consume page but a selected mode does not progress to inputs or workbench",Live
+S026,#/compare?crosswalk=relationships...,Framework compare transition,1440x900,Fail,High,Finish,"URL updates and card becomes active; page remains chooser with no outcome or recovery",Live
+S027,Configured Compare,Export and share state,Code inspection,Pass,Medium,Configure,"Export utilities and URL state exist for configured modes; entry path is broken",Code-derived
+S028,#/learn,Learn landing,1440x900,Fail,High,Delete,"0 playbooks in 0 categories; publicly exposed empty product with Recommended for new users",Live
+S029,#/learn,Learn empty state,375x812,Fail,High,Delete,"Empty product still consumes about 2104px and offers no explanatory material",Live
+S030,#/build,Build landing,1440x900,Fail,High,Replace,"Choose the work/Start with a task plus ten cards bury starter documents and Resources",Live
+S031,#/build,Build task state,Refresh/back/share,Fail,High,Finish,"Task/filter selections are partly local state; unselected baseline defaults to Moderate",Code-derived
+S032,#/build,Starter document failure state,Code inspection,Fail,Critical,Finish,"Moderate can enter generated output without user selection; Download may remain enabled when preview unavailable",Code-derived
+S033,#/build/resources,Resources discoverability,1440x900,Fail,High,Replace,"96-item defining ecosystem exists but is buried under Build and absent from global entrances",Live
+S034,#/build/resources,Resources directory,1440x900,Pass,Medium,Configure,"Useful tools/templates/data/training/community coverage and purpose categories exist",Live
+S035,#/build/resources,Resources shareable filters,Refresh/back/share,Fail,High,Finish,"Several URL parameters are parsed/serialized but ignored; show-all remains local",Code-derived
+S036,#/build/resources,Resources loading state,Cold load,Fail,Medium,Replace,"Fallback uses stale Playbooks/Templates/Get a recommendation vocabulary",Live+Code-derived
+S037,#/sources,Sources trust register,1440x900,Fail,Medium,Consolidate,"46 sources are present but promo bridge, accordions, filters, and whitespace obscure compact trust scanning",Live
+S038,#/sources,Sources query state,Refresh/back/share,Fail,Medium,Finish,"Publisher/source query is component-local",Code-derived
+S039,#/about,Product boundary,1440x900,Fail,High,Replace,"RMF is described as the trunk; tree metaphor and plain-English marketing overstate the product model",Live
+S040,#/about,Determination boundary,1440x900,Pass,Low,Consolidate,"Boundary is present but repeated in footer and other surfaces",Live
+S041,#/retired?from=library,Retired route recovery,1440x900,Fail,Medium,Consolidate,"Parameter is discarded and a generic Search recovery surface appears",Live
+S042,#/definitely-not-a-route,Unknown route recovery,1440x900,Pass,None,Keep,"Clear Page not found state",Live
+S043,Global header,Canonical destination identity,Desktop,Fail,High,Replace,"Search is an action but not canonical nav; Start here title differs; Resources has no direct entry",Live+Code-derived
+S044,Global mobile navigation,Expose canonical destinations,375x812,Pass,Low,Configure,"Named dialog menu exists and main destinations remain available",Code-derived
+S045,Footer,Trust boundary and secondary navigation,All,Fail,Medium,Consolidate,"Oversized and repeats About/disclaimer copy",Live
+S046,Loading states,Cold live data,All,Fail,Medium,Replace,"Stale nouns and footer-before-content layout shift",Live+Code-derived
+S047,Empty states,Search and Learn,All,Fail,High,Finish,"Search is honest; Learn is an empty public destination rather than a useful state",Live
+S048,Error and invalid state,Routes,All,Pass,Low,Configure,"Not-found is clear; invalid parameter recovery explanations are inconsistent",Live+Code-derived
+S049,Responsive parity,Ten canonical routes,375x812,Fail,High,Finish,"No sampled document overflow, but outcomes are buried in very long stacks",Live
+S050,200 percent zoom,Preserve information and controls,Representative routes,Blocked,Unknown,Verify,"Actual browser zoom could not be measured; 768px proxy exposed Explore overflow",Unverified-human
+S051,Reduced motion,Honor motion preference,Brand/map/template motion,Pass,Low,Keep,"Relevant components query prefers-reduced-motion; live emulation not performed",Code-derived
+S052,Keyboard focus,AC-2 record,Keyboard-only,Pass,Low,Configure,"Logical shell-to-record order; full header precedes record work",Live
+S053,Human screen readers,Product-wide,NVDA/VoiceOver/TalkBack,Skipped with reason,Unknown,Verify,"No human assistive-technology session was available",Unverified-human
+S054,Physical devices,Product-wide,Phone/tablet,Skipped with reason,Unknown,Verify,"CSS viewport emulation only",Unverified-human
+S055,Automated route/a11y suites,Regression trust,Code inspection,Fail,High,Replace,"Tests still target retired menu/library/playbooks/templates routes and may exercise recovery pages",Code-derived
+S056,Copy extraction and Vale,User-facing copy coverage,Code inspection,Fail,High,Replace,"Extractor scans TSX only and captures noise; misses MJS JSON generated and dynamic strings",Code-derived

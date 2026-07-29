@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2400" viewBox="0 0 1800 2400">
+  <defs>
+    <style>
+      .bg{fill:#0b1218}.phone{fill:#111c24;stroke:#526673;stroke-width:3}.bar{fill:#182832}.card{fill:#16242d;stroke:#334a58}.field{fill:#f4f7f8;stroke:#7fa9bb}.accent{fill:#54c7e8}.tag{fill:#223944;stroke:#4d6a77}.rule{stroke:#36505f;stroke-width:2}.h{fill:#fff;font:700 23px Arial,sans-serif}.t{fill:#eef5f7;font:700 16px Arial,sans-serif}.m{fill:#dce9ed;font:14px Arial,sans-serif}.s{fill:#b7c9d1;font:12px Arial,sans-serif}.dark{fill:#0d2732;font:700 13px Arial,sans-serif}.label{fill:#72d3ec;font:700 11px Arial,sans-serif;letter-spacing:1.5px}.note{fill:#83a5b2;font:11px Arial,sans-serif}.good{fill:#89d6b0}.warn{fill:#f0bf65}
+    </style>
+    <g id="phone">
+      <rect class="phone" width="420" height="690" rx="22"/>
+      <rect class="bar" width="420" height="54" rx="22"/>
+      <text class="t" x="18" y="34">CONTROL ATLAS</text>
+      <rect class="accent" x="323" y="13" width="42" height="28" rx="14"/><text class="dark" x="337" y="32">⌕</text>
+      <rect class="tag" x="373" y="13" width="30" height="28" rx="5"/><text class="s" x="382" y="32">☰</text>
+    </g>
+  </defs>
+  <rect class="bg" width="1800" height="2400"/>
+  <text class="h" x="40" y="48">Control Atlas target experience — mobile</text>
+  <text class="s" x="40" y="73">Same meaning and controls; compact sequence; no horizontal dependence.</text>
+
+  <!-- row 1 -->
+  <g transform="translate(90 100)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">HOME</text>
+    <text class="h" x="22" y="123">Find a record or resource</text>
+    <text class="s" x="22" y="147">Search all destination types.</text>
+    <rect class="field" x="22" y="170" width="286" height="52" rx="7"/><text class="s" x="36" y="201" fill="#445964">AC-2, encryption, SSP…</text>
+    <rect class="accent" x="316" y="170" width="82" height="52" rx="7"/><text class="dark" x="332" y="201">SEARCH</text>
+    <text class="label" x="22" y="262">OPEN A DESTINATION</text>
+    <rect class="card" x="22" y="280" width="376" height="68" rx="7"/><text class="t" x="38" y="308">Open the Atlas</text><text class="s" x="38" y="330">Path, Map, or List by framework</text>
+    <rect class="card" x="22" y="358" width="376" height="68" rx="7"/><text class="t" x="38" y="386">Browse Catalog</text><text class="s" x="38" y="408">Complete official inventory</text>
+    <rect class="card" x="22" y="436" width="376" height="68" rx="7"/><text class="t" x="38" y="464">Find Tools &amp; Resources</text><text class="s" x="38" y="486">Tools, templates, training, community</text>
+    <line class="rule" x1="22" y1="535" x2="398" y2="535"/>
+    <text class="m" x="22" y="565">Public, no-account workbench</text>
+    <text class="s" x="22" y="589">Official records name their source.</text>
+    <text class="note" x="22" y="650">Primary Search fits in the first viewport.</text>
+  </g>
+
+  <g transform="translate(690 100)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">SEARCH</text>
+    <rect class="field" x="22" y="108" width="276" height="46" rx="6"/><text class="s" x="36" y="136" fill="#445964">encryption</text>
+    <rect class="accent" x="306" y="108" width="92" height="46" rx="6"/><text class="dark" x="327" y="136">SEARCH</text>
+    <text class="m" x="22" y="190">31 eligible results</text>
+    <rect class="tag" x="22" y="210" width="112" height="32" rx="16"/><text class="s" x="42" y="231">Filters (0)</text>
+    <rect class="tag" x="144" y="210" width="123" height="32" rx="16"/><text class="s" x="162" y="231">Types: all</text>
+    <rect class="card" x="22" y="264" width="376" height="112" rx="7"/><text class="label" x="38" y="291">CONTROL ENHANCEMENT · NIST</text><text class="t" x="38" y="320">SC-13(1) · Cryptographic protection</text><text class="s" x="38" y="347">Matched title and official text</text>
+    <rect class="card" x="22" y="388" width="376" height="112" rx="7"/><text class="label" x="38" y="415">RESOURCE · FEDRAMP</text><text class="t" x="38" y="444">FedRAMP cryptographic guidance</text><text class="s" x="38" y="471">Matched title · external resource</text>
+    <rect class="card" x="22" y="512" width="376" height="92" rx="7"/><text class="label" x="38" y="539">SOURCE · NIST</text><text class="t" x="38" y="568">SP 800-53 Rev. 5</text>
+    <text class="note" x="22" y="650">No table-only filters; counts and clear action remain visible.</text>
+  </g>
+
+  <g transform="translate(1290 100)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">EXPLORE</text>
+    <text class="h" x="22" y="121">Open the Atlas</text>
+    <rect class="field" x="22" y="145" width="376" height="44" rx="6"/><text class="s" x="36" y="172" fill="#445964">Framework: NIST SP 800-53 ▾</text>
+    <g transform="translate(22 207)"><rect class="accent" width="92" height="34" rx="5"/><text class="dark" x="28" y="22">PATH</text><rect class="tag" x="102" width="92" height="34" rx="5"/><text class="s" x="132" y="22">MAP</text><rect class="tag" x="204" width="92" height="34" rx="5"/><text class="s" x="234" y="22">LIST</text></g>
+    <text class="label" x="22" y="282">PUBLISHER-DECLARED HIERARCHY</text>
+    <rect class="card" x="22" y="300" width="376" height="54" rx="7"/><text class="m" x="40" y="333">SP 800-53 Rev. 5 Catalog</text>
+    <line class="rule" x1="42" y1="354" x2="42" y2="374"/>
+    <rect class="card" x="22" y="374" width="376" height="54" rx="7"/><text class="m" x="40" y="407">AC · Access Control family</text>
+    <line class="rule" x1="42" y1="428" x2="42" y2="448"/>
+    <rect class="card" x="22" y="448" width="376" height="54" rx="7"/><text class="m" x="40" y="481">AC-2 · Account Management</text>
+    <text class="label" x="22" y="548">CHOICES APPLYING TO THIS SCOPE</text>
+    <rect class="tag" x="22" y="566" width="126" height="30" rx="15"/><text class="s" x="40" y="586">Baseline: none</text>
+    <rect class="tag" x="158" y="566" width="134" height="30" rx="15"/><text class="s" x="176" y="586">RMF lens: off</text>
+    <text class="note" x="22" y="650">All controls reflow; no clipped map-filter grid.</text>
+  </g>
+
+  <!-- row 2 -->
+  <g transform="translate(90 870)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">CATALOG</text>
+    <text class="h" x="22" y="121">Complete inventory</text>
+    <rect class="field" x="22" y="145" width="376" height="44" rx="6"/><text class="s" x="36" y="172" fill="#445964">Search catalogs and records</text>
+    <rect class="tag" x="22" y="207" width="124" height="32" rx="16"/><text class="s" x="42" y="228">Filters (0)</text>
+    <rect class="tag" x="156" y="207" width="122" height="32" rx="16"/><text class="s" x="174" y="228">Grouped ▾</text>
+    <text class="label" x="22" y="280">SECURITY AND PRIVACY CONTROLS · 4</text>
+    <rect class="card" x="22" y="298" width="376" height="86" rx="7"/><text class="t" x="38" y="328">SP 800-53 Rev. 5</text><text class="s" x="38" y="354">1,196 records · NIST · Current</text>
+    <rect class="card" x="22" y="396" width="376" height="86" rx="7"/><text class="t" x="38" y="426">SP 800-171 Rev. 3</text><text class="s" x="38" y="452">Requirements for CUI · NIST · Current</text>
+    <text class="label" x="22" y="524">CYBERSECURITY FRAMEWORKS · 5</text>
+    <rect class="card" x="22" y="542" width="376" height="74" rx="7"/><text class="t" x="38" y="572">Cybersecurity Framework 2.0</text><text class="s" x="38" y="597">Functions, categories, subcategories</text>
+    <text class="note" x="22" y="650">Publisher is a filter, not a 5,600px page architecture.</text>
+  </g>
+
+  <g transform="translate(690 870)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">CSF 2.0 · SUBCATEGORY</text>
+    <text class="h" x="22" y="121">DE.AE-08</text>
+    <text class="s" x="22" y="145">No separate descriptive title is published.</text>
+    <rect class="tag" x="22" y="167" width="118" height="28" rx="14"/><text class="s" x="38" y="186">NIST · CSF 2.0</text>
+    <rect class="accent" x="280" y="160" width="118" height="40" rx="6"/><text class="dark" x="296" y="185">OPEN SOURCE</text>
+    <text class="label" x="22" y="236">OFFICIAL TEXT</text>
+    <rect class="card" x="22" y="252" width="376" height="132" rx="7"/><text class="m" x="38" y="282">Incidents are declared when adverse</text><text class="m" x="38" y="306">events meet the defined incident</text><text class="m" x="38" y="330">criteria…</text><text class="s" x="38" y="363">NIST Cybersecurity Framework 2.0</text>
+    <text class="label" x="22" y="424">WHERE THIS SITS</text>
+    <text class="m" x="22" y="450">CSF 2.0 › Detect › Adverse Event</text><text class="m" x="22" y="472">Analysis › DE.AE-08</text>
+    <text class="label" x="22" y="514">KEY PUBLISHED RELATIONSHIPS</text>
+    <rect class="card" x="22" y="530" width="376" height="76" rx="7"/><text class="t" x="38" y="559">IR-4 · Incident Handling</text><text class="s" x="38" y="584">NIST OLIR mapping · no rationale</text>
+    <text class="note" x="22" y="650">Source truth appears before actions and metadata.</text>
+  </g>
+
+  <g transform="translate(1290 870)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">COMPARE</text>
+    <text class="h" x="22" y="121">Compare published mappings</text>
+    <rect class="accent" x="22" y="147" width="116" height="34" rx="5"/><text class="dark" x="36" y="169">FRAMEWORKS</text>
+    <rect class="tag" x="148" y="147" width="100" height="34" rx="5"/><text class="s" x="172" y="169">RECORDS</text>
+    <text class="s" x="22" y="218">Framework A</text><rect class="field" x="22" y="230" width="376" height="42" rx="6"/><text class="s" x="36" y="256" fill="#445964">CSF 2.0 ▾</text>
+    <text class="s" x="22" y="304">Framework B</text><rect class="field" x="22" y="316" width="376" height="42" rx="6"/><text class="s" x="36" y="342" fill="#445964">SP 800-53 Rev. 5 ▾</text>
+    <text class="s" x="22" y="390">Mapping source</text><rect class="field" x="22" y="402" width="376" height="42" rx="6"/><text class="s" x="36" y="428" fill="#445964">NIST OLIR crosswalk ▾</text>
+    <rect class="accent" x="22" y="466" width="376" height="48" rx="7"/><text class="dark" x="135" y="496">SHOW MAPPINGS</text>
+    <rect class="card" x="22" y="536" width="376" height="78" rx="7"/><text class="s" x="38" y="563">Mappings do not determine equivalent</text><text class="s" x="38" y="585">coverage or applicability.</text>
+    <text class="note" x="22" y="650">Selection reveals inputs; no dead card grid.</text>
+  </g>
+
+  <!-- row 3 -->
+  <g transform="translate(90 1640)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">BUILD</text>
+    <text class="h" x="22" y="121">Choose a work lane</text>
+    <rect class="card" x="22" y="148" width="376" height="76" rx="7"/><text class="t" x="38" y="178">Tasks</text><text class="s" x="38" y="202">Open a defined job and its inputs</text>
+    <rect class="card" x="22" y="236" width="376" height="76" rx="7"/><text class="t" x="38" y="266">Starter documents</text><text class="s" x="38" y="290">Configure a sourced DOCX or XLSX</text>
+    <rect class="accent" x="22" y="324" width="376" height="76" rx="7"/><text class="dark" x="38" y="354">Resources</text><text class="dark" x="38" y="378">Tools, templates, datasets, training, communities</text>
+    <text class="label" x="22" y="442">RESOURCES · 96</text>
+    <rect class="field" x="22" y="458" width="376" height="42" rx="6"/><text class="s" x="36" y="484" fill="#445964">Search resources</text>
+    <g transform="translate(22 516)"><rect class="tag" width="74" height="28" rx="14"/><text class="s" x="18" y="19">Tools</text><rect class="tag" x="82" width="92" height="28" rx="14"/><text class="s" x="97" y="19">Templates</text><rect class="tag" x="182" width="82" height="28" rx="14"/><text class="s" x="200" y="19">Training</text></g>
+    <rect class="card" x="22" y="562" width="376" height="58" rx="7"/><text class="t" x="38" y="587">OSCAL tools and models</text><text class="s" x="38" y="607">Open-source tool · NIST</text>
+    <text class="note" x="22" y="650">All three lanes are equal and above the fold.</text>
+  </g>
+
+  <g transform="translate(690 1640)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">LEARN</text>
+    <text class="h" x="22" y="121">Use Control Atlas</text>
+    <text class="s" x="22" y="145">Product-authored explanations, labeled clearly.</text>
+    <rect class="field" x="22" y="168" width="376" height="42" rx="6"/><text class="s" x="36" y="194" fill="#445964">Search explanation topics</text>
+    <text class="label" x="22" y="252">INFORMATION MODEL</text>
+    <rect class="card" x="22" y="270" width="376" height="90" rx="7"/><text class="t" x="38" y="300">Hierarchy and relationships</text><text class="s" x="38" y="325">Trees, mappings, evidence, applicability</text>
+    <rect class="card" x="22" y="372" width="376" height="90" rx="7"/><text class="t" x="38" y="402">How Search works</text><text class="s" x="38" y="427">Eligibility, ranking, exact IDs, zero results</text>
+    <text class="label" x="22" y="504">WORKBENCH GUIDE</text>
+    <rect class="card" x="22" y="522" width="376" height="92" rx="7"/><text class="t" x="38" y="552">Compare two frameworks</text><text class="s" x="38" y="577">Steps · source basis · limits · next action</text>
+    <text class="note" x="22" y="650">No novice/beginner labels and no empty destination.</text>
+  </g>
+
+  <g transform="translate(1290 1640)">
+    <use href="#phone"/>
+    <text class="label" x="22" y="88">SOURCES</text>
+    <text class="h" x="22" y="121">Provenance register</text>
+    <rect class="field" x="22" y="145" width="376" height="42" rx="6"/><text class="s" x="36" y="171" fill="#445964">Search publisher or source</text>
+    <rect class="tag" x="22" y="205" width="124" height="32" rx="16"/><text class="s" x="42" y="226">Filters (0)</text>
+    <text class="label" x="22" y="270">NIST</text>
+    <rect class="card" x="22" y="286" width="376" height="94" rx="7"/><text class="t" x="38" y="316">Cybersecurity Framework 2.0</text><text class="s" x="38" y="341">Subcategories · Retrieved 2026-07-16</text><text class="good" x="38" y="364">Current</text>
+    <rect class="card" x="22" y="392" width="376" height="94" rx="7"/><text class="t" x="38" y="422">SP 800-53 Rev. 5</text><text class="s" x="38" y="447">Controls · Retrieved 2026-07-16</text><text class="good" x="38" y="470">Current</text>
+    <rect class="card" x="22" y="508" width="376" height="88" rx="7"/><text class="m" x="38" y="537">Need a working tool or template?</text><text class="s" x="38" y="563">Open Build → Resources</text>
+    <text class="note" x="22" y="650">Trust data first; one compact Resources boundary.</text>
+  </g>
+</svg>

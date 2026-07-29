@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2400" viewBox="0 0 1800 2400">
+  <defs>
+    <style>
+      .bg{fill:#0b1218}.panel{fill:#111c24;stroke:#415463;stroke-width:2}.bar{fill:#182832}.card{fill:#16242d;stroke:#334a58}.field{fill:#f4f7f8;stroke:#7fa9bb}.accent{fill:#54c7e8}.soft{fill:#243641}.rule{stroke:#36505f;stroke-width:2}.t{fill:#eef5f7;font:700 18px Arial,sans-serif}.h{fill:#fff;font:700 27px Arial,sans-serif}.s{fill:#b7c9d1;font:14px Arial,sans-serif}.m{fill:#dce9ed;font:15px Arial,sans-serif}.dark{fill:#0d2732;font:700 14px Arial,sans-serif}.tag{fill:#223944;stroke:#4d6a77}.note{fill:#83a5b2;font:12px Arial,sans-serif}.label{fill:#72d3ec;font:700 12px Arial,sans-serif;letter-spacing:2px}.num{fill:#0b1218;font:700 14px Arial,sans-serif}.white{fill:#fff}.warn{fill:#f0bf65}.good{fill:#89d6b0}
+    </style>
+    <g id="shell">
+      <rect class="panel" width="540" height="690" rx="10"/>
+      <rect class="bar" x="0" y="0" width="540" height="54" rx="10"/>
+      <text class="t" x="18" y="34">CONTROL ATLAS</text>
+      <text class="s" x="215" y="33">Explore  Catalog  Compare  Learn  Build</text>
+      <rect class="accent" x="465" y="13" width="58" height="28" rx="14"/>
+      <text class="dark" x="480" y="32">Search</text>
+    </g>
+  </defs>
+  <rect class="bg" width="1800" height="2400"/>
+  <text class="h" x="40" y="48">Control Atlas target experience — desktop</text>
+  <text class="s" x="40" y="73">Signal layer: one action. Mission layer: compact work. Depth appears only after entry.</text>
+
+  <!-- Home -->
+  <g transform="translate(40 100)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">HOME</text>
+    <text class="h" x="24" y="132">Find the published record or resource you need</text>
+    <text class="s" x="24" y="158">Search identifiers, titles, topics, sources, and practitioner resources.</text>
+    <rect class="field" x="24" y="184" width="390" height="58" rx="8"/>
+    <text class="s" x="42" y="218" fill="#445964">AC-2, encryption, FedRAMP, SSP template…</text>
+    <rect class="accent" x="424" y="184" width="92" height="58" rx="8"/>
+    <text class="dark" x="445" y="218">SEARCH</text>
+    <text class="label" x="24" y="288">OPEN A DESTINATION</text>
+    <g transform="translate(24 310)">
+      <rect class="card" width="156" height="106" rx="7"/><text class="t" x="14" y="31">Open the Atlas</text><text class="s" x="14" y="57">Path, Map, or List</text><text class="s" x="14" y="78">by framework</text>
+      <rect class="card" x="168" width="156" height="106" rx="7"/><text class="t" x="182" y="31">Browse Catalog</text><text class="s" x="182" y="57">Exhaustive official</text><text class="s" x="182" y="78">inventory</text>
+      <rect class="card" x="336" width="156" height="106" rx="7"/><text class="t" x="350" y="31">Find Resources</text><text class="s" x="350" y="57">Tools, templates,</text><text class="s" x="350" y="78">training, community</text>
+    </g>
+    <line class="rule" x1="24" y1="454" x2="516" y2="454"/>
+    <text class="m" x="24" y="490">Public, no-account workbench</text>
+    <text class="s" x="24" y="518">Official records identify their publisher and source.</text>
+    <text class="s" x="24" y="541">Product notes are labeled separately.</text>
+    <rect class="tag" x="24" y="575" width="118" height="30" rx="15"/><text class="s" x="42" y="595">Browse Sources</text>
+    <rect class="tag" x="152" y="575" width="92" height="30" rx="15"/><text class="s" x="170" y="595">About</text>
+    <text class="note" x="24" y="655">No rotating slogan. No RMF default. Search is visible without scrolling.</text>
+  </g>
+
+  <!-- Search -->
+  <g transform="translate(630 100)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">SEARCH</text>
+    <text class="h" x="24" y="126">Search Control Atlas</text>
+    <rect class="field" x="24" y="150" width="360" height="48" rx="6"/><text class="s" x="40" y="179" fill="#445964">encryption</text>
+    <rect class="accent" x="394" y="150" width="100" height="48" rx="6"/><text class="dark" x="418" y="179">SEARCH</text>
+    <text class="m" x="24" y="236">31 eligible results</text>
+    <text class="s" x="195" y="236">Sorted by identifier/title match, then text relevance</text>
+    <g transform="translate(24 258)">
+      <rect class="card" width="150" height="260" rx="7"/>
+      <text class="t" x="14" y="30">Refine</text>
+      <text class="s" x="14" y="61">Type</text><text class="m" x="14" y="86">□ Controls (12)</text><text class="m" x="14" y="112">□ Resources (8)</text><text class="m" x="14" y="138">□ Sources (3)</text>
+      <text class="s" x="14" y="177">Publisher</text><text class="m" x="14" y="202">□ NIST</text><text class="m" x="14" y="228">□ FedRAMP</text>
+      <rect class="tag" x="14" y="242" width="88" height="26" rx="13"/><text class="s" x="29" y="260">Clear all</text>
+      <rect class="card" x="166" width="326" height="100" rx="7"/>
+      <text class="label" x="182" y="284">CONTROL ENHANCEMENT · NIST</text>
+      <text class="t" x="182" y="313">SC-13(1) — Cryptographic protection</text>
+      <text class="s" x="182" y="339">Matched title and official text</text>
+      <rect class="card" x="166" y="114" width="326" height="100" rx="7"/>
+      <text class="label" x="182" y="398">RESOURCE · FEDRAMP</text>
+      <text class="t" x="182" y="427">FedRAMP cryptographic guidance</text>
+      <text class="s" x="182" y="453">Matched title · external resource</text>
+      <rect class="card" x="166" y="228" width="326" height="100" rx="7"/>
+      <text class="label" x="182" y="512">SOURCE · NIST</text>
+      <text class="t" x="182" y="541">SP 800-53 Rev. 5</text>
+      <text class="s" x="182" y="567">Matched official source metadata</text>
+    </g>
+    <text class="note" x="24" y="655">Exact unique identifiers may open directly; ambiguous text always remains in Search.</text>
+  </g>
+
+  <!-- Explore -->
+  <g transform="translate(1220 100)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">EXPLORE</text>
+    <text class="h" x="24" y="126">Open the Atlas</text>
+    <text class="s" x="24" y="151">Choose a declared scope. Path, Map, and List cover the same records.</text>
+    <rect class="field" x="24" y="174" width="245" height="42" rx="6"/><text class="s" x="38" y="200" fill="#445964">Framework: NIST SP 800-53 ▾</text>
+    <rect class="tag" x="282" y="174" width="119" height="42" rx="6"/><text class="s" x="299" y="200">RMF lens: Off</text>
+    <rect class="tag" x="411" y="174" width="105" height="42" rx="6"/><text class="s" x="426" y="200">Filters (0)</text>
+    <g transform="translate(24 236)"><rect class="accent" width="88" height="34" rx="5"/><text class="dark" x="28" y="22">PATH</text><rect class="tag" x="96" width="88" height="34" rx="5"/><text class="s" x="122" y="22">MAP</text><rect class="tag" x="192" width="88" height="34" rx="5"/><text class="s" x="218" y="22">LIST</text></g>
+    <text class="label" x="24" y="310">PUBLISHER-DECLARED HIERARCHY</text>
+    <g transform="translate(24 332)">
+      <rect class="card" width="492" height="48" rx="6"/><circle class="accent" cx="22" cy="24" r="10"/><text class="m" x="44" y="29">SP 800-53 Rev. 5 Catalog</text>
+      <line class="rule" x1="22" y1="48" x2="22" y2="65"/>
+      <rect class="card" y="65" width="492" height="48" rx="6"/><circle class="accent" cx="22" cy="89" r="10"/><text class="m" x="44" y="94">AC — Access Control family</text>
+      <line class="rule" x1="22" y1="113" x2="22" y2="130"/>
+      <rect class="card" y="130" width="492" height="48" rx="6"/><circle class="accent" cx="22" cy="154" r="10"/><text class="m" x="44" y="159">AC-2 — Account Management</text>
+    </g>
+    <text class="label" x="24" y="550">CHOICES APPLYING TO THIS SCOPE</text>
+    <rect class="tag" x="24" y="570" width="120" height="30" rx="15"/><text class="s" x="42" y="590">Baseline: none</text>
+    <rect class="tag" x="154" y="570" width="135" height="30" rx="15"/><text class="s" x="173" y="590">Relations: structure</text>
+    <text class="note" x="24" y="655">Unknown ancestry is stated. Baselines and mappings never become parents.</text>
+  </g>
+
+  <!-- Catalog -->
+  <g transform="translate(40 870)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">CATALOG</text>
+    <text class="h" x="24" y="126">Browse the complete inventory</text>
+    <text class="s" x="24" y="151">Official frameworks, catalogs, requirements, mappings, and published datasets.</text>
+    <rect class="field" x="24" y="174" width="320" height="44" rx="6"/><text class="s" x="39" y="201" fill="#445964">Search catalog titles and records</text>
+    <rect class="tag" x="354" y="174" width="162" height="44" rx="6"/><text class="s" x="372" y="201">23 catalogs · Filters</text>
+    <g transform="translate(24 240)">
+      <rect class="accent" width="104" height="32" rx="5"/><text class="dark" x="26" y="21">GROUPED</text>
+      <rect class="tag" x="112" width="83" height="32" rx="5"/><text class="s" x="135" y="21">LIST</text>
+      <rect class="tag" x="203" width="110" height="32" rx="5"/><text class="s" x="224" y="21">PUBLISHER</text>
+    </g>
+    <text class="label" x="24" y="310">SECURITY AND PRIVACY CONTROLS · 4</text>
+    <rect class="card" x="24" y="330" width="236" height="106" rx="7"/><text class="t" x="40" y="359">SP 800-53 Rev. 5</text><text class="s" x="40" y="386">1,196 controls and enhancements</text><text class="s" x="40" y="410">NIST · Current</text>
+    <rect class="card" x="280" y="330" width="236" height="106" rx="7"/><text class="t" x="296" y="359">SP 800-171 Rev. 3</text><text class="s" x="296" y="386">Requirements for CUI</text><text class="s" x="296" y="410">NIST · Current</text>
+    <text class="label" x="24" y="476">CYBERSECURITY FRAMEWORKS · 5</text>
+    <rect class="card" x="24" y="496" width="236" height="106" rx="7"/><text class="t" x="40" y="525">Cybersecurity Framework 2.0</text><text class="s" x="40" y="552">Functions, categories, subcategories</text><text class="s" x="40" y="576">NIST · Current</text>
+    <rect class="card" x="280" y="496" width="236" height="106" rx="7"/><text class="t" x="296" y="525">MITRE ATT&amp;CK</text><text class="s" x="296" y="552">Tactics and techniques</text><text class="s" x="296" y="576">MITRE · Current</text>
+    <text class="note" x="24" y="655">Publisher is a filter. Useful type grouping is the default. Counts always reconcile.</text>
+  </g>
+
+  <!-- Record -->
+  <g transform="translate(630 870)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">CSF 2.0 · SUBCATEGORY</text>
+    <text class="h" x="24" y="126">DE.AE-08</text>
+    <text class="s" x="24" y="151">No separate descriptive title is published for this subcategory.</text>
+    <rect class="tag" x="24" y="174" width="130" height="30" rx="15"/><text class="s" x="41" y="194">Publisher: NIST</text>
+    <rect class="tag" x="164" y="174" width="150" height="30" rx="15"/><text class="s" x="181" y="194">Source: CSF 2.0</text>
+    <rect class="accent" x="390" y="168" width="126" height="40" rx="6"/><text class="dark" x="408" y="193">OPEN SOURCE</text>
+    <text class="label" x="24" y="246">OFFICIAL TEXT · NIST CYBERSECURITY FRAMEWORK 2.0</text>
+    <rect class="card" x="24" y="263" width="492" height="118" rx="7"/>
+    <text class="m" x="40" y="294">Incidents are declared when adverse events meet</text><text class="m" x="40" y="320">the defined incident criteria…</text><text class="s" x="40" y="356">Citation and source location</text>
+    <text class="label" x="24" y="423">WHERE THIS SITS</text>
+    <text class="m" x="24" y="450">CSF 2.0 › Detect › Adverse Event Analysis › DE.AE-08</text>
+    <text class="label" x="24" y="494">KEY PUBLISHED RELATIONSHIPS</text>
+    <rect class="card" x="24" y="510" width="238" height="80" rx="7"/><text class="t" x="40" y="540">IR-4 · Incident Handling</text><text class="s" x="40" y="566">NIST OLIR mapping · no rationale</text>
+    <rect class="card" x="278" y="510" width="238" height="80" rx="7"/><text class="t" x="294" y="540">IR-8 · Incident Response Plan</text><text class="s" x="294" y="566">NIST OLIR mapping · no rationale</text>
+    <text class="note" x="24" y="655">Official identity first. Product navigation and raw metadata disclose later.</text>
+  </g>
+
+  <!-- Compare -->
+  <g transform="translate(1220 870)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">COMPARE</text>
+    <text class="h" x="24" y="126">Compare published records and mappings</text>
+    <g transform="translate(24 150)"><rect class="accent" width="112" height="34" rx="5"/><text class="dark" x="18" y="22">FRAMEWORKS</text><rect class="tag" x="120" width="94" height="34" rx="5"/><text class="s" x="142" y="22">RECORDS</text><rect class="tag" x="222" width="106" height="34" rx="5"/><text class="s" x="240" y="22">BASELINES</text></g>
+    <text class="s" x="24" y="222">Framework A</text><rect class="field" x="24" y="234" width="230" height="44" rx="6"/><text class="s" x="38" y="261" fill="#445964">CSF 2.0 ▾</text>
+    <text class="s" x="276" y="222">Framework B</text><rect class="field" x="276" y="234" width="240" height="44" rx="6"/><text class="s" x="290" y="261" fill="#445964">SP 800-53 Rev. 5 ▾</text>
+    <text class="s" x="24" y="310">Mapping source</text><rect class="field" x="24" y="322" width="326" height="44" rx="6"/><text class="s" x="38" y="349" fill="#445964">NIST OLIR CSF 2.0 crosswalk ▾</text>
+    <rect class="accent" x="364" y="322" width="152" height="44" rx="6"/><text class="dark" x="384" y="349">SHOW MAPPINGS</text>
+    <line class="rule" x1="24" y1="398" x2="516" y2="398"/>
+    <text class="m" x="24" y="430">0 selected · configuration preserved in URL</text>
+    <rect class="card" x="24" y="450" width="492" height="120" rx="7"/>
+    <text class="t" x="40" y="480">What results will mean</text>
+    <text class="s" x="40" y="507">Only mappings from the selected cited source appear.</text>
+    <text class="s" x="40" y="532">A mapping does not determine equivalent coverage or applicability.</text>
+    <text class="note" x="24" y="655">Mode selection immediately reveals inputs; no five-card dead-end chooser.</text>
+  </g>
+
+  <!-- Build / Resources -->
+  <g transform="translate(40 1640)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">BUILD</text>
+    <text class="h" x="24" y="126">Work from a task, document, or resource</text>
+    <g transform="translate(24 156)">
+      <rect class="card" width="156" height="128" rx="7"/><text class="t" x="14" y="31">Tasks</text><text class="s" x="14" y="58">Open a defined job</text><text class="s" x="14" y="80">and its inputs.</text><rect class="tag" x="14" y="94" width="112" height="24" rx="12"/><text class="s" x="27" y="111">Browse tasks</text>
+      <rect class="card" x="168" width="156" height="128" rx="7"/><text class="t" x="182" y="31">Starter documents</text><text class="s" x="182" y="58">Configure a sourced</text><text class="s" x="182" y="80">DOCX or XLSX.</text><rect class="tag" x="182" y="94" width="126" height="24" rx="12"/><text class="s" x="194" y="111">Browse documents</text>
+      <rect class="accent" x="336" width="156" height="128" rx="7"/><text class="dark" x="350" y="31">Resources</text><text class="dark" x="350" y="58">Tools, templates,</text><text class="dark" x="350" y="80">training, community.</text><rect class="white" x="350" y="94" width="126" height="24" rx="12"/><text class="dark" x="366" y="111">Find resources</text>
+    </g>
+    <text class="label" x="24" y="332">RESOURCES · 96</text>
+    <rect class="field" x="24" y="350" width="310" height="42" rx="6"/><text class="s" x="39" y="376" fill="#445964">Search tools, templates, datasets…</text>
+    <rect class="tag" x="344" y="350" width="172" height="42" rx="6"/><text class="s" x="363" y="376">Type · Owner · Cost</text>
+    <g transform="translate(24 414)">
+      <rect class="tag" width="76" height="28" rx="14"/><text class="s" x="20" y="19">Tools</text>
+      <rect class="tag" x="84" width="96" height="28" rx="14"/><text class="s" x="101" y="19">Templates</text>
+      <rect class="tag" x="188" width="84" height="28" rx="14"/><text class="s" x="207" y="19">Datasets</text>
+      <rect class="tag" x="280" width="82" height="28" rx="14"/><text class="s" x="300" y="19">Training</text>
+      <rect class="tag" x="370" width="118" height="28" rx="14"/><text class="s" x="386" y="19">Communities</text>
+    </g>
+    <rect class="card" x="24" y="472" width="492" height="92" rx="7"/><text class="label" x="40" y="496">OPEN-SOURCE TOOL · NIST</text><text class="t" x="40" y="526">OSCAL tools and models</text><text class="s" x="40" y="550">Why included: supports OSCAL validation · verify fit independently</text>
+    <text class="note" x="24" y="655">Resources remains under Build, but is a first-screen equal lane and Home entrance.</text>
+  </g>
+
+  <!-- Learn -->
+  <g transform="translate(630 1640)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">LEARN</text>
+    <text class="h" x="24" y="126">Explanations for using Control Atlas</text>
+    <text class="s" x="24" y="151">Product-authored material is labeled and never presented as publisher guidance.</text>
+    <rect class="field" x="24" y="174" width="492" height="42" rx="6"/><text class="s" x="40" y="200" fill="#445964">Search explanation topics</text>
+    <text class="label" x="24" y="258">HOW CONTROL ATLAS ORGANIZES INFORMATION</text>
+    <rect class="card" x="24" y="278" width="238" height="110" rx="7"/><text class="t" x="40" y="308">Hierarchy and relationships</text><text class="s" x="40" y="335">Trees, mappings, evidence,</text><text class="s" x="40" y="357">and applicability choices.</text>
+    <rect class="card" x="278" y="278" width="238" height="110" rx="7"/><text class="t" x="294" y="308">How Search works</text><text class="s" x="294" y="335">Eligibility, ranking, exact</text><text class="s" x="294" y="357">identifiers, and zero results.</text>
+    <text class="label" x="24" y="430">WORKBENCH GUIDES</text>
+    <rect class="card" x="24" y="450" width="492" height="94" rx="7"/><text class="t" x="40" y="480">Compare two frameworks using a published mapping</text><text class="s" x="40" y="508">Steps · source basis · limitations · next action</text>
+    <rect class="card" x="24" y="556" width="492" height="62" rx="7"/><text class="t" x="40" y="586">Read a record page</text><text class="s" x="310" y="586">Official text first</text>
+    <text class="note" x="24" y="655">No novice/beginner labels. Empty Learn is not globally exposed.</text>
+  </g>
+
+  <!-- Sources -->
+  <g transform="translate(1220 1640)">
+    <use href="#shell"/>
+    <text class="label" x="24" y="92">SOURCES</text>
+    <text class="h" x="24" y="126">Provenance and trust register</text>
+    <text class="s" x="24" y="151">Sources used for records, official text, and published relationships.</text>
+    <rect class="field" x="24" y="174" width="300" height="42" rx="6"/><text class="s" x="40" y="200" fill="#445964">Search publisher or source</text>
+    <rect class="tag" x="334" y="174" width="182" height="42" rx="6"/><text class="s" x="352" y="200">46 sources · Filters (0)</text>
+    <text class="label" x="24" y="258">SOURCE</text><text class="label" x="290" y="258">COVERAGE</text><text class="label" x="405" y="258">STATUS</text>
+    <line class="rule" x1="24" y1="270" x2="516" y2="270"/>
+    <text class="t" x="24" y="304">NIST Cybersecurity Framework 2.0</text><text class="s" x="290" y="304">Subcategories</text><text class="good" x="405" y="304">Current</text>
+    <text class="s" x="24" y="328">NIST · retrieved 2026-07-16</text>
+    <line class="rule" x1="24" y1="348" x2="516" y2="348"/>
+    <text class="t" x="24" y="382">SP 800-53 Rev. 5</text><text class="s" x="290" y="382">Controls</text><text class="good" x="405" y="382">Current</text>
+    <text class="s" x="24" y="406">NIST · retrieved 2026-07-16</text>
+    <line class="rule" x1="24" y1="426" x2="516" y2="426"/>
+    <text class="t" x="24" y="460">NIST OLIR CSF 2.0 crosswalk</text><text class="s" x="290" y="460">Mappings</text><text class="warn" x="405" y="460">Review date due</text>
+    <text class="s" x="24" y="484">NIST · mapping rationale not published</text>
+    <rect class="card" x="24" y="526" width="492" height="72" rx="7"/><text class="m" x="40" y="554">Looking for external working material?</text><text class="s" x="40" y="578">Build → Resources contains tools, templates, training, and communities.</text>
+    <text class="note" x="24" y="655">Compact register first. Resources boundary is one sentence, not a promo panel.</text>
+  </g>
+</svg>
