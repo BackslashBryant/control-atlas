@@ -100,9 +100,12 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
     /word: "(?:Comply|Authorize|Inherit|Baseline|Assess|Audit|Simplify|Clarify|Demystify|Verify)"/,
   );
   assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
+  assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 8000/);
   assert.match(brand, /brand-key">Ctrl/);
-  assert.match(brand, /prefers-reduced-motion/);
+  assert.match(brand, /BRAND_ROTATION_SETTLE_MS/);
+  assert.match(brand, /setTimeout/);
   assert.match(brand, /setInterval/);
+  assert.doesNotMatch(brand, /classList/);
   assert.match(html, /class="brand-key">Ctrl/);
   assert.match(html, /class="brand-key">Alt/);
   assert.match(html, /data-brand-word>Trace/);
@@ -177,12 +180,14 @@ test('graph implementation references are documented', () => {
   }
 });
 
-test('static artifact loading caches requests in memory', () => {
+test('static artifact loading caches requests and scopes initial data by route', () => {
   assert.match(runtimeLoader, /new Map<.*Promise/);
   assert.match(runtimeLoader, /artifactCache\.get/);
   assert.match(runtimeLoader, /artifactCache\.set/);
-  assert.match(runtimeLoader, /includeFullGraph/);
-  assert.match(reactApp, /requiresFullGraph\(viewState\.view\)/);
+  assert.match(runtimeLoader, /runtimeArtifactPlan/);
+  assert.match(runtimeLoader, /catalog-bootstrap\.json/);
+  assert.match(runtimeLoader, /catalog-records/);
+  assert.match(reactApp, /requiresFullGraph\(viewState\)/);
 });
 
 test('secondary route pages are lazy loaded behind a suspense fallback', () => {

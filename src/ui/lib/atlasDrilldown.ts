@@ -144,23 +144,42 @@ export function buildAtlasDrilldownModel(dataset: {
   const publishedEdges = dataset.edges.filter(
     (edge) => edge.publication_status === "published",
   );
-  const structuralEdges = publishedEdges.filter(
-    (edge) =>
+  const structuralChildrenByParent = new Map<string, string[]>();
+  const selectedIdsByBaseline = new Map<string, string[]>();
+  const incidentEdgesByNode = new Map<string, AtlasDrillEdge[]>();
+  for (const edge of publishedEdges) {
+    for (const nodeId of [edge.source_node_id, edge.target_node_id]) {
+      const incident = incidentEdgesByNode.get(nodeId) || [];
+      incident.push(edge);
+      incidentEdgesByNode.set(nodeId, incident);
+    }
+    if (
       edge.relationship_class === "structural" &&
-      edge.relationship_type === "contains",
-  );
+      edge.relationship_type === "contains"
+    ) {
+      const children = structuralChildrenByParent.get(edge.source_node_id) || [];
+      children.push(edge.target_node_id);
+      structuralChildrenByParent.set(edge.source_node_id, children);
+    }
+    if (
+      edge.relationship_class === "applicability" &&
+      edge.relationship_type === "selects"
+    ) {
+      const selected = selectedIdsByBaseline.get(edge.source_node_id) || [];
+      selected.push(edge.target_node_id);
+      selectedIdsByBaseline.set(edge.source_node_id, selected);
+    }
+  }
   const frameworkGroups = SUPPORTED_FRAMEWORKS.map((supported) => {
     const root = nodesById.get(supported.rootId);
     if (!root) return null;
-    const units = structuralEdges
-      .filter((edge) => edge.source_node_id === supported.rootId)
-      .map((edge) => nodesById.get(edge.target_node_id))
+    const units = (structuralChildrenByParent.get(supported.rootId) || [])
+      .map((nodeId) => nodesById.get(nodeId))
       .filter((node): node is AtlasDrillNode => Boolean(node))
       .map((unit) => ({
         ...toChoice(unit),
-        records: structuralEdges
-          .filter((edge) => edge.source_node_id === unit.id)
-          .map((edge) => nodesById.get(edge.target_node_id))
+        records: (structuralChildrenByParent.get(unit.id) || [])
+          .map((nodeId) => nodesById.get(nodeId))
           .filter((node): node is AtlasDrillNode => Boolean(node))
           .map(toChoice)
           .sort(byItemId),
@@ -196,32 +215,14 @@ export function buildAtlasDrilldownModel(dataset: {
   const familyRecordIds = new Map(
     familyNodes.map((family) => [
       family.id,
-      new Set(
-        publishedEdges
-          .filter(
-            (edge) =>
-              edge.relationship_class === "structural" &&
-              edge.relationship_type === "contains" &&
-              edge.source_node_id === family.id,
-          )
-          .map((edge) => edge.target_node_id),
-      ),
+      new Set(structuralChildrenByParent.get(family.id) || []),
     ]),
   );
 
   const baselines = NIST_BASELINE_IDS.map((baselineId) => {
     const baseline = nodesById.get(baselineId);
     if (!baseline) return null;
-    const selectedIds = new Set(
-      publishedEdges
-        .filter(
-          (edge) =>
-            edge.relationship_class === "applicability" &&
-            edge.relationship_type === "selects" &&
-            edge.source_node_id === baselineId,
-        )
-        .map((edge) => edge.target_node_id),
-    );
+    const selectedIds = new Set(selectedIdsByBaseline.get(baselineId) || []);
     const families = familyNodes
       .map((family) => {
         const records = [...(familyRecordIds.get(family.id) || [])]
@@ -251,11 +252,7 @@ export function buildAtlasDrilldownModel(dataset: {
   const rmfSteps = RMF_STEP_IDS.map((stepId) => {
     const step = nodesById.get(stepId);
     if (!step) return null;
-    const results = publishedEdges
-      .filter(
-        (edge) =>
-          edge.source_node_id === stepId || edge.target_node_id === stepId,
-      )
+    const results = (incidentEdgesByNode.get(stepId) || [])
       .map((edge) => {
         const node = nodesById.get(counterpartId(edge, stepId));
         return node

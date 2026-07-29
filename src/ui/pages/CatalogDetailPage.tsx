@@ -34,7 +34,10 @@ export function CatalogDetailPage(props: {
   onOpenNode: (nodeId: string, from?: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
-  const catalogs = bundle.runtime.getCatalogs();
+  const catalogs =
+    bundle.catalogSummaries?.length
+      ? bundle.catalogSummaries
+      : bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === state.catalog);
 
   if (!state.catalog) {
@@ -210,7 +213,11 @@ export function CatalogDetailPage(props: {
           </div>
         </div>
 
-        {showTierBrowser ? (
+        {bundle.catalogRecordsReady === false ? (
+          <p className="notice-inline" role="status">
+            Loading this publication's records…
+          </p>
+        ) : showTierBrowser ? (
           <>
             <div className="catalog-index-list">
               {tierGroups.map((group) => (

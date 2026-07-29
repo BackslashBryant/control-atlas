@@ -6,7 +6,6 @@ import test from "node:test";
 import {
   atlasNeighborhoodShardId,
   buildAtlasNeighborhoodShards,
-  buildAtlasNodeIndex,
 } from "../src/app/atlas-neighborhood.mjs";
 
 test("Atlas neighborhood sharding is deterministic and preserves canonical edges", () => {
@@ -43,13 +42,13 @@ test("Atlas neighborhood sharding is deterministic and preserves canonical edges
   const first = buildAtlasNeighborhoodShards(graph, 8);
   const second = buildAtlasNeighborhoodShards(graph, 8);
   assert.deepEqual(first, second);
-  assert.deepEqual(buildAtlasNodeIndex(graph)[0], ["a", "control", "A", "Alpha", ""]);
-
   const record = first
     .find((shard) => shard.shard_id === atlasNeighborhoodShardId("a", 8))
     .records.a;
   assert.equal(record.published_connection_count, 1);
   assert.equal(record.candidate_connection_count, 1);
+  assert.deepEqual(record.center_node, graph.nodes[0]);
+  assert.deepEqual(record.nodes.map((node) => node[0]), ["a", "b", "c"]);
   assert.deepEqual(record.structural_path, ["a"]);
   assert.deepEqual(record.edges.map((edge) => edge[0]), ["edge:published", "edge:candidate"]);
 
@@ -103,11 +102,13 @@ test("generated Atlas shards contain only incident canonical edges", () => {
   const canonicalEdges = new Map(
     JSON.parse(readFileSync("data/generated/edges.json", "utf8")).edges.map((edge) => [edge.id, edge]),
   );
-  const canonicalNodeIds = new Set(
-    JSON.parse(readFileSync("data/generated/nodes.json", "utf8")).nodes.map(
-      (node) => node.id,
-    ),
+  const canonicalNodes = JSON.parse(
+    readFileSync("data/generated/nodes.json", "utf8"),
+  ).nodes;
+  const canonicalNodeById = new Map(
+    canonicalNodes.map((node) => [node.id, node]),
   );
+  const canonicalNodeIds = new Set(canonicalNodeById.keys());
   const shardDir = "data/generated/atlas-neighborhood";
   const shardedNodeIds = new Set();
   let recordCount = 0;
@@ -116,6 +117,17 @@ test("generated Atlas shards contain only incident canonical edges", () => {
     for (const [nodeId, record] of Object.entries(artifact.atlas_neighborhood_shard.records)) {
       recordCount += 1;
       shardedNodeIds.add(nodeId);
+      assert.deepEqual(
+        record.center_node,
+        canonicalNodeById.get(nodeId),
+        `${nodeId} center node must be canonical`,
+      );
+      for (const compactNode of record.nodes) {
+        assert.ok(
+          canonicalNodeIds.has(compactNode[0]),
+          `${compactNode[0]} neighborhood node must be canonical`,
+        );
+      }
       for (const compactEdge of record.edges) {
         const [edgeId, sourceNodeId, targetNodeId] = compactEdge;
         assert.ok(canonicalEdges.has(edgeId), `${edgeId} must be canonical`);

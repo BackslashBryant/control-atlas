@@ -25,6 +25,7 @@ export const BRAND_WORDS = BRAND_ACTIONS.map(({ word }) => word);
 
 export const BRAND_ROTATION_INTERVAL_MS = 2400;
 export const BRAND_ROTATION_TRANSITION_MS = 320;
+export const BRAND_ROTATION_SETTLE_MS = 8000;
 
 export const LONGEST_BRAND_WORD = BRAND_WORDS.reduce((longest, word) =>
   word.length > longest.length ? word : longest,

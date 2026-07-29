@@ -14,7 +14,6 @@ import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
   ATLAS_NEIGHBORHOOD_SHARD_COUNT,
-  buildAtlasNodeIndex,
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
 import {
@@ -25,6 +24,7 @@ import {
   resolveCatalogPublicationIdentity,
   validateCatalogPublicationIdentity,
 } from "../src/app/catalog-publication-identity.mjs";
+import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -41,7 +41,6 @@ const GOVERNANCE_FILES = [
   "graph-diff-summary.json",
   "library-search.json",
   "atlas-neighborhood-manifest.json",
-  "atlas-node-index.json",
 ];
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
 
@@ -1756,7 +1755,8 @@ function createBuildManifest(graph) {
       "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-neighborhood/",
-      "atlas-node-index.json",
+      "catalog-bootstrap.json",
+      "catalog-records/",
     ],
     governance_artifacts: GOVERNANCE_FILES,
     source_registry_path: "data/source-registry.json",
@@ -1777,10 +1777,12 @@ function buildLibraryDocuments(graph) {
   );
   return graph.nodes.map((node) => {
     const source = sourceById.get(node.source_id);
+    const itemId = node.metadata?.item_id || node.id;
+    const title = node.metadata?.title || node.label;
     return {
       id: node.id,
-      item_id: node.metadata?.item_id || node.id,
-      title: node.metadata?.title || node.label,
+      item_id: itemId,
+      title,
       description_available: Boolean(node.metadata?.description?.trim()),
       object_type: node.node_type,
       source_id: node.source_id,
@@ -1795,8 +1797,16 @@ function buildLibraryDocuments(graph) {
 
 function buildLibrarySearch(graph) {
   const documents = buildLibraryDocuments(graph);
+  const facetValues = (field) =>
+    [...new Set(documents.map((document) => document[field]).filter(Boolean))].sort();
   return {
     document_count: documents.length,
+    facets: {
+      objectTypes: facetValues("object_type"),
+      sourceClasses: facetValues("source_class"),
+      controlFamilies: facetValues("control_family"),
+      severities: facetValues("severity"),
+    },
     documents,
   };
 }
@@ -1864,7 +1874,82 @@ export function buildFrameworkData() {
   );
   const librarySearch = buildLibrarySearch(graph);
   const atlasNeighborhoodShards = buildAtlasNeighborhoodShards(graph);
-  const atlasNodeIndex = buildAtlasNodeIndex(graph);
+  const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const evidenceById = new Map(
+    graph.evidence.map((entry) => [entry.id, entry]),
+  );
+  const catalogs = createFederalGraphRuntime(graph)
+    .getCatalogs()
+    .map((catalog) => {
+      const root =
+        graph.nodes.find(
+          (node) =>
+            node.node_type === "catalog" &&
+            node.metadata?.catalog_id === catalog.id,
+        ) ||
+        graph.nodes.find(
+          (node) => node.metadata?.catalog_id === catalog.id,
+        );
+      const source = sourceById.get(root?.source_id);
+      return {
+        ...catalog,
+        source_id: root?.source_id || "",
+        source_version: source?.version || source?.source_version || "",
+      };
+    });
+  const mappingSourcesByPair = new Map();
+  for (const edge of graph.edges) {
+    if (edge.publication_status !== "published") continue;
+    const sourceCatalog =
+      nodeById.get(edge.source_node_id)?.metadata?.catalog_id || "";
+    const targetCatalog =
+      nodeById.get(edge.target_node_id)?.metadata?.catalog_id || "";
+    if (!sourceCatalog || !targetCatalog || sourceCatalog === targetCatalog) {
+      continue;
+    }
+    const sourceIds = new Set([
+      ...(edge.source_refs || []).map((reference) => reference.source_id),
+      ...(edge.evidence_ids || []).map(
+        (evidenceId) => evidenceById.get(evidenceId)?.source_id,
+      ),
+    ]);
+    for (const key of [
+      `${sourceCatalog}|${targetCatalog}`,
+      `${targetCatalog}|${sourceCatalog}`,
+    ]) {
+      const values = mappingSourcesByPair.get(key) || new Set();
+      for (const sourceId of sourceIds) {
+        if (sourceId) values.add(sourceId);
+      }
+      mappingSourcesByPair.set(key, values);
+    }
+  }
+  const catalogBootstrap = {
+    catalogs,
+    mapping_sources: Object.fromEntries(
+      [...mappingSourcesByPair.entries()].map(([key, sourceIds]) => [
+        key,
+        [...sourceIds]
+          .map((sourceId) => {
+            const source = sourceById.get(sourceId);
+            return {
+              value: sourceId,
+              label: source?.display_name || source?.name || sourceId,
+            };
+          })
+          .sort((left, right) => left.label.localeCompare(right.label)),
+      ]),
+    ),
+  };
+  const catalogRecords = new Map();
+  for (const node of graph.nodes) {
+    const catalogId = node.metadata?.catalog_id;
+    if (!catalogId) continue;
+    const records = catalogRecords.get(catalogId) || [];
+    records.push(node);
+    catalogRecords.set(catalogId, records);
+  }
 
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
@@ -1874,7 +1959,11 @@ export function buildFrameworkData() {
     if (entry === "commons-search-index.json") {
       continue;
     }
-    if (entry === "library-search" || entry === "atlas-neighborhood") {
+    if (
+      entry === "library-search" ||
+      entry === "atlas-neighborhood" ||
+      entry === "catalog-records"
+    ) {
       rmSync(entryPath, { recursive: true, force: true });
       continue;
     }
@@ -1963,10 +2052,28 @@ export function buildFrameworkData() {
   );
 
   writeFileSync(
-    join(GENERATED, "atlas-node-index.json"),
-    `${JSON.stringify(artifact("atlas_nodes", atlasNodeIndex, generatedAt))}\n`,
+    join(GENERATED, "catalog-bootstrap.json"),
+    `${JSON.stringify(
+      artifact("catalog_bootstrap", catalogBootstrap, generatedAt),
+    )}\n`,
     "utf8",
   );
+
+  const catalogRecordsDir = join(GENERATED, "catalog-records");
+  mkdirSync(catalogRecordsDir, { recursive: true });
+  for (const [catalogId, nodes] of catalogRecords) {
+    writeFileSync(
+      join(catalogRecordsDir, `${catalogId}.json`),
+      `${JSON.stringify(
+        artifact(
+          "catalog_records",
+          { catalog_id: catalogId, nodes },
+          generatedAt,
+        ),
+      )}\n`,
+      "utf8",
+    );
+  }
 
   return {
     sources: graph.sources.length,

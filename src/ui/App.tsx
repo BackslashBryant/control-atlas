@@ -173,14 +173,26 @@ export function App() {
     setGraphRequested((current) => (current ? current : true));
   }
 
+  const runtimeScopeKey =
+    viewState.view === "library-detail"
+      ? `${viewState.view}:${viewState.node}`
+      : viewState.view === "catalog-detail"
+        ? `${viewState.view}:${viewState.catalog}`
+        : viewState.view === "matrix"
+          ? `${viewState.view}:${viewState.crosswalk}:${viewState.compareRun}`
+        : viewState.view === "templates"
+            ? `${viewState.view}:${viewState.buildSection}:${viewState.task}:${viewState.templateType}`
+            : viewState.view;
+
   useEffect(() => {
     let cancelled = false;
     setLoadSlow(false);
     setLoadError("");
+    const runtimeState = latestNavStateRef.current;
 
     const needsRuntime =
-      viewState.view === "search" ||
-      !isStaticViewWithoutBundle(viewState.view) ||
+      runtimeState.view === "search" ||
+      !isStaticViewWithoutBundle(runtimeState.view) ||
       searchOverlayOpen;
     if (!needsRuntime) {
       return () => {
@@ -204,7 +216,9 @@ export function App() {
     import("./lib/runtimeLoader")
       .then(({ loadRuntimeDatasetStaged }) =>
         loadRuntimeDatasetStaged({
-          includeFullGraph: requiresFullGraph(viewState.view) || graphRequested,
+          state: runtimeState,
+          graphRequested,
+          searchOverlayOpen,
           onSearchReady: (result) => {
             if (!cancelled) {
               // A delivered stage proves the connection works: cancel the hard
@@ -213,7 +227,15 @@ export function App() {
               window.clearTimeout(slowTimer);
               window.clearTimeout(timeoutTimer);
               setLoadSlow(false);
-              setBundle((current) => (current?.graphReady ? current : result));
+              startTransition(() => {
+                setBundle((current) =>
+                  runtimeState.view === "catalog-detail"
+                    ? result
+                    : current?.graphReady
+                      ? current
+                      : result,
+                );
+              });
               setLoadError("");
             }
           },
@@ -222,7 +244,9 @@ export function App() {
               window.clearTimeout(slowTimer);
               window.clearTimeout(timeoutTimer);
               setLoadSlow(false);
-              setBundle(result);
+              startTransition(() => {
+                setBundle(result);
+              });
               setLoadError("");
             }
           },
@@ -249,7 +273,12 @@ export function App() {
       window.clearTimeout(slowTimer);
       window.clearTimeout(timeoutTimer);
     };
-  }, [graphRequested, loadAttempt, searchOverlayOpen, viewState.view]);
+  }, [
+    graphRequested,
+    loadAttempt,
+    runtimeScopeKey,
+    searchOverlayOpen,
+  ]);
 
   function retryLoad() {
     setBundle(null);
@@ -284,7 +313,7 @@ export function App() {
     const node =
       viewState.view === "library-detail" &&
       viewState.node &&
-      bundle?.graphReady
+      bundle
         ? bundle.runtime.getNode(viewState.node)
         : null;
     if (node) return recordDisplayTitle(node);
@@ -296,7 +325,7 @@ export function App() {
 
   useEffect(() => {
     const node =
-      viewState.view === "library-detail" && viewState.node && bundle?.graphReady
+      viewState.view === "library-detail" && viewState.node && bundle
         ? bundle.runtime.getNode(viewState.node)
         : null;
     document.title = routeDocumentTitle(viewState, node, routeEntityName);
@@ -382,7 +411,7 @@ export function App() {
     ? "error"
     : canRenderWithoutBundle && viewState.view !== "search"
       ? "true"
-    : bundle?.graphReady || (bundle && !requiresFullGraph(viewState.view))
+    : bundle?.routeReady && (!requiresFullGraph(viewState) || bundle.graphReady)
       ? "true"
       : bundle
         ? "partial"
@@ -552,7 +581,7 @@ function AppContent(props: {
     );
   }
 
-  if (bundle && !graphReady && requiresFullGraph(state.view)) {
+  if (bundle && !graphReady && requiresFullGraph(state)) {
     if (state.view === "library-detail") {
       return <DetailConnectionsSkeleton />;
     }

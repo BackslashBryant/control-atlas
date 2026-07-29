@@ -237,3 +237,62 @@ test("generated framework selector choices are meaningful and never dead ends", 
     ),
   );
 });
+
+test("guided Atlas indexes structural edges once instead of rescanning per unit", () => {
+  const scaleNodes: AtlasDrillNode[] = [
+    node("nist-800-53:CATALOG", "catalog", "CATALOG", "SP 800-53"),
+  ];
+  const scaleEdges: AtlasDrillEdge[] = [];
+  for (let familyIndex = 0; familyIndex < 100; familyIndex += 1) {
+    const familyId = `nist-800-53:FAMILY-${familyIndex}`;
+    scaleNodes.push(
+      node(familyId, "family", `FAMILY-${familyIndex}`, `Family ${familyIndex}`),
+    );
+    scaleEdges.push(
+      edge(`root-${familyIndex}`, "nist-800-53:CATALOG", familyId, "contains"),
+    );
+    for (let recordIndex = 0; recordIndex < 10; recordIndex += 1) {
+      const recordId = `nist-800-53:C-${familyIndex}-${recordIndex}`;
+      scaleNodes.push(
+        node(
+          recordId,
+          "control",
+          `C-${familyIndex}-${recordIndex}`,
+          `Control ${familyIndex}-${recordIndex}`,
+        ),
+      );
+      scaleEdges.push(
+        edge(
+          `record-${familyIndex}-${recordIndex}`,
+          familyId,
+          recordId,
+          "contains",
+        ),
+      );
+    }
+  }
+
+  let endpointReads = 0;
+  const trackedEdges = scaleEdges.map(
+    (candidate) =>
+      new Proxy(candidate, {
+        get(target, property, receiver) {
+          if (property === "source_node_id" || property === "target_node_id") {
+            endpointReads += 1;
+          }
+          return Reflect.get(target, property, receiver);
+        },
+      }),
+  );
+
+  const model = buildAtlasDrilldownModel({
+    nodes: scaleNodes,
+    edges: trackedEdges,
+  });
+
+  assert.equal(model.frameworkGroups[0]?.frameworks[0]?.units.length, 100);
+  assert.ok(
+    endpointReads < scaleEdges.length * 20,
+    `expected linear edge indexing, observed ${endpointReads} endpoint reads`,
+  );
+});

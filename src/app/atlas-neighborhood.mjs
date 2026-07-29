@@ -19,6 +19,9 @@ function compactNode(node) {
     node.metadata?.item_id || node.id,
     node.metadata?.title || node.label || node.id,
     node.metadata?.catalog_id || "",
+    node.source_id || "",
+    node.metadata?.family || "",
+    node.parent_id || "",
   ];
 }
 
@@ -40,15 +43,12 @@ function compactEdge(edge) {
   ];
 }
 
-export function buildAtlasNodeIndex(graph) {
-  return graph.nodes.map(compactNode);
-}
-
 export function buildAtlasNeighborhoodShards(
   graph,
   shardCount = ATLAS_NEIGHBORHOOD_SHARD_COUNT,
 ) {
   const ancestorGraph = buildAncestorGraph(graph.nodes, graph.edges);
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const edgesByNode = new Map(graph.nodes.map((node) => [node.id, []]));
 
   for (const edge of graph.edges) {
@@ -61,13 +61,24 @@ export function buildAtlasNeighborhoodShards(
   const shardRecords = new Map();
   for (const node of graph.nodes) {
     const edges = (edgesByNode.get(node.id) || []).map(compactEdge);
+    const structuralPath = ancestorChain(node.id, ancestorGraph).map(
+      (link) => link.id,
+    );
+    const neighborhoodNodeIds = new Set([
+      node.id,
+      ...structuralPath,
+      ...edges.flatMap((edge) => [edge[1], edge[2]]),
+    ]);
     const shardId = atlasNeighborhoodShardId(node.id, shardCount);
     const records = shardRecords.get(shardId) || {};
     records[node.id] = {
+      center_node: node,
+      nodes: [...neighborhoodNodeIds]
+        .map((nodeId) => nodeById.get(nodeId))
+        .filter(Boolean)
+        .map(compactNode),
       edges,
-      structural_path: ancestorChain(node.id, ancestorGraph).map(
-        (link) => link.id,
-      ),
+      structural_path: structuralPath,
       published_connection_count: edges.filter(
         (edge) => edge[6] === "published",
       ).length,

@@ -18,6 +18,19 @@ type TopNavProps = {
   onOpenHelp: () => void;
 };
 
+function useMediaMatch(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window === "undefined" ? false : window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const onChange = (event: MediaQueryListEvent) => setMatches(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, [query]);
+  return matches;
+}
+
 export function TopNav(props: TopNavProps) {
   const {
     viewState,
@@ -27,6 +40,8 @@ export function TopNav(props: TopNavProps) {
   } = props;
 
   const activeView = activeNavForState(viewState);
+  const compactNavigation = useMediaMatch("(max-width: 1279px)");
+  const compactHeader = useMediaMatch("(max-width: 880px)");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
@@ -135,17 +150,19 @@ export function TopNav(props: TopNavProps) {
         </span>
       </button>
 
-      <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
-        <Tabs
-          tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
-          activeId={activeView as string}
-          onChange={(id) => {
-            const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
-            if (item) navigate(item.view, item.patch);
-          }}
-          className="border-b-0 h-full gap-[8px]"
-        />
-      </nav>
+      {!compactNavigation ? (
+        <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
+          <Tabs
+            tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
+            activeId={activeView as string}
+            onChange={(id) => {
+              const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
+              if (item) navigate(item.view, item.patch);
+            }}
+            className="border-b-0 h-full gap-[8px]"
+          />
+        </nav>
+      ) : null}
 
       <div className="header-actions">
         <div className="header-search-trigger-wrap">
@@ -159,7 +176,7 @@ export function TopNav(props: TopNavProps) {
             <span>Search</span>
           </Button>
         </div>
-        <div className="header-actions-text">
+        {!compactHeader ? <div className="header-actions-text">
           <Button
             variant="secondary"
             className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
@@ -181,7 +198,7 @@ export function TopNav(props: TopNavProps) {
           >
             Start here
           </Button>
-        </div>
+        </div> : null}
         <button
           aria-controls="mobile-nav-sheet"
           aria-expanded={mobileMenuOpen}

@@ -45,6 +45,11 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   const rowByNodeId = new Map(
     visibleRows.map((row) => [row.counterpart.id, row]),
   );
+  const groupLabelByNodeId = new Map(
+    visibleGroups.flatMap((group) =>
+      group.items.map((row) => [row.counterpart.id, group.label] as const),
+    ),
+  );
   const nodes = [center, ...visibleRows.map((row) => row.counterpart)];
   const edges = visibleRows.map((row) => row.edge);
   const reducedMotion =
@@ -85,6 +90,33 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           </button>
         ) : null}
       </div>
+      {compact ? (
+        <div
+          aria-label="Compact relationship map"
+          className="atlas-compact-map"
+          role="group"
+        >
+          <div className="atlas-compact-map-center">
+            <strong>{center.metadata?.item_id || center.label || center.id}</strong>
+            {center.metadata?.title ? <span>{center.metadata.title}</span> : null}
+          </div>
+          <ul>
+            {visibleRows.map((row) => (
+              <li key={row.counterpart.id}>
+                <button
+                  aria-pressed={row.counterpart.id === selectedItemId}
+                  onClick={() => onSelectItem(row)}
+                  type="button"
+                >
+                  <span>{groupLabelByNodeId.get(row.counterpart.id)}</span>
+                  <strong>{row.itemId}</strong>
+                  <small>{row.title}</small>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
       <div className="ca-canvas-container atlas-shared-graph">
         <Suspense
           fallback={<p role="status">Loading the bounded relationship map…</p>}
@@ -104,6 +136,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           />
         </Suspense>
       </div>
+      )}
       {expandedGroup && expandedGroup.items.length > visibleRows.length ? (
         <button className="atlas-spatial-more" onClick={onOpenList} type="button">
           {expandedGroup.items.length - visibleRows.length} more records in List
