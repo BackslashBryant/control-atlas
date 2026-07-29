@@ -36,6 +36,13 @@ if (!rootElement || !reactRootElement) {
 let brandRotationInterval = 0;
 let brandRotationTransition = 0;
 let reactBoot: Promise<void> | null = null;
+let reactModules: Promise<
+  [
+    typeof import('react'),
+    typeof import('react-dom/client'),
+    typeof import('./ui/App'),
+  ]
+> | null = null;
 let brandMotionMedia: MediaQueryList | null = null;
 
 function isHomeHash() {
@@ -52,6 +59,69 @@ function staticSearchQuery() {
   const queryIndex = hash.indexOf('?');
   if (queryIndex === -1) return '';
   return new URLSearchParams(hash.slice(queryIndex + 1)).get('q') || '';
+}
+
+function syncStaticRouteShell() {
+  const shell = rootElement.querySelector<HTMLElement>('[data-static-route]');
+  if (!shell) return;
+  const active =
+    rootElement.dataset.routeHydrated !== 'true' &&
+    !isHomeHash() &&
+    !isSearchHash();
+  shell.toggleAttribute('hidden', !active);
+  if (!active) {
+    delete rootElement.dataset.staticRouteActive;
+    return;
+  }
+  rootElement.dataset.staticRouteActive = 'true';
+  delete rootElement.dataset.routeHydrated;
+  shell.removeAttribute('aria-hidden');
+  shell.removeAttribute('inert');
+  shell.setAttribute('role', 'status');
+}
+
+function observeRouteHydration() {
+  let settleTimer = 0;
+  const markHydrated = () => {
+    const app = reactRootElement.querySelector<HTMLElement>('#app');
+    if (!app || app.dataset.appReady !== 'true') return false;
+    if (
+      app.dataset.view === 'atlas-map' &&
+      app.dataset.hasSubject === 'true' &&
+      !reactRootElement.querySelector('[data-route-content-ready="true"]')
+    ) {
+      return false;
+    }
+    rootElement.dataset.routeHydrated = 'true';
+    const shell = rootElement.querySelector<HTMLElement>('[data-static-route]');
+    shell?.setAttribute('aria-hidden', 'true');
+    shell?.setAttribute('inert', '');
+    shell?.removeAttribute('role');
+    return true;
+  };
+  const scheduleHydration = () => {
+    const app = reactRootElement.querySelector<HTMLElement>('#app');
+    if (!app || app.dataset.appReady !== 'true') return;
+    window.clearTimeout(settleTimer);
+    settleTimer = window.setTimeout(() => {
+      if (markHydrated()) observer.disconnect();
+    }, 200);
+  };
+  const observer = new MutationObserver(() => {
+    scheduleHydration();
+  });
+  observer.observe(reactRootElement, {
+    attributes: true,
+    attributeFilter: ['data-app-ready'],
+    childList: true,
+    subtree: true,
+  });
+  scheduleHydration();
+  window.setTimeout(() => {
+    window.clearTimeout(settleTimer);
+    markHydrated();
+    observer.disconnect();
+  }, 15_000);
 }
 
 function stopBrandRotation() {
@@ -156,6 +226,7 @@ function syncProgressiveShell() {
   rootElement
     .querySelector<HTMLElement>('[data-static-search]')
     ?.toggleAttribute('hidden', !search);
+  syncStaticRouteShell();
   const input = rootElement.querySelector<HTMLInputElement>(
     '[data-static-search-input]',
   );
@@ -208,11 +279,7 @@ async function bootReactApp() {
   window.removeEventListener('hashchange', onLocationChange);
   window.removeEventListener('popstate', onLocationChange);
 
-  reactBoot = Promise.all([
-    import('react'),
-    import('react-dom/client'),
-    import('./ui/App'),
-  ])
+  reactBoot = loadReactModules()
     .then(([react, reactDom, appModule]) => {
       reactDom.createRoot(reactRootElement).render(
         react.createElement(
@@ -221,6 +288,7 @@ async function bootReactApp() {
           react.createElement(appModule.App),
         ),
       );
+      observeRouteHydration();
     })
     .catch((error: unknown) => {
       reactBoot = null;
@@ -237,6 +305,16 @@ async function bootReactApp() {
 
   syncProgressiveShell();
   return reactBoot;
+}
+
+function loadReactModules() {
+  if (reactModules) return reactModules;
+  reactModules = Promise.all([
+    import('react'),
+    import('react-dom/client'),
+    import('./ui/App'),
+  ]);
+  return reactModules;
 }
 
 function onLocationChange() {
@@ -267,10 +345,9 @@ async function start() {
     window.addEventListener('hashchange', onLocationChange);
     window.addEventListener('popstate', onLocationChange);
   } else {
-    // Let the server-rendered route shell reach the screen before parsing the
-    // interactive workspace. This is the progressive-render boundary: the
-    // static Search form works immediately, then React adds results after the
-    // initial document has loaded. Any user action boots the workspace at once.
+    // Fetch the route bundle in parallel with the stable server-rendered shell,
+    // then mount the interactive workspace after the initial paint. The static
+    // Search form works immediately, and any user action still boots at once.
     const bootAfterInitialPaint = () => {
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {

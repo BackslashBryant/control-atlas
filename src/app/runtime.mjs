@@ -83,8 +83,8 @@ function normalizeLibrarySearchQuery(value) {
 
 function librarySearchRankBoost(document, query) {
   const normalizedQuery = normalize(query);
-  const title = normalize(document?.title);
-  const itemId = normalize(document?.item_id);
+  const title = document?.search_title || normalize(document?.title);
+  const itemId = document?.search_item_id || normalize(document?.item_id);
   let boost = 0;
   if (title === normalizedQuery) boost += 10_000;
   else if (title.includes(normalizedQuery)) boost += 1_000;
@@ -201,11 +201,15 @@ export function createFederalGraphRuntime(dataset) {
     if (existing) existing.push(edge);
     else edgesBySource.set(edge.source_node_id, [edge]);
   }
-  const libraryDocuments = [];
-  const libraryDocumentById = new Map();
+  const suppliedLibraryDocuments = dataset.librarySearch?.documents || [];
+  const libraryDocuments =
+    dataset.nodes.length === 0 ? suppliedLibraryDocuments : [];
+  let libraryDocumentById =
+    dataset.nodes.length === 0 ? null : new Map();
 
   function ingestLibrarySearch(searchArtifact) {
     if (!searchArtifact) return null;
+    if (dataset.nodes.length === 0) return null;
     for (const document of searchArtifact.documents || []) {
       if (libraryDocumentById.has(document.id)) {
         continue;
@@ -217,6 +221,15 @@ export function createFederalGraphRuntime(dataset) {
       libraryDocumentById.set(document.id, hydratedDocument);
       libraryDocuments.push(hydratedDocument);
     }
+  }
+
+  function getLibraryDocumentById(id) {
+    if (!libraryDocumentById) {
+      libraryDocumentById = new Map(
+        libraryDocuments.map((document) => [document.id, document]),
+      );
+    }
+    return libraryDocumentById.get(id) || null;
   }
 
   ingestLibrarySearch(dataset.librarySearch);
@@ -288,7 +301,7 @@ export function createFederalGraphRuntime(dataset) {
     connectedNodeIds.add(edge.source_node_id);
     connectedNodeIds.add(edge.target_node_id);
   }
-  const catalogs = [
+  const derivedCatalogs = [
     ...new Set(
       dataset.nodes.map((node) => node.metadata?.catalog_id).filter(Boolean),
     ),
@@ -334,6 +347,9 @@ export function createFederalGraphRuntime(dataset) {
         ).length,
       };
     });
+  const catalogs = Array.isArray(dataset.catalogs)
+    ? dataset.catalogs
+    : derivedCatalogs;
   const sortNodesByItemId = (left, right) =>
     itemIdFor(left).localeCompare(itemIdFor(right)) ||
     left.id.localeCompare(right.id);
@@ -923,14 +939,17 @@ export function createFederalGraphRuntime(dataset) {
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
       const aliasNeedle = normalizeControlNotation(needle);
-      const candidates = libraryDocuments.filter((document) =>
-        matchesLibraryFacet(document, filters),
-      );
+      const candidates = Object.values(filters).some(Boolean)
+        ? libraryDocuments.filter((document) =>
+            matchesLibraryFacet(document, filters),
+          )
+        : libraryDocuments;
       if (!needle) return candidates;
 
       const exactMatches = candidates.filter((document) => {
-        const itemId = normalize(document.item_id);
-        const id = normalize(document.id);
+        const itemId =
+          document.search_item_id || normalize(document.item_id);
+        const id = document.search_id || normalize(document.id);
         return (
           itemId === needle ||
           id === needle ||
@@ -947,35 +966,37 @@ export function createFederalGraphRuntime(dataset) {
       const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
       if (searchTerms.length === 0) return [];
 
-      return candidates
-        .map((document) => {
-          const itemId = normalize(document.item_id);
-          const title = normalize(document.title);
-          const searchableText = [
+      const matches = [];
+      for (const document of candidates) {
+        const itemId =
+          document.search_item_id || normalize(document.item_id);
+        const title = document.search_title || normalize(document.title);
+        const searchableText =
+          document.search_text ||
+          [
             itemId,
             title,
             normalize(document.control_family),
             normalize(document.source_name),
           ].join(" ");
-          const matchesAllTerms = searchTerms.every((term) =>
-            searchableText.includes(term),
-          );
-          const score = !matchesAllTerms
-            ? 99
-            : itemId === needle || itemId === aliasNeedle
-              ? 0
-              : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
-                ? 1
-                : title.includes(searchNeedle)
-                  ? 2
-                  : 3;
-          return {
-            document,
-            rankBoost: librarySearchRankBoost(document, searchNeedle),
-            score,
-          };
-        })
-        .filter((entry) => entry.score < 99)
+        if (!searchTerms.every((term) => searchableText.includes(term))) {
+          continue;
+        }
+        const score =
+          itemId === needle || itemId === aliasNeedle
+            ? 0
+            : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
+              ? 1
+              : title.includes(searchNeedle)
+                ? 2
+                : 3;
+        matches.push({
+          document,
+          rankBoost: librarySearchRankBoost(document, searchNeedle),
+          score,
+        });
+      }
+      return matches
         .sort(
           (a, b) =>
             a.score - b.score ||
@@ -989,7 +1010,7 @@ export function createFederalGraphRuntime(dataset) {
       return nodeById.get(id) || null;
     },
     getLibraryDocument(id) {
-      return libraryDocumentById.get(id) || null;
+      return getLibraryDocumentById(id);
     },
     getNodes(filters = {}) {
       return dataset.nodes.filter(
@@ -1049,6 +1070,9 @@ export function createFederalGraphRuntime(dataset) {
       return catalogs;
     },
     getLibraryFacets() {
+      if (dataset.librarySearch?.facets) {
+        return dataset.librarySearch.facets;
+      }
       return {
         objectTypes: [
           ...new Set(

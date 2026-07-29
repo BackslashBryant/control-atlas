@@ -95,7 +95,16 @@ test('Explore renders the ancestry chooser without hydrating the graph UI', asyn
   await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /Source starting points/ })).toBeVisible();
   await expect(page.locator('.react-flow')).toHaveCount(0);
-  expect(requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
-  expect(requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url))).toBe(true);
+  expect(
+    requests.some((url) =>
+      /\/atlas-node-index\.json(?:\.gz)?(?:\?|$)/.test(url),
+    ),
+  ).toBe(false);
+  expect(
+    requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url)),
+  ).toBe(false);
+  expect(
+    requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url)),
+  ).toBe(false);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });

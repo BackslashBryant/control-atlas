@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import {
   BRAND_ROTATION_INTERVAL_MS,
-  BRAND_ROTATION_TRANSITION_MS,
+  BRAND_ROTATION_SETTLE_MS,
   BRAND_WORDS,
   LONGEST_BRAND_WORD,
 } from "../../shared/brand-rotation";
@@ -30,42 +30,43 @@ export function BrandMark() {
 }
 
 export function BrandFlourish() {
-  const [reduceMotion, setReduceMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
-  const [wordIndex, setWordIndex] = useState(0);
-  const [wordPhase, setWordPhase] = useState<"enter" | "exit">("enter");
+  const wordRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReduceMotion(media.matches);
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
+    let wordIndex = 0;
+    let settleTimer = 0;
+    let rotationTimer = 0;
 
-  useEffect(() => {
-    if (reduceMotion) {
-      setWordIndex(0);
-      setWordPhase("enter");
-      return;
-    }
-
-    let transitionTimer = 0;
-    const rotationTimer = window.setInterval(() => {
-      setWordPhase("exit");
-      transitionTimer = window.setTimeout(() => {
-        setWordIndex((current) => (current + 1) % BRAND_WORDS.length);
-        setWordPhase("enter");
-      }, BRAND_ROTATION_TRANSITION_MS);
-    }, BRAND_ROTATION_INTERVAL_MS);
-
-    return () => {
+    const stopRotation = () => {
+      window.clearTimeout(settleTimer);
       window.clearInterval(rotationTimer);
-      window.clearTimeout(transitionTimer);
     };
-  }, [reduceMotion]);
+    const showNextWord = () => {
+      wordIndex = (wordIndex + 1) % BRAND_WORDS.length;
+      if (wordRef.current) wordRef.current.textContent = BRAND_WORDS[wordIndex];
+    };
+    const startRotation = () => {
+      stopRotation();
+      wordIndex = 0;
+      if (wordRef.current) wordRef.current.textContent = BRAND_WORDS[0];
+      if (media.matches) return;
+      settleTimer = window.setTimeout(() => {
+        showNextWord();
+        rotationTimer = window.setInterval(
+          showNextWord,
+          BRAND_ROTATION_INTERVAL_MS,
+        );
+      }, BRAND_ROTATION_SETTLE_MS);
+    };
+
+    media.addEventListener("change", startRotation);
+    startRotation();
+    return () => {
+      stopRotation();
+      media.removeEventListener("change", startRotation);
+    };
+  }, []);
 
   return (
     <span aria-hidden="true" className="brand-kbd">
@@ -75,8 +76,8 @@ export function BrandFlourish() {
       <span className="brand-plus">+</span>
       <span className="brand-key brand-key--active">
         <span className="brand-key-sizer">{LONGEST_BRAND_WORD}</span>
-        <span className={`brand-key-word word-${wordPhase}`}>
-          {BRAND_WORDS[wordIndex]}
+        <span className="brand-key-word" ref={wordRef}>
+          {BRAND_WORDS[0]}
         </span>
       </span>
     </span>

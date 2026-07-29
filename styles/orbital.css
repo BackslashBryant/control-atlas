@@ -31,7 +31,7 @@ body {
   background-size: 24px 24px, 24px 24px, auto, auto, auto;
 }
 
-#root[data-react-active="true"] {
+#root {
   display: grid;
   align-content: start;
   grid-template-columns: minmax(0, 1fr);
@@ -39,34 +39,43 @@ body {
   min-height: 100vh;
 }
 
-#root[data-react-active="true"] > [data-react-root] {
+#root > [data-react-root] {
   display: contents;
 }
 
-#root[data-react-active="true"] > [data-static-header-reserve],
-#root[data-react-active="true"] .site-header {
+#root > [data-static-header-reserve],
+#root > [data-react-root] .site-header {
   grid-column: 1;
   grid-row: 1;
 }
 
-#root[data-react-active="true"] > [data-static-context-reserve],
-#root[data-react-active="true"] .orbital-context {
+#root > [data-static-context-reserve],
+#root > [data-react-root] .orbital-context {
   grid-column: 1;
   grid-row: 2;
 }
 
-#root[data-react-active="true"] > [data-static-search] {
+#root > [data-static-search] {
   grid-column: 1;
   grid-row: 3;
 }
 
-#root[data-react-active="true"] #workspace {
+#root > [data-static-route],
+#root > [data-react-root] #workspace {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#root > [data-react-root] footer {
   grid-column: 1;
   grid-row: 4;
 }
 
-#root[data-react-active="true"] footer {
-  grid-column: 1;
+#root[data-static-search-active="true"] > [data-react-root] #workspace {
+  grid-row: 4;
+}
+
+#root[data-static-search-active="true"] > [data-react-root] footer {
   grid-row: 5;
 }
 
@@ -82,12 +91,43 @@ body {
   padding-top: var(--ca-space-8);
 }
 
+.static-route-shell {
+  min-height: max(620px, calc(100svh - 200px));
+  padding-top: var(--ca-space-8);
+  position: relative;
+  z-index: 0;
+}
+
+.static-route-summary {
+  min-height: min(52svh, 430px);
+  max-width: 62ch;
+}
+
+#root[data-static-route-active="true"] [data-react-root] #workspace {
+  min-height: max(620px, calc(100svh - 200px));
+  position: relative;
+  visibility: hidden;
+  z-index: 1;
+}
+
+#root[data-static-route-active="true"][data-route-hydrated="true"]
+  [data-react-root]
+  #workspace {
+  background: var(--ca-bg);
+  visibility: visible;
+}
+
 .static-search-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: var(--ca-space-4);
   margin-bottom: 0;
+}
+
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
 }
 
 [data-static-search-status] {

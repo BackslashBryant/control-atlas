@@ -6,7 +6,7 @@ export function SiteFooter(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   return (
-    <footer className="mt-[64px] border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[48px] px-[24px]">
+    <footer className="site-footer mt-[64px] border-t border-[var(--ca-border-strong)] bg-[var(--ca-surface-raised)] py-[48px] px-[24px]">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-[48px] w-full max-w-[1280px] mx-auto mb-[48px]">
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[12px] text-[var(--ca-text)]">Control Atlas</strong>

@@ -1,9 +1,17 @@
 #!/usr/bin/env node
 
 import { readFile, readdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import {
+  LIGHTHOUSE_THRESHOLDS,
+  routeThresholdFailures,
+  selectLatestRouteRuns,
+  summarizeRouteMedians,
+} from './lighthouse-metrics.mjs';
 
-const REPORT_DIR = join(process.cwd(), 'artifacts', 'lighthouse-ci');
+const REPORT_DIR = process.env.LIGHTHOUSE_REPORT_DIR
+  ? resolve(process.cwd(), process.env.LIGHTHOUSE_REPORT_DIR)
+  : join(process.cwd(), 'artifacts', 'lighthouse-ci');
 const reportFiles = (await readdir(REPORT_DIR)).filter((name) =>
   name.endsWith('.report.json'),
 );
@@ -16,7 +24,8 @@ const rows = [];
 for (const reportFile of reportFiles) {
   const report = JSON.parse(await readFile(join(REPORT_DIR, reportFile), 'utf8'));
   rows.push({
-    url: report.finalDisplayedUrl || report.finalUrl || report.requestedUrl,
+    url: report.requestedUrl || report.finalDisplayedUrl || report.finalUrl,
+    fetchTime: report.fetchTime,
     performance: Math.round((report.categories.performance?.score ?? 0) * 100),
     accessibility: Math.round((report.categories.accessibility?.score ?? 0) * 100),
     lcpMs: Math.round(report.audits['largest-contentful-paint']?.numericValue ?? 0),
@@ -25,11 +34,17 @@ for (const reportFile of reportFiles) {
   });
 }
 
-rows.sort((a, b) => a.url.localeCompare(b.url));
+const currentRows = selectLatestRouteRuns(rows);
+currentRows.sort((a, b) => a.url.localeCompare(b.url));
+const routeMedians = summarizeRouteMedians(currentRows);
+const thresholdFailures = routeThresholdFailures(routeMedians);
 const summary = {
   generatedAt: new Date().toISOString(),
   evidence: 'local-or-CI synthetic Lighthouse; not field, real-device, or deployed evidence',
-  runs: rows,
+  thresholds: LIGHTHOUSE_THRESHOLDS,
+  routeMedians,
+  thresholdFailures,
+  runs: currentRows,
 };
 
 await writeFile(
@@ -37,4 +52,12 @@ await writeFile(
   `${JSON.stringify(summary, null, 2)}\n`,
 );
 
-console.table(rows);
+console.table(currentRows);
+console.table(routeMedians);
+if (thresholdFailures.length > 0) {
+  console.error('Lighthouse route-median gate failed:');
+  for (const failure of thresholdFailures) {
+    console.error(`- ${failure.url}: ${failure.failures.join('; ')}`);
+  }
+  process.exitCode = 1;
+}

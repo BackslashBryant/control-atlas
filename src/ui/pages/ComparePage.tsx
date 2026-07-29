@@ -149,12 +149,16 @@ export function ComparePage(props: {
     if (!catalogId) {
       return null;
     }
+    const catalog = catalogs.find((entry: any) => entry.id === catalogId);
+    if (catalog?.source_version) {
+      return catalog.source_version;
+    }
     const sampleNode = bundle.runtime.getNodes({ catalog_id: catalogId })[0];
     const source = sampleNode
       ? bundle.runtime.getSource(sampleNode.source_id)
       : null;
     return source?.version || source?.source_version || null;
-  }, [bundle.runtime, state.source, state.target]);
+  }, [bundle.runtime, catalogs, state.source, state.target]);
   const crosswalk = state.crosswalk || "intent";
   const relationshipNodeIds = useMemo(
     () => parseCatalogItemIds(state.items, state.source),
@@ -173,6 +177,11 @@ export function ComparePage(props: {
         })
       : null;
   const mappingSourceOptions = useMemo(() => {
+    if (!bundle.graphReady && state.source && state.target) {
+      return (
+        bundle.mappingSources?.[`${state.source}|${state.target}`] || []
+      );
+    }
     const sources = new Map<string, string>();
     for (const row of relationshipRowsRaw?.rows || []) {
       for (const reference of row.source_refs || []) {
@@ -188,7 +197,14 @@ export function ComparePage(props: {
     return [...sources.entries()]
       .map(([value, label]) => ({ value, label }))
       .sort((left, right) => left.label.localeCompare(right.label));
-  }, [bundle.runtime, relationshipRowsRaw]);
+  }, [
+    bundle.graphReady,
+    bundle.mappingSources,
+    bundle.runtime,
+    relationshipRowsRaw,
+    state.source,
+    state.target,
+  ]);
   const relationshipRows =
     relationshipRowsRaw && state.mappingSource
       ? {
@@ -238,6 +254,9 @@ export function ComparePage(props: {
   // item/type/provenance/confidence filters, since pair-level support is
   // about the catalogs, not one item or one relationship type.
   const pairHasAnyPublishedMapping =
+    !bundle.graphReady
+      ? true
+      :
     crosswalk === "relationships" && state.source && state.target
       ? bundle.runtime.buildRelationshipRows({
           source_catalog: state.source,

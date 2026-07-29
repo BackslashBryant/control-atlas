@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3,
+      "numberOfRuns": 5,
       "startServerCommand": "npm run serve:static",
       "startServerReadyPattern": "Control Atlas static site available",
       "startServerReadyTimeout": 120000,

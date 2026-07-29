@@ -52,6 +52,7 @@ import { serializeHashUrl } from "../lib/hashRoutes";
 import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
+import { officialTextPreview } from "../lib/officialText";
 import {
   Badge,
   DisclosurePanel,
@@ -152,6 +153,9 @@ export function ObjectDetailPage(props: {
   const source = document
     ? bundle.runtime.getSource(document.source_id)
     : bundle.runtime.getSource(node?.source_id);
+  const descriptionPreview = document?.description
+    ? officialTextPreview(document.description)
+    : null;
   const edges = node
     ? bundle.runtime.getEdgesForNode(node.id, {
         publication_status: "published",
@@ -446,10 +450,16 @@ export function ObjectDetailPage(props: {
                   Source excerpt from {source.display_name || source.name}
                 </p>
                 <p>
-                  {document.description
-                    ? renderOdpText(document.description)
+                  {descriptionPreview
+                    ? renderOdpText(descriptionPreview.preview)
                     : "No narrative description was published for this record."}
                 </p>
+                {descriptionPreview?.truncated ? (
+                  <details className="official-description-disclosure">
+                    <summary>Read full official description</summary>
+                    <p>{renderOdpText(document.description)}</p>
+                  </details>
+                ) : null}
               </>
             ) : (
               <p>

@@ -16,13 +16,13 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
   );
 }
 
-export function requiresFullGraph(view: ViewState["view"]) {
+export function requiresFullGraph(state: ViewState) {
   return (
-    view === "library-detail" ||
-    view === "catalog-detail" ||
-    view === "matrix" ||
-    view === "sources" ||
-    view === "templates" ||
-    view === "retired"
+    (state.view === "matrix" &&
+      (state.compareRun === "true" ||
+        state.crosswalk === "stig-chain" ||
+        state.crosswalk === "baseline-compare" ||
+        state.crosswalk === "threat-chain")) ||
+    (state.view === "templates" && Boolean(state.templateType))
   );
 }

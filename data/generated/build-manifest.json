@@ -12,15 +12,15 @@
       "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-neighborhood/",
-      "atlas-node-index.json"
+      "catalog-bootstrap.json",
+      "catalog-records/"
     ],
     "governance_artifacts": [
       "build-manifest.json",
       "source-manifests.json",
       "graph-diff-summary.json",
       "library-search.json",
-      "atlas-neighborhood-manifest.json",
-      "atlas-node-index.json"
+      "atlas-neighborhood-manifest.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",

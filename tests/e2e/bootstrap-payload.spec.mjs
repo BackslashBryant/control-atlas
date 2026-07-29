@@ -135,3 +135,34 @@ test("focused Atlas loading state avoids a content-agnostic mobile minimum heigh
   expect(loadingHeight).toBeLessThanOrEqual(823);
   expect(loadedHeight).toBeGreaterThan(loadingHeight);
 });
+
+test("catalog identity renders before its full record payload arrives", async ({
+  page,
+}) => {
+  let releaseRecords = () => {};
+  const recordsGate = new Promise((resolve) => {
+    releaseRecords = () => resolve();
+  });
+
+  await page.route(
+    "**/data/generated/catalog-records/nist-800-53.json*",
+    async (route) => {
+      await recordsGate;
+      await route.continue();
+    },
+  );
+
+  await page.goto("/#/catalog/nist-800-53");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "SP 800-53 Rev. 5" }),
+  ).toBeVisible({ timeout: 5000 });
+  await expect(page.getByText("Loading this publication's records…")).toBeVisible();
+
+  releaseRecords();
+  await expect(page.getByText("Loading this publication's records…")).toBeHidden({
+    timeout: 15000,
+  });
+  await expect(page.getByRole("heading", { level: 2 })).toContainText(
+    "SP 800-53 Rev. 5",
+  );
+});

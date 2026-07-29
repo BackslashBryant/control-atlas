@@ -1,4 +1,5 @@
 import {
+  startTransition,
   useEffect,
   useMemo,
   useRef,
@@ -41,6 +42,7 @@ import {
   type RuntimeBundle,
 } from "../lib/runtimeLoader";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
+import { officialTextPreview } from "../lib/officialText";
 
 import { Button, Panel } from "../components/lsm";
 
@@ -160,10 +162,15 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }, [state.relationshipSearch]);
 
   useEffect(() => {
-    if (!nodeId && !bundle.graphReady) {
+    if (!nodeId && state.atlasFramework && !bundle.graphReady) {
       onRequestFullGraph();
     }
-  }, [bundle.graphReady, nodeId, onRequestFullGraph]);
+  }, [
+    bundle.graphReady,
+    nodeId,
+    onRequestFullGraph,
+    state.atlasFramework,
+  ]);
 
   useEffect(() => {
     let cancelled = false;
@@ -178,8 +185,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     loadAtlasNeighborhood(nodeId)
       .then((nextRecord) => {
         if (cancelled) return;
-        setRecord(nextRecord);
-        setRecordStatus(nextRecord ? "ready" : "missing");
+        startTransition(() => {
+          setRecord(nextRecord);
+          setRecordStatus(nextRecord ? "ready" : "missing");
+        });
       })
       .catch(() => {
         if (!cancelled) setRecordStatus("error");
@@ -217,7 +226,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }
 
   return (
-    <Panel className="atlas-workspace">
+    <Panel
+      className="atlas-workspace"
+      data-route-content-ready={
+        recordStatus === "loading" ? "false" : "true"
+      }
+    >
       <header className="atlas-workspace-header">
         <div>
           <h1>
@@ -314,7 +328,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           state={state}
           view={view}
         />
-      ) : recordStatus === "idle" && bundle.graphReady ? (
+      ) : recordStatus === "idle" && bundle.routeReady ? (
         <AtlasGuidedPath
           bundle={bundle}
           onNavigate={onNavigate}
@@ -380,6 +394,7 @@ function FocusedAtlas(props: {
     inspectedDocument?.description ||
     inspectedNode?.metadata?.description ||
     "No narrative description was published for this record.";
+  const inspectedSynopsisPreview = officialTextPreview(inspectedSynopsis);
   const selectedSource = selectedRow?.edge.source_refs?.[0];
   const choiceLabels = [
     state.atlasFramework
@@ -629,7 +644,13 @@ function FocusedAtlas(props: {
 
               <section className="atlas-inspector-synopsis">
                 <h3>Official description</h3>
-                <p>{inspectedSynopsis}</p>
+                <p>{inspectedSynopsisPreview.preview}</p>
+                {inspectedSynopsisPreview.truncated ? (
+                  <details className="official-description-disclosure">
+                    <summary>Read full official description</summary>
+                    <p>{inspectedSynopsis}</p>
+                  </details>
+                ) : null}
               </section>
 
               {selectedRow ? (
@@ -712,11 +733,6 @@ function AtlasGuidedPath(props: {
 }) {
   const { bundle, state, patchAtlas, onNavigate, onOpenNode } = props;
   const [recordFilter, setRecordFilter] = useState("");
-  const model = useMemo(
-    () => buildAtlasDrilldownModel(bundle.runtime.dataset),
-    [bundle.runtime.dataset],
-  );
-  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const axis =
     state.atlasAxis ||
     (state.sourceView === "rmf" ||
@@ -724,6 +740,14 @@ function AtlasGuidedPath(props: {
     state.relationshipView === "rmf"
       ? "process"
       : "");
+  const model = useMemo(
+    () =>
+      axis
+        ? buildAtlasDrilldownModel(bundle.runtime.dataset)
+        : { baselines: [], rmfSteps: [], frameworkGroups: [] },
+    [axis, bundle.runtime.dataset],
+  );
+  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const framework = frameworks.find(
     (choice) => choice.id === state.atlasFramework,
   );
