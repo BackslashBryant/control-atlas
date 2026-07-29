@@ -11,6 +11,7 @@ import {
 } from "../lib/catalogCoverage";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
 import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
+import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -101,6 +102,17 @@ export function ExplorePage(props: {
       state.query,
     ],
   );
+  const directoryResources = useMemo(
+    () =>
+      !hasQuery || hasFilters
+        ? []
+        : searchResourceDocuments(
+            bundle.commonsSearchIndex?.documents || [],
+            state.query,
+            8,
+          ).map((entry) => entry.document),
+    [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query],
+  );
 
   const catalogCoverage = useMemo(
     () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1),
@@ -150,6 +162,7 @@ export function ExplorePage(props: {
   const hasVisibleResults =
     visibleDocumentRows.length > 0 ||
     glossaryMatches.length > 0 ||
+    directoryResources.length > 0 ||
     resourceMatches.templates.length > 0 ||
     resourceMatches.artifacts.length > 0;
 
@@ -159,6 +172,7 @@ export function ExplorePage(props: {
   const GROUP_RENDER_CAP = 5;
   const openAllGroups = visibleDocumentRows.length <= 10;
   const defaultOpenGroups = [
+    ...(directoryResources.length ? ["Resources"] : []),
     ...(resourceMatches.templates.length ? ["Templates"] : []),
     ...(resourceMatches.artifacts.length ? ["Official resources"] : []),
     ...(glossaryMatches.length ? ["Glossary"] : []),
@@ -268,6 +282,49 @@ export function ExplorePage(props: {
             tabIndex={-1}
             type="multiple"
           >
+            {directoryResources.length ? (
+              <DisclosurePanel
+                title={`Resources (${directoryResources.length})`}
+                value="Resources"
+              >
+                <div className="stack">
+                  {directoryResources.map((resource) => (
+                    <article
+                      aria-describedby={`desc-${resource.id}`}
+                      aria-labelledby={`title-${resource.id}`}
+                      className="result-card"
+                      key={resource.id}
+                    >
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">External resource</p>
+                          <CardTitle
+                            id={`title-${resource.id}`}
+                            onOpen={() =>
+                              onNavigate("commons-detail", {
+                                id: resource.id,
+                                from: "search",
+                              })
+                            }
+                          >
+                            {resource.name}
+                          </CardTitle>
+                        </div>
+                        <Badge tone="info">
+                          {resource.resourceType.replaceAll("_", " ")}
+                        </Badge>
+                      </div>
+                      <p className="result-summary" id={`desc-${resource.id}`}>
+                        {resource.summary}
+                      </p>
+                      <p className="result-support">
+                        Owner: {resource.publisher}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            ) : null}
             {resourceMatches.templates.length ? (
               <DisclosurePanel
                 title={`Templates (${resourceMatches.templates.length})`}

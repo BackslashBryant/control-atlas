@@ -167,7 +167,7 @@ test("search and glossary dialogs expose accessible control names", () => {
     "src/ui/components/GlossaryDrawer.tsx",
     "utf8",
   );
-  assert.match(searchOverlay, /aria-label="Search records"/);
+  assert.match(searchOverlay, /aria-label="Search Control Atlas"/);
   assert.match(glossaryDrawer, /aria-label="Close help and glossary"/);
   assert.match(glossaryDrawer, /glossaryTabRef\.current\?\.focus\(\)/);
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);

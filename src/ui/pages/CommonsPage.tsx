@@ -6,7 +6,6 @@ import {
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 
-import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import type { CommonsResource } from "../lib/commonsTypes";
 import {
@@ -103,10 +102,9 @@ export function CommonsPage(props: {
   return (
     <main className="commons-page">
       <div className="ca-content-container resources-directory">
-        <BuildLocalNav active="resources" onNavigate={onNavigate} />
         <header className="resources-directory-header">
           <div>
-            <p className="eyebrow">Build → Resources</p>
+            <p className="eyebrow">Resources</p>
             <h1>Resources</h1>
             <p>
               Search external tools, templates, datasets, training, and

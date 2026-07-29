@@ -35,8 +35,8 @@ const ROUTE_GROUPS = [
       "/#/build",
       "/#/build/documents",
       "/#/build/documents/security_plan_starter",
-      "/#/build/resources",
-      "/#/build/resources/official-nist-sp800-53-r5",
+      "/#/resources",
+      "/#/resources/official-nist-sp800-53-r5",
     ],
   },
   {

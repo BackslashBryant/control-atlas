@@ -49,7 +49,7 @@ for (const viewport of [
   test(`Resources categories and filters remain discoverable at ${viewport.label}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     attachPageDiagnostics(page);
-    await gotoApp(page, "/#/build/resources");
+    await gotoApp(page, "/#/resources");
     await waitForAppReady(page);
     await dismissOnboarding(page);
 

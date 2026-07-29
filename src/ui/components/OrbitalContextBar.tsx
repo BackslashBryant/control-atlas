@@ -44,9 +44,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         mode: "operational",
         label: routeIdentityFor("commons-detail").contextLabel,
         scope: entityName || "Resource detail",
-        // Commons is folded into Build (no top-nav entry) — back-link reads
-        // "Build" though the internal view key stays "commons".
-        back: { label: "Build", view: "commons" },
+        back: { label: "All resources", view: "commons" },
       };
     case "not-found":
       return {
@@ -127,7 +125,6 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
       return {
         depth: 1,
         mode: "operational",
-        // Folded into Build (no top-nav entry); internal view key unchanged.
         label: routeIdentityFor("commons").contextLabel,
         scope: "All resources",
       };

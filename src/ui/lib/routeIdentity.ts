@@ -29,8 +29,8 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   patterns: { path: "/learn", label: "Learn", title: "Learn", contextLabel: "Learn", analyticsName: "learn" },
   templates: { path: "/build", label: "Build", title: "Build", contextLabel: "Build", analyticsName: "build" },
   sources: { path: "/sources", label: "Sources", title: "Sources", contextLabel: "Sources", analyticsName: "sources" },
-  commons: { path: "/build/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
-  "commons-detail": { path: "/build/resources", label: "Resource", title: "Resource", contextLabel: "Resource", analyticsName: "resource_detail" },
+  commons: { path: "/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
+  "commons-detail": { path: "/resources", label: "Resource", title: "Resource", contextLabel: "Resource", analyticsName: "resource_detail" },
   about: { path: "/about", label: "About", title: "About", contextLabel: "About", analyticsName: "about" },
   retired: { path: "/retired", label: "Retired identifier", title: "Retired identifier", contextLabel: "Retired identifier", analyticsName: "retired_identifier" },
   "not-found": { path: "/not-found", label: "Page not found", title: "Page not found", contextLabel: "Page not found", analyticsName: "not_found" },
@@ -47,8 +47,8 @@ const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   patterns: "patterns",
   templates: "templates",
   sources: "sources",
-  commons: "templates",
-  "commons-detail": "templates",
+  commons: "commons",
+  "commons-detail": "commons",
   about: null,
   retired: "catalog-detail",
   "not-found": null,
@@ -222,12 +222,18 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     }
   }
 
+  if (path === "/build/resources") {
+    path = "/resources";
+  } else if (/^\/build\/resources\/[^/]+$/.test(path)) {
+    path = path.replace(/^\/build\/resources/, "/resources");
+  }
+
   let permitted: Set<string> | null = null;
   if (path === "/explore") permitted = ATLAS_PARAMS;
   if (path === "/search") permitted = SEARCH_PARAMS;
   if (path === "/catalog" || /^\/catalog\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
-  if (path === "/build/resources") permitted = RESOURCE_PARAMS;
-  if (/^\/build\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
+  if (path === "/resources") permitted = RESOURCE_PARAMS;
+  if (/^\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare") permitted = COMPARE_PARAMS;
@@ -239,7 +245,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     const result = permittedParams(params, permitted);
     params = result.params;
     discarded ||= result.discarded;
-    if (path === "/build/resources") discarded ||= validateResourceFacetValues(params);
+    if (path === "/resources") discarded ||= validateResourceFacetValues(params);
   } else if (params.size > 0 && !path.startsWith("/catalog/")) {
     params = new URLSearchParams();
     discarded = true;

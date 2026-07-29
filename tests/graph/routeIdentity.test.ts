@@ -17,16 +17,16 @@ test("route matrix preserves current durable destinations", () => {
       canonical: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
     },
     {
-      input: "/build/resources/official-nist-sp800-53-r5?from=templates",
-      canonical: "/build/resources/official-nist-sp800-53-r5?from=templates",
+      input: "/resources/official-nist-sp800-53-r5?from=templates",
+      canonical: "/resources/official-nist-sp800-53-r5?from=templates",
     },
     {
       input: "/build?templateType=security_plan_starter&format=docx",
       canonical: "/build/documents/security_plan_starter?format=docx",
     },
     {
-      input: "/build/resources?category=tools&lane=open_source&resourceType=tool",
-      canonical: "/build/resources?category=tools&lane=open_source&resourceType=tool",
+      input: "/resources?category=tools&lane=open_source&resourceType=tool",
+      canonical: "/resources?category=tools&lane=open_source&resourceType=tool",
     },
     {
       input: "/search?q=access+control&connectedOnly=true",
@@ -64,9 +64,35 @@ test("invalid parameters are discarded with a visible recovery contract", () => 
 });
 
 test("invalid Resources facet state recovers to the valid canonical browse scope", () => {
-  const resolved = canonicalizeHashLocation("/build/resources?category=made-up&lifecycle=Monitor");
-  assert.equal(resolved.canonicalPath, "/build/resources");
+  const resolved = canonicalizeHashLocation("/resources?category=made-up&lifecycle=Monitor");
+  assert.equal(resolved.canonicalPath, "/resources");
   assert.match(resolved.recoveryMessage, /removed|could not/i);
+});
+
+test("former Build-nested Resources links redirect to the top-level spoke", () => {
+  const browse = canonicalizeHashLocation(
+    "/build/resources?category=tools&lane=open_source",
+  );
+  assert.equal(
+    browse.canonicalPath,
+    "/resources?category=tools&lane=open_source",
+  );
+  assert.equal(browse.requiresReplace, true);
+
+  const detail = canonicalizeHashLocation(
+    "/build/resources/official-nist-sp800-53-r5?from=templates",
+  );
+  assert.equal(
+    detail.canonicalPath,
+    "/resources/official-nist-sp800-53-r5?from=templates",
+  );
+  assert.equal(
+    parseHashLocation(
+      "/build/resources/official-nist-sp800-53-r5",
+      "?from=templates",
+    ).view,
+    "commons-detail",
+  );
 });
 
 test("invalid comparison and boolean state fails closed", () => {
@@ -106,7 +132,7 @@ test("canonical destinations own URL, label, title, navigation, analytics, conte
     ["matrix", "/compare", "Compare", "matrix", "compare"],
     ["patterns", "/learn", "Learn", "patterns", "learn"],
     ["templates", "/build", "Build", "templates", "build"],
-    ["commons", "/build/resources", "Resources", "templates", "resources"],
+    ["commons", "/resources", "Resources", "commons", "resources"],
     ["sources", "/sources", "Sources", "sources", "sources"],
     ["about", "/about", "About", null, "about"],
   ];

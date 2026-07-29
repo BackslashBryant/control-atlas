@@ -66,15 +66,15 @@ export function SearchOverlay(props: SearchOverlayProps) {
     <Dialog.Root onOpenChange={onOpenChange} open={open}>
       <Dialog.Portal>
         <Dialog.Overlay className="drawer-overlay search-overlay-backdrop" />
-        <Dialog.Content aria-label="Search records" className="search-overlay">
+        <Dialog.Content aria-label="Search Control Atlas" className="search-overlay">
           <div className="search-overlay-header">
             <Dialog.Title className="visually-hidden">
-              Search records
+              Search Control Atlas
             </Dialog.Title>
             <div className="search-input search-overlay-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
-                aria-label="Search records"
+                aria-label="Search Control Atlas"
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
@@ -98,11 +98,13 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
             <p className="field-hint">
-              Type to search records. Press Enter for full search results,
-              plus templates, tools, and Resources in Build.
+              Type to search records, templates, tools, and Resources. Press
+              Enter for the full results page.
             </p>
           ) : results.libraryResults.length === 0 && results.commonsResults.length === 0 ? (
-            <p className="field-hint">No records match &quot;{query.trim()}&quot;.</p>
+            <p className="field-hint">
+              No records or resources match &quot;{query.trim()}&quot;.
+            </p>
           ) : (
             <div className="search-overlay-results-container space-y-4">
               {results.commonsResults.length > 0 ? (
@@ -121,7 +123,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           <span className="search-overlay-result-title flex items-center justify-between">
                             <span>{doc.name}</span>
                             <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
-                              Community · {doc.resourceLane}
+                              Resource · {doc.resourceLane.replaceAll("_", " ")}
                             </span>
                           </span>
                           <span className="search-overlay-result-meta">

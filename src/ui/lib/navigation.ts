@@ -6,6 +6,7 @@ import {
   IconLibrary,
   IconMap,
   IconSourceCode,
+  IconTool,
 } from "@tabler/icons-react";
 
 import type { ViewState } from "./viewState";
@@ -22,7 +23,7 @@ export type NavItem = {
   path: string;
   icon: typeof IconCompass;
   patch?: Record<string, string>;
-  section: "framework" | "toolkit" | "utility";
+  section: "discovery" | "toolkit" | "utility";
 };
 
 export type NavSection = {
@@ -30,8 +31,8 @@ export type NavSection = {
   items: NavItem[];
 };
 
-export const FRAMEWORK_SECTION_LABEL = "The framework";
-export const TOOLKIT_SECTION_LABEL = "Practitioner toolkit";
+export const DISCOVERY_SECTION_LABEL = "Explore and compare";
+export const TOOLKIT_SECTION_LABEL = "Learn and work";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
@@ -39,7 +40,7 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     view: "atlas-map",
     path: routeIdentityFor("atlas-map").path,
     icon: IconMap,
-    section: "framework",
+    section: "discovery",
   },
   {
     label: routeIdentityFor("catalog-detail").label,
@@ -47,14 +48,14 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     path: routeIdentityFor("catalog-detail").path,
     icon: IconLibrary,
     patch: { catalog: "" },
-    section: "framework",
+    section: "discovery",
   },
   {
     label: routeIdentityFor("matrix").label,
     view: "matrix",
     path: routeIdentityFor("matrix").path,
     icon: IconGitCompare,
-    section: "framework",
+    section: "discovery",
   },
   {
     label: routeIdentityFor("patterns").label,
@@ -68,6 +69,13 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     view: "templates",
     path: routeIdentityFor("templates").path,
     icon: IconClipboardList,
+    section: "toolkit",
+  },
+  {
+    label: routeIdentityFor("commons").label,
+    view: "commons",
+    path: routeIdentityFor("commons").path,
+    icon: IconTool,
     section: "toolkit",
   },
 ];
@@ -91,8 +99,8 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
 
 export const MOBILE_NAV_SECTIONS: NavSection[] = [
   {
-    label: FRAMEWORK_SECTION_LABEL,
-    items: PRIMARY_NAV_ITEMS.filter((item) => item.section === "framework"),
+    label: DISCOVERY_SECTION_LABEL,
+    items: PRIMARY_NAV_ITEMS.filter((item) => item.section === "discovery"),
   },
   {
     label: TOOLKIT_SECTION_LABEL,

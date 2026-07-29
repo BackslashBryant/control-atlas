@@ -65,8 +65,11 @@ test('shell removes the old mode toggle and uses the current translation-first n
   assert.match(routeIdentity, /Compare/);
   assert.match(routeIdentity, /Learn/);
   assert.match(routeIdentity, /Build/);
+  assert.match(routeIdentity, /Resources/);
   assert.match(routeIdentity, /Start here/);
   assert.match(routeIdentity, /Sources/);
+  assert.match(navigation, /DISCOVERY_SECTION_LABEL = "Explore and compare"/);
+  assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
 });
@@ -309,6 +312,7 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(html, />Open the Atlas</);
   assert.match(html, />Browse Catalog</);
   assert.match(html, />Find Tools &amp; Resources</);
+  assert.match(html, /data-route="#\/resources"/);
   assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 3);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
@@ -381,7 +385,7 @@ test('result-affecting controls have one visible workbench owner', () => {
   );
 });
 
-test('Build local navigation stays subordinate and identifies the current Build branch', () => {
+test('Build stays locally coherent while Resources owns a top-level route', () => {
   const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
   const buildRouteState = readFileSync('src/ui/lib/buildRouteState.ts', 'utf8');
   const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
@@ -394,8 +398,10 @@ test('Build local navigation stays subordinate and identifies the current Build 
   assert.match(buildRouteState, /label: "Starter documents"/);
   assert.match(buildRouteState, /label: "Resources"/);
   assert.match(buildPage, /<BuildLocalNav/);
-  assert.match(resourcesPage, /<BuildLocalNav active="resources"/);
-  assert.match(resourceDetail, /<BuildLocalNav active="resources"/);
+  assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
+  assert.doesNotMatch(resourceDetail, /BuildLocalNav/);
+  assert.match(resourcesPage, /<p className="eyebrow">Resources<\/p>/);
+  assert.match(resourceDetail, /Back to Resources/);
 });
 
 test('route interactions keep canonical context and synchronize visible state', () => {
@@ -411,6 +417,10 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
   assert.match(explore, /visibleDocumentRows\.length > 0/);
   assert.match(explore, /searchExploreResources/);
+  assert.match(explore, /searchResourceDocuments/);
+  assert.match(explore, /onNavigate\("commons-detail"/);
+  assert.match(searchOverlay, /Search Control Atlas/);
+  assert.match(searchOverlay, /Resource · \{doc\.resourceLane/);
   assert.match(explore, /Official resources/);
   assert.match(explore, /No matching connected records found/);
 });
