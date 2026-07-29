@@ -41,11 +41,17 @@ test('Lighthouse CI remains report-only when synthetic collection is unstable', 
 test('security workflows exist for CodeQL and secret scanning', () => {
   assert.ok(existsSync('.github/workflows/codeql.yml'));
   assert.ok(existsSync('.github/workflows/secret-scan.yml'));
+  assert.ok(existsSync('.gitleaks.toml'));
   const codeql = readFileSync('.github/workflows/codeql.yml', 'utf8');
   const secrets = readFileSync('.github/workflows/secret-scan.yml', 'utf8');
+  const gitleaks = readFileSync('.gitleaks.toml', 'utf8');
   assert.match(codeql, /github\/codeql-action\/init@v4/);
   assert.match(codeql, /github\/codeql-action\/analyze@v4/);
   assert.match(secrets, /gitleaks/gim);
+  assert.ok(
+    gitleaks.includes('data/generated/atlas-neighborhood/.*\\.json'),
+    'deterministic public neighborhood shards must retain their scoped false-positive allowlist',
+  );
 });
 
 test('release scripts cover staged builds, static checks, and focused browser smoke', () => {

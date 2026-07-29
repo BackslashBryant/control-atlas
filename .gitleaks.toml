@@ -4,7 +4,7 @@ title = "Control Atlas gitleaks config"
 useDefault = true
 
 [allowlist]
-description = "Committed public catalog snapshots use source.key for registry IDs, not secrets"
+description = "Committed public catalog snapshots contain registry keys and NIST control identifiers, not secrets"
 paths = [
   '''data/attack-techniques-enterprise.json''',
   '''data/attack-techniques-ics.json''',
@@ -12,4 +12,5 @@ paths = [
   '''maps/attack-to-d3fend.json''',
   '''maps/d3fend-to-800-53.json''',
   '''data/generated/atlas-node-index.json''',
+  '''data/generated/atlas-neighborhood/.*\.json''',
 ]
