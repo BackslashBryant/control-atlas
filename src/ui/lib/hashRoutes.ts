@@ -12,9 +12,9 @@ import { canonicalizeHashLocation, routeIdentityFor } from "./routeIdentity";
  * View key "atlas-map" -> user-facing "Explore" nav label (rename kept its
  * existing path — see PLAN CHANGE in docs/STATE.md: "/explore" is already
  * the ExplorePage's own path). "catalog-detail" -> "Catalog", "patterns" ->
- * "Learn", "templates" -> "Build". "commons"/"commons-detail" no longer have
- * a top-nav entry (folded into Build) but keep their own routes, now nested
- * under /build.
+ * "Learn", "templates" -> "Build", and "commons"/"commons-detail" ->
+ * "Resources". Internal view keys stay stable while every user-facing route
+ * uses the current product vocabulary.
  */
 const VIEW_TO_PATH: Record<AppView, string> = {
   home: routeIdentityFor("home").path,
@@ -45,8 +45,8 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/learn": "patterns",
   "/build": "templates",
   "/sources": "sources",
-  "/build/resources": "commons",
-  "/build/resources-detail": "commons-detail",
+  "/resources": "commons",
+  "/resources-detail": "commons-detail",
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
@@ -85,10 +85,10 @@ function parseNodeIdFromPath(pathname: string): {
       buildSection: "",
     };
   }
-  const resourceMatch = pathname.match(/^\/build\/resources\/([^/]+)$/);
+  const resourceMatch = pathname.match(/^\/resources\/([^/]+)$/);
   if (resourceMatch) {
     return {
-      basePath: "/build/resources-detail",
+      basePath: "/resources-detail",
       nodeId: "",
       catalogId: "",
       resourceId: decodeURIComponent(resourceMatch[1]),
@@ -195,7 +195,7 @@ export function serializeHashLocation(state: ViewState): string {
   if (state.view === "commons-detail" && state.id) {
     params.delete("id");
     const qs = params.toString();
-    return `/build/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
+    return `/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
   }
 
   if (state.view === "templates") {

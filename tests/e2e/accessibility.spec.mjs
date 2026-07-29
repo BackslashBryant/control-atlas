@@ -38,12 +38,12 @@ const ROUTES = [
     label: "record detail",
     path: "/#/record/nist-800-53/AC-2",
   },
-  { label: "resources", path: "/#/build/resources" },
+  { label: "resources", path: "/#/resources" },
   // Deep card grid (opened via a lane) is where badge/tag contrast lives.
-  { label: "resources directory", path: "/#/build/resources?lane=official" },
+  { label: "resources directory", path: "/#/resources?lane=official" },
   {
     label: "resource detail",
-    path: "/#/build/resources/official-nist-sp800-53-r5",
+    path: "/#/resources/official-nist-sp800-53-r5",
   },
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },

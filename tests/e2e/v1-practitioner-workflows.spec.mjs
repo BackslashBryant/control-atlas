@@ -116,7 +116,7 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 });
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
-  await open(page, "/#/build/resources?q=OSCAL");
+  await open(page, "/#/resources?q=OSCAL");
   await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
   await expect(page.getByPlaceholder("Search external resources")).toHaveValue("OSCAL");
   await expect(page.getByRole("region", { name: "Resource results" })).toBeVisible();
@@ -134,7 +134,7 @@ test("V1 workflow 10 — recover from invalid settings, missing records, and emp
 test("V1 workflow 11 — refresh and browser history preserve valid URL state", async ({
   page,
 }) => {
-  await open(page, "/#/build/resources?lane=official");
+  await open(page, "/#/resources?lane=official");
   const filters = page.getByRole("button", { name: /^Filters/ });
   await filters.click();
   const ownerType = page.getByLabel("Owner type");

@@ -87,7 +87,7 @@ export function SourcesPage(props: {
       />
 
       <p className="sources-resource-boundary">
-        Tools, templates, datasets, training, and communities live in Build → Resources.{" "}
+        Tools, templates, datasets, training, and communities are in Resources.{" "}
         <button onClick={() => onNavigate("commons")} type="button">
           Open Resources
         </button>

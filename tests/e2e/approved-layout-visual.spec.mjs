@@ -19,10 +19,10 @@ const ROUTE_COMPOSITIONS = [
   { slug: 'catalog', path: '/#/catalog' },
   { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
   { slug: 'compare', path: '/#/compare' },
-  { slug: 'resources', path: '/#/build/resources?lane=official' },
+  { slug: 'resources', path: '/#/resources?lane=official' },
   {
     slug: 'resource-detail',
-    path: '/#/build/resources/official-nist-sp800-53-r5',
+    path: '/#/resources/official-nist-sp800-53-r5',
   },
   { slug: 'learn', path: '/#/learn' },
   { slug: 'documents', path: '/#/build/documents' },

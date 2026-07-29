@@ -181,7 +181,10 @@ export function runtimeArtifactPlan(
     commons:
       state.view === "commons" ||
       state.view === "commons-detail" ||
-      buildDetailRequested,
+      state.view === "library-detail" ||
+      state.view === "search" ||
+      buildDetailRequested ||
+      Boolean(options.searchOverlayOpen),
     fullGraph,
     librarySearch:
       state.view === "search" ||

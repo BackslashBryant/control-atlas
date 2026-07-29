@@ -27,6 +27,33 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
   assert.equal(resources.librarySearch, false);
   assert.equal(resources.fullGraph, false);
 
+  const recordDetail = runtimeArtifactPlan(
+    normalizeViewState("library-detail"),
+  );
+  assert.equal(
+    recordDetail.commons,
+    true,
+    "record pages load their existing contextual Resources module",
+  );
+
+  const globalSearch = runtimeArtifactPlan(normalizeViewState("search"));
+  assert.equal(globalSearch.librarySearch, true);
+  assert.equal(
+    globalSearch.commons,
+    true,
+    "the full results page includes the Resources directory",
+  );
+
+  const overlaySearch = runtimeArtifactPlan(normalizeViewState("home"), {
+    searchOverlayOpen: true,
+  });
+  assert.equal(overlaySearch.librarySearch, true);
+  assert.equal(
+    overlaySearch.commons,
+    true,
+    "the global search overlay includes the Resources directory",
+  );
+
   const sources = runtimeArtifactPlan(normalizeViewState("sources"));
   assert.equal(sources.sources, true);
   assert.equal(sources.librarySearch, false);

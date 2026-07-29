@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -13,11 +14,11 @@ test.beforeEach(async ({ page }) => {
 test("search overlay starts clean after closing an unfinished search", async ({
   page,
 }) => {
-  await page.goto("/?view=explore");
+  await gotoApp(page, "/?view=explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.getByRole("button", { name: "Open search" }).click();
-  const input = page.getByRole("searchbox", { name: "Search records" });
+  const input = page.getByRole("searchbox", { name: "Search Control Atlas" });
   await input.fill("zzzznotfound");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Open search" }).click();
