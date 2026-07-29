@@ -4,6 +4,7 @@ Evidence updated: 2026-07-29
 Branch: `agent/forge/control-atlas-holistic-correction`
 Starting commit: `8848fc9be9996e76c8e3595c328bfda4af382d98`
 Candidate implementation commit: `fed6cf5e550808d72ce2897a71b523c59999c775`
+Pre-push identity and voice milestone: `62c9dfa8a9e0bc39ce2d6a1b9cae39cf8799361d`
 Authority: local implementation and non-destructive validation only
 
 ## Local outcome
@@ -14,7 +15,9 @@ Control Atlas now keeps exact publication identity attached across the 11,674-no
 
 The product finds, reads, compares, traces, and produces starter files from explicit inputs. It does not determine applicability, select a baseline, claim compliance or inheritance, or decide authorization or ATO readiness.
 
-The rotating `Ctrl + Alt + word` brand flourish remains protected. Its 20 words map to real product actions across the seven launch surfaces and exclude determinations and self-awarded quality claims. A required future pre-push gate now reruns the brand, copy-speaker, disclaimer, product-identity, and style contracts.
+The rotating `Ctrl + Alt + word` brand flourish remains protected. Its 27 words map to real product actions across the seven launch surfaces and exclude determinations and self-awarded quality claims. The blocking pre-push gate reruns the brand, copy-speaker, disclaimer, product-identity, and style contracts.
+
+Product-authored glossary entries are labeled `Control Atlas explanation` with their references shown separately. They no longer masquerade as official source text or an unattributed practitioner consensus, and they do not assign applicability, baseline, compliance, inheritance, authorization, or ATO outcomes.
 
 ## Correction ledger
 
@@ -31,7 +34,7 @@ The rotating `Ctrl + Alt + word` brand flourish remains protected. Its 20 words 
 | CA-CAT-009 | Catalog hid records behind grouping and a cap | Catalog query and pagination model | Every eligible record appears exactly once | Pass |
 | CA-CMP-010 | Compare intent did not reveal required state | Compare workbench state model | Advancing, zero, error, and explicit mapping-source fixtures | Pass |
 | CA-LRN-011 | Learn was an empty shell | Cited Learn content manifest | Six required topics, citations, limitations, and next actions | Pass |
-| CA-CPY-012/016 | Copy lacked speaker ownership and complete extraction | Speaker manifest and multi-source extractor | Determination ban, speaker coverage, repeated-copy, and disclaimer fixtures | Pass |
+| CA-CPY-012/016 | Copy lacked speaker ownership and complete extraction; glossary explanations were misattributed | Speaker manifest, multi-source extractor, shared product identity/disclaimer, and glossary consumers | Determination ban, glossary attribution, speaker coverage, repeated-copy, brand, and disclaimer fixtures | Pass |
 | CA-STA-013 | Durable interaction state was local | Validated URL state schemas | Round-trip, refresh, Back, Forward, invalid-state recovery | Pass |
 | CA-RWD-014/018 | Fixed panels and page patches owned layout | Shared surface primitives | Overflow, first-useful-content, responsive, reduced-motion, and a11y checks | Pass locally; external human/device checks blocked |
 | CA-TST-015 | Tests retained retired routes | Canonical route matrix | Meta-contract and browser recovery matrix | Pass |
@@ -53,7 +56,7 @@ The rotating `Ctrl + Alt + word` brand flourish remains protected. Its 20 words 
 
 | Command or invariant | Result |
 | --- | --- |
-| `npm run test:correction:contracts` | Pass — 57 TypeScript + 33 Node tests |
+| `npm run test:correction:contracts` | Pass — 57 TypeScript + 34 Node tests |
 | `npm run test:correction:local` | Pass — 27 Playwright tests |
 | `npm run precommit` | Pass |
 | Data suite inside precommit | Pass — 236 tests |
