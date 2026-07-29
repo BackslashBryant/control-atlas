@@ -13,4 +13,3 @@ Do not stop at green tests or closed backlog rows. Finish only when every requir
 
 You may run the authorized local server and non-destructive validation described in the execution prompt. Do not push, merge, deploy, release, modify production, rewrite history, edit secrets, or change files outside the repository. Stop only for an unsafe action needing new authority, an unreconcilable overlapping user edit, a governing-doc conflict requiring a product decision, or a repeated external blocker after safe alternatives are exhausted.
 ```
-

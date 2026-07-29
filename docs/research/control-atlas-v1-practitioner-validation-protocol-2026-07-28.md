@@ -1,6 +1,6 @@
 # Control Atlas V1 practitioner validation protocol
 
-Date: 2026-07-28  
+Date: 2026-07-28
 Purpose: prove the release candidate works for practitioners without relying on internal familiarity or synthetic personas.
 
 ## Research question
@@ -125,4 +125,3 @@ Produce:
 - launch recommendation.
 
 Internal persona walkthroughs and automated tests are useful preparation, but they do not count as participant evidence.
-
