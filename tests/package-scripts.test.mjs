@@ -52,6 +52,19 @@ test('security workflows exist for CodeQL and secret scanning', () => {
     gitleaks.includes('data/generated/atlas-neighborhood/.*\\.json'),
     'deterministic public neighborhood shards must retain their scoped false-positive allowlist',
   );
+  for (const auditedCommit of [
+    '8993f4968ef5e019f6cdffe0d6bffec606f30b38',
+    'b50b12894d042dbfe39aefdf0a379780ec483272',
+    'a56b5de1b64ad9d10d57b2fb461e8e412d632cca',
+    'b03a094863bb7b1a315a1db9cd42aa22621dbd94',
+    '15655ec80c838678f4da2da326c5a4c3f3e9c970',
+    '61686939ee7ae11a3f11a5b9b83fc7fe8e55939c',
+  ]) {
+    assert.ok(
+      gitleaks.includes(auditedCommit),
+      `audited historical false-positive commit ${auditedCommit} must remain explicit`,
+    );
+  }
 });
 
 test('release scripts cover staged builds, static checks, and focused browser smoke', () => {
