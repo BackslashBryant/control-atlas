@@ -4,7 +4,15 @@ title = "Control Atlas gitleaks config"
 useDefault = true
 
 [allowlist]
-description = "Committed public catalog snapshots contain registry keys and NIST control identifiers, not secrets"
+description = "Public catalog identifiers in deterministic artifacts and six audited immutable bootstrap commits are not secrets"
+commits = [
+  "8993f4968ef5e019f6cdffe0d6bffec606f30b38",
+  "b50b12894d042dbfe39aefdf0a379780ec483272",
+  "a56b5de1b64ad9d10d57b2fb461e8e412d632cca",
+  "b03a094863bb7b1a315a1db9cd42aa22621dbd94",
+  "15655ec80c838678f4da2da326c5a4c3f3e9c970",
+  "61686939ee7ae11a3f11a5b9b83fc7fe8e55939c",
+]
 paths = [
   '''data/attack-techniques-enterprise.json''',
   '''data/attack-techniques-ics.json''',
