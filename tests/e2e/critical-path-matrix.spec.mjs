@@ -277,7 +277,7 @@ test("critical path: keyboard focus reaches primary nav and search", async ({
   await expect(startHere).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(
-    page.getByRole("heading", { name: "Start with a publication" }),
+    page.getByRole("heading", { name: "Find the publication you need" }),
   ).toBeVisible();
 
   const search = page.getByRole("button", { name: "Open search" });

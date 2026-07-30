@@ -13,7 +13,8 @@ test("Start here exposes fixed public source starting points without a questionn
       (point) =>
         point.catalogId &&
         point.label &&
-        /^Listed because Control Atlas has public /.test(point.inclusionReason),
+        point.inclusionReason &&
+        !/^Listed because|^Control Atlas has/.test(point.inclusionReason),
     ),
   );
   assert.ok(

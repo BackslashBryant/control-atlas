@@ -206,7 +206,7 @@ test("Home makes Search the sole primary action and keeps RMF optional", () => {
   assert.match(homePage, /Open the Atlas/);
   assert.match(homePage, /Browse Catalog/);
   assert.match(homePage, /Find Tools & Resources/);
-  assert.match(homePage, /Browse source starting points/);
+  assert.match(homePage, /Browse publications/);
   assert.match(homePage, /BrandFlourish/);
   assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
@@ -222,7 +222,7 @@ test("high-density task surfaces bound results and name download actions", () =>
   assert.match(comparePage, /View evidence/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
-  assert.match(startHere, /Source starting points/);
+  assert.match(startHere, /Find the publication you need/);
   assert.match(startHere, /Search all records/);
 });
 

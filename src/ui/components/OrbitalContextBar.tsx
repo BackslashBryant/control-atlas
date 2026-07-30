@@ -133,7 +133,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("start-here").contextLabel,
-        scope: "Source starting points",
+        scope: "Published sources",
       };
     case "about":
       return {

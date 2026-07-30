@@ -80,7 +80,9 @@ test('Learn explanation copy avoids prohibited compliance or authorization claim
 
 test('Start here is a source navigator without determination questions', () => {
   const startHere = readFileSync('src/ui/pages/StartHerePage.tsx', 'utf8');
-  assert.match(startHere, /source list—not a framework or baseline, and not an applicability/i);
+  assert.match(startHere, /Find the publication you need/);
+  assert.match(startHere, /records and relationships loaded from that\s+publisher/);
+  assert.doesNotMatch(startHere, /applicability recommendation|not a framework or baseline/i);
   assert.doesNotMatch(startHere, /System type|Data sensitivity|Operational environment/);
   for (const claim of DETERMINATION_BOUNDARY) {
     assert.doesNotMatch(startHere, claim, `Start Here contains a determination-like claim: ${claim}`);

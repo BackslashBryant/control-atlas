@@ -14,17 +14,16 @@ export function StartHerePage(props: {
   return (
     <Panel className="max-w-[70rem] mx-auto">
       <PageHeader
-        eyebrow="Source starting points"
-        summary="Open a public catalog or program publication already represented in Control Atlas. Each entry says why it is here."
-        title="Start with a publication"
+        eyebrow="Start here"
+        summary="Pick a publication below, or search all records if you are not sure where to begin."
+        title="Find the publication you need"
       />
 
       <section aria-labelledby="source-starting-points">
-        <h2 id="source-starting-points">Available publications</h2>
+        <h2 id="source-starting-points">Publications in Control Atlas</h2>
         <p className="page-summary">
-          Use this list when you already know the source you need. This is a
-          source list—not a framework or baseline, and not an applicability
-          recommendation.
+          Each link opens the records and relationships loaded from that
+          publisher.
         </p>
         <div className="catalog-index-list">
           {SOURCE_STARTING_POINTS.map((source) => (

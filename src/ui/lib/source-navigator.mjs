@@ -2,44 +2,37 @@ export const SOURCE_STARTING_POINTS = Object.freeze([
   {
     catalogId: "nist-800-53",
     label: "NIST SP 800-53 Rev. 5",
-    inclusionReason:
-      "Listed because Control Atlas has public NIST control and control-enhancement records.",
+    inclusionReason: "Controls and control enhancements from Revision 5.",
   },
   {
     catalogId: "nist-800-53b",
     label: "NIST SP 800-53B",
-    inclusionReason:
-      "Listed because Control Atlas has public NIST baseline profiles.",
+    inclusionReason: "Low, Moderate, and High control baseline profiles.",
   },
   {
     catalogId: "fedramp-rev5",
     label: "FedRAMP Rev. 5",
-    inclusionReason:
-      "Listed because Control Atlas has public FedRAMP program records and baseline profiles.",
+    inclusionReason: "FedRAMP program controls and Revision 5 baseline profiles.",
   },
   {
     catalogId: "disa-stig",
     label: "DISA STIG Library",
-    inclusionReason:
-      "Listed because Control Atlas has public DISA Security Technical Implementation Guide records.",
+    inclusionReason: "Security Technical Implementation Guide records from DISA.",
   },
   {
     catalogId: "disa-srg",
     label: "DISA SRG Library",
-    inclusionReason:
-      "Listed because Control Atlas has public DISA Security Requirements Guide records.",
+    inclusionReason: "Security Requirements Guide records from DISA.",
   },
   {
     catalogId: "nist-800-171-rev2",
     label: "NIST SP 800-171 Rev. 2",
-    inclusionReason:
-      "Listed because Control Atlas has public records from this revision of NIST's CUI security requirements.",
+    inclusionReason: "CUI security requirements from Revision 2.",
   },
   {
     catalogId: "mitre-attack",
     label: "MITRE ATT&CK Enterprise",
-    inclusionReason:
-      "Listed because Control Atlas has public MITRE enterprise tactic and technique records.",
+    inclusionReason: "Enterprise tactics and techniques from MITRE ATT&CK.",
   },
 ]);
 

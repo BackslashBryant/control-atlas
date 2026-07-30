@@ -884,8 +884,8 @@ function AtlasGuidedPath(props: {
             >
               <IconSearch aria-hidden="true" size={24} />
               <span>
-                <strong>Source starting points</strong>
-                <small>Browse public sources without an applicability decision</small>
+                <strong>Browse publications</strong>
+                <small>Open a catalog or program source</small>
               </span>
               <IconChevronRight aria-hidden="true" size={20} />
             </button>
