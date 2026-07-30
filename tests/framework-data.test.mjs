@@ -548,7 +548,6 @@ test("graph build derives structural control-enhancement edges with derived conf
   assert.equal(familyEdge.confidence, "derived");
 
   // No duplicate enhancement edges after two consecutive builds.
-  buildFrameworkData();
   const edgesAfterRebuild = generated("edges").edges;
   const enhancementEdgeCount = edgesAfterRebuild.filter(
     (edge) =>

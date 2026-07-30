@@ -5,34 +5,103 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: public-repo-checks-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   checks:
-    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
     steps:
+      - name: Find reusable exact-SHA verification
+        id: reuse
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -u
+          echo "run_id=" >> "$GITHUB_OUTPUT"
+          response_file="$(mktemp)"
+          if ! gh api --method GET \
+            "/repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs" \
+            -f head_sha="${GITHUB_SHA}" \
+            -f status=success \
+            -f per_page=20 > "$response_file"; then
+            echo "Exact-SHA lookup failed; running the full fail-closed gate."
+            exit 0
+          fi
+          run_id="$(
+            jq -r --arg current "${GITHUB_RUN_ID}" \
+              '.workflow_runs[]
+               | select((.id | tostring) != $current)
+               | select(.event == "push" and .head_branch != "main")
+               | .id' "$response_file" \
+              | head -n 1
+          )"
+          if [[ -n "$run_id" && "$run_id" != "null" ]]; then
+            echo "Reusing successful Public Repo Checks run ${run_id} for ${GITHUB_SHA}."
+            echo "run_id=${run_id}" >> "$GITHUB_OUTPUT"
+          else
+            echo "No prior exact-SHA success found; running the full fail-closed gate."
+          fi
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Classify changed scope
+        id: scope
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "scope=full" >> "$GITHUB_OUTPUT"
+            echo "reason=manual-run" >> "$GITHUB_OUTPUT"
+          else
+            node tools/classify-change-scope.mjs \
+              --base "${BASE_SHA}" \
+              --head "${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Verify evidence-only change
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'evidence-only' }}
+        run: git diff --check && node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
       - uses: actions/setup-node@v6
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         with:
           node-version: '22'
-      - run: npm ci
+          cache: 'npm'
+      - if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        run: npm ci
       - name: Dependency audit
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run audit:deps
       - name: Build staged static site
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run build:site
       - name: Lint
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run lint
       - name: Type check
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run typecheck
       - name: Unit and contract verification
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm test && npm run test:browser && npm run smoke:dom && npm run verify:public
       - name: Install Playwright browser
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npx playwright install chromium
       - name: Accessibility smoke
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run test:a11y:smoke
       - name: Critical browser smoke
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run test:e2e:smoke
       - name: Upload Playwright failure artifacts
-        if: failure()
+        if: ${{ failure() && steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         uses: actions/upload-artifact@v7
         with:
           name: ci-playwright-artifacts
@@ -40,6 +109,18 @@ jobs:
             test-results
             playwright-report
           if-no-files-found: ignore
+      - name: Record verified change scope
+        if: ${{ success() }}
+        shell: bash
+        run: printf '%s\n' '${{ steps.scope.outputs.scope }}' > ci-change-scope.txt
+      - name: Upload verified change scope
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-change-scope
+          path: ci-change-scope.txt
+          if-no-files-found: error
+          retention-days: 1
   approved-layout-visuals:
     # Snapshot comparison is a diagnosis tool, not a deploy gate. Run it on demand.
     if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -68,6 +149,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'npm'
       - run: npm ci
       - name: Run report-only Lighthouse evidence
         continue-on-error: true

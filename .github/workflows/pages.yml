@@ -4,9 +4,11 @@ on:
   workflow_run:
     workflows: [Public Repo Checks]
     types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -16,12 +18,48 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  scope:
     if: >-
       ${{ github.event_name == 'workflow_dispatch' ||
           (github.event.workflow_run.conclusion == 'success' &&
            github.event.workflow_run.event == 'push' &&
            github.event.workflow_run.head_branch == 'main') }}
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.scope.outputs.deploy }}
+    steps:
+      - name: Download verified change scope
+        if: ${{ github.event_name == 'workflow_run' }}
+        uses: actions/download-artifact@v8
+        with:
+          name: ci-change-scope
+          path: .ci
+          github-token: ${{ github.token }}
+          run-id: ${{ github.event.workflow_run.id }}
+      - name: Decide whether runtime deployment is required
+        id: scope
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          scope="$(tr -d '\r\n' < .ci/ci-change-scope.txt)"
+          case "$scope" in
+            evidence-only) echo "deploy=false" >> "$GITHUB_OUTPUT" ;;
+            full) echo "deploy=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "Unrecognized verified change scope: $scope"; exit 1 ;;
+          esac
+
+  deploy:
+    needs: scope
+    if: >-
+      ${{ needs.scope.outputs.deploy == 'true' &&
+          (github.event_name == 'workflow_dispatch' ||
+           (github.event.workflow_run.conclusion == 'success' &&
+            github.event.workflow_run.event == 'push' &&
+            github.event.workflow_run.head_branch == 'main')) }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -33,6 +71,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'npm'
       - run: npm ci
       - name: Build staged static site
         run: npm run build:site

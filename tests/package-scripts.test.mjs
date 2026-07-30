@@ -47,7 +47,11 @@ test('security workflows exist for CodeQL and secret scanning', () => {
   const gitleaks = readFileSync('.gitleaks.toml', 'utf8');
   assert.match(codeql, /github\/codeql-action\/init@v4/);
   assert.match(codeql, /github\/codeql-action\/analyze@v4/);
+  assert.match(codeql, /paths-ignore:[\s\S]*?'docs\/audits\/\*\*'/);
+  assert.match(codeql, /group: codeql-\$\{\{ github\.ref \}\}/);
   assert.match(secrets, /gitleaks/gim);
+  assert.doesNotMatch(secrets, /paths-ignore:/);
+  assert.match(secrets, /group: secret-scan-\$\{\{ github\.ref \}\}/);
   assert.ok(
     gitleaks.includes('data/generated/atlas-neighborhood/.*\\.json'),
     'deterministic public neighborhood shards must retain their scoped false-positive allowlist',
@@ -145,11 +149,67 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.event == 'push'/);
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.head_branch == 'main'/);
   assert.match(pagesWorkflow, /ref: \$\{\{ github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/);
-  assert.match(pagesWorkflow, /npm run build:site/);
-  assert.match(pagesWorkflow, /npm run verify:public/);
   assert.doesNotMatch(pagesWorkflow, /npm run test:a11y/);
   assert.doesNotMatch(pagesWorkflow, /npm run test:e2e/);
   assert.match(nightlyWorkflow, /npm run precommit/);
+});
+
+test('CI reuses prior exact-SHA verification on main and otherwise fails closed', () => {
+  assert.match(ciWorkflow, /name: Find reusable exact-SHA verification/);
+  assert.match(ciWorkflow, /github\.ref == 'refs\/heads\/main'/);
+  assert.match(ciWorkflow, /head_sha/);
+  assert.match(
+    ciWorkflow,
+    /Exact-SHA lookup failed; running the full fail-closed gate/,
+  );
+  assert.match(ciWorkflow, /steps\.reuse\.outputs\.run_id == ''/);
+  assert.doesNotMatch(ciWorkflow, /\[skip ci\]/);
+});
+
+test('evidence-only changes take a narrow fail-closed check and publish their verified scope', () => {
+  assert.ok(existsSync('tools/classify-change-scope.mjs'));
+  assert.ok(existsSync('tests/change-scope.test.mjs'));
+  assert.ok(existsSync('tests/release-evidence.test.mjs'));
+  assert.match(ciWorkflow, /name: Classify changed scope/);
+  assert.match(ciWorkflow, /scope\.outputs\.scope == 'evidence-only'/);
+  assert.match(ciWorkflow, /git diff --check/);
+  assert.match(ciWorkflow, /name: ci-change-scope/);
+});
+
+test('Pages deploys runtime changes only and still rebuilds the exact checked SHA', () => {
+  const liveSmoke = readFileSync('.github/workflows/pages-live-smoke.yml', 'utf8');
+
+  assert.match(pagesWorkflow, /actions\/download-artifact@v8/);
+  assert.match(pagesWorkflow, /name: ci-change-scope/);
+  assert.match(pagesWorkflow, /needs\.scope\.outputs\.deploy == 'true'/);
+  assert.match(pagesWorkflow, /npm ci/);
+  assert.match(pagesWorkflow, /npm run build:site/);
+  assert.match(pagesWorkflow, /npm run verify:public/);
+  assert.match(liveSmoke, /name: Check whether Pages actually deployed/);
+  assert.match(liveSmoke, /select\(\.name == "deploy"\)/);
+  assert.match(liveSmoke, /needs\.gate\.outputs\.run == 'true'/);
+});
+
+test('npm-backed workflows use the official setup-node dependency cache', () => {
+  for (const path of [
+    '.github/workflows/ci.yml',
+    '.github/workflows/codeql.yml',
+    '.github/workflows/deployed-lighthouse.yml',
+    '.github/workflows/lighthouse-ab.yml',
+    '.github/workflows/nightly-refresh.yml',
+    '.github/workflows/oscal-validation.yml',
+    '.github/workflows/pages-live-smoke.yml',
+    '.github/workflows/pages.yml',
+  ]) {
+    const workflow = readFileSync(path, 'utf8');
+    const setupCount = (workflow.match(/actions\/setup-node@v6/g) ?? []).length;
+    const cacheCount = (workflow.match(/cache: ['"]npm['"]/g) ?? []).length;
+    assert.equal(
+      cacheCount,
+      setupCount,
+      `${path} must cache npm for every setup-node job`,
+    );
+  }
 });
 
 test('direct ship scripts cover push retry, remote checks wait, and main ship flow', () => {
@@ -167,6 +227,14 @@ test('direct ship scripts cover push retry, remote checks wait, and main ship fl
   assert.equal(packageJson.scripts['pregit:push'], 'npm run prepush:audit');
   const shipToMain = readFileSync('tools/ship-to-main.mjs', 'utf8');
   assert.match(shipToMain, /run\('npm', \['run', 'prepush:audit'\]\)/);
+  assert.match(
+    shipToMain,
+    /Direct ship must start from a verified task branch, not main/,
+  );
+  assert.match(
+    shipToMain,
+    /Skipping remote wait \(--no-wait\)\.[\s\S]*?return;[\s\S]*?Fast-forwarding main/,
+  );
 });
 
 test('documented port status command checks the Playwright site port', () => {
