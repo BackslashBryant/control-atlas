@@ -4,7 +4,7 @@ Evidence updated: 2026-07-29
 Branch: `agent/forge/control-atlas-holistic-correction`
 Starting commit and pre-deploy rollback target: `8a759f371731efec8be06ccfc515486ad0d0a3c7`
 Candidate implementation commit: `c596c0f3160f60eed277f764f000c4c58c21183a`
-Authority: local implementation, non-destructive validation, push, merge to `main`, and GitHub Pages deployment. The first deployed candidate exposed one missed Catalog-detail consumer; the corrected candidate is locally verified and awaiting exact-commit deployment evidence.
+Authority: local implementation, non-destructive validation, push, merge to `main`, and GitHub Pages deployment. Every locally completable launch-contract gate has current local and deployed evidence.
 
 ## Milestone commits
 
@@ -102,10 +102,10 @@ Product-authored glossary entries are labeled `Control Atlas explanation` with t
 | 3. IA, layout, and copy | Pass for automation | Blocked | Human editorial sign-off and actual 200% zoom |
 | 4. Practitioner validation | Blocked | Blocked | Five practitioners across at least three roles |
 | 5. Accessibility | Pass for automation | Blocked | NVDA; VoiceOver or TalkBack; physical phone/tablet; actual 200% zoom |
-| 6. Performance and resilience | Pass | Pass for deployed application commit `54e40be` | Rerun same-runner previous-release A/B on corrected application commit |
-| 7. Security, privacy, dependencies | Pass locally | Pass for deployed application commit `54e40be` | CI/CodeQL on corrected application commit |
-| 8. Release and operations | Pass locally | Pass for deployed application commit `54e40be` | Corrected deployment, live smoke, and exact deployed asset identity |
-| 9. Product identity and launch communication | Pass locally | Pass for deployed application commit `54e40be` except owner decision | Corrected live verification and owner `GO` or `NO-GO` |
+| 6. Performance and resilience | Pass | Pass | Same-runner A/B `30503791440`: previous-release median 53, corrected candidate median 91 |
+| 7. Security, privacy, dependencies | Pass | Pass | None known |
+| 8. Release and operations | Pass | Pass | None known |
+| 9. Product identity and launch communication | Pass | Blocked only on owner decision | Owner `GO` or `NO-GO` |
 
 No gate is recorded as `Not tested`.
 
@@ -140,6 +140,21 @@ No gate is recorded as `Not tested`.
 - Same-runner Lighthouse A/B: run `30502633632`; previous release `v1.0.2` median performance 58, candidate `54e40be` median performance 98.
 - Live cache marker `20260729-1`, top-level Resources, revised Start Here copy, and the nonblank Atlas entry all matched the committed application.
 - Live DOM replay then proved the grouped Catalog-detail controls had no `data-controls-for` owner. The browser contract covered Catalog inventory but not Catalog detail. Commit `c596c0f` extends the invariant to the omitted state and migrates that consumer to the shared owner.
+
+## Corrected deployed-candidate evidence
+
+- Application correction: `c596c0f3160f60eed277f764f000c4c58c21183a`.
+- Deployment source with the pre-deploy evidence packet: `2496c9c4776c4cfb5c6ff42adcfb30efb5949c33`.
+- Correction branch Public Repo Checks: run `30503469420`.
+- `main` Public Repo Checks: run `30503546369`.
+- Secret Scan: run `30503546338`.
+- CodeQL: run `30503546367`.
+- GitHub Pages deployment: run `30503636846`.
+- Pages Live Smoke: run `30503679776`, all live accessibility and workflow checks passed.
+- Same-runner Lighthouse A/B: run `30503791440`; previous release `v1.0.2` median performance 53, corrected candidate median performance 91.
+- Live Catalog-detail DOM: exactly one `data-controls-for="catalog-record-results"` owner, exactly one result target, matching `aria-controls`, visible ownership, and zero horizontal overflow.
+- Live control owner label: `Filter SP 800-53 Rev. 5 controls`; deployed entry asset: `index-DK5gUEAZ.js`; cache marker: `20260729-1`.
+- This post-deploy evidence update changes documentation only; the verified application assets are unchanged.
 
 ## Open-source utility decision
 
@@ -181,7 +196,6 @@ Do not add a second search engine, graph framework, router, state library, desig
 - Human VoiceOver or TalkBack mobile session.
 - Physical phone and tablet checks.
 - Actual browser 200% zoom session.
-- CI, CodeQL, same-runner previous-release Lighthouse A/B, GitHub Pages deployment, live smoke, and deployed asset identity for corrected application commit `c596c0f`.
 - Owner review and final `GO` or `NO-GO`.
 
-The first candidate was pushed, merged to `main`, deployed to GitHub Pages, and verified as recorded above. The grouped Catalog-detail correction remains locally committed and authorized for the same direct ship flow. Tags and GitHub Releases are not part of this correction.
+The corrected candidate was pushed, merged to `main`, deployed to GitHub Pages, and verified as recorded above. Tags and GitHub Releases are not part of this correction.

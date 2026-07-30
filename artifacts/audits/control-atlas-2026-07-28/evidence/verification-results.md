@@ -46,11 +46,23 @@ Candidate implementation commit: `c596c0f3160f60eed277f764f000c4c58c21183a`
 - Pages Live Smoke `30502503158`: 52 of 52 passed.
 - Same-runner Lighthouse A/B `30502633632`: previous release median 58; application commit `54e40be` median 98.
 
+## Corrected deployed-candidate evidence
+
+- Application correction `c596c0f3160f60eed277f764f000c4c58c21183a`; deployment source `2496c9c4776c4cfb5c6ff42adcfb30efb5949c33`.
+- Correction branch Public Repo Checks `30503469420`: passed.
+- `main` Public Repo Checks `30503546369`: passed.
+- Secret Scan `30503546338`: passed.
+- CodeQL `30503546367`: passed.
+- Pages deployment `30503636846`: passed.
+- Pages Live Smoke `30503679776`: passed.
+- Same-runner Lighthouse A/B `30503791440`: previous release median 53; corrected candidate median 91.
+- Live Catalog-detail proof: one shared owner and one result target, matching `aria-controls`, visible ownership, zero horizontal overflow, entry asset `index-DK5gUEAZ.js`, and cache marker `20260729-1`.
+- This post-deploy evidence update changes documentation only; the verified application assets are unchanged.
+
 ## OSCAL boundary
 
 The current importer classifies and normalizes the repository's controlled public-source inputs; it is not an independent OSCAL schema validator. The NIST CLI is the independent verification gate and correctly rejects missing required metadata. No uploaded or user-supplied OSCAL enters the static product.
 
 ## External results still required
 
-- CI, CodeQL, same-runner previous-release Lighthouse A/B, deployment, and post-deploy live smoke for corrected application commit `c596c0f`.
 - Human editorial, practitioner, screen-reader, actual-zoom, and physical-device sign-off.
