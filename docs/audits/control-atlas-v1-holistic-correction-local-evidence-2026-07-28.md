@@ -173,6 +173,10 @@ No gate is recorded as `Not tested`.
 - Maintained MIT-licensed `actionlint` v1.7.12 reported no workflow syntax, expression, action-input, or inline-shell findings. It was used as a milestone validation tool rather than imposed as a compile/download cost on every run.
 - Focused evidence-ship milestone: `47cf5f4937b5f30e15cfb1873450e1d06f9e16c3`.
 - Its full branch check (`30506294963`), exact-SHA main reuse (`30506398920`), Secret Scan (`30506398928`), CodeQL (`30506398914`), Pages deployment (`30506420128`), and deployment-gated live smoke (`30506464904`) all passed.
+- Evidence-only proof commit: `e8c7ef0`.
+- Its local ship gate ran only the change-scope and release-evidence tests. Branch Public Repo Checks `30506621573` completed its focused evidence path in 10 seconds; npm install, build, lint, typecheck, corpus, Playwright, and browser steps were skipped.
+- Main Public Repo Checks `30506635794` reused the exact-SHA proof. Secret Scan `30506635834` still passed. CodeQL correctly did not trigger because every changed path was inside the narrow audit-evidence allowlist.
+- GitHub Pages `30506648622` read `evidence-only` and skipped deployment. Pages Live Smoke `30506654877` confirmed no deployment occurred and skipped the live suite.
 
 ## Open-source utility decision
 
