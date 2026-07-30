@@ -227,6 +227,9 @@ test('direct ship scripts cover push retry, remote checks wait, and main ship fl
   assert.equal(packageJson.scripts['pregit:push'], 'npm run prepush:audit');
   const shipToMain = readFileSync('tools/ship-to-main.mjs', 'utf8');
   assert.match(shipToMain, /run\('npm', \['run', 'prepush:audit'\]\)/);
+  assert.match(shipToMain, /classify-change-scope\.mjs/);
+  assert.match(shipToMain, /Running the focused release-evidence gate/);
+  assert.match(shipToMain, /tests\/release-evidence\.test\.mjs/);
   assert.match(
     shipToMain,
     /Direct ship must start from a verified task branch, not main/,

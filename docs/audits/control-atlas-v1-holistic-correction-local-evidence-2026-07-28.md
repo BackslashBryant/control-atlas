@@ -156,6 +156,22 @@ No gate is recorded as `Not tested`.
 - Live control owner label: `Filter SP 800-53 Rev. 5 controls`; deployed entry asset: `index-DK5gUEAZ.js`; cache marker: `20260729-1`.
 - This post-deploy evidence update changes documentation only; the verified application assets are unchanged.
 
+## Pipeline correction and efficiency evidence
+
+- Pipeline milestone: `404ae7deded7f6ce1d8aa500d564c7ee23d6e0b2`.
+- Branch Public Repo Checks: run `30505913467`; the full `checks` job passed in 1 minute 47 seconds.
+- Main Public Repo Checks: run `30506011446`; it reused the successful exact-SHA branch proof and completed in 18 seconds while still checking out, classifying, and publishing the verified runtime scope.
+- Main Secret Scan: run `30506011439`; retained on every push.
+- Main CodeQL: run `30506011454`; passed for the pipeline/runtime change.
+- GitHub Pages: run `30506028966`; the scope job read the verified `full` classification, then the exact-SHA build, public verification, and deployment passed.
+- Pages Live Smoke: run `30506085794`; the gate proved a Pages deployment occurred before the full deployed-site suite ran and passed.
+- The evidence-only allowlist is limited to additions and modifications under `docs/audits/` and `artifacts/audits/`. Empty diffs, deletions, renames, copies, unknown statuses, missing bases, and every other path fail closed to the full gate.
+- User-controlled `[skip ci]` behavior is removed. The required `checks` job always resolves.
+- Official `actions/setup-node` npm caching is enabled in every npm-backed workflow. One duplicate Atlas graph suite owner, one redundant framework rebuild, and two redundant Commons index builds were removed without deleting their assertions.
+- `--no-wait` now returns before any main checkout, merge, or push. Direct ship rejects execution from `main`, and documentation-only ship updates use the focused evidence gate.
+- Eleven fully merged `ship/ci-*` automation branches were deleted. The superseded main-start temporary-branch implementation was removed.
+- Maintained MIT-licensed `actionlint` v1.7.12 reported no workflow syntax, expression, action-input, or inline-shell findings. It was used as a milestone validation tool rather than imposed as a compile/download cost on every run.
+
 ## Open-source utility decision
 
 Retain and consolidate:
