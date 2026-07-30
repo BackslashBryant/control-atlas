@@ -176,183 +176,191 @@ export function CatalogDetailPage(props: {
             </p>
           </div>
         </div>
-        <div
-          aria-label="Catalog record controls"
-          className="catalog-record-toolbar"
-          role="group"
+        <WorkbenchControlSurface
+          className="catalog-detail-control-surface"
+          label={`Filter ${catalog.name} ${profile.recordLabel}`}
+          targetId="catalog-record-results"
         >
-          <div className="catalog-record-filters">
-            {families.length > 1 && !showTierBrowser ? (
-              <label className="catalog-record-filter">
-                <span>Published group</span>
-                <select
-                  aria-label="Filter by published group"
-                  onChange={(event) =>
-                    update({
-                      family: event.target.value,
-                      browseAll: "true",
-                      page: "",
-                    })
-                  }
-                  value={state.family}
-                >
-                  <option value="">All published groups</option>
-                  {families.map((name) => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
+          <div
+            aria-label="Catalog record controls"
+            className="catalog-record-toolbar"
+            role="group"
+          >
+            <div className="catalog-record-filters">
+              {families.length > 1 && !showTierBrowser ? (
+                <label className="catalog-record-filter">
+                  <span>Published group</span>
+                  <select
+                    aria-label="Filter by published group"
+                    onChange={(event) =>
+                      update({
+                        family: event.target.value,
+                        browseAll: "true",
+                        page: "",
+                      })
+                    }
+                    value={state.family}
+                  >
+                    <option value="">All published groups</option>
+                    {families.map((name) => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              <label className="catalog-record-filter catalog-record-search-filter">
+                <span>Search records</span>
+                <span className="catalog-search">
+                  <IconSearch aria-hidden="true" size={18} />
+                  <input
+                    aria-label="Search this catalog"
+                    onChange={(event) =>
+                      update({
+                        query: event.target.value,
+                        browseAll: "true",
+                        page: "",
+                      })
+                    }
+                    placeholder={`Identifier or title in ${catalog.name}`}
+                    type="search"
+                    value={state.query}
+                  />
+                </span>
               </label>
-            ) : null}
-            <label className="catalog-record-filter catalog-record-search-filter">
-              <span>Search records</span>
-              <span className="catalog-search">
-                <IconSearch aria-hidden="true" size={18} />
-                <input
-                  aria-label="Search this catalog"
-                  onChange={(event) =>
-                    update({
-                      query: event.target.value,
-                      browseAll: "true",
-                      page: "",
-                    })
-                  }
-                  placeholder={`Identifier or title in ${catalog.name}`}
-                  type="search"
-                  value={state.query}
-                />
-              </span>
-            </label>
+            </div>
           </div>
-        </div>
+        </WorkbenchControlSurface>
 
-        {bundle.catalogRecordsReady === false ? (
-          <p className="notice-inline" role="status">
-            Loading this publication's records…
-          </p>
-        ) : showTierBrowser ? (
-          <>
-            <div className="catalog-index-list">
-              {tierGroups.map((group) => (
-                <button
-                  className="catalog-index-row"
-                  key={group.name}
+        <div data-control-results id="catalog-record-results">
+          {bundle.catalogRecordsReady === false ? (
+            <p className="notice-inline" role="status">
+              Loading this publication's records…
+            </p>
+          ) : showTierBrowser ? (
+            <>
+              <div className="catalog-index-list">
+                {tierGroups.map((group) => (
+                  <button
+                    className="catalog-index-row"
+                    key={group.name}
+                    onClick={() =>
+                      update({
+                        family: group.name,
+                        browseAll: "true",
+                        page: "",
+                      })
+                    }
+                    type="button"
+                  >
+                    <span><strong>{group.name}</strong></span>
+                    <span>
+                      {group.count.toLocaleString()} {profile.recordLabel}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <button
+                className="link-button"
+                onClick={() => update({ browseAll: "true", page: "" })}
+                type="button"
+              >
+                Browse all {records.length.toLocaleString()} {profile.recordLabel}
+              </button>
+            </>
+          ) : !pageIsValid ? (
+            <div className="empty-state">
+              <h3>That result page is not available.</h3>
+              <p>
+                This filter has {pageCount} page{pageCount === 1 ? "" : "s"}.
+              </p>
+              <Button
+                onClick={() => update({ page: String(pageCount) })}
+                type="button"
+                variant="secondary"
+              >
+                Open the last available page
+              </Button>
+            </div>
+          ) : pageRecords.length ? (
+            <>
+              <div className="catalog-record-list">
+                {pageRecords.map((record: any) => {
+                  const itemId = record.metadata?.item_id || record.id;
+                  const title = record.metadata?.title || itemId;
+                  return (
+                    <article className="catalog-record-row" key={record.id}>
+                      <button
+                        className="catalog-record-title"
+                        onClick={() => onOpenNode(record.id, "catalog-detail")}
+                        type="button"
+                      >
+                        <strong>{itemId}</strong>
+                        {title !== itemId ? <span>{title}</span> : null}
+                      </button>
+                      <p>
+                        {record.description ||
+                          "No narrative description was published for this record."}
+                      </p>
+                      {record.metadata?.family ? (
+                        <small>{record.metadata.family}</small>
+                      ) : null}
+                    </article>
+                  );
+                })}
+              </div>
+              <nav aria-label="Catalog result pages" className="catalog-pagination">
+                <Button
+                  disabled={requestedPage === 1}
                   onClick={() =>
                     update({
-                      family: group.name,
-                      browseAll: "true",
-                      page: "",
+                      page:
+                        requestedPage - 1 === 1
+                          ? ""
+                          : String(requestedPage - 1),
                     })
                   }
                   type="button"
+                  variant="secondary"
                 >
-                  <span><strong>{group.name}</strong></span>
-                  <span>
-                    {group.count.toLocaleString()} {profile.recordLabel}
-                  </span>
-                </button>
-              ))}
-            </div>
-            <button
-              className="link-button"
-              onClick={() => update({ browseAll: "true", page: "" })}
-              type="button"
-            >
-              Browse all {records.length.toLocaleString()} {profile.recordLabel}
-            </button>
-          </>
-        ) : !pageIsValid ? (
-          <div className="empty-state">
-            <h3>That result page is not available.</h3>
-            <p>
-              This filter has {pageCount} page{pageCount === 1 ? "" : "s"}.
-            </p>
-            <Button
-              onClick={() => update({ page: String(pageCount) })}
-              type="button"
-              variant="secondary"
-            >
-              Open the last available page
-            </Button>
-          </div>
-        ) : pageRecords.length ? (
-          <>
-            <div className="catalog-record-list">
-              {pageRecords.map((record: any) => {
-                const itemId = record.metadata?.item_id || record.id;
-                const title = record.metadata?.title || itemId;
-                return (
-                  <article className="catalog-record-row" key={record.id}>
-                    <button
-                      className="catalog-record-title"
-                      onClick={() => onOpenNode(record.id, "catalog-detail")}
-                      type="button"
-                    >
-                      <strong>{itemId}</strong>
-                      {title !== itemId ? <span>{title}</span> : null}
-                    </button>
-                    <p>
-                      {record.description ||
-                        "No narrative description was published for this record."}
-                    </p>
-                    {record.metadata?.family ? (
-                      <small>{record.metadata.family}</small>
-                    ) : null}
-                  </article>
-                );
-              })}
-            </div>
-            <nav aria-label="Catalog result pages" className="catalog-pagination">
+                  Previous
+                </Button>
+                <span>
+                  Page {requestedPage} of {pageCount} · showing{" "}
+                  {(requestedPage - 1) * PAGE_SIZE + 1}–
+                  {(requestedPage - 1) * PAGE_SIZE + pageRecords.length} of{" "}
+                  {matchingRecords.length.toLocaleString()}
+                </span>
+                <Button
+                  disabled={requestedPage === pageCount}
+                  onClick={() => update({ page: String(requestedPage + 1) })}
+                  type="button"
+                  variant="secondary"
+                >
+                  Next
+                </Button>
+              </nav>
+            </>
+          ) : (
+            <div className="empty-state">
+              <h3>No records match these filters.</h3>
+              <p>Try an identifier, official title, published group, or broader term.</p>
               <Button
-                disabled={requestedPage === 1}
                 onClick={() =>
                   update({
-                    page:
-                      requestedPage - 1 === 1
-                        ? ""
-                        : String(requestedPage - 1),
+                    query: "",
+                    family: "",
+                    browseAll: "",
+                    page: "",
                   })
                 }
                 type="button"
                 variant="secondary"
               >
-                Previous
+                Clear catalog filters
               </Button>
-              <span>
-                Page {requestedPage} of {pageCount} · showing{" "}
-                {(requestedPage - 1) * PAGE_SIZE + 1}–
-                {(requestedPage - 1) * PAGE_SIZE + pageRecords.length} of{" "}
-                {matchingRecords.length.toLocaleString()}
-              </span>
-              <Button
-                disabled={requestedPage === pageCount}
-                onClick={() => update({ page: String(requestedPage + 1) })}
-                type="button"
-                variant="secondary"
-              >
-                Next
-              </Button>
-            </nav>
-          </>
-        ) : (
-          <div className="empty-state">
-            <h3>No records match these filters.</h3>
-            <p>Try an identifier, official title, published group, or broader term.</p>
-            <Button
-              onClick={() =>
-                update({
-                  query: "",
-                  family: "",
-                  browseAll: "",
-                  page: "",
-                })
-              }
-              type="button"
-              variant="secondary"
-            >
-              Clear catalog filters
-            </Button>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </section>
     </section>
   );
