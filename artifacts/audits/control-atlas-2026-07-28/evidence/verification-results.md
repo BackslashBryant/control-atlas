@@ -1,19 +1,21 @@
 # Verification results — corrected local candidate
 
 Date: 2026-07-29
-Candidate implementation commit: `fed6cf5e550808d72ce2897a71b523c59999c775`
+Candidate implementation commit: `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4`
 
 ## Current local results
 
-- `npm run test:correction:contracts`: 57 TypeScript tests and 33 Node tests passed.
+- `npm run test:correction:contracts`: 58 TypeScript tests and 36 Node tests passed.
 - `npm run test:correction:local`: 27 Playwright tests passed.
 - `npm run precommit`: passed.
   - data suite: 236 tests passed;
   - runtime suite: 30 passed;
-  - graph suite: 51 passed;
-  - browser contracts: 21 passed;
+  - graph suite: 52 passed;
+  - browser contracts: 23 passed;
   - accessibility smoke: 5 passed;
   - practitioner workflow smoke: 12 passed.
+- Full automated accessibility matrix: 30 routes and interaction states passed with zero serious or critical axe violations.
+- `npm run prepush:audit`: 2 brand-rotation tests and 37 browser/content/speaker tests passed; Vale reported zero findings.
 - Complete search artifact: 229,145 bytes at gzip level 9, below the 300,000-byte invariant.
 - Federal graph: 50 sources, 11,674 nodes, 22,273 edges, 22,273 evidence records, 11 blocked graph-health findings, and zero inferred candidate edges published.
 - `npm run audit:deps`: passed with two existing time-bounded dev-tool exceptions.
@@ -28,10 +30,10 @@ Candidate implementation commit: `fed6cf5e550808d72ce2897a71b523c59999c775`
 ## Candidate artifact identity
 
 - Build manifest timestamp: `2026-07-29T01:35:49.122Z`.
-- `index-Dhp3e1e8.js`: SHA-256 `6A1575C4F188FCBD1F4234BE38FBDA391068AC355D5BC49273CC853A7B27F112`.
-- `App-Bn2A358z.js`: SHA-256 `E2FB6C0D7199DA7C05EB74240279976E424E3CD21AB5FBE913795EA2B12D37E4`.
-- `runtimeLoader-CebW1eWN.js`: SHA-256 `B6B9F856F0CE9C7E4CB03D04EDA4E50F7BE30793CEF1994E6BCA92A2B6767BFF`.
-- `RelationshipGraph-CAsH0jwE.js`: SHA-256 `B8799DFFF4B3CEDC4F5727A09E323C013095B382E3DF2A2E18D76A4B58F2FF86`; loaded only for an explicit desktop graph-dependent view.
+- `index-B2w5-eYW.js`: SHA-256 `AD41B3F00C591077810F83036AB1AE4F24418969A89F07CB934C4D6D474A98D5`.
+- `App-D3U3-Fo9.js`: SHA-256 `CDDD06D461A613F8D6FCFC1D5194D63E8150479BA3954A72D537F17941EA01B6`.
+- `runtimeLoader-Cn2KtAwj.js`: SHA-256 `E15B5F46AC74070FF6E3FDA66D8E457448E2BE44488AFCF263AD5D66E85A4FFB`.
+- `RelationshipGraph-CuLl9xFB.js`: SHA-256 `64AA5D263127BF4563EBF61C47FEF6990DA75A39E9AD8FC973D19469D65B45A3`; loaded only for an explicit desktop graph-dependent view.
 
 ## OSCAL boundary
 

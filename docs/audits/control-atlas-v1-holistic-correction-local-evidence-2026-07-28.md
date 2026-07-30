@@ -2,10 +2,18 @@
 
 Evidence updated: 2026-07-29
 Branch: `agent/forge/control-atlas-holistic-correction`
-Starting commit: `8848fc9be9996e76c8e3595c328bfda4af382d98`
-Candidate implementation commit: `fed6cf5e550808d72ce2897a71b523c59999c775`
-Pre-push identity and voice milestone: `62c9dfa8a9e0bc39ce2d6a1b9cae39cf8799361d`
-Authority: local implementation and non-destructive validation only
+Starting commit and pre-deploy rollback target: `8a759f371731efec8be06ccfc515486ad0d0a3c7`
+Candidate implementation commit: `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4`
+Authority: local implementation, non-destructive validation, push, merge to `main`, and GitHub Pages deployment. Deployment evidence remains pending until the exact committed candidate is live.
+
+## Milestone commits
+
+- `f13758492ac4c5e09ee3199e8c5c4f8ba36423b5` — restore guided Atlas loading and recovery.
+- `4800640f7ebb6e94859ff9821b91194503df6403` — anchor result-affecting controls to the results they own.
+- `575bc407d2d3bea59e0762dc4662514777b18794` — promote Resources to a top-level spoke and connect global discovery.
+- `45b65443ca544365ecb453fc1234fe7d7f14ea26` — centralize deployed cache/version gate ownership.
+- `8f201ea56fa49c721feed08c19174b95410e14d1` — separate accessible action colors from the brand accent.
+- `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4` — remove duplicate floating navigation and rewrite source entry in practitioner voice.
 
 ## Local outcome
 
@@ -40,6 +48,11 @@ Product-authored glossary entries are labeled `Control Atlas explanation` with t
 | CA-TST-015 | Tests retained retired routes | Canonical route matrix | Meta-contract and browser recovery matrix | Pass |
 | CA-SRCH-017 | Surfaces owned eligibility and ranking separately | Complete compact search artifact and MiniSearch Resources owner | Exact, ambiguous, topic, typo, facets, and honest-zero benchmarks | Pass |
 | CA-PERF-019 | Every route loaded global graph/index state; catalog identity waited for its full record payload | Route-scoped artifact plan, self-contained Atlas shards, and staged catalog identity | Loader-plan contracts, shard canonicality, delayed-record invariant, payload budget, 16-route Lighthouse matrix | Pass |
+| CA-ATL-020 | The Atlas shell could remain blank while the route waited on the wrong graph scope | Shared route-scope loader and progressive-shell ownership | Blank, loading, selected, partial, error, and retry browser invariants | Pass |
+| CA-UI-021 | Search, filter, and compare controls floated outside the result region they changed | Shared `WorkbenchControlSurface` | One visible owner, `aria-controls`, responsive containment, and zero-overflow checks | Pass |
+| CA-RES-022 | Resources and practitioner communities existed under Build but were absent from primary discovery | Canonical Resources route, primary nav, and global Search | Canonical/legacy route, nav, Search, record-context, and responsive invariants | Pass |
+| CA-REL-023 | Runtime cache identity and deployed checks used different owners | Shared runtime cache version and build metadata | Local and deployed marker agreement, subpath-safe identity checks | Pass locally; deployed proof pending |
+| CA-CPY-024 | Start Here and source-entry copy exposed internal taxonomy and repeated disclaimer language | Shared source navigator plus Help/Home/Explore consumers | Speaker, content, browser, Start Here, and pre-push copy contracts | Pass |
 
 ## Superseded implementations deleted
 
@@ -56,15 +69,17 @@ Product-authored glossary entries are labeled `Control Atlas explanation` with t
 
 | Command or invariant | Result |
 | --- | --- |
-| `npm run test:correction:contracts` | Pass — 57 TypeScript + 34 Node tests |
+| `npm run test:correction:contracts` | Pass — 58 TypeScript + 36 Node tests |
 | `npm run test:correction:local` | Pass — 27 Playwright tests |
 | `npm run precommit` | Pass |
 | Data suite inside precommit | Pass — 236 tests |
 | Runtime suite | Pass — 30 tests |
-| Graph suite | Pass — 51 tests |
-| Browser contracts | Pass — 21 tests |
+| Graph suite | Pass — 52 tests |
+| Browser contracts | Pass — 23 tests |
 | Accessibility smoke | Pass — 5 routes, zero serious/critical axe violations |
+| Full automated accessibility matrix | Pass — 30 routes/states, zero serious/critical axe violations |
 | Practitioner workflow smoke | Pass — 12 of 12 |
+| `npm run prepush:audit` | Pass — brand rotation 2/2; browser/content/speaker 37/37; Vale 0 findings |
 | Search artifact budget | Pass — 229,145 gzip bytes; limit 300,000 |
 | Federal graph audit | Pass — 50 sources, 11,674 nodes, 22,273 edges/evidence, 11 blocked findings |
 | Dependency audit | Pass with two existing scoped dev-tool exceptions |
@@ -108,10 +123,10 @@ No gate is recorded as `Not tested`.
 ## Candidate artifact identity
 
 - Build manifest timestamp: `2026-07-29T01:35:49.122Z`.
-- Entry: `index-Dhp3e1e8.js` — 10,264 bytes — SHA-256 `6A1575C4F188FCBD1F4234BE38FBDA391068AC355D5BC49273CC853A7B27F112`.
-- App: `App-Bn2A358z.js` — 31,662 bytes — SHA-256 `E2FB6C0D7199DA7C05EB74240279976E424E3CD21AB5FBE913795EA2B12D37E4`.
-- Runtime loader: `runtimeLoader-CebW1eWN.js` — 34,641 bytes — SHA-256 `B6B9F856F0CE9C7E4CB03D04EDA4E50F7BE30793CEF1994E6BCA92A2B6767BFF`.
-- Desktop relationship graph: `RelationshipGraph-CAsH0jwE.js` — 1,618,001 bytes, 501.93 KB gzip — SHA-256 `B8799DFFF4B3CEDC4F5727A09E323C013095B382E3DF2A2E18D76A4B58F2FF86`; it remains lazy and is not an initial-route dependency.
+- Entry: `index-B2w5-eYW.js` — 10,573 bytes — SHA-256 `AD41B3F00C591077810F83036AB1AE4F24418969A89F07CB934C4D6D474A98D5`.
+- App: `App-D3U3-Fo9.js` — 32,068 bytes — SHA-256 `CDDD06D461A613F8D6FCFC1D5194D63E8150479BA3954A72D537F17941EA01B6`.
+- Runtime loader: `runtimeLoader-Cn2KtAwj.js` — 34,747 bytes — SHA-256 `E15B5F46AC74070FF6E3FDA66D8E457448E2BE44488AFCF263AD5D66E85A4FFB`.
+- Desktop relationship graph: `RelationshipGraph-CuLl9xFB.js` — 1,618,001 bytes, 501.90 KB gzip — SHA-256 `64AA5D263127BF4563EBF61C47FEF6990DA75A39E9AD8FC973D19469D65B45A3`; it remains lazy and is not an initial-route dependency.
 
 ## Open-source utility decision
 
@@ -154,8 +169,8 @@ Do not add a second search engine, graph framework, router, state library, desig
 - Physical phone and tablet checks.
 - Actual browser 200% zoom session.
 - CI, CodeQL, and same-runner previous-release Lighthouse A/B on the exact commit.
-- Authorized deployment and post-deploy live evidence.
+- GitHub Pages deployment and post-deploy live evidence for the authorized candidate.
 - Deployed URL and asset identity for this candidate.
 - Owner review and final `GO` or `NO-GO`.
 
-No push, merge, deployment, tag, release, or production mutation occurred.
+At this evidence checkpoint, no push, merge, deployment, tag, release, or production mutation has occurred. Push, merge to `main`, and Pages deployment are authorized; tags and GitHub Releases are not part of this correction.
