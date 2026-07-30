@@ -45,6 +45,25 @@ function ensureCleanTree() {
   }
 }
 
+function classifyShipScope() {
+  try {
+    const output = execFileSync(
+      process.execPath,
+      [
+        'tools/classify-change-scope.mjs',
+        '--base',
+        'origin/main',
+        '--head',
+        'HEAD',
+      ],
+      { encoding: 'utf8' },
+    );
+    return /^scope=evidence-only$/m.test(output) ? 'evidence-only' : 'full';
+  } catch {
+    return 'full';
+  }
+}
+
 async function main() {
   if (process.env.GITHUB_TOKEN) {
     console.log(
@@ -68,8 +87,18 @@ async function main() {
     console.log('[ship] Skipping local precommit (--skip-local).');
   }
 
-  console.log('[ship] Running the protected brand, copy, and disclaimer audit...');
-  run('npm', ['run', 'prepush:audit']);
+  const scope = classifyShipScope();
+  if (scope === 'evidence-only') {
+    console.log('[ship] Running the focused release-evidence gate...');
+    run('node', [
+      '--test',
+      'tests/change-scope.test.mjs',
+      'tests/release-evidence.test.mjs',
+    ]);
+  } else {
+    console.log('[ship] Running the protected brand, copy, and disclaimer audit...');
+    run('npm', ['run', 'prepush:audit']);
+  }
 
   console.log(`[ship] Pushing ${taskBranch} to trigger remote checks...`);
   run('node', ['tools/git-push-with-retry.mjs', taskBranch]);
