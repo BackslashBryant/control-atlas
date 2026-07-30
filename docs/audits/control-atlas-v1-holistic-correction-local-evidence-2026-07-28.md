@@ -171,6 +171,8 @@ No gate is recorded as `Not tested`.
 - `--no-wait` now returns before any main checkout, merge, or push. Direct ship rejects execution from `main`, and documentation-only ship updates use the focused evidence gate.
 - Eleven fully merged `ship/ci-*` automation branches were deleted. The superseded main-start temporary-branch implementation was removed.
 - Maintained MIT-licensed `actionlint` v1.7.12 reported no workflow syntax, expression, action-input, or inline-shell findings. It was used as a milestone validation tool rather than imposed as a compile/download cost on every run.
+- Focused evidence-ship milestone: `47cf5f4937b5f30e15cfb1873450e1d06f9e16c3`.
+- Its full branch check (`30506294963`), exact-SHA main reuse (`30506398920`), Secret Scan (`30506398928`), CodeQL (`30506398914`), Pages deployment (`30506420128`), and deployment-gated live smoke (`30506464904`) all passed.
 
 ## Open-source utility decision
 
