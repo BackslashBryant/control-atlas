@@ -375,6 +375,12 @@ test('result-affecting controls have one visible workbench owner', () => {
     assert.match(source, /data-control-results/);
   }
 
+  assert.match(catalog, /targetId="catalog-record-results"/);
+  assert.match(
+    catalog,
+    /data-control-results id="catalog-record-results"/,
+  );
+
   assert.match(compare, /targetId="compare-workspace"/);
   assert.match(compare, /data-control-results id="compare-workspace"/);
   assert.doesNotMatch(compare, /function (?:Field|SelectField)\(/);
