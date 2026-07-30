@@ -172,10 +172,10 @@ export function GlossaryDrawer(props: {
               id="help-drawer-panel"
               role="tabpanel"
             >
-              <SummaryCard title="Browse source starting points" tone="trust">
-                <p>Review the fixed public-source list and the rule used to include each source. This is navigation, not an applicability recommendation.</p>
+              <SummaryCard title="Find a publication" tone="trust">
+                <p>Know which publication you need? Open it directly. If not, search all records.</p>
                 <Button variant="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
-                  Browse source starting points
+                  Browse publications
                 </Button>
               </SummaryCard>
               <div className="card-actions">

@@ -98,7 +98,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <aside className="home-trust-boundary">
         <p>No account or uploads. {PRODUCT_DECISION_BOUNDARY}</p>
         <button onClick={() => onNavigate("start-here")} type="button">
-          Browse source starting points
+          Browse publications
         </button>
       </aside>
     </section>

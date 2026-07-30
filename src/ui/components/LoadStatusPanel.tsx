@@ -75,8 +75,8 @@ export function OfflineFallbackActions(props: {
         onClick={() => props.onNavigate("start-here")}
         type="button"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse source starting points</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Review the fixed public-source list and its inclusion rule.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse publications</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Open a catalog or program source directly.</span>
       </button>
       <button
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"

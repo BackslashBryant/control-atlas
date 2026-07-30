@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("Start here exposes source starting points without applicability questions", async ({
+test("Start here opens publications without determination questions", async ({
   page,
 }) => {
   await page.goto("/#/start");
@@ -18,12 +18,10 @@ test("Start here exposes source starting points without applicability questions"
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Browse public sources" }),
+    page.getByRole("heading", { name: "Find the publication you need" }),
   ).toBeVisible();
   await expect(
-    page.getByText(
-      /does not determine which source, baseline, or authorization path applies/i,
-    ),
+    page.getByText(/Each link opens the records and relationships loaded from that publisher/i),
   ).toBeVisible();
   await expect(page.getByLabel("System type")).toHaveCount(0);
   await expect(page.getByLabel("Data sensitivity")).toHaveCount(0);
@@ -52,7 +50,9 @@ test("retired questionnaire parameters are removed with visible recovery", async
   await expect(
     page.getByText(/unsupported link settings were removed/i),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Browse public sources" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Find the publication you need" }),
+  ).toBeVisible();
 });
 
 test("catalog detail keeps source context and opens a specific record", async ({
@@ -68,7 +68,7 @@ test("catalog detail keeps source context and opens a specific record", async ({
   await expect(
     page.getByRole("link", { name: /View official source/ }),
   ).toBeVisible();
-  await page.getByPlaceholder("Search SP 800-171 Rev. 2").fill("3.1.1");
+  await page.getByRole("searchbox", { name: "Search this catalog" }).fill("3.1.1");
   const row = page
     .locator(".catalog-record-row")
     .filter({ hasText: "3.1.1" })

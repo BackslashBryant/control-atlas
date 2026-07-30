@@ -43,7 +43,7 @@ test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results",
   await open(page, "/#/search?q=account");
   expect(await page.locator("#library-results .result-card").count()).toBeGreaterThan(1);
 
-  await open(page, "/#/search?q=definitely-no-control-atlas-result-9x7");
+  await open(page, "/#/search?q=qzxv9417nohit");
   await expect(
     page.getByRole("heading", { name: "No matching records found." }),
   ).toBeVisible();

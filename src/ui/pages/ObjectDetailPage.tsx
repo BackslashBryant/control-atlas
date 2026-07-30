@@ -333,7 +333,6 @@ export function ObjectDetailPage(props: {
       <StickyDetailBar
         enabled={state.from === "search"}
         itemLabel={document.item_id}
-        onBack={returnToOrigin}
         onCompare={() =>
           onNavigate("matrix", {
             crosswalk: "relationships",

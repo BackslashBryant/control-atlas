@@ -4,7 +4,6 @@ import { Button } from "./lsm/Button";
 export function StickyDetailBar(props: {
   enabled: boolean;
   itemLabel: string;
-  onBack: () => void;
   onOpenAtlasMap?: () => void;
   onCompare?: () => void;
 }) {
@@ -36,9 +35,6 @@ export function StickyDetailBar(props: {
       role="navigation"
     >
       <span className="sticky-detail-label">{props.itemLabel}</span>
-      <Button variant="secondary" onClick={props.onBack} type="button">
-        Back to results
-      </Button>
       {props.onOpenAtlasMap ? (
         <Button variant="primary" onClick={props.onOpenAtlasMap} type="button">
           Open in Explore

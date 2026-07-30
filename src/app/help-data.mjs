@@ -2,7 +2,7 @@ export const helpSurfaces = [
   {
     view: "start-here",
     title: "Start Here",
-    body: "Browse the fixed public-source starting points represented in Control Atlas. Inclusion is not an applicability recommendation.",
+    body: "Open a publication already represented in Control Atlas, or search all records if you are not sure where to begin.",
     actionLabel: "Open Start Here",
   },
   {
