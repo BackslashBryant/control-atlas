@@ -1,7 +1,7 @@
 # Verification results — corrected local candidate
 
 Date: 2026-07-29
-Candidate implementation commit: `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4`
+Candidate implementation commit: `c596c0f3160f60eed277f764f000c4c58c21183a`
 
 ## Current local results
 
@@ -26,14 +26,25 @@ Candidate implementation commit: `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4`
 - A delayed-payload browser invariant now proves the catalog title and source context render from the small bootstrap before records arrive.
 - Focused post-fix Lighthouse: LCP 1,963 ms, TBT 8 ms, CLS 0.
 - Final `npm run test:performance`: 16 routes × 3 measured samples, zero threshold failures; median LCP 1,956–1,963 ms, maximum median TBT 73 ms, maximum median CLS 0.034, performance 98, accessibility 100.
+- Live replay of deployed application commit `54e40be` exposed one missed Catalog-detail toolbar consumer. The pre-fix DOM had no `data-controls-for` owner for its result-affecting controls. Commit `c596c0f` adds the missing browser invariant, wraps the toolbar in `WorkbenchControlSurface`, binds it to `catalog-record-results`, and passes the full local gate.
 
 ## Candidate artifact identity
 
 - Build manifest timestamp: `2026-07-29T01:35:49.122Z`.
-- `index-B2w5-eYW.js`: SHA-256 `AD41B3F00C591077810F83036AB1AE4F24418969A89F07CB934C4D6D474A98D5`.
-- `App-D3U3-Fo9.js`: SHA-256 `CDDD06D461A613F8D6FCFC1D5194D63E8150479BA3954A72D537F17941EA01B6`.
+- `index-DK5gUEAZ.js`: SHA-256 `4D55C69BFC08CB2E8F2AE3E5F541A8D102897837D3F426C0878C8031D52DB7B0`.
+- `App-CR2URoL2.js`: SHA-256 `C5D73FD8778E11E7B19BDB6E8D44CC4D14AA3CE39D9674C5BA77E4B62BB78D57`.
 - `runtimeLoader-Cn2KtAwj.js`: SHA-256 `E15B5F46AC74070FF6E3FDA66D8E457448E2BE44488AFCF263AD5D66E85A4FFB`.
-- `RelationshipGraph-CuLl9xFB.js`: SHA-256 `64AA5D263127BF4563EBF61C47FEF6990DA75A39E9AD8FC973D19469D65B45A3`; loaded only for an explicit desktop graph-dependent view.
+- `RelationshipGraph-CZveK5C1.js`: SHA-256 `438E3AEA20D075E3A5F1D207BFD35CAEF802B580BA9B1A2A5966C2EA620AA838`; loaded only for an explicit desktop graph-dependent view.
+
+## First deployed-candidate evidence
+
+- Correction branch Public Repo Checks `30502288499`: passed.
+- `main` Public Repo Checks `30502377470`: passed.
+- Secret Scan `30502377468`: passed.
+- CodeQL `30502377495`: passed.
+- Pages deployment `30502464010`: passed.
+- Pages Live Smoke `30502503158`: 52 of 52 passed.
+- Same-runner Lighthouse A/B `30502633632`: previous release median 58; application commit `54e40be` median 98.
 
 ## OSCAL boundary
 
@@ -41,7 +52,5 @@ The current importer classifies and normalizes the repository's controlled publi
 
 ## External results still required
 
-- CI and CodeQL on the exact committed candidate.
-- Same-runner previous-release Lighthouse A/B in the repository workflow.
-- Deployment and post-deploy live smoke.
+- CI, CodeQL, same-runner previous-release Lighthouse A/B, deployment, and post-deploy live smoke for corrected application commit `c596c0f`.
 - Human editorial, practitioner, screen-reader, actual-zoom, and physical-device sign-off.

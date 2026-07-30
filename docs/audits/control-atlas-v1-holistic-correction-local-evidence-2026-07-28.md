@@ -3,8 +3,8 @@
 Evidence updated: 2026-07-29
 Branch: `agent/forge/control-atlas-holistic-correction`
 Starting commit and pre-deploy rollback target: `8a759f371731efec8be06ccfc515486ad0d0a3c7`
-Candidate implementation commit: `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4`
-Authority: local implementation, non-destructive validation, push, merge to `main`, and GitHub Pages deployment. Deployment evidence remains pending until the exact committed candidate is live.
+Candidate implementation commit: `c596c0f3160f60eed277f764f000c4c58c21183a`
+Authority: local implementation, non-destructive validation, push, merge to `main`, and GitHub Pages deployment. The first deployed candidate exposed one missed Catalog-detail consumer; the corrected candidate is locally verified and awaiting exact-commit deployment evidence.
 
 ## Milestone commits
 
@@ -14,6 +14,7 @@ Authority: local implementation, non-destructive validation, push, merge to `mai
 - `45b65443ca544365ecb453fc1234fe7d7f14ea26` — centralize deployed cache/version gate ownership.
 - `8f201ea56fa49c721feed08c19174b95410e14d1` — separate accessible action colors from the brand accent.
 - `cf05530bc586b4e2ca4af1e7f399b2e42d257bf4` — remove duplicate floating navigation and rewrite source entry in practitioner voice.
+- `c596c0f3160f60eed277f764f000c4c58c21183a` — migrate the grouped Catalog-detail controls to the shared anchored workbench owner.
 
 ## Local outcome
 
@@ -49,7 +50,7 @@ Product-authored glossary entries are labeled `Control Atlas explanation` with t
 | CA-SRCH-017 | Surfaces owned eligibility and ranking separately | Complete compact search artifact and MiniSearch Resources owner | Exact, ambiguous, topic, typo, facets, and honest-zero benchmarks | Pass |
 | CA-PERF-019 | Every route loaded global graph/index state; catalog identity waited for its full record payload | Route-scoped artifact plan, self-contained Atlas shards, and staged catalog identity | Loader-plan contracts, shard canonicality, delayed-record invariant, payload budget, 16-route Lighthouse matrix | Pass |
 | CA-ATL-020 | The Atlas shell could remain blank while the route waited on the wrong graph scope | Shared route-scope loader and progressive-shell ownership | Blank, loading, selected, partial, error, and retry browser invariants | Pass |
-| CA-UI-021 | Search, filter, and compare controls floated outside the result region they changed | Shared `WorkbenchControlSurface` | One visible owner, `aria-controls`, responsive containment, and zero-overflow checks | Pass |
+| CA-UI-021 | Search, filter, and compare controls floated outside the result region they changed; the initial inventory audit omitted the grouped Catalog-detail state | Shared `WorkbenchControlSurface`, including the Catalog-detail consumer | One visible owner and result target per workbench, `aria-controls`, responsive containment, and zero-overflow checks | Pass |
 | CA-RES-022 | Resources and practitioner communities existed under Build but were absent from primary discovery | Canonical Resources route, primary nav, and global Search | Canonical/legacy route, nav, Search, record-context, and responsive invariants | Pass |
 | CA-REL-023 | Runtime cache identity and deployed checks used different owners | Shared runtime cache version and build metadata | Local and deployed marker agreement, subpath-safe identity checks | Pass locally; deployed proof pending |
 | CA-CPY-024 | Start Here and source-entry copy exposed internal taxonomy and repeated disclaimer language | Shared source navigator plus Help/Home/Explore consumers | Speaker, content, browser, Start Here, and pre-push copy contracts | Pass |
@@ -101,10 +102,10 @@ Product-authored glossary entries are labeled `Control Atlas explanation` with t
 | 3. IA, layout, and copy | Pass for automation | Blocked | Human editorial sign-off and actual 200% zoom |
 | 4. Practitioner validation | Blocked | Blocked | Five practitioners across at least three roles |
 | 5. Accessibility | Pass for automation | Blocked | NVDA; VoiceOver or TalkBack; physical phone/tablet; actual 200% zoom |
-| 6. Performance and resilience | Pass | Blocked | Same-runner previous-release A/B on exact commit |
-| 7. Security, privacy, dependencies | Pass locally | Blocked | CI/CodeQL on exact commit |
-| 8. Release and operations | Pass locally | Blocked | CI, authorized deployment, live smoke, deployed URL/assets |
-| 9. Product identity and launch communication | Pass locally | Blocked | Live metadata/repository-description verification and owner decision |
+| 6. Performance and resilience | Pass | Pass for deployed application commit `54e40be` | Rerun same-runner previous-release A/B on corrected application commit |
+| 7. Security, privacy, dependencies | Pass locally | Pass for deployed application commit `54e40be` | CI/CodeQL on corrected application commit |
+| 8. Release and operations | Pass locally | Pass for deployed application commit `54e40be` | Corrected deployment, live smoke, and exact deployed asset identity |
+| 9. Product identity and launch communication | Pass locally | Pass for deployed application commit `54e40be` except owner decision | Corrected live verification and owner `GO` or `NO-GO` |
 
 No gate is recorded as `Not tested`.
 
@@ -123,10 +124,22 @@ No gate is recorded as `Not tested`.
 ## Candidate artifact identity
 
 - Build manifest timestamp: `2026-07-29T01:35:49.122Z`.
-- Entry: `index-B2w5-eYW.js` — 10,573 bytes — SHA-256 `AD41B3F00C591077810F83036AB1AE4F24418969A89F07CB934C4D6D474A98D5`.
-- App: `App-D3U3-Fo9.js` — 32,068 bytes — SHA-256 `CDDD06D461A613F8D6FCFC1D5194D63E8150479BA3954A72D537F17941EA01B6`.
+- Entry: `index-DK5gUEAZ.js` — 10,573 bytes — SHA-256 `4D55C69BFC08CB2E8F2AE3E5F541A8D102897837D3F426C0878C8031D52DB7B0`.
+- App: `App-CR2URoL2.js` — 32,068 bytes — SHA-256 `C5D73FD8778E11E7B19BDB6E8D44CC4D14AA3CE39D9674C5BA77E4B62BB78D57`.
 - Runtime loader: `runtimeLoader-Cn2KtAwj.js` — 34,747 bytes — SHA-256 `E15B5F46AC74070FF6E3FDA66D8E457448E2BE44488AFCF263AD5D66E85A4FFB`.
-- Desktop relationship graph: `RelationshipGraph-CuLl9xFB.js` — 1,618,001 bytes, 501.90 KB gzip — SHA-256 `64AA5D263127BF4563EBF61C47FEF6990DA75A39E9AD8FC973D19469D65B45A3`; it remains lazy and is not an initial-route dependency.
+- Desktop relationship graph: `RelationshipGraph-CZveK5C1.js` — 1,618,001 bytes, 501.93 KB gzip — SHA-256 `438E3AEA20D075E3A5F1D207BFD35CAEF802B580BA9B1A2A5966C2EA620AA838`; it remains lazy and is not an initial-route dependency.
+
+## First deployed-candidate evidence and correction discovery
+
+- Correction branch Public Repo Checks: run `30502288499`.
+- `main` Public Repo Checks: run `30502377470`.
+- Secret Scan: run `30502377468`.
+- CodeQL: run `30502377495`.
+- GitHub Pages deployment: run `30502464010`.
+- Pages Live Smoke: run `30502503158`, 52 of 52 live workflows passed.
+- Same-runner Lighthouse A/B: run `30502633632`; previous release `v1.0.2` median performance 58, candidate `54e40be` median performance 98.
+- Live cache marker `20260729-1`, top-level Resources, revised Start Here copy, and the nonblank Atlas entry all matched the committed application.
+- Live DOM replay then proved the grouped Catalog-detail controls had no `data-controls-for` owner. The browser contract covered Catalog inventory but not Catalog detail. Commit `c596c0f` extends the invariant to the omitted state and migrates that consumer to the shared owner.
 
 ## Open-source utility decision
 
@@ -168,9 +181,7 @@ Do not add a second search engine, graph framework, router, state library, desig
 - Human VoiceOver or TalkBack mobile session.
 - Physical phone and tablet checks.
 - Actual browser 200% zoom session.
-- CI, CodeQL, and same-runner previous-release Lighthouse A/B on the exact commit.
-- GitHub Pages deployment and post-deploy live evidence for the authorized candidate.
-- Deployed URL and asset identity for this candidate.
+- CI, CodeQL, same-runner previous-release Lighthouse A/B, GitHub Pages deployment, live smoke, and deployed asset identity for corrected application commit `c596c0f`.
 - Owner review and final `GO` or `NO-GO`.
 
-At this evidence checkpoint, no push, merge, deployment, tag, release, or production mutation has occurred. Push, merge to `main`, and Pages deployment are authorized; tags and GitHub Releases are not part of this correction.
+The first candidate was pushed, merged to `main`, deployed to GitHub Pages, and verified as recorded above. The grouped Catalog-detail correction remains locally committed and authorized for the same direct ship flow. Tags and GitHub Releases are not part of this correction.
