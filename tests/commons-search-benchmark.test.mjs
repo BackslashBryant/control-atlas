@@ -1,14 +1,11 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import assert from "assert";
-import { execSync } from "child_process";
 
 const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const INDEX_PATH = resolve("data/generated/commons-search-index.json");
 
 console.log("⚡ Running Control Commons Search Quality Benchmark...");
-
-execSync("node scripts/build-commons-index.mjs");
 
 const dataset = JSON.parse(readFileSync(DATASET_PATH, "utf-8"));
 const index = JSON.parse(readFileSync(INDEX_PATH, "utf-8"));

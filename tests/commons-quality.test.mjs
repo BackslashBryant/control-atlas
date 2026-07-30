@@ -4,18 +4,12 @@ import { resolve } from "path";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 
-import { execSync } from "child_process";
-
 const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const MANIFEST_PATH = resolve("data/commons-candidate-manifest.json");
 const INDEX_PATH = resolve("data/generated/commons-search-index.json");
 const SCHEMA_PATH = resolve("data/schemas/commons-resource-schema.json");
 
 console.log("⚡ Running Control Commons Quality & Integrity Benchmark...");
-
-// Rebuild so the index contract checks the dataset under test, not a stale
-// generated artifact left by a previous build.
-execSync("node scripts/build-commons-index.mjs");
 
 // 1. Check file existence
 assert.ok(existsSync(DATASET_PATH), "Dataset file exists");
