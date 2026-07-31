@@ -140,14 +140,13 @@ test("guided Atlas selections survive URL serialization and parsing", () => {
   assert.equal(parsed.atlasRmfStep, "");
 });
 
-test("CA-ATL-005: supported framework selector exposes four validated hierarchy groups", () => {
+test("CA-ATL-005: the Atlas selector groups every catalog under its limb in trunk order", () => {
   const structuralNodes: AtlasDrillNode[] = [
+    node("atlas:TRUNK", "trunk", "TRUNK", "Cybersecurity"),
+    node("atlas:LIMB-COMPLIANCE", "limb", "LIMB-COMPLIANCE", "Compliance"),
+    node("atlas:LIMB-THREAT", "limb", "LIMB-THREAT", "Threats & Defense"),
     node("nist-800-53:CATALOG", "catalog", "CATALOG", "SP 800-53"),
     node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),
-    node("csf-2:CATALOG", "catalog", "CATALOG", "CSF 2.0", "csf-2"),
-    node("csf-2:FUNCTION-GV", "function", "GV", "Govern", "csf-2"),
-    node("cmmc-2:CATALOG", "catalog", "CATALOG", "CMMC 2.0", "cmmc-2"),
-    node("cmmc-2:LEVEL-1", "program_level", "LEVEL-1", "Level 1", "cmmc-2"),
     node(
       "mitre-attack:CATALOG",
       "catalog",
@@ -155,51 +154,31 @@ test("CA-ATL-005: supported framework selector exposes four validated hierarchy 
       "MITRE ATT&CK Enterprise",
       "mitre-attack",
     ),
-    node(
-      "mitre-attack:TA0001",
-      "tactic",
-      "TA0001",
-      "Initial Access",
-      "mitre-attack",
-    ),
+    node("mitre-attack:TA0001", "tactic", "TA0001", "Initial Access", "mitre-attack"),
   ];
   const structuralEdges: AtlasDrillEdge[] = [
-    edge(
-      "nist-root",
-      "nist-800-53:CATALOG",
-      "nist-800-53:FAMILY-AC",
-      "contains",
-    ),
-    edge(
-      "csf-root",
-      "csf-2:CATALOG",
-      "csf-2:FUNCTION-GV",
-      "contains",
-    ),
-    edge(
-      "cmmc-root",
-      "cmmc-2:CATALOG",
-      "cmmc-2:LEVEL-1",
-      "contains",
-    ),
-    edge(
-      "attack-root",
-      "mitre-attack:CATALOG",
-      "mitre-attack:TA0001",
-      "contains",
-    ),
+    edge("trunk-compliance", "atlas:TRUNK", "atlas:LIMB-COMPLIANCE", "organizes", "organizing"),
+    edge("trunk-threat", "atlas:TRUNK", "atlas:LIMB-THREAT", "organizes", "organizing"),
+    edge("compliance-nist", "atlas:LIMB-COMPLIANCE", "nist-800-53:CATALOG", "organizes", "organizing"),
+    edge("threat-attack", "atlas:LIMB-THREAT", "mitre-attack:CATALOG", "organizes", "organizing"),
+    edge("nist-root", "nist-800-53:CATALOG", "nist-800-53:FAMILY-AC", "contains"),
+    edge("attack-root", "mitre-attack:CATALOG", "mitre-attack:TA0001", "contains"),
   ];
 
   const model = buildAtlasDrilldownModel({
     nodes: structuralNodes,
     edges: structuralEdges,
   });
-  assert.equal(model.frameworkGroups.length, 4);
+  // Groups follow the trunk-declared limb order.
   assert.deepEqual(
-    model.frameworkGroups.flatMap((group) =>
+    model.frameworkGroups.map((group) => group.id),
+    ["atlas:LIMB-COMPLIANCE", "atlas:LIMB-THREAT"],
+  );
+  assert.deepEqual(
+    model.frameworkGroups.map((group) =>
       group.frameworks.map((framework) => framework.id),
     ),
-    ["nist-800-53", "csf-2", "cmmc-2", "mitre-attack"],
+    [["nist-800-53"], ["mitre-attack"]],
   );
   assert.ok(
     model.frameworkGroups
@@ -208,7 +187,7 @@ test("CA-ATL-005: supported framework selector exposes four validated hierarchy 
   );
 });
 
-test("generated framework selector choices are meaningful and never dead ends", () => {
+test("generated selector groups all catalogs under their limbs, no dead ends, empty limbs kept", () => {
   const generatedNodes = JSON.parse(
     readFileSync("data/generated/nodes.json", "utf8"),
   ).nodes as AtlasDrillNode[];
@@ -219,14 +198,24 @@ test("generated framework selector choices are meaningful and never dead ends", 
     nodes: generatedNodes,
     edges: generatedEdges,
   });
-  const frameworks = model.frameworkGroups.flatMap(
-    (group) => group.frameworks,
-  );
-
-  assert.deepEqual(
-    frameworks.map((framework) => framework.id),
-    ["nist-800-53", "csf-2", "cmmc-2", "mitre-attack"],
-  );
+  assert.equal(model.frameworkGroups.length, 9, "nine limbs");
+  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
+  // Every catalog is now reachable through a limb, not just the old four.
+  assert.ok(frameworks.length >= 16, `expected >=16 catalogs, got ${frameworks.length}`);
+  for (const id of [
+    "nist-800-53",
+    "csf-2",
+    "cmmc-2",
+    "mitre-attack",
+    "fips-199",
+    "fips-200",
+    "nist-800-37",
+  ]) {
+    assert.ok(
+      frameworks.some((framework) => framework.id === id),
+      `catalog ${id} must be reachable through a limb`,
+    );
+  }
   assert.ok(
     frameworks.every(
       (framework) =>
@@ -235,14 +224,26 @@ test("generated framework selector choices are meaningful and never dead ends", 
           (unit) => unit.id.length > 0 && unit.label.trim().length > 0,
         ),
     ),
+    "no catalog is a dead end",
   );
+  // Empty limbs are still rendered (greyed by A.7), never dropped.
+  const emptyLimbs = model.frameworkGroups
+    .filter((group) => group.frameworks.length === 0)
+    .map((group) => group.label)
+    .sort();
+  assert.deepEqual(emptyLimbs, ["Assessment", "Knowledge", "Operations"]);
 });
 
 test("guided Atlas indexes structural edges once instead of rescanning per unit", () => {
   const scaleNodes: AtlasDrillNode[] = [
+    node("atlas:TRUNK", "trunk", "TRUNK", "Cybersecurity"),
+    node("atlas:LIMB-COMPLIANCE", "limb", "LIMB-COMPLIANCE", "Compliance"),
     node("nist-800-53:CATALOG", "catalog", "CATALOG", "SP 800-53"),
   ];
-  const scaleEdges: AtlasDrillEdge[] = [];
+  const scaleEdges: AtlasDrillEdge[] = [
+    edge("trunk-compliance", "atlas:TRUNK", "atlas:LIMB-COMPLIANCE", "organizes", "organizing"),
+    edge("compliance-nist", "atlas:LIMB-COMPLIANCE", "nist-800-53:CATALOG", "organizes", "organizing"),
+  ];
   for (let familyIndex = 0; familyIndex < 100; familyIndex += 1) {
     const familyId = `nist-800-53:FAMILY-${familyIndex}`;
     scaleNodes.push(

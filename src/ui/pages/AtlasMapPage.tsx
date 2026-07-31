@@ -463,7 +463,10 @@ function FocusedAtlas(props: {
           links={
             record.structural_path.length > 1 ||
             record.center_node.node_type === "catalog"
-              ? record.structural_path
+              ? record.structural_path.map((link) => ({
+                  ...link,
+                  origin: "structural" as const,
+                }))
               : undefined
           }
           nodeId={record.center_node.id}
@@ -563,7 +566,10 @@ function FocusedAtlas(props: {
                   links={
                     record.structural_path.length > 1 ||
                     record.center_node.node_type === "catalog"
-                      ? record.structural_path
+                      ? record.structural_path.map((link) => ({
+                          ...link,
+                          origin: "structural" as const,
+                        }))
                       : undefined
                   }
                   nodeId={record.center_node.id}
@@ -727,13 +733,12 @@ function AtlasGuidedPath(props: {
     state.relationshipView === "rmf"
       ? "process"
       : "");
+  // Built always (not axis-gated) so the landing can render the trunk + limbs.
   const model = useMemo(
-    () =>
-      axis
-        ? buildAtlasDrilldownModel(bundle.runtime.dataset)
-        : { baselines: [], rmfSteps: [], frameworkGroups: [] },
-    [axis, bundle.runtime.dataset],
+    () => buildAtlasDrilldownModel(bundle.runtime.dataset),
+    [bundle.runtime.dataset],
   );
+  const [openLimbId, setOpenLimbId] = useState("");
   const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const framework = frameworks.find(
     (choice) => choice.id === state.atlasFramework,
@@ -811,6 +816,7 @@ function AtlasGuidedPath(props: {
 
   function openAncestor(id: string) {
     if (id === "atlas:root") {
+      setOpenLimbId("");
       resetDrill({});
       return;
     }
@@ -847,59 +853,78 @@ function AtlasGuidedPath(props: {
 
       {!axis ? (
         <>
-          <p className="atlas-path-prompt">What do you want to trace?</p>
-          <div className="atlas-ancestry-choice-grid">
-            <button
-              className="atlas-ancestry-choice"
-              onClick={() =>
-                resetDrill({
-                  atlasAxis: "framework",
-                })
-              }
-              type="button"
-            >
-              <IconBinaryTree aria-hidden="true" size={24} />
-              <span>
-                <strong>A published structure</strong>
-                <small>Publisher-declared groups → records</small>
-              </span>
-              <IconChevronRight aria-hidden="true" size={20} />
-            </button>
-            <button
-              className="atlas-ancestry-choice"
-              onClick={() => resetDrill({ atlasAxis: "process" })}
-              type="button"
-            >
-              <IconRoute aria-hidden="true" size={24} />
-              <span>
-                <strong>The RMF process</strong>
-                <small>Lifecycle step → published results</small>
-              </span>
-              <IconChevronRight aria-hidden="true" size={20} />
-            </button>
-            <button
-              className="atlas-ancestry-choice"
-              onClick={() => onNavigate("start-here")}
-              type="button"
-            >
-              <IconSearch aria-hidden="true" size={24} />
-              <span>
-                <strong>Browse publications</strong>
-                <small>Open a catalog or program source</small>
-              </span>
-              <IconChevronRight aria-hidden="true" size={20} />
-            </button>
+          <div className="atlas-trunk-banner">
+            <IconBinaryTree aria-hidden="true" size={22} />
+            <span className="atlas-trunk-banner-text">
+              <strong>Cybersecurity</strong>
+              <small>
+                The whole field hangs off one trunk, split into nine limbs. Pick
+                where your question lives.
+              </small>
+            </span>
           </div>
+          <ul className="atlas-limb-grid" aria-label="The nine limbs of cybersecurity">
+            {model.frameworkGroups.map((limb) => {
+              const catalogCount = limb.frameworks.length;
+              const empty = catalogCount === 0;
+              return (
+                <li key={limb.id}>
+                  <button
+                    className={
+                      empty
+                        ? "atlas-limb-card atlas-limb-card-empty"
+                        : "atlas-limb-card"
+                    }
+                    disabled={empty}
+                    onClick={() => {
+                      setOpenLimbId(limb.id);
+                      resetDrill({ atlasAxis: "framework" });
+                    }}
+                    type="button"
+                  >
+                    <span className="atlas-limb-card-text">
+                      <strong>{limb.label}</strong>
+                      <small>{limb.description}</small>
+                    </span>
+                    <span className="atlas-limb-card-meta">
+                      {empty
+                        ? "Not yet loaded"
+                        : `${catalogCount} ${catalogCount === 1 ? "catalog" : "catalogs"}`}
+                    </span>
+                    {empty ? null : (
+                      <IconChevronRight aria-hidden="true" size={18} />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <button
+            className="atlas-secondary-link"
+            onClick={() => resetDrill({ atlasAxis: "process" })}
+            type="button"
+          >
+            <IconRoute aria-hidden="true" size={18} />
+            Or trace the RMF lifecycle step by step
+          </button>
         </>
       ) : null}
 
       {axis === "framework" && !framework ? (
         <>
           <p className="atlas-path-prompt">
-            Which published structure do you want to trace?
+            {openLimbId
+              ? `${
+                  model.frameworkGroups.find((group) => group.id === openLimbId)
+                    ?.label ?? "This limb"
+                }: which catalog do you want to open?`
+              : "Which published structure do you want to trace?"}
           </p>
           <ul className="atlas-path-stage-list">
-            {model.frameworkGroups.flatMap((group) =>
+            {(openLimbId
+              ? model.frameworkGroups.filter((group) => group.id === openLimbId)
+              : model.frameworkGroups
+            ).flatMap((group) =>
               group.frameworks.map((choice) => (
                 <li key={choice.id}>
                   <button

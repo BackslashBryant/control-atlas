@@ -32,10 +32,16 @@ export function resolveCatalogPublicationIdentity({
   };
 }
 
+// Control Atlas's own structural scaffold (trunk + limbs) is not published
+// catalog content — it carries no catalog_id and is exempt from catalog
+// publication identity. Its edges are always publication_status 'editorial'.
+export const ORGANIZING_STRUCTURE_SOURCE_ID = "control-atlas-structure";
+
 export function validateCatalogPublicationIdentity(nodes, sources) {
   const sourceById = new Map(sources.map((source) => [source.id, source]));
   const errors = [];
   for (const node of nodes) {
+    if (node.source_id === ORGANIZING_STRUCTURE_SOURCE_ID) continue;
     const catalogId = node.metadata?.catalog_id;
     const ingestionSourceId = node.metadata?.ingestion_source_id;
     if (!catalogId) {

@@ -41,11 +41,16 @@ export type AncestorLink = {
   id: string;
   label: string;
   node_type: string;
+  // "structural" = a validated native-catalog tree edge; "organizing" = Control
+  // Atlas's own Class-4 spine hop (trunk/limb/catalog or a derived junction home),
+  // which the UI must badge as "Control Atlas structure", not publisher-declared.
+  origin: "structural" | "organizing";
 };
 
 export interface Graph {
   nodesById: Map<string, AncestorNode>;
   structuralParentsOf: Map<string, string[]>;
+  organizingParentsOf: Map<string, string[]>;
 }
 
 export function buildAncestorGraph(

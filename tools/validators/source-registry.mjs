@@ -5,6 +5,8 @@ export const PROVENANCE_CLASSES = new Set([
   'federal_utilized',
   'federal_referenced',
   'mitre_published',
+  // Control Atlas's own editorial/organizing layer (the tree spine source).
+  'control_atlas_derived',
 ]);
 
 export const ELIGIBILITY_STATUSES = new Set(['eligible', 'limited', 'excluded', 'pending_review']);

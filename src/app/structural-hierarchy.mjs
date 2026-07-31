@@ -2,6 +2,11 @@ export const RELATIONSHIP_CLASSES = Object.freeze({
   structural: "structural",
   applicability: "applicability",
   correlation: "correlation",
+  // Control Atlas's own organizing spine (trunk, limbs, catalog->limb attachment,
+  // and the derived CCI/assessment-procedure parentages). Never publisher-declared;
+  // always badged "Control Atlas structure" in the UI. Kept fully separate from
+  // `structural` so the same-catalog structural rule stays untouched.
+  organizing: "organizing",
 });
 
 export const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
@@ -9,6 +14,8 @@ export const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
   "parent_of",
   "decomposes_into",
 ]);
+
+export const ORGANIZING_RELATIONSHIP_TYPES = new Set(["organizes"]);
 
 // These node kinds may be connected to native records, but they are lenses,
 // selections, aids, or process context. They can never own structural
@@ -70,6 +77,9 @@ export function defaultRelationshipClass(relationshipType) {
     relationshipType === "selects"
   ) {
     return RELATIONSHIP_CLASSES.applicability;
+  }
+  if (ORGANIZING_RELATIONSHIP_TYPES.has(relationshipType)) {
+    return RELATIONSHIP_CLASSES.organizing;
   }
   return RELATIONSHIP_CLASSES.correlation;
 }

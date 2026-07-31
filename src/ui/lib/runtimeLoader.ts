@@ -164,7 +164,9 @@ export function runtimeArtifactPlan(
       Boolean(state.templateType));
   const fullGraph =
     Boolean(options.graphRequested) ||
-    (state.view === "atlas-map" && Boolean(state.atlasAxis)) ||
+    // The Explore landing now renders the trunk + nine limbs from the organizing
+    // spine, so it needs the full graph even before an axis is chosen.
+    state.view === "atlas-map" ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

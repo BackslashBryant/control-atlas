@@ -2,6 +2,13 @@
 
 ## Constraints
 
+- "Everything must connect to the trunk. Period. Everything is traceable, either
+  through inference, official crosswalks, or correlations of the IDs... We need to
+  be pulling in the full records. Not summaries. THIS SITE IS THE MECCA of
+  AGGREGATION and RESOURCES. THAT IS THE VISION. MAKE IT A CORE PILLAR."
+  (2026-07-31, session 14) => 100% trunk connectivity is a HARD build gate (zero
+  orphans, fail loudly); full-record aggregation is a core pillar. See
+  memory/aggregation-mecca-pillar.md.
 - "Execute and fully complete Control Atlas Epic 1 - Structural truth and
   Atlas correctness ... Do not push, merge, deploy, or modify remote state."
   (2026-07-27 current session; supersedes session 9's direct-ship instruction
@@ -36,6 +43,123 @@
   rail) only." (2026-07-27 session 8)
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
+
+## 2026-07-31 (session 14) - EXECUTING the trunk spine + voice spec
+
+Executing `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md`. Owner said
+"Execute... And ship" + mid-flight escalation: "Everything must connect to the
+trunk. Period... MECCA of AGGREGATION" (see Constraints + memory/aggregation-mecca-pillar.md).
+
+### PART A COMPLETE (A.0-A.7), all gated green
+npm test = data 251 / runtime 30 / graph 55; lint + typecheck clean; a11y:smoke
+5/5; e2e:smoke 12/12; atlas e2e specs (drilldown, source-hierarchy, relationship-
+graph, navigation-fidelity) green; live browser verified.
+
+### Done (A.0-A.7)
+- A.0 `docs/tree-model.md`: trunk = Cybersecurity, 9 limbs, Class-4 `organizing`.
+- A.1 `data/curated/tree-spine.json`: trunk + 9 limbs + 16 catalogLimbs +
+  3 syntheticCatalogs (fips-199->Risk, fips-200/nist-800-37->Governance) +
+  residualLimbs (baselines, disa-cci). Owner chose synthetic wrappers.
+- A.2 `scripts/hierarchy-derivation.mjs`: +deriveAssessmentProcedureParents,
+  deriveEditorialSpine, deriveSyntheticCatalogs (+tests, 11/11).
+- A.3 `scripts/build-framework-data.mjs` `applyOrganizingSpine()`: emits the
+  spine (trunk/limb/catalog organizing edges, publication_status "editorial",
+  provenance "control_atlas_derived"), synthetic catalog nodes + structural
+  children, CCI->objective/control + procedure->control organizing edges, and a
+  HARD connectivity gate: build FAILS if any node can't reach atlas:TRUNK.
+  Result: 11,687 nodes, 28,479 edges, 6,179 organizing edges, **100% reach the
+  trunk**. New source `control-atlas-structure` in data/source-registry.json.
+  Vocabulary added to validators (federal-graph, source-registry): `editorial`
+  status + `control_atlas_derived` provenance. catalog-publication-identity
+  exempts the scaffold source. `src/app/structural-hierarchy.mjs`: +organizing
+  class + ORGANIZING_RELATIONSHIP_TYPES.
+- A.4 `src/app/ancestor-path.mjs` + `src/ui/lib/ancestorPath.ts`: walk falls back
+  to one organizing hop when no structural parent; each link carries
+  `origin: "structural"|"organizing"`. CCI-000015 now walks TRUNK > Compliance >
+  SP800-53 > AC family > AC-2.1 > AC-2.1 objective > CCI. (+4 tests.)
+
+### PLAN DEVIATIONS from the spec (owner-visible, all to satisfy contracts/vision)
+- CCI/procedure derived parents are `organizing` edges (not persisted as spec's
+  literal CCI->control), keeping them OUT of structural ancestry per tree-model
+  §4; contract test line 576 updated to allow organizing alongside correlation.
+- Connectivity is an undirected build gate (owner "everything connects, period"),
+  broader than the spec's per-node fallback.
+
+- A.5 `WhereThisSitsRail.tsx` + `styles/surfaces.css`: organizing hops badged
+  "Atlas" + aria "Control Atlas structure, not publisher-declared". Live-verified
+  on CCI-000015 (chain: Cybersecurity > Compliance > SP800-53 > AC family >
+  AC-2.1 > AC-2.1 objective > CCI; "unavailable" gone).
+- A.6 `atlasDrilldown.ts`: 4-catalog allowlist replaced with limb grouping from
+  organizing edges. 9 limbs, 19 catalogs, no dead ends, empty = {Assessment,
+  Operations, Knowledge}. Tests rewritten.
+- A.7 `AtlasMapPage.tsx` + CSS: Explore landing renders trunk banner + 9 limb
+  cards (empty greyed "Not yet loaded"). `runtimeLoader.ts` + `navigationState.ts`:
+  atlas-map landing now loads the full graph (needed for limbs). 4 atlas e2e
+  specs updated to the new landing + stale-copy fixes. Live-verified.
+
+### Next: Part B (voice) + full-records pillar + ship
+- B.1-B.5 NOT started: Home hero copy, Start Here situational questions, catalog
+  synopses ("Not recorded" cleanup), the Ctrl+Alt+<verb> hotkey made real (extend
+  the Cmd/Ctrl+K listener in App.tsx ~line 351), Compare card type-scale/labels.
+- OPEN pillar (larger, owner 2026-07-31): full-record ingestion. Confirmed STIG
+  rule V-222387 has truncated description, nist_control:null, empty references, no
+  check/fix text. Closing this = re-ingesting DISA STIG/SRG XCCDF (check/fix/
+  discussion + NIST/CCI refs) — a pipeline workstream, scoped separately.
+- SHIP: owner authorized "And ship" (direct push to main, no PR per deploy-workflow
+  memory). Part A is a clean, shippable increment on its own. Awaiting owner call
+  on ship-Part-A-now vs. finish Part B first. NOT pushed yet.
+
+## 2026-07-31 (session 13) - Cybersecurity trunk spine + voice pass (spec only, no code yet)
+
+### Goal
+
+Owner ran `/super-product-review` on v1.0.2, then directed: trunk = literal
+"Cybersecurity" (not RMF/Governance as `docs/tree-model.md` had it since
+2026-07-26), and asked for a full execution-ready spec covering both the
+hierarchy fix and a voice/personality pass — "I don't have a week... spec it
+good enough that it knows what to do... do it now with Sonnet."
+
+### Completed this session
+
+- Review: `product_review_reports/control-atlas/2026-07-30_spr-03/` (5
+  reports + 30 screenshots + read-only derivation prototype). Measured:
+  53.2% of 11,674 nodes unparented (5,154 CCIs, 1,014 assessment procedures =
+  99% of orphans), 16 disconnected catalog roots, depth 3. A read-only
+  derivation reached 100% coverage / depth 6 via two joins (CCI-cites-control,
+  assessment-procedure `assesses` edge reversed) + a 9-limb editorial spine.
+- Discovered prior art the review missed on first pass, all confirmed live:
+  `scripts/hierarchy-derivation.mjs` (CCI-parent picker, tested, never wired
+  into `build-framework-data.mjs`); `WhereThisSitsRail.tsx` +
+  `ancestorPath.ts`/`ancestor-path.mjs` (already-shipped ancestor-chain
+  breadcrumb, currently renders "Structural path unavailable" on all 6,168
+  orphaned records — confirmed on `disa-cci:CCI-000015` live); `atlasDrilldown.ts`
+  `SUPPORTED_FRAMEWORKS` (hard-codes 4 of 16 catalogs, was Epic 1's
+  deliberate correctness-over-completeness choice, not an oversight);
+  `styles/tokens.css` (a real, named "Lunar Signal Modernism" palette already
+  close to the owner-approved review-artifact palette — the personality gap
+  is copy/voice, not the color tokens).
+- Owner confirmed via AskUserQuestion: rewrite `docs/tree-model.md`'s trunk
+  model to Cybersecurity (not keep RMF-trunk, not draft both first).
+- Wrote full spec:
+  [`docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md`](plans/cybersecurity-trunk-and-voice-2026-07-31.md) —
+  Part A (A.0-A.7): doctrine rewrite, spine data file, derivation extension,
+  wire into build, ancestor-chain fallback, rail badge, drilldown rewrite,
+  Explore landing. Part B (B.0-B.5): Home hero, Start Here, catalog synopses,
+  the rotating-hotkey device made real (extends the existing `Ctrl+/Cmd+K`
+  listener in `App.tsx`), Compare card copy/scale. Each step has FILES/DONE-WHEN.
+
+### Now
+
+Spec written. No product code changed yet — this session was review +
+planning only.
+
+### Next
+
+Execute `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md` in order:
+A.0 -> A.1 -> A.2 -> A.3 -> A.4 -> A.5 -> A.6 -> A.7 -> B.1 -> B.2 -> B.3 ->
+B.4 -> B.5. Each step's own DONE-WHEN check first; full `npm test` regression
+gate every 2-3 steps. Do not push or merge without fresh owner authorization,
+per the standing constraint below.
 
 ## 2026-07-27 (session 11) - Epic 2 navigation and route identity
 

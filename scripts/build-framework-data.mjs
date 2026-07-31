@@ -17,13 +17,21 @@ import {
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
 import {
+  catalogIdOf,
   defaultRelationshipClass,
   RELATIONSHIP_CLASSES,
 } from "../src/app/structural-hierarchy.mjs";
 import {
+  ORGANIZING_STRUCTURE_SOURCE_ID,
   resolveCatalogPublicationIdentity,
   validateCatalogPublicationIdentity,
 } from "../src/app/catalog-publication-identity.mjs";
+import {
+  deriveAssessmentProcedureParents,
+  deriveCciHierarchyParents,
+  deriveEditorialSpine,
+  deriveSyntheticCatalogs,
+} from "./hierarchy-derivation.mjs";
 import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -1833,12 +1841,345 @@ function buildDiffSummary(previous, collections, generatedAt) {
   };
 }
 
+// --- Class-4 organizing spine (Cybersecurity trunk + limbs) ---------------
+// Owner directive 2026-07-31: "Everything must connect to the trunk. Period."
+// This emits the trunk/limb/catalog spine (organizing edges, publication_status
+// "editorial", never publisher-declared) plus structural backfill for orphans
+// whose catalog root exists, then a HARD connectivity gate that fails the build
+// if any node cannot reach the trunk over the full (undirected) edge set. CCIs
+// and assessment procedures stay pure correlation junctions (docs/tree-model.md
+// §4) — they reach the trunk through their existing correlation/assesses edges,
+// not through new structural parents.
+
+function buildStructureNode({ id, nodeType, label, description }) {
+  return {
+    id,
+    node_type: nodeType,
+    label,
+    source_id: ORGANIZING_STRUCTURE_SOURCE_ID,
+    lifecycle_status: "active",
+    metadata: {
+      ingestion_source_id: ORGANIZING_STRUCTURE_SOURCE_ID,
+      item_id: id.split(":").pop(),
+      title: label,
+      description,
+      type: nodeType,
+    },
+  };
+}
+
+function buildSyntheticCatalogNode(decl) {
+  return {
+    id: `${decl.catalog_id}:CATALOG`,
+    node_type: "catalog",
+    label: decl.label,
+    source_id: decl.source_id,
+    lifecycle_status: "active",
+    metadata: {
+      catalog_id: decl.catalog_id,
+      ingestion_source_id: decl.source_id,
+      item_id: "CATALOG",
+      title: decl.label,
+      description: decl.description,
+      family: "Catalog",
+      type: "catalog_summary",
+      references: null,
+    },
+  };
+}
+
+function pushOrganizingEdge(edgeState, { subjectId, sourceNodeId, targetNodeId, rationale }) {
+  const evidenceId = `evidence:${subjectId}`;
+  edgeState.evidence.push({
+    id: evidenceId,
+    source_id: ORGANIZING_STRUCTURE_SOURCE_ID,
+    source_version: "2026-07-31",
+    locator: `tree-spine#${subjectId}`,
+    retrieved_at: "2026-07-31",
+    checksum: null,
+    evidence_quality: "editorial",
+    ingestion_source_id: ORGANIZING_STRUCTURE_SOURCE_ID,
+  });
+  edgeState.edges.push({
+    id: `edge:${subjectId}`,
+    source_node_id: sourceNodeId,
+    target_node_id: targetNodeId,
+    relationship_type: "organizes",
+    relationship_class: RELATIONSHIP_CLASSES.organizing,
+    provenance_class: "control_atlas_derived",
+    confidence: "derived",
+    publication_status: "editorial",
+    evidence_ids: [evidenceId],
+    display_label: `${sourceNodeId} organizes ${targetNodeId}`,
+    warning: null,
+    inference_rule_id: null,
+    rationale,
+    source_refs: [
+      {
+        source_id: ORGANIZING_STRUCTURE_SOURCE_ID,
+        ref_type: "editorial",
+        locator: `tree-spine#${subjectId}`,
+      },
+    ],
+  });
+}
+
+function pushStructuralBackfillEdge(edgeState, sourceById, { subjectId, parentNode, childNode, rationale }) {
+  const source = sourceById.get(childNode.source_id);
+  const provenance =
+    source?.provenance_class && source.provenance_class !== "inferred"
+      ? source.provenance_class
+      : "federal_published";
+  const evidenceId = `evidence:${subjectId}`;
+  edgeState.evidence.push({
+    id: evidenceId,
+    source_id: childNode.source_id,
+    source_version: source?.version || "",
+    locator: `${childNode.source_id}#${childNode.id}`,
+    retrieved_at: source?.retrieved_at || null,
+    checksum: source?.checksum || null,
+    evidence_quality: "primary",
+    ingestion_source_id: childNode.metadata?.ingestion_source_id || childNode.source_id,
+  });
+  edgeState.edges.push({
+    id: `edge:${subjectId}`,
+    source_node_id: parentNode.id,
+    target_node_id: childNode.id,
+    relationship_type: "contains",
+    relationship_class: RELATIONSHIP_CLASSES.structural,
+    provenance_class: provenance,
+    confidence: "direct",
+    publication_status: "published",
+    evidence_ids: [evidenceId],
+    display_label: `${parentNode.id} contains ${childNode.id}`,
+    warning: null,
+    inference_rule_id: null,
+    rationale,
+    source_refs: [
+      {
+        source_id: childNode.source_id,
+        ref_type: "primary",
+        locator: `${childNode.source_id}#${childNode.id}`,
+      },
+    ],
+  });
+}
+
+function trunkConnectedComponent(rootId, edges, nodeIds) {
+  const adjacency = new Map();
+  for (const id of nodeIds) adjacency.set(id, []);
+  for (const edge of edges) {
+    const source = edge.source_node_id;
+    const target = edge.target_node_id;
+    if (adjacency.has(source)) adjacency.get(source).push(target);
+    if (adjacency.has(target)) adjacency.get(target).push(source);
+  }
+  const seen = new Set([rootId]);
+  const stack = [rootId];
+  while (stack.length) {
+    const current = stack.pop();
+    for (const neighbor of adjacency.get(current) || []) {
+      if (!seen.has(neighbor)) {
+        seen.add(neighbor);
+        stack.push(neighbor);
+      }
+    }
+  }
+  return seen;
+}
+
+function applyOrganizingSpine(nodeState, edgeState, registry) {
+  const spine = readJson(join(ROOT, "data", "curated", "tree-spine.json"));
+  const sourceById = registry.byId;
+  const nodes = nodeState.nodes;
+
+  // 1. Trunk + limb nodes (scaffold, no catalog_id — exempt from catalog identity).
+  nodes.push(
+    buildStructureNode({
+      id: spine.trunk.id,
+      nodeType: "trunk",
+      label: spine.trunk.label,
+      description:
+        "The cybersecurity discipline itself — the single common ancestor every limb hangs from.",
+    }),
+  );
+  for (const limb of spine.limbs) {
+    nodes.push(
+      buildStructureNode({
+        id: limb.id,
+        nodeType: "limb",
+        label: limb.label,
+        description: limb.blurb,
+      }),
+    );
+  }
+
+  // 2. Synthetic catalog wrappers (catalog_ids with content but no root node).
+  const synthetic = deriveSyntheticCatalogs(nodes, spine, catalogIdOf);
+  if (synthetic.empty.length) {
+    throw new Error(
+      `tree-spine syntheticCatalogs matched zero nodes: ${synthetic.empty.join(", ")}`,
+    );
+  }
+  let nodeById = new Map(nodes.map((node) => [node.id, node]));
+  for (const wrapper of synthetic.wrappers) {
+    const decl = spine.syntheticCatalogs.find((entry) => entry.catalog_id === wrapper.catalogId);
+    const catalogNode = buildSyntheticCatalogNode(decl);
+    nodes.push(catalogNode);
+    nodeById.set(catalogNode.id, catalogNode);
+    pushOrganizingEdge(edgeState, {
+      subjectId: `organizing:limb-catalog:${wrapper.catalogNodeId}`,
+      sourceNodeId: wrapper.limbId,
+      targetNodeId: wrapper.catalogNodeId,
+      rationale: `${decl.label} is organized under ${wrapper.limbId} (synthetic catalog wrapper).`,
+    });
+    for (const childId of wrapper.childIds) {
+      pushStructuralBackfillEdge(edgeState, sourceById, {
+        subjectId: `structural:synthetic:${wrapper.catalogNodeId}:${childId}`,
+        parentNode: catalogNode,
+        childNode: nodeById.get(childId),
+        rationale: `${decl.label} contains ${childId}.`,
+      });
+    }
+  }
+
+  // 3. Editorial spine over the real catalog roots (trunk->limb, limb->catalog).
+  const realCatalogRoots = nodes.filter(
+    (node) => node.node_type === "catalog" && spine.catalogLimbs[catalogIdOf(node)],
+  );
+  const { organizesEdges, unassigned } = deriveEditorialSpine(realCatalogRoots, spine, catalogIdOf);
+  if (unassigned.length) {
+    throw new Error(`catalog roots with no limb assignment: ${unassigned.join(", ")}`);
+  }
+  for (const edge of organizesEdges) {
+    pushOrganizingEdge(edgeState, {
+      subjectId: `organizing:spine:${edge.source_id}->${edge.target_id}`,
+      sourceNodeId: edge.source_id,
+      targetNodeId: edge.target_id,
+      rationale:
+        edge.source_id === spine.trunk.id
+          ? `${edge.target_id} is a limb of the Cybersecurity trunk.`
+          : `${edge.target_id} is a catalog organized under ${edge.source_id}.`,
+    });
+  }
+
+  // 3.5 Junction canonical parents as organizing edges so the rail can walk them.
+  // These stay OUT of structural ancestry — CCIs and procedures remain correlation
+  // junctions (docs/tree-model.md §4); the organizing edge is a badged editorial
+  // "where this sits" home, never a publisher containment claim.
+  const nodeIdSet = new Set(nodes.map((node) => node.id));
+  const assessesRelationships = edgeState.edges
+    .filter((edge) => edge.relationship_type === "assesses")
+    .map((edge) => ({ source_id: edge.source_node_id, target_id: edge.target_node_id }));
+  const { parents: procedureParents } = deriveAssessmentProcedureParents(assessesRelationships);
+  for (const [procedureNodeId, { controlId }] of procedureParents) {
+    if (!nodeIdSet.has(controlId)) continue;
+    // Parent -> child: the control is the parent, the procedure hangs beneath it.
+    pushOrganizingEdge(edgeState, {
+      subjectId: `organizing:procedure:${procedureNodeId}`,
+      sourceNodeId: controlId,
+      targetNodeId: procedureNodeId,
+      rationale: `${procedureNodeId} assesses ${controlId}; filed beneath it for the tree path.`,
+    });
+  }
+  const cciMapRelationships = (filename) => {
+    const path = join(ROOT, "maps", filename);
+    if (!existsSync(path)) return [];
+    return (readJson(path).relationships || []).map((relationship) => ({
+      source_id: relationship.source_id,
+      target_id: normalizeControlId(relationship.target_id),
+    }));
+  };
+  const { parents: cciParents } = deriveCciHierarchyParents({
+    cciItemIds: nodes
+      .filter((node) => catalogIdOf(node) === "disa-cci")
+      .map((node) => node.metadata.item_id),
+    directRelationships: cciMapRelationships("cci-to-800-53.json"),
+    crosswalkRelationships: cciMapRelationships("cci-to-800-53-rev4.json"),
+    assessmentProcedureItemIds: new Set(
+      nodes
+        .filter((node) => node.node_type === "assessment_procedure")
+        .map((node) => node.metadata.item_id),
+    ),
+    controlItemIds: new Set(
+      nodes
+        .filter((node) => catalogIdOf(node) === "nist-800-53")
+        .map((node) => node.metadata.item_id),
+    ),
+  });
+  for (const [cciItemId, { controlId, tier }] of cciParents) {
+    const parentNodeId =
+      tier === "assessment_procedure" ? `nist-800-53a:${controlId}` : `nist-800-53:${controlId}`;
+    if (!nodeIdSet.has(parentNodeId)) continue;
+    // Parent -> child: the control/assessment objective is the parent, the CCI
+    // hangs beneath it (docs/tree-model.md §4: control -> objective -> CCI).
+    pushOrganizingEdge(edgeState, {
+      subjectId: `organizing:cci:disa-cci:${cciItemId}`,
+      sourceNodeId: parentNodeId,
+      targetNodeId: `disa-cci:${cciItemId}`,
+      rationale: `CCI ${cciItemId} cites ${controlId}; filed beneath its ${
+        tier === "assessment_procedure" ? "assessment objective" : "control"
+      } for the tree path.`,
+    });
+  }
+
+  // 4. Residual connectivity backfill — anything still unreachable from the trunk.
+  const catalogRootByCatalogId = new Map();
+  for (const node of nodes) {
+    if (node.node_type === "catalog") catalogRootByCatalogId.set(catalogIdOf(node), node);
+  }
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  let component = trunkConnectedComponent(spine.trunk.id, edgeState.edges, nodeIds);
+  const hardFail = [];
+  for (const node of nodes) {
+    if (component.has(node.id)) continue;
+    const cid = catalogIdOf(node);
+    const root = catalogRootByCatalogId.get(cid);
+    if (root && root.id !== node.id) {
+      pushStructuralBackfillEdge(edgeState, sourceById, {
+        subjectId: `structural:residual:${root.id}->${node.id}`,
+        parentNode: root,
+        childNode: node,
+        rationale: `${node.id} attached to its catalog root ${root.id} (residual connectivity backfill).`,
+      });
+    } else if (spine.residualLimbs?.[cid]) {
+      pushOrganizingEdge(edgeState, {
+        subjectId: `organizing:residual:${spine.residualLimbs[cid]}->${node.id}`,
+        sourceNodeId: spine.residualLimbs[cid],
+        targetNodeId: node.id,
+        rationale: `${node.id} (${cid}) filed under ${spine.residualLimbs[cid]} for reachability (editorial, non-structural).`,
+      });
+    } else {
+      hardFail.push(node.id);
+    }
+  }
+
+  // 5. Hard connectivity gate — every node must reach the trunk.
+  component = trunkConnectedComponent(spine.trunk.id, edgeState.edges, nodeIds);
+  const stillOrphan = nodes.filter((node) => !component.has(node.id)).map((node) => node.id);
+  if (stillOrphan.length) {
+    throw new Error(
+      `Trunk connectivity gate FAILED: ${stillOrphan.length} node(s) cannot reach ${spine.trunk.id}` +
+        (hardFail.length ? ` (${hardFail.length} had no catalog root or residual limb)` : "") +
+        `. First 25: ${stillOrphan.slice(0, 25).join(", ")}`,
+    );
+  }
+  const organizingCount = edgeState.edges.filter(
+    (edge) => edge.relationship_type === "organizes",
+  ).length;
+  console.log(
+    `[organizing-spine] trunk+${spine.limbs.length} limbs, ${synthetic.wrappers.length} synthetic catalogs, ` +
+      `${organizingCount} organizing edges; 100% of ${nodes.length} nodes reach ${spine.trunk.id}.`,
+  );
+}
+
 export function buildFrameworkData() {
   const registry = loadSourceRegistry(
     readJson(join(ROOT, "data", "source-registry.json")),
   );
   const nodeState = buildNodes(registry);
   const edgeState = buildEdges(registry, nodeState.nodes);
+  applyOrganizingSpine(nodeState, edgeState, registry);
   const findings = [...nodeState.findings, ...edgeState.findings];
   const graph = {
     sources: registry.sources,

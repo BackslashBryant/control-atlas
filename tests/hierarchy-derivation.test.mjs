@@ -3,6 +3,9 @@ import test from "node:test";
 import {
   pickCanonicalCciParent,
   deriveCciHierarchyParents,
+  deriveAssessmentProcedureParents,
+  deriveEditorialSpine,
+  deriveSyntheticCatalogs,
 } from "../scripts/hierarchy-derivation.mjs";
 
 const catalogs = {
@@ -68,4 +71,83 @@ test("deriveCciHierarchyParents dedupes repeated candidates without changing the
     controlId: "AC-1",
     tier: "assessment_procedure",
   });
+});
+
+test("deriveAssessmentProcedureParents reverses the single assesses edge into a parent", () => {
+  const { parents, extraTargets } = deriveAssessmentProcedureParents([
+    { source_id: "AC-2.1_smt.a", target_id: "AC-2.1" },
+    { source_id: "AC-3_obj.1", target_id: "AC-3" },
+  ]);
+  assert.deepEqual(parents.get("AC-2.1_smt.a"), { controlId: "AC-2.1" });
+  assert.deepEqual(parents.get("AC-3_obj.1"), { controlId: "AC-3" });
+  assert.equal(extraTargets.size, 0);
+});
+
+test("deriveAssessmentProcedureParents keeps the first target and reports extras rather than dropping them", () => {
+  const { parents, extraTargets } = deriveAssessmentProcedureParents([
+    { source_id: "AC-2.1_smt.a", target_id: "AC-2.1" },
+    { source_id: "AC-2.1_smt.a", target_id: "AC-2" },
+    { source_id: "AC-2.1_smt.a", target_id: "AC-1" },
+  ]);
+  assert.deepEqual(parents.get("AC-2.1_smt.a"), { controlId: "AC-2.1" });
+  assert.deepEqual(extraTargets.get("AC-2.1_smt.a"), ["AC-2", "AC-1"]);
+});
+
+const spineFixture = {
+  trunk: { id: "atlas:TRUNK", label: "Cybersecurity" },
+  limbs: [
+    { id: "atlas:LIMB-COMPLIANCE", label: "Compliance" },
+    { id: "atlas:LIMB-THREAT", label: "Threats & Defense" },
+  ],
+  catalogLimbs: {
+    "nist-800-53": "atlas:LIMB-COMPLIANCE",
+    "mitre-attack": "atlas:LIMB-THREAT",
+  },
+  syntheticCatalogs: [
+    { catalog_id: "fips-199", limb: "atlas:LIMB-COMPLIANCE" },
+    { catalog_id: "ghost", limb: "atlas:LIMB-THREAT" },
+  ],
+};
+
+const catalogIdOf = (node) => node.metadata.catalog_id;
+
+test("deriveEditorialSpine emits one edge per limb plus one per resolved catalog root", () => {
+  const roots = [
+    { id: "nist-800-53:CATALOG", metadata: { catalog_id: "nist-800-53" } },
+    { id: "mitre-attack:CATALOG", metadata: { catalog_id: "mitre-attack" } },
+  ];
+  const { organizesEdges, unassigned } = deriveEditorialSpine(roots, spineFixture, catalogIdOf);
+  assert.equal(organizesEdges.length, spineFixture.limbs.length + roots.length);
+  assert.deepEqual(unassigned, []);
+  assert.ok(
+    organizesEdges.some((e) => e.source_id === "atlas:TRUNK" && e.target_id === "atlas:LIMB-COMPLIANCE"),
+  );
+  assert.ok(
+    organizesEdges.some((e) => e.source_id === "atlas:LIMB-THREAT" && e.target_id === "mitre-attack:CATALOG"),
+  );
+});
+
+test("deriveEditorialSpine reports an unassigned catalog root rather than dropping it", () => {
+  const roots = [{ id: "unknown-cat:CATALOG", metadata: { catalog_id: "unknown-cat" } }];
+  const { organizesEdges, unassigned } = deriveEditorialSpine(roots, spineFixture, catalogIdOf);
+  assert.deepEqual(unassigned, ["unknown-cat:CATALOG"]);
+  // only the limb->trunk edges, no catalog edge for the unassigned root
+  assert.equal(organizesEdges.length, spineFixture.limbs.length);
+});
+
+test("deriveSyntheticCatalogs collects same-catalog children and reports declared-but-empty wrappers", () => {
+  const nodes = [
+    { id: "fips-199:FIPS-199-HIGH", metadata: { catalog_id: "fips-199" } },
+    { id: "fips-199:FIPS-199-LOW", metadata: { catalog_id: "fips-199" } },
+    { id: "nist-800-53:AC-2", metadata: { catalog_id: "nist-800-53" } },
+  ];
+  const { wrappers, empty } = deriveSyntheticCatalogs(nodes, spineFixture, catalogIdOf);
+  assert.equal(wrappers.length, 1);
+  assert.deepEqual(wrappers[0], {
+    catalogId: "fips-199",
+    catalogNodeId: "fips-199:CATALOG",
+    limbId: "atlas:LIMB-COMPLIANCE",
+    childIds: ["fips-199:FIPS-199-HIGH", "fips-199:FIPS-199-LOW"],
+  });
+  assert.deepEqual(empty, ["ghost"]);
 });

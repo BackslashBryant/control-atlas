@@ -58,7 +58,7 @@ test("OLIR adapter parses workbook rows from official-style crosswalk sheets", a
 test("federal graph build emits graph contract counts", () => {
   const generatedAt = generated("sources").generated_at;
   buildFrameworkData();
-  assert.equal(buildResult.sources, 50);
+  assert.equal(buildResult.sources, 51);
   assert.ok(buildResult.nodes > 9000);
   assert.ok(buildResult.edges > 12000);
   assert.equal(buildResult.edges, buildResult.evidence);

@@ -55,24 +55,49 @@ export function WhereThisSitsRail(props: {
 
   if (chain.length === 0) return null;
 
+  const organizingLabel = "Control Atlas structure, not publisher-declared";
+
   return (
     <nav aria-label="Where this sits" className="atlas-path-breadcrumb tree-path-rail">
-      {chain.map((link, index) => (
-        <Fragment key={link.id}>
-          {index > 0 ? <IconChevronRight aria-hidden="true" size={15} /> : null}
-          {index === chain.length - 1 ? (
-            <span className="atlas-path-crumb-subject">{link.label}</span>
-          ) : (
-            <button
-              className="atlas-path-crumb-link"
-              onClick={() => onOpenNode(link.id)}
-              type="button"
-            >
-              {link.label}
-            </button>
-          )}
-        </Fragment>
-      ))}
+      {chain.map((link, index) => {
+        const isOrganizing = link.origin === "organizing";
+        const isSubject = index === chain.length - 1;
+        return (
+          <Fragment key={link.id}>
+            {index > 0 ? <IconChevronRight aria-hidden="true" size={15} /> : null}
+            {isSubject ? (
+              <span
+                className={
+                  isOrganizing
+                    ? "atlas-path-crumb-subject atlas-path-crumb-organizing"
+                    : "atlas-path-crumb-subject"
+                }
+              >
+                {link.label}
+              </span>
+            ) : (
+              <button
+                className={
+                  isOrganizing
+                    ? "atlas-path-crumb-link atlas-path-crumb-organizing"
+                    : "atlas-path-crumb-link"
+                }
+                onClick={() => onOpenNode(link.id)}
+                type="button"
+                aria-label={isOrganizing ? `${link.label} — ${organizingLabel}` : undefined}
+                title={isOrganizing ? organizingLabel : undefined}
+              >
+                {link.label}
+                {isOrganizing ? (
+                  <span className="atlas-path-crumb-badge" aria-hidden="true">
+                    Atlas
+                  </span>
+                ) : null}
+              </button>
+            )}
+          </Fragment>
+        );
+      })}
     </nav>
   );
 }
