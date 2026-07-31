@@ -108,6 +108,7 @@ data/*
 !data/*.json
 !data/curated/
 !data/curated/fedramp-transition-mappings.json
+!data/curated/tree-spine.json
 !data/curated/dod-zt/
 !data/curated/dod-zt/*.json
 !data/curated/plain-language/

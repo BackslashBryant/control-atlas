@@ -91,3 +91,100 @@ export function deriveCciHierarchyParents({
   }
   return { parents, unresolved };
 }
+
+/**
+ * A.2 — an assessment_procedure's structural parent is the control/enhancement
+ * it assesses, already recorded as a published `assesses` edge. This is a
+ * reversal of existing published fact, not a guess: every assessment_procedure
+ * has exactly one `assesses` target in the current data. If a procedure ever
+ * carries more than one, keep the first in edge-array order and report the rest
+ * via `extraTargets` rather than silently discarding — the invariant is checked,
+ * not assumed to hold forever.
+ *
+ * @param {Array<{source_id: string, target_id: string}>} assessesRelationships
+ * @returns {{ parents: Map<string, {controlId: string}>, extraTargets: Map<string, string[]> }}
+ */
+export function deriveAssessmentProcedureParents(assessesRelationships) {
+  const parents = new Map();
+  const extraTargets = new Map();
+  for (const rel of assessesRelationships) {
+    if (parents.has(rel.source_id)) {
+      const list = extraTargets.get(rel.source_id) || [];
+      list.push(rel.target_id);
+      extraTargets.set(rel.source_id, list);
+      continue;
+    }
+    parents.set(rel.source_id, { controlId: rel.target_id });
+  }
+  return { parents, extraTargets };
+}
+
+/**
+ * A.2 — attaches every catalog root to its limb (from tree-spine.json's
+ * catalogLimbs), and every limb to the trunk. Pure over already-loaded spine
+ * data — no file I/O here; the caller loads the JSON. A catalog root whose
+ * catalog_id has no limb assignment is reported in `unassigned` (never silently
+ * dropped) so the build can fail loudly per A.1's "fail loudly" note.
+ *
+ * @param {{id: string}[]} catalogRoots - node_type === "catalog" nodes
+ * @param {{trunk: {id: string}, limbs: {id: string}[], catalogLimbs: Record<string,string>}} spine
+ * @param {(catalogNode: object) => string} catalogIdOf
+ * @returns {{ organizesEdges: Array<{source_id: string, target_id: string}>, unassigned: string[] }}
+ */
+export function deriveEditorialSpine(catalogRoots, spine, catalogIdOf) {
+  const organizesEdges = [];
+  const unassigned = [];
+  for (const limb of spine.limbs) {
+    organizesEdges.push({ source_id: spine.trunk.id, target_id: limb.id });
+  }
+  for (const root of catalogRoots) {
+    const limbId = spine.catalogLimbs[catalogIdOf(root)];
+    if (!limbId) {
+      unassigned.push(root.id);
+      continue;
+    }
+    organizesEdges.push({ source_id: limbId, target_id: root.id });
+  }
+  return { organizesEdges, unassigned };
+}
+
+/**
+ * A.3 (owner-approved, 2026-07-31) — some catalog_ids carry real limb content
+ * but ship with no catalog root node, leaving their records orphaned. For each
+ * declared synthetic catalog this returns the wrapper node id, its limb, and
+ * every node sharing its catalog_id (its structural children — the same-catalog
+ * rule accepts them). A declared synthetic catalog that matches zero nodes is
+ * reported in `empty` so the build fails loudly rather than emitting a childless
+ * wrapper. Baseline catalogs are intentionally NOT declared here — baselines are
+ * Class-2 applicability, never spine (docs/tree-model.md §3.2).
+ *
+ * @param {Array<{id: string, node_type?: string, metadata?: {catalog_id?: string}}>} nodes
+ * @param {{syntheticCatalogs?: Array<{catalog_id: string, limb: string}>}} spine
+ * @param {(node: object) => string} catalogIdOf
+ * @returns {{ wrappers: Array<{catalogId: string, catalogNodeId: string, limbId: string, childIds: string[]}>, empty: string[] }}
+ */
+export function deriveSyntheticCatalogs(nodes, spine, catalogIdOf) {
+  const declared = spine.syntheticCatalogs || [];
+  const childrenByCatalog = new Map();
+  for (const decl of declared) childrenByCatalog.set(decl.catalog_id, []);
+  for (const node of nodes) {
+    const cid = catalogIdOf(node);
+    if (childrenByCatalog.has(cid)) childrenByCatalog.get(cid).push(node.id);
+  }
+  const wrappers = [];
+  const empty = [];
+  for (const decl of declared) {
+    const childIds = childrenByCatalog.get(decl.catalog_id) || [];
+    if (childIds.length === 0) {
+      empty.push(decl.catalog_id);
+      continue;
+    }
+    wrappers.push({
+      catalogId: decl.catalog_id,
+      catalogNodeId: `${decl.catalog_id}:CATALOG`,
+      limbId: decl.limb,
+      childIds,
+    });
+  }
+  return { wrappers, empty };
+}

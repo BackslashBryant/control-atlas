@@ -4,6 +4,13 @@
     "stale_after_days": 45,
     "sources": [
       {
+        "source_id": "control-atlas-structure",
+        "sync_model": "curated",
+        "last_checked": "2026-07-31",
+        "last_imported": "2026-07-31",
+        "hash": null
+      },
+      {
         "source_id": "nist-oscal",
         "sync_model": "auto_synced",
         "last_checked": "2026-07-16",
@@ -356,6 +363,31 @@
     ]
   },
   "sources": [
+    {
+      "id": "control-atlas-structure",
+      "name": "Control Atlas Structure",
+      "display_name": "Control Atlas Structure",
+      "display_group": "Control Atlas",
+      "owner": "Control Atlas",
+      "provenance_class": "control_atlas_derived",
+      "mandate_basis": [],
+      "version": "2026-07-31",
+      "retrieved_at": "2026-07-31",
+      "retrieval_method": "committed_artifact",
+      "artifact_url": "https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json",
+      "artifact_type": "json",
+      "checksum": "sha256:control_atlas_structure_editorial_spine_placeholder",
+      "access_status": "public",
+      "license_or_use": "Control Atlas editorial structure (product-authored organizing layer)",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "federal_referenced_by": [],
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "editorial",
+        "note": "The Cybersecurity trunk, its nine limbs, and every catalog->limb attachment. Never publisher-declared; always badged 'Control Atlas structure'."
+      }
+    },
     {
       "id": "nist-oscal",
       "name": "NIST OSCAL Content",

@@ -29,6 +29,7 @@ test('every source has the locked Phase 6 synchronization model', () => {
       'nist-oscal', 'nist-ssdf-oscal',
     ],
     curated: [
+      'control-atlas-structure',
       'dod-cmmc-rule', 'dod-rai-toolkit', 'dod-zt-capabilities',
       'dod-zt-execution-roadmap', 'dod-zt-overlays-2024',
       'dod-zt-reference-architecture-v2', 'dod-zt-strategy', 'isoo-cui-regulation',

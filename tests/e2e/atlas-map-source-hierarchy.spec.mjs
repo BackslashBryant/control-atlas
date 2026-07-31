@@ -15,13 +15,6 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-async function openHome(page, viewport) {
-  await page.setViewportSize(viewport);
-  await page.goto("/#/");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-}
-
 async function expectNoHorizontalOverflow(page) {
   const width = await page.evaluate(() => ({
     client: globalThis.document.documentElement.clientWidth,
@@ -39,16 +32,20 @@ for (const viewport of VIEWPORTS) {
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    await page.getByRole("button", { name: /A framework path/ }).click();
+    await page.getByRole("button", { name: /Compliance/ }).click();
+    await expect(
+      page.getByText(/which catalog do you want to open\?/i),
+    ).toBeVisible();
     await expect(page.getByText("SP 800-53 Rev. 5 Catalog", { exact: true })).toBeVisible();
-    await expect(page.locator(".atlas-path-stage-option")).toHaveCount(4);
 
     await page
       .locator(".atlas-path-stage-option")
       .filter({ hasText: "SP 800-53 Rev. 5 Catalog" })
       .click();
     await expect(
-      page.getByText("Which applicability scope do you want to use?"),
+      page.getByText(
+        "Optional display filter: which published baseline selection should narrow the records?",
+      ),
     ).toBeVisible();
     await expect(page).not.toHaveURL(/atlasBaseline=/);
 
@@ -57,11 +54,8 @@ for (const viewport of VIEWPORTS) {
       .filter({ hasText: "LOW impact" })
       .click();
     await expect(
-      page.getByText("Which part of this framework do you want to open?"),
+      page.getByText("Which publisher-declared group do you want to open?"),
     ).toBeVisible();
-    await expect(page.locator(".atlas-choice-trail")).toContainText(
-      "Low Impact Baseline",
-    );
 
     await page.locator(".atlas-ancestry-family").first().click();
     await expect(page.getByLabel("Filter this family")).toBeVisible();
@@ -73,12 +67,9 @@ for (const viewport of VIEWPORTS) {
     await expect(page).toHaveURL(/node=nist-800-53/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/AC-/);
     await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "Where this sits" })).not.toContainText(
-      "Low Impact Baseline",
-    );
-    await expect(page.getByRole("navigation", { name: "Your choices" })).toContainText(
-      "Low Impact Baseline",
-    );
+    await expect(
+      page.getByRole("navigation", { name: "Where this sits" }).first(),
+    ).not.toContainText("Low Impact Baseline");
     await expectNoHorizontalOverflow(page);
     await page.screenshot({
       fullPage: true,
@@ -89,17 +80,22 @@ for (const viewport of VIEWPORTS) {
   test(`RMF reaches a published result in three choices at ${viewport.width}px`, async ({
     page,
   }) => {
-    await openHome(page, viewport);
+    await page.setViewportSize(viewport);
+    await page.goto("/#/explore");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
 
-    await page.getByRole("button", { name: /Follow the RMF process/ }).click();
+    await page.getByRole("button", { name: /trace the RMF lifecycle/i }).click();
     await expect(
       page.getByText("Which Risk Management Framework step are you working in?"),
     ).toBeVisible();
 
     await page.locator(".atlas-rmf-step-list button").first().click();
-    await expect(page.getByText("Published relationships")).toBeVisible();
+    await expect(
+      page.getByText("Published relationships", { exact: true }),
+    ).toBeVisible();
     await expect(page.locator(".atlas-choice-trail")).toContainText("PREPARE");
-    await expect(page.locator(".badge.tone-applicability")).toBeVisible();
+    await expect(page.locator(".badge.tone-applicability").first()).toBeVisible();
     await expectNoHorizontalOverflow(page);
     await page.screenshot({
       fullPage: true,
@@ -119,8 +115,8 @@ test("Atlas root offers three plain entry axes without a canvas", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByText("What do you want to trace?")).toBeVisible();
-  await expect(page.locator(".atlas-ancestry-choice")).toHaveCount(3);
+  await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
+  await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
   await expect(page.locator(".react-flow")).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,

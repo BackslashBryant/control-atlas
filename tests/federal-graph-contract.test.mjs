@@ -112,7 +112,8 @@ test('displayable edges separate semantics, provenance, confidence, and evidence
     );
     assert.ok(edge.provenance_class);
     assert.ok(edge.confidence);
-    assert.ok(['published', 'candidate'].includes(edge.publication_status));
+    // 'editorial' is Control Atlas's own organizing spine (trunk/limb/catalog).
+    assert.ok(['published', 'candidate', 'editorial'].includes(edge.publication_status));
     assert.ok(edge.evidence_ids.length > 0, `missing evidence for ${edge.id}`);
     assert.ok(edge.evidence_ids.every((id) => evidenceById.has(id)), `unknown evidence for ${edge.id}`);
     assert.ok(edge.evidence_ids.every((id) => evidenceById.get(id).evidence_quality));
@@ -574,7 +575,12 @@ test('CCI mappings remain correlation edges and never become structural parents'
   );
   assert.ok(
     cciEdges.every(
-      (edge) => edge.relationship_class === RELATIONSHIP_CLASSES.correlation,
+      (edge) =>
+        edge.relationship_class === RELATIONSHIP_CLASSES.correlation ||
+        // Editorial organizing edges (e.g. filing a genuinely-unmappable CCI under
+        // a limb for reachability) are explicitly NOT structural ancestry — they
+        // are Control Atlas's own badged organizing layer, never a publisher claim.
+        edge.relationship_class === RELATIONSHIP_CLASSES.organizing,
     ),
     'CCI bridge edges must stay out of structural ancestry',
   );

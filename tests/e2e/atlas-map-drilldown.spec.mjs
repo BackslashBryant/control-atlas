@@ -10,35 +10,26 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("choosing a published structure loads choices instead of an empty Atlas", async ({
+test("the Explore landing shows the trunk and nine limbs, and a limb opens its catalogs", async ({
   page,
 }) => {
   test.setTimeout(120_000);
-  let releaseGraph = () => {};
-  const graphGate = new Promise((resolve) => {
-    releaseGraph = () => resolve();
-  });
-  await page.route("**/data/generated/{nodes,edges}.json*", async (route) => {
-    await graphGate;
-    await route.continue();
-  });
-
   await gotoApp(page, "/#/explore");
   await waitForAppReady(page);
-  await page
-    .getByRole("button", { name: /A published structure/i })
-    .click();
 
-  await expect(
-    page.getByText("Loading Explore", { exact: true }),
-  ).toBeVisible();
-  releaseGraph();
+  // The trunk + nine limbs render (empty limbs greyed, never hidden).
+  await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
+  await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
+  await expect(page.locator(".atlas-limb-card-empty")).toHaveCount(3);
 
-  await waitForAppReady(page);
+  // A populated limb opens into its catalogs.
+  await page.getByRole("button", { name: /Compliance/ }).click();
   await expect(
-    page.getByText("Which published structure do you want to trace?"),
+    page.getByText(/which catalog do you want to open\?/i),
   ).toBeVisible();
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(4);
+  await expect(
+    page.getByRole("button", { name: /SP 800-53 Rev\. 5/ }),
+  ).toBeVisible();
 });
 
 test("framework choices survive refresh and the rail steps back one generation", async ({

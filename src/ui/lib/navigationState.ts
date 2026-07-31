@@ -18,7 +18,8 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 
 export function requiresFullGraph(state: ViewState) {
   return (
-    (state.view === "atlas-map" && Boolean(state.atlasAxis)) ||
+    // The Explore landing renders the trunk + limbs from the full graph.
+    state.view === "atlas-map" ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

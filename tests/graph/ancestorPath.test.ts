@@ -280,7 +280,72 @@ test("tree doctrine: a baseline cannot become a structural parent", () => {
   );
 });
 
-test("AC-2 generated ancestry is catalog to family to control, with no choices or mappings", () => {
+test("A.4: ancestorChain falls back to a single organizing hop when no structural parent exists", () => {
+  const nodes: AncestorNode[] = [
+    { id: "atlas:LIMB-RISK", node_type: "limb" },
+    {
+      id: "fips-199:CATALOG",
+      node_type: "catalog",
+      metadata: { catalog_id: "fips-199" },
+    },
+  ];
+  const edges: AncestorEdge[] = [
+    {
+      source_node_id: "atlas:LIMB-RISK",
+      target_node_id: "fips-199:CATALOG",
+      relationship_type: "organizes",
+      relationship_class: "organizing",
+    },
+  ];
+  const chain = ancestorChain("fips-199:CATALOG", graphFrom(nodes, edges));
+  assert.deepEqual(chain.map((link) => link.id), [
+    "atlas:LIMB-RISK",
+    "fips-199:CATALOG",
+  ]);
+  // The organizing hop above the node is the last-but-one link and is badged.
+  assert.equal(chain.at(-2)?.origin, "organizing");
+  assert.equal(chain.at(-1)?.origin, "structural");
+});
+
+test("A.4: a structural parent still wins over any organizing hop (regression guard)", () => {
+  const nodes: AncestorNode[] = [
+    {
+      id: "nist-800-53:FAMILY-AC",
+      node_type: "family",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    {
+      id: "nist-800-53:AC-2",
+      node_type: "control",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    { id: "atlas:LIMB-COMPLIANCE", node_type: "limb" },
+  ];
+  const edges: AncestorEdge[] = [
+    {
+      source_node_id: "nist-800-53:FAMILY-AC",
+      target_node_id: "nist-800-53:AC-2",
+      relationship_type: "contains",
+      relationship_class: "structural",
+    },
+    // A competing organizing edge must never override the structural parent.
+    {
+      source_node_id: "atlas:LIMB-COMPLIANCE",
+      target_node_id: "nist-800-53:AC-2",
+      relationship_type: "organizes",
+      relationship_class: "organizing",
+    },
+  ];
+  const chain = ancestorChain("nist-800-53:AC-2", graphFrom(nodes, edges));
+  assert.deepEqual(chain.map((link) => link.id), [
+    "nist-800-53:FAMILY-AC",
+    "nist-800-53:AC-2",
+  ]);
+  assert.equal(chain.at(-1)?.origin, "structural");
+  assert.equal(chain.at(-2)?.origin, "structural");
+});
+
+test("AC-2 generated ancestry now walks up through the organizing spine to the trunk", () => {
   const nodes = JSON.parse(
     readFileSync("data/generated/nodes.json", "utf8"),
   ).nodes as AncestorNode[];
@@ -288,14 +353,35 @@ test("AC-2 generated ancestry is catalog to family to control, with no choices o
     readFileSync("data/generated/edges.json", "utf8"),
   ).edges as AncestorEdge[];
 
+  const chain = ancestorChain("nist-800-53:AC-2", graphFrom(nodes, edges));
   assert.deepEqual(
-    ancestorChain("nist-800-53:AC-2", graphFrom(nodes, edges)).map(
-      (link) => link.id,
-    ),
+    chain.map((link) => link.id),
     [
+      "atlas:TRUNK",
+      "atlas:LIMB-COMPLIANCE",
       "nist-800-53:CATALOG",
       "nist-800-53:FAMILY-AC",
       "nist-800-53:AC-2",
     ],
   );
+  // Trunk + limb are organizing; catalog/family/control are structural.
+  assert.deepEqual(
+    chain.map((link) => link.origin),
+    ["organizing", "organizing", "structural", "structural", "structural"],
+  );
+});
+
+test("A.4: a generated CCI now reaches the trunk through its assessment objective", () => {
+  const nodes = JSON.parse(
+    readFileSync("data/generated/nodes.json", "utf8"),
+  ).nodes as AncestorNode[];
+  const edges = JSON.parse(
+    readFileSync("data/generated/edges.json", "utf8"),
+  ).edges as AncestorEdge[];
+
+  const chain = ancestorChain("disa-cci:CCI-000015", graphFrom(nodes, edges));
+  const ids = chain.map((link) => link.id);
+  assert.equal(ids[0], "atlas:TRUNK", "CCI chain must reach the trunk");
+  assert.equal(ids.at(-1), "disa-cci:CCI-000015");
+  assert.ok(ids.length >= 5, `expected a deep chain, got ${ids.join(" > ")}`);
 });

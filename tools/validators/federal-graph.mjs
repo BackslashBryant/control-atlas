@@ -12,9 +12,14 @@ const PROVENANCE_CLASSES = new Set([
   'federal_referenced',
   'mitre_published',
   'inferred',
+  // Control Atlas's own organizing spine (trunk/limb/catalog attachment). Not a
+  // publisher claim — always paired with publication_status 'editorial'.
+  'control_atlas_derived',
 ]);
 const CONFIDENCE_VALUES = new Set(['direct', 'derived', 'inferred', 'inferred_high', 'inferred_medium', 'inferred_low']);
-const PUBLICATION_STATUSES = new Set(['published', 'candidate']);
+// 'editorial' marks Control Atlas's own organizing-layer edges — never publisher
+// fact. Kept out of the published/candidate provenance guards below on purpose.
+const PUBLICATION_STATUSES = new Set(['published', 'candidate', 'editorial']);
 const RELATIONSHIP_CLASS_VALUES = new Set(Object.values(RELATIONSHIP_CLASSES));
 
 function pushDuplicateErrors(errors, label, items) {

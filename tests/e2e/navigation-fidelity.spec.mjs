@@ -48,7 +48,7 @@ test('retired aliases resolve to an honest not-found state instead of a canonica
 
   await gotoApp(page, '/#/explore?q=AC-2&objectType=control');
   await expect(page).toHaveURL(/#\/explore$/);
-  await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
+  await expect(page.locator('.atlas-trunk-banner')).toContainText('Cybersecurity');
 
   await gotoApp(page, '/#/commons-detail?id=official-nist-sp800-53-r5');
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
@@ -87,7 +87,7 @@ test('header search submits to canonical Search and carries focus to results', a
   await expect(page.locator('#library-results')).toBeFocused({ timeout: 15000 });
 });
 
-test('Explore renders the ancestry chooser without hydrating the graph UI', async ({ page }) => {
+test('Explore landing renders the trunk and limbs, not the heavy graph map UI', async ({ page }) => {
   test.setTimeout(90000);
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -95,21 +95,10 @@ test('Explore renders the ancestry chooser without hydrating the graph UI', asyn
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByText('What do you want to trace?', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: /A published structure/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: /The RMF process/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Browse publications/ })).toBeVisible();
+  // The landing now renders the trunk + nine limbs (from the organizing spine),
+  // so it does load the graph data — but not the heavy react-flow relationship map.
+  await expect(page.locator('.atlas-trunk-banner')).toContainText('Cybersecurity');
+  await expect(page.locator('.atlas-limb-card')).toHaveCount(9);
   await expect(page.locator('.react-flow')).toHaveCount(0);
-  expect(
-    requests.some((url) =>
-      /\/atlas-node-index\.json(?:\.gz)?(?:\?|$)/.test(url),
-    ),
-  ).toBe(false);
-  expect(
-    requests.some((url) => /\/nodes\.json(?:\.gz)?(?:\?|$)/.test(url)),
-  ).toBe(false);
-  expect(
-    requests.some((url) => /\/edges\.json(?:\.gz)?(?:\?|$)/.test(url)),
-  ).toBe(false);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });

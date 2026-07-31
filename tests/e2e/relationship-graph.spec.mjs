@@ -31,8 +31,8 @@ test("Atlas default route is the guided ancestry path, not an empty graph", asyn
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Control Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("What do you want to trace?")).toBeVisible();
-  await expect(page.locator(".atlas-ancestry-choice")).toHaveCount(3);
+  await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
+  await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
   await expect(page.locator(".react-flow")).toHaveCount(0);
 });
 

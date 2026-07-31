@@ -79,37 +79,6 @@ export type AtlasDrilldownModel = {
   frameworkGroups: AtlasFrameworkGroup[];
 };
 
-const SUPPORTED_FRAMEWORKS = [
-  {
-    id: "nist-800-53",
-    rootId: "nist-800-53:CATALOG",
-    groupId: "control-catalog",
-    groupLabel: "Control catalog",
-    groupDescription: "Families, controls, and enhancements.",
-  },
-  {
-    id: "csf-2",
-    rootId: "csf-2:CATALOG",
-    groupId: "outcome-framework",
-    groupLabel: "Outcome framework",
-    groupDescription: "Functions, categories, and subcategories.",
-  },
-  {
-    id: "cmmc-2",
-    rootId: "cmmc-2:CATALOG",
-    groupId: "certification-program",
-    groupLabel: "Certification program",
-    groupDescription: "Program levels and their published requirements.",
-  },
-  {
-    id: "mitre-attack",
-    rootId: "mitre-attack:CATALOG",
-    groupId: "threat-knowledge",
-    groupLabel: "Threat knowledge",
-    groupDescription: "Tactics, techniques, and sub-techniques.",
-  },
-] as const;
-
 function toChoice(node: AtlasDrillNode): AtlasRecordChoice {
   const itemId = node.metadata?.item_id || node.id;
   return {
@@ -170,10 +139,26 @@ export function buildAtlasDrilldownModel(dataset: {
       selectedIdsByBaseline.set(edge.source_node_id, selected);
     }
   }
-  const frameworkGroups = SUPPORTED_FRAMEWORKS.map((supported) => {
-    const root = nodesById.get(supported.rootId);
-    if (!root) return null;
-    const units = (structuralChildrenByParent.get(supported.rootId) || [])
+  // Class-4 organizing spine: limb -> catalog attachment. These edges are
+  // publication_status "editorial" (never "published"), so index them from the
+  // full edge set, not from publishedEdges.
+  const organizingChildrenByParent = new Map<string, string[]>();
+  for (const edge of dataset.edges) {
+    if (
+      edge.relationship_class === "organizing" &&
+      edge.relationship_type === "organizes"
+    ) {
+      const children = organizingChildrenByParent.get(edge.source_node_id) || [];
+      children.push(edge.target_node_id);
+      organizingChildrenByParent.set(edge.source_node_id, children);
+    }
+  }
+
+  const buildFramework = (
+    catalogNode: AtlasDrillNode,
+    limbId: string,
+  ): AtlasFrameworkChoice => {
+    const units = (structuralChildrenByParent.get(catalogNode.id) || [])
       .map((nodeId) => nodesById.get(nodeId))
       .filter((node): node is AtlasDrillNode => Boolean(node))
       .map((unit) => ({
@@ -185,21 +170,43 @@ export function buildAtlasDrilldownModel(dataset: {
           .sort(byItemId),
       }))
       .sort(byItemId);
-    if (!units.length) return null;
     return {
-      id: supported.groupId,
-      label: supported.groupLabel,
-      description: supported.groupDescription,
-      frameworks: [
-        {
-          ...toChoice(root),
-          id: supported.id,
-          groupId: supported.groupId,
-          units,
-        },
-      ],
+      ...toChoice(catalogNode),
+      id: catalogNode.metadata?.catalog_id || catalogNode.id,
+      groupId: limbId,
+      units,
     };
-  }).filter(Boolean) as AtlasFrameworkGroup[];
+  };
+
+  // One group per limb, in trunk-declared order, empty limbs included (A.7 greys
+  // them rather than hiding — docs/plans/cybersecurity-trunk-and-voice-2026-07-31 A.7).
+  const trunkNode = dataset.nodes.find((node) => node.node_type === "trunk");
+  const limbNodes = dataset.nodes.filter((node) => node.node_type === "limb");
+  const limbById = new Map(limbNodes.map((node) => [node.id, node]));
+  const trunkLimbOrder = trunkNode
+    ? organizingChildrenByParent.get(trunkNode.id) || []
+    : [];
+  const orderedLimbIds = [
+    ...trunkLimbOrder.filter((id) => limbById.has(id)),
+    ...limbNodes
+      .map((node) => node.id)
+      .filter((id) => !trunkLimbOrder.includes(id)),
+  ];
+  const frameworkGroups: AtlasFrameworkGroup[] = orderedLimbIds.map((limbId) => {
+    const limb = limbById.get(limbId) as AtlasDrillNode;
+    const frameworks = (organizingChildrenByParent.get(limbId) || [])
+      .map((id) => nodesById.get(id))
+      .filter((node): node is AtlasDrillNode => Boolean(node))
+      .filter((node) => node.node_type === "catalog")
+      .map((catalogNode) => buildFramework(catalogNode, limbId))
+      .sort((left, right) => left.label.localeCompare(right.label));
+    return {
+      id: limb.id,
+      label: limb.metadata?.title || limb.label || limb.id,
+      description: limb.metadata?.description || "",
+      frameworks,
+    };
+  });
   const familyNodes = dataset.nodes
     .filter(
       (node) =>

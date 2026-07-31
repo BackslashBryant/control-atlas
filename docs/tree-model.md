@@ -42,20 +42,21 @@ exists to get people out of.
 ## 2. The tree
 
 ```text
-ENVIRONMENT
-Mission • Systems • Data • Technology • Threats
+SOIL / CONTEXT
+Mission • Systems • Data • Environment • Threats
                          │
                          ▼
 ROOTS — WHY
-Authorities and authoritative sources
+Authorities • Law • Policy • Standards • Source material
                          │
                          ▼
-TRUNK — HOW RISK IS MANAGED
-Governance and the RMF lifecycle
+TRUNK
+Cybersecurity
                          │
                          ▼
-MAJOR BRANCHES — ORGANIZING SYSTEMS
-Frameworks, standards, and compliance programs
+LIMBS — THE NINE DIVISIONS OF THE WORK
+Governance · Risk · Compliance · Architecture · Implementation
+· Assessment · Operations · Threats & Defense · Knowledge
                          │
                          ▼
 BRANCHES — SECURITY DOMAINS
@@ -84,7 +85,7 @@ Templates, patterns, common controls, inheritance, and reciprocity
 
 ### Layer by layer
 
-**ENVIRONMENT — the conditions around the tree.** Mission and business purpose,
+**SOIL / CONTEXT — the conditions around the tree.** Mission and business purpose,
 system type and authorization boundary, information types and impact levels,
 operational environment, technology and hosting model, threats and adversary
 behavior.
@@ -103,14 +104,25 @@ CISA, FedRAMP, DoD CIO, MITRE).
 **Every record must be traceable downward to implementation and upward to one or
 more roots.**
 
-**TRUNK — governance and RMF.** The common operating process connecting policy to
-work: Prepare → Categorize → Select → Implement → Assess → Authorize → Monitor.
-Also holds the cross-cutting concepts — system boundary, roles and
-responsibilities, common controls, control inheritance, shared responsibility,
-reciprocity, continuous monitoring, risk acceptance, authorization.
+**TRUNK — Cybersecurity.** The trunk is now literally the discipline itself, not a
+process. It carries no content of its own; it exists so that every limb has one
+visible common ancestor. The RMF lifecycle (Prepare → Categorize → Select →
+Implement → Assess → Authorize → Monitor) and the cross-cutting concepts — system
+boundary, roles and responsibilities, common controls, control inheritance, shared
+responsibility, reciprocity, continuous monitoring, risk acceptance, authorization
+— are not the spine; they move **into the Governance limb as content.**
 
-**MAJOR BRANCHES — frameworks and programs.** These are not all the same kind of
-object, and the product must say so. Classify every one:
+**LIMBS — the nine divisions of the work.** The limbs replace the old TRUNK
+(governance/RMF) and MAJOR BRANCHES (frameworks) tiers with a single tier of nine:
+Governance, Risk, Compliance, Architecture, Implementation, Assessment, Operations,
+Threats & Defense, and Knowledge. Every published catalog attaches to exactly one
+limb (see `data/curated/tree-spine.json` and Part A.1 of
+`docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md`).
+
+Frameworks and programs are not all the same kind of object, and the product must
+say so. This classification is preserved unchanged — it now lives inside the
+Compliance and Implementation limbs rather than as its own tier. Classify every
+one:
 
 | Type | Examples |
 |---|---|
@@ -169,7 +181,7 @@ system, assessment, or organization.
 
 ---
 
-## 3. Three relationship classes — keep them separate in data AND in the UI
+## 3. Four relationship classes — keep them separate in data AND in the UI
 
 This is the part most likely to be violated by accident. Conflating these is what
 makes a graph unreadable and a hierarchy dishonest.
@@ -203,6 +215,23 @@ CCIs, crosswalks, ATT&CK mappings, and framework equivalencies live here.
 
 **Going *down* the tree and going *sideways* to another framework must never look
 alike.**
+
+### Class 4 — Organizing (Control Atlas's own structure — NOT publisher-declared)
+
+```text
+organizes
+```
+
+This is the trunk, the limbs, and every catalog→limb attachment. It is **not**
+`contains` and must never be reported as publisher-declared. Every UI surface that
+renders an `organizes` hop must visually mark it as Control Atlas's own organizing
+layer (badge text: "Control Atlas structure", not a source name).
+
+The two derived parentages introduced with the trunk spine (CCI→control,
+assessment procedure→control) are also `organizes`, not `contains` — they are real
+structural facts (the CCI already cites the control; the assessment procedure
+already carries an `assesses` edge to it) but they are *derived*, not published as
+containment by DISA or NIST, so they carry the same visible badge.
 
 ---
 
@@ -307,8 +336,9 @@ menu items.
 
 | Surface | Job | Tree relationship |
 |---|---|---|
-| **Start Here** | Situation → what applies to you | ENVIRONMENT layer |
+| **Start Here** | Situation → what applies to you | SOIL / CONTEXT layer |
 | **Atlas** | Understand the whole tree | The tree itself, through lenses |
+| **Limb assignment** | Every published catalog belongs to exactly one limb | see `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md` Part A.1 |
 | **Library** | Find any object | The complete object catalog |
 | **Compare** | See across branches | Class-3 correlation edges |
 | **Commons** | External ecosystem | Supporting resources *linked to* tree nodes, never members of the tree |

@@ -1,20 +1,33 @@
 import {
   isValidatedStructuralEdge,
   isValidatedStructuralPointer,
+  ORGANIZING_RELATIONSHIP_TYPES,
+  RELATIONSHIP_CLASSES,
 } from "./structural-hierarchy.mjs";
 
 export function buildAncestorGraph(nodes, edges) {
   const nodesById = new Map(nodes.map((node) => [node.id, node]));
   const structuralParentsOf = new Map();
+  const organizingParentsOf = new Map();
   for (const edge of edges) {
     const parent = nodesById.get(edge.source_node_id);
     const child = nodesById.get(edge.target_node_id);
-    if (!isValidatedStructuralEdge(edge, parent, child)) continue;
-    const list = structuralParentsOf.get(edge.target_node_id) || [];
-    list.push(edge.source_node_id);
-    structuralParentsOf.set(edge.target_node_id, list);
+    if (isValidatedStructuralEdge(edge, parent, child)) {
+      const list = structuralParentsOf.get(edge.target_node_id) || [];
+      list.push(edge.source_node_id);
+      structuralParentsOf.set(edge.target_node_id, list);
+    } else if (
+      edge.relationship_class === RELATIONSHIP_CLASSES.organizing &&
+      ORGANIZING_RELATIONSHIP_TYPES.has(edge.relationship_type)
+    ) {
+      // Class-4 organizing hop (trunk/limb/catalog spine, or a derived junction
+      // home). Only used as a fallback parent when no structural parent exists.
+      const list = organizingParentsOf.get(edge.target_node_id) || [];
+      list.push(edge.source_node_id);
+      organizingParentsOf.set(edge.target_node_id, list);
+    }
   }
-  return { nodesById, structuralParentsOf };
+  return { nodesById, structuralParentsOf, organizingParentsOf };
 }
 
 function parentCandidates(id, graph) {
@@ -81,20 +94,31 @@ export function pickCanonicalParent(childId, candidateIds, graph) {
   return [...shallowestPool].sort()[0];
 }
 
-function canonicalParentId(id, graph) {
+function canonicalParentWithOrigin(id, graph) {
   const node = graph.nodesById.get(id);
   if (node?.parent_id) {
     const parent = graph.nodesById.get(node.parent_id);
-    if (isValidatedStructuralPointer(node, parent)) return node.parent_id;
+    if (isValidatedStructuralPointer(node, parent)) {
+      return { parentId: node.parent_id, origin: "structural" };
+    }
   }
-  return pickCanonicalParent(
+  const structural = pickCanonicalParent(
     id,
     graph.structuralParentsOf.get(id) || [],
     graph,
   );
+  if (structural) return { parentId: structural, origin: "structural" };
+  // No structural parent — fall back to a single Class-4 organizing hop.
+  const organizing = graph.organizingParentsOf?.get(id) || [];
+  if (organizing.length > 0) {
+    const parentId =
+      organizing.length === 1 ? organizing[0] : [...organizing].sort()[0];
+    return { parentId, origin: "organizing" };
+  }
+  return null;
 }
 
-function toLink(node) {
+function toLink(node, origin) {
   const structuralLabel =
     node.node_type === "catalog" || node.node_type === "family"
       ? node.metadata?.title
@@ -108,6 +132,7 @@ function toLink(node) {
       node.metadata?.catalog_id ||
       node.id,
     node_type: node.node_type || "",
+    origin,
   };
 }
 
@@ -115,17 +140,19 @@ export function ancestorChain(nodeId, graph) {
   const startNode = graph.nodesById.get(nodeId);
   if (!startNode) return [];
 
-  const chain = [toLink(startNode)];
+  // The viewed node itself is never reached via a hop; label its origin
+  // "structural" so only genuine organizing hops above it get badged.
+  const chain = [toLink(startNode, "structural")];
   const visited = new Set([nodeId]);
   let currentId = nodeId;
   for (;;) {
-    const parentId = canonicalParentId(currentId, graph);
-    if (!parentId || visited.has(parentId)) break;
-    const parentNode = graph.nodesById.get(parentId);
+    const next = canonicalParentWithOrigin(currentId, graph);
+    if (!next || visited.has(next.parentId)) break;
+    const parentNode = graph.nodesById.get(next.parentId);
     if (!parentNode) break;
-    chain.push(toLink(parentNode));
-    visited.add(parentId);
-    currentId = parentId;
+    chain.push(toLink(parentNode, next.origin));
+    visited.add(next.parentId);
+    currentId = next.parentId;
   }
   return chain.reverse();
 }

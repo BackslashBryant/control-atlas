@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-29T01:35:49.122Z",
+  "generated_at": "2026-07-31T18:36:56.754Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -26,6 +26,30 @@
       "node_count": 0,
       "relationship_count": 0,
       "evidence_count": 0,
+      "finding_count": 0
+    },
+    {
+      "source_id": "control-atlas-structure",
+      "display_name": "Control Atlas Structure",
+      "display_group": "Control Atlas",
+      "frameworks": [],
+      "owner": "Control Atlas",
+      "version": "2026-07-31",
+      "sync_model": "curated",
+      "last_checked": "2026-07-31",
+      "last_imported": "2026-07-31",
+      "hash": null,
+      "stale_after_days": 45,
+      "retrieved_at": "2026-07-31",
+      "artifact_url": "https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json",
+      "artifact_type": "json",
+      "checksum": "sha256:control_atlas_structure_editorial_spine_placeholder",
+      "access_status": "public",
+      "lifecycle_status": "active",
+      "graph_eligible": true,
+      "node_count": 10,
+      "relationship_count": 6179,
+      "evidence_count": 6179,
       "finding_count": 0
     },
     {
@@ -788,9 +812,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 7,
-      "relationship_count": 14,
-      "evidence_count": 14,
+      "node_count": 8,
+      "relationship_count": 21,
+      "evidence_count": 21,
       "finding_count": 0
     },
     {
@@ -1026,9 +1050,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 3,
-      "relationship_count": 3,
-      "evidence_count": 3,
+      "node_count": 4,
+      "relationship_count": 6,
+      "evidence_count": 6,
       "finding_count": 0
     },
     {
@@ -1052,9 +1076,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 17,
-      "relationship_count": 17,
-      "evidence_count": 17,
+      "node_count": 18,
+      "relationship_count": 34,
+      "evidence_count": 34,
       "finding_count": 0
     },
     {
