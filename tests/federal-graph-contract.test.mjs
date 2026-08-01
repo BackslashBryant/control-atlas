@@ -357,6 +357,42 @@ test('DISA STIG and SRG records carry their benchmark as the grouping label', ()
   assert.ok(srgBenchmarks.length > 0, 'expected DISA SRG benchmark nodes');
 });
 
+test('DISA STIG and SRG records carry full, untruncated check and fix text', () => {
+  const nodes = generated('nodes').nodes;
+  for (const nodeType of ['stig_rule', 'srg_requirement']) {
+    const records = nodes.filter((node) => node.node_type === nodeType);
+    assert.ok(records.length > 0, `expected ${nodeType} nodes`);
+    const missingCheckText = records
+      .filter((node) => !node.metadata?.check_text?.trim())
+      .map((node) => node.id);
+    assert.deepEqual(
+      missingCheckText,
+      [],
+      `${nodeType} records must carry metadata.check_text`,
+    );
+    const missingFixText = records
+      .filter((node) => !node.metadata?.fix_text?.trim())
+      .map((node) => node.id);
+    assert.deepEqual(
+      missingFixText,
+      [],
+      `${nodeType} records must carry metadata.fix_text`,
+    );
+    const truncated = records
+      .filter(
+        (node) =>
+          node.metadata.check_text.endsWith('...') ||
+          node.metadata.fix_text.endsWith('...'),
+      )
+      .map((node) => node.id);
+    assert.deepEqual(
+      truncated,
+      [],
+      `${nodeType} records must not have their check_text/fix_text truncated`,
+    );
+  }
+});
+
 test('every tiered catalog has its outermost tier parented to the catalog node, not floating', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
