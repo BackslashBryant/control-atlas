@@ -146,24 +146,8 @@ export function ObjectDetailPage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenGlossary: (termId?: string) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
-  onRequestFullGraph?: () => void;
 }) {
-  const {
-    bundle,
-    state,
-    onNavigate,
-    onOpenGlossary,
-    onOpenNode,
-    onRequestFullGraph,
-  } = props;
-  // "Where this sits" walks from this record up to the trunk. The priority
-  // shard only carries the record's immediate neighborhood, so the chain
-  // stopped one hop up (2 crumbs instead of 7 on disa-cci:CCI-000015). Ask for
-  // the full graph in the background — the page still renders immediately from
-  // the shard and the rail fills in when it lands.
-  useEffect(() => {
-    onRequestFullGraph?.();
-  }, [onRequestFullGraph]);
+  const { bundle, state, onNavigate, onOpenGlossary, onOpenNode } = props;
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
   const source = document

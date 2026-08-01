@@ -2,6 +2,10 @@ import { IconSearch } from "@tabler/icons-react";
 import { useMemo } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { sourceLinkFor } from "../graph/sourceLinks";
+import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
+
+const connectionInventory = connectionInventoryArtifact.connection_inventory;
 import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
 import { Button, Panel } from "../components/lsm";
 import {
@@ -83,7 +87,7 @@ export function SourcesPage(props: {
       <PageHeader
         eyebrow="Sources"
         summary="See each publication’s publisher, coverage, version, status, and the date Control Atlas last checked it."
-        title="Sources"
+        title="Where every record here comes from"
       />
 
       <p className="sources-resource-boundary">
@@ -92,6 +96,89 @@ export function SourcesPage(props: {
           Open Resources
         </button>
       </p>
+
+      {/* Restored 2026-08-01. This disclosure was dropped from the page while
+          tests/e2e/atlas-map-links.spec.mjs still required it; the statutory
+          and standards links behind the whole corpus are the one thing a
+          reader cannot reconstruct from the table below. */}
+      <details className="canonical-source-links" id="official-source-links">
+        <summary>Official source links</summary>
+        <div className="disclosure-content">
+          <p>
+            Direct links to the primary publications behind the controls,
+            mappings, and threat and defensive references in Control Atlas.
+          </p>
+          <ul>
+            {[
+              "fisma-44-usc-3551",
+              "nist-sp-800-53-r5",
+              "mitre-attack-enterprise",
+              "mitre-d3fend",
+            ].map((sourceId) => {
+              const link = sourceLinkFor(sourceId);
+              return (
+                <li key={link.sourceId}>
+                  <a
+                    href={link.canonicalUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {link.displayName}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </details>
+
+      {/* Restored 2026-08-01 from data/generated/connection-inventory.json.
+          These are build counts, not completeness scores, and they are
+          precomputed so this route never pulls the monolithic graph. */}
+      <details className="connection-inventory" id="connection-inventory">
+        <summary>Connection inventory</summary>
+        <div className="disclosure-content">
+          <p>
+            What Control Atlas currently loads and connects. These are build
+            counts, not completeness scores.
+          </p>
+          <p className="connection-inventory-summary">
+            <strong>{connectionInventory.totalRecords.toLocaleString()}</strong>{" "}
+            records across {connectionInventory.rows.length} practical
+            categories with{" "}
+            <strong>
+              {connectionInventory.publishedLinks.toLocaleString()}
+            </strong>{" "}
+            published links.
+          </p>
+          <details className="connection-inventory-details">
+            <summary>
+              Per-category counts ({connectionInventory.rows.length})
+            </summary>
+            <ul className="connection-inventory-list">
+              {connectionInventory.rows.map((category) => (
+                <li className="connection-inventory-row" key={category.id}>
+                  <strong>{category.label}</strong>
+                  <span>
+                    {category.totalRecords.toLocaleString()} records loaded
+                  </span>
+                  <span>
+                    {category.connectedRecords.toLocaleString()} records
+                    connected
+                  </span>
+                  <span>
+                    {category.publishedLinks.toLocaleString()} published links
+                  </span>
+                  <span className="connection-inventory-related">
+                    Connects to:{" "}
+                    {category.relatedCategories.join(", ") || "none yet"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
+      </details>
 
       <WorkbenchControlSurface
         className="source-register-control-surface"

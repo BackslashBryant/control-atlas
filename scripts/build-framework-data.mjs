@@ -26,6 +26,11 @@ import {
   resolveCatalogPublicationIdentity,
   validateCatalogPublicationIdentity,
 } from "../src/app/catalog-publication-identity.mjs";
+import { buildConnectionInventory } from "../src/ui/lib/connectionInventory.mjs";
+import {
+  ancestorChain,
+  buildAncestorGraph,
+} from "../src/app/ancestor-path.mjs";
 import {
   deriveAssessmentProcedureParents,
   deriveCciHierarchyParents,
@@ -1994,6 +1999,29 @@ function trunkConnectedComponent(rootId, edges, nodeIds) {
   return seen;
 }
 
+/**
+ * Records carry their own path to the trunk. The record page loads a single
+ * neighborhood shard, never the monolithic graph (enforced by
+ * tests/e2e/bootstrap-payload.spec.mjs), so a runtime walk over the full edge
+ * set could only ever produce a truncated chain there. Deriving it once at
+ * build time costs ~300 bytes per node and lets "Where this sits" render the
+ * complete chain from whatever artifact delivered the record.
+ */
+function attachAncestorPaths(nodes, edges) {
+  const graph = buildAncestorGraph(nodes, edges);
+  for (const node of nodes) {
+    const chain = ancestorChain(node.id, graph);
+    // The last link is the node itself; keep only its ancestors, root first.
+    const ancestors = chain.slice(0, -1).map((link) => ({
+      id: link.id,
+      label: link.label,
+      node_type: link.node_type,
+      origin: link.origin,
+    }));
+    if (ancestors.length) node.ancestor_path = ancestors;
+  }
+}
+
 function applyOrganizingSpine(nodeState, edgeState, registry) {
   const spine = readJson(join(ROOT, "data", "curated", "tree-spine.json"));
   const sourceById = registry.byId;
@@ -2186,6 +2214,7 @@ export function buildFrameworkData() {
   const nodeState = buildNodes(registry);
   const edgeState = buildEdges(registry, nodeState.nodes);
   applyOrganizingSpine(nodeState, edgeState, registry);
+  attachAncestorPaths(nodeState.nodes, edgeState.edges);
   const findings = [...nodeState.findings, ...edgeState.findings];
   const graph = {
     sources: registry.sources,
@@ -2327,6 +2356,25 @@ export function buildFrameworkData() {
       "utf8",
     );
   }
+
+  // The Sources page reports what the build actually loaded and connected.
+  // Deriving it in the browser would force the monolithic graph onto a route
+  // that otherwise needs none, so it is computed once here and shipped as a
+  // few hundred bytes.
+  writeFileSync(
+    join(GENERATED, "connection-inventory.json"),
+    `${JSON.stringify(
+      artifact(
+        "connection_inventory",
+        buildConnectionInventory(graph.nodes, graph.edges),
+        generatedAt,
+      ),
+      null,
+      2,
+    )}
+`,
+    "utf8",
+  );
 
   writeFileSync(
     join(GENERATED, "source-manifests.json"),

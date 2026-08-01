@@ -100,6 +100,10 @@ function observeRouteHydration() {
     shell?.setAttribute('aria-hidden', 'true');
     shell?.setAttribute('inert', '');
     shell?.removeAttribute('role');
+    // It had only been made inert, not hidden. Its 620px reservation kept
+    // occupying layout after hydration, so at mobile widths the "Opening
+    // workspace" placeholder sat above the real page on every non-home route.
+    shell?.setAttribute('hidden', '');
     return true;
   };
   const scheduleHydration = () => {

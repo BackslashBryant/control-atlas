@@ -26,7 +26,7 @@ export function PlaybooksPage(props: {
         <PageHeader
           eyebrow="Learn"
           summary="Control Atlas explanations for reading source identity, structure, search, mappings, records, and starter documents."
-          title="Learn"
+          title="How to read what you find here"
         />
         <section aria-label="Learning articles" className="learn-article-grid">
           {learnArticles.map((article) => (

@@ -7,6 +7,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
+import { Button } from "../components/lsm";
 import type { CommonsResource } from "../lib/commonsTypes";
 import {
   filterDirectoryResources,
@@ -40,8 +41,18 @@ export function CommonsPage(props: {
           category: "",
           showAll: "",
         };
+  // The resource directory is a separate artifact from the record graph and is
+  // fetched with a .catch(() => null) in runtimeLoader. When that fetch fails
+  // the page used to report "No resources match these filters" — telling the
+  // reader the directory is empty when it simply never arrived.
+  const directoryAvailable = Boolean(bundle?.commonsDataset);
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
   const [filtersOpen, setFiltersOpen] = useState(false);
+  // 96 resources rendered as one grid made a 17,000px page. Show a first
+  // screenful and let the reader ask for the rest; the filters above are the
+  // intended way to narrow, and the status line still reports the true total.
+  const RESOURCE_PAGE_SIZE = 24;
+  const [showAll, setShowAll] = useState(false);
   const update = (patch: Partial<CommonsState>) =>
     onNavigate("commons", { ...state, ...patch });
 
@@ -243,14 +254,33 @@ export function CommonsPage(props: {
           </div>
         </WorkbenchControlSurface>
 
-        {filtered.length ? (
+        {!directoryAvailable ? (
+          <section
+            className="empty-state"
+            data-control-results
+            id="resources-results"
+          >
+            <h2>The resource directory did not load.</h2>
+            <p>
+              It is a separate data file from the published records, so the rest
+              of Control Atlas still works. Reload to try again.
+            </p>
+            <Button
+              onClick={() => window.location.reload()}
+              type="button"
+              variant="secondary"
+            >
+              Reload the directory
+            </Button>
+          </section>
+        ) : filtered.length ? (
           <section
             aria-label="Resource results"
             className="resources-result-grid"
             data-control-results
             id="resources-results"
           >
-            {filtered.map((resource) => (
+            {(showAll ? filtered : filtered.slice(0, RESOURCE_PAGE_SIZE)).map((resource) => (
               <CommonsResourceCard
                 key={resource.id}
                 onNavigateSearch={(query) => update({ query })}
@@ -260,6 +290,18 @@ export function CommonsPage(props: {
                 resource={resource}
               />
             ))}
+            {!showAll && filtered.length > RESOURCE_PAGE_SIZE ? (
+              <div className="resources-show-more">
+                <Button
+                  onClick={() => setShowAll(true)}
+                  type="button"
+                  variant="secondary"
+                >
+                  Show the remaining {filtered.length - RESOURCE_PAGE_SIZE}{" "}
+                  resources
+                </Button>
+              </div>
+            ) : null}
           </section>
         ) : (
           <section

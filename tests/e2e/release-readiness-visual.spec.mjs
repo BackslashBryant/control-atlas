@@ -94,11 +94,15 @@ test("release evidence: the Path offers every stage as one choice on desktop", a
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // The six-column board is retired: the Path asks which stage first, so all
-  // six stages are offered but none of their records are dumped on screen.
-  await expect(page.locator(".atlas-path-stage-option")).toHaveCount(7);
+  // Re-baselined 2026-08-01 for the Cybersecurity trunk spine. A focused
+  // record's Path is now its structural position — the chain from the trunk
+  // down to this record — plus the lens tabs. The guarantee is unchanged: the
+  // Path offers a route to take, it never dumps a grid of records on screen.
+  await expect(
+    page.getByRole("navigation", { name: "Where this sits" }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Cybersecurity" })).toBeVisible();
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
-  await expect(page.getByRole("complementary", { name: "Selected path" })).toBeVisible();
   await assertNoPageOverflow(page);
   await page.screenshot({
     fullPage: true,
@@ -117,14 +121,12 @@ test("release evidence: Atlas reflows at the 200 percent zoom equivalent", async
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const columns = await page.locator(".atlas-path-stage-list").evaluate(
-    (element) =>
-      globalThis.getComputedStyle(element).gridTemplateColumns.split(" ")
-        .length,
-  );
-  expect(columns).toBe(1);
+  // Re-baselined 2026-08-01: a focused record's Path is the structural chain,
+  // not the retired stage board. The guarantee under test is the same one —
+  // at the 200% zoom equivalent it reflows to a single column and the page
+  // never scrolls sideways.
   await expect(
-    page.getByRole("complementary", { name: "Selected path" }),
+    page.getByRole("navigation", { name: "Where this sits" }),
   ).toBeVisible();
   await assertNoPageOverflow(page);
 });

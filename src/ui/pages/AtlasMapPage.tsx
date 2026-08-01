@@ -33,6 +33,7 @@ import {
   buildAtlasDrilldownModel,
   NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
+import { catalogProfileFor } from "../lib/catalogProfiles";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
@@ -561,22 +562,9 @@ function FocusedAtlas(props: {
               <section className="atlas-path-summary">
                 <p className="eyebrow">Publisher-declared structural path</p>
                 <h3>{centerLabel}</h3>
-                <WhereThisSitsRail
-                  bundle={bundle}
-                  links={
-                    record.structural_path.length > 1 ||
-                    record.center_node.node_type === "catalog"
-                      ? record.structural_path.map((link) => ({
-                          ...link,
-                          origin: "structural" as const,
-                        }))
-                      : undefined
-                  }
-                  nodeId={record.center_node.id}
-                  onOpenNode={(node) =>
-                    patchAtlas({ node, atlasStage: "", relationshipGroup: "" })
-                  }
-                />
+                {/* The identical chain already renders in the "Structural
+                    position" header above; a second copy inside the Path panel
+                    duplicated the landmark and the content. */}
                 <p>
                   Relationship classes are shown in Map and List. Baselines and
                   process lenses remain separate choices rather than
@@ -860,8 +848,8 @@ function AtlasGuidedPath(props: {
             <span className="atlas-trunk-banner-text">
               <strong>Cybersecurity</strong>
               <small>
-                The whole field hangs off one trunk, split into nine limbs. Pick
-                where your question lives.
+                Every publication in Control Atlas sits under one of these nine
+                limbs.
               </small>
             </span>
           </div>
@@ -892,10 +880,10 @@ function AtlasGuidedPath(props: {
                       {empty
                         ? "Not yet loaded"
                         : `${catalogCount} ${catalogCount === 1 ? "catalog" : "catalogs"}`}
+                      {empty ? null : (
+                        <IconChevronRight aria-hidden="true" size={18} />
+                      )}
                     </span>
-                    {empty ? null : (
-                      <IconChevronRight aria-hidden="true" size={18} />
-                    )}
                   </button>
                 </li>
               );
@@ -943,9 +931,11 @@ function AtlasGuidedPath(props: {
                     <IconBinaryTree aria-hidden="true" size={20} />
                     <span className="atlas-path-stage-option-text">
                       <strong>{choice.label}</strong>
-                      <small>
-                        {group.label}: {group.description}
-                      </small>
+                      {/* Was the limb's blurb, which repeated verbatim under
+                          every catalog in the limb. Each catalog states what it
+                          actually covers (src/ui/lib/catalogProfiles.ts); the
+                          limb name is already in the prompt above. */}
+                      <small>{catalogProfileFor(choice.id, choice.label).synopsis}</small>
                     </span>
                     <IconChevronRight aria-hidden="true" size={20} />
                   </button>

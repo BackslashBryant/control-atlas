@@ -1017,7 +1017,7 @@ export function TemplatesPage(props: {
           : "Choose a task to see related public references, tools, and starter documents."}
         title={
           buildOverview
-            ? "Build"
+            ? "Start a document or a task"
             : documentBrowser || selectedTemplate
               ? "Choose a starter document"
               : "Tasks"

@@ -7,12 +7,15 @@ import {
   waitForAppReady,
 } from "./support.mjs";
 
-const GRAPH_NODE_COUNT = JSON.parse(
-  readFileSync("data/generated/nodes.json", "utf8"),
-).nodes.length;
-const GRAPH_PUBLISHED_LINK_COUNT = JSON.parse(
-  readFileSync("data/generated/edges.json", "utf8"),
-).edges.filter((edge) => edge.publication_status === "published").length;
+// Checked against the same artifact the page renders, which is built from the
+// graph by scripts/build-framework-data.mjs. Counting nodes.json directly
+// disagreed by exactly the 10 Class-4 spine nodes (trunk + nine limbs): those
+// are Control Atlas's own organizing layer, not records it loaded.
+const CONNECTION_INVENTORY = JSON.parse(
+  readFileSync("data/generated/connection-inventory.json", "utf8"),
+).connection_inventory;
+const GRAPH_NODE_COUNT = CONNECTION_INVENTORY.totalRecords;
+const GRAPH_PUBLISHED_LINK_COUNT = CONNECTION_INVENTORY.publishedLinks;
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);

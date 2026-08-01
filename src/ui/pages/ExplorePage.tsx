@@ -282,6 +282,179 @@ export function ExplorePage(props: {
             tabIndex={-1}
             type="multiple"
           >
+            {Object.entries(groupedDocuments as Record<string, any[]>).map(
+              ([group, entries]) => (
+                <DisclosurePanel
+                  key={group}
+                  title={`${group} (${entries.length})`}
+                  value={group}
+                >
+                  <div className="stack">
+                    {entries
+                      .slice(0, GROUP_RENDER_CAP)
+                      .map(
+                        ({
+                          document,
+                          node,
+                          relationshipCount,
+                          source,
+                          lowCoverage,
+                        }) => {
+                        return (
+                          <article
+                            className="result-card"
+                            key={document.id}
+                            aria-labelledby={`title-${document.id}`}
+                            // Only set when the description paragraph is
+                            // actually rendered — a dangling reference points
+                            // assistive tech at nothing.
+                            aria-describedby={
+                              document.description_available
+                                ? undefined
+                                : `desc-${document.id}`
+                            }
+                          >
+                            <div className="result-card-header">
+                              <div>
+                                <p className="result-meta">
+                                  {displayNameFor(
+                                    "object_type",
+                                    document.object_type,
+                                  )}
+                                </p>
+                                <CardTitle
+                                  id={`title-${document.id}`}
+                                  onOpen={() =>
+                                    onOpenNode(document.id, "search")
+                                  }
+                                >
+                                  {recordDisplayTitle(
+                                    node ?? {
+                                      id: document.id,
+                                      node_type: document.object_type,
+                                      metadata: {
+                                        item_id: document.item_id,
+                                        title: document.title,
+                                      },
+                                    },
+                                  )}
+                                </CardTitle>
+                              </div>
+                              <div className="result-card-badges">
+                                {relationshipCount > 0 ? (
+                                  <Badge tone="info">
+                                    {relationshipCount} connections
+                                  </Badge>
+                                ) : graphReady ? (
+                                  <span className="no-connections">
+                                    No connections yet
+                                  </span>
+                                ) : null}
+                                {lowCoverage ? (
+                                  <Badge tone="warning">Limited coverage</Badge>
+                                ) : null}
+                              </div>
+                            </div>
+                            {/* When a description exists the card used to say
+                                "Open this record to read the published text."
+                                on every single result — an instruction the
+                                Open record button already gives. Only the
+                                absence is worth stating. */}
+                            {document.description_available ? null : (
+                              <p className="result-summary" id={`desc-${document.id}`}>
+                                No narrative description was published for this
+                                record.
+                              </p>
+                            )}
+                            <div className="result-support">
+                              <span>
+                                Source:{" "}
+                                {source?.display_name ||
+                                  source?.name ||
+                                  document.source_name ||
+                                  "Source unavailable"}
+                              </span>
+                              {source?.provenance_class ||
+                              document.source_class ? (
+                                <ProvenanceTerm
+                                  kind="provenance"
+                                  value={
+                                    source?.provenance_class ||
+                                    document.source_class
+                                  }
+                                />
+                              ) : null}
+                            </div>
+                            <div className="card-actions">
+                              <Button
+                                variant="primary"
+                                onClick={() => onOpenNode(document.id, "search")}
+                                type="button"
+                              >
+                                Open record
+                              </Button>
+                              <details className="result-actions-menu">
+                                <summary>Compare, map, or export</summary>
+                                <div className="result-actions-popover">
+                                  {relationshipCount > 0 || !graphReady ? (
+                                    <Button
+                                      variant="secondary"
+                                      onClick={() =>
+                                        openAtlasMapForNode(
+                                          onNavigate,
+                                          document.id,
+                                        )
+                                      }
+                                      type="button"
+                                    >
+                                      Open in Explore
+                                    </Button>
+                                  ) : null}
+                                  <Button
+                                    variant="secondary"
+                                    onClick={() =>
+                                      onNavigate("matrix", {
+                                        crosswalk: "relationships",
+                                        items: document.item_id,
+                                      })
+                                    }
+                                    type="button"
+                                  >
+                                    Compare
+                                  </Button>
+                                  <Button
+                                    variant="secondary"
+                                    onClick={() =>
+                                      navigator.clipboard?.writeText(
+                                        `${window.location.origin}${window.location.pathname}${serializeHashUrl(
+                                          {
+                                            view: "library-detail",
+                                            node: document.id,
+                                            from: "search",
+                                          },
+                                        )}`,
+                                      )
+                                    }
+                                    type="button"
+                                  >
+                                    Copy link
+                                  </Button>
+                                </div>
+                              </details>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    {entries.length > GROUP_RENDER_CAP ? (
+                      <p className="muted">
+                        Showing the first {GROUP_RENDER_CAP} of {entries.length}
+                        . Search or use “Refine results” to narrow this list.
+                      </p>
+                    ) : null}
+                  </div>
+                </DisclosurePanel>
+              ),
+            )}
             {directoryResources.length ? (
               <DisclosurePanel
                 title={`Resources (${directoryResources.length})`}
@@ -445,161 +618,6 @@ export function ExplorePage(props: {
                 </div>
               </DisclosurePanel>
             ) : null}
-            {Object.entries(groupedDocuments as Record<string, any[]>).map(
-              ([group, entries]) => (
-                <DisclosurePanel
-                  key={group}
-                  title={`${group} (${entries.length})`}
-                  value={group}
-                >
-                  <div className="stack">
-                    {entries
-                      .slice(0, GROUP_RENDER_CAP)
-                      .map(
-                        ({
-                          document,
-                          node,
-                          relationshipCount,
-                          source,
-                          lowCoverage,
-                        }) => {
-                        return (
-                          <article className="result-card" key={document.id} aria-labelledby={`title-${document.id}`} aria-describedby={`desc-${document.id}`}>
-                            <div className="result-card-header">
-                              <div>
-                                <p className="result-meta">
-                                  {displayNameFor(
-                                    "object_type",
-                                    document.object_type,
-                                  )}
-                                </p>
-                                <CardTitle
-                                  id={`title-${document.id}`}
-                                  onOpen={() =>
-                                    onOpenNode(document.id, "search")
-                                  }
-                                >
-                                  {recordDisplayTitle(
-                                    node ?? {
-                                      id: document.id,
-                                      node_type: document.object_type,
-                                      metadata: {
-                                        item_id: document.item_id,
-                                        title: document.title,
-                                      },
-                                    },
-                                  )}
-                                </CardTitle>
-                              </div>
-                              <div className="result-card-badges">
-                                {relationshipCount > 0 ? (
-                                  <Badge tone="info">
-                                    {relationshipCount} connections
-                                  </Badge>
-                                ) : graphReady ? (
-                                  <span className="no-connections">
-                                    No connections yet
-                                  </span>
-                                ) : null}
-                                {lowCoverage ? (
-                                  <Badge tone="warning">Limited coverage</Badge>
-                                ) : null}
-                              </div>
-                            </div>
-                            <p className="result-summary" id={`desc-${document.id}`}>
-                              {document.description_available
-                                ? "Open this record to read the published text."
-                                : "No narrative description was published for this record."}
-                            </p>
-                            <div className="result-support">
-                              <span>
-                                Source:{" "}
-                                {source?.display_name ||
-                                  source?.name ||
-                                  document.source_name ||
-                                  "Source unavailable"}
-                              </span>
-                              {source?.provenance_class ||
-                              document.source_class ? (
-                                <ProvenanceTerm
-                                  kind="provenance"
-                                  value={
-                                    source?.provenance_class ||
-                                    document.source_class
-                                  }
-                                />
-                              ) : null}
-                            </div>
-                            <div className="card-actions">
-                              <Button
-                                variant="primary"
-                                onClick={() => onOpenNode(document.id, "search")}
-                                type="button"
-                              >
-                                Open record
-                              </Button>
-                              <details className="result-actions-menu">
-                                <summary>Compare, map, or export</summary>
-                                <div className="result-actions-popover">
-                                  {relationshipCount > 0 || !graphReady ? (
-                                    <Button
-                                      variant="secondary"
-                                      onClick={() =>
-                                        openAtlasMapForNode(
-                                          onNavigate,
-                                          document.id,
-                                        )
-                                      }
-                                      type="button"
-                                    >
-                                      Open in Explore
-                                    </Button>
-                                  ) : null}
-                                  <Button
-                                    variant="secondary"
-                                    onClick={() =>
-                                      onNavigate("matrix", {
-                                        crosswalk: "relationships",
-                                        items: document.item_id,
-                                      })
-                                    }
-                                    type="button"
-                                  >
-                                    Compare
-                                  </Button>
-                                  <Button
-                                    variant="secondary"
-                                    onClick={() =>
-                                      navigator.clipboard?.writeText(
-                                        `${window.location.origin}${window.location.pathname}${serializeHashUrl(
-                                          {
-                                            view: "library-detail",
-                                            node: document.id,
-                                            from: "search",
-                                          },
-                                        )}`,
-                                      )
-                                    }
-                                    type="button"
-                                  >
-                                    Copy link
-                                  </Button>
-                                </div>
-                              </details>
-                            </div>
-                          </article>
-                        );
-                      })}
-                    {entries.length > GROUP_RENDER_CAP ? (
-                      <p className="muted">
-                        Showing the first {GROUP_RENDER_CAP} of {entries.length}
-                        . Search or use “Refine results” to narrow this list.
-                      </p>
-                    ) : null}
-                  </div>
-                </DisclosurePanel>
-              ),
-            )}
           </Accordion.Root>
         ) : connectionsOnly && documents.length > 0 ? (
           <section className="empty-state">

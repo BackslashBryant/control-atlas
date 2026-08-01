@@ -23,10 +23,11 @@ test("focused Atlas opens publisher-declared structure before relationship views
   await expect(page.getByRole("tab", { name: "Purpose" })).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "RMF" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
+  // Re-baselined 2026-08-01: the chain renders once, in the always-visible
+  // "Structural position" block above the lens tabs, so it stays on screen in
+  // Map and List too. It used to be duplicated inside the Path panel.
   await expect(
-    page
-      .getByRole("tabpanel", { name: "Path" })
-      .getByRole("navigation", { name: "Where this sits" }),
+    page.getByRole("navigation", { name: "Where this sits" }),
   ).toContainText("SP 800-53 Rev. 5");
   await expect(
     page.getByText(/Publisher-declared structural path/i),
@@ -44,16 +45,16 @@ test("focused Path opens its publisher-declared parent without inventing another
   await dismissOnboarding(page);
 
   await page
-    .getByRole("tabpanel", { name: "Path" })
+    .getByRole("navigation", { name: "Where this sits" })
     .getByRole("button", { name: "Access Control" })
     .click();
   await expect(
-    page.getByRole("heading", { name: "FAMILY-AC â€” Access Control", level: 1 }),
+    // The literal em dash in this file was double-encoded, so this assertion
+    // could never match the rendered heading. Matched by pattern instead.
+    page.getByRole("heading", { name: /FAMILY-AC .+ Access Control/, level: 1 }),
   ).toBeVisible();
   await expect(
-    page
-      .getByRole("tabpanel", { name: "Path" })
-      .getByRole("navigation", { name: "Where this sits" }),
+    page.getByRole("navigation", { name: "Where this sits" }),
   ).toContainText("SP 800-53 Rev. 5");
   await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
   await expect(page).not.toHaveURL(/atlasBaseline=/);

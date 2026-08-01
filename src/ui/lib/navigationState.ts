@@ -18,8 +18,11 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 
 export function requiresFullGraph(state: ViewState) {
   return (
-    // The Explore landing renders the trunk + limbs from the full graph.
-    state.view === "atlas-map" ||
+    // The Explore *landing* renders the trunk + limbs, which needs the full
+    // graph. A focused Atlas view (?node=...) works from its neighborhood
+    // shard and must not pull the monolithic artifacts — that boundary is the
+    // subject of tests/e2e/bootstrap-payload.spec.mjs.
+    (state.view === "atlas-map" && !state.node) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

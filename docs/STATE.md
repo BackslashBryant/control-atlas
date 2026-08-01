@@ -130,6 +130,46 @@ Screenshots at 1440x900 and 390x844 across /, /start, /explore, /explore?atlasLi
   AI-slop. Removed with "the joint in the middle of the tree" and "the rules are
   real". Rule recorded in CLAUDE.md Corrections and memory/no-insider-copy.md.
 
+### Full-surface QA sweep (2026-08-01, second pass)
+Owner: "I keep coming across rookie mistakes... Navigation is huge." Swept all
+20 canonical routes at 1440x900 and 390x844, plus newbie and expert click
+paths. Full e2e suite went from 128 passed / 14 failed to **141 passed / 0
+failed**. Fixed:
+- **Start Here's limb routing was dead.** `canonicalizeHashLocation` stripped
+  the new `atlasLimb` param, so every situation link landed on the generic
+  board with a "settings removed" notice, and it also needed `atlasAxis`.
+  Guarded permanently by a new `tests/graph/routeIdentity.test.ts` case that
+  round-trips every durable view field.
+- **Records now carry their own path to the trunk** (`attachAncestorPaths`,
+  ~300 bytes/node). The rail no longer needs the monolithic graph, so the
+  record page keeps its one-shard payload budget AND shows the full chain.
+  A.7 had also made *focused* Atlas pull nodes+edges — narrowed to the
+  landing only, in both `navigationState.ts` and `runtimeLoader.ts`.
+- Search ranked external Resources above published records; record groups now
+  render first. Overlay result buttons had the whole card as their accessible
+  name; now the record/resource name.
+- Restored `#official-source-links` and the connection inventory on Sources
+  (dropped from the UI while their contracts still required them). The
+  inventory is precomputed into `data/generated/connection-inventory.json` so
+  Sources never pulls the graph.
+- Static "Opening workspace" shell stayed visible above content on every
+  non-home mobile route (it was made inert, never hidden).
+- Explore limb cards: blurbs were squeezed into ~90px by a fixed-width sibling;
+  `.atlas-ancestry` widened from 64rem. Catalog rows repeated the limb blurb
+  under every catalog; each now states what it covers.
+- Resources: 96 cards in one 17,000px page -> first 24 + "show the remaining N";
+  a failed directory fetch said "no resources match" instead of admitting it
+  did not load.
+- "Where this sits" rendered twice on focused Atlas; Sources/Learn/Build H1s
+  repeated their own eyebrow; long STIG titles printed three times on one
+  screen (context bar now truncates).
+- REMOVED `tests/e2e/start-here-alias.spec.mjs`: it asserted `/#/start-here`
+  opens Start here, contradicting the owner's Epic 7 alias retirement, which
+  `tests/graph/routeIdentity.test.ts` asserts the opposite way. Restore the
+  alias if that decision has changed.
+- Re-baselined (product changed deliberately, guarantee kept): the Path
+  evidence specs, compare-map's implicit run, and the payload specs.
+
 ### Gate gap found while shipping
 `tests/e2e/live-smoke.spec.mjs` is NOT part of any local gate (`npm test`,
 `test:browser`, `test:a11y:smoke`, `test:e2e:smoke`) — it only runs post-deploy
