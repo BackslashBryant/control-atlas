@@ -89,16 +89,20 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   const brand = readFileSync('src/ui/components/BrandLockup.tsx', 'utf8');
   const rotation = readFileSync('src/shared/brand-rotation.ts', 'utf8');
   assert.doesNotMatch(app, /BrandEntranceOverlay/);
-  assert.match(brand, /BRAND_WORDS/);
+  assert.match(brand, /BRAND_ACTIONS/);
+  // The rotation timers live in the shared module now: one ticker drives every
+  // flourish so Ctrl+Alt+<word> resolves against a single displayed word.
+  assert.match(brand, /subscribeBrandRotation/);
   for (const featureWord of [
     "Trace",
-    "Search",
     "Explore",
-    "Compare",
-    "Build",
     "Crosswalk",
-    "Source",
-    "Export",
+    "Browse",
+    "Draft",
+    "Find",
+    "Verify",
+    "Reconcile",
+    "Learn",
   ]) {
     assert.match(rotation, new RegExp(`"${featureWord}"`));
   }
@@ -109,13 +113,16 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
   assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 8000/);
   assert.match(brand, /brand-key">Ctrl/);
-  assert.match(brand, /BRAND_ROTATION_SETTLE_MS/);
-  assert.match(brand, /setTimeout/);
-  assert.match(brand, /setInterval/);
+  assert.match(rotation, /BRAND_ROTATION_SETTLE_MS/);
+  assert.match(rotation, /setTimeout/);
+  assert.match(rotation, /setInterval/);
   assert.doesNotMatch(brand, /classList/);
+  // The shortcut the keycap advertises is wired to the one global listener.
+  assert.match(app, /BRAND_SURFACE_VIEWS/);
+  assert.match(app, /activeBrandAction/);
   assert.match(html, /class="brand-key">Ctrl/);
   assert.match(html, /class="brand-key">Alt/);
-  assert.match(html, /data-brand-word>Trace/);
+  assert.match(html, /data-brand-word>Explore/);
   assert.match(mainEntrypoint, /prefers-reduced-motion: reduce/);
   assert.match(mainEntrypoint, /BRAND_WORDS/);
   assert.match(mainEntrypoint, /addEventListener\('change', onBrandMotionChange\)/);
@@ -306,7 +313,7 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(homePage, /PRODUCT_DEFINITION/);
+  assert.match(homePage, /PRODUCT_HERO/);
   assert.match(homePage, /aria-label="Search published records"/);
   assert.match(html, /aria-label="Search published records"/);
   assert.match(html, />Open the Atlas</);

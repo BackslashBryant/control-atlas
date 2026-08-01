@@ -738,7 +738,9 @@ function AtlasGuidedPath(props: {
     () => buildAtlasDrilldownModel(bundle.runtime.dataset),
     [bundle.runtime.dataset],
   );
-  const [openLimbId, setOpenLimbId] = useState("");
+  // Seeded from the URL so Start Here (and any shared link) can open straight
+  // into one limb; further limb choices stay local to this page.
+  const [openLimbId, setOpenLimbId] = useState(state.atlasLimb || "");
   const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const framework = frameworks.find(
     (choice) => choice.id === state.atlasFramework,

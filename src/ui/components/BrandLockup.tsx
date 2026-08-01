@@ -1,10 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import {
-  BRAND_ROTATION_INTERVAL_MS,
-  BRAND_ROTATION_SETTLE_MS,
-  BRAND_WORDS,
+  BRAND_ACTIONS,
   LONGEST_BRAND_WORD,
+  subscribeBrandRotation,
 } from "../../shared/brand-rotation";
 
 // Real logo geometry from the user's brand asset export (components/logo/logo-icon.tsx):
@@ -30,55 +29,32 @@ export function BrandMark() {
 }
 
 export function BrandFlourish() {
-  const wordRef = useRef<HTMLSpanElement | null>(null);
+  const [word, setWord] = useState(BRAND_ACTIONS[0].word as string);
 
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let wordIndex = 0;
-    let settleTimer = 0;
-    let rotationTimer = 0;
-
-    const stopRotation = () => {
-      window.clearTimeout(settleTimer);
-      window.clearInterval(rotationTimer);
-    };
-    const showNextWord = () => {
-      wordIndex = (wordIndex + 1) % BRAND_WORDS.length;
-      if (wordRef.current) wordRef.current.textContent = BRAND_WORDS[wordIndex];
-    };
-    const startRotation = () => {
-      stopRotation();
-      wordIndex = 0;
-      if (wordRef.current) wordRef.current.textContent = BRAND_WORDS[0];
-      if (media.matches) return;
-      settleTimer = window.setTimeout(() => {
-        showNextWord();
-        rotationTimer = window.setInterval(
-          showNextWord,
-          BRAND_ROTATION_INTERVAL_MS,
-        );
-      }, BRAND_ROTATION_SETTLE_MS);
-    };
-
-    media.addEventListener("change", startRotation);
-    startRotation();
-    return () => {
-      stopRotation();
-      media.removeEventListener("change", startRotation);
-    };
-  }, []);
+  // One shared rotation drives every flourish on the page, so the word the
+  // keyboard shortcut resolves against is never ambiguous.
+  useEffect(() => subscribeBrandRotation((action) => setWord(action.word)), []);
 
   return (
-    <span aria-hidden="true" className="brand-kbd">
-      <span className="brand-key">Ctrl</span>
-      <span className="brand-plus">+</span>
-      <span className="brand-key">Alt</span>
-      <span className="brand-plus">+</span>
-      <span className="brand-key brand-key--active">
-        <span className="brand-key-sizer">{LONGEST_BRAND_WORD}</span>
-        <span className="brand-key-word" ref={wordRef}>
-          {BRAND_WORDS[0]}
+    <span className="brand-lockup-shortcut">
+      <span
+        aria-hidden="true"
+        className="brand-kbd"
+        title={`Press Ctrl + Alt + ${word[0]} to ${word.toLowerCase()}`}
+      >
+        <span className="brand-key">Ctrl</span>
+        <span className="brand-plus">+</span>
+        <span className="brand-key">Alt</span>
+        <span className="brand-plus">+</span>
+        <span className="brand-key brand-key--active">
+          <span className="brand-key-sizer">{LONGEST_BRAND_WORD}</span>
+          <span className="brand-key-word">{word}</span>
         </span>
+      </span>
+      {/* Static, so a screen reader is not re-read every rotation tick. */}
+      <span className="visually-hidden">
+        Keyboard shortcut: Control plus Alt plus the first letter of the action
+        shown in the masthead opens that part of Control Atlas.
       </span>
     </span>
   );

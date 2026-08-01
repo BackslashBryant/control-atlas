@@ -32,6 +32,7 @@ export type ViewState =
       view: "atlas-map";
       node: string;
       atlasAxis: string;
+      atlasLimb: string;
       atlasFramework: string;
       atlasBaseline: string;
       atlasFamily: string;
@@ -177,6 +178,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     view: "atlas-map",
     node: "",
     atlasAxis: "",
+    atlasLimb: "",
     atlasFramework: "",
     atlasBaseline: "",
     atlasFamily: "",
@@ -261,6 +263,7 @@ export function parseViewState(search: string): ViewState {
       view,
       node: params.get("node") || "",
       atlasAxis: params.get("atlasAxis") || "",
+      atlasLimb: params.get("atlasLimb") || "",
       atlasFramework: params.get("atlasFramework") || "",
       atlasBaseline: params.get("atlasBaseline") || "",
       atlasFamily: params.get("atlasFamily") || "",
@@ -613,6 +616,7 @@ export function serializeViewState(state: ViewState): string {
     params.set("view", "atlas-map");
     setIfValue(params, "node", state.node);
     setIfValue(params, "atlasAxis", state.atlasAxis);
+    setIfValue(params, "atlasLimb", state.atlasLimb);
     setIfValue(params, "atlasFramework", state.atlasFramework);
     setIfValue(params, "atlasBaseline", state.atlasBaseline);
     setIfValue(params, "atlasFamily", state.atlasFamily);
@@ -764,6 +768,7 @@ export function serializeViewState(state: ViewState): string {
 export type AtlasMapUrlOptions = {
   node?: string;
   atlasAxis?: string;
+  atlasLimb?: string;
   atlasFramework?: string;
   atlasBaseline?: string;
   atlasFamily?: string;
@@ -801,6 +806,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     view: "atlas-map",
     node: options.node || "",
     atlasAxis: options.atlasAxis || "",
+    atlasLimb: options.atlasLimb || "",
     atlasFramework: options.atlasFramework || "",
     atlasBaseline: options.atlasBaseline || "",
     atlasFamily: options.atlasFamily || "",

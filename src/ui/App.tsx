@@ -39,6 +39,10 @@ import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
 import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
 import { notifyRouteCommitted } from "../shared/navigation-events";
+import {
+  activeBrandAction,
+  BRAND_SURFACE_VIEWS,
+} from "../shared/brand-rotation";
 
 const AboutPage = lazy(() =>
   import("./pages/AboutPage").then((module) => ({
@@ -348,6 +352,20 @@ export function App() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      // The masthead keycap advertises Ctrl+Alt+<word>; make it real. Matched
+      // against the word currently displayed, so words that share a first
+      // letter never collide. Checked before Ctrl+K so Ctrl+Alt+K is not
+      // swallowed by the search overlay.
+      if (event.altKey && (event.metaKey || event.ctrlKey)) {
+        const action = activeBrandAction();
+        if (event.key.toLowerCase() === action.word[0].toLowerCase()) {
+          event.preventDefault();
+          navigateRef.current(
+            BRAND_SURFACE_VIEWS[action.surface] as ViewState["view"],
+          );
+          return;
+        }
+      }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         setSearchOverlayOpen(true);
@@ -369,6 +387,11 @@ export function App() {
     routerNavigate(serializeHashLocation(nextState));
     window.scrollTo({ top: 0, behavior: "auto" });
   }
+
+  // The global keydown listener is registered once with no deps; it reaches the
+  // current navigate through this ref rather than re-subscribing every render.
+  const navigateRef = useRef(navigate);
+  navigateRef.current = navigate;
 
   function openNode(nodeId: string, from = activeNavForState(viewState)) {
     const currentState = latestNavStateRef.current;
