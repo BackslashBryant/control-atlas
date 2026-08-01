@@ -2230,9 +2230,17 @@ export function buildFrameworkData() {
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);
 
+  // ancestor_path rides along on the shard and catalog-record copies of a node
+  // so the record page can draw its chain to the trunk from the one artifact it
+  // loads. nodes.json omits it: anything reading that file already has the whole
+  // graph, and carrying it there pushes the artifact past the 20 MiB budget in
+  // scripts/check-data-size.mjs. Stripped here, before the collections are
+  // compared with what is already on disk, so an unchanged build keeps its
+  // generated_at.
+  const emittedNodes = graph.nodes.map(({ ancestor_path, ...node }) => node);
   const collections = {
     sources: graph.sources,
-    nodes: graph.nodes,
+    nodes: emittedNodes,
     edges: graph.edges,
     evidence: graph.evidence,
     "graph-health": graph.findings,
