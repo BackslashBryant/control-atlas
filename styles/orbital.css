@@ -556,7 +556,7 @@ body {
 [class*="rounded-2xl"] {
   border-color: var(--ca-border);
   border-radius: var(--ca-radius-lg);
-  background: color-mix(in srgb, var(--ca-surface) 96%, transparent);
+  background: var(--ca-surface);
   box-shadow: var(--ca-elev-1);
 }
 
@@ -578,7 +578,7 @@ body {
 .intent-card,
 .source-card,
 .commons-card {
-  border-top-color: color-mix(in srgb, var(--ca-primary) 30%, transparent);
+  border-top-color: color-mix(in srgb, var(--ca-primary) 62%, transparent);
 }
 
 /* v1.7.0 instrument grammar: grain texture, matching Panel's recipe

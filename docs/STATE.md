@@ -91,6 +91,35 @@ Executed `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md` Part B in full
   corner ticks drawn in `orbital.css`. "Mapping source" -> "Mapping
   publication" (neither label was dead; the ambiguity was the defect).
 
+### QA/QC pass (owner: "put eyes on the site", "fix as you find")
+Screenshots at 1440x900 and 390x844 across /, /start, /explore, /explore?atlasLimb,
+/catalog, /catalog/disa-stig, /compare, /record/disa-cci/CCI-000015. Fixed:
+- Record detail showed 2 breadcrumbs instead of 7 and never recovered: nothing on
+  the page requested the full graph, so the chain stopped one hop above the
+  record. `ObjectDetailPage` now calls `onRequestFullGraph` on mount (render is
+  not gated; the rail fills in when it lands). Measured live: Cybersecurity >
+  Compliance > SP 800-53 > Access Control > AC-2.1 > procedure > CCI-000015.
+  NOTE: adding `library-detail` to `requiresFullGraph` instead leaves the page
+  stuck on "Loading connections" — that flag gates rendering, `graphRequested`
+  drives the fetch.
+- Every CCI label was "CCI-000015 CCI-000015": `build-framework-data.mjs` joined
+  "<id> <title>" when DISA sets title === id. 0 duplicates remain.
+- Catalog inventory printed publisher "Other" for FedRAMP/CMMC/CUI: the node-walk
+  lookup needs the full graph, so it fell back to display_group. Now reads
+  `entry.source_id` from the bootstrap: FEDRAMP / DOD / ISOO.
+- `--ca-surface-subtle` and `--ca-trust` were consumed by surfaces.css but never
+  defined; the trust strips rendered with no surface or edge.
+- Contrast: ground moved to Orbit with surface/raised stepped down one tier, card
+  backgrounds no longer mixed toward transparent, datum hairline 30% -> 62%.
+  Owner had reported the UI "all kinda blends together" — the three surface tiers
+  sat within ~10% luminance.
+- Home filled the viewport (flex column, footer pinned, hero at --ca-text-lg);
+  Compare's 5 modes wrap as an even auto-fit grid instead of 4+1; Start Here
+  sections separated.
+- Copy: owner rejected "Nothing floats loose" (orphan-node build-speak) as
+  AI-slop. Removed with "the joint in the middle of the tree" and "the rules are
+  real". Rule recorded in CLAUDE.md Corrections and memory/no-insider-copy.md.
+
 ### Verification
 npm test = atlas 3 / data 252 / runtime 30 / graph 56 (baseline 3/252/30/55),
 lint + typecheck clean, test:browser 23/23, a11y:smoke 5/5, e2e:smoke 12/12,

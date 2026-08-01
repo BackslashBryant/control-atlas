@@ -54,15 +54,15 @@ export function StartHerePage(props: {
   );
 
   return (
-    <Panel className="max-w-[70rem] mx-auto">
+    <Panel className="max-w-[70rem] mx-auto start-here-panel">
       <PageHeader
         eyebrow="Start here"
-        summary="Everything in Control Atlas hangs off one trunk, split into nine limbs. Pick the sentence closest to your situation and it opens the limb your question lives on."
+        summary="Pick the sentence closest to what you need. Each one opens the part of Control Atlas that covers it."
         title="What are you trying to work out?"
       />
 
       <section aria-labelledby="start-here-situations">
-        <h2 id="start-here-situations">Where does your question live?</h2>
+        <h2 id="start-here-situations">Common starting points</h2>
         <div className="catalog-index-list">
           {situations.map((situation) => (
             <button

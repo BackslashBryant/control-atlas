@@ -2360,6 +2360,16 @@ button.atlas-path-crumb-organizing:focus-visible {
   margin-top: var(--ca-space-4);
 }
 
+/* Two lists of near-identical rows read as one long list without this. */
+.start-here-panel > section + section,
+.start-here-panel > .card-actions {
+  margin-top: var(--ca-space-8);
+}
+
+.start-here-panel > section > h2 {
+  margin-bottom: var(--ca-space-2);
+}
+
 .start-here-question {
   display: grid;
   gap: var(--ca-space-4);
@@ -5252,18 +5262,24 @@ button.atlas-leverage-row:hover {
 }
 
 /* V1 entry architecture: Search is the sole dominant Home action. */
+/* Home is the one route with no top nav and no side rail, so it has the whole
+   viewport to itself. It fills it: the column stretches to the available
+   height and the blocks distribute, rather than stacking tight at the top and
+   leaving a third of the screen as patterned background. */
 .home-entry {
   display: grid;
-  gap: 20px;
-  width: min(100%, 1120px);
+  align-content: center;
+  gap: var(--ca-space-8);
+  width: min(100%, 1200px);
+  min-height: 100%;
   margin: 0 auto;
-  padding: 28px 24px 36px;
+  padding: var(--ca-space-8) var(--ca-space-6);
 }
 
 .home-entry-header {
   display: grid;
-  gap: 8px;
-  max-width: 760px;
+  gap: var(--ca-space-3);
+  max-width: 68ch;
 }
 
 .home-entry-brand {
@@ -5286,6 +5302,14 @@ button.atlas-leverage-row:hover {
   margin: 0;
   color: var(--ca-text-muted);
   line-height: 1.55;
+}
+
+/* The hero is the one paragraph on the site that has to carry weight. At the
+   shared body size it read as a caption under a 3rem wordmark. */
+.home-entry-header p {
+  color: var(--ca-text);
+  font-size: var(--ca-text-lg);
+  line-height: 1.5;
 }
 
 .home-search {
@@ -5417,6 +5441,21 @@ button.atlas-leverage-row:hover {
   color: var(--ca-link);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Home is the only route without a top nav, so its content stopped short and
+   left the footer floating mid-viewport with patterned background beneath it.
+   Pin the footer to the bottom of the viewport when the page is shorter. */
+#root:has(.app-shell[data-view="home"]),
+#root > [data-static-home]:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+#root:has(.app-shell[data-view="home"]) main#workspace,
+#root > [data-static-home]:not([hidden]) main#workspace {
+  flex: 1 0 auto;
 }
 
 .home-footer {
@@ -5791,18 +5830,22 @@ button.atlas-leverage-row:hover {
   font-size: 13px;
 }
 
+/* Five modes wrapped 4 + 1 as a flex row, leaving one tall orphan card. An
+   auto-fit grid keeps them equal width and equal height at every breakpoint. */
 .compare-mode-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--ca-space-3);
 }
 
+/* Padding clears the 7px corner registration ticks (orbital.css
+   .intent-card::after) — at 9px 12px the ticks cut through the card titles. */
 .compare-mode-tabs > button {
   display: grid;
-  gap: 3px;
+  gap: var(--ca-space-2);
   width: auto;
   min-height: 58px;
-  padding: 9px 12px;
+  padding: var(--ca-space-4) var(--ca-space-5);
   text-align: left;
   color: var(--ca-text);
   border: 1px solid var(--ca-border);
@@ -5811,9 +5854,10 @@ button.atlas-leverage-row:hover {
 }
 
 .compare-mode-tabs .intent-card-body {
-  max-width: 32ch;
+  max-width: 34ch;
   color: var(--ca-text-muted);
-  font-size: 11px;
+  font-size: var(--ca-text-sm);
+  line-height: 1.45;
 }
 
 .compare-mode-tabs .intent-card-action-hint {

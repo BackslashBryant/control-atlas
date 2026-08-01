@@ -377,13 +377,19 @@ function CatalogInventory(props: {
     () =>
       catalogs.map((entry) => {
         const profile = catalogProfileFor(entry.id, entry.name);
-        const source = publicationSourceForCatalog(bundle.runtime, entry.id);
+        // The bootstrap entry names its source directly; the node-walk only
+        // resolves once the full graph is loaded, so on this page it returned
+        // null and the row fell back to display_group — which is a grouping
+        // bucket, printing "Other" as the publisher of FedRAMP, CMMC, and CUI.
+        const source =
+          (entry.source_id ? bundle.runtime.getSource(entry.source_id) : null) ||
+          publicationSourceForCatalog(bundle.runtime, entry.id);
         return {
           entry,
           profile,
           // Absent metadata is omitted from the row, not printed as a
           // "Not recorded" placeholder (voice pass B.3).
-          publisher: source?.owner || entry.display_group || "",
+          publisher: source?.owner || "",
           lifecycle: source?.lifecycle_status || "",
         };
       }),
