@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-01T17:18:08.945Z",
+  "connection_inventory": {
+    "totalRecords": 11677,
+    "publishedLinks": 22300,
+    "rows": [
+      {
+        "id": "requirements",
+        "label": "Requirements",
+        "totalRecords": 7333,
+        "connectedRecords": 7289,
+        "publishedLinks": 10685,
+        "relatedCategories": [
+          "Assessment checks",
+          "Controls",
+          "Framework structure"
+        ]
+      },
+      {
+        "id": "controls",
+        "label": "Controls",
+        "totalRecords": 1196,
+        "connectedRecords": 1196,
+        "publishedLinks": 12100,
+        "relatedCategories": [
+          "Assessment checks",
+          "Baselines and impact levels",
+          "Framework structure",
+          "Requirements",
+          "Threats and defenses",
+          "Zero Trust"
+        ]
+      },
+      {
+        "id": "assessment-checks",
+        "label": "Assessment checks",
+        "totalRecords": 1617,
+        "connectedRecords": 1617,
+        "publishedLinks": 2147,
+        "relatedCategories": [
+          "Controls",
+          "Framework structure",
+          "Requirements"
+        ]
+      },
+      {
+        "id": "threats-defenses",
+        "label": "Threats and defenses",
+        "totalRecords": 1065,
+        "connectedRecords": 1065,
+        "publishedLinks": 4721,
+        "relatedCategories": [
+          "Controls",
+          "Framework structure"
+        ]
+      },
+      {
+        "id": "zero-trust",
+        "label": "Zero Trust",
+        "totalRecords": 227,
+        "connectedRecords": 227,
+        "publishedLinks": 1029,
+        "relatedCategories": [
+          "Controls",
+          "Framework structure"
+        ]
+      },
+      {
+        "id": "baselines-impact",
+        "label": "Baselines and impact levels",
+        "totalRecords": 11,
+        "connectedRecords": 11,
+        "publishedLinks": 1963,
+        "relatedCategories": [
+          "Controls",
+          "Framework structure"
+        ]
+      },
+      {
+        "id": "framework-structure",
+        "label": "Framework structure",
+        "totalRecords": 228,
+        "connectedRecords": 228,
+        "publishedLinks": 5437,
+        "relatedCategories": [
+          "Assessment checks",
+          "Baselines and impact levels",
+          "Controls",
+          "Requirements",
+          "Threats and defenses",
+          "Zero Trust"
+        ]
+      }
+    ]
+  }
+}

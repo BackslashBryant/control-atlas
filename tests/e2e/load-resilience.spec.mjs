@@ -29,7 +29,7 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
     .click();
   await expect(page).toHaveURL(/#\/learn/);
   await expect(
-    page.getByRole("heading", { name: "Learn" }),
+    page.getByRole("heading", { name: "How to read what you find here" }),
   ).toBeVisible();
 });
 

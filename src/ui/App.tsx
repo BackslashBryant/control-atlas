@@ -684,7 +684,6 @@ function AppContent(props: {
         onNavigate={onNavigate}
         onOpenGlossary={onOpenGlossary}
         onOpenNode={onOpenNode}
-        onRequestFullGraph={onRequestFullGraph}
         state={state}
       />
     );

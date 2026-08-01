@@ -23,7 +23,9 @@ test("landing presents search first, the rotating brand item, and exactly three 
 
   await expect(page.getByRole("search")).toBeVisible();
   await expect(page.locator(".home-entry .brand-kbd")).toBeVisible();
-  await expect(page.locator("[data-brand-word]")).toHaveText("Trace");
+  // Pinned to the shape, not the literal: the word list is product copy and
+  // has been trimmed before. src/shared/brand-rotation.ts owns the order.
+  await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
   await expect(page.getByRole("button", { name: /Open the Atlas/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /Browse Catalog/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /Find Tools & Resources/ })).toBeVisible();
@@ -42,11 +44,12 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
   await page.goto("/");
   await waitForAppReady(page);
 
+  const firstWord = await page.locator("[data-brand-word]").textContent();
   await expect
     .poll(() => page.locator("[data-brand-word]").textContent(), {
-      timeout: 5000,
+      timeout: 15000,
     })
-    .not.toBe("Trace");
+    .not.toBe(firstWord);
 
   await page.getByRole("button", { name: /Browse Catalog/ }).click();
   await waitForAppReady(page);

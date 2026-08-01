@@ -180,3 +180,49 @@ test("query-bearing Explore links do not transfer into Search after alias retire
   assert.match(canonical.recoveryMessage, /removed/i);
   assert.equal(parseHashLocation("/explore", "").view, "atlas-map");
 });
+
+// Guard added 2026-08-01 after Start Here's limb routing shipped dead: the new
+// atlasLimb field round-tripped through viewState fine, so every unit test
+// passed, but canonicalizeHashLocation silently stripped it as an unsupported
+// parameter and the link landed on a generic page with a recovery message.
+// A route field that the canonicalizer does not allow is a field that does not
+// exist in production, so assert every one of them survives a round trip.
+test("every durable view field survives canonicalization", () => {
+  const SAMPLES: Array<[string, Record<string, string>]> = [
+    [
+      "/explore",
+      {
+        node: "nist-800-53:AC-2",
+        atlasAxis: "framework",
+        atlasLimb: "atlas:LIMB-COMPLIANCE",
+        atlasFramework: "nist-800-53",
+        atlasBaseline: "nist-800-53b:MODERATE",
+        atlasFamily: "nist-800-53:AC",
+        atlasRmfStep: "nist-800-37:RMF-SELECT",
+        relationshipView: "path",
+      },
+    ],
+    ["/search", { q: "access control", objectType: "control" }],
+    ["/catalog", { q: "AC", family: "AC", page: "2" }],
+    [
+      "/resources",
+      { q: "reddit", lane: "practitioner", category: "community" },
+    ],
+  ];
+
+  for (const [path, params] of SAMPLES) {
+    for (const [key, value] of Object.entries(params)) {
+      const url = `${path}?${key}=${encodeURIComponent(value)}`;
+      const canonical = canonicalizeHashLocation(url);
+      assert.ok(
+        canonical.canonicalPath.includes(`${key}=`),
+        `${key} was stripped from ${path}: ${canonical.canonicalPath}`,
+      );
+      assert.equal(
+        canonical.recoveryMessage,
+        "",
+        `${key} on ${path} triggered a recovery message`,
+      );
+    }
+  }
+});

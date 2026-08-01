@@ -69,7 +69,13 @@ export function StartHerePage(props: {
               className="catalog-index-row"
               key={situation.limbId}
               onClick={() =>
-                onNavigate("atlas-map", { atlasLimb: situation.limbId })
+                // atlasAxis must come too: the limb board only shows a limb's
+                // catalogs on the framework axis, so without it the link lands
+                // back on the full nine-limb board.
+                onNavigate("atlas-map", {
+                  atlasLimb: situation.limbId,
+                  atlasAxis: "framework",
+                })
               }
               type="button"
             >

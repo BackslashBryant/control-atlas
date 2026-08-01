@@ -164,9 +164,11 @@ export function runtimeArtifactPlan(
       Boolean(state.templateType));
   const fullGraph =
     Boolean(options.graphRequested) ||
-    // The Explore landing now renders the trunk + nine limbs from the organizing
-    // spine, so it needs the full graph even before an axis is chosen.
-    state.view === "atlas-map" ||
+    // The Explore landing renders the trunk + nine limbs from the organizing
+    // spine, so it needs the full graph even before an axis is chosen. A
+    // focused Atlas view (?node=...) must not: it works from one neighborhood
+    // shard. Keep this in step with requiresFullGraph in navigationState.ts.
+    (state.view === "atlas-map" && !state.node) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||

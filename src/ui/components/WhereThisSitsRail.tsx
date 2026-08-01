@@ -34,8 +34,31 @@ export function WhereThisSitsRail(props: {
     () => ancestorChain(nodeId, graph),
     [nodeId, graph],
   );
-  const chain = links || derivedChain;
   const selectedNode = nodeId ? bundle?.runtime.getNode(nodeId) : null;
+  // Records ship with their path to the trunk attached (see
+  // attachAncestorPaths in scripts/build-framework-data.mjs). The record page
+  // holds one neighborhood shard, not the whole graph, so a runtime walk here
+  // can only reach one hop up; the precomputed path is the complete one.
+  const attachedChain: AncestorLink[] | null = selectedNode?.ancestor_path
+    ?.length
+    ? [
+        ...(selectedNode.ancestor_path as AncestorLink[]),
+        {
+          id: selectedNode.id,
+          label:
+            selectedNode.metadata?.title ||
+            selectedNode.label ||
+            selectedNode.id,
+          node_type: selectedNode.node_type || "",
+          origin: "structural" as const,
+        },
+      ]
+    : null;
+  const chain =
+    links ||
+    (attachedChain && attachedChain.length > derivedChain.length
+      ? attachedChain
+      : derivedChain);
   const unavailable =
     !links &&
     Boolean(nodeId) &&

@@ -176,8 +176,14 @@ export function OrbitalContextBar(props: {
           <span aria-hidden="true" className="orbital-context-datum" />
           <strong>{context.label}</strong>
         </div>
+        {/* STIG rules carry a full sentence as their title, which the record
+            page already prints as its H1 and again in the breadcrumb. Shortened
+            here so the same sentence is not on screen three times; the full
+            text stays in the tooltip. */}
         <span className="orbital-context-scope" title={context.scope}>
-          {context.scope}
+          {context.scope.length > 56
+            ? `${context.scope.slice(0, 55).trimEnd()}…`
+            : context.scope}
         </span>
         {context.back ? (
           <button

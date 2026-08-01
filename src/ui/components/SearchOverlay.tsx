@@ -116,6 +116,10 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     {results.commonsResults.map((doc) => (
                       <li key={doc.id}>
                         <button
+                          // Without this the accessible name is the whole card
+                          // - title, lane badge, publisher, type and summary
+                          // read as one run-on string.
+                          aria-label={doc.name}
                           className="search-overlay-result"
                           onClick={() => openCommonsResult(doc.id)}
                           type="button"
@@ -153,6 +157,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                       return (
                         <li key={document.id}>
                           <button
+                            aria-label={document.title || document.item_id}
                             className="search-overlay-result"
                             onClick={() => openResult(document.id)}
                             type="button"

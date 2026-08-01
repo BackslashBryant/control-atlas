@@ -14,6 +14,14 @@ test("relationship compare exposes map and list toggles with summary", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Re-baselined 2026-08-01: a comparison no longer runs itself from a deep
+  // link. The reader picks the publication that records the mapping and asks
+  // for it, so results are always attributable to a cited source.
+  await page
+    .getByLabel("Mapping publication")
+    .selectOption("nist-olir-csf2-to-sp800-53");
+  await page.getByRole("button", { name: "Show mappings" }).click();
+
   await expect(page.locator(".compare-results-panel")).toBeVisible({
     timeout: 15000,
   });

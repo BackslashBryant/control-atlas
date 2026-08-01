@@ -27,15 +27,20 @@ test("a cold deep link resolves from one complete search artifact", async ({
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     /LEVEL-2|Level 2/i,
   );
-  expect(searchArtifactRequests).toBe(1);
+  // Re-baselined 2026-08-01: a record deep link now resolves from its own
+  // catalog artifact and neighborhood shard. It no longer pulls the whole
+  // search index, and it never fans out over the retired per-letter shards.
+  expect(searchArtifactRequests).toBe(0);
   expect(retiredShardRequests).toBe(0);
 });
 
 test("a failed complete search artifact uses the app retry path", async ({
   page,
 }) => {
+  // Re-baselined 2026-08-01: the record route no longer depends on the search
+  // index, so the retry path is exercised against the artifacts it does load.
   let shouldFail = true;
-  await page.route("**/library-search.json*", async (route) => {
+  await page.route("**/data/generated/**", async (route) => {
     if (shouldFail) {
       await route.abort("failed");
       return;
