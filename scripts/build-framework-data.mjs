@@ -798,6 +798,8 @@ function buildNodes(registry) {
             nist_control: record.nist_control || null,
             type: record.type || null,
             references: record.references || null,
+            check_text: record.check_text || null,
+            fix_text: record.fix_text || null,
             superseded_by: record.metadata?.superseded_by || null,
           },
         },

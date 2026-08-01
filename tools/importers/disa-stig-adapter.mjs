@@ -80,12 +80,6 @@ function detectCatalogKind(benchmark, hintKind) {
   return null;
 }
 
-function truncateProse(value = '', maxLength = 500) {
-  const text = String(value || '');
-  if (text.length <= maxLength) return text;
-  return `${text.slice(0, maxLength - 3)}...`;
-}
-
 function composeVersion(benchmark) {
   const majorVersion = textValue(benchmark?.version);
   if (/^V\d+R\d+$/i.test(majorVersion)) return majorVersion;
@@ -128,13 +122,13 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
         id: vulnId,
         type: catalogKind === 'stig' ? 'stig_rule' : 'srg_requirement',
         title: titleVal,
-        description: truncateProse(discussionVal),
+        description: discussionVal,
         severity: rule.severity || '',
         rule_id: rule.id || '',
         vuln_id: vulnId,
         stig_id: textValue(rule.version) || textValue(group.title),
-        check_text: truncateProse(getCheckText(rule)),
-        fix_text: truncateProse(stripMarkup(textValue(rule.fixtext))),
+        check_text: getCheckText(rule),
+        fix_text: stripMarkup(textValue(rule.fixtext)),
         references: parseReferences(rule),
         source: {
           key: sourceKey,

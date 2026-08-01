@@ -695,6 +695,16 @@ export function ObjectDetailPage(props: {
                 </p>
               ) : null}
             </DisclosurePanel>
+            {node.metadata?.check_text ? (
+              <DisclosurePanel title="Check text" value="check-text">
+                <p>{renderOdpText(node.metadata.check_text)}</p>
+              </DisclosurePanel>
+            ) : null}
+            {node.metadata?.fix_text ? (
+              <DisclosurePanel title="Fix text" value="fix-text">
+                <p>{renderOdpText(node.metadata.fix_text)}</p>
+              </DisclosurePanel>
+            ) : null}
           </Accordion.Root>
         </section>
 

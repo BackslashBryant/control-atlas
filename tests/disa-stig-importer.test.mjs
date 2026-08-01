@@ -243,7 +243,7 @@ test('DISA XCCDF parser falls back to an explicit hintKind when no SRG/STIG sign
   assert.equal(result.records[0].type, 'stig_rule');
 });
 
-test('DISA XCCDF parser truncates oversized prose fields to the 500-char size budget', () => {
+test('DISA XCCDF parser preserves full-length prose fields without truncation', () => {
   const longDiscussion = 'A'.repeat(600);
   const longFix = 'B'.repeat(600);
   const longCheck = 'C'.repeat(600);
@@ -262,10 +262,10 @@ test('DISA XCCDF parser truncates oversized prose fields to the 500-char size bu
   });
 
   const record = result.records[0];
-  assert.equal(record.description.length, 500);
-  assert.ok(record.description.endsWith('...'));
-  assert.equal(record.fix_text.length, 500);
-  assert.ok(record.fix_text.endsWith('...'));
-  assert.equal(record.check_text.length, 500);
-  assert.ok(record.check_text.endsWith('...'));
+  assert.equal(record.description, longDiscussion);
+  assert.ok(!record.description.endsWith('...'));
+  assert.equal(record.fix_text, longFix);
+  assert.ok(!record.fix_text.endsWith('...'));
+  assert.equal(record.check_text, longCheck);
+  assert.ok(!record.check_text.endsWith('...'));
 });
