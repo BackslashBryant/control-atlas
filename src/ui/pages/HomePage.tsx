@@ -109,10 +109,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <h2 id="home-spine-title">
           One trunk: <strong>{TRUNK_LABEL}</strong>
         </h2>
-        <p>
-          Every publication in here hangs off one of nine limbs. Nothing floats
-          loose.
-        </p>
+        <p>Every publication in Control Atlas sits under one of these nine limbs.</p>
         <ul className="home-spine-limbs">
           {LIMB_LABELS.map((label) => (
             <li key={label}>

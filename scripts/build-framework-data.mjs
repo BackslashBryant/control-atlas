@@ -771,9 +771,13 @@ function buildNodes(registry) {
           node_type: record.type?.startsWith("zt_")
             ? record.type
             : nodeType(defaultType, record.id),
-          label: record.title
-            ? `${record.id} ${record.title}`
-            : String(record.id),
+          // DISA CCI records carry their own identifier as the title, so the
+          // naive "<id> <title>" join printed "CCI-000015 CCI-000015" on every
+          // one of them (breadcrumbs, search results, Atlas labels).
+          label:
+            record.title && !String(record.title).startsWith(String(record.id))
+              ? `${record.id} ${record.title}`
+              : String(record.title || record.id),
           source_id: sourceId,
           lifecycle_status: lifecycleStatus(record),
           metadata: {

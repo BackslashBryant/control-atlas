@@ -65,7 +65,7 @@ const SYNOPSES: Record<string, string> = {
   "fips-199":
     "How to categorize a system as low, moderate, or high impact. This is the decision every baseline downstream depends on.",
   "disa-cci":
-    "The identifiers that connect a control's individual statements to the settings that satisfy them. The joint in the middle of the tree.",
+    "The identifiers that connect a control's individual statements to the specific settings that satisfy them.",
   "disa-srg":
     "Requirements for a class of technology — a web server, a database — before any specific product is named.",
   "disa-stig":

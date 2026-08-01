@@ -27,10 +27,21 @@
   --lsm-rust: #c97a60;
   --lsm-fault: #ea7468;
 
-  /* Semantic surfaces */
-  --ca-bg: var(--lsm-graphite);
-  --ca-surface: var(--lsm-slate);
-  --ca-surface-raised: var(--lsm-alloy);
+  /* Semantic surfaces.
+     Ground is Orbit, not Graphite: with bg=graphite (#253139), surface=slate
+     (#2d3a42) and raised=alloy (#37464f) the three tiers sat within ~10%
+     luminance of each other and every card read as part of the background.
+     Dropping the ground to Orbit restores a real ladder using the palette that
+     already existed — no new colours. */
+  --ca-bg: var(--lsm-orbit);
+  --ca-surface: var(--lsm-graphite);
+  --ca-surface-raised: var(--lsm-slate);
+  --ca-surface-lifted: var(--lsm-alloy);
+  /* Both were consumed by styles/surfaces.css (trust boundary, compare
+     boundary, quiet strips) but never defined anywhere, so those blocks
+     rendered with no surface and a currentColor edge. */
+  --ca-surface-subtle: color-mix(in srgb, var(--lsm-graphite) 62%, var(--lsm-orbit));
+  --ca-trust: var(--lsm-signal);
   --ca-surface-deep: var(--lsm-orbit);
   --ca-border: color-mix(in srgb, var(--lsm-grid-line) 82%, transparent);
   --ca-border-subtle: color-mix(in srgb, var(--lsm-grid-line) 34%, transparent);
