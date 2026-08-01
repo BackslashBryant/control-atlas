@@ -120,6 +120,14 @@ Screenshots at 1440x900 and 390x844 across /, /start, /explore, /explore?atlasLi
   AI-slop. Removed with "the joint in the middle of the tree" and "the rules are
   real". Rule recorded in CLAUDE.md Corrections and memory/no-insider-copy.md.
 
+### Gate gap found while shipping
+`tests/e2e/live-smoke.spec.mjs` is NOT part of any local gate (`npm test`,
+`test:browser`, `test:a11y:smoke`, `test:e2e:smoke`) — it only runs post-deploy
+in Pages Live Smoke. It hard-codes Home copy, so the Part B hero change went
+green locally and failed against the deployed site (51 passed, 1 failed).
+Before changing Home copy, run:
+`npx playwright test --config playwright.e2e.config.mjs tests/e2e/live-smoke.spec.mjs`
+
 ### Verification
 npm test = atlas 3 / data 252 / runtime 30 / graph 56 (baseline 3/252/30/55),
 lint + typecheck clean, test:browser 23/23, a11y:smoke 5/5, e2e:smoke 12/12,

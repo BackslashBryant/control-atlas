@@ -26,9 +26,11 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await expect(page.getByRole("search")).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
   await expect(page.locator(".home-entry .brand-key-word")).toBeVisible();
+  // The hero is its own copy, separate from the package.json/meta one-liner.
   await expect(page.locator(".home-product-identity")).toContainText(
-    "people doing the work can find what they need and keep moving",
+    "with every record still attached to the publisher that wrote it",
   );
+  await expect(page.locator(".home-spine-limbs button")).toHaveCount(9);
   await expect(page.locator(".home-trust-boundary")).toContainText(
     "The people doing the work decide what applies",
   );
