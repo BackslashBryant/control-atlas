@@ -54,6 +54,16 @@
 
 ## 2026-08-01 (session 15) - PART B (voice) + ship
 
+### SHIPPED to main and deployed (owner: "shipped in full")
+`d8a8305` STIG/SRG full records · `8b05eee` Part B voice · `a2a6ce7` QA pass ·
+`53f886e` live-smoke pin · `3fca282` single organizing badge. Main branch
+protection now requires a `checks` status, so each push went to a temporary
+branch first for CI, then to main (no PR, per memory/deploy-workflow).
+Public Repo Checks, Secret Scan, CodeQL, GitHub Pages and Pages Live Smoke all
+green on `3fca282`; live site verified at
+https://backslashbryant.github.io/control-atlas/.
+Session 14's "NOT pushed yet" note below is superseded.
+
 Executed `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md` Part B in full
 (Part A shipped in session 14, commit c0d5a57).
 
