@@ -117,7 +117,7 @@ test("critical path: compare detailed mappings expose text provenance labels", a
   await dismissOnboarding(page);
 
   await page
-    .getByRole("combobox", { name: /^Mapping source/ })
+    .getByRole("combobox", { name: /^Mapping publication/ })
     .selectOption({ label: "NIST CSF 2.0" });
   await page.getByRole("button", { name: "Show mappings" }).click();
   await expect(page.locator("#compare-results")).toBeVisible({

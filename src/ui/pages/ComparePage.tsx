@@ -624,11 +624,11 @@ export function ComparePage(props: {
                 emptyLabel={
                   (state.intent === "item-mapping" && state.items) ||
                   (state.source && state.target)
-                    ? "Select a published mapping source"
+                    ? "Select the publication that records the mapping"
                     : "Complete the comparison scope first"
                 }
                 hint="Required. Results are limited to relationships cited to this source."
-                label="Mapping source"
+                label="Mapping publication"
                 onChange={(mappingSource) =>
                   onNavigate("matrix", {
                     crosswalk,

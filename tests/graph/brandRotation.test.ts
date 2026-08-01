@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   BRAND_ACTIONS,
+  BRAND_SURFACE_VIEWS,
   BRAND_WORDS,
 } from "../../src/shared/brand-rotation";
 
@@ -20,33 +21,15 @@ const DECISION_OR_SELF_PRAISE_WORDS =
   /^(?:Approve|Assess|Audit|Authorize|Baseline|Clarify|Comply|Demystify|Inherit|Recommend|Secure|Simplify)$/i;
 
 const EXPECTED_BRAND_WORDS = [
-  "Trace",
-  "Find",
-  "Search",
-  "Browse",
-  "Read",
   "Explore",
-  "Map",
-  "Compare",
-  "Connect",
-  "Relate",
-  "Filter",
-  "Inspect",
+  "Trace",
   "Crosswalk",
+  "Browse",
+  "Draft",
+  "Find",
   "Verify",
-  "Cite",
-  "Source",
-  "Build",
-  "Create",
-  "Preview",
-  "Download",
-  "Export",
-  "Document",
   "Reconcile",
-  "Navigate",
   "Learn",
-  "Share",
-  "Recover",
 ] as const;
 
 test("every rotating brand action names a real Control Atlas surface", () => {
@@ -64,6 +47,23 @@ test("every rotating brand action names a real Control Atlas surface", () => {
     );
     assert.doesNotMatch(action.word, DECISION_OR_SELF_PRAISE_WORDS);
   }
+});
+
+test("every rotating word resolves to a distinct, routable keyboard shortcut", () => {
+  // The keycap advertises Ctrl+Alt+<first letter>; App.tsx matches the word on
+  // display. Unique first letters keep the promise unambiguous even so.
+  const initials = BRAND_WORDS.map((word) => word[0].toUpperCase());
+  assert.equal(new Set(initials).size, initials.length);
+
+  for (const action of BRAND_ACTIONS) {
+    const view = BRAND_SURFACE_VIEWS[action.surface];
+    assert.ok(view, `${action.surface} has no view to navigate to`);
+    assert.match(view, /^[a-z-]+$/);
+  }
+  assert.deepEqual(
+    new Set(Object.keys(BRAND_SURFACE_VIEWS)),
+    PRODUCT_SURFACES,
+  );
 });
 
 test("the rotation spans the seven launch surfaces", () => {

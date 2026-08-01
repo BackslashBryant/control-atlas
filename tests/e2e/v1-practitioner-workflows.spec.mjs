@@ -99,7 +99,7 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
     page.getByRole("heading", { name: "Catalog to catalog" }),
   ).toBeVisible();
   await page
-    .getByRole("combobox", { name: /^Mapping source/ })
+    .getByRole("combobox", { name: /^Mapping publication/ })
     .selectOption({ label: "NIST CSF 2.0" });
   await page.getByRole("button", { name: "Show mappings" }).click();
   await expect(page).toHaveURL(/mappingSource=/);

@@ -52,8 +52,16 @@ test('public product surfaces share one canonical identity and decision boundary
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  assert.match(homePage, /PRODUCT_DEFINITION/);
+  // The landing hero speaks in its own voice; the metadata one-liner stays on
+  // package.json/meta/About. The two must never be the same string again.
+  assert.match(homePage, /PRODUCT_HERO/);
+  assert.doesNotMatch(homePage, /PRODUCT_DEFINITION/);
   assert.match(homePage, /PRODUCT_DECISION_BOUNDARY/);
+  const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
+  const heroMatch = identity.match(/PRODUCT_HERO\s*=\s*\n?\s*"([^"]+)"/);
+  assert.ok(heroMatch, 'product-identity.ts must export PRODUCT_HERO');
+  assert.notEqual(heroMatch[1], definition);
+  assert.notEqual(heroMatch[1], packageManifest.description);
 
   const index = readFileSync('src/index.html', 'utf8');
   assert.match(index, /name="application-name" content="Control Atlas"/);

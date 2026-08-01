@@ -6,9 +6,10 @@ import {
 } from "@tabler/icons-react";
 import { useState } from "react";
 
+import treeSpine from "../../../data/curated/tree-spine.json";
 import {
   PRODUCT_DECISION_BOUNDARY,
-  PRODUCT_DEFINITION,
+  PRODUCT_HERO,
 } from "../../shared/product-identity";
 import { BrandFlourish, BrandMark } from "../components/BrandLockup";
 import { Button, Input } from "../components/lsm";
@@ -21,23 +22,29 @@ type HomePageProps = {
 const HOME_ENTRANCES = [
   {
     label: "Open the Atlas",
-    description: "Trace published hierarchy and relationships.",
+    description:
+      "For when you do not know which publication covers your question. Start at the trunk and narrow down.",
     icon: IconMap2,
     view: "atlas-map",
   },
   {
     label: "Browse Catalog",
-    description: "Browse every published record in the catalog.",
+    description:
+      "For when you already know the publication or the control ID and want to go straight to it.",
     icon: IconBooks,
     view: "catalog-detail",
   },
   {
     label: "Find Tools & Resources",
-    description: "Find external tools, templates, data, training, and communities.",
+    description:
+      "For when the official text is not the thing you need — templates, tooling, training, communities.",
     icon: IconExternalLink,
     view: "commons",
   },
 ] as const;
+
+const TRUNK_LABEL = treeSpine.trunk.label;
+const LIMB_LABELS = treeSpine.limbs.map((limb) => limb.label);
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const [searchDraft, setSearchDraft] = useState("");
@@ -50,7 +57,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <h1 id="home-title">Control Atlas</h1>
         </div>
         <BrandFlourish />
-        <p className="home-product-identity">{PRODUCT_DEFINITION}</p>
+        <p className="home-product-identity">{PRODUCT_HERO}</p>
       </header>
 
       <form
@@ -94,6 +101,28 @@ export function HomePage({ onNavigate }: HomePageProps) {
           );
         })}
       </nav>
+
+      {/* The trunk/limb spine shipped in Part A (data/curated/tree-spine.json).
+          Home shows it so the shape of the whole corpus is visible before the
+          visitor commits to a click. */}
+      <section aria-labelledby="home-spine-title" className="home-spine">
+        <h2 id="home-spine-title">
+          One trunk: <strong>{TRUNK_LABEL}</strong>
+        </h2>
+        <p>
+          Every publication in here hangs off one of nine limbs. Nothing floats
+          loose.
+        </p>
+        <ul className="home-spine-limbs">
+          {LIMB_LABELS.map((label) => (
+            <li key={label}>
+              <button onClick={() => onNavigate("atlas-map")} type="button">
+                {label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <aside className="home-trust-boundary">
         <p>No account or uploads. {PRODUCT_DECISION_BOUNDARY}</p>

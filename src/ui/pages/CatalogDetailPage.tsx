@@ -381,8 +381,10 @@ function CatalogInventory(props: {
         return {
           entry,
           profile,
-          publisher: source?.owner || entry.display_group || "Not recorded",
-          lifecycle: source?.lifecycle_status || "Not recorded",
+          // Absent metadata is omitted from the row, not printed as a
+          // "Not recorded" placeholder (voice pass B.3).
+          publisher: source?.owner || entry.display_group || "",
+          lifecycle: source?.lifecycle_status || "",
         };
       }),
     [bundle.runtime, catalogs],
@@ -443,13 +445,17 @@ function CatalogInventory(props: {
         <InventorySelect
           label="Publisher"
           onChange={(publisher) => update({ publisher })}
-          options={[...new Set(rows.map((row) => row.publisher))].sort()}
+          options={[...new Set(rows.map((row) => row.publisher))]
+            .filter(Boolean)
+            .sort()}
           value={state.publisher}
         />
         <InventorySelect
           label="Lifecycle"
           onChange={(lifecycle) => update({ lifecycle })}
-          options={[...new Set(rows.map((row) => row.lifecycle))].sort()}
+          options={[...new Set(rows.map((row) => row.lifecycle))]
+            .filter(Boolean)
+            .sort()}
           value={state.lifecycle}
         />
         </div>
@@ -476,9 +482,12 @@ function CatalogInventory(props: {
               >
                 <span>
                   <strong>{entry.name}</strong>
-                  <small>
-                    {profile.synopsis} {publisher} · {lifecycle}
-                  </small>
+                  <small>{profile.synopsis}</small>
+                  {[publisher, lifecycle].filter(Boolean).length ? (
+                    <small className="catalog-index-row-meta">
+                      {[publisher, lifecycle].filter(Boolean).join(" · ")}
+                    </small>
+                  ) : null}
                 </span>
                 <span>
                   {(entry.leaf_record_count ?? entry.node_count).toLocaleString()}{" "}

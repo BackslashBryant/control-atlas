@@ -2,6 +2,14 @@
 
 ## Constraints
 
+- "Ensure D:\DevOps\1. Projects\GovFrame/docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md
+  is complete, polished, and shipped in full." (2026-08-01, session 15) => fresh
+  owner authorization to push to main after the gate passes.
+- "Make sure that after everything is shipped, you QA/QC and fix anything that
+  doesn't meet spec/intent." (2026-08-01, session 15)
+- "When I say QA/QC I mean put eyes on the site, not just the code."
+  (2026-08-01, session 15) => live browser walkthrough with screenshots I judge
+  personally; green tests are not the QA deliverable.
 - "Everything must connect to the trunk. Period. Everything is traceable, either
   through inference, official crosswalks, or correlations of the IDs... We need to
   be pulling in the full records. Not summaries. THIS SITE IS THE MECCA of
@@ -43,6 +51,51 @@
   rail) only." (2026-07-27 session 8)
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
+
+## 2026-08-01 (session 15) - PART B (voice) + ship
+
+Executed `docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md` Part B in full
+(Part A shipped in session 14, commit c0d5a57).
+
+### Done
+- B.1 Home: new `PRODUCT_HERO` in `src/shared/product-identity.ts` (situational,
+  no longer character-identical to package.json's `description`, which keeps
+  `PRODUCT_DEFINITION`). Card copy states what each entrance is *for*. New
+  `.home-spine` strip renders the trunk + 9 limbs from
+  `data/curated/tree-spine.json`; mirrored in `src/index.html`'s pre-hydration
+  shell so it does not shift layout on hydration.
+- B.2 Start Here: title is now "What are you trying to work out?" over six
+  situational rows that route to `#/explore?atlasLimb=...`. New `atlasLimb`
+  field in `src/ui/lib/viewState.ts` (6 touch points) seeds
+  `AtlasMapPage`'s `openLimbId`, so a limb can be deep-linked.
+  DEVIATION: the spec asked for "system type / whose rules apply / what stage"
+  questions. Epic 5 forbids exactly that (`tests/content-review.test.mjs:86`
+  bans System type / Data sensitivity / Operational environment on this page;
+  DETERMINATION_BOUNDARY bans applicability claims). Delivered the intent —
+  situation-first routing into the Part A spine — as navigation, not intake,
+  with every determination contract left untouched. The publication list
+  survives as the second section ("Find the publication you need").
+- B.3 `catalogProfiles.ts`: 23 hand-written synopses (who it binds, when it
+  applies) replace the "records loaded from the cited publisher source"
+  template. `CatalogDetailPage` inventory rows omit publisher/lifecycle
+  entirely when unrecorded instead of printing "Not recorded".
+- B.4 The keycap is a real shortcut. `brand-rotation.ts` now owns one shared,
+  ref-counted rotation (both flourishes were previously running independent
+  timers) and exports `activeBrandAction` + `BRAND_SURFACE_VIEWS`; the existing
+  Cmd/Ctrl+K listener in `App.tsx` was extended (not duplicated) so
+  Ctrl+Alt+<first letter of the displayed word> navigates to that surface.
+  BRAND_WORDS trimmed 27 -> 9 (Explore, Trace, Crosswalk, Browse, Draft, Find,
+  Verify, Reconcile, Learn), unique initials, all 7 surfaces covered.
+- B.5 Compare: `.intent-card-title` `clamp(1.5rem,3vw,2rem)` -> `--ca-text-lg`
+  (~1.4x body, was ~2.2x) and `.intent-card` padding raised to clear the 7px
+  corner ticks drawn in `orbital.css`. "Mapping source" -> "Mapping
+  publication" (neither label was dead; the ambiguity was the defect).
+
+### Verification
+npm test = atlas 3 / data 252 / runtime 30 / graph 56 (baseline 3/252/30/55),
+lint + typecheck clean, test:browser 23/23, a11y:smoke 5/5, e2e:smoke 12/12,
+touched e2e specs 26/26, build:site clean, build:data 100% trunk connectivity
+(11,687 nodes, 28,479 edges).
 
 ## 2026-07-31 (session 14) - EXECUTING the trunk spine + voice spec
 
