@@ -117,11 +117,30 @@ test("generated Atlas shards contain only incident canonical edges", () => {
     for (const [nodeId, record] of Object.entries(artifact.atlas_neighborhood_shard.records)) {
       recordCount += 1;
       shardedNodeIds.add(nodeId);
+      // ancestor_path is attached to the shard copy on purpose: it is how the
+      // record page draws the chain to the trunk without loading the graph. It
+      // is stripped from nodes.json to stay inside the 20 MiB artifact budget,
+      // so compare the record identity separately from that navigation aid.
+      const { ancestor_path: shardAncestorPath, ...shardCenterNode } =
+        record.center_node;
       assert.deepEqual(
-        record.center_node,
+        shardCenterNode,
         canonicalNodeById.get(nodeId),
         `${nodeId} center node must be canonical`,
       );
+      if (shardAncestorPath) {
+        assert.equal(
+          shardAncestorPath[0].id,
+          "atlas:TRUNK",
+          `${nodeId} ancestor path must start at the trunk`,
+        );
+        for (const link of shardAncestorPath) {
+          assert.ok(
+            canonicalNodeIds.has(link.id),
+            `${link.id} in ${nodeId} ancestor path must be a canonical node`,
+          );
+        }
+      }
       for (const compactNode of record.nodes) {
         assert.ok(
           canonicalNodeIds.has(compactNode[0]),
