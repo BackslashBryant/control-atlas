@@ -56,6 +56,10 @@ export function WhereThisSitsRail(props: {
   if (chain.length === 0) return null;
 
   const organizingLabel = "Control Atlas structure, not publisher-declared";
+  // Every organizing hop stays visually distinct and keeps its aria-label, but
+  // the word badge prints once. A CCI chain has four of them, and repeating
+  // "Atlas" four times across one breadcrumb read as noise, not as provenance.
+  const firstOrganizingId = chain.find((link) => link.origin === "organizing")?.id;
 
   return (
     <nav aria-label="Where this sits" className="atlas-path-breadcrumb tree-path-rail">
@@ -88,9 +92,9 @@ export function WhereThisSitsRail(props: {
                 title={isOrganizing ? organizingLabel : undefined}
               >
                 {link.label}
-                {isOrganizing ? (
+                {isOrganizing && link.id === firstOrganizingId ? (
                   <span className="atlas-path-crumb-badge" aria-hidden="true">
-                    Atlas
+                    Atlas structure
                   </span>
                 ) : null}
               </button>
