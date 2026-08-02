@@ -36,10 +36,20 @@ Every workbook's Read Me sheet carries, at minimum: Title, Description, Disclaim
 
 No document was found to: invent a requirement or decision, silently pick a baseline (the app-level generation form requires an explicit baseline or "All controls" choice with no default — confirmed live, see the readiness report), or prefill organizational data (every generated example is either blank or an explicitly-labeled placeholder for the user to complete).
 
+## Focused content review (added after initial draft, per correction below)
+
+The first draft of this report classified all 12 as Ready while *also* listing a full content re-grade as an open, unperformed gap — an internal contradiction correctly flagged in review. Resolved by actually reading real body content (not just structure) before finalizing the verdict:
+
+- **Implementation Statement Worksheet** ("Implementation Statements" sheet, 300 data rows): confirmed only `acronym` and `Control Title` are pre-filled across every row; all nine remaining columns (`implementationStatus`, `implementationNarrative`, `Evidence References`, `slcmFrequency`, etc.) are genuinely blank for the practitioner to complete — not a truncation, a deliberate blank-form design. No leftover/fabricated content.
+- **Evidence Expectation Matrix** ("Evidence Expectations" sheet): same pattern — `Control ID`/`Control Title` populated, all evidence-tracking columns (`Evidence Owner`, `Collection Method`, `Confidence`, `Assessor Notes`, ...) genuinely blank. The SP 800-53A assessment text the 08-02 full-record ingestion added lives on the app's own record pages (verified earlier in this session), not injected into this tracking sheet — there was no full-record content for this ingestion to disturb.
+- **Security Plan Starter** (.docx): read the actual per-enhancement narrative tables in full (e.g. AC-2.1 through AC-2.13) via a proper XML parse (a first pass with a naive regex extraction produced garbled output around em dashes — re-verified as a parsing artifact, not a document defect: the underlying character is a correct U+2014 em dash). Each enhancement gets a clean "Field / Response or guidance" table with genuine prompts (`Implementation Status`, `Implementation Narrative`, `Evidence References`, `Responsible Role`), consistent formatting, no invented narrative.
+
+This is a targeted spot-check on the three documents most likely to carry full-record-ingestion content, not a line-by-line re-run of the full 2026-07-16 professionalism rubric across all 12. That fuller rubric re-application remains reasonable future work if the owner wants it, but it is no longer an open contradiction against this report's verdict — the specific risk this epic flagged (full-record content silently breaking these documents) was checked directly and not found.
+
 ## Not independently re-verified this session
 
-- The prior `docs/audits/fedramp-2026-transition-hardening-2026-07-16.md` correction pass and `docs/audits/template-professionalism-post-edit-2026-07-16.md`'s full manual grading rubric were not re-run cell-by-cell; this review instead confirmed structural integrity (loads cleanly, no formula errors, real non-placeholder content, correct source citations) and the one new addition (the review notice). Given the 08-02 full-record ingestion changed underlying control text (Discussion, 800-53A evidence) that these worksheets pull from, a full manual re-grade against that same rubric is reasonable future work — flagged here, not performed.
-- Print/visual QA (`npm run qa:templates:pdf`) was not run this session; the technical (load/structure/content) check above did not require it.
+- The prior `docs/audits/fedramp-2026-transition-hardening-2026-07-16.md` correction pass and `docs/audits/template-professionalism-post-edit-2026-07-16.md`'s full manual grading rubric (all 12 documents, every criterion) were not re-run in full — see the focused content review above for what was actually re-checked and why it targets the real risk.
+- Print/visual QA (`npm run qa:templates:pdf`) was not run this session; the technical and content checks above did not require it.
 
 ## Paid-companion potential (informational only, no pricing recommendation)
 

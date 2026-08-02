@@ -39,6 +39,33 @@ test("focused Atlas opens publisher-declared structure before relationship views
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
 });
 
+test("focused Path badges the organizing hops, not just the direct record page", async ({ page }) => {
+  // Regression: AtlasMapPage's own "Where this sits" rail used to hardcode
+  // origin: "structural" for every hop in record.structural_path, silently
+  // overwriting the trunk/limb hops' real "organizing" origin — so the
+  // Control-Atlas-structure badge rendered correctly on /#/record/:catalog/:id
+  // but never on this Explore-embedded view of the exact same record, even
+  // though the underlying data was correct both places. Fixed by deriving
+  // origin from node_type in runtimeLoader.ts instead of hardcoding it.
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const rail = page.getByRole("navigation", { name: "Where this sits" });
+  const cybersecurity = rail.getByRole("button", { name: "Cybersecurity" });
+  await expect(cybersecurity).toHaveClass(/atlas-path-crumb-organizing/);
+  await expect(cybersecurity).toHaveAttribute(
+    "title",
+    /Control Atlas structure, not publisher-declared/,
+  );
+  const compliance = rail.getByRole("button", { name: "Compliance" });
+  await expect(compliance).toHaveClass(/atlas-path-crumb-organizing/);
+  // The publisher-declared hops must stay unbadged — this isn't "badge
+  // everything", it's "badge only the hops Control Atlas itself organized".
+  const catalog = rail.getByRole("button", { name: "SP 800-53 Rev. 5 Catalog" });
+  await expect(catalog).not.toHaveClass(/atlas-path-crumb-organizing/);
+});
+
 test("focused Path opens its publisher-declared parent without inventing another parent", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);

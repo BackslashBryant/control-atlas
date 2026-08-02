@@ -64,6 +64,68 @@
   PRs (push to a throwaway branch first for Public Repo Checks, then main).
   (2026-08-02, session 17)
 
+## 2026-08-02 (session 20) - readiness report corrections + second ship, CLOSED OUT
+
+Following session 19's "Ready for external practitioner evaluation" verdict
+and "Ship it" (which shipped `e781eac`), an external review of the readiness
+report's first draft caught two real problems and prompted a third finding:
+
+1. **Deploy/candidate mismatch (resolved by shipping, already done by the
+   time the review landed).** The review was drafted against the pre-ship
+   state; by the time it reached this session, `e781eac` was already
+   committed, pushed through the required `Public Repo Checks` gate (via a
+   throwaway branch — direct push to `main` is blocked without a passing
+   check on that exact SHA), deployed, and verified via `Pages Live Smoke`.
+2. **Starter-document classification contradiction.** The readiness report
+   classified all 12 documents "Ready" while separately listing a full
+   content re-grade as an unperformed gap. Resolved by actually reading real
+   body content (not structure) on the three documents most exposed to the
+   2026-08-02 full-record-ingestion risk: Implementation Statement
+   Worksheet, Evidence Expectation Matrix, Security Plan Starter — all
+   confirmed clean (honest blank fill-in forms where expected, professional
+   narrative tables where not; one apparent encoding artifact traced to a
+   terminal-display issue in my own extraction script, not a real document
+   defect — the underlying character was a correct U+2014 em dash).
+3. **Organizing-structure badge bug (found, fixed, regression-tested).** The
+   report's residual list attributed the missing "Control Atlas structure"
+   badge on `AC-2`'s breadcrumb to a data-generation gap
+   (`attachAncestorPaths`). Re-investigated: the generated shard data was
+   actually correct (`atlas:TRUNK`/`atlas:LIMB-COMPLIANCE` both carry
+   `origin: "organizing"`). The real bug: `AtlasMapPage.tsx`'s "Where this
+   sits" rail built its `links` prop from `record.structural_path` and
+   hardcoded every hop's origin to `"structural"`, discarding the correct
+   value for the two organizing hops — only on the Explore-embedded record
+   view, not the direct `/record/...` page (which doesn't override origin).
+   Fixed: `src/ui/lib/runtimeLoader.ts` now derives real origin from
+   `node_type` when building `structural_path`; `AtlasMapPage.tsx` stopped
+   hardcoding it. New regression test in
+   `tests/e2e/atlas-map-focused-control.spec.mjs` ("focused Path badges the
+   organizing hops, not just the direct record page"), proven red against
+   the pre-fix code (`git stash` the two files, run the test alone, confirm
+   fail) and green after restoring the fix.
+   While re-verifying this live, the newly-visible "ATLAS STRUCTURE" badge
+   text itself was flagged (by the owner, live, mid-verification) as unclear
+   on its own — changed to "Not from the publisher" in
+   `WhereThisSitsRail.tsx`, which states the fact plainly instead of naming
+   an internal concept.
+
+Full verification re-run after these fixes, all clean: lint, typecheck,
+`npm test` (348/348), full e2e suite (142/142, 1 skipped live-only), a11y
+suite (32/32), visual suite (28/28, after refreshing 4 more baselines for
+the badge-copy change — Path and record-detail pages), `npm run precommit`
+(exit 0).
+
+Shipped as a second commit: committed, pushed a throwaway branch, confirmed
+`Public Repo Checks` passed on that exact SHA, fast-forwarded `main`, deleted
+the throwaway branch, confirmed `GitHub Pages` deployed and `Pages Live
+Smoke` passed. All four `docs/audits/*.md` reports updated to reflect the
+corrected, final verdict — see
+`docs/audits/control-atlas-external-evaluation-readiness.md`'s "Second-round
+corrections" section for the full account.
+
+Verdict unchanged in substance, now on firmer footing: **Ready for external
+practitioner evaluation**, verified against the actual deployed candidate.
+
 ## 2026-08-02 (session 19) - external evaluation readiness audit — CLOSED OUT
 
 Completed the Control Atlas External Evaluation Readiness epic, all six
