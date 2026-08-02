@@ -13,7 +13,10 @@
  */
 
 import { strToU8, zipSync } from "fflate";
-import { PRODUCT_DISCLAIMER as DISCLAIMER } from "../shared/disclaimer.mjs";
+import {
+  PRODUCT_DISCLAIMER as DISCLAIMER,
+  PRELAUNCH_REVIEW_NOTICE,
+} from "../shared/disclaimer.mjs";
 
 const XLSX_MIME =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -125,6 +128,7 @@ export function officeDocumentToSheets(doc) {
     ["Title", doc.title],
     ["Description", doc.description],
     ["Disclaimer", DISCLAIMER],
+    ["Review status", PRELAUNCH_REVIEW_NOTICE],
     [
       "How to start",
       "Read the guidance below, then complete the working sheet. Blank pale-blue cells are intended for user input; preserve the supplied identifiers and reference values.",
@@ -579,7 +583,7 @@ export function docToDocx(doc) {
       spacingAfter: 220,
     });
   }
-  body += `<w:tbl><w:tblPr><w:tblW w:w="${DOCX_CONTENT_WIDTH_TWIPS}" w:type="dxa"/><w:tblInd w:w="120" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6" w:color="D6DEE8"/><w:left w:val="single" w:sz="6" w:color="D6DEE8"/><w:bottom w:val="single" w:sz="6" w:color="D6DEE8"/><w:right w:val="single" w:sz="6" w:color="D6DEE8"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid><w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/><w:shd w:val="clear" w:fill="F4F6F9"/><w:tcMar><w:top w:w="140" w:type="dxa"/><w:left w:w="160" w:type="dxa"/><w:bottom w:w="140" w:type="dxa"/><w:right w:w="160" w:type="dxa"/></w:tcMar></w:tcPr>${docxParagraph(`Important: ${DISCLAIMER}`, { size: 18, color: "475467", spacingAfter: 0 })}</w:tc></w:tr></w:tbl>`;
+  body += `<w:tbl><w:tblPr><w:tblW w:w="${DOCX_CONTENT_WIDTH_TWIPS}" w:type="dxa"/><w:tblInd w:w="120" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6" w:color="D6DEE8"/><w:left w:val="single" w:sz="6" w:color="D6DEE8"/><w:bottom w:val="single" w:sz="6" w:color="D6DEE8"/><w:right w:val="single" w:sz="6" w:color="D6DEE8"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid><w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/><w:shd w:val="clear" w:fill="F4F6F9"/><w:tcMar><w:top w:w="140" w:type="dxa"/><w:left w:w="160" w:type="dxa"/><w:bottom w:w="140" w:type="dxa"/><w:right w:w="160" w:type="dxa"/></w:tcMar></w:tcPr>${docxParagraph(`Important: ${DISCLAIMER}`, { size: 18, color: "475467", spacingAfter: 120 })}${docxParagraph(PRELAUNCH_REVIEW_NOTICE, { size: 18, color: "475467", spacingAfter: 0 })}</w:tc></w:tr></w:tbl>`;
   body += docxPageBreak();
   body += docxParagraph("Contents", {
     style: "Heading1",

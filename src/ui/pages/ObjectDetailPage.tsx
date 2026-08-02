@@ -285,7 +285,7 @@ export function ObjectDetailPage(props: {
   if (!node) {
     return (
       <section className="notice">
-        <h2>Item not found</h2>
+        <h1>Item not found</h1>
         <p>This deep link does not match a current public library entry.</p>
         <Button
           variant="primary"
@@ -301,7 +301,7 @@ export function ObjectDetailPage(props: {
   if (!document) {
     return (
       <section className="notice">
-        <h2>Record metadata unavailable</h2>
+        <h1>Record metadata unavailable</h1>
         <p>
           This graph record is not present in the current search catalog, so
           its identity cannot be shown reliably.

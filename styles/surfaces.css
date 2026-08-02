@@ -3290,7 +3290,7 @@ a:focus-visible {
 
 .atlas-focused-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(19rem, 26vw, 24rem);
+  grid-template-columns: minmax(0, 1fr) clamp(17.5rem, 19vw, 20rem);
   align-items: start;
   gap: var(--ca-space-4);
   min-width: 0;
@@ -3310,6 +3310,10 @@ a:focus-visible {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
+  position: sticky;
+  top: var(--ca-header-safe-offset);
+  max-height: calc(100vh - var(--ca-header-safe-offset) - var(--ca-space-4));
+  overflow-y: auto;
 }
 
 .atlas-record-inspector h2,
@@ -3956,22 +3960,59 @@ a:focus-visible {
   contain-intrinsic-size: auto 700px;
 }
 
-.atlas-relationship-map,
-.atlas-map-group-controls {
+.atlas-relationship-map {
   display: grid;
   gap: var(--ca-space-3);
 }
 
-.atlas-map-group-controls {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+/* Relationship-type summary cards: the primary answer to "what kinds of
+   relationships does this record have, and how many of each" — shown
+   before any record list or diagram. */
+.atlas-lens-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-2);
 }
 
-.atlas-map-group-controls button {
+.atlas-lens-summary button {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
   min-height: 44px;
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+}
+
+.atlas-lens-summary button strong {
+  margin-left: var(--ca-space-1);
+}
+
+.atlas-lens-summary button:hover {
+  border-color: var(--ca-primary);
+}
+
+.atlas-lens-summary button[aria-pressed="true"] {
+  border-color: var(--ca-primary);
+  outline: 2px solid color-mix(in srgb, var(--ca-primary) 30%, transparent);
+}
+
+/* The full node-link diagram is optional, off by default (round 4 of the
+   owner's live review: the map answering "what's related" should not force
+   every relationship class into one network by default). */
+.atlas-graph-toggle {
+  margin-top: var(--ca-space-2);
+}
+
+.atlas-graph-toggle > summary {
+  cursor: pointer;
 }
 
 .atlas-shared-graph {
-  min-height: 32rem;
+  height: clamp(22rem, 58vh, 30rem);
+  min-height: 22rem;
 }
 
 .atlas-compact-map {
@@ -4094,6 +4135,16 @@ a:focus-visible {
 
 .atlas-inspector-synopsis p {
   line-height: 1.6;
+}
+
+/* The narrower record-neighborhood panel clips the preview to ~5 lines
+   regardless of character count — "Read full official description" (already
+   rendered below) still opens the complete text. */
+.atlas-inspector-synopsis > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
 }
 
 .atlas-inspector-source p {
@@ -6547,11 +6598,19 @@ button.atlas-leverage-row:hover {
 
 .graph-node-shortcuts {
   display: flex;
+  align-items: center;
   gap: var(--ca-space-2);
   overflow-x: auto;
   overflow-y: hidden;
   padding: var(--ca-space-2);
   border-top: 1px solid var(--ca-border);
+}
+
+.graph-node-shortcuts-label {
+  flex: 0 0 auto;
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
 }
 
 .graph-node-shortcuts button {

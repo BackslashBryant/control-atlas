@@ -2,6 +2,12 @@
 
 ## Constraints
 
+- "If it looks like a bug or looks awkard from a navigation first glance, it'll
+  probably feel like a bug or shitty nav for the user. So, when you see stuff
+  like that, just fix it don't try and deep dive too much." (2026-08-02,
+  external-evaluation-readiness epic) => for navigation/UX defects found during
+  this audit, apply the pragmatic fix once the cause line is clear; do not
+  extend root-cause investigation beyond what's needed to fix correctly.
 - "Ensure D:\DevOps\1. Projects\GovFrame/docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md
   is complete, polished, and shipped in full." (2026-08-01, session 15) => fresh
   owner authorization to push to main after the gate passes.
@@ -57,6 +63,183 @@
   Control-Atlas-composed rationale or evidence list. Ship direct to main, no
   PRs (push to a throwaway branch first for Public Repo Checks, then main).
   (2026-08-02, session 17)
+
+## 2026-08-02 (session 19) - external evaluation readiness audit — CLOSED OUT
+
+Completed the Control Atlas External Evaluation Readiness epic, all six
+stages. Verdict: **Ready for external practitioner evaluation** — full
+justification and residual-risk list in
+`docs/audits/control-atlas-external-evaluation-readiness.md`.
+
+Working tree is uncommitted but consistent (every edit was typechecked,
+linted, and rebuilt clean throughout). Nothing pushed, nothing committed —
+owner review and the commit/push decision are next, per this epic's explicit
+"no push/merge/deploy/tag/publish" rule. Files touched this session:
+`docs/STATE.md`; `src/ui/App.tsx`; `src/ui/pages/AtlasMapPage.tsx`;
+`src/ui/pages/ObjectDetailPage.tsx`; `src/ui/components/
+AtlasConnectionMap.tsx`; `src/ui/components/RelationshipGraph.tsx`;
+`src/ui/lib/graphTheme.ts`; `src/shared/disclaimer.mjs`;
+`src/app/office-export.mjs`; `src/app/template-engine.mjs`;
+`src/ui/pages/TemplatesPage.tsx`; `styles/tokens.css`; `styles/surfaces.css`;
+`tests/e2e/atlas-map-focused-control.spec.mjs`; four new
+`docs/audits/*.md` deliverables.
+
+Final verification, all green (full detail and evidence table in the
+readiness report): `npm run build:site`, `npm run lint` (0 warnings),
+`npm run typecheck`, `npm test` (348/348 across 4 suites), the complete
+`npx playwright test --config playwright.e2e.config.mjs` (141/141, 1 skipped
+live-only), the complete `--config playwright.a11y.config.mjs` (32/32), the
+complete `--config playwright.visual.config.mjs` (28/28 after refreshing 6
+baselines that changed for intentional, personally-inspected reasons — the
+diffs were the Map rework and the new document-collection notice, nothing
+else), and `npm run precommit` (clean, exit 0, including
+`test:a11y:smoke`/`test:e2e:smoke`). `tests/e2e/live-smoke.spec.mjs` was not
+run — no Home copy/initial-HTML/metadata/pre-hydration content changed this
+session.
+
+Next for a future session (not blocking this epic's verdict): the deferred
+radial/concentric-lane graph-layout follow-on; the `attachAncestorPaths`
+data-generation gap (no link tagged `origin: "organizing"` on AC-2's
+ancestor_path); a full manual re-grade of the 12 starter documents against
+the 2026-07-16 professionalism rubric now that 08-02's full-record content
+has landed; human AT/real-device/pen-test evaluation (long-standing accepted
+residual, not new); and the actual external practitioner evaluation sessions
+this epic exists to prepare for, which this epic does not itself conduct.
+
+Stage 0 (repo/build/deploy verification), Stage 1 (application inspection),
+Stage 2 (practitioner workflow dry run, 12/12), Stage 3 (starter document
+technical review, 12/12 ready), Stage 4 (defect correction), and Stage 5
+(full verification suite) are all done and green.
+
+Findings and fixes so far, each rebuilt + typechecked:
+- Stage 0: deployed GitHub Pages site is byte-identical to local build from
+  HEAD `d532039` (same runtime-cache-version, same main bundle hash, same
+  meta tags). No deploy drift.
+- CRITICAL, fixed: `AtlasMapPage.tsx`'s `AtlasGuidedPath` seeded `openLimbId`
+  from `state.atlasLimb` via a `useState` initializer only, never re-syncing
+  on prop change. Effect: switching Explore areas via browser back/forward,
+  opening a different area's shared link while Explore was already mounted,
+  or any hash-only navigation between two `atlasLimb` values all left the
+  *previous* area's content on screen while the URL and title updated
+  correctly — silent, easy to miss without personally clicking through it.
+  Fixed with a `useEffect` re-syncing `openLimbId` to `state.atlasLimb`
+  (`src/ui/pages/AtlasMapPage.tsx:748-754`). Also removed the `startTransition`
+  wrap around the hash-driven `setViewState` in `src/ui/App.tsx:313` (same
+  symptom class, route commits must not be deferrable).
+- A11y, fixed: four full-page notice states had no `<h1>` — `not-found` and
+  `retired` in `src/ui/App.tsx`, `Item not found` and `Record metadata
+  unavailable` in `src/ui/pages/ObjectDetailPage.tsx` all used `<h2>` as the
+  page's only heading. Bumped to `<h1>` (matches the existing convention in
+  `CatalogDetailPage.tsx`, which already did this correctly).
+- Map view reworked in multiple rounds (owner-directed live during this
+  session across three detailed critiques, exceeds the "fix defects only"
+  boundary — logged in full since it's substantial, undocumented-elsewhere
+  work). Consistent with [[atlas-depth-spine-decision]] (rail+Miller-column
+  redesign, owner-endorsed 2026-07-26, first increment only — this session
+  did NOT build the full Miller-column spec) and docs/tree-model.md's
+  relationship classes.
+  - Round 1: `AtlasConnectionMap.tsx` splits `groups` by `.lens`. `structure`
+    lens (base control, enhancements) renders as a full, uncapped "family
+    tree" of tag/badge buttons (reused `.record-decomposition-block` /
+    `.badge-row` / `Badge` pattern, which the owner liked from record pages)
+    below the diagram; every other lens stays in the filterable diagram +
+    List. Diagram-first ordering (stats/controls below it, not above).
+  - Round 2 (owner: graph too small, panel too wide/tall, node-shortcut row
+    redundant, group buttons don't look clickable): `RelationshipGraph.tsx`
+    `fitViewOptions` now force `minZoom: 1` (was defaulting to 0.4x on this
+    neighborhood — verified live via the diagram's own zoom-level readout,
+    0.4x -> 1.0x, a 2.5x increase); `.atlas-shared-graph` height reduced to
+    `clamp(22rem, 58vh, 30rem)` (was drifting taller without shrinking); the
+    inspector panel column narrowed to `clamp(17.5rem, 19vw, 20rem)` and made
+    `position: sticky` with its own scroll; `.atlas-inspector-synopsis > p`
+    line-clamped to 5 lines (`Read full official description` still expands
+    the complete text); `.graph-node-shortcuts` ("Jump to node:" strip) is
+    `visually-hidden` when the graph has <=10 nodes (kept in the a11y tree
+    for keyboard users and for `tests/e2e/atlas-map-focused-control.spec.mjs`,
+    which asserts its node count, not its visibility); `.atlas-map-group-
+    controls button` given real border/background (was borderless text).
+  - Round 3 (owner: relationship classes must be visually distinguishable,
+    not source/publisher; the map must not imply a false single-chain
+    hierarchy across correlation, applicability, and cross-framework edges;
+    the "Control Atlas structure" eyebrow mislabeled the ENTIRE breadcrumb
+    including the publisher-declared segment): `graphRole` (declared on
+    `RelationshipGraphProps.nodes` but never previously populated by any
+    caller) now carries the owning connection-group's `.lens`
+    (applicability/implementation/assessment-evidence/process-artifacts/
+    cross-framework/threat-defense — structure is excluded, it's not in this
+    diagram). `graphTheme.ts` adds `lensColor()`/`RELATIONSHIP_LENS_LEGEND`
+    and colors both nodes (`nodeColor()`) and edges (`buildDiagramEdges`,
+    falls back to the existing provenance color when no lens is set, so
+    other RelationshipGraph callers are unaffected) by relationship class;
+    new CSS tokens `--ca-lens-*` in `styles/tokens.css` (all `var(--lsm-*)`
+    references — no new hues added to the locked palette). `AtlasConnectionMap
+    .tsx` groups the below-diagram connection-group buttons under lens
+    headings instead of a flat source list, and adds a `<details>` legend
+    (reusing the `.ca-legend-popover`/`.legend-item`/`.legend-swatch` pattern
+    already used in `RelationshipExplorer.tsx`) showing only the lenses
+    actually present. Fixed my own round-1 regression: the `AtlasMapPage.tsx`
+    eyebrow now reads "Hierarchy" (was "Control Atlas structure", overclaiming
+    the whole breadcrumb) — `WhereThisSitsRail.tsx` already badges only the
+    genuinely organizing hops per-crumb; the wrapper label was contradicting
+    that existing precision, not adding to it.
+  - NOTED (not done): AC-2's own ancestor_path currently has no link tagged
+    `origin: "organizing"` at all (checked live via DOM — no crumb carries
+    the `-organizing` class or badge for this record), so the per-crumb
+    Control-Atlas-structure badge never actually renders for this record.
+    That's a data-generation question in `attachAncestorPaths`
+    (scripts/build-framework-data.mjs), pre-existing and out of scope for
+    this pass — not something introduced this session.
+  - NOTED (not done, superseded in part by round 4 below): the owner's fuller
+    ask — AC-2 as the literal geometric center of concentric/quadrant
+    relationship-class lanes, rather than color-coded but still
+    ELK-"mrtree"-positioned nodes — was deferred. Round 4 made the diagram
+    optional and secondary (default view is now the lens-summary + list, see
+    below), which addresses most of the practical concern; the OPTIONAL
+    diagram itself, when opened, is still ELK "mrtree", not a true
+    radial/lane layout. Implementing that precisely (ELK's `radial`
+    algorithm with forced root-on-center, or a custom angular layout) remains
+    a bounded, real, not-yet-attempted follow-on.
+  - Round 4 (owner: this is an information-architecture problem, not a
+    polish problem — the map should answer "what kinds of relationships,
+    how many of each" before any diagram, not draw every relationship class
+    as one network; the diagram should become an optional secondary "Explore
+    graph" view, not the default): rewrote `AtlasConnectionMap.tsx`'s default
+    rendering. New primary content: `.atlas-lens-summary` — one clickable
+    card per relationship class with its aggregate item count (e.g.
+    "Applicability 7", "Implementation 47"), replacing the round-3 per-source
+    button rows entirely (`.atlas-map-group-controls`/`.atlas-lens-section`
+    CSS removed as dead code). Selecting a card shows that class's own
+    record list (reusing the existing compact-mode `<ul>` list pattern,
+    generalized to all viewports — the `compact` prop no longer branches
+    default vs list rendering, only whether the optional graph toggle is
+    offered at all). The full ReactFlow/ELK diagram moved behind a
+    `showGraph` local state (`useState`, default `false`) inside a
+    `<details className="atlas-graph-toggle">` — "View as graph" — and is
+    not mounted in the DOM at all until opened (no `RelationshipGraph`
+    import cost paid until requested). `expandedGroupId`/`onExpandedGroupChange`
+    (prop names kept to avoid touching the persisted `relationshipGroup` URL
+    param and `routeIdentity.ts`'s permitted-params list) now carry a LENS
+    key ("implementation") instead of one source group's id ("disa") —
+    confirmed via reference sweep that no other file reads this field
+    expecting the old per-source-group semantics. Verified live: AC-2 shows
+    4 lens cards (Applicability 7, Implementation 47, Assessment 1,
+    Cross-framework 27) with a default-selected lens, a scrollable capped
+    list (14 items), "View all N in List", and a working graph toggle.
+    Caused one real test regression, fixed rather than weakened:
+    `tests/content-review.test.mjs` "site-wide UI copy rule rejects canned
+    metaphors" failed because my own code comments (not user-facing copy) in
+    `AtlasConnectionMap.tsx`/`graphTheme.ts`/`styles/tokens.css` used the
+    phrase "family tree", which this repo already bans site-wide (pre-existing
+    guard, not something I introduced) — reworded the comments, no user-facing
+    text was ever affected. Updated `tests/e2e/atlas-map-focused-control.spec
+    .mjs`'s "focused Map..." test to assert the new intentional behavior
+    (lens cards visible, no diagram by default, selecting a lens shows its
+    list, "View as graph" reveals the diagram) instead of the removed
+    `.atlas-scope-count`/always-on-diagram assertions — quoted here since it's
+    a test-expectation change: old assertion checked `.atlas-scope-count`
+    text and a `<=7`-node diagram present by default; new assertion checks
+    the lens-summary group is visible, `.react-flow` has zero count before
+    interaction, and the diagram only appears after clicking "View as graph".
 
 ## 2026-08-02 (session 18) - audit closeout
 

@@ -27,6 +27,7 @@ export type GraphLink = {
   publicationStatus: string;
   confidence: string;
   plainLanguageRationale: string;
+  relationshipLens?: string;
 };
 
 export type GraphData = {
@@ -98,6 +99,35 @@ export function compareNodeColor(role: CompareRole): string {
   return map[role];
 }
 
+// Relationship-class colors (docs/tree-model.md's four classes: structural,
+// applicability, correlation, organizing). Structural never reaches this
+// component — it renders separately as its own structural-child tag list —
+// so only the remaining classes need a color. One color per class, reused
+// for both nodes and edges of that class, so "what kind of relationship is
+// this" reads at a glance instead of only from the text label.
+export const RELATIONSHIP_LENS_LEGEND = [
+  { key: "applicability", label: "Applicability", color: "--ca-lens-applicability" },
+  { key: "implementation", label: "Implementation", color: "--ca-lens-implementation" },
+  { key: "assessment-evidence", label: "Assessment", color: "--ca-lens-assessment" },
+  { key: "process-artifacts", label: "Process", color: "--ca-lens-process" },
+  { key: "cross-framework", label: "Cross-framework", color: "--ca-lens-cross-framework" },
+  { key: "threat-defense", label: "Threat & defense", color: "--ca-lens-threat" },
+] as const;
+
+const LENS_FALLBACK_COLOR: Record<string, string> = {
+  applicability: "#CBAE67",
+  implementation: "#54BCD9",
+  "assessment-evidence": "#7EB79E",
+  "process-artifacts": "#98A4AC",
+  "cross-framework": "#E76F51",
+  "threat-defense": "#C4645A",
+};
+
+export function lensColor(lens: string): string {
+  const entry = RELATIONSHIP_LENS_LEGEND.find((item) => item.key === lens);
+  return readToken(entry?.color ?? "", LENS_FALLBACK_COLOR[lens] ?? "#98A4AC");
+}
+
 export function nodeColor(
   node: GraphNode,
   selectedId: string | null,
@@ -109,6 +139,9 @@ export function nodeColor(
   if (node.isCenter) return readToken("--ca-graph-center", "#54BCD9");
   if (highlightIds.size && !highlightIds.has(node.id)) {
     return readToken("--ca-graph-dim", "rgba(152, 164, 172, 0.35)");
+  }
+  if (node.graphRole && LENS_FALLBACK_COLOR[node.graphRole]) {
+    return lensColor(node.graphRole);
   }
   if (node.nodeType === "source") return readToken("--ca-prov-fedramp", "#7EB79E");
   if (node.nodeType === "template") return readToken("--ca-prov-mitre", "#CBAE67");
@@ -142,6 +175,7 @@ export function buildGraphData(
     confidence: string;
     rationale?: string;
     navigation_note?: string;
+    relationship_lens?: string;
   }>,
   centerNodeId: string,
   clusterMeta?: Map<string, import("./graphClustering").ClusterNodeMeta>,
@@ -167,6 +201,7 @@ export function buildGraphData(
       publicationStatus: edge.publication_status,
       confidence: edge.confidence,
       plainLanguageRationale: edge.rationale || edge.navigation_note || "",
+      relationshipLens: edge.relationship_lens,
     })),
   };
 }

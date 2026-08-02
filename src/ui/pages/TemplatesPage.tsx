@@ -22,6 +22,7 @@ import {
   TEMPLATE_CATEGORIES,
 } from "../lib/catalogGroups.mjs";
 
+import { PRELAUNCH_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
@@ -563,6 +564,9 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
         <p className="template-document-preview-description">{doc.description}</p>
         <p className="template-document-preview-disclaimer">
           Starter document. The selected inputs and cited sources appear in the file.
+        </p>
+        <p className="template-document-preview-disclaimer">
+          {PRELAUNCH_REVIEW_NOTICE}
         </p>
         {(doc.sections || []).map((section: any) => (
           <section className="template-document-preview-section" key={section.heading}>
@@ -1253,6 +1257,9 @@ export function TemplatesPage(props: {
                 <p className="page-summary">
                   Generate a starter file with its headings, prompts, and source
                   context ready for your team to complete.
+                </p>
+                <p className="template-document-preview-disclaimer">
+                  {PRELAUNCH_REVIEW_NOTICE}
                 </p>
               </div>
             </div>
