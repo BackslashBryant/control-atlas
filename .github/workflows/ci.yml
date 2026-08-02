@@ -131,6 +131,9 @@ jobs:
       - uses: actions/checkout@v6
       - run: npm ci
       - run: npm run build:site
+      # Same version skew as the baseline job: the pinned image predates the
+      # Playwright in package.json, so its browser build is missing.
+      - run: npx playwright install chromium
       - run: npm run test:visual
       - name: Upload visual failure artifacts
         if: failure()
