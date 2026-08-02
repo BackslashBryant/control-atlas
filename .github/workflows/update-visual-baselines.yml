@@ -23,11 +23,18 @@ jobs:
       - uses: actions/checkout@v6
       - run: npm ci
       - run: npm run build:site
-      # Playwright exits non-zero whenever --update-snapshots actually rewrites
-      # a baseline, which is the entire point of this job. Without this the run
-      # failed before it could publish the artifact it exists to produce.
+      # The pinned image ships the browser build for its own Playwright
+      # version; package.json has moved ahead of it, so the browser the test
+      # runner wants is not in the image and every test errored with
+      # "Executable doesn't exist". Install the matching build into the image.
+      - run: npx playwright install chromium
+      # Playwright exits non-zero whenever --update-snapshots rewrites a
+      # baseline, which is the entire point of this job. continue-on-error
+      # keeps the run going to the upload step while still showing the step
+      # as failed, so a genuine failure is visible rather than swallowed.
       - name: Regenerate baselines
-        run: npx playwright test --config playwright.visual.config.mjs --update-snapshots || true
+        continue-on-error: true
+        run: npx playwright test --config playwright.visual.config.mjs --update-snapshots
       - name: Upload regenerated baselines
         uses: actions/upload-artifact@v7
         with:
