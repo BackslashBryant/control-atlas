@@ -59,16 +59,32 @@ async function openApprovedComposition(page, viewport, relationshipView) {
     await expect(
       main.getByRole('region', { name: 'Relationship map' }),
     ).toBeVisible();
+    // The map paints once from the neighborhood shard and again once every
+    // counterpart label resolves, so screenshotting on first paint captured
+    // one of two stable layouts at random. Wait for the traffic to stop and
+    // the box to settle before the comparison.
+    await page.waitForLoadState('networkidle');
+    await expect
+      .poll(async () => {
+        const box = await main
+          .getByRole('region', { name: 'Relationship map' })
+          .boundingBox();
+        return Math.round(box?.height ?? 0);
+      })
+      .toBeGreaterThan(0);
     await expect(
       page.getByRole('complementary', { name: 'Current record overview' }),
     ).toBeVisible();
   } else {
-    // The six-column board is retired: the Path asks which stage first, so
-    // all six stages are offered as choices and no records are dumped.
-    await expect(main.locator('.atlas-path-stage-option')).toHaveCount(7);
+    // Re-baselined 2026-08-01 for the Cybersecurity trunk spine. A focused
+    // record's Path is its structural position — the chain from the trunk down
+    // to this record — rather than the retired stage board. The guarantee is
+    // unchanged: the Path shows where you are and where you can go, and never
+    // dumps a grid of records.
     await expect(
-      page.getByRole('complementary', { name: 'Selected path' }),
+      page.getByRole('navigation', { name: 'Where this sits' }),
     ).toBeVisible();
+    await expect(main.locator('.atlas-path-record')).toHaveCount(0);
   }
   return main;
 }
@@ -95,6 +111,19 @@ async function openRouteComposition(page, viewport, path) {
   await waitForSkeletonsSettled(page);
   await page.evaluate(() => globalThis.document.fonts.ready);
   await expect(page.locator('#workspace')).toBeVisible();
+  // App-ready fires before the heaviest routes have laid their content out, so
+  // whichever route lost the race was screenshotted at viewport height instead
+  // of its full composition. Wait for the workspace box to stop growing.
+  await page.waitForLoadState('networkidle');
+  let lastHeight = -1;
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const height = await page
+      .locator('#workspace')
+      .evaluate((element) => Math.round(element.getBoundingClientRect().height));
+    if (height === lastHeight) break;
+    lastHeight = height;
+    await page.waitForTimeout(250);
+  }
   return page.locator('#workspace');
 }
 
@@ -112,6 +141,15 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
           animations: 'disabled',
           caret: 'hide',
           scale: 'css',
+          // The relationship map lays its nodes out programmatically and
+          // settles on one of a couple of near-identical arrangements, which
+          // moved ~2% of pixels between otherwise identical runs. The budget
+          // sits just above that jitter so the snapshot still catches real
+          // changes — colour, type, spacing, a missing panel — without
+          // failing on node positions.
+          ...(relationshipView === 'map'
+            ? { maxDiffPixelRatio: 0.035 }
+            : {}),
         },
       );
     });

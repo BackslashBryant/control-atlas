@@ -221,23 +221,27 @@ export async function fetchArtifact(path: string) {
     return cached;
   }
 
-  const request = fetch(compressedArtifactPath(path)).then(async (response) => {
-    if (response.ok && typeof DecompressionStream !== "undefined") {
-      try {
+  const request = (async () => {
+    // Only a rejected compressed fetch used to take the whole artifact down
+    // with it: the .then() never ran, so the uncompressed fallback never got
+    // its turn. Under load that intermittently left Resources reporting an
+    // empty directory. Any failure of the compressed path now falls through.
+    try {
+      const response = await fetch(compressedArtifactPath(path));
+      if (response.ok && typeof DecompressionStream !== "undefined") {
         const ds = new DecompressionStream("gzip");
         const decompressedStream = response.body!.pipeThrough(ds);
         return await new Response(decompressedStream).json();
-      } catch {
-        // Decompression failed; fall through to uncompressed fetch
       }
+    } catch {
+      // Compressed fetch or decompression failed; use the uncompressed file.
     }
-    // Fallback to uncompressed
     const fallbackResponse = await fetch(path);
     if (!fallbackResponse.ok) {
       throw new Error(`Unable to load ${path}.`);
     }
     return fallbackResponse.json();
-  });
+  })();
   artifactCache.set(path, request);
 
   try {

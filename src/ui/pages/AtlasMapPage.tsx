@@ -454,32 +454,41 @@ function FocusedAtlas(props: {
 
   const boardView = view === "path";
 
+  // One definition, rendered in exactly one place: it is the Path view's own
+  // content, and on Map and List it sits in the header so the record's
+  // position never leaves the screen. Rendering both duplicated the landmark.
+  const structuralPosition = (
+    <section className="atlas-structural-position">
+      <p className="eyebrow">Structural position</p>
+      <h2>Where this sits</h2>
+      <WhereThisSitsRail
+        bundle={bundle}
+        links={
+          record.structural_path.length > 1 ||
+          record.center_node.node_type === "catalog"
+            ? record.structural_path.map((link) => ({
+                ...link,
+                origin: "structural" as const,
+              }))
+            : undefined
+        }
+        nodeId={record.center_node.id}
+        onOpenNode={(node) =>
+          patchAtlas({ node, atlasStage: "", relationshipGroup: "" })
+        }
+      />
+      {choiceLabels.length ? (
+        <nav aria-label="Your choices" className="atlas-choice-trail">
+          <strong>Your choices</strong>
+          <span>{choiceLabels.join(" > ")}</span>
+        </nav>
+      ) : null}
+    </section>
+  );
+
   return (
     <div className="atlas-focused-shell">
-      <section className="atlas-structural-position">
-        <p className="eyebrow">Structural position</p>
-        <h2>Where this sits</h2>
-        <WhereThisSitsRail
-          bundle={bundle}
-          links={
-            record.structural_path.length > 1 ||
-            record.center_node.node_type === "catalog"
-              ? record.structural_path.map((link) => ({
-                  ...link,
-                  origin: "structural" as const,
-                }))
-              : undefined
-          }
-          nodeId={record.center_node.id}
-          onOpenNode={(node) => patchAtlas({ node, atlasStage: "" })}
-        />
-        {choiceLabels.length ? (
-          <nav aria-label="Your choices" className="atlas-choice-trail">
-            <strong>Your choices</strong>
-            <span>{choiceLabels.join(" > ")}</span>
-          </nav>
-        ) : null}
-      </section>
+      {boardView ? null : structuralPosition}
       <div className="atlas-focused-toolbar">
         <div aria-label="Atlas views" className="atlas-view-tabs" role="tablist">
           {/* Three views of ONE record. The lens (Purpose vs RMF) is chosen
@@ -561,10 +570,9 @@ function FocusedAtlas(props: {
             {boardView ? (
               <section className="atlas-path-summary">
                 <p className="eyebrow">Publisher-declared structural path</p>
-                <h3>{centerLabel}</h3>
-                {/* The identical chain already renders in the "Structural
-                    position" header above; a second copy inside the Path panel
-                    duplicated the landmark and the content. */}
+                {/* centerLabel was here too: the record's name is already the
+                    page H1 and the last crumb of the chain below. */}
+                {structuralPosition}
                 <p>
                   Relationship classes are shown in Map and List. Baselines and
                   process lenses remain separate choices rather than
