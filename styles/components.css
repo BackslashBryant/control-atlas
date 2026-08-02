@@ -836,6 +836,24 @@
   font-size: var(--ca-text-sm);
 }
 
+.record-decomposition-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ca-space-3);
+  margin: calc(-1 * var(--ca-space-2)) 0 var(--ca-space-3);
+}
+
+.record-decomposition-label {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+  font-weight: 700;
+}
+
+.record-decomposition-block .badge-row {
+  margin-top: 0;
+}
+
 .record-lifecycle-badges {
   align-items: center;
   margin-bottom: var(--ca-space-3);

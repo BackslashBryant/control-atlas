@@ -4,6 +4,7 @@ import {
   BRAND_WORDS,
 } from './shared/brand-rotation';
 import {
+  requestSearchOverlayOpen,
   ROUTE_COMMITTED_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
 } from './shared/navigation-events';
@@ -269,14 +270,33 @@ function connectStaticHome() {
     });
 
   startBrandRotation();
+  window.addEventListener('keydown', onStaticSearchShortcut);
   rootElement
     .querySelector<HTMLElement>('.app-shell')
     ?.setAttribute('data-app-ready', 'true');
 }
 
+// React (and its Ctrl+K listener in App.tsx) does not mount at all while on
+// Home, per syncProgressiveShell's reactActive flag below — so the shortcut
+// the masthead advertises would otherwise do nothing on the one page whose
+// hero prints it. Boot React, then ask it to open the overlay once mounted.
+function onStaticSearchShortcut(event: KeyboardEvent) {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    void bootReactApp().then(() => {
+      // React's passive effects (which attach the listener this event needs)
+      // flush asynchronously after commit, not within this same microtask —
+      // a rAF landed before that flush and the event was lost. A short delay
+      // clears it reliably; it is imperceptible on a keypress.
+      window.setTimeout(() => requestSearchOverlayOpen(), 60);
+    });
+  }
+}
+
 async function bootReactApp() {
   if (reactBoot) return reactBoot;
 
+  window.removeEventListener('keydown', onStaticSearchShortcut);
   stopBrandRotation();
   const staticHome = rootElement.querySelector<HTMLElement>('[data-static-home]');
   staticHome?.setAttribute('hidden', '');

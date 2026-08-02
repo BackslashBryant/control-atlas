@@ -161,3 +161,51 @@ test("a11y: library detail relationship table has no serious or critical violati
   ).toBeVisible();
   await assertNoBlockingViolations(page, "library detail relationship table");
 });
+
+test("a11y: skip link moves keyboard focus to the workspace", async ({
+  page,
+}) => {
+  await gotoApp(page, "/#/");
+  await waitForAppReady(page, { allowPartial: true });
+  await dismissOnboarding(page);
+
+  await page.keyboard.press("Tab");
+  const skipLink = page.locator("a.skip-link");
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toHaveAttribute("href", "#workspace");
+  await expect(skipLink).toBeVisible();
+
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#workspace")).toBeFocused();
+});
+
+test("a11y: Ctrl+K search opens an accessible, focus-trapped dialog", async ({
+  page,
+}) => {
+  await gotoApp(page, "/#/");
+  await waitForAppReady(page, { allowPartial: true });
+  await dismissOnboarding(page);
+
+  await page.keyboard.press("Control+k");
+  const dialog = page.getByRole("dialog", { name: "Search Control Atlas" });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByRole("searchbox", { name: "Search Control Atlas" }),
+  ).toBeFocused();
+
+  const blocking = (
+    await new AxeBuilder({ page })
+      .include('[aria-label="Search Control Atlas"]')
+      .withTags(["wcag2a", "wcag2aa"])
+      .analyze()
+  ).violations.filter((violation) =>
+    ["serious", "critical"].includes(violation.impact || ""),
+  );
+  expect(
+    blocking,
+    `Accessibility violations in search dialog: ${blocking.map((entry) => `${entry.id} (${entry.impact})`).join(", ")}`,
+  ).toEqual([]);
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});

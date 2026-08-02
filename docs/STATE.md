@@ -58,6 +58,40 @@
   PRs (push to a throwaway branch first for Public Repo Checks, then main).
   (2026-08-02, session 17)
 
+## 2026-08-02 (session 18) - audit closeout
+
+Completed the deferred audit from session 17 against the current canonical
+surface, rather than treating pre-rebrand artifacts as product coverage.
+
+### Done
+- **Current visual coverage:** reviewed the 28 current visual contracts: the
+  12 active route compositions (Home, Start here, Search, Catalog, record,
+  Compare, Resources, resource detail, Learn, Build documents, Sources, and
+  About) at desktop and compact widths, plus the focused Atlas Map and Path
+  compositions at both widths. The 20 removed snapshots used old route names
+  (`explore`, `library`, `commons`, `commons-detail`, and `guides`) and are
+  not referenced by the current visual spec; they were deleted rather than
+  misrepresented as part of the audit.
+- **Structural decomposition:** closed tree-model Â§7 item 6. Published
+  enhancement edges now render in a compact, labeled **Decomposes into** block
+  near the record title and no longer mix with generic correlation groups.
+  The first implementation exposed every enhancement as a full-width card;
+  the visual gate caught it and the final compact link treatment was accepted
+  only after desktop and compact screenshot inspection.
+- **Keyboard accessibility:** added permanent Playwright assertions for the
+  skip link moving focus to `#workspace` and for Home-page Ctrl+K booting the
+  React shell, opening the named search dialog, focusing its searchbox, and
+  passing the dialog's axe check.
+
+### Verification
+- Accessibility: all 32 checks passed, including the new skip-link and Ctrl+K
+  dialog assertions.
+- Visual: all 28 current desktop/compact compositions passed after the
+  inspected record-page rebaseline.
+- `npm run precommit` passed: build, lint, typecheck, unit/contracts, browser,
+  static/public audit, 5 accessibility smokes, and 12 practitioner workflows.
+  Remote and deployed evidence are recorded with the shipping commit.
+
 ## 2026-08-02 (session 17) - full-record ingestion
 
 Executed `docs/plans/full-records-2026-08-02.md` in full. Owner-measured gap:

@@ -468,6 +468,11 @@ publisher text already in the pipeline, just not surfaced:
   looked up cross-shard, because `src/app/atlas-neighborhood.mjs` only ships
   a compact id/type/title tuple for a record's connected counterparts) and on
   the assessment_procedure's own page.
+- **Item 6, "what decomposes beneath it"**: a control's published
+  `decomposes_into` edges render in a distinct **Decomposes into** block beside
+  the record heading. They are compact, keyboard-operable record links and are
+  excluded from the generic Connections groups, preserving the Class-1
+  structural/correlation boundary.
 
 Do not reopen these as authoring tasks. If a future reader need surfaces here
 again, the fix is finding or ingesting more of the publisher's own text, not

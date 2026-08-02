@@ -38,7 +38,10 @@ import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
 import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
-import { notifyRouteCommitted } from "../shared/navigation-events";
+import {
+  notifyRouteCommitted,
+  OPEN_SEARCH_OVERLAY_EVENT,
+} from "../shared/navigation-events";
 import {
   activeBrandAction,
   BRAND_SURFACE_VIEWS,
@@ -371,8 +374,16 @@ export function App() {
         setSearchOverlayOpen(true);
       }
     };
+    // The Home route boots without this component mounted at all (its
+    // shortcuts are advertised on a static shell React hasn't rendered yet),
+    // so main.tsx boots React on Ctrl+K and fires this once mounted instead.
+    const onOpenSearchOverlay = () => setSearchOverlayOpen(true);
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
+    };
   }, []);
 
   function navigate(
