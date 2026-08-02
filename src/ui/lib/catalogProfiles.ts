@@ -41,7 +41,7 @@ const SYNOPSES: Record<string, string> = {
   "fedramp-rev5":
     "What a cloud service must meet to be authorized for federal use, expressed as 800-53 plus FedRAMP's own additions and parameters.",
   "nist-800-171":
-    "What a non-federal organization must do to protect controlled unclassified information on its own systems.",
+    "Revision 3: what a non-federal organization must do to protect controlled unclassified information on its own systems.",
   "nist-800-171-rev2":
     "The revision most DoD contracts still cite for protecting controlled unclassified information outside federal systems.",
   "nist-800-172":
