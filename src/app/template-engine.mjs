@@ -18,7 +18,10 @@
  * @property {DocSection[]} sections
  */
 
-import { PRODUCT_DISCLAIMER as DISCLAIMER } from '../shared/disclaimer.mjs';
+import {
+  PRODUCT_DISCLAIMER as DISCLAIMER,
+  PRELAUNCH_REVIEW_NOTICE,
+} from '../shared/disclaimer.mjs';
 
 const EVIDENCE_TYPE_HINT = "Policy | Procedure | Config screenshot | System report | Access review | Scan output | Interview | Architecture diagram | Change record | Training record | Incident record | Log sample | Inventory export | Exception memo";
 
@@ -1166,7 +1169,7 @@ function formatMarkdownTableSection(sec) {
 }
 
 function formatMarkdown(doc) {
-  let out = `# ${doc.title}\n\n${doc.description}\n\n> **Disclaimer:** ${DISCLAIMER}\n\n`;
+  let out = `# ${doc.title}\n\n${doc.description}\n\n> **Disclaimer:** ${DISCLAIMER}\n\n> **Review status:** ${PRELAUNCH_REVIEW_NOTICE}\n\n`;
   for (const sec of doc.sections) {
     out += `## ${sec.heading}\n\n`;
     if (sec.type === "text") {
@@ -1199,6 +1202,7 @@ function formatCsv(doc) {
   }
   out += `# ${doc.title}\n`;
   out += `# Disclaimer: ${DISCLAIMER.replace(/\n/g, " ")}\n`;
+  out += `# Review status: ${PRELAUNCH_REVIEW_NOTICE.replace(/\n/g, " ")}\n`;
   for (const sec of doc.sections) {
     if (sec.type === "text") {
       out += `# ${sec.heading}: ${String(sec.content).replace(/\n/g, " ")}\n`;
@@ -1212,6 +1216,7 @@ function formatJson(doc) {
     title: doc.title,
     description: doc.description,
     disclaimer: DISCLAIMER,
+    reviewStatus: PRELAUNCH_REVIEW_NOTICE,
     sections: doc.sections,
   };
   return JSON.stringify(output, null, 2);
@@ -1221,6 +1226,7 @@ function formatYaml(doc) {
   let out = `title: "${doc.title.replace(/"/g, '\\"')}"\n`;
   out += `description: "${doc.description.replace(/"/g, '\\"')}"\n`;
   out += `disclaimer: "${DISCLAIMER.replace(/"/g, '\\"')}"\n`;
+  out += `reviewStatus: "${PRELAUNCH_REVIEW_NOTICE.replace(/"/g, '\\"')}"\n`;
   out += "sections:\n";
   for (const sec of doc.sections) {
     out += `  - heading: "${sec.heading.replace(/"/g, '\\"')}"\n`;

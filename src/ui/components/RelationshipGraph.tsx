@@ -38,6 +38,7 @@ import {
 } from "../lib/graphLayout";
 import {
   buildGraphData,
+  lensColor,
   linkDashPattern,
   nodeColor,
   provenanceColor,
@@ -64,6 +65,7 @@ type RelationshipGraphProps = {
     confidence: string;
     rationale?: string;
     navigation_note?: string;
+    relationship_lens?: string;
   }>;
   centerNodeId: string;
   selectedNodeId: string | null;
@@ -316,7 +318,9 @@ function buildDiagramEdges(
       markerEnd: { type: MarkerType.ArrowClosed },
       data: { relationshipType: edge.relationshipType },
       style: {
-        stroke: provenanceColor(edge.provenanceClass),
+        stroke: edge.relationshipLens
+          ? lensColor(edge.relationshipLens)
+          : provenanceColor(edge.provenanceClass),
         strokeDasharray: dashed ? dashed.join(" ") : undefined,
         strokeWidth: 2,
       },
@@ -344,6 +348,15 @@ const RelationshipGraphInner = forwardRef<
     layoutMode = "hierarchy",
     canvasOverlay,
   } = props;
+  // minZoom here forces fitView to zoom in at least this far even when that
+  // means the full layout no longer all fits on screen — a small, readable
+  // graph beats a fully-visible but illegibly tiny one; pan/zoom controls
+  // and the MiniMap (large graphs) remain available to see the rest.
+  const fitViewOptions = {
+    padding: 0.1,
+    minZoom: 1,
+    duration: reducedMotion ? 0 : 180,
+  };
 
   const reactFlow = useReactFlow<DiagramNode, DiagramEdge>();
   const instanceRef = useRef<ReactFlowInstance<DiagramNode, DiagramEdge> | null>(
@@ -417,7 +430,7 @@ const RelationshipGraphInner = forwardRef<
 
   useImperativeHandle(ref, () => ({
     fitToScreen() {
-      void reactFlow.fitView({ padding: 0.18, duration: reducedMotion ? 0 : 180 });
+      void reactFlow.fitView(fitViewOptions);
     },
     resetView() {
       setLayout(null);
@@ -455,10 +468,7 @@ const RelationshipGraphInner = forwardRef<
           `Diagram ready: ${graphData.nodes.length} nodes / ${graphData.links.length} links.`,
         );
         window.setTimeout(() => {
-          void reactFlow.fitView({
-            padding: 0.18,
-            duration: reducedMotion ? 0 : 180,
-          });
+          void reactFlow.fitView(fitViewOptions);
         }, 0);
       })
       .catch(() => {
@@ -612,9 +622,18 @@ const RelationshipGraphInner = forwardRef<
       </div>
       <div
         aria-label="Map nodes"
-        className="graph-node-shortcuts"
+        className={
+          // A visible chip row duplicates the diagram once the graph is
+          // small enough to read directly; keep it for keyboard/AT users
+          // (still focusable, still counted by tests) but stop competing
+          // for sighted users' attention on small graphs.
+          graphData.nodes.length > 10
+            ? "graph-node-shortcuts"
+            : "graph-node-shortcuts visually-hidden"
+        }
         role="group"
       >
+        <span className="graph-node-shortcuts-label">Jump to node:</span>
         {graphData.nodes.map((node, index) => (
           <button
             className={node.id === selectedNodeId ? "selected" : ""}

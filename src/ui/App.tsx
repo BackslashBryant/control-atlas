@@ -151,9 +151,9 @@ export function App() {
     parseHashLocation(location.pathname, location.search),
   );
   // Latest URL-derived state, updated synchronously by navigate() and the
-  // location effect. viewState itself commits inside startTransition, which
-  // React may defer past a second rapid navigation; merging from this ref
-  // keeps back-to-back navigations from dropping each other's patches.
+  // location effect, ahead of viewState's own commit. The runtime-load effect
+  // below reads this ref instead of viewState so it always sees the most
+  // recent navigation even if its own dependencies haven't re-run yet.
   const latestNavStateRef = useRef<ViewState>(viewState);
   const [bundle, setBundle] = useState<RuntimeBundle | null>(null);
   const [loadError, setLoadError] = useState<string>("");
@@ -310,9 +310,12 @@ export function App() {
     pendingRouteRecovery = "";
     const parsed = parseHashLocation(location.pathname, location.search);
     latestNavStateRef.current = parsed;
-    startTransition(() => {
-      setViewState(parsed);
-    });
+    // Route changes must commit immediately: wrapping this in startTransition
+    // let a same-path, query-only navigation (e.g. switching Explore areas via
+    // a direct hash edit, bookmark, or back/forward, not a click) get
+    // superseded before it ever painted, leaving the previous area on screen
+    // while the URL had already moved on.
+    setViewState(parsed);
   }, [location.pathname, location.search, routerNavigate]);
 
   // Per-route document.title (CATL-61): honest browser-history/bookmark labels,
@@ -644,7 +647,7 @@ function AppContent(props: {
   if (state.view === "not-found") {
     return (
       <section className="notice">
-        <h2>Page not found</h2>
+        <h1>Page not found</h1>
         <p>
           We could not find that page. The link may be incorrect or the page may
           have moved.
@@ -785,7 +788,7 @@ function AppContent(props: {
     }
     return (
       <section className="notice">
-        <h2>No public map entry for "{state.query}"</h2>
+        <h1>No public map entry for "{state.query}"</h1>
         <p>Try Search or Start to find the closest path.</p>
         <div className="card-actions">
           <Button

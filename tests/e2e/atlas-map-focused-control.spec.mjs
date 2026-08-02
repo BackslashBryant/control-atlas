@@ -76,20 +76,29 @@ test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
   await expect(pathTab).toHaveAttribute("aria-selected", "true");
 });
 
-test("focused Map uses the shared bounded graph and exposes the complete List", async ({ page }) => {
+test("focused Map answers relationship type and count before any diagram", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Round-4 rework (2026-08-02): the default view is relationship-class
+  // summary cards + that class's own record list, never every relationship
+  // class in one diagram — the node-link graph is opt-in via "View as graph".
   const map = page.getByRole("region", { name: "Relationship map" });
   await expect(map).toBeVisible();
-  await expect(map.locator(".atlas-scope-count")).toContainText(
-    "List contains the complete same scope",
-  );
+  const lensCards = map.getByRole("group", { name: "Relationship types" });
+  await expect(lensCards).toBeVisible();
+  await expect(lensCards.getByRole("button", { name: /Implementation/ })).toBeVisible();
+  await expect(map.locator(".react-flow")).toHaveCount(0);
+
+  await map.getByRole("button", { name: /Implementation/ }).click();
+  await expect(map.getByRole("button", { name: "View all 47 in List" })).toBeVisible();
+
+  await map.getByText("View as graph").click();
   const visibleNodes = map
     .getByRole("group", { name: "Map nodes" })
     .getByRole("button");
-  expect(await visibleNodes.count()).toBeLessThanOrEqual(7);
+  expect(await visibleNodes.count()).toBeLessThanOrEqual(15);
 
   await page.getByRole("tab", { name: "List", exact: true }).click();
   await expect(

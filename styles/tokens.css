@@ -114,6 +114,18 @@
   --ca-graph-center: var(--lsm-relay);
   --ca-graph-dim: color-mix(in srgb, var(--lsm-dust) 35%, transparent);
 
+  /* Relationship-class colors for the record-neighborhood map: one hue per
+     class (docs/tree-model.md), reused for both nodes and edges of that
+     class so the kind of relationship reads from color, not only the text
+     label. Structural never reaches this map (rendered separately as its
+     own structural-child tag list), so it has no color here. */
+  --ca-lens-applicability: var(--lsm-gold);
+  --ca-lens-implementation: var(--lsm-relay);
+  --ca-lens-assessment: var(--lsm-signal);
+  --ca-lens-process: var(--lsm-dust);
+  --ca-lens-cross-framework: var(--lsm-orange);
+  --ca-lens-threat: var(--lsm-rust);
+
   /* 4-point spacing scale */
   --ca-space-1: 0.25rem;
   --ca-space-2: 0.5rem;

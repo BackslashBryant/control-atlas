@@ -468,7 +468,12 @@ function FocusedAtlas(props: {
   // position never leaves the screen. Rendering both duplicated the landmark.
   const structuralPosition = (
     <section className="atlas-structural-position">
-      <p className="eyebrow">Structural position</p>
+      {/* Not "Control Atlas structure" — WhereThisSitsRail badges only the
+          organizing hops it actually derived; the rest of this path
+          (catalog family onward) is the publisher's own declared hierarchy,
+          and a blanket eyebrow claiming the whole path is Control Atlas's
+          own would contradict that per-crumb distinction. */}
+      <p className="eyebrow">Hierarchy</p>
       <h2>Where this sits</h2>
       <WhereThisSitsRail
         bundle={bundle}
@@ -746,6 +751,13 @@ function AtlasGuidedPath(props: {
   // Seeded from the URL so Start Here (and any shared link) can open straight
   // into one limb; further limb choices stay local to this page.
   const [openLimbId, setOpenLimbId] = useState(state.atlasLimb || "");
+  // Re-sync when the URL's limb changes without this component unmounting —
+  // back/forward and opening a different area's shared link while Explore is
+  // already open both change state.atlasLimb without a remount, and openLimbId
+  // must follow or the screen keeps showing the previous area.
+  useEffect(() => {
+    setOpenLimbId(state.atlasLimb || "");
+  }, [state.atlasLimb]);
   const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
   const framework = frameworks.find(
     (choice) => choice.id === state.atlasFramework,
