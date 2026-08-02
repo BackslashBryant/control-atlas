@@ -12,6 +12,7 @@ import {
   parseViewState,
   serializeViewState,
 } from "../../src/ui/lib/viewState";
+import spine from "../../data/curated/tree-spine.json";
 
 const nodes: AtlasDrillNode[] = [
   node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),
@@ -226,12 +227,24 @@ test("generated selector groups all catalogs under their limbs, no dead ends, em
     ),
     "no catalog is a dead end",
   );
-  // Empty limbs are still rendered (greyed by A.7), never dropped.
-  const emptyLimbs = model.frameworkGroups
+  // Areas with no published catalog are still rendered, never dropped. Since
+  // 2026-08-02 Assessment carries the 800-53A procedures, and the only two
+  // without a catalog (Operations, Knowledge) are the ones whose content lives
+  // on another surface — every one of those must name where that is, so no
+  // area is ever a dead end.
+  const areasWithoutCatalogs = model.frameworkGroups
     .filter((group) => group.frameworks.length === 0)
     .map((group) => group.label)
     .sort();
-  assert.deepEqual(emptyLimbs, ["Assessment", "Knowledge", "Operations"]);
+  assert.deepEqual(areasWithoutCatalogs, ["Knowledge", "Operations"]);
+  const destinations = spine.areaDestinations as Record<string, unknown>;
+  for (const group of model.frameworkGroups) {
+    if (group.frameworks.length > 0) continue;
+    assert.ok(
+      destinations[group.id],
+      `${group.label} has no catalogs and no declared destination`,
+    );
+  }
 });
 
 test("guided Atlas indexes structural edges once instead of rescanning per unit", () => {

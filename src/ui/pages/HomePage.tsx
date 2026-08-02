@@ -23,7 +23,7 @@ const HOME_ENTRANCES = [
   {
     label: "Open the Atlas",
     description:
-      "For when you do not know which publication covers your question. Start at the trunk and narrow down.",
+      "For when you do not know which publication covers your question. Start from the nine areas and narrow down.",
     icon: IconMap2,
     view: "atlas-map",
   },
@@ -43,8 +43,7 @@ const HOME_ENTRANCES = [
   },
 ] as const;
 
-const TRUNK_LABEL = treeSpine.trunk.label;
-const LIMB_LABELS = treeSpine.limbs.map((limb) => limb.label);
+const AREA_LABELS = treeSpine.limbs.map((area) => area.label);
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const [searchDraft, setSearchDraft] = useState("");
@@ -106,12 +105,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
           Home shows it so the shape of the whole corpus is visible before the
           visitor commits to a click. */}
       <section aria-labelledby="home-spine-title" className="home-spine">
-        <h2 id="home-spine-title">
-          One trunk: <strong>{TRUNK_LABEL}</strong>
-        </h2>
-        <p>Every publication in Control Atlas sits under one of these nine limbs.</p>
+        <h2 id="home-spine-title">Everything here, in nine areas</h2>
+        <p>
+          Every publication, setting and procedure belongs to one of them.
+        </p>
         <ul className="home-spine-limbs">
-          {LIMB_LABELS.map((label) => (
+          {AREA_LABELS.map((label) => (
             <li key={label}>
               <button onClick={() => onNavigate("atlas-map")} type="button">
                 {label}

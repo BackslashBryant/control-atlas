@@ -596,7 +596,12 @@ test('assessment procedures remain correlation records rather than structural ch
 test('CCI mappings remain correlation edges and never become structural parents', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const ccis = nodes.filter((node) => node.metadata?.catalog_id === 'disa-cci');
+  // The CCI library now has a catalog wrapper so it is browsable in Explore
+  // (2026-08-02). Count the requirement records themselves, not the wrapper.
+  const ccis = nodes.filter(
+    (node) =>
+      node.metadata?.catalog_id === 'disa-cci' && node.node_type !== 'catalog',
+  );
   assert.equal(ccis.length, 5137, 'CCI count');
 
   assert.ok(ccis.every((node) => node.parent_id === undefined));

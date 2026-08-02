@@ -183,7 +183,14 @@ export function deriveSyntheticCatalogs(nodes, spine, catalogIdOf) {
       catalogId: decl.catalog_id,
       catalogNodeId: `${decl.catalog_id}:CATALOG`,
       limbId: decl.limb,
-      childIds,
+      // CCIs and assessment procedures already hang beneath the control they
+      // cite or assess (deriveCciHierarchyParents /
+      // deriveAssessmentProcedureParents). A wrapper that also claimed them
+      // structurally outranked that and flattened the record's chain to
+      // "area > wrapper > record", losing the control it belongs to. Those
+      // catalogs get a browsable root with no children of its own; Explore
+      // lists their records by catalog membership instead.
+      childIds: decl.attachRecords === false ? [] : childIds,
     });
   }
   return { wrappers, empty };

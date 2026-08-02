@@ -10,19 +10,23 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("the Explore landing shows the trunk and nine limbs, and a limb opens its catalogs", async ({
+test("the Explore landing shows nine areas, none of them a dead end, and an area opens its publications", async ({
   page,
 }) => {
   test.setTimeout(120_000);
   await gotoApp(page, "/#/explore");
   await waitForAppReady(page);
 
-  // The trunk + nine limbs render (empty limbs greyed, never hidden).
+  // Nine areas render, and since 2026-08-02 none of them is a dead end: an
+  // area with no published catalog names the surface that holds its content
+  // (Operations -> tasks, Knowledge -> the resource directory) instead of
+  // showing a disabled "Not yet loaded" card.
   await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
   await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
-  await expect(page.locator(".atlas-limb-card-empty")).toHaveCount(3);
+  await expect(page.locator(".atlas-limb-card[disabled]")).toHaveCount(0);
+  await expect(page.getByText("Not yet loaded")).toHaveCount(0);
 
-  // A populated limb opens into its catalogs.
+  // An area with publications opens into them.
   await page.getByRole("button", { name: /Compliance/ }).click();
   await expect(
     page.getByText(/which catalog do you want to open\?/i),

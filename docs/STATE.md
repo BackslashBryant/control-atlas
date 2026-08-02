@@ -170,6 +170,36 @@ failed**. Fixed:
 - Re-baselined (product changed deliberately, guarantee kept): the Path
   evidence specs, compare-map's implicit run, and the payload specs.
 
+## 2026-08-02 (session 16) - user language and no empty categories
+
+Owner: "'Limbs' is not appropriate language for users... There should be no
+known gaps... Needs your eyes not mine is not the right answer."
+
+- **The internal vocabulary is out of the product.** Home, Explore, Start Here
+  and the context bar said limbs / trunk / "choose a branch". Everything now
+  says **area**. `tests/content-review.test.mjs` fails the build if trunk,
+  limb, twig or acorn ever reaches rendered copy again (identifiers and class
+  names are exempt). Rule recorded in CLAUDE.md and docs/tree-model.md.
+- **No area is empty any more.** Assessment was showing "Not yet loaded" while
+  1,014 assessment procedures sat in the graph: 800-53A had no catalog root.
+  Added roots for **800-53A, FedRAMP Rev. 5, 800-53B and the CCI library** —
+  FedRAMP in particular was unreachable from Explore entirely.
+  Operations and Knowledge have no catalog by nature, so they now name the
+  surface that holds their content (`areaDestinations` in tree-spine.json):
+  Operations → Build's tasks (continuous monitoring, POA&Ms, baselines,
+  reciprocity), Knowledge → the resource directory.
+- **The wrappers must not own their records.** The first cut gave CCIs and
+  procedures structural `contains` edges from the new roots, which outranked
+  the derived parentage and flattened CCI-000015's chain from seven hops to
+  "Implementation > CCI library > CCI" — losing the control it implements.
+  `attachRecords: false` keeps those roots browsable while the records stay
+  under the control they cite or assess; `atlasDrilldown` lists them by
+  catalog membership instead. Residual unmappable CCIs are filed with
+  `organizes`, never `contains`.
+
+Verified: npm test 3/253/30/57, e2e 141/141, visual 28/28 twice, precommit
+clean, 100% of 11,691 nodes reach the trunk.
+
 ### Gates that had never been run (2026-08-01, third pass)
 `npm run precommit`, `npm run audit:deps` and the **visual** suite
 (`playwright.visual.config.mjs` — a separate config, so it was NOT part of the

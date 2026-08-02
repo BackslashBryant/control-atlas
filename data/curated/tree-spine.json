@@ -1,16 +1,55 @@
 {
-  "_doc": "Class-4 (organizing) data. Hand-authored, NOT derived and NOT publisher-declared. Defines the Cybersecurity trunk, the nine limbs, and which limb every published catalog attaches to. See docs/tree-model.md §3 Class 4 and docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md Part A. Every catalog->limb and trunk->limb hop is emitted as an `organizes` edge (relationship_class `organizing`, publication_status `editorial`) and must be badged 'Control Atlas structure' in the UI, never as a source name.",
-  "trunk": { "id": "atlas:TRUNK", "label": "Cybersecurity" },
+  "_doc": "Class-4 (organizing) data. Hand-authored, NOT derived and NOT publisher-declared. Defines the Cybersecurity trunk, the nine limbs, and which limb every published catalog attaches to. See docs/tree-model.md \u00a73 Class 4 and docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md Part A. Every catalog->limb and trunk->limb hop is emitted as an `organizes` edge (relationship_class `organizing`, publication_status `editorial`) and must be badged 'Control Atlas structure' in the UI, never as a source name.",
+  "trunk": {
+    "id": "atlas:TRUNK",
+    "label": "Cybersecurity"
+  },
   "limbs": [
-    { "id": "atlas:LIMB-GOVERNANCE", "label": "Governance", "blurb": "Who decides, who signs, and under what authority." },
-    { "id": "atlas:LIMB-RISK", "label": "Risk", "blurb": "How bad it would be, and how much of that you accept." },
-    { "id": "atlas:LIMB-COMPLIANCE", "label": "Compliance", "blurb": "The control sets you are measured against." },
-    { "id": "atlas:LIMB-ARCHITECTURE", "label": "Architecture", "blurb": "How the system is supposed to be built." },
-    { "id": "atlas:LIMB-IMPLEMENTATION", "label": "Implementation", "blurb": "The settings that make a control real on a box." },
-    { "id": "atlas:LIMB-ASSESSMENT", "label": "Assessment", "blurb": "How someone proves the control works." },
-    { "id": "atlas:LIMB-OPERATIONS", "label": "Operations", "blurb": "Keeping it true after the ATO." },
-    { "id": "atlas:LIMB-THREAT", "label": "Threats & Defense", "blurb": "What the adversary does, and what stops it." },
-    { "id": "atlas:LIMB-KNOWLEDGE", "label": "Knowledge", "blurb": "Guides, templates, crosswalks, and communities." }
+    {
+      "id": "atlas:LIMB-GOVERNANCE",
+      "label": "Governance",
+      "blurb": "Who decides, who signs, and under what authority."
+    },
+    {
+      "id": "atlas:LIMB-RISK",
+      "label": "Risk",
+      "blurb": "How bad it would be, and how much of that you accept."
+    },
+    {
+      "id": "atlas:LIMB-COMPLIANCE",
+      "label": "Compliance",
+      "blurb": "The control sets you are measured against."
+    },
+    {
+      "id": "atlas:LIMB-ARCHITECTURE",
+      "label": "Architecture",
+      "blurb": "How the system is supposed to be built."
+    },
+    {
+      "id": "atlas:LIMB-IMPLEMENTATION",
+      "label": "Implementation",
+      "blurb": "The settings that make a control real on a box."
+    },
+    {
+      "id": "atlas:LIMB-ASSESSMENT",
+      "label": "Assessment",
+      "blurb": "How someone proves the control works."
+    },
+    {
+      "id": "atlas:LIMB-OPERATIONS",
+      "label": "Operations",
+      "blurb": "Keeping it true after the ATO."
+    },
+    {
+      "id": "atlas:LIMB-THREAT",
+      "label": "Threats & Defense",
+      "blurb": "What the adversary does, and what stops it."
+    },
+    {
+      "id": "atlas:LIMB-KNOWLEDGE",
+      "label": "Knowledge",
+      "blurb": "Guides, templates, crosswalks, and communities."
+    }
   ],
   "catalogLimbs": {
     "nist-800-53": "atlas:LIMB-COMPLIANCE",
@@ -30,13 +69,9 @@
     "mitre-attack-ics": "atlas:LIMB-THREAT",
     "mitre-d3fend": "atlas:LIMB-THREAT"
   },
-  "_syntheticCatalogsDoc": "These three catalog_ids carry real limb content but ship with no catalog root node of their own (their records land orphaned). The build (Part A.3) synthesizes a `<catalog_id>:CATALOG` node for each so they attach to their limb exactly like the 16 real roots; their same-catalog children then attach via the existing structural rule. Baseline catalogs (nist-800-53b, fedramp-rev5) are deliberately excluded — baselines are Class-2 applicability overlays, never tree spine (docs/tree-model.md §3.2).",
-  "_residualLimbsDoc": "Total-trunk-connectivity backfill (owner 2026-07-31: 'everything must connect to the trunk, period'). Catalog_ids here have neither a real nor a synthetic catalog root — they are baseline / applicability sets. Their orphan nodes connect to the trunk via an editorial `organizes` edge to the named limb, satisfying connectivity while keeping baselines OFF the structural spine (they remain Class-2 applicability overlays). Any orphan whose catalog_id HAS a real catalog root is instead backfilled structurally to that root by the build (same-catalog rule); the build fails loudly if ANY node still cannot reach the trunk.",
-  "residualLimbs": {
-    "nist-800-53b": "atlas:LIMB-COMPLIANCE",
-    "fedramp-rev5": "atlas:LIMB-COMPLIANCE",
-    "disa-cci": "atlas:LIMB-IMPLEMENTATION"
-  },
+  "_syntheticCatalogsDoc": "These three catalog_ids carry real limb content but ship with no catalog root node of their own (their records land orphaned). The build (Part A.3) synthesizes a `<catalog_id>:CATALOG` node for each so they attach to their limb exactly like the 16 real roots; their same-catalog children then attach via the existing structural rule. Baseline catalogs (nist-800-53b, fedramp-rev5) are deliberately excluded \u2014 baselines are Class-2 applicability overlays, never tree spine (docs/tree-model.md \u00a73.2).",
+  "_residualLimbsDoc": "Total-trunk-connectivity backfill (owner 2026-07-31: 'everything must connect to the trunk, period'). Catalog_ids here have neither a real nor a synthetic catalog root \u2014 they are baseline / applicability sets. Their orphan nodes connect to the trunk via an editorial `organizes` edge to the named limb, satisfying connectivity while keeping baselines OFF the structural spine (they remain Class-2 applicability overlays). Any orphan whose catalog_id HAS a real catalog root is instead backfilled structurally to that root by the build (same-catalog rule); the build fails loudly if ANY node still cannot reach the trunk.",
+  "residualLimbs": {},
   "syntheticCatalogs": [
     {
       "catalog_id": "fips-200",
@@ -58,6 +93,49 @@
       "label": "FIPS 199 Security Categorization",
       "source_id": "nist-fips-199",
       "description": "Standards for security categorization of federal information and information systems (FIPS 199)."
+    },
+    {
+      "catalog_id": "nist-800-53a",
+      "limb": "atlas:LIMB-ASSESSMENT",
+      "label": "NIST SP 800-53A Assessment Procedures",
+      "source_id": "nist-800-53a-assessment-procedures",
+      "description": "The procedures an assessor follows to decide whether each control is working.",
+      "attachRecords": false
+    },
+    {
+      "catalog_id": "fedramp-rev5",
+      "limb": "atlas:LIMB-COMPLIANCE",
+      "label": "FedRAMP Rev. 5 Baselines",
+      "source_id": "fedramp-rev5",
+      "description": "What a cloud service must meet to be authorized for federal use."
+    },
+    {
+      "catalog_id": "nist-800-53b",
+      "limb": "atlas:LIMB-COMPLIANCE",
+      "label": "NIST SP 800-53B Control Baselines",
+      "source_id": "nist-800-53b-baselines",
+      "description": "The Low, Moderate and High starting sets of controls."
+    },
+    {
+      "catalog_id": "disa-cci",
+      "limb": "atlas:LIMB-IMPLEMENTATION",
+      "label": "DISA Control Correlation Identifiers",
+      "source_id": "disa-cci-list",
+      "description": "The identifiers that tie a control's individual statements to the settings that satisfy them.",
+      "attachRecords": false
     }
-  ]
+  ],
+  "_areaDestinationsDoc": "Areas whose content is not a published catalog. Explore renders these as real entries pointing at the surface that holds them, so no area is ever shown empty.",
+  "areaDestinations": {
+    "atlas:LIMB-OPERATIONS": {
+      "view": "templates",
+      "actionLabel": "Open the operations tasks",
+      "summary": "Continuous monitoring, POA&Ms, system baselines and reciprocity packages."
+    },
+    "atlas:LIMB-KNOWLEDGE": {
+      "view": "commons",
+      "actionLabel": "Open the resource directory",
+      "summary": "Guides, datasets, tools, training and practitioner communities."
+    }
+  }
 }

@@ -2158,6 +2158,11 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
   }
 
   // 4. Residual connectivity backfill — anything still unreachable from the trunk.
+  const syntheticNonOwningCatalogs = new Set(
+    (spine.syntheticCatalogs || [])
+      .filter((decl) => decl.attachRecords === false)
+      .map((decl) => decl.catalog_id),
+  );
   const catalogRootByCatalogId = new Map();
   for (const node of nodes) {
     if (node.node_type === "catalog") catalogRootByCatalogId.set(catalogIdOf(node), node);
@@ -2169,12 +2174,25 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
     if (component.has(node.id)) continue;
     const cid = catalogIdOf(node);
     const root = catalogRootByCatalogId.get(cid);
-    if (root && root.id !== node.id) {
+    // A catalog whose records are parented elsewhere (CCIs under the control
+    // they cite, procedures under the control they assess) keeps a browsable
+    // root that owns nothing. Filing a leftover under it is Control Atlas's
+    // own decision, not a publisher containment claim, so it is an organizing
+    // edge — the same class the rest of that catalog's filing uses.
+    const rootOwnsRecords = !syntheticNonOwningCatalogs.has(cid);
+    if (root && root.id !== node.id && rootOwnsRecords) {
       pushStructuralBackfillEdge(edgeState, sourceById, {
         subjectId: `structural:residual:${root.id}->${node.id}`,
         parentNode: root,
         childNode: node,
         rationale: `${node.id} attached to its catalog root ${root.id} (residual connectivity backfill).`,
+      });
+    } else if (root && root.id !== node.id) {
+      pushOrganizingEdge(edgeState, {
+        subjectId: `organizing:residual:${root.id}->${node.id}`,
+        sourceNodeId: root.id,
+        targetNodeId: node.id,
+        rationale: `${node.id} filed under ${root.id} for reachability (editorial, non-structural).`,
       });
     } else if (spine.residualLimbs?.[cid]) {
       pushOrganizingEdge(edgeState, {

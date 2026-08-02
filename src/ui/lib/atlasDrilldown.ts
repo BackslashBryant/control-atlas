@@ -105,6 +105,30 @@ function byItemId(left: AtlasRecordChoice, right: AtlasRecordChoice) {
   });
 }
 
+// Records that belong to a catalog by membership rather than by a published
+// containment edge. Grouped by their family when the publisher gives one, so
+// 5,000 CCIs do not arrive as a single flat list.
+function groupRecordsByFamily(records: AtlasDrillNode[]): AtlasFamilyChoice[] {
+  const byFamily = new Map<string, AtlasDrillNode[]>();
+  for (const record of records) {
+    const family =
+      (record.metadata as { family?: string } | undefined)?.family || "All records";
+    const bucket = byFamily.get(family) || [];
+    bucket.push(record);
+    byFamily.set(family, bucket);
+  }
+  return [...byFamily.entries()]
+    .map(([family, entries]) => ({
+      id: `membership:${family}`,
+      itemId: family,
+      label: family,
+      description: `${entries.length.toLocaleString()} records`,
+      nodeType: "family",
+      records: entries.map(toChoice).sort(byItemId),
+    }))
+    .sort(byItemId);
+}
+
 export function buildAtlasDrilldownModel(dataset: {
   nodes: AtlasDrillNode[];
   edges: AtlasDrillEdge[];
@@ -170,11 +194,27 @@ export function buildAtlasDrilldownModel(dataset: {
           .sort(byItemId),
       }))
       .sort(byItemId);
+    // CCIs and assessment procedures hang beneath the control they cite or
+    // assess, so their catalog root deliberately owns no structural children
+    // (see attachRecords in data/curated/tree-spine.json). Browsing still has
+    // to work, so group those records by catalog membership instead of leaving
+    // the catalog a dead end.
+    const catalogId = catalogNode.metadata?.catalog_id || catalogNode.id;
+    const membershipUnits =
+      units.length > 0
+        ? units
+        : groupRecordsByFamily(
+            dataset.nodes.filter(
+              (node) =>
+                node.metadata?.catalog_id === catalogId &&
+                node.node_type !== "catalog",
+            ),
+          );
     return {
       ...toChoice(catalogNode),
-      id: catalogNode.metadata?.catalog_id || catalogNode.id,
+      id: catalogId,
       groupId: limbId,
-      units,
+      units: membershipUnits,
     };
   };
 

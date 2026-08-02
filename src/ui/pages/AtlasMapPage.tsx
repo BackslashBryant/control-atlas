@@ -34,6 +34,7 @@ import {
   NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
 import { catalogProfileFor } from "../lib/catalogProfiles";
+import treeSpine from "../../../data/curated/tree-spine.json";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
@@ -55,6 +56,14 @@ type AtlasMapPageProps = {
 };
 
 type AtlasView = "path" | "map" | "list";
+
+// Areas whose content is not a published catalog (Operations lives in Build's
+// tasks, Knowledge in the resource directory). Declared in tree-spine.json so
+// the data and the board cannot drift apart.
+const AREA_DESTINATIONS = treeSpine.areaDestinations as Record<
+  string,
+  { view: string; actionLabel: string; summary: string }
+>;
 
 function atlasView(value: string, focused: boolean): AtlasView {
   // "purpose"/"rmf" are legacy view ids: both are the Path view under a
@@ -229,8 +238,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </h1>
           {!record ? (
             <p className="page-summary">
-              Choose a published structure or lifecycle process, then open records and
-              relationships as your question becomes more specific.
+              Start with the area your question is about, then narrow to a
+              publication, and then to the record itself.
             </p>
           ) : null}
         </div>
@@ -854,43 +863,47 @@ function AtlasGuidedPath(props: {
           <div className="atlas-trunk-banner">
             <IconBinaryTree aria-hidden="true" size={22} />
             <span className="atlas-trunk-banner-text">
-              <strong>Cybersecurity</strong>
+              <strong>Cybersecurity, in nine areas</strong>
               <small>
-                Every publication in Control Atlas sits under one of these nine
-                limbs.
+                Everything Control Atlas holds belongs to one of these. Pick the
+                one your question is about.
               </small>
             </span>
           </div>
-          <ul className="atlas-limb-grid" aria-label="The nine limbs of cybersecurity">
-            {model.frameworkGroups.map((limb) => {
-              const catalogCount = limb.frameworks.length;
-              const empty = catalogCount === 0;
+          <ul className="atlas-limb-grid" aria-label="Areas of cybersecurity">
+            {model.frameworkGroups.map((area) => {
+              const catalogCount = area.frameworks.length;
+              // An area with no published catalog is not empty: its content
+              // lives on another surface (tasks, the resource directory), and
+              // the spine names where. No area is ever shown as a dead end.
+              const destination = AREA_DESTINATIONS[area.id];
               return (
-                <li key={limb.id}>
+                <li key={area.id}>
                   <button
-                    className={
-                      empty
-                        ? "atlas-limb-card atlas-limb-card-empty"
-                        : "atlas-limb-card"
-                    }
-                    disabled={empty}
+                    className="atlas-limb-card"
                     onClick={() => {
-                      setOpenLimbId(limb.id);
+                      if (catalogCount === 0 && destination) {
+                        onNavigate(destination.view as ViewState["view"]);
+                        return;
+                      }
+                      setOpenLimbId(area.id);
                       resetDrill({ atlasAxis: "framework" });
                     }}
                     type="button"
                   >
                     <span className="atlas-limb-card-text">
-                      <strong>{limb.label}</strong>
-                      <small>{limb.description}</small>
+                      <strong>{area.label}</strong>
+                      <small>
+                        {catalogCount === 0 && destination
+                          ? destination.summary
+                          : area.description}
+                      </small>
                     </span>
                     <span className="atlas-limb-card-meta">
-                      {empty
-                        ? "Not yet loaded"
-                        : `${catalogCount} ${catalogCount === 1 ? "catalog" : "catalogs"}`}
-                      {empty ? null : (
-                        <IconChevronRight aria-hidden="true" size={18} />
-                      )}
+                      {catalogCount === 0 && destination
+                        ? destination.actionLabel
+                        : `${catalogCount} ${catalogCount === 1 ? "publication" : "publications"}`}
+                      <IconChevronRight aria-hidden="true" size={18} />
                     </span>
                   </button>
                 </li>
@@ -914,7 +927,7 @@ function AtlasGuidedPath(props: {
             {openLimbId
               ? `${
                   model.frameworkGroups.find((group) => group.id === openLimbId)
-                    ?.label ?? "This limb"
+                    ?.label ?? "This area"
                 }: which catalog do you want to open?`
               : "Which published structure do you want to trace?"}
           </p>
