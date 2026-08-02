@@ -439,6 +439,40 @@ authoritative sources → next action.
 12. Official text, provenance, and version
 ```
 
+**Items 3 and 9 are closed as of 2026-08-02, and closed as publisher-sourced
+content — never as Control Atlas authored guidance.** Epic 5 (2026-07-28)
+deliberately deleted the curated 800-53 translation dataset and its generator
+specifically to keep records source-first; a per-record "why it exists"
+rationale or "what evidence supports it" list authored by Control Atlas would
+rebuild exactly what that epic removed, and `PRODUCT_DECISION_BOUNDARY` treats
+"what evidence supports this control" as a determination in all but name when
+we author it. Both reader needs turned out to already be answerable from
+publisher text already in the pipeline, just not surfaced:
+
+- **Item 3, "why it exists"**: the "Where this sits" rail (item 2) plus a new
+  **Discussion** section carrying the publisher's own explanatory prose —
+  NIST calls this "Discussion" in SP 800-53/800-171/800-172. It was being
+  ingested and then discarded: the OSCAL normalizer walked both the
+  `statement` and `guidance` parts of a control into one blended, 1,200-char-
+  capped `description` field. `tools/normalizers/oscal-normalize.mjs` now
+  keeps them as two distinct fields (`description`, `metadata.discussion`)
+  with no length cap on either, and `ObjectDetailPage.tsx` renders Discussion
+  as its own card, attributed to the publisher.
+- **Item 9, "what evidence normally supports it"**: NIST SP 800-53A's
+  assessment objectives, methods (EXAMINE/INTERVIEW/TEST), and objects were
+  already being parsed per control (`buildAssessmentMetadata`) and already
+  powered a separate `assessment_procedure` node — but nothing rendered its
+  content anywhere, including on its own record page. `ObjectDetailPage.tsx`
+  now renders it in a "What evidence normally supports it" card on the
+  control's own page (duplicated onto the control node's own metadata, not
+  looked up cross-shard, because `src/app/atlas-neighborhood.mjs` only ships
+  a compact id/type/title tuple for a record's connected counterparts) and on
+  the assessment_procedure's own page.
+
+Do not reopen these as authoring tasks. If a future reader need surfaces here
+again, the fix is finding or ingesting more of the publisher's own text, not
+writing Control Atlas's own explanation or evidence list.
+
 Item 2 is the **"Where this sits" tree path** — the single most important
 addition to the current record pages:
 

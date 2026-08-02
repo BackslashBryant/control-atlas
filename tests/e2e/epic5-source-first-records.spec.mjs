@@ -8,7 +8,12 @@ const records = [
   ["SRG rule", "/#/record/disa-srg/V-202006", "network device", true],
   ["ATT&CK technique", "/#/record/mitre-attack-ics/T0800", "Activate Firmware Update Mode", true],
   ["assessment procedure", "/#/record/nist-800-53a/AC-1", "Policy and Procedures Assessment Procedure", true],
-  ["record without description", "/#/record/mitre-d3fend/D3-AA", "Agent Authentication", false],
+  // D3-AA was the last record type with an empty description (MITRE D3FEND
+  // technique/all.json omits d3f:definition; the full ontology graph carries
+  // it — docs/plans/full-records-2026-08-02.md). No graph node currently has
+  // an empty description, so there is no real fixture left for the
+  // "no narrative description" fallback branch in ObjectDetailPage.tsx.
+  ["MITRE D3FEND countermeasure", "/#/record/mitre-d3fend/D3-AA", "Agent Authentication", true],
 ];
 
 /** @type {Array<[string, number, number]>} */

@@ -3,7 +3,6 @@
  * Normalize NIST OSCAL documents into Control Atlas source record arrays.
  */
 
-const MAX_DESCRIPTION = 1200;
 const ASSESSMENT_SOURCE_KEY = 'nist-800-53a-assessment-procedures';
 const SUPPORTED_OSCAL_MODELS = ['catalog', 'profile', 'component-definition', 'assessment-plan'];
 
@@ -63,29 +62,48 @@ function collectProse(parts, out, resolveInserts) {
   }
 }
 
-function truncateAtBracket(text) {
-  if (text.length <= MAX_DESCRIPTION) return text;
-  const truncated = text.slice(0, MAX_DESCRIPTION);
-  const lastCloseBracket = truncated.lastIndexOf(']');
-  const lastOpenBracket = truncated.lastIndexOf('[');
-  let cut;
-  if (lastOpenBracket > lastCloseBracket) {
-    // Mid-bracket: cut before the open bracket instead of splitting it.
-    cut = lastOpenBracket;
-  } else {
-    const lastSentenceEnd = Math.max(truncated.lastIndexOf('. '), lastCloseBracket + 1);
-    cut = lastSentenceEnd > 0 ? lastSentenceEnd : truncated.length;
+/**
+ * OSCAL controls/requirements carry the requirement text under a top-level
+ * part named 'statement' and the publisher's own explanatory prose (NIST
+ * calls this "Discussion") under a top-level part named 'guidance'. Both are
+ * walked to full depth — no length cap. A record whose combined text still
+ * ends in an ellipsis is the publisher's own text doing that, not ours.
+ */
+function collectPartProse(part, out, resolveInserts) {
+  if (ASSESSMENT_PART_NAMES.has(part.name)) return;
+  const prose = cleanText(part.prose, resolveInserts);
+  if (prose) out.push(prose);
+  for (const child of part.parts || []) collectPartProse(child, out, resolveInserts);
+}
+
+function proseForPartName(parts, name, resolveInserts) {
+  const out = [];
+  for (const part of parts || []) {
+    if (part.name === name) collectPartProse(part, out, resolveInserts);
   }
-  return `${truncated.slice(0, cut).trim()}...`;
+  return out.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 }
 
 function descriptionFromControl(control, resolveInserts) {
+  const statementText = proseForPartName(control.parts, 'statement', resolveInserts);
+  if (statementText) return statementText;
+  // Catalogs with no statement/guidance split (e.g. CSF subcategories): fall
+  // back to every prose part in the node.
   const chunks = [];
   collectProse(control.parts, chunks, resolveInserts);
-  if (!chunks.length && control.title) chunks.push(control.title);
   const text = chunks.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
-  if (!text) return control.title || control.id;
-  return truncateAtBracket(text);
+  return text || control.title || control.id;
+}
+
+function discussionFromControl(control, resolveInserts) {
+  return proseForPartName(control.parts, 'guidance', resolveInserts);
+}
+
+function relatedControlIds(node, normalizeId) {
+  return (node.links || [])
+    .filter((link) => link.rel === 'related')
+    .map((link) => normalizeId(String(link.href || '').replace(/^#/, '')))
+    .filter(Boolean);
 }
 
 function propValue(props, name) {
@@ -199,9 +217,13 @@ function buildControlRecord(node, family, sourceKey, resolveInserts) {
   const desc = withdrawn
     ? (node.title || normalize80053Id(node.id))
     : descriptionFromControl(node, resolveInserts);
+  const discussion = withdrawn ? '' : discussionFromControl(node, resolveInserts);
+  const relatedControls = withdrawn ? [] : relatedControlIds(node, normalize80053Id);
   const supersededBy = withdrawn ? supersededByIds(node) : [];
   const metadata = {
     ...(assessment ? { assessment } : {}),
+    ...(discussion ? { discussion } : {}),
+    ...(relatedControls.length ? { related_controls: relatedControls } : {}),
     ...(supersededBy.length ? { superseded_by: supersededBy } : {}),
   };
   return {
@@ -301,7 +323,14 @@ function walk800171(nodes, familyTitle, records) {
     if (node.groups) walk800171(node.groups, family, records);
     if (node.class === 'requirement' && node.id) {
       const id = normalize800171Id(node.id);
-      const desc = descriptionFromControl(node);
+      const resolveInserts = createParamResolver(node.params);
+      const desc = descriptionFromControl(node, resolveInserts);
+      const discussion = discussionFromControl(node, resolveInserts);
+      const relatedControls = relatedControlIds(node, normalize800171Id);
+      const metadata = {
+        ...(discussion ? { discussion } : {}),
+        ...(relatedControls.length ? { related_controls: relatedControls } : {}),
+      };
       records.push({
         id,
         type: '800-171-requirement',
@@ -309,6 +338,7 @@ function walk800171(nodes, familyTitle, records) {
         title: node.title || id,
         family: family || 'Requirements',
         description: desc,
+        metadata: Object.keys(metadata).length ? metadata : undefined,
       });
     }
   }
@@ -401,7 +431,14 @@ function walk800172(nodes, familyTitle, records) {
     if (node.groups) walk800172(node.groups, family, records);
     if (node.class === 'security_requirement' && node.id) {
       const id = normalize800172Id(node.id);
-      const desc = descriptionFromControl(node);
+      const resolveInserts = createParamResolver(node.params);
+      const desc = descriptionFromControl(node, resolveInserts);
+      const discussion = discussionFromControl(node, resolveInserts);
+      const relatedControls = relatedControlIds(node, normalize800172Id);
+      const metadata = {
+        ...(discussion ? { discussion } : {}),
+        ...(relatedControls.length ? { related_controls: relatedControls } : {}),
+      };
       records.push({
         id,
         type: '800-172-requirement',
@@ -409,6 +446,7 @@ function walk800172(nodes, familyTitle, records) {
         title: node.title || id,
         family: family || 'Requirements',
         description: desc,
+        metadata: Object.keys(metadata).length ? metadata : undefined,
       });
     }
   }

@@ -118,6 +118,49 @@ const RELATIONSHIP_CLASS_BUCKETS: Array<{
  * parameter]") and wrap each match in a muted-highlight span. Uses safe
  * React split-render — never dangerouslySetInnerHTML.
  */
+/**
+ * Renders a control's SP 800-53A assessment objectives and methods, sourced
+ * from the already-ingested assessment_procedure node metadata (see
+ * buildAssessmentNode in scripts/build-framework-data.mjs). Shared between a
+ * control's own page (via its linked assessment_procedure counterpart) and
+ * the assessment_procedure's own record page.
+ */
+function renderAssessmentProcedure(metadata: any): ReactNode {
+  const objectives: any[] = metadata?.assessment_objectives || [];
+  const methods: any[] = metadata?.assessment_method_details || [];
+  if (!objectives.length && !methods.length) return null;
+  return (
+    <>
+      {objectives.length ? (
+        <div className="assessment-objectives">
+          <p className="support-meta">Assessment objectives</p>
+          <ul>
+            {objectives.map((objective: any, index: number) => (
+              <li key={objective.id || objective.label || index}>
+                {objective.label ? <strong>{objective.label}</strong> : null}{" "}
+                {renderOdpText(objective.prose)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {methods.length ? (
+        <div className="assessment-methods">
+          <p className="support-meta">Assessment methods and objects</p>
+          <ul>
+            {methods.map((method: any, index: number) => (
+              <li key={method.id || method.method || index}>
+                <strong>{method.method}</strong>
+                {method.objects?.length ? `: ${method.objects.join("; ")}` : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 function renderOdpText(text: string): ReactNode {
   if (!text) return text;
   const parts = text.split(ODP_PATTERN);
@@ -479,6 +522,15 @@ export function ObjectDetailPage(props: {
               </p>
             ) : null}
           </SummaryCard>
+          {node.metadata?.discussion ? (
+            <SummaryCard title="Discussion" tone="trust">
+              <p className="support-meta">
+                {source?.display_name || source?.name || "The publisher"}'s
+                own explanation of why this exists.
+              </p>
+              <p>{renderOdpText(node.metadata.discussion)}</p>
+            </SummaryCard>
+          ) : null}
           <WhereThisSitsRail
             bundle={bundle}
             nodeId={node.id}
@@ -519,6 +571,14 @@ export function ObjectDetailPage(props: {
             query={document.title}
             onNavigate={onNavigate}
           />
+          {node.node_type === "assessment_procedure" ? (
+            <SummaryCard title="Assessment objectives and methods" tone="trust">
+              <p className="support-meta">Source: NIST SP 800-53A.</p>
+              {renderAssessmentProcedure(node.metadata) || (
+                <p>No assessment content was published for this procedure.</p>
+              )}
+            </SummaryCard>
+          ) : null}
           {node.node_type === "attack_technique" ? (
             <SummaryCard title="Threat context">
               <p>
@@ -703,6 +763,18 @@ export function ObjectDetailPage(props: {
             {node.metadata?.fix_text ? (
               <DisclosurePanel title="Fix text" value="fix-text">
                 <p>{renderOdpText(node.metadata.fix_text)}</p>
+              </DisclosurePanel>
+            ) : null}
+            {node.metadata?.assessment_objectives?.length ||
+            node.metadata?.assessment_method_details?.length ? (
+              <DisclosurePanel
+                title="What evidence normally supports it"
+                value="assessment-evidence"
+              >
+                <p className="support-meta">
+                  Assessment objectives and methods from NIST SP 800-53A.
+                </p>
+                {renderAssessmentProcedure(node.metadata)}
               </DisclosurePanel>
             ) : null}
           </Accordion.Root>

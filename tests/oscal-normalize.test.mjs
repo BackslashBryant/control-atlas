@@ -209,7 +209,44 @@ test('800-172 catalog normalization preserves enhanced requirement identifiers',
     title: 'Dual Authorization',
     family: 'Access Control',
     description: 'Protect critical CUI functions.',
+    // No 'guidance'/'related' parts in this fixture, so metadata stays
+    // undefined rather than an empty object — same convention as 800-53.
+    metadata: undefined,
   });
+});
+
+test('800-53 catalog normalization separates Discussion from the control statement and never truncates either', () => {
+  const longSentence = 'This is a very long discussion sentence about account management practices. '.repeat(30);
+  const catalog = {
+    catalog: {
+      groups: [{
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [{
+          id: 'ac-2',
+          class: 'SP800-53',
+          title: 'Account Management',
+          links: [
+            { href: '#ac-3', rel: 'related' },
+            { href: '#ac-6', rel: 'related' },
+            { href: '#2956e175', rel: 'reference' },
+          ],
+          parts: [
+            { id: 'ac-2_smt', name: 'statement', prose: longSentence },
+            { id: 'ac-2_gdn', name: 'guidance', prose: longSentence },
+          ],
+        }],
+      }],
+    },
+  };
+  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const record = result.records.find((item) => item.id === 'AC-2');
+  assert.ok(record.description.length > 1200, 'statement text must not be capped');
+  assert.ok(!record.description.endsWith('...'), 'statement must not be artificially truncated');
+  assert.ok(record.metadata.discussion.length > 1200, 'discussion text must not be capped');
+  assert.ok(!record.metadata.discussion.endsWith('...'));
+  assert.deepEqual(record.metadata.related_controls, ['AC-3', 'AC-6']);
 });
 
 test('CSF 2.0 catalog normalization threads Function and Category grouping onto each subcategory', () => {

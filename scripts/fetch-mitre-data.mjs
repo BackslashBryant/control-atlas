@@ -16,6 +16,7 @@ import {
   buildMappingDocument,
   buildSlugToD3fendIdMap,
   parseD3fendTechniques,
+  resolveD3fendDefinitions,
   resolveD3fendTactics,
 } from '../tools/importers/mitre-d3fend-adapter.mjs';
 
@@ -130,6 +131,7 @@ export async function fetchMitreData(options = {}) {
 
     const d3fendRecords = parseD3fendTechniques(d3fendTechniques);
     const d3fendTactics = resolveD3fendTactics(d3fendOntology);
+    const d3fendDefinitions = resolveD3fendDefinitions(d3fendOntology);
     for (const record of d3fendRecords) {
       record.source.snapshot_date = snapshotDate;
       record.source.version = String(d3fendVersion);
@@ -137,6 +139,12 @@ export async function fetchMitreData(options = {}) {
       record.family = tactic?.title || '';
       record.metadata.tactic_id = tactic?.id || null;
       record.metadata.tactic_title = tactic?.title || null;
+      // technique/all.json rarely carries d3f:definition; the full ontology
+      // graph does, keyed by the same d3fend-id (fetch-framework-catalogs
+      // measured 271/278 empty descriptions before this join existed).
+      if (!record.description) {
+        record.description = d3fendDefinitions.get(record.id) || '';
+      }
     }
     const d3fend = buildD3fendCatalogDocument(d3fendRecords, {
       artifactUrl: REMOTE.d3fendTechniques,
