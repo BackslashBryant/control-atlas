@@ -200,6 +200,32 @@ known gaps... Needs your eyes not mine is not the right answer."
 Verified: npm test 3/253/30/57, e2e 141/141, visual 28/28 twice, precommit
 clean, 100% of 11,691 nodes reach the trunk.
 
+### Visual baselines and the CI skew (2026-08-02)
+Both visual jobs run in `mcr.microsoft.com/playwright:v1.60.0-noble` while
+package.json is on 1.61, so the browser build the runner asks for is absent and
+every test died with "Executable doesn't exist". Neither job had run recently
+enough for anyone to see it. Both now `npx playwright install chromium` first.
+The baseline job also swallowed the failure with `|| true` and cheerfully
+published months-old snapshots; it uses `continue-on-error` now, so a real
+failure is visible while the artifact still uploads.
+Linux baselines regenerated from the pinned image (first refresh since the
+July rename — they still showed banned Home copy) and committed.
+**`approved-layout-visuals` on Linux is green for the first time** (CI run
+30729630002).
+
+### Remaining residuals — nothing else is open
+Everything closeable by engineering here is closed. What is left is not:
+1. **Human assistive-technology review** (NVDA / VoiceOver / TalkBack), real
+   iOS/Android devices, WebPageTest, penetration test. These require a human
+   and physical hardware; automated axe + Playwright is not a substitute and
+   has never been claimed as one.
+2. **Full-record ingestion beyond DISA STIG/SRG.** STIG/SRG now carry check and
+   fix text. Other catalogs still hold what their upstream artifact publishes;
+   widening that is a per-source ingestion workstream, not a defect.
+3. **Record anatomy items 3 and 9** from `docs/tree-model.md` §7 ("why it
+   exists" per record, evidence expectations). Net-new content features, open
+   since session 8, deliberately not invented under time pressure.
+
 ### Gates that had never been run (2026-08-01, third pass)
 `npm run precommit`, `npm run audit:deps` and the **visual** suite
 (`playwright.visual.config.mjs` — a separate config, so it was NOT part of the
