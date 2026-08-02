@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-01T18:22:07.434Z",
+  "generated_at": "2026-08-02T02:07:47.227Z",
   "connection_inventory": {
-    "totalRecords": 11677,
-    "publishedLinks": 22300,
+    "totalRecords": 11681,
+    "publishedLinks": 22308,
     "rows": [
       {
         "id": "requirements",
@@ -71,7 +71,7 @@
         "label": "Baselines and impact levels",
         "totalRecords": 11,
         "connectedRecords": 11,
-        "publishedLinks": 1963,
+        "publishedLinks": 1971,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -80,9 +80,9 @@
       {
         "id": "framework-structure",
         "label": "Framework structure",
-        "totalRecords": 228,
-        "connectedRecords": 228,
-        "publishedLinks": 5437,
+        "totalRecords": 232,
+        "connectedRecords": 230,
+        "publishedLinks": 5445,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",

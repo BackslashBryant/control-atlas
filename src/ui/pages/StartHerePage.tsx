@@ -81,7 +81,7 @@ export function StartHerePage(props: {
             >
               <span>
                 <strong>{situation.prompt}</strong>
-                <small>Opens the {situation.limbLabel} limb.</small>
+                <small>Opens {situation.limbLabel}.</small>
               </span>
               <IconArrowRight aria-hidden="true" size={18} />
             </button>

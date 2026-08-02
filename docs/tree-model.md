@@ -112,6 +112,21 @@ boundary, roles and responsibilities, common controls, control inheritance, shar
 responsibility, reciprocity, continuous monitoring, risk acceptance, authorization
 — are not the spine; they move **into the Governance limb as content.**
 
+> **Vocabulary boundary (2026-08-02).** Trunk, limb, twig and acorn are how we
+> reason about the corpus. They are **not** words the product says. Every
+> surface calls a limb an **area** ("Cybersecurity, in nine areas"), and the
+> ban is enforced by `tests/content-review.test.mjs` — "the internal tree
+> vocabulary never reaches rendered copy". Internal identifiers
+> (`atlas:LIMB-*`, `ancestor_path`, class names) keep the model's names.
+>
+> **No area is ever shown empty.** An area whose content is not a published
+> catalog names the surface that holds it, via `areaDestinations` in
+> `data/curated/tree-spine.json` (Operations → Build's tasks, Knowledge → the
+> resource directory). A catalog whose records are parented elsewhere — CCIs
+> under the control they cite, procedures under the control they assess — gets
+> a browsable root that owns no children (`attachRecords: false`), so browsing
+> works without flattening the record's chain to the trunk.
+
 **LIMBS — the nine divisions of the work.** The limbs replace the old TRUNK
 (governance/RMF) and MAJOR BRANCHES (frameworks) tiers with a single tier of nine:
 Governance, Risk, Compliance, Architecture, Implementation, Assessment, Operations,

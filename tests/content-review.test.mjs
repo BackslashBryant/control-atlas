@@ -100,6 +100,36 @@ test('site-wide UI copy rule rejects canned metaphors and compliance-only prompt
   }
 });
 
+// The trunk/limb/twig vocabulary in docs/tree-model.md is how the team reasons
+// about the corpus. It is not how a visitor talks, and in 2026-08 it leaked
+// into Home, Explore and Start Here as "nine limbs". Internal identifiers keep
+// it (atlas:LIMB-*, class names); rendered text must not.
+test('the internal tree vocabulary never reaches rendered copy', () => {
+  const TREE_WORDS = /\b(limbs?|trunks?|twigs?|acorns?)\b/i;
+  const files = readdirSync('src/ui', { recursive: true })
+    .map(String)
+    .filter((path) => /\.(?:tsx|html)$/.test(path))
+    .map((path) => [`src/ui/${path}`, readFileSync(`src/ui/${path}`, 'utf8')]);
+  files.push(['src/index.html', readFileSync('src/index.html', 'utf8')]);
+
+  for (const [path, contents] of files) {
+    // Strip engineering surface — comments, class names, identifiers and data
+    // attributes — leaving the words a visitor actually reads.
+    const rendered = contents
+      .replace(/\/\*[\s\S]*?\*\//g, ' ')
+      .replace(/^\s*\/\/.*$/gm, ' ')
+      .replace(/(?:class|className)=(?:"[^"]*"|\{`[^`]*`\}|\{[^}]*\})/g, ' ')
+      .replace(/[A-Za-z_]*(?:LIMB|Limb|limb)[A-Za-z_]*/g, ' ')
+      .replace(/treeSpine\.\w+/g, ' ')
+      .replace(/data-[\w-]+="[^"]*"/g, ' ');
+    const match = rendered.match(TREE_WORDS);
+    assert.ok(
+      !match,
+      `${path} renders the internal tree vocabulary: ${match && match[0]}`,
+    );
+  }
+});
+
 test('Learn summaries name a concrete reading job', () => {
   for (const pattern of learnArticles) {
     const summary = String(pattern.summary || '').trim();

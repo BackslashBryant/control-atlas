@@ -68,7 +68,8 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         mode: "operational",
         // Internal view key stays "atlas-map"; nav label renamed to Explore.
         label: routeIdentityFor("atlas-map").contextLabel,
-        scope: "Choose a branch",
+        // "Choose a branch" was the tree model talking to itself.
+        scope: entityName || "Choose an area",
       };
     case "search":
       return {
