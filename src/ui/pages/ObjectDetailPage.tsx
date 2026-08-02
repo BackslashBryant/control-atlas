@@ -207,7 +207,17 @@ export function ObjectDetailPage(props: {
   const grouped = node
     ? groupRelationships(edges, node.id, bundle.runtime)
     : [];
-  const relationshipGroupSignature = grouped
+  // tree-model.md #7 item 6: enhancements/base-control are Class-1 structural
+  // decomposition, not Class-3 correlation, so they render as their own
+  // "Decomposes into" block near "Part of X" (below) instead of alongside the
+  // CCI/MITRE/STIG correlation groups in the generic Connections accordion.
+  // baseControl is additionally redundant there — the record's base control is
+  // already the "Part of X" link, sourced independently from `baseControlNode`.
+  const enhancementsGroup = grouped.find((group) => group.id === "enhancements");
+  const connectionGroups = grouped.filter(
+    (group) => group.id !== "enhancements" && group.id !== "baseControl",
+  );
+  const relationshipGroupSignature = connectionGroups
     .map((group) => `${group.id}:${group.items.length}`)
     .join("|");
   const classBuckets = useMemo(
@@ -231,7 +241,7 @@ export function ObjectDetailPage(props: {
     string[]
   >([]);
   useEffect(() => {
-    setOpenRelationshipGroupIds(defaultOpenRelationshipGroups(grouped));
+    setOpenRelationshipGroupIds(defaultOpenRelationshipGroups(connectionGroups));
   }, [relationshipGroupSignature]);
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
@@ -453,6 +463,28 @@ export function ObjectDetailPage(props: {
             Part of {baseItemId}
           </button>
         </p>
+      ) : null}
+
+      {enhancementsGroup && enhancementsGroup.items.length ? (
+        <div className="record-decomposition-block">
+          <span className="record-decomposition-label">Decomposes into</span>
+          <div className="badge-row">
+            {enhancementsGroup.items.map((item: any) => (
+              <button
+                className="badge-button"
+                key={item.counterpart.id}
+                onClick={() =>
+                  onOpenNode(item.counterpart.id, state.from || "search")
+                }
+                type="button"
+              >
+                <Badge>
+                  {item.counterpart.metadata?.item_id || item.counterpart.id}
+                </Badge>
+              </button>
+            ))}
+          </div>
+        </div>
       ) : null}
 
       {isWithdrawn ? (
@@ -680,7 +712,7 @@ export function ObjectDetailPage(props: {
 
             <RelationshipGroupsSection
               formatRelationshipLabel={formatRelationshipLabel}
-              groups={grouped}
+              groups={connectionGroups}
               onOpenNode={(nodeId) =>
                 onOpenNode(nodeId, state.from || "search")
               }
