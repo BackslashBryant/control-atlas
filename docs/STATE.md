@@ -170,6 +170,28 @@ failed**. Fixed:
 - Re-baselined (product changed deliberately, guarantee kept): the Path
   evidence specs, compare-map's implicit run, and the payload specs.
 
+### Gates that had never been run (2026-08-01, third pass)
+`npm run precommit`, `npm run audit:deps` and the **visual** suite
+(`playwright.visual.config.mjs` — a separate config, so it was NOT part of the
+e2e sweep) had not been run this session. precommit and audit:deps passed
+(2 documented dependency exceptions). The visual suite was red and its
+baselines were stale since the 2026-07-26 rename. Regenerating them surfaced
+three real defects:
+- **Two `<main id="workspace">` elements on every hydrated route.** The boot
+  handoff renamed the static shell's `#app` but not its `#workspace`, leaving a
+  duplicate id, a second main landmark and an ambiguous skip-link target.
+- **The chain rendered twice on focused Atlas**, then not at all on Path once
+  the duplicate was removed. Now one definition (`structuralPosition`) rendered
+  in exactly one place: it is Path's content, and the header carries it on Map
+  and List so the record's position never leaves the screen.
+- **`fetchArtifact` dropped an artifact when the compressed fetch rejected** —
+  the `.then()` never ran so the uncompressed fallback never got its turn.
+  Under load that intermittently emptied the Resources directory (and was the
+  real cause of the flaky resource-discovery and visual failures).
+Visual suite now 28/28 across four consecutive runs; win32 baselines
+regenerated and inspected. **Linux baselines are still stale** — they can only
+be produced by the visual-baseline workflow on the Linux runner.
+
 ### Gate gap found while shipping
 `tests/e2e/live-smoke.spec.mjs` is NOT part of any local gate (`npm test`,
 `test:browser`, `test:a11y:smoke`, `test:e2e:smoke`) — it only runs post-deploy

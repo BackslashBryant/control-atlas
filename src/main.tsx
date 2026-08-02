@@ -282,6 +282,12 @@ async function bootReactApp() {
   staticHome?.setAttribute('hidden', '');
   const staticHomeApp = staticHome?.querySelector<HTMLElement>('#app');
   if (staticHomeApp) staticHomeApp.id = 'static-home-app';
+  // #app was already handed over; #workspace was not, so every hydrated route
+  // carried two <main id="workspace"> elements — a duplicate id, a second main
+  // landmark, and an ambiguous target for the skip link.
+  const staticHomeWorkspace =
+    staticHome?.querySelector<HTMLElement>('#workspace');
+  if (staticHomeWorkspace) staticHomeWorkspace.id = 'static-home-workspace';
   syncProgressiveShell();
   window.removeEventListener('hashchange', onLocationChange);
   window.removeEventListener('popstate', onLocationChange);
