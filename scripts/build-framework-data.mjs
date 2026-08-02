@@ -810,6 +810,18 @@ function buildNodes(registry) {
             check_text: record.check_text || null,
             fix_text: record.fix_text || null,
             superseded_by: record.metadata?.superseded_by || null,
+            discussion: record.metadata?.discussion || null,
+            related_controls: record.metadata?.related_controls || null,
+            // Duplicated onto the control's own node (not just the separate
+            // assessment_procedure node buildAssessmentNode below emits) so a
+            // viewer sees it without a full-graph fetch: atlas-neighborhood
+            // shards only carry a compact id/type/title tuple for counterpart
+            // nodes (src/app/atlas-neighborhood.mjs compactNode), so the
+            // assessment_procedure counterpart's rich metadata is invisible
+            // from the control's own record page. The control itself is
+            // always the shard's center_node, which keeps full metadata.
+            assessment_objectives: record.metadata?.assessment?.objectives || null,
+            assessment_method_details: record.metadata?.assessment?.methods || null,
           },
         },
         sourceId,

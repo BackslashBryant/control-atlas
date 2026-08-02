@@ -324,7 +324,7 @@ function buildBaselineCompareGraph(comparison: any): CompareGraphResult {
   addNode(nodes, comparison.baseline_a, "neutral");
   addNode(nodes, comparison.baseline_b, "neutral");
 
-  for (const entry of comparison.shared.slice(0, 50)) {
+  for (const entry of comparison.shared) {
     edges.push({
       id: `shared-${entry.control_node.id}`,
       source_node_id: comparison.baseline_a.id,

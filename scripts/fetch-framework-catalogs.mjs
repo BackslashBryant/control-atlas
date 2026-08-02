@@ -119,7 +119,10 @@ function writeCatalog(filename, document) {
   return { filename, records: document.records.length };
 }
 
-export async function fetchFrameworkCatalogs() {
+export async function fetchFrameworkCatalogs(options = {}) {
+  const only = options.only ? new Set(options.only) : null;
+  const remoteTargets = only ? REMOTE_CATALOGS.filter((target) => only.has(target.id)) : REMOTE_CATALOGS;
+  const publicTargets = only ? [] : PUBLIC_CATALOGS;
   const results = [];
   let fedrampMembership = null;
   try {
@@ -128,7 +131,7 @@ export async function fetchFrameworkCatalogs() {
     console.warn('Failed to pre-fetch FedRAMP baseline membership:', err.message);
   }
 
-  for (const target of REMOTE_CATALOGS) {
+  for (const target of remoteTargets) {
     const response = await fetch(target.url);
     if (!response.ok) throw new Error(`${target.id} fetch failed: ${response.status} ${target.url}`);
     const payload = target.responseType === 'text'
@@ -140,7 +143,7 @@ export async function fetchFrameworkCatalogs() {
     }
     results.push(writeCatalog(target.outfile, document));
   }
-  for (const [filename, build] of PUBLIC_CATALOGS) {
+  for (const [filename, build] of publicTargets) {
     const doc = build === buildFedrampPublicCatalog
       ? build(SNAPSHOT, fedrampMembership)
       : build(SNAPSHOT);

@@ -671,3 +671,73 @@ test('every blocked graph-health relationship has checked upstream provenance an
     assert.ok(!edges.some((edge) => edge.id === `edge:${finding.subject_id}`));
   }
 });
+
+test('every catalog stays within its documented description-completeness budget', () => {
+  const nodes = generated('nodes').nodes;
+  // Regression guard for docs/plans/full-records-2026-08-02.md: a record
+  // whose description ends in an ellipsis, or is blank, reads as partial
+  // where a visitor expects the whole thing. Every catalog defaults to a
+  // zero budget; add an entry here ONLY with a written reason the publisher's
+  // own text is short or ends that way (none currently need one).
+  const EXCEPTIONS = {};
+  const byCatalog = new Map();
+  for (const node of nodes) {
+    const catalogId = node.metadata?.catalog_id;
+    if (!catalogId) continue;
+    const bucket = byCatalog.get(catalogId) || [];
+    bucket.push(node);
+    byCatalog.set(catalogId, bucket);
+  }
+  assert.ok(byCatalog.size > 10, 'expected many catalogs to be present');
+  for (const [catalogId, records] of byCatalog) {
+    const budget = EXCEPTIONS[catalogId] || { truncated: 0, empty: 0 };
+    const truncated = records.filter((node) => {
+      const description = (node.metadata?.description || '').trim();
+      return description.endsWith('...') || description.endsWith('…');
+    });
+    const empty = records.filter((node) => !(node.metadata?.description || '').trim());
+    assert.ok(
+      truncated.length <= budget.truncated,
+      `${catalogId}: ${truncated.length} truncated descriptions exceed the budget of ${budget.truncated} (${truncated
+        .slice(0, 5)
+        .map((node) => node.id)
+        .join(', ')})`,
+    );
+    assert.ok(
+      empty.length <= budget.empty,
+      `${catalogId}: ${empty.length} empty descriptions exceed the budget of ${budget.empty} (${empty
+        .slice(0, 5)
+        .map((node) => node.id)
+        .join(', ')})`,
+    );
+  }
+});
+
+test('active NIST SP 800-53 controls carry the publisher\'s Discussion text', () => {
+  const nodes = generated('nodes').nodes;
+  const controls = nodes.filter(
+    (node) =>
+      node.metadata?.catalog_id === 'nist-800-53' &&
+      (node.node_type === 'control' || node.node_type === 'control_enhancement') &&
+      node.lifecycle_status !== 'withdrawn',
+  );
+  assert.ok(controls.length > 1000, 'expected the full active 800-53 control set');
+  const missingDiscussion = controls
+    .filter((node) => !node.metadata?.discussion?.trim())
+    .map((node) => node.id);
+  assert.deepEqual(missingDiscussion, [], 'active 800-53 controls must carry metadata.discussion');
+});
+
+test('MITRE D3FEND countermeasures carry a real publisher definition', () => {
+  const nodes = generated('nodes').nodes;
+  const countermeasures = nodes.filter((node) => node.node_type === 'defend_countermeasure');
+  assert.ok(countermeasures.length > 200, 'expected the full D3FEND technique set');
+  const missingDescription = countermeasures
+    .filter((node) => !node.metadata?.description?.trim())
+    .map((node) => node.id);
+  assert.deepEqual(
+    missingDescription,
+    [],
+    'D3FEND countermeasures must carry a publisher definition, not an empty stub',
+  );
+});

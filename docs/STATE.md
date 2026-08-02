@@ -51,6 +51,126 @@
   rail) only." (2026-07-27 session 8)
 - "One workstream per chat; do not push or merge." (2026-07-27 session 8,
   reaffirmed)
+- "Execute docs/plans/full-records-2026-08-02.md in full." Do not build
+  tree-model §7 items 3/9 as authored content — closed via publisher-sourced
+  Discussion text and SP 800-53A assessment content instead, never a
+  Control-Atlas-composed rationale or evidence list. Ship direct to main, no
+  PRs (push to a throwaway branch first for Public Repo Checks, then main).
+  (2026-08-02, session 17)
+
+## 2026-08-02 (session 17) - full-record ingestion
+
+Executed `docs/plans/full-records-2026-08-02.md` in full. Owner-measured gap:
+225/1,216 800-53 descriptions truncated with "...", 66/132 in 800-172, 37/147
+in 800-171, 271/278 D3FEND countermeasures with no description at all. Root
+cause (§2a of the plan): the curated source artifacts, not the graph build.
+
+### Done
+- **Root fix, `tools/normalizers/oscal-normalize.mjs`**: the OSCAL normalizer
+  was walking a control's `statement` AND `guidance` (Discussion) parts into
+  one blended string, then hard-capping it at 1,200 chars. Split into two
+  fields (`description`, `metadata.discussion`) with no length cap on either;
+  applied to the 800-53, 800-171, and 800-172 walkers. Also now resolves ODP
+  `{{insert}}` placeholders for 800-171/800-172 (previously silently
+  stripped, not resolved) and extracts `metadata.related_controls` from OSCAL
+  `rel: related` links.
+- **D3FEND, `tools/importers/mitre-d3fend-adapter.mjs`**: `technique/all.json`
+  (what the importer read) doesn't carry `d3f:definition` for 271/278
+  techniques — the full ontology graph (`d3fend.json`, fetched separately for
+  the NIST-control mapping) does, for all 271 that need it. New
+  `resolveD3fendDefinitions()` joins them, same shape as the existing
+  `resolveD3fendTactics()`. Decision recorded: ingest properly, not retire —
+  the data was one join away from complete.
+- **Re-ingested from live upstream**: `data/controls-800-53.json` (1,196
+  records, same identity, richer content), `requirements-800-171.json` (130),
+  `requirements-800-172.json` (115), `csf-subcategories.json` (185 — 2
+  genuinely-truncated records found and closed via the same fix, not in the
+  plan's original priority list but cheap to include), and via
+  `scripts/fetch-mitre-data.mjs`: `d3fend-countermeasures.json` (271/271 now
+  carry a real definition), plus a routine ATT&CK/mapping freshness refresh
+  (metadata only, no content changes — verified by diff).
+- **`scripts/fetch-framework-catalogs.mjs`**: `fetchFrameworkCatalogs()` now
+  accepts `{ only: [...catalogIds] }` so a scoped re-ingest doesn't also
+  touch FedRAMP 2026 rules, CCIs, STIGs, and the other catalogs `refresh:data`
+  would touch — kept this session's diff to what the plan asked for.
+- **`scripts/build-framework-data.mjs`**: control/requirement nodes now carry
+  `metadata.discussion` and `metadata.related_controls`. 800-53 control nodes
+  also carry `metadata.assessment_objectives`/`assessment_method_details`
+  directly (duplicated from the same-record `metadata.assessment` the
+  normalizer already parsed) — necessary, not redundant: discovered live that
+  `src/app/atlas-neighborhood.mjs`'s `compactNode()` only ships an
+  id/type/title tuple for a shard's counterpart nodes, so the control page
+  could not read its linked `assessment_procedure` counterpart's rich
+  metadata without a full-graph fetch the record page doesn't make.
+- **`src/ui/pages/ObjectDetailPage.tsx`**: new always-visible "Discussion"
+  card (publisher's own explanation, tree-model item 3) beside "Official
+  description"; new collapsed "What evidence normally supports it" disclosure
+  panel (SP 800-53A objectives/methods/objects, tree-model item 9) alongside
+  the existing Check text/Fix text panels — collapsed to match that existing
+  convention once a real control (AC-2, 26 objectives) showed it would
+  otherwise be a 1,270px-tall always-open card. Same renderer also powers the
+  assessment_procedure node's own record page, which previously rendered
+  nothing but a stub description.
+- **`docs/tree-model.md` §7**: recorded that items 3 and 9 are closed as
+  publisher-sourced content, not authored guidance, so they are not
+  reopened as authoring tasks by a future session.
+- **§4 broader audit** (partial-where-whole-is-expected, not limited to
+  description text): checked every `.slice(0, N)` cap in `src/ui` against
+  whether the remainder is disclosed. Found and fixed one real defect:
+  `buildCompareGraph.ts`'s baseline-compare view added every shared control as
+  a node but capped drawn edges at 50 — baselines that share 50+ controls
+  (common; Moderate vs. High is 300+) rendered the rest as visually
+  disconnected orphans in the diagram even though the summary count was
+  correct. Removed the cap so it matches the unsliced node loop. Confirmed by
+  reading the code, not written: the "+N more in Connections below" pointer,
+  Resources' "show remaining N", Templates' "Show all N" toggles, and
+  `leaf_record_count` (excludes wrapper/tier nodes from catalog counts) were
+  already correctly disclosed from prior sessions' sweeps.
+- **New regression guard**, `tests/federal-graph-contract.test.mjs`: a
+  per-catalog truncated/empty-description budget (defaults to zero, requires
+  a written exception to raise), plus dedicated assertions that active
+  800-53 controls carry Discussion and D3FEND countermeasures carry a real
+  definition.
+- **Test fixture fix**: `tests/e2e/epic5-source-first-records.spec.mjs` used
+  D3-AA as its "record without description" fixture — the exact record this
+  session gave a description to. Updated to reflect current data (product
+  deliberately changed); no node in the graph has an empty description
+  anymore, so that fallback UI branch has no real fixture left to test
+  end-to-end.
+
+### Verification
+`node --test tests/oscal-normalize.test.mjs` 11/11, `mitre-d3fend-importer`
+5/5 (both with new coverage for the fixes above), `npm run test:data` 258/258,
+`test:runtime` 30/30, `test:graph` 57/57, `npm run typecheck`/`lint` clean,
+`npm run build:data` — 100% of 11,691 nodes still reach the trunk (unchanged
+node count — confirms no records were dropped by the re-ingest, only content
+enriched), `npm run check:data-size` passed (229,779 compressed bytes, budget
+unaffected by the richer per-record metadata). `npm run precommit` clean.
+Browser-verified live (DOM/computed-style inspection — the `computer`
+screenshot tool is unavailable in this non-interactive session, "the Browser
+pane is not displayed"): AC-2 control page shows Discussion (full publisher
+text, no truncation) and the collapsed assessment-evidence panel with all 26
+objectives; the assessment_procedure's own page (`nist-800-53a:AC-2`) renders
+the same content as its primary card; D3FEND `D3-AA` shows a real definition;
+STIG rule `V-222387` unaffected (no 800-53-only fields, as expected) — all
+checked at 1440×900 and 390×844, no card overlap.
+
+### Full gate (final)
+`npm run precommit` clean; full e2e `playwright.e2e.config.mjs` 141/141 (one
+pre-existing intentional skip); visual suite `playwright.visual.config.mjs`
+28/28 win32 after re-baselining exactly 2 screenshots
+(`route-record-desktop-win32.png`, `route-record-compact-win32.png`) —
+AC-2's page grew from the new Discussion card and evidence disclosure; both
+new images were personally inspected (no overlap, disclosures collapsed
+correctly, Discussion reads as a normal card) before accepting the diff. The
+Linux baselines for those two images will refresh via the existing
+`visual-baseline` CI workflow after push, same as the last several sessions.
+`live-smoke` not run — no Home copy changed this session, so the §0
+precondition for it doesn't apply.
+
+### Next
+Nothing open from this plan. Push to a throwaway branch for Public Repo
+Checks, then to `main`, per `memory/deploy-workflow.md`.
 
 ## 2026-08-01 (session 15) - PART B (voice) + ship
 

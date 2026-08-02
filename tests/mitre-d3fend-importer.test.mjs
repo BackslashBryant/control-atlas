@@ -7,6 +7,7 @@ import {
   buildD3fendToNistRelationships,
   buildSlugToD3fendIdMap,
   parseD3fendTechniques,
+  resolveD3fendDefinitions,
   resolveD3fendTactics,
 } from '../tools/importers/mitre-d3fend-adapter.mjs';
 
@@ -99,6 +100,35 @@ test('resolveD3fendTactics walks subClassOf + d3f:enables to the top-level tacti
     'multi-level subClassOf chain resolves through its mid-level enables',
   );
   assert.equal(tactics.has('D3-ORPHAN'), false, 'no fabricated tactic when no path exists');
+});
+
+test('resolveD3fendDefinitions reads d3f:definition from the full ontology graph, not the technique list', () => {
+  const ontology = {
+    '@graph': [
+      {
+        '@id': 'd3f:AgentAuthentication',
+        'd3f:d3fend-id': 'D3-AA',
+        'rdfs:label': 'Agent Authentication',
+        'd3f:definition': 'Agent authentication verifies the identities of agents.',
+      },
+      {
+        '@id': 'd3f:NoDefinition',
+        'd3f:d3fend-id': 'D3-ND',
+        'rdfs:label': 'No Definition',
+      },
+      {
+        '@id': 'd3f:NotATechnique',
+        'rdfs:label': 'Not a technique, no d3fend-id',
+      },
+    ],
+  };
+  const definitions = resolveD3fendDefinitions(ontology);
+  assert.equal(
+    definitions.get('D3-AA'),
+    'Agent authentication verifies the identities of agents.',
+  );
+  assert.equal(definitions.has('D3-ND'), false, 'no fabricated definition when the ontology has none');
+  assert.equal(definitions.size, 1);
 });
 
 test('buildD3fendToNistRelationships normalizes NIST control ids', () => {

@@ -229,6 +229,26 @@ export function resolveD3fendTactics(ontologyDocument) {
   return result;
 }
 
+/**
+ * The technique list (`technique/all.json`, what parseD3fendTechniques reads)
+ * does not carry `d3f:definition` for most techniques — only the full
+ * ontology graph does, keyed by the same `d3f:d3fend-id`. Same shape as
+ * resolveD3fendTactics: the definition lives one document over from where
+ * the technique record is built.
+ */
+export function resolveD3fendDefinitions(ontologyDocument) {
+  const graph = ontologyDocument?.['@graph'] || [];
+  const definitions = new Map();
+  for (const entry of graph) {
+    const d3fendId = entry['d3f:d3fend-id'];
+    if (!d3fendId) continue;
+    const definition = entry['d3f:definition'] || entry['d3f:kb-article'] || '';
+    const text = String(definition).replace(/\s+/g, ' ').trim();
+    if (text) definitions.set(d3fendId, text);
+  }
+  return definitions;
+}
+
 export function buildMappingDocument(relationships, metadata) {
   return {
     schema_version: '2.0',

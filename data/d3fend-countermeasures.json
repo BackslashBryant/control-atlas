@@ -3,7 +3,7 @@
   "source_key": "mitre-d3fend-ontology",
   "source_artifact": "https://d3fend.mitre.org/api/technique/all.json",
   "source_version": "4",
-  "snapshot_date": "2026-07-25",
+  "snapshot_date": "2026-08-02",
   "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
   "provenance": "MITRE D3FEND defensive technique catalog",
   "records": [
@@ -11,7 +11,7 @@
       "id": "D3-AA",
       "type": "defend_countermeasure",
       "title": "D3-AA Agent Authentication",
-      "description": "",
+      "description": "Agent authentication is the process of verifying the identities of agents to ensure they are authorized and trustworthy participants within a system.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -22,7 +22,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AA"
       }
@@ -31,7 +31,7 @@
       "id": "D3-ABPI",
       "type": "defend_countermeasure",
       "title": "D3-ABPI Application-based Process Isolation",
-      "description": "",
+      "description": "Application code which prevents its own subroutines from accessing intra-process / internal memory space.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -46,7 +46,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ABPI"
       }
@@ -55,7 +55,7 @@
       "id": "D3-ACA",
       "type": "defend_countermeasure",
       "title": "D3-ACA Active Certificate Analysis",
-      "description": "",
+      "description": "Actively collecting PKI certificates by connecting to the server and downloading its server certificates for analysis.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -66,7 +66,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ACA"
       }
@@ -75,7 +75,7 @@
       "id": "D3-ACH",
       "type": "defend_countermeasure",
       "title": "D3-ACH Application Configuration Hardening",
-      "description": "",
+      "description": "Modifying an application's configuration to reduce its attack surface.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -86,7 +86,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ACH"
       }
@@ -95,7 +95,7 @@
       "id": "D3-AEM",
       "type": "defend_countermeasure",
       "title": "D3-AEM Application Exception Monitoring",
-      "description": "",
+      "description": "Monitoring the failures of system counters and timers.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -106,7 +106,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AEM"
       }
@@ -115,7 +115,7 @@
       "id": "D3-AH",
       "type": "defend_countermeasure",
       "title": "D3-AH Application Hardening",
-      "description": "",
+      "description": "Application Hardening makes an executable application more resilient to a class of exploits which either introduce new code or execute unwanted existing code. These techniques may be applied at compile-time or on an application binary.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -126,7 +126,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AH"
       }
@@ -135,7 +135,7 @@
       "id": "D3-AI",
       "type": "defend_countermeasure",
       "title": "D3-AI Asset Inventory",
-      "description": "",
+      "description": "Asset inventorying identifies and records the organization's assets and enriches each inventory item with knowledge about their vulnerabilities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -149,7 +149,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AI"
       }
@@ -158,7 +158,7 @@
       "id": "D3-AL",
       "type": "defend_countermeasure",
       "title": "D3-AL Account Locking",
-      "description": "",
+      "description": "The process of temporarily disabling user accounts on a system or domain.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -169,7 +169,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AL"
       }
@@ -178,7 +178,7 @@
       "id": "D3-ALLM",
       "type": "defend_countermeasure",
       "title": "D3-ALLM Active Logical Link Mapping",
-      "description": "",
+      "description": "Active logical link mapping sends and receives network traffic as a means to map the whole data link layer, where the links represent logical data flows rather than physical connection",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -189,7 +189,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ALLM"
       }
@@ -198,7 +198,7 @@
       "id": "D3-AM",
       "type": "defend_countermeasure",
       "title": "D3-AM Access Modeling",
-      "description": "",
+      "description": "Access modeling captures and records the access permissions granted to identities (e.g., administrators, users, groups, systems) and optionally includes details on how these identities are stored, managed, and shared across systems.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -209,7 +209,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AM"
       }
@@ -218,7 +218,7 @@
       "id": "D3-AMED",
       "type": "defend_countermeasure",
       "title": "D3-AMED Access Mediation",
-      "description": "",
+      "description": "Access mediation is the process of granting or denying specific requests to: 1) obtain and use information and related information processing services; and 2) enter specific physical facilities (e.g., Federal buildings, military establishments, border crossing entrances). Access mediation decisions should enforce least privilege by granting access for scoped durations to prevent privilege creep and, where applicable, implement just-in-time (JIT) access. Denial decisions may prevent initial access or terminate access that has already been granted, ensuring continuous enforcement of security policies.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -229,7 +229,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AMED"
       }
@@ -238,7 +238,7 @@
       "id": "D3-ANAA",
       "type": "defend_countermeasure",
       "title": "D3-ANAA Administrative Network Activity Analysis",
-      "description": "",
+      "description": "Detection of unauthorized use of administrative network protocols by analyzing network activity against a baseline.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -249,7 +249,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ANAA"
       }
@@ -258,7 +258,7 @@
       "id": "D3-ANCI",
       "type": "defend_countermeasure",
       "title": "D3-ANCI Authentication Cache Invalidation",
-      "description": "",
+      "description": "Removing tokens or credentials from an authentication cache to prevent further user associated account accesses.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -269,7 +269,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ANCI"
       }
@@ -278,7 +278,7 @@
       "id": "D3-ANET",
       "type": "defend_countermeasure",
       "title": "D3-ANET Authentication Event Thresholding",
-      "description": "",
+      "description": "Collecting authentication events, creating a baseline user profile, and determining whether authentication events are consistent with the baseline profile.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -289,7 +289,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ANET"
       }
@@ -298,7 +298,7 @@
       "id": "D3-APA",
       "type": "defend_countermeasure",
       "title": "D3-APA Access Policy Administration",
-      "description": "",
+      "description": "Access policy administration is the systematic process of defining, implementing, and managing access control policies that dictate user permissions to resources.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -309,7 +309,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-APA"
       }
@@ -318,7 +318,7 @@
       "id": "D3-APCA",
       "type": "defend_countermeasure",
       "title": "D3-APCA Application Protocol Command Analysis",
-      "description": "",
+      "description": "Analyzing application protocol level remote commands to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -329,7 +329,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-APCA"
       }
@@ -338,7 +338,7 @@
       "id": "D3-APLM",
       "type": "defend_countermeasure",
       "title": "D3-APLM Active Physical Link Mapping",
-      "description": "",
+      "description": "Active physical link mapping sends and receives network traffic as a means to map the physical layer.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -349,7 +349,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-APLM"
       }
@@ -358,7 +358,7 @@
       "id": "D3-APM",
       "type": "defend_countermeasure",
       "title": "D3-APM Application Performance Monitoring",
-      "description": "",
+      "description": "Monitoring the count and duration of the application or program cycle.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -369,7 +369,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-APM"
       }
@@ -378,7 +378,7 @@
       "id": "D3-AVE",
       "type": "defend_countermeasure",
       "title": "D3-AVE Asset Vulnerability Enumeration",
-      "description": "",
+      "description": "Asset vulnerability enumeration enriches inventory items with knowledge identifying their vulnerabilities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -389,7 +389,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AVE"
       }
@@ -398,7 +398,7 @@
       "id": "D3-AZET",
       "type": "defend_countermeasure",
       "title": "D3-AZET Authorization Event Thresholding",
-      "description": "",
+      "description": "Collecting authorization events, creating a baseline user profile, and determining whether authorization events are consistent with the baseline profile.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -409,7 +409,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-AZET"
       }
@@ -418,7 +418,7 @@
       "id": "D3-BA",
       "type": "defend_countermeasure",
       "title": "D3-BA Bootloader Authentication",
-      "description": "",
+      "description": "Cryptographically authenticating the bootloader software before system boot.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -429,7 +429,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-BA"
       }
@@ -438,7 +438,7 @@
       "id": "D3-BAN",
       "type": "defend_countermeasure",
       "title": "D3-BAN Biometric Authentication",
-      "description": "",
+      "description": "Using biological measures in order to authenticate a user.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -449,7 +449,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-BAN"
       }
@@ -458,7 +458,7 @@
       "id": "D3-BDI",
       "type": "defend_countermeasure",
       "title": "D3-BDI Broadcast Domain Isolation",
-      "description": "",
+      "description": "Broadcast isolation restricts the number of computers a host can contact on their LAN.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -469,7 +469,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-BDI"
       }
@@ -478,7 +478,7 @@
       "id": "D3-BMA",
       "type": "defend_countermeasure",
       "title": "D3-BMA Bus Message Authentication",
-      "description": "",
+      "description": "Applies cryptographic primitives to individual bus frames to verify the sender's identity and ensure the integrity of the data payload.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -489,7 +489,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-BMA"
       }
@@ -498,7 +498,7 @@
       "id": "D3-BSE",
       "type": "defend_countermeasure",
       "title": "D3-BSE Byte Sequence Emulation",
-      "description": "",
+      "description": "Analyzing sequences of bytes and determining if they likely represent malicious shellcode.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -509,7 +509,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-BSE"
       }
@@ -518,7 +518,7 @@
       "id": "D3-CA",
       "type": "defend_countermeasure",
       "title": "D3-CA Certificate Analysis",
-      "description": "",
+      "description": "Analyzing Public Key Infrastructure certificates to detect if they have been misconfigured or spoofed using both network traffic, certificate fields and third-party logs.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -529,7 +529,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CA"
       }
@@ -538,7 +538,7 @@
       "id": "D3-CAA",
       "type": "defend_countermeasure",
       "title": "D3-CAA Connection Attempt Analysis",
-      "description": "",
+      "description": "Analyzing failed connections in a network to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -549,7 +549,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CAA"
       }
@@ -558,7 +558,7 @@
       "id": "D3-CBAN",
       "type": "defend_countermeasure",
       "title": "D3-CBAN Certificate-based Authentication",
-      "description": "",
+      "description": "Requiring a digital certificate in order to authenticate a user.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -569,7 +569,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CBAN"
       }
@@ -578,7 +578,7 @@
       "id": "D3-CCSA",
       "type": "defend_countermeasure",
       "title": "D3-CCSA Credential Compromise Scope Analysis",
-      "description": "",
+      "description": "Determining which credentials may have been compromised by analyzing the user logon history of a particular system.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -589,7 +589,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CCSA"
       }
@@ -598,7 +598,7 @@
       "id": "D3-CDP",
       "type": "defend_countermeasure",
       "title": "D3-CDP Change Default Password",
-      "description": "",
+      "description": "Changing the default password means replacing the factory-set credentials with a strong, unique password before the device is deployed, preventing unauthorized access.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -609,7 +609,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CDP"
       }
@@ -618,7 +618,7 @@
       "id": "D3-CE",
       "type": "defend_countermeasure",
       "title": "D3-CE Credential Eviction",
-      "description": "",
+      "description": "Credential Eviction techniques disable or remove compromised credentials from a computer network.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -629,7 +629,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CE"
       }
@@ -638,7 +638,7 @@
       "id": "D3-CERO",
       "type": "defend_countermeasure",
       "title": "D3-CERO Certificate Rotation",
-      "description": "",
+      "description": "Certificate rotation involves replacing digital certificates and their private keys to maintain cryptographic integrity and trust, mitigating key compromise risks and ensuring continuous secure communications.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -649,7 +649,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CERO"
       }
@@ -658,7 +658,7 @@
       "id": "D3-CF",
       "type": "defend_countermeasure",
       "title": "D3-CF Content Filtering",
-      "description": "",
+      "description": "Content Filtering techniques aid in the process of analyzing an input file for malicious or erroneous content and outputing a sanitized version.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -669,7 +669,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CF"
       }
@@ -678,7 +678,7 @@
       "id": "D3-CFC",
       "type": "defend_countermeasure",
       "title": "D3-CFC Content Format Conversion",
-      "description": "",
+      "description": "Content format conversion is mechanical transformation from one format to another which may be normalization or specifically flattening.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -689,7 +689,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CFC"
       }
@@ -698,7 +698,7 @@
       "id": "D3-CFI",
       "type": "defend_countermeasure",
       "title": "D3-CFI Control Flow Integrity",
-      "description": "",
+      "description": "Enforcing legal control flow transfers during application process execution.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -709,7 +709,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CFI"
       }
@@ -718,7 +718,7 @@
       "id": "D3-CH",
       "type": "defend_countermeasure",
       "title": "D3-CH Credential Hardening",
-      "description": "",
+      "description": "Credential Hardening techniques modify system or network properties in order to protect system or network/domain credentials.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -729,7 +729,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CH"
       }
@@ -738,7 +738,7 @@
       "id": "D3-CHN",
       "type": "defend_countermeasure",
       "title": "D3-CHN Connected Honeynet",
-      "description": "",
+      "description": "A decoy service, system, or environment, that is connected to the enterprise network, and simulates or emulates certain functionality to the network, without exposing full access to a production system.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -749,7 +749,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CHN"
       }
@@ -758,7 +758,7 @@
       "id": "D3-CI",
       "type": "defend_countermeasure",
       "title": "D3-CI Configuration Inventory",
-      "description": "",
+      "description": "Configuration inventory identifies and records the configuration of software and hardware and their components throughout the organization.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -769,7 +769,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CI"
       }
@@ -778,7 +778,7 @@
       "id": "D3-CIA",
       "type": "defend_countermeasure",
       "title": "D3-CIA Container Image Analysis",
-      "description": "",
+      "description": "Analyzing a Container Image with respect to a set of policies.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -789,7 +789,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CIA"
       }
@@ -798,7 +798,7 @@
       "id": "D3-CM",
       "type": "defend_countermeasure",
       "title": "D3-CM Content Modification",
-      "description": "",
+      "description": "Modify content that does not comply with policy.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -809,7 +809,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CM"
       }
@@ -818,7 +818,7 @@
       "id": "D3-CNE",
       "type": "defend_countermeasure",
       "title": "D3-CNE Content Excision",
-      "description": "",
+      "description": "Removing specific, potentially malicious, parts of content",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -829,7 +829,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CNE"
       }
@@ -838,7 +838,7 @@
       "id": "D3-CNR",
       "type": "defend_countermeasure",
       "title": "D3-CNR Content Rebuild",
-      "description": "",
+      "description": "Rebuild the file according to the spec so any unreferenced components or objects are removed.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -849,7 +849,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CNR"
       }
@@ -858,7 +858,7 @@
       "id": "D3-CNS",
       "type": "defend_countermeasure",
       "title": "D3-CNS Content Substitution",
-      "description": "",
+      "description": "Modifies specific digital content information by replacing it with something else.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -869,7 +869,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CNS"
       }
@@ -878,7 +878,7 @@
       "id": "D3-CP",
       "type": "defend_countermeasure",
       "title": "D3-CP Certificate Pinning",
-      "description": "",
+      "description": "Persisting either a server's X.509 certificate or their public key and comparing that to server's presented identity to allow for greater client confidence in the remote server's identity for SSL connections.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -889,7 +889,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CP"
       }
@@ -898,7 +898,7 @@
       "id": "D3-CQ",
       "type": "defend_countermeasure",
       "title": "D3-CQ Content Quarantine",
-      "description": "",
+      "description": "Transfer content that does not comply with policy to a quarantine zone.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -909,7 +909,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CQ"
       }
@@ -918,7 +918,7 @@
       "id": "D3-CR",
       "type": "defend_countermeasure",
       "title": "D3-CR Credential Revocation",
-      "description": "",
+      "description": "Deleting a set of credentials permanently to prevent them from being used to authenticate.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -929,7 +929,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CR"
       }
@@ -938,7 +938,7 @@
       "id": "D3-CRO",
       "type": "defend_countermeasure",
       "title": "D3-CRO Credential Rotation",
-      "description": "",
+      "description": "Credential rotation is a security procedure in which authentication credentials, such as passwords, API keys, or certificates, are regularly changed or replaced to minimize the risk of unauthorized access.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -949,7 +949,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CRO"
       }
@@ -958,7 +958,7 @@
       "id": "D3-CS",
       "type": "defend_countermeasure",
       "title": "D3-CS Credential Scrubbing",
-      "description": "",
+      "description": "The systematic removal of hard-coded credentials from source code to prevent accidental exposure and unauthorized access.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -969,7 +969,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CS"
       }
@@ -978,7 +978,7 @@
       "id": "D3-CSPP",
       "type": "defend_countermeasure",
       "title": "D3-CSPP Client-server Payload Profiling",
-      "description": "",
+      "description": "Comparing client-server request and response payloads to a baseline profile to identify outliers.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -989,7 +989,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CSPP"
       }
@@ -998,7 +998,7 @@
       "id": "D3-CTS",
       "type": "defend_countermeasure",
       "title": "D3-CTS Credential Transmission Scoping",
-      "description": "",
+      "description": "Limiting the transmission of a credential to a scoped set of relying parties.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1009,7 +1009,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CTS"
       }
@@ -1018,7 +1018,7 @@
       "id": "D3-CV",
       "type": "defend_countermeasure",
       "title": "D3-CV Content Validation",
-      "description": "",
+      "description": "Verify and validate contents complies with policy",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1029,7 +1029,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-CV"
       }
@@ -1038,7 +1038,7 @@
       "id": "D3-DA",
       "type": "defend_countermeasure",
       "title": "D3-DA Dynamic Analysis",
-      "description": "",
+      "description": "Executing or opening a file in a synthetic \"sandbox\" environment to determine if the file is a malicious program or if the file exploits another program such as a document reader.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1052,7 +1052,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DA"
       }
@@ -1061,7 +1061,7 @@
       "id": "D3-DAM",
       "type": "defend_countermeasure",
       "title": "D3-DAM Domain Account Monitoring",
-      "description": "",
+      "description": "Monitoring the existence of or changes to Domain User Accounts.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1072,7 +1072,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DAM"
       }
@@ -1081,7 +1081,7 @@
       "id": "D3-DCE",
       "type": "defend_countermeasure",
       "title": "D3-DCE Dead Code Elimination",
-      "description": "",
+      "description": "Removing unreachable or \"dead code\" from compiled source code.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1092,7 +1092,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DCE"
       }
@@ -1101,7 +1101,7 @@
       "id": "D3-DE",
       "type": "defend_countermeasure",
       "title": "D3-DE Decoy Environment",
-      "description": "",
+      "description": "A Decoy Environment comprises hosts and networks for the purposes of deceiving an attacker.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1112,7 +1112,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DE"
       }
@@ -1121,7 +1121,7 @@
       "id": "D3-DEM",
       "type": "defend_countermeasure",
       "title": "D3-DEM Data Exchange Mapping",
-      "description": "",
+      "description": "Data exchange mapping identifies and models the organization's intended design for the flows of the data types, formats, and volumes between systems at the application layer.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -1135,7 +1135,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DEM"
       }
@@ -1144,7 +1144,7 @@
       "id": "D3-DENCR",
       "type": "defend_countermeasure",
       "title": "D3-DENCR Disk Encryption",
-      "description": "",
+      "description": "Encrypting a hard disk partition to prevent cleartext access to a file system.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1155,7 +1155,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DENCR"
       }
@@ -1164,7 +1164,7 @@
       "id": "D3-DF",
       "type": "defend_countermeasure",
       "title": "D3-DF Decoy File",
-      "description": "",
+      "description": "A file created for the purposes of deceiving an adversary.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1175,7 +1175,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DF"
       }
@@ -1184,7 +1184,7 @@
       "id": "D3-DI",
       "type": "defend_countermeasure",
       "title": "D3-DI Data Inventory",
-      "description": "",
+      "description": "Data inventorying identifies and records the schemas, formats, volumes, and locations of data stored and used on the organization's architecture.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -1198,7 +1198,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DI"
       }
@@ -1207,7 +1207,7 @@
       "id": "D3-DKE",
       "type": "defend_countermeasure",
       "title": "D3-DKE Disk Erasure",
-      "description": "",
+      "description": "Disk Erasure is the process of securely deleting all data on a disk to ensure that it cannot be recovered by any means.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1218,7 +1218,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DKE"
       }
@@ -1227,7 +1227,7 @@
       "id": "D3-DKF",
       "type": "defend_countermeasure",
       "title": "D3-DKF Disk Formatting",
-      "description": "",
+      "description": "Disk Formatting is the process of preparing a data storage device, such as a hard drive, solid-state drive, or USB flash drive, for initial use.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1238,7 +1238,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DKF"
       }
@@ -1247,7 +1247,7 @@
       "id": "D3-DKP",
       "type": "defend_countermeasure",
       "title": "D3-DKP Disk Partitioning",
-      "description": "",
+      "description": "Disk Partitioning is the process of dividing a disk into multiple distinct sections, known as partitions.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1258,7 +1258,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DKP"
       }
@@ -1267,7 +1267,7 @@
       "id": "D3-DLIC",
       "type": "defend_countermeasure",
       "title": "D3-DLIC Driver Load Integrity Checking",
-      "description": "",
+      "description": "Ensuring the integrity of drivers loaded during initialization of the operating system.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1278,7 +1278,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DLIC"
       }
@@ -1287,7 +1287,7 @@
       "id": "D3-DLV",
       "type": "defend_countermeasure",
       "title": "D3-DLV Domain Logic Validation",
-      "description": "",
+      "description": "Validation of variable state in the context of the domain application.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1298,7 +1298,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DLV"
       }
@@ -1307,7 +1307,7 @@
       "id": "D3-DNL",
       "type": "defend_countermeasure",
       "title": "D3-DNL Directional Network Link",
-      "description": "",
+      "description": "Enforce one-way network communication by preventing two-way communication.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1318,7 +1318,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNL"
       }
@@ -1327,7 +1327,7 @@
       "id": "D3-DNR",
       "type": "defend_countermeasure",
       "title": "D3-DNR Decoy Network Resource",
-      "description": "",
+      "description": "Deploying a network resource for the purposes of deceiving an adversary.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1338,7 +1338,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNR"
       }
@@ -1347,7 +1347,7 @@
       "id": "D3-DNRA",
       "type": "defend_countermeasure",
       "title": "D3-DNRA Domain Name Reputation Analysis",
-      "description": "",
+      "description": "Analyzing the reputation of a domain name.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1358,7 +1358,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNRA"
       }
@@ -1367,7 +1367,7 @@
       "id": "D3-DNSAL",
       "type": "defend_countermeasure",
       "title": "D3-DNSAL DNS Allowlisting",
-      "description": "",
+      "description": "Permitting only approved domains and their subdomains to be resolved.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1378,7 +1378,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNSAL"
       }
@@ -1387,7 +1387,7 @@
       "id": "D3-DNSCE",
       "type": "defend_countermeasure",
       "title": "D3-DNSCE DNS Cache Eviction",
-      "description": "",
+      "description": "Flushing DNS to clear any IP addresses or other DNS records from the cache.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1398,7 +1398,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNSCE"
       }
@@ -1407,7 +1407,7 @@
       "id": "D3-DNSDL",
       "type": "defend_countermeasure",
       "title": "D3-DNSDL DNS Denylisting",
-      "description": "",
+      "description": "Blocking DNS Network Traffic based on criteria such as IP address, domain name, or DNS query type.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1418,7 +1418,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNSDL"
       }
@@ -1427,7 +1427,7 @@
       "id": "D3-DNSTA",
       "type": "defend_countermeasure",
       "title": "D3-DNSTA DNS Traffic Analysis",
-      "description": "",
+      "description": "Analysis of domain name metadata, including name and DNS records, to determine whether the domain is likely to resolve to an undesirable host.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1438,7 +1438,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DNSTA"
       }
@@ -1447,7 +1447,7 @@
       "id": "D3-DO",
       "type": "defend_countermeasure",
       "title": "D3-DO Decoy Object",
-      "description": "",
+      "description": "A Decoy Object is created and deployed for the purposes of deceiving attackers.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1458,7 +1458,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DO"
       }
@@ -1467,7 +1467,7 @@
       "id": "D3-DP",
       "type": "defend_countermeasure",
       "title": "D3-DP Decoy Persona",
-      "description": "",
+      "description": "Establishing a fake online identity to misdirect, deceive, and or interact with adversaries.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1478,7 +1478,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DP"
       }
@@ -1487,7 +1487,7 @@
       "id": "D3-DPLM",
       "type": "defend_countermeasure",
       "title": "D3-DPLM Direct Physical Link Mapping",
-      "description": "",
+      "description": "Direct physical link mapping creates a physical link map by direct observation and recording of the physical network links.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -1498,7 +1498,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DPLM"
       }
@@ -1507,7 +1507,7 @@
       "id": "D3-DPR",
       "type": "defend_countermeasure",
       "title": "D3-DPR Decoy Public Release",
-      "description": "",
+      "description": "Issuing publicly released media to deceive adversaries.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1518,7 +1518,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DPR"
       }
@@ -1527,7 +1527,7 @@
       "id": "D3-DQSA",
       "type": "defend_countermeasure",
       "title": "D3-DQSA Database Query String Analysis",
-      "description": "",
+      "description": "Analyzing database queries to detect [SQL Injection](https://capec.mitre.org/data/definitions/66.html).",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1538,7 +1538,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DQSA"
       }
@@ -1547,7 +1547,7 @@
       "id": "D3-DRA",
       "type": "defend_countermeasure",
       "title": "D3-DRA Disable Remote Access",
-      "description": "",
+      "description": "Limiting access to a computing device which is not required through or from a non-organization-controlled network.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1558,7 +1558,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DRA"
       }
@@ -1567,7 +1567,7 @@
       "id": "D3-DRT",
       "type": "defend_countermeasure",
       "title": "D3-DRT Domain Registration Takedown",
-      "description": "",
+      "description": "The process of performing a takedown of the attacker's domain registration infrastructure.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1578,7 +1578,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DRT"
       }
@@ -1587,7 +1587,7 @@
       "id": "D3-DST",
       "type": "defend_countermeasure",
       "title": "D3-DST Decoy Session Token",
-      "description": "",
+      "description": "An authentication token created for the purposes of deceiving an adversary.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1598,7 +1598,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DST"
       }
@@ -1607,7 +1607,7 @@
       "id": "D3-DTP",
       "type": "defend_countermeasure",
       "title": "D3-DTP Domain Trust Policy",
-      "description": "",
+      "description": "Restricting inter-domain trust by modifying domain configuration.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1618,7 +1618,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DTP"
       }
@@ -1627,7 +1627,7 @@
       "id": "D3-DUC",
       "type": "defend_countermeasure",
       "title": "D3-DUC Decoy User Credential",
-      "description": "",
+      "description": "A Credential created for the purpose of deceiving an adversary.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -1638,7 +1638,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-DUC"
       }
@@ -1647,7 +1647,7 @@
       "id": "D3-EAL",
       "type": "defend_countermeasure",
       "title": "D3-EAL Executable Allowlisting",
-      "description": "",
+      "description": "Using a digital signature to authenticate a file before opening.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1658,7 +1658,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EAL"
       }
@@ -1667,7 +1667,7 @@
       "id": "D3-EBWSAM",
       "type": "defend_countermeasure",
       "title": "D3-EBWSAM Endpoint-based Web Server Access Mediation",
-      "description": "",
+      "description": "Endpoint-based web server access mediation regulates web server access directly from user endpoints by implementing mechanisms such as client-side certificates and endpoint security software to authenticate devices and ensure compliant access.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1678,7 +1678,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EBWSAM"
       }
@@ -1687,7 +1687,7 @@
       "id": "D3-EDL",
       "type": "defend_countermeasure",
       "title": "D3-EDL Executable Denylisting",
-      "description": "",
+      "description": "Blocking the execution of files on a host in accordance with defined application policy rules.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1698,7 +1698,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EDL"
       }
@@ -1707,7 +1707,7 @@
       "id": "D3-EF",
       "type": "defend_countermeasure",
       "title": "D3-EF Email Filtering",
-      "description": "",
+      "description": "Filtering incoming email traffic based on specific criteria.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1718,7 +1718,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EF"
       }
@@ -1727,7 +1727,7 @@
       "id": "D3-EFA",
       "type": "defend_countermeasure",
       "title": "D3-EFA Emulated File Analysis",
-      "description": "",
+      "description": "Emulating instructions in a file looking for specific patterns.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1738,7 +1738,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EFA"
       }
@@ -1747,7 +1747,7 @@
       "id": "D3-EHB",
       "type": "defend_countermeasure",
       "title": "D3-EHB Endpoint Health Beacon",
-      "description": "",
+      "description": "Monitoring the security status of an endpoint by sending periodic messages with health status, where absence of a response may indicate that the endpoint has been compromised.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1758,7 +1758,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EHB"
       }
@@ -1767,7 +1767,7 @@
       "id": "D3-EHPV",
       "type": "defend_countermeasure",
       "title": "D3-EHPV Exception Handler Pointer Validation",
-      "description": "",
+      "description": "Validates that a referenced exception handler pointer is a valid exception handler.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1778,7 +1778,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EHPV"
       }
@@ -1787,7 +1787,7 @@
       "id": "D3-EI",
       "type": "defend_countermeasure",
       "title": "D3-EI Execution Isolation",
-      "description": "",
+      "description": "Execution Isolation techniques prevent application processes from accessing non-essential system resources, such as memory, devices, or files.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1798,7 +1798,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EI"
       }
@@ -1807,7 +1807,7 @@
       "id": "D3-ELM",
       "type": "defend_countermeasure",
       "title": "D3-ELM Electronic Lock Monitoring",
-      "description": "",
+      "description": "Monitoring electronic lock and door hardware states and access events (e.g., locked/unlocked, access granted/denied, door forced/held, tamper) to detect and respond to unauthorized entry.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1821,7 +1821,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ELM"
       }
@@ -1830,7 +1830,7 @@
       "id": "D3-EMH",
       "type": "defend_countermeasure",
       "title": "D3-EMH Electromagnetic Radiation Hardening",
-      "description": "",
+      "description": "The application of physical and material-level design measures to electronic systems, components, or facilities to reduce their susceptibility to damage or disruption from electromagnetic threats.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -1841,7 +1841,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EMH"
       }
@@ -1850,7 +1850,7 @@
       "id": "D3-EPL",
       "type": "defend_countermeasure",
       "title": "D3-EPL Physical Locking",
-      "description": "",
+      "description": "Employ a mechanical locking device for securing moveable portions of physical barriers (e.g., doors, gates, drawers) in a secured position.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1861,7 +1861,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-EPL"
       }
@@ -1870,7 +1870,7 @@
       "id": "D3-ER",
       "type": "defend_countermeasure",
       "title": "D3-ER Email Removal",
-      "description": "",
+      "description": "The email removal technique deletes email files from system storage.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -1881,7 +1881,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ER"
       }
@@ -1890,7 +1890,7 @@
       "id": "D3-ET",
       "type": "defend_countermeasure",
       "title": "D3-ET Encrypted Tunnels",
-      "description": "",
+      "description": "Encrypted encapsulation of routable network traffic.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -1901,7 +1901,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ET"
       }
@@ -1910,7 +1910,7 @@
       "id": "D3-FA",
       "type": "defend_countermeasure",
       "title": "D3-FA File Analysis",
-      "description": "",
+      "description": "File Analysis is an analytic process to determine a file's status. For example: virus, trojan, benign, malicious, trusted, unauthorized, sensitive, etc.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1921,7 +1921,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FA"
       }
@@ -1930,7 +1930,7 @@
       "id": "D3-FAPA",
       "type": "defend_countermeasure",
       "title": "D3-FAPA File Access Pattern Analysis",
-      "description": "",
+      "description": "Analyzing the files accessed by a process to identify unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1941,7 +1941,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FAPA"
       }
@@ -1950,7 +1950,7 @@
       "id": "D3-FBA",
       "type": "defend_countermeasure",
       "title": "D3-FBA Firmware Behavior Analysis",
-      "description": "",
+      "description": "Analyzing the behavior of embedded code in firmware and looking for anomalous behavior and suspicious activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1961,7 +1961,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FBA"
       }
@@ -1970,7 +1970,7 @@
       "id": "D3-FC",
       "type": "defend_countermeasure",
       "title": "D3-FC File Carving",
-      "description": "",
+      "description": "Identifying and extracting files from network application protocols through the use of network stream reassembly software.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -1981,7 +1981,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FC"
       }
@@ -1990,7 +1990,7 @@
       "id": "D3-FCA",
       "type": "defend_countermeasure",
       "title": "D3-FCA File Creation Analysis",
-      "description": "",
+      "description": "Analyzing the properties of file create system call invocations.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2001,7 +2001,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FCA"
       }
@@ -2010,7 +2010,7 @@
       "id": "D3-FCDC",
       "type": "defend_countermeasure",
       "title": "D3-FCDC File Content Decompression Checking",
-      "description": "",
+      "description": "Checking if compressed or encoded data sections can be successfully decompressed or decoded. Can follow with further analysis with semantic knowledge",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2021,7 +2021,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FCDC"
       }
@@ -2030,7 +2030,7 @@
       "id": "D3-FCOA",
       "type": "defend_countermeasure",
       "title": "D3-FCOA File Content Analysis",
-      "description": "",
+      "description": "Employing a pattern matching algorithm to statically analyze the content of files.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2041,7 +2041,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FCOA"
       }
@@ -2050,7 +2050,7 @@
       "id": "D3-FCR",
       "type": "defend_countermeasure",
       "title": "D3-FCR File Content Rules",
-      "description": "",
+      "description": "Employing a pattern matching rule language to analyze the content of files.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2064,7 +2064,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FCR"
       }
@@ -2073,7 +2073,7 @@
       "id": "D3-FE",
       "type": "defend_countermeasure",
       "title": "D3-FE File Encryption",
-      "description": "",
+      "description": "Encrypting a file using a cryptographic key.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2084,7 +2084,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FE"
       }
@@ -2093,7 +2093,7 @@
       "id": "D3-FEMC",
       "type": "defend_countermeasure",
       "title": "D3-FEMC Firmware Embedded Monitoring Code",
-      "description": "",
+      "description": "Monitoring code is injected into firmware for integrity monitoring of firmware and firmware data.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2104,7 +2104,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FEMC"
       }
@@ -2113,7 +2113,7 @@
       "id": "D3-FEV",
       "type": "defend_countermeasure",
       "title": "D3-FEV File Eviction",
-      "description": "",
+      "description": "File eviction techniques delete files from system storage.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -2124,7 +2124,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FEV"
       }
@@ -2133,7 +2133,7 @@
       "id": "D3-FFV",
       "type": "defend_countermeasure",
       "title": "D3-FFV File Format Verification",
-      "description": "",
+      "description": "Verifying that a file conforms to its expected format specifications",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2144,7 +2144,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FFV"
       }
@@ -2153,7 +2153,7 @@
       "id": "D3-FH",
       "type": "defend_countermeasure",
       "title": "D3-FH File Hashing",
-      "description": "",
+      "description": "Employing file hash comparisons to detect known malware.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2164,7 +2164,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FH"
       }
@@ -2173,7 +2173,7 @@
       "id": "D3-FHRA",
       "type": "defend_countermeasure",
       "title": "D3-FHRA File Hash Reputation Analysis",
-      "description": "",
+      "description": "Analyzing the reputation of a file hash.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2184,7 +2184,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FHRA"
       }
@@ -2193,7 +2193,7 @@
       "id": "D3-FIM",
       "type": "defend_countermeasure",
       "title": "D3-FIM File Integrity Monitoring",
-      "description": "",
+      "description": "Detecting any suspicious changes to files in a computer system.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2204,7 +2204,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FIM"
       }
@@ -2213,7 +2213,7 @@
       "id": "D3-FISV",
       "type": "defend_countermeasure",
       "title": "D3-FISV File Internal Structure Verification",
-      "description": "",
+      "description": "The process of checking specific static values within a file, such as file signatures or magic numbers, to ensure they match the expected values defined by the file format specification.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2224,7 +2224,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FISV"
       }
@@ -2233,7 +2233,7 @@
       "id": "D3-FMBV",
       "type": "defend_countermeasure",
       "title": "D3-FMBV File Magic Byte Verification",
-      "description": "",
+      "description": "Utilizing the magic number to verify the file",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2244,7 +2244,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FMBV"
       }
@@ -2253,7 +2253,7 @@
       "id": "D3-FMCV",
       "type": "defend_countermeasure",
       "title": "D3-FMCV File Metadata Consistency Validation",
-      "description": "",
+      "description": "The process of validating the consistency between a file's metadata and its actual content, ensuring that elements like declared lengths, pointers, and checksums accurately describe the file's content.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2264,7 +2264,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FMCV"
       }
@@ -2273,7 +2273,7 @@
       "id": "D3-FMVV",
       "type": "defend_countermeasure",
       "title": "D3-FMVV File Metadata Value Verification",
-      "description": "",
+      "description": "The process of checking specific static values within a file, such as file signatures or magic numbers, to ensure they match the expected values defined by the file format specification.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2284,7 +2284,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FMVV"
       }
@@ -2293,7 +2293,7 @@
       "id": "D3-FRDDL",
       "type": "defend_countermeasure",
       "title": "D3-FRDDL Forward Resolution Domain Denylisting",
-      "description": "",
+      "description": "Blocking a lookup based on the query's domain name value.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2304,7 +2304,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FRDDL"
       }
@@ -2313,7 +2313,7 @@
       "id": "D3-FRIDL",
       "type": "defend_countermeasure",
       "title": "D3-FRIDL Forward Resolution IP Denylisting",
-      "description": "",
+      "description": "Blocking a DNS lookup's answer's IP address value.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2324,7 +2324,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FRIDL"
       }
@@ -2333,7 +2333,7 @@
       "id": "D3-FV",
       "type": "defend_countermeasure",
       "title": "D3-FV Firmware Verification",
-      "description": "",
+      "description": "Cryptographically verifying firmware integrity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2344,7 +2344,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-FV"
       }
@@ -2353,7 +2353,7 @@
       "id": "D3-HBPI",
       "type": "defend_countermeasure",
       "title": "D3-HBPI Hardware-based Process Isolation",
-      "description": "",
+      "description": "Preventing one process from writing to the memory space of another process through hardware based address manager implementations.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2364,7 +2364,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HBPI"
       }
@@ -2373,7 +2373,7 @@
       "id": "D3-HBWP",
       "type": "defend_countermeasure",
       "title": "D3-HBWP Hardware-based Write Protection",
-      "description": "",
+      "description": "Physical methods of preventing data from being written to computer storage.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2384,7 +2384,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HBWP"
       }
@@ -2393,7 +2393,7 @@
       "id": "D3-HCI",
       "type": "defend_countermeasure",
       "title": "D3-HCI Hardware Component Inventory",
-      "description": "",
+      "description": "Hardware component inventorying identifies and records the hardware items in the organization's architecture.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -2407,7 +2407,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HCI"
       }
@@ -2416,7 +2416,7 @@
       "id": "D3-HD",
       "type": "defend_countermeasure",
       "title": "D3-HD Homoglyph Detection",
-      "description": "",
+      "description": "Comparing strings using a variety of techniques to determine if a deceptive or malicious string is being presented to a user.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2427,7 +2427,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HD"
       }
@@ -2436,7 +2436,7 @@
       "id": "D3-HDDL",
       "type": "defend_countermeasure",
       "title": "D3-HDDL Hierarchical Domain Denylisting",
-      "description": "",
+      "description": "Blocking the resolution of any subdomain of a specified domain name.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2447,7 +2447,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HDDL"
       }
@@ -2456,7 +2456,7 @@
       "id": "D3-HDL",
       "type": "defend_countermeasure",
       "title": "D3-HDL Homoglyph Denylisting",
-      "description": "",
+      "description": "Blocking DNS queries that are deceptively similar to legitimate domain names.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2467,7 +2467,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HDL"
       }
@@ -2476,7 +2476,7 @@
       "id": "D3-HR",
       "type": "defend_countermeasure",
       "title": "D3-HR Host Reboot",
-      "description": "",
+      "description": "Initiating a host's reboot sequence to terminate all running processes.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -2487,7 +2487,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HR"
       }
@@ -2496,7 +2496,7 @@
       "id": "D3-HS",
       "type": "defend_countermeasure",
       "title": "D3-HS Host Shutdown",
-      "description": "",
+      "description": "Initiating a host's shutdown sequence to terminate all running processes.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -2507,7 +2507,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-HS"
       }
@@ -2516,7 +2516,7 @@
       "id": "D3-IAA",
       "type": "defend_countermeasure",
       "title": "D3-IAA Identifier Activity Analysis",
-      "description": "",
+      "description": "Taking known malicious identifiers and determining if they are present in a system.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2527,7 +2527,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IAA"
       }
@@ -2536,7 +2536,7 @@
       "id": "D3-IBCA",
       "type": "defend_countermeasure",
       "title": "D3-IBCA Indirect Branch Call Analysis",
-      "description": "",
+      "description": "Analyzing vendor specific branch call recording in order to detect ROP style attacks.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2547,7 +2547,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IBCA"
       }
@@ -2556,7 +2556,7 @@
       "id": "D3-ID",
       "type": "defend_countermeasure",
       "title": "D3-ID Identifier Analysis",
-      "description": "",
+      "description": "Analyzing identifier artifacts such as IP address, domain names, or URL(I)s.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2567,7 +2567,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ID"
       }
@@ -2576,7 +2576,7 @@
       "id": "D3-IDA",
       "type": "defend_countermeasure",
       "title": "D3-IDA Input Device Analysis",
-      "description": "",
+      "description": "Operating system level mechanisms to prevent abusive input device exploitation.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2587,7 +2587,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IDA"
       }
@@ -2596,7 +2596,7 @@
       "id": "D3-IHN",
       "type": "defend_countermeasure",
       "title": "D3-IHN Integrated Honeynet",
-      "description": "",
+      "description": "The practice of setting decoys in a production environment to entice interaction from attackers.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -2607,7 +2607,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IHN"
       }
@@ -2616,7 +2616,7 @@
       "id": "D3-IOPR",
       "type": "defend_countermeasure",
       "title": "D3-IOPR IO Port Restriction",
-      "description": "",
+      "description": "Limiting access to computer input/output (IO) ports to restrict unauthorized devices.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2627,7 +2627,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IOPR"
       }
@@ -2636,7 +2636,7 @@
       "id": "D3-IPCTA",
       "type": "defend_countermeasure",
       "title": "D3-IPCTA IPC Traffic Analysis",
-      "description": "",
+      "description": "Analyzing standard inter process communication (IPC) protocols to detect deviations from normal protocol activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2647,7 +2647,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IPCTA"
       }
@@ -2656,7 +2656,7 @@
       "id": "D3-IPRA",
       "type": "defend_countermeasure",
       "title": "D3-IPRA IP Reputation Analysis",
-      "description": "",
+      "description": "Analyzing the reputation of an IP address.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2667,7 +2667,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IPRA"
       }
@@ -2676,7 +2676,7 @@
       "id": "D3-IRA",
       "type": "defend_countermeasure",
       "title": "D3-IRA Identifier Reputation Analysis",
-      "description": "",
+      "description": "Analyzing the reputation of an identifier.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2687,7 +2687,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IRA"
       }
@@ -2696,7 +2696,7 @@
       "id": "D3-IRV",
       "type": "defend_countermeasure",
       "title": "D3-IRV Integer Range Validation",
-      "description": "",
+      "description": "Ensuring that an integer is within a valid range.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2707,7 +2707,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-IRV"
       }
@@ -2716,7 +2716,7 @@
       "id": "D3-ISVA",
       "type": "defend_countermeasure",
       "title": "D3-ISVA Inbound Session Volume Analysis",
-      "description": "",
+      "description": "Analyzing inbound network session or connection attempt volume.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2727,7 +2727,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ISVA"
       }
@@ -2736,7 +2736,7 @@
       "id": "D3-ITF",
       "type": "defend_countermeasure",
       "title": "D3-ITF Inbound Traffic Filtering",
-      "description": "",
+      "description": "Restricting network traffic originating from untrusted networks destined towards a private host or enclave.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2747,7 +2747,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ITF"
       }
@@ -2756,7 +2756,7 @@
       "id": "D3-JFAPA",
       "type": "defend_countermeasure",
       "title": "D3-JFAPA Job Function Access Pattern Analysis",
-      "description": "",
+      "description": "Detecting anomalies in user access patterns by comparing user access activity to behavioral profiles that categorize users by role such as job title, function, department.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2767,7 +2767,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-JFAPA"
       }
@@ -2776,7 +2776,7 @@
       "id": "D3-KBPI",
       "type": "defend_countermeasure",
       "title": "D3-KBPI Kernel-based Process Isolation",
-      "description": "",
+      "description": "Using kernel-level capabilities to isolate processes.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2787,7 +2787,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-KBPI"
       }
@@ -2796,7 +2796,7 @@
       "id": "D3-LAM",
       "type": "defend_countermeasure",
       "title": "D3-LAM Local Account Monitoring",
-      "description": "",
+      "description": "Analyzing local user accounts to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2807,7 +2807,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-LAM"
       }
@@ -2816,7 +2816,7 @@
       "id": "D3-LAMED",
       "type": "defend_countermeasure",
       "title": "D3-LAMED LAN Access Mediation",
-      "description": "",
+      "description": "LAN access mediation encompasses the application of strict access control policies, systematic verification of devices, and authentication mechanisms to govern connectivity to a Local Area Network.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2827,7 +2827,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-LAMED"
       }
@@ -2836,7 +2836,7 @@
       "id": "D3-LFAM",
       "type": "defend_countermeasure",
       "title": "D3-LFAM Local File Access Mediation",
-      "description": "",
+      "description": "Local file access mediation is the process of an operating system granting or denying a specific access request to a local file.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2847,7 +2847,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-LFAM"
       }
@@ -2856,7 +2856,7 @@
       "id": "D3-LFP",
       "type": "defend_countermeasure",
       "title": "D3-LFP Local File Permissions",
-      "description": "",
+      "description": "Local file permissions is the systematic process of defining, implementing, and managing access control policies that dictate user permissions for accessing files on a local system through the configuration of operating system functionality.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -2867,7 +2867,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-LFP"
       }
@@ -2876,7 +2876,7 @@
       "id": "D3-LLM",
       "type": "defend_countermeasure",
       "title": "D3-LLM Logical Link Mapping",
-      "description": "",
+      "description": "Logical link mapping creates a model of existing or previous node-to-node connections using network-layer data or metadata.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -2887,7 +2887,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-LLM"
       }
@@ -2896,7 +2896,7 @@
       "id": "D3-MA",
       "type": "defend_countermeasure",
       "title": "D3-MA Message Analysis",
-      "description": "",
+      "description": "Analyzing email or instant message content to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2910,7 +2910,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MA"
       }
@@ -2919,7 +2919,7 @@
       "id": "D3-MAN",
       "type": "defend_countermeasure",
       "title": "D3-MAN Message Authentication",
-      "description": "",
+      "description": "Authenticating the sender of a message and ensuring message integrity.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2930,7 +2930,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MAN"
       }
@@ -2939,7 +2939,7 @@
       "id": "D3-MBSV",
       "type": "defend_countermeasure",
       "title": "D3-MBSV Memory Block Start Validation",
-      "description": "",
+      "description": "Ensuring that a pointer accurately references the beginning of a designated memory block.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2950,7 +2950,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MBSV"
       }
@@ -2959,7 +2959,7 @@
       "id": "D3-MBT",
       "type": "defend_countermeasure",
       "title": "D3-MBT Memory Boundary Tracking",
-      "description": "",
+      "description": "Analyzing a call stack for return addresses which point to unexpected memory locations.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -2970,7 +2970,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MBT"
       }
@@ -2979,7 +2979,7 @@
       "id": "D3-MENCR",
       "type": "defend_countermeasure",
       "title": "D3-MENCR Message Encryption",
-      "description": "",
+      "description": "Encrypting a message body using a cryptographic key.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -2990,7 +2990,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MENCR"
       }
@@ -2999,7 +2999,7 @@
       "id": "D3-MFA",
       "type": "defend_countermeasure",
       "title": "D3-MFA Multi-factor Authentication",
-      "description": "",
+      "description": "Requiring proof of two or more pieces of evidence in order to authenticate a user.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3010,7 +3010,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MFA"
       }
@@ -3019,7 +3019,7 @@
       "id": "D3-MH",
       "type": "defend_countermeasure",
       "title": "D3-MH Message Hardening",
-      "description": "",
+      "description": "The application of security controls to user-to-user and system-to-system communications so messages remain confidential, unaltered, and verifiable while resisting injection, replay, and tampering.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3030,7 +3030,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MH"
       }
@@ -3039,7 +3039,7 @@
       "id": "D3-MSM",
       "type": "defend_countermeasure",
       "title": "D3-MSM Motion Sensor Monitoring",
-      "description": "",
+      "description": "Monitoring events from motion detectors (e.g., passive IR, microwave, dual-technology) to detect presence or movement within protected areas.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3053,7 +3053,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-MSM"
       }
@@ -3062,7 +3062,7 @@
       "id": "D3-NAM",
       "type": "defend_countermeasure",
       "title": "D3-NAM Network Access Mediation",
-      "description": "",
+      "description": "Network access mediation is the control method for authorizing access to a system by a user (or a process acting on behalf of a user) communicating through a network, including a local area network, a wide area network, and the Internet.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3073,7 +3073,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NAM"
       }
@@ -3082,7 +3082,7 @@
       "id": "D3-NI",
       "type": "defend_countermeasure",
       "title": "D3-NI Network Isolation",
-      "description": "",
+      "description": "Network Isolation techniques prevent network hosts from accessing non-essential system network resources.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3093,7 +3093,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NI"
       }
@@ -3102,7 +3102,7 @@
       "id": "D3-NM",
       "type": "defend_countermeasure",
       "title": "D3-NM Network Mapping",
-      "description": "",
+      "description": "Network mapping encompasses the techniques to identify and model the physical layer, network layer, and data exchange layers of the organization's network and their physical location, and determine allowed pathways through that network.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3113,7 +3113,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NM"
       }
@@ -3122,7 +3122,7 @@
       "id": "D3-NNI",
       "type": "defend_countermeasure",
       "title": "D3-NNI Network Node Inventory",
-      "description": "",
+      "description": "Network node inventorying identifies and records all the network nodes (hosts, routers, switches, firewalls, etc.) in the organization's architecture.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3136,7 +3136,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NNI"
       }
@@ -3145,7 +3145,7 @@
       "id": "D3-NPC",
       "type": "defend_countermeasure",
       "title": "D3-NPC Null Pointer Checking",
-      "description": "",
+      "description": "Checking if a pointer is NULL.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3156,7 +3156,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NPC"
       }
@@ -3165,7 +3165,7 @@
       "id": "D3-NRAM",
       "type": "defend_countermeasure",
       "title": "D3-NRAM Network Resource Access Mediation",
-      "description": "",
+      "description": "Control of access to organizational systems and services by users or processes over a network.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3176,7 +3176,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NRAM"
       }
@@ -3185,7 +3185,7 @@
       "id": "D3-NTA",
       "type": "defend_countermeasure",
       "title": "D3-NTA Network Traffic Analysis",
-      "description": "",
+      "description": "Analyzing intercepted or summarized computer network traffic to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3196,7 +3196,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NTA"
       }
@@ -3205,7 +3205,7 @@
       "id": "D3-NTCD",
       "type": "defend_countermeasure",
       "title": "D3-NTCD Network Traffic Community Deviation",
-      "description": "",
+      "description": "Establishing baseline communities of network hosts and identifying statistically divergent inter-community communication.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3216,7 +3216,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NTCD"
       }
@@ -3225,7 +3225,7 @@
       "id": "D3-NTF",
       "type": "defend_countermeasure",
       "title": "D3-NTF Network Traffic Filtering",
-      "description": "",
+      "description": "Restricting network traffic originating from any location.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3236,7 +3236,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NTF"
       }
@@ -3245,7 +3245,7 @@
       "id": "D3-NTPM",
       "type": "defend_countermeasure",
       "title": "D3-NTPM Network Traffic Policy Mapping",
-      "description": "",
+      "description": "Network traffic policy mapping identifies and models the allowed pathways of data at the network, transport, and/or application levels.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3261,7 +3261,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NTPM"
       }
@@ -3270,7 +3270,7 @@
       "id": "D3-NTSA",
       "type": "defend_countermeasure",
       "title": "D3-NTSA Network Traffic Signature Analysis",
-      "description": "",
+      "description": "Analyzing network traffic and compares it to known signatures",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3281,7 +3281,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NTSA"
       }
@@ -3290,7 +3290,7 @@
       "id": "D3-NVA",
       "type": "defend_countermeasure",
       "title": "D3-NVA Network Vulnerability Assessment",
-      "description": "",
+      "description": "Network vulnerability assessment relates all the vulnerabilities of a network's components in the context of their configuration and interdependencies and can also include assessing risk emerging from the network's design as a whole, not just the sum of individual network node or network segment vulnerabilities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3301,7 +3301,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-NVA"
       }
@@ -3310,7 +3310,7 @@
       "id": "D3-OAM",
       "type": "defend_countermeasure",
       "title": "D3-OAM Operational Activity Mapping",
-      "description": "",
+      "description": "Operational activity mapping identifies activities of the organization and the organization's suborganizations, groups, roles, and individuals that carry out the activities and then establishes the dependencies of the activities on the systems and people that perform those activities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3321,7 +3321,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OAM"
       }
@@ -3330,7 +3330,7 @@
       "id": "D3-ODM",
       "type": "defend_countermeasure",
       "title": "D3-ODM Operational Dependency Mapping",
-      "description": "",
+      "description": "Operational dependency mapping identifies and models the dependencies of the organization's activities on each other and on the organization's performers (people, systems, and services.) This may include modeling the higher- and lower-level activities of an organization forming a hierarchy, or layering, of the dependencies in an organization's activities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3341,7 +3341,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ODM"
       }
@@ -3350,7 +3350,7 @@
       "id": "D3-OE",
       "type": "defend_countermeasure",
       "title": "D3-OE Object Eviction",
-      "description": "",
+      "description": "Terminate or remove an object from a host machine. This is the broadest class for object eviction.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -3361,7 +3361,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OE"
       }
@@ -3370,7 +3370,7 @@
       "id": "D3-OLV",
       "type": "defend_countermeasure",
       "title": "D3-OLV Operational Logic Validation",
-      "description": "",
+      "description": "Validation of variable state in the context of the control logic of the operational application.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3381,7 +3381,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OLV"
       }
@@ -3390,7 +3390,7 @@
       "id": "D3-OM",
       "type": "defend_countermeasure",
       "title": "D3-OM Organization Mapping",
-      "description": "",
+      "description": "Organization mapping identifies and models the people, roles, and groups with an organization and the relations between them.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3401,7 +3401,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OM"
       }
@@ -3410,7 +3410,7 @@
       "id": "D3-OMM",
       "type": "defend_countermeasure",
       "title": "D3-OMM Operating Mode Monitoring",
-      "description": "",
+      "description": "Detects operating modes such as Program, Run, Remote, or Stop.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3421,7 +3421,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OMM"
       }
@@ -3430,7 +3430,7 @@
       "id": "D3-OPM",
       "type": "defend_countermeasure",
       "title": "D3-OPM Operational Process Monitoring",
-      "description": "",
+      "description": "Monitoring physical parameters and operator actions related to an operational environment.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3441,7 +3441,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OPM"
       }
@@ -3450,7 +3450,7 @@
       "id": "D3-OPR",
       "type": "defend_countermeasure",
       "title": "D3-OPR Operating Mode Restriction",
-      "description": "",
+      "description": "Restricting unauthorized changes to the operating mode prevents devices from switching into inappropriate or vulnerable states during normal use.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3461,7 +3461,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OPR"
       }
@@ -3470,7 +3470,7 @@
       "id": "D3-ORA",
       "type": "defend_countermeasure",
       "title": "D3-ORA Operational Risk Assessment",
-      "description": "",
+      "description": "Operational risk assessment identifies and models the vulnerabilities of, and risks to, an organization's activities individually and as a whole.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3481,7 +3481,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ORA"
       }
@@ -3490,7 +3490,7 @@
       "id": "D3-OSM",
       "type": "defend_countermeasure",
       "title": "D3-OSM Operating System Monitoring",
-      "description": "",
+      "description": "The operating system software, for D3FEND's purposes, includes the kernel and its process management functions, hardware drivers, initialization or boot logic. It also includes and other key system daemons and their configuration. The monitoring or analysis of these components for unauthorized activity constitute **Operating System Monitoring**.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3501,7 +3501,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OSM"
       }
@@ -3510,7 +3510,7 @@
       "id": "D3-OTF",
       "type": "defend_countermeasure",
       "title": "D3-OTF Outbound Traffic Filtering",
-      "description": "",
+      "description": "Restricting network traffic originating from a private host or enclave destined towards untrusted networks.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3521,7 +3521,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OTF"
       }
@@ -3530,7 +3530,7 @@
       "id": "D3-OTP",
       "type": "defend_countermeasure",
       "title": "D3-OTP One-time Password",
-      "description": "",
+      "description": "A one-time password is valid for only one user authentication.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3541,7 +3541,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OTP"
       }
@@ -3550,7 +3550,7 @@
       "id": "D3-OVAR",
       "type": "defend_countermeasure",
       "title": "D3-OVAR OT Variable Access Restriction",
-      "description": "",
+      "description": "Assign read/write access controls on designated registers or data tags to prevent unauthorized writes.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3561,7 +3561,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-OVAR"
       }
@@ -3570,7 +3570,7 @@
       "id": "D3-PA",
       "type": "defend_countermeasure",
       "title": "D3-PA Process Analysis",
-      "description": "",
+      "description": "Process Analysis consists of observing a running application process and analyzing it to watch for certain behaviors or conditions which may indicate adversary activity. Analysis can occur inside of the process or through a third-party monitoring application. Examples include monitoring system and privileged calls, monitoring process initiation chains, and memory boundary allocations.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3581,7 +3581,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PA"
       }
@@ -3590,7 +3590,7 @@
       "id": "D3-PAM",
       "type": "defend_countermeasure",
       "title": "D3-PAM Physical Access Mediation",
-      "description": "",
+      "description": "Physical access mediation is the process of granting or denying specific requests to enter specific physical facilities (e.g., Federal buildings, military establishments, border crossing entrances.)",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3601,7 +3601,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PAM"
       }
@@ -3610,7 +3610,7 @@
       "id": "D3-PAN",
       "type": "defend_countermeasure",
       "title": "D3-PAN Pointer Authentication",
-      "description": "",
+      "description": "Comparing the cryptographic hash or derivative of a pointer's value to an expected value.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3621,7 +3621,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PAN"
       }
@@ -3630,7 +3630,7 @@
       "id": "D3-PBWSAM",
       "type": "defend_countermeasure",
       "title": "D3-PBWSAM Proxy-based Web Server Access Mediation",
-      "description": "",
+      "description": "Proxy-based web server access mediation focuses on the regulation of web server access through intermediary proxy servers.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -3641,7 +3641,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PBWSAM"
       }
@@ -3650,7 +3650,7 @@
       "id": "D3-PCA",
       "type": "defend_countermeasure",
       "title": "D3-PCA Passive Certificate Analysis",
-      "description": "",
+      "description": "Collecting host certificates from network traffic or other passive sources like a certificate transparency log and analyzing them for unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3661,7 +3661,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PCA"
       }
@@ -3670,7 +3670,7 @@
       "id": "D3-PCSV",
       "type": "defend_countermeasure",
       "title": "D3-PCSV Process Code Segment Verification",
-      "description": "",
+      "description": "Comparing the \"text\" or \"code\" memory segments to a source of truth.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3681,7 +3681,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PCSV"
       }
@@ -3690,7 +3690,7 @@
       "id": "D3-PE",
       "type": "defend_countermeasure",
       "title": "D3-PE Process Eviction",
-      "description": "",
+      "description": "Process eviction techniques terminate or remove running process.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -3701,7 +3701,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PE"
       }
@@ -3710,7 +3710,7 @@
       "id": "D3-PEH",
       "type": "defend_countermeasure",
       "title": "D3-PEH Physical Enclosure Hardening",
-      "description": "",
+      "description": "Physical changes to a computer enclosure which reduce the ability for agents or the environment to affect the contained computer system.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3721,7 +3721,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PEH"
       }
@@ -3730,7 +3730,7 @@
       "id": "D3-PFV",
       "type": "defend_countermeasure",
       "title": "D3-PFV Peripheral Firmware Verification",
-      "description": "",
+      "description": "Cryptographically verifying peripheral firmware integrity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3741,7 +3741,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PFV"
       }
@@ -3750,7 +3750,7 @@
       "id": "D3-PH",
       "type": "defend_countermeasure",
       "title": "D3-PH Platform Hardening",
-      "description": "",
+      "description": "Hardening components of a Platform with the intention of making them more difficult to exploit. Platforms includes components such as: * BIOS UEFI Subsystems * Hardware security devices such as Trusted Platform Modules * Boot process logic or code * Kernel software components",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3764,7 +3764,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PH"
       }
@@ -3773,7 +3773,7 @@
       "id": "D3-PHAM",
       "type": "defend_countermeasure",
       "title": "D3-PHAM Physical Access Monitoring",
-      "description": "",
+      "description": "Monitoring the physical access of a specified environment through detection, recording, reviewing, and logging of who/what enters and exists areas.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3784,7 +3784,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PHAM"
       }
@@ -3793,7 +3793,7 @@
       "id": "D3-PHDURA",
       "type": "defend_countermeasure",
       "title": "D3-PHDURA Per Host Download-Upload Ratio Analysis",
-      "description": "",
+      "description": "Detecting anomalies that indicate malicious activity by comparing the amount of data downloaded versus data uploaded by a host.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3804,7 +3804,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PHDURA"
       }
@@ -3813,7 +3813,7 @@
       "id": "D3-PLA",
       "type": "defend_countermeasure",
       "title": "D3-PLA Process Lineage Analysis",
-      "description": "",
+      "description": "Identification of suspicious processes executing on an end-point device by examining the ancestry and siblings of a process, and the associated metadata of each node on the tree, such as process execution, duration, and order relative to siblings and ancestors.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3824,7 +3824,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PLA"
       }
@@ -3833,7 +3833,7 @@
       "id": "D3-PLLM",
       "type": "defend_countermeasure",
       "title": "D3-PLLM Passive Logical Link Mapping",
-      "description": "",
+      "description": "Passive logical link mapping only listens to network traffic as a means to map the the whole data link layer, where the links represent logical data flows rather than physical connections.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3844,7 +3844,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PLLM"
       }
@@ -3853,7 +3853,7 @@
       "id": "D3-PLM",
       "type": "defend_countermeasure",
       "title": "D3-PLM Physical Link Mapping",
-      "description": "",
+      "description": "Physical link mapping identifies and models the link connectivity of the network devices within a physical network.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -3864,7 +3864,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PLM"
       }
@@ -3873,7 +3873,7 @@
       "id": "D3-PM",
       "type": "defend_countermeasure",
       "title": "D3-PM Platform Monitoring",
-      "description": "",
+      "description": "Monitoring platform components such as operating systems software, hardware devices, or firmware.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3884,7 +3884,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PM"
       }
@@ -3893,7 +3893,7 @@
       "id": "D3-PMAD",
       "type": "defend_countermeasure",
       "title": "D3-PMAD Protocol Metadata Anomaly Detection",
-      "description": "",
+      "description": "Collecting network communication protocol metadata and identifying statistical outliers.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3904,7 +3904,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PMAD"
       }
@@ -3913,7 +3913,7 @@
       "id": "D3-PR",
       "type": "defend_countermeasure",
       "title": "D3-PR Password Rotation",
-      "description": "",
+      "description": "Password rotation is a security policy that mandates the periodic change of user account passwords to mitigate the risk of unauthorized access due to compromised credentials.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3924,7 +3924,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PR"
       }
@@ -3933,7 +3933,7 @@
       "id": "D3-PS",
       "type": "defend_countermeasure",
       "title": "D3-PS Process Suspension",
-      "description": "",
+      "description": "Suspending a running process on a computer system.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -3944,7 +3944,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PS"
       }
@@ -3953,7 +3953,7 @@
       "id": "D3-PSA",
       "type": "defend_countermeasure",
       "title": "D3-PSA Process Spawn Analysis",
-      "description": "",
+      "description": "Analyzing spawn arguments or attributes of a process to detect processes that are unauthorized.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -3964,7 +3964,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PSA"
       }
@@ -3973,7 +3973,7 @@
       "id": "D3-PSEP",
       "type": "defend_countermeasure",
       "title": "D3-PSEP Process Segment Execution Prevention",
-      "description": "",
+      "description": "Preventing execution of any address in a memory region other than the code segment.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -3987,7 +3987,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PSEP"
       }
@@ -3996,7 +3996,7 @@
       "id": "D3-PSM",
       "type": "defend_countermeasure",
       "title": "D3-PSM Proximity Sensor Monitoring",
-      "description": "",
+      "description": "Monitoring events from proximity sensors that indicate a credential or tagged asset is within the sensor’s read range or a defined zone. Common enabling technologies include RFID, Bluetooth Low Energy (BLE), and Ultra-Wideband (UWB).",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4010,7 +4010,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PSM"
       }
@@ -4019,7 +4019,7 @@
       "id": "D3-PSMD",
       "type": "defend_countermeasure",
       "title": "D3-PSMD Process Self-Modification Detection",
-      "description": "",
+      "description": "Detects processes that modify, change, or replace their own code at runtime.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4030,7 +4030,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PSMD"
       }
@@ -4039,7 +4039,7 @@
       "id": "D3-PT",
       "type": "defend_countermeasure",
       "title": "D3-PT Process Termination",
-      "description": "",
+      "description": "Terminating a running application process on a computer system.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -4050,7 +4050,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PT"
       }
@@ -4059,7 +4059,7 @@
       "id": "D3-PUM",
       "type": "defend_countermeasure",
       "title": "D3-PUM Platform Uptime Monitoring",
-      "description": "",
+      "description": "Monitor the amount of time since the last power cycle or restart.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4070,7 +4070,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PUM"
       }
@@ -4079,7 +4079,7 @@
       "id": "D3-PV",
       "type": "defend_countermeasure",
       "title": "D3-PV Pointer Validation",
-      "description": "",
+      "description": "Ensuring that a pointer variable has the required properties for use.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4090,7 +4090,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PV"
       }
@@ -4099,7 +4099,7 @@
       "id": "D3-PWA",
       "type": "defend_countermeasure",
       "title": "D3-PWA Password Authentication",
-      "description": "",
+      "description": "Password authentication is a security mechanism used to verify the identity of a user or entity attempting to access a system or resource by requiring the input of a secret string of characters, known as a password, that is associated with the user or entity.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4110,7 +4110,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-PWA"
       }
@@ -4119,7 +4119,7 @@
       "id": "D3-RA",
       "type": "defend_countermeasure",
       "title": "D3-RA Restore Access",
-      "description": "",
+      "description": "Restoring an entity's access to resources.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4130,7 +4130,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RA"
       }
@@ -4139,7 +4139,7 @@
       "id": "D3-RAM",
       "type": "defend_countermeasure",
       "title": "D3-RAM Routing Access Mediation",
-      "description": "",
+      "description": "Routing access mediation is a network security approach that manages and controls access at the network layer using VPNs, tunneling protocols, firewall rules, and traffic inspection to ensure secure and efficient data routing.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -4150,7 +4150,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RAM"
       }
@@ -4159,7 +4159,7 @@
       "id": "D3-RAPA",
       "type": "defend_countermeasure",
       "title": "D3-RAPA Resource Access Pattern Analysis",
-      "description": "",
+      "description": "Analyzing the resources accessed by a user to identify unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4170,7 +4170,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RAPA"
       }
@@ -4179,7 +4179,7 @@
       "id": "D3-RC",
       "type": "defend_countermeasure",
       "title": "D3-RC Restore Configuration",
-      "description": "",
+      "description": "Restoring an software configuration.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4190,7 +4190,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RC"
       }
@@ -4199,7 +4199,7 @@
       "id": "D3-RD",
       "type": "defend_countermeasure",
       "title": "D3-RD Restore Database",
-      "description": "",
+      "description": "Restoring the data in a database.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4210,7 +4210,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RD"
       }
@@ -4219,7 +4219,7 @@
       "id": "D3-RDI",
       "type": "defend_countermeasure",
       "title": "D3-RDI Restore Disk Image",
-      "description": "",
+      "description": "Restoring a previously captured disk image a hard drive.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4230,7 +4230,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RDI"
       }
@@ -4239,7 +4239,7 @@
       "id": "D3-RE",
       "type": "defend_countermeasure",
       "title": "D3-RE Restore Email",
-      "description": "",
+      "description": "Restoring an email for an entity to access.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4250,7 +4250,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RE"
       }
@@ -4259,7 +4259,7 @@
       "id": "D3-RF",
       "type": "defend_countermeasure",
       "title": "D3-RF Restore File",
-      "description": "",
+      "description": "Restoring a file for an entity to access.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4270,7 +4270,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RF"
       }
@@ -4279,7 +4279,7 @@
       "id": "D3-RFAM",
       "type": "defend_countermeasure",
       "title": "D3-RFAM Remote File Access Mediation",
-      "description": "",
+      "description": "Remote file access mediation is the process of managing and securing access to file systems over a network to ensure that only authorized users or processes can interact with remote files.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -4290,7 +4290,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RFAM"
       }
@@ -4299,7 +4299,7 @@
       "id": "D3-RFS",
       "type": "defend_countermeasure",
       "title": "D3-RFS RF Shielding",
-      "description": "",
+      "description": "Adding physical barriers to a platform to prevent undesired radio interference.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4310,7 +4310,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RFS"
       }
@@ -4319,7 +4319,7 @@
       "id": "D3-RFUM",
       "type": "defend_countermeasure",
       "title": "D3-RFUM Remote Firmware Update Monitoring",
-      "description": "",
+      "description": "Monitoring of remote firmware update commands to identify unauthorized software installations.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4330,7 +4330,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RFUM"
       }
@@ -4339,7 +4339,7 @@
       "id": "D3-RH",
       "type": "defend_countermeasure",
       "title": "D3-RH Radiation Hardening",
-      "description": "",
+      "description": "Radiation hardening is the process of making electronic components and circuits resistant to damage or malfunction caused by high levels of ionizing radiation.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4350,7 +4350,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RH"
       }
@@ -4359,7 +4359,7 @@
       "id": "D3-RIC",
       "type": "defend_countermeasure",
       "title": "D3-RIC Reissue Credential",
-      "description": "",
+      "description": "Issue a new credential to a user which supercedes their old credential.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4370,7 +4370,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RIC"
       }
@@ -4379,7 +4379,7 @@
       "id": "D3-RKD",
       "type": "defend_countermeasure",
       "title": "D3-RKD Registry Key Deletion",
-      "description": "",
+      "description": "Delete a registry key.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -4390,7 +4390,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RKD"
       }
@@ -4399,7 +4399,7 @@
       "id": "D3-RN",
       "type": "defend_countermeasure",
       "title": "D3-RN Reference Nullification",
-      "description": "",
+      "description": "Invalidating all pointers that reference a specific memory block, ensuring that the block cannot be accessed or modified after deallocation.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4410,7 +4410,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RN"
       }
@@ -4419,7 +4419,7 @@
       "id": "D3-RNA",
       "type": "defend_countermeasure",
       "title": "D3-RNA Restore Network Access",
-      "description": "",
+      "description": "Restoring a entity's access to a computer network.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4430,7 +4430,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RNA"
       }
@@ -4439,7 +4439,7 @@
       "id": "D3-RO",
       "type": "defend_countermeasure",
       "title": "D3-RO Restore Object",
-      "description": "",
+      "description": "Restoring an object for an entity to access. This is the broadest class for object restoral.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4450,7 +4450,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RO"
       }
@@ -4459,7 +4459,7 @@
       "id": "D3-RPA",
       "type": "defend_countermeasure",
       "title": "D3-RPA Relay Pattern Analysis",
-      "description": "",
+      "description": "The detection of an internal host relaying traffic between the internal network and the external network.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4470,7 +4470,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RPA"
       }
@@ -4479,7 +4479,7 @@
       "id": "D3-RRID",
       "type": "defend_countermeasure",
       "title": "D3-RRID Reverse Resolution IP Denylisting",
-      "description": "",
+      "description": "Blocking a reverse lookup based on the query's IP address value.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -4490,7 +4490,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RRID"
       }
@@ -4499,7 +4499,7 @@
       "id": "D3-RS",
       "type": "defend_countermeasure",
       "title": "D3-RS Restore Software",
-      "description": "",
+      "description": "Restoring software to a host.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4510,7 +4510,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RS"
       }
@@ -4519,7 +4519,7 @@
       "id": "D3-RTA",
       "type": "defend_countermeasure",
       "title": "D3-RTA RPC Traffic Analysis",
-      "description": "",
+      "description": "Monitoring the activity of remote procedure calls in communication traffic to establish standard protocol operations and potential attacker activities.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4530,7 +4530,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RTA"
       }
@@ -4539,7 +4539,7 @@
       "id": "D3-RTSD",
       "type": "defend_countermeasure",
       "title": "D3-RTSD Remote Terminal Session Detection",
-      "description": "",
+      "description": "Detection of an unauthorized remote live terminal console session by examining network traffic to a network host.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4550,7 +4550,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RTSD"
       }
@@ -4559,7 +4559,7 @@
       "id": "D3-RUAA",
       "type": "defend_countermeasure",
       "title": "D3-RUAA Restore User Account Access",
-      "description": "",
+      "description": "Restoring a user account's access to resources.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -4570,7 +4570,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-RUAA"
       }
@@ -4579,7 +4579,7 @@
       "id": "D3-SAOR",
       "type": "defend_countermeasure",
       "title": "D3-SAOR Segment Address Offset Randomization",
-      "description": "",
+      "description": "Randomizing the base (start) address of one or more segments of memory during the initialization of a process.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4593,7 +4593,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SAOR"
       }
@@ -4602,7 +4602,7 @@
       "id": "D3-SBV",
       "type": "defend_countermeasure",
       "title": "D3-SBV Service Binary Verification",
-      "description": "",
+      "description": "Analyzing changes in service binary files by comparing to a source of truth.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4613,7 +4613,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SBV"
       }
@@ -4622,7 +4622,7 @@
       "id": "D3-SCA",
       "type": "defend_countermeasure",
       "title": "D3-SCA System Call Analysis",
-      "description": "",
+      "description": "Analyzing system calls to determine whether a process is exhibiting unauthorized behavior.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4633,7 +4633,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SCA"
       }
@@ -4642,7 +4642,7 @@
       "id": "D3-SCF",
       "type": "defend_countermeasure",
       "title": "D3-SCF System Call Filtering",
-      "description": "",
+      "description": "Controlling access to local computer system resources with kernel-level capabilities.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -4653,7 +4653,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SCF"
       }
@@ -4662,7 +4662,7 @@
       "id": "D3-SCH",
       "type": "defend_countermeasure",
       "title": "D3-SCH Source Code Hardening",
-      "description": "",
+      "description": "Hardening source code with the intention of making it more difficult to exploit and less error prone.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4673,7 +4673,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SCH"
       }
@@ -4682,7 +4682,7 @@
       "id": "D3-SCP",
       "type": "defend_countermeasure",
       "title": "D3-SCP System Configuration Permissions",
-      "description": "",
+      "description": "Restricting system configuration modifications to a specific user or group of users.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4693,7 +4693,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SCP"
       }
@@ -4702,7 +4702,7 @@
       "id": "D3-SDA",
       "type": "defend_countermeasure",
       "title": "D3-SDA Session Duration Analysis",
-      "description": "",
+      "description": "Analyzing the duration of user sessions in order to detect unauthorized activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4713,7 +4713,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SDA"
       }
@@ -4722,7 +4722,7 @@
       "id": "D3-SDM",
       "type": "defend_countermeasure",
       "title": "D3-SDM System Daemon Monitoring",
-      "description": "",
+      "description": "Tracking changes to the state or configuration of critical system level processes.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4733,7 +4733,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SDM"
       }
@@ -4742,7 +4742,7 @@
       "id": "D3-SEA",
       "type": "defend_countermeasure",
       "title": "D3-SEA Script Execution Analysis",
-      "description": "",
+      "description": "Analyzing the execution of a script to detect unauthorized user activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4753,7 +4753,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SEA"
       }
@@ -4762,7 +4762,7 @@
       "id": "D3-SFA",
       "type": "defend_countermeasure",
       "title": "D3-SFA System File Analysis",
-      "description": "",
+      "description": "Monitoring system files such as authentication databases, configuration files, system logs, and system executables for modification or tampering.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4773,7 +4773,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SFA"
       }
@@ -4782,7 +4782,7 @@
       "id": "D3-SFCV",
       "type": "defend_countermeasure",
       "title": "D3-SFCV Stack Frame Canary Validation",
-      "description": "",
+      "description": "Comparing a value stored in a stack frame with a known good value in order to prevent or detect a memory segment overwrite.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4793,7 +4793,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SFCV"
       }
@@ -4802,7 +4802,7 @@
       "id": "D3-SFV",
       "type": "defend_countermeasure",
       "title": "D3-SFV System Firmware Verification",
-      "description": "",
+      "description": "Cryptographically verifying installed system firmware integrity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4813,7 +4813,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SFV"
       }
@@ -4822,7 +4822,7 @@
       "id": "D3-SHN",
       "type": "defend_countermeasure",
       "title": "D3-SHN Standalone Honeynet",
-      "description": "",
+      "description": "An environment created for the purpose of attracting attackers and eliciting their behaviors that is not connected to any production enterprise systems.",
       "status": "active",
       "family": "Deceive",
       "metadata": {
@@ -4833,7 +4833,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SHN"
       }
@@ -4842,7 +4842,7 @@
       "id": "D3-SICA",
       "type": "defend_countermeasure",
       "title": "D3-SICA System Init Config Analysis",
-      "description": "",
+      "description": "Analysis of any system process startup configuration.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4856,7 +4856,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SICA"
       }
@@ -4865,7 +4865,7 @@
       "id": "D3-SJA",
       "type": "defend_countermeasure",
       "title": "D3-SJA Scheduled Job Analysis",
-      "description": "",
+      "description": "Analysis of source files, processes, destination files, or destination servers associated with a scheduled job to detect unauthorized use of job scheduling.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4876,7 +4876,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SJA"
       }
@@ -4885,7 +4885,7 @@
       "id": "D3-SMRA",
       "type": "defend_countermeasure",
       "title": "D3-SMRA Sender MTA Reputation Analysis",
-      "description": "",
+      "description": "Characterizing the reputation of mail transfer agents (MTA) to determine the security risk in emails.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4896,7 +4896,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SMRA"
       }
@@ -4905,7 +4905,7 @@
       "id": "D3-SPP",
       "type": "defend_countermeasure",
       "title": "D3-SPP Strong Password Policy",
-      "description": "",
+      "description": "Modifying system configuration to increase password strength.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4916,7 +4916,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SPP"
       }
@@ -4925,7 +4925,7 @@
       "id": "D3-SRA",
       "type": "defend_countermeasure",
       "title": "D3-SRA Sender Reputation Analysis",
-      "description": "",
+      "description": "Ascertaining sender reputation based on information associated with a message (e.g. email/instant messaging).",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4936,7 +4936,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SRA"
       }
@@ -4945,7 +4945,7 @@
       "id": "D3-SSC",
       "type": "defend_countermeasure",
       "title": "D3-SSC Shadow Stack Comparisons",
-      "description": "",
+      "description": "Comparing a call stack in system memory with a shadow call stack maintained by the processor to determine unauthorized shellcode activity.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -4956,7 +4956,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SSC"
       }
@@ -4965,7 +4965,7 @@
       "id": "D3-ST",
       "type": "defend_countermeasure",
       "title": "D3-ST Session Termination",
-      "description": "",
+      "description": "Forcefully end all active sessions associated with compromised accounts or devices.",
       "status": "active",
       "family": "Evict",
       "metadata": {
@@ -4976,7 +4976,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ST"
       }
@@ -4985,7 +4985,7 @@
       "id": "D3-SU",
       "type": "defend_countermeasure",
       "title": "D3-SU Software Update",
-      "description": "",
+      "description": "Replacing old software on a computer system component.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -4996,7 +4996,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SU"
       }
@@ -5005,7 +5005,7 @@
       "id": "D3-SVCDM",
       "type": "defend_countermeasure",
       "title": "D3-SVCDM Service Dependency Mapping",
-      "description": "",
+      "description": "Service dependency mapping determines the services on which each given service relies.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -5016,7 +5016,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SVCDM"
       }
@@ -5025,7 +5025,7 @@
       "id": "D3-SWI",
       "type": "defend_countermeasure",
       "title": "D3-SWI Software Inventory",
-      "description": "",
+      "description": "Software inventorying identifies and records the software items in the organization's architecture.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -5039,7 +5039,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SWI"
       }
@@ -5048,7 +5048,7 @@
       "id": "D3-SYSDM",
       "type": "defend_countermeasure",
       "title": "D3-SYSDM System Dependency Mapping",
-      "description": "",
+      "description": "System dependency mapping identifies and models the dependencies of system components on each other to carry out their function.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -5059,7 +5059,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SYSDM"
       }
@@ -5068,7 +5068,7 @@
       "id": "D3-SYSM",
       "type": "defend_countermeasure",
       "title": "D3-SYSM System Mapping",
-      "description": "",
+      "description": "System mapping encompasses the techniques to identify the organization's systems, how they are configured and decomposed into subsystems and components, how they are dependent on one another, and where they are physically located.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -5079,7 +5079,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SYSM"
       }
@@ -5088,7 +5088,7 @@
       "id": "D3-SYSVA",
       "type": "defend_countermeasure",
       "title": "D3-SYSVA System Vulnerability Assessment",
-      "description": "",
+      "description": "System vulnerability assessment relates all the vulnerabilities of a system's components in the context of their configuration and internal dependencies and can also include assessing risk emerging from the system's design as a whole, not just the sum of individual component vulnerabilities.",
       "status": "active",
       "family": "Model",
       "metadata": {
@@ -5099,7 +5099,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-SYSVA"
       }
@@ -5108,7 +5108,7 @@
       "id": "D3-TAAN",
       "type": "defend_countermeasure",
       "title": "D3-TAAN Transfer Agent Authentication",
-      "description": "",
+      "description": "Validating that server components of a messaging infrastructure are authorized to send a particular message.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5119,7 +5119,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-TAAN"
       }
@@ -5128,7 +5128,7 @@
       "id": "D3-TB",
       "type": "defend_countermeasure",
       "title": "D3-TB Token Binding",
-      "description": "",
+      "description": "Token binding is a security mechanism used to enhance the protection of tokens, such as cookies or OAuth tokens, by binding them to a specific connection.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5139,7 +5139,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-TB"
       }
@@ -5148,7 +5148,7 @@
       "id": "D3-TBA",
       "type": "defend_countermeasure",
       "title": "D3-TBA Token-based Authentication",
-      "description": "",
+      "description": "Token-based authentication is an authentication protocol where users verify their identity in exchange for a unique access token. Users can then access the website, application, or resource for the life of the token without having to re-enter their credentials.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5159,7 +5159,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-TBA"
       }
@@ -5168,7 +5168,7 @@
       "id": "D3-TBI",
       "type": "defend_countermeasure",
       "title": "D3-TBI TPM Boot Integrity",
-      "description": "",
+      "description": "Assuring the integrity of a platform by demonstrating that the boot process starts from a trusted combination of hardware and software and continues until the operating system has fully booted and applications are running. Sometimes called Static Root of Trust Measurement (STRM).",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5182,7 +5182,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-TBI"
       }
@@ -5191,7 +5191,7 @@
       "id": "D3-TL",
       "type": "defend_countermeasure",
       "title": "D3-TL Trusted Library",
-      "description": "",
+      "description": "A trusted library is a collection of pre-verified and secure code modules or components that are used within software applications to perform specific functions. These libraries are considered reliable and have been vetted for security vulnerabilities, ensuring they do not introduce risks into the application.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5202,7 +5202,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-TL"
       }
@@ -5211,7 +5211,7 @@
       "id": "D3-UA",
       "type": "defend_countermeasure",
       "title": "D3-UA URL Analysis",
-      "description": "",
+      "description": "Determining if a URL is benign or malicious by analyzing the URL or its components.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5222,7 +5222,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-UA"
       }
@@ -5231,7 +5231,7 @@
       "id": "D3-UAP",
       "type": "defend_countermeasure",
       "title": "D3-UAP User Account Permissions",
-      "description": "",
+      "description": "Restricting a user account's access to resources.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -5242,7 +5242,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-UAP"
       }
@@ -5251,7 +5251,7 @@
       "id": "D3-UBA",
       "type": "defend_countermeasure",
       "title": "D3-UBA User Behavior Analysis",
-      "description": "",
+      "description": "User behavior analytics (\"UBA\") as defined by Gartner, is a cybersecurity process about detection of insider threats, targeted attacks, and financial fraud. UBA solutions look at patterns of human behavior, and then apply algorithms and statistical analysis to detect meaningful anomalies from those patterns-anomalies that indicate potential threats.' Instead of tracking devices or security events, UBA tracks a system's users. Big data platforms are increasing UBA functionality by allowing them to analyze petabytes worth of data to detect insider threats and advanced persistent threats.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5265,7 +5265,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-UBA"
       }
@@ -5274,7 +5274,7 @@
       "id": "D3-UDTA",
       "type": "defend_countermeasure",
       "title": "D3-UDTA User Data Transfer Analysis",
-      "description": "",
+      "description": "Analyzing the amount of data transferred by a user.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5285,7 +5285,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-UDTA"
       }
@@ -5294,7 +5294,7 @@
       "id": "D3-UGLPA",
       "type": "defend_countermeasure",
       "title": "D3-UGLPA User Geolocation Logon Pattern Analysis",
-      "description": "",
+      "description": "Monitoring geolocation data of user logon attempts and comparing it to a baseline user behavior profile to identify anomalies in logon location.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5305,7 +5305,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-UGLPA"
       }
@@ -5314,7 +5314,7 @@
       "id": "D3-ULA",
       "type": "defend_countermeasure",
       "title": "D3-ULA Unlock Account",
-      "description": "",
+      "description": "Restoring a user account's access to resources by unlocking a locked User Account.",
       "status": "active",
       "family": "Restore",
       "metadata": {
@@ -5325,7 +5325,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-ULA"
       }
@@ -5334,7 +5334,7 @@
       "id": "D3-URA",
       "type": "defend_countermeasure",
       "title": "D3-URA URL Reputation Analysis",
-      "description": "",
+      "description": "Analyzing the reputation of a URL.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5345,7 +5345,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-URA"
       }
@@ -5354,7 +5354,7 @@
       "id": "D3-USICA",
       "type": "defend_countermeasure",
       "title": "D3-USICA User Session Init Config Analysis",
-      "description": "",
+      "description": "Analyzing modifications to user session config files such as .bashrc or .bash_profile.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5365,7 +5365,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-USICA"
       }
@@ -5374,7 +5374,7 @@
       "id": "D3-VI",
       "type": "defend_countermeasure",
       "title": "D3-VI Variable Initialization",
-      "description": "",
+      "description": "Setting variables to a known value before use.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5385,7 +5385,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-VI"
       }
@@ -5394,7 +5394,7 @@
       "id": "D3-VS",
       "type": "defend_countermeasure",
       "title": "D3-VS Video Surveillance",
-      "description": "",
+      "description": "Monitoring of physical areas via camera video feeds to deter, detect, and investigate unauthorized access and related security events.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5408,7 +5408,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-VS"
       }
@@ -5417,7 +5417,7 @@
       "id": "D3-VTV",
       "type": "defend_countermeasure",
       "title": "D3-VTV Variable Type Validation",
-      "description": "",
+      "description": "Ensuring that a variable has the correct type.",
       "status": "active",
       "family": "Harden",
       "metadata": {
@@ -5428,7 +5428,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-VTV"
       }
@@ -5437,7 +5437,7 @@
       "id": "D3-WSAA",
       "type": "defend_countermeasure",
       "title": "D3-WSAA Web Session Activity Analysis",
-      "description": "",
+      "description": "Monitoring changes in user web session behavior by comparing current web session activity to a baseline behavior profile or a catalog of predetermined malicious behavior.",
       "status": "active",
       "family": "Detect",
       "metadata": {
@@ -5448,7 +5448,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-WSAA"
       }
@@ -5457,7 +5457,7 @@
       "id": "D3-WSAM",
       "type": "defend_countermeasure",
       "title": "D3-WSAM Web Session Access Mediation",
-      "description": "",
+      "description": "Web session access mediation secures user sessions in web applications by employing robust authentication and integrity validation, along with adaptive threat mitigation techniques, to ensure that access to web resources is authorized and protected from session-related attacks.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -5468,7 +5468,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3-WSAM"
       }
@@ -5477,7 +5477,7 @@
       "id": "D3F-UGPH",
       "type": "defend_countermeasure",
       "title": "D3F-UGPH User Group Permissions",
-      "description": "",
+      "description": "Access control where access is determined based on attributes associated with users and the objects being accessed.",
       "status": "active",
       "family": "Isolate",
       "metadata": {
@@ -5488,7 +5488,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-07-25",
+        "snapshot_date": "2026-08-02",
         "version": "4",
         "locator": "technique/all.json#D3F-UGPH"
       }
