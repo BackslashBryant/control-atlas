@@ -480,10 +480,7 @@ function FocusedAtlas(props: {
         links={
           record.structural_path.length > 1 ||
           record.center_node.node_type === "catalog"
-            ? record.structural_path.map((link) => ({
-                ...link,
-                origin: "structural" as const,
-              }))
+            ? record.structural_path
             : undefined
         }
         nodeId={record.center_node.id}

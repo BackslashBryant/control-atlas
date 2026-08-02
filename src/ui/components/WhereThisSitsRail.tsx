@@ -117,7 +117,7 @@ export function WhereThisSitsRail(props: {
                 {link.label}
                 {isOrganizing && link.id === firstOrganizingId ? (
                   <span className="atlas-path-crumb-badge" aria-hidden="true">
-                    Atlas structure
+                    Not from the publisher
                   </span>
                 ) : null}
               </button>

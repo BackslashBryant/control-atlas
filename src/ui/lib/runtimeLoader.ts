@@ -111,6 +111,7 @@ export type AtlasNeighborhoodRecord = {
     id: string;
     label: string;
     node_type: string;
+    origin: "structural" | "organizing";
   }>;
   published_connection_count: number;
   candidate_connection_count: number;
@@ -372,6 +373,12 @@ export async function loadAtlasNeighborhood(
     center_node: centerNode,
     nodes,
     edges,
+    // Trunk/limb hops in this chain are Control Atlas's own organizing
+    // scaffold (applyOrganizingSpine in build-framework-data.mjs), never
+    // publisher-declared containment — every other hop (catalog/family/...)
+    // is genuine structural parentage. The shard only stores bare ids here,
+    // so origin is derived from node_type rather than carried from the
+    // build-time ancestor_path (which isn't present on shard nodes).
     structural_path: (shardRecord.structural_path || []).flatMap((id) => {
       const node = nodeById.get(id);
       return node
@@ -379,6 +386,9 @@ export async function loadAtlasNeighborhood(
             id,
             label: node.metadata?.title || id,
             node_type: node.node_type || "",
+            origin: (node.node_type === "trunk" || node.node_type === "limb"
+              ? "organizing"
+              : "structural") as "structural" | "organizing",
           }]
         : [];
     }),
