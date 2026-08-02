@@ -188,6 +188,16 @@ vulnerabilities, POA&M entries, residual-risk statements, authorization decision
 matrices, and links between requirements and expected proof. **It must never imply
 that evidence exists or that a control is compliant.**
 
+> **Decision, 2026-08-02 — those expectations are quoted, never authored.**
+> Epic 5 removed product-authored guidance from records for good reason, and an
+> evidence list we write ourselves is a determination wearing a different hat.
+> The publisher already answers this: NIST SP 800-53A ships assessment
+> objectives, methods (examine / interview / test) and objects per control, and
+> all of it is already in the graph. Surface *that*, attributed to 800-53A.
+> The related "why this exists" idea is closed the same way — the authority
+> chain plus the publisher's own Discussion text, not a rationale we compose.
+> See `docs/plans/full-records-2026-08-02.md` §1.
+
 **ACORNS — reusable work.** Templates, control implementation patterns,
 common-control packages, inheritance worksheets, shared-responsibility matrices,
 reciprocity packages, assessment procedures, continuous-monitoring calendars,
