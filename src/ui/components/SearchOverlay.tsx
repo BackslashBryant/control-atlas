@@ -4,6 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
+import {
+  resourceAccessLabel,
+  resourceTypeLabel,
+} from "../lib/resourceBrands.mjs";
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -29,16 +33,22 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
   const results = useMemo(() => {
     if (!bundle || !query.trim()) {
-      return { libraryResults: [], commonsResults: [] };
+      return { libraryResults: [], resourceResults: [], communityResults: [] };
     }
     const libraryResults = bundle.runtime.searchLibrary(query.trim()).slice(0, 8);
     const commonsResults = searchResourceDocuments(
       bundle.commonsSearchIndex?.documents || [],
       query,
-      4,
+      8,
     ).map((entry) => entry.document);
+    const resourceResults = commonsResults
+      .filter((document) => document.resourceType !== "community_forum")
+      .slice(0, 4);
+    const communityResults = commonsResults
+      .filter((document) => document.resourceType === "community_forum")
+      .slice(0, 4);
 
-    return { libraryResults, commonsResults };
+    return { libraryResults, resourceResults, communityResults };
   }, [bundle, query]);
 
   function openResult(nodeId: string) {
@@ -101,57 +111,17 @@ export function SearchOverlay(props: SearchOverlayProps) {
               Type to search records, templates, tools, and Resources. Press
               Enter for the full results page.
             </p>
-          ) : results.libraryResults.length === 0 && results.commonsResults.length === 0 ? (
+          ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 ? (
             <p className="field-hint">
               No records or resources match &quot;{query.trim()}&quot;.
             </p>
           ) : (
             <div className="search-overlay-results-container space-y-4">
-              {results.commonsResults.length > 0 ? (
-                <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
-                    Resources ({results.commonsResults.length})
-                  </div>
-                  <ul className="search-overlay-results">
-                    {results.commonsResults.map((doc) => (
-                      <li key={doc.id}>
-                        <button
-                          // Without this the accessible name is the whole card
-                          // - title, lane badge, publisher, type and summary
-                          // read as one run-on string.
-                          aria-label={doc.name}
-                          className="search-overlay-result"
-                          onClick={() => openCommonsResult(doc.id)}
-                          type="button"
-                        >
-                          <span className="search-overlay-result-title flex items-center justify-between">
-                            <span>{doc.name}</span>
-                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
-                              Resource · {doc.resourceLane.replaceAll("_", " ")}
-                            </span>
-                          </span>
-                          <span className="search-overlay-result-meta">
-                            <code>{doc.publisher}</code>
-                            {" · "}
-                            {doc.resourceType}
-                          </span>
-                          <span className="search-overlay-result-summary">
-                            {doc.summary}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
               {results.libraryResults.length > 0 ? (
                 <div>
-                  {results.commonsResults.length > 0 ? (
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
-                      Control Atlas Catalog Records
-                    </div>
-                  ) : null}
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
+                    Published records ({results.libraryResults.length})
+                  </div>
                   <ul className="search-overlay-results">
                     {results.libraryResults.map((document: any) => {
                       return (
@@ -177,6 +147,73 @@ export function SearchOverlay(props: SearchOverlayProps) {
                         </li>
                       );
                     })}
+                  </ul>
+                </div>
+              ) : null}
+
+              {results.resourceResults.length > 0 ? (
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
+                    Tools and resources ({results.resourceResults.length})
+                  </div>
+                  <ul className="search-overlay-results">
+                    {results.resourceResults.map((doc) => (
+                      <li key={doc.id}>
+                        <button
+                          aria-label={doc.name}
+                          className="search-overlay-result"
+                          onClick={() => openCommonsResult(doc.id)}
+                          type="button"
+                        >
+                          <span className="search-overlay-result-title flex items-center justify-between">
+                            <span>{doc.name}</span>
+                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
+                              {resourceTypeLabel(doc.resourceType)}
+                            </span>
+                          </span>
+                          <span className="search-overlay-result-meta">
+                            <code>{doc.publisher}</code>
+                            {" · "}
+                            {resourceAccessLabel(doc)}
+                          </span>
+                          <span className="search-overlay-result-summary">
+                            {doc.summary}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {results.communityResults.length > 0 ? (
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
+                    Communities ({results.communityResults.length})
+                  </div>
+                  <ul className="search-overlay-results">
+                    {results.communityResults.map((doc) => (
+                      <li key={doc.id}>
+                        <button
+                          aria-label={doc.name}
+                          className="search-overlay-result"
+                          onClick={() => openCommonsResult(doc.id)}
+                          type="button"
+                        >
+                          <span className="search-overlay-result-title">
+                            {doc.name}
+                          </span>
+                          <span className="search-overlay-result-meta">
+                            <code>{doc.publisher}</code>
+                            {" · "}
+                            {resourceAccessLabel(doc)}
+                          </span>
+                          <span className="search-overlay-result-summary">
+                            {doc.summary}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               ) : null}
