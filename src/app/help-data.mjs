@@ -1,24 +1,22 @@
 export const helpSurfaces = [
   {
     view: "start-here",
-    title: "Start Here",
-    body: "Open a publication already represented in Control Atlas, or search all records if you are not sure where to begin.",
-    actionLabel: "Open Start Here",
+    title: "Start here",
+    body: "Answer two questions to get a starting point in the public material.",
+    actionLabel: "Open Start here",
   },
   {
     view: "atlas-map",
-    title: "Explore",
+    title: "Atlas",
     body: "Trace publisher-declared structure separately from cited mappings, applicability selections, and process relationships.",
-    actionLabel: "Open Explore",
+    actionLabel: "Open Atlas",
   },
   {
-    // Renamed from "Explore" so it no longer shares a name with the
-    // atlas-map nav item, now itself called Explore (see PLAN CHANGE in
-    // docs/STATE.md). Internal view key stays "search".
+    // Internal view key stays "search"; search results are a state of Library.
     view: "search",
-    title: "Search Results",
-    body: "Search by control ID or topic. Open records to see grouped connections and source support.",
-    actionLabel: "Open Search Results",
+    title: "Library",
+    body: "Search by control ID or topic, or browse the publications records come from.",
+    actionLabel: "Open Library",
   },
   {
     view: "matrix",
@@ -29,17 +27,17 @@ export const helpSurfaces = [
   {
     // Internal view key stays "patterns"; nav label renamed to Learn.
     view: "patterns",
-    title: "Learn",
-    body: "Control Atlas explanations for source identity, hierarchy, mappings, records, Search, and starter documents.",
-    actionLabel: "Open Learn",
+    title: "Guides",
+    body: "Practitioner guides for authorization, control selection, assessment, findings, and monitoring.",
+    actionLabel: "Open Guides",
   },
   {
     // Internal view key stays "templates"; nav label renamed to Build
     // (Commons folded in — see W4).
     view: "templates",
-    title: "Build",
-    body: "Download starter RMF and ATO documents, official artifacts, tools, and community resources in your browser. Nothing you type is uploaded or stored.",
-    actionLabel: "Open Build",
+    title: "Documents",
+    body: "Create starter RMF and ATO documents in your browser. Nothing you type is uploaded.",
+    actionLabel: "Open Documents",
   },
   {
     view: "sources",
@@ -49,14 +47,26 @@ export const helpSurfaces = [
   },
   {
     view: "about",
-    title: "About & trust",
-    body: "See how Control Atlas handles sources, product notes, and decisions—and where the workbench stops.",
+    title: "About",
+    body: "What Control Atlas contains, how it is organized, and where it stops.",
     actionLabel: "Open About",
   },
   {
     view: "library-detail",
     title: "Relationship list view",
-    body: "On any record or map view, switch to List for a full screen-reader-friendly table of every connection with rationale columns. Deep links can include relationshipView=list.",
-    actionLabel: "Open Search Results",
+    body: "On any record or map view, switch to List for a screen-reader-friendly table of every connection.",
+    actionLabel: "Open Library",
   },
+];
+
+// Keyboard shortcuts belong here, not on About. The Ctrl+Alt entry describes
+// the masthead keycap, which rotates: the letter is always the first letter of
+// the word currently showing (see src/shared/brand-rotation.ts).
+export const helpShortcuts = [
+  { keys: "Ctrl + K", action: "Open search" },
+  {
+    keys: "Ctrl + Alt + first letter",
+    action: "Go to the surface named on the masthead keycap",
+  },
+  { keys: "Esc", action: "Close a dialog, drawer, or menu" },
 ];

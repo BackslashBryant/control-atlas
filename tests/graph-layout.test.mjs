@@ -55,6 +55,10 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
     "src/ui/components/AtlasConnectionMap.tsx",
     "utf8",
   );
+  const relationshipExplorer = readFileSync(
+    "src/ui/components/RelationshipExplorer.tsx",
+    "utf8",
+  );
 
   assert.match(graphLayout, /topologyFingerprint/);
   assert.match(graphLayout, /truncateCanvasLabel/);
@@ -73,6 +77,12 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
     /lastArrangedKeyRef\.current === arrangementKey/,
   );
   assert.match(relationshipGraph, /setLayoutRevision/);
-  assert.match(atlasConnectionMap, /import\("\.\/RelationshipGraph"\)/);
+  // 2026-08-03: the Atlas record workspace replaced its ReactFlow "view as
+  // graph" toggle with a bespoke radial diagram (centered record, relationship
+  // classes as spokes) — the operational map is the product now, not a
+  // generic force-graph demo, so AtlasConnectionMap carries no ReactFlow/ELK
+  // dependency at all. RelationshipExplorer (Compare, record detail) still
+  // owns the lazy-loaded force-graph contract.
+  assert.match(relationshipExplorer, /import\("\.\/RelationshipGraph"\)/);
   assert.doesNotMatch(atlasConnectionMap, /elkjs|@xyflow\/react|<ReactFlow/);
 });

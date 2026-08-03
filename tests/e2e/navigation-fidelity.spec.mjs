@@ -14,9 +14,9 @@ test('canonical routes set human-readable document titles', async ({ page }) => 
   /** @type {Array<[string, RegExp]>} */
   const cases = [
     ['/#/', /Control Atlas/],
-    ['/#/explore', /^Explore.*Control Atlas$/],
-    ['/#/search?q=AC-2', /^AC-2.*Search.*Control Atlas$/],
-    ['/#/build', /^Build.*Control Atlas$/],
+    ['/#/explore', /^Atlas.*Control Atlas$/],
+    ['/#/search?q=AC-2', /^AC-2.*Library.*Control Atlas$/],
+    ['/#/build', /^Documents.*Control Atlas$/],
     ['/#/resources', /^Resources.*Control Atlas$/],
     ['/#/compare', /^Compare.*Control Atlas$/],
     ['/#/about', /^About.*Control Atlas$/],

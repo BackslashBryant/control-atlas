@@ -26,6 +26,20 @@
   --lsm-signal: #7eb79e;
   --lsm-rust: #c97a60;
   --lsm-fault: #ea7468;
+  /* 2026-08-03: the palette held one usable accent (relay cyan) plus gold, so
+     publishers, relationship classes and secondary actions all resolved to the
+     same blue-grey. These three extend the same muted, desaturated family so
+     colour can carry meaning instead of decorating. */
+  --lsm-iris: #9d92d6;
+  --lsm-teal: #4fb3a5;
+  --lsm-amber: #e0a44a;
+  /* Text tints of the same hues. The fill values above are for rails, dots and
+     badge backgrounds; as body/badge TEXT on slate and alloy they fall under
+     4.5:1, so every *-text token uses these instead (verified against
+     tests/a11y-contract.test.mjs "meet WCAG AA contrast"). */
+  --lsm-iris-text: #b6ade9;
+  --lsm-teal-text: #74ccbe;
+  --lsm-orange-text: #f2a982;
 
   /* Semantic surfaces.
      Ground is Orbit, not Graphite: with bg=graphite (#253139), surface=slate
@@ -60,8 +74,10 @@
   --ca-action-primary: var(--lsm-relay-deep);
   --ca-action-primary-hover: var(--lsm-relay-deep-hover);
   --ca-on-primary: var(--lsm-bone);
-  --ca-secondary: var(--lsm-relay);
-  --ca-secondary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
+  --ca-secondary: var(--lsm-teal);
+  --ca-secondary-hover: color-mix(in srgb, var(--lsm-teal) 84%, var(--lsm-bone));
+  --ca-accent: var(--lsm-amber);
+  --ca-link: var(--lsm-relay);
   --ca-priority: var(--lsm-gold);
   --ca-editorial: var(--lsm-orange);
   /* --ca-editorial fails 4.5:1 for normal text on --ca-surface (4.09:1,
@@ -72,10 +88,10 @@
   --ca-prov-official: var(--lsm-relay);
   --ca-prov-dod: var(--lsm-gold);
   --ca-prov-nist: var(--lsm-relay);
-  --ca-prov-disa: var(--lsm-bone);
-  --ca-prov-fedramp: var(--lsm-dust);
-  --ca-prov-mitre: var(--lsm-gold);
-  --ca-prov-community: var(--lsm-dust);
+  --ca-prov-disa: var(--lsm-iris);
+  --ca-prov-fedramp: var(--lsm-teal);
+  --ca-prov-mitre: var(--lsm-orange);
+  --ca-prov-community: var(--lsm-amber);
   --ca-prov-inferred: var(--lsm-rust);
   --ca-prov-deprecated: var(--lsm-fault);
   --ca-prov-active: var(--lsm-signal);
@@ -83,10 +99,10 @@
   --ca-prov-official-text: var(--lsm-relay);
   --ca-prov-dod-text: var(--lsm-gold);
   --ca-prov-nist-text: var(--lsm-relay);
-  --ca-prov-disa-text: var(--lsm-bone);
-  --ca-prov-fedramp-text: var(--lsm-dust);
-  --ca-prov-mitre-text: var(--lsm-gold);
-  --ca-prov-community-text: var(--lsm-dust);
+  --ca-prov-disa-text: var(--lsm-iris-text);
+  --ca-prov-fedramp-text: var(--lsm-teal-text);
+  --ca-prov-mitre-text: var(--lsm-orange-text);
+  --ca-prov-community-text: var(--lsm-amber);
   /* Inferred uses Alert Rust as its border/tone; Bone keeps the label AA-readable. */
   --ca-prov-inferred-text: var(--lsm-bone);
   /* Deprecated uses Fault Red as its border/tone; Bone keeps the label AA-readable. */
@@ -123,10 +139,10 @@
      label. Structural never reaches this map (rendered separately as its
      own structural-child tag list), so it has no color here. */
   --ca-lens-applicability: var(--lsm-gold);
-  --ca-lens-correlation: var(--lsm-relay-deep);
+  --ca-lens-correlation: var(--lsm-iris);
   --ca-lens-implementation: var(--lsm-relay);
   --ca-lens-assessment: var(--lsm-signal);
-  --ca-lens-process: var(--lsm-dust);
+  --ca-lens-process: var(--lsm-teal);
   --ca-lens-cross-framework: var(--lsm-orange);
   --ca-lens-threat: var(--lsm-rust);
 

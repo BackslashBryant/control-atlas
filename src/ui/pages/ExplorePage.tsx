@@ -11,6 +11,10 @@ import {
 } from "../lib/catalogCoverage";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
 import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
+import {
+  resourceAccessLabel,
+  resourceTypeLabel,
+} from "../lib/resourceBrands.mjs";
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { recordDisplayTitle } from "../lib/recordTitle";
@@ -187,6 +191,20 @@ export function ExplorePage(props: {
     directoryResources.length > 0 ||
     resourceMatches.templates.length > 0 ||
     resourceMatches.artifacts.length > 0;
+  const directoryGroups = [
+    {
+      label: "Tools and resources",
+      resources: directoryResources.filter(
+        (resource) => resource.resourceType !== "community_forum",
+      ),
+    },
+    {
+      label: "Communities",
+      resources: directoryResources.filter(
+        (resource) => resource.resourceType === "community_forum",
+      ),
+    },
+  ].filter((group) => group.resources.length > 0);
 
   // Bound the DOM: an empty query matches the whole library (9k+ records).
   // Open every group only for small result sets; always cap the cards
@@ -194,7 +212,7 @@ export function ExplorePage(props: {
   const GROUP_RENDER_CAP = 5;
   const openAllGroups = visibleDocumentRows.length <= 10;
   const defaultOpenGroups = [
-    ...(directoryResources.length ? ["Resources"] : []),
+    ...directoryGroups.map((group) => group.label),
     ...(resourceMatches.templates.length ? ["Templates"] : []),
     ...(resourceMatches.artifacts.length ? ["Official resources"] : []),
     ...(glossaryMatches.length ? ["Glossary"] : []),
@@ -208,6 +226,26 @@ export function ExplorePage(props: {
   return (
     <>
       <Panel className="search-results-panel border-0 !bg-transparent p-0">
+        <header className="page-header">
+          <div className="page-header-row">
+            <div>
+              <h1>Library</h1>
+              <p className="page-summary">
+                Search every published record, or browse the publications they
+                come from.
+              </p>
+            </div>
+            <div className="page-header-action">
+              <Button
+                onClick={() => onNavigate("catalog-detail", { catalog: "" })}
+                type="button"
+                variant="secondary"
+              >
+                Browse publications
+              </Button>
+            </div>
+          </div>
+        </header>
         <label className="catalog-search search-results-query">
           <IconSearch aria-hidden="true" size={18} />
           <input
@@ -322,6 +360,11 @@ export function ExplorePage(props: {
             tabIndex={-1}
             type="multiple"
           >
+            {visibleDocumentRows.length ? (
+              <p className="result-meta search-result-section-label">
+                Published records ({visibleDocumentRows.length})
+              </p>
+            ) : null}
             {Object.entries(groupedDocuments as Record<string, any[]>).map(
               ([group, entries]) => (
                 <DisclosurePanel
@@ -453,7 +496,7 @@ export function ExplorePage(props: {
                                       }
                                       type="button"
                                     >
-                                      Open in Explore
+                                      Open in the Atlas
                                     </Button>
                                   ) : null}
                                   <Button
@@ -501,13 +544,14 @@ export function ExplorePage(props: {
                 </DisclosurePanel>
               ),
             )}
-            {directoryResources.length ? (
+            {directoryGroups.map((group) => (
               <DisclosurePanel
-                title={`Resources (${directoryResources.length})`}
-                value="Resources"
+                key={group.label}
+                title={`${group.label} (${group.resources.length})`}
+                value={group.label}
               >
                 <div className="stack">
-                  {directoryResources.map((resource) => (
+                  {group.resources.map((resource) => (
                     <article
                       aria-describedby={`desc-${resource.id}`}
                       aria-labelledby={`title-${resource.id}`}
@@ -530,20 +574,20 @@ export function ExplorePage(props: {
                           </CardTitle>
                         </div>
                         <Badge tone="info">
-                          {resource.resourceType.replaceAll("_", " ")}
+                          {resourceTypeLabel(resource.resourceType)}
                         </Badge>
                       </div>
                       <p className="result-summary" id={`desc-${resource.id}`}>
                         {resource.summary}
                       </p>
                       <p className="result-support">
-                        Owner: {resource.publisher}
+                        Owner: {resource.publisher} · {resourceAccessLabel(resource)}
                       </p>
                     </article>
                   ))}
                 </div>
               </DisclosurePanel>
-            ) : null}
+            ))}
             {resourceMatches.templates.length ? (
               <DisclosurePanel
                 title={`Templates (${resourceMatches.templates.length})`}
@@ -710,7 +754,7 @@ export function ExplorePage(props: {
               <details>
                 <summary>Try another path</summary>
                 <div className="card-actions disclosure-actions">
-                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Explore</Button>
+                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open the Atlas</Button>
                 </div>
               </details>
             </div>

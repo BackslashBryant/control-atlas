@@ -21,13 +21,13 @@ export type RouteIdentity = {
 const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   home: { path: "/", label: "Home", title: "Home", contextLabel: "Home", analyticsName: "home" },
   "start-here": { path: "/start", label: "Start here", title: "Start here", contextLabel: "Start here", analyticsName: "start_here" },
-  "atlas-map": { path: "/explore", label: "Explore", title: "Explore", contextLabel: "Explore", analyticsName: "explore" },
-  search: { path: "/search", label: "Search", title: "Search", contextLabel: "Search", analyticsName: "search" },
-  "catalog-detail": { path: "/catalog", label: "Catalog", title: "Catalog", contextLabel: "Catalog", analyticsName: "catalog" },
+  "atlas-map": { path: "/explore", label: "Atlas", title: "Atlas", contextLabel: "Atlas", analyticsName: "explore" },
+  search: { path: "/search", label: "Library", title: "Library", contextLabel: "Search results", analyticsName: "search" },
+  "catalog-detail": { path: "/catalog", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "catalog" },
   "library-detail": { path: "/record", label: "Record", title: "Record", contextLabel: "Record", analyticsName: "record_detail" },
   matrix: { path: "/compare", label: "Compare", title: "Compare", contextLabel: "Compare", analyticsName: "compare" },
-  patterns: { path: "/learn", label: "Learn", title: "Learn", contextLabel: "Learn", analyticsName: "learn" },
-  templates: { path: "/build", label: "Build", title: "Build", contextLabel: "Build", analyticsName: "build" },
+  patterns: { path: "/learn", label: "Guides", title: "Guides", contextLabel: "Guides", analyticsName: "learn" },
+  templates: { path: "/build", label: "Documents", title: "Documents", contextLabel: "Documents", analyticsName: "build" },
   sources: { path: "/sources", label: "Sources", title: "Sources", contextLabel: "Sources", analyticsName: "sources" },
   commons: { path: "/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
   "commons-detail": { path: "/resources", label: "Resource", title: "Resource", contextLabel: "Resource", analyticsName: "resource_detail" },
@@ -40,7 +40,9 @@ const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   home: null,
   "start-here": "start-here",
   "atlas-map": "atlas-map",
-  search: null,
+  // Search results are a state of Library, not a separate destination, so the
+  // Library tab stays selected while a query is open.
+  search: "catalog-detail",
   "catalog-detail": "catalog-detail",
   "library-detail": "catalog-detail",
   matrix: "matrix",
@@ -120,14 +122,18 @@ const ATLAS_PARAMS = new Set([
 ]);
 const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "showAll"]);
+const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "collection", "owner", "costType", "sort", "showAll"]);
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
   category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
-  lifecycle: ["Implement", "Assess"],
-  resourceType: ["catalog", "community_forum", "dataset", "documentation", "historical_reference", "instruction", "matrix", "policy", "specification", "template", "tool", "training"],
+  collection: ["dod-cybersecurity-portals", "reciprocity-authorization-reuse", "implementation-assessment-tools", "product-assurance-approved-products", "cloud-devsecops-software-factories", "cmmc-defense-industrial-base", "cyber-workforce-training", "practitioner-communities"],
+  lifecycle: ["Prepare", "Categorize", "Select", "Implement", "Assess", "Authorize", "Operate", "Monitor"],
+  accessType: ["public", "free_account", "cac_required", "dod_network_required", "invitation_required", "access_varies"],
+  costType: ["free", "no_cost", "varies"],
+  resourceType: ["catalog", "community_forum", "dataset", "documentation", "ecosystem", "government_portal", "historical_reference", "instruction", "marketplace", "matrix", "product_directory", "restricted_service", "service_portal", "specification", "template", "tool", "training"],
+  sort: ["relevance", "name", "checked"],
 };
 const DETAIL_PARAMS = new Set(["from", "returnTo", "relationshipView", "relationshipType", "provenance", "confidence", "nodeType", "includeCandidates", "relationshipSearch"]);
-const START_PARAMS = new Set<string>();
+const START_PARAMS = new Set(["goal", "context"]);
 const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
@@ -200,9 +206,32 @@ function withParams(path: string, params: URLSearchParams): string {
  * Resolves every supported hash path into its one canonical URL. This is the
  * only compatibility table and is deliberately independent from rendering.
  */
+/**
+ * The 2026-08 public names (Atlas, Library, Guides, Documents) are accepted as
+ * URLs and resolved to the existing canonical paths. Old bookmarks keep
+ * working; new names are never a dead link.
+ */
+const PUBLIC_NAME_ALIASES: Readonly<Record<string, string>> = {
+  "/atlas": "/explore",
+  "/library": "/catalog",
+  "/guides": "/learn",
+  "/documents": "/build",
+};
+
+function resolvePublicNameAlias(path: string): string {
+  const exact = PUBLIC_NAME_ALIASES[path];
+  if (exact) return exact;
+  for (const [alias, canonical] of Object.entries(PUBLIC_NAME_ALIASES)) {
+    if (path.startsWith(`${alias}/`)) {
+      return `${canonical}${path.slice(alias.length)}`;
+    }
+  }
+  return path;
+}
+
 export function canonicalizeHashLocation(input: string): CanonicalRoute {
   const { path: initialPath, params: incoming } = normalizedPath(input);
-  let path = initialPath;
+  let path = resolvePublicNameAlias(initialPath);
   let params = incoming;
   let discarded = false;
 

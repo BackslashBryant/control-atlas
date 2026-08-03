@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "lastUpdated": "2026-08-03",
+  "policy": {
+    "hotlinkingAllowed": false,
+    "externalImageAssetsShipped": false,
+    "statement": "Resource identities use bundled Tabler SVG components or locally rendered text monograms. No remote images, official seals, external fonts, or third-party logo files are shipped."
+  },
+  "identityBases": [
+    {
+      "id": "tabler-icons-react",
+      "kind": "bundled_icon_library",
+      "package": "@tabler/icons-react",
+      "version": "^3.44.0",
+      "sourceUrl": "https://github.com/tabler/tabler-icons",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/tabler/tabler-icons/blob/main/LICENSE",
+      "usageBasis": "Existing project dependency used for generic type glyphs and the GitHub, Reddit, Slack, and Microsoft brand glyphs."
+    },
+    {
+      "id": "text-monograms",
+      "kind": "locally_rendered_text",
+      "package": null,
+      "version": null,
+      "sourceUrl": null,
+      "license": "Not applicable",
+      "licenseUrl": null,
+      "usageBasis": "Plain-text abbreviations identify owners when shipping an official or vendor mark is unnecessary or its redistribution terms are not established."
+    }
+  ],
+  "localAssets": []
+}

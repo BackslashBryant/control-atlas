@@ -44,7 +44,7 @@ for (const viewport of [
 
 for (const viewport of [
   { label: "375px", width: 375, height: 812, columns: 1 },
-  { label: "768px", width: 768, height: 1024, columns: 2 },
+  { label: "768px", width: 768, height: 1024, columns: 3 },
 ]) {
   test(`Resources categories and filters remain discoverable at ${viewport.label}`, async ({ page }) => {
     await page.setViewportSize(viewport);
@@ -53,8 +53,8 @@ for (const viewport of [
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    const categories = page.locator("[aria-labelledby='resource-categories'] button");
-    await expect(categories).toHaveCount(6);
+    const collections = page.locator(".resource-collection-grid button");
+    await expect(collections).toHaveCount(8);
     await expectNoPageOverflow(page, `Resources at ${viewport.label}`);
 
     const filters = page.getByRole("button", { name: /^Filters/ });
@@ -70,9 +70,9 @@ for (const viewport of [
     );
     expect(columns).toBe(viewport.columns);
 
-    await page.locator("#commons-lane-filter").selectOption("official");
-    await expect(page).toHaveURL(/lane=official/);
-    await expect(page.getByRole("status")).toContainText(/Showing \d+ of \d+ resources/);
+    await page.getByRole("combobox", { name: "Owner" }).selectOption("National Institute of Standards and Technology");
+    await expect(page).toHaveURL(/owner=National(?:%20|\+)Institute/);
+    await expect(page.locator("#resources-results .resource-card").first()).toBeVisible();
 
     const results = await new AxeBuilder({ page })
       .include("#resources-filter-panel")

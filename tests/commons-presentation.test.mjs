@@ -9,6 +9,13 @@ import {
   hostIdentity,
   resourceHost,
 } from "../src/ui/lib/commonsPresentation.mjs";
+import {
+  RESOURCE_BRAND_REGISTRY,
+  RESOURCE_TYPE_FALLBACKS,
+  resourceAccessLabel,
+  resourceBrandIdentity,
+  resourceTypeLabel,
+} from "../src/ui/lib/resourceBrands.mjs";
 
 const dataset = JSON.parse(
   readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"),
@@ -56,10 +63,10 @@ test("hostIdentity resolves publishing-organization monograms per registrable do
 });
 
 test("hostIdentity falls back to the hostname rather than approximating an unknown publisher", () => {
-  assert.deepEqual(hostIdentity("https://open-scap.org/tools/scap-workbench/"), {
-    host: "open-scap.org",
+  assert.deepEqual(hostIdentity("https://example.net/tool/"), {
+    host: "example.net",
     kind: "generic",
-    label: "open-scap.org",
+    label: "example.net",
   });
   assert.deepEqual(hostIdentity("garbage"), { host: "", kind: "generic", label: "" });
 });
@@ -156,4 +163,239 @@ test("every section carries a plain-English label and blurb, and no type is doub
       seenTypes.add(type);
     }
   }
+});
+
+test("central resource brand registry covers every required owner and ecosystem", () => {
+  const requiredKeys = [
+    "reddit",
+    "fedramp",
+    "nist",
+    "cisa",
+    "disa",
+    "dod_cyber_exchange",
+    "dod_cio",
+    "platform_one",
+    "iron_bank",
+    "common_criteria",
+    "niap",
+    "tenable",
+    "github",
+    "mattermost",
+    "slack",
+    "cis",
+    "microsoft",
+    "mitre",
+    "dcsa",
+    "cyber_ab",
+    "project_spectrum",
+  ];
+
+  assert.deepEqual(
+    requiredKeys.filter((key) => !RESOURCE_BRAND_REGISTRY[key]),
+    [],
+  );
+  for (const key of requiredKeys) {
+    const entry = RESOURCE_BRAND_REGISTRY[key];
+    assert.equal(entry.key, key);
+    assert.ok(entry.ownerLabel);
+    assert.ok(entry.accessibleName);
+    assert.ok(entry.iconKey || entry.initials);
+    assert.doesNotMatch(JSON.stringify(entry), /https?:\/\//i);
+  }
+});
+
+test("brand resolution prefers the specific ecosystem over a generic host", () => {
+  const cases = [
+    [
+      {
+        id: "community-reddit-nistcontrols",
+        name: "Reddit /r/NISTControls Practitioner Community",
+        publisher: "Reddit",
+        canonicalUrl: "https://www.reddit.com/r/NISTControls/",
+      },
+      "reddit",
+    ],
+    [
+      {
+        id: "tool-platform-one-ironbank",
+        name: "DoD Platform One Iron Bank Container Registry",
+        publisher: "Platform One",
+        canonicalUrl: "https://p1.dso.mil/services/iron-bank",
+      },
+      "iron_bank",
+    ],
+    [
+      {
+        name: "Big Bang deployment documentation",
+        publisher: "Platform One",
+        canonicalUrl: "https://p1.dso.mil/",
+      },
+      "platform_one",
+    ],
+    [
+      {
+        name: "NIAP Common Criteria Product Compliant List",
+        publisher: "NIAP",
+        canonicalUrl: "https://www.niap-ccevs.org/",
+      },
+      "niap",
+    ],
+    [
+      {
+        name: "MITRE Heimdall",
+        publisher: "MITRE",
+        canonicalUrl: "https://github.com/mitre/heimdall2",
+      },
+      "mitre",
+    ],
+    [
+      {
+        name: "PowerSTIG",
+        publisher: "Microsoft",
+        canonicalUrl: "https://github.com/microsoft/PowerSTIG",
+      },
+      "microsoft",
+    ],
+  ];
+
+  for (const [resource, expectedKey] of cases) {
+    assert.equal(resourceBrandIdentity(resource).key, expectedKey);
+  }
+
+  const subreddit = resourceBrandIdentity(cases[0][0]);
+  assert.equal(subreddit.ownerLabel, "r/NISTControls");
+  assert.equal(subreddit.variantKey, "subreddit:nistcontrols");
+});
+
+test("registry recognizes future required identities without adding image assets", () => {
+  const cases = [
+    ["DoD Cyber Exchange", "dod_cyber_exchange"],
+    ["DoD CIO Cyber Workforce Hub", "dod_cio"],
+    ["Common Criteria Portal", "common_criteria"],
+    ["Tenable Audits", "tenable"],
+    ["Mattermost ChatOps", "mattermost"],
+    ["CIS WorkBench", "cis"],
+    ["DCSA NISP Cybersecurity Office", "dcsa"],
+    ["The Cyber AB Marketplace", "cyber_ab"],
+    ["Project Spectrum", "project_spectrum"],
+  ];
+
+  for (const [name, expectedKey] of cases) {
+    assert.equal(
+      resourceBrandIdentity({
+        name,
+        publisher: name,
+        canonicalUrl: "https://example.test/",
+      }).key,
+      expectedKey,
+    );
+  }
+});
+
+test("type fallbacks are meaningful and visually distinct", () => {
+  const requiredFallbacks = [
+    "government_portal",
+    "tool",
+    "template",
+    "dataset",
+    "documentation",
+    "training",
+    "marketplace",
+    "community",
+    "repository",
+    "restricted_service",
+  ];
+  const iconKeys = requiredFallbacks.map(
+    (key) => RESOURCE_TYPE_FALLBACKS[key]?.iconKey,
+  );
+
+  assert.ok(iconKeys.every(Boolean));
+  assert.equal(new Set(iconKeys).size, requiredFallbacks.length);
+  assert.equal(
+    resourceBrandIdentity({
+      name: "Unknown community",
+      publisher: "Unknown owner",
+      resourceType: "community_forum",
+      accessType: "public",
+      canonicalUrl: "https://example.test/community",
+    }).key,
+    "community",
+  );
+  assert.equal(
+    resourceBrandIdentity({
+      name: "Unknown restricted tool",
+      publisher: "Unknown owner",
+      resourceType: "tool",
+      accessType: "dod_network",
+      canonicalUrl: "https://example.test/tool",
+    }).key,
+    "restricted_service",
+  );
+});
+
+test("every shipped resource resolves to an accessible consistent identity", () => {
+  for (const resource of resources) {
+    const first = resourceBrandIdentity(resource);
+    const second = resourceBrandIdentity(resource);
+    assert.ok(first.key, resource.id);
+    assert.ok(first.accessibleName, resource.id);
+    assert.ok(first.iconKey || first.initials, resource.id);
+    assert.deepEqual(first, second, resource.id);
+  }
+});
+
+test("resource type and access labels never expose raw schema enums", () => {
+  assert.equal(resourceTypeLabel("community_forum"), "Community or forum");
+  assert.equal(resourceTypeLabel("historical_reference"), "Historical reference");
+  assert.equal(resourceAccessLabel({ accessType: "public" }), "Public");
+  assert.equal(
+    resourceAccessLabel({ accessType: "free_account" }),
+    "Free account required",
+  );
+  assert.equal(resourceAccessLabel({ accessType: "cac_or_piv" }), "CAC required");
+  assert.equal(
+    resourceAccessLabel({ accessType: "dod_network" }),
+    "DoD network required",
+  );
+  assert.equal(
+    resourceAccessLabel({ accessType: "public", authenticationRequired: true }),
+    "Access varies",
+  );
+});
+
+test("brand asset manifest forbids hotlinks and records each identity basis", () => {
+  const manifest = JSON.parse(
+    readFileSync(resolve("data/resource-brand-assets.json"), "utf8"),
+  );
+  assert.equal(manifest.policy.hotlinkingAllowed, false);
+  assert.equal(manifest.policy.externalImageAssetsShipped, false);
+  assert.deepEqual(manifest.localAssets, []);
+
+  const tabler = manifest.identityBases.find(
+    (entry) => entry.id === "tabler-icons-react",
+  );
+  const monograms = manifest.identityBases.find(
+    (entry) => entry.id === "text-monograms",
+  );
+  assert.equal(tabler.license, "MIT");
+  assert.match(tabler.sourceUrl, /^https:\/\/github\.com\/tabler\/tabler-icons$/);
+  assert.equal(monograms.kind, "locally_rendered_text");
+  assert.equal(monograms.sourceUrl, null);
+});
+
+test("resource card uses the central identity seam and restrained anatomy", () => {
+  const card = readFileSync(
+    resolve("src/ui/components/CommonsResourceCard.tsx"),
+    "utf8",
+  );
+  const styles = readFileSync(resolve("styles/resources.css"), "utf8");
+
+  assert.match(card, /resourceBrandIdentity\(resource\)/);
+  assert.match(card, /resourceAccessLabel\(resource\)/);
+  assert.match(card, /resourceTypeLabel\(resource\.resourceType\)/);
+  assert.match(card, /cardPurpose/);
+  assert.doesNotMatch(card, /whyIncluded|frameworks\.map|artifactTypes\.map|CommonsLaneBadge/);
+  assert.match(styles, /\.resource-brand-mark[\s\S]*height:\s*44px/);
+  assert.match(styles, /\.resource-brand-mark[\s\S]*width:\s*44px/);
+  assert.match(styles, /@media \(max-width:\s*30rem\)[\s\S]*height:\s*40px/);
 });

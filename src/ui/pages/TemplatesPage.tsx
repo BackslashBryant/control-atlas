@@ -1007,21 +1007,14 @@ export function TemplatesPage(props: {
             </Button>
           ) : undefined
         }
-        eyebrow={
-          buildOverview
-            ? "Build"
-            : documentBrowser || selectedTemplate
-              ? "Starter documents"
-              : "Build from a task"
-        }
         summary={buildOverview
-          ? "Open a task, start a document, or find an external resource."
+          ? "Create a starter document, or work from a task."
           : documentBrowser || selectedTemplate
-          ? "Review a starter document and its public references before adapting it to your work."
-          : "Choose a task to see related public references, tools, and starter documents."}
+          ? "Review a starter document and its public references before you adapt it."
+          : "Pick a task to see its public references and starter documents."}
         title={
           buildOverview
-            ? "Start a document or a task"
+            ? "Documents"
             : documentBrowser || selectedTemplate
               ? "Choose a starter document"
               : "Tasks"
@@ -1547,7 +1540,7 @@ export function TemplatesPage(props: {
               {inputOptions.includes("baseline") ? (
                 <SelectField
                   emptyLabel="Select a baseline"
-                  hint="Required: choose a published baseline or All controls. There is no default."
+                  hint="Required. Choose a published baseline or All controls."
                   label="Baseline"
                   onChange={(value) =>
                     onNavigate("templates", {

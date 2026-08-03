@@ -69,14 +69,14 @@ const benchmarkQueries = [
   { query: "NIST NVD API", expectedId: "official-nist-nvd-api", category: "Exact Match" },
   { query: "DISA STIG", expectedId: "tool-disa-stig-viewer", category: "Exact Match" },
   { query: "OSCAL", expectedId: "official-nist-oscal", category: "Exact Match" },
-  { query: "CMMC 2.0", expectedId: "community-reddit-cmmc", category: "Exact Match" },
+  { query: "CMMC 2.0", expectedId: "portal-dod-cmmc", category: "Exact Match" },
   { query: "CISA KEV", expectedId: "official-cisa-kev-catalog", category: "Exact Match" },
-  { query: "DoDI 8510.01", expectedId: "official-dodi-8510-01", category: "Exact Match" },
+  { query: "DoDI 8510.01", expectedId: "service-dod-rmf-knowledge-service", category: "Exact Match" },
   { query: "FedRAMP 20x", expectedId: "official-fedramp-20x", category: "Exact Match" },
 
   // 2. Acronym Queries
-  { query: "RMF", expectedId: "official-dodi-8510-01", category: "Acronym" },
-  { query: "ATO", expectedId: "official-dodi-8510-01", category: "Acronym" },
+  { query: "RMF", expectedId: "service-dod-rmf-knowledge-service", category: "Acronym" },
+  { query: "ATO", expectedId: "service-dod-rmf-knowledge-service", category: "Acronym" },
   { query: "SSP", expectedId: "template-fedramp-ssp-rev5", category: "Acronym" },
   { query: "POAM", expectedId: "template-fedramp-poam-rev5", category: "Acronym" },
   { query: "KEV", expectedId: "official-cisa-kev-catalog", category: "Acronym" },
@@ -86,7 +86,7 @@ const benchmarkQueries = [
 
   // 3. Natural-Language Intent Queries
   { query: "known exploited vulnerabilities catalog", expectedId: "official-cisa-kev-catalog", category: "Natural Language Intent" },
-  { query: "CMMC Level 2 scoping guide", expectedId: "community-reddit-cmmc", category: "Natural Language Intent" },
+  { query: "CMMC Level 2 scoping guide", expectedId: "portal-dod-cmmc-documentation", category: "Natural Language Intent" },
   { query: "FedRAMP moderate templates", expectedId: "template-fedramp-ssp-rev5", category: "Natural Language Intent" },
   { query: "automated STIG scanner", expectedId: "tool-compliance-as-code", category: "Natural Language Intent" },
   { query: "Windows server hardening", expectedId: "tool-powerstig", category: "Natural Language Intent" },

@@ -142,6 +142,10 @@ export type ViewState =
       accessType: string;
       resourceType: string;
       category: string;
+      collection: string;
+      owner: string;
+      costType: string;
+      sort: string;
       showAll: string;
     }
   | {
@@ -149,7 +153,7 @@ export type ViewState =
       id: string;
       from?: string;
     }
-  | { view: "start-here" }
+  | { view: "start-here"; goal: string; context: string }
   | {
       view: "about";
     }
@@ -193,7 +197,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     relationshipSearch: "",
     atlasStage: "",
     relationshipGroup: "",
-    sourceView: "novice",
+    sourceView: "default",
     showSupportingReferences: "",
     showDraftOrLegacy: "",
     showRegistryOnly: "",
@@ -269,8 +273,13 @@ export function parseViewState(search: string): ViewState {
       atlasBaseline: params.get("atlasBaseline") || "",
       atlasFamily: params.get("atlasFamily") || "",
       atlasRmfStep: params.get("atlasRmfStep") || "",
-      relationshipView:
-        normalizeRelationshipView(params.get("relationshipView") || "") || "path",
+      // Empty means "the default for this state" — Connections when a record
+      // is focused, the board otherwise (AtlasMapPage.atlasView decides). It is
+      // deliberately not forced to "path": serializing a default the user never
+      // chose raced with their first click and overwrote it.
+      relationshipView: normalizeRelationshipView(
+        params.get("relationshipView") || "",
+      ),
       relationshipType: params.get("relationshipType") || "",
       provenance: params.get("provenance") || "",
       confidence: params.get("confidence") || "",
@@ -281,8 +290,8 @@ export function parseViewState(search: string): ViewState {
       relationshipGroup: params.get("relationshipGroup") || "",
       sourceView:
         params.get("sourceView") === "purpose" || params.get("sourceView") === "rmf"
-          ? params.get("sourceView") || "novice"
-          : "novice",
+          ? params.get("sourceView") || "default"
+          : "default",
       showSupportingReferences: params.get("showSupportingReferences") || "",
       showDraftOrLegacy: params.get("showDraftOrLegacy") || "",
       showRegistryOnly: params.get("showRegistryOnly") || "",
@@ -395,6 +404,10 @@ export function parseViewState(search: string): ViewState {
       accessType: params.get("accessType") || "",
       resourceType: params.get("resourceType") || "",
       category: params.get("category") || "",
+      collection: params.get("collection") || "",
+      owner: params.get("owner") || "",
+      costType: params.get("costType") || "",
+      sort: params.get("sort") || "relevance",
       showAll: params.get("showAll") === "true" ? "true" : "",
     };
   }
@@ -408,7 +421,11 @@ export function parseViewState(search: string): ViewState {
   }
 
   if (view === "start-here") {
-    return { view };
+    return {
+      view,
+      goal: params.get("goal") || "",
+      context: params.get("context") || "",
+    };
   }
 
   if (view === "about") {
@@ -563,6 +580,10 @@ export function normalizeViewState(
       accessType: incoming.accessType || "",
       resourceType: incoming.resourceType || "",
       category: incoming.category || "",
+      collection: incoming.collection || "",
+      owner: incoming.owner || "",
+      costType: incoming.costType || "",
+      sort: incoming.sort || "relevance",
       showAll: incoming.showAll === "true" ? "true" : "",
     };
   }
@@ -577,7 +598,12 @@ export function normalizeViewState(
   }
 
   if (view === "start-here") {
-    return { view };
+    const incoming = state as Extract<ViewState, { view: "start-here" }>;
+    return {
+      view,
+      goal: incoming.goal || "",
+      context: incoming.context || "",
+    };
   }
 
   if (view === "about") {
@@ -751,6 +777,10 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "accessType", state.accessType);
     setIfValue(params, "resourceType", state.resourceType);
     setIfValue(params, "category", state.category);
+    setIfValue(params, "collection", state.collection);
+    setIfValue(params, "owner", state.owner);
+    setIfValue(params, "costType", state.costType);
+    if (state.sort && state.sort !== "relevance") setIfValue(params, "sort", state.sort);
     setIfValue(params, "showAll", state.showAll);
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
@@ -758,6 +788,8 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "from", state.from || "");
   } else if (state.view === "start-here") {
     params.set("view", state.view);
+    setIfValue(params, "goal", state.goal);
+    setIfValue(params, "context", state.context);
   } else if (state.view === "about") {
     params.set("view", state.view);
   } else if (state.view === "retired") {
@@ -777,7 +809,7 @@ export type AtlasMapUrlOptions = {
   atlasBaseline?: string;
   atlasFamily?: string;
   atlasRmfStep?: string;
-  sourceView?: "novice" | "purpose" | "rmf";
+  sourceView?: "default" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
   provenance?: string;
@@ -815,7 +847,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     atlasBaseline: options.atlasBaseline || "",
     atlasFamily: options.atlasFamily || "",
     atlasRmfStep: options.atlasRmfStep || "",
-    sourceView: options.sourceView || "novice",
+    sourceView: options.sourceView || "default",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",
     provenance: options.provenance || "",

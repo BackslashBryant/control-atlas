@@ -73,7 +73,7 @@ async function openApprovedComposition(page, viewport, relationshipView) {
       })
       .toBeGreaterThan(0);
     await expect(
-      page.getByRole('complementary', { name: 'Current record overview' }),
+      page.getByRole('complementary', { name: 'Selected item' }),
     ).toBeVisible();
   } else {
     // Re-baselined 2026-08-01 for the Cybersecurity trunk spine. A focused

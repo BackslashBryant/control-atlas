@@ -76,15 +76,40 @@ test("V1 workflow 05 — follow a record and return without losing search state"
   await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue("AC-2");
 });
 
-test("V1 workflow 06 — explore one declared scope through Path, Map, and List", async ({
+test("V1 workflow 06 — explore one record through Connections, Hierarchy, and the full list", async ({
   page,
 }) => {
   await open(page, "/#/explore?node=nist-800-53%3AAC-2");
-  await expect(page.getByRole("tabpanel", { name: "Path" })).toBeVisible();
-  await page.getByRole("tab", { name: "Map", exact: true }).click();
-  await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
-  await page.getByRole("tab", { name: "List", exact: true }).click();
-  await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
+
+  // Connections is the workspace: it is present without choosing a mode.
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible();
+  // Orientation stays on screen without opening anything.
+  await expect(page.locator(".atlas-workspace-crumb")).toContainText(
+    "SP 800-53 Rev. 5",
+  );
+
+  // Hierarchy is a supporting panel with real structural substance.
+  await page.getByRole("button", { name: "Hierarchy" }).click();
+  await expect(page).toHaveURL(/relationshipView=path/);
+  const hierarchy = page.locator("#atlas-hierarchy-panel");
+  await expect(hierarchy).toContainText("Control Atlas structure");
+  await expect(hierarchy).toContainText("Publisher hierarchy");
+  await expect(hierarchy).toContainText("Decomposes into");
+  await expect(
+    hierarchy.getByRole("button", { name: "AC-2.1", exact: true }),
+  ).toBeVisible();
+
+  // The complete list supports the map instead of replacing it.
+  await page.getByRole("button", { name: "View all", exact: true }).click();
+  await expect(page).toHaveURL(/relationshipView=list/);
+  await expect(
+    page.getByRole("table", { name: "Relationship table" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Relationship map" }),
+  ).toBeVisible();
 });
 
 test("V1 workflow 07 — compare with a shareable explicit configuration", async ({
@@ -117,8 +142,8 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
   await open(page, "/#/resources?q=OSCAL");
-  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
-  await expect(page.getByPlaceholder("Search external resources")).toHaveValue("OSCAL");
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work", level: 1 })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
   await expect(page.getByRole("region", { name: "Resource results" })).toBeVisible();
 });
 
@@ -134,17 +159,18 @@ test("V1 workflow 10 — recover from invalid settings, missing records, and emp
 test("V1 workflow 11 — refresh and browser history preserve valid URL state", async ({
   page,
 }) => {
-  await open(page, "/#/resources?lane=official");
+  const owner = "National Institute of Standards and Technology";
+  await open(page, `/#/resources?owner=${encodeURIComponent(owner)}`);
   const filters = page.getByRole("button", { name: /^Filters/ });
   await filters.click();
-  const ownerType = page.getByLabel("Owner type");
-  await expect(ownerType).toHaveValue("official");
+  const ownerFilter = page.getByLabel("Owner");
+  await expect(ownerFilter).toHaveValue(owner);
   await page.reload();
-  await expect(ownerType).toHaveValue("official");
+  await expect(ownerFilter).toHaveValue(owner);
   await filters.click();
-  await ownerType.selectOption("all");
+  await ownerFilter.selectOption("");
   await page.goBack();
-  await expect(ownerType).toHaveValue("official");
+  await expect(ownerFilter).toHaveValue(owner);
 });
 
 test("V1 workflow 12 — defining work reflows at mobile, tablet, and desktop widths", async ({
@@ -157,8 +183,8 @@ test("V1 workflow 12 — defining work reflows at mobile, tablet, and desktop wi
   ]) {
     await page.setViewportSize(viewport);
     await open(page, "/#/");
-    await expect(page.locator(".home-entry .brand-kbd")).toBeVisible();
-    await expect(page.locator(".home-entry .brand-key-word")).not.toBeEmpty();
+    await expect(page.locator(".site-header .brand-kbd").last()).toBeVisible();
+    await expect(page.locator(".site-header .brand-key-word").last()).not.toBeEmpty();
     await expect(page.getByRole("search")).toBeVisible();
     const dimensions = await page.evaluate(() => ({
       client: globalThis.document.documentElement.clientWidth,

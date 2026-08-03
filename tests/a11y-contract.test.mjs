@@ -31,7 +31,24 @@ test("provenance badges always render text labels alongside tone classes", () =>
 });
 
 test("provenance tokens stay distinct from Orbital action and status meanings", () => {
-  assert.match(tokens, /--ca-prov-fedramp:\s*var\(--lsm-dust\)/i);
+  // 2026-08-03: this used to pin --ca-prov-fedramp to --lsm-dust. That value
+  // was one way to satisfy the rule this test is named for, but it also meant
+  // DISA, FedRAMP and community all rendered colourless, which the owner
+  // rejected. Enforce the rule itself: a publisher hue may never reuse an
+  // action (relay) or status (rust/fault) token.
+  for (const publisher of ["disa", "fedramp", "community", "mitre"]) {
+    const value = tokens.match(
+      new RegExp(
+        `--ca-prov-${publisher}:\\s*var\\((--lsm-[a-z-]+)\\)`,
+        "i",
+      ),
+    );
+    assert.ok(value, `--ca-prov-${publisher} must be defined`);
+    assert.ok(
+      !["--lsm-relay", "--lsm-rust", "--lsm-fault"].includes(value[1]),
+      `--ca-prov-${publisher} reuses the action/status token ${value[1]}`,
+    );
+  }
   assert.match(tokens, /--ca-primary:\s*var\(--lsm-relay\)/i);
   assert.match(tokens, /--ca-warning:\s*var\(--lsm-rust\)/i);
   assert.match(tokens, /--ca-danger:\s*var\(--lsm-fault\)/i);
@@ -205,10 +222,10 @@ test("Home makes Start Here the sole primary action, retains direct Search, and 
   assert.match(homePage, /onNavigate\("start-here"\)/);
   assert.match(homePage, /className="home-search"/);
   assert.match(homePage, /Search published records/);
-  assert.match(homePage, /Open the Atlas/);
-  assert.match(homePage, /Browse Catalog/);
-  assert.match(homePage, /Find Tools & Resources/);
-  assert.match(homePage, /BrandFlourish/);
+  assert.match(homePage, /Follow implementation/);
+  assert.match(homePage, /Compare guidance/);
+  assert.match(homePage, /Start a document/);
+  assert.match(homePage, /HomeChainPreview/);
   assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
   assert.doesNotMatch(homePage, /Choose a starting point/);
@@ -223,8 +240,8 @@ test("high-density task surfaces bound results and name download actions", () =>
   assert.match(comparePage, /View evidence/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
-  assert.match(startHere, /Find the publication you need/);
-  assert.match(startHere, /Search all records/);
+  assert.match(startHere, /What are you trying to do\?/);
+  assert.match(startHere, /Search the Library/);
 });
 
 test("Build overview exposes Tasks, Starter documents, and Resources as equal lanes", () => {
