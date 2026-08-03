@@ -688,6 +688,12 @@ li {
   font-size: var(--font-size-sm);
 }
 
+.result-match-reason {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
 /* Record header reuses the established result-card action popover
    rather than inventing a second disclosure idiom. */
 .result-actions-menu,
@@ -2680,6 +2686,12 @@ button.atlas-path-crumb-organizing:focus-visible {
   padding: 0;
   border: 0;
   background: transparent;
+}
+
+.search-results-query {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: var(--ca-space-4);
 }
 
 .catalog-record-row,

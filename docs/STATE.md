@@ -73,6 +73,35 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4a (Search relevance) COMPLETE
+
+`ExplorePage.tsx`: added a real editable search input at the top of the
+results page (it previously had none — query only lived in the URL/header
+overlay). New `matchReasonFor()` derives Exact identifier/Identifier match/
+Title match/Official text match honestly from the same rule the runtime's
+own `searchLibrary` already applies (it returns ONLY exact matches when any
+exist, never mixed) — computed in the UI layer, not written back into the
+runtime search index, so search relevance still cannot become a graph
+relationship. A status line names the tier ("Exact matches for..." /
+"Published text matches for... — each result below shows why it matched.");
+non-exact rows show their own reason inline. Renamed the vague "Compare,
+map, or export" summary to "More actions" (matches the identical pattern
+already used on the record page).
+
+Scope decision: implemented 3 of the spec's 4 tiers (Exact / Text match /
+External resources), not "directly connected records" — there is no center
+record in a free-text search to compute a directed connection from, and
+fabricating one would be exactly the "search similarity becomes a graph
+relationship" anti-pattern WS11 itself forbids.
+
+### Verification
+Lint/typecheck/`npm test` unchanged. Full e2e 142/142 (1 skip), full a11y
+32/32, full visual 28/28 after inspecting the Search screenshot.
+Live-verified in Chrome: typed "account" into the new query box, watched
+results update live with "Title match" reasons on both hits; "AC-2" showed
+"Exact matches for..." with no per-row reason (correctly suppressed for the
+exact tier). `npm run precommit` clean.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3d (Start Here badges) COMPLETE, PHASE 3 DONE
 
 `StartHerePage.tsx`: per the session-21 ASSUMPTION (Workstream 7's literal
