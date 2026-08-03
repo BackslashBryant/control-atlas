@@ -3,6 +3,7 @@ import { IconArrowRight, IconBook2, IconExternalLink } from "@tabler/icons-react
 import {
   learnArticleById,
   learnArticles,
+  practitionerGuides,
 } from "../../app/learn-content.mjs";
 import { Button, Panel } from "../components/lsm";
 import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
@@ -25,11 +26,11 @@ export function PlaybooksPage(props: {
       <Panel>
         <PageHeader
           eyebrow="Learn"
-          summary="Control Atlas explanations for reading source identity, structure, search, mappings, records, and starter documents."
-          title="How to read what you find here"
+          summary="Practitioner guides for federal cybersecurity work — starting an authorization, selecting and implementing controls, assessment, findings, monitoring, inheritance, reciprocity, cloud, and STIGs."
+          title="Guides for the work, not just the interface"
         />
-        <section aria-label="Learning articles" className="learn-article-grid">
-          {learnArticles.map((article) => (
+        <section aria-label="Practitioner guides" className="learn-article-grid">
+          {practitionerGuides.map((article) => (
             <button
               key={article.id}
               onClick={() => onNavigate("patterns", { pattern: article.id })}
@@ -44,6 +45,33 @@ export function PlaybooksPage(props: {
             </button>
           ))}
         </section>
+
+        <details className="accordion-item">
+          <summary>How Control Atlas works</summary>
+          <div className="disclosure-content">
+            <p>
+              Explanations for reading source identity, structure, search,
+              mappings, records, and starter documents in this product —
+              interface help, not practitioner guidance.
+            </p>
+            <section aria-label="Product help articles" className="learn-article-grid">
+              {learnArticles.map((article) => (
+                <button
+                  key={article.id}
+                  onClick={() => onNavigate("patterns", { pattern: article.id })}
+                  type="button"
+                >
+                  <IconBook2 aria-hidden="true" size={20} />
+                  <span>
+                    <strong>{article.title}</strong>
+                    <small>{article.summary}</small>
+                  </span>
+                  <IconArrowRight aria-hidden="true" size={18} />
+                </button>
+              ))}
+            </section>
+          </div>
+        </details>
       </Panel>
     );
   }
@@ -60,12 +88,22 @@ export function PlaybooksPage(props: {
             Back to Learn
           </Button>
         }
-        eyebrow="Control Atlas explanation"
+        eyebrow={selected.kind === "practitioner" ? "Practitioner guide" : "Control Atlas explanation"}
         summary={selected.summary}
         title={selected.title}
       />
       <div className="learn-article">
-        <SummaryCard title="Explanation">
+        {selected.whereItSits ? (
+          <SummaryCard title="Where it sits">
+            <p>{selected.whereItSits}</p>
+          </SummaryCard>
+        ) : null}
+        {selected.whenItMatters ? (
+          <SummaryCard title="When it matters">
+            <p>{selected.whenItMatters}</p>
+          </SummaryCard>
+        ) : null}
+        <SummaryCard title="What this means">
           <p>{selected.explanation}</p>
         </SummaryCard>
         <SummaryCard title="Limitations" tone="warning">
