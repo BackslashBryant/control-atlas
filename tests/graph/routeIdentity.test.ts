@@ -203,7 +203,7 @@ test("every durable view field survives canonicalization", () => {
       },
     ],
     ["/search", { q: "access control", objectType: "control" }],
-    ["/catalog", { q: "AC", family: "AC", page: "2" }],
+    ["/catalog", { q: "AC", family: "AC", page: "2", area: "Compliance" }],
     [
       "/resources",
       { q: "reddit", lane: "practitioner", category: "community" },

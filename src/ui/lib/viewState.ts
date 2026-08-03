@@ -68,6 +68,7 @@ export type ViewState =
       family: string;
       browseAll: string;
       type: string;
+      area: string;
       publisher: string;
       lifecycle: string;
       page: string;
@@ -312,6 +313,7 @@ export function parseViewState(search: string): ViewState {
       family: params.get("family") || "",
       browseAll: params.get("browseAll") === "true" ? "true" : "",
       type: params.get("type") || "",
+      area: params.get("area") || "",
       publisher: params.get("publisher") || "",
       lifecycle: params.get("lifecycle") || "",
       page: params.get("page") || "",
@@ -489,6 +491,7 @@ export function normalizeViewState(
       family: incoming.family || "",
       browseAll: incoming.browseAll === "true" ? "true" : "",
       type: incoming.type || "",
+      area: incoming.area || "",
       publisher: incoming.publisher || "",
       lifecycle: incoming.lifecycle || "",
       page: incoming.page || "",
@@ -666,6 +669,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "family", state.family);
     setIfValue(params, "browseAll", state.browseAll);
     setIfValue(params, "type", state.type);
+    setIfValue(params, "area", state.area);
     setIfValue(params, "publisher", state.publisher);
     setIfValue(params, "lifecycle", state.lifecycle);
     setIfValue(params, "page", state.page);

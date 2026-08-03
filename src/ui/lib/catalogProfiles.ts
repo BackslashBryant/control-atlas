@@ -1,7 +1,71 @@
+import treeSpine from "../../../data/curated/tree-spine.json";
+
 export type CatalogProfile = {
   synopsis: string;
   recordLabel: string;
+  publicationKind: string;
+  area: string;
 };
+
+// W10 — canonical publication-kind classification (docs/plans/audit-
+// alignment-2026-08-02.md Phase 3c). Primary grouping on Catalog used to be
+// the raw record-type enum below ("STIG rules", "identifiers"), which reads
+// as a schema dump, not a map a newcomer can use to tell FedRAMP from a
+// STIG. "Policy and regulation" is one addition beyond the fix spec's nine
+// example kinds — CUI marking policy is not a control catalog, risk
+// framework, or any of the other eight, and mislabeling it would be worse
+// than naming a tenth kind for the one publication that needs it.
+const PUBLICATION_KINDS: Record<string, string> = {
+  "nist-800-53": "Control catalog",
+  "nist-800-53a": "Control catalog",
+  "nist-800-171": "Control catalog",
+  "nist-800-171-rev2": "Control catalog",
+  "nist-800-172": "Control catalog",
+  "nist-800-53b": "Control-selection method",
+  "nist-800-37": "Risk framework",
+  "fips-199": "Risk framework",
+  "fips-200": "Risk framework",
+  "nist-ai-rmf": "Risk framework",
+  "dod-rai": "Risk framework",
+  "csf-2": "Outcome framework",
+  "fedramp-rev5": "Authorization program",
+  "cmmc-2": "Certification program",
+  "disa-stig": "Implementation standard",
+  "disa-srg": "Implementation standard",
+  "disa-cci": "Implementation standard",
+  "nist-ssdf": "Implementation standard",
+  "dod-zt": "Implementation standard",
+  "mitre-attack": "Threat knowledge base",
+  "mitre-attack-ics": "Threat knowledge base",
+  "mitre-d3fend": "Defensive knowledge base",
+  "cui-policy": "Policy and regulation",
+};
+
+const LIMB_AREA_NAMES: Record<string, string> = {
+  "atlas:LIMB-GOVERNANCE": "Governance",
+  "atlas:LIMB-RISK": "Risk",
+  "atlas:LIMB-COMPLIANCE": "Compliance",
+  "atlas:LIMB-ARCHITECTURE": "Architecture",
+  "atlas:LIMB-IMPLEMENTATION": "Implementation",
+  "atlas:LIMB-ASSESSMENT": "Assessment",
+  "atlas:LIMB-OPERATIONS": "Operations",
+  "atlas:LIMB-THREAT": "Threats & Defense",
+  "atlas:LIMB-KNOWLEDGE": "Knowledge",
+};
+
+const CATALOG_LIMBS: Record<string, string> = {
+  ...(treeSpine.catalogLimbs as Record<string, string>),
+  ...Object.fromEntries(
+    (treeSpine.syntheticCatalogs as Array<{ catalog_id: string; limb: string }>).map(
+      (entry) => [entry.catalog_id, entry.limb],
+    ),
+  ),
+};
+
+export function catalogAreaFor(catalogId: string): string {
+  const limbId = CATALOG_LIMBS[catalogId];
+  return (limbId && LIMB_AREA_NAMES[limbId]) || "";
+}
 
 const RECORD_LABELS: Record<string, string> = {
   "nist-800-171-rev2": "requirements",
@@ -91,5 +155,7 @@ export function catalogProfileFor(
       SYNOPSES[catalogId] ||
       `${catalogName}, published by the source cited on every record below.`,
     recordLabel: RECORD_LABELS[catalogId] || "records",
+    publicationKind: PUBLICATION_KINDS[catalogId] || "Published structure",
+    area: catalogAreaFor(catalogId),
   };
 }

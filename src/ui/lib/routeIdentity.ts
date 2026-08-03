@@ -119,7 +119,7 @@ const ATLAS_PARAMS = new Set([
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
 const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly"]);
-const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "publisher", "lifecycle", "page"]);
+const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
 const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "showAll"]);
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
   category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
