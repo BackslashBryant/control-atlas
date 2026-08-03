@@ -1266,7 +1266,7 @@ export function TemplatesPage(props: {
             {showCompanionFilters ? (
               <CatalogFilterBar
                 category={categoryFilter}
-                categoryOptions={[...Object.keys(TEMPLATE_CATEGORIES), "Other"]}
+                categoryOptions={Object.keys(TEMPLATE_CATEGORIES)}
                 countLabel={`${filteredTemplates.length} starter document${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
                 onCategoryChange={(category) =>
                   onNavigate("templates", { ...state, category })
