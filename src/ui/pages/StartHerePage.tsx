@@ -3,7 +3,8 @@ import { IconArrowRight, IconSearch, IconSourceCode } from "@tabler/icons-react"
 import treeSpine from "../../../data/curated/tree-spine.json";
 import { Panel, Button } from "../components/lsm";
 import { SOURCE_STARTING_POINTS } from "../lib/source-navigator.mjs";
-import { PageHeader } from "../lib/pagePrimitives";
+import { catalogProfileFor } from "../lib/catalogProfiles";
+import { Badge, PageHeader } from "../lib/pagePrimitives";
 import type { ViewState } from "../lib/viewState";
 
 // Navigation, not intake. Each row says where in the tree that kind of question
@@ -81,7 +82,10 @@ export function StartHerePage(props: {
             >
               <span>
                 <strong>{situation.prompt}</strong>
-                <small>Opens {situation.limbLabel}.</small>
+                <span className="start-here-row-badges">
+                  <Badge>{situation.limbLabel}</Badge>
+                  <small>Why: this area covers that question.</small>
+                </span>
               </span>
               <IconArrowRight aria-hidden="true" size={18} />
             </button>
@@ -107,7 +111,10 @@ export function StartHerePage(props: {
             >
               <span>
                 <strong>{source.label}</strong>
-                <small>{source.inclusionReason}</small>
+                <span className="start-here-row-badges">
+                  <Badge>{catalogProfileFor(source.catalogId, source.label).publicationKind}</Badge>
+                  <small>{source.inclusionReason}</small>
+                </span>
               </span>
               <IconArrowRight aria-hidden="true" size={18} />
             </button>

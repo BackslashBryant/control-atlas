@@ -73,6 +73,31 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3d (Start Here badges) COMPLETE, PHASE 3 DONE
+
+`StartHerePage.tsx`: per the session-21 ASSUMPTION (Workstream 7's literal
+3-step wizard conflicts with the session-15 DETERMINATION_BOUNDARY decision
+— see Constraints above), built the spirit instead: every situational row
+and publication starting point now shows a real `Badge` (area name, or the
+Phase 3c publication-kind classification reused directly — "Control
+catalog", "Authorization program", etc.) plus an explicit "Why:" reason line.
+No new question, no classification step, no applicability claim — same rows,
+same links, more honestly labeled. `tests/content-review.test.mjs`'s
+DETERMINATION_BOUNDARY and System-type/Data-sensitivity checks still pass
+unchanged (verified, not just assumed).
+
+### Verification
+Lint/typecheck/`npm test` unchanged (258/30/57/3). Full e2e 142/142 (1
+skip), full a11y 32/32, full visual 28/28 after inspecting the Start Here
+screenshot. Live-verified in Chrome: badges render correctly, including
+Phase 3c's publication-kind labels flowing through to this page's
+publication links. `npm run precommit` clean.
+
+**Phase 3 (destination doctrine jobs) is now fully done**: Learn, Documents,
+Catalog, and Start Here each do the job their doctrine assigns them. Next:
+Phase 4 (Search relevance tiers, Compare evidence-basis copy, semantic
+snapshot test), Phase 5 (Home/About thesis), then the ship gate.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3c (Catalog publication kind) COMPLETE
 
 `src/ui/lib/catalogProfiles.ts`: new `publicationKind` (Control catalog /
