@@ -126,6 +126,7 @@ const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audienc
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
   category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
   collection: ["dod-cybersecurity-portals", "reciprocity-authorization-reuse", "implementation-assessment-tools", "product-assurance-approved-products", "cloud-devsecops-software-factories", "cmmc-defense-industrial-base", "cyber-workforce-training", "practitioner-communities"],
+  lifecycle: ["Prepare", "Categorize", "Select", "Implement", "Assess", "Authorize", "Operate", "Monitor"],
   accessType: ["public", "free_account", "cac_required", "dod_network_required", "invitation_required", "access_varies"],
   costType: ["free", "no_cost", "varies"],
   resourceType: ["catalog", "community_forum", "dataset", "documentation", "ecosystem", "government_portal", "historical_reference", "instruction", "marketplace", "matrix", "product_directory", "restricted_service", "service_portal", "specification", "template", "tool", "training"],
