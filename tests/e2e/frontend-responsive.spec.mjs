@@ -80,7 +80,7 @@ for (const viewport of VIEWPORTS) {
             await waitForAppReady(page);
             await dismissOnboarding(page);
             await expect(
-              page.locator("main h1:visible, main h2:visible").first(),
+              page.locator("h1:visible, main h2:visible").first(),
               route,
             ).toBeVisible();
 

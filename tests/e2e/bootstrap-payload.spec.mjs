@@ -33,9 +33,12 @@ test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
 
   expect(graphArtifactUrls(requested)).toEqual([]);
   expect(requested).toEqual([]);
-  expect(scripts).toHaveLength(1);
+  // The tiny classic shell sets route identity before first paint; the only
+  // other script is the deferred interactive entry. Home still requests no
+  // route or graph payload until the user leaves the static front door.
+  expect(scripts).toHaveLength(2);
 
-  await page.getByRole("button", { name: "Browse the Library" }).click();
+  await page.getByRole("button", { name: "Browse official publications" }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/catalog/);
   expect(scripts.length).toBeGreaterThan(1);

@@ -20,6 +20,7 @@
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="preload" href="./progressive-shell.js" as="script">
 </head>
 <body>
   <div id="root">
@@ -82,68 +83,55 @@
         data-view="home"
         id="app"
       >
-        <section class="home-entry" aria-labelledby="home-title">
-          <header class="home-entry-header">
-            <h1 id="home-title">Federal cyber guidance is scattered. The work still has to get done.</h1>
-            <p class="home-product-identity">Find the requirement, trace it to the source, and follow it into implementation and assessment.</p>
-          </header>
-
-          <form class="home-search" data-home-search role="search">
-            <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-            <input aria-label="Search published records" name="query" placeholder="Search AC-2, FedRAMP, CCIs, STIGs, reciprocity&hellip;" type="search">
-            <button class="button button--secondary" type="submit">Search</button>
-          </form>
-
-          <div class="home-primary-actions">
-            <button class="button button--primary home-start-here" data-route="#/start" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="m14.5 9.5-2 5-5 2 2-5 5-2z"></path>
-              </svg>
-              Start here
-            </button>
-            <button class="home-inline-link" data-route="#/catalog" type="button">Browse the Library</button>
-            <p class="home-start-here-hint">Not sure where to begin? Start with the work in front of you.</p>
+        <section class="home-entry" aria-labelledby="home-title" data-visual-identity="universal-front-door">
+          <div class="home-hero">
+            <div class="home-hero-lead">
+              <header class="home-entry-header">
+                <h1 id="home-title">Find the source. See what connects. Keep the work moving.</h1>
+                <p class="home-product-identity">Govern, secure, assess, operate, and defend systems from one public, source-traceable workbench.</p>
+              </header>
+              <form class="home-search" data-home-search role="search">
+                <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+                <input aria-label="Search Control Atlas" name="query" placeholder="Search controls, clauses, STIGs, ATT&amp;CK, guides, tools, or communities&hellip;" type="search">
+                <button class="button button--secondary" type="submit">Search</button>
+              </form>
+              <div class="home-primary-actions">
+                <button class="button button--primary home-start-here" data-route="#/start" type="button">Start with your work</button>
+                <button class="home-inline-link" data-route="#/catalog" type="button">Browse official publications</button>
+              </div>
+            </div>
+            <div class="home-work-map" aria-label="The work Control Atlas covers"><span>Govern</span><span>Build</span><span>Assess</span><span>Operate</span><span>Defend</span></div>
           </div>
 
-          <section aria-labelledby="home-chain-title" class="home-chain">
-            <h2 class="home-chain-title" id="home-chain-title">Follow a requirement</h2>
-            <ol class="home-chain-path">
-              <li>SP 800-53</li>
-              <li aria-hidden="true">&rsaquo;</li>
-              <li>Access Control</li>
-              <li aria-hidden="true">&rsaquo;</li>
-              <li class="home-chain-subject">AC-2 Account Management</li>
-            </ol>
-            <ul class="home-chain-branches">
-              <li><span class="home-chain-relation">Selected by</span><span class="home-chain-target">FedRAMP Moderate</span></li>
-              <li><span class="home-chain-relation">Assessed by</span><span class="home-chain-target">SP 800-53A</span></li>
-              <li><span class="home-chain-relation">Connected through</span><span class="home-chain-target">DISA CCIs</span></li>
-            </ul>
-            <button class="home-chain-open" data-route="#/explore?node=nist-800-53%3AAC-2&amp;relationshipView=map" type="button">Trace AC-2</button>
-          </section>
-
-          <nav aria-label="Ways to begin" class="home-secondary-grid">
-            <button class="home-secondary-action" data-route="#/explore" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>
-              <span><strong>Follow implementation</strong><small>See how a requirement connects to CCIs, SRGs, STIGs, and technical checks.</small></span>
-            </button>
-            <button class="home-secondary-action" data-route="#/compare" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3"></path><path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"></path><path d="M12 3v18"></path></svg>
-              <span><strong>Compare guidance</strong><small>See where two publications align and where no published mapping exists.</small></span>
-            </button>
-            <button class="home-secondary-action" data-route="#/build" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect height="4" rx="1" width="6" x="9" y="3"></rect></svg>
-              <span><strong>Start a document</strong><small>Build a clean draft from the sources and inputs you select.</small></span>
-            </button>
+          <nav aria-label="Start from your work" class="home-secondary-grid">
+            <button class="home-secondary-action" data-route="#/start?goal=understand" type="button"><span><strong>Understand a requirement</strong><small>Start with controls and requirements, then keep the source attached.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=implement" type="button"><span><strong>Secure or build a system</strong><small>Move into implementation work and technical checks.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=assess" type="button"><span><strong>Assess or authorize</strong><small>Open published methods and package work.</small></span></button>
+            <button class="home-secondary-action" data-route="#/explore?atlasLimb=atlas%3ALIMB-THREAT" type="button"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></button>
+            <button class="home-secondary-action" data-route="#/search?q=supply%20chain" type="button"><span><strong>Manage risk or supply chain</strong><small>Find CUI, CMMC, SBOM, and product-assurance material.</small></span></button>
+            <button class="home-secondary-action" data-route="#/build/documents" type="button"><span><strong>Produce a document</strong><small>Choose the work product, then add source context.</small></span></button>
+            <button class="home-secondary-action" data-route="#/resources?showAll=true" type="button"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Search the practitioner ecosystem without mixing it into publisher hierarchy.</small></span></button>
           </nav>
 
-          <aside class="home-trust-boundary">
-            <p>Public sources only. No account, no uploads, and no organizational data.</p>
-          </aside>
+          <section aria-labelledby="home-capabilities-title" class="home-capability-previews">
+            <header class="home-capability-header"><p class="eyebrow">What you can do here</p><h2 id="home-capabilities-title">Source, connection, next action</h2></header>
+            <div class="home-capability-grid">
+              <article class="home-capability-preview home-capability-preview--source-chain">
+                <div class="home-capability-copy"><p class="home-capability-eyebrow">Published chain</p><h3>Trace a supply-chain requirement</h3><p>Open SP 800-171 3.17.1 with its publisher, structural path, official text, and cited connections intact.</p><small>SP 800-171 &middot; Supply Chain Risk Management &middot; 3.17.1</small></div>
+                <button class="home-capability-action" data-route="#/record/nist-800-171/3.17.1" type="button">Open the record</button>
+              </article>
+              <article class="home-capability-preview home-capability-preview--threat-defense">
+                <div class="home-capability-copy"><p class="home-capability-eyebrow">Threat and defense</p><h3>Follow a software supply-chain technique</h3><p>Start with ATT&amp;CK T1195.002, then inspect only the defensive relationships a publisher actually records.</p><small>ATT&amp;CK &middot; Initial Access &middot; T1195.002</small></div>
+                <button class="home-capability-action" data-route="#/explore?node=mitre-attack%3AT1195.002&amp;relationshipView=map" type="button">Open in the Atlas</button>
+              </article>
+              <article class="home-capability-preview home-capability-preview--working-output">
+                <div class="home-capability-copy"><p class="home-capability-eyebrow">Working output</p><h3>Prepare an assessment</h3><p>Move through published inputs, readiness checks, and starter documents for assessment planning.</p><small>Task &middot; Prepare for a security assessment</small></div>
+                <button class="home-capability-action" data-route="#/build/tasks/prepare-security-assessment" type="button">Open the task</button>
+              </article>
+            </div>
+          </section>
+
+          <aside class="home-trust-boundary"><p>Official public material stays primary and attributed. Control Atlas suggestions are labeled and never added to the published graph.</p></aside>
         </section>
       </section>
     </main>
@@ -157,6 +145,7 @@
       aria-labelledby="static-route-title"
       class="static-route-shell ca-page"
       data-static-route
+      hidden
       role="status"
     >
       <header class="page-header">
@@ -180,11 +169,11 @@
         <p class="eyebrow">Library</p>
         <div class="page-header-row">
           <div>
-            <h1 id="static-search-title">Find a published record</h1>
-            <p class="page-summary">Search controls, baselines, CCIs, STIGs, terms, and starter templates.</p>
+            <h1 id="static-search-title">Library</h1>
+            <p class="page-summary">Search every published record, or browse the publications they come from.</p>
           </div>
           <div class="page-header-action">
-            <button class="button button--secondary" data-static-search-start type="button">Start here</button>
+            <button class="button button--secondary" data-static-search-catalog type="button">Browse publications</button>
           </div>
         </div>
       </header>
@@ -205,6 +194,7 @@
     <div data-react-root></div>
   </div>
   <noscript>Control Atlas needs JavaScript to load the public compliance workspace.</noscript>
+  <script src="./progressive-shell.js"></script>
   <script type="module" src="./main.tsx"></script>
 </body>
 </html>

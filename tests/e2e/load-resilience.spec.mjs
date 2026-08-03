@@ -34,7 +34,7 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
     .click();
   await expect(page).toHaveURL(/#\/learn/);
   await expect(
-    page.getByRole("heading", { name: "Guides", exact: true }),
+    page.getByRole("heading", { name: "Practitioner guides", exact: true }),
   ).toBeVisible();
 });
 
@@ -104,7 +104,7 @@ test("staged library search enables results before detail pages", async ({
   await expect.poll(() => detailRequests, { timeout: 15000 }).toBeGreaterThan(0);
 });
 
-test("heavy routes explain what they are loading", async ({ page }) => {
+test("heavy routes identify the destination while scoped data loads", async ({ page }) => {
   await page.route("**/data/**", async (route) => {
     const url = route.request().url();
     if (url.includes("compliance-workflows.json")) {
@@ -115,11 +115,11 @@ test("heavy routes explain what they are loading", async ({ page }) => {
 
   await gotoApp(page, "/#/build/tasks");
   await expect(
-    page.getByRole("heading", { name: "Opening workspace", exact: true }),
+    page.getByRole("heading", { name: "Tasks", exact: true }),
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "Loading published records and their sources.",
+      "Choose a task or starter document, then keep its public references attached.",
       { exact: false },
     ),
   ).toBeVisible();

@@ -117,7 +117,7 @@ export function CatalogDetailPage(props: {
     onNavigate("catalog-detail", { ...state, ...patch });
 
   return (
-    <section className="panel catalog-detail-page">
+    <section className="panel catalog-detail-page" data-visual-identity="publisher-research-library">
       <button
         className="back-link"
         onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
@@ -126,13 +126,13 @@ export function CatalogDetailPage(props: {
         <IconArrowLeft aria-hidden="true" size={17} /> Back to Catalog
       </button>
 
-      <header className="catalog-detail-hero">
-        <p className="eyebrow">Published structure · {catalog.display_group}</p>
-        <h1>{catalog.name}</h1>
-        <p className="catalog-synopsis">
+      <header className="catalog-detail-hero" data-route-primary-header="true">
+        <p className="eyebrow" data-route-primary-copy="true">Published structure · {catalog.display_group}</p>
+        <h1 data-route-primary-copy="true">{catalog.name}</h1>
+        <p className="catalog-synopsis" data-route-primary-copy="true">
           Control Atlas note: {profile.synopsis}
         </p>
-        <div className="catalog-facts" aria-label="Catalog summary">
+        <div className="catalog-facts" aria-label="Catalog summary" data-route-primary-support="true">
           <span>
             <strong>
               {(catalog.leaf_record_count ?? catalog.node_count).toLocaleString()}
@@ -152,6 +152,7 @@ export function CatalogDetailPage(props: {
         {source?.artifact_url ? (
           <ButtonLink
             className="catalog-source-link"
+            data-route-primary-support="true"
             href={source.artifact_url}
             rel="noreferrer"
             target="_blank"
@@ -422,8 +423,8 @@ function CatalogInventory(props: {
     onNavigate("catalog-detail", { ...state, ...patch });
 
   return (
-    <section className="panel catalog-index">
-      <header className="page-header">
+    <section className="panel catalog-index" data-visual-identity="publisher-research-library">
+      <header className="page-header" data-route-primary-copy="true" data-route-primary-header="true">
         <h1>Library</h1>
         <p className="page-summary">
           Search every published record, or browse the publications they come

@@ -471,9 +471,10 @@ export function ComparePage(props: {
   );
 
   return (
-    <Panel data-control-results id="compare-workspace">
+    <Panel data-control-results data-visual-identity="aligned-analysis-workbench" id="compare-workspace">
       <PageHeader
         eyebrow="Compare"
+        primary
         summary="Choose the kind of comparison. Then pick the two things you need to reconcile."
         title="What do you want to compare?"
       />
@@ -487,9 +488,9 @@ export function ComparePage(props: {
             Choose a comparison type
           </h2>
           <p className="page-summary compare-decision-boundary">
-            A missing mapping is not proof that no relationship exists, and a
-            mapping shown here is not a compliance conclusion — it is a
-            cited, source-backed relationship for you to evaluate.
+            A missing mapping does not prove there is no relationship. Every
+            mapping shown is published, cited, and yours to evaluate — not a
+            compliance conclusion.
           </p>
           <div aria-label="Comparison modes" className="compare-mode-tabs" role="tablist">
             {comparisonCards.map((card) => (

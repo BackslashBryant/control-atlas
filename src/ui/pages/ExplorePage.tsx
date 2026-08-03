@@ -3,6 +3,7 @@ import { IconSearch, IconSparkles } from "@tabler/icons-react";
 import { useMemo, useRef } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { practitionerGuides } from "../../app/learn-content.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import {
   buildCatalogCoverageList,
@@ -131,6 +132,37 @@ export function ExplorePage(props: {
           ).map((entry) => entry.document),
     [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query],
   );
+  const guideMatches = useMemo(() => {
+    const needle = state.query.trim().toLowerCase();
+    if (!needle || hasFilters) return [];
+    return practitionerGuides
+      .filter((guide) =>
+        [guide.title, guide.summary, guide.whereItSits, guide.whenItMatters]
+          .join(" ")
+          .toLowerCase()
+          .includes(needle),
+      )
+      .slice(0, 5);
+  }, [hasFilters, state.query]);
+  const sourceMatches = useMemo(() => {
+    const needle = state.query.trim().toLowerCase();
+    if (!needle || hasFilters) return [];
+    return (bundle.runtime.dataset.sources || [])
+      .filter((source: any) =>
+        [
+          source.id,
+          source.display_name,
+          source.name,
+          source.publisher,
+          source.agency,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(needle),
+      )
+      .slice(0, 5);
+  }, [bundle.runtime, hasFilters, state.query]);
 
   const catalogCoverage = useMemo(
     () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1),
@@ -190,7 +222,9 @@ export function ExplorePage(props: {
     glossaryMatches.length > 0 ||
     directoryResources.length > 0 ||
     resourceMatches.templates.length > 0 ||
-    resourceMatches.artifacts.length > 0;
+    resourceMatches.artifacts.length > 0 ||
+    guideMatches.length > 0 ||
+    sourceMatches.length > 0;
   const directoryGroups = [
     {
       label: "Tools and resources",
@@ -215,6 +249,8 @@ export function ExplorePage(props: {
     ...directoryGroups.map((group) => group.label),
     ...(resourceMatches.templates.length ? ["Templates"] : []),
     ...(resourceMatches.artifacts.length ? ["Official resources"] : []),
+    ...(guideMatches.length ? ["Guides"] : []),
+    ...(sourceMatches.length ? ["Sources"] : []),
     ...(glossaryMatches.length ? ["Glossary"] : []),
     ...(openAllGroups
       ? Object.keys(groupedDocuments)
@@ -225,8 +261,11 @@ export function ExplorePage(props: {
 
   return (
     <>
-      <Panel className="search-results-panel border-0 !bg-transparent p-0">
-        <header className="page-header">
+      <Panel
+        className="search-results-panel border-0 !bg-transparent p-0"
+        data-visual-identity="classified-research-search"
+      >
+        <header className="page-header" data-route-primary-header="true">
           <div className="page-header-row">
             <div>
               <h1>Library</h1>
@@ -246,16 +285,28 @@ export function ExplorePage(props: {
             </div>
           </div>
         </header>
-        <label className="catalog-search search-results-query">
-          <IconSearch aria-hidden="true" size={18} />
-          <input
-            aria-label="Search query"
-            onChange={(event) => onNavigate("search", { query: event.target.value })}
-            placeholder="Search by identifier, title, or topic"
-            type="search"
-            value={state.query}
-          />
-        </label>
+        <form
+          className="search-results-query-row"
+          onSubmit={(event) => {
+            event.preventDefault();
+            resultsRef.current?.focus();
+          }}
+          role="search"
+        >
+          <label className="catalog-search search-results-query">
+            <IconSearch aria-hidden="true" size={18} />
+            <input
+              aria-label="Search query"
+              onChange={(event) => onNavigate("search", { query: event.target.value })}
+              placeholder="Search by identifier, title, or topic"
+              type="search"
+              value={state.query}
+            />
+          </label>
+          <Button type="submit" variant="secondary">
+            Search
+          </Button>
+        </form>
         <Accordion.Root className="accordion-root" collapsible type="single">
           <DisclosurePanel title="Refine results" value="filters">
             <div className="filter-grid">
@@ -385,8 +436,9 @@ export function ExplorePage(props: {
                           matchReason,
                         }) => {
                         return (
-                          <article
-                            className="result-card"
+                           <article
+                             className="result-card"
+                             data-result-class="published-record"
                             key={document.id}
                             aria-labelledby={`title-${document.id}`}
                             // Only set when the description paragraph is
@@ -555,7 +607,12 @@ export function ExplorePage(props: {
                     <article
                       aria-describedby={`desc-${resource.id}`}
                       aria-labelledby={`title-${resource.id}`}
-                      className="result-card"
+                       className="result-card"
+                       data-result-class={
+                         resource.resourceType === "community_forum"
+                           ? "practitioner-community"
+                           : "ecosystem-resource"
+                       }
                       key={resource.id}
                     >
                       <div className="result-card-header">
@@ -580,6 +637,9 @@ export function ExplorePage(props: {
                       <p className="result-summary" id={`desc-${resource.id}`}>
                         {resource.summary}
                       </p>
+                      <p className="result-match-reason">
+                        Why matched: directory metadata
+                      </p>
                       <p className="result-support">
                         Owner: {resource.publisher} · {resourceAccessLabel(resource)}
                       </p>
@@ -595,7 +655,7 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {resourceMatches.templates.map((template: any) => (
-                    <article className="result-card" key={template.id} aria-labelledby={`title-${template.id}`} aria-describedby={`desc-${template.id}`}>
+                    <article className="result-card" data-result-class="starter-document" key={template.id} aria-labelledby={`title-${template.id}`} aria-describedby={`desc-${template.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Starter template</p>
@@ -613,6 +673,9 @@ export function ExplorePage(props: {
                         <Badge tone="info">{template.classification}</Badge>
                       </div>
                       <p className="result-summary" id={`desc-${template.id}`}>{template.summary}</p>
+                      <p className="result-support">
+                        Owner: Control Atlas · Why matched: document metadata
+                      </p>
                     </article>
                   ))}
                 </div>
@@ -625,7 +688,7 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {resourceMatches.artifacts.map((artifact: any) => (
-                    <article className="result-card" key={artifact.id} aria-labelledby={`title-${artifact.id}`} aria-describedby={`desc-${artifact.id}`}>
+                    <article className="result-card" data-result-class="official-resource" key={artifact.id} aria-labelledby={`title-${artifact.id}`} aria-describedby={`desc-${artifact.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Official resource</p>
@@ -647,8 +710,72 @@ export function ExplorePage(props: {
                         </Badge>
                       </div>
                       <p className="result-summary" id={`desc-${artifact.id}`}>{artifact.summary}</p>
+                      <p className="result-match-reason">
+                        Why matched: official resource metadata
+                      </p>
                       <p className="result-support">
                         {artifact.version ? `Version: ${artifact.version}` : ""}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            ) : null}
+            {guideMatches.length ? (
+              <DisclosurePanel title={`Guides (${guideMatches.length})`} value="Guides">
+                <div className="stack">
+                  {guideMatches.map((guide) => (
+                    <article
+                      aria-labelledby={`title-guide-${guide.id}`}
+                      className="result-card"
+                      data-result-class="practitioner-guide"
+                      key={guide.id}
+                    >
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">Practitioner guide</p>
+                          <CardTitle
+                            id={`title-guide-${guide.id}`}
+                            onOpen={() => onNavigate("patterns", { pattern: guide.id })}
+                          >
+                            {guide.title}
+                          </CardTitle>
+                        </div>
+                        <Badge tone="info">Field manual</Badge>
+                      </div>
+                      <p className="result-summary">{guide.summary}</p>
+                      <p className="result-support">
+                        Owner: Control Atlas · Why matched: guide topic
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            ) : null}
+            {sourceMatches.length ? (
+              <DisclosurePanel title={`Sources (${sourceMatches.length})`} value="Sources">
+                <div className="stack">
+                  {sourceMatches.map((source: any) => (
+                    <article
+                      aria-labelledby={`title-source-${source.id}`}
+                      className="result-card"
+                      data-result-class="provenance-source"
+                      key={source.id}
+                    >
+                      <div className="result-card-header">
+                        <div>
+                          <p className="result-meta">Source register entry</p>
+                          <CardTitle
+                            id={`title-source-${source.id}`}
+                            onOpen={() => onNavigate("sources", { source: source.id })}
+                          >
+                            {source.display_name || source.name || source.id}
+                          </CardTitle>
+                        </div>
+                        <Badge tone="success">Provenance</Badge>
+                      </div>
+                      <p className="result-support">
+                        Publisher: {source.publisher || source.agency || "Source owner"} · Why matched: source identity
                       </p>
                     </article>
                   ))}
@@ -662,7 +789,7 @@ export function ExplorePage(props: {
               >
                 <div className="stack">
                   {glossaryMatches.map((entry) => (
-                    <article className="result-card" key={entry.id} aria-labelledby={`title-${entry.id}`} aria-describedby={`desc-${entry.id}`}>
+                    <article className="result-card" data-result-class="control-atlas-glossary" key={entry.id} aria-labelledby={`title-${entry.id}`} aria-describedby={`desc-${entry.id}`}>
                       <div className="result-card-header">
                         <div>
                           <p className="result-meta">Glossary term</p>

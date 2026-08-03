@@ -3,23 +3,26 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const manifest = JSON.parse(
-  readFileSync("data/ui-copy-speaker-manifest.json", "utf8"),
+  readFileSync("config/experience-guardian/copy-ownership.json", "utf8"),
 );
 
 test("speaker manifest separates product copy from official source text", () => {
   assert.deepEqual(
-    Object.keys(manifest.speakerClasses).sort(),
+    Object.keys(manifest.classes).sort(),
     [
-      "control_atlas_brand",
+      "accessibility-label",
+      "control-atlas-brand",
       "generated-artifact",
+      "legal-license",
       "official-source",
       "product-explanation",
       "product-interface",
       "resource-register",
+      "test-developer",
     ],
   );
   for (const rule of manifest.rules) {
-    assert.ok(manifest.speakerClasses[rule.speaker]);
+    assert.ok(manifest.classes[rule.class]);
     for (const file of rule.files || []) {
       assert.ok(existsSync(file), `Missing copy source ${file}`);
     }
@@ -28,7 +31,7 @@ test("speaker manifest separates product copy from official source text", () => 
     manifest.exemptions.some(
       (entry) =>
         entry.root === "data/generated" &&
-        entry.speaker === "official-source",
+        entry.class === "official-source",
     ),
   );
 });
@@ -80,19 +83,24 @@ test("glossary guidance stays source-labeled and cannot assign outcomes", () => 
   }
 });
 
-test("superseded editorial collection claims stay absent", () => {
+test("resource collections stay editorial and outside the published graph", () => {
   const dataset = JSON.parse(
     readFileSync("data/commons-resource-dataset.json", "utf8"),
   );
-  assert.deepEqual(dataset.collections, []);
+  assert.ok(dataset.collections.length > 0);
+  assert.ok(dataset.collections.every((collection) => collection.whyCurated));
   assert.equal(
     dataset.resources.some((resource) =>
       Object.hasOwn(resource, "editorialRecommendation"),
     ),
     false,
   );
-  assert.doesNotMatch(
-    readFileSync("src/ui/pages/CommonsPage.tsx", "utf8"),
-    /curated|collection/i,
+  assert.equal(
+    dataset.collections.some((collection) =>
+      Object.hasOwn(collection, "relationshipType") ||
+      Object.hasOwn(collection, "source_node_id") ||
+      Object.hasOwn(collection, "target_node_id"),
+    ),
+    false,
   );
 });

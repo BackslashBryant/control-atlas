@@ -79,6 +79,44 @@ export type AtlasDrilldownModel = {
   frameworkGroups: AtlasFrameworkGroup[];
 };
 
+export function buildAtlasBootstrapModel(
+  catalogs: Array<{ id?: string; name?: string }>,
+  spine: {
+    limbs: Array<{ id: string; label: string; blurb: string }>;
+    catalogLimbs: Record<string, string>;
+  },
+): AtlasDrilldownModel {
+  const catalogById = new Map(
+    catalogs
+      .filter((catalog): catalog is { id: string; name?: string } => Boolean(catalog.id))
+      .map((catalog) => [catalog.id, catalog]),
+  );
+  return {
+    baselines: [],
+    rmfSteps: [],
+    frameworkGroups: spine.limbs.map((limb) => ({
+      id: limb.id,
+      label: limb.label,
+      description: limb.blurb,
+      frameworks: Object.entries(spine.catalogLimbs)
+        .filter(([, limbId]) => limbId === limb.id)
+        .map(([catalogId]) => {
+          const catalog = catalogById.get(catalogId);
+          return {
+            id: catalogId,
+            itemId: catalogId,
+            label: catalog?.name || catalogId,
+            description: "",
+            nodeType: "catalog",
+            groupId: limb.id,
+            units: [],
+          };
+        })
+        .sort((left, right) => left.label.localeCompare(right.label)),
+    })),
+  };
+}
+
 function toChoice(node: AtlasDrillNode): AtlasRecordChoice {
   const itemId = node.metadata?.item_id || node.id;
   return {

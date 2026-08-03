@@ -85,6 +85,9 @@ jobs:
       - name: Lint
         if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run lint
+      - name: Experience Guardian deterministic checks
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        run: npm run review:experience:fast
       - name: Type check
         if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
         run: npm run typecheck

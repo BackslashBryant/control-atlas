@@ -19,17 +19,17 @@ test("critical path: landing hero and primary entry cards are visible", async ({
 
   await expect(
     page.getByRole("heading", {
-      name: /Federal cyber guidance is scattered/,
+      name: /Find the source\. See what connects/,
     }),
   ).toBeVisible();
 
   await expect(page.getByRole("search").first()).toBeVisible();
-  await expect(page.getByRole("button", { name: /Follow implementation/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Compare guidance/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Understand a requirement/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Operate or defend/ })).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /Start a document/ }),
+    page.getByRole("button", { name: /Produce a document/ }),
   ).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({

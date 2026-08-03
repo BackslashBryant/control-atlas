@@ -10,7 +10,7 @@ async function open(page, route) {
 
 test("V1 workflow 01 — find a known identifier", async ({ page }) => {
   await open(page, "/#/");
-  await page.getByRole("searchbox", { name: "Search published records" }).fill("AC-2");
+  await page.getByRole("searchbox", { name: "Search Control Atlas" }).fill("AC-2");
   await page.getByRole("search").getByRole("button", { name: "Search" }).click();
   await expect(page).toHaveURL(/#\/search\?q=AC-2/);
   await expect(

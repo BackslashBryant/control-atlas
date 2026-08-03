@@ -36,7 +36,7 @@ test("threat chain: library detail links into compare workbench", async ({
 
   await page
     .getByRole("button", {
-      name: "Trace this technique to D3FEND and NIST controls",
+      name: "Trace published threat and defense connections",
     })
     .click();
   await expect(page).toHaveURL(/workbench=threat-chain/);

@@ -22,22 +22,19 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   }
   await expect(
     page.getByRole("heading", {
-      name: /Federal cyber guidance is scattered/,
+      name: /Find the source\. See what connects/,
     }),
   ).toBeVisible();
   await expect(page.getByRole("search").first()).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
   await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
   // The hero is its own copy, separate from the package.json/meta one-liner.
   await expect(page.locator(".home-product-identity")).toContainText(
-    "trace it to the source",
+    "Govern, secure, assess, operate, and defend",
   );
-  // Home shows one real published chain instead of teaching the data model.
-  await expect(page.locator(".home-chain-subject")).toHaveText(
-    "AC-2 Account Management",
-  );
+  await expect(page.locator(".home-capability-preview")).toHaveCount(3);
   await expect(page.locator(".home-trust-boundary")).toContainText(
-    "Public sources only",
+    "Official public material stays primary",
   );
 
   await gotoApp(page, "/#/search?q=AC-2");

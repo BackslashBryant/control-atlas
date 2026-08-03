@@ -102,17 +102,17 @@ export function CommonsPage(props: {
   const reset = () => update({ ...EMPTY_STATE });
 
   return (
-    <main className="commons-page resources-ecosystem-page">
+    <main className="commons-page resources-ecosystem-page" data-visual-identity="ecosystem-directory">
       <div className="ca-content-container resources-directory">
-        <header className="resources-directory-header">
-          <div>
+        <header className="resources-directory-header" data-route-primary-header="true">
+          <div data-route-primary-copy="true">
             <p className="eyebrow">Resources</p>
             <h1>Find the ecosystem around the work</h1>
             <p>
               Search official portals, tools, services, training, product directories, and practitioner communities. Publications stay in Library.
             </p>
           </div>
-          <div className="resources-directory-actions">
+          <div className="resources-directory-actions" data-route-primary-support="true">
             <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank"><IconPlus aria-hidden="true" size={16} />Submit resource</a>
             <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={16} />Report a problem</a>
           </div>

@@ -989,7 +989,7 @@ export function TemplatesPage(props: {
   }
 
   return (
-    <Panel>
+    <Panel data-visual-identity="staged-production-workflow">
       {!buildOverview ? (
         <BuildLocalNav
           active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
@@ -997,6 +997,7 @@ export function TemplatesPage(props: {
         />
       ) : null}
       <PageHeader
+        primary
         action={
           selectedTemplate ? (
             <Button
