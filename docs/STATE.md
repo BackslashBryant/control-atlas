@@ -73,6 +73,40 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3a (Learn practitioner guides) COMPLETE
+
+`src/app/learn-content.mjs`: new `practitionerGuides` array (12 entries) —
+Starting an authorization, Understanding RMF, Selecting/Implementing
+controls, Preparing evidence, Conducting assessments, Managing findings,
+Continuous monitoring, Inheritance and common controls, Reciprocity, Cloud
+and shared responsibility, STIG lifecycle. Each has `whereItSits`/
+`whenItMatters`/`explanation`/`limitations` (kept conservative — only
+well-established fact about the concept, never authored control rationale
+or evidence prescription per the fix spec's non-goals), one real citation
+(sourceId cross-checked against `data/source-registry.json`, URL taken from
+`src/ui/graph/sourceLinks.ts`'s already-curated human-readable registry, not
+invented), and one working `nextAction` (verified live: "Understanding RMF"
+-> "Browse SP 800-37 in Catalog" actually lands on that catalog with 7
+tasks/8 connected records). `PlaybooksPage.tsx`: practitioner guides are now
+the primary grid; the original 6 product-help articles moved under a
+collapsed "How Control Atlas works" `<details>` section (existing pattern,
+matches Sources page's disclosures).
+
+New test `tests/learn-content.test.mjs` "every practitioner guide answers a
+real work question with a verified citation" — same rigor as the existing
+6-article test, adapted since practitioner-guide citations legitimately span
+DISA/FedRAMP domains the original NIST-only regex didn't allow.
+
+### Verification
+Lint/typecheck/`npm test` unchanged. `tests/learn-content.test.mjs`,
+`browser-contract.test.mjs`, `content-review.test.mjs`, `ui-copy-speakers
+.test.mjs` all green (38/38). Full e2e 142/142 (1 skip) after fixing one
+hardcoded old Learn title in `load-resilience.spec.mjs`. Full a11y 32/32,
+full visual 28/28 after personally inspecting both Learn screenshots.
+Live-verified in Chrome: guide detail page renders Where it sits/When it
+matters/What this means/Limitations/Official references, and the next-action
+button navigates to the correct Catalog entry. `npm run precommit` clean.
+
 ## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2c (Resources relabel) COMPLETE, PHASE 2 DONE
 
 `CommonsResourceCard.tsx`/`CommonsDetailPage.tsx`: "Why it is here"/"Why this

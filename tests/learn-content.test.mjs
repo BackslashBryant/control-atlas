@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { learnArticles } from "../src/app/learn-content.mjs";
+import { learnArticles, practitionerGuides } from "../src/app/learn-content.mjs";
 import sourceRegistry from "../data/source-registry.json" with { type: "json" };
 
 test("every Learn article is a cited Control Atlas explanation with boundaries", () => {
@@ -23,6 +23,45 @@ test("every Learn article is a cited Control Atlas explanation with boundaries",
       );
       assert.ok(source, `${article.id} citation source must exist`);
       assert.equal(citation.url, source.artifact_url);
+    }
+    assert.doesNotMatch(
+      `${article.title} ${article.summary} ${article.explanation} ${article.limitations}`,
+      /\b(new user|novice|beginner|recommended for)\b/i,
+    );
+  }
+});
+
+test("every practitioner guide answers a real work question with a verified citation", () => {
+  assert.equal(practitionerGuides.length, 12);
+  const sourceIds = new Set(sourceRegistry.sources.map((entry) => entry.id));
+  for (const article of practitionerGuides) {
+    assert.equal(article.kind, "practitioner", article.id);
+    assert.ok(article.title, article.id);
+    assert.ok(article.summary, article.id);
+    assert.ok(article.whereItSits, article.id);
+    assert.ok(article.whenItMatters, article.id);
+    assert.ok(article.explanation, article.id);
+    assert.ok(article.limitations, article.id);
+    assert.ok(article.nextAction?.label, article.id);
+    assert.ok(article.nextAction?.view, article.id);
+    assert.ok(article.citations.length > 0, article.id);
+    for (const citation of article.citations) {
+      // Citation URLs point to the human-readable landing page for the
+      // publication, which is not always identical to the machine-readable
+      // artifact_url ingested from the same source — but the sourceId must
+      // be a real, ingested source, and the URL must be a real federal
+      // publication domain, never fabricated.
+      assert.ok(
+        sourceIds.has(citation.sourceId),
+        `${article.id} citation sourceId '${citation.sourceId}' must be a real ingested source`,
+      );
+      assert.match(
+        citation.url,
+        /^https:\/\/(?:csrc\.nist\.gov|www\.nist\.gov|www\.cyber\.mil|www\.fedramp\.gov)\//,
+        `${article.id} citation URL must be an authoritative federal domain`,
+      );
+      assert.equal(citation.role, "official-subject-source", article.id);
+      assert.ok(citation.supports, `${article.id} citation needs a support note`);
     }
     assert.doesNotMatch(
       `${article.title} ${article.summary} ${article.explanation} ${article.limitations}`,
