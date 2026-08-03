@@ -73,6 +73,53 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4c (semantic snapshot test) COMPLETE, PHASE 4 DONE
+
+Added `tests/e2e/semantic-parity.spec.mjs` (4 tests) implementing Workstream 0
+(Deterministic baseline) from the codex fix spec.
+
+While writing test 2 (record-page vs Explore relationship totals), hit a real
+failure: record page reported 82 published links, Explore's List reported 95
+— the exact "82 vs 95" split the audit's C-01 finding calls out. Followed
+DEBUG.md before touching any code:
+
+CAUSE: `src/app/relationship-groups.mjs` `groupRelationships()` correctly
+buckets AC-2's 13 control-enhancement edges (AC-2.1 … AC-2.13) into an
+`enhancements` group; `ObjectDetailPage.tsx:216-219` intentionally excludes
+that group from the Connections rollup because those edges already render in
+their own "Decomposes into" block above (tree-model.md #7 item 6, shipped
+Phase 1c) -> `ExpandableRelationshipGroup`'s rollup sums only the remaining
+82 -> SYMPTOM: Explore's flat, undifferentiated List/Map views have no such
+carve-out and report all 95. Verified with a standalone script decoding the
+real `atlas-neighborhood` shard for AC-2 (same compact-tuple format the app
+decodes) and replaying `groupRelationships` directly: 95 published edges,
+82 after removing the 13-item `enhancements` group, 0 in `baseControl`. This
+is the audit's C-01 pair exactly — a stale pre-Phase-1c Linux screenshot
+(95/8 groups, no Decomposes-into block) next to a post-Phase-1c Windows
+screenshot (82/7 groups, has Decomposes-into) — not a live data-loading bug
+and not a platform difference. Confirms the mid-session reminder ("screenshots
+must always be updated every ship"): the audit compared two different builds,
+not two platforms rendering the same build differently.
+
+Fixed the test's wrong assumption (raw equality) to assert the reconciling
+invariant instead: `recordTotal + decompositionBadgeCount === exploreTotal`.
+Added a 4th test, the actual semantic snapshot the spec's Workstream 0 calls
+for: locks AC-2's path-rail crumbs (5 total, 2 organizing), all 7
+connection-group IDs/labels/counts, the 13-item decomposition block, and the
+Discussion card presence to exact values. Because these are Playwright
+text/DOM assertions, not pixel comparisons, the same command produces the
+same pass/fail on Linux and Windows by construction — no separate
+cross-platform step exists to run.
+
+### Verification
+Lint/typecheck/`npm test` clean (258/30/57/3, unchanged — test-only phase).
+Full e2e 146/146 (1 skip, ~3.8m), full a11y 32/32, full visual 28/28.
+`npx playwright test --config playwright.e2e.config.mjs tests/e2e/semantic-parity.spec.mjs`
+-> 4 passed. `npm run precommit` exit 0.
+
+**Phase 4 (Search relevance, Compare evidence copy, semantic snapshot) is now
+fully done.** Next: Phase 5 (Home + About thesis), then the ship gate.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4b (Compare evidence copy) COMPLETE
 
 `ComparePage.tsx`: each of the 5 comparison-mode chooser cards now states
