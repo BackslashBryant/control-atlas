@@ -56,7 +56,9 @@ test('public product surfaces share one canonical identity and decision boundary
   // package.json/meta/About. The two must never be the same string again.
   assert.match(homePage, /PRODUCT_HERO/);
   assert.doesNotMatch(homePage, /PRODUCT_DEFINITION/);
-  assert.match(homePage, /PRODUCT_DECISION_BOUNDARY/);
+  // The full decision boundary lives on About and the footer only; Home
+  // states a one-line trust fact instead of repeating it.
+  assert.doesNotMatch(homePage, /PRODUCT_DECISION_BOUNDARY/);
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
   const heroMatch = identity.match(/PRODUCT_HERO\s*=\s*\n?\s*"([^"]+)"/);
   assert.ok(heroMatch, 'product-identity.ts must export PRODUCT_HERO');

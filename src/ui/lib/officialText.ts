@@ -1,18 +1,19 @@
 const OFFICIAL_TEXT_PREVIEW_LIMIT = 700;
 
-export function officialTextPreview(text: string): {
+export function officialTextPreview(
+  text: string,
+  limit: number = OFFICIAL_TEXT_PREVIEW_LIMIT,
+): {
   preview: string;
   truncated: boolean;
 } {
-  if (text.length <= OFFICIAL_TEXT_PREVIEW_LIMIT) {
+  if (text.length <= limit) {
     return { preview: text, truncated: false };
   }
-  const candidate = text.slice(0, OFFICIAL_TEXT_PREVIEW_LIMIT + 1);
+  const candidate = text.slice(0, limit + 1);
   const lastBreak = candidate.lastIndexOf(" ");
   const boundary =
-    lastBreak >= Math.floor(OFFICIAL_TEXT_PREVIEW_LIMIT * 0.8)
-      ? lastBreak
-      : OFFICIAL_TEXT_PREVIEW_LIMIT;
+    lastBreak >= Math.floor(limit * 0.8) ? lastBreak : limit;
   return {
     preview: `${text.slice(0, boundary).trimEnd()}...`,
     truncated: true,

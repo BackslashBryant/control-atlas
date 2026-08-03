@@ -10,30 +10,51 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("Start here opens publications without determination questions", async ({
+// 2026-08-03: the owner asked for a genuine two-step guided flow here,
+// superseding the earlier "fixed list, no questions" design. The boundary
+// that design was protecting is unchanged and still enforced below: the flow
+// routes to public material, it never determines applicability.
+test("Start here asks two questions without making a determination", async ({
   page,
 }) => {
   await page.goto("/#/start");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await expect(page.getByRole("heading", { name: "Start here", exact: true })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Find the publication you need" }),
+    page.getByRole("heading", { name: "1. What are you trying to do?" }),
   ).toBeVisible();
+  // Step 2 only appears once a goal is chosen.
   await expect(
-    page.getByText(/Each link opens the records and relationships loaded from that publisher/i),
-  ).toBeVisible();
+    page.getByRole("heading", { name: "2. What context do you already know?" }),
+  ).toHaveCount(0);
   await expect(page.getByLabel("System type")).toHaveCount(0);
   await expect(page.getByLabel("Data sensitivity")).toHaveCount(0);
   await expect(page.getByLabel("Operational environment")).toHaveCount(0);
 });
 
-test("Start here opens a named public source catalog", async ({ page }) => {
+test("Start here produces a plan traceable to real publications", async ({
+  page,
+}) => {
   await page.goto("/#/start");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: /FedRAMP Rev\. 5/ }).click();
+  await page.getByRole("button", { name: "Prepare for assessment" }).click();
+  await expect(
+    page.getByRole("heading", { name: "2. What context do you already know?" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "FedRAMP cloud service" }).click();
+
+  await expect(page.getByRole("button", { name: /^Start with/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Then review/ })).toBeVisible();
+  // Control Atlas does not decide applicability; the plan only routes.
+  await expect(
+    page.getByText(/Control Atlas does not decide\s+what applies to your system/),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: /^Start with/ }).click();
   await expect(page).toHaveURL(/#\/catalog\/fedramp-rev5/);
 });
 
@@ -50,9 +71,22 @@ test("retired questionnaire parameters are removed with visible recovery", async
   await expect(
     page.getByText(/unsupported link settings were removed/i),
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Find the publication you need" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start here", exact: true })).toBeVisible();
+});
+
+test("Start here's chosen goal and context survive reload and back navigation", async ({
+  page,
+}) => {
+  await page.goto("/#/start?goal=assess&context=fedramp");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByRole("button", { name: /^Start with/ })).toContainText(
+    "FedRAMP Rev. 5",
+  );
+  await expect(page.getByRole("button", { name: /^Then review/ })).toContainText(
+    "SP 800-53A Rev. 5",
+  );
 });
 
 test("catalog detail keeps source context and opens a specific record", async ({

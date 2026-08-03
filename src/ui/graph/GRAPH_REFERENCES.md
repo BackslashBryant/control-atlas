@@ -57,7 +57,7 @@ Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK
 
 ## Control Atlas source hierarchy/reference set
 
-The source inventory is one model with three views. Purpose is the canonical hierarchy and defines nine top-level categories, dispositions, and the default-map gating model: Rules, Frameworks, Controls, Baselines, Implementation, Assessment, Mappings, Threat / Defense, and Supporting Sources. The default Atlas interface groups the same records by novice question; the RMF lifecycle is an alternate guided view. Managerial, Operational, and Technical are control tags, not document categories.
+The source inventory is one model with three views. Purpose is the canonical hierarchy and defines nine top-level categories, dispositions, and the default-map gating model: Rules, Frameworks, Controls, Baselines, Implementation, Assessment, Mappings, Threat / Defense, and Supporting Sources. The default Atlas interface groups the same records by the question a reader arrives with; the RMF lifecycle is an alternate guided view. Managerial, Operational, and Technical are control tags, not document categories.
 
 Key source families from that manifest:
 

@@ -86,7 +86,7 @@ for (const viewport of VIEWPORTS) {
 
             if (route === "/#/") {
               const search = page.getByRole("search");
-              const flourish = page.locator(".home-entry .brand-key-word");
+              const flourish = page.locator(".site-header .brand-key-word");
               await expect(search).toBeVisible();
               await expect(flourish).toBeVisible();
               expect(

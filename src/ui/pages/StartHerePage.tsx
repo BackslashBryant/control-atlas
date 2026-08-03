@@ -1,143 +1,168 @@
-import { IconArrowRight, IconSearch, IconSourceCode } from "@tabler/icons-react";
+import { IconArrowRight, IconSearch } from "@tabler/icons-react";
 
-import treeSpine from "../../../data/curated/tree-spine.json";
+import {
+  START_HERE_CONTEXTS,
+  START_HERE_GOALS,
+  labelForContext,
+  labelForGoal,
+  publicationNameFor,
+  startingPlanFor,
+} from "../../app/start-here-guide.mjs";
 import { Panel, Button } from "../components/lsm";
-import { SOURCE_STARTING_POINTS } from "../lib/source-navigator.mjs";
 import { catalogProfileFor } from "../lib/catalogProfiles";
-import { Badge, PageHeader } from "../lib/pagePrimitives";
+import { PageHeader } from "../lib/pagePrimitives";
+import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
-// Navigation, not intake. Each row says where in the tree that kind of question
-// lives and opens that limb — it does not classify the visitor's system, decide
-// what applies to them, or imply an authorization outcome.
-const SITUATIONS: { prompt: string; limbLabel: string; limbId: string }[] = [
-  {
-    prompt: "I need to know who signs, and under what authority.",
-    limbLabel: "Governance",
-    limbId: "atlas:LIMB-GOVERNANCE",
-  },
-  {
-    prompt: "I need the control set my program is measured against.",
-    limbLabel: "Compliance",
-    limbId: "atlas:LIMB-COMPLIANCE",
-  },
-  {
-    prompt: "I need the actual settings for a box, a server, or a service.",
-    limbLabel: "Implementation",
-    limbId: "atlas:LIMB-IMPLEMENTATION",
-  },
-  {
-    prompt: "I need to know how impact levels are decided.",
-    limbLabel: "Risk",
-    limbId: "atlas:LIMB-RISK",
-  },
-  {
-    prompt: "I need to know how the system is supposed to be built.",
-    limbLabel: "Architecture",
-    limbId: "atlas:LIMB-ARCHITECTURE",
-  },
-  {
-    prompt: "I need to know what the adversary does, and what stops it.",
-    limbLabel: "Threats & Defense",
-    limbId: "atlas:LIMB-THREAT",
-  },
-];
+type StartHereState = Extract<ViewState, { view: "start-here" }>;
 
-const LIMB_IDS = new Set(treeSpine.limbs.map((limb) => limb.id));
+function PlanStep(props: {
+  role: string;
+  catalogId: string;
+  bundle: RuntimeBundle | null;
+  onOpen: () => void;
+}) {
+  const { role, catalogId, bundle, onOpen } = props;
+  // Start here renders before the runtime bundle exists, so the static name
+  // table is the source of truth and the bundle only refines it.
+  const catalog = bundle?.runtime
+    ?.getCatalogs?.()
+    ?.find((entry: any) => entry.id === catalogId);
+  const name = catalog?.name || publicationNameFor(catalogId);
+  return (
+    <button className="catalog-index-row" onClick={onOpen} type="button">
+      <span>
+        <small className="start-here-plan-role">{role}</small>
+        <strong>{name}</strong>
+        <small>{catalogProfileFor(catalogId, name).synopsis}</small>
+      </span>
+      <IconArrowRight aria-hidden="true" size={18} />
+    </button>
+  );
+}
 
 export function StartHerePage(props: {
-  state: Extract<ViewState, { view: "start-here" }>;
+  bundle?: RuntimeBundle | null;
+  state: StartHereState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
-  const { onNavigate } = props;
-  const situations = SITUATIONS.filter((situation) =>
-    LIMB_IDS.has(situation.limbId),
-  );
+  const { bundle = null, state, onNavigate } = props;
+  const plan = startingPlanFor(state.goal, state.context);
+
+  const update = (patch: Partial<StartHereState>) =>
+    onNavigate("start-here", { ...state, ...patch });
 
   return (
     <Panel className="max-w-[70rem] mx-auto start-here-panel">
       <PageHeader
-        eyebrow="Start here"
-        summary="Pick the sentence closest to what you need. Each one opens the part of Control Atlas that covers it."
-        title="What are you trying to work out?"
+        summary="Answer two questions to get a starting point in the public material."
+        title="Start here"
       />
 
-      <section aria-labelledby="start-here-situations">
-        <h2 id="start-here-situations">Common starting points</h2>
-        <div className="catalog-index-list">
-          {situations.map((situation) => (
+      <section aria-labelledby="start-here-goal">
+        <h2 id="start-here-goal">1. What are you trying to do?</h2>
+        <div className="start-here-choices">
+          {START_HERE_GOALS.map((goal: { id: string; label: string }) => (
             <button
-              className="catalog-index-row"
-              key={situation.limbId}
-              onClick={() =>
-                // atlasAxis must come too: the limb board only shows a limb's
-                // catalogs on the framework axis, so without it the link lands
-                // back on the full nine-limb board.
-                onNavigate("atlas-map", {
-                  atlasLimb: situation.limbId,
-                  atlasAxis: "framework",
-                })
+              aria-pressed={state.goal === goal.id}
+              className={
+                state.goal === goal.id
+                  ? "start-here-choice is-selected"
+                  : "start-here-choice"
               }
+              key={goal.id}
+              onClick={() => update({ goal: goal.id })}
               type="button"
             >
-              <span>
-                <strong>{situation.prompt}</strong>
-                <span className="start-here-row-badges">
-                  <Badge>{situation.limbLabel}</Badge>
-                  <small>Why: this area covers that question.</small>
-                </span>
-              </span>
-              <IconArrowRight aria-hidden="true" size={18} />
+              {goal.label}
             </button>
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="source-starting-points">
-        <h2 id="source-starting-points">Find the publication you need</h2>
-        <p className="page-summary">
-          Already know the publisher? Each link opens the
-          records and relationships loaded from that publisher.
-        </p>
-        <div className="catalog-index-list">
-          {SOURCE_STARTING_POINTS.map((source) => (
-            <button
-              className="catalog-index-row"
-              key={source.catalogId}
+      {state.goal ? (
+        <section aria-labelledby="start-here-context">
+          <h2 id="start-here-context">2. What context do you already know?</h2>
+          <div className="start-here-choices">
+            {START_HERE_CONTEXTS.map((context: { id: string; label: string }) => (
+              <button
+                aria-pressed={state.context === context.id}
+                className={
+                  state.context === context.id
+                    ? "start-here-choice is-selected"
+                    : "start-here-choice"
+                }
+                key={context.id}
+                onClick={() => update({ context: context.id })}
+                type="button"
+              >
+                {context.label}
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {plan ? (
+        <section aria-labelledby="start-here-plan" className="start-here-plan">
+          <h2 id="start-here-plan">
+            {labelForGoal(plan.goalId)} · {labelForContext(plan.contextId)}
+          </h2>
+          <p className="page-summary">
+            These are places to start reading. Control Atlas does not decide
+            what applies to your system.
+          </p>
+          <div className="catalog-index-list">
+            <PlanStep
+              bundle={bundle}
+              catalogId={plan.startWith.catalogId}
+              onOpen={() =>
+                onNavigate("catalog-detail", {
+                  catalog: plan.startWith.catalogId,
+                })
+              }
+              role="Start with"
+            />
+            <PlanStep
+              bundle={bundle}
+              catalogId={plan.thenReview.catalogId}
+              onOpen={() =>
+                onNavigate("catalog-detail", {
+                  catalog: plan.thenReview.catalogId,
+                })
+              }
+              role="Then review"
+            />
+          </div>
+          <div className="card-actions">
+            <Button
               onClick={() =>
-                onNavigate("catalog-detail", { catalog: source.catalogId })
+                onNavigate(plan.action.view as ViewState["view"])
               }
               type="button"
+              variant="primary"
             >
-              <span>
-                <strong>{source.label}</strong>
-                <span className="start-here-row-badges">
-                  <Badge>{catalogProfileFor(source.catalogId, source.label).publicationKind}</Badge>
-                  <small>{source.inclusionReason}</small>
-                </span>
-              </span>
-              <IconArrowRight aria-hidden="true" size={18} />
-            </button>
-          ))}
-        </div>
-      </section>
+              {plan.action.label}
+            </Button>
+            <Button
+              onClick={() => update({ goal: "", context: "" })}
+              type="button"
+              variant="secondary"
+            >
+              Start over
+            </Button>
+          </div>
+        </section>
+      ) : null}
 
       <div className="card-actions">
         <Button
-          variant="primary"
           onClick={() => onNavigate("search", { query: "" })}
           type="button"
+          variant="secondary"
         >
           <IconSearch aria-hidden="true" size={18} />
-          Search all records
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => onNavigate("sources")}
-          type="button"
-        >
-          <IconSourceCode aria-hidden="true" size={18} />
-          Review the source register
+          Search the Library
         </Button>
       </div>
     </Panel>

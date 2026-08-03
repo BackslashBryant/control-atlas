@@ -1,80 +1,58 @@
 import {
-  IconBooks,
+  IconClipboardList,
   IconCompass,
-  IconExternalLink,
+  IconGitCompare,
   IconMap2,
   IconSearch,
 } from "@tabler/icons-react";
 import { useState } from "react";
 
-import treeSpine from "../../../data/curated/tree-spine.json";
-import {
-  PRODUCT_DECISION_BOUNDARY,
-  PRODUCT_HERO,
-} from "../../shared/product-identity";
-import { BrandFlourish, BrandMark } from "../components/BrandLockup";
+import { PRODUCT_HERO } from "../../shared/product-identity";
 import { Button, Input } from "../components/lsm";
+import { HomeChainPreview } from "../components/HomeChainPreview";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
+// Three distinct jobs. Searching is the field above, so no card repeats it.
 const HOME_ENTRANCES = [
   {
-    label: "Open the Atlas",
+    label: "Follow implementation",
     description:
-      "For when you do not know which publication covers your question. Start from the nine areas and narrow down.",
+      "See how a requirement connects to CCIs, SRGs, STIGs, and technical checks.",
     icon: IconMap2,
     view: "atlas-map",
   },
   {
-    label: "Browse Catalog",
+    label: "Compare guidance",
     description:
-      "For when you already know the publication or the control ID and want to go straight to it.",
-    icon: IconBooks,
-    view: "catalog-detail",
+      "See where two publications align and where no published mapping exists.",
+    icon: IconGitCompare,
+    view: "matrix",
   },
   {
-    label: "Find Tools & Resources",
-    description:
-      "For when the official text is not the thing you need — templates, tooling, training, communities.",
-    icon: IconExternalLink,
-    view: "commons",
+    label: "Start a document",
+    description: "Build a clean draft from the sources and inputs you select.",
+    icon: IconClipboardList,
+    view: "templates",
   },
 ] as const;
-
-const AREA_LABELS = treeSpine.limbs.map((area) => area.label);
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const [searchDraft, setSearchDraft] = useState("");
 
   return (
     <section className="home-entry" aria-labelledby="home-title">
+      <div className="home-hero">
+      <div className="home-hero-lead">
       <header className="home-entry-header">
-        <div className="home-entry-brand">
-          <BrandMark />
-          <h1 id="home-title">Control Atlas</h1>
-        </div>
-        <BrandFlourish />
+        <h1 id="home-title">
+          Federal cyber guidance is scattered. The work still has to get done.
+        </h1>
         <p className="home-product-identity">{PRODUCT_HERO}</p>
       </header>
-
-      <div className="home-primary-actions">
-        <Button
-          className="home-start-here"
-          onClick={() => onNavigate("start-here")}
-          type="button"
-          variant="primary"
-        >
-          <IconCompass aria-hidden="true" size={20} stroke={1.8} />
-          Start Here
-        </Button>
-        <p className="home-start-here-hint">
-          New to Control Atlas? Answer a couple of questions and we point you
-          at the right publications.
-        </p>
-      </div>
 
       <form
         className="home-search"
@@ -89,7 +67,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <Input
           aria-label="Search published records"
           onChange={(event) => setSearchDraft(event.target.value)}
-          placeholder="Or search directly by identifier or topic"
+          placeholder="Search AC-2, FedRAMP, CCIs, STIGs, reciprocity…"
           type="search"
           value={searchDraft}
         />
@@ -98,7 +76,33 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </Button>
       </form>
 
-      <nav aria-label="Other ways to begin" className="home-secondary-grid">
+      <div className="home-primary-actions">
+        <Button
+          className="home-start-here"
+          onClick={() => onNavigate("start-here")}
+          type="button"
+          variant="primary"
+        >
+          <IconCompass aria-hidden="true" size={20} stroke={1.8} />
+          Start here
+        </Button>
+        <button
+          className="home-inline-link"
+          onClick={() => onNavigate("catalog-detail", { catalog: "" })}
+          type="button"
+        >
+          Browse the Library
+        </button>
+        <p className="home-start-here-hint">
+          Not sure where to begin? Start with the work in front of you.
+        </p>
+      </div>
+      </div>
+
+      <HomeChainPreview onNavigate={onNavigate} />
+      </div>
+
+      <nav aria-label="Ways to begin" className="home-secondary-grid">
         {HOME_ENTRANCES.map((entrance) => {
           const Icon = entrance.icon;
           return (
@@ -118,53 +122,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
         })}
       </nav>
 
-      {/* The trunk/limb spine shipped in Part A (data/curated/tree-spine.json).
-          Home shows it so the shape of the whole corpus is visible before the
-          visitor commits to a click. */}
-      <section aria-labelledby="home-spine-title" className="home-spine">
-        <h2 id="home-spine-title">Every Atlas publication, in nine areas</h2>
-        <p>
-          Every publication and record in the Atlas belongs to one of them.
-          Tools, templates, and other outside Resources are organized
-          separately — they support the work without becoming part of this
-          structure.
-        </p>
-        <ul className="home-spine-limbs">
-          {AREA_LABELS.map((label) => (
-            <li key={label}>
-              <button onClick={() => onNavigate("atlas-map")} type="button">
-                {label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section aria-labelledby="home-thesis-title" className="home-thesis">
-        <h2 id="home-thesis-title">Hierarchy and relationships are different things</h2>
-        <p>
-          Every record lives in exactly one place — its publication, inside
-          one of the nine areas above. Everything it connects to beyond that —
-          a baseline that selects it, a mapping to another framework, an
-          assessment procedure — is a relationship, shown separately so it is
-          never mistaken for where the record lives.
-        </p>
-        <p className="home-thesis-example">
-          NIST publishes SP 800-53, which defines control AC-2. AC-2 is
-          selected into the FedRAMP Moderate baseline and assessed through an
-          SP 800-53A procedure — one hierarchy, two relationships.
-        </p>
-        <button
-          className="home-thesis-link"
-          onClick={() => onNavigate("about")}
-          type="button"
-        >
-          Read more about how Control Atlas is organized
-        </button>
-      </section>
-
       <aside className="home-trust-boundary">
-        <p>No account or uploads. {PRODUCT_DECISION_BOUNDARY}</p>
+        <p>
+          Public sources only. No account, no uploads, and no organizational
+          data.
+        </p>
       </aside>
     </section>
   );

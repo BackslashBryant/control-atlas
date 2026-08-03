@@ -46,7 +46,7 @@ test("release evidence: focused Atlas stays bounded on desktop", async ({ page }
   await dismissOnboarding(page);
 
   const map = page.getByRole("region", { name: "Relationship map" });
-  const inspector = page.getByRole("complementary", { name: "Current record overview" });
+  const inspector = page.getByRole("complementary", { name: "Selected item" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
@@ -69,7 +69,7 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
   await dismissOnboarding(page);
 
   const map = page.getByRole("region", { name: "Relationship map" });
-  const inspector = page.getByRole("complementary", { name: "Current record overview" });
+  const inspector = page.getByRole("complementary", { name: "Selected item" });
   await expect(map).toBeVisible();
   await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
@@ -141,7 +141,7 @@ test("release evidence: Atlas fits a 375 by 667 compact viewport", async ({
 
   const map = page.getByRole("region", { name: "Relationship map" });
   const inspector = page.getByRole("complementary", {
-    name: "Current record overview",
+    name: "Selected item",
   });
   const mapBox = await map.boundingBox();
   const inspectorBox = await inspector.boundingBox();
@@ -159,11 +159,12 @@ test("release evidence: reduced motion keeps every Atlas control available", asy
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
+  const hierarchyToggle = page.getByRole("button", { name: "Hierarchy" });
+  await expect(hierarchyToggle).toBeVisible();
   await expect(
     page.getByRole("region", { name: "Relationship map" }),
   ).toBeVisible();
-  const duration = await page.getByRole("tab", { name: "Map" }).evaluate(
+  const duration = await hierarchyToggle.evaluate(
     (element) => globalThis.getComputedStyle(element).transitionDuration,
   );
   expect(["0s", "0.00001s"]).toContain(duration);

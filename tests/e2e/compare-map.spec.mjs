@@ -27,7 +27,7 @@ test("relationship compare exposes map and list toggles with summary", async ({
   });
   await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "List", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Open in Explore" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open in the Atlas" })).toBeVisible();
 });
 
 test("baseline compare map toggle renders compare map panel", async ({ page }) => {

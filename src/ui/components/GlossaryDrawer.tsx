@@ -3,7 +3,8 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { glossaryData } from "../../app/glossary-data.mjs";
-import { helpSurfaces } from "../../app/help-data.mjs";
+import { helpShortcuts, helpSurfaces } from "../../app/help-data.mjs";
+import { learnArticles } from "../../app/learn-content.mjs";
 import { templatesForPatterns } from "../lib/glossarySearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -101,8 +102,8 @@ export function GlossaryDrawer(props: {
               </Dialog.Title>
               <Dialog.Description>
                 {helpTab === "guide"
-                  ? "How to use Control Atlas: pick what you are trying to do, search the records, then compare frameworks or create starter documents."
-                  : "Short definitions, why they matter, and quick links back into the library or pattern pages."}
+                  ? "How to use Control Atlas."
+                  : "Short definitions with links back into the Library and Guides."}
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
@@ -172,16 +173,20 @@ export function GlossaryDrawer(props: {
               id="help-drawer-panel"
               role="tabpanel"
             >
-              <SummaryCard title="Find a publication" tone="trust">
-                <p>Know which publication you need? Open it directly. If not, search all records.</p>
-                <Button variant="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">
-                  Browse publications
-                </Button>
-              </SummaryCard>
               <div className="card-actions">
-                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("search"); }} type="button">Search records</Button>
-                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("matrix"); }} type="button">Open Compare</Button>
+                <Button variant="primary" onClick={() => { setOpen(false); onNavigate("start-here"); }} type="button">Start here</Button>
+                <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("catalog-detail", { catalog: "" }); }} type="button">Open Library</Button>
               </div>
+              <SummaryCard title="Keyboard shortcuts">
+                <dl className="help-shortcut-list">
+                  {helpShortcuts.map((shortcut) => (
+                    <div key={shortcut.keys}>
+                      <dt>{shortcut.keys}</dt>
+                      <dd>{shortcut.action}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </SummaryCard>
               <details className="drawer-all-help">
                 <summary>All help topics ({helpSurfaces.length})</summary>
                 <div className="stack disclosure-content">
@@ -190,6 +195,21 @@ export function GlossaryDrawer(props: {
                       <p>{surface.body}</p>
                       <Button variant="secondary" onClick={() => { setOpen(false); onNavigate(surface.view as ViewState["view"]); }} type="button">
                         {surface.actionLabel}
+                      </Button>
+                    </SummaryCard>
+                  ))}
+                </div>
+              </details>
+              {/* Product-operation articles moved off Guides (which is now
+                  practitioner-only) and live here instead. */}
+              <details className="drawer-all-help">
+                <summary>How Control Atlas works ({learnArticles.length})</summary>
+                <div className="stack disclosure-content">
+                  {learnArticles.map((article: any) => (
+                    <SummaryCard key={article.id} title={article.title}>
+                      <p>{article.summary}</p>
+                      <Button variant="secondary" onClick={() => { setOpen(false); onNavigate("patterns", { pattern: article.id }); }} type="button">
+                        Read it
                       </Button>
                     </SummaryCard>
                   ))}

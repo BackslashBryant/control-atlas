@@ -66,6 +66,13 @@ for (const viewport of VIEWPORTS) {
     await page.locator(".atlas-path-record").first().click();
     await expect(page).toHaveURL(/node=nist-800-53/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/AC-/);
+    // The guided path lands with Hierarchy already open (it sets
+    // relationshipView: "path" when a record is chosen) — the visitor just
+    // navigated structure to get here, so showing it is the point.
+    await expect(page.getByRole("button", { name: "Hierarchy" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
     await expect(
       page.getByRole("navigation", { name: "Where this sits" }).first(),

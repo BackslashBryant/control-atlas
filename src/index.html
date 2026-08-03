@@ -25,6 +25,51 @@
   <div id="root">
     <div data-static-home hidden>
     <a class="skip-link" data-skip-workspace href="#workspace">Skip to workspace</a>
+    <!-- The same persistent header React renders on every route. It paints
+         before React boots so Home never appears without global navigation. -->
+    <header class="site-header">
+      <button aria-label="Control Atlas &mdash; home" class="brand" data-route="#/" type="button">
+        <span aria-hidden="true" class="brand-icon-mark">
+          <svg fill="none" viewBox="0 0 80 80">
+            <path d="M 61.2 61.2 A 30 30 0 1 1 61.2 18.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="7"></path>
+            <path d="M 31 31 L 53 40 L 43 43 L 40 53 Z" fill="currentColor"></path>
+          </svg>
+        </span>
+        <span class="brand-lockup">
+          <span class="brand-name">Control Atlas</span>
+          <span aria-hidden="true" class="brand-kbd">
+            <span class="brand-key">Ctrl</span>
+            <span class="brand-plus">+</span>
+            <span class="brand-key">Alt</span>
+            <span class="brand-plus">+</span>
+            <span class="brand-key brand-key--active">
+              <span class="brand-key-sizer">Crosswalk</span>
+              <span class="brand-key-word word-enter" data-brand-word>Explore</span>
+            </span>
+          </span>
+        </span>
+      </button>
+      <nav aria-label="Primary navigation" class="primary-nav ml-[32px] self-end mb-[-1px]">
+        <button data-route="#/explore" type="button">Atlas</button>
+        <button data-route="#/catalog" type="button">Library</button>
+        <button data-route="#/compare" type="button">Compare</button>
+        <button data-route="#/learn" type="button">Guides</button>
+        <button data-route="#/build" type="button">Documents</button>
+      </nav>
+      <div class="header-actions">
+        <nav aria-label="Utility navigation" class="header-actions-text">
+          <button data-route="#/resources" type="button">Resources</button>
+          <button data-route="#/sources" type="button">Sources</button>
+          <button data-route="#/about" type="button">About</button>
+          <button class="button button--primary" data-route="#/start" type="button">Start here</button>
+        </nav>
+        <button aria-label="Open navigation menu" class="mobile-nav-toggle" data-static-menu-boot type="button">
+          <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
     <main id="workspace" tabindex="-1">
       <section
         aria-busy="false"
@@ -39,27 +84,18 @@
       >
         <section class="home-entry" aria-labelledby="home-title">
           <header class="home-entry-header">
-            <div class="home-entry-brand">
-              <span aria-hidden="true" class="brand-icon-mark">
-                <svg fill="none" viewBox="0 0 80 80">
-                  <path d="M 61.2 61.2 A 30 30 0 1 1 61.2 18.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="7"></path>
-                  <path d="M 31 31 L 53 40 L 43 43 L 40 53 Z" fill="currentColor"></path>
-                </svg>
-              </span>
-              <h1 id="home-title">Control Atlas</h1>
-            </div>
-            <span aria-hidden="true" class="brand-kbd">
-              <span class="brand-key">Ctrl</span>
-              <span class="brand-plus">+</span>
-              <span class="brand-key">Alt</span>
-              <span class="brand-plus">+</span>
-              <span class="brand-key brand-key--active">
-                <span class="brand-key-sizer">Crosswalk</span>
-                <span class="brand-key-word word-enter" data-brand-word>Explore</span>
-              </span>
-            </span>
-            <p class="home-product-identity">Someone handed you a system and told you to get it authorized. The rules are public, but they are spread across a dozen publications that do not reference each other. Control Atlas holds all of them in one place, with every record still attached to the publisher that wrote it.</p>
+            <h1 id="home-title">Federal cyber guidance is scattered. The work still has to get done.</h1>
+            <p class="home-product-identity">Find the requirement, trace it to the source, and follow it into implementation and assessment.</p>
           </header>
+
+          <form class="home-search" data-home-search role="search">
+            <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input aria-label="Search published records" name="query" placeholder="Search AC-2, FedRAMP, CCIs, STIGs, reciprocity&hellip;" type="search">
+            <button class="button button--secondary" type="submit">Search</button>
+          </form>
 
           <div class="home-primary-actions">
             <button class="button button--primary home-start-here" data-route="#/start" type="button">
@@ -67,60 +103,46 @@
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="m14.5 9.5-2 5-5 2 2-5 5-2z"></path>
               </svg>
-              Start Here
+              Start here
             </button>
-            <p class="home-start-here-hint">New to Control Atlas? Answer a couple of questions and we point you at the right publications.</p>
+            <button class="home-inline-link" data-route="#/catalog" type="button">Browse the Library</button>
+            <p class="home-start-here-hint">Not sure where to begin? Start with the work in front of you.</p>
           </div>
 
-          <form class="home-search" data-home-search role="search">
-            <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-            <input aria-label="Search published records" name="query" placeholder="Or search directly by identifier or topic" type="search">
-            <button class="button button--secondary" type="submit">Search</button>
-          </form>
+          <section aria-labelledby="home-chain-title" class="home-chain">
+            <h2 class="home-chain-title" id="home-chain-title">Follow a requirement</h2>
+            <ol class="home-chain-path">
+              <li>SP 800-53</li>
+              <li aria-hidden="true">&rsaquo;</li>
+              <li>Access Control</li>
+              <li aria-hidden="true">&rsaquo;</li>
+              <li class="home-chain-subject">AC-2 Account Management</li>
+            </ol>
+            <ul class="home-chain-branches">
+              <li><span class="home-chain-relation">Selected by</span><span class="home-chain-target">FedRAMP Moderate</span></li>
+              <li><span class="home-chain-relation">Assessed by</span><span class="home-chain-target">SP 800-53A</span></li>
+              <li><span class="home-chain-relation">Connected through</span><span class="home-chain-target">DISA CCIs</span></li>
+            </ul>
+            <button class="home-chain-open" data-route="#/explore?node=nist-800-53%3AAC-2&amp;relationshipView=map" type="button">Trace AC-2</button>
+          </section>
 
-          <nav aria-label="Other ways to begin" class="home-secondary-grid">
+          <nav aria-label="Ways to begin" class="home-secondary-grid">
             <button class="home-secondary-action" data-route="#/explore" type="button">
               <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>
-              <span><strong>Open the Atlas</strong><small>For when you do not know which publication covers your question. Start from the nine areas and narrow down.</small></span>
+              <span><strong>Follow implementation</strong><small>See how a requirement connects to CCIs, SRGs, STIGs, and technical checks.</small></span>
             </button>
-            <button class="home-secondary-action" data-route="#/catalog" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              <span><strong>Browse Catalog</strong><small>For when you already know the publication or the control ID and want to go straight to it.</small></span>
+            <button class="home-secondary-action" data-route="#/compare" type="button">
+              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3"></path><path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"></path><path d="M12 3v18"></path></svg>
+              <span><strong>Compare guidance</strong><small>See where two publications align and where no published mapping exists.</small></span>
             </button>
-            <button class="home-secondary-action" data-route="#/resources" type="button">
-              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
-              <span><strong>Find Tools &amp; Resources</strong><small>For when the official text is not the thing you need &mdash; templates, tooling, training, communities.</small></span>
+            <button class="home-secondary-action" data-route="#/build" type="button">
+              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" width="20"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect height="4" rx="1" width="6" x="9" y="3"></rect></svg>
+              <span><strong>Start a document</strong><small>Build a clean draft from the sources and inputs you select.</small></span>
             </button>
           </nav>
 
-          <section aria-labelledby="home-spine-title" class="home-spine">
-            <h2 id="home-spine-title">Every Atlas publication, in nine areas</h2>
-            <p>Every publication and record in the Atlas belongs to one of them. Tools, templates, and other outside Resources are organized separately &mdash; they support the work without becoming part of this structure.</p>
-            <ul class="home-spine-limbs">
-              <li><button data-route="#/explore" type="button">Governance</button></li>
-              <li><button data-route="#/explore" type="button">Risk</button></li>
-              <li><button data-route="#/explore" type="button">Compliance</button></li>
-              <li><button data-route="#/explore" type="button">Architecture</button></li>
-              <li><button data-route="#/explore" type="button">Implementation</button></li>
-              <li><button data-route="#/explore" type="button">Assessment</button></li>
-              <li><button data-route="#/explore" type="button">Operations</button></li>
-              <li><button data-route="#/explore" type="button">Threats &amp; Defense</button></li>
-              <li><button data-route="#/explore" type="button">Knowledge</button></li>
-            </ul>
-          </section>
-
-          <section aria-labelledby="home-thesis-title" class="home-thesis">
-            <h2 id="home-thesis-title">Hierarchy and relationships are different things</h2>
-            <p>Every record lives in exactly one place &mdash; its publication, inside one of the nine areas above. Everything it connects to beyond that &mdash; a baseline that selects it, a mapping to another framework, an assessment procedure &mdash; is a relationship, shown separately so it is never mistaken for where the record lives.</p>
-            <p class="home-thesis-example">NIST publishes SP 800-53, which defines control AC-2. AC-2 is selected into the FedRAMP Moderate baseline and assessed through an SP 800-53A procedure &mdash; one hierarchy, two relationships.</p>
-            <button class="home-thesis-link" data-route="#/about" type="button">Read more about how Control Atlas is organized</button>
-          </section>
-
           <aside class="home-trust-boundary">
-            <p>No account or uploads. Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.</p>
+            <p>Public sources only. No account, no uploads, and no organizational data.</p>
           </aside>
         </section>
       </section>
@@ -143,7 +165,7 @@
           <div>
             <h1 id="static-route-title" data-static-route-title>Opening workspace</h1>
             <p class="page-summary static-route-summary" data-static-route-summary>
-              Control Atlas is opening this public workspace with publisher and source identity attached. Find, read, compare, and trace published cybersecurity material here. Your team decides what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO. No account or upload is required.
+              Loading published records and their sources.
             </p>
           </div>
         </div>
@@ -155,14 +177,14 @@
       data-static-search
     >
       <header class="page-header">
-        <p class="eyebrow">Search</p>
+        <p class="eyebrow">Library</p>
         <div class="page-header-row">
           <div>
-            <h1 id="static-search-title">Search everything in one place</h1>
-            <p class="page-summary">Search controls, baselines, CCIs, STIGs, terms, starter templates, and official resources.</p>
+            <h1 id="static-search-title">Find a published record</h1>
+            <p class="page-summary">Search controls, baselines, CCIs, STIGs, terms, and starter templates.</p>
           </div>
           <div class="page-header-action">
-            <button class="button button--secondary" data-static-search-start type="button">Start guided path</button>
+            <button class="button button--secondary" data-static-search-start type="button">Start here</button>
           </div>
         </div>
       </header>

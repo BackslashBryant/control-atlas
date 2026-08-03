@@ -35,7 +35,7 @@ test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
   expect(requested).toEqual([]);
   expect(scripts).toHaveLength(1);
 
-  await page.getByRole("button", { name: /Browse Catalog/ }).click();
+  await page.getByRole("button", { name: "Browse the Library" }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/catalog/);
   expect(scripts.length).toBeGreaterThan(1);

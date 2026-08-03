@@ -14,6 +14,11 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
   page,
 }) => {
   test.setTimeout(60000);
+  // 2026-08-03: utility navigation grew to 5 items — see the compactNavigation
+  // breakpoint comment in styles/orbital.css. The bare Playwright default
+  // (1280x720) now renders the (correctly) collapsed mobile-sheet header
+  // instead of the primary nav this test exercises directly.
+  await page.setViewportSize({ width: 1600, height: 900 });
   await page.route("**/library-search.json**", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 3500));
     await route.continue();
@@ -25,11 +30,11 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Learn", exact: true })
+    .getByRole("button", { name: "Guides", exact: true })
     .click();
   await expect(page).toHaveURL(/#\/learn/);
   await expect(
-    page.getByRole("heading", { name: "Guides for the work, not just the interface" }),
+    page.getByRole("heading", { name: "Guides", exact: true }),
   ).toBeVisible();
 });
 
@@ -78,7 +83,7 @@ test("staged library search enables results before detail pages", async ({
 
   await gotoApp(page, "/#/search?q=AC-2");
   await expect(
-    page.getByRole("heading", { name: "Search everything in one place" }),
+    page.getByRole("heading", { name: "Library", exact: true }),
   ).toBeVisible({
     timeout: 15000,
   });
@@ -114,7 +119,7 @@ test("heavy routes explain what they are loading", async ({ page }) => {
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "Control Atlas is opening this public workspace with publisher and source identity attached.",
+      "Loading published records and their sources.",
       { exact: false },
     ),
   ).toBeVisible();

@@ -2,7 +2,6 @@ import { IconArrowRight, IconBook2, IconExternalLink } from "@tabler/icons-react
 
 import {
   learnArticleById,
-  learnArticles,
   practitionerGuides,
 } from "../../app/learn-content.mjs";
 import { Button, Panel } from "../components/lsm";
@@ -18,16 +17,15 @@ export function PlaybooksPage(props: {
   onOpenGlossary: (termId?: string) => void;
   setHelpOpen: (open: boolean) => void;
 }) {
-  const { state, onNavigate } = props;
+  const { state, onNavigate, setHelpOpen } = props;
   const selected = learnArticleById(state.pattern);
 
   if (!selected) {
     return (
       <Panel>
         <PageHeader
-          eyebrow="Learn"
-          summary="Practitioner guides for federal cybersecurity work — starting an authorization, selecting and implementing controls, assessment, findings, monitoring, inheritance, reciprocity, cloud, and STIGs."
-          title="Guides for the work, not just the interface"
+          summary="Practitioner guides for authorization, control selection, assessment, findings, and monitoring."
+          title="Guides"
         />
         <section aria-label="Practitioner guides" className="learn-article-grid">
           {practitionerGuides.map((article) => (
@@ -46,32 +44,13 @@ export function PlaybooksPage(props: {
           ))}
         </section>
 
-        <details className="accordion-item">
-          <summary>How Control Atlas works</summary>
-          <div className="disclosure-content">
-            <p>
-              Explanations for reading source identity, structure, search,
-              mappings, records, and starter documents in this product —
-              interface help, not practitioner guidance.
-            </p>
-            <section aria-label="Product help articles" className="learn-article-grid">
-              {learnArticles.map((article) => (
-                <button
-                  key={article.id}
-                  onClick={() => onNavigate("patterns", { pattern: article.id })}
-                  type="button"
-                >
-                  <IconBook2 aria-hidden="true" size={20} />
-                  <span>
-                    <strong>{article.title}</strong>
-                    <small>{article.summary}</small>
-                  </span>
-                  <IconArrowRight aria-hidden="true" size={18} />
-                </button>
-              ))}
-            </section>
-          </div>
-        </details>
+        {/* Product-operation articles live in Help, not in the guide list.
+            Their routes still resolve, so existing links keep working. */}
+        <div className="card-actions">
+          <Button onClick={() => setHelpOpen(true)} type="button" variant="secondary">
+            How to use Control Atlas
+          </Button>
+        </div>
       </Panel>
     );
   }
@@ -85,7 +64,7 @@ export function PlaybooksPage(props: {
             type="button"
             variant="secondary"
           >
-            Back to Learn
+            Back to Guides
           </Button>
         }
         eyebrow={selected.kind === "practitioner" ? "Practitioner guide" : "Control Atlas explanation"}
