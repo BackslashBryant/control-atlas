@@ -111,7 +111,12 @@ const iAssure = dataset.resources.find((resource) => resource.id === "template-i
 assert.equal(iAssure?.canonicalUrl, "https://i-assure.com/products/rmf-templates/");
 assert.equal(iAssure?.resourceType, "template");
 assert.equal(iAssure?.costType, "free");
+assert.equal(iAssure?.publisherType, "commercial");
+assert.match(iAssure?.officialStatus || "", /commercial publisher/i);
 assert.match(iAssure?.whyIncluded || "", /paid service offerings are outside/i);
+for (const resource of dataset.resources.filter((entry) => entry.resourceLane === "commercial")) {
+  assert.doesNotMatch(resource.officialStatus, /^community$/i, `${resource.id} must label publisher ownership accurately`);
+}
 for (const removedId of [
   "portal-tenable-audits",
   "docs-tenable-compliance",

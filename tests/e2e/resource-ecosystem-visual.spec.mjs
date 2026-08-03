@@ -22,7 +22,7 @@ async function open(page, hash) {
 }
 
 async function shot(page, name) {
-  await page.screenshot({ path: resolve(output, `${name}.png`), fullPage: true });
+  await page.screenshot({ path: resolve(output, `${name}.jpg`), type: "jpeg", quality: 82, fullPage: true });
 }
 
 test("resource ecosystem visual evidence", async ({ page }) => {

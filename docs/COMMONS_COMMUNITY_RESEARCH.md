@@ -18,17 +18,13 @@ The shipped practitioner-community collection includes only channels with a veri
 
 - NIST OSCAL community channels
 - CIS WorkBench
-- ComplianceAsCode
-- MITRE SAF and Heimdall
+- ComplianceAsCode Discussions
 - Wazuh Community
-- Open Policy Agent community
-- OpenSCAP community
-- OpenSSF community
-- CNCF TAG Security
 - r/NISTControls
 - r/CMMC
 - r/FedRAMP
 - r/devsecops
+- r/GRC
 
 Control Atlas does not claim a precise activity level, membership count, endorsement, or response time without durable primary evidence. Each community detail page repeats this warning exactly once:
 
