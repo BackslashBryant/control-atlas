@@ -19,6 +19,7 @@ const GENERATED_DATA_INPUT_PREFIXES = [
 
 const GENERATED_DATA_INPUT_FILES = new Set([
   'tools/build-static-site.mjs',
+  'tools/generated-data-cache-key.mjs',
   'package-lock.json',
   'package.json',
 ]);

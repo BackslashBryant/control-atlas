@@ -45,15 +45,17 @@ Authoritative references:
 4. The change classifier stays fail-closed and adds a generated-data build mode.
    UI, documentation, test, and workflow changes reuse reviewed committed graph
    artifacts; source, map, generator, shared-graph, or dependency changes rebuild
-   them.
+   them. Reuse is allowed only after restoring a complete generated-data cache
+   keyed from tracked source data, maps, the generator dependency closure, and
+   the lockfile. A miss or incomplete cache rebuilds deterministically.
 5. Pull requests and branch pushes run deterministic gates plus small browser and
    accessibility smoke sets. Approved-layout and full rendered review no longer
    run redundantly on every push.
 6. The live gate runs four bounded cases: Home/record, Compare, runtime cache
    version, and exact deployed commit SHA.
-7. A nightly workflow builds once, runs four Playwright functional shards in
-   parallel, runs complete accessibility separately, runs approved-layout and
-   Guardian rendered review once, and merges blob reports.
+7. A nightly workflow builds once, runs four Playwright functional shards,
+   complete accessibility, approved-layout comparison, and Guardian rendered
+   review in parallel, then merges the functional and accessibility blob reports.
 8. Weekly source refresh keeps human-reviewed draft PRs. Because `refresh:data`
    already rebuilt the graph, its repository gate uses `precommit:incremental`
    instead of generating the same graph twice.
@@ -62,6 +64,8 @@ Authoritative references:
 
 - Unknown file operations, missing bases, missing artifacts, unrecognized scope,
   and SHA mismatches fail closed to a full build or a failed deployment.
+- Generated-data cache keys never include their own output. Missing catalog or
+  neighborhood shards are rejected before Vite runs.
 - A suggestion, source relationship, or publisher record is never fetched from a
   runtime database; this ADR does not change the product data model.
 - Caches may accelerate dependency downloads, but deployment consumes an
