@@ -16,12 +16,15 @@ const dataset = JSON.parse(readFileSync(resolve("data/commons-resource-dataset.j
 const resources = dataset.resources;
 
 test("CA-RES-001/002: Resources retains its directory identity and six primary browse categories", () => {
-  assert.equal(resources.length, 96);
+  // 2026-08-02: 96 -> 83. 13 official-lane resources removed — each
+  // duplicated a publication already canonically ingested as its own
+  // Catalog/Source (docs/plans/audit-alignment-2026-08-02.md Phase 2a).
+  assert.equal(resources.length, 83);
   const categories = resources.map(primaryBrowseCategory);
   assert.equal(categories.filter(Boolean).length, resources.length);
   assert.deepEqual(
     primaryBrowseCategoryCounts(resources).map(({ id, count }) => [id, count]),
-    [["rules", 17], ["catalogs", 26], ["templates", 8], ["tools", 33], ["community", 6], ["reference", 6]],
+    [["rules", 13], ["catalogs", 17], ["templates", 8], ["tools", 33], ["community", 6], ["reference", 6]],
   );
   assert.equal(new Set(PRIMARY_BROWSE_CATEGORIES.map(({ id }) => id)).size, 6);
 });

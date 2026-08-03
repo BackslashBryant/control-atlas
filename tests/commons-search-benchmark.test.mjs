@@ -59,18 +59,23 @@ function executeSearch(queryStr) {
 }
 
 // 27 Standardized Benchmark Queries
+// 2026-08-02: SP 800-53, DISA STIG, CMMC 2.0, and FedRAMP baselines are
+// canonical Catalog/Source publications now, not ordinary Resources (see
+// docs/plans/audit-alignment-2026-08-02.md Phase 2a). Rows that used to
+// target those removed Resource IDs now target the remaining Resources a
+// user searching those terms should actually land on.
 const benchmarkQueries = [
   // 1. Exact Match Queries
-  { query: "NIST SP 800-53", expectedId: "official-nist-sp800-53-r5", category: "Exact Match" },
-  { query: "DISA STIG", expectedId: "official-disa-stig-library", category: "Exact Match" },
+  { query: "NIST NVD API", expectedId: "official-nist-nvd-api", category: "Exact Match" },
+  { query: "DISA STIG", expectedId: "tool-disa-stig-viewer", category: "Exact Match" },
   { query: "OSCAL", expectedId: "official-nist-oscal", category: "Exact Match" },
-  { query: "CMMC 2.0", expectedId: "official-cmmc-32cfr-170", category: "Exact Match" },
+  { query: "CMMC 2.0", expectedId: "community-reddit-cmmc", category: "Exact Match" },
   { query: "CISA KEV", expectedId: "official-cisa-kev-catalog", category: "Exact Match" },
   { query: "DoDI 8510.01", expectedId: "official-dodi-8510-01", category: "Exact Match" },
-  { query: "FedRAMP Baselines", expectedId: "official-fedramp-baselines", category: "Exact Match" },
+  { query: "FedRAMP 20x", expectedId: "official-fedramp-20x", category: "Exact Match" },
 
   // 2. Acronym Queries
-  { query: "RMF", expectedId: "official-nist-sp800-37-r2", category: "Acronym" },
+  { query: "RMF", expectedId: "official-dodi-8510-01", category: "Acronym" },
   { query: "ATO", expectedId: "official-dodi-8510-01", category: "Acronym" },
   { query: "SSP", expectedId: "template-fedramp-ssp-rev5", category: "Acronym" },
   { query: "POAM", expectedId: "template-fedramp-poam-rev5", category: "Acronym" },
@@ -80,8 +85,8 @@ const benchmarkQueries = [
   { query: "SBOM", expectedId: "tool-cyclonedx-cli", category: "Acronym" },
 
   // 3. Natural-Language Intent Queries
-  { query: "how to implement AC-2", expectedId: "official-nist-sp800-53-r5", category: "Natural Language Intent" },
-  { query: "CMMC Level 2 scoping guide", expectedId: "official-nist-sp800-171-r2", category: "Natural Language Intent" },
+  { query: "known exploited vulnerabilities catalog", expectedId: "official-cisa-kev-catalog", category: "Natural Language Intent" },
+  { query: "CMMC Level 2 scoping guide", expectedId: "community-reddit-cmmc", category: "Natural Language Intent" },
   { query: "FedRAMP moderate templates", expectedId: "template-fedramp-ssp-rev5", category: "Natural Language Intent" },
   { query: "automated STIG scanner", expectedId: "tool-compliance-as-code", category: "Natural Language Intent" },
   { query: "Windows server hardening", expectedId: "tool-powerstig", category: "Natural Language Intent" },

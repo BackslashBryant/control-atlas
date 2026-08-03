@@ -22,7 +22,7 @@ const ROUTE_COMPOSITIONS = [
   { slug: 'resources', path: '/#/resources?lane=official' },
   {
     slug: 'resource-detail',
-    path: '/#/resources/official-nist-sp800-53-r5',
+    path: '/#/resources/official-nist-oscal',
   },
   { slug: 'learn', path: '/#/learn' },
   { slug: 'documents', path: '/#/build/documents' },

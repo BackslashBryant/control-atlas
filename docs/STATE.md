@@ -73,6 +73,50 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2a (ownership dedup) COMPLETE
+
+`data/commons-resource-dataset.json`: removed 13 official-lane resources that
+duplicated a publication already ingested as its own Catalog (matched against
+`data/generated/catalog-bootstrap.json`'s 21 catalogs by `source_id`): SP
+800-53/53A/53B/37/171(rev2)/172, CSF 2.0, AI RMF, SSDF, DISA STIG library,
+DISA SRG library, CMMC 32 CFR 170, FedRAMP Rev.5 baselines. 96 -> 83
+resources. `data/commons-candidate-manifest.json` reconciled (13 candidates
+moved accepted -> rejected with reason). Two `supersededBy` pointers into the
+removed set nulled (`legacyReason` text still carries the message).
+
+New permanent regression guard in `tests/commons-quality.test.mjs`: for each
+ingested catalog, a distinctive name-token regex asserts no official-lane,
+non-tool/template Resource also carries it. Verified it would have caught all
+13 real duplicates pre-fix and produces zero false positives post-fix
+(checked by diffing against `git show HEAD:...` of the pre-edit dataset).
+
+Updated counts/expectations that depended on the old 96-resource dataset:
+`tests/commons-quality.test.mjs` thresholds, `tests/resources-directory.test.mjs`
+category counts (rules 17->13, catalogs 26->17), `tests/commons-search-benchmark.test.mjs`
+(7 benchmark rows whose expectedId was a removed resource now point at a
+remaining resource that a user searching that term should actually land on
+— verified live against the rebuilt search index, not guessed), plus 4 e2e
+specs that hardcoded `official-nist-sp800-53-r5` as an example resource-detail
+route (swapped to `official-nist-oscal`, still present).
+
+Live-verified via visual diff (all 8 affected screenshots personally
+inspected before re-baselining): Search's Resources group for "AC-2" no
+longer duplicates SP 800-53/53A; AC-2's record page "Related resources"
+module now renders nothing (previously showed SP 800-53 mislabeled
+"Implementation guidance" — with the only matching resource gone, there is
+honestly nothing to show, which is correct, not a regression); Resources
+listing shows an accurate "83" total with no dead space.
+
+NOTED (not done): Resource detail page for a real external resource
+(`official-nist-oscal`) still has the large-empty-workspace layout defect
+and unlabeled "Why this resource is here" text the audit flagged — that's
+Phase 2c (relabel + related-Atlas-records section), not yet started.
+
+### Verification
+Lint/typecheck clean. `npm test` unchanged (258/30/57/3). Full e2e 142/142 (1
+skip), full a11y 32/32, full visual 28/28 after personally-inspected
+re-baselines, `npm run precommit` clean.
+
 ## 2026-08-02 (session 21) - audit alignment, Phase 1 (core ontology) COMPLETE
 
 Executing `docs/plans/audit-alignment-2026-08-02.md`. Phase 1 (Path split,

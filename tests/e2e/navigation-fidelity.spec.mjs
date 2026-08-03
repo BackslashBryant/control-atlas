@@ -34,7 +34,7 @@ test('detail titles resolve official entity names instead of IDs', async ({ page
   await dismissOnboarding(page);
   await expect(page).toHaveTitle(/^AC-2.*Account Management.*Control Atlas$/, { timeout: 20000 });
 
-  await gotoApp(page, '/#/resources/official-nist-sp800-53-r5');
+  await gotoApp(page, '/#/resources/official-nist-oscal');
   await waitForAppReady(page);
   await expect(page).toHaveTitle(/NIST.*Control Atlas$/, { timeout: 20000 });
 });
@@ -50,7 +50,7 @@ test('retired aliases resolve to an honest not-found state instead of a canonica
   await expect(page).toHaveURL(/#\/explore$/);
   await expect(page.locator('.atlas-trunk-banner')).toContainText('Cybersecurity');
 
-  await gotoApp(page, '/#/commons-detail?id=official-nist-sp800-53-r5');
+  await gotoApp(page, '/#/commons-detail?id=official-nist-oscal');
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
 });
 

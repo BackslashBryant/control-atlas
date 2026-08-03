@@ -36,7 +36,7 @@ const ROUTE_GROUPS = [
       "/#/build/documents",
       "/#/build/documents/security_plan_starter",
       "/#/resources",
-      "/#/resources/official-nist-sp800-53-r5",
+      "/#/resources/official-nist-oscal",
     ],
   },
   {

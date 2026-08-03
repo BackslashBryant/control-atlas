@@ -8,6 +8,7 @@ const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const MANIFEST_PATH = resolve("data/commons-candidate-manifest.json");
 const INDEX_PATH = resolve("data/generated/commons-search-index.json");
 const SCHEMA_PATH = resolve("data/schemas/commons-resource-schema.json");
+const CATALOG_BOOTSTRAP_PATH = resolve("data/generated/catalog-bootstrap.json");
 
 console.log("⚡ Running Control Commons Quality & Integrity Benchmark...");
 
@@ -35,7 +36,13 @@ if (!valid) {
 console.log("  ✓ Schema Validation Passed");
 
 // 3. Validate minimum resource count & category targets
-assert.ok(dataset.resources.length >= 96, `Expected >= 96 resources, found ${dataset.resources.length}`);
+// 2026-08-02: 13 official-lane resources removed — each duplicated a
+// publication already canonically ingested as its own Catalog/Source
+// (SP 800-53/53A/53B/37/171/172, CSF 2.0, AI RMF, SSDF, DISA STIG/SRG, CMMC
+// rule, FedRAMP baselines). See docs/plans/audit-alignment-2026-08-02.md
+// Phase 2a — an ingested publication must not also render as an ordinary
+// Resource card.
+assert.ok(dataset.resources.length >= 83, `Expected >= 83 resources, found ${dataset.resources.length}`);
 console.log(`  ✓ Resource Count: ${dataset.resources.length} indexed resources`);
 
 const officialCount = dataset.resources.filter(r => r.resourceLane === "official").length;
@@ -47,12 +54,12 @@ const datasetFeedCount = dataset.resources.filter(r => r.resourceType === "datas
 const commercialCount = dataset.resources.filter(r => r.resourceLane === "commercial" || r.costType === "freemium").length;
 const legacyCount = dataset.resources.filter(r => r.resourceLane === "legacy" || r.maintenanceStatus === "archived").length;
 
-assert.ok(officialCount >= 50, `Expected >= 50 official resources, found ${officialCount}`);
+assert.ok(officialCount >= 37, `Expected >= 37 official resources, found ${officialCount}`);
 assert.ok(openSourceCount >= 32, `Expected >= 32 open-source resources, found ${openSourceCount}`);
 assert.ok(practitionerCount >= 7, `Expected >= 7 practitioner resources, found ${practitionerCount}`);
 assert.ok(templateCount >= 8, `Expected >= 8 template resources, found ${templateCount}`);
 assert.ok(toolCount >= 33, `Expected >= 33 tool resources, found ${toolCount}`);
-assert.ok(datasetFeedCount >= 9, `Expected >= 9 dataset/API resources, found ${datasetFeedCount}`);
+assert.ok(datasetFeedCount >= 7, `Expected >= 7 dataset/API resources, found ${datasetFeedCount}`);
 assert.ok(commercialCount >= 3, `Expected >= 3 commercial resources, found ${commercialCount}`);
 assert.ok(legacyCount >= 4, `Expected >= 4 legacy resources, found ${legacyCount}`);
 
@@ -89,6 +96,51 @@ for (const r of dataset.resources) {
 }
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
 
+// 3b. Ownership: an ingested Catalog publication must not also render as an
+// ordinary Resource (docs/tree-model.md ownership rule; audit-alignment
+// 2026-08-02 Phase 2a / Workstream 4). Each pattern is a distinctive token
+// from a real ingested catalog's own name — specific enough that only a
+// genuine duplicate-identity Resource would carry it too. Tool/template
+// resources are exempt: a STIG viewer or an SSP template legitimately
+// mentions its framework without duplicating the framework's own identity.
+if (existsSync(CATALOG_BOOTSTRAP_PATH)) {
+  const catalogBootstrap = JSON.parse(readFileSync(CATALOG_BOOTSTRAP_PATH, "utf-8"));
+  const CATALOG_IDENTITY_TOKENS = {
+    "cmmc-2": /\bcmmc\b.*\b(2\.0|32 cfr|170)\b/i,
+    "csf-2": /\bcybersecurity framework\b.*\b2\.0\b|\bcsf\b.*\b2\.0\b/i,
+    "disa-srg": /\bdisa\b.*\bsrg\b|\bsecurity requirements guides?\b/i,
+    "disa-stig": /\bdisa\b.*\bstig\b|\bsecurity technical implementation guides?\b/i,
+    "fedramp-rev5": /\bfedramp\b.*\bbaseline/i,
+    "nist-800-171": /\bsp\s?800-171\b(?!a)/i,
+    "nist-800-171-rev2": /\bsp\s?800-171\b.*\brev(?:ision)?\.?\s?2\b/i,
+    "nist-800-172": /\bsp\s?800-172\b/i,
+    "nist-800-37": /\bsp\s?800-37\b/i,
+    "nist-800-53": /\bsp\s?800-53\b(?!a|b)/i,
+    "nist-800-53a": /\bsp\s?800-53a\b/i,
+    "nist-800-53b": /\bsp\s?800-53b\b/i,
+    "nist-ai-rmf": /\bai rmf\b/i,
+    "nist-ssdf": /\bssdf\b/i,
+  };
+  const EXEMPT_RESOURCE_TYPES = new Set(["tool", "template"]);
+
+  for (const catalog of catalogBootstrap.catalog_bootstrap.catalogs) {
+    const pattern = CATALOG_IDENTITY_TOKENS[catalog.id];
+    if (!pattern) continue;
+    const duplicate = dataset.resources.find(
+      (r) =>
+        r.resourceLane === "official" &&
+        !EXEMPT_RESOURCE_TYPES.has(r.resourceType) &&
+        pattern.test(r.name),
+    );
+    assert.equal(
+      duplicate,
+      undefined,
+      `Resource '${duplicate?.id}' duplicates ingested catalog '${catalog.id}' (${catalog.name}, ${catalog.leaf_record_count} records) as an ordinary Resource — this publication already has a canonical Catalog/Source identity and must not have a second one.`,
+    );
+  }
+  console.log("  ✓ Catalog Ownership Audit Passed (no ingested publication duplicated as a Resource)");
+}
+
 // 4. Validate collection integrity
 assert.deepEqual(dataset.collections, [], "Superseded editorial collections stay removed");
 console.log(`  ✓ Collection Integrity Audit Passed (${dataset.collections.length} collections verified)`);
@@ -123,10 +175,13 @@ function testSearch(query, expectedId) {
   assert.ok(found, `Search query '${query}' did not contain expected resource ID '${expectedId}'`);
 }
 
-testSearch("CMMC", "official-cmmc-32cfr-170");
-testSearch("STIG", "official-disa-stig-library");
+// CMMC 2.0, DISA STIG, and FedRAMP baselines are canonical Catalog/Source
+// publications now, not ordinary Resources (see 2026-08-02 note above) —
+// these queries assert against the Resources that legitimately remain.
+testSearch("CMMC", "community-cmmc-practitioner-discord");
+testSearch("STIG", "tool-disa-stig-viewer");
 testSearch("OSCAL", "official-nist-oscal");
-testSearch("FedRAMP", "official-fedramp-baselines");
+testSearch("FedRAMP", "official-fedramp-marketplace");
 testSearch("Trestle", "tool-compliance-trestle");
 testSearch("PowerSTIG", "tool-powerstig");
 
