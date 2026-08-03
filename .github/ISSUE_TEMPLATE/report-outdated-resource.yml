@@ -11,8 +11,8 @@ body:
     id: resource_id
     attributes:
       label: Resource ID or Name
-      description: Enter the Control Commons Resource ID (e.g., `official-nist-sp800-53-r5`) or exact title.
-      placeholder: e.g. official-nist-sp800-53-r5
+      description: Enter the Control Commons Resource ID (e.g., `official-nist-oscal`) or exact title.
+      placeholder: e.g. official-nist-oscal
     validations:
       required: true
   - type: input

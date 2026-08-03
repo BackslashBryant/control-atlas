@@ -43,7 +43,7 @@ const ROUTES = [
   { label: "resources directory", path: "/#/resources?lane=official" },
   {
     label: "resource detail",
-    path: "/#/resources/official-nist-sp800-53-r5",
+    path: "/#/resources/official-nist-oscal",
   },
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },

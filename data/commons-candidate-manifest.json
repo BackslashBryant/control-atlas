@@ -2,39 +2,9 @@
   "manifestVersion": "2.0",
   "generatedOn": "2026-07-23",
   "totalEvaluated": 106,
-  "acceptedCount": 96,
-  "rejectedCount": 10,
+  "acceptedCount": 83,
+  "rejectedCount": 23,
   "acceptedCandidates": [
-    {
-      "candidateName": "NIST SP 800-53 Rev. 5 Security and Privacy Controls",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST SP 800-53A Rev. 5 Assessing Security and Privacy Controls",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST SP 800-53B Control Baselines for Information Systems",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST SP 800-37 Rev. 2 Risk Management Framework for Information Systems",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST SP 800-171 Rev. 2 Protecting CUI in Nonfederal Systems",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
-      "status": "accepted",
-      "lane": "official"
-    },
     {
       "candidateName": "NIST SP 800-171A Assessing Security Requirements for CUI",
       "url": "https://csrc.nist.gov/publications/detail/sp/800-171a/final",
@@ -42,32 +12,8 @@
       "lane": "official"
     },
     {
-      "candidateName": "NIST SP 800-172 Enhanced Security Requirements for CUI",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST Cybersecurity Framework (CSF) 2.0",
-      "url": "https://csrc.nist.gov/publications/detail/sp/1280/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
-      "url": "https://csrc.nist.gov/publications/detail/sp/1270/final",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
       "candidateName": "NIST Privacy Framework 1.0",
       "url": "https://www.nist.gov/privacy-framework",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "NIST SP 800-218 Secure Software Development Framework (SSDF)",
-      "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
       "status": "accepted",
       "lane": "official"
     },
@@ -114,18 +60,6 @@
       "lane": "official"
     },
     {
-      "candidateName": "DISA Security Technical Implementation Guides (STIGs)",
-      "url": "https://public.cyber.mil/stigs/downloads/",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "DISA Security Requirements Guides (SRGs)",
-      "url": "https://public.cyber.mil/stigs/srgs/",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
       "candidateName": "DoD Instruction 8510.01 Risk Management Framework (RMF) for DoD IT",
       "url": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf",
       "status": "accepted",
@@ -150,12 +84,6 @@
       "lane": "official"
     },
     {
-      "candidateName": "CMMC Program 32 CFR Part 170 Final Rule",
-      "url": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
       "candidateName": "DFARS 252.204-7012 Safeguarding Covered Defense Information",
       "url": "https://www.acquisition.gov/dfars/252.204-7012-safeguarding-covered-defense-information-and-cyber-incident-reporting.",
       "status": "accepted",
@@ -164,12 +92,6 @@
     {
       "candidateName": "NARA National CUI Registry",
       "url": "https://www.archives.gov/cui",
-      "status": "accepted",
-      "lane": "official"
-    },
-    {
-      "candidateName": "FedRAMP Security Controls Baselines (Rev. 5)",
-      "url": "https://www.fedramp.gov/baselines/",
       "status": "accepted",
       "lane": "official"
     },
@@ -632,6 +554,71 @@
       "candidateName": "CISA Federal Continuous Monitoring (ISCM) Plan Template",
       "url": "https://www.cisa.gov/resources-tools/resources/iscm-strategy-template",
       "reason": "The prior CISA template URL returns not found and no content-matching replacement was verified."
+    },
+    {
+      "candidateName": "NIST SP 800-53 Rev. 5 Security and Privacy Controls",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-53A Rev. 5 Assessing Security and Privacy Controls",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-53B Control Baselines for Information Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-37 Rev. 2 Risk Management Framework for Information Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-171 Rev. 2 Protecting CUI in Nonfederal Systems",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-172 Enhanced Security Requirements for CUI",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST SP 800-218 Secure Software Development Framework (SSDF)",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "DISA Security Technical Implementation Guides (STIGs)",
+      "url": "https://public.cyber.mil/stigs/downloads/",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "DISA Security Requirements Guides (SRGs)",
+      "url": "https://public.cyber.mil/stigs/srgs/",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "CMMC Program 32 CFR Part 170 Final Rule",
+      "url": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST Cybersecurity Framework (CSF) 2.0",
+      "url": "https://csrc.nist.gov/publications/detail/sp/1280/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "NIST Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+      "url": "https://csrc.nist.gov/publications/detail/sp/1270/final",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+    },
+    {
+      "candidateName": "FedRAMP Security Controls Baselines (Rev. 5)",
+      "url": "https://www.fedramp.gov/baselines/",
+      "reason": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
     }
   ]
 }
