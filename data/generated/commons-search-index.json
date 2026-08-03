@@ -1,6 +1,6 @@
 {
   "builtAt": "2026-08-03T00:00:00.000Z",
-  "totalCount": 113,
+  "totalCount": 114,
   "collections": [
     {
       "id": "dod-cybersecurity-portals",
@@ -1685,6 +1685,55 @@
       ],
       "searchKeywords": [],
       "searchableText": "disa connect disa connect discover disa services, network connections, onboarding paths, support, and training. discover disa services, network connections, onboarding paths, support, and training. it gives practitioners a public service catalog and honest path into account-based disa services. defense information systems agency defense information systems agency service_portal government access_varies free official disa services federal cybersecurity practitioners prepare implement operate disa services dod networks dod-cybersecurity-portals cloud-devsecops-software-factories dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. disa connect disa services network connections"
+    },
+    {
+      "id": "portal-disa-servicenow",
+      "name": "DISA ServiceNow service portal",
+      "shortName": "DISA ServiceNow",
+      "cardPurpose": "Open and track support requests for authorized DISA services from a DoD network.",
+      "slug": "portal-disa-servicenow",
+      "summary": "Open and track support requests for authorized DISA services from a DoD network.",
+      "whyIncluded": "It is DISA's official ticketing destination for practitioners who already use supported DISA services.",
+      "canonicalUrl": "https://services.disa.mil/",
+      "publisher": "Defense Information Systems Agency",
+      "publisherType": "government",
+      "resourceLane": "official",
+      "resourceType": "service_portal",
+      "frameworks": [],
+      "programs": [
+        "DISA services"
+      ],
+      "lifecycleStages": [
+        "operate"
+      ],
+      "audiences": [
+        "authorized DoD practitioners"
+      ],
+      "artifactTypes": [],
+      "technologyScopes": [
+        "DISA services",
+        "DoD networks"
+      ],
+      "accessType": "dod_network_required",
+      "costType": "free",
+      "maintenanceStatus": "active",
+      "openSource": false,
+      "popularitySignals": {},
+      "companionResources": [],
+      "featuredCollections": [
+        "dod-cybersecurity-portals"
+      ],
+      "searchAliases": [
+        "DISA ServiceNow",
+        "DISA Service Now",
+        "DISA ticketing",
+        "NIPRNet support portal"
+      ],
+      "searchKeywords": [
+        "NIPRNet",
+        "support request"
+      ],
+      "searchableText": "disa servicenow service portal disa servicenow open and track support requests for authorized disa services from a dod network. open and track support requests for authorized disa services from a dod network. it is disa's official ticketing destination for practitioners who already use supported disa services. defense information systems agency defense information systems agency service_portal government dod_network_required free official disa services authorized dod practitioners operate disa services dod networks dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. disa servicenow disa service now disa ticketing niprnet support portal niprnet support request"
     },
     {
       "id": "tool-disa-scap-compliance-checker",

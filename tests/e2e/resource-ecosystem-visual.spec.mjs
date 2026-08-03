@@ -49,15 +49,20 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   await expect(page.locator(".resources-result-grid")).toBeVisible();
   await shot(page, "11-filtered-public-templates");
 
+  await open(page, "#/resources?showAll=true");
+  await expect(page.locator(".resources-result-grid")).toBeVisible();
+  await shot(page, "11b-browse-all");
+
   const detailCases = [
     ["official-nist-oscal", "12-detail-public"],
     ["portal-dod-policy-guidance", "13-detail-cac"],
-    ["service-dcsa-nisp-emass", "14-detail-restricted-government"],
-    ["commercial-cis-benchmarks-free", "15-detail-free-commercial-publisher-artifact"],
-    ["portal-cis-workbench", "16-detail-community"],
-    ["ecosystem-common-criteria", "17-detail-parent"],
-    ["directory-common-criteria-products", "18-detail-child"],
-    ["commercial-aws-govcloud-docs", "19-detail-generic-brand-fallback"],
+    ["portal-disa-servicenow", "14-detail-dod-network"],
+    ["service-dcsa-nisp-emass", "15-detail-restricted-government"],
+    ["commercial-cis-benchmarks-free", "16-detail-free-commercial-publisher-artifact"],
+    ["portal-cis-workbench", "17-detail-community"],
+    ["ecosystem-common-criteria", "18-detail-parent"],
+    ["directory-common-criteria-products", "19-detail-child"],
+    ["commercial-aws-govcloud-docs", "20-detail-generic-brand-fallback"],
   ];
   for (const [id, name] of detailCases) {
     await open(page, `#/resources/${id}?from=commons`);
@@ -67,7 +72,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
 
   await open(page, "#/resources?q=zzzzqqqq");
   await expect(page.getByRole("heading", { name: "No resources match that combination." })).toBeVisible();
-  await shot(page, "20-empty-search");
+  await shot(page, "21-empty-search");
 
 });
 
@@ -76,7 +81,7 @@ test("resource dataset error is honest", async ({ page }) => {
   await page.route("**/data/commons-resource-dataset.json.gz*", (route) => route.abort());
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
-  await shot(page, "21-dataset-error");
+  await shot(page, "22-dataset-error");
 });
 
 test("identity marks never depend on remote images", async ({ page }) => {
@@ -91,10 +96,10 @@ test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
   await expect(page.locator(".resource-collection-card")).toHaveCount(8);
-  await shot(page, "22-mobile-landing-320");
+  await shot(page, "23-mobile-landing-320");
 
   await open(page, "#/resources/portal-cis-workbench?from=commons");
   await expect(page.locator(".resource-detail-hero")).toBeVisible();
   await expect(page.getByText("Do not post CUI", { exact: false })).toHaveCount(1);
-  await shot(page, "23-mobile-community-detail-320");
+  await shot(page, "24-mobile-community-detail-320");
 });
