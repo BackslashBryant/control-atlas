@@ -25,7 +25,7 @@ test('source refresh opens one human-reviewed draft PR after the full gate', () 
   assert.match(workflow, /npm run refresh:data/);
   assert.match(workflow, /npm run audit:deps/);
   assert.match(workflow, /npx playwright install chromium/);
-  assert.match(workflow, /npm run precommit/);
+  assert.match(workflow, /npm run precommit:incremental/);
   assert.match(workflow, /npm run sbom:generate/);
   assert.match(workflow, /peter-evans\/create-pull-request@v8/);
   assert.match(workflow, /branch: automation\/source-refresh/);

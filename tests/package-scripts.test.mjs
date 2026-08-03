@@ -6,6 +6,7 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 const ciWorkflow = readFileSync('.github/workflows/ci.yml', 'utf8');
 const pagesWorkflow = readFileSync('.github/workflows/pages.yml', 'utf8');
 const nightlyWorkflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
+const nightlyQualityWorkflow = readFileSync('.github/workflows/nightly-quality.yml', 'utf8');
 const e2eConfig = readFileSync('playwright.e2e.config.mjs', 'utf8');
 const dependencyReviewWorkflowPath = '.github/workflows/dependency-review.yml';
 const dependabotPath = '.github/dependabot.yml';
@@ -73,6 +74,8 @@ test('security workflows exist for CodeQL and secret scanning', () => {
 
 test('release scripts cover staged builds, static checks, and focused browser smoke', () => {
   assert.equal(typeof packageJson.scripts['build:site'], 'string');
+  assert.equal(typeof packageJson.scripts['build:site:incremental'], 'string');
+  assert.equal(typeof packageJson.scripts['verify:site-artifact'], 'string');
   assert.equal(typeof packageJson.scripts.lint, 'string');
   assert.equal(typeof packageJson.scripts.typecheck, 'string');
   assert.equal(typeof packageJson.scripts['license:check'], 'string');
@@ -90,8 +93,9 @@ test('release scripts cover staged builds, static checks, and focused browser sm
   assert.equal(typeof packageJson.scripts['ports:free:win'], 'string');
   assert.equal(typeof packageJson.scripts['test:graph'], 'string');
   assert.match(packageJson.scripts.precommit, /npm run build:site/);
-  assert.match(packageJson.scripts.precommit, /npm run lint/);
-  assert.match(packageJson.scripts.precommit, /npm run typecheck/);
+  assert.match(packageJson.scripts.precommit, /npm run verify:quality/);
+  assert.match(packageJson.scripts['verify:quality'], /npm run lint/);
+  assert.match(packageJson.scripts['verify:quality'], /npm run typecheck/);
   assert.equal(typeof packageJson.scripts['test:a11y:smoke'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e:smoke'], 'string');
   assert.match(packageJson.scripts['test:a11y:smoke'], /a11y: focused Atlas Map/);
@@ -117,6 +121,7 @@ test('precommit reuses one build and runs only the focused browser smoke', () =>
   assert.match(packageJson.scripts['test:e2e'], /build:site.*test:e2e:run/);
   assert.match(e2eConfig, /accessibility\.spec\.mjs/);
   assert.match(e2eConfig, /approved-layout-visual\.spec\.mjs/);
+  assert.match(packageJson.scripts['precommit:incremental'], /build:site:incremental/);
 });
 
 test('translation-first frontend foundation adds React, Vite, and targeted Radix support', () => {
@@ -139,8 +144,8 @@ test('Epic 2 data refresh includes official DISA STIG and SRG ingestion', () => 
 
 test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(ciWorkflow, /npm run build:site/);
-  assert.match(ciWorkflow, /npm run lint/);
-  assert.match(ciWorkflow, /npm run typecheck/);
+  assert.match(ciWorkflow, /npm run build:site:incremental/);
+  assert.match(ciWorkflow, /npm run verify:quality/);
   assert.match(ciWorkflow, /npm run test:a11y:smoke/);
   assert.match(ciWorkflow, /npm run test:e2e:smoke/);
   assert.doesNotMatch(ciWorkflow, /npm run sbom:generate/);
@@ -148,10 +153,13 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.conclusion == 'success'/);
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.event == 'push'/);
   assert.match(pagesWorkflow, /github\.event\.workflow_run\.head_branch == 'main'/);
-  assert.match(pagesWorkflow, /ref: \$\{\{ github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/);
+  assert.match(
+    pagesWorkflow,
+    /EXPECTED_SHA: \$\{\{ github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/,
+  );
   assert.doesNotMatch(pagesWorkflow, /npm run test:a11y/);
   assert.doesNotMatch(pagesWorkflow, /npm run test:e2e/);
-  assert.match(nightlyWorkflow, /npm run precommit/);
+  assert.match(nightlyWorkflow, /npm run precommit:incremental/);
 });
 
 test('CI reuses prior exact-SHA verification on main and otherwise fails closed', () => {
@@ -174,20 +182,46 @@ test('evidence-only changes take a narrow fail-closed check and publish their ve
   assert.match(ciWorkflow, /scope\.outputs\.scope == 'evidence-only'/);
   assert.match(ciWorkflow, /git diff --check/);
   assert.match(ciWorkflow, /name: ci-change-scope/);
+  assert.match(ciWorkflow, /build_mode/);
 });
 
-test('Pages deploys runtime changes only and still rebuilds the exact checked SHA', () => {
+test('Pages deploys the exact checked artifact without a routine rebuild', () => {
   const liveSmoke = readFileSync('.github/workflows/pages-live-smoke.yml', 'utf8');
 
   assert.match(pagesWorkflow, /actions\/download-artifact@v8/);
   assert.match(pagesWorkflow, /name: ci-change-scope/);
   assert.match(pagesWorkflow, /needs\.scope\.outputs\.deploy == 'true'/);
-  assert.match(pagesWorkflow, /npm ci/);
-  assert.match(pagesWorkflow, /npm run build:site/);
-  assert.match(pagesWorkflow, /npm run verify:public/);
+  assert.match(pagesWorkflow, /name: site-build/);
+  assert.match(pagesWorkflow, /github\.event\.workflow_run\.id/);
+  assert.match(pagesWorkflow, /actual_sha=.*release\.json/);
+  assert.match(pagesWorkflow, /if: \$\{\{ github\.event_name == 'workflow_dispatch' \}\}[\s\S]*?npm ci/);
+  assert.doesNotMatch(pagesWorkflow, /name: Public verification/);
   assert.match(liveSmoke, /name: Check whether Pages actually deployed/);
   assert.match(liveSmoke, /select\(\.name == "deploy"\)/);
   assert.match(liveSmoke, /needs\.gate\.outputs\.run == 'true'/);
+  assert.match(liveSmoke, /npm run test:e2e:live/);
+  assert.match(liveSmoke, /EXPECTED_DEPLOY_SHA/);
+  assert.doesNotMatch(liveSmoke, /npx playwright install chromium/);
+});
+
+test('CI builds once, reuses the exact-SHA artifact on main, and omits per-push visual replay', () => {
+  assert.match(ciWorkflow, /name: Build site once for this commit/);
+  assert.match(ciWorkflow, /name: Download reusable exact-SHA site artifact/);
+  assert.match(ciWorkflow, /name: Verify exact-SHA site artifact/);
+  assert.match(ciWorkflow, /name: site-build/);
+  assert.doesNotMatch(ciWorkflow, /approved-layout-visuals/);
+});
+
+test('nightly full verification builds once and shards browser coverage', () => {
+  assert.match(nightlyQualityWorkflow, /cron: '37 6 \* \* \*'/);
+  assert.equal((nightlyQualityWorkflow.match(/Build once from reviewed generated data/g) ?? []).length, 1);
+  assert.match(nightlyQualityWorkflow, /shard: \[1, 2, 3, 4\]/);
+  assert.match(nightlyQualityWorkflow, /--shard=\$\{\{ matrix\.shard \}\}\/4/);
+  assert.match(nightlyQualityWorkflow, /PLAYWRIGHT_FULLY_PARALLEL: '1'/);
+  assert.match(nightlyQualityWorkflow, /playwright merge-reports/);
+  assert.match(nightlyQualityWorkflow, /playwright\.guardian\.config\.mjs/);
+  assert.match(nightlyQualityWorkflow, /npm run test:visual/);
+  assert.doesNotMatch(nightlyQualityWorkflow, /playwright install chromium/);
 });
 
 test('npm-backed workflows use the official setup-node dependency cache', () => {
@@ -197,6 +231,7 @@ test('npm-backed workflows use the official setup-node dependency cache', () => 
     '.github/workflows/deployed-lighthouse.yml',
     '.github/workflows/lighthouse-ab.yml',
     '.github/workflows/nightly-refresh.yml',
+    '.github/workflows/nightly-quality.yml',
     '.github/workflows/oscal-validation.yml',
     '.github/workflows/pages-live-smoke.yml',
     '.github/workflows/pages.yml',

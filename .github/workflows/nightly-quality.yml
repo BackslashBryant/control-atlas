@@ -1,0 +1,145 @@
+name: Nightly Full Verification
+
+on:
+  schedule:
+    - cron: '37 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: nightly-full-verification
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - name: Dependency audit
+        run: npm run audit:deps
+      - name: Build once from reviewed generated data
+        env:
+          CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
+        run: npm run build:site:incremental
+      - name: Static, data, contract, and Guardian gates
+        run: npm run verify:quality
+      - name: Verify exact-SHA site artifact
+        run: npm run verify:site-artifact -- --sha "${GITHUB_SHA}"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nightly-site-build
+          path: dist/site
+          if-no-files-found: error
+          retention-days: 2
+
+  e2e:
+    needs: prepare
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - name: Run functional shard ${{ matrix.shard }}/4
+        env:
+          PLAYWRIGHT_FULLY_PARALLEL: '1'
+        run: npx playwright test --config playwright.e2e.config.mjs --shard=${{ matrix.shard }}/4 --reporter=blob
+      - name: Upload shard report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-blob-e2e-${{ matrix.shard }}
+          path: blob-report
+          if-no-files-found: error
+          retention-days: 2
+
+  accessibility:
+    needs: prepare
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - name: Run complete accessibility suite
+        run: npx playwright test --config playwright.a11y.config.mjs --reporter=blob
+      - name: Upload accessibility report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-blob-accessibility
+          path: blob-report
+          if-no-files-found: error
+          retention-days: 2
+
+  rendered-review:
+    needs: prepare
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - name: Approved-layout visual comparison
+        run: npm run test:visual
+      - name: Experience Guardian rendered review
+        run: playwright test --config playwright.guardian.config.mjs
+      - name: Upload rendered evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-rendered-evidence
+          path: |
+            artifacts/experience-guardian
+            test-results
+          if-no-files-found: warn
+          retention-days: 14
+
+  report:
+    if: ${{ !cancelled() }}
+    needs: [e2e, accessibility, rendered-review]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: nightly-blob-*
+          path: all-blob-reports
+          merge-multiple: true
+      - name: Merge Playwright shard reports
+        run: npx playwright merge-reports --reporter=html all-blob-reports
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nightly-playwright-report
+          path: playwright-report
+          if-no-files-found: error
+          retention-days: 14

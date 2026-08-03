@@ -19,6 +19,7 @@ const COPY_PATHS = [
   ["maps", "maps"],
 ];
 const VITE_BUILD_COMMAND = "vite build";
+const reuseGenerated = process.argv.includes("--reuse-generated");
 
 function copyIntoDist(sourceRelativePath, destRelativePath) {
   const sourcePath = join(ROOT, sourceRelativePath);
@@ -30,18 +31,22 @@ function copyIntoDist(sourceRelativePath, destRelativePath) {
   cpSync(sourcePath, destPath, { recursive: true });
 }
 
-// Run deterministic artifact builders in-process. On Windows, repeatedly
-// nesting Node through execFileSync can terminate before diagnostics are
-// emitted; direct module execution preserves the same package-script owners
-// and surfaces the actual exception.
-const { buildFrameworkData } = await import(
-  pathToFileURL(join(ROOT, "scripts/build-framework-data.mjs")).href
-);
-const graphResult = buildFrameworkData();
-console.log(
-  `Built federal graph: ${graphResult.sources} sources, ${graphResult.nodes} nodes, ${graphResult.edges} edges, ${graphResult.evidence} evidence records, ${graphResult.findings} findings`,
-);
-await import(pathToFileURL(join(ROOT, "scripts/build-commons-index.mjs")).href);
+if (reuseGenerated) {
+  console.log("Reusing committed generated data (input scope excludes graph builders and source data).");
+} else {
+  // Run deterministic artifact builders in-process. On Windows, repeatedly
+  // nesting Node through execFileSync can terminate before diagnostics are
+  // emitted; direct module execution preserves the same package-script owners
+  // and surfaces the actual exception.
+  const { buildFrameworkData } = await import(
+    pathToFileURL(join(ROOT, "scripts/build-framework-data.mjs")).href
+  );
+  const graphResult = buildFrameworkData();
+  console.log(
+    `Built federal graph: ${graphResult.sources} sources, ${graphResult.nodes} nodes, ${graphResult.edges} edges, ${graphResult.evidence} evidence records, ${graphResult.findings} findings`,
+  );
+  await import(pathToFileURL(join(ROOT, "scripts/build-commons-index.mjs")).href);
+}
 
 for (const sourceRelativePath of REQUIRED_GENERATED_FILES) {
   if (!existsSync(join(ROOT, sourceRelativePath))) {
@@ -56,6 +61,16 @@ execFileSync("npx", VITE_BUILD_COMMAND.split(" "), {
   stdio: "inherit",
   shell: process.platform === "win32",
 });
+
+const commitSha =
+  process.env.CONTROL_ATLAS_COMMIT_SHA ||
+  process.env.GITHUB_SHA ||
+  execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+writeFileSync(
+  join(DIST, "release.json"),
+  `${JSON.stringify({ schema_version: "1.0", commit_sha: commitSha })}\n`,
+  "utf8",
+);
 
 for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
   copyIntoDist(sourceRelativePath, destRelativePath);
