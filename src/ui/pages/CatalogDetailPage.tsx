@@ -399,19 +399,24 @@ function CatalogInventory(props: {
   const eligible = rows.filter(
     (row) =>
       (!query ||
-        [row.entry.id, row.entry.name, row.publisher, row.profile.recordLabel]
+        [row.entry.id, row.entry.name, row.publisher, row.profile.recordLabel, row.profile.publicationKind]
           .some((value) => String(value).toLowerCase().includes(query))) &&
       (!state.type || row.profile.recordLabel === state.type) &&
+      (!state.area || row.profile.area === state.area) &&
       (!state.publisher || row.publisher === state.publisher) &&
       (!state.lifecycle || row.lifecycle === state.lifecycle),
   );
+  // W10: publication kind is the primary grouping — a newcomer can tell
+  // FedRAMP (an authorization program) from a STIG (an implementation
+  // standard) from this heading alone. Record type moves to its own
+  // secondary filter below, not the section headers.
   const grouped = [
-    ...new Set(eligible.map((row) => row.profile.recordLabel)),
+    ...new Set(eligible.map((row) => row.profile.publicationKind)),
   ]
     .sort()
     .map((label) => ({
       label,
-      rows: eligible.filter((row) => row.profile.recordLabel === label),
+      rows: eligible.filter((row) => row.profile.publicationKind === label),
     }));
   const update = (patch: Partial<CatalogState>) =>
     onNavigate("catalog-detail", { ...state, ...patch });
@@ -420,10 +425,12 @@ function CatalogInventory(props: {
     <section className="panel catalog-index">
       <header className="page-header">
         <p className="eyebrow">Catalog</p>
-        <h1>Published record inventory</h1>
+        <h1>Published structures</h1>
         <p className="page-summary">
-          Browse loaded catalogs, frameworks, program structures, baseline
-          publications, implementation guides, and knowledge bases by record type.
+          Control catalogs, risk and outcome frameworks, authorization and
+          certification programs, implementation standards, and threat and
+          defensive knowledge bases — grouped by what kind of publication
+          each one is.
         </p>
       </header>
       <WorkbenchControlSurface
@@ -443,10 +450,12 @@ function CatalogInventory(props: {
           />
         </label>
         <InventorySelect
-          label="Record type"
-          onChange={(type) => update({ type })}
-          options={[...new Set(rows.map((row) => row.profile.recordLabel))].sort()}
-          value={state.type}
+          label="Area"
+          onChange={(area) => update({ area })}
+          options={[...new Set(rows.map((row) => row.profile.area))]
+            .filter(Boolean)
+            .sort()}
+          value={state.area}
         />
         <InventorySelect
           label="Publisher"
@@ -463,6 +472,12 @@ function CatalogInventory(props: {
             .filter(Boolean)
             .sort()}
           value={state.lifecycle}
+        />
+        <InventorySelect
+          label="Record type (advanced)"
+          onChange={(type) => update({ type })}
+          options={[...new Set(rows.map((row) => row.profile.recordLabel))].sort()}
+          value={state.type}
         />
         </div>
         <p className="catalog-inventory-total" aria-live="polite">
@@ -489,15 +504,15 @@ function CatalogInventory(props: {
                 <span>
                   <strong>{entry.name}</strong>
                   <small>{profile.synopsis}</small>
-                  {[publisher, lifecycle].filter(Boolean).length ? (
+                  {[publisher, profile.area, lifecycle].filter(Boolean).length ? (
                     <small className="catalog-index-row-meta">
-                      {[publisher, lifecycle].filter(Boolean).join(" · ")}
+                      {[publisher, profile.area, lifecycle].filter(Boolean).join(" · ")}
                     </small>
                   ) : null}
                 </span>
                 <span>
                   {(entry.leaf_record_count ?? entry.node_count).toLocaleString()}{" "}
-                  records
+                  {profile.recordLabel}
                 </span>
               </button>
             ))}
@@ -550,6 +565,7 @@ function emptyCatalogState(): Omit<CatalogState, "view"> {
     family: "",
     browseAll: "",
     type: "",
+    area: "",
     publisher: "",
     lifecycle: "",
     page: "",

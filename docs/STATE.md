@@ -73,6 +73,39 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3c (Catalog publication kind) COMPLETE
+
+`src/ui/lib/catalogProfiles.ts`: new `publicationKind` (Control catalog /
+Control-selection method / Risk framework / Outcome framework /
+Authorization program / Certification program / Implementation standard /
+Threat knowledge base / Defensive knowledge base / Policy and regulation —
+one addition beyond the fix spec's 9 examples, for CUI policy, which fit
+none of them) and `area` (resolved from `data/curated/tree-spine.json`'s
+`catalogLimbs` + `syntheticCatalogs`, covering all 22 catalogs) mapped by
+hand per catalog. `CatalogDetailPage.tsx`'s `CatalogInventory` now groups
+primarily by publication kind (was the raw record-type enum — "STIG rules",
+"identifiers" as section headers); added Area filter; "Record type" filter
+kept but relabeled "(advanced)" and moved last, per the spec's "keep as
+secondary" instruction, instead of removed.
+
+New durable view field `area` on the `catalog-detail` route required 3
+`viewState.ts` touch points (type union, parse, serialize) plus the
+`CATALOG_PARAMS` allowlist in `routeIdentity.ts` — missed on the first pass,
+caught by `tests/graph/routeIdentity.test.ts`'s "every durable view field
+survives canonicalization" test (`area was stripped from /catalog`), the
+same silent-strip failure class as the historical `atlasLimb` bug. Added a
+sample case for `area` to that test so a future regression is caught the
+same way.
+
+### Verification
+Lint/typecheck clean. `npm test` unchanged (258/30/57/3, including the fixed
+routeIdentity test). Full e2e 142/142 (1 skip), full a11y 32/32, full visual
+28/28 after inspecting both Catalog screenshots (10 correctly-labeled
+publication-kind groups, e.g. SP 800-53 under "Control catalog", SP 800-53B
+under "Control-selection method", FedRAMP under "Authorization program",
+CMMC under "Certification program", DISA STIG/SRG/CCI under "Implementation
+standard"). Live-verified in Chrome. `npm run precommit` clean.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3b (Documents recategorization) COMPLETE
 
 `src/ui/lib/catalogGroups.mjs`'s `TEMPLATE_CATEGORIES`: Authorization/
