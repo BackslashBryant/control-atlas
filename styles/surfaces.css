@@ -1023,6 +1023,16 @@ li {
   font-weight: 700;
 }
 
+.intent-card-evidence-basis {
+  color: var(--ca-text-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+.compare-decision-boundary {
+  color: var(--ca-text-muted);
+}
+
 .load-progress {
   width: 100%;
   max-width: 16rem;

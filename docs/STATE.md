@@ -73,6 +73,31 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4b (Compare evidence copy) COMPLETE
+
+`ComparePage.tsx`: each of the 5 comparison-mode chooser cards now states
+its evidence basis (e.g. STIG/SRG-to-controls: "a CCI-mediated path —
+STIG/SRG to CCI to NIST control"; baseline-to-baseline: "shared baseline
+membership in each baseline's own published control list"). Added a
+one-time decision-boundary statement above the chooser: a missing mapping
+is not proof no relationship exists, and a mapping shown is not a
+compliance conclusion — complements (does not duplicate) the existing
+narrower ATT&CK-ICS-specific caveat deeper in the threat-chain flow.
+
+SCOPE DECISION: did not build a "conflicting-source-disagreement" state.
+The audit listed it under "missing evidence" (screenshot coverage the audit
+pack didn't capture), not a proven defect — there's no confirmed case in
+the current data where two mapping sources assert different relationships
+for the same pair. Building detection + UI for an unconfirmed condition
+would be exactly the speculative-capability doctrine warns against;
+revisit if a real conflicting-source case is found.
+
+### Verification
+Lint/typecheck/`npm test` unchanged. Full e2e 142/142 (1 skip), full a11y
+32/32, full visual 28/28 after inspecting the Compare screenshot (all 5
+cards show evidence text cleanly, no overlap). Live-verified in Chrome.
+`npm run precommit` clean.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4a (Search relevance) COMPLETE
 
 `ExplorePage.tsx`: added a real editable search input at the top of the

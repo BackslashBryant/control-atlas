@@ -370,36 +370,42 @@ export function ComparePage(props: {
     id: (typeof COMPARE_MODES)[number]["id"];
     title: string;
     body: string;
+    evidenceBasis: string;
     crosswalk: CompareCrosswalk;
   }> = [
     {
       id: "frameworks",
       title: "Catalog to catalog",
       body: "Compare two published structures using one explicitly selected mapping source.",
+      evidenceBasis: "Evidence: an explicit published mapping source between the two catalogs.",
       crosswalk: "relationships",
     },
     {
       id: "stig-chain",
       title: "STIG/SRG to controls",
       body: "Trace Security Technical Implementation Guide (STIG) and Security Requirements Guide (SRG) items through CCI links to related NIST controls.",
+      evidenceBasis: "Evidence: a CCI-mediated path — STIG/SRG to CCI to NIST control.",
       crosswalk: "stig-chain",
     },
     {
       id: "threat-chain",
       title: "Threat to controls",
       body: "Trace an ATT&CK technique through D3FEND countermeasures to related NIST controls.",
+      evidenceBasis: "Evidence: a published ATT&CK to D3FEND to NIST control source chain.",
       crosswalk: "threat-chain",
     },
     {
       id: "baseline-compare",
       title: "Baseline to baseline",
       body: "See what two public baselines share and what is only present in one of them.",
+      evidenceBasis: "Evidence: shared baseline membership in each baseline's own published control list.",
       crosswalk: "baseline-compare",
     },
     {
       id: "item-mapping",
       title: "Find what maps to this item",
       body: "Open the framework comparison view with one known item in mind instead of blank filters.",
+      evidenceBasis: "Evidence: an explicit published mapping source between the two catalogs.",
       crosswalk: "relationships",
     },
   ];
@@ -480,6 +486,11 @@ export function ComparePage(props: {
           <h2 className="visually-hidden" id="compare-kind-heading">
             Choose a comparison type
           </h2>
+          <p className="page-summary compare-decision-boundary">
+            A missing mapping is not proof that no relationship exists, and a
+            mapping shown here is not a compliance conclusion — it is a
+            cited, source-backed relationship for you to evaluate.
+          </p>
           <div aria-label="Comparison modes" className="compare-mode-tabs" role="tablist">
             {comparisonCards.map((card) => (
               <button
@@ -494,6 +505,7 @@ export function ComparePage(props: {
               >
                 <span className="intent-card-title">{card.title}</span>
                 <span className="intent-card-body">{card.body}</span>
+                <span className="intent-card-evidence-basis">{card.evidenceBasis}</span>
                 <span className="intent-card-action-hint">Choose this comparison</span>
               </button>
             ))}
