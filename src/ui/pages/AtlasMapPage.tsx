@@ -5,7 +5,6 @@ import {
   useRef,
   useState,
   type FormEvent,
-  type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import {
   IconBinaryTree,
@@ -27,6 +26,7 @@ import {
   atlasFilterOptions,
   buildAtlasGroups,
   buildAtlasRows,
+  buildStructuralChildren,
   type AtlasFilterState,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
@@ -67,56 +67,25 @@ const AREA_DESTINATIONS = treeSpine.areaDestinations as Record<
 >;
 
 function atlasView(value: string, focused: boolean): AtlasView {
-  // "purpose"/"rmf" are legacy view ids: both are the Path view under a
+  // "purpose"/"rmf" are legacy view ids: both opened the hierarchy under a
   // different lens, so they resolve to "path" and keep old links working.
   if (value === "purpose" || value === "rmf") {
     return "path";
   }
   // Map draws the connections OF a selected record, so with no record it can
   // only ever be a dead end. A bookmarked or shared `?relationshipView=map`
-  // link with no record resolves to Path instead of stranding the visitor.
-  // List is unaffected: it renders the source inventory, which does not
-  // depend on a selected record.
+  // link with no record resolves to the board instead of stranding the
+  // visitor. List is unaffected: it renders the source inventory, which does
+  // not depend on a selected record.
   if (value === "map" && !focused) {
     return "path";
   }
   if (["path", "map", "list"].includes(value)) {
     return value as AtlasView;
   }
-  return "path";
-}
-
-function handleTabKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>) {
-  if (
-    ![
-      "ArrowLeft",
-      "ArrowRight",
-      "ArrowUp",
-      "ArrowDown",
-      "Home",
-      "End",
-    ].includes(event.key)
-  ) {
-    return;
-  }
-  const tabs = Array.from(
-    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
-      ':scope > [role="tab"]',
-    ) || [],
-  );
-  if (!tabs.length) return;
-  event.preventDefault();
-  const currentIndex = tabs.indexOf(event.currentTarget);
-  const nextIndex =
-    event.key === "Home"
-      ? 0
-      : event.key === "End"
-        ? tabs.length - 1
-        : event.key === "ArrowLeft" || event.key === "ArrowUp"
-          ? (currentIndex - 1 + tabs.length) % tabs.length
-          : (currentIndex + 1) % tabs.length;
-  tabs[nextIndex]?.focus();
-  tabs[nextIndex]?.click();
+  // A focused record opens on Connections with both panels closed — that is
+  // the workspace. Only an explicit ?relationshipView=path|list opens one.
+  return focused ? "map" : "path";
 }
 
 function useCompactAtlas() {
@@ -231,32 +200,77 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       }
     >
       <header className="atlas-workspace-header">
-        <div>
+        <div className="atlas-workspace-header-text">
+          {record ? (
+            <p className="eyebrow">
+              {bundle.runtime
+                .getCatalogs()
+                .find(
+                  (catalog: any) =>
+                    catalog.id === record.center_node.metadata?.catalog_id,
+                )?.name ||
+                bundle.runtime.getSource(record.center_node.source_id)
+                  ?.display_name ||
+                record.center_node.metadata?.catalog_id ||
+                ""}
+            </p>
+          ) : null}
           <h1>
             {record
-              ? `${record.center_node.metadata?.item_id || record.center_node.id} — ${record.center_node.metadata?.title || record.center_node.label || "Selected record"}`
-              : "Control Atlas"}
+              ? (() => {
+                  const itemId =
+                    record.center_node.metadata?.item_id || record.center_node.id;
+                  const title =
+                    record.center_node.metadata?.title ||
+                    record.center_node.label ||
+                    "Selected record";
+                  // CCIs and similar records often carry the same string as
+                  // both id and title — "CCI-000010 — CCI-000010" said
+                  // nothing twice instead of once.
+                  return title.trim().toLowerCase() === itemId.trim().toLowerCase()
+                    ? itemId
+                    : `${itemId} — ${title}`;
+                })()
+              : "Atlas"}
           </h1>
           {!record ? (
             <p className="page-summary">
-              Start with the area your question is about, then narrow to a
-              publication, and then to the record itself.
+              Pick an area, then a publication, then a record.
             </p>
-          ) : null}
+          ) : (
+            <p className="atlas-workspace-description">
+              {officialTextPreview(
+                bundle.runtime.getLibraryDocument(record.center_node.id)
+                  ?.description ||
+                  "No narrative description was published for this record.",
+                160,
+              ).preview}
+            </p>
+          )}
         </div>
+        {record ? (
+          <Button
+            onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+            type="button"
+            variant="secondary"
+          >
+            <IconExternalLink aria-hidden="true" size={18} />
+            Open full record
+          </Button>
+        ) : null}
       </header>
 
       <form className="atlas-map-command" onSubmit={submitSearch}>
         <label className="visually-hidden" htmlFor="atlas-search">
-          Search this Atlas
+          Jump to another record
         </label>
         <div className="search-input">
           <IconSearch aria-hidden="true" size={20} stroke={1.8} />
           <input
-            aria-label="Search Atlas"
+            aria-label="Jump to another record"
             id="atlas-search"
             onChange={(event) => setMapSearchDraft(event.target.value)}
-            placeholder="Search this Atlas"
+            placeholder="Jump to another record"
             type="search"
             value={mapSearchDraft}
           />
@@ -390,9 +404,29 @@ function FocusedAtlas(props: {
     [rows, lensLabelByEdgeId],
   );
   const options = useMemo(() => atlasFilterOptions(record), [record]);
+  const structuralChildren = useMemo(
+    () => buildStructuralChildren(record),
+    [record],
+  );
+  // Same chain the Hierarchy panel renders, flattened to one orientation line
+  // so the record's position never leaves the screen.
+  const structuralCrumbs = useMemo(
+    () => record.structural_path.map((link) => link.label).filter(Boolean),
+    [record],
+  );
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
   const centerLabel = record.center_node.metadata?.item_id || record.center_node.id;
+  // Publication name, never the raw catalog id: `NIST-800-53` is a slug, and
+  // the eyebrow printed it verbatim until the catalog lookup was added.
+  const centerCatalogId = record.center_node.metadata?.catalog_id || "";
+  const centerPublication =
+    bundle.runtime
+      .getCatalogs()
+      .find((catalog: any) => catalog.id === centerCatalogId)?.name ||
+    bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
+    bundle.runtime.getSource(record.center_node.source_id)?.name ||
+    centerCatalogId;
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
@@ -485,7 +519,11 @@ function FocusedAtlas(props: {
     onNavigate("sources", sourceId ? { source: sourceId } : undefined);
   }
 
-  const boardView = view === "path";
+  const boardView = false;
+  // The record workspace always shows Connections. relationshipView now
+  // selects which supporting panel is open, so old deep links still resolve.
+  const hierarchyOpen = view === "path";
+  const listOpen = view === "list";
 
   // One definition, rendered in exactly one place: it is the Path view's own
   // content, and on Map and List it sits in the header so the record's
@@ -497,8 +535,7 @@ function FocusedAtlas(props: {
           (catalog family onward) is the publisher's own declared hierarchy,
           and a blanket eyebrow claiming the whole path is Control Atlas's
           own would contradict that per-crumb distinction. */}
-      <p className="eyebrow">Hierarchy</p>
-      <h2>Where this sits</h2>
+      <h2 className="atlas-path-heading">Where this sits</h2>
       <WhereThisSitsRail
         bundle={bundle}
         links={
@@ -523,47 +560,54 @@ function FocusedAtlas(props: {
 
   return (
     <div className="atlas-focused-shell">
-      {boardView ? null : structuralPosition}
+      {/* A compact, always-visible orientation line. The full hierarchy lives
+          in the Hierarchy panel; it is supporting context, not a workspace. */}
+      <p className="atlas-workspace-crumb">
+        <span className="eyebrow">{centerPublication}</span>
+        {record.structural_path.length ? (
+          <span className="atlas-workspace-crumb-path">
+            {structuralCrumbs.join(" › ")}
+          </span>
+        ) : null}
+      </p>
+      {/* One record workspace, not three competing modes. Connections is the
+          product; Hierarchy and the complete list are supporting panels.
+          relationshipView still round-trips through the URL so every existing
+          ?relationshipView=path|list deep link keeps working — it now decides
+          which panel opens, not which product you get. */}
       <div className="atlas-focused-toolbar">
-        <div aria-label="Atlas views" className="atlas-view-tabs" role="tablist">
-          {/* Three views of ONE record. The lens (Purpose vs RMF) is chosen
-              once on entry and shown as a breadcrumb inside Path — it is not
-              a fourth peer tab, because representation and ordering are
-              different questions and stacking them read as a settings panel. */}
-          {([
-            ["path", "Path", IconRoute],
-            ["map", "Map", IconMap],
-            ["list", "List", IconListDetails],
-          ] as const).map(([viewId, label, ViewIcon]) => (
-            <button
-              aria-controls="atlas-focused-view"
-              aria-selected={view === viewId}
-              className={view === viewId ? "active" : ""}
-              id={`atlas-focused-tab-${viewId}`}
-              key={viewId}
-              onClick={() => {
-                setSelectedRow(null);
-                patchAtlas({ relationshipView: viewId, relationshipGroup: "" });
-              }}
-              onKeyDown={handleTabKeyDown}
-              role="tab"
-              tabIndex={view === viewId ? 0 : -1}
-              type="button"
-            >
-              <ViewIcon aria-hidden="true" size={17} />
-              {label}
-            </button>
-          ))}
+        <h2 className="atlas-workspace-heading">Connections</h2>
+        <div className="atlas-workspace-controls">
+          <button
+            aria-controls="atlas-hierarchy-panel"
+            aria-expanded={hierarchyOpen}
+            className={hierarchyOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
+            onClick={() =>
+              patchAtlas({ relationshipView: hierarchyOpen ? "map" : "path" })
+            }
+            type="button"
+          >
+            <IconRoute aria-hidden="true" size={17} />
+            Hierarchy
+          </button>
+          <button
+            aria-controls="atlas-all-connections"
+            aria-expanded={listOpen}
+            className={listOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
+            onClick={() =>
+              patchAtlas({ relationshipView: listOpen ? "map" : "list" })
+            }
+            type="button"
+          >
+            <IconListDetails aria-hidden="true" size={17} />
+            View all
+          </button>
+          <AtlasFilterBar filters={filters} onChange={updateFilters} options={options} />
         </div>
-        <AtlasFilterBar filters={filters} onChange={updateFilters} options={options} />
       </div>
 
       {rows.length === 0 ? (
-        <div
-          aria-labelledby={`atlas-focused-tab-${view}`}
-          id="atlas-focused-view"
-          role="tabpanel"
-        >
+        <div id="atlas-focused-view">
           <AtlasNoConnections
             candidateCount={record.candidate_connection_count}
             filtersActive={Boolean(
@@ -592,18 +636,13 @@ function FocusedAtlas(props: {
           />
         </div>
       ) : (
-        <div
-          aria-labelledby={`atlas-focused-tab-${view}`}
-          className={`atlas-focused-layout${boardView ? " atlas-focused-layout--board" : ""}`}
-          id="atlas-focused-view"
-          role="tabpanel"
-        >
+        <div className="atlas-focused-layout" id="atlas-focused-view">
           <section
             aria-label="Focused Atlas record"
             className="atlas-focused-main"
           >
-            {boardView ? (
-              <section className="atlas-path-summary">
+            {hierarchyOpen ? (
+              <section className="atlas-path-summary" id="atlas-hierarchy-panel">
                 {/* No single eyebrow here: the chain below mixes Control
                     Atlas structure and publisher-declared hierarchy, and a
                     blanket "publisher-declared" claim over the whole thing
@@ -612,77 +651,202 @@ function FocusedAtlas(props: {
                     centerLabel was here too: the record's name is already the
                     page H1 and the last crumb of the chain below. */}
                 {structuralPosition}
-                <p>
-                  Relationship classes are shown in Map and List. Baselines and
-                  process lenses remain separate choices rather than
-                  structural parents.
-                </p>
+
+                <dl className="atlas-path-facts">
+                  <div>
+                    <dt>Record type</dt>
+                    <dd>
+                      {displayNameFor(
+                        "object_type",
+                        record.center_node.node_type,
+                      )}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Publication</dt>
+                    <dd>{centerPublication}</dd>
+                  </div>
+                  <div>
+                    <dt>Identifier</dt>
+                    <dd>{centerLabel}</dd>
+                  </div>
+                </dl>
+
+                <section
+                  aria-labelledby="atlas-path-children"
+                  className="atlas-path-children"
+                >
+                  <h3 id="atlas-path-children">Decomposes into</h3>
+                  {structuralChildren.length ? (
+                    <>
+                      <ul className="atlas-path-child-list">
+                        {structuralChildren.map((child) => (
+                          <li key={child.id}>
+                            <button
+                              onClick={() =>
+                                patchAtlas({
+                                  node: child.id,
+                                  atlasStage: "",
+                                  relationshipGroup: "",
+                                })
+                              }
+                              title={child.title}
+                              type="button"
+                            >
+                              {child.itemId}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="muted">
+                        {structuralChildren.length} published child record
+                        {structuralChildren.length === 1 ? "" : "s"}.
+                      </p>
+                    </>
+                  ) : (
+                    <p className="muted">
+                      The publisher does not break this record into smaller
+                      parts.
+                    </p>
+                  )}
+                </section>
+
+                <div className="card-actions atlas-path-actions">
+                  <Button
+                    onClick={() => patchAtlas({ relationshipView: "map" })}
+                    type="button"
+                    variant="primary"
+                  >
+                    See connections
+                  </Button>
+                  <Button
+                    onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+                    type="button"
+                    variant="secondary"
+                  >
+                    Open full record
+                  </Button>
+                  <Button
+                    onClick={() => openSources(record.center_node.source_id)}
+                    type="button"
+                    variant="secondary"
+                  >
+                    Review official source
+                  </Button>
+                </div>
               </section>
             ) : null}
 
-            {view === "map" ? (
-              <AtlasConnectionMap
-                center={record.center_node}
-                compact={compact}
-                expandedGroupId={state.relationshipGroup}
-                groups={groups}
-                onExpandedGroupChange={(relationshipGroup) =>
-                  patchAtlas({ relationshipGroup })
-                }
-                onOpenList={() => patchAtlas({ relationshipView: "list" })}
-                onSelectItem={setSelectedRow}
-                selectedItemId={selectedRow?.counterpart.id || ""}
-              />
-            ) : null}
+            <AtlasConnectionMap
+              center={record.center_node}
+              compact={compact}
+              expandedGroupId={state.relationshipGroup}
+              groups={groups}
+              onExpandedGroupChange={(relationshipGroup) =>
+                patchAtlas({ relationshipGroup })
+              }
+              onOpenList={() => patchAtlas({ relationshipView: "list" })}
+              onSelectItem={setSelectedRow}
+              selectedItemId={selectedRow?.counterpart.id || ""}
+            />
 
-            {view === "list" ? (
-              <RelationshipGraphTable
-                centerNodeId={record.center_node.id}
-                conciseTrust
-                onOpenNode={(node) =>
-                  setSelectedRow(
-                    rows.find((row) => row.counterpart.id === node) || null,
-                  )
-                }
-                rows={listRows}
-              />
+            {/* The complete relationship set. It supports the map instead of
+                competing with it, and stays the accessible DOM equivalent:
+                same rows, same class labels, same counts, same filters. */}
+            <section
+              className="atlas-all-connections"
+              id="atlas-all-connections"
+            >
+              {listOpen ? (
+                <RelationshipGraphTable
+                  centerNodeId={record.center_node.id}
+                  conciseTrust
+                  onOpenNode={(node) =>
+                    setSelectedRow(
+                      rows.find((row) => row.counterpart.id === node) || null,
+                    )
+                  }
+                  rows={listRows}
+                />
+              ) : (
+                <button
+                  className="atlas-all-connections-toggle"
+                  onClick={() => patchAtlas({ relationshipView: "list" })}
+                  type="button"
+                >
+                  View all {rows.length} connections
+                </button>
+              )}
+            </section>
+
+            {/* Published children stay on the workspace: they are the record's
+                own decomposition, not a connection. */}
+            {structuralChildren.length ? (
+              <section className="atlas-workspace-children">
+                <h3>Published children</h3>
+                <ul className="atlas-path-child-list">
+                  {structuralChildren.slice(0, 12).map((child) => (
+                    <li key={child.id}>
+                      <button
+                        onClick={() =>
+                          patchAtlas({
+                            node: child.id,
+                            atlasStage: "",
+                            relationshipGroup: "",
+                          })
+                        }
+                        title={child.title}
+                        type="button"
+                      >
+                        {child.itemId}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                {structuralChildren.length > 12 ? (
+                  <p className="muted">
+                    Showing 12 of {structuralChildren.length}. Open Hierarchy
+                    for the full list.
+                  </p>
+                ) : null}
+              </section>
             ) : null}
           </section>
 
-          {!boardView ? (
-            <aside
+          <aside
               aria-atomic="true"
-              aria-label={selectedRow ? `${inspectedItemId} record brief` : "Current record overview"}
+              aria-label={selectedRow ? `${inspectedItemId} record brief` : "Selected item"}
               aria-live="polite"
               className={`atlas-record-inspector header-offset-target${selectedRow ? " atlas-record-inspector--selected" : ""}`}
               ref={inspectorRef}
             >
-              <div className="atlas-inspector-heading">
-                <p className="eyebrow">
-                  {selectedRow
-                    ? displayNameFor(
-                        "object_type",
-                        inspectedDocument?.object_type || inspectedNode?.node_type,
-                      )
-                    : "Current record"}
-                </p>
-                <h2>{inspectedItemId}</h2>
-                {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
-              </div>
-
-              <section className="atlas-inspector-synopsis">
-                <h3>Official description</h3>
-                <p>{inspectedSynopsisPreview.preview}</p>
-                {inspectedSynopsisPreview.truncated ? (
-                  <details className="official-description-disclosure">
-                    <summary>Read full official description</summary>
-                    <p>{inspectedSynopsis}</p>
-                  </details>
-                ) : null}
-              </section>
-
+              {/* When nothing is selected this must not restate AC-2 a third
+                  time (page title, map center, here too) — it prompts toward
+                  the map instead. */}
               {selectedRow ? (
                 <>
+                  <div className="atlas-inspector-heading">
+                    <p className="eyebrow">
+                      {displayNameFor(
+                        "object_type",
+                        inspectedDocument?.object_type || inspectedNode?.node_type,
+                      )}
+                    </p>
+                    <h2>{inspectedItemId}</h2>
+                    {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
+                  </div>
+
+                  <section className="atlas-inspector-synopsis">
+                    <h3>Official description</h3>
+                    <p>{inspectedSynopsisPreview.preview}</p>
+                    {inspectedSynopsisPreview.truncated ? (
+                      <details className="official-description-disclosure">
+                        <summary>Read full official description</summary>
+                        <p>{inspectedSynopsis}</p>
+                      </details>
+                    ) : null}
+                  </section>
+
                   <section>
                     <h3>{relationshipExplanation(selectedRow.edge).label}</h3>
                     <p>{relationshipExplanation(selectedRow.edge).text}</p>
@@ -701,9 +865,14 @@ function FocusedAtlas(props: {
                   </section>
                 </>
               ) : (
-                <p className="atlas-inspector-count">
-                  <strong>{rows.length}</strong> related items across <strong>{groups.length}</strong> groups. Select an item to read it here.
-                </p>
+                <>
+                  <div className="atlas-inspector-heading">
+                    <p className="eyebrow">Selected item</p>
+                  </div>
+                  <p className="atlas-inspector-count">
+                    <strong>{rows.length}</strong> related items across <strong>{groups.length}</strong> groups. Select one to read it here.
+                  </p>
+                </>
               )}
 
               <div className="atlas-inspector-actions">
@@ -745,7 +914,6 @@ function FocusedAtlas(props: {
                 ) : null}
               </div>
             </aside>
-          ) : null}
         </div>
       )}
     </div>
@@ -901,10 +1069,7 @@ function AtlasGuidedPath(props: {
             <IconBinaryTree aria-hidden="true" size={22} />
             <span className="atlas-trunk-banner-text">
               <strong>Cybersecurity, in nine areas</strong>
-              <small>
-                Everything Control Atlas holds belongs to one of these. Pick the
-                one your question is about.
-              </small>
+              <small>Pick the area your question is about.</small>
             </span>
           </div>
           <ul className="atlas-limb-grid" aria-label="Areas of cybersecurity">

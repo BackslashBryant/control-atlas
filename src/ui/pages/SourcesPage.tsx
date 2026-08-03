@@ -35,7 +35,7 @@ const SOURCE_LAYER_TABS: Array<{
     id: "publication",
     label: "Publication register",
     description:
-      "One row per canonical publication — the identity a record's own source traces back to.",
+      "One row per publication, with the publisher it traces back to.",
   },
   {
     id: "connection",
@@ -47,13 +47,13 @@ const SOURCE_LAYER_TABS: Array<{
     id: "ingestion",
     label: "Ingestion provenance",
     description:
-      "Advanced: technical retrieval detail — alternate mirrors, download endpoints, and viewer feeds for a publication already in the register above.",
+      "Retrieval detail: mirrors, download endpoints, and viewer feeds.",
   },
   {
     id: "organization",
     label: "Control Atlas structure",
     description:
-      "Control Atlas's own organizing spine, across Cybersecurity and its areas. Not a publisher source.",
+      "How Control Atlas groups publications into areas. Not a publisher source.",
   },
 ];
 
@@ -113,7 +113,7 @@ export function SourcesPage(props: {
         </button>
         <PageHeader
           eyebrow="Source detail"
-          summary="How this source is identified, retrieved, covered, and checked for freshness in Control Atlas."
+          summary="Identity, coverage, and freshness for this source."
           title={selectedSource.display_name || selectedSource.name}
         />
         <SourceSummaryCard source={selectedSource} />
@@ -136,8 +136,8 @@ export function SourcesPage(props: {
     <Panel className="sources-page">
       <PageHeader
         eyebrow="Sources"
-        summary="See each publication’s publisher, coverage, version, status, and the date Control Atlas last checked it."
-        title="Where every record here comes from"
+        summary="Publisher, coverage, version, and last-checked date for every publication."
+        title="Sources"
       />
 
       <p className="sources-resource-boundary">

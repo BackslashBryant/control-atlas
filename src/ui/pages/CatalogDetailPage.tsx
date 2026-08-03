@@ -62,7 +62,7 @@ export function CatalogDetailPage(props: {
           type="button"
           variant="primary"
         >
-          Browse Catalog
+          Back to Library
         </Button>
       </section>
     );
@@ -424,15 +424,40 @@ function CatalogInventory(props: {
   return (
     <section className="panel catalog-index">
       <header className="page-header">
-        <p className="eyebrow">Catalog</p>
-        <h1>Published structures</h1>
+        <h1>Library</h1>
         <p className="page-summary">
-          Control catalogs, risk and outcome frameworks, authorization and
-          certification programs, implementation standards, and threat and
-          defensive knowledge bases — grouped by what kind of publication
-          each one is.
+          Search every published record, or browse the publications they come
+          from.
         </p>
       </header>
+      {/* Library merge: searching records and browsing publications are the
+          same destination, so the record search runs from here instead of
+          making the reader pick a surface first. */}
+      <form
+        className="library-record-search"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const query = String(
+            new FormData(event.currentTarget).get("libraryQuery") || "",
+          ).trim();
+          if (query) onNavigate("search", { query });
+        }}
+        role="search"
+      >
+        <label className="catalog-search">
+          <IconSearch aria-hidden="true" size={18} />
+          <input
+            aria-label="Search published records"
+            name="libraryQuery"
+            placeholder="Search by identifier, title, or topic"
+            type="search"
+          />
+        </label>
+        <Button type="submit" variant="primary">
+          Search records
+        </Button>
+      </form>
+      <h2 className="library-browse-heading">Browse publications</h2>
       <WorkbenchControlSurface
         className="catalog-inventory-control-surface"
         label="Filter published structures"

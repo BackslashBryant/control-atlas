@@ -9,19 +9,16 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("Atlas standalone route exposes Path, bounded Map, and List", async ({ page }) => {
+test("Atlas standalone route opens straight to Connections, with Hierarchy and List as panels", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
-  // Purpose/RMF are lenses inside Path now, not peer tabs.
-  await expect(page.getByRole("tab", { name: "Path", exact: true })).toBeVisible();
-  await page.getByRole("tab", { name: "Map" }).click();
   await expect(
     page.getByRole("region", { name: "Relationship map" }),
   ).toBeVisible();
-  await page.getByRole("tab", { name: "List" }).click();
+  await page.getByRole("button", { name: "View all", exact: true }).click();
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 
@@ -30,7 +27,7 @@ test("Atlas default route is the guided ancestry path, not an empty graph", asyn
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "Control Atlas", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
   await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
   await expect(page.locator(".react-flow")).toHaveCount(0);
@@ -75,7 +72,7 @@ test("record detail opens the same record in the new Atlas", async ({ page }) =>
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "Open in Explore" }).first().click();
+  await page.getByRole("button", { name: "Open in the Atlas" }).first().click();
   await expect(page).toHaveURL(/#\/explore/);
   await expect(page.getByRole("heading", { name: "AC-2", level: 1 })).toBeVisible();
 });
