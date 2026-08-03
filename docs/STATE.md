@@ -73,6 +73,35 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2c (Resources relabel) COMPLETE, PHASE 2 DONE
+
+`CommonsResourceCard.tsx`/`CommonsDetailPage.tsx`: "Why it is here"/"Why this
+resource is here" -> "Why Control Atlas lists this" (names the author, no
+longer reads as publisher metadata). Detail page's "Frameworks & Programs"
+sidebar tags are now clickable (navigate to Search with that framework as
+the query — a real Search call, never a fabricated graph edge). New
+"Explicitly related Atlas records" sidebar section with the same honest
+Search link. `CommonsPage.tsx` initial page size 24 -> 18 (spec's 12-18
+range). The Resource-detail "redirect ingested publications to their
+canonical Source page" ask is moot: Phase 2a already removed those 13
+resources outright, so there is no duplicate detail page left to redirect
+from — simpler than building a redirect layer for a page that no longer
+needs to exist.
+
+### Verification
+Lint/typecheck/`npm test` unchanged (258/30/57/3). Full e2e 142/142 (1
+skip), full a11y 32/32, full visual 28/28 after personally inspecting all 4
+changed screenshots (clean "Why Control Atlas lists this" labels, working
+"Search Atlas records" link verified live end-to-end in Chrome, 18-card
+first page confirmed via `document.querySelectorAll('.commons-card').length
+=== 18`). `npm run precommit` clean.
+
+**Phase 2 (surface-boundary dedup) is now fully done**: an ingested
+publication cannot appear as a duplicate Resource (guarded by a permanent
+test), Sources separates publication/connection/ingestion/organization, and
+every Control-Atlas-authored note on a Resource says so by name. Next:
+Phase 3 (Learn/Documents/Catalog/Start-Here — destination doctrine jobs).
+
 ## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2b (Sources split) COMPLETE
 
 `src/ui/lib/sourceRegister.ts`: added `buildSourceLayers()` (additive — the
