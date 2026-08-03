@@ -79,6 +79,20 @@ jobs:
         if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'evidence-only' }}
         run: git diff --check && node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
 
+      - name: Calculate generated-data cache key
+        id: generated-key
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        shell: bash
+        run: echo "key=$(node tools/generated-data-cache-key.mjs)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore generated data
+        id: generated-cache
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        uses: actions/cache@v5
+        with:
+          path: data/generated
+          key: generated-data-${{ runner.os }}-v1-${{ steps.generated-key.outputs.key }}
+
       - uses: actions/setup-node@v6
         if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         with:
@@ -98,11 +112,13 @@ jobs:
         env:
           CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
           BUILD_MODE: ${{ steps.scope.outputs.build_mode }}
+          GENERATED_CACHE_HIT: ${{ steps.generated-cache.outputs.cache-hit }}
         shell: bash
         run: |
-          if [[ "$BUILD_MODE" == "incremental" ]]; then
+          if [[ "$BUILD_MODE" == "incremental" && "$GENERATED_CACHE_HIT" == "true" ]]; then
             npm run build:site:incremental
           else
+            echo "Generated data cache unavailable or invalidated; rebuilding deterministically."
             npm run build:site
           fi
 

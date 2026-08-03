@@ -25,10 +25,28 @@ jobs:
       - run: npm ci
       - name: Dependency audit
         run: npm run audit:deps
-      - name: Build once from reviewed generated data
+      - name: Calculate generated-data cache key
+        id: generated-key
+        shell: bash
+        run: echo "key=$(node tools/generated-data-cache-key.mjs)" >> "$GITHUB_OUTPUT"
+      - name: Restore generated data
+        id: generated-cache
+        uses: actions/cache@v5
+        with:
+          path: data/generated
+          key: generated-data-${{ runner.os }}-v1-${{ steps.generated-key.outputs.key }}
+      - name: Build once from cached or source data
         env:
           CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
-        run: npm run build:site:incremental
+          GENERATED_CACHE_HIT: ${{ steps.generated-cache.outputs.cache-hit }}
+        shell: bash
+        run: |
+          if [[ "$GENERATED_CACHE_HIT" == "true" ]]; then
+            npm run build:site:incremental
+          else
+            echo "Generated data cache unavailable; rebuilding deterministically."
+            npm run build:site
+          fi
       - name: Static, data, contract, and Guardian gates
         run: npm run verify:quality
       - name: Verify exact-SHA site artifact
@@ -92,7 +110,7 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
-  rendered-review:
+  visual-review:
     needs: prepare
     runs-on: ubuntu-latest
     container:
@@ -106,13 +124,34 @@ jobs:
           path: dist/site
       - name: Approved-layout visual comparison
         run: npm run test:visual
-      - name: Experience Guardian rendered review
-        run: playwright test --config playwright.guardian.config.mjs
-      - name: Upload rendered evidence
+      - name: Upload visual evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: nightly-rendered-evidence
+          name: nightly-visual-evidence
+          path: test-results
+          if-no-files-found: warn
+          retention-days: 14
+
+  experience-review:
+    needs: prepare
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - name: Experience Guardian rendered review
+        run: playwright test --config playwright.guardian.config.mjs
+      - name: Upload Guardian evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-guardian-evidence
           path: |
             artifacts/experience-guardian
             test-results
@@ -121,7 +160,7 @@ jobs:
 
   report:
     if: ${{ !cancelled() }}
-    needs: [e2e, accessibility, rendered-review]
+    needs: [e2e, accessibility, visual-review, experience-review]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

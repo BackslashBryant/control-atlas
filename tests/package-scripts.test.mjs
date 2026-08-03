@@ -209,18 +209,26 @@ test('CI builds once, reuses the exact-SHA artifact on main, and omits per-push 
   assert.match(ciWorkflow, /name: Download reusable exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: Verify exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: site-build/);
+  assert.match(ciWorkflow, /actions\/cache@v5/);
+  assert.match(ciWorkflow, /GENERATED_CACHE_HIT/);
+  assert.match(ciWorkflow, /Generated data cache unavailable or invalidated; rebuilding deterministically/);
   assert.doesNotMatch(ciWorkflow, /approved-layout-visuals/);
 });
 
 test('nightly full verification builds once and shards browser coverage', () => {
   assert.match(nightlyQualityWorkflow, /cron: '37 6 \* \* \*'/);
-  assert.equal((nightlyQualityWorkflow.match(/Build once from reviewed generated data/g) ?? []).length, 1);
+  assert.equal((nightlyQualityWorkflow.match(/Build once from cached or source data/g) ?? []).length, 1);
+  assert.match(nightlyQualityWorkflow, /actions\/cache@v5/);
+  assert.match(nightlyQualityWorkflow, /Generated data cache unavailable; rebuilding deterministically/);
   assert.match(nightlyQualityWorkflow, /shard: \[1, 2, 3, 4\]/);
   assert.match(nightlyQualityWorkflow, /--shard=\$\{\{ matrix\.shard \}\}\/4/);
   assert.match(nightlyQualityWorkflow, /PLAYWRIGHT_FULLY_PARALLEL: '1'/);
   assert.match(nightlyQualityWorkflow, /playwright merge-reports/);
   assert.match(nightlyQualityWorkflow, /playwright\.guardian\.config\.mjs/);
   assert.match(nightlyQualityWorkflow, /npm run test:visual/);
+  assert.match(nightlyQualityWorkflow, /name: nightly-visual-evidence/);
+  assert.match(nightlyQualityWorkflow, /name: nightly-guardian-evidence/);
+  assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility, visual-review, experience-review\]/);
   assert.doesNotMatch(nightlyQualityWorkflow, /playwright install chromium/);
 });
 

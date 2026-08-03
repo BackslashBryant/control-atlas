@@ -10,8 +10,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_SEGMENT = "dist/site";
 const DIST = join(ROOT, ...DIST_SEGMENT.split("/"));
 const REQUIRED_GENERATED_FILES = [
+  "data/generated/build-manifest.json",
+  "data/generated/catalog-bootstrap.json",
   "data/generated/library-search.json",
   "data/generated/commons-search-index.json",
+  "data/generated/atlas-neighborhood-manifest.json",
 ];
 
 const COPY_PATHS = [
@@ -31,6 +34,38 @@ function copyIntoDist(sourceRelativePath, destRelativePath) {
   cpSync(sourcePath, destPath, { recursive: true });
 }
 
+function readGeneratedArtifact(relativePath) {
+  return JSON.parse(readFileSync(join(ROOT, relativePath), "utf8"));
+}
+
+function assertGeneratedDataComplete() {
+  for (const sourceRelativePath of REQUIRED_GENERATED_FILES) {
+    if (!existsSync(join(ROOT, sourceRelativePath))) {
+      throw new Error(`Required generated artifact missing: ${sourceRelativePath}`);
+    }
+  }
+
+  const catalogBootstrap = readGeneratedArtifact(
+    "data/generated/catalog-bootstrap.json",
+  ).catalog_bootstrap;
+  for (const catalog of catalogBootstrap?.catalogs ?? []) {
+    const path = `data/generated/catalog-records/${catalog.id}.json`;
+    if (!existsSync(join(ROOT, path))) {
+      throw new Error(`Generated data cache is incomplete: ${path}`);
+    }
+  }
+
+  const neighborhoodManifest = readGeneratedArtifact(
+    "data/generated/atlas-neighborhood-manifest.json",
+  ).atlas_neighborhood_manifest;
+  for (const shard of neighborhoodManifest?.shards ?? []) {
+    const path = `data/generated/${shard.path}`;
+    if (!existsSync(join(ROOT, path))) {
+      throw new Error(`Generated data cache is incomplete: ${path}`);
+    }
+  }
+}
+
 if (reuseGenerated) {
   console.log("Reusing committed generated data (input scope excludes graph builders and source data).");
 } else {
@@ -48,13 +83,7 @@ if (reuseGenerated) {
   await import(pathToFileURL(join(ROOT, "scripts/build-commons-index.mjs")).href);
 }
 
-for (const sourceRelativePath of REQUIRED_GENERATED_FILES) {
-  if (!existsSync(join(ROOT, sourceRelativePath))) {
-    throw new Error(
-      `Required generated artifact missing: ${sourceRelativePath}`,
-    );
-  }
-}
+assertGeneratedDataComplete();
 
 execFileSync("npx", VITE_BUILD_COMMAND.split(" "), {
   cwd: ROOT,
