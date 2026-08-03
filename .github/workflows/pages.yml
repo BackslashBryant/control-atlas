@@ -65,18 +65,45 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v6
+      - name: Download the exact site artifact already verified by CI
+        if: ${{ github.event_name == 'workflow_run' }}
+        uses: actions/download-artifact@v8
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          name: site-build
+          path: dist/site
+          github-token: ${{ github.token }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      # Manual dispatch is an explicit disaster-recovery path. Routine releases
+      # always consume CI's exact-SHA artifact and never rebuild.
+      - uses: actions/checkout@v6
+        if: ${{ github.event_name == 'workflow_dispatch' }}
       - uses: actions/setup-node@v6
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         with:
           node-version: '22'
           cache: 'npm'
-      - run: npm ci
-      - name: Build staged static site
+      - name: Install locked dependencies for manual recovery
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: npm ci
+      - name: Build main for manual recovery
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
         run: npm run build:site
-      - name: Public verification
-        run: npm run verify:public
+
+      - name: Verify artifact provenance
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        shell: bash
+        run: |
+          actual_sha="$(jq -r '.commit_sha // empty' dist/site/release.json)"
+          if [[ ! "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ || "$actual_sha" != "$EXPECTED_SHA" ]]; then
+            echo "Site artifact SHA mismatch: expected $EXPECTED_SHA, found ${actual_sha:-missing}"
+            exit 1
+          fi
+          echo "Deploying verified site artifact for $EXPECTED_SHA"
+
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:

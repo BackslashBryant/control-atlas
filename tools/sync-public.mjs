@@ -23,6 +23,7 @@ const ALLOWLIST = [
   '.github/workflows/ci.yml',
   '.github/workflows/pages.yml',
   '.github/workflows/nightly-refresh.yml',
+  '.github/workflows/nightly-quality.yml',
   'tools/check-dependencies.mjs',
   'tools/docs-audit.mjs',
   'tools/guard-runner.mjs',

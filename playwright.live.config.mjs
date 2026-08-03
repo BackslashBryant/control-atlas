@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test";
+import process from "node:process";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL;
 if (!baseURL) {
@@ -7,13 +8,7 @@ if (!baseURL) {
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  testMatch: [
-    "accessibility.spec.mjs",
-    "frontend-responsive.spec.mjs",
-    "live-smoke.spec.mjs",
-    "legacy-url-shim.spec.mjs",
-    "publication-identity.spec.mjs",
-  ],
+  testMatch: "live-smoke.spec.mjs",
   timeout: 120000,
   workers: 1,
   use: {

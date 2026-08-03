@@ -49,9 +49,11 @@ jobs:
           else
             echo "No prior exact-SHA success found; running the full fail-closed gate."
           fi
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
       - name: Classify changed scope
         id: scope
         shell: bash
@@ -59,52 +61,86 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            echo "scope=full" >> "$GITHUB_OUTPUT"
-            echo "reason=manual-run" >> "$GITHUB_OUTPUT"
+            printf 'scope=full\nreason=manual-run\nbuild_mode=full\n' >> "$GITHUB_OUTPUT"
           else
             node tools/classify-change-scope.mjs \
               --base "${BASE_SHA}" \
               --head "${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Download reusable exact-SHA site artifact
+        if: ${{ steps.reuse.outputs.run_id != '' && steps.scope.outputs.scope == 'full' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED_RUN_ID: ${{ steps.reuse.outputs.run_id }}
+        run: gh run download "$VERIFIED_RUN_ID" --name site-build --dir dist/site
+
       - name: Verify evidence-only change
         if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'evidence-only' }}
         run: git diff --check && node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
+
       - uses: actions/setup-node@v6
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         with:
           node-version: '22'
           cache: 'npm'
-      - if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+
+      - name: Install locked dependencies
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         run: npm ci
+
       - name: Dependency audit
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         run: npm run audit:deps
-      - name: Build staged static site
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
-        run: npm run build:site
-      - name: Lint
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
-        run: npm run lint
-      - name: Experience Guardian deterministic checks
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
-        run: npm run review:experience:fast
-      - name: Type check
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
-        run: npm run typecheck
-      - name: Unit and contract verification
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
-        run: npm test && npm run test:browser && npm run smoke:dom && npm run verify:public
-      - name: Install Playwright browser
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+
+      - name: Build site once for this commit
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        env:
+          CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
+          BUILD_MODE: ${{ steps.scope.outputs.build_mode }}
+        shell: bash
+        run: |
+          if [[ "$BUILD_MODE" == "incremental" ]]; then
+            npm run build:site:incremental
+          else
+            npm run build:site
+          fi
+
+      - name: Static, data, contract, and Guardian gates
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        run: npm run verify:quality
+
+      - name: Install Playwright Chromium
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         run: npx playwright install chromium
+
       - name: Accessibility smoke
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        env:
+          PLAYWRIGHT_WORKERS: '2'
         run: npm run test:a11y:smoke
+
       - name: Critical browser smoke
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        env:
+          PLAYWRIGHT_WORKERS: '2'
         run: npm run test:e2e:smoke
+
+      - name: Verify exact-SHA site artifact
+        if: ${{ success() && steps.scope.outputs.scope == 'full' }}
+        run: node tools/verify-site-artifact.mjs --sha "${GITHUB_SHA}"
+
+      - name: Upload exact-SHA site artifact
+        if: ${{ success() && steps.scope.outputs.scope == 'full' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-build
+          path: dist/site
+          if-no-files-found: error
+          retention-days: 2
+
       - name: Upload Playwright failure artifacts
-        if: ${{ failure() && steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope != 'evidence-only' }}
+        if: ${{ failure() && steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
         uses: actions/upload-artifact@v7
         with:
           name: ci-playwright-artifacts
@@ -112,10 +148,12 @@ jobs:
             test-results
             playwright-report
           if-no-files-found: ignore
+
       - name: Record verified change scope
         if: ${{ success() }}
         shell: bash
         run: printf '%s\n' '${{ steps.scope.outputs.scope }}' > ci-change-scope.txt
+
       - name: Upload verified change scope
         if: ${{ success() }}
         uses: actions/upload-artifact@v7
@@ -123,44 +161,9 @@ jobs:
           name: ci-change-scope
           path: ci-change-scope.txt
           if-no-files-found: error
-          retention-days: 1
-  approved-layout-visuals:
-    # Runs every push so a screenshot set exists for each ship. The approved
-    # baselines in tests/e2e/approved-layout-visual.spec.mjs-snapshots/ are
-    # captured on Windows (win32); this job runs on the Linux runner, so
-    # per the audit's own acceptance criteria (pixel baselines may be
-    # platform-specific; only semantic content must match across platforms)
-    # a pixel mismatch here is expected, not a regression. continue-on-error
-    # keeps that expected divergence from turning the job red — this stays a
-    # diagnosis/evidence job, not a deploy gate — while still always
-    # publishing whatever Playwright captured this run.
-    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
-    steps:
-      - uses: actions/checkout@v6
-      - run: npm ci
-      - run: npm run build:site
-      # Same version skew as the baseline job: the pinned image predates the
-      # Playwright in package.json, so its browser build is missing.
-      - run: npx playwright install chromium
-      - name: Capture and compare approved-layout screenshots
-        continue-on-error: true
-        run: npm run test:visual
-      - name: Upload latest screenshots
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: approved-layout-visuals-${{ github.sha }}
-          path: |
-            test-results
-            tests/e2e/approved-layout-visual.spec.mjs-snapshots
-          if-no-files-found: warn
-          retention-days: 30
+          retention-days: 2
 
   lighthouse-report:
-    # Lighthouse is useful for investigation, but noisy as a deploy requirement.
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:

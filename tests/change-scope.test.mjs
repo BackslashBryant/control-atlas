@@ -14,22 +14,40 @@ test('audit evidence additions and modifications use the evidence-only path', ()
     ].join('\0'),
   );
 
-  assert.deepEqual(result, { scope: 'evidence-only', reason: 'audits-only' });
+  assert.deepEqual(result, {
+    scope: 'evidence-only',
+    reason: 'audits-only',
+    buildMode: 'none',
+  });
 });
 
-test('runtime, workflow, test, and planning changes require full verification', () => {
+test('runtime changes require full verification and select the conservative build mode', () => {
   for (const path of [
     'src/App.tsx',
     '.github/workflows/ci.yml',
     'tests/browser-contract.test.mjs',
     'docs/planning/launch.md',
+  ]) {
+    assert.deepEqual(classifyNameStatus(`M\0${path}\0`), {
+      scope: 'full',
+      reason: 'runtime-incremental',
+      buildMode: 'incremental',
+    }, path);
+  }
+
+  for (const path of [
+    'data/source-registry.json',
+    'maps/800-53-to-csf.json',
+    'scripts/build-framework-data.mjs',
+    'src/shared/federalGraph.mjs',
+    'tools/importers/framework-adapters.mjs',
     'package-lock.json',
   ]) {
-    assert.equal(
-      classifyNameStatus(`M\0${path}\0`).scope,
-      'full',
-      path,
-    );
+    assert.deepEqual(classifyNameStatus(`M\0${path}\0`), {
+      scope: 'full',
+      reason: 'runtime-full',
+      buildMode: 'full',
+    }, path);
   }
 });
 
@@ -42,6 +60,19 @@ test('empty, deleted, renamed, copied, or malformed diffs fail closed', () => {
     'X\0docs/audits/evidence.md\0',
     'M\0',
   ]) {
-    assert.equal(classifyNameStatus(diff).scope, 'full', JSON.stringify(diff));
+    assert.deepEqual(
+      classifyNameStatus(diff),
+      expectFullResult(diff),
+      JSON.stringify(diff),
+    );
   }
 });
+
+function expectFullResult(diff) {
+  if (!diff) return { scope: 'full', reason: 'empty-diff', buildMode: 'full' };
+  const status = diff.split('\0')[0];
+  if (!/^[AM]\d*$/.test(status)) {
+    return { scope: 'full', reason: `unsupported-status-${status}`, buildMode: 'full' };
+  }
+  return { scope: 'full', reason: 'runtime-or-unknown-path-missing', buildMode: 'full' };
+}

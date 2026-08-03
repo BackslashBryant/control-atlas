@@ -74,3 +74,17 @@ test("live smoke: deployed runtime cache version matches source", async ({
   )?.[1];
   expect(deployedVersion).toBe(RUNTIME_CACHE_VERSION);
 });
+
+test("live smoke: deployed artifact matches the expected commit", async ({
+  request,
+}) => {
+  const expectedSha = process.env.EXPECTED_DEPLOY_SHA;
+  test.skip(!expectedSha, "exact deployment SHA check only runs after Pages deploys");
+  expect(expectedSha).toMatch(/^[0-9a-f]{40}$/i);
+  const response = await request.get(
+    new URL("release.json", process.env.PLAYWRIGHT_BASE_URL).toString(),
+  );
+  expect(response.ok()).toBeTruthy();
+  const release = await response.json();
+  expect(release).toEqual({ schema_version: "1.0", commit_sha: expectedSha });
+});

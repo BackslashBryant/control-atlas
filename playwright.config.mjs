@@ -6,8 +6,9 @@ const baseURL = `http://localhost:${port}`;
 export default defineConfig({
   testDir: './tests/e2e',
   testIgnore: '**/approved-layout-visual.spec.mjs',
+  fullyParallel: process.env.PLAYWRIGHT_FULLY_PARALLEL === '1',
   timeout: process.env.CI ? 45000 : 30000,
-  workers: 1,
+  workers: Math.max(1, Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '1', 10) || 1),
   retries: process.env.CI ? 1 : 0,
   expect: {
     timeout: process.env.CI ? 15000 : 5000,

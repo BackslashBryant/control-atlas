@@ -30,7 +30,11 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install chromium
       - name: Run full repository gate
-        run: npm run precommit
+        env:
+          PLAYWRIGHT_WORKERS: '2'
+        # refresh:data already rebuilt and validated generated graph artifacts;
+        # reuse them instead of running the same graph build a second time.
+        run: npm run precommit:incremental
       - name: Generate review SBOM
         run: npm run sbom:generate
       - uses: actions/upload-artifact@v7
