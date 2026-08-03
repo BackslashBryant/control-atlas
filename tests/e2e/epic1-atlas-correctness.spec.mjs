@@ -86,8 +86,10 @@ test("focused Atlas exposes explicit lenses and class-direction List semantics",
   await page.getByRole("tab", { name: "List" }).click();
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table.getByRole("columnheader", { name: "Class and direction" })).toBeVisible();
+  // List reuses Map's own relationship-lens label per row (never a coarser,
+  // disagreeing taxonomy) — any of the published lens labels is valid here.
   await expect(table.locator("tbody tr").first()).toContainText(
-    /Structure|Applicability|Correlation/,
+    /Structure|Applicability|Correlation|Implementation|Assessment|Process|Cross-framework|Threat/,
   );
   await expect(table.locator("tbody tr").first()).toContainText(
     /From selected record|To selected record/,

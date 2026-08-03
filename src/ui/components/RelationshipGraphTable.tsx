@@ -25,6 +25,10 @@ type TableRow = {
   counterpart: { id: string };
   itemId: string;
   title: string;
+  // When set, overrides the class column with the same relationship-lens
+  // label Map uses for this row, so the two views never disagree on what
+  // class a record belongs to (e.g. a CCI reads "Correlation" in both).
+  lensLabel?: string;
 };
 
 export function RelationshipGraphTable(props: {
@@ -61,7 +65,7 @@ export function RelationshipGraphTable(props: {
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ edge, counterpart, itemId, title }) => {
+          {rows.map(({ edge, counterpart, itemId, title, lensLabel }) => {
             const explanation = relationshipExplanation(edge);
             return (
               <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
@@ -79,11 +83,12 @@ export function RelationshipGraphTable(props: {
               </td>
               <td data-label="Class and direction">
                 <strong>
-                  {edge.relationship_class === "structural"
-                    ? "Structure"
-                    : edge.relationship_class === "applicability"
-                      ? "Applicability"
-                      : "Correlation"}
+                  {lensLabel ||
+                    (edge.relationship_class === "structural"
+                      ? "Structure"
+                      : edge.relationship_class === "applicability"
+                        ? "Applicability"
+                        : "Correlation")}
                 </strong>
                 <br />
                 {centerNodeId && edge.source_node_id === centerNodeId

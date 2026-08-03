@@ -63,6 +63,86 @@
   Control-Atlas-composed rationale or evidence list. Ship direct to main, no
   PRs (push to a throwaway branch first for Public Repo Checks, then main).
   (2026-08-02, session 17)
+- "Address all issues in the audit by implementing the spec and shipping."
+  (2026-08-02, session 21) => owner supplied
+  `D:\Storage\Downloads\control-atlas-full-surface-audit.md` and
+  `control-atlas-codex-fix-spec.md` (external files, not in repo). Triaged
+  against current HEAD before implementing — see
+  docs/plans/audit-alignment-2026-08-02.md — because much of the audit was
+  already stale (shipped in sessions 15-20). Workstream 7 (Start Here 3-step
+  wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
+  its spirit (reasons/badges on existing rows) instead, not the wizard.
+
+## 2026-08-02 (session 21) - audit alignment, Phase 1 (core ontology) COMPLETE
+
+Executing `docs/plans/audit-alignment-2026-08-02.md`. Phase 1 (Path split,
+Map/List reclassification, record-page reorder) done and fully gated; Phases
+2-5 (surface-boundary dedup, destination doctrine jobs, search/compare,
+thesis) remain — see that plan doc for the full remaining scope.
+
+### Done
+- **1a — Path split into two rails**: `WhereThisSitsRail.tsx` now groups the
+  ancestor chain into contiguous same-origin segments, each rendered under its
+  own rail label ("Control Atlas structure" vs "Publisher hierarchy") instead
+  of one heading claiming a mixed path is publisher-declared. Every organizing
+  crumb is now visually distinct (previously only the first got the visible
+  badge). `AtlasMapPage.tsx:583`'s literal "Publisher-declared structural
+  path" eyebrow over the mixed rail is removed.
+- **1b — CCI reclassification + Map/List taxonomy alignment**: CCIs (47 on
+  AC-2) were classified `lens: "implementation"` — the exact audit complaint.
+  Added a `"correlation"` lens to `atlasModel.ts`/`graphTheme.ts`/
+  `tokens.css` (new `--ca-lens-correlation`/`--ca-editorial`-adjacent token
+  `--ca-editorial-text`, no new hues — color-mix of existing locked tokens);
+  `GROUP_META.disa` moved to `correlation`. `RelationshipGraphTable.tsx`
+  (List) now takes an optional `lensLabel` per row, populated in
+  `AtlasMapPage.tsx` from the same `groups` Map uses, so List and Map never
+  disagree on a record's class label.
+- **1c — Record page reorder** (`ObjectDetailPage.tsx`): Path now renders
+  right after identity, before Decomposes/Official description/Discussion
+  (was after both). The `classBuckets` chip summary (Selected by/Correlated
+  through/Assessed through) and the Connections accordion were two competing
+  systems in different places; merged into one — chips now intro the same
+  Panel instead of a separate standalone block. "Assessed through" items now
+  read `SP 800-53A — AC-2 assessment procedure` (was bare `AC-2`,
+  self-referential). "What evidence normally supports it" moved before
+  "Official text / source excerpt" (evidence before source detail).
+  `ContextualCommonsModule`'s "Implementation guidance for this control"
+  label (a keyword-match resource, never a verified edge) changed to "Related
+  by search relevance, not a verified implementation link"; moved to the end
+  of the main column, after the Connections/evidence accordion. Found live
+  while verifying: the record-page back button fell back to "Explore records"
+  for unrecognized origins while its handler navigated to Search, not Explore
+  — fixed to "Back to Search" (also resolves the audit's "Explore
+  records"/"Open in Explore" redundancy complaint, item H).
+- **Accessibility fix found during the Phase-1 gate**: wrapping Path in the
+  same `.atlas-structural-position` block on the record page as Atlas Map
+  exposed a pre-existing contrast failure — `--ca-editorial` (#e66a2c) on
+  `--ca-surface` (#253139) is 4.09:1, below the 4.5:1 WCAG AA floor for normal
+  text. New `--ca-editorial-text` token (`color-mix` of existing
+  `--lsm-orange`/`--lsm-bone`, 5.09:1) used for organizing-crumb text; the raw
+  `--ca-editorial` token is no longer used as a text color anywhere.
+
+### Verification
+Lint/typecheck clean throughout. `npm test` (data 258/258, runtime 30/30,
+graph 57/57, atlas 3/3) unchanged from baseline. Full e2e
+`playwright.e2e.config.mjs` 142/142 (1 pre-existing live-only skip). Full a11y
+`playwright.a11y.config.mjs` 32/32 (0 before the contrast fix, then 32/32).
+Full visual `playwright.visual.config.mjs` 28/28 win32 after re-baselining 5
+compositions (`atlas-desktop-path`, `atlas-compact-path`, `atlas-compact-map`,
+`route-record-desktop`, `route-record-compact`) — each diff personally
+inspected live in-browser before accepting (screenshots in this session's
+transcript: two-rail Path, Correlation lens card, reordered record page — no
+overlap, no crowding). `npm run precommit` clean. Live-verified in Chrome via
+`preview_start`/`navigate`/screenshot at `/#/record/nist-800-53/AC-2`, not
+just DOM-inspected.
+
+### Next
+Phase 2 (docs/plans/audit-alignment-2026-08-02.md): 4a ownership dedup test +
+Resources dedup, 5a Sources register split, 6a Resources relabel/detail
+redirect. Then Phase 3 (Learn/Documents/Catalog/Start-Here), Phase 4
+(Search/Compare/semantic-snapshot test), Phase 5 (Home/About thesis), then
+the ship gate (throwaway branch -> Public Repo Checks -> main, per
+memory/deploy-workflow.md — no PRs).
 
 ## 2026-08-02 (session 20) - readiness report corrections + second ship, CLOSED OUT
 

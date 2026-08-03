@@ -64,6 +64,9 @@
   --ca-secondary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
   --ca-priority: var(--lsm-gold);
   --ca-editorial: var(--lsm-orange);
+  /* --ca-editorial fails 4.5:1 for normal text on --ca-surface (4.09:1,
+     measured against #253139). Use this for organizing-hop text/labels. */
+  --ca-editorial-text: color-mix(in srgb, var(--lsm-orange) 75%, var(--lsm-bone));
 
   /* Provenance: always paired with a text label. */
   --ca-prov-official: var(--lsm-relay);
@@ -120,6 +123,7 @@
      label. Structural never reaches this map (rendered separately as its
      own structural-child tag list), so it has no color here. */
   --ca-lens-applicability: var(--lsm-gold);
+  --ca-lens-correlation: var(--lsm-relay-deep);
   --ca-lens-implementation: var(--lsm-relay);
   --ca-lens-assessment: var(--lsm-signal);
   --ca-lens-process: var(--lsm-dust);

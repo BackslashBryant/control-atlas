@@ -35,7 +35,11 @@ export function ContextualCommonsModule({
   if (recommendations.length === 0) return null;
 
   const defaultContextLabels: Record<typeof contextType, string> = {
-    control: "Implementation guidance for this control",
+    // Never "implementation guidance" — these are search-relevance matches
+    // (see contextualResourceRecommendations' "relation" field below), not a
+    // verified graph edge. Calling a keyword match implementation guidance
+    // is exactly the false claim this label exists to avoid.
+    control: "Related by search relevance, not a verified implementation link",
     catalog: "Official and practitioner material for this framework",
     stig: "Supporting material for this STIG",
     template: "Templates and OSCAL models that may help",

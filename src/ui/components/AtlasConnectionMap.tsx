@@ -1,5 +1,6 @@
 import { lazy, Suspense, useMemo, useState } from "react";
 
+import { displayNameFor } from "../../app/display-names.mjs";
 import {
   type AtlasConnectionGroup,
   type AtlasRelationshipRow,
@@ -205,10 +206,12 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           <div className="badge-row">
             {group.items.map((row) => (
               <button
+                aria-label={`${row.itemId} — ${displayNameFor("relationship_type", row.edge.relationship_type)}`}
                 aria-pressed={row.counterpart.id === selectedItemId}
                 className="badge-button"
                 key={row.counterpart.id}
                 onClick={() => onSelectItem(row)}
+                title={displayNameFor("relationship_type", row.edge.relationship_type)}
                 type="button"
               >
                 <Badge>{row.itemId}</Badge>

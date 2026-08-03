@@ -1377,29 +1377,52 @@ li {
 
 /* Class-4 organizing hop (trunk / limb / derived junction home). Marked as
    Control Atlas's own structure, distinct from publisher-declared structural
-   crumbs, reusing the existing --ca-editorial token. */
+   crumbs. Uses --ca-editorial-text (not --ca-editorial): the raw token fails
+   WCAG 4.5:1 for normal-weight text on this surface. */
 .atlas-path-crumb-organizing {
   display: inline-flex;
   align-items: center;
   gap: var(--ca-space-1);
-  color: var(--ca-editorial);
+  color: var(--ca-editorial-text);
 }
 
 button.atlas-path-crumb-organizing:hover,
 button.atlas-path-crumb-organizing:focus-visible {
-  color: var(--ca-editorial);
+  color: var(--ca-editorial-text);
 }
 
-.atlas-path-crumb-badge {
-  padding: 0 var(--ca-space-1);
-  border: 1px solid color-mix(in srgb, var(--ca-editorial) 55%, transparent);
-  border-radius: var(--radius-sm);
+/* Two rails, not one mixed breadcrumb: consecutive same-origin hops group
+   under their own label instead of one heading claiming the whole chain is
+   publisher-declared. */
+.tree-path-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2);
+}
+
+.tree-path-rail-connector {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ca-text-muted);
+  margin-inline-start: var(--ca-space-1);
+}
+
+.tree-path-rail-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-1);
+}
+
+.tree-path-rail-label {
   font-size: 0.68em;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ca-editorial);
-  line-height: 1.5;
+  color: var(--ca-text-muted);
+}
+
+.tree-path-rail-row-organizing .tree-path-rail-label {
+  color: var(--ca-editorial-text);
 }
 
 .atlas-path-prompt {
