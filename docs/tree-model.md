@@ -37,6 +37,19 @@ down to somebody's technical check. That chain exists. It is just never shown.
 a limitation to report honestly. Reporting the gap is the same trap this product
 exists to get people out of.
 
+This is the cybersecurity-tree theory: context explains the conditions of the work;
+roots explain why the work exists; the Cybersecurity trunk gives every area a common
+orientation; and the branches, requirements, implementation, assurance, and reusable
+work explain how it is carried out. The tree is deliberately not a claim that every
+relationship is hierarchical. It is the stable mental model that lets a newcomer
+orient themselves before seeing the crosswalks, selections, mappings, and other
+many-to-many relationships that form the real graph.
+
+Control Atlas exists to make that model public, useful, and easy to pass on: an
+open, people-first common resource that practitioners recommend because it connects
+the actual published material without hiding the source, the uncertainty, or the
+decision still owned by a responsible person.
+
 ---
 
 ## 2. The tree

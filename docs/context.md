@@ -5,8 +5,9 @@
 - Public product name: **Control Atlas**
 - Protected brand flourish: **Ctrl+Alt+** followed by a rotating, real product
   action such as **Trace**, **Search**, **Explore**, **Compare**, or **Build**.
-- Product definition: A public, no-account workbench for finding, reading,
-  comparing, and tracing federal cybersecurity material back to its source.
+- Product definition: A public, no-account working commons for finding, reading,
+  comparing, and tracing federal cybersecurity material back to its source — built
+  openly from public material for the people doing the work.
 - Boundary: Control Atlas organizes public material. The people responsible
   for the work decide applicability, baseline selection, compliance and
   inheritance claims, and authorization or ATO outcomes.

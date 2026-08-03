@@ -8,6 +8,18 @@ Every project should reduce the distance between a messy real-world problem and 
 
 For Control Atlas, that means turning frameworks, controls, mappings, STIGs, MITRE techniques, Zero Trust concepts, and RMF artifacts into a **shared plain-language model** that small teams can understand, trust, and use.
 
+## Build a public common resource
+
+Control Atlas should become the federal-cybersecurity resource practitioners recommend
+to one another. That ambition is earned by being useful, open, specific, traceable,
+and respectful of the people doing the work. It is not earned through opaque claims,
+artificial scarcity, or pretending that a reference tool can make an organization's
+compliance, risk, or authorization decisions.
+
+Design for the person who arrives overwhelmed and the practitioner who arrives with a
+precise question. Give both a fast answer, a visible connection to the underlying
+public source, and a practical next step.
+
 ## Operating rules for AI agents
 
 1. **Plain language first.** Use domain terms only when they add precision.
