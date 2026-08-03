@@ -33,7 +33,7 @@ jobs:
       MAX_MEDIAN_DROP: "3"
       ROUTE: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v6

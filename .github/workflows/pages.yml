@@ -76,7 +76,7 @@ jobs:
 
       # Manual dispatch is an explicit disaster-recovery path. Routine releases
       # always consume CI's exact-SHA artifact and never rebuild.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         if: ${{ github.event_name == 'workflow_dispatch' }}
       - uses: actions/setup-node@v6
         if: ${{ github.event_name == 'workflow_dispatch' }}
