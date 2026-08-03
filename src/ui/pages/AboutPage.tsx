@@ -38,8 +38,10 @@ export function AboutPage(props: {
               its publisher and publication. Ingestion is tracked separately.
             </li>
             <li>
-              <strong>Structure follows the publisher:</strong> Path shows only
-              hierarchy declared by the source.
+              <strong>Path has two rails:</strong> Control Atlas structure
+              (Cybersecurity, its areas, and each catalog) and publisher hierarchy
+              (the ancestors the source itself declares) are shown separately
+              and never mixed into one claimed chain.
             </li>
             <li>
               <strong>Connections stay connections:</strong> baselines,
@@ -57,6 +59,42 @@ export function AboutPage(props: {
               is missing, there is no file.
             </li>
           </ol>
+        </SummaryCard>
+
+        <SummaryCard title="A tree for hierarchy, a graph for relationships">
+          <p>
+            Every record has one place it lives — its hierarchy. AC-2 lives
+            under SP 800-53&apos;s own Access Control family, and that catalog
+            lives under the Compliance area of Control Atlas. That containment
+            is the tree, and each record has exactly one path through it.
+          </p>
+          <p>
+            Everything else a record connects to — a baseline that selects it,
+            a CCI that correlates it to an assessment requirement, a mapping to
+            another framework — is a relationship, not a parent. A record can
+            have any number of these, and they are shown separately from Path
+            so a mapping is never mistaken for structure.
+          </p>
+          <p>
+            <strong>A compact chain:</strong> NIST publishes SP 800-53, which
+            defines control AC-2 (Account Management). AC-2 is selected into
+            the FedRAMP Moderate baseline (applicability), correlates to DISA
+            CCI-000010 (correlation), and is assessed through an SP 800-53A
+            procedure (assessment). Four different facts about one record —
+            one hierarchy, three relationships.
+          </p>
+          <p>
+            Relationship classes in plain language: <strong>applicability</strong>{" "}
+            selects or scopes a record into a baseline or profile;{" "}
+            <strong>correlation</strong> connects records through a mapping
+            junction like a CCI without either becoming the other&apos;s
+            parent; <strong>implementation and technical requirements</strong>{" "}
+            link to published STIGs, SRGs, and rules;{" "}
+            <strong>assessment and evidence</strong> link to published
+            procedures and the evidence they expect;{" "}
+            <strong>cross-framework mappings</strong> connect the same record
+            to another published framework.
+          </p>
         </SummaryCard>
 
         <SummaryCard title="Why this exists">
@@ -84,6 +122,9 @@ export function AboutPage(props: {
             </Button>
             <Button variant="secondary" onClick={() => onNavigate("sources")}>
               Review sources
+            </Button>
+            <Button variant="secondary" onClick={() => onNavigate("patterns")}>
+              Read Learn guides
             </Button>
             <Button variant="secondary" onClick={() => onNavigate("templates", { buildSection: "documents" })}>
               Open starter documents

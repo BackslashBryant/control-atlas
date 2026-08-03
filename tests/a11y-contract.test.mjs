@@ -199,14 +199,15 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
 });
 
-test("Home makes Search the sole primary action and keeps RMF optional", () => {
+test("Home makes Start Here the sole primary action, retains direct Search, and keeps RMF optional", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
+  assert.match(homePage, /className="home-start-here"/);
+  assert.match(homePage, /onNavigate\("start-here"\)/);
   assert.match(homePage, /className="home-search"/);
   assert.match(homePage, /Search published records/);
   assert.match(homePage, /Open the Atlas/);
   assert.match(homePage, /Browse Catalog/);
   assert.match(homePage, /Find Tools & Resources/);
-  assert.match(homePage, /Browse publications/);
   assert.match(homePage, /BrandFlourish/);
   assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
