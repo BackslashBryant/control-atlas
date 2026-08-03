@@ -157,7 +157,7 @@ export function CommonsResourceCard({
             sentence to 12px. Same content, one less frame. */}
         <div className="mb-4">
           <span className="text-xs font-semibold uppercase tracking-wider text-[var(--ca-primary)] block mb-0.5">
-            Why it is here
+            Why Control Atlas lists this
           </span>
           <p className="text-sm text-[var(--ca-text-muted)] leading-relaxed">
             {resource.whyIncluded}

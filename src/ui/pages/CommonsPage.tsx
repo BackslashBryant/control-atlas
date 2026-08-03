@@ -48,10 +48,10 @@ export function CommonsPage(props: {
   const directoryAvailable = Boolean(bundle?.commonsDataset);
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
   const [filtersOpen, setFiltersOpen] = useState(false);
-  // 96 resources rendered as one grid made a 17,000px page. Show a first
-  // screenful and let the reader ask for the rest; the filters above are the
-  // intended way to narrow, and the status line still reports the true total.
-  const RESOURCE_PAGE_SIZE = 24;
+  // A full resource grid made a 17,000px page. Show a first screenful and
+  // let the reader ask for the rest; the filters above are the intended way
+  // to narrow, and the status line still reports the true total.
+  const RESOURCE_PAGE_SIZE = 18;
   const [showAll, setShowAll] = useState(false);
   const update = (patch: Partial<CommonsState>) =>
     onNavigate("commons", { ...state, ...patch });

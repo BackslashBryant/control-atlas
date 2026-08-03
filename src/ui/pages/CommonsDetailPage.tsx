@@ -195,7 +195,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
             <section className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-6 shadow-md">
               <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--ca-primary)] flex items-center gap-2 mb-3">
                 <IconInfoCircle size={18} />
-                Why this resource is here
+                Why Control Atlas lists this
               </h2>
               <p className="text-sm text-[var(--ca-text)] leading-relaxed">
                 {resource.whyIncluded}
@@ -302,9 +302,14 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
                 <span className="text-[var(--ca-secondary)] block mb-0.5">Frameworks & Programs</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {resource.frameworks.map((fw) => (
-                    <span key={fw} className="px-2 py-0.5 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] font-medium">
+                    <button
+                      key={fw}
+                      className="px-2 py-0.5 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] font-medium hover:text-[var(--ca-primary)]"
+                      onClick={() => onNavigate("search", { query: fw })}
+                      type="button"
+                    >
                       {fw}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -319,6 +324,29 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: CommonsDeta
                 <p className="text-[var(--ca-text-muted)]">{resource.lifecycleStages.join(", ")}</p>
               </div>
             </div>
+
+            {/* Explicitly related Atlas records: frameworks above are a
+                curated, source-backed link into Search — never a fabricated
+                graph edge. No Resource has an implementation relationship to
+                a record unless it is asserted here, by name. */}
+            {resource.frameworks.length ? (
+              <div className="rounded-md border border-[var(--ca-border)] bg-[var(--ca-surface)] p-5 space-y-2 text-xs">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ca-text-muted)] border-b border-[var(--ca-border)] pb-2">
+                  Explicitly related Atlas records
+                </h3>
+                <p className="text-[var(--ca-text-muted)]">
+                  Search Control Atlas for records connected to{" "}
+                  {resource.frameworks.join(", ")}.
+                </p>
+                <button
+                  className="text-[var(--ca-primary)] font-semibold hover:underline"
+                  onClick={() => onNavigate("search", { query: resource.frameworks[0] })}
+                  type="button"
+                >
+                  Search Atlas records →
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
