@@ -1,18 +1,30 @@
 /** Derived UI categories for patterns and templates (no schema migration). */
 
+// Work-stage categories (docs/plans/audit-alignment-2026-08-02.md Phase 3b):
+// Plan/Implement/Assess/Remediate/Monitor, the same five stages RMF's own
+// Categorize+Select, Implement, Assess, and Monitor steps use — not a
+// schema-derived Authorization/Assessment/Evidence/Monitoring taxonomy that
+// treated Evidence as its own phase and had no Remediate stage at all. Every
+// starter document has a stage; there is no "Other" bucket.
 export const TEMPLATE_CATEGORIES = {
-  Authorization: [
+  Plan: [
     "security_plan_starter",
+    "hardware_baseline",
+    "software_baseline",
+    "ppsm_preparation_worksheet",
+  ],
+  Implement: [
     "inheritance_worksheet",
     "reciprocity_checklist",
-  ],
-  Assessment: [
-    "assessment_planning_worksheet",
-    "stig_evidence_checklist",
     "implementation_statement_worksheet",
   ],
-  Evidence: ["evidence_expectation_matrix", "poam_starter"],
-  Monitoring: ["conmon_calendar"],
+  Assess: [
+    "assessment_planning_worksheet",
+    "stig_evidence_checklist",
+    "evidence_expectation_matrix",
+  ],
+  Remediate: ["poam_starter"],
+  Monitor: ["conmon_calendar"],
 };
 
 export function groupItemsByCategory(items, categoryMap, getId) {

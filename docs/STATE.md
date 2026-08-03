@@ -73,6 +73,24 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3b (Documents recategorization) COMPLETE
+
+`src/ui/lib/catalogGroups.mjs`'s `TEMPLATE_CATEGORIES`: Authorization/
+Assessment/Evidence/Monitoring (+ implicit Other for 3 uncategorized
+templates) -> Plan/Implement/Assess/Remediate/Monitor per the spec's exact
+12-document mapping (verified each template id against `data/template-
+registry.json`'s `name`/`display_name` fields before assigning). All 12
+templates now have a category; no Other bucket. `TemplatesPage.tsx`'s
+category filter chip list no longer appends a dead "Other" option.
+
+### Verification
+Lint/typecheck/`npm test` unchanged (258/30/57/3) — no test hardcoded the
+old category names. Full e2e 142/142 (1 skip), full a11y 32/32, full visual
+28/28 after inspecting the Documents screenshot (12 documents, 5 correctly-
+labeled sections, no Other). Live-verified in Chrome: category chips read
+Plan/Implement/Assess/Remediate/Monitor, "12 starter documents in 5
+categories". `npm run precommit` clean.
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 3a (Learn practitioner guides) COMPLETE
 
 `src/app/learn-content.mjs`: new `practitionerGuides` array (12 entries) —
