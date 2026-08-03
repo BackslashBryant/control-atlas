@@ -490,7 +490,7 @@
       "whyIncluded": "Vendor documentation for configuring AWS GovCloud services to meet federal compliance controls.",
       "canonicalUrl": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/welcome.html",
       "publisher": "Amazon Web Services",
-      "publisherType": "government_or_organization",
+      "publisherType": "commercial",
       "resourceLane": "commercial",
       "resourceType": "documentation",
       "frameworks": [
@@ -529,7 +529,7 @@
         "AWS GovCloud Guide"
       ],
       "searchKeywords": [],
-      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation government_or_organization public free community fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. aws govcloud guide"
+      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation commercial public free commercial publisher fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. aws govcloud guide"
     },
     {
       "id": "training-cdse",
@@ -638,7 +638,7 @@
       "whyIncluded": "Commercial security benchmarks freely available for personal and internal organizational use.",
       "canonicalUrl": "https://www.cisecurity.org/cis-benchmarks",
       "publisher": "Center for Internet Security (CIS)",
-      "publisherType": "government_or_organization",
+      "publisherType": "nonprofit",
       "resourceLane": "commercial",
       "resourceType": "catalog",
       "frameworks": [
@@ -677,7 +677,7 @@
         "CIS Benchmarks Free"
       ],
       "searchKeywords": [],
-      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. consensus-developed secure configuration benchmarks for os, cloud, and network platforms. commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog government_or_organization free_account free community cis benchmarks nist sp 800-53 cis hardening security engineer system administrator implement assess general_it product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cis benchmarks free"
+      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. consensus-developed secure configuration benchmarks for os, cloud, and network platforms. commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog nonprofit free_account free nonprofit publisher cis benchmarks nist sp 800-53 cis hardening security engineer system administrator implement assess general_it product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cis benchmarks free"
     },
     {
       "id": "portal-cis-workbench",
@@ -3019,8 +3019,8 @@
       "whyIncluded": "The linked page exposes the templates themselves; I-Assure consulting and paid service offerings are outside this directory.",
       "canonicalUrl": "https://i-assure.com/products/rmf-templates/",
       "publisher": "I-Assure",
-      "publisherType": "government_or_organization",
-      "resourceLane": "practitioner",
+      "publisherType": "commercial",
+      "resourceLane": "commercial",
       "resourceType": "template",
       "frameworks": [
         "NIST SP 800-53",
@@ -3059,7 +3059,7 @@
         "control family templates"
       ],
       "searchKeywords": [],
-      "searchableText": "i-assure rmf artifact templates i-assure rmf templates no-cost rmf artifact templates organized by nist control subject area. download no-cost rmf artifact templates organized by nist control subject area. the linked page exposes the templates themselves; i-assure consulting and paid service offerings are outside this directory. i-assure template government_or_organization public free publisher-provided free resource nist sp 800-53 nist rmf fisma isso consultant implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. i-assure rmf templates i-assure rmf artifact templates control family templates"
+      "searchableText": "i-assure rmf artifact templates i-assure rmf templates no-cost rmf artifact templates organized by nist control subject area. download no-cost rmf artifact templates organized by nist control subject area. the linked page exposes the templates themselves; i-assure consulting and paid service offerings are outside this directory. i-assure template commercial public free commercial publisher; free templates nist sp 800-53 nist rmf fisma isso consultant implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. i-assure rmf templates i-assure rmf artifact templates control family templates"
     },
     {
       "id": "tool-compliance-trestle",
@@ -3325,7 +3325,7 @@
       "whyIncluded": "Vendor guidance for deploying compliant federal workloads on Azure Government.",
       "canonicalUrl": "https://learn.microsoft.com/en-us/azure/azure-government/",
       "publisher": "Microsoft",
-      "publisherType": "government_or_organization",
+      "publisherType": "commercial",
       "resourceLane": "commercial",
       "resourceType": "documentation",
       "frameworks": [
@@ -3362,7 +3362,7 @@
         "Azure Gov Compliance"
       ],
       "searchKeywords": [],
-      "searchableText": "microsoft azure government compliance documentation azure gov compliance architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. vendor guidance for deploying compliant federal workloads on azure government. microsoft documentation government_or_organization public free community fedramp high dod il5 nist sp 800-53 azure government cloud architect isso engineer implement assess general_it azure gov compliance"
+      "searchableText": "microsoft azure government compliance documentation azure gov compliance architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. architecture blueprints, compliance coverage matrices, and fedramp high implementation guides for azure government. vendor guidance for deploying compliant federal workloads on azure government. microsoft documentation commercial public free commercial publisher fedramp high dod il5 nist sp 800-53 azure government cloud architect isso engineer implement assess general_it azure gov compliance"
     },
     {
       "id": "tool-microsoft-security-compliance-toolkit",

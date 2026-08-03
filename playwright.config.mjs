@@ -1,5 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
+const port = process.env.PLAYWRIGHT_PORT ?? '4317';
+const baseURL = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './tests/e2e',
   testIgnore: '**/approved-layout-visual.spec.mjs',
@@ -10,7 +13,7 @@ export default defineConfig({
     timeout: process.env.CI ? 15000 : 5000,
   },
   use: {
-    baseURL: 'http://localhost:4317',
+    baseURL,
     actionTimeout: process.env.CI ? 15000 : 0,
     navigationTimeout: process.env.CI ? 30000 : 0,
     trace: 'on-first-retry',
@@ -18,9 +21,9 @@ export default defineConfig({
   webServer: {
     command: 'node ./tools/serve-static-site.mjs',
     env: {
-      PORT: '4317',
+      PORT: port,
     },
-    url: 'http://localhost:4317',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
