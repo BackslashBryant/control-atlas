@@ -43,6 +43,30 @@ for (const res of dataset.resources) {
     console.error(`Missing canonicalUrl for resource: ${res.id}`);
     process.exit(1);
   }
+  const canonicalUrl = new URL(res.canonicalUrl).toString();
+  if (urls.has(canonicalUrl)) {
+    console.error(`Duplicate canonicalUrl found: ${canonicalUrl}`);
+    process.exit(1);
+  }
+  urls.add(canonicalUrl);
+}
+
+const collectionIds = new Set(dataset.collections.map((collection) => collection.id));
+for (const collection of dataset.collections) {
+  for (const resourceId of collection.resourceIds) {
+    if (!ids.has(resourceId)) throw new Error(`Collection ${collection.id} references missing resource ${resourceId}`);
+  }
+}
+for (const resource of dataset.resources) {
+  for (const collectionId of resource.featuredCollections) {
+    if (!collectionIds.has(collectionId)) throw new Error(`Resource ${resource.id} references missing collection ${collectionId}`);
+  }
+  if (resource.parentEcosystemId && !ids.has(resource.parentEcosystemId)) {
+    throw new Error(`Resource ${resource.id} references missing parent ${resource.parentEcosystemId}`);
+  }
+  for (const childId of resource.childResourceIds) {
+    if (!ids.has(childId)) throw new Error(`Resource ${resource.id} references missing child ${childId}`);
+  }
 }
 
 // Build Search Index Documents
@@ -51,14 +75,23 @@ const indexDocuments = dataset.resources.map((res) => {
     res.name,
     res.shortName,
     res.summary,
+    res.cardPurpose,
     res.whyIncluded,
     res.publisher,
     res.maintainer || "",
     res.resourceType,
+    res.publisherType,
+    res.accessType,
+    res.costType,
+    res.officialStatus,
     ...(res.frameworks || []),
     ...(res.programs || []),
     ...(res.controlFamilies || []),
     ...(res.audiences || []),
+    ...(res.lifecycleStages || []),
+    ...(res.technologyScopes || []),
+    ...(res.featuredCollections || []),
+    ...dataset.collections.filter((collection) => res.featuredCollections.includes(collection.id)).flatMap((collection) => [collection.title, collection.summary]),
     ...(res.searchAliases || []),
     ...(res.searchKeywords || [])
   ].filter(Boolean).join(" ").toLowerCase();
@@ -67,11 +100,13 @@ const indexDocuments = dataset.resources.map((res) => {
     id: res.id,
     name: res.name,
     shortName: res.shortName,
+    cardPurpose: res.cardPurpose,
     slug: res.slug,
     summary: res.summary,
     whyIncluded: res.whyIncluded,
     canonicalUrl: res.canonicalUrl,
     publisher: res.publisher,
+    publisherType: res.publisherType,
     resourceLane: res.resourceLane,
     resourceType: res.resourceType,
     frameworks: res.frameworks || [],
@@ -79,6 +114,7 @@ const indexDocuments = dataset.resources.map((res) => {
     lifecycleStages: res.lifecycleStages || [],
     audiences: res.audiences || [],
     artifactTypes: res.artifactTypes || [],
+    technologyScopes: res.technologyScopes || [],
     accessType: res.accessType,
     costType: res.costType,
     maintenanceStatus: res.maintenanceStatus,

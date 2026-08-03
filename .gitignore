@@ -92,6 +92,7 @@ styles/*
 !styles/components.css
 !styles/surfaces.css
 !styles/orbital.css
+!styles/resources.css
 !tools/
 !tools/*.mjs
 !tools/importers/

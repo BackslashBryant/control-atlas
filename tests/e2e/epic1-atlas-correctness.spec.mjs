@@ -16,9 +16,9 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
   page,
 }) => {
   await page
-    .getByRole("searchbox", { name: "Search Atlas" })
+    .getByRole("searchbox", { name: "Jump to another record" })
     .fill("nist-800-53:AC-2");
-  await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
 
   await expect(page).toHaveURL(/node=nist-800-53%3AAC-2/);
   await expect(
@@ -27,6 +27,9 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
       name: "AC-2 — Account Management",
     }),
   ).toBeVisible();
+  // Hierarchy is closed by default in the record workspace (Connections is
+  // the default surface); open it to reach "Where this sits".
+  await page.getByRole("button", { name: "Hierarchy" }).click();
   const structuralPosition = page.getByRole("navigation", {
     name: "Where this sits",
   }).first();
@@ -37,14 +40,14 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
 });
 
 test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {
-  await page.getByRole("searchbox", { name: "Search Atlas" }).fill("account");
-  await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to another record" }).fill("account");
+  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
 
   await expect(page).toHaveURL(/\/search\?q=account/);
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Search everything in one place",
+      name: "Library",
     }),
   ).toBeVisible();
 });
@@ -53,8 +56,8 @@ test("no-match Atlas search stays local with announced recovery actions", async 
   page,
 }) => {
   const query = "zzzz-epic-one-no-match";
-  await page.getByRole("searchbox", { name: "Search Atlas" }).fill(query);
-  await page.getByRole("searchbox", { name: "Search Atlas" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to another record" }).fill(query);
+  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
 
   await expect(page).toHaveURL(/\/explore/);
   await expect(
@@ -73,17 +76,17 @@ test("focused Atlas exposes explicit lenses and class-direction List semantics",
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
 
+  await page.getByRole("button", { name: "Hierarchy" }).click();
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }).first(),
   ).toContainText("SP 800-53 Rev. 5");
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }).first(),
   ).toContainText("Access Control");
-  await expect(page.getByRole("tab", { name: "Path" })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "View all", exact: true })).toBeVisible();
 
-  await page.getByRole("tab", { name: "List" }).click();
+  await page.getByRole("button", { name: "View all", exact: true }).click();
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table.getByRole("columnheader", { name: "Class and direction" })).toBeVisible();
   // List reuses Map's own relationship-lens label per row (never a coarser,

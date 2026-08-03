@@ -208,6 +208,53 @@ export function buildAtlasRows(
     .sort((left, right) => left.itemId.localeCompare(right.itemId));
 }
 
+export type AtlasStructuralChild = {
+  id: string;
+  itemId: string;
+  title: string;
+  nodeType: string;
+};
+
+/**
+ * Published structural children of the focused record — the "decomposes into"
+ * list on Path. Structural edges are deliberately excluded from Map and List
+ * (they are hierarchy, not connections), so Path is the only surface that can
+ * show them, and without this it showed nothing but two breadcrumb lines.
+ *
+ * Never filtered by the connection filters: those scope relationships, and a
+ * record's children are not relationships.
+ */
+export function buildStructuralChildren(
+  record: AtlasNeighborhoodRecord,
+): AtlasStructuralChild[] {
+  const nodeById = new Map(record.nodes.map((node) => [node.id, node]));
+  const centerId = record.center_node.id;
+  const seen = new Set<string>();
+  const children: AtlasStructuralChild[] = [];
+
+  for (const edge of record.edges) {
+    if (edge.relationship_class !== "structural") continue;
+    if (edge.source_node_id !== centerId) continue;
+    if (edge.target_node_id === centerId) continue;
+    if (edge.publication_status !== "published") continue;
+    if (seen.has(edge.target_node_id)) continue;
+    const node = nodeById.get(edge.target_node_id);
+    if (!node) continue;
+    seen.add(edge.target_node_id);
+    children.push({
+      id: node.id,
+      itemId: node.metadata?.item_id || node.id,
+      title: node.metadata?.title || node.label || node.id,
+      nodeType: node.node_type || "",
+    });
+  }
+
+  // Natural order so AC-2(2) precedes AC-2(10) instead of sorting beside AC-2(1).
+  return children.sort((left, right) =>
+    left.itemId.localeCompare(right.itemId, undefined, { numeric: true }),
+  );
+}
+
 export function buildAtlasGroups(
   record: AtlasNeighborhoodRecord,
   filters: AtlasFilterState,

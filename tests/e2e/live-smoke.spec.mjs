@@ -21,18 +21,23 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
     expect(page.url()).toContain("/control-atlas/");
   }
   await expect(
-    page.getByRole("heading", { name: "Control Atlas", exact: true }),
+    page.getByRole("heading", {
+      name: /Federal cyber guidance is scattered/,
+    }),
   ).toBeVisible();
-  await expect(page.getByRole("search")).toBeVisible();
+  await expect(page.getByRole("search").first()).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
-  await expect(page.locator(".home-entry .brand-key-word")).toBeVisible();
+  await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
   // The hero is its own copy, separate from the package.json/meta one-liner.
   await expect(page.locator(".home-product-identity")).toContainText(
-    "with every record still attached to the publisher that wrote it",
+    "trace it to the source",
   );
-  await expect(page.locator(".home-spine-limbs button")).toHaveCount(9);
+  // Home shows one real published chain instead of teaching the data model.
+  await expect(page.locator(".home-chain-subject")).toHaveText(
+    "AC-2 Account Management",
+  );
   await expect(page.locator(".home-trust-boundary")).toContainText(
-    "The people doing the work decide what applies",
+    "Public sources only",
   );
 
   await gotoApp(page, "/#/search?q=AC-2");

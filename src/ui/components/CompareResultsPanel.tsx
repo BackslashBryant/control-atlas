@@ -202,7 +202,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
         <div className="card-actions">
           {graph.atlasMapNode ? (
             <Button variant="secondary" onClick={openAtlasMap} type="button">
-              Open in Explore
+              Open in the Atlas
             </Button>
           ) : null}
           <Button

@@ -10,13 +10,26 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "title", "summary", "whyCurated", "resourceIds"],
+        "required": ["id", "title", "summary", "whyCurated", "resourceIds", "icon"],
         "properties": {
           "id": { "type": "string" },
           "title": { "type": "string" },
           "summary": { "type": "string" },
           "whyCurated": { "type": "string" },
-          "resourceIds": { "type": "array", "items": { "type": "string" } }
+          "resourceIds": { "type": "array", "items": { "type": "string" } },
+          "icon": { "type": "string" },
+          "libraryLinks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "query", "reason"],
+              "properties": {
+                "label": { "type": "string" },
+                "query": { "type": "string" },
+                "reason": { "type": "string" }
+              }
+            }
+          }
         }
       }
     },
@@ -28,11 +41,13 @@
           "id",
           "name",
           "shortName",
+          "cardPurpose",
           "slug",
           "summary",
           "whyIncluded",
           "canonicalUrl",
           "publisher",
+          "publisherType",
           "resourceLane",
           "resourceType",
           "frameworks",
@@ -41,13 +56,23 @@
           "artifactTypes",
           "accessType",
           "costType",
+          "accountRequired",
+          "authenticationRequired",
+          "officialStatus",
           "maintenanceStatus",
-          "lastCheckedAt"
+          "lastCheckedAt",
+          "technologyScopes",
+          "searchAliases",
+          "featuredCollections",
+          "brandKey",
+          "sourceEvidence",
+          "verificationMethod"
         ],
         "properties": {
           "id": { "type": "string" },
           "name": { "type": "string" },
           "shortName": { "type": "string" },
+          "cardPurpose": { "type": "string" },
           "slug": { "type": "string" },
           "summary": { "type": "string" },
           "whyIncluded": { "type": "string" },
@@ -74,7 +99,21 @@
           "formats": { "type": "array", "items": { "type": "string" } },
           "accessType": {
             "type": "string",
-            "enum": ["public", "free_account", "membership", "customer_only", "cac_or_piv", "paid", "restricted", "unknown"]
+            "enum": [
+              "public",
+              "free_account",
+              "commercial_account",
+              "cac_required",
+              "dod_network_required",
+              "invitation_required",
+              "access_varies",
+              "membership",
+              "customer_only",
+              "cac_or_piv",
+              "paid",
+              "restricted",
+              "unknown"
+            ]
           },
           "costType": { "type": "string" },
           "accountRequired": { "type": "boolean" },
@@ -125,7 +164,14 @@
           "searchAliases": { "type": "array", "items": { "type": "string" } },
           "searchKeywords": { "type": "array", "items": { "type": "string" } },
           "featuredCollections": { "type": "array", "items": { "type": "string" } },
-          "sourceEvidence": { "type": ["string", "null"] },
+          "parentEcosystemId": { "type": ["string", "null"] },
+          "childResourceIds": { "type": "array", "items": { "type": "string" } },
+          "brandKey": { "type": "string" },
+          "sourceEvidence": { "type": "string" },
+          "verificationMethod": {
+            "type": "string",
+            "enum": ["public_url", "official_repository", "manual_restricted"]
+          },
           "automatedFields": { "type": "array", "items": { "type": "string" } },
           "manualFields": { "type": "array", "items": { "type": "string" } }
         }

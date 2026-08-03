@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { learnArticles } from '../src/app/learn-content.mjs';
@@ -34,6 +34,38 @@ const BANNED_SITE_COPY = [
   /family tree/i,
   /what do you need to get done/i,
   /start with a compliance task/i,
+  // 2026-08-03 UX copy correction. These are the exact constructions the
+  // interface used to narrate itself with: route descriptions that explained
+  // when to click, and doctrine pasted out of docs/ into page bodies.
+  /for when you/i,
+  /we point you at/i,
+  /a compact chain/i,
+  /relationship classes in plain language/i,
+  /one hierarchy, (?:two|three) relationships/i,
+  /everything it connects to beyond that/i,
+  /if the official text is not the thing you need/i,
+  // Generic product language: accurate but bloodless. The site speaks like a
+  // practitioner, so these constructions stay out of rendered copy.
+  /explore a published chain/i,
+  /see what comes next/i,
+  /choices you make explicitly/i,
+  /make explicit choices/i,
+  /follow published connections/i,
+  /navigate the ecosystem/i,
+  /explore the ecosystem/i,
+  /unlock insights/i,
+  /seamlessly trace/i,
+];
+
+// The 2026-08-03 public names. Old surface names are internal route keys only
+// and must not appear as rendered labels again.
+const RETIRED_SURFACE_LABELS = [
+  />Browse Catalog</,
+  /Find Tools &amp; Resources/,
+  /Back to Learn/,
+  /Open in Explore/,
+  /Open Explore</,
+  />Loading Catalog</,
 ];
 
 const dataset = {
@@ -78,14 +110,181 @@ test('Learn explanation copy avoids prohibited compliance or authorization claim
   }
 });
 
-test('Start here is a source navigator without determination questions', () => {
+// 2026-08-03: the owner asked for a two-step guided flow, superseding the
+// session-15 "no questions at all" rule. The boundary it was protecting is
+// unchanged and still enforced: the flow may route, never determine.
+test('Start here guides in two steps without making a determination', () => {
   const startHere = readFileSync('src/ui/pages/StartHerePage.tsx', 'utf8');
-  assert.match(startHere, /Find the publication you need/);
-  assert.match(startHere, /records and relationships loaded from that\s+publisher/);
+  assert.match(startHere, /1\. What are you trying to do\?/);
+  assert.match(startHere, /2\. What context do you already know\?/);
+  assert.match(startHere, /Control Atlas does not decide\s+what applies to your system/);
   assert.doesNotMatch(startHere, /applicability recommendation|not a framework or baseline/i);
   assert.doesNotMatch(startHere, /System type|Data sensitivity|Operational environment/);
   for (const claim of DETERMINATION_BOUNDARY) {
     assert.doesNotMatch(startHere, claim, `Start Here contains a determination-like claim: ${claim}`);
+  }
+});
+
+test('Start here plans are traceable to real publications and routes', async () => {
+  const guide = await import('../src/app/start-here-guide.mjs');
+  assert.deepEqual(guide.validateStartHereGuide(), []);
+
+  const catalogIds = new Set(
+    JSON.parse(
+      readFileSync('data/generated/catalog-bootstrap.json', 'utf8'),
+    ).catalog_bootstrap.catalogs.map((catalog) => catalog.id),
+  );
+  const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
+
+  for (const goal of guide.START_HERE_GOALS) {
+    for (const context of guide.START_HERE_CONTEXTS) {
+      const plan = guide.startingPlanFor(goal.id, context.id);
+      assert.ok(plan, `no plan for ${goal.id}/${context.id}`);
+      for (const step of [plan.startWith, plan.thenReview]) {
+        assert.ok(
+          catalogIds.has(step.catalogId),
+          `${goal.id}/${context.id} names an unknown publication: ${step.catalogId}`,
+        );
+      }
+      assert.match(
+        routeIdentity,
+        new RegExp(`"?${plan.action.view}"?:`),
+        `${goal.id} next action targets an unknown route: ${plan.action.view}`,
+      );
+    }
+  }
+
+  // Start here renders without the runtime bundle, so every publication it can
+  // name needs a static display name — otherwise the plan prints a raw catalog
+  // id, which is exactly what the live browser showed on 2026-08-03.
+  const catalogNames = new Map(
+    JSON.parse(
+      readFileSync('data/generated/catalog-bootstrap.json', 'utf8'),
+    ).catalog_bootstrap.catalogs.map((catalog) => [catalog.id, catalog.name]),
+  );
+  for (const [catalogId, name] of Object.entries(guide.PUBLICATION_NAMES)) {
+    assert.equal(
+      name,
+      catalogNames.get(catalogId),
+      `${catalogId} display name has drifted from the generated catalog data`,
+    );
+    assert.doesNotMatch(name, /^[a-z0-9-]+$/, `${catalogId} renders a raw id`);
+  }
+
+  // A half-answered flow must never render a plan.
+  assert.equal(guide.startingPlanFor('understand', ''), null);
+  assert.equal(guide.startingPlanFor('', 'federal'), null);
+  assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
+});
+
+test('primary navigation uses the current public names', () => {
+  const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
+  for (const [view, label] of [
+    ['atlas-map', 'Atlas'],
+    ['catalog-detail', 'Library'],
+    ['search', 'Library'],
+    ['matrix', 'Compare'],
+    ['patterns', 'Guides'],
+    ['templates', 'Documents'],
+  ]) {
+    assert.match(
+      routeIdentity,
+      new RegExp(`"?${view}"?: \\{[^}]*label: "${label}"`),
+      `${view} must render as "${label}"`,
+    );
+  }
+  // Search results are a state of Library, not a sixth destination.
+  assert.match(routeIdentity, /search: "catalog-detail"/);
+
+  const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
+  const primaryViews = [...navigation.matchAll(/view: "([a-z-]+)",\n\s+path: routeIdentityFor/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(primaryViews.slice(0, 5), [
+    'atlas-map',
+    'catalog-detail',
+    'matrix',
+    'patterns',
+    'templates',
+  ]);
+  // Resources is utility navigation, not a primary destination.
+  assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "commons"/);
+});
+
+test('old public-name URLs and the new ones both resolve', () => {
+  const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
+  for (const [alias, canonical] of [
+    ['/atlas', '/explore'],
+    ['/library', '/catalog'],
+    ['/guides', '/learn'],
+    ['/documents', '/build'],
+  ]) {
+    assert.match(
+      routeIdentity,
+      new RegExp(`"${alias}": "${canonical}"`),
+      `${alias} must resolve to ${canonical} so both URLs work`,
+    );
+  }
+  // Start Here's guided answers must survive canonicalization, or the flow is
+  // dead on a shared link (the atlasLimb regression, 2026-08-01).
+  assert.match(routeIdentity, /const START_PARAMS = new Set\(\["goal", "context"\]\)/);
+});
+
+test('Home is an entry surface, not a lesson about the data model', () => {
+  for (const path of ['src/ui/pages/HomePage.tsx', 'src/index.html']) {
+    const home = readFileSync(path, 'utf8');
+    assert.doesNotMatch(home, /home-spine/, `${path} still renders the nine-area directory`);
+    assert.doesNotMatch(home, /home-thesis/, `${path} still renders the hierarchy lesson`);
+    // AC-2 may appear as the preview chain's subject, never as a lesson.
+    assert.doesNotMatch(home, /AC-2 is selected into|AC-2 lives under|one hierarchy/, `${path} still teaches the AC-2 example`);
+    assert.doesNotMatch(home, /which baseline to use/, `${path} repeats the About trust boundary`);
+    assert.match(
+      home,
+      /Federal cyber guidance is scattered\. The work still has to get done\./,
+    );
+    // Home shows the product, not just claims about it.
+    assert.match(home, /home-chain|HomeChainPreview/, `${path} has no published-chain preview`);
+    // Searching is the field above; no card may repeat it.
+    assert.doesNotMatch(home, /Find a requirement/, `${path} duplicates the search entrance`);
+    assert.doesNotMatch(home, /guidance that applies to your work/, `${path} implies an applicability decision`);
+  }
+});
+
+test('the Home preview chain shows only published relationships', async () => {
+  const { readFileSync: read } = await import('node:fs');
+  const edgeFile = JSON.parse(read('data/generated/edges.json', 'utf8'));
+  const edges = Array.isArray(edgeFile) ? edgeFile : edgeFile.edges || Object.values(edgeFile)[0];
+  const has = (predicate) => edges.some(predicate);
+
+  assert.ok(
+    has((edge) => edge.source_node_id === 'nist-800-53:FAMILY-AC' && edge.target_node_id === 'nist-800-53:AC-2'),
+    'Home claims AC-2 sits under Access Control',
+  );
+  assert.ok(
+    has((edge) => edge.source_node_id === 'fedramp-rev5:MODERATE' && edge.target_node_id === 'nist-800-53:AC-2' && edge.relationship_type === 'selects'),
+    'Home claims FedRAMP Moderate selects AC-2',
+  );
+  assert.ok(
+    has((edge) => edge.source_node_id === 'nist-800-53a:AC-2' && edge.target_node_id === 'nist-800-53:AC-2' && edge.relationship_type === 'assesses'),
+    'Home claims SP 800-53A assesses AC-2',
+  );
+  assert.ok(
+    has((edge) => /^disa-cci:/.test(edge.source_node_id) && edge.target_node_id === 'nist-800-53:AC-2'),
+    'Home claims DISA CCIs connect to AC-2',
+  );
+});
+
+test('retired surface labels never return to rendered copy', () => {
+  const uiFiles = readdirSync('src/ui', { recursive: true })
+    .map(String)
+    .filter((path) => /\.(?:ts|tsx)$/.test(path))
+    .map((path) => [`src/ui/${path}`, readFileSync(`src/ui/${path}`, 'utf8')]);
+  uiFiles.push(['src/index.html', readFileSync('src/index.html', 'utf8')]);
+
+  for (const [path, contents] of uiFiles) {
+    for (const label of RETIRED_SURFACE_LABELS) {
+      assert.doesNotMatch(contents, label, `${path} renders a retired surface label: ${label}`);
+    }
   }
 });
 
@@ -195,13 +394,50 @@ test('starter documents use the same direct decision boundary as the public prod
 test('about page states the exact product boundary without a decorative hierarchy', () => {
   const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
   assert.match(appShell, /AboutPage/);
-  assert.match(aboutPage, /eyebrow="About"/);
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  assert.match(aboutPage, /Path has two rails/i);
+  // The two-rails distinction must survive the copy cut, in whatever wording.
+  assert.match(aboutPage, /separate rails/i);
   assert.match(aboutPage, /Control Atlas structure/);
   assert.match(aboutPage, /publisher hierarchy/i);
   assert.match(aboutPage, /A tree for hierarchy, a graph for relationships/);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
+  // About explains the model once; it is not the keyboard-shortcut page and
+  // not a doctrine dump.
+  assert.doesNotMatch(aboutPage, /Ctrl \+|keyboard shortcut/i);
+  assert.doesNotMatch(aboutPage, /Where to go next/i);
+  assert.ok(
+    (aboutPage.match(/AC-2/g) || []).length <= 2,
+    'About should carry at most one AC-2 example',
+  );
+});
+
+test('the tree/graph line and the AC-2 example live in exactly one place', () => {
+  const uiFiles = readdirSync('src/ui', { recursive: true })
+    .map(String)
+    .filter((path) => /\.(?:ts|tsx)$/.test(path))
+    .map((path) => [
+      `src/ui/${path}`.split(sep).join('/'),
+      readFileSync(`src/ui/${path}`, 'utf8'),
+    ]);
+  uiFiles.push(['src/index.html', readFileSync('src/index.html', 'utf8')]);
+
+  const withTreeGraphLine = uiFiles.filter(([, contents]) =>
+    /A tree for hierarchy, a graph for relationships/.test(contents),
+  );
+  assert.deepEqual(
+    withTreeGraphLine.map(([path]) => path),
+    ['src/ui/pages/AboutPage.tsx'],
+  );
+
+  // ComparePage uses AC-2 as an input placeholder, not as a lesson; only
+  // explanatory prose is restricted.
+  const withAcExample = uiFiles.filter(([, contents]) =>
+    /AC-2 is selected into|AC-2 lives under/.test(contents),
+  );
+  assert.deepEqual(
+    withAcExample.map(([path]) => path),
+    ['src/ui/pages/AboutPage.tsx'],
+  );
 });

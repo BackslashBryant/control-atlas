@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import "./resource-ecosystem-contract.test.mjs";
 
 const DATASET_PATH = resolve("data/commons-resource-dataset.json");
 const MANIFEST_PATH = resolve("data/commons-candidate-manifest.json");
@@ -57,11 +58,11 @@ const legacyCount = dataset.resources.filter(r => r.resourceLane === "legacy" ||
 assert.ok(officialCount >= 37, `Expected >= 37 official resources, found ${officialCount}`);
 assert.ok(openSourceCount >= 32, `Expected >= 32 open-source resources, found ${openSourceCount}`);
 assert.ok(practitionerCount >= 7, `Expected >= 7 practitioner resources, found ${practitionerCount}`);
-assert.ok(templateCount >= 8, `Expected >= 8 template resources, found ${templateCount}`);
+assert.ok(templateCount >= 5, `Expected >= 5 resource templates after publication-owned starters moved to Library, found ${templateCount}`);
 assert.ok(toolCount >= 33, `Expected >= 33 tool resources, found ${toolCount}`);
 assert.ok(datasetFeedCount >= 7, `Expected >= 7 dataset/API resources, found ${datasetFeedCount}`);
 assert.ok(commercialCount >= 3, `Expected >= 3 commercial resources, found ${commercialCount}`);
-assert.ok(legacyCount >= 4, `Expected >= 4 legacy resources, found ${legacyCount}`);
+assert.ok(legacyCount >= 2, `Expected >= 2 legacy resource records after publication history moved to Library, found ${legacyCount}`);
 
 console.log("  ✓ Category Breakdown Targets Passed:");
 console.log(`    - Official: ${officialCount} | Open Source: ${openSourceCount} | Practitioner: ${practitionerCount}`);
@@ -93,8 +94,43 @@ for (const r of dataset.resources) {
     /\b(?:authoritative|essential|governing|leading|mandatory|popular|recommended|widely used|widely recognized|industry-standard|battle-tested|pioneering)\b/i,
     `Resource ${r.id} whyIncluded must state an observable inclusion reason`,
   );
+  if (!r.openSource && r.license) {
+    assert.doesNotMatch(r.license, /open source/i, `Resource ${r.id} must not claim an open-source license`);
+  }
 }
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
+
+const paidProductEntries = dataset.resources.filter(
+  (resource) =>
+    resource.costType === "commercial" ||
+    (resource.publisherType === "commercial" && !["public", "free_account"].includes(resource.accessType)),
+);
+assert.deepEqual(
+  paidProductEntries.map((resource) => resource.id),
+  [],
+  "Resources may list a commercial publisher only for a clearly accessible artifact, not a paywalled product or service",
+);
+const iAssure = dataset.resources.find((resource) => resource.id === "template-i-assure-ssp-worksheet");
+assert.equal(iAssure?.canonicalUrl, "https://i-assure.com/products/rmf-templates/");
+assert.equal(iAssure?.resourceType, "template");
+assert.equal(iAssure?.costType, "free");
+assert.equal(iAssure?.publisherType, "commercial");
+assert.match(iAssure?.officialStatus || "", /commercial publisher/i);
+assert.match(iAssure?.whyIncluded || "", /paid service offerings are outside/i);
+for (const resource of dataset.resources.filter((entry) => entry.resourceLane === "commercial")) {
+  assert.doesNotMatch(resource.officialStatus, /^community$/i, `${resource.id} must label publisher ownership accurately`);
+}
+for (const removedId of [
+  "portal-tenable-audits",
+  "docs-tenable-compliance",
+  "community-tenable",
+  "service-platform-one-party-bus",
+  "service-platform-one-collabtools",
+  "service-platform-one-edgeops",
+]) {
+  assert.equal(dataset.resources.some((resource) => resource.id === removedId), false, `${removedId} stays excluded as paid-product-only`);
+}
+console.log("  ✓ Accessible Artifact Boundary Passed (no paywalled product cards)");
 
 // 3b. Ownership: an ingested Catalog publication must not also render as an
 // ordinary Resource (docs/tree-model.md ownership rule; audit-alignment
@@ -121,7 +157,7 @@ if (existsSync(CATALOG_BOOTSTRAP_PATH)) {
     "nist-ai-rmf": /\bai rmf\b/i,
     "nist-ssdf": /\bssdf\b/i,
   };
-  const EXEMPT_RESOURCE_TYPES = new Set(["tool", "template"]);
+  const PUBLICATION_IDENTITY_TYPES = new Set(["policy", "instruction", "specification", "historical_reference"]);
 
   for (const catalog of catalogBootstrap.catalog_bootstrap.catalogs) {
     const pattern = CATALOG_IDENTITY_TOKENS[catalog.id];
@@ -129,7 +165,7 @@ if (existsSync(CATALOG_BOOTSTRAP_PATH)) {
     const duplicate = dataset.resources.find(
       (r) =>
         r.resourceLane === "official" &&
-        !EXEMPT_RESOURCE_TYPES.has(r.resourceType) &&
+        PUBLICATION_IDENTITY_TYPES.has(r.resourceType) &&
         pattern.test(r.name),
     );
     assert.equal(
@@ -142,7 +178,14 @@ if (existsSync(CATALOG_BOOTSTRAP_PATH)) {
 }
 
 // 4. Validate collection integrity
-assert.deepEqual(dataset.collections, [], "Superseded editorial collections stay removed");
+assert.equal(dataset.collections.length, 8, "Eight curated resource collections ship");
+const collectionIds = new Set(dataset.collections.map((collection) => collection.id));
+assert.equal(collectionIds.size, dataset.collections.length, "Collection IDs are unique");
+for (const collection of dataset.collections) {
+  assert.ok(collection.title && collection.summary && collection.whyCurated && collection.icon, `Collection ${collection.id} has usable metadata`);
+  assert.ok(collection.resourceIds.length > 0, `Collection ${collection.id} is not empty`);
+  for (const resourceId of collection.resourceIds) assert.ok(idSet.has(resourceId), `Collection ${collection.id} references ${resourceId}`);
+}
 console.log(`  ✓ Collection Integrity Audit Passed (${dataset.collections.length} collections verified)`);
 
 // 5. Candidate Manifest & Rejection Audit
@@ -178,7 +221,7 @@ function testSearch(query, expectedId) {
 // CMMC 2.0, DISA STIG, and FedRAMP baselines are canonical Catalog/Source
 // publications now, not ordinary Resources (see 2026-08-02 note above) —
 // these queries assert against the Resources that legitimately remain.
-testSearch("CMMC", "community-cmmc-practitioner-discord");
+testSearch("CMMC", "portal-dod-cmmc");
 testSearch("STIG", "tool-disa-stig-viewer");
 testSearch("OSCAL", "official-nist-oscal");
 testSearch("FedRAMP", "official-fedramp-marketplace");

@@ -70,8 +70,7 @@ export function WhereThisSitsRail(props: {
   if (unavailable) {
     return (
       <p className="tree-path-unavailable" role="status">
-        Structural path unavailable. Control Atlas will not infer a parent from
-        applicability, mappings, implementation, assessment, or evidence links.
+        No structural path published for this record.
       </p>
     );
   }

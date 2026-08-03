@@ -7,6 +7,7 @@ import {
   activeNavForState,
   MOBILE_NAV_SECTIONS,
   PRIMARY_NAV_ITEMS,
+  UTILITY_NAV_ITEMS,
 } from "../lib/navigation";
 
 import type { ViewState } from "../lib/viewState";
@@ -40,27 +41,27 @@ export function TopNav(props: TopNavProps) {
   } = props;
 
   const activeView = activeNavForState(viewState);
-  const compactNavigation = useMediaMatch("(max-width: 1279px)");
+  // Kept in sync with styles/orbital.css's `@media (max-width: 1519px)` —
+  // see that rule's comment for the width budget this threshold is based on.
+  const compactNavigation = useMediaMatch("(max-width: 1519px)");
   const compactHeader = useMediaMatch("(max-width: 880px)");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
-  // Home keeps its distinctive orbit entrance. All interior pages use the
-  // same direct, stable product navigation.
-  const hideChrome = viewState.view === "home";
-
+  // One persistent header on every route, Home included: global navigation is
+  // never hidden.
   useEffect(() => {
     const header = headerRef.current;
     const root = document.documentElement;
     if (!header) return;
 
     const publishHeaderHeight = () => {
-      const height = hideChrome
-        ? 0
-        : Math.ceil(header.getBoundingClientRect().height);
-      root.style.setProperty("--ca-header-height", `${height}px`);
+      root.style.setProperty(
+        "--ca-header-height",
+        `${Math.ceil(header.getBoundingClientRect().height)}px`,
+      );
     };
 
     publishHeaderHeight();
@@ -72,7 +73,7 @@ export function TopNav(props: TopNavProps) {
       observer.disconnect();
       window.removeEventListener("resize", publishHeaderHeight);
     };
-  }, [hideChrome]);
+  }, []);
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -131,12 +132,7 @@ export function TopNav(props: TopNavProps) {
   }
 
   return (
-    <header
-      aria-hidden={hideChrome || undefined}
-      className="site-header"
-      hidden={hideChrome}
-      ref={headerRef}
-    >
+    <header className="site-header" ref={headerRef}>
       <button
         aria-label="Control Atlas — home"
         className="brand"
@@ -176,15 +172,19 @@ export function TopNav(props: TopNavProps) {
             <span>Search</span>
           </Button>
         </div>
-        {!compactHeader ? <div className="header-actions-text">
+        {!compactHeader ? <nav aria-label="Utility navigation" className="header-actions-text">
+          {UTILITY_NAV_ITEMS.map((item) => (
+            <Button
+              aria-current={activeView === item.view ? "page" : undefined}
+              key={item.view}
+              variant="secondary"
+              className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
+              onClick={() => navigate(item.view, item.patch)}
+            >
+              {item.label}
+            </Button>
+          ))}
           <Button
-            variant="secondary"
-            className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
-            onClick={() => onNavigate("sources")}
-          >
-            Sources
-          </Button>
-          <Button 
             variant="secondary"
             className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
             onClick={onOpenHelp}
@@ -198,7 +198,7 @@ export function TopNav(props: TopNavProps) {
           >
             Start here
           </Button>
-        </div> : null}
+        </nav> : null}
         <button
           aria-controls="mobile-nav-sheet"
           aria-expanded={mobileMenuOpen}
@@ -249,6 +249,13 @@ export function TopNav(props: TopNavProps) {
             ))}
           </nav>
           <div className="mobile-nav-sheet-actions p-[16px]">
+            <Button
+              variant="primary"
+              className="w-full"
+              onClick={() => navigate("start-here")}
+            >
+              Start here
+            </Button>
             <Button
               variant="secondary"
               className="w-full"

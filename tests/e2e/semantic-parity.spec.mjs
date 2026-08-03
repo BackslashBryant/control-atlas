@@ -40,7 +40,11 @@ test("organizing hops agree between the direct record page and the Explore-embed
     .locator(".atlas-path-crumb-organizing")
     .allTextContents();
 
-  await gotoApp(page, "/#/explore?node=nist-800-53%3AAC-2");
+  // 2026-08-03: Path/Map/List were folded into one record workspace, so the
+  // Explore-embedded rail now lives in the Hierarchy panel and is closed by
+  // default (Connections is) — open it to reach the same rail this test
+  // compares against.
+  await gotoApp(page, "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
