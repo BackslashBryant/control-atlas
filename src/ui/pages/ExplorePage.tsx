@@ -208,6 +208,26 @@ export function ExplorePage(props: {
   return (
     <>
       <Panel className="search-results-panel border-0 !bg-transparent p-0">
+        <header className="page-header">
+          <div className="page-header-row">
+            <div>
+              <h1>Library</h1>
+              <p className="page-summary">
+                Search every published record, or browse the publications they
+                come from.
+              </p>
+            </div>
+            <div className="page-header-action">
+              <Button
+                onClick={() => onNavigate("catalog-detail", { catalog: "" })}
+                type="button"
+                variant="secondary"
+              >
+                Browse publications
+              </Button>
+            </div>
+          </div>
+        </header>
         <label className="catalog-search search-results-query">
           <IconSearch aria-hidden="true" size={18} />
           <input
@@ -453,7 +473,7 @@ export function ExplorePage(props: {
                                       }
                                       type="button"
                                     >
-                                      Open in Explore
+                                      Open in the Atlas
                                     </Button>
                                   ) : null}
                                   <Button
@@ -710,7 +730,7 @@ export function ExplorePage(props: {
               <details>
                 <summary>Try another path</summary>
                 <div className="card-actions disclosure-actions">
-                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open Explore</Button>
+                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open the Atlas</Button>
                 </div>
               </details>
             </div>

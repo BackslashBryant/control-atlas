@@ -1,15 +1,11 @@
-import { lazy, Suspense, useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import { displayNameFor } from "../../app/display-names.mjs";
 import {
   type AtlasConnectionGroup,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import { RELATIONSHIP_LENS_LEGEND, lensColor } from "../lib/graphTheme";
-import { Badge } from "../lib/pagePrimitives";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
-
-const RelationshipGraph = lazy(() => import("./RelationshipGraph"));
 
 type AtlasConnectionMapProps = {
   center: AtlasNeighborhoodNode;
@@ -26,6 +22,23 @@ type AtlasConnectionMapProps = {
   onSelectItem: (row: AtlasRelationshipRow) => void;
 };
 
+// A representative label for a connected record: the human title when it
+// differs from the ID (most records), the ID alone otherwise (CCIs, whose
+// title usually repeats the ID).
+function previewLabel(row: AtlasRelationshipRow): string {
+  const title = row.title.trim();
+  const itemId = row.itemId.trim();
+  return title && title !== itemId ? title : itemId;
+}
+
+/**
+ * One record, centered, with its relationship classes radiating outward —
+ * the operational map this workspace is built around. Only class-level
+ * summaries (not individual edges) are placed in the diagram: a dense
+ * record's 95 connections would otherwise either overflow the viewport or
+ * force zooming, both of which the map must avoid. Individual records live
+ * in the bounded detail list below, which the selected spoke drives.
+ */
 export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   const {
     center,
@@ -37,109 +50,146 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     onOpenList,
     onSelectItem,
   } = props;
-  const [showGraph, setShowGraph] = useState(false);
   // Structure (base control / enhancements) is publisher-declared parentage,
   // never a peer of applicability/implementation/cross-framework correlation
-  // (docs/tree-model.md's four relationship classes). Rendered as its own
-  // full set of structural-child tags, never mixed with the lens summary
-  // below.
-  const structureGroups = groups.filter(
-    (group) => group.lens === "structure" && group.items.length > 0,
-  );
+  // (docs/tree-model.md's four relationship classes) — it is hierarchy, not a
+  // connection, and the workspace's Hierarchy panel and "Published children"
+  // list are its one home. Rendering it a second time here would duplicate
+  // that list under a different label.
   const explorationGroups = groups.filter((group) => group.lens !== "structure");
-  // The default view answers one question at a time: "what kinds of
-  // relationships does this record have, and how many of each" (the lens
-  // summary), then "show me that one" (the selected lens's own record
-  // list) — never a mixed diagram of every kind of relationship at once.
-  // `expandedGroupId` carries a LENS key here (e.g. "implementation"), not
-  // one source group's id — a lens can bundle more than one source group
-  // (Applicability = NIST baselines + FedRAMP baselines).
-  const groupsByLens = RELATIONSHIP_LENS_LEGEND.map((entry) => ({
-    entry,
-    groups: explorationGroups.filter((group) => group.lens === entry.key),
-    total: explorationGroups
-      .filter((group) => group.lens === entry.key)
-      .reduce((sum, group) => sum + group.items.length, 0),
-  })).filter(({ groups: lensGroups }) => lensGroups.length > 0);
+  const groupsByLens = RELATIONSHIP_LENS_LEGEND.map((entry) => {
+    const lensGroups = explorationGroups.filter((group) => group.lens === entry.key);
+    const items = lensGroups
+      .flatMap((group) => group.items.map((row) => ({ row, groupLabel: group.label })))
+      .sort((left, right) => left.row.itemId.localeCompare(right.row.itemId));
+    return { entry, groups: lensGroups, items, total: items.length };
+  }).filter(({ items }) => items.length > 0);
+
   const activeLensKey =
     expandedGroupId || (groupsByLens.length ? groupsByLens[0].entry.key : "");
-  const activeLens = groupsByLens.find(
-    (entry) => entry.entry.key === activeLensKey,
-  );
-  const activeItems = useMemo(
-    () =>
-      activeLens
-        ? activeLens.groups
-            .flatMap((group) =>
-              group.items.map((row) => ({ row, groupLabel: group.label })),
-            )
-            .sort((left, right) => left.row.itemId.localeCompare(right.row.itemId))
-        : [],
-    [activeLens],
-  );
-  const visibleRows = activeItems.slice(0, compact ? 8 : 14).map((e) => e.row);
+  const activeLens = groupsByLens.find((entry) => entry.entry.key === activeLensKey);
+  const visibleRows = (activeLens?.items || [])
+    .slice(0, compact ? 8 : 14)
+    .map((e) => e.row);
   const groupLabelByNodeId = new Map(
-    activeItems.map((e) => [e.row.counterpart.id, e.groupLabel] as const),
+    (activeLens?.items || []).map((e) => [e.row.counterpart.id, e.groupLabel] as const),
   );
-  const rowByNodeId = new Map(
-    visibleRows.map((row) => [row.counterpart.id, row]),
-  );
-  // Color nodes/edges by relationship class (docs/tree-model.md), not by
-  // source/publisher — the class (applicability vs correlation vs
-  // implementation vs assessment) is the load-bearing distinction here.
-  const nodes = [
-    center,
-    ...visibleRows.map((row) => ({
-      ...row.counterpart,
-      graphRole: activeLensKey,
-    })),
-  ];
-  const edges = visibleRows.map((row) => ({
-    ...row.edge,
-    relationship_lens: activeLensKey,
-  }));
-  const reducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Evenly spaced around the center, starting at 12 o'clock. Positions are
+  // percentages of the container box, so the diagram reflows with its
+  // container instead of needing a resize observer.
+  const spokes = useMemo(() => {
+    const count = groupsByLens.length;
+    return groupsByLens.map((group, index) => {
+      const angle = (-90 + (360 / Math.max(count, 1)) * index) * (Math.PI / 180);
+      const radius = 36;
+      return {
+        ...group,
+        x: 50 + radius * Math.cos(angle),
+        y: 50 + radius * Math.sin(angle),
+        preview: group.items.slice(0, 2).map(({ row }) => previewLabel(row)),
+      };
+    });
+  }, [groupsByLens]);
+
+  const centerLabel = center.metadata?.item_id || center.label || center.id;
+  const centerTitle = center.metadata?.title || "";
 
   return (
     <section className="atlas-relationship-map" aria-label="Relationship map">
-      <div className="atlas-compact-map-center">
-        <strong>{center.metadata?.item_id || center.label || center.id}</strong>
-        {center.metadata?.title ? <span>{center.metadata.title}</span> : null}
-      </div>
-
-      {/* Answers "what kinds of relationships does this record have, and how
-          many of each" first — a record neighborhood is several distinct
-          relationship classes, not one network. Selecting a card answers
-          "show me that one" below; it never draws every class at once. */}
-      <div
-        aria-label="Relationship types"
-        className="atlas-lens-summary"
-        role="group"
-      >
-        {groupsByLens.map(({ entry, total }) => (
-          <button
-            aria-pressed={entry.key === activeLensKey}
-            key={entry.key}
-            onClick={() => onExpandedGroupChange(entry.key)}
-            type="button"
+      {compact ? (
+        // Mobile: a readable vertical neighborhood, not a shrunken diagram.
+        // Radial label positions become illegible well before a phone-width
+        // canvas would, so the same group data renders as a stack instead.
+        <div
+          aria-label="Relationship types"
+          className="atlas-radial-map atlas-radial-map--stacked"
+          role="group"
+        >
+          <div className="atlas-radial-center">
+            <strong>{centerLabel}</strong>
+            {centerTitle ? <span>{centerTitle}</span> : null}
+          </div>
+          <ul className="atlas-radial-stack-list">
+            {spokes.map((group) => (
+              <li key={group.entry.key}>
+                <button
+                  aria-pressed={group.entry.key === activeLensKey}
+                  className="atlas-radial-group"
+                  onClick={() => onExpandedGroupChange(group.entry.key)}
+                  type="button"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="atlas-radial-group-swatch"
+                    style={{ backgroundColor: lensColor(group.entry.key) }}
+                  />
+                  <span className="atlas-radial-group-label">{group.entry.label}</span>
+                  <strong className="atlas-radial-group-count">{group.total}</strong>
+                  {group.preview.length ? (
+                    <small className="atlas-radial-group-preview">
+                      {group.preview.join(" · ")}
+                    </small>
+                  ) : null}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div aria-label="Relationship types" className="atlas-radial-map" role="group">
+          <svg
+            aria-hidden="true"
+            className="atlas-radial-lines"
+            preserveAspectRatio="none"
+            viewBox="0 0 100 100"
           >
-            <span
-              aria-hidden="true"
-              className="legend-swatch"
-              style={{ backgroundColor: lensColor(entry.key) }}
-            />
-            {entry.label}
-            <strong>{total}</strong>
-          </button>
-        ))}
-      </div>
+            {spokes.map((group) => (
+              <line
+                key={group.entry.key}
+                stroke={lensColor(group.entry.key)}
+                strokeWidth={group.entry.key === activeLensKey ? 0.9 : 0.5}
+                x1={50}
+                x2={group.x}
+                y1={50}
+                y2={group.y}
+              />
+            ))}
+          </svg>
+          <div className="atlas-radial-center">
+            <strong>{centerLabel}</strong>
+            {centerTitle ? <span>{centerTitle}</span> : null}
+          </div>
+          {spokes.map((group) => (
+            <button
+              aria-pressed={group.entry.key === activeLensKey}
+              className="atlas-radial-group"
+              key={group.entry.key}
+              onClick={() => onExpandedGroupChange(group.entry.key)}
+              style={{ left: `${group.x}%`, top: `${group.y}%` }}
+              type="button"
+            >
+              <span
+                aria-hidden="true"
+                className="atlas-radial-group-swatch"
+                style={{ backgroundColor: lensColor(group.entry.key) }}
+              />
+              <span className="atlas-radial-group-label">{group.entry.label}</span>
+              <strong className="atlas-radial-group-count">{group.total}</strong>
+              {group.preview.length ? (
+                <small className="atlas-radial-group-preview">
+                  {group.preview.join(" · ")}
+                </small>
+              ) : null}
+            </button>
+          ))}
+        </div>
+      )}
 
       {activeLens ? (
         <div
           aria-label={`${activeLens.entry.label} records`}
-          className="atlas-compact-map"
+          className="atlas-lens-detail"
           role="group"
         >
           <ul>
@@ -157,69 +207,13 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
               </li>
             ))}
           </ul>
-          {activeItems.length > visibleRows.length ? (
+          {activeLens.total > visibleRows.length ? (
             <button className="atlas-spatial-more" onClick={onOpenList} type="button">
-              View all {activeItems.length} in List
+              View all {activeLens.total} in List
             </button>
           ) : null}
         </div>
       ) : null}
-
-      {!compact && activeLens ? (
-        <details className="atlas-graph-toggle" open={showGraph}>
-          <summary
-            className="ca-legend-trigger"
-            onClick={(event) => {
-              event.preventDefault();
-              setShowGraph((current) => !current);
-            }}
-          >
-            {showGraph ? "Hide" : "View as"} graph
-          </summary>
-          {showGraph ? (
-            <div className="ca-canvas-container atlas-shared-graph">
-              <Suspense
-                fallback={<p role="status">Loading the bounded relationship map…</p>}
-              >
-                <RelationshipGraph
-                  centerNodeId={center.id}
-                  edges={edges}
-                  layoutMode="focus"
-                  nodes={nodes}
-                  onSelectNode={(nodeId) => {
-                    const row = rowByNodeId.get(nodeId);
-                    if (row) onSelectItem(row);
-                  }}
-                  reducedMotion={reducedMotion}
-                  searchHighlightIds={new Set()}
-                  selectedNodeId={selectedItemId || null}
-                />
-              </Suspense>
-            </div>
-          ) : null}
-        </details>
-      ) : null}
-
-      {structureGroups.map((group) => (
-        <div className="record-decomposition-block" key={group.id}>
-          <span className="record-decomposition-label">{group.label}</span>
-          <div className="badge-row">
-            {group.items.map((row) => (
-              <button
-                aria-label={`${row.itemId} — ${displayNameFor("relationship_type", row.edge.relationship_type)}`}
-                aria-pressed={row.counterpart.id === selectedItemId}
-                className="badge-button"
-                key={row.counterpart.id}
-                onClick={() => onSelectItem(row)}
-                title={displayNameFor("relationship_type", row.edge.relationship_type)}
-                type="button"
-              >
-                <Badge>{row.itemId}</Badge>
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
     </section>
   );
 }

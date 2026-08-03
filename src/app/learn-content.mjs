@@ -199,7 +199,7 @@ export const learnArticles = Object.freeze([
       "A structural path follows only hierarchy declared by the publisher. Baselines select from a catalog; mappings correlate records; evidence and implementation resources support work. None of those becomes a structural parent.",
     limitations:
       "Control Atlas can display published structure and recorded relationships. It cannot decide which baseline, mapping, or implementation applies to an organization.",
-    nextAction: { label: "Open Explore", view: "atlas-map" },
+    nextAction: { label: "Open the Atlas", view: "atlas-map" },
     citations: [
       { sourceId: "nist-800-53", role: "official-subject-source", label: "NIST SP 800-53 Rev. 5", url: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final", supports: "The publisher-declared catalog and control hierarchy used in the example; it does not define Control Atlas navigation." },
     ],
@@ -241,7 +241,7 @@ export const learnArticles = Object.freeze([
       "Start with the record identifier, official title, publisher, publication, and official text. Then read structural position, published relationships, and Control Atlas navigation notes as distinct sections.",
     limitations:
       "A record page does not establish that the record applies, is implemented, or is satisfied.",
-    nextAction: { label: "Browse Catalog", view: "catalog-detail" },
+    nextAction: { label: "Open the Library", view: "catalog-detail" },
     citations: [
       { sourceId: "nist-800-53", role: "official-subject-source", label: "NIST SP 800-53 Rev. 5", url: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final", supports: "The official record identifiers, titles, and hierarchy used in the reading example." },
     ],

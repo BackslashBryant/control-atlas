@@ -9,39 +9,54 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("focused Atlas opens publisher-declared structure before relationship views", async ({ page }) => {
+// 2026-08-03: Path/Map/List were folded into one record workspace —
+// Connections is the product, Hierarchy and View all are supporting panels
+// opened on demand. relationshipView still round-trips through the URL (it
+// now selects which panel is open) so every old deep link keeps resolving.
+test("focused Atlas opens straight to Connections, not a structural page", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
-  // Three views of one record. Path owns structural position; relationship
-  // classes stay in Map and List instead of becoming structural parents.
-  await expect(page.getByRole("tab", { name: "Path" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("tab", { name: "Map" })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "List" })).toBeVisible();
-  await expect(page.getByRole("tab", { name: "Purpose" })).toHaveCount(0);
-  await expect(page.getByRole("tab", { name: "RMF" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
-  // Re-baselined 2026-08-01: the chain renders once, in the always-visible
-  // "Structural position" block above the lens tabs, so it stays on screen in
-  // Map and List too. It used to be duplicated inside the Path panel.
-  await expect(
-    page.getByRole("navigation", { name: "Where this sits" }),
-  ).toContainText("SP 800-53 Rev. 5");
-  // Two rails, not one mixed "publisher-declared" claim: the chain groups
-  // into labeled rails instead of one heading over the whole path.
-  await expect(
-    page.getByText(/Control Atlas structure|Publisher hierarchy/).first(),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/Baselines and process lenses remain separate choices/i),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
+  const hierarchyToggle = page.getByRole("button", { name: "Hierarchy" });
+  const viewAllToggle = page.getByRole("button", { name: "View all", exact: true });
+  await expect(hierarchyToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(viewAllToggle).toHaveAttribute("aria-expanded", "false");
+  // Both panels stay closed until asked for — the workspace never opens
+  // pre-expanded onto a structural page the way the old Path default did.
+  await expect(page.getByRole("heading", { name: "Where this sits" })).toHaveCount(0);
   await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
 });
 
-test("focused Path badges the organizing hops, not just the direct record page", async ({ page }) => {
+test("Hierarchy panel shows real structural substance, not just breadcrumb lines", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await page.getByRole("button", { name: "Hierarchy" }).click();
+  await expect(page).toHaveURL(/relationshipView=path/);
+  const panel = page.locator("#atlas-hierarchy-panel");
+  await expect(panel.getByRole("heading", { name: "Where this sits" })).toBeVisible();
+  // Two rails, not one mixed "publisher-declared" claim.
+  await expect(
+    panel.getByText(/Control Atlas structure|Publisher hierarchy/).first(),
+  ).toBeVisible();
+  // Record type, publication, identifier, and the record's own published
+  // children — the substance a single-heading panel never had.
+  await expect(panel.getByText("Record type")).toBeVisible();
+  await expect(panel.getByText("Publication")).toBeVisible();
+  await expect(panel.getByText("Decomposes into")).toBeVisible();
+  await expect(panel.getByRole("button", { name: "AC-2.1", exact: true })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "See connections" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Open full record" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Review official source" })).toBeVisible();
+});
+
+test("focused Hierarchy badges the organizing hops, not just the direct record page", async ({ page }) => {
   // Regression: AtlasMapPage's own "Where this sits" rail used to hardcode
   // origin: "structural" for every hop in record.structural_path, silently
   // overwriting the trunk/limb hops' real "organizing" origin — so the
@@ -49,7 +64,7 @@ test("focused Path badges the organizing hops, not just the direct record page",
   // but never on this Explore-embedded view of the exact same record, even
   // though the underlying data was correct both places. Fixed by deriving
   // origin from node_type in runtimeLoader.ts instead of hardcoding it.
-  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=path");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -68,8 +83,8 @@ test("focused Path badges the organizing hops, not just the direct record page",
   await expect(catalog).not.toHaveClass(/atlas-path-crumb-organizing/);
 });
 
-test("focused Path opens its publisher-declared parent without inventing another parent", async ({ page }) => {
-  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+test("focused Hierarchy opens its publisher-declared parent without inventing another parent", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=path");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -78,10 +93,10 @@ test("focused Path opens its publisher-declared parent without inventing another
     .getByRole("button", { name: "Access Control" })
     .click();
   await expect(
-    // The literal em dash in this file was double-encoded, so this assertion
-    // could never match the rendered heading. Matched by pattern instead.
     page.getByRole("heading", { name: /FAMILY-AC .+ Access Control/, level: 1 }),
   ).toBeVisible();
+  // Hierarchy re-opens on the newly focused record — relationshipView=path
+  // survives the navigation, same as any other Atlas link.
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }),
   ).toContainText("SP 800-53 Rev. 5");
@@ -89,53 +104,58 @@ test("focused Path opens its publisher-declared parent without inventing another
   await expect(page).not.toHaveURL(/atlasBaseline=/);
 });
 
-test("Atlas view tabs support keyboard arrow navigation", async ({ page }) => {
+test("Hierarchy and View all are independently reachable and operable by keyboard", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const pathTab = page.getByRole("tab", { name: "Path", exact: true });
-  await pathTab.focus();
-  await page.keyboard.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-  await page.keyboard.press("ArrowLeft");
-  await expect(pathTab).toHaveAttribute("aria-selected", "true");
+  const hierarchyToggle = page.getByRole("button", { name: "Hierarchy" });
+  await hierarchyToggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(hierarchyToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(page).toHaveURL(/relationshipView=path/);
+
+  await page.keyboard.press("Tab");
+  const viewAllToggle = page.getByRole("button", { name: "View all", exact: true });
+  await expect(viewAllToggle).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(viewAllToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(page).toHaveURL(/relationshipView=list/);
+  // Opening View all closes Hierarchy — they are two panels on one toolbar,
+  // not independent checkboxes stacking on top of each other.
+  await expect(hierarchyToggle).toHaveAttribute("aria-expanded", "false");
 });
 
-test("focused Map answers relationship type and count before any diagram", async ({ page }) => {
+test("Connections answers relationship type and count before any individual record", async ({ page }) => {
   await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // Round-4 rework (2026-08-02): the default view is relationship-class
-  // summary cards + that class's own record list, never every relationship
-  // class in one diagram — the node-link graph is opt-in via "View as graph".
   const map = page.getByRole("region", { name: "Relationship map" });
   await expect(map).toBeVisible();
-  const lensCards = map.getByRole("group", { name: "Relationship types" });
-  await expect(lensCards).toBeVisible();
+  const lensGroups = map.getByRole("group", { name: "Relationship types" });
+  await expect(lensGroups).toBeVisible();
   // AC-2's 47 DISA CCIs are correlation junctions, not implementation
   // records — they mediate a path to real STIG/SRG implementation but are
   // never classified as Implementation themselves.
-  await expect(lensCards.getByRole("button", { name: /Correlation/ })).toBeVisible();
+  const correlation = lensGroups.getByRole("button", { name: /Correlation/ });
+  await expect(correlation).toBeVisible();
+  await expect(correlation).toContainText("47");
+  // The map is the bespoke radial diagram, not a generic force-graph demo.
   await expect(map.locator(".react-flow")).toHaveCount(0);
 
-  await map.getByRole("button", { name: /Correlation/ }).click();
+  await correlation.click();
   await expect(map.getByRole("button", { name: "View all 47 in List" })).toBeVisible();
+  // Clicking a spoke never rebuilds the diagram — the same four groups stay
+  // exactly where they were.
+  await expect(lensGroups.getByRole("button")).toHaveCount(4);
 
-  await map.getByText("View as graph").click();
-  const visibleNodes = map
-    .getByRole("group", { name: "Map nodes" })
-    .getByRole("button");
-  expect(await visibleNodes.count()).toBeLessThanOrEqual(15);
-
-  await page.getByRole("tab", { name: "List", exact: true }).click();
+  await page.getByRole("button", { name: "View all", exact: true }).click();
   await expect(
     page.getByRole("table", { name: "Relationship table" }),
   ).toBeVisible();
+  // View all supports the map; it does not replace it.
+  await expect(map).toBeVisible();
 });
 
 test("List uses the same published set and exposes traceable source references", async ({ page }) => {
@@ -151,7 +171,7 @@ test("List uses the same published set and exposes traceable source references",
   await expect(table).not.toContainText("nist-olir-");
 });
 
-test("zero-published-edge records render an honest empty state instead of Map", async ({ page }) => {
+test("zero-published-edge records render an honest empty state instead of Connections", async ({ page }) => {
   await page.goto("/#/explore?node=disa-cci%3ACCI-000220&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -169,26 +189,28 @@ test("a sparse STIG keeps structural position separate from its published connec
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
-  await expect(
-    page.getByRole("tabpanel", { name: "Path" }),
-  ).toContainText(/Control Atlas structure|Publisher hierarchy/);
-  await page.getByRole("tab", { name: "List", exact: true }).click();
+  await page.getByRole("button", { name: "Hierarchy" }).click();
+  await expect(page.locator("#atlas-hierarchy-panel")).toContainText(
+    /Control Atlas structure|Publisher hierarchy/,
+  );
+  await page.getByRole("button", { name: "View all", exact: true }).click();
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table).toBeVisible();
   await expect(table).toContainText(/implementation/i);
 });
 
-test("compact Map keeps the shared graph bounded without page overflow", async ({ page }) => {
+test("compact Connections shows a readable vertical neighborhood without page overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   const map = page.getByRole("region", { name: "Relationship map" });
-  const visibleNodes = map
-    .getByRole("group", { name: "Map nodes" })
-    .getByRole("button");
-  expect(await visibleNodes.count()).toBeLessThanOrEqual(5);
+  // Mobile trades the radial diagram for a vertical stack of the same bounded
+  // group data — never a shrunken, illegible copy of the desktop diagram.
+  await expect(map.locator(".atlas-radial-map--stacked")).toBeVisible();
+  const groups = map.getByRole("group", { name: "Relationship types" }).getByRole("button");
+  expect(await groups.count()).toBeLessThanOrEqual(7);
   const overflow = await page.evaluate(() => ({
     body:
       globalThis.document.body.scrollWidth -
@@ -200,14 +222,14 @@ test("compact Map keeps the shared graph bounded without page overflow", async (
   expect(overflow).toEqual({ body: 0, document: 0 });
 });
 
-test("compact Path preserves structural position without horizontal overflow", async ({ page }) => {
+test("compact Hierarchy preserves structural position without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=path");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("tabpanel", { name: "Path" }),
+    page.locator("#atlas-hierarchy-panel"),
   ).toContainText(/Control Atlas structure|Publisher hierarchy/);
   const overflow = await page.evaluate(() => ({
     body:

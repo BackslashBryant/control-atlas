@@ -60,15 +60,15 @@ test('shell removes the old mode toggle and uses the current translation-first n
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   assert.match(navigation, /PRIMARY_NAV_ITEMS/);
   assert.match(navigation, /routeIdentityFor/);
-  assert.match(routeIdentity, /Explore/);
-  assert.match(routeIdentity, /Catalog/);
-  assert.match(routeIdentity, /Compare/);
-  assert.match(routeIdentity, /Learn/);
-  assert.match(routeIdentity, /Build/);
+  assert.match(routeIdentity, /label: "Atlas"/);
+  assert.match(routeIdentity, /label: "Library"/);
+  assert.match(routeIdentity, /label: "Compare"/);
+  assert.match(routeIdentity, /label: "Guides"/);
+  assert.match(routeIdentity, /label: "Documents"/);
   assert.match(routeIdentity, /Resources/);
   assert.match(routeIdentity, /Start here/);
   assert.match(routeIdentity, /Sources/);
-  assert.match(navigation, /DISCOVERY_SECTION_LABEL = "Explore and compare"/);
+  assert.match(navigation, /DISCOVERY_SECTION_LABEL = "Find and compare"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -314,12 +314,19 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   assert.match(homePage, /PRODUCT_HERO/);
+  assert.match(
+    homePage,
+    /Federal cyber guidance is scattered\. The work still has to get done\./,
+  );
   assert.match(homePage, /aria-label="Search published records"/);
   assert.match(html, /aria-label="Search published records"/);
-  assert.match(html, />Open the Atlas</);
-  assert.match(html, />Browse Catalog</);
-  assert.match(html, />Find Tools &amp; Resources</);
-  assert.match(html, /data-route="#\/resources"/);
+  assert.match(html, />Follow implementation</);
+  assert.match(html, />Compare guidance</);
+  assert.match(html, />Start a document</);
+  // Home shows one real published chain, not just a claim about connections.
+  assert.match(html, /class="home-chain"/);
+  assert.match(html, />AC-2 Account Management</);
+  assert.match(html, /data-route="#\/build"/);
   assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 3);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
@@ -425,7 +432,13 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(atlasMap, /loadAtlasNeighborhood\(nodeId\)/);
   assert.match(atlasMap, /buildAtlasGroups\(record, filters\)/);
   assert.match(atlasMap, /buildAtlasRows\(record, filters\)/);
-  assert.match(atlasMap, /relationshipView: viewId/);
+  // The Path/Map/List tabs were folded into one record workspace: Connections
+  // is always rendered and relationshipView now decides which supporting panel
+  // is open, so every existing deep link still resolves.
+  assert.match(atlasMap, /relationshipView: hierarchyOpen \? "map" : "path"/);
+  assert.match(atlasMap, /relationshipView: listOpen \? "map" : "list"/);
+  assert.doesNotMatch(atlasMap, /role="tablist"/);
+  assert.match(atlasMap, /buildStructuralChildren\(record\)/);
   assert.match(atlasMap, /relationshipGroup/);
   assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
   assert.match(explore, /visibleDocumentRows\.length > 0/);
@@ -457,6 +470,9 @@ test('Learn is a real explanation product with visible provenance boundaries', (
   assert.match(playbooksPage, /Control Atlas explanation/);
   assert.match(playbooksPage, /Official references/);
   assert.match(playbooksPage, /Limitations/);
-  assert.match(playbooksPage, /learnArticles\.map/);
+  // Product-operation articles moved to the Help drawer; Guides lists
+  // practitioner guides only.
+  assert.doesNotMatch(playbooksPage, /learnArticles\.map/);
+  assert.match(readFileSync('src/ui/components/GlossaryDrawer.tsx', 'utf8'), /learnArticles\.map/);
   assert.doesNotMatch(playbooksPage, /Recommended for new users|No public playbooks are available yet/);
 });
