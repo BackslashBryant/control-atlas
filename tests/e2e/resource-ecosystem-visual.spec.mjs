@@ -2,7 +2,7 @@ import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 
-const output = resolve("artifacts/resource-ecosystem-screenshots");
+const output = resolve("docs/evidence/resource-ecosystem/screenshots");
 mkdirSync(output, { recursive: true });
 const collections = [
   "dod-cybersecurity-portals",
