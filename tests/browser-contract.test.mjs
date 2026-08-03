@@ -433,7 +433,14 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(explore, /searchResourceDocuments/);
   assert.match(explore, /onNavigate\("commons-detail"/);
   assert.match(searchOverlay, /Search Control Atlas/);
-  assert.match(searchOverlay, /Resource · \{doc\.resourceLane/);
+  assert.match(searchOverlay, /Published records/);
+  assert.match(searchOverlay, /Tools and resources/);
+  assert.match(searchOverlay, /Communities/);
+  assert.match(searchOverlay, /document\.resourceType === "community_forum"/);
+  assert.match(searchOverlay, /resourceTypeLabel\(doc\.resourceType\)/);
+  assert.match(searchOverlay, /resourceAccessLabel\(doc\)/);
+  assert.doesNotMatch(searchOverlay, /doc\.resourceLane\.replaceAll/);
+  assert.doesNotMatch(searchOverlay, />\{doc\.resourceType\}</);
   assert.match(explore, /Official resources/);
   assert.match(explore, /No matching connected records found/);
 });
