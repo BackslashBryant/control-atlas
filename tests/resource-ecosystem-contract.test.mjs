@@ -7,6 +7,7 @@ import { searchDirectoryResources } from "../src/ui/lib/resourcesDirectory.mjs";
 const dataset = JSON.parse(readFileSync("data/commons-resource-dataset.json", "utf8"));
 const manifest = JSON.parse(readFileSync("data/commons-candidate-manifest.json", "utf8"));
 const disposition = JSON.parse(readFileSync("data/resource-ecosystem-disposition.json", "utf8"));
+const health = JSON.parse(readFileSync("data/commons-health-report.json", "utf8"));
 const byId = new Map(dataset.resources.map((resource) => [resource.id, resource]));
 const expectedCollections = [
   "dod-cybersecurity-portals",
@@ -31,6 +32,7 @@ test("eight required collections are populated and mutually resolvable", () => {
 });
 
 test("every card and detail field has explicit source, access, identity, and review metadata", () => {
+  const wordCount = (value) => value.trim().split(/\s+/).length;
   for (const resource of dataset.resources) {
     assert.ok(resource.cardPurpose.length >= 20, `${resource.id} card purpose`);
     assert.ok(resource.publisherType, `${resource.id} publisher type`);
@@ -42,6 +44,12 @@ test("every card and detail field has explicit source, access, identity, and rev
     assert.ok(Array.isArray(resource.technologyScopes));
     assert.ok(Array.isArray(resource.searchAliases));
     assert.ok(Array.isArray(resource.featuredCollections));
+    assert.ok(wordCount(resource.summary) <= 25, `${resource.id} summary exceeds 25 words`);
+    assert.ok(wordCount(resource.whyIncluded) <= 35, `${resource.id} why listed exceeds 35 words`);
+    assert.ok(wordCount(resource.cardPurpose) <= 18, `${resource.id} card purpose exceeds 18 words`);
+
+    const hostname = new URL(resource.canonicalUrl).hostname;
+    assert.doesNotMatch(hostname, /(^|\.)(example\.(com|org|net)|invalid|localhost)$/i, `${resource.id} uses a non-canonical test domain`);
   }
 });
 
@@ -52,6 +60,8 @@ test("parent and child ecosystem relationships resolve without becoming publicat
   }
   assert.equal(byId.get("directory-common-criteria-products").parentEcosystemId, "ecosystem-common-criteria");
   assert.equal(byId.get("tool-platform-one-ironbank").parentEcosystemId, "ecosystem-platform-one");
+  assert.equal(byId.get("portal-disa-servicenow").parentEcosystemId, "portal-disa-connect");
+  assert.equal(byId.get("portal-disa-servicenow").accessType, "dod_network_required");
 });
 
 test("aliases find current resources and removed publications stay out of Resources", () => {
@@ -72,4 +82,11 @@ test("communities carry one exact safety warning and rejected candidates remain 
   assert.equal(disposition.candidates.length, manifest.totalEvaluated);
   assert.ok(manifest.rejectedCandidates.some((candidate) => /Tenable Audit Files/.test(candidate.candidateName)));
   assert.ok(manifest.rejectedCandidates.some((candidate) => /Platform One Party Bus/.test(candidate.candidateName)));
+});
+
+test("protected destinations remain explicit expected-access checks", () => {
+  const disaServiceNow = health.results.find((result) => result.id === "portal-disa-servicenow");
+  assert.equal(disaServiceNow?.outcome, "manual_expected_access");
+  assert.equal(disaServiceNow?.ok, true);
+  assert.match(disaServiceNow?.note ?? "", /NIPRNet or NIPRNet VPN/);
 });
