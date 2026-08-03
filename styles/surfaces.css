@@ -6208,6 +6208,12 @@ button.atlas-leverage-row:hover {
   gap: 12px;
 }
 
+.record-context-rail > *,
+.record-context-published > *,
+.record-suggestion-list > * {
+  min-width: 0;
+}
+
 .record-context-owner,
 .record-suggestion-label,
 .record-suggestion-reason {
@@ -6241,6 +6247,17 @@ button.atlas-leverage-row:hover {
   background: transparent;
   color: var(--ca-text);
   text-align: left;
+}
+
+.record-suggestion-list article > button > strong,
+.record-suggestion-list article > button > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.record-suggestion-list article > button > span {
+  flex: 0 1 40%;
+  text-align: right;
 }
 
 .record-suggestion-group {

@@ -53,6 +53,28 @@ test("record keeps official material primary and separates published facts from 
   expect(order).toBe(true);
 });
 
+test("record suggestions stay inside the mobile viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await open(page, "/#/record/nist-800-53/AC-2");
+
+  const overflow = await page.evaluate(() => ({
+    body: globalThis.document.body.scrollWidth - globalThis.document.body.clientWidth,
+    document:
+      globalThis.document.documentElement.scrollWidth -
+      globalThis.document.documentElement.clientWidth,
+    suggestionGroups: [...globalThis.document.querySelectorAll(".record-suggestion-group")].map(
+      (group) => group.scrollWidth - group.clientWidth,
+    ),
+  }));
+
+  expect(overflow.body).toBe(0);
+  expect(overflow.document).toBe(0);
+  expect(overflow.suggestionGroups.length).toBeGreaterThan(0);
+  expect(overflow.suggestionGroups).toEqual(
+    overflow.suggestionGroups.map(() => 0),
+  );
+});
+
 test("record actions preserve durable context across features", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
   await page.getByRole("button", { name: "Open in the Atlas" }).click();
