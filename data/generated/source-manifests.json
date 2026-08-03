@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-02T15:20:45.669Z",
+  "generated_at": "2026-08-03T03:11:00.341Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -899,7 +899,7 @@
     },
     {
       "source_id": "nist-800-53b-baselines",
-      "display_name": "SP 800-53 Rev. 5",
+      "display_name": "SP 800-53B",
       "display_group": "NIST",
       "frameworks": [
         "nist-800-53",

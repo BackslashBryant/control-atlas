@@ -1,3 +1,5 @@
+import { humanizeSlug } from "../../app/display-names.mjs";
+
 export type SourceRegisterRow = {
   id: string;
   publication: string;
@@ -53,4 +55,102 @@ export function buildSourceRegister(
       left.publisher.localeCompare(right.publisher) ||
       left.publication.localeCompare(right.publication),
     );
+}
+
+/**
+ * W5 — split the flat register into the three layers the default table used
+ * to mix: publication identity, connection/mapping sources, and ingestion
+ * artifacts, plus Control Atlas's own organizing source kept out of the
+ * publisher list entirely. A source is a canonical publication when a real
+ * ingested catalog names it as that catalog's own `source_id` — the build
+ * pipeline's own authoritative pointer, not a guess. Everything else is a
+ * connection source (crosswalk/mapping/OLIR/reference id or name) or falls
+ * through to ingestion provenance (alternate mirrors, viewers, downloads,
+ * API endpoints for a publication already registered above).
+ */
+export type SourceLayerId = "publication" | "connection" | "ingestion" | "organization";
+
+export type CatalogSummary = {
+  id: string;
+  name: string;
+  source_id: string;
+  leaf_record_count: number;
+};
+
+const CONNECTION_ID_HINT = /crosswalk|mapping|olir|supplemental|references/i;
+
+export function canonicalSourceIdsFromCatalogs(
+  catalogs: CatalogSummary[],
+): Set<string> {
+  return new Set(catalogs.map((catalog) => catalog.source_id));
+}
+
+export function classifySourceLayer(
+  source: any,
+  canonicalSourceIds: Set<string>,
+): SourceLayerId {
+  if (source.provenance_class === "control_atlas_derived") return "organization";
+  if (source.metadata?.identity_kind === "ingestion") return "ingestion";
+  if (canonicalSourceIds.has(source.id)) return "publication";
+  const name = source.display_name || source.name || "";
+  if (CONNECTION_ID_HINT.test(source.id) || CONNECTION_ID_HINT.test(name)) {
+    return "connection";
+  }
+  return "ingestion";
+}
+
+/** Resolve raw framework/catalog ids (e.g. "disa-cci") to their published
+ * display name (e.g. "DISA CCI") — the default view must never show a raw
+ * schema/coverage identifier. */
+export function resolveCoverageLabel(
+  frameworkIds: string[],
+  catalogsById: Map<string, CatalogSummary>,
+): string {
+  if (!frameworkIds.length) return "Coverage not recorded";
+  return frameworkIds
+    .map((id) => catalogsById.get(id)?.name || humanizeSlug(id))
+    .join(", ");
+}
+
+export type LayeredSourceRow = SourceRegisterRow & {
+  recordsRepresented: number | null;
+  officialLink: string;
+  // Advanced-only fields — never shown in the default Publication register,
+  // only in the Ingestion provenance tab, per the "raw IDs stay advanced"
+  // rule.
+  artifactType: string;
+  rawCoverageKeys: string;
+};
+
+export function buildSourceLayers(
+  sources: any[],
+  catalogs: CatalogSummary[],
+  filters: SourceRegisterFilters = {},
+): Record<SourceLayerId, LayeredSourceRow[]> {
+  const rows = buildSourceRegister(sources, filters);
+  const sourcesById = new Map(sources.map((source) => [source.id, source]));
+  const catalogsById = new Map(catalogs.map((catalog) => [catalog.id, catalog]));
+  const canonicalSourceIds = canonicalSourceIdsFromCatalogs(catalogs);
+
+  const layers: Record<SourceLayerId, LayeredSourceRow[]> = {
+    organization: [],
+    publication: [],
+    connection: [],
+    ingestion: [],
+  };
+  for (const row of rows) {
+    const source = sourcesById.get(row.id);
+    if (!source) continue;
+    const layer = classifySourceLayer(source, canonicalSourceIds);
+    const catalog = catalogs.find((entry) => entry.source_id === source.id) || null;
+    layers[layer].push({
+      ...row,
+      coverage: resolveCoverageLabel(source.metadata?.frameworks || [], catalogsById),
+      recordsRepresented: catalog ? catalog.leaf_record_count : null,
+      officialLink: source.artifact_url || source.catalog_browse_url || "",
+      artifactType: source.artifact_type || "Not recorded",
+      rawCoverageKeys: (source.metadata?.frameworks || []).join(", ") || "Not recorded",
+    });
+  }
+  return layers;
 }

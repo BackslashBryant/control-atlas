@@ -1358,7 +1358,7 @@
     {
       "id": "nist-800-53b-baselines",
       "name": "NIST SP 800-53B Baseline Profiles",
-      "display_name": "SP 800-53 Rev. 5",
+      "display_name": "SP 800-53B",
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
