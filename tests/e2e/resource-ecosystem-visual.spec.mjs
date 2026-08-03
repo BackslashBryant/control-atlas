@@ -59,6 +59,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
     ["portal-disa-servicenow", "14-detail-dod-network"],
     ["service-dcsa-nisp-emass", "15-detail-restricted-government"],
     ["commercial-cis-benchmarks-free", "16-detail-free-commercial-publisher-artifact"],
+    ["template-i-assure-ssp-worksheet", "16b-detail-i-assure-free-templates-only"],
     ["portal-cis-workbench", "17-detail-community"],
     ["ecosystem-common-criteria", "18-detail-parent"],
     ["directory-common-criteria-products", "19-detail-child"],
@@ -111,7 +112,7 @@ test("resource directory supports keyboard use and a 200 percent zoom equivalent
   const search = page.getByRole("searchbox", { name: "Find resources" });
   await search.focus();
   await expect(search).toBeFocused();
-  await page.keyboard.type("I-Assure");
+  await search.pressSequentially("I-Assure", { delay: 50 });
   await expect(page.getByText("I-Assure RMF artifact templates", { exact: true }).first()).toBeVisible();
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
