@@ -33,6 +33,7 @@ export type AtlasConnectionGroup = {
 export type AtlasRelationshipLensId =
   | "structure"
   | "applicability"
+  | "correlation"
   | "implementation"
   | "assessment-evidence"
   | "process-artifacts"
@@ -55,9 +56,15 @@ export const ATLAS_RELATIONSHIP_LENSES: Array<{
     description: "Baselines, profiles, and overlays that select or modify scope.",
   },
   {
+    id: "correlation",
+    label: "Correlation",
+    description:
+      "CCIs and other mapping junctions that connect this record without becoming a parent or an implementation.",
+  },
+  {
     id: "implementation",
     label: "Implementation and technical requirements",
-    description: "CCIs, SRGs, STIGs, rules, and other implementation connections.",
+    description: "SRGs, STIGs, rules, and other published implementation connections.",
   },
   {
     id: "assessment-evidence",
@@ -93,9 +100,11 @@ const GROUP_META: Record<
   enhancements: { placement: "downstream", lens: "structure", rank: 1 },
   nistBaseline: { placement: "upstream", lens: "applicability", rank: 2 },
   fedrampBaseline: { placement: "upstream", lens: "applicability", rank: 3 },
-  disa: { placement: "downstream", lens: "implementation", rank: 4 },
-  stig: { placement: "downstream", lens: "implementation", rank: 5 },
-  assessment: { placement: "downstream", lens: "assessment-evidence", rank: 6 },
+  // CCIs are correlation junctions, not implementation children — they may
+  // mediate an implementation path but are never the implementation itself.
+  disa: { placement: "downstream", lens: "correlation", rank: 4 },
+  assessment: { placement: "downstream", lens: "assessment-evidence", rank: 5 },
+  stig: { placement: "downstream", lens: "implementation", rank: 6 },
   csf: { placement: "lateral", lens: "cross-framework", rank: 7 },
   sp171: { placement: "lateral", lens: "cross-framework", rank: 8 },
   nistControl: { placement: "lateral", lens: "cross-framework", rank: 9 },

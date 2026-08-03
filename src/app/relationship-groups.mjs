@@ -1,6 +1,6 @@
 export function groupRelationships(edges, runtimeNodeLookupId, runtime) {
   const groups = {
-    disa: { label: 'DISA CCIs', description: 'These CCIs map DISA implementation and assessment requirements back to this control.', items: [] },
+    disa: { label: 'DISA CCIs', description: 'Correlation junctions that map DISA implementation and assessment requirements back to this control — not implementation records themselves.', items: [] },
     nistBaseline: { label: 'NIST baselines', description: 'Included in these published NIST baselines.', items: [] },
     fedrampBaseline: { label: 'FedRAMP baselines', description: 'Included in these FedRAMP baselines.', items: [] },
     assessment: { label: 'Assessment procedures', description: 'Assessment procedures related to this item.', items: [] },

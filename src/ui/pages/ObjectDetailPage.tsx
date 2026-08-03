@@ -229,10 +229,20 @@ export function ObjectDetailPage(props: {
         items: grouped
           .filter((group) => bucket.groupIds.includes(group.id))
           .flatMap((group) =>
-            group.items.map((item: any) => ({
-              id: item.counterpart.id,
-              label: item.counterpart.metadata?.item_id || item.counterpart.id,
-            })),
+            group.items.map((item: any) => {
+              const itemId =
+                item.counterpart.metadata?.item_id || item.counterpart.id;
+              return {
+                id: item.counterpart.id,
+                // "Assessed through AC-2" reads as a self-reference — the
+                // assessment procedure needs its source and object type, not
+                // just the shared item ID.
+                label:
+                  bucket.id === "assessed-through"
+                    ? `SP 800-53A — ${itemId} assessment procedure`
+                    : itemId,
+              };
+            }),
           ),
       })).filter((bucket) => bucket.items.length > 0),
     [relationshipGroupSignature],
@@ -344,7 +354,11 @@ export function ObjectDetailPage(props: {
               ? "Back to comparison"
               : state.from === "catalog-detail"
                 ? "Back to Catalog"
-              : "Explore records";
+              // The unrecognized-origin fallback calls onNavigate("search")
+              // below, not Explore — the label must say where it actually
+              // goes, and must not read as a peer of the primary "Open in
+              // Explore" action beside it.
+              : "Back to Search";
 
   function returnToOrigin() {
     if (state.returnTo && Number(window.history.state?.idx || 0) > 0) {
@@ -450,6 +464,19 @@ export function ObjectDetailPage(props: {
         }
         title={recordDisplayTitle(node) || document.title}
       />
+
+      {/* Orientation before complexity: where this record sits comes right
+          after identity, before any official text or relationship detail —
+          not buried inside the two-column grid below the description. */}
+      <section className="atlas-structural-position">
+        <p className="eyebrow">Hierarchy</p>
+        <h2>Where this sits</h2>
+        <WhereThisSitsRail
+          bundle={bundle}
+          nodeId={node.id}
+          onOpenNode={(id) => onOpenNode(id, state.from || "search")}
+        />
+      </section>
 
       {isEnhancement && baseControlNode ? (
         <p className="record-parent-link">
@@ -563,46 +590,6 @@ export function ObjectDetailPage(props: {
               <p>{renderOdpText(node.metadata.discussion)}</p>
             </SummaryCard>
           ) : null}
-          <WhereThisSitsRail
-            bundle={bundle}
-            nodeId={node.id}
-            onOpenNode={(id) => onOpenNode(id, state.from || "search")}
-          />
-          {classBuckets.length ? (
-            <div className="tree-relationship-classes" aria-label="Relationship classes">
-              {classBuckets.map((bucket) => (
-                <div className="tree-relationship-class-row" key={bucket.id}>
-                  <span className="tree-relationship-class-label">{bucket.label}</span>
-                  <div className="badge-row">
-                    {bucket.items.slice(0, 6).map((item) => (
-                      <button
-                        className="badge-button"
-                        key={item.id}
-                        onClick={() => onOpenNode(item.id, state.from || "search")}
-                        type="button"
-                      >
-                        <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
-                          {item.label}
-                        </Badge>
-                      </button>
-                    ))}
-                    {bucket.items.length > 6 ? (
-                      <span className="tree-relationship-class-more">
-                        +{bucket.items.length - 6} more in Connections below
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : null}
-          <ContextualCommonsModule
-            bundle={bundle}
-            contextType="control"
-            contextId={document.item_id}
-            query={document.title}
-            onNavigate={onNavigate}
-          />
           {node.node_type === "assessment_procedure" ? (
             <SummaryCard title="Assessment objectives and methods" tone="trust">
               <p className="support-meta">Source: NIST SP 800-53A.</p>
@@ -668,6 +655,40 @@ export function ObjectDetailPage(props: {
                 <Badge tone="info">{edges.length} connections</Badge>
               </div>
             </div>
+
+            {/* One canonical relationship summary, not two competing
+                systems: the class breakdown (Selected by / Correlated
+                through / Implemented by / Assessed through) introduces the
+                same groups the accordion below lists in full, instead of
+                repeating them in a separate section. */}
+            {classBuckets.length ? (
+              <div className="tree-relationship-classes" aria-label="Relationship classes">
+                {classBuckets.map((bucket) => (
+                  <div className="tree-relationship-class-row" key={bucket.id}>
+                    <span className="tree-relationship-class-label">{bucket.label}</span>
+                    <div className="badge-row">
+                      {bucket.items.slice(0, 6).map((item) => (
+                        <button
+                          className="badge-button"
+                          key={item.id}
+                          onClick={() => onOpenNode(item.id, state.from || "search")}
+                          type="button"
+                        >
+                          <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
+                            {item.label}
+                          </Badge>
+                        </button>
+                      ))}
+                      {bucket.items.length > 6 ? (
+                        <span className="tree-relationship-class-more">
+                          +{bucket.items.length - 6} more below
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
 
             {state.relationshipView === "map" ||
             state.relationshipView === "list" ||
@@ -755,6 +776,18 @@ export function ObjectDetailPage(props: {
                 )}
               </p>
             </DisclosurePanel>
+            {node.metadata?.assessment_objectives?.length ||
+            node.metadata?.assessment_method_details?.length ? (
+              <DisclosurePanel
+                title="What evidence normally supports it"
+                value="assessment-evidence"
+              >
+                <p className="support-meta">
+                  Assessment objectives and methods from NIST SP 800-53A.
+                </p>
+                {renderAssessmentProcedure(node.metadata)}
+              </DisclosurePanel>
+            ) : null}
             <DisclosurePanel
               title="Official text / source excerpt"
               value="official-text"
@@ -797,19 +830,15 @@ export function ObjectDetailPage(props: {
                 <p>{renderOdpText(node.metadata.fix_text)}</p>
               </DisclosurePanel>
             ) : null}
-            {node.metadata?.assessment_objectives?.length ||
-            node.metadata?.assessment_method_details?.length ? (
-              <DisclosurePanel
-                title="What evidence normally supports it"
-                value="assessment-evidence"
-              >
-                <p className="support-meta">
-                  Assessment objectives and methods from NIST SP 800-53A.
-                </p>
-                {renderAssessmentProcedure(node.metadata)}
-              </DisclosurePanel>
-            ) : null}
           </Accordion.Root>
+
+          <ContextualCommonsModule
+            bundle={bundle}
+            contextType="control"
+            contextId={document.item_id}
+            query={document.title}
+            onNavigate={onNavigate}
+          />
         </section>
 
         <aside className="stack detail-sidebar">

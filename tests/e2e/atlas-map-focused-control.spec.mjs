@@ -29,8 +29,10 @@ test("focused Atlas opens publisher-declared structure before relationship views
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }),
   ).toContainText("SP 800-53 Rev. 5");
+  // Two rails, not one mixed "publisher-declared" claim: the chain groups
+  // into labeled rails instead of one heading over the whole path.
   await expect(
-    page.getByText(/Publisher-declared structural path/i),
+    page.getByText(/Control Atlas structure|Publisher hierarchy/).first(),
   ).toBeVisible();
   await expect(
     page.getByText(/Baselines and process lenses remain separate choices/i),
@@ -115,10 +117,13 @@ test("focused Map answers relationship type and count before any diagram", async
   await expect(map).toBeVisible();
   const lensCards = map.getByRole("group", { name: "Relationship types" });
   await expect(lensCards).toBeVisible();
-  await expect(lensCards.getByRole("button", { name: /Implementation/ })).toBeVisible();
+  // AC-2's 47 DISA CCIs are correlation junctions, not implementation
+  // records — they mediate a path to real STIG/SRG implementation but are
+  // never classified as Implementation themselves.
+  await expect(lensCards.getByRole("button", { name: /Correlation/ })).toBeVisible();
   await expect(map.locator(".react-flow")).toHaveCount(0);
 
-  await map.getByRole("button", { name: /Implementation/ }).click();
+  await map.getByRole("button", { name: /Correlation/ }).click();
   await expect(map.getByRole("button", { name: "View all 47 in List" })).toBeVisible();
 
   await map.getByText("View as graph").click();
@@ -166,7 +171,7 @@ test("a sparse STIG keeps structural position separate from its published connec
   await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
   await expect(
     page.getByRole("tabpanel", { name: "Path" }),
-  ).toContainText("Publisher-declared structural path");
+  ).toContainText(/Control Atlas structure|Publisher hierarchy/);
   await page.getByRole("tab", { name: "List", exact: true }).click();
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table).toBeVisible();
@@ -203,7 +208,7 @@ test("compact Path preserves structural position without horizontal overflow", a
 
   await expect(
     page.getByRole("tabpanel", { name: "Path" }),
-  ).toContainText("Publisher-declared structural path");
+  ).toContainText(/Control Atlas structure|Publisher hierarchy/);
   const overflow = await page.evaluate(() => ({
     body:
       globalThis.document.body.scrollWidth -

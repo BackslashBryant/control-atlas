@@ -107,6 +107,7 @@ export function compareNodeColor(role: CompareRole): string {
 // this" reads at a glance instead of only from the text label.
 export const RELATIONSHIP_LENS_LEGEND = [
   { key: "applicability", label: "Applicability", color: "--ca-lens-applicability" },
+  { key: "correlation", label: "Correlation", color: "--ca-lens-correlation" },
   { key: "implementation", label: "Implementation", color: "--ca-lens-implementation" },
   { key: "assessment-evidence", label: "Assessment", color: "--ca-lens-assessment" },
   { key: "process-artifacts", label: "Process", color: "--ca-lens-process" },
@@ -116,6 +117,7 @@ export const RELATIONSHIP_LENS_LEGEND = [
 
 const LENS_FALLBACK_COLOR: Record<string, string> = {
   applicability: "#CBAE67",
+  correlation: "#205F78",
   implementation: "#54BCD9",
   "assessment-evidence": "#7EB79E",
   "process-artifacts": "#98A4AC",

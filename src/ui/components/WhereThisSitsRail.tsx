@@ -79,49 +79,82 @@ export function WhereThisSitsRail(props: {
   if (chain.length === 0) return null;
 
   const organizingLabel = "Control Atlas structure, not publisher-declared";
-  // Every organizing hop stays visually distinct and keeps its aria-label, but
-  // the word badge prints once. A CCI chain has four of them, and repeating
-  // "Atlas" four times across one breadcrumb read as noise, not as provenance.
-  const firstOrganizingId = chain.find((link) => link.origin === "organizing")?.id;
+  const lastId = chain[chain.length - 1].id;
+
+  // Two rails, not one mixed breadcrumb: consecutive hops of the same origin
+  // group under one label ("Control Atlas structure" or "Publisher
+  // hierarchy") instead of one heading claiming the whole chain is
+  // publisher-declared when some hops are Control Atlas's own spine. Most
+  // chains produce exactly two groups (organizing spine, then the publisher's
+  // native tree); a record whose own parent is itself organizing-derived
+  // (e.g. a CCI) can produce more, and each still renders under its true rail.
+  const segments: { origin: AncestorLink["origin"]; links: AncestorLink[] }[] = [];
+  for (const link of chain) {
+    const current = segments[segments.length - 1];
+    if (current && current.origin === link.origin) {
+      current.links.push(link);
+    } else {
+      segments.push({ origin: link.origin, links: [link] });
+    }
+  }
 
   return (
-    <nav aria-label="Where this sits" className="atlas-path-breadcrumb tree-path-rail">
-      {chain.map((link, index) => {
-        const isOrganizing = link.origin === "organizing";
-        const isSubject = index === chain.length - 1;
+    <nav aria-label="Where this sits" className="tree-path-rail">
+      {segments.map((segment, segmentIndex) => {
+        const isOrganizing = segment.origin === "organizing";
         return (
-          <Fragment key={link.id}>
-            {index > 0 ? <IconChevronRight aria-hidden="true" size={15} /> : null}
-            {isSubject ? (
-              <span
-                className={
-                  isOrganizing
-                    ? "atlas-path-crumb-subject atlas-path-crumb-organizing"
-                    : "atlas-path-crumb-subject"
-                }
-              >
-                {link.label}
+          <Fragment key={segmentIndex}>
+            {segmentIndex > 0 ? (
+              <span aria-hidden="true" className="tree-path-rail-connector">
+                <IconChevronRight size={13} />
               </span>
-            ) : (
-              <button
-                className={
-                  isOrganizing
-                    ? "atlas-path-crumb-link atlas-path-crumb-organizing"
-                    : "atlas-path-crumb-link"
-                }
-                onClick={() => onOpenNode(link.id)}
-                type="button"
-                aria-label={isOrganizing ? `${link.label} — ${organizingLabel}` : undefined}
-                title={isOrganizing ? organizingLabel : undefined}
-              >
-                {link.label}
-                {isOrganizing && link.id === firstOrganizingId ? (
-                  <span className="atlas-path-crumb-badge" aria-hidden="true">
-                    Not from the publisher
-                  </span>
-                ) : null}
-              </button>
-            )}
+            ) : null}
+            <div
+              className={
+                isOrganizing
+                  ? "tree-path-rail-row tree-path-rail-row-organizing"
+                  : "tree-path-rail-row tree-path-rail-row-structural"
+              }
+            >
+              <span className="tree-path-rail-label">
+                {isOrganizing ? "Control Atlas structure" : "Publisher hierarchy"}
+              </span>
+              <div className="atlas-path-breadcrumb">
+                {segment.links.map((link, index) => {
+                  const isSubject = link.id === lastId;
+                  return (
+                    <Fragment key={link.id}>
+                      {index > 0 ? <IconChevronRight aria-hidden="true" size={15} /> : null}
+                      {isSubject ? (
+                        <span
+                          className={
+                            isOrganizing
+                              ? "atlas-path-crumb-subject atlas-path-crumb-organizing"
+                              : "atlas-path-crumb-subject"
+                          }
+                        >
+                          {link.label}
+                        </span>
+                      ) : (
+                        <button
+                          className={
+                            isOrganizing
+                              ? "atlas-path-crumb-link atlas-path-crumb-organizing"
+                              : "atlas-path-crumb-link"
+                          }
+                          onClick={() => onOpenNode(link.id)}
+                          type="button"
+                          aria-label={isOrganizing ? `${link.label} — ${organizingLabel}` : undefined}
+                          title={isOrganizing ? organizingLabel : undefined}
+                        >
+                          {link.label}
+                        </button>
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </div>
           </Fragment>
         );
       })}

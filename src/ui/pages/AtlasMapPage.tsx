@@ -23,6 +23,7 @@ import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
+  ATLAS_RELATIONSHIP_LENSES,
   atlasFilterOptions,
   buildAtlasGroups,
   buildAtlasRows,
@@ -365,6 +366,29 @@ function FocusedAtlas(props: {
   };
   const groups = useMemo(() => buildAtlasGroups(record, filters), [record, state]);
   const rows = useMemo(() => buildAtlasRows(record, filters), [record, state]);
+  // List must never disagree with Map about what class a record belongs to
+  // (a CCI reads "Correlation" in both, never "Implementation" in one and
+  // "Correlation" in the other) — derive the label from the same groups.
+  const lensLabelByEdgeId = useMemo(() => {
+    const labelByLens = new Map(
+      ATLAS_RELATIONSHIP_LENSES.map((lens) => [lens.id, lens.label] as const),
+    );
+    const map = new Map<string, string>();
+    for (const group of groups) {
+      const label = labelByLens.get(group.lens);
+      if (!label) continue;
+      for (const item of group.items) map.set(item.edge.id, label);
+    }
+    return map;
+  }, [groups]);
+  const listRows = useMemo(
+    () =>
+      rows.map((row) => ({
+        ...row,
+        lensLabel: lensLabelByEdgeId.get(row.edge.id),
+      })),
+    [rows, lensLabelByEdgeId],
+  );
   const options = useMemo(() => atlasFilterOptions(record), [record]);
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
@@ -580,8 +604,12 @@ function FocusedAtlas(props: {
           >
             {boardView ? (
               <section className="atlas-path-summary">
-                <p className="eyebrow">Publisher-declared structural path</p>
-                {/* centerLabel was here too: the record's name is already the
+                {/* No single eyebrow here: the chain below mixes Control
+                    Atlas structure and publisher-declared hierarchy, and a
+                    blanket "publisher-declared" claim over the whole thing
+                    would be false. WhereThisSitsRail renders each as its own
+                    labeled rail instead.
+                    centerLabel was here too: the record's name is already the
                     page H1 and the last crumb of the chain below. */}
                 {structuralPosition}
                 <p>
@@ -616,7 +644,7 @@ function FocusedAtlas(props: {
                     rows.find((row) => row.counterpart.id === node) || null,
                   )
                 }
-                rows={rows}
+                rows={listRows}
               />
             ) : null}
           </section>
