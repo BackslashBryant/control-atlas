@@ -64,9 +64,15 @@ test("invalid parameters are discarded with a visible recovery contract", () => 
 });
 
 test("invalid Resources facet state recovers to the valid canonical browse scope", () => {
-  const resolved = canonicalizeHashLocation("/resources?category=made-up&lifecycle=Monitor");
+  const resolved = canonicalizeHashLocation("/resources?category=made-up&lifecycle=Archive");
   assert.equal(resolved.canonicalPath, "/resources");
   assert.match(resolved.recoveryMessage, /removed|could not/i);
+});
+
+test("current Resources work stages survive canonicalization", () => {
+  const resolved = canonicalizeHashLocation("/resources?lifecycle=Monitor");
+  assert.equal(resolved.canonicalPath, "/resources?lifecycle=Monitor");
+  assert.equal(resolved.requiresReplace, false);
 });
 
 test("former Build-nested Resources links redirect to the top-level spoke", () => {

@@ -45,6 +45,12 @@ function unique(values: string[]) {
   return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right));
 }
 
+function workStageLabel(value: string): string {
+  return value
+    ? `${value.slice(0, 1).toUpperCase()}${value.slice(1).toLowerCase()}`
+    : value;
+}
+
 export function CommonsPage(props: {
   bundle: RuntimeBundle | null;
   viewState: ViewState;
@@ -75,7 +81,9 @@ export function CommonsPage(props: {
 
   const resourceTypes = unique(resources.map((resource) => resource.resourceType));
   const owners = unique(resources.map((resource) => resource.publisher));
-  const lifecycleStages = unique(resources.flatMap((resource) => resource.lifecycleStages));
+  const lifecycleStages = unique(
+    resources.flatMap((resource) => resource.lifecycleStages).map(workStageLabel),
+  );
   const audiences = unique(resources.flatMap((resource) => resource.audiences));
   const accessTypes = unique(resources.map((resource) => resource.accessType));
   const costTypes = unique(resources.map((resource) => resource.costType));
