@@ -198,8 +198,10 @@ test('about page states the exact product boundary without a decorative hierarch
   assert.match(aboutPage, /eyebrow="About"/);
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  assert.match(aboutPage, /Structure follows the publisher/i);
-  assert.match(aboutPage, /hierarchy declared by the source/i);
+  assert.match(aboutPage, /Path has two rails/i);
+  assert.match(aboutPage, /Control Atlas structure/);
+  assert.match(aboutPage, /publisher hierarchy/i);
+  assert.match(aboutPage, /A tree for hierarchy, a graph for relationships/);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
 });

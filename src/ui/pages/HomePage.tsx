@@ -1,5 +1,6 @@
 import {
   IconBooks,
+  IconCompass,
   IconExternalLink,
   IconMap2,
   IconSearch,
@@ -59,6 +60,22 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <p className="home-product-identity">{PRODUCT_HERO}</p>
       </header>
 
+      <div className="home-primary-actions">
+        <Button
+          className="home-start-here"
+          onClick={() => onNavigate("start-here")}
+          type="button"
+          variant="primary"
+        >
+          <IconCompass aria-hidden="true" size={20} stroke={1.8} />
+          Start Here
+        </Button>
+        <p className="home-start-here-hint">
+          New to Control Atlas? Answer a couple of questions and we point you
+          at the right publications.
+        </p>
+      </div>
+
       <form
         className="home-search"
         onSubmit={(event) => {
@@ -72,11 +89,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <Input
           aria-label="Search published records"
           onChange={(event) => setSearchDraft(event.target.value)}
-          placeholder="Search by identifier or topic"
+          placeholder="Or search directly by identifier or topic"
           type="search"
           value={searchDraft}
         />
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="secondary">
           Search
         </Button>
       </form>
@@ -105,9 +122,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
           Home shows it so the shape of the whole corpus is visible before the
           visitor commits to a click. */}
       <section aria-labelledby="home-spine-title" className="home-spine">
-        <h2 id="home-spine-title">Everything here, in nine areas</h2>
+        <h2 id="home-spine-title">Every Atlas publication, in nine areas</h2>
         <p>
-          Every publication, setting and procedure belongs to one of them.
+          Every publication and record in the Atlas belongs to one of them.
+          Tools, templates, and other outside Resources are organized
+          separately — they support the work without becoming part of this
+          structure.
         </p>
         <ul className="home-spine-limbs">
           {AREA_LABELS.map((label) => (
@@ -120,11 +140,31 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </ul>
       </section>
 
+      <section aria-labelledby="home-thesis-title" className="home-thesis">
+        <h2 id="home-thesis-title">Hierarchy and relationships are different things</h2>
+        <p>
+          Every record lives in exactly one place — its publication, inside
+          one of the nine areas above. Everything it connects to beyond that —
+          a baseline that selects it, a mapping to another framework, an
+          assessment procedure — is a relationship, shown separately so it is
+          never mistaken for where the record lives.
+        </p>
+        <p className="home-thesis-example">
+          NIST publishes SP 800-53, which defines control AC-2. AC-2 is
+          selected into the FedRAMP Moderate baseline and assessed through an
+          SP 800-53A procedure — one hierarchy, two relationships.
+        </p>
+        <button
+          className="home-thesis-link"
+          onClick={() => onNavigate("about")}
+          type="button"
+        >
+          Read more about how Control Atlas is organized
+        </button>
+      </section>
+
       <aside className="home-trust-boundary">
         <p>No account or uploads. {PRODUCT_DECISION_BOUNDARY}</p>
-        <button onClick={() => onNavigate("start-here")} type="button">
-          Browse publications
-        </button>
       </aside>
     </section>
   );

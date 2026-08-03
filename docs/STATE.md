@@ -73,6 +73,67 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-03 (session 21 cont.) - audit alignment, Phase 5 (Home + About thesis) COMPLETE, AUDIT ALIGNMENT DONE
+
+`HomePage.tsx` / `AboutPage.tsx`: Workstream 12.
+
+Home: added a primary `Start Here` CTA (icon + hint line) above the
+existing search form, which is retained but demoted to `variant="secondary"`
+— matches the spec's "make Start Here the primary newcomer action, retain
+direct Search." Removed the redundant bottom "Browse publications" button
+(same destination as the new primary CTA). Corrected the nine-areas copy —
+"Every publication, setting and procedure belongs to one of them" overclaimed
+scope; Resources (external tools/templates/training/communities) are
+explicitly NOT part of the nine areas per About's own "Resources stay outside
+the tree" bullet. New heading/copy scopes it to Atlas publications and states
+Resources are organized separately. Added a compact "Hierarchy and
+relationships are different things" section with a real, data-verified
+example chain (AC-2 → FedRAMP Moderate baseline → SP 800-53A assessment).
+
+About: fixed a real, stale factual error found while reading the page for
+this task — "Structure follows the publisher: Path shows only hierarchy
+declared by the source" has been wrong since Phase 1a shipped the two-rail
+Path split; replaced with an accurate description of both rails. Added the
+spec's "A tree for hierarchy, a graph for relationships" card: tree vs. graph
+distinction, the same AC-2 example chain (extended with a real DISA CCI,
+CCI-000010 — verified against `data/generated/edges.json`, not invented), and
+plain-language relationship-class descriptions reused verbatim from
+`ATLAS_RELATIONSHIP_LENSES` (no new vocabulary invented). Added a Learn link
+to "Where to go next" (spec asked for links to Learn and Sources; Sources was
+already there).
+
+Found and fixed a second real drift while verifying in-browser: `src/index.html`
+contains a hand-maintained static HTML mirror of Home (`data-static-home`) —
+by design, Home renders entirely from this static shell with vanilla JS
+(`main.tsx`'s `connectStaticHome()`); React does not boot on Home at all
+unless navigating back to it from elsewhere. This static copy had drifted out
+of sync with `HomePage.tsx` before this session too (unrelated to today's
+edit) and would have kept doing so — updated it to match exactly. Also
+caught and fixed a copy-paste error of my own: styled the About "Read more"
+link with `.link-action`, the site's boxed-card-button class, which rendered
+as a jarring full-width card instead of a quiet link — added a proper
+`.home-thesis-link` (underlined text) style instead and used it in both
+`HomePage.tsx` and the static mirror. Separately, `onNavigate("playbooks")`
+doesn't exist on `ViewState` (the canonical id is `"patterns"`) — caught by
+`tsc`, not by eye; fixed before commit.
+
+Updated two tests whose assertions encoded the now-superseded old design:
+`a11y-contract.test.mjs` renamed/rewrote "Home makes Search the sole primary
+action" (now: Start Here is sole primary, Search retained). `content-review.test.mjs`
+updated its stale-hierarchy-line assertions to the corrected two-rail wording.
+
+### Verification
+Lint/typecheck clean after fixing the `"playbooks"` type error. `npm test`
+258/30/57/3 clean. Full e2e 146/146 (1 skip), full a11y 32/32. Full visual
+28/28 — Home and About baselines re-approved after personally reviewing
+desktop and compact screenshots for both (no overlap, no crowding, the
+`.link-action`→`.home-thesis-link` fix visually confirmed). `npm run precommit`
+exit 0.
+
+**This closes out `docs/plans/audit-alignment-2026-08-02.md` end to end.**
+Next: ship gate (push to a throwaway branch for Public Repo Checks, then
+fast-forward `main`, per `memory/deploy-workflow.md`).
+
 ## 2026-08-03 (session 21 cont.) - audit alignment, Phase 4c (semantic snapshot test) COMPLETE, PHASE 4 DONE
 
 Added `tests/e2e/semantic-parity.spec.mjs` (4 tests) implementing Workstream 0

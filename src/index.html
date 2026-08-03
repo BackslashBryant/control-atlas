@@ -61,13 +61,24 @@
             <p class="home-product-identity">Someone handed you a system and told you to get it authorized. The rules are public, but they are spread across a dozen publications that do not reference each other. Control Atlas holds all of them in one place, with every record still attached to the publisher that wrote it.</p>
           </header>
 
+          <div class="home-primary-actions">
+            <button class="button button--primary home-start-here" data-route="#/start" type="button">
+              <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="m14.5 9.5-2 5-5 2 2-5 5-2z"></path>
+              </svg>
+              Start Here
+            </button>
+            <p class="home-start-here-hint">New to Control Atlas? Answer a couple of questions and we point you at the right publications.</p>
+          </div>
+
           <form class="home-search" data-home-search role="search">
             <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.35-4.35"></path>
             </svg>
-            <input aria-label="Search published records" name="query" placeholder="Search by identifier or topic" type="search">
-            <button class="button button--primary" type="submit">Search</button>
+            <input aria-label="Search published records" name="query" placeholder="Or search directly by identifier or topic" type="search">
+            <button class="button button--secondary" type="submit">Search</button>
           </form>
 
           <nav aria-label="Other ways to begin" class="home-secondary-grid">
@@ -86,8 +97,8 @@
           </nav>
 
           <section aria-labelledby="home-spine-title" class="home-spine">
-            <h2 id="home-spine-title">Everything here, in nine areas</h2>
-            <p>Every publication, setting and procedure belongs to one of them.</p>
+            <h2 id="home-spine-title">Every Atlas publication, in nine areas</h2>
+            <p>Every publication and record in the Atlas belongs to one of them. Tools, templates, and other outside Resources are organized separately &mdash; they support the work without becoming part of this structure.</p>
             <ul class="home-spine-limbs">
               <li><button data-route="#/explore" type="button">Governance</button></li>
               <li><button data-route="#/explore" type="button">Risk</button></li>
@@ -101,9 +112,15 @@
             </ul>
           </section>
 
+          <section aria-labelledby="home-thesis-title" class="home-thesis">
+            <h2 id="home-thesis-title">Hierarchy and relationships are different things</h2>
+            <p>Every record lives in exactly one place &mdash; its publication, inside one of the nine areas above. Everything it connects to beyond that &mdash; a baseline that selects it, a mapping to another framework, an assessment procedure &mdash; is a relationship, shown separately so it is never mistaken for where the record lives.</p>
+            <p class="home-thesis-example">NIST publishes SP 800-53, which defines control AC-2. AC-2 is selected into the FedRAMP Moderate baseline and assessed through an SP 800-53A procedure &mdash; one hierarchy, two relationships.</p>
+            <button class="home-thesis-link" data-route="#/about" type="button">Read more about how Control Atlas is organized</button>
+          </section>
+
           <aside class="home-trust-boundary">
             <p>No account or uploads. Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.</p>
-            <button data-route="#/start" type="button">Browse publications</button>
           </aside>
         </section>
       </section>
