@@ -50,6 +50,12 @@ const ORG_MONOGRAMS = {
   "mitre.org": "MITRE",
   "sans.org": "SANS",
   "niap-ccevs.org": "NIAP",
+  "commoncriteriaportal.org": "CC",
+  "dcsa.mil": "DCSA",
+  "war.gov": "DoD",
+  "open-scap.org": "SCAP",
+  "tenable.com": "Tenable",
+  "cyberab.org": "Cyber AB",
 };
 
 /** Strip `www.` so `www.reddit.com` and `reddit.com` read as one host. */
@@ -104,7 +110,7 @@ export const COMMONS_GROUPS = [
     id: "catalogs",
     label: "Catalogs and data",
     blurb: "The actual lists of controls and mappings, including machine-readable feeds.",
-    types: ["catalog", "dataset", "matrix", "specification"],
+    types: ["catalog", "dataset", "matrix", "specification", "product_directory", "marketplace"],
   },
   {
     id: "templates",
@@ -116,7 +122,7 @@ export const COMMONS_GROUPS = [
     id: "tools",
     label: "Tools and automation",
     blurb: "Software that scans, checks, or generates the work for you.",
-    types: ["tool"],
+    types: ["tool", "ecosystem", "government_portal", "portal", "restricted_service", "service_portal"],
   },
   {
     id: "community",

@@ -20,7 +20,26 @@ function indexFor(documents) {
       fuzzy: 0.15,
     },
   });
-  index.addAll(documents);
+  index.addAll(documents.map((document) => ({
+    ...document,
+    searchableText: [
+      document.searchableText,
+      document.cardPurpose,
+      document.publisher,
+      document.publisherType,
+      document.resourceType,
+      document.accessType,
+      document.costType,
+      ...(document.searchAliases || []),
+      ...(document.searchKeywords || []),
+      ...(document.frameworks || []),
+      ...(document.programs || []),
+      ...(document.lifecycleStages || []),
+      ...(document.audiences || []),
+      ...(document.technologyScopes || []),
+      ...(document.featuredCollections || []),
+    ].filter(Boolean).join(" "),
+  })));
   indexes.set(documents, index);
   return index;
 }

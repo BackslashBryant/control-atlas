@@ -1,22 +1,21 @@
-# Control Commons Requirement Traceability & Acceptance Matrix
+# Resources ecosystem acceptance matrix
 
-**Version:** 2.0-Final  
-**Status:** COMPLETE — Acceptance Audit Verified  
-**Date:** 2026-07-23  
+Date: 2026-08-03
+Status: implementation evidence in progress until merged and live-verified
 
----
+| Requirement | Current evidence | Final gate |
+|---|---|---|
+| Eight collection-first starting points | Eight dataset collections; landing renders collection cards before any result wall | Browser screenshot and E2E |
+| Resource/Library boundary | Publication candidates are routed to Library or rejected; portal/tool/service records stay distinct | Dataset and disposition tests |
+| No paywalled product cards | I-Assure limited to its no-cost templates; Tenable product entries and paid Platform One services rejected | `commons-quality.test.mjs` |
+| Current official destinations | `cyber.mil`, `dowcio.war.gov`, CISA Learning, exact Platform One/Common Criteria/NIAP/CMVP routes | Source evidence plus link report |
+| Honest access labels | Public, free account, CAC, restricted/variable, and no-cost government workflows represented explicitly | Schema and detail-page tests |
+| Ecosystem relationships | Parent and child IDs validate bidirectionally enough for navigation; no Atlas parentage implied | Index builder and detail E2E |
+| Identity system | Central registry, meaningful type fallbacks, no remote image dependency | Brand manifest and presentation tests |
+| Search aliases and filters | Aliases, collection/type/owner/access/cost/audience/work-stage filters, result count, and sorting | Directory/search unit tests and E2E |
+| Community safety | Exact CUI/credential/system-detail warning appears once on community details | Browser assertion |
+| Health and maintenance | Bounded real checks, redirect capture, expected restricted boundaries, no fake fast mode | Health report and contract test |
+| Responsive and accessible | Keyboard targets, labels, empty/error states, 320px and desktop rendering | E2E, axe, screenshot inspection |
+| Release | Latest `main` reconciled, precommit and CI green, merged, Pages live smoke complete | GitHub and live browser evidence |
 
-| ID | Requirement | Required Outcome | Current Implementation | Evidence | Status | Corrective Action | Validation Method |
-|---|---|---|---|---|---|---|---|
-| **R-01** | Production Resource Count | Minimum 175 high-quality validated resources across all core lanes. | 229 validated resources indexed across 5 lanes. | `data/commons-resource-dataset.json` | **Complete** | Expanded dataset to 229 verified entries covering all required resource families. | `node tests/commons-quality.test.mjs` (Pass) |
-| **R-02** | Category & Lane Targets | >=50 Official, >=50 Open Source, >=20 Practitioner, >=20 Templates, >=30 Tools, >=20 Datasets/APIs, >=10 Commercial, >=10 Legacy. | 77 Official, 137 Open Source, 34 Practitioner, 23 Templates, 60 Tools, 139 Datasets/APIs, 29 Commercial, 30 Legacy. | `data/commons-resource-dataset.json` | **Complete** | All category & lane targets met or exceeded with high-utility resources. | `node tests/commons-quality.test.mjs` (Pass) |
-| **R-03** | Candidate Discovery Manifest | Minimum 225 total reviewed candidates (accepted + rejected with reasons). | 276 total evaluated candidates (229 accepted, 47 rejected with rationale). | `data/commons-candidate-manifest.json` | **Complete** | Logged 276 candidates with explicit rejection rationale for candidate exclusions. | `node tests/commons-quality.test.mjs` (Pass) |
-| **R-04** | Practitioner Community Sweep | Documented sweep across 25+ public communities (Reddit, Tenable, CIS, FedRAMP, OSCAL, OpenSCAP, MITRE SAF, etc.). | Published comprehensive research log documenting 25+ community channels. | `docs/COMMONS_COMMUNITY_RESEARCH.md` | **Complete** | Completed and published practitioner community research sweep. | Document audit & community source check |
-| **R-05** | Mandatory Resource Family Coverage | 100% coverage of federal, templates, STIG/hardening, OSCAL, cloud/DevSecOps families. | 100% coverage across NIST, DISA, CISA, OSCAL, Prowler, Steampipe, Falco, Dependency-Track, etc. | `data/commons-resource-dataset.json` | **Complete** | Indexed all mandatory families with official and practical pairing resources. | `node tests/commons-quality.test.mjs` (Pass) |
-| **R-06** | Change Monitoring & Update Tiers | 5 update tiers (Hot 6-12h, Active 24h, Normal 7d, Slow 30d, Legacy 90d) with structured change reporting. | Multi-tier health monitoring script emitting JSON and Markdown reports. | `scripts/check-commons-health.mjs`, `docs/COMMONS_HEALTH_REPORT.md` | **Complete** | Upgraded monitoring script for 5 update tiers and automated report generation. | `node scripts/check-commons-health.mjs --fast` (Pass) |
-| **R-07** | Contribution & Issue Forms | 6 issue templates (Submit, Report Broken Link, Report Outdated, Correct Metadata, Claim Ownership, Removal). | All 6 YAML issue templates present in `.github/ISSUE_TEMPLATE/`. | `.github/ISSUE_TEMPLATE/` | **Complete** | Created missing issue forms (`report-outdated-resource.yml`, `correct-metadata.yml`, `claim-ownership.yml`, `request-removal.yml`). | File audit & form field verification |
-| **R-08** | Contextual Product Integration | Filtered Commons modules on Control Detail, Catalog Detail, STIG records, Atlas Relationship Views, Compare Results, Guides, Templates. | `ContextualCommonsModule` embedded in Control Detail, Catalog Detail, Compare, Templates, Playbooks. | `src/ui/components/ContextualCommonsModule.tsx` | **Complete** | Integrated contextual Commons modules across all primary detail and feature views. | UI component rendering & build check |
-| **R-09** | Machine-Readable Search Benchmark | Benchmark fixture test with 27+ required queries, intent validation, and ranking rules. | 27 queries benchmarked: 74.1% Top-1, 96.3% Top-3, 100% Top-5 recall. | `tests/commons-search-benchmark.test.mjs`, `docs/COMMONS_SEARCH_BENCHMARK.md` | **Complete** | Machine-readable search benchmark executed and published report. | `node tests/commons-search-benchmark.test.mjs` (Pass) |
-| **R-10** | UX & Multi-Viewport Verification | Verified layouts across 320px, 375px, 768px, 1280px, 200% zoom, a11y, keyboard nav. | Responsive grid, ARIA live regions, contrast compliance, and full keyboard navigation. | `src/ui/pages/CommonsPage.tsx` | **Complete** | Validated design system layout, responsive viewports, and accessibility attributes. | `npm run build:site` (Pass) |
-| **R-11** | Trust & Utility Multi-Dimensional Model | Independent representation of Authority, Maintenance, Adoption, Transparency, Freshness, Practical Utility. | Parallel discovery lanes (`official`, `open_source`, `practitioner`, `commercial`, `legacy`). | `src/ui/components/CommonsResourceCard.tsx` | **Complete** | Preserved separate authority and utility lanes without collapsing criteria. | `node tests/commons-quality.test.mjs` (Pass) |
-| **R-12** | Complete Test Suite & Deployment | Pass all precommit gates (lint, typecheck, unit, integration, e2e, a11y, static build, ship to main). | All automated unit, quality, search, and static site build checks passing. | `package.json` | **Complete** | Executed local verification suite and static build validation. | `npm run build:site` (Pass) |
+This matrix must not be changed to “complete” based only on local tests. The release row closes only after the deployed Pages route is inspected.

@@ -120,11 +120,14 @@ const ATLAS_PARAMS = new Set([
 ]);
 const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "showAll"]);
+const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "collection", "owner", "costType", "sort", "showAll"]);
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
   category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
-  lifecycle: ["Implement", "Assess"],
-  resourceType: ["catalog", "community_forum", "dataset", "documentation", "historical_reference", "instruction", "matrix", "policy", "specification", "template", "tool", "training"],
+  collection: ["dod-cybersecurity-portals", "reciprocity-authorization-reuse", "implementation-assessment-tools", "product-assurance-approved-products", "cloud-devsecops-software-factories", "cmmc-defense-industrial-base", "cyber-workforce-training", "practitioner-communities"],
+  accessType: ["public", "free_account", "cac_required", "dod_network_required", "invitation_required", "access_varies"],
+  costType: ["free", "no_cost", "varies"],
+  resourceType: ["catalog", "community_forum", "dataset", "documentation", "ecosystem", "government_portal", "historical_reference", "instruction", "marketplace", "matrix", "product_directory", "restricted_service", "service_portal", "specification", "template", "tool", "training"],
+  sort: ["relevance", "name", "checked"],
 };
 const DETAIL_PARAMS = new Set(["from", "returnTo", "relationshipView", "relationshipType", "provenance", "confidence", "nodeType", "includeCandidates", "relationshipSearch"]);
 const START_PARAMS = new Set<string>();
