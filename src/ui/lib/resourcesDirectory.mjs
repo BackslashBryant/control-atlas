@@ -30,7 +30,7 @@ export function primaryBrowseCategoryCounts(resources) {
 }
 
 function includesQuery(value, query) {
-  return String(value || "").toLowerCase().includes(query);
+  return String(value || "").toLowerCase().includes(String(query || "").toLowerCase());
 }
 
 export function resourceSearchEvidence(resource, query) {

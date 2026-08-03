@@ -42,6 +42,13 @@ test("clearing a query restores the previous browse scope", () => {
   assert.deepEqual(searchDirectoryResources(scope, "").map((resource) => resource.id), scope.map((resource) => resource.id));
 });
 
+test("mixed-case facet values match resource metadata case-insensitively", () => {
+  const owner = "National Institute of Standards and Technology";
+  const matches = filterDirectoryResources(resources, { owner });
+  assert.ok(matches.length > 0);
+  assert.ok(matches.every((resource) => resource.publisher === owner));
+});
+
 test("contextual recommendations expose derived provenance without structural parentage", () => {
   const recommendations = contextualResourceRecommendations({
     resources,

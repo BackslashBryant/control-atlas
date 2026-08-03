@@ -142,8 +142,8 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
   await open(page, "/#/resources?q=OSCAL");
-  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
-  await expect(page.getByPlaceholder("Search external resources")).toHaveValue("OSCAL");
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work", level: 1 })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
   await expect(page.getByRole("region", { name: "Resource results" })).toBeVisible();
 });
 
@@ -159,17 +159,18 @@ test("V1 workflow 10 — recover from invalid settings, missing records, and emp
 test("V1 workflow 11 — refresh and browser history preserve valid URL state", async ({
   page,
 }) => {
-  await open(page, "/#/resources?lane=official");
+  const owner = "National Institute of Standards and Technology";
+  await open(page, `/#/resources?owner=${encodeURIComponent(owner)}`);
   const filters = page.getByRole("button", { name: /^Filters/ });
   await filters.click();
-  const ownerType = page.getByLabel("Owner type");
-  await expect(ownerType).toHaveValue("official");
+  const ownerFilter = page.getByLabel("Owner");
+  await expect(ownerFilter).toHaveValue(owner);
   await page.reload();
-  await expect(ownerType).toHaveValue("official");
+  await expect(ownerFilter).toHaveValue(owner);
   await filters.click();
-  await ownerType.selectOption("all");
+  await ownerFilter.selectOption("");
   await page.goBack();
-  await expect(ownerType).toHaveValue("official");
+  await expect(ownerFilter).toHaveValue(owner);
 });
 
 test("V1 workflow 12 — defining work reflows at mobile, tablet, and desktop widths", async ({
