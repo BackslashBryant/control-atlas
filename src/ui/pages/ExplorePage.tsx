@@ -26,6 +26,20 @@ import {
 } from "../lib/pagePrimitives";
 import { Button, Panel } from "../components/lsm";
 
+// W11 — every nonexact result must show why it matched; search relevance
+// must never be presented as a graph relationship (that stays search-only,
+// computed here, not written back into the runtime search index).
+function matchReasonFor(document: any, query: string): string {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return "Matches active filters";
+  const itemId = String(document.item_id || document.id || "").toLowerCase();
+  const title = String(document.title || "").toLowerCase();
+  if (itemId === needle) return "Exact identifier";
+  if (itemId.startsWith(needle)) return "Identifier match";
+  if (title.includes(needle)) return "Title match";
+  return "Official text match";
+}
+
 export function ExplorePage(props: {
   bundle: RuntimeBundle;
   graphReady: boolean;
@@ -132,9 +146,10 @@ export function ExplorePage(props: {
         const lowCoverage = isLowCatalogCoverage(
           catalogCoverageForId(catalogCoverage, document.catalog_id),
         );
-        return { document, node, relationshipCount, source, lowCoverage };
+        const matchReason = matchReasonFor(document, state.query);
+        return { document, node, relationshipCount, source, lowCoverage, matchReason };
       }),
-    [bundle.runtime, catalogCoverage, documents],
+    [bundle.runtime, catalogCoverage, documents, state.query],
   );
 
   const visibleDocumentRows = useMemo(
@@ -159,6 +174,13 @@ export function ExplorePage(props: {
       {},
     );
   }, [visibleDocumentRows]);
+  // The runtime's own search returns ONLY exact identifier matches when any
+  // exist (never mixed with partial text matches) — reusing that same rule
+  // here, not inventing a new one, keeps this label honest.
+  const isExactResultSet =
+    hasQuery &&
+    visibleDocumentRows.length > 0 &&
+    visibleDocumentRows.every((row) => row.matchReason === "Exact identifier");
   const hasVisibleResults =
     visibleDocumentRows.length > 0 ||
     glossaryMatches.length > 0 ||
@@ -186,6 +208,16 @@ export function ExplorePage(props: {
   return (
     <>
       <Panel className="search-results-panel border-0 !bg-transparent p-0">
+        <label className="catalog-search search-results-query">
+          <IconSearch aria-hidden="true" size={18} />
+          <input
+            aria-label="Search query"
+            onChange={(event) => onNavigate("search", { query: event.target.value })}
+            placeholder="Search by identifier, title, or topic"
+            type="search"
+            value={state.query}
+          />
+        </label>
         <Accordion.Root className="accordion-root" collapsible type="single">
           <DisclosurePanel title="Refine results" value="filters">
             <div className="filter-grid">
@@ -271,6 +303,14 @@ export function ExplorePage(props: {
           </p>
         ) : null}
 
+        {searchStarted && hasVisibleResults && visibleDocumentRows.length ? (
+          <p className="notice-inline" role="status">
+            {isExactResultSet
+              ? `Exact match${visibleDocumentRows.length === 1 ? "" : "es"} for "${state.query}".`
+              : `Published text matches for "${state.query}" — each result below shows why it matched.`}
+          </p>
+        ) : null}
+
         {searchStarted && hasVisibleResults ? (
           <Accordion.Root
             aria-label="Search results"
@@ -299,6 +339,7 @@ export function ExplorePage(props: {
                           relationshipCount,
                           source,
                           lowCoverage,
+                          matchReason,
                         }) => {
                         return (
                           <article
@@ -341,6 +382,11 @@ export function ExplorePage(props: {
                                 </CardTitle>
                               </div>
                               <div className="result-card-badges">
+                                {hasQuery && matchReason !== "Exact identifier" ? (
+                                  <span className="result-match-reason">
+                                    {matchReason}
+                                  </span>
+                                ) : null}
                                 {relationshipCount > 0 ? (
                                   <Badge tone="info">
                                     {relationshipCount} connections
@@ -394,7 +440,7 @@ export function ExplorePage(props: {
                                 Open record
                               </Button>
                               <details className="result-actions-menu">
-                                <summary>Compare, map, or export</summary>
+                                <summary>More actions</summary>
                                 <div className="result-actions-popover">
                                   {relationshipCount > 0 || !graphReady ? (
                                     <Button
