@@ -122,8 +122,16 @@ jobs:
           if-no-files-found: error
           retention-days: 1
   approved-layout-visuals:
-    # Snapshot comparison is a diagnosis tool, not a deploy gate. Run it on demand.
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    # Runs every push so a screenshot set exists for each ship. The approved
+    # baselines in tests/e2e/approved-layout-visual.spec.mjs-snapshots/ are
+    # captured on Windows (win32); this job runs on the Linux runner, so
+    # per the audit's own acceptance criteria (pixel baselines may be
+    # platform-specific; only semantic content must match across platforms)
+    # a pixel mismatch here is expected, not a regression. continue-on-error
+    # keeps that expected divergence from turning the job red — this stays a
+    # diagnosis/evidence job, not a deploy gate — while still always
+    # publishing whatever Playwright captured this run.
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.60.0-noble
@@ -134,14 +142,19 @@ jobs:
       # Same version skew as the baseline job: the pinned image predates the
       # Playwright in package.json, so its browser build is missing.
       - run: npx playwright install chromium
-      - run: npm run test:visual
-      - name: Upload visual failure artifacts
-        if: failure()
+      - name: Capture and compare approved-layout screenshots
+        continue-on-error: true
+        run: npm run test:visual
+      - name: Upload latest screenshots
+        if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: approved-layout-visual-diffs
-          path: test-results
-          if-no-files-found: ignore
+          name: approved-layout-visuals-${{ github.sha }}
+          path: |
+            test-results
+            tests/e2e/approved-layout-visual.spec.mjs-snapshots
+          if-no-files-found: warn
+          retention-days: 30
 
   lighthouse-report:
     # Lighthouse is useful for investigation, but noisy as a deploy requirement.
