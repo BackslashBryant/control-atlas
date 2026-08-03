@@ -235,43 +235,29 @@ test('Home is an entry surface, not a lesson about the data model', () => {
     const home = readFileSync(path, 'utf8');
     assert.doesNotMatch(home, /home-spine/, `${path} still renders the nine-area directory`);
     assert.doesNotMatch(home, /home-thesis/, `${path} still renders the hierarchy lesson`);
-    // AC-2 may appear as the preview chain's subject, never as a lesson.
+    // A real record may appear in a preview, never as a hierarchy lesson.
     assert.doesNotMatch(home, /AC-2 is selected into|AC-2 lives under|one hierarchy/, `${path} still teaches the AC-2 example`);
     assert.doesNotMatch(home, /which baseline to use/, `${path} repeats the About trust boundary`);
     assert.match(
       home,
-      /Federal cyber guidance is scattered\. The work still has to get done\./,
+      /Find the source\. See what connects\. Keep the work moving\./,
     );
     // Home shows the product, not just claims about it.
-    assert.match(home, /home-chain|HomeChainPreview/, `${path} has no published-chain preview`);
+    assert.match(home, /home-capability-previews|HomeCapabilityPreviews/, `${path} has no real capability preview`);
     // Searching is the field above; no card may repeat it.
     assert.doesNotMatch(home, /Find a requirement/, `${path} duplicates the search entrance`);
     assert.doesNotMatch(home, /guidance that applies to your work/, `${path} implies an applicability decision`);
   }
 });
 
-test('the Home preview chain shows only published relationships', async () => {
+test('Home capability previews use real records without hard-coded graph edges', async () => {
   const { readFileSync: read } = await import('node:fs');
-  const edgeFile = JSON.parse(read('data/generated/edges.json', 'utf8'));
-  const edges = Array.isArray(edgeFile) ? edgeFile : edgeFile.edges || Object.values(edgeFile)[0];
-  const has = (predicate) => edges.some(predicate);
-
-  assert.ok(
-    has((edge) => edge.source_node_id === 'nist-800-53:FAMILY-AC' && edge.target_node_id === 'nist-800-53:AC-2'),
-    'Home claims AC-2 sits under Access Control',
-  );
-  assert.ok(
-    has((edge) => edge.source_node_id === 'fedramp-rev5:MODERATE' && edge.target_node_id === 'nist-800-53:AC-2' && edge.relationship_type === 'selects'),
-    'Home claims FedRAMP Moderate selects AC-2',
-  );
-  assert.ok(
-    has((edge) => edge.source_node_id === 'nist-800-53a:AC-2' && edge.target_node_id === 'nist-800-53:AC-2' && edge.relationship_type === 'assesses'),
-    'Home claims SP 800-53A assesses AC-2',
-  );
-  assert.ok(
-    has((edge) => /^disa-cci:/.test(edge.source_node_id) && edge.target_node_id === 'nist-800-53:AC-2'),
-    'Home claims DISA CCIs connect to AC-2',
-  );
+  const library = JSON.parse(read('data/generated/library-search.json', 'utf8')).library_search.documents;
+  const ids = new Set(library.map((record) => record.id));
+  assert.ok(ids.has('nist-800-171:3.17.1'));
+  assert.ok(ids.has('mitre-attack:T1195.002'));
+  const preview = read('src/ui/components/HomeCapabilityPreviews.tsx', 'utf8');
+  assert.doesNotMatch(preview, /source_node_id|target_node_id|relationship_type/);
 });
 
 test('retired surface labels never return to rendered copy', () => {

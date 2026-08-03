@@ -73,10 +73,66 @@ body {
 
 #root[data-static-search-active="true"] > [data-react-root] #workspace {
   grid-row: 4;
+  visibility: visible;
 }
 
 #root[data-static-search-active="true"] > [data-react-root] footer {
   grid-row: 5;
+}
+
+/* Search's first-paint shell and hydrated workspace occupy the same grid slot.
+   The hidden workspace can finish layout without pushing a second search
+   surface below the shell; the handoff therefore changes ownership, not page
+   geometry. */
+#root[data-static-search-active="true"] > [data-static-search] {
+  position: relative;
+  z-index: 2;
+  background: var(--ca-bg);
+}
+
+#root[data-route-hydrated="true"][data-static-search-active="true"]
+  > [data-react-root]
+  #workspace {
+  grid-row: 4;
+  padding-top: 0;
+  visibility: visible;
+}
+
+#root[data-route-hydrated="true"][data-static-search-active="true"]
+  > [data-react-root]
+  footer {
+  grid-row: 5;
+}
+
+/* Search's progressive masthead remains the route's real masthead after the
+   result workspace becomes interactive. This avoids replacing the largest
+   first-paint text and gives slow connections a stable search control. */
+#root[data-route-hydrated="true"][data-static-search-active="true"]
+  > [data-react-root]
+  .search-results-panel
+  .page-header,
+#root[data-static-search-active="true"]
+  > [data-react-root]
+  .search-results-panel
+  .search-results-query-row {
+  display: none;
+}
+
+#root[data-route-hydrated="true"][data-static-search-active="true"]
+  > [data-static-search]
+  [data-static-search-status] {
+  visibility: hidden;
+}
+
+#root[data-static-search-active="true"]
+  > [data-react-root]
+  .search-results-panel
+  .result-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 [data-static-header-reserve] {
@@ -115,6 +171,42 @@ body {
   #workspace {
   background: var(--ca-bg);
   visibility: visible;
+}
+
+/* Hash routes cannot be server-rendered independently on GitHub Pages. The
+   small progressive masthead therefore remains the route's authoritative
+   identity while React takes ownership of the task-specific body below it. */
+#root[data-static-route-persistent="true"] > [data-static-route] {
+  min-height: 0;
+}
+
+#root[data-static-route-persistent="true"] .static-route-summary {
+  min-height: 0;
+}
+
+#root[data-static-route-persistent="true"] > [data-react-root] #workspace {
+  grid-row: 4;
+  padding-top: 0;
+}
+
+#root[data-static-route-persistent="true"] > [data-react-root] footer {
+  grid-row: 5;
+}
+
+#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+  > [data-react-root]
+  [data-route-primary-header]
+  [data-route-primary-copy],
+#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+  > [data-react-root]
+  [data-route-primary-header][data-route-primary-copy] {
+  display: none;
+}
+
+#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+  > [data-react-root]
+  [data-route-primary-header]:not(:has([data-route-primary-support])) {
+  display: none;
 }
 
 .static-search-form {

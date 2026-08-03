@@ -322,9 +322,8 @@ export function App() {
   // loaded.
   const routeEntityName = (() => {
     const node =
-      viewState.view === "library-detail" &&
-      viewState.node &&
-      bundle
+      (viewState.view === "library-detail" || viewState.view === "atlas-map") &&
+      viewState.node && bundle
         ? bundle.runtime.getNode(viewState.node)
         : null;
     if (node) return recordDisplayTitle(node);
@@ -340,6 +339,15 @@ export function App() {
         ? bundle.runtime.getNode(viewState.node)
         : null;
     document.title = routeDocumentTitle(viewState, node, routeEntityName);
+    if (
+      (viewState.view === "library-detail" || viewState.view === "atlas-map") &&
+      routeEntityName
+    ) {
+      const progressiveTitle = document.querySelector<HTMLElement>(
+        "[data-static-route-title]",
+      );
+      if (progressiveTitle) progressiveTitle.textContent = routeEntityName;
+    }
   }, [viewState, bundle, routeEntityName]);
 
   useEffect(() => {

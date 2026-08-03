@@ -62,11 +62,43 @@ function staticSearchQuery() {
   return new URLSearchParams(hash.slice(queryIndex + 1)).get('q') || '';
 }
 
+type StaticRouteIdentity = {
+  eyebrow: string;
+  kind: string;
+  summary: string;
+  title: string;
+};
+
+declare global {
+  interface Window {
+    controlAtlasProgressiveRouteIdentity?: () => StaticRouteIdentity | null;
+    controlAtlasSyncFirstPaintShell?: () => void;
+  }
+}
+
+function progressiveRouteIdentity(): StaticRouteIdentity | null {
+  return window.controlAtlasProgressiveRouteIdentity?.() ?? null;
+}
+
 function syncStaticRouteShell() {
   const shell = rootElement.querySelector<HTMLElement>('[data-static-route]');
   if (!shell) return;
+  const identity = progressiveRouteIdentity();
+  if (identity) {
+    rootElement.dataset.staticRoutePersistent = 'true';
+    rootElement.dataset.staticRouteKind = identity.kind;
+    const eyebrow = shell.querySelector<HTMLElement>('[data-static-route-eyebrow]');
+    const title = shell.querySelector<HTMLElement>('[data-static-route-title]');
+    const summary = shell.querySelector<HTMLElement>('[data-static-route-summary]');
+    if (eyebrow) eyebrow.textContent = identity.eyebrow;
+    if (title) title.textContent = identity.title;
+    if (summary) summary.textContent = identity.summary;
+  } else {
+    delete rootElement.dataset.staticRoutePersistent;
+    delete rootElement.dataset.staticRouteKind;
+  }
   const active =
-    rootElement.dataset.routeHydrated !== 'true' &&
+    (Boolean(identity) || rootElement.dataset.routeHydrated !== 'true') &&
     !isHomeHash() &&
     !isSearchHash();
   shell.toggleAttribute('hidden', !active);
@@ -75,7 +107,6 @@ function syncStaticRouteShell() {
     return;
   }
   rootElement.dataset.staticRouteActive = 'true';
-  delete rootElement.dataset.routeHydrated;
   shell.removeAttribute('aria-hidden');
   shell.removeAttribute('inert');
   shell.setAttribute('role', 'status');
@@ -104,7 +135,12 @@ function observeRouteHydration() {
     // It had only been made inert, not hidden. Its 620px reservation kept
     // occupying layout after hydration, so at mobile widths the "Opening
     // workspace" placeholder sat above the real page on every non-home route.
-    shell?.setAttribute('hidden', '');
+    if (rootElement.dataset.staticRoutePersistent !== 'true') {
+      shell?.setAttribute('hidden', '');
+    } else {
+      shell?.removeAttribute('aria-hidden');
+      shell?.removeAttribute('inert');
+    }
     return true;
   };
   const scheduleHydration = () => {
@@ -197,8 +233,8 @@ function focusSearchResultsWhenReady() {
 
 function connectStaticSearch() {
   rootElement
-    .querySelector<HTMLElement>('[data-static-search-start]')
-    ?.addEventListener('click', () => navigateFromStaticHome('#/start'));
+    .querySelector<HTMLElement>('[data-static-search-catalog]')
+    ?.addEventListener('click', () => navigateFromStaticHome('#/catalog'));
   rootElement
     .querySelector<HTMLFormElement>('[data-static-search-form]')
     ?.addEventListener('submit', (event) => {
@@ -366,6 +402,33 @@ function onLocationChange() {
   if (!isHomeHash()) void bootReactApp();
 }
 
+function warmInteractiveRoute() {
+  const hashRoute = window.location.hash.replace(/^#/, '') || '/';
+  const routeUrl = new URL(hashRoute, window.location.origin);
+  switch (routeUrl.pathname.split('/')[1]) {
+    case 'search':
+      void import('./ui/pages/ExplorePage');
+      break;
+    case 'explore':
+      void import('./ui/pages/AtlasMapPage');
+      break;
+    case 'catalog':
+      void import('./ui/pages/CatalogDetailPage');
+      break;
+    case 'record':
+      void import('./ui/pages/ObjectDetailPage');
+      break;
+  }
+  void Promise.all([
+    import('./ui/lib/hashRoutes'),
+    import('./ui/lib/runtimeLoader'),
+  ]).then(([routes, runtime]) =>
+    runtime.preloadRuntimeArtifacts(
+      routes.parseHashLocation(routeUrl.pathname, routeUrl.search),
+    ),
+  );
+}
+
 async function start() {
   const hasLegacyQuery =
     window.location.search.length > 1 &&
@@ -400,23 +463,12 @@ async function start() {
     return;
   }
 
-  // Fetch the route bundle in parallel with the stable server-rendered shell,
-  // then mount the interactive workspace after the initial paint. The static
-  // Search form works immediately, and any user action still boots at once.
-  const bootAfterInitialPaint = () => {
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.setTimeout(() => {
-          void bootReactApp();
-        }, 0);
-      });
-    });
-  };
-  if (document.readyState === 'complete') {
-    bootAfterInitialPaint();
-  } else {
-    window.addEventListener('load', bootAfterInitialPaint, { once: true });
-  }
+  // Start fetching the interactive route immediately behind the stable
+  // first-paint shell. Waiting for window.load created a full network
+  // waterfall: CSS and the entry module finished before the React route and
+  // its data even started. Home keeps its one-script static boundary above.
+  warmInteractiveRoute();
+  void bootReactApp();
 }
 
 void start();

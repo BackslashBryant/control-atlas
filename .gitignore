@@ -12,6 +12,7 @@
 !playwright.e2e.config.mjs
 !playwright.live.config.mjs
 !playwright.visual.config.mjs
+!playwright.guardian.config.mjs
 !.lighthouserc.json
 !.vale.ini
 !vale/
@@ -26,6 +27,8 @@
 !tests/graph/**
 !tests/e2e/
 !tests/e2e/**
+!tests/guardian/
+!tests/guardian/**
 !tests/fixtures/
 !tests/fixtures/**
 !tests/benchmarks/
@@ -34,6 +37,17 @@
 !docs/**
 # AI-assistant working notes dropped by a plugin — not app logic, never ship.
 docs/guardrails/
+
+!.ai/
+.ai/*
+!.ai/shared/
+.ai/shared/*
+!.ai/shared/control-atlas-experience-guardian.md
+
+!config/
+config/*
+!config/experience-guardian/
+!config/experience-guardian/**
 
 !.github/
 !.github/dependabot.yml

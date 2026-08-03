@@ -7,8 +7,9 @@ import ts from 'typescript';
 const OUTPUT = join(process.cwd(), 'artifacts', 'vale', 'ui-copy.md');
 const SPEAKER_MANIFEST = join(
   process.cwd(),
-  'data',
-  'ui-copy-speaker-manifest.json',
+  'config',
+  'experience-guardian',
+  'copy-ownership.json',
 );
 
 async function sourceFiles(directory, extensions) {
@@ -104,6 +105,7 @@ function extractJsonStrings(value, strings = []) {
 const manifest = JSON.parse(await readFile(SPEAKER_MANIFEST, 'utf8'));
 const sections = [];
 for (const rule of manifest.rules) {
+  if (rule.extraction === 'none') continue;
   const files = [
     ...(rule.root
       ? await sourceFiles(
@@ -126,7 +128,7 @@ for (const rule of manifest.rules) {
     }
     if (strings.length === 0) continue;
     sections.push(
-      `## ${relative(process.cwd(), file).replaceAll('\\', '/')}\n\nSpeaker: \`${rule.speaker}\`\n\n${strings.join('\n\n')}`,
+      `## ${relative(process.cwd(), file).replaceAll('\\', '/')}\n\nOwner class: \`${rule.class}\`\n\n${strings.join('\n\n')}`,
     );
   }
 }

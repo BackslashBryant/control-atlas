@@ -316,18 +316,17 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(homePage, /PRODUCT_HERO/);
   assert.match(
     homePage,
-    /Federal cyber guidance is scattered\. The work still has to get done\./,
+    /Find the source\. See what connects\. Keep the work moving\./,
   );
-  assert.match(homePage, /aria-label="Search published records"/);
-  assert.match(html, /aria-label="Search published records"/);
-  assert.match(html, />Follow implementation</);
-  assert.match(html, />Compare guidance</);
-  assert.match(html, />Start a document</);
-  // Home shows one real published chain, not just a claim about connections.
-  assert.match(html, /class="home-chain"/);
-  assert.match(html, />AC-2 Account Management</);
-  assert.match(html, /data-route="#\/build"/);
-  assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 3);
+  assert.match(homePage, /aria-label="Search Control Atlas"/);
+  assert.match(html, /aria-label="Search Control Atlas"/);
+  assert.match(html, />Understand a requirement</);
+  assert.match(html, />Operate or defend</);
+  assert.match(html, />Manage risk or supply chain</);
+  assert.match(html, /class="home-capability-previews"/);
+  assert.match(html, /T1195\.002/);
+  assert.match(html, /data-route="#\/build\/documents"/);
+  assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 7);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
 
@@ -396,7 +395,7 @@ test('result-affecting controls have one visible workbench owner', () => {
   );
 
   assert.match(compare, /targetId="compare-workspace"/);
-  assert.match(compare, /data-control-results id="compare-workspace"/);
+  assert.match(compare, /data-control-results[^>]*id="compare-workspace"/);
   assert.doesNotMatch(compare, /function (?:Field|SelectField)\(/);
   assert.match(compareResults, /aria-label="Comparison result controls"/);
   assert.match(

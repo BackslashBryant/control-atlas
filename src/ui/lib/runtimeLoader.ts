@@ -165,11 +165,22 @@ export function runtimeArtifactPlan(
       Boolean(state.templateType));
   const fullGraph =
     Boolean(options.graphRequested) ||
-    // The Explore landing renders the trunk + nine limbs from the organizing
-    // spine, so it needs the full graph even before an axis is chosen. A
-    // focused Atlas view (?node=...) must not: it works from one neighborhood
-    // shard. Keep this in step with requiresFullGraph in navigationState.ts.
-    (state.view === "atlas-map" && !state.node) ||
+    // The Atlas landing renders from the compact catalog bootstrap. Load the
+    // full graph only after a graph-dependent drilldown is requested. A
+    // focused Atlas record still works from one neighborhood shard. Keep this
+    // in step with requiresFullGraph in navigationState.ts.
+    (state.view === "atlas-map" &&
+      !state.node &&
+      Boolean(
+        state.atlasAxis ||
+          state.atlasFramework ||
+          state.atlasBaseline ||
+          state.atlasFamily ||
+          state.atlasRmfStep ||
+          state.sourceView === "rmf" ||
+          state.sourceView === "rmf-lifecycle" ||
+          state.relationshipView === "rmf",
+      )) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
         state.crosswalk === "stig-chain" ||
@@ -206,14 +217,66 @@ export function runtimeArtifactPlan(
         !state.node.startsWith("hierarchy:"))
         ? state.node
         : "",
-    registries: buildDetailRequested,
+    registries:
+      state.view === "search" ||
+      buildDetailRequested ||
+      Boolean(options.searchOverlayOpen),
     sources:
       state.view === "sources" ||
       state.view === "catalog-detail" ||
       state.view === "library-detail" ||
       state.view === "matrix" ||
-      buildDetailRequested,
+      state.view === "search" ||
+      buildDetailRequested ||
+      Boolean(options.searchOverlayOpen),
   };
+}
+
+/**
+ * Start route-scoped data requests while the React route modules are still
+ * downloading. fetchArtifact owns the shared promise cache, so the staged
+ * loader consumes these exact requests instead of starting a second fetch.
+ */
+export async function preloadRuntimeArtifacts(state: ViewState) {
+  const plan = runtimeArtifactPlan(state);
+  const requests: Array<Promise<unknown>> = [];
+  const add = (path: string) => requests.push(fetchArtifact(path));
+  const atlasLanding = state.view === "atlas-map" && !state.node && !state.atlasAxis;
+
+  if ((plan.librarySearch && !atlasLanding) || plan.fullGraph) {
+    add(artifactPath("library-search.json"));
+  }
+  if (plan.sources || plan.fullGraph) {
+    add(artifactPath("sources.json"));
+  }
+  if (plan.catalogBootstrap) {
+    add(artifactPath("catalog-bootstrap.json"));
+  }
+  // A catalog route first paints from sources + catalog-bootstrap. Its larger
+  // record shard starts after that shell is ready instead of competing with
+  // the files needed for orientation.
+  if (plan.recordNodeId) {
+    requests.push(loadAtlasNeighborhood(plan.recordNodeId));
+  }
+  if (plan.registries) {
+    add("./data/template-registry.json");
+    add("./data/official-artifact-registry.json");
+    add("./data/compliance-workflows.json");
+    add("./data/compliance-tool-registry.json");
+    add("./data/fedramp-transition-index.json");
+  }
+  if (plan.commons && state.view !== "library-detail") {
+    add("./data/generated/commons-search-index.json");
+    add("./data/commons-resource-dataset.json");
+  }
+  if (plan.fullGraph) {
+    add(artifactPath("nodes.json"));
+    add(artifactPath("edges.json"));
+    add(artifactPath("evidence.json"));
+    add(artifactPath("graph-health.json"));
+  }
+
+  await Promise.allSettled(requests);
 }
 
 export async function fetchArtifact(path: string) {
@@ -761,6 +824,31 @@ export async function loadRuntimeDatasetStaged(handlers: {
       handlers.onSearchReady(await loadCatalogShellPhase(plan));
       const catalogPhase = await loadRouteScopedPhase(plan);
       handlers.onFullReady(catalogPhase.bundle);
+      return;
+    }
+    if (
+      handlers.state.view === "atlas-map" &&
+      !handlers.state.node &&
+      !handlers.state.atlasAxis &&
+      !plan.fullGraph
+    ) {
+      const orientationPhase = await loadRouteScopedPhase({
+        ...plan,
+        librarySearch: false,
+      });
+      handlers.onSearchReady(orientationPhase.bundle);
+      const searchPhase = await loadRouteScopedPhase(plan);
+      handlers.onFullReady(searchPhase.bundle);
+      return;
+    }
+    if (handlers.state.view === "library-detail" && plan.commons) {
+      const officialPhase = await loadRouteScopedPhase({
+        ...plan,
+        commons: false,
+      });
+      handlers.onSearchReady(officialPhase.bundle);
+      const contextualPhase = await loadRouteScopedPhase(plan);
+      handlers.onFullReady(contextualPhase.bundle);
       return;
     }
     const routePhase = await loadRouteScopedPhase(plan);

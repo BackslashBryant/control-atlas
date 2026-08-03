@@ -53,8 +53,9 @@ export function StartHerePage(props: {
     onNavigate("start-here", { ...state, ...patch });
 
   return (
-    <Panel className="max-w-[70rem] mx-auto start-here-panel">
+    <Panel className="max-w-[70rem] mx-auto start-here-panel" data-visual-identity="task-intake-compass">
       <PageHeader
+        primary
         summary="Answer two questions to get a starting point in the public material."
         title="Start here"
       />

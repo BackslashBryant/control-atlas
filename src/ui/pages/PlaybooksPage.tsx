@@ -22,8 +22,9 @@ export function PlaybooksPage(props: {
 
   if (!selected) {
     return (
-      <Panel>
+      <Panel data-visual-identity="practitioner-field-manual">
         <PageHeader
+          primary
           summary="Practitioner guides for authorization, control selection, assessment, findings, and monitoring."
           title="Guides"
         />
@@ -56,7 +57,7 @@ export function PlaybooksPage(props: {
   }
 
   return (
-    <Panel>
+    <Panel data-visual-identity="practitioner-field-manual">
       <PageHeader
         action={
           <Button

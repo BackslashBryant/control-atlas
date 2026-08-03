@@ -103,7 +103,7 @@ export function SourcesPage(props: {
 
   if (selectedSource) {
     return (
-      <Panel className="sources-page">
+      <Panel className="sources-page" data-visual-identity="provenance-ledger">
         <button
           className="link-action"
           onClick={() => onNavigate("sources", { ...state, source: "" })}
@@ -113,6 +113,7 @@ export function SourcesPage(props: {
         </button>
         <PageHeader
           eyebrow="Source detail"
+          primary
           summary="Identity, coverage, and freshness for this source."
           title={selectedSource.display_name || selectedSource.name}
         />
@@ -133,9 +134,10 @@ export function SourcesPage(props: {
   }
 
   return (
-    <Panel className="sources-page">
+    <Panel className="sources-page" data-visual-identity="provenance-ledger">
       <PageHeader
         eyebrow="Sources"
+        primary
         summary="Publisher, coverage, version, and last-checked date for every publication."
         title="Sources"
       />

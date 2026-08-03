@@ -31,7 +31,9 @@ import {
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import {
+  buildAtlasBootstrapModel,
   buildAtlasDrilldownModel,
+  type AtlasDrilldownModel,
   NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
 import { catalogProfileFor } from "../lib/catalogProfiles";
@@ -112,6 +114,18 @@ function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
   return node.includes(":") ? node : "";
 }
 
+function focusedAtlasTitle(record: AtlasNeighborhoodRecord) {
+  const itemId =
+    record.center_node.metadata?.item_id || record.center_node.id;
+  const title =
+    record.center_node.metadata?.title ||
+    record.center_node.label ||
+    "Selected record";
+  return title.trim().toLowerCase() === itemId.trim().toLowerCase()
+    ? itemId
+    : `${itemId} — ${title}`;
+}
+
 export function AtlasMapPage(props: AtlasMapPageProps) {
   const {
     bundle,
@@ -165,6 +179,16 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     };
   }, [nodeId]);
 
+  useEffect(() => {
+    if (!record) return;
+    const progressiveTitle = document.querySelector<HTMLElement>(
+      "[data-static-route-title]",
+    );
+    if (progressiveTitle) {
+      progressiveTitle.textContent = focusedAtlasTitle(record);
+    }
+  }, [record]);
+
   function patchAtlas(patch: Partial<typeof state>) {
     onNavigate("atlas-map", patch);
   }
@@ -195,12 +219,13 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   return (
     <Panel
       className="atlas-workspace"
+      data-visual-identity="technical-cartography"
       data-route-content-ready={
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <header className="atlas-workspace-header">
-        <div className="atlas-workspace-header-text">
+      <header className="atlas-workspace-header" data-route-primary-header="true">
+        <div className="atlas-workspace-header-text" data-route-primary-copy="true">
           {record ? (
             <p className="eyebrow">
               {bundle.runtime
@@ -216,22 +241,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             </p>
           ) : null}
           <h1>
-            {record
-              ? (() => {
-                  const itemId =
-                    record.center_node.metadata?.item_id || record.center_node.id;
-                  const title =
-                    record.center_node.metadata?.title ||
-                    record.center_node.label ||
-                    "Selected record";
-                  // CCIs and similar records often carry the same string as
-                  // both id and title — "CCI-000010 — CCI-000010" said
-                  // nothing twice instead of once.
-                  return title.trim().toLowerCase() === itemId.trim().toLowerCase()
-                    ? itemId
-                    : `${itemId} — ${title}`;
-                })()
-              : "Atlas"}
+            {record ? focusedAtlasTitle(record) : "Atlas"}
           </h1>
           {!record ? (
             <p className="page-summary">
@@ -249,14 +259,16 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           )}
         </div>
         {record ? (
-          <Button
-            onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
-            type="button"
-            variant="secondary"
-          >
-            <IconExternalLink aria-hidden="true" size={18} />
-            Open full record
-          </Button>
+          <div data-route-primary-support="true">
+            <Button
+              onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+              type="button"
+              variant="secondary"
+            >
+              <IconExternalLink aria-hidden="true" size={18} />
+              Open full record
+            </Button>
+          </div>
         ) : null}
       </header>
 
@@ -920,6 +932,14 @@ function FocusedAtlas(props: {
   );
 }
 
+export function atlasDrilldownModel(
+  bundle: Pick<RuntimeBundle, "catalogSummaries" | "runtime">,
+): AtlasDrilldownModel {
+  const fullModel = buildAtlasDrilldownModel(bundle.runtime.dataset);
+  if (fullModel.frameworkGroups.length) return fullModel;
+  return buildAtlasBootstrapModel(bundle.catalogSummaries || [], treeSpine);
+}
+
 function AtlasGuidedPath(props: {
   bundle: RuntimeBundle;
   state: AtlasMapPageProps["state"];
@@ -938,8 +958,8 @@ function AtlasGuidedPath(props: {
       : "");
   // Built always (not axis-gated) so the landing can render the trunk + limbs.
   const model = useMemo(
-    () => buildAtlasDrilldownModel(bundle.runtime.dataset),
-    [bundle.runtime.dataset],
+    () => atlasDrilldownModel(bundle),
+    [bundle],
   );
   // Seeded from the URL so Start Here (and any shared link) can open straight
   // into one limb; further limb choices stay local to this page.
@@ -1089,7 +1109,10 @@ function AtlasGuidedPath(props: {
                         return;
                       }
                       setOpenLimbId(area.id);
-                      resetDrill({ atlasAxis: "framework" });
+                      resetDrill({
+                        atlasAxis: "framework",
+                        atlasLimb: area.id,
+                      });
                     }}
                     type="button"
                   >

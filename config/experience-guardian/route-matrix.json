@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "viewports": {
+    "desktop": { "width": 1440, "height": 1000 },
+    "mobile": { "width": 390, "height": 844 }
+  },
+  "activeRoutes": [
+    "home",
+    "start-here",
+    "atlas-map",
+    "search",
+    "catalog-detail",
+    "library-detail",
+    "matrix",
+    "patterns",
+    "templates",
+    "sources",
+    "commons",
+    "commons-detail",
+    "about",
+    "retired",
+    "not-found"
+  ],
+  "states": [
+    { "id": "home", "route": "home", "path": "/#/", "viewports": ["desktop", "mobile"], "expectedIdentity": "universal-front-door" },
+    { "id": "start-here", "route": "start-here", "path": "/#/start?goal=implement", "viewports": ["desktop", "mobile"], "expectedIdentity": "task-intake-compass" },
+    { "id": "atlas", "route": "atlas-map", "path": "/#/explore?node=nist-800-53%3AAC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "technical-cartography" },
+    { "id": "library", "route": "catalog-detail", "path": "/#/catalog", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-library" },
+    { "id": "control-rich", "route": "library-detail", "path": "/#/record/nist-800-53/AC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
+    { "id": "cci", "route": "library-detail", "path": "/#/record/disa-cci/CCI-000001", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
+    { "id": "stig-rule", "route": "library-detail", "path": "/#/record/disa-stig/V-222387", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
+    { "id": "attack-technique", "route": "library-detail", "path": "/#/record/mitre-attack/T1195.002", "viewports": ["desktop", "mobile"], "expectedIdentity": "threat-research-record", "officialBeforeEditorial": true },
+    { "id": "supply-chain", "route": "library-detail", "path": "/#/record/nist-800-171/3.17.1", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
+    { "id": "record-sparse", "route": "library-detail", "path": "/#/record/cmmc-2/LEVEL-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
+    { "id": "mixed-search", "route": "search", "path": "/#/search?q=supply%20chain", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search" },
+    { "id": "search-empty", "route": "search", "path": "/#/search?q=zzzz-no-result-zzzz", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search", "scenario": "empty" },
+    { "id": "compare", "route": "matrix", "path": "/#/compare?crosswalk=relationships&source=nist-800-53&items=AC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "aligned-analysis-workbench" },
+    { "id": "guides", "route": "patterns", "path": "/#/learn?pattern=implementing-controls", "viewports": ["desktop", "mobile"], "expectedIdentity": "practitioner-field-manual" },
+    { "id": "documents", "route": "templates", "path": "/#/build/documents", "viewports": ["desktop", "mobile"], "expectedIdentity": "staged-production-workflow" },
+    { "id": "resources", "route": "commons", "path": "/#/resources?showAll=true", "viewports": ["desktop", "mobile"], "expectedIdentity": "ecosystem-directory" },
+    { "id": "resource-detail", "route": "commons-detail", "path": "/#/resources/tool-syft-sbom-generator", "viewports": ["desktop", "mobile"] },
+    { "id": "sources", "route": "sources", "path": "/#/sources", "viewports": ["desktop", "mobile"], "expectedIdentity": "provenance-ledger" },
+    { "id": "about", "route": "about", "path": "/#/about", "viewports": ["desktop", "mobile"] },
+    { "id": "retired", "route": "retired", "path": "/#/retired?q=AC-2%20(1)", "viewports": ["desktop", "mobile"] },
+    { "id": "error", "route": "not-found", "path": "/#/record/nist-800-53/NOT-A-REAL-CONTROL", "viewports": ["desktop", "mobile"], "scenario": "error" },
+    { "id": "loading", "route": "home", "path": "/#/search?q=access", "viewports": ["desktop", "mobile"], "scenario": "loading" }
+  ]
+}

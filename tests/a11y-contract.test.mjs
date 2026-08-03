@@ -221,11 +221,11 @@ test("Home makes Start Here the sole primary action, retains direct Search, and 
   assert.match(homePage, /className="home-start-here"/);
   assert.match(homePage, /onNavigate\("start-here"\)/);
   assert.match(homePage, /className="home-search"/);
-  assert.match(homePage, /Search published records/);
-  assert.match(homePage, /Follow implementation/);
-  assert.match(homePage, /Compare guidance/);
-  assert.match(homePage, /Start a document/);
-  assert.match(homePage, /HomeChainPreview/);
+  assert.match(homePage, /Search Control Atlas/);
+  assert.match(homePage, /Understand a requirement/);
+  assert.match(homePage, /Operate or defend/);
+  assert.match(homePage, /Produce a document/);
+  assert.match(homePage, /HomeCapabilityPreviews/);
   assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
   assert.doesNotMatch(homePage, /Choose a starting point/);

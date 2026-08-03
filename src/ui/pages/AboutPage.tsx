@@ -8,7 +8,7 @@ import {
 export function AboutPage() {
   return (
     <Panel>
-      <PageHeader summary={PRODUCT_DEFINITION} title="About Control Atlas" />
+      <PageHeader primary summary={PRODUCT_DEFINITION} title="About Control Atlas" />
 
       <div className="flex flex-col gap-[24px]">
         <SummaryCard title="What it contains">
@@ -33,11 +33,11 @@ export function AboutPage() {
 
         <SummaryCard title="A tree for hierarchy, a graph for relationships">
           <p>
-            Control Atlas separates hierarchy from connections. Path shows
-            where a record sits — both in Control Atlas structure and in its
-            publisher hierarchy, kept on separate rails so neither is mistaken
-            for the other. Map and List show baselines, mappings, assessments,
-            and implementation links without treating them as parents.
+            Control Atlas keeps hierarchy and relationships separate. Path
+            shows where a record sits in Control Atlas structure and in its
+            publisher hierarchy on separate rails. Map and List show
+            baselines, mappings, assessments, and implementation links without
+            treating them as parents.
           </p>
           <p>
             AC-2 lives under SP 800-53&apos;s own Access Control family. It is

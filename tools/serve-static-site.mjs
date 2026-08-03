@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { createServer } from 'node:http';
+import { gzipSync } from 'node:zlib';
 
 const ROOT = join(process.cwd(), 'dist', 'site');
 const PORT = Number(process.env.PORT || 4317);
@@ -15,6 +16,19 @@ const contentTypes = new Map([
   ['.mjs', 'text/javascript; charset=utf-8'],
   ['.gz', 'application/gzip'],
 ]);
+const compressibleTypes = new Set(['.css', '.html', '.js', '.json', '.mjs']);
+const gzipCache = new Map();
+
+function compressedFile(filePath) {
+  const cached = gzipCache.get(filePath);
+  if (cached) return cached;
+  // GitHub Pages/CDN keeps encoded asset variants warm. Cache the local
+  // release server's equivalent after its first request so Lighthouse measures
+  // transfer/render behavior instead of repeatedly benchmarking zlib.
+  const compressed = gzipSync(readFileSync(filePath));
+  gzipCache.set(filePath, compressed);
+  return compressed;
+}
 
 createServer((request, response) => {
   const rawPath = request.url.split('?')[0];
@@ -34,11 +48,22 @@ createServer((request, response) => {
     return;
   }
 
+  const extension = extname(filePath);
+  const useGzip =
+    compressibleTypes.has(extension) &&
+    /(?:^|,)\s*gzip(?:\s*;|\s*,|\s*$)/i.test(request.headers['accept-encoding'] || '');
   response.writeHead(200, {
     'content-type': contentTypes.get(extname(filePath)) || 'application/octet-stream',
     'cache-control': 'no-store',
+    ...(useGzip
+      ? { 'content-encoding': 'gzip', vary: 'Accept-Encoding' }
+      : {}),
   });
-  createReadStream(filePath).pipe(response);
+  if (useGzip) {
+    response.end(compressedFile(filePath));
+  } else {
+    createReadStream(filePath).pipe(response);
+  }
 }).listen(PORT, 'localhost', () => {
   console.log(`Control Atlas static site available at http://localhost:${PORT}`);
 });

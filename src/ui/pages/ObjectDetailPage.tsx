@@ -2,11 +2,9 @@ import * as Accordion from "@radix-ui/react-accordion";
 import {
   IconArrowRight,
   IconBook2,
-  IconClipboardList,
   IconCompass,
   IconExternalLink,
   IconFileDescription,
-  IconGitCompare,
   IconInfoCircle,
   IconLink,
   IconSearch,
@@ -39,7 +37,7 @@ import {
   relationshipFiltersFromState,
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
-import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { RecordContextRail } from "../components/RecordContextRail";
 import { StickyDetailBar } from "../components/StickyDetailBar";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
@@ -396,7 +394,16 @@ export function ObjectDetailPage(props: {
   }
 
   return (
-    <section className="detail-page">
+    <section
+      className="detail-page"
+      data-visual-identity={
+        node.node_type === "attack_technique"
+          ? "threat-research-record"
+          : node.node_type === "defend_countermeasure"
+            ? "defense-research-record"
+            : "publisher-research-record"
+      }
+    >
       <StickyDetailBar
         enabled={state.from === "search"}
         itemLabel={document.item_id}
@@ -410,6 +417,7 @@ export function ObjectDetailPage(props: {
         onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
       />
       <PageHeader
+        primary
         eyebrow={displayNameFor("object_type", document.object_type)}
         action={
           <div className="page-header-actions">
@@ -832,13 +840,6 @@ export function ObjectDetailPage(props: {
             ) : null}
           </Accordion.Root>
 
-          <ContextualCommonsModule
-            bundle={bundle}
-            contextType="control"
-            contextId={document.item_id}
-            query={document.title}
-            onNavigate={onNavigate}
-          />
         </section>
 
         <aside className="stack detail-sidebar">
@@ -869,34 +870,14 @@ export function ObjectDetailPage(props: {
             </div>
           </SummaryCard>
 
-          <SummaryCard title="Browse related records">
-            <div className="stack compact">
-              {node.node_type === "attack_technique" ? (
-                <button
-                  className="link-action"
-                  onClick={() =>
-                    onNavigate("matrix", {
-                      crosswalk: "threat-chain",
-                      chainCatalog: node.metadata?.catalog_id || "",
-                      chainItem: node.id,
-                    })
-                  }
-                  type="button"
-                >
-                  <IconGitCompare aria-hidden="true" size={16} stroke={1.8} />
-                  <span>Trace this technique to D3FEND and NIST controls</span>
-                </button>
-              ) : null}
-              <button
-                className="link-action"
-                onClick={() => onNavigate("templates")}
-                type="button"
-              >
-                <IconClipboardList aria-hidden="true" size={16} stroke={1.8} />
-                <span>Browse starter documents</span>
-              </button>
-            </div>
-          </SummaryCard>
+          <RecordContextRail
+            bundle={bundle}
+            document={document}
+            node={node}
+            onNavigate={onNavigate}
+            onOpenNode={onOpenNode}
+            publishedBuckets={classBuckets}
+          />
 
           {relatedGlossaryTerms.length ? (
             <SummaryCard title="Related terms">

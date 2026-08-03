@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  buildAtlasBootstrapModel,
   buildAtlasDrilldownModel,
   type AtlasDrillEdge,
   type AtlasDrillNode,
@@ -41,6 +42,26 @@ const edges: AtlasDrillEdge[] = [
   edge("moderate-au-2", "nist-800-53b:MODERATE", "nist-800-53:AU-2", "selects"),
   edge("rmf-select", "nist-800-37:RMF-SELECT", "nist-800-53b:MODERATE", "selects"),
 ];
+
+test("Atlas bootstrap preserves the nine-area spine without waiting for the full graph", () => {
+  const model = buildAtlasBootstrapModel(
+    [
+      { id: "nist-800-53", name: "SP 800-53 Rev. 5" },
+      { id: "mitre-attack", name: "MITRE ATT&CK" },
+    ],
+    spine,
+  );
+
+  assert.equal(model.frameworkGroups.length, 9);
+  assert.equal(model.baselines.length, 0);
+  assert.equal(model.rmfSteps.length, 0);
+  assert.equal(
+    model.frameworkGroups
+      .find((group) => group.id === "atlas:LIMB-THREAT")
+      ?.frameworks.find((framework) => framework.id === "mitre-attack")?.label,
+    "MITRE ATT&CK",
+  );
+});
 
 function node(
   id: string,

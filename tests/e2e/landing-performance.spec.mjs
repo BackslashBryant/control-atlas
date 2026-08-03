@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("landing presents search first, the rotating brand item, and exactly three other entrances", async ({
+test("landing presents universal search, task entrances, and real capability previews", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -19,7 +19,7 @@ test("landing presents search first, the rotating brand item, and exactly three 
 
   await expect(
     page.getByRole("heading", {
-      name: /Federal cyber guidance is scattered/,
+      name: /Find the source\. See what connects/,
     }),
   ).toBeVisible();
 
@@ -29,20 +29,32 @@ test("landing presents search first, the rotating brand item, and exactly three 
   // Pinned to the shape, not the literal: the word list is product copy and
   // has been trimmed before. src/shared/brand-rotation.ts owns the order.
   await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
-  await expect(page.getByRole("button", { name: /Follow implementation/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Compare guidance/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Start a document/ })).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
-  // Home proves the claim with one real published chain.
-  await expect(page.locator(".home-chain-subject")).toHaveText(
-    "AC-2 Account Management",
-  );
+  await expect(page.getByRole("button", { name: /Understand a requirement/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Operate or defend/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Produce a document/ })).toBeVisible();
+  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
+  await expect(page.locator(".home-capability-preview")).toHaveCount(3);
 
   const urlBeforeSkip = page.url();
   await page.locator(".skip-link").focus();
   await page.keyboard.press("Enter");
   await expect(page.locator("#workspace")).toBeFocused();
   expect(page.url()).toBe(urlBeforeSkip);
+});
+
+test("the local release server mirrors production compression for built styles", async ({
+  request,
+}) => {
+  const home = await request.get("/", {
+    headers: { "Accept-Encoding": "gzip" },
+  });
+  const stylesheet = (await home.text()).match(/href="\.\/(assets\/[^"]+\.css)"/)?.[1];
+  expect(stylesheet).toBeTruthy();
+
+  const response = await request.get(`/${stylesheet}`, {
+    headers: { "Accept-Encoding": "gzip" },
+  });
+  expect(response.headers()["content-encoding"]).toBe("gzip");
 });
 
 test("protected Ctrl+Alt slogan rotates and native Home history remains coherent", async ({
@@ -58,7 +70,7 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
     })
     .not.toBe(firstWord);
 
-  await page.getByRole("button", { name: /^Browse the Library$/ }).click();
+  await page.getByRole("button", { name: /^Browse official publications$/ }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/catalog/);
 
@@ -66,7 +78,7 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
   await waitForAppReady(page);
   await expect(
     page.getByRole("heading", {
-      name: /Federal cyber guidance is scattered/,
+      name: /Find the source\. See what connects/,
     }),
   ).toBeVisible();
 
@@ -94,7 +106,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
     .click({ force: true });
   await expect(
     page.getByRole("heading", {
-      name: /Federal cyber guidance is scattered/,
+      name: /Find the source\. See what connects/,
     }),
   ).toBeVisible({
     timeout: 15000,

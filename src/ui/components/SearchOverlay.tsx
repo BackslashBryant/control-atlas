@@ -3,6 +3,7 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
 import {
   resourceAccessLabel,
@@ -33,7 +34,13 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
   const results = useMemo(() => {
     if (!bundle || !query.trim()) {
-      return { libraryResults: [], resourceResults: [], communityResults: [] };
+      return {
+        libraryResults: [],
+        resourceResults: [],
+        communityResults: [],
+        guideResults: [],
+        sourceResults: [],
+      };
     }
     const libraryResults = bundle.runtime.searchLibrary(query.trim()).slice(0, 8);
     const commonsResults = searchResourceDocuments(
@@ -47,8 +54,32 @@ export function SearchOverlay(props: SearchOverlayProps) {
     const communityResults = commonsResults
       .filter((document) => document.resourceType === "community_forum")
       .slice(0, 4);
+    const needle = query.trim().toLowerCase();
+    const guideResults = practitionerGuides
+      .filter((guide) =>
+        [guide.title, guide.summary, guide.whereItSits]
+          .join(" ")
+          .toLowerCase()
+          .includes(needle),
+      )
+      .slice(0, 3);
+    const sourceResults = (bundle.runtime.dataset.sources || [])
+      .filter((source: any) =>
+        [source.id, source.display_name, source.name, source.publisher]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(needle),
+      )
+      .slice(0, 3);
 
-    return { libraryResults, resourceResults, communityResults };
+    return {
+      libraryResults,
+      resourceResults,
+      communityResults,
+      guideResults,
+      sourceResults,
+    };
   }, [bundle, query]);
 
   function openResult(nodeId: string) {
@@ -111,7 +142,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
               Type to search records, templates, tools, and Resources. Press
               Enter for the full results page.
             </p>
-          ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 ? (
+          ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 && results.guideResults.length === 0 && results.sourceResults.length === 0 ? (
             <p className="field-hint">
               No records or resources match &quot;{query.trim()}&quot;.
             </p>
@@ -147,6 +178,63 @@ export function SearchOverlay(props: SearchOverlayProps) {
                         </li>
                       );
                     })}
+                  </ul>
+                </div>
+              ) : null}
+
+              {results.guideResults.length > 0 ? (
+                <div data-result-class="practitioner-guide">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
+                    Guides ({results.guideResults.length})
+                  </div>
+                  <ul className="search-overlay-results">
+                    {results.guideResults.map((guide) => (
+                      <li key={guide.id}>
+                        <button
+                          aria-label={guide.title}
+                          className="search-overlay-result"
+                          onClick={() => {
+                            onOpenChange(false);
+                            onNavigate("patterns", { pattern: guide.id });
+                          }}
+                          type="button"
+                        >
+                          <span className="search-overlay-result-title">{guide.title}</span>
+                          <span className="search-overlay-result-meta">Control Atlas guide · topic match</span>
+                          <span className="search-overlay-result-summary">{guide.summary}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {results.sourceResults.length > 0 ? (
+                <div data-result-class="provenance-source">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
+                    Sources ({results.sourceResults.length})
+                  </div>
+                  <ul className="search-overlay-results">
+                    {results.sourceResults.map((source: any) => (
+                      <li key={source.id}>
+                        <button
+                          aria-label={source.display_name || source.name || source.id}
+                          className="search-overlay-result"
+                          onClick={() => {
+                            onOpenChange(false);
+                            onNavigate("sources", { source: source.id });
+                          }}
+                          type="button"
+                        >
+                          <span className="search-overlay-result-title">
+                            {source.display_name || source.name || source.id}
+                          </span>
+                          <span className="search-overlay-result-meta">
+                            {source.publisher || "Source owner"} · identity match
+                          </span>
+                        </button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               ) : null}

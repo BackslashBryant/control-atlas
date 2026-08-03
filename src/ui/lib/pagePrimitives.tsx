@@ -150,19 +150,29 @@ export function PageHeader(props: {
   title: string;
   summary?: string;
   action?: ReactNode;
+  primary?: boolean;
 }) {
   return (
-    <header className="page-header">
-      {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
+    <header
+      className="page-header"
+      data-route-primary-header={props.primary ? "true" : undefined}
+    >
+      {props.eyebrow ? (
+        <p className="eyebrow" data-route-primary-copy="true">
+          {props.eyebrow}
+        </p>
+      ) : null}
       <div className="page-header-row">
-        <div>
+        <div data-route-primary-copy="true">
           <h1>{props.title}</h1>
           {props.summary ? (
             <p className="page-summary">{props.summary}</p>
           ) : null}
         </div>
         {props.action ? (
-          <div className="page-header-action">{props.action}</div>
+          <div className="page-header-action" data-route-primary-support="true">
+            {props.action}
+          </div>
         ) : null}
       </div>
     </header>
