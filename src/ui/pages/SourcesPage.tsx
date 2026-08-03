@@ -1,11 +1,13 @@
 import { IconSearch } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
 import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
+import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
 
 const connectionInventory = connectionInventoryArtifact.connection_inventory;
+const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap.catalogs;
 import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
 import { Button, Panel } from "../components/lsm";
 import {
@@ -17,8 +19,43 @@ import {
   sourceUsageSummary,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
-import { buildSourceRegister } from "../lib/sourceRegister";
+import {
+  buildSourceLayers,
+  buildSourceRegister,
+  type SourceLayerId,
+} from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
+
+const SOURCE_LAYER_TABS: Array<{
+  id: SourceLayerId;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "publication",
+    label: "Publication register",
+    description:
+      "One row per canonical publication — the identity a record's own source traces back to.",
+  },
+  {
+    id: "connection",
+    label: "Connection sources",
+    description:
+      "Published crosswalks, mappings, and cross-references between publications.",
+  },
+  {
+    id: "ingestion",
+    label: "Ingestion provenance",
+    description:
+      "Advanced: technical retrieval detail — alternate mirrors, download endpoints, and viewer feeds for a publication already in the register above.",
+  },
+  {
+    id: "organization",
+    label: "Control Atlas structure",
+    description:
+      "Control Atlas's own organizing spine, across Cybersecurity and its areas. Not a publisher source.",
+  },
+];
 
 export function SourcesPage(props: {
   bundle: RuntimeBundle;
@@ -30,15 +67,15 @@ export function SourcesPage(props: {
   const selectedSource = state.source
     ? bundle.runtime.getSource(state.source)
     : null;
+  const registerFilters = {
+    query: state.query,
+    provenance: state.provenance,
+    eligibility: state.eligibility,
+    lifecycle: state.lifecycle,
+    access: state.access,
+  };
   const rows = useMemo(
-    () =>
-      buildSourceRegister(allSources, {
-        query: state.query,
-        provenance: state.provenance,
-        eligibility: state.eligibility,
-        lifecycle: state.lifecycle,
-        access: state.access,
-      }),
+    () => buildSourceRegister(allSources, registerFilters),
     [
       allSources,
       state.access,
@@ -48,6 +85,19 @@ export function SourcesPage(props: {
       state.query,
     ],
   );
+  const layers = useMemo(
+    () => buildSourceLayers(allSources, sourceCatalogs, registerFilters),
+    [
+      allSources,
+      state.access,
+      state.eligibility,
+      state.lifecycle,
+      state.provenance,
+      state.query,
+    ],
+  );
+  const [activeLayer, setActiveLayer] = useState<SourceLayerId>("publication");
+  const activeRows = layers[activeLayer];
   const distinct = (key: string) =>
     [...new Set(allSources.map((source: any) => source[key]).filter(Boolean))] as string[];
 
@@ -249,67 +299,153 @@ export function SourcesPage(props: {
         </div>
       </WorkbenchControlSurface>
 
-      {rows.length ? (
-        <div
-          aria-label="Control Atlas source register"
-          className="source-register"
-          data-control-results
-          id="source-register-results"
-          role="table"
-        >
-          <div className="source-register-heading" role="row">
-            <span role="columnheader">Source / publication</span>
-            <span role="columnheader">Publisher</span>
-            <span role="columnheader">Coverage</span>
-            <span role="columnheader">Version / current through</span>
-            <span role="columnheader">Status</span>
-          </div>
-          {rows.map((row) => (
-            <div
-              className="source-register-row"
-              key={row.id}
-              role="row"
-            >
-              <strong role="cell">
-                <button
-                  onClick={() => onNavigate("sources", { ...state, source: row.id })}
-                  type="button"
-                >
-                  {row.publication}
-                </button>
-              </strong>
-              <span role="cell">{row.publisher}</span>
-              <span role="cell">{row.coverage}</span>
-              <span role="cell">{row.version}<small>{row.currentThrough}</small></span>
-              <span role="cell">{displayNameFor("lifecycle_status", row.status)}</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <section
-          className="empty-state"
-          data-control-results
-          id="source-register-results"
-        >
-          <h2>No sources match these filters.</h2>
-          <p>Clear the search or status filters to return to the full register.</p>
-          <Button
-            onClick={() =>
-              onNavigate("sources", {
-                query: "",
-                provenance: "",
-                eligibility: "",
-                lifecycle: "",
-                access: "",
-              })
-            }
+      {/* W5: three layers, not one mixed table — publication identity,
+          connection/mapping sources, and ingestion artifacts each get their
+          own tab instead of one register that conflates all three (plus
+          Control Atlas's own organizing source, kept out of the publisher
+          list entirely). */}
+      <div aria-label="Source register layers" className="source-view-toggle" role="tablist">
+        {SOURCE_LAYER_TABS.map((tab) => (
+          <button
+            aria-controls="source-register-results"
+            aria-selected={activeLayer === tab.id}
+            className={activeLayer === tab.id ? "active" : ""}
+            id={`source-layer-tab-${tab.id}`}
+            key={tab.id}
+            onClick={() => setActiveLayer(tab.id)}
+            role="tab"
+            tabIndex={activeLayer === tab.id ? 0 : -1}
             type="button"
-            variant="primary"
           >
-            Clear source filters
-          </Button>
-        </section>
-      )}
+            {tab.label} <strong>{layers[tab.id].length}</strong>
+          </button>
+        ))}
+      </div>
+      <p className="support-meta" id="source-layer-description">
+        {SOURCE_LAYER_TABS.find((tab) => tab.id === activeLayer)?.description}
+      </p>
+
+      <div
+        aria-labelledby={`source-layer-tab-${activeLayer}`}
+        id="source-register-results"
+        role="tabpanel"
+      >
+        {activeLayer === "organization" ? (
+          <div data-control-results>
+            {activeRows.map((row) => (
+              <SummaryCard key={row.id} title={row.publication}>
+                <p>
+                  Control Atlas's own organizing spine, across Cybersecurity
+                  and its areas, never a publisher's declared structure. See
+                  the Path rail
+                  on any record for how organizing hops are badged
+                  separately from the publisher's own hierarchy.
+                </p>
+                <p className="support-meta">Owner: {row.publisher}</p>
+              </SummaryCard>
+            ))}
+          </div>
+        ) : activeRows.length ? (
+          <div
+            aria-label="Control Atlas source register"
+            className="source-register"
+            data-control-results
+            role="table"
+          >
+            <div className="source-register-heading" role="row">
+              {activeLayer === "ingestion" ? (
+                <>
+                  <span role="columnheader">Feed / artifact</span>
+                  <span role="columnheader">Publisher</span>
+                  <span role="columnheader">Format</span>
+                  <span role="columnheader">Retrieved</span>
+                  <span role="columnheader">Status</span>
+                </>
+              ) : activeLayer === "connection" ? (
+                <>
+                  <span role="columnheader">Mapping source</span>
+                  <span role="columnheader">Publisher</span>
+                  <span role="columnheader">Relationship classes supplied</span>
+                  <span role="columnheader">Version / current through</span>
+                  <span role="columnheader">Status</span>
+                </>
+              ) : (
+                <>
+                  <span role="columnheader">Source / publication</span>
+                  <span role="columnheader">Publisher</span>
+                  <span role="columnheader">Coverage</span>
+                  <span role="columnheader">Version / current through</span>
+                  <span role="columnheader">Status</span>
+                </>
+              )}
+            </div>
+            {activeRows.map((row) => (
+              <div className="source-register-row" key={row.id} role="row">
+                {activeLayer === "ingestion" ? (
+                  <>
+                    <strong role="cell">
+                      <button
+                        onClick={() => onNavigate("sources", { ...state, source: row.id })}
+                        type="button"
+                      >
+                        {row.id}
+                      </button>
+                      <small>{row.publication}</small>
+                    </strong>
+                    <span role="cell">{row.publisher}</span>
+                    <span role="cell">{row.artifactType}</span>
+                    <span role="cell">
+                      {row.currentThrough}
+                      <small>{row.rawCoverageKeys}</small>
+                    </span>
+                    <span role="cell">{displayNameFor("lifecycle_status", row.status)}</span>
+                  </>
+                ) : (
+                  <>
+                    <strong role="cell">
+                      <button
+                        onClick={() => onNavigate("sources", { ...state, source: row.id })}
+                        type="button"
+                      >
+                        {row.publication}
+                      </button>
+                    </strong>
+                    <span role="cell">{row.publisher}</span>
+                    <span role="cell">
+                      {row.coverage}
+                      {activeLayer === "publication" && row.recordsRepresented != null ? (
+                        <small>{row.recordsRepresented.toLocaleString()} records represented</small>
+                      ) : null}
+                    </span>
+                    <span role="cell">{row.version}<small>{row.currentThrough}</small></span>
+                    <span role="cell">{displayNameFor("lifecycle_status", row.status)}</span>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <section className="empty-state" data-control-results>
+            <h2>No sources match these filters.</h2>
+            <p>Clear the search or status filters to return to the full register.</p>
+            <Button
+              onClick={() =>
+                onNavigate("sources", {
+                  query: "",
+                  provenance: "",
+                  eligibility: "",
+                  lifecycle: "",
+                  access: "",
+                })
+              }
+              type="button"
+              variant="primary"
+            >
+              Clear source filters
+            </Button>
+          </section>
+        )}
+      </div>
     </Panel>
   );
 }

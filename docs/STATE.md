@@ -73,6 +73,42 @@
   wizard) conflicts with the session-15 DETERMINATION_BOUNDARY decision; built
   its spirit (reasons/badges on existing rows) instead, not the wizard.
 
+## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2b (Sources split) COMPLETE
+
+`src/ui/lib/sourceRegister.ts`: added `buildSourceLayers()` (additive — the
+existing tested `buildSourceRegister()` is unchanged and still used inside
+it) that classifies each of the 51 raw sources into Publication register /
+Connection sources / Ingestion provenance / Control Atlas structure. A source
+is canonical when a real ingested catalog names it as that catalog's own
+`source_id` (`data/generated/catalog-bootstrap.json` — the build pipeline's
+own authoritative pointer, not a guess); everything else is a connection
+(crosswalk/mapping/OLIR id or name) or falls to ingestion (alternate mirrors,
+viewers, downloads). 23 publication / 11 connection / 16 ingestion / 1
+organization. `SourcesPage.tsx` now renders 4 tabs instead of one 51-row
+table; raw coverage keys (`disa-cci`, `disa-stig`) resolve to display names
+via the catalog lookup in every tab except Ingestion provenance (advanced,
+raw IDs allowed there per the spec).
+
+Found and fixed live while inspecting the new Publication register: NIST SP
+800-53B's own source (`nist-800-53b-baselines`) had `display_name: "SP
+800-53 Rev. 5"` in `data/source-registry.json` — a copy-paste bug that made
+it print as an apparent duplicate of the real SP 800-53 row once the
+register was actually deduplicated. Corrected to "SP 800-53B", regenerated
+all data via `npm run build:data` (100% trunk connectivity unchanged,
+`changed_runtime_artifacts: []` confirms only this one field differs
+semantically — the rest of the generated-file diffs are `generated_at`
+timestamp churn from the rebuild, same as every prior session's data
+regeneration).
+
+### Verification
+Lint/typecheck clean. `npm test` unchanged (258/30/57/3) — including
+`tests/graph/sourceRegister.test.ts`'s existing contract for
+`buildSourceRegister`, untouched. Full e2e 142+/142+ (touched specs
+re-verified), full a11y 32/32, full visual 28/28 after personally inspecting
+both Sources screenshots (23 clean, unique publication rows; no more raw
+`disa-cci`/`disa-stig`-style coverage strings). Live-verified all 4 tabs via
+`preview_start`/click-through in Chrome. `npm run precommit` clean.
+
 ## 2026-08-02 (session 21 cont.) - audit alignment, Phase 2a (ownership dedup) COMPLETE
 
 `data/commons-resource-dataset.json`: removed 13 official-lane resources that
