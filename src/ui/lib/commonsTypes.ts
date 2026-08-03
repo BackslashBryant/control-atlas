@@ -15,6 +15,16 @@ export type CommonsAccessType =
   | "restricted"
   | "unknown";
 
+export type CommonsCollection = {
+  id: string;
+  title: string;
+  summary: string;
+  whyCurated: string;
+  icon: string;
+  resourceIds: string[];
+  libraryLinks?: Array<{ label: string; query: string; reason: string }>;
+};
+
 export type CommonsMaintenanceStatus =
   | "active"
   | "maintained"
@@ -36,6 +46,7 @@ export type CommonsResource = {
   id: string;
   name: string;
   shortName: string;
+  cardPurpose: string;
   slug: string;
   summary: string;
   whyIncluded: string;
@@ -96,7 +107,11 @@ export type CommonsResource = {
   searchAliases?: string[];
   searchKeywords?: string[];
   featuredCollections?: string[];
+  parentEcosystemId?: string | null;
+  childResourceIds?: string[];
+  brandKey?: string;
   sourceEvidence?: string | null;
+  verificationMethod?: "public_url" | "official_repository" | "manual_restricted";
   automatedFields?: string[];
   manualFields?: string[];
 };
@@ -104,7 +119,7 @@ export type CommonsResource = {
 export type CommonsResourceDataset = {
   schemaVersion: string;
   lastUpdated: string;
-  collections: [];
+  collections: CommonsCollection[];
   resources: CommonsResource[];
 };
 
@@ -137,6 +152,6 @@ export type CommonsSearchIndexDoc = {
 export type CommonsSearchIndex = {
   builtAt: string;
   totalCount: number;
-  collections: [];
+  collections: CommonsCollection[];
   documents: CommonsSearchIndexDoc[];
 };

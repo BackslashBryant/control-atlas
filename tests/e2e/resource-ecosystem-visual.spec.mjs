@@ -1,0 +1,100 @@
+import { mkdirSync } from "node:fs";
+import { resolve } from "node:path";
+import { expect, test } from "@playwright/test";
+
+const output = resolve("artifacts/resource-ecosystem-screenshots");
+mkdirSync(output, { recursive: true });
+const collections = [
+  "dod-cybersecurity-portals",
+  "reciprocity-authorization-reuse",
+  "implementation-assessment-tools",
+  "product-assurance-approved-products",
+  "cloud-devsecops-software-factories",
+  "cmmc-defense-industrial-base",
+  "cyber-workforce-training",
+  "practitioner-communities",
+];
+
+async function open(page, hash) {
+  await page.goto(`/${hash}`);
+  await expect(page.locator("#workspace")).toBeVisible();
+  await page.waitForLoadState("networkidle");
+}
+
+async function shot(page, name) {
+  await page.screenshot({ path: resolve(output, `${name}.png`), fullPage: true });
+}
+
+test("resource ecosystem visual evidence", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await open(page, "#/resources");
+  await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
+  await expect(page.locator(".resource-collection-card")).toHaveCount(8);
+  await expect(page.locator(".resources-result-grid")).toHaveCount(0);
+  await shot(page, "01-landing-collections");
+
+  for (let index = 0; index < collections.length; index += 1) {
+    const id = collections[index];
+    await open(page, `#/resources?collection=${id}&showAll=true`);
+    await expect(page.locator(".resources-result-grid")).toBeVisible();
+    await shot(page, `${String(index + 2).padStart(2, "0")}-collection-${id}`);
+  }
+
+  await open(page, "#/resources?q=Repo%20One");
+  await expect(page.getByText("DoD Platform One Iron Bank Container Registry", { exact: true }).first()).toBeVisible();
+  await shot(page, "10-search-alias-repo-one");
+
+  await open(page, "#/resources?resourceType=template&accessType=public&showAll=true");
+  await expect(page.locator(".resources-result-grid")).toBeVisible();
+  await shot(page, "11-filtered-public-templates");
+
+  const detailCases = [
+    ["official-nist-oscal", "12-detail-public"],
+    ["portal-dod-policy-guidance", "13-detail-cac"],
+    ["service-dcsa-nisp-emass", "14-detail-restricted-government"],
+    ["commercial-cis-benchmarks-free", "15-detail-free-commercial-publisher-artifact"],
+    ["portal-cis-workbench", "16-detail-community"],
+    ["ecosystem-common-criteria", "17-detail-parent"],
+    ["directory-common-criteria-products", "18-detail-child"],
+    ["commercial-aws-govcloud-docs", "19-detail-generic-brand-fallback"],
+  ];
+  for (const [id, name] of detailCases) {
+    await open(page, `#/resources/${id}?from=commons`);
+    await expect(page.locator(".resource-detail-hero")).toBeVisible();
+    await shot(page, name);
+  }
+
+  await open(page, "#/resources?q=zzzzqqqq");
+  await expect(page.getByRole("heading", { name: "No resources match that combination." })).toBeVisible();
+  await shot(page, "20-empty-search");
+
+});
+
+test("resource dataset error is honest", async ({ page }) => {
+  await page.route("**/data/commons-resource-dataset.json*", (route) => route.abort());
+  await page.route("**/data/commons-resource-dataset.json.gz*", (route) => route.abort());
+  await open(page, "#/resources");
+  await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
+  await shot(page, "21-dataset-error");
+});
+
+test("identity marks never depend on remote images", async ({ page }) => {
+  await open(page, "#/resources?showAll=true");
+  await expect(page.locator(".resource-brand-mark img")).toHaveCount(0);
+  await expect(page.locator(".resource-brand-mark").first()).toBeVisible();
+});
+
+test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 760 });
+
+  await open(page, "#/resources");
+  await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
+  await expect(page.locator(".resource-collection-card")).toHaveCount(8);
+  await shot(page, "22-mobile-landing-320");
+
+  await open(page, "#/resources/portal-cis-workbench?from=commons");
+  await expect(page.locator(".resource-detail-hero")).toBeVisible();
+  await expect(page.getByText("Do not post CUI", { exact: false })).toHaveCount(1);
+  await shot(page, "23-mobile-community-detail-320");
+});

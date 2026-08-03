@@ -142,6 +142,10 @@ export type ViewState =
       accessType: string;
       resourceType: string;
       category: string;
+      collection: string;
+      owner: string;
+      costType: string;
+      sort: string;
       showAll: string;
     }
   | {
@@ -395,6 +399,10 @@ export function parseViewState(search: string): ViewState {
       accessType: params.get("accessType") || "",
       resourceType: params.get("resourceType") || "",
       category: params.get("category") || "",
+      collection: params.get("collection") || "",
+      owner: params.get("owner") || "",
+      costType: params.get("costType") || "",
+      sort: params.get("sort") || "relevance",
       showAll: params.get("showAll") === "true" ? "true" : "",
     };
   }
@@ -563,6 +571,10 @@ export function normalizeViewState(
       accessType: incoming.accessType || "",
       resourceType: incoming.resourceType || "",
       category: incoming.category || "",
+      collection: incoming.collection || "",
+      owner: incoming.owner || "",
+      costType: incoming.costType || "",
+      sort: incoming.sort || "relevance",
       showAll: incoming.showAll === "true" ? "true" : "",
     };
   }
@@ -751,6 +763,10 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "accessType", state.accessType);
     setIfValue(params, "resourceType", state.resourceType);
     setIfValue(params, "category", state.category);
+    setIfValue(params, "collection", state.collection);
+    setIfValue(params, "owner", state.owner);
+    setIfValue(params, "costType", state.costType);
+    if (state.sort && state.sort !== "relevance") setIfValue(params, "sort", state.sort);
     setIfValue(params, "showAll", state.showAll);
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);

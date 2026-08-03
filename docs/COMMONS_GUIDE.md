@@ -1,64 +1,50 @@
-# Control Commons Guide & Architectural Blueprint
+# Resources directory guide
 
-**Navigation Label:** Commons  
-**Tagline:** Official sources. Working tools. Practitioner knowledge.  
-**Purpose:** The shared public resource hub for government cybersecurity, compliance, authorization, workforce qualification, hardening benchmarks, and compliance automation.
+Resources is Control Atlas's directory of external places and artifacts that help practitioners do the work. It is not a second Library.
 
----
+## Ownership boundary
 
-## 1. Governance & Inclusion Principles
+- Library owns authoritative publications, regulations, standards, baselines, and ingested source records.
+- Resources owns portals, tools, clearly accessible templates, public datasets, training, product-assurance directories, government systems, and practitioner communities.
+- A publisher's paid product or consulting service is not a resource. A commercial publisher is eligible only for a specific independently accessible artifact, such as a free template, public documentation, or no-cost community account.
+- Restricted government workflows may be listed when their access boundary is explicit; they are not described as public.
 
-Control Commons is built around 8 core design principles tailored for government cyber practitioners:
+I-Assure is the concrete boundary example: Resources links only to its public no-cost RMF template library, not its consulting or managed-service offerings. Tenable product-dependent entries and managed Platform One service offerings are rejected.
 
-1. **Parallel Discovery Lanes:** Official government sources, open-source tools, practitioner templates, commercial guidance, and legacy records exist in parallel. Authority and practical usefulness are treated as separate dimensions.
-2. **Plain Language Purpose:** Every resource explains *What is this?*, *Why does it matter?*, and *What should I do with it?*.
-3. **Mandatory Inclusion Justification:** Every indexed entry includes an explicit `whyIncluded` explanation detailing the exact compliance task or workflow it supports.
-4. **Official-Plus-Practical Pairings:** Whenever possible, governing requirements are paired with maintained practical tools, templates, explainers, and support communities.
-5. **Static-First & Deterministic:** All resource metadata and collections are stored as version-controlled JSON/YAML in the repository. Search indexes are pre-built deterministically.
-6. **Transparent Provenance & Integrity:** Data sources for Control Atlas internal graph (`/sources`) are strictly distinguished from external working resources (`/commons`).
-7. **Rejection Provenance:** Rejected resource candidates (e.g. paywalled whitepapers, unverified AI content, malware risks, stale baselines) are logged in `data/commons-candidate-manifest.json` with explicit rejection reasons.
-8. **Automated Health & Community Tooling:** Monthly link reachability actions and GitHub issue templates support continuous community updates.
+## Curated collections
 
----
+1. DoD cybersecurity portals
+2. Reciprocity and authorization reuse
+3. Implementation and assessment tools
+4. Product assurance and approved products
+5. Cloud, DevSecOps, and software factories
+6. CMMC and the defense industrial base
+7. Cyber workforce and training
+8. Practitioner communities
 
-## 2. Parallel Discovery Lanes
+Collections are editorial browse aids. They do not create structural Atlas parentage or imply endorsement.
 
-| Lane | ID | Description | Example Resources |
-|---|---|---|---|
-| **Official** | `official` | Primary government publications, baselines, & regulations | NIST SP 800-53 Rev 5, CMMC 32 CFR Part 170, FedRAMP Rev 5 |
-| **Open Source** | `open_source` | Maintained software, SCAP engines, & automation scripts | ComplianceAsCode/content, PowerSTIG, Compliance-Trestle |
-| **Practitioner** | `practitioner` | Community templates, guides, explainers, & forums | CMMC SSP Starter Template, Reddit /r/NISTControls |
-| **Commercial** | `commercial` | Free tier software, vendor docs, & tool kits | CIS Benchmarks Free Account, AWS GovCloud User Guide |
-| **Legacy** | `legacy` | Superseded standards retained for audit continuity | NIST SP 800-53 Rev 4, FedRAMP Rev 4 Baselines |
+## Data contract
 
----
+- Dataset: `data/commons-resource-dataset.json`
+- Schema: `data/schemas/commons-resource-schema.json`
+- Candidate dispositions: `data/commons-candidate-manifest.json`
+- Research and platform decision: `data/resource-ecosystem-disposition.json`
+- Brand sources and fallbacks: `data/resource-brand-assets.json`
+- Generated search index: `data/generated/commons-search-index.json`
 
-## 3. Data Architecture & Build Integration
+Every resource carries a concise card purpose, publisher and publisher type, access and cost labels, official status, technology scope, search aliases, collection membership, brand key, source evidence, verification method, and review dates. Parent/child links connect external ecosystems only; they do not alter Atlas or Library structure.
 
-- **Dataset Path:** `data/commons-resource-dataset.json`
-- **Schema Path:** `data/schemas/commons-resource-schema.json`
-- **Research Manifest:** `data/commons-candidate-manifest.json`
-- **Generated Index:** `data/generated/commons-search-index.json`
-- **Build Generator:** `scripts/build-commons-index.mjs`
-- **Health Verification:** `scripts/check-commons-health.mjs`
-- **Quality Benchmark:** `tests/commons-quality.test.mjs`
+## Verification
 
-### Build Command Execution:
-```bash
-# Build the generated search index
-node scripts/build-commons-index.mjs
-
-# Run quality & schema tests
-node tests/commons-quality.test.mjs
-
-# Full static site build
+```text
+npm run resources:validate
+npm run resources:health
 npm run build:site
 ```
 
----
+The health checker follows redirects, retries public HEAD failures with a bounded GET, records expected restricted-access boundaries, and never fabricates a successful fast-mode response.
 
-## 4. Community Contribution Workflows
+Community detail pages show this warning once:
 
-Practitioners can submit new resources or report issues via GitHub Issue Templates:
-- **Submit New Resource:** `.github/ISSUE_TEMPLATE/submit-resource.yml`
-- **Report Broken Link:** `.github/ISSUE_TEMPLATE/report-broken-link.yml`
+> Do not post CUI, credentials, system details, assessment evidence, or other non-public organizational information.

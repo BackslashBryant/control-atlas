@@ -52,12 +52,15 @@ export function resourceSearchEvidence(resource, query) {
 export function filterDirectoryResources(resources, filters = {}) {
   return resources.filter((resource) => {
     if (filters.category && primaryBrowseCategory(resource) !== filters.category) return false;
+    if (filters.collection && !(resource.featuredCollections || []).includes(filters.collection)) return false;
     if (filters.lane && filters.lane !== "all" && resource.resourceLane !== filters.lane) return false;
+    if (filters.owner && !includesQuery(resource.publisher, filters.owner)) return false;
     if (filters.framework && !resource.frameworks.some((value) => includesQuery(value, filters.framework))) return false;
     if (filters.lifecycle && !resource.lifecycleStages.some((value) => value.toLowerCase() === filters.lifecycle.toLowerCase())) return false;
     if (filters.audience && !resource.audiences.some((value) => includesQuery(value, filters.audience))) return false;
     if (filters.resourceType && resource.resourceType !== filters.resourceType) return false;
     if (filters.accessType && resource.accessType !== filters.accessType) return false;
+    if (filters.costType && resource.costType !== filters.costType) return false;
     return true;
   });
 }
@@ -67,4 +70,10 @@ export function searchDirectoryResources(resources, query) {
   return searchResourceDocuments(resources, query).map(
     ({ document }) => document,
   );
+}
+
+export function sortDirectoryResources(resources, sort = "relevance") {
+  if (sort === "name") return [...resources].sort((left, right) => left.name.localeCompare(right.name));
+  if (sort === "checked") return [...resources].sort((left, right) => String(right.lastCheckedAt).localeCompare(String(left.lastCheckedAt)) || left.name.localeCompare(right.name));
+  return resources;
 }
