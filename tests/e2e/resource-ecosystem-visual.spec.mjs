@@ -22,6 +22,7 @@ async function open(page, hash) {
 }
 
 async function shot(page, name) {
+  await page.addStyleTag({ content: ".brand-key-word { visibility: hidden !important; }" });
   await page.screenshot({ path: resolve(output, `${name}.jpg`), type: "jpeg", quality: 82, fullPage: true });
 }
 
