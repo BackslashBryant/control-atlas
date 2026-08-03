@@ -94,6 +94,9 @@ for (const r of dataset.resources) {
     /\b(?:authoritative|essential|governing|leading|mandatory|popular|recommended|widely used|widely recognized|industry-standard|battle-tested|pioneering)\b/i,
     `Resource ${r.id} whyIncluded must state an observable inclusion reason`,
   );
+  if (!r.openSource && r.license) {
+    assert.doesNotMatch(r.license, /open source/i, `Resource ${r.id} must not claim an open-source license`);
+  }
 }
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
 
