@@ -11,20 +11,23 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 });
 
-test("Resources is a top-level spoke and global search reaches communities", async ({
+test("Resources is reachable from utility navigation and global search reaches communities", async ({
   page,
 }) => {
   await gotoApp(page, "/#/catalog");
   await waitForAppReady(page);
 
-  const primaryNav = page.getByRole("navigation", {
-    name: "Primary navigation",
+  // Resources holds external tools/templates/communities outside the Atlas
+  // hierarchy, so it lives in utility navigation, not the five primary
+  // destinations (Atlas/Library/Compare/Guides/Documents).
+  const utilityNav = page.getByRole("navigation", {
+    name: "Utility navigation",
   });
   await expect(
-    primaryNav.getByRole("button", { name: "Resources", exact: true }),
+    utilityNav.getByRole("button", { name: "Resources", exact: true }),
   ).toBeVisible();
 
-  await primaryNav
+  await utilityNav
     .getByRole("button", { name: "Resources", exact: true })
     .click();
   await waitForAppReady(page);
@@ -65,7 +68,7 @@ test("Resources is a top-level spoke and global search reaches communities", asy
     /#\/resources\/community-reddit-nistcontrols\?from=search/,
   );
   await expect(
-    primaryNav.getByRole("button", { name: "Resources", exact: true }),
+    utilityNav.getByRole("button", { name: "Resources", exact: true }),
   ).toHaveAttribute("aria-current", "page");
 });
 

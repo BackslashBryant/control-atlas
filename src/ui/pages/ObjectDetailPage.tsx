@@ -349,7 +349,7 @@ export function ObjectDetailPage(props: {
         : state.from === "start-here"
           ? "Back to source navigator"
           : state.from === "patterns"
-            ? "Back to Learn"
+            ? "Back to Guides"
       : state.from === "matrix"
               ? "Back to comparison"
               : state.from === "catalog-detail"
@@ -426,7 +426,7 @@ export function ObjectDetailPage(props: {
                 onClick={() => openAtlasMapForNode(onNavigate, state.node)}
                 type="button"
               >
-                Open in Explore
+                Open in the Atlas
               </Button>
             ) : null}
             {/* Secondary actions collapse into one affordance so the record

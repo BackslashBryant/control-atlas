@@ -18,14 +18,16 @@ test("critical path: landing hero and primary entry cards are visible", async ({
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Control Atlas", exact: true }),
+    page.getByRole("heading", {
+      name: /Federal cyber guidance is scattered/,
+    }),
   ).toBeVisible();
 
-  await expect(page.getByRole("search")).toBeVisible();
-  await expect(page.getByRole("button", { name: /Open the Atlas/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Browse Catalog/ })).toBeVisible();
+  await expect(page.getByRole("search").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: /Follow implementation/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Compare guidance/ })).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /Find Tools & Resources/ }),
+    page.getByRole("button", { name: /Start a document/ }),
   ).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
 });
@@ -71,7 +73,13 @@ test("critical path: Atlas Open full record leaves the path for record detail", 
     .getByRole("button")
     .first()
     .click();
-  await page.getByRole("button", { name: "Open full record" }).click();
+  // Scoped to the selected-item inspector: the compact workspace header has
+  // its own "Open full record" for the CENTER record, which would otherwise
+  // make this ambiguous.
+  await page
+    .getByLabel(/record brief/)
+    .getByRole("button", { name: "Open full record" })
+    .click();
 
   await expect(page).toHaveURL(/#\/record\//);
   await expect(page.locator(".detail-page")).toBeVisible();
@@ -252,10 +260,13 @@ test("critical path: baseline compare surfaces delta controls with export action
 test("critical path: keyboard focus reaches primary nav and search", async ({
   page,
 }) => {
-  // The home view is a self-contained calm entrance without the persistent
-  // site chrome (its own wordmark/search/buttons cover that role there) — the
-  // primary nav and header search this test exercises only render once the
-  // user has navigated somewhere else.
+  // 2026-08-03: utility navigation grew from 3 items to 5 (Resources/About
+  // joined Sources/Help/Start here), which needs more header width before
+  // the full desktop chrome fits — see styles/orbital.css's compactNavigation
+  // breakpoint comment. Playwright's bare default viewport (1280x720) is
+  // below it now, so the primary nav this test exercises would otherwise be
+  // the (correctly) collapsed mobile-sheet version instead.
+  await page.setViewportSize({ width: 1600, height: 900 });
   await gotoApp(page, "/?view=explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -264,12 +275,14 @@ test("critical path: keyboard focus reaches primary nav and search", async ({
     name: "Primary navigation",
   });
   const library = primaryNav.getByRole("button", {
-    name: "Catalog",
+    name: "Library",
     exact: true,
   });
   await library.focus();
   await expect(library).toBeFocused();
-  const startHere = page.getByRole("button", {
+  // Scoped to the banner: the static search shell's own "Start here" button
+  // can also be present in the DOM while its route is loading.
+  const startHere = page.getByRole("banner").getByRole("button", {
     name: "Start here",
     exact: true,
   });
@@ -277,7 +290,7 @@ test("critical path: keyboard focus reaches primary nav and search", async ({
   await expect(startHere).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(
-    page.getByRole("heading", { name: "Find the publication you need" }),
+    page.getByRole("heading", { name: "Start here", exact: true }),
   ).toBeVisible();
 
   const search = page.getByRole("button", { name: "Open search" });

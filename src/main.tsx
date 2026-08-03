@@ -259,6 +259,18 @@ function connectStaticHome() {
     });
   });
 
+  // Below the compact-header breakpoint the persistent header's primary and
+  // utility nav are CSS-hidden in favor of TopNav's real mobile sheet, which
+  // only exists once React mounts. The static shell has no equivalent
+  // drawer, so a tap here boots React (like the search shortcut below) —
+  // the first tap opens the real, fully-interactive menu instead of building
+  // a second, throwaway one.
+  rootElement
+    .querySelector<HTMLElement>('[data-static-menu-boot]')
+    ?.addEventListener('click', () => {
+      void bootReactApp();
+    });
+
   rootElement
     .querySelector<HTMLFormElement>('[data-home-search]')
     ?.addEventListener('submit', (event) => {
@@ -373,28 +385,37 @@ async function start() {
     focusSearchResultsWhenReady,
   );
 
+  // Home stays on the static shell until a real interaction (nav click,
+  // search submit, Ctrl+K, or the mobile menu button) boots React — that is
+  // the whole point of the static shell, and tests/e2e/bootstrap-payload.spec
+  // enforces it (exactly one script requested on first paint). The static
+  // header carries the persistent nav markup so Home is never without
+  // navigation even before that boot (see src/index.html's <header
+  // class="site-header">); every other route boots immediately after the
+  // initial paint, same as before.
   if (isHomeHash()) {
     connectStaticHome();
     window.addEventListener('hashchange', onLocationChange);
     window.addEventListener('popstate', onLocationChange);
-  } else {
-    // Fetch the route bundle in parallel with the stable server-rendered shell,
-    // then mount the interactive workspace after the initial paint. The static
-    // Search form works immediately, and any user action still boots at once.
-    const bootAfterInitialPaint = () => {
+    return;
+  }
+
+  // Fetch the route bundle in parallel with the stable server-rendered shell,
+  // then mount the interactive workspace after the initial paint. The static
+  // Search form works immediately, and any user action still boots at once.
+  const bootAfterInitialPaint = () => {
+    window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          window.setTimeout(() => {
-            void bootReactApp();
-          }, 0);
-        });
+        window.setTimeout(() => {
+          void bootReactApp();
+        }, 0);
       });
-    };
-    if (document.readyState === 'complete') {
-      bootAfterInitialPaint();
-    } else {
-      window.addEventListener('load', bootAfterInitialPaint, { once: true });
-    }
+    });
+  };
+  if (document.readyState === 'complete') {
+    bootAfterInitialPaint();
+  } else {
+    window.addEventListener('load', bootAfterInitialPaint, { once: true });
   }
 }
 

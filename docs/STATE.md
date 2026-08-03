@@ -2,6 +2,21 @@
 
 ## Constraints
 
+- "Retire this too: ?mode=novice#/  \"Novice\" is demeaning." (2026-08-03,
+  session 22) => the word "novice" is banned from product vocabulary, code
+  identifiers, and URLs. The Atlas default source view key is now "default".
+- "Do not modify inactive legacy UI unless it still supplies rendered strings."
+  (2026-08-03, session 22, UX copy correction)
+- "Do not change the data model, graph semantics, route behavior, or product
+  boundary as part of this task." (2026-08-03, session 22, UX copy correction)
+- "Preserve old URLs through redirects or route aliases. Do not break
+  bookmarks." (2026-08-03, session 22, IA correction)
+- "Do not create fake recommendations or applicability claims." / "Do not merely
+  rename existing clutter." (2026-08-03, session 22, IA correction)
+- "Never fabricate a resource, URL, owner, description, status, relationship,
+  activity level, or popularity claim." (2026-08-03, session 22, Resources
+  expansion — not yet started)
+
 - "If it looks like a bug or looks awkard from a navigation first glance, it'll
   probably feel like a bug or shitty nav for the user. So, when you see stuff
   like that, just fix it don't try and deep dive too much." (2026-08-02,
@@ -1961,3 +1976,81 @@ technology review remains a separate residual.
 No human drove NVDA, VoiceOver, or TalkBack, and no physical iOS/Android,
 WebPageTest, or penetration-test evidence was produced. Those remain external
 residuals and are not implied by automated browser or Lighthouse results.
+
+## 2026-08-03 (session 22) - Atlas record workspace + practitioner voice
+
+Done: nav renamed (Atlas/Library/Compare/Guides/Documents + utility), Search+Catalog
+merged into Library, Start Here two-step flow, Home rebuilt twice (practitioner
+voice + AC-2 chain preview), palette extended so colour carries meaning,
+Path/Map/List folded into ONE record workspace (Connections + Hierarchy panel +
+View-all list), "novice" retired.
+
+KNOWN REGRESSION (not fixed): tests/e2e/bootstrap-payload.spec.mjs - Home now
+loads 24 JS chunks instead of 1, because start() in src/main.tsx boots React on
+Home so it gets the persistent header. Graph JSON is still avoided. Correct fix
+is NOT to accept the budget: keep React deferred on Home and make the static
+shell header fully functional (nav links already work via data-route; only the
+mobile hamburger needs vanilla JS).
+
+REMAINING: 35 other e2e failures, all stale assertions against the removed
+three-tab model / old Home copy / old Start Here. Categories in the session log.
+
+## 2026-08-03 (session 22 cont.) - Atlas record workspace redesign + full verification
+
+Path/Map/List merged into ONE record workspace per owner's exact visual spec:
+Connections (bespoke radial diagram, centered record, relationship-class
+spokes) is the product; Hierarchy and View all are supporting panels toggled
+by the SAME toolbar buttons, relationshipView URL param now selects panel not
+mode. AtlasConnectionMap.tsx rewritten (ReactFlow/ELK force-graph removed from
+this component entirely; RelationshipExplorer.tsx keeps that contract for
+Compare/record-detail). Root-caused and fixed a real bug: normalizeViewState's
+atlasMapState() factory default relationshipView:"path" was leaking into every
+guided-path record navigation (not just the first) — this is intentional
+there (guided path lands on Hierarchy-open) but was NOT a new regression, just
+newly load-bearing test-wise.
+
+Home rewritten twice this session to match iterative owner feedback: final
+copy is the owner's exact provided text (headline "Federal cyber guidance is
+scattered...", cards Follow implementation/Compare guidance/Start a document,
+trust line). Added a verified-honest AC-2 published-chain preview (every edge
+asserted against data/generated/edges.json in tests/content-review.test.mjs).
+
+Fixed real defects found via live browser inspection (not assumed):
+- Home bootstrap regression: React was eagerly booting on Home to give it the
+  persistent header, blowing the 1-script payload budget
+  (tests/e2e/bootstrap-payload.spec.mjs). Fixed by keeping Home static-only
+  until interaction, and making the static shell itself carry the full header
+  markup (src/index.html) with a mobile-menu button that boots React on tap.
+- `.atlas-radial-map` collapsed to 0 width (grid container with no explicit
+  columns sizes to content, and all children were position:absolute so it had
+  none) — added explicit width:100%.
+- Mobile workspace header overflowed ~600px past the viewport: a later,
+  unconditional `.atlas-workspace-header{align-items:center}` rule beat the
+  767px media query's `align-items:stretch`, so the flex item sized to its
+  nowrap description's full intrinsic width instead of the container. Fixed
+  with an explicit width:100% on the wrapping div (styles/surfaces.css).
+- Palette: --ca-secondary was literally aliased to --ca-primary (same cyan),
+  and DISA/FedRAMP/community/MITRE provenance tokens were --lsm-dust
+  (colourless grey) — extended the palette (iris/teal/amber) so colour
+  actually carries meaning, added *-text tint variants to keep AA contrast
+  (tests/a11y-contract.test.mjs).
+- H1 duplicated the record name when title==itemId (e.g. "CCI-000010 —
+  CCI-000010"); de-duplicated.
+- TopNav's new desktop utility-nav buttons (Resources/Sources/About) had no
+  aria-current, unlike the pre-existing mobile sheet — added it.
+- The expanded primary and utility navigation overlapped at ordinary laptop
+  widths after the final screenshot review. The compact-navigation threshold
+  now matches the measured header width budget, and the focused responsive
+  browser checks pass at the affected widths.
+
+KNOWN PRE-EXISTING DEFECT, NOT FIXED (out of scope, app-shell-wide, not
+introduced this session): [data-static-header-reserve]/[data-static-context-reserve]
+stay unhidden after hydration on every non-Home route (confirmed same on
+Library, unrelated to Atlas), producing a ~140px blank gap above the header on
+mobile. Needs its own investigation of main.tsx's syncProgressiveShell().
+
+Verification: unit 357/357 and the final task-level unit run 59/59, lint clean,
+typecheck clean, a11y suite 32/32, and the full browser suite 148 passed with
+one intentional skip out of 149 collected tests (exit 0). The intentional
+Home/Atlas visual changes were re-baselined, and all 48 desktop/compact review
+screenshots were captured before the final responsive navigation correction.

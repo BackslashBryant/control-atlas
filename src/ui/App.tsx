@@ -17,7 +17,6 @@ import {
   DetailConnectionsSkeleton,
   LibrarySkeleton,
 } from "./components/LibrarySkeleton";
-import { HomeFooter } from "./components/HomeFooter";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import type { HelpTab } from "./components/GlossaryDrawer";
@@ -471,14 +470,12 @@ export function App() {
       >
         Skip to workspace
       </a>
-      {viewState.view !== "home" ? (
-        <TopNav
-          onNavigate={navigate}
-          onOpenHelp={() => openHelp()}
-          onOpenSearch={() => setSearchOverlayOpen(true)}
-          viewState={viewState}
-        />
-      ) : null}
+      <TopNav
+        onNavigate={navigate}
+        onOpenHelp={() => openHelp()}
+        onOpenSearch={() => setSearchOverlayOpen(true)}
+        viewState={viewState}
+      />
       <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} />
 
       <main id="workspace" tabIndex={-1}>
@@ -528,11 +525,7 @@ export function App() {
         </section>
       </main>
 
-      {viewState.view === "home" ? (
-        <HomeFooter />
-      ) : (
-        <SiteFooter onNavigate={navigate} />
-      )}
+      <SiteFooter onNavigate={navigate} />
 
       {searchOverlayOpen ? (
         <Suspense fallback={null}>
@@ -675,7 +668,7 @@ function AppContent(props: {
   if (state.view === "atlas-map") {
     if (!bundle) {
       return (
-        <DataPendingNotice onRetry={onRetryLoad} title="Loading Explore" />
+        <DataPendingNotice onRetry={onRetryLoad} title="Loading the Atlas" />
       );
     }
     return (
@@ -705,7 +698,7 @@ function AppContent(props: {
 
   if (state.view === "catalog-detail") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} title="Loading Catalog" />;
+      return <DataPendingNotice onRetry={onRetryLoad} title="Loading the Library" />;
     }
     return (
       <CatalogDetailPage
@@ -775,11 +768,13 @@ function AppContent(props: {
   }
 
   if (state.view === "start-here") {
-    return <StartHerePage onNavigate={onNavigate} state={state} />;
+    return (
+      <StartHerePage bundle={bundle} onNavigate={onNavigate} state={state} />
+    );
   }
 
   if (state.view === "about") {
-    return <AboutPage onNavigate={onNavigate} />;
+    return <AboutPage />;
   }
 
   if (state.view === "retired") {
@@ -839,7 +834,7 @@ function routeLoadingCopy(view: ViewState["view"]) {
       };
     case "catalog-detail":
       return {
-        title: "Loading Catalog",
+        title: "Loading the Library",
         description:
           "We are loading the selected catalog, its public records, and source details.",
       };
@@ -857,9 +852,9 @@ function routeLoadingCopy(view: ViewState["view"]) {
       };
     case "atlas-map":
       return {
-        title: "Loading Explore",
+        title: "Loading the Atlas",
         description:
-          "Explore is preparing the selected record and its real published connections.",
+          "Preparing the selected record and its published connections.",
       };
     default:
       return {

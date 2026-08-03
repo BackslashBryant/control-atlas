@@ -3,6 +3,7 @@ import {
   IconClipboardList,
   IconCompass,
   IconGitCompare,
+  IconInfoCircle,
   IconLibrary,
   IconMap,
   IconSourceCode,
@@ -31,8 +32,9 @@ export type NavSection = {
   items: NavItem[];
 };
 
-export const DISCOVERY_SECTION_LABEL = "Explore and compare";
-export const TOOLKIT_SECTION_LABEL = "Learn and work";
+export const DISCOVERY_SECTION_LABEL = "Find and compare";
+export const TOOLKIT_SECTION_LABEL = "Guides and documents";
+export const UTILITY_SECTION_LABEL = "More";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
@@ -71,21 +73,17 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     icon: IconClipboardList,
     section: "toolkit",
   },
+];
+
+// Resources sits in utility navigation: it holds external material that is
+// deliberately outside the Atlas hierarchy, so it does not compete with the
+// five primary destinations.
+export const UTILITY_NAV_ITEMS: NavItem[] = [
   {
     label: routeIdentityFor("commons").label,
     view: "commons",
     path: routeIdentityFor("commons").path,
     icon: IconTool,
-    section: "toolkit",
-  },
-];
-
-export const UTILITY_NAV_ITEMS: NavItem[] = [
-  {
-    label: routeIdentityFor("start-here").label,
-    view: "start-here",
-    path: routeIdentityFor("start-here").path,
-    icon: IconCompass,
     section: "utility",
   },
   {
@@ -95,7 +93,22 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
     icon: IconSourceCode,
     section: "utility",
   },
+  {
+    label: routeIdentityFor("about").label,
+    view: "about",
+    path: routeIdentityFor("about").path,
+    icon: IconInfoCircle,
+    section: "utility",
+  },
 ];
+
+export const START_HERE_NAV_ITEM: NavItem = {
+  label: routeIdentityFor("start-here").label,
+  view: "start-here",
+  path: routeIdentityFor("start-here").path,
+  icon: IconCompass,
+  section: "utility",
+};
 
 export const MOBILE_NAV_SECTIONS: NavSection[] = [
   {
@@ -106,10 +119,11 @@ export const MOBILE_NAV_SECTIONS: NavSection[] = [
     label: TOOLKIT_SECTION_LABEL,
     items: PRIMARY_NAV_ITEMS.filter((item) => item.section === "toolkit"),
   },
-  { label: "Help", items: UTILITY_NAV_ITEMS },
+  { label: UTILITY_SECTION_LABEL, items: UTILITY_NAV_ITEMS },
 ];
 
 export const ALL_NAV_ITEMS = [
+  START_HERE_NAV_ITEM,
   ...PRIMARY_NAV_ITEMS,
   ...UTILITY_NAV_ITEMS,
 ];

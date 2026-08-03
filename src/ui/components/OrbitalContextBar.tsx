@@ -32,7 +32,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         label: routeIdentityFor("library-detail").contextLabel,
         scope: entityName || "Record detail",
         back: {
-          label: "Catalog",
+          label: "Library",
           view: "catalog-detail",
           patch: { view: "catalog-detail", catalog },
         },
@@ -69,7 +69,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         // Internal view key stays "atlas-map"; nav label renamed to Explore.
         label: routeIdentityFor("atlas-map").contextLabel,
         // "Choose a branch" was the tree model talking to itself.
-        scope: entityName || "Choose an area",
+        scope: entityName,
       };
     case "search":
       return {
@@ -78,42 +78,42 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         // Renamed from "Explore" so it no longer shares a name with the
         // atlas-map nav item (see PLAN CHANGE in docs/STATE.md).
         label: routeIdentityFor("search").contextLabel,
-        scope: state.query || "All public records",
+        scope: state.query,
       };
     case "catalog-detail":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("catalog-detail").contextLabel,
-        scope: "Selected catalog",
+        scope: "",
       };
     case "matrix":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("matrix").contextLabel,
-        scope: "Choose a comparison",
+        scope: "",
       };
     case "patterns":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("patterns").contextLabel,
-        scope: "All guides",
+        scope: "",
       };
     case "templates":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("templates").contextLabel,
-        scope: "Choose a document task",
+        scope: "",
       };
     case "sources":
       return {
         depth: state.source ? 2 : 1,
         mode: "operational",
         label: state.source ? "Source" : "Sources",
-        scope: state.source ? "Selected source" : "All publishers",
+        scope: "",
         back: state.source
           ? {
               label: "All sources",
@@ -127,21 +127,21 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("commons").contextLabel,
-        scope: "All resources",
+        scope: "",
       };
     case "start-here":
       return {
         depth: 1,
         mode: "operational",
         label: routeIdentityFor("start-here").contextLabel,
-        scope: "Published sources",
+        scope: "",
       };
     case "about":
       return {
         depth: 0,
         mode: "operational",
         label: routeIdentityFor("about").contextLabel,
-        scope: "Purpose and trust boundary",
+        scope: "",
         back: { label: "Home", view: "home" },
       };
   }
@@ -157,7 +157,10 @@ export function OrbitalContextBar(props: {
 }) {
   const context = orbitalRouteContext(props.state, props.entityName);
 
-  if (props.state.view === "home") {
+  // The bar earns its space only when it adds something the page header does
+  // not already say: a real subject, or a way back to a parent. Otherwise it
+  // was a second copy of the page title under a generic "Section" chip.
+  if (props.state.view === "home" || (!context.scope && !context.back)) {
     return null;
   }
 
@@ -171,21 +174,19 @@ export function OrbitalContextBar(props: {
     >
       <div className="orbital-context-inner ca-page">
         <div className="orbital-context-location">
-          <span className="orbital-depth">
-            {context.depth === 0 ? "Overview" : context.depth === 1 ? "Section" : "Detail"}
-          </span>
-          <span aria-hidden="true" className="orbital-context-datum" />
           <strong>{context.label}</strong>
         </div>
         {/* STIG rules carry a full sentence as their title, which the record
             page already prints as its H1 and again in the breadcrumb. Shortened
             here so the same sentence is not on screen three times; the full
             text stays in the tooltip. */}
-        <span className="orbital-context-scope" title={context.scope}>
-          {context.scope.length > 56
-            ? `${context.scope.slice(0, 55).trimEnd()}…`
-            : context.scope}
-        </span>
+        {context.scope ? (
+          <span className="orbital-context-scope" title={context.scope}>
+            {context.scope.length > 56
+              ? `${context.scope.slice(0, 55).trimEnd()}…`
+              : context.scope}
+          </span>
+        ) : null}
         {context.back ? (
           <button
             className="orbital-context-return"
