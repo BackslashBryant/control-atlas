@@ -114,10 +114,14 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      # Keep pixel comparisons aligned with the environment that produces the
+      # reviewed Linux baselines in update-visual-baselines.yml.
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
     steps:
       - uses: actions/checkout@v6
       - run: npm ci
+      - name: Install package-matched Chromium
+        run: npx playwright install chromium
       - uses: actions/download-artifact@v8
         with:
           name: nightly-site-build
@@ -146,7 +150,7 @@ jobs:
           name: nightly-site-build
           path: dist/site
       - name: Experience Guardian rendered review
-        run: playwright test --config playwright.guardian.config.mjs
+        run: npx playwright test --config playwright.guardian.config.mjs
       - name: Upload Guardian evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
