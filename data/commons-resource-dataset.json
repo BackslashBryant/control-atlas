@@ -2987,9 +2987,113 @@
         "cloud-devsecops-software-factories"
       ],
       "parentEcosystemId": null,
-      "childResourceIds": [],
+      "childResourceIds": [
+        "portal-disa-servicenow"
+      ],
       "brandKey": "disa",
       "sourceEvidence": "https://connect.disa.mil/",
+      "verificationMethod": "manual_restricted",
+      "automatedFields": [],
+      "manualFields": [
+        "summary",
+        "whyIncluded",
+        "accessType",
+        "officialStatus",
+        "featuredCollections"
+      ]
+    },
+    {
+      "id": "portal-disa-servicenow",
+      "name": "DISA ServiceNow service portal",
+      "shortName": "DISA ServiceNow",
+      "cardPurpose": "Open and track support requests for authorized DISA services from a DoD network.",
+      "slug": "portal-disa-servicenow",
+      "summary": "Open and track support requests for authorized DISA services from a DoD network.",
+      "whyIncluded": "It is DISA's official ticketing destination for practitioners who already use supported DISA services.",
+      "canonicalUrl": "https://services.disa.mil/",
+      "alternateUrls": [],
+      "publisher": "Defense Information Systems Agency",
+      "maintainer": "Defense Information Systems Agency",
+      "publisherType": "government",
+      "resourceLane": "official",
+      "resourceType": "service_portal",
+      "frameworks": [],
+      "programs": [
+        "DISA services"
+      ],
+      "controlFamilies": [],
+      "lifecycleStages": [
+        "operate"
+      ],
+      "audiences": [
+        "authorized DoD practitioners"
+      ],
+      "artifactTypes": [],
+      "technologyScopes": [
+        "DISA services",
+        "DoD networks"
+      ],
+      "platforms": [],
+      "jurisdictions": [
+        "United States federal"
+      ],
+      "governmentBranches": [],
+      "formats": [
+        "HTML"
+      ],
+      "accessType": "dod_network_required",
+      "costType": "free",
+      "accountRequired": true,
+      "authenticationRequired": true,
+      "publicAccessNotes": "The public DISA Support page explains the service. The ticketing destination requires NIPRNet or NIPRNet VPN.",
+      "openSource": false,
+      "repositoryUrl": null,
+      "license": null,
+      "licenseUrl": null,
+      "redistributionPolicy": "Link only; verify current publisher terms before redistribution.",
+      "officialStatus": "official",
+      "maturity": "established",
+      "maintenanceStatus": "active",
+      "currentVersion": null,
+      "publisherUpdatedAt": null,
+      "lastReleaseAt": null,
+      "lastCommitAt": null,
+      "lastCheckedAt": "2026-08-03",
+      "lastChangedAt": null,
+      "nextCheckAt": "2026-11-03",
+      "updateMethod": "manual_primary_source_review",
+      "updateCadence": "quarterly",
+      "freshnessStatus": "current",
+      "supersedes": null,
+      "supersededBy": null,
+      "legacyReason": null,
+      "officialCounterparts": [],
+      "companionResources": [],
+      "communityLinks": [],
+      "trainingLinks": [],
+      "downloadLinks": [],
+      "apiLinks": [],
+      "feedLinks": [],
+      "popularitySignals": {},
+      "editorialNotes": "The public DISA Support page states that ServiceNow requires NIPRNet or NIPRNet VPN.",
+      "warnings": [],
+      "searchAliases": [
+        "DISA ServiceNow",
+        "DISA Service Now",
+        "DISA ticketing",
+        "NIPRNet support portal"
+      ],
+      "searchKeywords": [
+        "NIPRNet",
+        "support request"
+      ],
+      "featuredCollections": [
+        "dod-cybersecurity-portals"
+      ],
+      "parentEcosystemId": "portal-disa-connect",
+      "childResourceIds": [],
+      "brandKey": "disa",
+      "sourceEvidence": "https://help.disa.mil/?p=25",
       "verificationMethod": "manual_restricted",
       "automatedFields": [],
       "manualFields": [

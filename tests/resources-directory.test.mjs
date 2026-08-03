@@ -19,13 +19,13 @@ test("CA-RES-001/002: Resources retains its directory identity, eight collection
   // 2026-08-02: 96 -> 83. 13 official-lane resources removed — each
   // duplicated a publication already canonically ingested as its own
   // Catalog/Source (docs/plans/audit-alignment-2026-08-02.md Phase 2a).
-  assert.equal(resources.length, 113);
+  assert.equal(resources.length, 114);
   assert.equal(dataset.collections.length, 8);
   const categories = resources.map(primaryBrowseCategory);
   assert.equal(categories.filter(Boolean).length, resources.length);
   assert.deepEqual(
     primaryBrowseCategoryCounts(resources).map(({ id, count }) => [id, count]),
-    [["rules", 1], ["catalogs", 27], ["templates", 5], ["tools", 60], ["community", 12], ["reference", 8]],
+    [["rules", 1], ["catalogs", 27], ["templates", 5], ["tools", 61], ["community", 12], ["reference", 8]],
   );
   assert.equal(new Set(PRIMARY_BROWSE_CATEGORIES.map(({ id }) => id)).size, 6);
 });

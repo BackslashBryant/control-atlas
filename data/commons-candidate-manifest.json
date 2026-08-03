@@ -1,8 +1,8 @@
 {
   "manifestVersion": "3.0",
   "generatedOn": "2026-08-03",
-  "totalEvaluated": 165,
-  "acceptedCount": 113,
+  "totalEvaluated": 166,
+  "acceptedCount": 114,
   "rejectedCount": 52,
   "acceptedCandidates": [
     {
@@ -176,6 +176,12 @@
     {
       "candidateName": "DISA Connect",
       "url": "https://connect.disa.mil/",
+      "status": "accepted",
+      "lane": "official"
+    },
+    {
+      "candidateName": "DISA ServiceNow service portal",
+      "url": "https://services.disa.mil/",
       "status": "accepted",
       "lane": "official"
     },
@@ -1149,6 +1155,13 @@
       "disposition": "missing",
       "evidence": "https://connect.disa.mil/",
       "actionTaken": "Added to the live dataset and curated collections."
+    },
+    {
+      "candidate": "DISA ServiceNow service portal",
+      "canonicalUrl": "https://services.disa.mil/",
+      "disposition": "missing",
+      "evidence": "https://help.disa.mil/?p=25",
+      "actionTaken": "Added as an official DoD-network-restricted child of DISA Connect."
     },
     {
       "candidate": "DISA SCAP Compliance Checker",

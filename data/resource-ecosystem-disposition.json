@@ -24,7 +24,7 @@
   },
   "summary": {
     "beforeResources": 83,
-    "afterResources": 113,
+    "afterResources": 114,
     "beforeCollections": 0,
     "afterCollections": 8
   },
@@ -231,6 +231,13 @@
       "disposition": "missing",
       "evidence": "https://connect.disa.mil/",
       "actionTaken": "Added to the live dataset and curated collections."
+    },
+    {
+      "candidate": "DISA ServiceNow service portal",
+      "canonicalUrl": "https://services.disa.mil/",
+      "disposition": "missing",
+      "evidence": "https://help.disa.mil/?p=25",
+      "actionTaken": "Added as an official DoD-network-restricted child of DISA Connect."
     },
     {
       "candidate": "DISA SCAP Compliance Checker",
