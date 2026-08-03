@@ -113,7 +113,7 @@ export function CommonsPage(props: {
         <WorkbenchControlSurface className="resources-control-surface" label="Find resources" targetId="resources-results">
           <label className="resources-search" htmlFor="resources-query">
             <IconSearch aria-hidden="true" size={22} />
-            <input id="resources-query" onChange={(event) => update({ query: event.target.value })} placeholder="Try OSCAL, 8140, ATO reuse, Iron Bank, CMMC, or STIG scanner" type="search" value={state.query} />
+            <input aria-label="Find resources" id="resources-query" onChange={(event) => update({ query: event.target.value })} placeholder="Try OSCAL, 8140, ATO reuse, Iron Bank, CMMC, or STIG scanner" type="search" value={state.query} />
             {state.query ? <button aria-label="Clear resource search" onClick={() => update({ query: "" })} type="button"><IconX aria-hidden="true" size={18} /></button> : null}
           </label>
           <div className="resources-facets">

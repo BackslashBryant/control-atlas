@@ -103,3 +103,20 @@ test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
   await expect(page.getByText("Do not post CUI", { exact: false })).toHaveCount(1);
   await shot(page, "24-mobile-community-detail-320");
 });
+
+test("resource directory supports keyboard use and a 200 percent zoom equivalent", async ({ page }) => {
+  await page.setViewportSize({ width: 720, height: 900 });
+  await open(page, "#/resources");
+
+  const search = page.getByRole("searchbox", { name: "Find resources" });
+  await search.focus();
+  await expect(search).toBeFocused();
+  await page.keyboard.type("I-Assure");
+  await expect(page.getByText("I-Assure RMF artifact templates", { exact: true }).first()).toBeVisible();
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+
+  await page.keyboard.press("Tab");
+  await expect(page.locator(":focus")).toBeVisible();
+});
