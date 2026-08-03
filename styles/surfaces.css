@@ -2550,6 +2550,12 @@ button.atlas-path-crumb-organizing:focus-visible {
   color: var(--ca-text-muted);
 }
 
+.start-here-row-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+}
+
 /* Publisher · lifecycle sits under the synopsis as metadata, not as part of
    the sentence. Omitted entirely when neither value is recorded. */
 .resources-show-more {
