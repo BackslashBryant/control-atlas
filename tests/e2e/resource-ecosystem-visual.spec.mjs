@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 
 const output = resolve("docs/evidence/resource-ecosystem/screenshots");
+const shouldWriteEvidence = process.env.UPDATE_RESOURCE_EVIDENCE === "1";
 mkdirSync(output, { recursive: true });
 const collections = [
   "dod-cybersecurity-portals",
@@ -22,6 +23,7 @@ async function open(page, hash) {
 }
 
 async function shot(page, name) {
+  if (!shouldWriteEvidence) return;
   await page.addStyleTag({ content: ".brand-key-word { visibility: hidden !important; }" });
   await page.screenshot({ path: resolve(output, `${name}.jpg`), type: "jpeg", quality: 82, fullPage: true });
 }
