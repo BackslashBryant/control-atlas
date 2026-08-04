@@ -132,13 +132,26 @@ export function ExplorePage(props: {
   const resultsRef = useRef<HTMLDivElement>(null);
   const composingRef = useRef(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(40);
+  const [detailsReady, setDetailsReady] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(0);
   const connectedOnly = state.connectedOnly === "true";
   const hasQuery = Boolean(state.query.trim());
   const hasFilters = Boolean(state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity || connectedOnly);
   const searchStarted = hasQuery || hasFilters;
 
-  useEffect(() => setVisibleCount(40), [state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity, state.connectedOnly, state.sort]);
+  useEffect(() => {
+    setDetailsReady(false);
+    setVisibleCount(0);
+    let detailsFrame = 0;
+    const resultsFrame = window.requestAnimationFrame(() => {
+      setVisibleCount(10);
+      detailsFrame = window.requestAnimationFrame(() => setDetailsReady(true));
+    });
+    return () => {
+      window.cancelAnimationFrame(resultsFrame);
+      window.cancelAnimationFrame(detailsFrame);
+    };
+  }, [state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity, state.connectedOnly, state.sort]);
   useEffect(() => {
     if (!filtersOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -162,25 +175,19 @@ export function ExplorePage(props: {
   const catalogCoverage = useMemo(() => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1), [bundle.runtime]);
   const catalogs = useMemo(() => new Map(bundle.runtime.getCatalogs().map((catalog: any) => [catalog.id, catalog.name])), [bundle.runtime]);
 
-  const recordRows = useMemo(() => documents.map((document: any) => {
-    const node = bundle.runtime.getNode(document.id);
-    const source = bundle.runtime.getSource(document.source_id);
-    const relationshipCount = node
-      ? bundle.runtime.getEdgesForNode(node.id, { publication_status: "published" }).length
-      : 0;
-    const path = (node?.ancestor_path || []).slice(-3).map((entry: any) => entry.label).filter(Boolean).join(" › ");
-    return {
-      document,
-      node,
-      source,
-      relationshipCount,
-      path,
-      matchReason: matchReasonFor(document, state.query),
-      lowCoverage: isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, document.catalog_id)),
-      title: recordDisplayTitle(node ?? { id: document.id, node_type: document.object_type, metadata: { item_id: document.item_id, title: document.title } }),
-      publication: catalogs.get(document.catalog_id) || document.catalog_name || document.catalog_id || "Publication unavailable",
-    };
-  }).filter((row: any) => !connectedOnly || row.relationshipCount > 0), [bundle.runtime, catalogs, catalogCoverage, connectedOnly, documents, state.query]);
+  const recordRows = useMemo(() => documents.map((document: any) => ({
+    document,
+    matchReason: matchReasonFor(document, state.query),
+    title: recordDisplayTitle({
+      id: document.id,
+      node_type: document.object_type,
+      metadata: { item_id: document.item_id, title: document.title },
+    }),
+    publication: catalogs.get(document.catalog_id) || document.catalog_name || document.catalog_id || "Publication unavailable",
+  })).filter((row: any) => {
+    if (!connectedOnly) return true;
+    return bundle.runtime.getEdgesForNode(row.document.id, { publication_status: "published" }).length > 0;
+  }), [bundle.runtime, catalogs, connectedOnly, documents, state.query]);
 
   const directoryResources = useMemo(() => !hasQuery || hasFilters ? [] : searchResourceDocuments(bundle.commonsSearchIndex?.documents || [], state.query, 12).map((entry) => entry.document), [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query]);
   const guideMatches = useMemo(() => {
@@ -268,31 +275,42 @@ export function ExplorePage(props: {
           <FilterControls {...filterProps} />
         </aside>
 
-        <div aria-label="Search results" className="search-result-list" id="library-results" ref={resultsRef} tabIndex={-1}>
+        <div aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="search-result-list" id="library-results" ref={resultsRef} tabIndex={-1}>
           {connectedOnly && !graphReady ? <p className="notice-inline" role="status">Loading connection data for this filter…</p> : null}
           {unifiedResults.slice(0, visibleCount).map((result: any) => {
             if (result.kind === "record") {
               const row = result.payload;
+              const node = detailsReady ? bundle.runtime.getNode(row.document.id) : null;
+              const source = detailsReady ? bundle.runtime.getSource(row.document.source_id) : null;
+              const relationshipCount = detailsReady
+                ? bundle.runtime.getEdgesForNode(row.document.id, { publication_status: "published" }).length
+                : 0;
+              const path = detailsReady
+                ? (node?.ancestor_path || []).slice(-3).map((entry: any) => entry.label).filter(Boolean).join(" › ")
+                : "";
+              const lowCoverage = detailsReady
+                ? isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, row.document.catalog_id))
+                : false;
               const excerpt = officialTextPreview(row.document.description || row.document.summary || "No narrative description was published for this record.", 220).preview;
               return (
                 <article aria-labelledby={`title-${row.document.id}`} className="search-result-row" data-result-class="published-record" key={result.key}>
                   <div className="search-result-row__type">{displayNameFor("object_type", row.document.object_type)}</div>
                   <div className="search-result-row__body">
                     <h2 id={`title-${row.document.id}`}><button className="search-result-primary" onClick={() => onOpenNode(row.document.id, "search")} type="button">{row.title}</button></h2>
-                    <p className="search-result-row__source">{row.source?.display_name || row.source?.name || row.document.source_name || "Source unavailable"} · {row.publication}</p>
-                    {row.path ? <p className="search-result-row__path">{row.path}</p> : null}
-                    <p className="search-result-row__excerpt">{excerpt}</p>
-                    <div className="search-result-row__signals">
+                    <p className="search-result-row__source">{source?.display_name || source?.name || row.document.source_name || "Source unavailable"} · {row.publication}</p>
+                    {detailsReady && path ? <p className="search-result-row__path">{path}</p> : null}
+                    {detailsReady ? <p className="search-result-row__excerpt">{excerpt}</p> : null}
+                    {detailsReady ? <div className="search-result-row__signals">
                       <span>{row.matchReason}</span>
-                      <span>{row.relationshipCount.toLocaleString()} published connection{row.relationshipCount === 1 ? "" : "s"}</span>
-                      {row.lowCoverage ? <Badge tone="warning">Limited coverage</Badge> : null}
-                    </div>
+                      <span>{relationshipCount.toLocaleString()} published connection{relationshipCount === 1 ? "" : "s"}</span>
+                      {lowCoverage ? <Badge tone="warning">Limited coverage</Badge> : null}
+                    </div> : null}
                   </div>
-                  <div className="search-result-row__actions">
+                  {detailsReady ? <div className="search-result-row__actions">
                     <button onClick={() => openAtlasMapForNode(onNavigate, row.document.id)} type="button">Open in Atlas</button>
                     <button onClick={() => onNavigate("matrix", { crosswalk: "relationships", items: row.document.item_id })} type="button">Compare</button>
                     <button onClick={() => navigator.clipboard?.writeText(`${window.location.origin}${window.location.pathname}${serializeHashUrl({ view: "library-detail", node: row.document.id, from: "search" })}`)} type="button">Copy link</button>
-                  </div>
+                  </div> : null}
                 </article>
               );
             }
@@ -312,14 +330,14 @@ export function ExplorePage(props: {
                 <div className="search-result-row__body">
                   <h2 id={`title-${result.key}`}><button className="search-result-primary" onClick={view.action} type="button">{result.title}<IconArrowUpRight aria-hidden="true" size={15} /></button></h2>
                   <p className="search-result-row__source">{result.publication}{result.kind === "resource" ? ` · ${resourceAccessLabel(item)}` : ""}</p>
-                  <p className="search-result-row__excerpt">{view.summary}</p>
-                  <div className="search-result-row__signals"><span>Matched {view.type.toLocaleLowerCase()} metadata</span></div>
+                  {detailsReady ? <p className="search-result-row__excerpt">{view.summary}</p> : null}
+                  {detailsReady ? <div className="search-result-row__signals"><span>Matched {view.type.toLocaleLowerCase()} metadata</span></div> : null}
                 </div>
               </article>
             );
           })}
 
-          {unifiedResults.length > visibleCount ? <Button onClick={() => setVisibleCount((count) => count + 40)} type="button" variant="secondary">Show 40 more</Button> : null}
+          {visibleCount > 0 && unifiedResults.length > visibleCount ? <Button onClick={() => setVisibleCount((count) => count + 15)} type="button" variant="secondary">Show 15 more</Button> : null}
           {searchStarted && unifiedResults.length === 0 ? (
             <section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", objectType: "", sourceClass: "", controlFamily: "", severity: "", connectedOnly: "", sort: "relevance" })} type="button" variant="primary">Clear search</Button></section>
           ) : !searchStarted ? <section className="empty-state subtle"><p className="muted">Try T1195.002, access control, encryption, or supply chain.</p></section> : null}

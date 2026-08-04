@@ -112,7 +112,7 @@ body {
 /* Search's progressive masthead remains the route's real masthead after the
    result workspace becomes interactive. This avoids replacing the largest
    first-paint text and gives slow connections a stable search control. */
-#root[data-route-hydrated="true"][data-static-search-active="true"]
+#root[data-static-search-active="true"]
   > [data-react-root]
   .search-results-panel
   .page-header,
@@ -261,29 +261,48 @@ body {
 
 #root[data-static-route-persistent="true"] > [data-react-root] #workspace {
   grid-row: 4;
-  min-height: 0;
   padding-top: 0;
+}
+
+/* Keep the footer below the first viewport while a persistent progressive
+   masthead hands off to route data. Without this reservation the empty React
+   workspace was only a few pixels tall, so the footer painted in-view and
+   then jumped hundreds of pixels when Documents, Resources, Catalog, or Atlas
+   content arrived. */
+#root[data-static-route-persistent="true"]:not([data-route-hydrated="true"])
+  > [data-react-root]
+  #workspace {
+  min-height: max(620px, calc(100svh - 200px));
 }
 
 #root[data-route-hydrated="true"] > [data-react-root] #workspace {
   min-height: 0;
 }
 
+/* The progressive Atlas masthead already names and explains the landscape on
+   first paint. Do not repaint a larger duplicate intro after data arrives;
+   the interactive circuit tree becomes the immediate next object instead. */
+#root[data-static-route-kind="atlas"]
+  > [data-react-root]
+  .atlas-universe__intro {
+  display: none;
+}
+
 #root[data-static-route-persistent="true"] > [data-react-root] footer {
   grid-row: 5;
 }
 
-#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+#root[data-static-route-persistent="true"]
   > [data-react-root]
   [data-route-primary-header]
   [data-route-primary-copy],
-#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+#root[data-static-route-persistent="true"]
   > [data-react-root]
   [data-route-primary-header][data-route-primary-copy] {
   display: none;
 }
 
-#root[data-route-hydrated="true"][data-static-route-persistent="true"]
+#root[data-static-route-persistent="true"]
   > [data-react-root]
   [data-route-primary-header]:not(:has([data-route-primary-support])) {
   display: none;

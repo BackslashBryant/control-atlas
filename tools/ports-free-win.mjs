@@ -2,7 +2,11 @@
 
 import { execFileSync } from 'node:child_process';
 
-const CANONICAL_PORTS = [4317, 3000, 3001, 3002];
+const requestedPort = Number(process.env.PORT || process.env.PLAYWRIGHT_PORT);
+const CANONICAL_PORTS =
+  Number.isInteger(requestedPort) && requestedPort > 0
+    ? [requestedPort]
+    : [4317, 3000, 3001, 3002];
 const output = execFileSync(
   'powershell.exe',
   [
