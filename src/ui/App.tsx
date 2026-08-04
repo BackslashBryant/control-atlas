@@ -169,7 +169,7 @@ export function App() {
 
   useEffect(() => {
     const syncLocation = () => {
-      beginRouteTransition("Opening the selected workspace");
+      beginRouteTransition("Opening the selected workspace", window.location.hash);
       setLocation(readHashLocation());
     };
     window.addEventListener("hashchange", syncLocation);
@@ -405,13 +405,14 @@ export function App() {
     nextView: ViewState["view"],
     patch: Partial<ViewState> = {},
   ) {
-    if (!beginRouteTransition("Opening the selected workspace")) return;
     const nextState = normalizeViewState(nextView, {
       ...(latestNavStateRef.current as Record<string, unknown>),
       ...(patch as Record<string, unknown>),
     } as Partial<ViewState>);
+    const nextLocation = serializeHashLocation(nextState);
+    if (!beginRouteTransition("Opening the selected workspace", nextLocation)) return;
     latestNavStateRef.current = nextState;
-    routerNavigate(serializeHashLocation(nextState));
+    routerNavigate(nextLocation);
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 

@@ -47,14 +47,15 @@ test("Start here produces a plan traceable to real publications", async ({
   ).toBeVisible();
   await page.getByRole("button", { name: "FedRAMP cloud service" }).click();
 
-  await expect(page.getByRole("button", { name: /^Start with/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^Start with/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Open FedRAMP/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /^Then review/ })).toBeVisible();
   // Control Atlas does not decide applicability; the plan only routes.
   await expect(
     page.getByText(/Control Atlas does not decide\s+what applies to your system/),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: /^Start with/ }).click();
+  await page.getByRole("button", { name: /^Open FedRAMP/ }).click();
   await expect(page).toHaveURL(/#\/catalog\/fedramp-rev5/);
 });
 
@@ -81,7 +82,7 @@ test("Start here's chosen goal and context survive reload and back navigation", 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("button", { name: /^Start with/ })).toContainText(
+  await expect(page.getByRole("heading", { name: /^Start with/ })).toContainText(
     "FedRAMP Rev. 5",
   );
   await expect(page.getByRole("button", { name: /^Then review/ })).toContainText(

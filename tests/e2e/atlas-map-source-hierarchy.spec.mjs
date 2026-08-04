@@ -33,31 +33,14 @@ for (const viewport of VIEWPORTS) {
     await dismissOnboarding(page);
 
     await page.getByRole("button", { name: /Compliance/ }).click();
-    await expect(
-      page.getByText(/which catalog do you want to open\?/i),
-    ).toBeVisible();
-    await expect(page.getByText("SP 800-53 Rev. 5 Catalog", { exact: true })).toBeVisible();
-
-    await page
-      .locator(".atlas-path-stage-option")
-      .filter({ hasText: "SP 800-53 Rev. 5 Catalog" })
-      .click();
-    await expect(
-      page.getByText(
-        "Optional display filter: which published baseline selection should narrow the records?",
-      ),
-    ).toBeVisible();
+    await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+    await expect(page.getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ })).toBeVisible();
+    await page.getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }).click();
+    await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+    await expect(page.getByRole("button", { name: /Access Control/ })).toBeVisible();
     await expect(page).not.toHaveURL(/atlasBaseline=/);
 
-    await page
-      .locator(".atlas-path-stage-option")
-      .filter({ hasText: "LOW impact" })
-      .click();
-    await expect(
-      page.getByText("Which publisher-declared group do you want to open?"),
-    ).toBeVisible();
-
-    await page.locator(".atlas-ancestry-family").first().click();
+    await page.getByRole("button", { name: /Access Control/ }).click();
     await expect(page.getByLabel("Filter this family")).toBeVisible();
     await expect(page.locator(".atlas-choice-trail")).toContainText(
       "Access Control",
@@ -88,11 +71,10 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/explore");
+    await page.goto("/#/explore?sourceView=rmf");
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    await page.getByRole("button", { name: /trace the RMF lifecycle/i }).click();
     await expect(
       page.getByText("Which Risk Management Framework step are you working in?"),
     ).toBeVisible();
@@ -115,16 +97,17 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("Atlas root offers three plain entry axes without a canvas", async ({
+test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   page,
 }) => {
   await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
-  await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
-  await expect(page.locator(".react-flow")).toHaveCount(0);
+  await expect(page.getByRole("application", { name: "Interactive Control Atlas hierarchy" })).toBeVisible();
+  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
+  await expect(page.locator(".react-flow")).toHaveCount(1);
+  await expect(page.getByText(/Mappings, baselines, RMF, and evidence appear after focus, not as parents/)).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,
   );

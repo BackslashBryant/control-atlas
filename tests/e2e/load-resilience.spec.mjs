@@ -88,13 +88,13 @@ test("staged library search enables results before detail pages", async ({
     timeout: 15000,
   });
   await expect(
-    page.locator("#library-results .result-card").first(),
+    page.locator("#library-results .search-result-row").first(),
   ).toBeVisible({
     timeout: 15000,
   });
   expect(detailRequests).toBe(0);
   const openDetail = page
-    .locator("#library-results .result-card .card-title-action")
+    .locator("#library-results .search-result-primary")
     .first();
   await expect(openDetail).toBeEnabled();
   await openDetail.click();

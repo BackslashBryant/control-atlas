@@ -14,13 +14,24 @@ function transitionElements() {
 
 /**
  * Start the shared progressive-shell/React route handoff synchronously with
- * the activating click. Returns false while a navigation is already pending
- * so callers can suppress double navigation.
+ * the activating click. Repeating the same pending destination is suppressed;
+ * a distinct follow-up state change is allowed to supersede it. This keeps a
+ * double-click from duplicating history without dropping rapid form choices.
  */
-export function beginRouteTransition(label = "Opening the next workspace"): boolean {
+export function beginRouteTransition(
+  label = "Opening the next workspace",
+  destinationKey = "",
+): boolean {
   const { root, overlay, status } = transitionElements();
-  if (!root || root.dataset.routeTransition === "pending") return false;
+  if (!root) return false;
+  if (
+    root.dataset.routeTransition === "pending" &&
+    (!destinationKey || root.dataset.routeTransitionDestination === destinationKey)
+  ) {
+    return false;
+  }
   root.dataset.routeTransition = "pending";
+  if (destinationKey) root.dataset.routeTransitionDestination = destinationKey;
   if (status) status.textContent = label;
   overlay?.removeAttribute("hidden");
   const workspace = root.querySelector<HTMLElement>("main:not([hidden])");
@@ -37,6 +48,7 @@ export function completeRouteTransition() {
   const { root, overlay } = transitionElements();
   if (!root) return;
   delete root.dataset.routeTransition;
+  delete root.dataset.routeTransitionDestination;
   overlay?.setAttribute("hidden", "");
   root.querySelectorAll<HTMLElement>("[data-route-transition-inert]").forEach((workspace) => {
     workspace.inert = false;

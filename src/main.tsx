@@ -211,7 +211,7 @@ function onBrandMotionChange() {
 }
 
 function navigateFromStaticHome(target: string) {
-  if (!beginRouteTransition("Opening Control Atlas")) return;
+  if (!beginRouteTransition("Opening Control Atlas", target)) return;
   if (window.location.hash !== target) {
     window.location.hash = target.slice(1);
   }
@@ -333,7 +333,7 @@ function connectStaticHeader() {
   rootElement
     .querySelector<HTMLElement>('[data-static-menu-boot]')
     ?.addEventListener('click', () => {
-      if (!beginRouteTransition('Opening navigation')) return;
+      if (!beginRouteTransition('Opening navigation', 'static:menu')) return;
       void bootReactApp().then(() => {
         completeRouteTransition();
         rootElement
@@ -344,7 +344,7 @@ function connectStaticHeader() {
   rootElement
     .querySelector<HTMLElement>('[data-static-search-open]')
     ?.addEventListener('click', () => {
-      if (!beginRouteTransition('Opening search')) return;
+      if (!beginRouteTransition('Opening search', 'static:search')) return;
       void bootReactApp().then(() => {
         completeRouteTransition();
         window.setTimeout(() => requestSearchOverlayOpen(), 0);
@@ -428,7 +428,7 @@ function loadReactModules() {
 }
 
 function onLocationChange() {
-  beginRouteTransition("Opening the selected workspace");
+  beginRouteTransition("Opening the selected workspace", window.location.hash);
   if (!isHomeHash()) void bootReactApp();
 }
 
