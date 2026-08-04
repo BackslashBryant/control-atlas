@@ -177,6 +177,69 @@ for (const route of configuredRoutes) {
   }
 }
 
+const correctionContracts = [
+  {
+    file: "src/shared/navigation-events.ts",
+    rule: "route-transition-feedback",
+    pattern: /beginRouteTransition[\s\S]*data-route-transition/,
+    message: "Shared navigation must expose immediate visible transition feedback and double-navigation protection.",
+  },
+  {
+    file: "src/ui/lib/recordTitle.ts",
+    rule: "duplicate-record-identifiers",
+    pattern: /formatRecordTitle[\s\S]*leadingIdentifier/,
+    message: "Record titles must use the shared duplicate-identifier formatter.",
+  },
+  {
+    file: "src/ui/components/SearchOverlay.tsx",
+    rule: "keyboard-search-submission",
+    pattern: /onSubmit[\s\S]*onCompositionStart[\s\S]*Clear search/,
+    message: "Global Search must submit by form, protect IME composition, and keep Clear separate from Close.",
+  },
+  {
+    file: "src/ui/pages/StartHerePage.tsx",
+    rule: "wizard-route-integrity",
+    pattern: /start-here-progress(?=[\s\S]*Back to context)(?=[\s\S]*Next destination)/,
+    message: "Start Here must retain progressive steps, explicit back behavior, and a named final destination.",
+  },
+  {
+    file: "src/ui/pages/ExplorePage.tsx",
+    rule: "ranked-search-contract",
+    pattern: /search-filter-rail[\s\S]*search-result-list[\s\S]*unifiedResults\.slice\(0, visibleCount\)[\s\S]*setVisibleCount/,
+    message: "Search must expose visible filters, one ranked list, and bounded incremental rendering.",
+  },
+  {
+    file: "src/ui/components/AtlasUniverse.tsx",
+    rule: "atlas-promised-feature",
+    pattern: /atlasUniverseCollisions(?=[\s\S]*Authority roots)(?=[\s\S]*Cybersecurity)(?=[\s\S]*data-semantic-level)/,
+    message: "The Atlas route must deliver an authority-rooted, semantic-zoom, collision-checked tree immediately.",
+  },
+  {
+    file: "src/index.html",
+    rule: "static-react-shell-parity",
+    pattern: /data-static-header[\s\S]*data-route-transition[\s\S]*data-react-root/,
+    message: "The static shell must reserve the same header and transition contract React hydrates.",
+  },
+  {
+    file: "src/ui/lib/hashRoutes.ts",
+    rule: "obsolete-public-parameters",
+    pattern: /hasRetiredMode[\s\S]*params\.has\("mode"\)/,
+    message: "Legacy public mode parameters must be removed during canonicalization.",
+  },
+];
+for (const contract of correctionContracts) {
+  const source = await readFile(join(root, contract.file), "utf8");
+  if (!contract.pattern.test(source)) {
+    add("error", contract.rule, contract.file, 1, contract.file, contract.message);
+  }
+}
+
+for (const entry of allCopy) {
+  if (/^Open full record$/i.test(entry.text)) {
+    add("error", "redundant-open-action", entry.file, entry.line, entry.target, "Use the title or primary row as the record-opening control; retain only context-specific secondary actions.");
+  }
+}
+
 const requiredClasses = [
   "product-interface",
   "official-source",

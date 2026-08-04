@@ -262,7 +262,8 @@ export function applyLegacyQueryRedirect(): boolean {
     return false;
   }
   const params = new URLSearchParams(search);
-  if (!params.get("view") && !params.get("q")) {
+  const hasRetiredMode = params.has("mode");
+  if (!params.get("view") && !params.get("q") && !hasRetiredMode) {
     return false;
   }
   const state = parseViewState(search);

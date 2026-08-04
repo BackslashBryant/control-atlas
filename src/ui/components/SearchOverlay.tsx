@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
@@ -25,10 +25,13 @@ type SearchOverlayProps = {
 export function SearchOverlay(props: SearchOverlayProps) {
   const { bundle, open, onOpenChange, onNavigate, onOpenNode } = props;
   const [query, setQuery] = useState("");
+  const [submitStatus, setSubmitStatus] = useState("");
+  const composingRef = useRef(false);
 
   useEffect(() => {
     if (!open) {
       setQuery("");
+      setSubmitStatus("");
     }
   }, [open]);
 
@@ -108,7 +111,19 @@ export function SearchOverlay(props: SearchOverlayProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="drawer-overlay search-overlay-backdrop" />
         <Dialog.Content aria-label="Search Control Atlas" className="search-overlay">
-          <div className="search-overlay-header">
+          <form
+            className="search-overlay-header"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (composingRef.current) return;
+              if (!query.trim()) {
+                setSubmitStatus("Enter an identifier, title, or topic to search.");
+                return;
+              }
+              openExplore();
+            }}
+            role="search"
+          >
             <Dialog.Title className="visually-hidden">
               Search Control Atlas
             </Dialog.Title>
@@ -117,23 +132,29 @@ export function SearchOverlay(props: SearchOverlayProps) {
               <input
                 aria-label="Search Control Atlas"
                 autoFocus
-                onChange={(event) => setQuery(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && query.trim()) {
-                    openExplore();
-                  }
-                }}
+                id="global-search-query"
+                name="query"
+                onChange={(event) => { setQuery(event.target.value); setSubmitStatus(""); }}
+                onCompositionEnd={() => { composingRef.current = false; }}
+                onCompositionStart={() => { composingRef.current = true; }}
                 placeholder="Search controls, STIGs, tools, templates, or resources..."
                 type="search"
                 value={query}
               />
+              {query ? (
+                <button aria-label="Clear search" className="search-overlay-clear" onClick={() => { setQuery(""); setSubmitStatus(""); }} type="button">
+                  Clear
+                </button>
+              ) : null}
             </div>
             <Dialog.Close asChild>
               <button aria-label="Close search" className="icon-button" type="button">
                 <IconX aria-hidden="true" size={18} stroke={1.8} />
               </button>
             </Dialog.Close>
-          </div>
+            <button className="visually-hidden" type="submit">Search</button>
+          </form>
+          <span aria-live="polite" className="visually-hidden" role="status">{submitStatus}</span>
 
           {!bundle ? (
             <p className="field-hint">Loading public data…</p>

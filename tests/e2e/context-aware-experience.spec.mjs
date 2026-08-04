@@ -82,7 +82,7 @@ test("record actions preserve durable context across features", async ({ page })
 
   await open(page, "/#/record/nist-800-53/AC-2");
   await page.getByText("More actions").click();
-  await page.getByRole("button", { name: "Compare", exact: true }).click();
+  await page.locator("#app").getByRole("button", { name: "Compare", exact: true }).click();
   await expect(page).toHaveURL(/#\/compare\?.*(source=nist-800-53.*items=AC-2|items=AC-2.*source=nist-800-53)/);
 
   await open(page, "/#/record/nist-800-53/AC-2");
@@ -111,10 +111,9 @@ test("record types receive conservative, useful sections and sparse records omit
 
 test("universal search keeps result classes visibly distinct", async ({ page }) => {
   await open(page, "/#/search?q=supply%20chain");
-  const classes = await page
-    .locator("[data-result-class]")
-    .evaluateAll((elements) => [...new Set(elements.map((element) => element.dataset.resultClass))]);
-  expect(classes).toContain("published-record");
-  expect(classes.some((value) => ["ecosystem-resource", "official-resource", "starter-document"].includes(value))).toBe(true);
-  await expect(page.getByText(/Why matched:/).first()).toBeVisible();
+  await expect(page.locator('[data-result-class="published-record"]').first()).toBeVisible();
+
+  await open(page, "/#/search?q=NISTControls");
+  await expect(page.locator('[data-result-class="resource"]').first()).toBeVisible();
+  await expect(page.getByText(/Matched community metadata/).first()).toBeVisible();
 });

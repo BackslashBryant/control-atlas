@@ -1,54 +1,118 @@
-import * as Accordion from "@radix-ui/react-accordion";
-import { IconSearch, IconSparkles } from "@tabler/icons-react";
-import { useMemo, useRef } from "react";
+import {
+  IconAdjustmentsHorizontal,
+  IconArrowUpRight,
+  IconSearch,
+  IconSparkles,
+  IconX,
+} from "@tabler/icons-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
-import { ProvenanceTerm } from "../components/ProvenanceTerm";
+import { searchGlossary } from "../lib/glossarySearch.mjs";
+import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
+import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
+import { serializeHashUrl } from "../lib/hashRoutes";
+import { recordDisplayTitle } from "../lib/recordTitle";
+import { officialTextPreview } from "../lib/officialText";
 import {
   buildCatalogCoverageList,
   catalogCoverageForId,
   isLowCatalogCoverage,
 } from "../lib/catalogCoverage";
-import { searchGlossary } from "../lib/glossarySearch.mjs";
-import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
-import {
-  resourceAccessLabel,
-  resourceTypeLabel,
-} from "../lib/resourceBrands.mjs";
-import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
-import { serializeHashUrl } from "../lib/hashRoutes";
-import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import {
-  Badge,
-  CardTitle,
-  DisclosurePanel,
-  PATTERN_RENAMES,
-  SelectField,
-  openAtlasMapForNode,
-} from "../lib/pagePrimitives";
+import { Badge, SelectField, openAtlasMapForNode } from "../lib/pagePrimitives";
 import { Button, Panel } from "../components/lsm";
 
-// W11 — every nonexact result must show why it matched; search relevance
-// must never be presented as a graph relationship (that stays search-only,
-// computed here, not written back into the runtime search index).
+type SearchState = Extract<ViewState, { view: "search" }>;
+
 function matchReasonFor(document: any, query: string): string {
-  const needle = query.trim().toLowerCase();
+  const needle = query.trim().toLocaleLowerCase();
   if (!needle) return "Matches active filters";
-  const itemId = String(document.item_id || document.id || "").toLowerCase();
-  const title = String(document.title || "").toLowerCase();
+  const itemId = String(document.item_id || document.id || "").toLocaleLowerCase();
+  const title = String(document.title || "").toLocaleLowerCase();
   if (itemId === needle) return "Exact identifier";
+  if (title === needle) return "Exact title";
   if (itemId.startsWith(needle)) return "Identifier match";
-  if (title.includes(needle)) return "Title match";
+  if (title.includes(needle)) return "Title or alias match";
   return "Official text match";
+}
+
+const RELEVANCE_ORDER: Record<string, number> = {
+  "Exact identifier": 0,
+  "Exact title": 1,
+  "Identifier match": 2,
+  "Title or alias match": 3,
+  "Official text match": 4,
+  "Matches active filters": 5,
+};
+
+function FilterControls(props: {
+  bundle: RuntimeBundle;
+  connectedOnly: boolean;
+  graphReady: boolean;
+  state: SearchState;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
+  onRequestFullGraph: () => void;
+}) {
+  const { bundle, connectedOnly, graphReady, state, onNavigate, onRequestFullGraph } = props;
+  const facets = bundle.runtime.getLibraryFacets();
+  return (
+    <div className="search-filter-controls">
+      <SelectField
+        label="Publication"
+        onChange={(filter) => onNavigate("search", { filter })}
+        options={bundle.runtime.getCatalogs().map((catalog: any) => ({ value: catalog.id, label: catalog.name }))}
+        value={state.filter}
+      />
+      <SelectField
+        label="Object type"
+        onChange={(objectType) => onNavigate("search", { objectType })}
+        options={facets.objectTypes.map((value: string) => ({ value, label: displayNameFor("object_type", value) }))}
+        value={state.objectType}
+      />
+      <SelectField
+        label="Source type"
+        onChange={(sourceClass) => onNavigate("search", { sourceClass })}
+        options={facets.sourceClasses.map((value: string) => ({ value, label: displayNameFor("provenance_class", value) }))}
+        value={state.sourceClass}
+      />
+      <SelectField
+        label="Control family"
+        onChange={(controlFamily) => onNavigate("search", { controlFamily })}
+        options={facets.controlFamilies.map((value: string) => ({ value, label: value }))}
+        value={state.controlFamily}
+      />
+      <SelectField
+        label="Severity"
+        onChange={(severity) => onNavigate("search", { severity })}
+        options={facets.severities.map((value: string) => ({ value, label: value }))}
+        value={state.severity}
+      />
+      <label className="connections-only-filter" htmlFor="connections-only">
+        <input
+          checked={connectedOnly}
+          id="connections-only"
+          onChange={(event) => {
+            const checked = event.target.checked;
+            onNavigate("search", { connectedOnly: checked ? "true" : "" });
+            if (checked && !graphReady) onRequestFullGraph();
+          }}
+          type="checkbox"
+        />
+        Has published connections
+      </label>
+    </div>
+  );
 }
 
 export function ExplorePage(props: {
   bundle: RuntimeBundle;
   graphReady: boolean;
-  state: Extract<ViewState, { view: "search" }>;
+  state: SearchState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onRequestFullGraph: () => void;
@@ -65,8 +129,37 @@ export function ExplorePage(props: {
     onRequestFullGraph,
     onOpenGlossary,
   } = props;
-  const connectionsOnly = state.connectedOnly === "true";
   const resultsRef = useRef<HTMLDivElement>(null);
+  const composingRef = useRef(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [detailsReady, setDetailsReady] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const connectedOnly = state.connectedOnly === "true";
+  const hasQuery = Boolean(state.query.trim());
+  const hasFilters = Boolean(state.filter || state.objectType || state.sourceClass || state.controlFamily || state.severity || connectedOnly);
+  const searchStarted = hasQuery || hasFilters;
+
+  useEffect(() => {
+    setDetailsReady(false);
+    setVisibleCount(0);
+    let detailsFrame = 0;
+    const resultsFrame = window.requestAnimationFrame(() => {
+      setVisibleCount(10);
+      detailsFrame = window.requestAnimationFrame(() => setDetailsReady(true));
+    });
+    return () => {
+      window.cancelAnimationFrame(resultsFrame);
+      window.cancelAnimationFrame(detailsFrame);
+    };
+  }, [state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity, state.connectedOnly, state.sort]);
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFiltersOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
 
   const filters = {
     catalog_id: state.filter || undefined,
@@ -75,825 +168,191 @@ export function ExplorePage(props: {
     control_family: state.controlFamily || undefined,
     severity: state.severity || undefined,
   };
+  const documents = useMemo(
+    () => (searchStarted ? bundle.runtime.searchLibrary(state.query, filters) : []),
+    [bundle.runtime, searchStarted, state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity],
+  );
+  const catalogCoverage = useMemo(() => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1), [bundle.runtime]);
+  const catalogs = useMemo(() => new Map(bundle.runtime.getCatalogs().map((catalog: any) => [catalog.id, catalog.name])), [bundle.runtime]);
 
-  const hasFilters = Boolean(
-    state.filter ||
-    state.objectType ||
-    state.sourceClass ||
-    state.controlFamily ||
-    state.severity,
-  );
-  const hasQuery = Boolean(state.query.trim());
-  const searchStarted = hasQuery || hasFilters;
+  const recordRows = useMemo(() => documents.map((document: any) => ({
+    document,
+    matchReason: matchReasonFor(document, state.query),
+    title: recordDisplayTitle({
+      id: document.id,
+      node_type: document.object_type,
+      metadata: { item_id: document.item_id, title: document.title },
+    }),
+    publication: catalogs.get(document.catalog_id) || document.catalog_name || document.catalog_id || "Publication unavailable",
+  })).filter((row: any) => {
+    if (!connectedOnly) return true;
+    return bundle.runtime.getEdgesForNode(row.document.id, { publication_status: "published" }).length > 0;
+  }), [bundle.runtime, catalogs, connectedOnly, documents, state.query]);
 
-  const documents = useMemo(() => {
-    return searchStarted
-      ? bundle.runtime.searchLibrary(state.query, filters)
-      : [];
-  }, [
-    bundle.runtime,
-    searchStarted,
-    state.query,
-    state.filter,
-    state.objectType,
-    state.sourceClass,
-    state.controlFamily,
-    state.severity,
-  ]);
-
-  const glossaryMatches = useMemo(
-    () => (hasQuery ? searchGlossary(state.query) : []),
-    [hasQuery, state.query],
-  );
-  const resourceMatches = useMemo(
-    () =>
-      !hasQuery || hasFilters
-        ? { templates: [], artifacts: [] }
-        : searchExploreResources(state.query, {
-            templates: bundle.templateRegistry.templates || [],
-            artifacts: bundle.officialArtifactRegistry?.artifacts || [],
-          }),
-    [
-      bundle.officialArtifactRegistry,
-      bundle.templateRegistry,
-      hasQuery,
-      hasFilters,
-      state.query,
-    ],
-  );
-  const directoryResources = useMemo(
-    () =>
-      !hasQuery || hasFilters
-        ? []
-        : searchResourceDocuments(
-            bundle.commonsSearchIndex?.documents || [],
-            state.query,
-            8,
-          ).map((entry) => entry.document),
-    [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query],
-  );
+  const directoryResources = useMemo(() => !hasQuery || hasFilters ? [] : searchResourceDocuments(bundle.commonsSearchIndex?.documents || [], state.query, 12).map((entry) => entry.document), [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query]);
   const guideMatches = useMemo(() => {
-    const needle = state.query.trim().toLowerCase();
-    if (!needle || hasFilters) return [];
-    return practitionerGuides
-      .filter((guide) =>
-        [guide.title, guide.summary, guide.whereItSits, guide.whenItMatters]
-          .join(" ")
-          .toLowerCase()
-          .includes(needle),
-      )
-      .slice(0, 5);
+    const query = state.query.trim().toLocaleLowerCase();
+    return !query || hasFilters ? [] : practitionerGuides.filter((guide) => [guide.title, guide.summary, guide.whereItSits, guide.whenItMatters].join(" ").toLocaleLowerCase().includes(query)).slice(0, 8);
   }, [hasFilters, state.query]);
   const sourceMatches = useMemo(() => {
-    const needle = state.query.trim().toLowerCase();
-    if (!needle || hasFilters) return [];
-    return (bundle.runtime.dataset.sources || [])
-      .filter((source: any) =>
-        [
-          source.id,
-          source.display_name,
-          source.name,
-          source.publisher,
-          source.agency,
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase()
-          .includes(needle),
-      )
-      .slice(0, 5);
+    const query = state.query.trim().toLocaleLowerCase();
+    return !query || hasFilters ? [] : (bundle.runtime.dataset.sources || []).filter((source: any) => [source.id, source.display_name, source.name, source.publisher, source.agency].filter(Boolean).join(" ").toLocaleLowerCase().includes(query)).slice(0, 8);
   }, [bundle.runtime, hasFilters, state.query]);
+  const resourceMatches = useMemo(() => !hasQuery || hasFilters ? { templates: [], artifacts: [] } : searchExploreResources(state.query, { templates: bundle.templateRegistry.templates || [], artifacts: bundle.officialArtifactRegistry?.artifacts || [] }), [bundle.officialArtifactRegistry, bundle.templateRegistry, hasFilters, hasQuery, state.query]);
+  const glossaryMatches = useMemo(() => hasQuery && !hasFilters ? searchGlossary(state.query).slice(0, 8) : [], [hasFilters, hasQuery, state.query]);
 
-  const catalogCoverage = useMemo(
-    () => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1),
-    [bundle.runtime],
-  );
+  const unifiedResults = useMemo(() => {
+    const rows: any[] = [
+      ...recordRows.map((row: any) => ({ key: `record:${row.document.id}`, kind: "record", title: row.title, identifier: row.document.item_id || row.document.id, publication: row.publication, rank: RELEVANCE_ORDER[row.matchReason] ?? 9, payload: row })),
+      ...guideMatches.map((guide) => ({ key: `guide:${guide.id}`, kind: "guide", title: guide.title, identifier: guide.id, publication: "Control Atlas", rank: 6, payload: guide })),
+      ...directoryResources.map((resource: any) => ({ key: `resource:${resource.id}`, kind: "resource", title: resource.name, identifier: resource.id, publication: resource.publisher, rank: 6, payload: resource })),
+      ...sourceMatches.map((source: any) => ({ key: `source:${source.id}`, kind: "source", title: source.display_name || source.name || source.id, identifier: source.id, publication: source.publisher || source.agency || "Source owner", rank: 6, payload: source })),
+      ...resourceMatches.templates.map((template: any) => ({ key: `template:${template.id}`, kind: "template", title: template.title, identifier: template.id, publication: "Control Atlas", rank: 7, payload: template })),
+      ...resourceMatches.artifacts.map((artifact: any) => ({ key: `artifact:${artifact.id}`, kind: "artifact", title: artifact.title, identifier: artifact.id, publication: artifact.publisher || "Official source", rank: 7, payload: artifact })),
+      ...glossaryMatches.map((entry: any) => ({ key: `glossary:${entry.id}`, kind: "glossary", title: entry.term, identifier: entry.id, publication: "Control Atlas glossary", rank: 8, payload: entry })),
+    ];
+    const byText = (key: "title" | "identifier" | "publication") => (left: any, right: any) => String(left[key]).localeCompare(String(right[key]), undefined, { numeric: true, sensitivity: "base" });
+    if (state.sort === "identifier") return rows.sort(byText("identifier"));
+    if (state.sort === "title") return rows.sort(byText("title"));
+    if (state.sort === "publication") return rows.sort(byText("publication"));
+    return rows.sort((left, right) => left.rank - right.rank || byText("title")(left, right));
+  }, [directoryResources, glossaryMatches, guideMatches, recordRows, resourceMatches.artifacts, resourceMatches.templates, sourceMatches, state.sort]);
 
-  const documentRows = useMemo(
-    () =>
-      documents.map((document: any) => {
-        const source = bundle.runtime.getSource(document.source_id);
-        const node = bundle.runtime.getNode(document.id);
-        const relationshipCount = node
-          ? bundle.runtime.getEdgesForNode(node.id, {
-              publication_status: "published",
-            }).length
-          : 0;
-        const lowCoverage = isLowCatalogCoverage(
-          catalogCoverageForId(catalogCoverage, document.catalog_id),
-        );
-        const matchReason = matchReasonFor(document, state.query);
-        return { document, node, relationshipCount, source, lowCoverage, matchReason };
-      }),
-    [bundle.runtime, catalogCoverage, documents, state.query],
-  );
+  const activeFilters = [
+    state.filter && { key: "filter", label: catalogs.get(state.filter) || state.filter },
+    state.objectType && { key: "objectType", label: displayNameFor("object_type", state.objectType) },
+    state.sourceClass && { key: "sourceClass", label: displayNameFor("provenance_class", state.sourceClass) },
+    state.controlFamily && { key: "controlFamily", label: state.controlFamily },
+    state.severity && { key: "severity", label: state.severity },
+    connectedOnly && { key: "connectedOnly", label: "Has connections" },
+  ].filter(Boolean) as Array<{ key: keyof SearchState; label: string }>;
 
-  const visibleDocumentRows = useMemo(
-    () =>
-      connectionsOnly
-        ? documentRows.filter((row) => row.relationshipCount > 0)
-        : documentRows,
-    [connectionsOnly, documentRows],
-  );
-
-  const groupedDocuments = useMemo<Record<string, typeof documentRows>>(() => {
-    return visibleDocumentRows.reduce(
-      (groups: Record<string, any[]>, document: any) => {
-        const key = displayNameFor(
-          "object_type",
-          document.document.object_type,
-        );
-        groups[key] ||= [];
-        groups[key].push(document);
-        return groups;
-      },
-      {},
-    );
-  }, [visibleDocumentRows]);
-  // The runtime's own search returns ONLY exact identifier matches when any
-  // exist (never mixed with partial text matches) — reusing that same rule
-  // here, not inventing a new one, keeps this label honest.
-  const isExactResultSet =
-    hasQuery &&
-    visibleDocumentRows.length > 0 &&
-    visibleDocumentRows.every((row) => row.matchReason === "Exact identifier");
-  const hasVisibleResults =
-    visibleDocumentRows.length > 0 ||
-    glossaryMatches.length > 0 ||
-    directoryResources.length > 0 ||
-    resourceMatches.templates.length > 0 ||
-    resourceMatches.artifacts.length > 0 ||
-    guideMatches.length > 0 ||
-    sourceMatches.length > 0;
-  const directoryGroups = [
-    {
-      label: "Tools and resources",
-      resources: directoryResources.filter(
-        (resource) => resource.resourceType !== "community_forum",
-      ),
-    },
-    {
-      label: "Communities",
-      resources: directoryResources.filter(
-        (resource) => resource.resourceType === "community_forum",
-      ),
-    },
-  ].filter((group) => group.resources.length > 0);
-
-  // Bound the DOM: an empty query matches the whole library (9k+ records).
-  // Open every group only for small result sets; always cap the cards
-  // rendered per group so browsing stays responsive.
-  const GROUP_RENDER_CAP = 5;
-  const openAllGroups = visibleDocumentRows.length <= 10;
-  const defaultOpenGroups = [
-    ...directoryGroups.map((group) => group.label),
-    ...(resourceMatches.templates.length ? ["Templates"] : []),
-    ...(resourceMatches.artifacts.length ? ["Official resources"] : []),
-    ...(guideMatches.length ? ["Guides"] : []),
-    ...(sourceMatches.length ? ["Sources"] : []),
-    ...(glossaryMatches.length ? ["Glossary"] : []),
-    ...(openAllGroups
-      ? Object.keys(groupedDocuments)
-      : Object.keys(groupedDocuments).slice(0, 1)),
-  ];
-
-  const facets = bundle.runtime.getLibraryFacets();
+  const clearFilters = () => onNavigate("search", { filter: "", objectType: "", sourceClass: "", controlFamily: "", severity: "", connectedOnly: "" });
+  const filterProps = { bundle, connectedOnly, graphReady, state, onNavigate, onRequestFullGraph };
 
   return (
-    <>
-      <Panel
-        className="search-results-panel border-0 !bg-transparent p-0"
-        data-visual-identity="classified-research-search"
-      >
-        <header className="page-header" data-route-primary-header="true">
-          <div className="page-header-row">
-            <div>
-              <h1>Library</h1>
-              <p className="page-summary">
-                Search every published record, or browse the publications they
-                come from.
-              </p>
-            </div>
-            <div className="page-header-action">
-              <Button
-                onClick={() => onNavigate("catalog-detail", { catalog: "" })}
-                type="button"
-                variant="secondary"
-              >
-                Browse publications
-              </Button>
-            </div>
-          </div>
-        </header>
-        <form
-          className="search-results-query-row"
-          onSubmit={(event) => {
-            event.preventDefault();
-            resultsRef.current?.focus();
-          }}
-          role="search"
-        >
-          <label className="catalog-search search-results-query">
-            <IconSearch aria-hidden="true" size={18} />
-            <input
-              aria-label="Search query"
-              onChange={(event) => onNavigate("search", { query: event.target.value })}
-              placeholder="Search by identifier, title, or topic"
-              type="search"
-              value={state.query}
-            />
-          </label>
-          <Button type="submit" variant="secondary">
-            Search
-          </Button>
-        </form>
-        <Accordion.Root className="accordion-root" collapsible type="single">
-          <DisclosurePanel title="Refine results" value="filters">
-            <div className="filter-grid">
-              <SelectField
-                label="Catalog"
-                onChange={(value) =>
-                  onNavigate("search", { filter: value })
-                }
-                options={bundle.runtime.getCatalogs().map((catalog: any) => ({
-                  value: catalog.id,
-                  label: catalog.name,
-                }))}
-                value={state.filter}
-              />
-              <SelectField
-                label="Item type"
-                onChange={(value) =>
-                  onNavigate("search", { objectType: value })
-                }
-                options={facets.objectTypes.map((value: string) => ({
-                  value,
-                  label: displayNameFor("object_type", value),
-                }))}
-                value={state.objectType}
-              />
-              <SelectField
-                label="Source type"
-                onChange={(value) =>
-                  onNavigate("search", { sourceClass: value })
-                }
-                options={facets.sourceClasses.map((value: string) => ({
-                  value,
-                  label: displayNameFor("provenance_class", value),
-                }))}
-                value={state.sourceClass}
-              />
-              <SelectField
-                label="Control family"
-                onChange={(value) =>
-                  onNavigate("search", { controlFamily: value })
-                }
-                options={facets.controlFamilies.map((value: string) => ({
-                  value,
-                  label: value,
-                }))}
-                value={state.controlFamily}
-              />
-              <SelectField
-                label="Severity"
-                onChange={(value) =>
-                  onNavigate("search", { severity: value })
-                }
-                options={facets.severities.map((value: string) => ({
-                  value,
-                  label: value,
-                }))}
-                value={state.severity}
-              />
-              <label className="connections-only-filter" htmlFor="connections-only">
-                <input
-                  checked={connectionsOnly}
-                  id="connections-only"
-                  onChange={(event) => {
-                    const checked = event.target.checked;
-                    onNavigate("search", {
-                      ...state,
-                      connectedOnly: checked ? "true" : "",
-                    });
-                    if (checked && !graphReady) {
-                      onRequestFullGraph();
-                    }
-                  }}
-                  type="checkbox"
-                />
-                Only show items with published connections
-              </label>
-            </div>
-          </DisclosurePanel>
-        </Accordion.Root>
-        {connectionsOnly && !graphReady ? (
-          <p className="notice-inline" role="status">
-            Loading connection data for this filter…
-          </p>
-        ) : null}
+    <Panel className="search-results-panel border-0 !bg-transparent p-0" data-visual-identity="classified-research-search">
+      <header className="page-header" data-route-primary-header="true">
+        <div className="page-header-row">
+          <div><h1>Library</h1><p className="page-summary">One ranked view across published records, guides, documents, resources, communities, and sources.</p></div>
+          <Button onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button" variant="secondary">Browse publications</Button>
+        </div>
+      </header>
 
-        {searchStarted && hasVisibleResults && visibleDocumentRows.length ? (
-          <p className="notice-inline" role="status">
-            {isExactResultSet
-              ? `Exact match${visibleDocumentRows.length === 1 ? "" : "es"} for "${state.query}".`
-              : `Published text matches for "${state.query}" — each result below shows why it matched.`}
-          </p>
-        ) : null}
+      <form className="search-results-query-row" onSubmit={(event) => { event.preventDefault(); if (!composingRef.current) resultsRef.current?.focus(); }} role="search">
+        <label className="catalog-search search-results-query">
+          <IconSearch aria-hidden="true" size={18} />
+          <input aria-label="Search query" id="library-search-query" name="query" onChange={(event) => onNavigate("search", { query: event.target.value })} onCompositionEnd={() => { composingRef.current = false; }} onCompositionStart={() => { composingRef.current = true; }} placeholder="Search by identifier, title, or topic" type="search" value={state.query} />
+        </label>
+        <Button type="submit" variant="secondary">Search</Button>
+      </form>
 
-        {searchStarted && hasVisibleResults ? (
-          <Accordion.Root
-            aria-label="Search results"
-            className="accordion-root search-result-groups"
-            defaultValue={defaultOpenGroups}
-            id="library-results"
-            key={state.query}
-            ref={resultsRef}
-            tabIndex={-1}
-            type="multiple"
-          >
-            {visibleDocumentRows.length ? (
-              <p className="result-meta search-result-section-label">
-                Published records ({visibleDocumentRows.length})
-              </p>
-            ) : null}
-            {Object.entries(groupedDocuments as Record<string, any[]>).map(
-              ([group, entries]) => (
-                <DisclosurePanel
-                  key={group}
-                  title={`${group} (${entries.length})`}
-                  value={group}
-                >
-                  <div className="stack">
-                    {entries
-                      .slice(0, GROUP_RENDER_CAP)
-                      .map(
-                        ({
-                          document,
-                          node,
-                          relationshipCount,
-                          source,
-                          lowCoverage,
-                          matchReason,
-                        }) => {
-                        return (
-                           <article
-                             className="result-card"
-                             data-result-class="published-record"
-                            key={document.id}
-                            aria-labelledby={`title-${document.id}`}
-                            // Only set when the description paragraph is
-                            // actually rendered — a dangling reference points
-                            // assistive tech at nothing.
-                            aria-describedby={
-                              document.description_available
-                                ? undefined
-                                : `desc-${document.id}`
-                            }
-                          >
-                            <div className="result-card-header">
-                              <div>
-                                <p className="result-meta">
-                                  {displayNameFor(
-                                    "object_type",
-                                    document.object_type,
-                                  )}
-                                </p>
-                                <CardTitle
-                                  id={`title-${document.id}`}
-                                  onOpen={() =>
-                                    onOpenNode(document.id, "search")
-                                  }
-                                >
-                                  {recordDisplayTitle(
-                                    node ?? {
-                                      id: document.id,
-                                      node_type: document.object_type,
-                                      metadata: {
-                                        item_id: document.item_id,
-                                        title: document.title,
-                                      },
-                                    },
-                                  )}
-                                </CardTitle>
-                              </div>
-                              <div className="result-card-badges">
-                                {hasQuery && matchReason !== "Exact identifier" ? (
-                                  <span className="result-match-reason">
-                                    {matchReason}
-                                  </span>
-                                ) : null}
-                                {relationshipCount > 0 ? (
-                                  <Badge tone="info">
-                                    {relationshipCount} connections
-                                  </Badge>
-                                ) : graphReady ? (
-                                  <span className="no-connections">
-                                    No connections yet
-                                  </span>
-                                ) : null}
-                                {lowCoverage ? (
-                                  <Badge tone="warning">Limited coverage</Badge>
-                                ) : null}
-                              </div>
-                            </div>
-                            {/* When a description exists the card used to say
-                                "Open this record to read the published text."
-                                on every single result — an instruction the
-                                Open record button already gives. Only the
-                                absence is worth stating. */}
-                            {document.description_available ? null : (
-                              <p className="result-summary" id={`desc-${document.id}`}>
-                                No narrative description was published for this
-                                record.
-                              </p>
-                            )}
-                            <div className="result-support">
-                              <span>
-                                Source:{" "}
-                                {source?.display_name ||
-                                  source?.name ||
-                                  document.source_name ||
-                                  "Source unavailable"}
-                              </span>
-                              {source?.provenance_class ||
-                              document.source_class ? (
-                                <ProvenanceTerm
-                                  kind="provenance"
-                                  value={
-                                    source?.provenance_class ||
-                                    document.source_class
-                                  }
-                                />
-                              ) : null}
-                            </div>
-                            <div className="card-actions">
-                              <Button
-                                variant="primary"
-                                onClick={() => onOpenNode(document.id, "search")}
-                                type="button"
-                              >
-                                Open record
-                              </Button>
-                              <details className="result-actions-menu">
-                                <summary>More actions</summary>
-                                <div className="result-actions-popover">
-                                  {relationshipCount > 0 || !graphReady ? (
-                                    <Button
-                                      variant="secondary"
-                                      onClick={() =>
-                                        openAtlasMapForNode(
-                                          onNavigate,
-                                          document.id,
-                                        )
-                                      }
-                                      type="button"
-                                    >
-                                      Open in the Atlas
-                                    </Button>
-                                  ) : null}
-                                  <Button
-                                    variant="secondary"
-                                    onClick={() =>
-                                      onNavigate("matrix", {
-                                        crosswalk: "relationships",
-                                        items: document.item_id,
-                                      })
-                                    }
-                                    type="button"
-                                  >
-                                    Compare
-                                  </Button>
-                                  <Button
-                                    variant="secondary"
-                                    onClick={() =>
-                                      navigator.clipboard?.writeText(
-                                        `${window.location.origin}${window.location.pathname}${serializeHashUrl(
-                                          {
-                                            view: "library-detail",
-                                            node: document.id,
-                                            from: "search",
-                                          },
-                                        )}`,
-                                      )
-                                    }
-                                    type="button"
-                                  >
-                                    Copy link
-                                  </Button>
-                                </div>
-                              </details>
-                            </div>
-                          </article>
-                        );
-                      })}
-                    {entries.length > GROUP_RENDER_CAP ? (
-                      <p className="muted">
-                        Showing the first {GROUP_RENDER_CAP} of {entries.length}
-                        . Search or use “Refine results” to narrow this list.
-                      </p>
-                    ) : null}
+      <div className="search-toolbar">
+        <div aria-live="polite" className="search-result-count">
+          {searchStarted ? `${unifiedResults.length.toLocaleString()} result${unifiedResults.length === 1 ? "" : "s"}` : "Enter a search or choose a filter"}
+        </div>
+        <label className="search-sort">
+          <span>Sort</span>
+          <select aria-label="Sort search results" onChange={(event) => onNavigate("search", { sort: event.target.value })} value={state.sort || "relevance"}>
+            <option value="relevance">Relevance</option><option value="identifier">Identifier</option><option value="title">Title</option><option value="publication">Publication or source</option>
+          </select>
+        </label>
+        <Button className="search-mobile-filter-button" onClick={() => setFiltersOpen(true)} type="button" variant="secondary">
+          <IconAdjustmentsHorizontal aria-hidden="true" size={17} /> Filters{activeFilters.length ? ` (${activeFilters.length})` : ""}
+        </Button>
+      </div>
+
+      {activeFilters.length ? (
+        <div aria-label="Active filters" className="active-filter-row">
+          {activeFilters.map((filter) => <button className="active-filter-chip" key={filter.key} onClick={() => onNavigate("search", { [filter.key]: "" })} type="button">{filter.label}<IconX aria-hidden="true" size={13} /></button>)}
+          <button className="clear-filter-link" onClick={clearFilters} type="button">Clear all</button>
+        </div>
+      ) : null}
+
+      <div className="search-results-layout">
+        <aside aria-label="Search filters" className="search-filter-rail">
+          <div className="search-filter-heading"><strong>Filter results</strong>{activeFilters.length ? <button onClick={clearFilters} type="button">Clear all</button> : null}</div>
+          <FilterControls {...filterProps} />
+        </aside>
+
+        <div aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="search-result-list" id="library-results" ref={resultsRef} tabIndex={-1}>
+          {connectedOnly && !graphReady ? <p className="notice-inline" role="status">Loading connection data for this filter…</p> : null}
+          {unifiedResults.slice(0, visibleCount).map((result: any) => {
+            if (result.kind === "record") {
+              const row = result.payload;
+              const node = detailsReady ? bundle.runtime.getNode(row.document.id) : null;
+              const source = detailsReady ? bundle.runtime.getSource(row.document.source_id) : null;
+              const relationshipCount = detailsReady
+                ? bundle.runtime.getEdgesForNode(row.document.id, { publication_status: "published" }).length
+                : 0;
+              const path = detailsReady
+                ? (node?.ancestor_path || []).slice(-3).map((entry: any) => entry.label).filter(Boolean).join(" › ")
+                : "";
+              const lowCoverage = detailsReady
+                ? isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, row.document.catalog_id))
+                : false;
+              const excerpt = officialTextPreview(row.document.description || row.document.summary || "No narrative description was published for this record.", 220).preview;
+              return (
+                <article aria-labelledby={`title-${row.document.id}`} className="search-result-row" data-result-class="published-record" key={result.key}>
+                  <div className="search-result-row__type">{displayNameFor("object_type", row.document.object_type)}</div>
+                  <div className="search-result-row__body">
+                    <h2 id={`title-${row.document.id}`}><button className="search-result-primary" onClick={() => onOpenNode(row.document.id, "search")} type="button">{row.title}</button></h2>
+                    <p className="search-result-row__source">{source?.display_name || source?.name || row.document.source_name || "Source unavailable"} · {row.publication}</p>
+                    {detailsReady && path ? <p className="search-result-row__path">{path}</p> : null}
+                    {detailsReady ? <p className="search-result-row__excerpt">{excerpt}</p> : null}
+                    {detailsReady ? <div className="search-result-row__signals">
+                      <span>{row.matchReason}</span>
+                      <span>{relationshipCount.toLocaleString()} published connection{relationshipCount === 1 ? "" : "s"}</span>
+                      {lowCoverage ? <Badge tone="warning">Limited coverage</Badge> : null}
+                    </div> : null}
                   </div>
-                </DisclosurePanel>
-              ),
-            )}
-            {directoryGroups.map((group) => (
-              <DisclosurePanel
-                key={group.label}
-                title={`${group.label} (${group.resources.length})`}
-                value={group.label}
-              >
-                <div className="stack">
-                  {group.resources.map((resource) => (
-                    <article
-                      aria-describedby={`desc-${resource.id}`}
-                      aria-labelledby={`title-${resource.id}`}
-                       className="result-card"
-                       data-result-class={
-                         resource.resourceType === "community_forum"
-                           ? "practitioner-community"
-                           : "ecosystem-resource"
-                       }
-                      key={resource.id}
-                    >
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">External resource</p>
-                          <CardTitle
-                            id={`title-${resource.id}`}
-                            onOpen={() =>
-                              onNavigate("commons-detail", {
-                                id: resource.id,
-                                from: "search",
-                              })
-                            }
-                          >
-                            {resource.name}
-                          </CardTitle>
-                        </div>
-                        <Badge tone="info">
-                          {resourceTypeLabel(resource.resourceType)}
-                        </Badge>
-                      </div>
-                      <p className="result-summary" id={`desc-${resource.id}`}>
-                        {resource.summary}
-                      </p>
-                      <p className="result-match-reason">
-                        Why matched: directory metadata
-                      </p>
-                      <p className="result-support">
-                        Owner: {resource.publisher} · {resourceAccessLabel(resource)}
-                      </p>
-                    </article>
-                  ))}
+                  {detailsReady ? <div className="search-result-row__actions">
+                    <button onClick={() => openAtlasMapForNode(onNavigate, row.document.id)} type="button">Open in Atlas</button>
+                    <button onClick={() => onNavigate("matrix", { crosswalk: "relationships", items: row.document.item_id })} type="button">Compare</button>
+                    <button onClick={() => navigator.clipboard?.writeText(`${window.location.origin}${window.location.pathname}${serializeHashUrl({ view: "library-detail", node: row.document.id, from: "search" })}`)} type="button">Copy link</button>
+                  </div> : null}
+                </article>
+              );
+            }
+            const item = result.payload;
+            const meta: Record<string, { type: string; summary: string; action: () => void }> = {
+              guide: { type: "Practitioner guide", summary: item.summary, action: () => onNavigate("patterns", { pattern: item.id }) },
+              resource: { type: item.resourceType === "community_forum" ? "Community" : resourceTypeLabel(item.resourceType), summary: item.summary, action: () => onNavigate("commons-detail", { id: item.id, from: "search" }) },
+              source: { type: "Source register", summary: `Publisher: ${item.publisher || item.agency || "Source owner"}`, action: () => onNavigate("sources", { source: item.id }) },
+              template: { type: "Starter document", summary: item.summary, action: () => onNavigate("templates", { templateType: item.templateType }) },
+              artifact: { type: "Official resource", summary: item.summary, action: () => { if (item.href) window.open(item.href, "_blank", "noopener,noreferrer"); } },
+              glossary: { type: "Glossary", summary: item.definition, action: () => onOpenGlossary(item.id) },
+            };
+            const view = meta[result.kind];
+            return (
+              <article aria-labelledby={`title-${result.key}`} className="search-result-row search-result-row--universal" data-result-class={result.kind} key={result.key}>
+                <div className="search-result-row__type">{view.type}</div>
+                <div className="search-result-row__body">
+                  <h2 id={`title-${result.key}`}><button className="search-result-primary" onClick={view.action} type="button">{result.title}<IconArrowUpRight aria-hidden="true" size={15} /></button></h2>
+                  <p className="search-result-row__source">{result.publication}{result.kind === "resource" ? ` · ${resourceAccessLabel(item)}` : ""}</p>
+                  {detailsReady ? <p className="search-result-row__excerpt">{view.summary}</p> : null}
+                  {detailsReady ? <div className="search-result-row__signals"><span>Matched {view.type.toLocaleLowerCase()} metadata</span></div> : null}
                 </div>
-              </DisclosurePanel>
-            ))}
-            {resourceMatches.templates.length ? (
-              <DisclosurePanel
-                title={`Templates (${resourceMatches.templates.length})`}
-                value="Templates"
-              >
-                <div className="stack">
-                  {resourceMatches.templates.map((template: any) => (
-                    <article className="result-card" data-result-class="starter-document" key={template.id} aria-labelledby={`title-${template.id}`} aria-describedby={`desc-${template.id}`}>
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">Starter template</p>
-                          <CardTitle
-                            id={`title-${template.id}`}
-                            onOpen={() =>
-                              onNavigate("templates", {
-                                templateType: template.templateType,
-                              })
-                            }
-                          >
-                            {template.title}
-                          </CardTitle>
-                        </div>
-                        <Badge tone="info">{template.classification}</Badge>
-                      </div>
-                      <p className="result-summary" id={`desc-${template.id}`}>{template.summary}</p>
-                      <p className="result-support">
-                        Owner: Control Atlas · Why matched: document metadata
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </DisclosurePanel>
-            ) : null}
-            {resourceMatches.artifacts.length ? (
-              <DisclosurePanel
-                title={`Official resources (${resourceMatches.artifacts.length})`}
-                value="Official resources"
-              >
-                <div className="stack">
-                  {resourceMatches.artifacts.map((artifact: any) => (
-                    <article className="result-card" data-result-class="official-resource" key={artifact.id} aria-labelledby={`title-${artifact.id}`} aria-describedby={`desc-${artifact.id}`}>
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">Official resource</p>
-                          <CardTitle id={`title-${artifact.id}`} href={artifact.href || undefined}>
-                            {artifact.title}
-                          </CardTitle>
-                        </div>
-                        <Badge
-                          tone={
-                            artifact.classification === "official_current"
-                              ? "success"
-                              : "warning"
-                          }
-                        >
-                          {displayNameFor(
-                            "compatibility_level",
-                            artifact.classification,
-                          )}
-                        </Badge>
-                      </div>
-                      <p className="result-summary" id={`desc-${artifact.id}`}>{artifact.summary}</p>
-                      <p className="result-match-reason">
-                        Why matched: official resource metadata
-                      </p>
-                      <p className="result-support">
-                        {artifact.version ? `Version: ${artifact.version}` : ""}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </DisclosurePanel>
-            ) : null}
-            {guideMatches.length ? (
-              <DisclosurePanel title={`Guides (${guideMatches.length})`} value="Guides">
-                <div className="stack">
-                  {guideMatches.map((guide) => (
-                    <article
-                      aria-labelledby={`title-guide-${guide.id}`}
-                      className="result-card"
-                      data-result-class="practitioner-guide"
-                      key={guide.id}
-                    >
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">Practitioner guide</p>
-                          <CardTitle
-                            id={`title-guide-${guide.id}`}
-                            onOpen={() => onNavigate("patterns", { pattern: guide.id })}
-                          >
-                            {guide.title}
-                          </CardTitle>
-                        </div>
-                        <Badge tone="info">Field manual</Badge>
-                      </div>
-                      <p className="result-summary">{guide.summary}</p>
-                      <p className="result-support">
-                        Owner: Control Atlas · Why matched: guide topic
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </DisclosurePanel>
-            ) : null}
-            {sourceMatches.length ? (
-              <DisclosurePanel title={`Sources (${sourceMatches.length})`} value="Sources">
-                <div className="stack">
-                  {sourceMatches.map((source: any) => (
-                    <article
-                      aria-labelledby={`title-source-${source.id}`}
-                      className="result-card"
-                      data-result-class="provenance-source"
-                      key={source.id}
-                    >
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">Source register entry</p>
-                          <CardTitle
-                            id={`title-source-${source.id}`}
-                            onOpen={() => onNavigate("sources", { source: source.id })}
-                          >
-                            {source.display_name || source.name || source.id}
-                          </CardTitle>
-                        </div>
-                        <Badge tone="success">Provenance</Badge>
-                      </div>
-                      <p className="result-support">
-                        Publisher: {source.publisher || source.agency || "Source owner"} · Why matched: source identity
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </DisclosurePanel>
-            ) : null}
-            {glossaryMatches.length ? (
-              <DisclosurePanel
-                title={`Glossary (${glossaryMatches.length})`}
-                value="Glossary"
-              >
-                <div className="stack">
-                  {glossaryMatches.map((entry) => (
-                    <article className="result-card" data-result-class="control-atlas-glossary" key={entry.id} aria-labelledby={`title-${entry.id}`} aria-describedby={`desc-${entry.id}`}>
-                      <div className="result-card-header">
-                        <div>
-                          <p className="result-meta">Glossary term</p>
-                          <CardTitle id={`title-${entry.id}`} onOpen={() => onOpenGlossary(entry.id)}>
-                            {entry.term}
-                            {entry.expansion ? ` · ${entry.expansion}` : ""}
-                          </CardTitle>
-                        </div>
-                        <Badge tone="info">Control Atlas explanation</Badge>
-                      </div>
-                      <p className="result-summary" id={`desc-${entry.id}`}>{entry.definition}</p>
-                      <p className="result-meta">Reference: {entry.source}</p>
-                      <div className="chip-row">
-                        {entry.related_patterns.map((patternId) => (
-                          <button
-                            className="chip"
-                            key={patternId}
-                            onClick={() =>
-                              onNavigate("patterns", { pattern: patternId })
-                            }
-                            type="button"
-                          >
-                            {PATTERN_RENAMES[patternId] || patternId}
-                          </button>
-                        ))}
-                        {entry.relatedTemplateIds.map((templateId) => (
-                          <button
-                            className="chip"
-                            key={templateId}
-                            onClick={() =>
-                              onNavigate("templates", {
-                                templateType: templateId,
-                              })
-                            }
-                            type="button"
-                          >
-                            {templateId.replaceAll("_", " ")}
-                          </button>
-                        ))}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </DisclosurePanel>
-            ) : null}
-          </Accordion.Root>
-        ) : connectionsOnly && documents.length > 0 ? (
-          <section className="empty-state">
-            <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
-            <h2>No matching connected records found.</h2>
-            <p>
-              Matching records exist, but none have published connections in the
-              current data.
-            </p>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                onNavigate("search", { ...state, connectedOnly: "" })
-              }
-              type="button"
-            >
-              Show all matching records
-            </Button>
+              </article>
+            );
+          })}
+
+          {visibleCount > 0 && unifiedResults.length > visibleCount ? <Button onClick={() => setVisibleCount((count) => count + 15)} type="button" variant="secondary">Show 15 more</Button> : null}
+          {searchStarted && unifiedResults.length === 0 ? (
+            <section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", objectType: "", sourceClass: "", controlFamily: "", severity: "", connectedOnly: "", sort: "relevance" })} type="button" variant="primary">Clear search</Button></section>
+          ) : !searchStarted ? <section className="empty-state subtle"><p className="muted">Try T1195.002, access control, encryption, or supply chain.</p></section> : null}
+        </div>
+      </div>
+
+      {filtersOpen ? createPortal((
+        <div className="search-filter-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setFiltersOpen(false); }}>
+          <section aria-label="Filter search results" aria-modal="true" className="search-filter-drawer" role="dialog">
+            <header><div><p className="eyebrow">Library</p><h2>Filter results</h2></div><button aria-label="Close filters" onClick={() => setFiltersOpen(false)} type="button"><IconX aria-hidden="true" size={20} /></button></header>
+            <FilterControls {...filterProps} />
+            <footer><Button onClick={() => setFiltersOpen(false)} type="button" variant="primary">Show {unifiedResults.length.toLocaleString()} results</Button>{activeFilters.length ? <Button onClick={clearFilters} type="button" variant="secondary">Clear all</Button> : null}</footer>
           </section>
-        ) : hasQuery || hasFilters ? (
-          <section className="empty-state">
-            <IconSparkles aria-hidden="true" size={24} stroke={1.8} />
-            <h2>No matching records found.</h2>
-            <p aria-live="polite">
-              Try searching by control ID, topic, baseline, CCI, or source.
-            </p>
-            <div className="card-actions">
-              <Button
-                variant="primary"
-                onClick={() =>
-                  onNavigate("search", {
-                    query: "",
-                    filter: "",
-                    objectType: "",
-                    sourceClass: "",
-                    controlFamily: "",
-                    severity: "",
-                  })
-                }
-                type="button"
-              >
-                Clear search
-              </Button>
-              <details>
-                <summary>Try another path</summary>
-                <div className="card-actions disclosure-actions">
-                  <Button variant="secondary" onClick={() => onNavigate("atlas-map")} type="button">Open the Atlas</Button>
-                </div>
-              </details>
-            </div>
-          </section>
-        ) : (
-          <section className="empty-state subtle">
-            <p className="muted">
-              Try encryption, access control, or passwords.
-            </p>
-          </section>
-        )}
-      </Panel>
-    </>
+        </div>
+      ), document.body) : null}
+    </Panel>
   );
 }

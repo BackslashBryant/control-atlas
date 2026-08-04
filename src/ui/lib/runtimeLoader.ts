@@ -290,12 +290,16 @@ export async function fetchArtifact(path: string) {
     // with it: the .then() never ran, so the uncompressed fallback never got
     // its turn. Under load that intermittently left Resources reporting an
     // empty directory. Any failure of the compressed path now falls through.
+    const parseOffThread = path.includes("library-search.json");
     try {
       const response = await fetch(compressedArtifactPath(path));
       if (response.ok && typeof DecompressionStream !== "undefined") {
         const ds = new DecompressionStream("gzip");
         const decompressedStream = response.body!.pipeThrough(ds);
-        return await new Response(decompressedStream).json();
+        const decompressedResponse = new Response(decompressedStream);
+        return parseOffThread
+          ? await parseJsonResponseOffThread(decompressedResponse)
+          : await decompressedResponse.json();
       }
     } catch {
       // Compressed fetch or decompression failed; use the uncompressed file.
@@ -304,7 +308,9 @@ export async function fetchArtifact(path: string) {
     if (!fallbackResponse.ok) {
       throw new Error(`Unable to load ${path}.`);
     }
-    return fallbackResponse.json();
+    return parseOffThread
+      ? parseJsonResponseOffThread(fallbackResponse)
+      : fallbackResponse.json();
   })();
   artifactCache.set(path, request);
 
@@ -314,6 +320,81 @@ export async function fetchArtifact(path: string) {
     artifactCache.delete(path);
     throw error;
   }
+}
+
+async function parseJsonResponseOffThread(response: Response) {
+  const bytes = await response.arrayBuffer();
+  if (typeof Worker === "undefined") {
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+  const worker = new Worker(
+    new URL("../workers/jsonParseWorker.ts", import.meta.url),
+    { type: "module" },
+  );
+  return new Promise<unknown>((resolve, reject) => {
+    worker.addEventListener("message", async (event: MessageEvent<
+      | { ok: true; value: unknown }
+      | { message: string; ok: false }
+    >) => {
+      worker.terminate();
+      if (event.data.ok === true) resolve(await expandLibrarySearchTransport(event.data.value));
+      else reject(new Error(event.data.message));
+    }, { once: true });
+    worker.addEventListener("error", (event) => {
+      worker.terminate();
+      reject(new Error(event.message || "Unable to parse the search index."));
+    }, { once: true });
+    worker.postMessage({ bytes }, [bytes]);
+  });
+}
+
+async function expandLibrarySearchTransport(value: unknown) {
+  if (!value || typeof value !== "object") return value;
+  const artifact = value as Record<string, unknown>;
+  const library = artifact.library_search;
+  if (!library || typeof library !== "object") return value;
+  const transport = library as {
+    transport_columns?: unknown[][];
+    transport_format?: string;
+  } & Record<string, unknown>;
+  if (
+    transport.transport_format !== "columns-v1" ||
+    !Array.isArray(transport.transport_columns) ||
+    transport.transport_columns.length !== 11
+  ) {
+    return value;
+  }
+  const columns = transport.transport_columns;
+  const documents: Array<Record<string, unknown>> = [];
+  const chunkSize = 500;
+  for (let index = 0; index < columns[0].length; index += chunkSize) {
+    const end = Math.min(index + chunkSize, columns[0].length);
+    for (let documentIndex = index; documentIndex < end; documentIndex += 1) {
+      documents.push({
+        id: columns[0][documentIndex],
+        item_id: columns[1][documentIndex],
+        title: columns[2][documentIndex],
+        description_available: columns[3][documentIndex],
+        object_type: columns[4][documentIndex],
+        source_id: columns[5][documentIndex],
+        source_name: columns[6][documentIndex],
+        source_class: columns[7][documentIndex],
+        catalog_id: columns[8][documentIndex],
+        control_family: columns[9][documentIndex],
+        severity: columns[10][documentIndex],
+      });
+    }
+    if (end < columns[0].length) {
+      await new Promise<void>((resume) => window.setTimeout(resume, 0));
+    }
+  }
+  const metadata = { ...transport };
+  delete metadata.transport_columns;
+  delete metadata.transport_format;
+  return {
+    ...artifact,
+    library_search: { ...metadata, documents },
+  };
 }
 
 export function compressedArtifactPath(path: string) {
@@ -537,6 +618,8 @@ export async function loadFullGraphPhase(
   fedrampTransitionIndex: FedrampTransitionIndex,
   commonsSearchIndex?: CommonsSearchIndex,
   commonsDataset?: CommonsResourceDataset,
+  catalogSummaries: Array<Record<string, any>> = [],
+  mappingSources: Record<string, Array<{ value: string; label: string }>> = {},
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
     fetchCollection(artifactPath("sources.json"), "sources"),
@@ -564,6 +647,8 @@ export async function loadFullGraphPhase(
     fedrampTransitionIndex,
     commonsSearchIndex,
     commonsDataset,
+    catalogSummaries,
+    mappingSources,
     routeReady: true,
     graphReady: true,
   };
@@ -868,6 +953,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       routePhase.fedrampTransitionIndex,
       routePhase.bundle.commonsSearchIndex,
       routePhase.bundle.commonsDataset,
+      routePhase.bundle.catalogSummaries || [],
+      routePhase.bundle.mappingSources || {},
     );
     handlers.onFullReady(fullBundle);
   } catch (error) {

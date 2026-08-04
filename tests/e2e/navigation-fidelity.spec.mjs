@@ -48,7 +48,7 @@ test('retired aliases resolve to an honest not-found state instead of a canonica
 
   await gotoApp(page, '/#/explore?q=AC-2&objectType=control');
   await expect(page).toHaveURL(/#\/explore$/);
-  await expect(page.locator('.atlas-trunk-banner')).toContainText('Cybersecurity');
+  await expect(page.getByRole('application', { name: 'Interactive Control Atlas hierarchy' })).toBeVisible();
 
   await gotoApp(page, '/#/commons-detail?id=official-nist-oscal');
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
@@ -87,7 +87,7 @@ test('header search submits to canonical Search and carries focus to results', a
   await expect(page.locator('#library-results')).toBeFocused({ timeout: 15000 });
 });
 
-test('Explore landing renders the trunk and limbs, not the heavy graph map UI', async ({ page }) => {
+test('Atlas landing renders the lightweight semantic hierarchy, not the relationship graph bundle', async ({ page }) => {
   test.setTimeout(90000);
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -95,10 +95,8 @@ test('Explore landing renders the trunk and limbs, not the heavy graph map UI', 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // The landing now renders the trunk + nine limbs (from the organizing spine),
-  // so it does load the graph data — but not the heavy react-flow relationship map.
-  await expect(page.locator('.atlas-trunk-banner')).toContainText('Cybersecurity');
-  await expect(page.locator('.atlas-limb-card')).toHaveCount(9);
-  await expect(page.locator('.react-flow')).toHaveCount(0);
+  await expect(page.getByRole('application', { name: 'Interactive Control Atlas hierarchy' })).toBeVisible();
+  await expect(page.locator('.atlas-universe__area')).toHaveCount(9);
+  await expect(page.locator('.react-flow')).toHaveCount(1);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });

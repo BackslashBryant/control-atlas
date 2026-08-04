@@ -103,11 +103,6 @@ export function WhereThisSitsRail(props: {
         const isOrganizing = segment.origin === "organizing";
         return (
           <Fragment key={segmentIndex}>
-            {segmentIndex > 0 ? (
-              <span aria-hidden="true" className="tree-path-rail-connector">
-                <IconChevronRight size={13} />
-              </span>
-            ) : null}
             <div
               className={
                 isOrganizing

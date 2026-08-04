@@ -41,10 +41,11 @@ export function TopNav(props: TopNavProps) {
   } = props;
 
   const activeView = activeNavForState(viewState);
-  // Kept in sync with styles/orbital.css's `@media (max-width: 1519px)` —
+  // Kept in sync with styles/orbital.css's desktop/mobile contract. Primary
+  // product navigation remains visible at ordinary desktop widths.
   // see that rule's comment for the width budget this threshold is based on.
-  const compactNavigation = useMediaMatch("(max-width: 1519px)");
-  const compactHeader = useMediaMatch("(max-width: 880px)");
+  const compactNavigation = useMediaMatch("(max-width: 1023px)");
+  const compactHeader = useMediaMatch("(max-width: 1279px)");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
@@ -147,7 +148,7 @@ export function TopNav(props: TopNavProps) {
       </button>
 
       {!compactNavigation ? (
-        <nav aria-label="Primary navigation" className="primary-nav ml-[32px] self-end mb-[-1px]">
+        <nav aria-label="Primary navigation" className="primary-nav ml-[16px] self-end mb-[-1px]">
           <Tabs
             tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
             activeId={activeView as string}
@@ -155,7 +156,7 @@ export function TopNav(props: TopNavProps) {
               const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
               if (item) navigate(item.view, item.patch);
             }}
-            className="border-b-0 h-full gap-[8px]"
+            className="border-b-0 h-full gap-[2px]"
           />
         </nav>
       ) : null}
