@@ -211,8 +211,8 @@ const correctionContracts = [
   {
     file: "src/ui/components/AtlasUniverse.tsx",
     rule: "atlas-promised-feature",
-    pattern: /atlasUniverseCollisions[\s\S]*Nine areas\. One traceable landscape/,
-    message: "The Atlas route must deliver a recognizable, collision-checked overview immediately.",
+    pattern: /atlasUniverseCollisions(?=[\s\S]*Authority roots)(?=[\s\S]*Cybersecurity)(?=[\s\S]*data-semantic-level)/,
+    message: "The Atlas route must deliver an authority-rooted, semantic-zoom, collision-checked tree immediately.",
   },
   {
     file: "src/index.html",

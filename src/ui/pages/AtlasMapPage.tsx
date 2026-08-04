@@ -1065,7 +1065,7 @@ function AtlasGuidedPath(props: {
     <section className="atlas-ancestry">
       <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
 
-      {!axis ? (
+      {!axis || axis === "landscape" ? (
         <AtlasUniverse
           areas={model.frameworkGroups}
           catalogSummaries={bundle.catalogSummaries || []}
@@ -1076,6 +1076,12 @@ function AtlasGuidedPath(props: {
               0,
             ) || bundle.runtime.dataset.nodes.length
           }
+          initialAreaId={axis === "landscape" ? openLimbId : ""}
+          initialFrameworkId={axis === "landscape" ? state.atlasFramework : ""}
+          onExpandArea={(area) => {
+            setOpenLimbId(area.id);
+            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
+          }}
           onOpenArea={(area) => {
             const destination = AREA_DESTINATIONS[area.id];
             if (area.frameworks.length === 0 && destination) {
@@ -1085,7 +1091,39 @@ function AtlasGuidedPath(props: {
             setOpenLimbId(area.id);
             resetDrill({ atlasAxis: "framework", atlasLimb: area.id });
           }}
-          onOpenProcess={() => resetDrill({ atlasAxis: "process" })}
+          onExpandFramework={(area, choice) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "landscape",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+            });
+          }}
+          onCollapseToArea={(area) => {
+            setOpenLimbId(area.id);
+            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
+          }}
+          onResetOverview={() => {
+            setOpenLimbId("");
+            resetDrill({});
+          }}
+          onOpenFramework={(area, choice) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "framework",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+            });
+          }}
+          onOpenUnit={(area, choice, unit) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "framework",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+              atlasFamily: unit.id,
+            });
+          }}
         />
       ) : null}
 
