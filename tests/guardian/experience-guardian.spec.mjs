@@ -73,6 +73,24 @@ test.describe("Control Atlas Experience Guardian", () => {
         expect(collisions, "Atlas overview labels must never collide").toEqual([]);
       }
 
+      if (state.id === "atlas-publications") {
+        if (viewport === "desktop") {
+          await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+          await expect(page.locator(".atlas-universe__publication")).toHaveCount(3);
+        } else {
+          await expect(page.locator(".atlas-universe-mobile")).toContainText("Publications");
+        }
+      }
+
+      if (state.id === "atlas-structure") {
+        if (viewport === "desktop") {
+          await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+          await expect(page.locator(".atlas-universe__unit").first()).toBeVisible();
+        } else {
+          await expect(page.locator(".atlas-universe-mobile")).toContainText("Publisher structure");
+        }
+      }
+
       if (["mixed-search", "exact-search", "filtered-search"].includes(state.id)) {
         await expect(page.locator(".search-result-count")).toBeVisible();
         await expect(page.locator(".search-sort select")).toBeVisible();

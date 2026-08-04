@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   ATLAS_UNIVERSE_POSITIONS,
   atlasUniverseCollisions,
-} from "../../src/ui/components/AtlasUniverse";
+} from "../../src/ui/lib/atlasUniverse";
 
 test("Atlas universe places every area exactly once without collisions", () => {
   assert.equal(ATLAS_UNIVERSE_POSITIONS.length, 9);

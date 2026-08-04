@@ -119,9 +119,36 @@ test("Atlas first paint is a collision-free nine-area circuit tree with drill-do
   await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
   const collisions = await visibleCollisions(page.locator(".atlas-universe__area:visible"));
   expect(collisions).toEqual([]);
+  await page.screenshot({
+    fullPage: true,
+    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-authority-tree-1440.png",
+  });
   await page.getByRole("button", { name: /Threats & Defense/ }).click();
-  await expect(page.getByText(/which catalog do you want to open/i)).toBeVisible();
+  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await expect(page).toHaveURL(/atlasAxis=landscape/);
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-THREAT/);
+  await expect(page.getByText(/split into the publications organized here/i)).toBeVisible();
+  await expect(page.locator(".atlas-universe__publication")).toHaveCount(3);
+  expect(await visibleCollisions(page.locator(".atlas-universe__publication:visible"), 8)).toEqual([]);
+  await page.screenshot({
+    fullPage: true,
+    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-publications-1440.png",
+  });
+  await page.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/i }).click();
+  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+  await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
+  await expect(page.getByText(/publisher-declared top-level structure/i)).toBeVisible();
+  await page.screenshot({
+    fullPage: true,
+    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-native-structure-1440.png",
+  });
+  await page.reload();
+  await waitForReady(page);
+  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+  await page.goBack();
+  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await page.goForward();
+  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
 });
 
 test("focused Atlas map never overlaps its center or relationship spokes", async ({ page }) => {

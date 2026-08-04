@@ -537,6 +537,8 @@ export async function loadFullGraphPhase(
   fedrampTransitionIndex: FedrampTransitionIndex,
   commonsSearchIndex?: CommonsSearchIndex,
   commonsDataset?: CommonsResourceDataset,
+  catalogSummaries: Array<Record<string, any>> = [],
+  mappingSources: Record<string, Array<{ value: string; label: string }>> = {},
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
     fetchCollection(artifactPath("sources.json"), "sources"),
@@ -564,6 +566,8 @@ export async function loadFullGraphPhase(
     fedrampTransitionIndex,
     commonsSearchIndex,
     commonsDataset,
+    catalogSummaries,
+    mappingSources,
     routeReady: true,
     graphReady: true,
   };
@@ -868,6 +872,8 @@ export async function loadRuntimeDatasetStaged(handlers: {
       routePhase.fedrampTransitionIndex,
       routePhase.bundle.commonsSearchIndex,
       routePhase.bundle.commonsDataset,
+      routePhase.bundle.catalogSummaries || [],
+      routePhase.bundle.mappingSources || {},
     );
     handlers.onFullReady(fullBundle);
   } catch (error) {
