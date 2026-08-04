@@ -24,11 +24,10 @@
 </head>
 <body>
   <div id="root">
-    <div data-static-home hidden>
     <a class="skip-link" data-skip-workspace href="#workspace">Skip to workspace</a>
     <!-- The same persistent header React renders on every route. It paints
          before React boots so Home never appears without global navigation. -->
-    <header class="site-header">
+    <header class="site-header" data-static-header>
       <button aria-label="Control Atlas &mdash; home" class="brand" data-route="#/" type="button">
         <span aria-hidden="true" class="brand-icon-mark">
           <svg fill="none" viewBox="0 0 80 80">
@@ -58,6 +57,7 @@
         <button data-route="#/build" type="button">Documents</button>
       </nav>
       <div class="header-actions">
+        <button aria-label="Open search" class="button button--secondary header-search-trigger" data-static-search-open type="button"><svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span>Search</span></button>
         <nav aria-label="Utility navigation" class="header-actions-text">
           <button data-route="#/resources" type="button">Resources</button>
           <button data-route="#/sources" type="button">Sources</button>
@@ -71,6 +71,7 @@
         </button>
       </div>
     </header>
+    <div data-static-home hidden>
     <main id="workspace" tabindex="-1">
       <section
         aria-busy="false"
@@ -184,6 +185,8 @@
           <input
             aria-label="Search by ID, title, or topic"
             data-static-search-input
+            id="static-library-search"
+            name="query"
             placeholder="encryption, access control, passwords"
             type="search"
           >
@@ -191,6 +194,19 @@
         <button class="button button--primary" type="submit">Search</button>
       </form>
     </section>
+    <div
+      aria-atomic="true"
+      aria-live="polite"
+      class="route-transition"
+      data-route-transition
+      hidden
+      role="status"
+    >
+      <span aria-hidden="true" class="route-transition__circuit">
+        <i></i><i></i><i></i>
+      </span>
+      <span data-route-transition-status>Opening the next workspace</span>
+    </div>
     <div data-react-root></div>
   </div>
   <noscript>Control Atlas needs JavaScript to load the public compliance workspace.</noscript>

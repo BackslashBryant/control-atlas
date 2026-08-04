@@ -24,6 +24,8 @@
   "states": [
     { "id": "home", "route": "home", "path": "/#/", "viewports": ["desktop", "mobile"], "expectedIdentity": "universal-front-door" },
     { "id": "start-here", "route": "start-here", "path": "/#/start?goal=implement", "viewports": ["desktop", "mobile"], "expectedIdentity": "task-intake-compass" },
+    { "id": "start-here-complete", "route": "start-here", "path": "/#/start?goal=implement&context=cui", "viewports": ["desktop", "mobile"], "expectedIdentity": "task-intake-compass" },
+    { "id": "atlas-overview", "route": "atlas-map", "path": "/#/explore", "viewports": ["desktop", "mobile"], "expectedIdentity": "technical-cartography" },
     { "id": "atlas", "route": "atlas-map", "path": "/#/explore?node=nist-800-53%3AAC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "technical-cartography" },
     { "id": "library", "route": "catalog-detail", "path": "/#/catalog", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-library" },
     { "id": "control-rich", "route": "library-detail", "path": "/#/record/nist-800-53/AC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
@@ -33,6 +35,8 @@
     { "id": "supply-chain", "route": "library-detail", "path": "/#/record/nist-800-171/3.17.1", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
     { "id": "record-sparse", "route": "library-detail", "path": "/#/record/cmmc-2/LEVEL-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "publisher-research-record", "officialBeforeEditorial": true },
     { "id": "mixed-search", "route": "search", "path": "/#/search?q=supply%20chain", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search" },
+    { "id": "exact-search", "route": "search", "path": "/#/search?q=T1195.002", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search" },
+    { "id": "filtered-search", "route": "search", "path": "/#/search?q=access&objectType=control&sort=identifier", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search" },
     { "id": "search-empty", "route": "search", "path": "/#/search?q=zzzz-no-result-zzzz", "viewports": ["desktop", "mobile"], "expectedIdentity": "classified-research-search", "scenario": "empty" },
     { "id": "compare", "route": "matrix", "path": "/#/compare?crosswalk=relationships&source=nist-800-53&items=AC-2", "viewports": ["desktop", "mobile"], "expectedIdentity": "aligned-analysis-workbench" },
     { "id": "guides", "route": "patterns", "path": "/#/learn?pattern=implementing-controls", "viewports": ["desktop", "mobile"], "expectedIdentity": "practitioner-field-manual" },

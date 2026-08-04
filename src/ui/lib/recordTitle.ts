@@ -16,6 +16,33 @@ type TitledNode = {
   metadata?: { item_id?: string; title?: string; catalog_id?: string };
 };
 
+/**
+ * Construct one identifier-led title without repeating an identifier the
+ * publisher already placed at the beginning of the official title.
+ *
+ * The boundary check is intentionally narrow. It removes only a leading,
+ * standalone identifier (case-insensitive), while preserving the same token
+ * when it appears later in legitimate official text.
+ */
+export function formatRecordTitle(itemId: string, officialTitle: string): string {
+  const identifier = itemId.trim();
+  const title = officialTitle.trim();
+  if (!identifier) return title;
+  if (!title) return identifier;
+  if (title.toLocaleLowerCase() === identifier.toLocaleLowerCase()) {
+    return identifier;
+  }
+  const leadingIdentifier = title.slice(0, identifier.length);
+  const boundary = title.slice(identifier.length, identifier.length + 1);
+  if (
+    leadingIdentifier.toLocaleLowerCase() === identifier.toLocaleLowerCase() &&
+    (!boundary || boundary === "[" || boundary === "]" || /[-\s\u2013\u2014:|()]/.test(boundary))
+  ) {
+    return title;
+  }
+  return `${identifier} — ${title}`;
+}
+
 // Node types whose item_id is an internal scaffold id, not an official
 // designation — for these the title alone is the official name.
 const INTERNAL_ID_TYPES = new Set([
@@ -44,8 +71,7 @@ export function recordDisplayTitle(node: TitledNode | null | undefined): string 
   if (INTERNAL_ID_TYPES.has(node.node_type ?? "")) {
     return title;
   }
-  if (title.startsWith(itemId)) return title;
-  return `${itemId} — ${title}`;
+  return formatRecordTitle(itemId, title);
 }
 
 const BASE_TITLE = "Control Atlas";

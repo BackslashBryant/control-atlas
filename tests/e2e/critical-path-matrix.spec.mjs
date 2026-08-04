@@ -57,7 +57,7 @@ test("critical path: the Atlas Path walks to a published connected record", asyn
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
 
-test("critical path: Atlas Open full record leaves the path for record detail", async ({
+test("critical path: Atlas selected title leaves the map for record detail", async ({
   page,
 }) => {
   await gotoApp(
@@ -73,13 +73,9 @@ test("critical path: Atlas Open full record leaves the path for record detail", 
     .getByRole("button")
     .first()
     .click();
-  // Scoped to the selected-item inspector: the compact workspace header has
-  // its own "Open full record" for the CENTER record, which would otherwise
-  // make this ambiguous.
-  await page
-    .getByLabel(/record brief/)
-    .getByRole("button", { name: "Open full record" })
-    .click();
+  const brief = page.getByLabel(/record brief/);
+  await expect(brief.getByRole("button", { name: "Open full record" })).toHaveCount(0);
+  await brief.locator("h2 button").click();
 
   await expect(page).toHaveURL(/#\/record\//);
   await expect(page.locator(".detail-page")).toBeVisible();
@@ -100,7 +96,7 @@ test("critical path: record back returns to the original Explore results", async
       name: "AC-2 — Account Management",
       exact: true,
     })
-    .getByRole("button", { name: "Open record" })
+    .locator(".search-result-primary")
     .click();
   await expect(page.locator(".detail-page")).toBeVisible();
   await page

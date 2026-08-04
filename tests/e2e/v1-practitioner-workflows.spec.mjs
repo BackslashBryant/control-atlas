@@ -68,7 +68,7 @@ test("V1 workflow 05 — follow a record and return without losing search state"
       name: "AC-2 — Account Management",
       exact: true,
     })
-    .getByRole("button", { name: "Open record" })
+    .locator(".search-result-primary")
     .click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
   await page.getByRole("button", { name: "Back to results" }).click();
