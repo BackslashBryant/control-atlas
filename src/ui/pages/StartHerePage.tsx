@@ -93,6 +93,7 @@ export function StartHerePage(props: {
           <p className="eyebrow">Your starting plan</p>
           <h2 id="start-here-plan">Start with {publicationName(bundle, plan.startWith.catalogId)}</h2>
           <p>Because you chose <strong>{labelForGoal(plan.goalId).toLocaleLowerCase()}</strong> for a <strong>{labelForContext(plan.contextId).toLocaleLowerCase()}</strong>, begin with this publication and keep the official source attached.</p>
+          <p className="notice-inline">Control Atlas does not decide what applies to your system.</p>
           <div className="start-here-primary-destination">
             <span><small>Next destination</small><strong>{publicationName(bundle, plan.startWith.catalogId)} publication view</strong><span>Publisher structure, records, coverage status, and source links.</span></span>
             <Button onClick={() => onNavigate("catalog-detail", { catalog: plan.startWith.catalogId })} type="button" variant="primary">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></Button>

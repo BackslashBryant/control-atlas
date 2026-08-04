@@ -197,12 +197,12 @@ test("critical path: MITRE library search returns technique with plain-language 
   await dismissOnboarding(page);
 
   await expect(
-    page.locator("#library-results .result-card .card-title-action").first(),
+    page.locator("#library-results .search-result-primary").first(),
   ).toBeVisible({
     timeout: 90000,
   });
   await page
-    .locator("#library-results .result-card .card-title-action")
+    .locator("#library-results .search-result-primary")
     .first()
     .click();
   await expect(page).toHaveURL(/record\/mitre-attack|library-detail/);

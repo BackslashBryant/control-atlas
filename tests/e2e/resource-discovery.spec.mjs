@@ -54,9 +54,7 @@ test("Resources is reachable from utility navigation and global search reaches c
   await search.press("Enter");
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/search\?q=NISTControls/);
-  await expect(
-    page.getByRole("button", { name: /Communities \(\d+\)/ }),
-  ).toBeVisible();
+  await expect(page.locator('[data-result-class="resource"]')).toBeVisible();
 
   await page
     .getByRole("button", {

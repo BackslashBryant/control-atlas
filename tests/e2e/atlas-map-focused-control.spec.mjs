@@ -53,7 +53,7 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   await expect(panel.getByRole("button", { name: "AC-2.1", exact: true })).toBeVisible();
   await expect(panel.getByRole("button", { name: "See connections" })).toBeVisible();
   await expect(panel.getByRole("button", { name: "Open full record" })).toHaveCount(0);
-  await expect(page.locator(".atlas-record-title-link").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
   await expect(panel.getByRole("button", { name: "Review official source" })).toBeVisible();
 });
 
@@ -94,8 +94,9 @@ test("focused Hierarchy opens its publisher-declared parent without inventing an
     .getByRole("button", { name: "Access Control" })
     .click();
   await expect(
-    page.getByRole("heading", { name: /FAMILY-AC .+ Access Control/, level: 1 }),
+    page.getByRole("heading", { name: "Access Control (AC) family", level: 1 }),
   ).toBeVisible();
+  await expect(page.locator("#atlas-hierarchy-panel")).toContainText("FAMILY-AC");
   // Hierarchy re-opens on the newly focused record — relationshipView=path
   // survives the navigation, same as any other Atlas link.
   await expect(

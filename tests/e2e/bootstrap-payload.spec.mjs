@@ -59,7 +59,7 @@ test("explore bootstrap avoids graph JSON until record open", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
-    page.locator("#library-results .result-card").first(),
+    page.locator("#library-results .search-result-row").first(),
   ).toBeVisible({
     timeout: 15000,
   });
@@ -67,7 +67,7 @@ test("explore bootstrap avoids graph JSON until record open", async ({
   expect(graphArtifactUrls(requested)).toEqual([]);
 
   const openDetail = page
-    .locator("#library-results .result-card .card-title-action")
+    .locator("#library-results .search-result-primary")
     .first();
   await expect(openDetail).toBeEnabled({ timeout: 15000 });
   await openDetail.click();
