@@ -2,16 +2,21 @@
   "schema_version": "1.0",
   "policy": "Blocked relationships remain unpublished. Do not infer or normalize an ineligible endpoint into a displayable edge.",
   "findings": [
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:149", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "CP -> PR.IR-03", "reason": "CP is an SP 800-53 family identifier, not an eligible control record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:168", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "CP-04 -> RC.RP", "reason": "RC.RP is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:178", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "CP-10 -> RC.RP", "reason": "RC.RP is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:212", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "IR -> PR.IR-03", "reason": "IR is an SP 800-53 family identifier, not an eligible control record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:242", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "IR-04 -> RS.MA", "reason": "RS.MA is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:264", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "IR-07 -> RS.MA", "reason": "RS.MA is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:278", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "IR-08 -> RS.MA", "reason": "RS.MA is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:281", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "IR-09 -> RS.MA", "reason": "RS.MA is a CSF category identifier, not an eligible subcategory record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-csf:461", "source_id": "nist-olir-csf2-to-sp800-53", "upstream_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx", "rejected_reference": "PT -> GV.OC-03", "reason": "PT is an SP 800-53 family identifier, not an eligible control record node.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:424", "source_id": "dod-zt-overlays-2024", "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf", "rejected_reference": "EC-1 -> CAP-2-7", "reason": "EC-1 is not an SP 800-53 control identifier in the catalog.", "disposition": "blocked_not_published" },
-    { "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:694", "source_id": "dod-zt-overlays-2024", "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf", "rejected_reference": "SAC-16 -> CAP-6-1", "reason": "SAC-16 is not an SP 800-53 control identifier in the catalog.", "disposition": "blocked_not_published" }
+    {
+      "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:424",
+      "source_id": "dod-zt-overlays-2024",
+      "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "rejected_reference": "EC-1 -> CAP-2-7",
+      "reason": "EC-1 is not an SP 800-53 control identifier in the catalog.",
+      "disposition": "blocked_not_published"
+    },
+    {
+      "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:694",
+      "source_id": "dod-zt-overlays-2024",
+      "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "rejected_reference": "SAC-16 -> CAP-6-1",
+      "reason": "SAC-16 is not an SP 800-53 control identifier in the catalog.",
+      "disposition": "blocked_not_published"
+    }
   ]
 }

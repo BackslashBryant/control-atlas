@@ -1648,13 +1648,15 @@ function buildEdges(registry, nodes) {
     for (const [index, relationship] of (
       document.relationships || []
     ).entries()) {
-      const sourceNodeId = nodeId(
+      const sourceNodeId = resolveMapEndpointNodeId(
         relationship.source_catalog || sourceCatalog,
-        normalizeControlId(relationship.source_id),
+        relationship.source_id,
+        nodeIds,
       );
-      const targetNodeId = nodeId(
+      const targetNodeId = resolveMapEndpointNodeId(
         relationship.target_catalog || targetCatalog,
-        normalizeControlId(relationship.target_id),
+        relationship.target_id,
+        nodeIds,
       );
       const sourceId =
         relationship.evidence_source || document.source_key || defaultSourceId;
@@ -1692,6 +1694,30 @@ function buildEdges(registry, nodes) {
   addDodZeroTrustHierarchyEdges(state, registry, nodeIds);
   addCuiPolicyEdges(state, registry, nodeIds);
   return state;
+}
+
+/**
+ * OLIR mappings can name a publisher-native grouping concept rather than a
+ * leaf record. Preserve that distinction: an 800-53 family or CSF category
+ * must resolve to its real grouping node, never become a blocked leaf lookup
+ * or a made-up control-to-control mapping.
+ */
+function resolveMapEndpointNodeId(catalogId, rawId, nodeIds) {
+  const itemId = normalizeControlId(rawId);
+  const leafNodeId = nodeId(catalogId, itemId);
+  if (nodeIds.has(leafNodeId)) return leafNodeId;
+
+  if (catalogId === "nist-800-53" && /^[A-Z]{2}$/.test(itemId)) {
+    const familyNodeId = nodeId(catalogId, `FAMILY-${itemId}`);
+    if (nodeIds.has(familyNodeId)) return familyNodeId;
+  }
+
+  if (catalogId === "csf-2" && /^[A-Z]{2}\.[A-Z]{2}$/.test(itemId)) {
+    const categoryNodeId = nodeId(catalogId, `CATEGORY-${itemId}`);
+    if (nodeIds.has(categoryNodeId)) return categoryNodeId;
+  }
+
+  return leafNodeId;
 }
 
 function artifact(collection, values, generatedAt) {

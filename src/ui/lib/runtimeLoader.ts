@@ -79,6 +79,7 @@ export type AtlasNeighborhoodNode = {
   metadata?: {
     item_id?: string;
     title?: string;
+    description?: string;
     catalog_id?: string;
     family?: string;
   };
@@ -119,7 +120,7 @@ export type AtlasNeighborhoodRecord = {
 
 type AtlasNeighborhoodShardRecord = {
   center_node?: Record<string, unknown>;
-  nodes: Array<[string, string, string, string, string, string, string, string]>;
+  nodes: Array<[string, string, string, string, string, string, string, string, string]>;
   edges: Array<[
     string,
     string,
@@ -447,6 +448,7 @@ export async function loadAtlasNeighborhood(
         sourceId,
         family,
         parentId,
+        description,
       ]) => [
         id,
         {
@@ -457,6 +459,7 @@ export async function loadAtlasNeighborhood(
           metadata: {
             item_id: itemId,
             title,
+            description,
             catalog_id: catalogId,
             family,
           },

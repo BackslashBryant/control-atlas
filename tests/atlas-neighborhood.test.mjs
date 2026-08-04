@@ -11,8 +11,8 @@ import {
 test("Atlas neighborhood sharding is deterministic and preserves canonical edges", () => {
   const graph = {
     nodes: [
-      { id: "a", node_type: "control", label: "A", metadata: { item_id: "A", title: "Alpha" } },
-      { id: "b", node_type: "control", label: "B", metadata: { item_id: "B", title: "Beta" } },
+      { id: "a", node_type: "control", label: "A", metadata: { item_id: "A", title: "Alpha", description: "Alpha's official description." } },
+      { id: "b", node_type: "control", label: "B", metadata: { item_id: "B", title: "Beta", description: "Beta's official description." } },
       { id: "c", node_type: "control", label: "C", metadata: { item_id: "C", title: "Gamma" } },
     ],
     edges: [
@@ -49,6 +49,11 @@ test("Atlas neighborhood sharding is deterministic and preserves canonical edges
   assert.equal(record.candidate_connection_count, 1);
   assert.deepEqual(record.center_node, graph.nodes[0]);
   assert.deepEqual(record.nodes.map((node) => node[0]), ["a", "b", "c"]);
+  assert.equal(
+    record.nodes.find((node) => node[0] === "b")[8],
+    "Beta's official description.",
+    "counterpart descriptions must survive compact neighborhood transport",
+  );
   assert.deepEqual(record.structural_path, ["a"]);
   assert.deepEqual(record.edges.map((edge) => edge[0]), ["edge:published", "edge:candidate"]);
 
