@@ -171,6 +171,11 @@ test("global Search handles empty, IME, exact-ID, Enter, Clear, Close, and Escap
   await page.getByRole("button", { name: "Open search" }).click();
   const dialog = page.getByRole("dialog", { name: "Search Control Atlas" });
   const search = dialog.getByRole("searchbox", { name: "Search Control Atlas" });
+  await search.focus();
+  await expect(dialog.locator(".search-overlay-input")).toHaveCSS("outline-style", "solid");
+  await expect(dialog.locator(".search-overlay-input")).toHaveCSS("box-shadow", "none");
+  await expect(search).toHaveCSS("outline-style", "none");
+  await expect(search).toHaveCSS("box-shadow", "none");
   await search.press("Enter");
   await expect(dialog.getByRole("status")).toContainText("Enter an identifier");
   await search.fill("T1195.002");

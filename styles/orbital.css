@@ -889,6 +889,18 @@ textarea:focus-visible {
   box-shadow: var(--ca-focus-ring);
 }
 
+/* SearchOverlay owns focus at the compound-field boundary. These selectors
+   intentionally outrank the shared field rules above so the inner input never
+   paints a second ring when stylesheet chunk order changes. */
+.search-input.search-overlay-input:focus-within {
+  box-shadow: none;
+}
+
+.search-overlay-input input[type="search"]:focus-visible {
+  outline: 0;
+  box-shadow: none;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--ca-text-subtle);
