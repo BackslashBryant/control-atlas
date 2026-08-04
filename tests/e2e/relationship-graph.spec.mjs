@@ -22,15 +22,16 @@ test("Atlas standalone route opens straight to Connections, with Hierarchy and L
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 
-test("Atlas default route is the guided ancestry path, not an empty graph", async ({ page }) => {
+test("Atlas default route is the semantic authority hierarchy, not an empty relationship graph", async ({ page }) => {
   await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.locator(".atlas-trunk-banner")).toContainText("Cybersecurity");
-  await expect(page.locator(".atlas-limb-card")).toHaveCount(9);
-  await expect(page.locator(".react-flow")).toHaveCount(0);
+  await expect(page.getByRole("application", { name: "Interactive Control Atlas hierarchy" })).toBeVisible();
+  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
+  await expect(page.locator(".react-flow")).toHaveCount(1);
+  await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
 });
 
 test("relationship graph on detail page retains its accessible List fallback", async ({ page }) => {

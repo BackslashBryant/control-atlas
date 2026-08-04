@@ -120,7 +120,7 @@ const ATLAS_PARAMS = new Set([
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
-const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly"]);
+const SEARCH_PARAMS = new Set(["q", "filter", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly", "sort"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
 const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "collection", "owner", "costType", "sort", "showAll"]);
 const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
@@ -173,6 +173,10 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       ["browseAll", "showAll", "connectedOnly", "includeCandidates", "compareRun"].includes(key) &&
       value !== "true"
     ) {
+      discarded = true;
+      continue;
+    }
+    if (key === "sort" && !["relevance", "identifier", "title", "publication", "name", "checked"].includes(value)) {
       discarded = true;
       continue;
     }

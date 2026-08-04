@@ -9,7 +9,6 @@ import {
 import {
   IconBinaryTree,
   IconChevronRight,
-  IconExternalLink,
   IconFolderOpen,
   IconListDetails,
   IconMap,
@@ -19,6 +18,7 @@ import {
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
+import { AtlasUniverse } from "../components/AtlasUniverse";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
@@ -48,6 +48,7 @@ import {
 } from "../lib/runtimeLoader";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 import { officialTextPreview } from "../lib/officialText";
+import { recordDisplayTitle } from "../lib/recordTitle";
 
 import { Button, Panel } from "../components/lsm";
 
@@ -115,15 +116,7 @@ function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
 }
 
 function focusedAtlasTitle(record: AtlasNeighborhoodRecord) {
-  const itemId =
-    record.center_node.metadata?.item_id || record.center_node.id;
-  const title =
-    record.center_node.metadata?.title ||
-    record.center_node.label ||
-    "Selected record";
-  return title.trim().toLowerCase() === itemId.trim().toLowerCase()
-    ? itemId
-    : `${itemId} — ${title}`;
+  return recordDisplayTitle(record.center_node) || "Selected record";
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
@@ -241,11 +234,19 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             </p>
           ) : null}
           <h1>
-            {record ? focusedAtlasTitle(record) : "Atlas"}
+            {record ? (
+              <button
+                className="atlas-record-title-link"
+                onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+                type="button"
+              >
+                {focusedAtlasTitle(record)}
+              </button>
+            ) : "Atlas"}
           </h1>
           {!record ? (
             <p className="page-summary">
-              Pick an area, then a publication, then a record.
+              See the full cyber landscape, then zoom into an area, publication, or record.
             </p>
           ) : (
             <p className="atlas-workspace-description">
@@ -258,18 +259,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             </p>
           )}
         </div>
-        {record ? (
-          <div data-route-primary-support="true">
-            <Button
-              onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
-              type="button"
-              variant="secondary"
-            >
-              <IconExternalLink aria-hidden="true" size={18} />
-              Open full record
-            </Button>
-          </div>
-        ) : null}
       </header>
 
       <form className="atlas-map-command" onSubmit={submitSearch}>
@@ -281,6 +270,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           <input
             aria-label="Jump to another record"
             id="atlas-search"
+            name="query"
             onChange={(event) => setMapSearchDraft(event.target.value)}
             placeholder="Jump to another record"
             type="search"
@@ -642,7 +632,6 @@ function FocusedAtlas(props: {
             onIncludeCandidates={() =>
               updateFilters({ includeCandidates: true })
             }
-            onOpenRecord={() => onOpenNode(record.center_node.id, "atlas-map")}
             onSearch={() => onNavigate("search", { query: centerLabel })}
             onSources={() => onNavigate("sources")}
           />
@@ -730,13 +719,6 @@ function FocusedAtlas(props: {
                     variant="primary"
                   >
                     See connections
-                  </Button>
-                  <Button
-                    onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
-                    type="button"
-                    variant="secondary"
-                  >
-                    Open full record
                   </Button>
                   <Button
                     onClick={() => openSources(record.center_node.source_id)}
@@ -844,7 +826,15 @@ function FocusedAtlas(props: {
                         inspectedDocument?.object_type || inspectedNode?.node_type,
                       )}
                     </p>
-                    <h2>{inspectedItemId}</h2>
+                    <h2>
+                      <button
+                        className="atlas-record-title-link"
+                        onClick={() => onOpenNode(inspectedId, "atlas-map")}
+                        type="button"
+                      >
+                        {inspectedItemId}
+                      </button>
+                    </h2>
                     {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
                   </div>
 
@@ -906,14 +896,6 @@ function FocusedAtlas(props: {
                     Explore from this record
                   </Button>
                 ) : null}
-                <Button
-                  variant="secondary"
-                  onClick={() => onOpenNode(inspectedId, "atlas-map")}
-                  type="button"
-                >
-                  <IconExternalLink aria-hidden="true" size={18} />
-                  Open full record
-                </Button>
                 {selectedRow ? (
                   <Button
                     variant="secondary-quiet"
@@ -1083,67 +1065,66 @@ function AtlasGuidedPath(props: {
     <section className="atlas-ancestry">
       <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
 
-      {!axis ? (
-        <>
-          <div className="atlas-trunk-banner">
-            <IconBinaryTree aria-hidden="true" size={22} />
-            <span className="atlas-trunk-banner-text">
-              <strong>Cybersecurity, in nine areas</strong>
-              <small>Pick the area your question is about.</small>
-            </span>
-          </div>
-          <ul className="atlas-limb-grid" aria-label="Areas of cybersecurity">
-            {model.frameworkGroups.map((area) => {
-              const catalogCount = area.frameworks.length;
-              // An area with no published catalog is not empty: its content
-              // lives on another surface (tasks, the resource directory), and
-              // the spine names where. No area is ever shown as a dead end.
-              const destination = AREA_DESTINATIONS[area.id];
-              return (
-                <li key={area.id}>
-                  <button
-                    className="atlas-limb-card"
-                    onClick={() => {
-                      if (catalogCount === 0 && destination) {
-                        onNavigate(destination.view as ViewState["view"]);
-                        return;
-                      }
-                      setOpenLimbId(area.id);
-                      resetDrill({
-                        atlasAxis: "framework",
-                        atlasLimb: area.id,
-                      });
-                    }}
-                    type="button"
-                  >
-                    <span className="atlas-limb-card-text">
-                      <strong>{area.label}</strong>
-                      <small>
-                        {catalogCount === 0 && destination
-                          ? destination.summary
-                          : area.description}
-                      </small>
-                    </span>
-                    <span className="atlas-limb-card-meta">
-                      {catalogCount === 0 && destination
-                        ? destination.actionLabel
-                        : `${catalogCount} ${catalogCount === 1 ? "publication" : "publications"}`}
-                      <IconChevronRight aria-hidden="true" size={18} />
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-          <button
-            className="atlas-secondary-link"
-            onClick={() => resetDrill({ atlasAxis: "process" })}
-            type="button"
-          >
-            <IconRoute aria-hidden="true" size={18} />
-            Or trace the RMF lifecycle step by step
-          </button>
-        </>
+      {!axis || axis === "landscape" ? (
+        <AtlasUniverse
+          areas={model.frameworkGroups}
+          catalogSummaries={bundle.catalogSummaries || []}
+          nodeCount={
+            (bundle.catalogSummaries || []).reduce(
+              (total, catalog) =>
+                total + (catalog.leaf_record_count ?? catalog.node_count ?? 0),
+              0,
+            ) || bundle.runtime.dataset.nodes.length
+          }
+          initialAreaId={axis === "landscape" ? openLimbId : ""}
+          initialFrameworkId={axis === "landscape" ? state.atlasFramework : ""}
+          onExpandArea={(area) => {
+            setOpenLimbId(area.id);
+            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
+          }}
+          onOpenArea={(area) => {
+            const destination = AREA_DESTINATIONS[area.id];
+            if (area.frameworks.length === 0 && destination) {
+              onNavigate(destination.view as ViewState["view"]);
+              return;
+            }
+            setOpenLimbId(area.id);
+            resetDrill({ atlasAxis: "framework", atlasLimb: area.id });
+          }}
+          onExpandFramework={(area, choice) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "landscape",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+            });
+          }}
+          onCollapseToArea={(area) => {
+            setOpenLimbId(area.id);
+            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
+          }}
+          onResetOverview={() => {
+            setOpenLimbId("");
+            resetDrill({});
+          }}
+          onOpenFramework={(area, choice) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "framework",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+            });
+          }}
+          onOpenUnit={(area, choice, unit) => {
+            setOpenLimbId(area.id);
+            resetDrill({
+              atlasAxis: "framework",
+              atlasLimb: area.id,
+              atlasFramework: choice.id,
+              atlasFamily: unit.id,
+            });
+          }}
+        />
       ) : null}
 
       {axis === "framework" && !framework ? (
@@ -1530,7 +1511,6 @@ function AtlasNoConnections(props: {
   includeCandidates: boolean;
   onClear: () => void;
   onIncludeCandidates: () => void;
-  onOpenRecord: () => void;
   onSearch: () => void;
   onSources: () => void;
 }) {
@@ -1552,7 +1532,6 @@ function AtlasNoConnections(props: {
             Show {props.candidateCount} candidate links
           </Button>
         ) : null}
-        <Button variant="secondary" onClick={props.onOpenRecord} type="button">Open record</Button>
         <Button variant="secondary" onClick={props.onSearch} type="button">Search Atlas</Button>
         <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>
       </div>

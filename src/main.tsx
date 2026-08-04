@@ -4,6 +4,8 @@ import {
   BRAND_WORDS,
 } from './shared/brand-rotation';
 import {
+  beginRouteTransition,
+  completeRouteTransition,
   requestSearchOverlayOpen,
   ROUTE_COMMITTED_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
@@ -90,9 +92,15 @@ function syncStaticRouteShell() {
     const eyebrow = shell.querySelector<HTMLElement>('[data-static-route-eyebrow]');
     const title = shell.querySelector<HTMLElement>('[data-static-route-title]');
     const summary = shell.querySelector<HTMLElement>('[data-static-route-summary]');
-    if (eyebrow) eyebrow.textContent = identity.eyebrow;
-    if (title) title.textContent = identity.title;
-    if (summary) summary.textContent = identity.summary;
+    if (eyebrow && eyebrow.textContent !== identity.eyebrow) {
+      eyebrow.textContent = identity.eyebrow;
+    }
+    if (title && title.textContent !== identity.title) {
+      title.textContent = identity.title;
+    }
+    if (summary && summary.textContent !== identity.summary) {
+      summary.textContent = identity.summary;
+    }
   } else {
     delete rootElement.dataset.staticRoutePersistent;
     delete rootElement.dataset.staticRouteKind;
@@ -124,6 +132,12 @@ function observeRouteHydration() {
       app.dataset.view === 'atlas-map' &&
       app.dataset.hasSubject === 'true' &&
       !reactRootElement.querySelector('[data-route-content-ready="true"]')
+    ) {
+      return false;
+    }
+    if (
+      rootElement.dataset.staticRoutePersistent === 'true' &&
+      reactRootElement.querySelector('[data-route-suspense-pending="true"]')
     ) {
       return false;
     }
@@ -209,6 +223,7 @@ function onBrandMotionChange() {
 }
 
 function navigateFromStaticHome(target: string) {
+  if (!beginRouteTransition("Opening Control Atlas", target)) return;
   if (window.location.hash !== target) {
     window.location.hash = target.slice(1);
   }
@@ -252,7 +267,8 @@ function connectStaticSearch() {
 function syncProgressiveShell() {
   const home = isHomeHash();
   const search = isSearchHash();
-  rootElement.dataset.reactActive = reactBoot && !home ? 'true' : 'false';
+  rootElement.dataset.reactActive =
+    rootElement.dataset.reactShellReady === 'true' ? 'true' : 'false';
   if (search) {
     rootElement.dataset.staticSearchActive = 'true';
   } else {
@@ -288,7 +304,7 @@ function connectStaticHome() {
       rootElement.querySelector<HTMLElement>('#workspace')?.focus();
     });
 
-  rootElement.querySelectorAll<HTMLElement>('[data-route]').forEach((control) => {
+  rootElement.querySelectorAll<HTMLElement>('[data-static-home] [data-route]').forEach((control) => {
     control.addEventListener('click', () => {
       const target = control.dataset.route;
       if (target) navigateFromStaticHome(target);
@@ -301,12 +317,6 @@ function connectStaticHome() {
   // drawer, so a tap here boots React (like the search shortcut below) —
   // the first tap opens the real, fully-interactive menu instead of building
   // a second, throwaway one.
-  rootElement
-    .querySelector<HTMLElement>('[data-static-menu-boot]')
-    ?.addEventListener('click', () => {
-      void bootReactApp();
-    });
-
   rootElement
     .querySelector<HTMLFormElement>('[data-home-search]')
     ?.addEventListener('submit', (event) => {
@@ -322,6 +332,37 @@ function connectStaticHome() {
   rootElement
     .querySelector<HTMLElement>('.app-shell')
     ?.setAttribute('data-app-ready', 'true');
+}
+
+function connectStaticHeader() {
+  rootElement
+    .querySelectorAll<HTMLElement>('[data-static-header] [data-route]')
+    .forEach((control) => {
+      control.addEventListener('click', () => {
+        const target = control.dataset.route;
+        if (target) navigateFromStaticHome(target);
+      });
+    });
+  rootElement
+    .querySelector<HTMLElement>('[data-static-menu-boot]')
+    ?.addEventListener('click', () => {
+      if (!beginRouteTransition('Opening navigation', 'static:menu')) return;
+      void bootReactApp().then(() => {
+        completeRouteTransition();
+        rootElement
+          .querySelector<HTMLElement>('[data-react-root] .mobile-nav-toggle')
+          ?.click();
+      });
+    });
+  rootElement
+    .querySelector<HTMLElement>('[data-static-search-open]')
+    ?.addEventListener('click', () => {
+      if (!beginRouteTransition('Opening search', 'static:search')) return;
+      void bootReactApp().then(() => {
+        completeRouteTransition();
+        window.setTimeout(() => requestSearchOverlayOpen(), 0);
+      });
+    });
 }
 
 // React (and its Ctrl+K listener in App.tsx) does not mount at all while on
@@ -373,6 +414,7 @@ async function bootReactApp() {
     })
     .catch((error: unknown) => {
       reactBoot = null;
+      completeRouteTransition();
       const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
       if (boundary) {
         boundary.setAttribute('role', 'alert');
@@ -399,6 +441,7 @@ function loadReactModules() {
 }
 
 function onLocationChange() {
+  beginRouteTransition("Opening the selected workspace", window.location.hash);
   if (!isHomeHash()) void bootReactApp();
 }
 
@@ -439,6 +482,7 @@ async function start() {
   }
 
   connectStaticSearch();
+  connectStaticHeader();
   syncProgressiveShell();
   window.addEventListener('hashchange', syncProgressiveShell);
   window.addEventListener('popstate', syncProgressiveShell);
@@ -467,6 +511,10 @@ async function start() {
   // first-paint shell. Waiting for window.load created a full network
   // waterfall: CSS and the entry module finished before the React route and
   // its data even started. Home keeps its one-script static boundary above.
+  // The classic progressive shell has already revealed the route identity.
+  // Begin fetching the route and framework immediately so network time overlaps
+  // that stable first paint and produces the interactive result without an
+  // extra task boundary between framework readiness and the initial commit.
   warmInteractiveRoute();
   void bootReactApp();
 }

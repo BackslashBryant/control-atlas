@@ -4,6 +4,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -38,6 +39,8 @@ import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
 import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
 import {
+  beginRouteTransition,
+  completeRouteTransition,
   notifyRouteCommitted,
   OPEN_SEARCH_OVERLAY_EVENT,
 } from "../shared/navigation-events";
@@ -164,9 +167,25 @@ export function App() {
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
   const [routeRecovery, setRouteRecovery] = useState("");
+  const [chromeReady, setChromeReady] = useState(false);
 
   useEffect(() => {
-    const syncLocation = () => setLocation(readHashLocation());
+    const frame = window.requestAnimationFrame(() => setChromeReady(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useLayoutEffect(() => {
+    const root = document.getElementById("root");
+    if (!root) return;
+    root.dataset.reactShellReady = chromeReady ? "true" : "false";
+    root.dataset.reactActive = chromeReady ? "true" : "false";
+  }, [chromeReady, viewState.view]);
+
+  useEffect(() => {
+    const syncLocation = () => {
+      beginRouteTransition("Opening the selected workspace", window.location.hash);
+      setLocation(readHashLocation());
+    };
     window.addEventListener("hashchange", syncLocation);
     window.addEventListener("popstate", syncLocation);
     return () => {
@@ -404,8 +423,10 @@ export function App() {
       ...(latestNavStateRef.current as Record<string, unknown>),
       ...(patch as Record<string, unknown>),
     } as Partial<ViewState>);
+    const nextLocation = serializeHashLocation(nextState);
+    if (!beginRouteTransition("Opening the selected workspace", nextLocation)) return;
     latestNavStateRef.current = nextState;
-    routerNavigate(serializeHashLocation(nextState));
+    routerNavigate(nextLocation);
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
@@ -466,6 +487,14 @@ export function App() {
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
   const routeContext = orbitalRouteContext(viewState, routeEntityName);
 
+  useEffect(() => {
+    if (readyState === "false") return;
+    const frame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(completeRouteTransition);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [readyState, viewState]);
+
   return (
     <>
       <a
@@ -478,13 +507,13 @@ export function App() {
       >
         Skip to workspace
       </a>
-      <TopNav
+      {chromeReady ? <TopNav
         onNavigate={navigate}
         onOpenHelp={() => openHelp()}
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}
-      />
-      <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} />
+      /> : null}
+      {chromeReady ? <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} /> : null}
 
       <main id="workspace" tabIndex={-1}>
         {routeRecovery ? (
@@ -506,7 +535,7 @@ export function App() {
           id="app"
         >
           {showWorkspaceContent ? (
-            <Suspense fallback={<LoadingStatusPanel slow={false} />}>
+            <Suspense fallback={<LoadingStatusPanel slow={false} suspensePending />}>
               <AppContent
                 bundle={bundle}
                 loadError={loadError}
@@ -533,7 +562,7 @@ export function App() {
         </section>
       </main>
 
-      <SiteFooter onNavigate={navigate} />
+      {chromeReady ? <SiteFooter onNavigate={navigate} /> : null}
 
       {searchOverlayOpen ? (
         <Suspense fallback={null}>

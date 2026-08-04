@@ -86,9 +86,9 @@ for (const viewport of VIEWPORTS) {
 
             if (route === "/#/") {
               const search = page.getByRole("search");
-              const flourish = page.locator(".site-header .brand-key-word");
+              const wordmark = page.locator(".site-header:visible .brand-name").last();
               await expect(search).toBeVisible();
-              await expect(flourish).toBeVisible();
+              await expect(wordmark).toBeVisible();
               expect(
                 (await search.boundingBox())?.y,
                 "Home Search must start inside the first viewport",

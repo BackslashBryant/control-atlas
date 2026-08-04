@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-03T21:25:33.744Z",
+  "generatedAt": "2026-08-04T08:31:08.278Z",
   "evidence": "local-or-CI synthetic Lighthouse; not field, real-device, or deployed evidence",
   "thresholds": {
     "lcpMs": 2500,
@@ -8,155 +8,8 @@
   },
   "routeMedians": [
     {
-      "url": "http://localhost:4317/",
+      "url": "http://localhost:4328/",
       "runs": 3,
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1353,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/build",
-      "runs": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2328,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/build/resources",
-      "runs": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2314,
-      "cls": 0.023,
-      "tbtMs": 2
-    },
-    {
-      "url": "http://localhost:4317/#/catalog",
-      "runs": 3,
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2469,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/catalog/nist-800-53",
-      "runs": 3,
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2463,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
-      "runs": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2322,
-      "cls": 0.02,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore",
-      "runs": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2324,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2192,
-      "cls": 0.003,
-      "tbtMs": 2
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2039,
-      "cls": 0.003,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
-      "runs": 3,
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1755,
-      "cls": 0.006,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/record/mitre-attack/T1033",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2058,
-      "cls": 0.019,
-      "tbtMs": 32
-    },
-    {
-      "url": "http://localhost:4317/#/record/nist-800-53/AC-2",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 1730,
-      "cls": 0.007,
-      "tbtMs": 54
-    },
-    {
-      "url": "http://localhost:4317/#/search?q=AC-2",
-      "runs": 3,
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1585,
-      "cls": 0.037,
-      "tbtMs": 50
-    },
-    {
-      "url": "http://localhost:4317/#/search?q=access%20control",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 1589,
-      "cls": 0.037,
-      "tbtMs": 110
-    },
-    {
-      "url": "http://localhost:4317/#/search?q=definitely-no-such-control",
-      "runs": 3,
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 1588,
-      "cls": 0.037,
-      "tbtMs": 72
-    },
-    {
-      "url": "http://localhost:4317/#/sources",
-      "runs": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2310,
-      "cls": 0.021,
-      "tbtMs": 0
-    }
-  ],
-  "thresholdFailures": [],
-  "runs": [
-    {
-      "url": "http://localhost:4317/",
-      "fetchTime": "2026-08-03T21:07:25.405Z",
       "performance": 100,
       "accessibility": 100,
       "lcpMs": 1354,
@@ -164,17 +17,155 @@
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/",
-      "fetchTime": "2026-08-03T21:07:11.748Z",
+      "url": "http://localhost:4328/#/build",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2330,
+      "cls": 0.026,
+      "tbtMs": 12
+    },
+    {
+      "url": "http://localhost:4328/#/build/resources",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2325,
+      "cls": 0.032,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/catalog",
+      "runs": 3,
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1775,
+      "cls": 0.027,
+      "tbtMs": 1
+    },
+    {
+      "url": "http://localhost:4328/#/catalog/nist-800-53",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2494,
+      "cls": 0.026,
+      "tbtMs": 12
+    },
+    {
+      "url": "http://localhost:4328/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2332,
+      "cls": 0.029,
+      "tbtMs": 2
+    },
+    {
+      "url": "http://localhost:4328/#/explore",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2354,
+      "cls": 0.026,
+      "tbtMs": 23
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
+      "runs": 3,
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2191,
+      "cls": 0.03,
+      "tbtMs": 12
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+      "runs": 3,
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1741,
+      "cls": 0.033,
+      "tbtMs": 15
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
+      "runs": 3,
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2189,
+      "cls": 0.03,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/record/mitre-attack/T1033",
+      "runs": 3,
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1749,
+      "cls": 0.045,
+      "tbtMs": 70
+    },
+    {
+      "url": "http://localhost:4328/#/record/nist-800-53/AC-2",
+      "runs": 3,
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1598,
+      "cls": 0.034,
+      "tbtMs": 88
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=AC-2",
+      "runs": 3,
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 1905,
+      "cls": 0.069,
+      "tbtMs": 161
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=access%20control",
+      "runs": 3,
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 1650,
+      "cls": 0.069,
+      "tbtMs": 160
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=definitely-no-such-control",
+      "runs": 3,
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 1667,
+      "cls": 0.069,
+      "tbtMs": 176
+    },
+    {
+      "url": "http://localhost:4328/#/sources",
+      "runs": 3,
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2331,
+      "cls": 0.026,
+      "tbtMs": 1
+    }
+  ],
+  "thresholdFailures": [],
+  "runs": [
+    {
+      "url": "http://localhost:4328/",
+      "fetchTime": "2026-08-04T07:45:57.608Z",
       "performance": 100,
       "accessibility": 100,
-      "lcpMs": 1204,
+      "lcpMs": 1354,
       "cls": 0,
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/",
-      "fetchTime": "2026-08-03T21:06:58.115Z",
+      "url": "http://localhost:4328/",
+      "fetchTime": "2026-08-04T07:45:40.834Z",
       "performance": 100,
       "accessibility": 100,
       "lcpMs": 1353,
@@ -182,409 +173,418 @@
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/build",
-      "fetchTime": "2026-08-03T21:22:48.063Z",
-      "performance": 98,
+      "url": "http://localhost:4328/",
+      "fetchTime": "2026-08-04T07:45:24.669Z",
+      "performance": 100,
       "accessibility": 100,
-      "lcpMs": 2313,
-      "cls": 0.021,
+      "lcpMs": 1354,
+      "cls": 0,
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/build",
-      "fetchTime": "2026-08-03T21:22:34.093Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2334,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/build",
-      "fetchTime": "2026-08-03T21:22:20.011Z",
+      "url": "http://localhost:4328/#/build",
+      "fetchTime": "2026-08-04T08:05:51.798Z",
       "performance": 98,
       "accessibility": 100,
       "lcpMs": 2328,
-      "cls": 0.021,
+      "cls": 0.026,
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/build/resources",
-      "fetchTime": "2026-08-03T21:23:58.704Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2314,
-      "cls": 0.023,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/build/resources",
-      "fetchTime": "2026-08-03T21:23:44.534Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2193,
-      "cls": 0.023,
-      "tbtMs": 10
-    },
-    {
-      "url": "http://localhost:4317/#/build/resources",
-      "fetchTime": "2026-08-03T21:23:30.303Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2318,
-      "cls": 0.023,
-      "tbtMs": 2
-    },
-    {
-      "url": "http://localhost:4317/#/catalog",
-      "fetchTime": "2026-08-03T21:16:59.886Z",
+      "url": "http://localhost:4328/#/build",
+      "fetchTime": "2026-08-04T08:05:35.503Z",
       "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2469,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/catalog",
-      "fetchTime": "2026-08-03T21:16:45.965Z",
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2478,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/catalog",
-      "fetchTime": "2026-08-03T21:16:32.049Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 1719,
-      "cls": 0.021,
-      "tbtMs": 2
-    },
-    {
-      "url": "http://localhost:4317/#/catalog/nist-800-53",
-      "fetchTime": "2026-08-03T21:18:09.225Z",
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2484,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/catalog/nist-800-53",
-      "fetchTime": "2026-08-03T21:17:55.250Z",
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2463,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/catalog/nist-800-53",
-      "fetchTime": "2026-08-03T21:17:41.380Z",
-      "performance": 98,
       "accessibility": 100,
       "lcpMs": 2330,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
-      "fetchTime": "2026-08-03T21:21:38.441Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2322,
-      "cls": 0.02,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
-      "fetchTime": "2026-08-03T21:21:24.702Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2309,
-      "cls": 0.02,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
-      "fetchTime": "2026-08-03T21:21:10.882Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2323,
-      "cls": 0.02,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore",
-      "fetchTime": "2026-08-03T21:12:07.600Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2324,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore",
-      "fetchTime": "2026-08-03T21:11:53.694Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2337,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore",
-      "fetchTime": "2026-08-03T21:11:39.097Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 1886,
-      "cls": 0,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
-      "fetchTime": "2026-08-03T21:15:48.624Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1588,
-      "cls": 0.003,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
-      "fetchTime": "2026-08-03T21:15:33.064Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2192,
-      "cls": 0.003,
-      "tbtMs": 2
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
-      "fetchTime": "2026-08-03T21:15:17.170Z",
-      "performance": 97,
-      "accessibility": 100,
-      "lcpMs": 2630,
-      "cls": 0.003,
-      "tbtMs": 4
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
-      "fetchTime": "2026-08-03T21:14:30.497Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2376,
-      "cls": 0.003,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
-      "fetchTime": "2026-08-03T21:14:16.059Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2039,
-      "cls": 0.003,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
-      "fetchTime": "2026-08-03T21:14:01.721Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1752,
-      "cls": 0.003,
+      "cls": 0.026,
       "tbtMs": 12
     },
     {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
-      "fetchTime": "2026-08-03T21:13:18.936Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1755,
-      "cls": 0.006,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
-      "fetchTime": "2026-08-03T21:13:04.614Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1583,
-      "cls": 0.006,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
-      "fetchTime": "2026-08-03T21:12:50.291Z",
-      "performance": 99,
-      "accessibility": 100,
-      "lcpMs": 2026,
-      "cls": 0.003,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/record/mitre-attack/T1033",
-      "fetchTime": "2026-08-03T21:20:29.230Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1744,
-      "cls": 0.019,
-      "tbtMs": 32
-    },
-    {
-      "url": "http://localhost:4317/#/record/mitre-attack/T1033",
-      "fetchTime": "2026-08-03T21:20:15.212Z",
+      "url": "http://localhost:4328/#/build",
+      "fetchTime": "2026-08-04T08:05:18.638Z",
       "performance": 97,
       "accessibility": 100,
-      "lcpMs": 2630,
-      "cls": 0.019,
+      "lcpMs": 2330,
+      "cls": 0.026,
+      "tbtMs": 13
+    },
+    {
+      "url": "http://localhost:4328/#/build/resources",
+      "fetchTime": "2026-08-04T08:07:17.645Z",
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2180,
+      "cls": 0.032,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/build/resources",
+      "fetchTime": "2026-08-04T08:07:00.393Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2325,
+      "cls": 0.032,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/build/resources",
+      "fetchTime": "2026-08-04T08:06:42.612Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2332,
+      "cls": 0.032,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/catalog",
+      "fetchTime": "2026-08-04T08:24:42.279Z",
+      "performance": 100,
+      "accessibility": 100,
+      "lcpMs": 1293,
+      "cls": 0.027,
+      "tbtMs": 1
+    },
+    {
+      "url": "http://localhost:4328/#/catalog",
+      "fetchTime": "2026-08-04T08:24:25.444Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1775,
+      "cls": 0.027,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/catalog",
+      "fetchTime": "2026-08-04T08:24:08.926Z",
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2217,
+      "cls": 0.027,
+      "tbtMs": 8
+    },
+    {
+      "url": "http://localhost:4328/#/catalog/nist-800-53",
+      "fetchTime": "2026-08-04T08:00:09.977Z",
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 2489,
+      "cls": 0.026,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/catalog/nist-800-53",
+      "fetchTime": "2026-08-04T07:59:53.111Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2500,
+      "cls": 0.026,
+      "tbtMs": 12
+    },
+    {
+      "url": "http://localhost:4328/#/catalog/nist-800-53",
+      "fetchTime": "2026-08-04T07:59:36.115Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2494,
+      "cls": 0.026,
+      "tbtMs": 15
+    },
+    {
+      "url": "http://localhost:4328/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+      "fetchTime": "2026-08-04T08:04:28.056Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2336,
+      "cls": 0.029,
+      "tbtMs": 1
+    },
+    {
+      "url": "http://localhost:4328/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+      "fetchTime": "2026-08-04T08:04:11.590Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2328,
+      "cls": 0.029,
+      "tbtMs": 2
+    },
+    {
+      "url": "http://localhost:4328/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+      "fetchTime": "2026-08-04T08:03:54.942Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2332,
+      "cls": 0.029,
       "tbtMs": 17
     },
     {
-      "url": "http://localhost:4317/#/record/mitre-attack/T1033",
-      "fetchTime": "2026-08-03T21:20:01.237Z",
-      "performance": 99,
+      "url": "http://localhost:4328/#/explore",
+      "fetchTime": "2026-08-04T07:52:13.805Z",
+      "performance": 94,
       "accessibility": 100,
-      "lcpMs": 2058,
-      "cls": 0.019,
-      "tbtMs": 52
+      "lcpMs": 2881,
+      "cls": 0.026,
+      "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/record/nist-800-53/AC-2",
-      "fetchTime": "2026-08-03T21:19:19.268Z",
+      "url": "http://localhost:4328/#/explore",
+      "fetchTime": "2026-08-04T07:51:56.656Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2354,
+      "cls": 0.026,
+      "tbtMs": 23
+    },
+    {
+      "url": "http://localhost:4328/#/explore",
+      "fetchTime": "2026-08-04T07:51:39.408Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1740,
+      "cls": 0.026,
+      "tbtMs": 35
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
+      "fetchTime": "2026-08-04T08:29:14.622Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1622,
+      "cls": 0.03,
+      "tbtMs": 20
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
+      "fetchTime": "2026-08-04T08:28:55.259Z",
       "performance": 98,
       "accessibility": 100,
-      "lcpMs": 2330,
-      "cls": 0.007,
-      "tbtMs": 51
+      "lcpMs": 2191,
+      "cls": 0.03,
+      "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/record/nist-800-53/AC-2",
-      "fetchTime": "2026-08-03T21:19:05.294Z",
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=list",
+      "fetchTime": "2026-08-04T08:28:35.693Z",
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2220,
+      "cls": 0.03,
+      "tbtMs": 12
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+      "fetchTime": "2026-08-04T08:27:37.358Z",
       "performance": 99,
       "accessibility": 100,
-      "lcpMs": 1730,
-      "cls": 0.007,
-      "tbtMs": 54
+      "lcpMs": 1741,
+      "cls": 0.03,
+      "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/record/nist-800-53/AC-2",
-      "fetchTime": "2026-08-03T21:18:51.251Z",
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+      "fetchTime": "2026-08-04T08:27:19.953Z",
+      "performance": 98,
+      "accessibility": 100,
+      "lcpMs": 2195,
+      "cls": 0.033,
+      "tbtMs": 15
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=map",
+      "fetchTime": "2026-08-04T08:27:02.461Z",
+      "performance": 100,
+      "accessibility": 100,
+      "lcpMs": 1437,
+      "cls": 0.033,
+      "tbtMs": 22
+    },
+    {
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
+      "fetchTime": "2026-08-04T08:26:10.104Z",
       "performance": 99,
       "accessibility": 100,
-      "lcpMs": 1574,
-      "cls": 0.007,
-      "tbtMs": 65
+      "lcpMs": 1907,
+      "cls": 0.03,
+      "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/search?q=AC-2",
-      "fetchTime": "2026-08-03T21:08:36.541Z",
-      "performance": 100,
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
+      "fetchTime": "2026-08-04T08:25:52.427Z",
+      "performance": 98,
       "accessibility": 100,
-      "lcpMs": 1585,
-      "cls": 0.037,
-      "tbtMs": 41
+      "lcpMs": 2223,
+      "cls": 0.033,
+      "tbtMs": 13
     },
     {
-      "url": "http://localhost:4317/#/search?q=AC-2",
-      "fetchTime": "2026-08-03T21:08:22.515Z",
-      "performance": 100,
+      "url": "http://localhost:4328/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
+      "fetchTime": "2026-08-04T08:25:34.707Z",
+      "performance": 98,
       "accessibility": 100,
-      "lcpMs": 1579,
-      "cls": 0.037,
+      "lcpMs": 2189,
+      "cls": 0.029,
+      "tbtMs": 0
+    },
+    {
+      "url": "http://localhost:4328/#/record/mitre-attack/T1033",
+      "fetchTime": "2026-08-04T08:03:01.264Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1749,
+      "cls": 0.045,
+      "tbtMs": 81
+    },
+    {
+      "url": "http://localhost:4328/#/record/mitre-attack/T1033",
+      "fetchTime": "2026-08-04T08:02:44.466Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1743,
+      "cls": 0.045,
+      "tbtMs": 70
+    },
+    {
+      "url": "http://localhost:4328/#/record/mitre-attack/T1033",
+      "fetchTime": "2026-08-04T08:02:27.269Z",
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 2660,
+      "cls": 0.045,
+      "tbtMs": 36
+    },
+    {
+      "url": "http://localhost:4328/#/record/nist-800-53/AC-2",
+      "fetchTime": "2026-08-04T08:30:42.612Z",
+      "performance": 99,
+      "accessibility": 100,
+      "lcpMs": 1598,
+      "cls": 0.034,
       "tbtMs": 50
     },
     {
-      "url": "http://localhost:4317/#/search?q=AC-2",
-      "fetchTime": "2026-08-03T21:08:07.850Z",
-      "performance": 100,
-      "accessibility": 100,
-      "lcpMs": 1595,
-      "cls": 0.037,
-      "tbtMs": 52
-    },
-    {
-      "url": "http://localhost:4317/#/search?q=access%20control",
-      "fetchTime": "2026-08-03T21:09:46.834Z",
+      "url": "http://localhost:4328/#/record/nist-800-53/AC-2",
+      "fetchTime": "2026-08-04T08:30:25.654Z",
       "performance": 99,
       "accessibility": 100,
-      "lcpMs": 1583,
-      "cls": 0.037,
-      "tbtMs": 123
+      "lcpMs": 1593,
+      "cls": 0.034,
+      "tbtMs": 88
     },
     {
-      "url": "http://localhost:4317/#/search?q=access%20control",
-      "fetchTime": "2026-08-03T21:09:32.721Z",
+      "url": "http://localhost:4328/#/record/nist-800-53/AC-2",
+      "fetchTime": "2026-08-04T08:30:08.731Z",
       "performance": 99,
       "accessibility": 100,
-      "lcpMs": 1589,
-      "cls": 0.037,
-      "tbtMs": 110
+      "lcpMs": 1748,
+      "cls": 0.034,
+      "tbtMs": 89
     },
     {
-      "url": "http://localhost:4317/#/search?q=access%20control",
-      "fetchTime": "2026-08-03T21:09:18.532Z",
-      "performance": 99,
+      "url": "http://localhost:4328/#/search?q=AC-2",
+      "fetchTime": "2026-08-04T07:47:31.668Z",
+      "performance": 96,
       "accessibility": 100,
-      "lcpMs": 1733,
-      "cls": 0,
-      "tbtMs": 99
+      "lcpMs": 1906,
+      "cls": 0.069,
+      "tbtMs": 157
     },
     {
-      "url": "http://localhost:4317/#/search?q=definitely-no-such-control",
-      "fetchTime": "2026-08-03T21:10:56.877Z",
-      "performance": 99,
+      "url": "http://localhost:4328/#/search?q=AC-2",
+      "fetchTime": "2026-08-04T07:47:12.383Z",
+      "performance": 96,
       "accessibility": 100,
-      "lcpMs": 1601,
-      "cls": 0.037,
-      "tbtMs": 65
+      "lcpMs": 1444,
+      "cls": 0.069,
+      "tbtMs": 208
     },
     {
-      "url": "http://localhost:4317/#/search?q=definitely-no-such-control",
-      "fetchTime": "2026-08-03T21:10:42.909Z",
-      "performance": 100,
+      "url": "http://localhost:4328/#/search?q=AC-2",
+      "fetchTime": "2026-08-04T07:46:52.510Z",
+      "performance": 96,
       "accessibility": 100,
-      "lcpMs": 1441,
-      "cls": 0.037,
-      "tbtMs": 91
+      "lcpMs": 1905,
+      "cls": 0.069,
+      "tbtMs": 161
     },
     {
-      "url": "http://localhost:4317/#/search?q=definitely-no-such-control",
-      "fetchTime": "2026-08-03T21:10:28.932Z",
-      "performance": 99,
+      "url": "http://localhost:4328/#/search?q=access%20control",
+      "fetchTime": "2026-08-04T07:49:09.350Z",
+      "performance": 96,
       "accessibility": 100,
-      "lcpMs": 1588,
-      "cls": 0.037,
-      "tbtMs": 72
+      "lcpMs": 1903,
+      "cls": 0.069,
+      "tbtMs": 160
     },
     {
-      "url": "http://localhost:4317/#/sources",
-      "fetchTime": "2026-08-03T21:25:13.389Z",
-      "performance": 98,
+      "url": "http://localhost:4328/#/search?q=access%20control",
+      "fetchTime": "2026-08-04T07:48:50.058Z",
+      "performance": 97,
       "accessibility": 100,
-      "lcpMs": 2314,
-      "cls": 0.021,
+      "lcpMs": 1481,
+      "cls": 0.069,
+      "tbtMs": 151
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=access%20control",
+      "fetchTime": "2026-08-04T07:48:29.829Z",
+      "performance": 95,
+      "accessibility": 100,
+      "lcpMs": 1650,
+      "cls": 0.069,
+      "tbtMs": 216
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=definitely-no-such-control",
+      "fetchTime": "2026-08-04T07:50:46.326Z",
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 1907,
+      "cls": 0.069,
+      "tbtMs": 176
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=definitely-no-such-control",
+      "fetchTime": "2026-08-04T07:50:27.282Z",
+      "performance": 93,
+      "accessibility": 100,
+      "lcpMs": 1667,
+      "cls": 0.069,
+      "tbtMs": 262
+    },
+    {
+      "url": "http://localhost:4328/#/search?q=definitely-no-such-control",
+      "fetchTime": "2026-08-04T07:50:08.186Z",
+      "performance": 96,
+      "accessibility": 100,
+      "lcpMs": 1659,
+      "cls": 0.069,
+      "tbtMs": 167
+    },
+    {
+      "url": "http://localhost:4328/#/sources",
+      "fetchTime": "2026-08-04T08:08:50.002Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2327,
+      "cls": 0.026,
+      "tbtMs": 19
+    },
+    {
+      "url": "http://localhost:4328/#/sources",
+      "fetchTime": "2026-08-04T08:08:31.143Z",
+      "performance": 97,
+      "accessibility": 100,
+      "lcpMs": 2333,
+      "cls": 0.026,
       "tbtMs": 0
     },
     {
-      "url": "http://localhost:4317/#/sources",
-      "fetchTime": "2026-08-03T21:24:58.166Z",
-      "performance": 98,
+      "url": "http://localhost:4328/#/sources",
+      "fetchTime": "2026-08-04T08:08:12.369Z",
+      "performance": 97,
       "accessibility": 100,
-      "lcpMs": 2166,
-      "cls": 0.021,
-      "tbtMs": 0
-    },
-    {
-      "url": "http://localhost:4317/#/sources",
-      "fetchTime": "2026-08-03T21:24:43.031Z",
-      "performance": 98,
-      "accessibility": 100,
-      "lcpMs": 2310,
-      "cls": 0.021,
-      "tbtMs": 0
+      "lcpMs": 2331,
+      "cls": 0.026,
+      "tbtMs": 1
     }
   ]
 }

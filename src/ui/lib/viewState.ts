@@ -60,6 +60,7 @@ export type ViewState =
       controlFamily: string;
       severity: string;
       connectedOnly: string;
+      sort: string;
     }
   | {
       view: "catalog-detail";
@@ -175,6 +176,7 @@ function searchState(): ViewState {
     controlFamily: "",
     severity: "",
     connectedOnly: "",
+    sort: "relevance",
   };
 }
 
@@ -445,6 +447,9 @@ export function parseViewState(search: string): ViewState {
     controlFamily: params.get("controlFamily") || "",
     severity: params.get("severity") || "",
     connectedOnly: params.get("connectedOnly") === "true" ? "true" : "",
+    sort: ["relevance", "identifier", "title", "publication"].includes(params.get("sort") || "")
+      ? params.get("sort") || "relevance"
+      : "relevance",
   };
 }
 
@@ -688,6 +693,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "controlFamily", state.controlFamily);
     setIfValue(params, "severity", state.severity);
     setIfValue(params, "connectedOnly", state.connectedOnly);
+    if (state.sort !== "relevance") setIfValue(params, "sort", state.sort);
   } else if (state.view === "catalog-detail") {
     params.set("view", state.view);
     setIfValue(params, "catalog", state.catalog);

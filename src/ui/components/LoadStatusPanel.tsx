@@ -4,9 +4,14 @@ import { Panel, Button, StatusChip } from "./lsm";
 export function LoadingStatusPanel(props: {
   slow: boolean;
   children?: ReactNode;
+  suspensePending?: boolean;
 }) {
   return (
-    <Panel className="max-w-[800px] mx-auto mt-[40px]" title="Loading Records">
+    <Panel
+      className="max-w-[800px] mx-auto mt-[40px]"
+      data-route-suspense-pending={props.suspensePending ? "true" : undefined}
+      title="Loading Records"
+    >
       <div aria-hidden="true" className="load-progress mb-[16px]" />
       <p className="mb-[16px]">
         Please wait a moment while we load the public records, source registry,
