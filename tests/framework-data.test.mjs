@@ -403,14 +403,9 @@ test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
     "expected paren enhancement CM-07(02) to resolve to nist-800-53:CM-7.2",
   );
 
-  // Notation alone must no longer block OLIR mappings. Before the fix, 579
-  // CSF and 126 SP 800-171 mappings were blocked purely by zero-padding; the
-  // only blocks that may remain are genuine upstream data gaps, NOT notation:
-  //   - all 126 SP 800-171 notation blocks clear outright (nothing residual);
-  //   - a small CSF residue remains from mappings that reference bare
-  //     family/category IDs the OLIR source left incomplete (e.g. "CP" ->
-  //     "PR.IR-03", "CP-4" -> "RC.RP"), which normalizeControlId correctly
-  //     leaves unchanged and which have no catalog node.
+  // Notation and publisher-native grouping IDs must both resolve. The OLIR
+  // source includes bare 800-53 family IDs (CP/IR/PT) and CSF category IDs
+  // (RC.RP/RS.MA); these map to genuine grouping nodes, not fabricated leaves.
   const blocked = findings.filter(
     (finding) => finding.finding_type === "blocked_relationship",
   );
@@ -425,10 +420,32 @@ test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
   const csfBlocked = blocked.filter((finding) =>
     finding.subject_id.startsWith("800-53-to-csf:"),
   );
-  assert.ok(
-    csfBlocked.length <= 12,
-    `CSF OLIR notation blocks (573 of 579) must clear; only bare-identifier data gaps may remain, got ${csfBlocked.length} (was 579)`,
+  assert.equal(
+    csfBlocked.length,
+    0,
+    "every CSF OLIR endpoint must resolve to its leaf or publisher-native grouping node",
   );
+  for (const [sourceNodeId, targetNodeId] of [
+    ["nist-800-53:FAMILY-CP", "csf-2:PR.IR-03"],
+    ["nist-800-53:FAMILY-IR", "csf-2:PR.IR-03"],
+    ["nist-800-53:FAMILY-PT", "csf-2:GV.OC-03"],
+    ["nist-800-53:CP-4", "csf-2:CATEGORY-RC.RP"],
+    ["nist-800-53:CP-10", "csf-2:CATEGORY-RC.RP"],
+    ["nist-800-53:IR-4", "csf-2:CATEGORY-RS.MA"],
+    ["nist-800-53:IR-7", "csf-2:CATEGORY-RS.MA"],
+    ["nist-800-53:IR-8", "csf-2:CATEGORY-RS.MA"],
+    ["nist-800-53:IR-9", "csf-2:CATEGORY-RS.MA"],
+  ]) {
+    assert.ok(
+      edges.some(
+        (edge) =>
+          edge.source_node_id === sourceNodeId &&
+          edge.target_node_id === targetNodeId &&
+          edge.relationship_type === "maps_to",
+      ),
+      `missing official OLIR grouping mapping ${sourceNodeId} -> ${targetNodeId}`,
+    );
+  }
 });
 
 test("complete library search bootstrap stays within its compressed transfer budget", () => {

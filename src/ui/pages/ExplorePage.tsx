@@ -16,7 +16,10 @@ import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mj
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { recordDisplayTitle } from "../lib/recordTitle";
-import { officialTextPreview } from "../lib/officialText";
+import {
+  officialDescriptionOrStatus,
+  officialTextPreview,
+} from "../lib/officialText";
 import {
   buildCatalogCoverageList,
   catalogCoverageForId,
@@ -208,7 +211,7 @@ export function ExplorePage(props: {
       ...directoryResources.map((resource: any) => ({ key: `resource:${resource.id}`, kind: "resource", title: resource.name, identifier: resource.id, publication: resource.publisher, rank: 6, payload: resource })),
       ...sourceMatches.map((source: any) => ({ key: `source:${source.id}`, kind: "source", title: source.display_name || source.name || source.id, identifier: source.id, publication: source.publisher || source.agency || "Source owner", rank: 6, payload: source })),
       ...resourceMatches.templates.map((template: any) => ({ key: `template:${template.id}`, kind: "template", title: template.title, identifier: template.id, publication: "Control Atlas", rank: 7, payload: template })),
-      ...resourceMatches.artifacts.map((artifact: any) => ({ key: `artifact:${artifact.id}`, kind: "artifact", title: artifact.title, identifier: artifact.id, publication: artifact.publisher || "Official source", rank: 7, payload: artifact })),
+      ...resourceMatches.artifacts.map((artifact: any) => ({ key: `artifact:${artifact.id}`, kind: "artifact", title: artifact.title, identifier: artifact.id, publication: artifact.publisher || "Publisher record", rank: 7, payload: artifact })),
       ...glossaryMatches.map((entry: any) => ({ key: `glossary:${entry.id}`, kind: "glossary", title: entry.term, identifier: entry.id, publication: "Control Atlas glossary", rank: 8, payload: entry })),
     ];
     const byText = (key: "title" | "identifier" | "publication") => (left: any, right: any) => String(left[key]).localeCompare(String(right[key]), undefined, { numeric: true, sensitivity: "base" });
@@ -291,7 +294,10 @@ export function ExplorePage(props: {
               const lowCoverage = detailsReady
                 ? isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, row.document.catalog_id))
                 : false;
-              const excerpt = officialTextPreview(row.document.description || row.document.summary || "No narrative description was published for this record.", 220).preview;
+              const excerpt = officialTextPreview(
+                row.document.summary || officialDescriptionOrStatus(row.document),
+                220,
+              ).preview;
               return (
                 <article aria-labelledby={`title-${row.document.id}`} className="search-result-row" data-result-class="published-record" key={result.key}>
                   <div className="search-result-row__type">{displayNameFor("object_type", row.document.object_type)}</div>
@@ -321,7 +327,11 @@ export function ExplorePage(props: {
               source: { type: "Source register", summary: `Publisher: ${item.publisher || item.agency || "Source owner"}`, action: () => onNavigate("sources", { source: item.id }) },
               template: { type: "Starter document", summary: item.summary, action: () => onNavigate("templates", { templateType: item.templateType }) },
               artifact: { type: "Official resource", summary: item.summary, action: () => { if (item.href) window.open(item.href, "_blank", "noopener,noreferrer"); } },
-              glossary: { type: "Glossary", summary: item.definition, action: () => onOpenGlossary(item.id) },
+              glossary: {
+                type: "Glossary · Control Atlas explanation",
+                summary: `${item.definition} Reference: ${item.source}`,
+                action: () => onOpenGlossary(item.id),
+              },
             };
             const view = meta[result.kind];
             return (

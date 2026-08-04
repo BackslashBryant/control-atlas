@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
+import { officialDescriptionOrStatus } from "../lib/officialText";
 import {
   resourceAccessLabel,
   resourceTypeLabel,
@@ -193,7 +194,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               {displayNameFor("object_type", document.object_type)}
                             </span>
                             <span className="search-overlay-result-summary">
-                              {document.description || "No narrative description was published for this record."}
+                              {officialDescriptionOrStatus(document)}
                             </span>
                           </button>
                         </li>

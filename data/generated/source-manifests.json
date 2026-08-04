@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-03T03:11:00.341Z",
+  "generated_at": "2026-08-04T13:00:49.321Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -1158,9 +1158,9 @@
       "lifecycle_status": "draft",
       "graph_eligible": true,
       "node_count": 0,
-      "relationship_count": 737,
-      "evidence_count": 737,
-      "finding_count": 9
+      "relationship_count": 746,
+      "evidence_count": 746,
+      "finding_count": 0
     },
     {
       "source_id": "nist-oscal",

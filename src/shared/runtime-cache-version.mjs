@@ -1,1 +1,1 @@
-export const RUNTIME_CACHE_VERSION = "20260729-1";
+export const RUNTIME_CACHE_VERSION = "20260804-1";

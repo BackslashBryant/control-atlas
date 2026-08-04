@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { officialTextPreview } from "../../src/ui/lib/officialText";
+import {
+  officialDescriptionOrStatus,
+  officialTextPreview,
+} from "../../src/ui/lib/officialText";
 
 test("long official text keeps a bounded preview and an explicit full-text boundary", () => {
   const official = `${"published source wording ".repeat(50)}final sentence`;
@@ -19,4 +22,19 @@ test("short official text is not altered", () => {
     preview: official,
     truncated: false,
   });
+});
+
+test("compact search records preserve a truthful official-description status", () => {
+  assert.equal(
+    officialDescriptionOrStatus({ description_available: true }),
+    "Official description available — open this record to read it.",
+  );
+  assert.equal(
+    officialDescriptionOrStatus({}),
+    "No narrative description was published for this record.",
+  );
+  assert.equal(
+    officialDescriptionOrStatus({ description: "Publisher wording." }),
+    "Publisher wording.",
+  );
 });

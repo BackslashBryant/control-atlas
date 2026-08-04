@@ -22,6 +22,7 @@ function compactNode(node) {
     node.source_id || "",
     node.metadata?.family || "",
     node.parent_id || "",
+    node.metadata?.description || "",
   ];
 }
 
