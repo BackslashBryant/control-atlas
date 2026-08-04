@@ -528,16 +528,16 @@ a {
 }
 
 .atlas-universe-mobile__roots,
-.atlas-universe-mobile__trunk { display: grid; gap: 2px; }
+.atlas-universe-mobile__spine { display: grid; gap: 2px; }
 
 .atlas-universe-mobile__roots span,
-.atlas-universe-mobile__trunk span,
+.atlas-universe-mobile__spine span,
 .atlas-universe-mobile__branches button span {
   color: var(--ca-text-muted);
   font: 600 0.64rem/1.35 var(--ca-font-mono);
 }
 
-.atlas-universe-mobile__trunk {
+.atlas-universe-mobile__spine {
   padding: var(--ca-space-2);
   border: 1px solid var(--ca-primary);
   border-radius: var(--ca-radius-sm);

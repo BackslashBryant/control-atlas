@@ -9,6 +9,10 @@ export type AtlasAreaPosition = {
 const AREA_WIDTH = 188;
 const AREA_HEIGHT = 68;
 
+// The underlying generated graph keeps this canonical ID. UI components use
+// the semantic name so internal modeling vocabulary never leaks into copy.
+export const ATLAS_CYBERSECURITY_NODE_ID = "atlas:TRUNK";
+
 // A deliberate canopy silhouette, not a radial hub. The measured rectangles
 // are shared by the renderer and cheap collision-contract tests.
 export const ATLAS_UNIVERSE_POSITIONS: AtlasAreaPosition[] = [
