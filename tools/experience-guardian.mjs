@@ -205,7 +205,7 @@ const correctionContracts = [
   {
     file: "src/ui/pages/ExplorePage.tsx",
     rule: "ranked-search-contract",
-    pattern: /search-filter-rail[\s\S]*search-result-list[\s\S]*Show 40 more/,
+    pattern: /search-filter-rail[\s\S]*search-result-list[\s\S]*unifiedResults\.slice\(0, visibleCount\)[\s\S]*setVisibleCount/,
     message: "Search must expose visible filters, one ranked list, and bounded incremental rendering.",
   },
   {

@@ -4,6 +4,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -166,6 +167,19 @@ export function App() {
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
   const [routeRecovery, setRouteRecovery] = useState("");
+  const [chromeReady, setChromeReady] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setChromeReady(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useLayoutEffect(() => {
+    const root = document.getElementById("root");
+    if (!root) return;
+    root.dataset.reactShellReady = chromeReady ? "true" : "false";
+    root.dataset.reactActive = chromeReady ? "true" : "false";
+  }, [chromeReady, viewState.view]);
 
   useEffect(() => {
     const syncLocation = () => {
@@ -493,13 +507,13 @@ export function App() {
       >
         Skip to workspace
       </a>
-      <TopNav
+      {chromeReady ? <TopNav
         onNavigate={navigate}
         onOpenHelp={() => openHelp()}
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}
-      />
-      <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} />
+      /> : null}
+      {chromeReady ? <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} /> : null}
 
       <main id="workspace" tabIndex={-1}>
         {routeRecovery ? (
@@ -521,7 +535,7 @@ export function App() {
           id="app"
         >
           {showWorkspaceContent ? (
-            <Suspense fallback={<LoadingStatusPanel slow={false} />}>
+            <Suspense fallback={<LoadingStatusPanel slow={false} suspensePending />}>
               <AppContent
                 bundle={bundle}
                 loadError={loadError}
@@ -548,7 +562,7 @@ export function App() {
         </section>
       </main>
 
-      <SiteFooter onNavigate={navigate} />
+      {chromeReady ? <SiteFooter onNavigate={navigate} /> : null}
 
       {searchOverlayOpen ? (
         <Suspense fallback={null}>

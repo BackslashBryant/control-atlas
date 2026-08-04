@@ -92,9 +92,15 @@ function syncStaticRouteShell() {
     const eyebrow = shell.querySelector<HTMLElement>('[data-static-route-eyebrow]');
     const title = shell.querySelector<HTMLElement>('[data-static-route-title]');
     const summary = shell.querySelector<HTMLElement>('[data-static-route-summary]');
-    if (eyebrow) eyebrow.textContent = identity.eyebrow;
-    if (title) title.textContent = identity.title;
-    if (summary) summary.textContent = identity.summary;
+    if (eyebrow && eyebrow.textContent !== identity.eyebrow) {
+      eyebrow.textContent = identity.eyebrow;
+    }
+    if (title && title.textContent !== identity.title) {
+      title.textContent = identity.title;
+    }
+    if (summary && summary.textContent !== identity.summary) {
+      summary.textContent = identity.summary;
+    }
   } else {
     delete rootElement.dataset.staticRoutePersistent;
     delete rootElement.dataset.staticRouteKind;
@@ -126,6 +132,12 @@ function observeRouteHydration() {
       app.dataset.view === 'atlas-map' &&
       app.dataset.hasSubject === 'true' &&
       !reactRootElement.querySelector('[data-route-content-ready="true"]')
+    ) {
+      return false;
+    }
+    if (
+      rootElement.dataset.staticRoutePersistent === 'true' &&
+      reactRootElement.querySelector('[data-route-suspense-pending="true"]')
     ) {
       return false;
     }
@@ -255,7 +267,8 @@ function connectStaticSearch() {
 function syncProgressiveShell() {
   const home = isHomeHash();
   const search = isSearchHash();
-  rootElement.dataset.reactActive = reactBoot && !home ? 'true' : 'false';
+  rootElement.dataset.reactActive =
+    rootElement.dataset.reactShellReady === 'true' ? 'true' : 'false';
   if (search) {
     rootElement.dataset.staticSearchActive = 'true';
   } else {
@@ -498,6 +511,10 @@ async function start() {
   // first-paint shell. Waiting for window.load created a full network
   // waterfall: CSS and the entry module finished before the React route and
   // its data even started. Home keeps its one-script static boundary above.
+  // The classic progressive shell has already revealed the route identity.
+  // Begin fetching the route and framework immediately so network time overlaps
+  // that stable first paint and produces the interactive result without an
+  // extra task boundary between framework readiness and the initial commit.
   warmInteractiveRoute();
   void bootReactApp();
 }
