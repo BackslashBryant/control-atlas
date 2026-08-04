@@ -80,6 +80,7 @@ function treeNode(
   dimensions: { width: number; height: number },
   data: Partial<AtlasTreeNodeData> = {},
 ): AtlasTreeNode {
+  const interactive = kind === "area" || kind === "publication" || kind === "unit";
   return {
     id,
     type: "atlasTree",
@@ -89,9 +90,9 @@ function treeNode(
     width: dimensions.width,
     height: dimensions.height,
     draggable: false,
-    selectable: kind !== "junction",
-    focusable: kind !== "junction" && kind !== "root" && kind !== "cybersecurity",
-    ariaRole: kind === "junction" ? "presentation" : "button",
+    selectable: interactive,
+    focusable: interactive,
+    ariaRole: kind === "junction" ? "presentation" : interactive ? "button" : "group",
   };
 }
 

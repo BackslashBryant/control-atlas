@@ -117,6 +117,11 @@ test("Atlas first paint is a collision-free nine-area circuit tree with drill-do
   await page.goto("/#/explore");
   await waitForReady(page);
   await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
+  await expect(page.locator(".atlas-universe__root")).toHaveAttribute("role", "group");
+  await expect(page.locator(".atlas-universe__cybersecurity")).toHaveAttribute("role", "group");
+  await expect(page.locator(".atlas-universe__area").first()).toHaveAttribute("role", "button");
+  await expect(page.getByRole("button", { name: /Authority roots/i })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Cybersecurity Control Atlas structure/i })).toHaveCount(0);
   const collisions = await visibleCollisions(page.locator(".atlas-universe__area:visible"));
   expect(collisions).toEqual([]);
   await page.screenshot({
