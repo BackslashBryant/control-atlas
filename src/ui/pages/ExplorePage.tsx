@@ -159,7 +159,7 @@ export function ExplorePage(props: {
     () => (searchStarted ? bundle.runtime.searchLibrary(state.query, filters) : []),
     [bundle.runtime, searchStarted, state.query, state.filter, state.objectType, state.sourceClass, state.controlFamily, state.severity],
   );
-  const coverage = useMemo(() => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1), [bundle.runtime]);
+  const catalogCoverage = useMemo(() => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1), [bundle.runtime]);
   const catalogs = useMemo(() => new Map(bundle.runtime.getCatalogs().map((catalog: any) => [catalog.id, catalog.name])), [bundle.runtime]);
 
   const recordRows = useMemo(() => documents.map((document: any) => {
@@ -176,11 +176,11 @@ export function ExplorePage(props: {
       relationshipCount,
       path,
       matchReason: matchReasonFor(document, state.query),
-      lowCoverage: isLowCatalogCoverage(catalogCoverageForId(coverage, document.catalog_id)),
+      lowCoverage: isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, document.catalog_id)),
       title: recordDisplayTitle(node ?? { id: document.id, node_type: document.object_type, metadata: { item_id: document.item_id, title: document.title } }),
       publication: catalogs.get(document.catalog_id) || document.catalog_name || document.catalog_id || "Publication unavailable",
     };
-  }).filter((row: any) => !connectedOnly || row.relationshipCount > 0), [bundle.runtime, catalogs, connectedOnly, coverage, documents, state.query]);
+  }).filter((row: any) => !connectedOnly || row.relationshipCount > 0), [bundle.runtime, catalogs, catalogCoverage, connectedOnly, documents, state.query]);
 
   const directoryResources = useMemo(() => !hasQuery || hasFilters ? [] : searchResourceDocuments(bundle.commonsSearchIndex?.documents || [], state.query, 12).map((entry) => entry.document), [bundle.commonsSearchIndex, hasFilters, hasQuery, state.query]);
   const guideMatches = useMemo(() => {

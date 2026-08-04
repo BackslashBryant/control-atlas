@@ -69,9 +69,8 @@ export function StartHerePage(props: {
 
       {step === 1 ? (
         <section aria-labelledby="start-here-goal" className="start-here-step">
-          <p className="eyebrow">Question 1 of 2</p>
-          <h2 id="start-here-goal">What are you trying to do?</h2>
-          <p>Choose the work in front of you. This guides navigation; it does not decide applicability.</p>
+          <h2 id="start-here-goal">1. What are you trying to do?</h2>
+          <p>Choose the work in front of you. Control Atlas does not decide what applies to your system.</p>
           <div className="start-here-choice-grid">
             {START_HERE_GOALS.map((goal: { id: string; label: string }) => <button key={goal.id} onClick={() => update({ goal: goal.id, context: "" })} type="button"><span>{goal.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
           </div>
@@ -80,8 +79,7 @@ export function StartHerePage(props: {
 
       {step === 2 ? (
         <section aria-labelledby="start-here-context" className="start-here-step">
-          <p className="eyebrow">Question 2 of 2</p>
-          <h2 id="start-here-context">What environment are you working in?</h2>
+          <h2 id="start-here-context">2. What context do you already know?</h2>
           <p>This selects a sensible publication to open first. It is not a scoping determination.</p>
           <div className="start-here-choice-grid">
             {START_HERE_CONTEXTS.map((context: { id: string; label: string }) => <button key={context.id} onClick={() => update({ context: context.id })} type="button"><span>{context.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}

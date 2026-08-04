@@ -19,6 +19,7 @@ import type {
   AtlasFamilyChoice,
 } from "../lib/atlasDrilldown";
 import {
+  ATLAS_CYBERSECURITY_NODE_ID,
   ATLAS_UNIVERSE_POSITIONS,
   atlasUniverseCollisions,
 } from "../lib/atlasUniverse";
@@ -30,7 +31,7 @@ type CatalogSummary = {
 };
 
 type SemanticLevel = "landscape" | "publications" | "structure";
-type NodeKind = "root" | "trunk" | "area" | "publication" | "unit" | "junction";
+type NodeKind = "root" | "cybersecurity" | "area" | "publication" | "unit" | "junction";
 
 type AtlasTreeNodeData = {
   kind: NodeKind;
@@ -89,7 +90,7 @@ function treeNode(
     height: dimensions.height,
     draggable: false,
     selectable: kind !== "junction",
-    focusable: kind !== "junction" && kind !== "root" && kind !== "trunk",
+    focusable: kind !== "junction" && kind !== "root" && kind !== "cybersecurity",
     ariaRole: kind === "junction" ? "presentation" : "button",
   };
 }
@@ -124,8 +125,8 @@ function baseNodes(): AtlasTreeNode[] {
       { meta: "Law / policy / standards / source material" },
     ),
     treeNode(
-      "atlas:TRUNK",
-      "trunk",
+      ATLAS_CYBERSECURITY_NODE_ID,
+      "cybersecurity",
       "Cybersecurity",
       { x: 560, y: 510 },
       { width: 240, height: 76 },
@@ -172,8 +173,8 @@ function landscapeProjection(
   }
 
   const edges: AtlasTreeEdge[] = [
-    treeEdge("roots-trunk", "atlas:AUTHORITY-ROOTS", "atlas:TRUNK", "organizing"),
-    treeEdge("trunk-base", "atlas:TRUNK", "junction:base", "routing"),
+    treeEdge("roots-cybersecurity", "atlas:AUTHORITY-ROOTS", ATLAS_CYBERSECURITY_NODE_ID, "organizing"),
+    treeEdge("cybersecurity-base", ATLAS_CYBERSECURITY_NODE_ID, "junction:base", "routing"),
     treeEdge("base-left", "junction:base", "junction:left", "routing"),
     treeEdge("left-crown", "junction:left", "junction:left-crown", "routing"),
     treeEdge("base-center", "junction:base", "junction:center", "routing"),
@@ -247,8 +248,8 @@ function publicationProjection(
     );
   });
   const edges = [
-    treeEdge("roots-trunk", "atlas:AUTHORITY-ROOTS", "atlas:TRUNK", "organizing"),
-    treeEdge("trunk-area", "atlas:TRUNK", area.id, "organizing"),
+    treeEdge("roots-cybersecurity", "atlas:AUTHORITY-ROOTS", ATLAS_CYBERSECURITY_NODE_ID, "organizing"),
+    treeEdge("cybersecurity-area", ATLAS_CYBERSECURITY_NODE_ID, area.id, "organizing"),
     ...area.frameworks.map((framework) =>
       treeEdge(
         `publication-edge:${framework.id}`,
@@ -302,8 +303,8 @@ function structureProjection(
     );
   });
   const edges = [
-    treeEdge("roots-trunk", "atlas:AUTHORITY-ROOTS", "atlas:TRUNK", "organizing"),
-    treeEdge("trunk-area", "atlas:TRUNK", area.id, "organizing"),
+    treeEdge("roots-cybersecurity", "atlas:AUTHORITY-ROOTS", ATLAS_CYBERSECURITY_NODE_ID, "organizing"),
+    treeEdge("cybersecurity-area", ATLAS_CYBERSECURITY_NODE_ID, area.id, "organizing"),
     treeEdge("area-publication", area.id, `publication:${framework.id}`, "organizing"),
     ...units.map((unit) =>
       treeEdge(
@@ -611,7 +612,7 @@ function AtlasUniverseMobile(props: {
   return (
     <div className="atlas-universe-mobile">
       <div className="atlas-universe-mobile__roots"><strong>Authority roots</strong><span>Law / policy / standards / source material</span></div>
-      <div className="atlas-universe-mobile__trunk"><strong>Cybersecurity</strong><span>Control Atlas structure</span></div>
+      <div className="atlas-universe-mobile__spine"><strong>Cybersecurity</strong><span>Control Atlas structure</span></div>
       <div className="atlas-universe-mobile__toolbar">
         {(area || framework) ? (
           <button onClick={() => {
