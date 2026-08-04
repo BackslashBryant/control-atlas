@@ -2,7 +2,7 @@ import React from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'secondary-quiet' | 'destructive' | 'editorial';
 
-const BUTTON_BASE = "inline-flex items-center justify-center min-h-[44px] px-[16px] border rounded-[3px] font-bold uppercase tracking-[0.06em] cursor-pointer transition-colors";
+const BUTTON_BASE = "inline-flex items-center justify-center gap-[8px] min-h-[44px] px-[16px] border rounded-[3px] font-bold uppercase tracking-[0.06em] cursor-pointer transition-colors";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   primary: "ca-button-primary",

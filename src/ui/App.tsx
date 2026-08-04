@@ -38,6 +38,8 @@ import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
 import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
 import {
+  beginRouteTransition,
+  completeRouteTransition,
   notifyRouteCommitted,
   OPEN_SEARCH_OVERLAY_EVENT,
 } from "../shared/navigation-events";
@@ -166,7 +168,10 @@ export function App() {
   const [routeRecovery, setRouteRecovery] = useState("");
 
   useEffect(() => {
-    const syncLocation = () => setLocation(readHashLocation());
+    const syncLocation = () => {
+      beginRouteTransition("Opening the selected workspace");
+      setLocation(readHashLocation());
+    };
     window.addEventListener("hashchange", syncLocation);
     window.addEventListener("popstate", syncLocation);
     return () => {
@@ -400,6 +405,7 @@ export function App() {
     nextView: ViewState["view"],
     patch: Partial<ViewState> = {},
   ) {
+    if (!beginRouteTransition("Opening the selected workspace")) return;
     const nextState = normalizeViewState(nextView, {
       ...(latestNavStateRef.current as Record<string, unknown>),
       ...(patch as Record<string, unknown>),
@@ -465,6 +471,14 @@ export function App() {
   const showWorkspaceContent =
     Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
   const routeContext = orbitalRouteContext(viewState, routeEntityName);
+
+  useEffect(() => {
+    if (readyState === "false") return;
+    const frame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(completeRouteTransition);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [readyState, viewState]);
 
   return (
     <>

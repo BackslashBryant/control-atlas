@@ -52,7 +52,8 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   await expect(panel.getByText("Decomposes into")).toBeVisible();
   await expect(panel.getByRole("button", { name: "AC-2.1", exact: true })).toBeVisible();
   await expect(panel.getByRole("button", { name: "See connections" })).toBeVisible();
-  await expect(panel.getByRole("button", { name: "Open full record" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Open full record" })).toHaveCount(0);
+  await expect(page.locator(".atlas-record-title-link").first()).toBeVisible();
   await expect(panel.getByRole("button", { name: "Review official source" })).toBeVisible();
 });
 

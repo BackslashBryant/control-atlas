@@ -4,6 +4,8 @@ import {
   BRAND_WORDS,
 } from './shared/brand-rotation';
 import {
+  beginRouteTransition,
+  completeRouteTransition,
   requestSearchOverlayOpen,
   ROUTE_COMMITTED_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
@@ -209,6 +211,7 @@ function onBrandMotionChange() {
 }
 
 function navigateFromStaticHome(target: string) {
+  if (!beginRouteTransition("Opening Control Atlas")) return;
   if (window.location.hash !== target) {
     window.location.hash = target.slice(1);
   }
@@ -288,7 +291,7 @@ function connectStaticHome() {
       rootElement.querySelector<HTMLElement>('#workspace')?.focus();
     });
 
-  rootElement.querySelectorAll<HTMLElement>('[data-route]').forEach((control) => {
+  rootElement.querySelectorAll<HTMLElement>('[data-static-home] [data-route]').forEach((control) => {
     control.addEventListener('click', () => {
       const target = control.dataset.route;
       if (target) navigateFromStaticHome(target);
@@ -301,12 +304,6 @@ function connectStaticHome() {
   // drawer, so a tap here boots React (like the search shortcut below) —
   // the first tap opens the real, fully-interactive menu instead of building
   // a second, throwaway one.
-  rootElement
-    .querySelector<HTMLElement>('[data-static-menu-boot]')
-    ?.addEventListener('click', () => {
-      void bootReactApp();
-    });
-
   rootElement
     .querySelector<HTMLFormElement>('[data-home-search]')
     ?.addEventListener('submit', (event) => {
@@ -322,6 +319,37 @@ function connectStaticHome() {
   rootElement
     .querySelector<HTMLElement>('.app-shell')
     ?.setAttribute('data-app-ready', 'true');
+}
+
+function connectStaticHeader() {
+  rootElement
+    .querySelectorAll<HTMLElement>('[data-static-header] [data-route]')
+    .forEach((control) => {
+      control.addEventListener('click', () => {
+        const target = control.dataset.route;
+        if (target) navigateFromStaticHome(target);
+      });
+    });
+  rootElement
+    .querySelector<HTMLElement>('[data-static-menu-boot]')
+    ?.addEventListener('click', () => {
+      if (!beginRouteTransition('Opening navigation')) return;
+      void bootReactApp().then(() => {
+        completeRouteTransition();
+        rootElement
+          .querySelector<HTMLElement>('[data-react-root] .mobile-nav-toggle')
+          ?.click();
+      });
+    });
+  rootElement
+    .querySelector<HTMLElement>('[data-static-search-open]')
+    ?.addEventListener('click', () => {
+      if (!beginRouteTransition('Opening search')) return;
+      void bootReactApp().then(() => {
+        completeRouteTransition();
+        window.setTimeout(() => requestSearchOverlayOpen(), 0);
+      });
+    });
 }
 
 // React (and its Ctrl+K listener in App.tsx) does not mount at all while on
@@ -373,6 +401,7 @@ async function bootReactApp() {
     })
     .catch((error: unknown) => {
       reactBoot = null;
+      completeRouteTransition();
       const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
       if (boundary) {
         boundary.setAttribute('role', 'alert');
@@ -399,6 +428,7 @@ function loadReactModules() {
 }
 
 function onLocationChange() {
+  beginRouteTransition("Opening the selected workspace");
   if (!isHomeHash()) void bootReactApp();
 }
 
@@ -439,6 +469,7 @@ async function start() {
   }
 
   connectStaticSearch();
+  connectStaticHeader();
   syncProgressiveShell();
   window.addEventListener('hashchange', syncProgressiveShell);
   window.addEventListener('popstate', syncProgressiveShell);

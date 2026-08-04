@@ -1,0 +1,209 @@
+import { expect, test } from "@playwright/test";
+
+async function waitForReady(page) {
+  await expect(page.locator('#app[data-app-ready="true"], #app[data-app-ready="partial"]')).toBeVisible({ timeout: 30000 });
+}
+
+async function visibleCollisions(locator, gap = 4) {
+  return locator.evaluateAll((elements, safeGap) => {
+    const boxes = elements.map((element) => ({
+      label: element.textContent?.trim() || element.className,
+      box: element.getBoundingClientRect(),
+    }));
+    return boxes.flatMap((left, index) =>
+      boxes.slice(index + 1).flatMap((right) =>
+        left.box.right + safeGap <= right.box.left ||
+        right.box.right + safeGap <= left.box.left ||
+        left.box.bottom + safeGap <= right.box.top ||
+        right.box.bottom + safeGap <= left.box.top
+          ? []
+          : [[left.label, right.label]],
+      ),
+    );
+  }, gap);
+}
+
+test("primary clicks expose transition feedback before the route replaces stale content", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.route("**/assets/*.js", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    await route.continue();
+  });
+  await page.goto("/#/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('[data-static-home] [data-app-ready="true"]')).toBeVisible();
+  await page.evaluate(() => {
+    globalThis.__transitionProbe = { clickAt: 0, shownAt: 0, inert: false };
+    globalThis.document.addEventListener("click", () => { globalThis.__transitionProbe.clickAt = performance.now(); }, { capture: true, once: true });
+    const root = globalThis.document.getElementById("root");
+    const observer = new globalThis.MutationObserver(() => {
+      const transition = root?.querySelector("[data-route-transition]");
+      if (transition && !transition.hasAttribute("hidden")) {
+        globalThis.__transitionProbe.shownAt = performance.now();
+        globalThis.__transitionProbe.inert = Boolean(root?.querySelector("main[inert]"));
+        observer.disconnect();
+      }
+    });
+    if (root) observer.observe(root, { attributes: true, subtree: true, attributeFilter: ["hidden", "data-route-transition"] });
+  });
+  await page.getByRole("button", { name: "Atlas", exact: true }).click();
+  await waitForReady(page);
+  const probe = await page.evaluate(() => globalThis.__transitionProbe);
+  expect(probe.shownAt - probe.clickAt).toBeLessThanOrEqual(100);
+  expect(probe.inert).toBe(true);
+  await expect(page.locator(".atlas-universe")).toBeVisible();
+});
+
+for (const viewport of [
+  { width: 320, height: 740 },
+  { width: 375, height: 812 },
+  { width: 390, height: 844 },
+  { width: 430, height: 932 },
+  { width: 768, height: 1024 },
+  { width: 900, height: 1000 },
+  { width: 1440, height: 900 },
+  { width: 1920, height: 1080 },
+]) {
+  test(`responsive Atlas shell is collision and overflow free at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/#/explore");
+    await waitForReady(page);
+    const dimensions = await page.evaluate(() => ({
+      clientWidth: globalThis.document.documentElement.clientWidth,
+      scrollWidth: globalThis.document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+    await expect(page.locator(".atlas-universe")).toBeVisible();
+    expect(await visibleCollisions(page.locator(".atlas-universe__area:visible"))).toEqual([]);
+    if (viewport.width < 1024) {
+      const search = page.getByRole("button", { name: "Open search" });
+      const menu = page.getByRole("button", { name: "Open navigation menu" });
+      for (const control of [search, menu]) {
+        const box = await control.boundingBox();
+        expect(box?.width).toBeGreaterThanOrEqual(44);
+        expect(box?.height).toBeGreaterThanOrEqual(44);
+      }
+    }
+  });
+}
+
+for (const zoom of [
+  { label: "100%", width: 1440, height: 900 },
+  { label: "125%", width: 1152, height: 720 },
+  { label: "200%", width: 720, height: 450 },
+]) {
+  test(`desktop-equivalent ${zoom.label} zoom preserves navigation and content`, async ({ page }) => {
+    await page.setViewportSize({ width: zoom.width, height: zoom.height });
+    await page.goto("/#/start");
+    await waitForReady(page);
+    const dimensions = await page.evaluate(() => ({
+      clientWidth: globalThis.document.documentElement.clientWidth,
+      scrollWidth: globalThis.document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+    await expect(page.getByRole("heading", { name: "Start here", level: 1 })).toBeVisible();
+  });
+}
+
+test("reduced motion keeps the complete Atlas visible without animation", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#/explore");
+  await waitForReady(page);
+  await expect(page.locator(".atlas-universe__branch").first()).toHaveCSS("animation-name", "none");
+  await expect(page.locator(".atlas-universe__branch").first()).toHaveCSS("stroke-dashoffset", "0px");
+});
+
+test("Atlas first paint is a collision-free nine-area circuit tree with drill-down", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#/explore");
+  await waitForReady(page);
+  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
+  const collisions = await visibleCollisions(page.locator(".atlas-universe__area:visible"));
+  expect(collisions).toEqual([]);
+  await page.getByRole("button", { name: /Threats & Defense/ }).click();
+  await expect(page.getByText(/which catalog do you want to open/i)).toBeVisible();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-THREAT/);
+});
+
+test("focused Atlas map never overlaps its center or relationship spokes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
+  await waitForReady(page);
+  const mapItems = page.locator(".atlas-radial-map:visible > .atlas-radial-center, .atlas-radial-map:visible > .atlas-radial-group");
+  await expect(mapItems).toHaveCount(5);
+  expect(await visibleCollisions(mapItems, 8)).toEqual([]);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileItems = page.locator(".atlas-radial-map--stacked:visible .atlas-radial-center, .atlas-radial-map--stacked:visible .atlas-radial-group");
+  await expect(mobileItems).toHaveCount(5);
+  expect(await visibleCollisions(mobileItems, 4)).toEqual([]);
+});
+
+test("global Search handles empty, IME, exact-ID, Enter, Clear, Close, and Escape", async ({ page }) => {
+  await page.goto("/#/about");
+  await waitForReady(page);
+  await page.getByRole("button", { name: "Open search" }).click();
+  const dialog = page.getByRole("dialog", { name: "Search Control Atlas" });
+  const search = dialog.getByRole("searchbox", { name: "Search Control Atlas" });
+  await search.press("Enter");
+  await expect(dialog.getByRole("status")).toContainText("Enter an identifier");
+  await search.fill("T1195.002");
+  await expect(dialog.getByRole("button", { name: "Clear search" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Close search" })).toBeVisible();
+  await search.dispatchEvent("compositionstart");
+  await search.press("Enter");
+  await expect(page).toHaveURL(/#\/about/);
+  await search.dispatchEvent("compositionend");
+  await search.press("Enter");
+  await expect(page).toHaveURL(/#\/search\?q=T1195\.002/);
+  await waitForReady(page);
+  const title = await page.locator('.search-result-row[data-result-class="published-record"] h2').first().innerText();
+  expect((title.match(/T1195\.002/gi) || []).length).toBe(1);
+  await page.getByRole("button", { name: "Open search" }).click();
+  await page.getByRole("dialog", { name: "Search Control Atlas" }).getByRole("searchbox").fill("access control");
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "Search Control Atlas" })).toHaveCount(0);
+});
+
+test("ranked search exposes desktop filters, sort, active chips, and mobile drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#/search?q=access&objectType=control&sort=identifier");
+  await waitForReady(page);
+  await expect(page.locator(".search-filter-rail")).toBeVisible();
+  await expect(page.locator(".search-result-count")).toContainText(/result/);
+  await expect(page.getByLabel("Sort search results")).toHaveValue("identifier");
+  await expect(page.locator(".search-result-groups")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Control/ }).first()).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: /Filters \(1\)/ }).click();
+  await expect(page.getByRole("dialog", { name: "Filter search results" })).toBeVisible();
+  await page.getByRole("button", { name: "Close filters" }).click();
+});
+
+test("Start Here preserves answers across URL history and names its destination", async ({ page }) => {
+  await page.goto("/#/start");
+  await waitForReady(page);
+  await page.getByRole("button", { name: "Implement requirements" }).click();
+  await expect(page).toHaveURL(/goal=implement/);
+  await page.getByRole("button", { name: "CUI contractor environment" }).click();
+  await expect(page).toHaveURL(/goal=implement.*context=cui|context=cui.*goal=implement/);
+  await expect(page.getByText("Next destination")).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/goal=implement/);
+  await expect(page).not.toHaveURL(/context=/);
+  await page.goForward();
+  await expect(page).toHaveURL(/context=cui/);
+  await page.reload();
+  await waitForReady(page);
+  await expect(page.getByRole("heading", { name: /Start with SP 800-171/ })).toBeVisible();
+  await page.getByRole("button", { name: /Open SP 800-171/ }).click();
+  await expect(page).toHaveURL(/#\/catalog\/nist-800-171-rev2|#\/catalog\?catalog=nist-800-171-rev2/);
+});
+
+test("desktop primary navigation remains visible and retired mode parameters canonicalize away", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?mode=novice#");
+  await expect(page).not.toHaveURL(/mode=novice/);
+  for (const label of ["Atlas", "Library", "Compare", "Guides", "Documents"]) {
+    await expect(page.locator(".site-header .primary-nav:visible").getByRole("button", { name: label, exact: true })).toBeVisible();
+  }
+});

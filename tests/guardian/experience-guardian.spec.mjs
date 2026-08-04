@@ -57,6 +57,51 @@ test.describe("Control Atlas Experience Guardian", () => {
         ).toBeVisible();
       }
 
+      const visibleHeaders = await page.locator(".site-header:visible").count();
+      expect(visibleHeaders, "Static and React shells must expose exactly one visible global header").toBe(1);
+
+      if (viewport === "desktop") {
+        await expect(page.locator(".site-header .primary-nav:visible")).toBeVisible();
+      }
+
+      if (state.id === "atlas-overview") {
+        await expect(page.locator(".atlas-universe")).toBeVisible();
+        const collisions = await page.locator(".atlas-universe__area:visible").evaluateAll((elements) => {
+          const boxes = elements.map((element) => ({ label: element.textContent?.trim() || "area", box: element.getBoundingClientRect() }));
+          return boxes.flatMap((left, index) => boxes.slice(index + 1).filter((right) => !(left.box.right + 4 <= right.box.left || right.box.right + 4 <= left.box.left || left.box.bottom + 4 <= right.box.top || right.box.bottom + 4 <= left.box.top)).map((right) => [left.label, right.label]));
+        });
+        expect(collisions, "Atlas overview labels must never collide").toEqual([]);
+      }
+
+      if (["mixed-search", "exact-search", "filtered-search"].includes(state.id)) {
+        await expect(page.locator(".search-result-count")).toBeVisible();
+        await expect(page.locator(".search-sort select")).toBeVisible();
+        await expect(page.locator(".search-result-groups")).toHaveCount(0);
+        if (viewport === "desktop") {
+          await expect(page.locator(".search-filter-rail")).toBeVisible();
+        } else {
+          await page.getByRole("button", { name: /Filters/ }).click();
+          await expect(page.getByRole("dialog", { name: "Filter search results" })).toBeVisible();
+          await page.getByRole("button", { name: "Close filters" }).click();
+        }
+      }
+
+      if (["compare", "guides", "documents", "resource-detail"].includes(state.id)) {
+        const deadSpace = await page.evaluate(() => {
+          const main = globalThis.document.querySelector("#workspace");
+          const footer = globalThis.document.querySelector("footer");
+          if (!main || !footer) return 0;
+          const visible = [...main.querySelectorAll("*")].filter((element) => {
+            const style = globalThis.getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            return style.display !== "none" && style.visibility !== "hidden" && rect.height > 0;
+          });
+          const contentBottom = Math.max(main.getBoundingClientRect().top, ...visible.map((element) => element.getBoundingClientRect().bottom));
+          return Math.max(0, Math.round(footer.getBoundingClientRect().top - contentBottom));
+        });
+        expect(deadSpace, `Unexpected ${deadSpace}px gap before the footer`).toBeLessThanOrEqual(160);
+      }
+
       if (state.officialBeforeEditorial && viewport === "mobile") {
         const order = await page.evaluate(() => {
           const official = [...globalThis.document.querySelectorAll("article")].find((element) =>

@@ -44,7 +44,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
     .getByRole("article", { name: /AC-2.*Account Management/i })
     .filter({ hasNotText: "Assessment Procedure" });
   await expect(controlResult).toBeVisible({ timeout: 30000 });
-  await controlResult.getByRole("button", { name: "Open record" }).click();
+  await controlResult.locator(".search-result-primary").click();
   await expect(
     page.getByText("Source excerpt from SP 800-53 Rev. 5", { exact: true }),
   ).toBeVisible({ timeout: 30000 });

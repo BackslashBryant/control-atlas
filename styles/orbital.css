@@ -43,10 +43,15 @@ body {
   display: contents;
 }
 
+#root > [data-static-header],
 #root > [data-static-header-reserve],
 #root > [data-react-root] .site-header {
   grid-column: 1;
   grid-row: 1;
+}
+
+#root[data-react-active="true"] > [data-static-header] {
+  display: none;
 }
 
 #root > [data-static-context-reserve],
@@ -143,6 +148,76 @@ body {
   min-height: var(--ca-control-md);
 }
 
+.route-transition {
+  position: fixed;
+  inset: var(--ca-header-height, 68px) 0 0;
+  z-index: 180;
+  display: grid;
+  place-content: center;
+  gap: var(--ca-space-3);
+  min-height: 10rem;
+  padding: var(--ca-space-6);
+  color: var(--ca-text);
+  text-align: center;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ca-bg) 92%, transparent), var(--ca-bg)),
+    repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in srgb, var(--ca-primary) 8%, transparent) 31px 32px);
+  backdrop-filter: blur(7px);
+  animation: route-transition-in 90ms ease-out both;
+}
+
+.route-transition[hidden] {
+  display: none;
+}
+
+.route-transition__circuit {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 2.25rem);
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+}
+
+.route-transition__circuit i {
+  position: relative;
+  display: block;
+  height: 2px;
+  background: var(--ca-primary);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--ca-primary) 62%, transparent);
+}
+
+.route-transition__circuit i::after {
+  position: absolute;
+  top: 50%;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--ca-primary);
+  border-radius: 999px;
+  background: var(--ca-bg);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.route-transition__circuit i:nth-child(2) {
+  background: var(--ca-accent);
+  transform: translateY(-10px);
+}
+
+.route-transition__circuit i:nth-child(3) {
+  transform: translateY(8px);
+}
+
+@keyframes route-transition-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition { animation: none; }
+}
+
 .static-search-shell {
   padding-top: var(--ca-space-8);
 }
@@ -186,7 +261,12 @@ body {
 
 #root[data-static-route-persistent="true"] > [data-react-root] #workspace {
   grid-row: 4;
+  min-height: 0;
   padding-top: 0;
+}
+
+#root[data-route-hydrated="true"] > [data-react-root] #workspace {
+  min-height: 0;
 }
 
 #root[data-static-route-persistent="true"] > [data-react-root] footer {
@@ -401,6 +481,20 @@ body {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+@media (min-width: 1024px) and (max-width: 1519px) {
+  .primary-nav button {
+    padding-inline: var(--ca-space-2);
+  }
+
+  .site-header {
+    gap: var(--ca-space-3);
+  }
+
+  .header-actions button {
+    padding-inline: var(--ca-space-3);
+  }
 }
 
 .primary-nav button.active,
@@ -1543,7 +1637,7 @@ details > summary {
    overlapped nav buttons with the actions column on ordinary laptop widths
    (grid items ignore their track's width when content can't fit, rather than
    clipping — the box model exception `min-width: auto` makes for grid). */
-@media (max-width: 1519px) {
+@media (max-width: 1023px) {
   .site-header .primary-nav {
     display: none;
   }
