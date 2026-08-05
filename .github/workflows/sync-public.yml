@@ -1,0 +1,49 @@
+name: Sync Public Release
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-public:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Private Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Stage Public Files
+        run: node tools/sync-public.mjs
+
+      - name: Push to Public Repository
+        env:
+          PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
+        run: |
+          if [ -z "$PUBLIC_REPO_URL" ]; then
+            echo "PUBLIC_REPO_URL secret is not set. Skipping sync."
+            echo "To enable sync, set PUBLIC_REPO_URL to: https://x-access-token:<PAT>@github.com/<org>/<repo>.git"
+            exit 0
+          fi
+
+          # Clone the target public repository
+          git clone "$PUBLIC_REPO_URL" target-repo
+          
+          # Remove all existing files in the target repo (except .git)
+          find target-repo -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          
+          # Copy all staged files into the target repo
+          cp -a dist-public/. target-repo/
+          
+          # Commit and push
+          cd target-repo
+          git config user.name "GitHub Actions Sync"
+          git config user.email "actions@github.com"
+          
+          git add .
+          git commit -m "Auto-sync release from private repository (commit $GITHUB_SHA)" || echo "No changes to commit"
+          git push origin main
