@@ -55,11 +55,20 @@ export async function parseOlirExcel(buffer, options = {}) {
       const comment = row[commentIdx] ? String(row[commentIdx]).trim() : '';
       const strength = row[strengthIdx] ? String(row[strengthIdx]).trim() : '';
 
+      const str = strength.toLowerCase();
+      let relType = 'maps_to';
+      if (str.includes('equivalent')) relType = 'equivalent_to';
+      else if (str.includes('subset of')) relType = 'subset_of';
+      else if (str.includes('intersects with')) relType = 'intersects_with';
+      else if (str.includes('broader than')) relType = 'broader_than';
+      else if (str.includes('narrower than')) relType = 'narrower_than';
+      else if (str.includes('is related to') || str.includes('related')) relType = 'is_related_to';
+      
       relationships.push({
         source_id: controlId,
         target_id: focalId,
-        relationship_type: strength.toLowerCase() === 'equivalent' ? 'equivalent_to' : 'maps_to',
-        why: comment || `NIST OLIR concept crosswalk associates SP 800-53 ${controlId} with CSF 2.0 ${focalId}.`,
+        relationship_type: relType,
+        why: comment || options.defaultWhy || `NIST OLIR crosswalk associates reference ${controlId} with focal ${focalId}.`,
         source_locator: `${selected.sheet}#${focalId}->${controlId}`,
         olir_status: options.status || 'draft',
         owner_authority: options.ownerAuthority !== false,

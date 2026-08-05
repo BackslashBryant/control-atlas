@@ -1,0 +1,283 @@
+{
+  "generated_at": "2026-08-05T11:49:41.400Z",
+  "source": "https://csrc.nist.gov/projects/olir/informative-reference-catalog",
+  "total_entries": 99,
+  "processed_items": [
+    {
+      "id": 111,
+      "name": "Cybersecurity Framework v2.0 to SP 800-53 Rev 5.2.0",
+      "source_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+      "relationships_count": 746,
+      "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
+      "status": "draft"
+    },
+    {
+      "id": 136,
+      "name": "SP 800-171 Rev 3 to SP 800-53 Rev 5.2.0",
+      "source_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+      "relationships_count": 157,
+      "checksum": "sha256:33d441c92e924e96256d1c7eef2a6a76e0cf33d4a3265cf876503c4796ebd4ad",
+      "status": "final"
+    },
+    {
+      "id": 229,
+      "source_url": "https://olir.keystonedigitalholdingsgroup.com/aisvs-v1.0-to-sp800-53r5.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 225,
+      "source_url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 198,
+      "source_url": "https://github.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/raw/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 194,
+      "source_url": "https://p-sscrm.github.io/assets/data/P-SSCRM_to_SSDF_CROSSWALK_20260219.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 131,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_final.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 186,
+      "source_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 173,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2-0-NFv2-0-0_Concept_Crosswalk_Sep10-2025.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 174,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800-82r3OLIR.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 179,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 152,
+      "source_url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-171-r3.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 153,
+      "source_url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-csf-2-0.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 149,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-37r2-Cybersecurity_Framework_v2-0_Concept_Crosswalk.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 78,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/Draft_Framework_v1.1-to-SP800_221A.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 79,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/Draft_SP800_221A-to-Framework_v1.1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 144,
+      "source_url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-53-r5-1-1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 145,
+      "source_url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-171-r2.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 142,
+      "source_url": "https://www.iiconsortium.org/wp-content/uploads/sites/2/2024/04/Cybersecurity-Framework-v1.1-Concept-Crosswalk-Template-IIC-SMM.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 138,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800_171_Rev2_to_SP_800_171_Rev3_CROSSWALK.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 118,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/221A_to_CSF_2_0_0_CROSSWALK%2020240224.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 119,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_to_CSFv2-0_CROSSWALK_20240326.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 196,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SSDF_to_CSF_2_0_0_CROSSWALK.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 106,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_SecurityRule_Crosswalk_2024.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 107,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 109,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_SecurityRule_Crosswalk_2024.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 110,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 128,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/NICE_Framework_SP_800-181r1_Components-2017_to_v1-0-0.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 195,
+      "source_url": "https://isagca.org/hubfs/2023%20ISA%20Website%20Redesigns/ISAGCA/PDFs/ISA-62443-3-3-2013-to-CSF-v1.1%20(1.0.2).xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 155,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/sp800-53r5-to-iso-27001-mapping-2022-OLIR-2023-10-12-UPDATED.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 88,
+      "source_url": "https://content.securecontrolsframework.com/olir/Secure-Controls-Framework-SCFv2023.2-to-CSF-V1.1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 89,
+      "source_url": "https://content.securecontrolsframework.com/olir/Secure-Controls-Framework-SCFv2023.2-to-NIST-800-171-R2.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 90,
+      "source_url": "https://www.nerc.com/comm/RSTC_Reliability_Guidelines/NIST%20CSF%20to%20NERC%20CIP%20OLIR%20Mapping.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 87,
+      "source_url": "https://www.nccoe.nist.gov/sites/default/files/2023-03/DOE-C2M2V2_1-CSF-mapping.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 85,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/Cybersecurity_Framework_v_1_1_Focal_Document_to_IR8286B.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 86,
+      "source_url": "https://www.nccoe.nist.gov/sites/default/files/2022-12/DOE-C2M2-CSF-mapping.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 82,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/csf-sp_800-171r2_mapping-Sept2022v3.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 81,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/800_53_Rev_5_to_Framework_v_1_1_v3.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 75,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/RansomwareProfileInformativeReference_WIP_20220217.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 69,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/WIP_Framework_v_1_1_to_800_53_Rev5.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 84,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/IR8286A-to-Framework-v1.1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 73,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_reviewed_800-213A_to_CSF_final.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 74,
+      "source_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_review_800-213A_to_800-53_rev5_final.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 70,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/SP800-37-Rev-2-to-Framework-v1.1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 72,
+      "source_url": "https://www.iotsecurityfoundation.org/wp-content/uploads/2021/10/IoTSF-Security-Compliance-Framework-v2_1-to-NISTIR-8259A-IoT-Device-Cybersecurity-Capability-Core-Baseline_052020-1.0.0.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 65,
+      "source_url": "https://globalplatform.org/wp-content/uploads/2021/06/NIST-8259A-to-SESIP-v1.2-1.0.0-1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 66,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/SP800-177-Rev-1-to-SP800-53-Rev-4.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 67,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/SP800-161-to-SP800-53-Rev-4.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 68,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/SP800-82-Rev-2-to-SP800-53-Rev-4.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 64,
+      "source_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/WIP_800_53_Rev_4_to_Framework_v_1_1.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 62,
+      "source_url": "https://cdn.cta.tech/cta/media/media/resources/standards/pdfs/cta-2088-to-nistir-8259a.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 61,
+      "source_url": "https://www.nist.gov/system/files/documents/2020/12/07/WIP_Framework_v1_1_to_800_53_Rev_4_2.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 52,
+      "source_url": "https://cdn2.hubspot.net/hubfs/1616664/NIST CSF and FAIR - Informative Reference/NIST OLIR - FAIR C13G - Final.xlsx",
+      "status": "discovered_but_not_ingested"
+    },
+    {
+      "id": 53,
+      "source_url": "https://cdn2.hubspot.net/hubfs/1616664/NIST CSF and FAIR - Informative Reference/NIST OLIR - FAIR C13K - Final.xlsx",
+      "status": "discovered_but_not_ingested"
+    }
+  ]
+}
