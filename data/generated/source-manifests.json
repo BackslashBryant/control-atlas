@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-05T10:13:50.523Z",
+  "generated_at": "2026-08-05T11:37:07.466Z",
   "source_manifests": [
     {
       "source_id": "community-cci-research",
@@ -206,9 +206,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1533,
-      "relationship_count": 1532,
-      "evidence_count": 1532,
+      "node_count": 2542,
+      "relationship_count": 2541,
+      "evidence_count": 2541,
       "finding_count": 0
     },
     {
@@ -232,9 +232,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1527,
-      "relationship_count": 1526,
-      "evidence_count": 1526,
+      "node_count": 17714,
+      "relationship_count": 17713,
+      "evidence_count": 17713,
       "finding_count": 0
     },
     {
@@ -261,8 +261,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 0,
-      "relationship_count": 3530,
-      "evidence_count": 3530,
+      "relationship_count": 29095,
+      "evidence_count": 29095,
       "finding_count": 0
     },
     {

@@ -13,6 +13,14 @@ const COMMITTED_ARTIFACTS = {
   manifest: join(ROOT, 'data', 'disa-artifact-manifest.json'),
 };
 
+export function findOfficialDisaCompilationUrl(html) {
+  const matches = [...String(html).matchAll(/https:\/\/dl\.dod\.cyber\.mil\/[^"' ]+\.zip/gi)]
+    .map((match) => match[0])
+    .filter((url) => /U_.*STIG.*Library.*\.zip$/i.test(url))
+    .sort();
+  return matches[0] || null;
+}
+
 export async function discoverDisaArtifacts(fetchImpl) {
   const response = await fetchImpl(DISCOVERY_URL);
   if (!response.ok) throw new Error(`DISA discovery failed: ${response.status} ${DISCOVERY_URL}`);

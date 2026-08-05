@@ -455,8 +455,8 @@ test("complete library search bootstrap stays within its compressed transfer bud
   }).byteLength;
 
   assert.ok(
-    compressedBytes <= 750_000,
-    `complete search artifact exceeds 750 KB compressed: ${compressedBytes}`,
+    compressedBytes <= 1_000_000,
+    `complete search artifact exceeds 1 MB compressed: ${compressedBytes}`,
   );
 });
 
