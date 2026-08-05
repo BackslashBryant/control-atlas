@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
+import { execSync } from 'node:child_process';
 import { checkFiles } from '../tools/hygiene-check.mjs';
 
 test('Hygiene Checker - Prohibited tracked paths', () => {
@@ -52,4 +53,24 @@ test('Hygiene Checker - Prohibited content patterns', () => {
   assert.ok(!contentViolations.some(v => v.file === 'AGENTS.md'));
   assert.ok(!contentViolations.some(v => v.file === 'CLAUDE.md'));
   assert.ok(!contentViolations.some(v => v.file === 'src/clean.js'));
+});
+
+test('Hygiene Checker - .gitignore permits new legitimate source files', () => {
+  const sampleSourcePaths = [
+    'src/app/new-feature-test.mjs',
+    'src/ui/components/NewComponentTest.tsx',
+    'scripts/new-script-test.mjs',
+    'tools/new-tool-test.mjs',
+    'tests/new-test.test.mjs'
+  ];
+
+  for (const path of sampleSourcePaths) {
+    try {
+      execSync(`git check-ignore ${path}`, { stdio: 'pipe' });
+      assert.fail(`Path ${path} was incorrectly ignored by .gitignore`);
+    } catch (err) {
+      // Exit code 1 from git check-ignore means the path is NOT ignored (which is expected)
+      assert.strictEqual(err.status, 1, `Path ${path} should not be ignored by .gitignore`);
+    }
+  }
 });

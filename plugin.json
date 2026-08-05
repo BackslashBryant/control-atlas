@@ -1,0 +1,167 @@
+{
+  "attributes": [
+    {
+      "attribute_name": "agent",
+      "attribute_value": "all"
+    },
+    {
+      "attribute_name": "always_run",
+      "attribute_value": "true"
+    },
+    {
+      "attribute_name": "enable_cgi_scanning",
+      "attribute_value": "false"
+    },
+    {
+      "attribute_name": "script_category",
+      "attribute_value": "ACT_END"
+    },
+    {
+      "attribute_name": "thorough_tests",
+      "attribute_value": "false"
+    }
+  ],
+  "cves": [],
+  "dependencies": [
+    "patch_management_auditing.nasl"
+  ],
+  "description": "The remote host is missing one or more security patches. This plugin lists the newest version of each patch to install to make sure the remote host is up-to-date.\n\nNote: Because the 'Show missing patches that have been superseded' setting in your scan policy depends on this plugin, it will always run and cannot be disabled.",
+  "description_i18n": {
+    "ja_JP": "リモートホストに、1 つ以上のセキュリティパッチが欠落しています。このプラグインは、インストールの対象となる各パッチの最新バージョンをリストしており、リモートホストが最新の状態であるかどうかを確認することができます。\n\n注意: スキャンポリシーの「置き換えられている欠落パッチを表示する」の設定はこのプラグインに依存するため、常に実行され、無効にすることはできません。",
+    "zh_CN": "远程主机缺少一个或多个安全修补程序。此插件列出为确保远程主机为最新而需要安装的每个修补程序的最新版本。\n\n注意：由于扫描策略中的“显示已取代的缺失补丁”设置依赖于此插件，因此它将始终运行且无法禁用。",
+    "zh_TW": "遠端主機遺漏一個或多個安全性修補程式。此 plugin 會列出要安裝的每個修補程式最新版本，確保遠端主機處於最新狀態。\n\n注意: 由於掃描原則中的「顯示已過時的遺漏修補程式」設定取決於這個 plugin，因此它一律會執行且無法停用。"
+  },
+  "doc_id": "66334",
+  "epss_metrics": null,
+  "excluded_keys": [
+    "Host/dead"
+  ],
+  "filename": "patches_summary.nbin",
+  "intel_type": "sensor",
+  "is_cna": null,
+  "plugin_modification_date": "2026-05-22T00:00:00",
+  "plugin_publication_date": "2013-07-08T00:00:00",
+  "plugin_type": "combined",
+  "preferences": [
+    {
+      "name": "Display the superseded patches in the report",
+      "type": "checkbox",
+      "value": "yes"
+    }
+  ],
+  "public_display": "66334",
+  "publication_date": null,
+  "references": [],
+  "risk_factor": "Info",
+  "script_copyright": "This script is Copyright (C) 2013-2026 and is owned by Tenable, Inc. or an Affiliate thereof.",
+  "script_family": "General",
+  "script_name": "Patch Report",
+  "script_name_i18n": {
+    "ja_JP": "パッチレポート",
+    "zh_CN": "补丁报告",
+    "zh_TW": "Patch Report"
+  },
+  "script_version": "1.307",
+  "solution": "Install the patches listed below.",
+  "solution_i18n": {
+    "ja_JP": "下記にリストされたパッチをインストールしてください。",
+    "zh_CN": "安装下面列出的修补程序。",
+    "zh_TW": "安裝以下所列的修補程式。"
+  },
+  "supported_sensors": [
+    {
+      "label": "Nessus Agent",
+      "value": "nessus_agent"
+    },
+    {
+      "label": "Nessus",
+      "value": "nessus"
+    }
+  ],
+  "synopsis": "The remote host is missing several patches.",
+  "synopsis_i18n": {
+    "ja_JP": "リモートホストに、いくつかのパッチが欠落しています。",
+    "zh_CN": "远程主机缺少多个修补程序。",
+    "zh_TW": "遠端主機遺漏多個修補程式。"
+  },
+  "vpr_metrics": null,
+  "vpr_v2_metrics": null,
+  "sensor": "nessus",
+  "language_code": "en_US",
+  "script_id": "66334",
+  "cvss": {
+    "cvssv2_vector": null,
+    "cvssv3_vector": null,
+    "cvssv4_vector": null,
+    "cvssv2_vector_base": null,
+    "cvssv3_vector_base": null,
+    "cvssv4_vector_base": null,
+    "cvssv3_version": null,
+    "cvssv4_version": null,
+    "cvssv2_score": null,
+    "cvssv3_score": null,
+    "cvssv4_score": null,
+    "cvssv2_temporal_vector": null,
+    "cvssv3_temporal_vector": null,
+    "cvssv2_temporal_vector_base": null,
+    "cvssv3_temporal_vector_base": null,
+    "cvssv2_temporal_score": null,
+    "cvssv3_temporal_score": null,
+    "cvssv2_environmental_vector": null,
+    "cvssv2_environmental_score": null,
+    "cvssv3_environmental_vector": null,
+    "cvssv3_environmental_score": null,
+    "rating": null,
+    "source": null,
+    "cvssv2_risk_factor": null,
+    "cvssv3_risk_factor": null,
+    "cvssv4_risk_factor": null
+  },
+  "cpe": [],
+  "available_languages": [
+    "ja_JP",
+    "zh_CN",
+    "zh_TW",
+    "en_US"
+  ],
+  "risk_factor_v4": "Info",
+  "risk_factor_v3": "Info",
+  "risk_factor_orig": "None",
+  "risk_factor_score": 1,
+  "xrefs_orig": [],
+  "xrefs": {},
+  "agent": [
+    "windows",
+    "macosx",
+    "unix"
+  ],
+  "required_keys": [],
+  "required_udp_ports": [],
+  "required_ports": [],
+  "always_run": true,
+  "tvdb_export_source": {
+    "file_name": "diff-202605230114.tar.gz",
+    "file_path": "exports/nessus/v1",
+    "data_file_name": "66334",
+    "created_at": "2026-05-23T01:37:20",
+    "updated_at": "2026-05-23T01:37:20"
+  },
+  "pluginPublicationDate": "7/8/2013",
+  "pluginModificationDate": "5/22/2026",
+  "locale": "en",
+  "availableLocales": [
+    "ja",
+    "zh-CN",
+    "zh-TW",
+    "en"
+  ],
+  "vpr_risk_factor": null,
+  "cisaKnownExploitedDate": null,
+  "supported_sensors_values": "nessus_agent,nessus",
+  "configurationMessages": [],
+  "cvssV2Severity": "Info",
+  "cvssV3Severity": null,
+  "cvssV4Severity": null,
+  "vprSeverity": null,
+  "severity": "Info"
+}

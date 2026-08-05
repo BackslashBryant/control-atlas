@@ -1,0 +1,365 @@
+#!/usr/bin/env node
+
+/**
+ * security-scan - Security scanning wrapper script (Scaffold-Ready)
+ * Wraps dependency vulnerability scans and secret detection
+ * Usage: scripts/security-scan [--fix] [--verbose] [--format=json|text]
+ * 
+ * This script is scaffold-ready and will work with any project type:
+ * - Detects project structure automatically
+ * - Adapts scanning based on available package.json files
+ * - Gracefully handles missing dependencies or configurations
+ */
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+// Configuration
+const config = {
+  fix: process.argv.includes('--fix'),
+  verbose: process.argv.includes('--verbose'),
+  format: process.argv.find(arg => arg.startsWith('--format='))?.split('=')[1] || 'text',
+  artifactsDir: path.join(__dirname, '..', 'artifacts'),
+  secretPatterns: [
+    // API keys and tokens
+    /(?:api[_-]?key|secret[_-]?key|access[_-]?token|auth[_-]?token)["\s]*[:=]["\s]*[a-zA-Z0-9_\-]{16,}/gi,
+    // Database URLs
+    /(?:database[_-]?url|db[_-]?url|connection[_-]?string)["\s]*[:=]["\s]*[a-zA-Z0-9+:\/\/@\.\-_]{20,}/gi,
+    // JWT secrets
+    /(?:jwt[_-]?secret|token[_-]?secret)["\s]*[:=]["\s]*[a-zA-Z0-9_\-]{16,}/gi,
+    // Private keys
+    /-----BEGIN [A-Z ]+PRIVATE KEY-----[\s\S]*?-----END [A-Z ]+PRIVATE KEY-----/gi,
+    // Common service keys
+    /(?:SUPABASE_SERVICE_ROLE_KEY|RESEND_API_KEY|POSTHOG_API_KEY|SMTP_PASSWORD|STRIPE_SECRET_KEY)["\s]*[:=]["\s]*[^\s"']{10,}/gi,
+    // GitHub tokens
+    /ghp_[a-zA-Z0-9]{36}/gi,
+    /gho_[a-zA-Z0-9]{36}/gi,
+    /ghu_[a-zA-Z0-9]{36}/gi,
+    /ghs_[a-zA-Z0-9]{36}/gi,
+    /ghr_[a-zA-Z0-9]{36}/gi,
+  ],
+  excludePaths: [
+    'node_modules',
+    '.git',
+    'dist',
+    'build',
+    '.next',
+    'coverage',
+    'artifacts',
+    'test-results',
+    'playwright-report',
+    '.turbo',
+    'out',
+  ],
+  allowedFiles: [
+    '.env.example',
+    'env.example',
+    '.env.template',
+    'env.template',
+    'README.md',
+    '*.md',
+    'package-lock.json',
+    'yarn.lock',
+    'pnpm-lock.yaml',
+  ],
+};
+
+// Colors for output
+const colors = {
+  reset: '\x1b[0m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+};
+
+function log(message, color = 'reset') {
+  console.log(`${colors[color]}${message}${colors.reset}`);
+}
+
+function ensureArtifactsDir() {
+  if (!fs.existsSync(config.artifactsDir)) {
+    fs.mkdirSync(config.artifactsDir, { recursive: true });
+  }
+}
+
+function detectProjectStructure() {
+  const projectRoot = path.join(__dirname, '..');
+  const structure = {
+    hasRootPackageJson: fs.existsSync(path.join(projectRoot, 'package.json')),
+    hasFrontendPackageJson: fs.existsSync(path.join(projectRoot, 'frontend', 'package.json')),
+    hasBackendPackageJson: fs.existsSync(path.join(projectRoot, 'backend', 'package.json')),
+    hasSharedPackageJson: fs.existsSync(path.join(projectRoot, 'shared', 'package.json')),
+    isMonorepo: false,
+    packageManagers: [],
+  };
+  
+  // Detect package managers
+  if (fs.existsSync(path.join(projectRoot, 'package-lock.json'))) {
+    structure.packageManagers.push('npm');
+  }
+  if (fs.existsSync(path.join(projectRoot, 'yarn.lock'))) {
+    structure.packageManagers.push('yarn');
+  }
+  if (fs.existsSync(path.join(projectRoot, 'pnpm-lock.yaml'))) {
+    structure.packageManagers.push('pnpm');
+  }
+  
+  // Detect monorepo structure
+  structure.isMonorepo = structure.hasFrontendPackageJson || structure.hasBackendPackageJson || structure.hasSharedPackageJson;
+  
+  return structure;
+}
+
+function runCommand(command, description) {
+  log(`\n🔍 ${description}...`, 'cyan');
+  
+  try {
+    const result = execSync(command, {
+      stdio: config.verbose ? 'inherit' : 'pipe',
+      encoding: 'utf8',
+    });
+    
+    log(`✅ ${description} completed`, 'green');
+    return { success: true, output: result };
+  } catch (error) {
+    log(`❌ ${description} failed`, 'red');
+    return { success: false, error: error.message, output: error.stdout || error.stderr };
+  }
+}
+
+function scanForSecrets() {
+  log('\n🕵️  Scanning for secrets and sensitive data...', 'cyan');
+  
+  const findings = [];
+  const projectRoot = path.join(__dirname, '..');
+  
+  function scanDirectory(dir, relativePath = '') {
+    if (config.excludePaths.some(exclude => relativePath.includes(exclude))) {
+      return;
+    }
+    
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const relativeFilePath = path.join(relativePath, entry.name);
+        
+        if (entry.isDirectory()) {
+          scanDirectory(fullPath, relativeFilePath);
+        } else if (entry.isFile()) {
+          scanFile(fullPath, relativeFilePath);
+        }
+      }
+    } catch (error) {
+      if (config.verbose) {
+        log(`Skipping directory ${relativePath}: ${error.message}`, 'yellow');
+      }
+    }
+  }
+  
+  function scanFile(filePath, relativePath) {
+    // Skip binary files and allowed files
+    if (config.allowedFiles.some(pattern => {
+      if (pattern.includes('*')) {
+        const regex = new RegExp(pattern.replace('*', '.*'));
+        return regex.test(path.basename(relativePath));
+      }
+      return path.basename(relativePath) === pattern;
+    })) {
+      return;
+    }
+    
+    try {
+      const content = fs.readFileSync(filePath, 'utf8');
+      
+      for (const pattern of config.secretPatterns) {
+        const matches = content.match(pattern);
+        if (matches) {
+          for (const match of matches) {
+            findings.push({
+              file: relativePath,
+              line: getLineNumber(content, match),
+              pattern: pattern.toString(),
+              match: match.substring(0, 50) + (match.length > 50 ? '...' : ''),
+              severity: 'HIGH',
+            });
+          }
+        }
+      }
+    } catch (error) {
+      // Skip files that can't be read as text
+      if (config.verbose) {
+        log(`Skipping binary file: ${relativePath}`, 'yellow');
+      }
+    }
+  }
+  
+  function getLineNumber(content, match) {
+    const lines = content.substring(0, content.indexOf(match)).split('\n');
+    return lines.length;
+  }
+  
+  scanDirectory(projectRoot);
+  
+  return findings;
+}
+
+function checkDependencyVulnerabilities(projectStructure) {
+  const results = [];
+  
+  // Check root dependencies
+  if (projectStructure.hasRootPackageJson) {
+    const result = runCommand('npm audit --audit-level=moderate', 'Root dependency audit');
+    results.push({ location: 'root', ...result });
+  }
+  
+  // Check frontend dependencies
+  if (projectStructure.hasFrontendPackageJson) {
+    const result = runCommand('cd frontend && npm audit --audit-level=moderate', 'Frontend dependency audit');
+    results.push({ location: 'frontend', ...result });
+  }
+  
+  // Check backend dependencies
+  if (projectStructure.hasBackendPackageJson) {
+    const result = runCommand('cd backend && npm audit --audit-level=moderate', 'Backend dependency audit');
+    results.push({ location: 'backend', ...result });
+  }
+  
+  // Check shared dependencies
+  if (projectStructure.hasSharedPackageJson) {
+    const result = runCommand('cd shared && npm audit --audit-level=moderate', 'Shared dependency audit');
+    results.push({ location: 'shared', ...result });
+  }
+  
+  return results;
+}
+
+function generateReport(secretFindings, dependencyResults, projectStructure) {
+  const timestamp = new Date().toISOString();
+  const reportId = crypto.randomBytes(8).toString('hex');
+  
+  const report = {
+    id: reportId,
+    timestamp,
+    projectStructure,
+    summary: {
+      secretsFound: secretFindings.length,
+      vulnerabilitiesFound: dependencyResults.filter(r => !r.success).length,
+      overallStatus: secretFindings.length === 0 && dependencyResults.every(r => r.success) ? 'PASS' : 'FAIL',
+    },
+    secrets: secretFindings,
+    dependencies: dependencyResults,
+  };
+  
+  // Save detailed report
+  const reportFile = path.join(config.artifactsDir, `security-scan-${reportId}.json`);
+  fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
+  
+  return report;
+}
+
+function displayReport(report) {
+  log('\n🛡️  SECURITY SCAN RESULTS', 'magenta');
+  log('='.repeat(50), 'magenta');
+  log(`Report ID: ${report.id}`, 'blue');
+  log(`Timestamp: ${report.timestamp}`, 'blue');
+  log(`Project Type: ${report.projectStructure.isMonorepo ? 'Monorepo' : 'Single Package'}`, 'blue');
+  log(`Package Managers: ${report.projectStructure.packageManagers.join(', ') || 'None detected'}`, 'blue');
+  log(`Overall Status: ${report.summary.overallStatus}`, 
+      report.summary.overallStatus === 'PASS' ? 'green' : 'red');
+  
+  // Secrets findings
+  if (report.secrets.length > 0) {
+    log(`\n🚨 Found ${report.secrets.length} potential secrets:`, 'red');
+    for (const finding of report.secrets) {
+      log(`  📁 ${finding.file}:${finding.line}`, 'yellow');
+      log(`     Pattern: ${finding.pattern}`, 'cyan');
+      log(`     Match: ${finding.match}`, 'red');
+    }
+  } else {
+    log('\n✅ No secrets detected', 'green');
+  }
+  
+  // Dependency vulnerabilities
+  const failedAudits = report.dependencies.filter(r => !r.success);
+  if (failedAudits.length > 0) {
+    log(`\n🔍 Found vulnerabilities in ${failedAudits.length} locations:`, 'red');
+    for (const audit of failedAudits) {
+      log(`  📦 ${audit.location}: ${audit.error}`, 'yellow');
+    }
+  } else {
+    log('\n✅ No dependency vulnerabilities found', 'green');
+  }
+  
+  if (config.format === 'json') {
+    console.log('\n' + JSON.stringify(report, null, 2));
+  }
+  
+  log(`\n💾 Detailed report saved to: artifacts/security-scan-${report.id}.json`, 'blue');
+}
+
+async function main() {
+  log('🛡️  Project Security Scanner (Scaffold-Ready)', 'cyan');
+  log('==============================================', 'cyan');
+  
+  ensureArtifactsDir();
+  
+  // Detect project structure
+  const projectStructure = detectProjectStructure();
+  log(`\n📦 Project Structure:`, 'blue');
+  log(`  - Root package.json: ${projectStructure.hasRootPackageJson ? '✅' : '❌'}`, 'blue');
+  log(`  - Frontend package.json: ${projectStructure.hasFrontendPackageJson ? '✅' : '❌'}`, 'blue');
+  log(`  - Backend package.json: ${projectStructure.hasBackendPackageJson ? '✅' : '❌'}`, 'blue');
+  log(`  - Shared package.json: ${projectStructure.hasSharedPackageJson ? '✅' : '❌'}`, 'blue');
+  log(`  - Monorepo: ${projectStructure.isMonorepo ? '✅' : '❌'}`, 'blue');
+  log(`  - Package Managers: ${projectStructure.packageManagers.join(', ') || 'None detected'}`, 'blue');
+  
+  if (!projectStructure.hasRootPackageJson && !projectStructure.hasFrontendPackageJson && !projectStructure.hasBackendPackageJson) {
+    log('\n⚠️  No package.json files found. This is a scaffold template.', 'yellow');
+    log('💡 To use this script, initialize your project with: npm init', 'yellow');
+    process.exit(0);
+  }
+  
+  // Run secret detection
+  const secretFindings = scanForSecrets();
+  
+  // Run dependency vulnerability checks
+  const dependencyResults = checkDependencyVulnerabilities(projectStructure);
+  
+  // Generate and display report
+  const report = generateReport(secretFindings, dependencyResults, projectStructure);
+  displayReport(report);
+  
+  // Exit with appropriate code
+  const hasIssues = secretFindings.length > 0 || dependencyResults.some(r => !r.success);
+  
+  if (hasIssues) {
+    log('\n⚠️  Security issues detected. Please review and address findings.', 'yellow');
+    process.exit(1);
+  } else {
+    log('\n🎉 Security scan passed!', 'green');
+    process.exit(0);
+  }
+}
+
+// Handle uncaught errors
+process.on('uncaughtException', (error) => {
+  log(`\n💥 Uncaught exception: ${error.message}`, 'red');
+  process.exit(1);
+});
+
+// Run main function
+if (require.main === module) {
+  main().catch(error => {
+    log(`\n💥 Fatal error: ${error.message}`, 'red');
+    process.exit(1);
+  });
+}
+
+module.exports = { scanForSecrets, checkDependencyVulnerabilities, detectProjectStructure };

@@ -475,7 +475,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     };
   };
   const stigCatalogNodes = (chainCatalog, chainBenchmark) => {
-    const sorted = dataset.nodes
+    return dataset.nodes
       .filter((node) => node.metadata?.catalog_id === chainCatalog)
       .filter(
         (node) =>
@@ -484,7 +484,6 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
           node.source_id === chainBenchmark,
       )
       .sort(sortNodesByItemId);
-    return chainBenchmark ? sorted : sorted.slice(0, 250);
   };
   const cciLinksForNode = (nodeId, includeCandidates = false) =>
     (edgesBySource.get(nodeId) || [])
@@ -516,27 +515,42 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       }))
       .filter((entry) => entry.nistNode)
       .sort((left, right) => sortNodesByItemId(left.nistNode, right.nistNode));
+  const chainDetailCache = new Map();
   const buildChainDetail = (node, includeCandidates = false) => {
+    const cacheKey = `${node.id}:${includeCandidates ? "1" : "0"}`;
+    if (chainDetailCache.has(cacheKey)) {
+      return chainDetailCache.get(cacheKey);
+    }
     const cciEntries = cciLinksForNode(node.id, includeCandidates);
-    const nistEntries = uniqueBy(
-      cciEntries.flatMap((entry) =>
-        nistLinksForCci(entry.cciNode.id, includeCandidates),
-      ),
-      (entry) => entry.nistNode.id,
-    );
-    const mappedCciIds = new Set(
-      nistEntries.map((entry) => entry.relationshipEdge.source_node_id),
-    );
-    return {
+    const nistEntries = [];
+    const seenNistIds = new Set();
+    for (const cciEntry of cciEntries) {
+      const links = nistLinksForCci(cciEntry.cciNode.id, includeCandidates);
+      for (const link of links) {
+        if (!seenNistIds.has(link.nistNode.id)) {
+          seenNistIds.add(link.nistNode.id);
+          nistEntries.push({
+            ...link,
+            viaCciNode: cciEntry.cciNode,
+          });
+        }
+      }
+    }
+    const result = {
       source_node: node,
       cci_entries: cciEntries,
-      cci_nodes: cciEntries.map((entry) => entry.cciNode),
       nist_entries: nistEntries,
-      nist_nodes: nistEntries.map((entry) => entry.nistNode),
+      cci_nodes: cciEntries.map((e) => e.cciNode),
+      nist_nodes: nistEntries.map((e) => e.nistNode),
       unmapped_cci_nodes: cciEntries
-        .filter((entry) => !mappedCciIds.has(entry.cciNode.id))
-        .map((entry) => entry.cciNode),
+        .filter(
+          (e) =>
+            nistLinksForCci(e.cciNode.id, includeCandidates).length === 0,
+        )
+        .map((e) => e.cciNode),
     };
+    chainDetailCache.set(cacheKey, result);
+    return result;
   };
   const attackCatalogNodes = (chainCatalog) =>
     dataset.nodes

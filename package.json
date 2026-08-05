@@ -5,6 +5,7 @@
   "private": true,
   "description": "Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.",
   "scripts": {
+    "hygiene:check": "node ./tools/hygiene-check.mjs",
     "check:oscal": "node ./scripts/check-oscal.mjs",
     "build:site": "node ./tools/build-static-site.mjs",
     "build:site:incremental": "node ./tools/build-static-site.mjs --reuse-generated",

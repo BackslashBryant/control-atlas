@@ -1664,3 +1664,27 @@ test("full graph runtime hydrates compact search documents with official source 
     "Publisher-authored control text.",
   );
 });
+
+test("STIG catalog chain returns complete nodes without a 250 record cap", () => {
+  const mockNodes = Array.from({ length: 350 }, (_, i) => ({
+    id: `disa-stig:TEST_BENCHMARK:SV-${i}_rule`,
+    node_type: "stig_rule",
+    label: `Rule ${i}`,
+    metadata: {
+      catalog_id: "disa-stig",
+      item_id: `SV-${i}_rule`,
+      title: `Rule ${i}`,
+    },
+  }));
+
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    nodes: mockNodes,
+    edges: [],
+    evidence: [],
+    findings: [],
+  });
+
+  const chain = runtime.buildStigChain({ chain_catalog: "disa-stig" });
+  assert.equal(chain.rows.length, 350, "All 350 STIG nodes must be included without 250 truncation");
+});

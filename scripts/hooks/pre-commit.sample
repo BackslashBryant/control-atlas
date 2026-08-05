@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Optional path-scope guard. Install with:
+#   cp scripts/hooks/pre-commit.sample .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+check_app_mode_files() {
+  if node --input-type=module <<'NODE'
+import { spawnSync } from 'node:child_process';
+import { detectRepoMode } from './tools/lib/repo-mode.mjs';
+import { summarizeAppModeViolations } from './tools/lib/app-mode-policy.mjs';
+
+if (detectRepoMode() !== 'app' || process.env.ALLOW_CURSOR_PUSH === '1') {
+  process.exit(0);
+}
+
+const result = spawnSync('git', ['diff', '--cached', '--name-status'], {
+  cwd: process.cwd(),
+  encoding: 'utf8',
+});
+
+const files = result.stdout
+  .split(/\r?\n/)
+  .filter(Boolean)
+  .map(line => {
+    const [status, ...rest] = line.split('\t');
+    return {
+      status: status.trim(),
+      filePath: rest.join('\t').split(' -> ').pop(),
+    };
+  })
+  .filter(entry => entry.filePath);
+const violations = summarizeAppModeViolations(files);
+if (violations.length === 0) {
+  process.exit(0);
+}
+
+for (const violation of violations) {
+  console.log(`BLOCK: ${violation.filePath}`);
+  console.log(`       ${violation.reason}`);
+}
+console.log('');
+console.log('App mode is strict: keep template-only infrastructure out of downstream commits and stay within the approved app roots.');
+process.exit(1);
+NODE
+  then
+    return 0
+  fi
+
+  return 1
+}
+
+if ! check_app_mode_files; then
+  exit 1
+fi
+
+echo "[pre-commit] Running sanity checks..."
+if ! npm run status -- --ci >/dev/null; then
+  echo "[pre-commit] Workspace status failed. Fix issues before committing."
+  exit 1
+fi
+echo "[pre-commit] Done."

@@ -82,17 +82,19 @@ Operating rules for agents:
    - `check:oscal`: Validates actual upstream external OSCAL files using official tooling (NIST CLI).
    - Normalized internal schemas must be validated via AJV, not described as OSCAL documents unless fully conforming.
 
-## Direct Ship Flow
+## Pull Request and Ship Flow
 
-PRs are optional and not the default.
+Every change must follow the pull request ship flow:
 
-1. Build on a branch.
-2. Verify locally.
-3. Commit.
-4. Push the branch.
-5. Merge to `main` when gates are green.
-6. Push `main`.
-7. Report branch, commit, checks, and final status.
+1. Build on a feature branch (`agent/<persona>/<issue>-<slug>` or `chore/<slug>`).
+2. Verify all local quality, hygiene, and test gates pass.
+3. Commit narrowly scoped changes.
+4. Push the feature branch to `origin`.
+5. Open a Pull Request against `main`.
+6. Confirm all GitHub CI checks run and pass (no direct local merges to `main` allowed).
+7. Perform fresh-checkout verification from the remote branch.
+8. Retain the feature branch until PR review and CI are complete.
+9. Report branch, PR URL, commit, CI status, and verification results.
 
 ## Maintenance Mode
 

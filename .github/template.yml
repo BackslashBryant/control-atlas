@@ -1,0 +1,8 @@
+name: Cursor + Bivvy Starter
+description: Beginner-friendly full-stack template with Cursor rules, Climb system, and AI best practices.
+tags:
+  - cursor
+  - bivvy
+  - mono-repo
+  - typescript
+  - template 
