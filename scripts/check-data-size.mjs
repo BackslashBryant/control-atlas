@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
-const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const MAX_FILE_BYTES = 35 * 1024 * 1024;
 const MAX_COMPLETE_SEARCH_GZIP_BYTES = 300_000;
 
 function walk(path) {

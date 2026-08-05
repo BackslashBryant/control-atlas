@@ -186,7 +186,7 @@ function baselineState(base = {}) {
   };
 }
 
-export function createFederalGraphRuntime(dataset) {
+export function createFederalGraphRuntime(opts) { const res = _createFederalGraphRuntime(opts); globalThis.debugRuntime = res; return res; } function _createFederalGraphRuntime(dataset) {
   const nodeById = new Map(dataset.nodes.map((node) => [node.id, node]));
   const sourceById = new Map(
     dataset.sources.map((source) => [source.id, source]),

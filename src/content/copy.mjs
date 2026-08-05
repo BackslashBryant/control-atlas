@@ -40,6 +40,8 @@ export const provenanceDescriptionMap = {
     "Referenced federal guidance used as supporting public context.",
   mitre_published:
     "Published MITRE ATT&CK or D3FEND mapping from the official catalog.",
+  control_atlas_derived:
+    "Derived structurally by Control Atlas based on the official source documents.",
   inferred:
     "Derived from available public mappings and should be reviewed before use.",
   deprecated:

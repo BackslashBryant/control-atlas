@@ -38,6 +38,10 @@ const DISA_ARTIFACT_MANIFEST = [
   { file: 'U_VPN_V3R4_SRG.zip', hintKind: 'srg', name: 'VPN SRG' },
   { file: 'U_Cloud_Computing_Y26M06_SRG.zip', hintKind: 'srg', name: 'Cloud Computing SRG (Mission Owner Network/OS)' },
   { file: 'U_Traditional_Security_Checklist_V2R8.zip', hintKind: 'stig', name: 'Traditional Security Checklist' },
+  { file: 'U_MS_Windows_11_V1R6_STIG.zip', hintKind: 'stig', name: 'Microsoft Windows 11 STIG' },
+  { file: 'U_RHEL_9_V1R3_STIG.zip', hintKind: 'stig', name: 'Red Hat Enterprise Linux 9 STIG' },
+  { file: 'U_Oracle_Database_19c_V1R3_STIG.zip', hintKind: 'stig', name: 'Oracle Database 19c STIG' },
+  { file: 'U_Kubernetes_V1R11_STIG.zip', hintKind: 'stig', name: 'Kubernetes STIG' },
 ];
 
 const DL_BASE = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/';

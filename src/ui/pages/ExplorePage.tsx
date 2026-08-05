@@ -202,6 +202,9 @@ export function ExplorePage(props: {
     return !query || hasFilters ? [] : (bundle.runtime.dataset.sources || []).filter((source: any) => [source.id, source.display_name, source.name, source.publisher, source.agency].filter(Boolean).join(" ").toLocaleLowerCase().includes(query)).slice(0, 8);
   }, [bundle.runtime, hasFilters, state.query]);
   const resourceMatches = useMemo(() => !hasQuery || hasFilters ? { templates: [], artifacts: [] } : searchExploreResources(state.query, { templates: bundle.templateRegistry.templates || [], artifacts: bundle.officialArtifactRegistry?.artifacts || [] }), [bundle.officialArtifactRegistry, bundle.templateRegistry, hasFilters, hasQuery, state.query]);
+  useEffect(() => {
+    (window as any).debugBundle = bundle;
+  }, [bundle]);
   const glossaryMatches = useMemo(() => hasQuery && !hasFilters ? searchGlossary(state.query).slice(0, 8) : [], [hasFilters, hasQuery, state.query]);
 
   const unifiedResults = useMemo(() => {

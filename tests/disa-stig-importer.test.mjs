@@ -66,7 +66,7 @@ test('DISA XCCDF parser normalizes STIG rules with required Epic 2 fields', () =
   assert.equal(result.catalogKind, 'stig');
   assert.equal(result.records.length, 1);
   assert.deepEqual(result.records[0], {
-    id: 'V-100001',
+    id: 'disa-stig:xccdf_mil.disa.stig_benchmark_Windows_11_STIG:SV-100001r1_rule',
     type: 'stig_rule',
     title: 'Configure account management',
     description: 'Accounts must be managed.',
@@ -90,6 +90,8 @@ test('DISA XCCDF parser normalizes STIG rules with required Epic 2 fields', () =
       benchmark_id: 'xccdf_mil.disa.stig_benchmark_Windows_11_STIG',
       benchmark_title: 'Windows 11 STIG',
       benchmark_description: 'Public DISA Windows 11 STIG benchmark.',
+      canonical_id: 'disa-stig:xccdf_mil.disa.stig_benchmark_Windows_11_STIG:SV-100001r1_rule',
+      legacy_ids: ['V-100001', 'SV-100001r1_rule', 'WN11-00-000001'],
       relationship_catalog: 'disa-cci',
       relationships: [
         { target_catalog: 'disa-cci', target_id: 'CCI-000015', relationship_type: 'references' },
@@ -107,7 +109,7 @@ test('DISA XCCDF parser normalizes SRG requirements with CCI relationships', () 
   });
 
   assert.equal(result.catalogKind, 'srg');
-  assert.equal(result.records[0].id, 'V-200001');
+  assert.equal(result.records[0].id, 'disa-srg:xccdf_mil.disa.srg_benchmark_Application_SRG:SV-200001r1_rule');
   assert.equal(result.records[0].type, 'srg_requirement');
   assert.equal(result.records[0].severity, 'high');
   assert.equal(result.records[0].rule_id, 'SV-200001r1_rule');

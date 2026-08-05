@@ -118,13 +118,15 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
       const cciReferences = [...new Set(cciIds(rule))];
       const titleVal = textValue(rule.title);
       const discussionVal = extractSection(description, 'VulnDiscussion') || stripMarkup(description);
+      const ruleId = rule.id || '';
+      const canonicalId = `${catalogKind === 'stig' ? 'disa-stig' : 'disa-srg'}:${benchmark.id}:${ruleId || vulnId}`;
       records.push({
-        id: vulnId,
+        id: canonicalId,
         type: catalogKind === 'stig' ? 'stig_rule' : 'srg_requirement',
         title: titleVal,
         description: discussionVal,
         severity: rule.severity || '',
-        rule_id: rule.id || '',
+        rule_id: ruleId,
         vuln_id: vulnId,
         stig_id: textValue(rule.version) || textValue(group.title),
         check_text: getCheckText(rule),
@@ -140,6 +142,8 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
           benchmark_id: benchmark.id,
           benchmark_title: benchmarkTitle,
           benchmark_description: benchmarkDescription,
+          canonical_id: canonicalId,
+          legacy_ids: [vulnId, ruleId, textValue(rule.version)].filter(Boolean),
           relationship_catalog: 'disa-cci',
           relationships: cciReferences.map((targetId) => ({
             target_catalog: 'disa-cci',
