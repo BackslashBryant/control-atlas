@@ -230,29 +230,56 @@ function walkArchiveEntries(archive, parentPath = '') {
 export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
   const parsed = { stig: [], srg: [] };
+  const inventory = [];
 
   for (const entry of walkArchiveEntries(archive)) {
-    if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
-    const xml = strFromU8(entry.value);
     const pathLower = entry.entryPath.toLowerCase();
-    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
-    const document = parseDisaXccdf(xml, {
-      sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
-      artifactUrl,
-      entryPath: entry.entryPath,
-      hintKind: pathHint,
-    });
-    parsed[document.catalogKind].push(document);
+    
+    if (!/\.(xml|xccdf)$/i.test(entry.entryPath)) {
+      inventory.push({ entryPath: entry.entryPath, status: 'ignored', reason: 'not an XML/XCCDF file' });
+      continue;
+    }
+    
+    if (shouldIgnoreEntry(entry.entryPath)) {
+      const isCui = /(^|\/)(CUI_|CUI\/)/i.test(entry.entryPath);
+      const isSunset = /(^|\/)Sunset/i.test(entry.entryPath);
+      const isDraft = /(^|\/)Draft/i.test(entry.entryPath);
+      const reason = isCui ? 'CUI restricted' : isSunset ? 'Sunset' : isDraft ? 'Draft' : 'Ignored by policy';
+      inventory.push({ entryPath: entry.entryPath, status: 'excluded', reason });
+      continue;
+    }
+    
+    try {
+      const xml = strFromU8(entry.value);
+      const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
+      const document = parseDisaXccdf(xml, {
+        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        artifactUrl,
+        entryPath: entry.entryPath,
+        hintKind: pathHint,
+      });
+      parsed[document.catalogKind].push(document);
+      inventory.push({ 
+        entryPath: entry.entryPath, 
+        status: 'ingested', 
+        catalogKind: document.catalogKind,
+        benchmarkId: document.records[0]?.metadata?.benchmark_id || 'unknown',
+        recordCount: document.records.length 
+      });
+    } catch (e) {
+      inventory.push({ entryPath: entry.entryPath, status: 'failed', reason: e.message });
+    }
   }
 
   const checksumValue = checksum(buffer);
-  const stig = createDocument(sourceKeys.stig, artifactUrl, checksumValue, parsed.stig);
-  const srg = createDocument(sourceKeys.srg, artifactUrl, checksumValue, parsed.srg);
+  const stig = parsed.stig.length ? createDocument(sourceKeys.stig, artifactUrl, checksumValue, parsed.stig) : null;
+  const srg = parsed.srg.length ? createDocument(sourceKeys.srg, artifactUrl, checksumValue, parsed.srg) : null;
   const relationships = createRelationshipDocument(
     artifactUrl,
     checksumValue,
     [...parsed.stig, ...parsed.srg].flatMap((entry) => entry.records),
   );
 
-  return { stig, srg, relationships, checksum: checksumValue };
+  return { stig, srg, relationships, checksum: checksumValue, inventory };
 }
+
