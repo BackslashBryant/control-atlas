@@ -9,7 +9,7 @@ const configDir = join(root, "config", "experience-guardian");
 const reportDir = join(root, "artifacts", "experience-guardian");
 const ownershipPath = join(configDir, "copy-ownership.json");
 const matrixPath = join(configDir, "route-matrix.json");
-const guardianPath = join(root, ".ai", "shared", "control-atlas-experience-guardian.md");
+const guardianPath = join(configDir, "control-atlas-experience-guardian.md");
 const routeIdentityPath = join(root, "src", "ui", "lib", "routeIdentity.ts");
 
 async function filesUnder(directory) {
