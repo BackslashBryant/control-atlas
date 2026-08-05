@@ -38,11 +38,47 @@
 # AI-assistant working notes dropped by a plugin — not app logic, never ship.
 docs/guardrails/
 
-!.ai/
-.ai/*
-!.ai/shared/
-.ai/shared/*
-!.ai/shared/control-atlas-experience-guardian.md
+# Hardened Agent/AI Exclusions
+.gemini/
+.claude/
+.antigravity/
+.cursor/
+.codex/
+.codex-remote-attachments/
+.codex-tmp/
+.notes/
+.rocky/
+.specify/
+.agents/
+.ai/
+.worktrees/
+brain/
+walkthrough.md
+completion-report/
+session-notes/
+.local/
+.local-agent/
+scratch/
+tmp/
+artifacts/local/
+docs/internal-local/
+
+# Local Environment Profiles
+.env.local
+.env.development
+.env.production
+.env.staging
+env.local
+env.development
+env.production
+env.staging
+
+# Test Recordings & Playwright Traces
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.lighthouseci/
 
 !config/
 config/*

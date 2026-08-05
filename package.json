@@ -76,7 +76,7 @@
     "ship:main": "node ./tools/ship-to-main.mjs",
     "precommit": "npm run build:site && npm run verify:quality && npm run test:a11y:smoke && npm run test:e2e:smoke",
     "precommit:incremental": "npm run build:site:incremental && npm run verify:quality && npm run test:a11y:smoke && npm run test:e2e:smoke",
-    "verify:quality": "npm run check:oscal && npm run lint && npm run review:experience:fast && npm run typecheck && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public"
+    "verify:quality": "node ./tools/hygiene-check.mjs && npm run check:oscal && npm run lint && npm run review:experience:fast && npm run typecheck && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public"
   },
   "engines": {
     "node": ">=22.22.0"
