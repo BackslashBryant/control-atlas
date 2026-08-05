@@ -17,7 +17,7 @@ Date: 2026-07-28
 
 Implement the complete Control Atlas correction in:
 
-`D:\DevOps\1. Projects\GovFrame`
+`.`
 
 This is an authorized change/build task, not another audit. Execute the whole correction program in one continuous session. Complete each milestone and its regression gate, then move directly to the next without asking for approval.
 
@@ -26,7 +26,7 @@ This is an authorized change/build task, not another audit. Execute the whole co
 Read completely before editing:
 
 1. `AGENTS.md`
-2. `C:\Users\OrEo2\.engineering\core-engineering-doctrine.md`
+2. `~/.engineering/core-engineering-doctrine.md`
 3. `docs/audits/control-atlas-full-surface-audit-2026-07-28.md`
 4. `docs/design/control-atlas-target-experience-2026-07-28.md`
 5. `docs/planning/control-atlas-ux-correction-backlog-2026-07-28.md`

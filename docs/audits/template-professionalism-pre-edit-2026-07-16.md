@@ -6,7 +6,7 @@ Phase 7 required every shipped template to be generated and graded before any re
 
 Temporary review outputs were generated outside the repository at:
 
-`C:\Users\OrEo2\AppData\Local\Temp\control-atlas-phase7-preedit-20260716`
+`%TEMP%\control-atlas-phase7-preedit-20260716`
 
 ## Results
 
