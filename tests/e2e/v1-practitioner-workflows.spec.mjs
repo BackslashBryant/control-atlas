@@ -26,7 +26,7 @@ test("V1 workflow 02 — search a topic without an identifier", async ({ page })
   await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
     "account management",
   );
-  await expect(page.locator("#library-results .result-card").first()).toBeVisible();
+  await expect(page.locator("#library-results .search-result-row").first()).toBeVisible();
 });
 
 test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results", async ({
@@ -41,11 +41,11 @@ test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results",
   ).toBeVisible();
 
   await open(page, "/#/search?q=account");
-  expect(await page.locator("#library-results .result-card").count()).toBeGreaterThan(1);
+  expect(await page.locator("#library-results .search-result-row").count()).toBeGreaterThan(1);
 
   await open(page, "/#/search?q=qzxv9417nohit");
   await expect(
-    page.getByRole("heading", { name: "No matching records found." }),
+    page.getByRole("heading", { name: "No matching results found." }),
   ).toBeVisible();
 });
 
@@ -68,7 +68,7 @@ test("V1 workflow 05 — follow a record and return without losing search state"
       name: "AC-2 — Account Management",
       exact: true,
     })
-    .getByRole("button", { name: "Open record" })
+    .getByRole("button", { name: "AC-2 — Account Management" })
     .click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
   await page.getByRole("button", { name: "Back to results" }).click();

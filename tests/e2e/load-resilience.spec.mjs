@@ -19,12 +19,14 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
   // (1280x720) now renders the (correctly) collapsed mobile-sheet header
   // instead of the primary nav this test exercises directly.
   await page.setViewportSize({ width: 1600, height: 900 });
+  await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(1600);
   await page.route("**/library-search.json**", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 3500));
     await route.continue();
   });
 
   await gotoApp(page, "/#/search");
+  await expect(page.locator("#root")).toHaveAttribute("data-react-active", "true", { timeout: 15000 });
   await expect(page.locator(".skeleton-card").first()).toBeVisible();
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",

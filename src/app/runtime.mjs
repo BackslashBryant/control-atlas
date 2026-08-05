@@ -474,8 +474,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       },
     };
   };
-  const stigCatalogNodes = (chainCatalog, chainBenchmark) =>
-    dataset.nodes
+  const stigCatalogNodes = (chainCatalog, chainBenchmark) => {
+    const sorted = dataset.nodes
       .filter((node) => node.metadata?.catalog_id === chainCatalog)
       .filter(
         (node) =>
@@ -484,6 +484,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
           node.source_id === chainBenchmark,
       )
       .sort(sortNodesByItemId);
+    return chainBenchmark ? sorted : sorted.slice(0, 250);
+  };
   const cciLinksForNode = (nodeId, includeCandidates = false) =>
     (edgesBySource.get(nodeId) || [])
       .filter(

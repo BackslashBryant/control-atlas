@@ -516,7 +516,7 @@ const CATALOG_SUMMARIES = new Map([
 ]);
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
-const nodeId = (catalogId, recordId) => `${catalogId}:${recordId}`;
+const nodeId = (catalogId, recordId) => recordId.startsWith(`${catalogId}:`) ? recordId : `${catalogId}:${recordId}`;
 const identifier = (value) => String(value).replace(/[^A-Za-z0-9:_-]+/g, "-");
 
 // OLIR-style mapping files zero-pad SP 800-53 control IDs and write

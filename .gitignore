@@ -39,6 +39,7 @@
 !docs/**
 # AI-assistant working notes dropped by a plugin — not app logic, never ship.
 docs/guardrails/
+docs/evidence/
 
 # Hardened Agent/AI Exclusions
 .gemini/
