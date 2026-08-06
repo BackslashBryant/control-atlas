@@ -101,9 +101,8 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
   });
 
   await page
-    .getByRole("button", { name: "Control Atlas — home" })
-    .first()
-    .click({ force: true });
+    .locator('[data-react-root] header.site-header button.brand')
+    .click();
   await expect(
     page.getByRole("heading", {
       name: /Find the source\. See what connects/,

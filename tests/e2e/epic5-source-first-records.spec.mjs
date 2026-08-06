@@ -4,8 +4,8 @@ import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from "./sup
 /** @type {Array<[string, string, string, boolean]>} */
 const records = [
   ["control", "/#/record/nist-800-53/AC-1", "Policy and Procedures", true],
-  ["STIG rule", "/#/record/disa-stig/Application_Security_Development_STIG%3ASV-222387r960735_rule", "limit the number of logon sessions", true],
-  ["SRG rule", "/#/record/disa-srg/Network_Device_Management_SRG%3ASV-202013r960777_rule", "automatically audit account creation", true],
+  ["STIG rule", "/#/record/disa-stig/V-222387", "limit the number of logon sessions", true],
+  ["SRG rule", "/#/record/disa-srg/V-202013", "automatically audit account creation", true],
   ["ATT&CK technique", "/#/record/mitre-attack-ics/T0800", "Activate Firmware Update Mode", true],
   ["assessment procedure", "/#/record/nist-800-53a/AC-1", "Policy and Procedures Assessment Procedure", true],
   // D3-AA was the last record type with an empty description (MITRE D3FEND
