@@ -95,7 +95,7 @@ test("record types receive conservative, useful sections and sparse records omit
 }) => {
   const cases = [
     ["/#/record/disa-cci/CCI-000001", "Implementation"],
-    ["/#/record/disa-stig/Application_Security_Development_STIG%3ASV-222387r960735_rule", "Implementation and validation"],
+    ["/#/record/disa-stig/V-222387", "Implementation and validation"],
     ["/#/record/mitre-attack/T1195.002", "Threat intelligence"],
     ["/#/record/nist-800-171/3.17.1", "Acquisition and supply chain"],
   ];
