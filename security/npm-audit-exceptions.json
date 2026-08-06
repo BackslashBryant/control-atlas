@@ -17,6 +17,22 @@
       "reason": "Transitive devDependency of @lhci/cli (Lighthouse CI), only invoked in local/CI performance-audit tooling against fixed, developer-controlled glob patterns — never against user input. Only available fix is a semver-major downgrade of @lhci/cli to 0.3.3.",
       "recordedAt": "2026-07-24",
       "reviewBy": "2026-10-24"
+    },
+    {
+      "package": "js-yaml",
+      "id": 1138114,
+      "advisory": "GHSA-5p4m-2wfm-xmqj",
+      "reason": "Transitive devDependency via @lhci/utils. Quadratic CPU consumption in !!omap resolution. Lighthouse CI runs in controlled environments, not parsing untrusted input. No backported fix available for v3/v4.",
+      "recordedAt": "2026-08-06",
+      "reviewBy": "2026-11-06"
+    },
+    {
+      "package": "js-yaml",
+      "id": 1138115,
+      "advisory": "GHSA-5p4m-2wfm-xmqj",
+      "reason": "Transitive devDependency via @lhci/utils. Quadratic CPU consumption in !!omap resolution. Lighthouse CI runs in controlled environments, not parsing untrusted input. No backported fix available for v3/v4.",
+      "recordedAt": "2026-08-06",
+      "reviewBy": "2026-11-06"
     }
   ]
 }

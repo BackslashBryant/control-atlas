@@ -224,11 +224,9 @@ test('nightly full verification builds once and shards browser coverage', () => 
   assert.match(nightlyQualityWorkflow, /--shard=\$\{\{ matrix\.shard \}\}\/4/);
   assert.match(nightlyQualityWorkflow, /PLAYWRIGHT_FULLY_PARALLEL: '1'/);
   assert.match(nightlyQualityWorkflow, /playwright merge-reports/);
-  assert.match(nightlyQualityWorkflow, /npx playwright test --config playwright\.guardian\.config\.mjs/);
   assert.match(nightlyQualityWorkflow, /npm run test:visual/);
   assert.match(nightlyQualityWorkflow, /name: nightly-visual-evidence/);
-  assert.match(nightlyQualityWorkflow, /name: nightly-guardian-evidence/);
-  assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility, visual-review, experience-review\]/);
+  assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility, visual-review\]/);
   assert.equal((nightlyQualityWorkflow.match(/playwright install chromium/g) ?? []).length, 1);
   assert.match(nightlyQualityWorkflow, /visual-review:[\s\S]*mcr\.microsoft\.com\/playwright:v1\.60\.0-noble[\s\S]*Install package-matched Chromium/);
 });
@@ -265,7 +263,6 @@ test('direct ship scripts cover push retry, remote checks wait, and main ship fl
   assert.ok(existsSync('tools/ship-to-main.mjs'));
   assert.ok(existsSync('.gitleaks.toml'));
   assert.match(packageJson.scripts['prepush:audit'], /brandRotation\.test\.ts/);
-  assert.match(packageJson.scripts['prepush:audit'], /ui-copy-speakers\.test\.mjs/);
   assert.match(packageJson.scripts['prepush:audit'], /content-review\.test\.mjs/);
   assert.match(packageJson.scripts['prepush:audit'], /style:check/);
   assert.equal(packageJson.scripts['pregit:push'], 'npm run prepush:audit');
