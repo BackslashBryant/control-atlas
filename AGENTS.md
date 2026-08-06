@@ -35,7 +35,7 @@ Operating rules for agents:
    - Sentinel: security/risk.
    - Nexus: git, CI, release, deploy, maintenance automation.
 3. Pick one lead persona per task. Do not stage fake full-team reviews.
-4. Setup should be agent-led. If setup state is missing, report what it found.
+4. Setup must use repository-local documented tooling (`npm run ...` scripts defined in `package.json`). Do not depend on personal, agent-specific, or machine-specific bootstrap state.
 
 ## Execution Guardrails
 
@@ -142,7 +142,7 @@ Before every commit:
 <!-- BEGIN core-engineering-doctrine -->
 # Core Engineering Doctrine (project reference)
 
-This repository follows the Core Engineering Doctrine. Canonical, full text:
+This repository follows the Core Engineering Doctrine. Condensed principles:
 
 Precedence when guidance conflicts (top wins):
 1. Safety, security, legal obligations, data integrity, and explicit user instructions.
