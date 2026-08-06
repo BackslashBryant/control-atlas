@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-05T18:38:46.549Z",
+  "generated_at": "2026-08-04T13:00:49.321Z",
   "connection_inventory": {
-    "totalRecords": 29789,
-    "publishedLinks": 68030,
+    "totalRecords": 11681,
+    "publishedLinks": 22317,
     "rows": [
       {
         "id": "requirements",
         "label": "Requirements",
-        "totalRecords": 8336,
-        "connectedRecords": 8292,
-        "publishedLinks": 38663,
+        "totalRecords": 7333,
+        "connectedRecords": 7289,
+        "publishedLinks": 10688,
         "relatedCategories": [
           "Assessment checks",
           "Controls",
@@ -35,9 +35,9 @@
       {
         "id": "assessment-checks",
         "label": "Assessment checks",
-        "totalRecords": 18374,
-        "connectedRecords": 18374,
-        "publishedLinks": 44828,
+        "totalRecords": 1617,
+        "connectedRecords": 1617,
+        "publishedLinks": 2147,
         "relatedCategories": [
           "Controls",
           "Framework structure",
@@ -49,7 +49,7 @@
         "label": "Threats and defenses",
         "totalRecords": 1065,
         "connectedRecords": 1065,
-        "publishedLinks": 5354,
+        "publishedLinks": 4721,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -58,9 +58,9 @@
       {
         "id": "zero-trust",
         "label": "Zero Trust",
-        "totalRecords": 226,
-        "connectedRecords": 226,
-        "publishedLinks": 1028,
+        "totalRecords": 227,
+        "connectedRecords": 227,
+        "publishedLinks": 1029,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -80,9 +80,9 @@
       {
         "id": "framework-structure",
         "label": "Framework structure",
-        "totalRecords": 581,
-        "connectedRecords": 579,
-        "publishedLinks": 23562,
+        "totalRecords": 232,
+        "connectedRecords": 230,
+        "publishedLinks": 5454,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",

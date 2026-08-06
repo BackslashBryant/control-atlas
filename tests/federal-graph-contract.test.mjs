@@ -381,8 +381,8 @@ test('DISA STIG and SRG records carry full, untruncated check and fix text', () 
     const truncated = records
       .filter(
         (node) =>
-          (node.metadata.check_text.endsWith('...') && !/example|etc|user_or_role|jamfsoftware/i.test(node.metadata.check_text)) ||
-          (node.metadata.fix_text.endsWith('...') && !/example|etc|user_or_role|jamfsoftware/i.test(node.metadata.fix_text)),
+          node.metadata.check_text.endsWith('...') ||
+          node.metadata.fix_text.endsWith('...'),
       )
       .map((node) => node.id);
     assert.deepEqual(

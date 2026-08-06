@@ -1,0 +1,1194 @@
+================================================================
+CONTROL ATLAS — SUPPLEMENTAL WEB DESIGN REVIEW (GAP-CLOSURE PASS)
+================================================================
+
+AGENT ID:        CURSOR-WD
+PARENT REPORT:   control_atlas_web_design_review_CURSOR-WD_2026-07-03.txt
+DATE/TIME:       2026-07-04T02:06:00-04:00
+URL REVIEWED:    https://backslashbryant.github.io/control-atlas/
+PASS SCOPE:      Surfaces and states omitted from initial review (Section 16 gaps)
+BROWSER:         Cursor IDE Browser (cursor-ide-browser MCP)
+VIEWPORTS ADDED: 1280x800, 768x1024 (tablet), 844x390 (landscape mobile)
+                 (plus prior 1920x1080, 390x844 from parent report)
+
+---
+
+1. SUPPLEMENT EXECUTIVE SUMMARY
+
+---
+
+This pass exercised Compare workbench/results/export, Templates generate/download,
+Playbooks hub and pattern detail, Start Here recommendation results, Open search
+overlay, Atlas pull tab, Glossary drawer, Explore empty state, and mid-breakpoint
+responsive behavior on Atlas Map.
+
+Verdict unchanged: CONDITIONAL. New findings reinforce prior themes (chrome/wayfinding,
+CTA duplication, trust module placement) and add tablet/landscape gaps. Several
+previously UNVERIFIED surfaces now WORKING or PARTIAL with evidence.
+
+Positive surprises:
+- Start Here results screen is visually strong with explicit non-determination disclaimer
+- Playbook pattern detail uses clear card structure (Purpose / When / How / Mistakes)
+- Explore empty search state is helpful and on-brand
+- Templates generate flow works with inline disclaimer and download status message
+- 1280 laptop Atlas Map is usable (graph ~432px tall, matrix visible, no overflow)
+
+New blockers / high-severity additions: none that override parent blockers, but
+CA-WD-022 (template panel overlap) and CA-WD-034/035 (tablet/landscape) add responsive
+risk for evaluators on laptops/tablets.
+
+Competitive template benchmark (Section 7): Control Atlas wins template discovery/generation
+UX vs I-Assure and all free peers; loses on Word/Excel output format, submission depth,
+social proof, and FedRAMP authority. See CA-WD-039 through CA-WD-045.
+
+Atlas Map deep layout review (Section 8): FAIL for flagship positioning — graph gets ~27%
+viewport width at 1920px while side table gets ~848px; ~46% of viewport is chrome before
+the graph starts; AC-2 focused view defaults to 0.2x unreadable zoom; duplicate node labels;
+mobile graph below fold. See CA-WD-046 through CA-WD-057. User dislike is structurally justified.
+
+---
+
+2. SURFACES NOW REVIEWED (STATUS)
+
+---
+
+Compare STIG-chain workbench (#/compare?workbench=stig-chain)
+  WORKING — Filter comboboxes, results table, mapping trace, stat summary cards
+
+Compare mapping trace (chainItem selected)
+  PARTIAL — Readable chain visualization; duplicate export cluster; page h1 still intent-hub copy
+
+Compare export (CSV/Markdown/JSON)
+  PARTIAL — Exports exposed; no About-style disclaimer module at export point
+
+Framework-to-framework workbench (#/compare?workbench=framework-pair)
+  PARTIAL — Route reachable; full results UI not deeply exercised this pass
+
+Templates hub (#/templates)
+  WORKING — (confirmed parent) unchanged
+
+Template detail + generate (#/templates?templateType=security_plan_starter...)
+  PARTIAL — Generate/download works; layout overlap with hub chrome; JSON mentioned but unavailable
+
+Playbooks hub (#/playbooks)
+  PARTIAL — Strong hub layout; duplicate card entries observed in accessibility tree
+
+Playbook pattern detail (#/playbooks?pattern=control-inheritance)
+  WORKING — Clear structured guidance; related control/tag chips; CTAs to map/templates/glossary
+
+Start Here results (#/start?step=results&...)
+  WORKING — Multi-section recommendations (Explore/Compare/Playbooks/Templates); trust disclaimer present
+
+Open search overlay (header Open search)
+  WORKING — Centered modal, labeled field, Escape closes; redundant with inline header search (CA-WD-009)
+
+Atlas pull tab (Open Atlas panel)
+  WORKING — Slide-in with summary + View full Atlas; thin but functional
+
+Glossary drawer (Help/Glossary)
+  PARTIAL — Searchable; term buttons expose slug IDs not display names
+
+Explore empty search (#/explore?q=zzzznonexistent999)
+  WORKING — "No matching records found" + guidance + Clear search CTA
+
+Brand entrance overlay (cold session, localStorage cleared)
+  BROKEN/ABSENT — ca_intro_seen key set on load but zero role=dialog renders; intro not observable
+
+Atlas Map List tab (#/atlas-map?relationshipView=list)
+  WORKING — Large accessible list tree populates (1000+ lines in snapshot)
+
+Responsive 1280x800 Atlas Map
+  WORKING — headerH 86px; graphH 432px; hOverflow 0; matrix visible
+
+Responsive 768x1024 Atlas Map
+  PARTIAL — headerH 76px; nav buttons ~38–43px wide; graph node labels truncate
+
+Responsive 844x390 landscape Atlas Map
+  PARTIAL — Graph workspace below fold; header/filter stack dominates viewport
+
+Focus visibility (button sample)
+  UNVERIFIED/WEEK — computed outline none, box-shadow none on focused button
+
+prefers-reduced-motion: reduce (emulated)
+  UNVERIFIED — brand rotation animationName none at snapshot time; rotation text still present
+
+---
+
+3. NEW FINDINGS (DETAILED)
+
+---
+
+ID:             CA-WD-019
+TITLE:          Compare results step retains intent-hub page title and summary
+LENS:           UX
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/compare?workbench=stig-chain (step 3 Review results active)
+OBSERVED:       Progress stepper shows step 3 active with results table and mapping trace visible, but h1 remains "What do you want to compare?" with intent-hub subcopy.
+INTERPRETATION: Users on results/export cannot tell from page header that they are reviewing outputs; stepper alone must carry context.
+REPRO:          1. Compare → STIG/SRG to controls → select item → View mapping trace 2. Observe h1 unchanged
+EXPECTED:       Results-step h1 e.g. "Review comparison results" or selected item title.
+ACTUAL:         Intent selection heading persists.
+EVIDENCE:       Snapshot on chainItem URL; screenshot ca-supplement-compare-workbench session
+RECOMMENDED FIX: Swap PageHeader copy based on workbench step state.
+
+ID:             CA-WD-020
+TITLE:          Compare export controls duplicated in results and mapping trace sections
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Compare STIG-chain results with mapping trace expanded
+OBSERVED:       Export results + Export CSV/Markdown/JSON appear twice (refs e65–e68 and e82–e85 in snapshot).
+INTERPRETATION: Visual noise; users unsure which export block is authoritative; template-driven duplication.
+REPRO:          Open STIG compare → View mapping trace → count export buttons
+EXPECTED:       Single export cluster per viewport.
+ACTUAL:         Two identical export toolbars.
+EVIDENCE:       Snapshot refs e65–e68, e82–e85
+RECOMMENDED FIX: Deduplicate; sticky single export bar on results step.
+
+ID:             CA-WD-021
+TITLE:          Compare export lacks prominent trust disclaimer module
+LENS:           TRUST
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Compare workbench export row
+OBSERVED:       Footer disclaimer exists globally; export area has mapping-type legend text only, not About-style orange DISCLAIMER panel before download.
+INTERPRETATION: Export is a trust-critical action; disclaimer visually weaker than About/Sources standard (CA-WD-016).
+REPRO:          Navigate to Compare results → inspect area above Export CSV
+EXPECTED:       Compact trust module matching About disclaimer styling before export.
+ACTUAL:         Generic provenance helper text; footer disclaimer only after scroll.
+EVIDENCE:       Compare mapping trace screenshot; Runtime.evaluate disclaimerNearExport true but no styled module
+RECOMMENDED FIX: Reuse About disclaimer component above export buttons (parent strategic rec confirmed).
+
+ID:             CA-WD-022
+TITLE:          Template selected view overlaps hub search and category filters
+LENS:           UI
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/templates?templateType=security_plan_starter...
+OBSERVED:       When Security Plan Starter selected, hub-level "9 templates in 4 categories", Search field, and category pills visually overlap Selected template panel headings per screenshot.
+INTERPRETATION: Breaks polish on artifact-generation flow; looks like two views rendered simultaneously without layout handoff.
+REPRO:          Templates → Select Security Plan Starter → observe header stack overlap
+EXPECTED:       Hub chrome hides or template detail replaces filter region cleanly.
+ACTUAL:         Overlapping layers; SELECTED TEMPLATE header competes with hub search.
+EVIDENCE:       ca-supplement-template-generate.png
+RECOMMENDED FIX: On template selection, collapse hub filter card or navigate to dedicated detail layout.
+
+ID:             CA-WD-023
+TITLE:          Template format helper promises JSON but dropdown offers only Markdown and CSV
+LENS:           COPY
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       Templates → More options → Format combobox
+OBSERVED:       Helper text: "File type for download: Markdown, CSV, or JSON." Options: Markdown, CSV only.
+INTERPRETATION: Broken expectation; looks unfinished.
+REPRO:          Open template More options → read Format helper vs dropdown options
+EXPECTED:       JSON option or remove JSON from copy.
+ACTUAL:         Copy/dropdown mismatch.
+EVIDENCE:       Snapshot combobox e84 options; helper text e91
+RECOMMENDED FIX: Align copy with available formats or add JSON export.
+
+ID:             CA-WD-024
+TITLE:          Template download confirmation is easy to miss
+LENS:           UX
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       Templates generate action
+OBSERVED:       After Generate, status role=status reads "Download started for security-plan-starter-2026-07-04.md. Check your downloads folder." in muted inline text between disclaimer and buttons.
+INTERPRETATION: Critical feedback uses low-visual-weight placement; users may click Generate repeatedly.
+REPRO:          Generate Security Plan Starter → locate confirmation message
+EXPECTED:       Toast or prominent success banner near primary button.
+ACTUAL:         Subtle status line.
+EVIDENCE:       Snapshot ref e92; ca-supplement-template-generate.png
+RECOMMENDED FIX: Success toast with check icon; disable Generate briefly after success.
+
+ID:             CA-WD-025
+TITLE:          Playbooks hub accessibility tree lists duplicate pattern cards
+LENS:           UI
+SEVERITY:       LOW
+CONFIDENCE:     MEDIUM
+LOCATION:       #/playbooks hub grid
+OBSERVED:       Snapshot contains duplicate buttons: "RMF Lifecycle Planning" (e54, e57), "Reusing Prior Authorization Work" (e55, e60), "What Your Cloud Provider Owns..." (e56, e65).
+INTERPRETATION: May be recommended section + category duplication; visually may render twice or confuse screen reader order.
+REPRO:          Open Playbooks → inspect card grid and snapshot button names
+EXPECTED:       Each playbook appears once in DOM unless intentionally featured + categorized with distinct semantics.
+ACTUAL:         Duplicate named buttons in tree.
+EVIDENCE:       Playbooks hub snapshot refs e54–e66
+RECOMMENDED FIX: If featured strip duplicates category list, mark featured clones aria-hidden or use list semantics with aria-labelledby.
+
+ID:             CA-WD-026
+TITLE:          Start Here playbook recommendations use identical placeholder copy
+LENS:           COPY
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/start?step=results (Cloud SaaS / Moderate / Federal civilian)
+OBSERVED:       Three Playbooks cards each say: "This pattern explains a concept that commonly blocks cloud saas teams in a federal civilian setting."
+INTERPRETATION: Undermines personalized recommendation promise; feels templated at payoff moment.
+REPRO:          Complete Start Here questionnaire → read Playbooks section card descriptions
+EXPECTED:       Pattern-specific one-line summaries (as on Playbooks hub cards).
+ACTUAL:         Same sentence repeated three times.
+EVIDENCE:       Snapshot refs e81–e83
+RECOMMENDED FIX: Pull playbook card summary field into recommendation renderer.
+
+ID:             CA-WD-027
+TITLE:          Start Here results include explicit non-determination disclaimer (positive)
+LENS:           TRUST
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       Start Here results WHAT THIS IS block
+OBSERVED:       "This is a reference recommendation. It is not a compliance determination."
+INTERPRETATION: Models good trust UX at action/recommendation moment; should be design template for export/generate surfaces.
+REPRO:          Complete Start Here → observe blue-accent WHAT THIS IS card
+EXPECTED:       N/A — positive
+ACTUAL:         Clear limitation language above recommendations.
+EVIDENCE:       Start Here results screenshot; snapshot ref e71
+RECOMMENDED FIX: Replicate this module styling at Compare export and Templates generate.
+
+ID:             CA-WD-028
+TITLE:          Playbook pattern detail structure is clear and scannable (positive)
+LENS:           UI
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       #/playbooks?pattern=control-inheritance
+OBSERVED:       Distinct sections Purpose, Related glossary terms, When to use, How it works, Common mistakes, Related controls; Back to playbooks wayfinding; chip links to PL-2, SA-9, templates.
+INTERPRETATION: Best-in-product content layout for long-form guidance.
+REPRO:          Open Control Inheritance Model pattern
+EXPECTED:       N/A — positive
+ACTUAL:         Strong hierarchy and cross-links.
+EVIDENCE:       Playbook detail screenshot; snapshot headings e73, e87–e91
+RECOMMENDED FIX: Use as layout reference for record detail and Compare trace panels.
+
+ID:             CA-WD-029
+TITLE:          Glossary drawer lists slug-style term IDs instead of human labels
+LENS:           COPY
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Glossary drawer (Help → Glossary tab)
+OBSERVED:       Term buttons labeled "rmf-lifecycle", "ato-vs-atc", "ato-vs-fedramp", "security plan starter" (lowercase slug style) mixed with "PL-2", "SA-9".
+INTERPRETATION: Breaks otherwise polished drawer; exposes internal slug naming.
+REPRO:          Open Glossary drawer → read term button labels
+EXPECTED:       Title case display names matching Playbooks/Templates naming.
+ACTUAL:         URL-slug style identifiers as visible labels.
+EVIDENCE:       Glossary snapshot refs e118–e127
+RECOMMENDED FIX: Map slug → displayName for button text; keep slug in data attributes only.
+
+ID:             CA-WD-030
+TITLE:          Open search overlay functional but duplicates header inline search (confirmed)
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Global header Open search modal
+OBSERVED:       Modal with h2 "Search records", focused field, helper "Press Enter to open full Explore results", Close button; Escape closes. Inline header searchbox remains visible behind overlay.
+INTERPRETATION: Confirms CA-WD-009; overlay adds focus benefit but doubles search affordances.
+REPRO:          Click Open search on home
+EXPECTED:       Single search pattern.
+ACTUAL:         Overlay + inline field coexist.
+EVIDENCE:       ca-supplement-search-overlay.png
+RECOMMENDED FIX: Remove inline field; Open search only OR inline only without separate button.
+
+ID:             CA-WD-031
+TITLE:          Brand entrance overlay not observable despite ca_intro_seen storage key
+LENS:           UX
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       First visit / home after localStorage.clear + reload
+OBSERVED:       After clearing storage and reloading, localStorage immediately contains ca_intro_seen; document.querySelectorAll('[role=dialog]').length === 0; no intro DOM nodes.
+INTERPRETATION: Onboarding/brand entrance either removed, broken, or sets flag without showing UI; designers cannot rely on first-run education.
+REPRO:          Clear localStorage → reload https://backslashbryant.github.io/control-atlas/ → check dialogs
+EXPECTED:       First-visit intro OR no ca_intro_seen key until dismissed.
+ACTUAL:         Key set; no visible intro.
+EVIDENCE:       Runtime.evaluate keys=[ca_intro_seen], allDialogs=0
+RECOMMENDED FIX: Restore intro modal or remove dead storage key logic.
+
+ID:             CA-WD-032
+TITLE:          Atlas pull tab panel is minimal but usable
+LENS:           UI
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       Open Atlas panel side tab (all routes)
+OBSERVED:       Expanded panel shows summary copy + "View full Atlas →" + Close; does not obstruct main content severely on desktop.
+INTERPRETATION: Acceptable quick preview; not a primary navigation path.
+REPRO:          Click ATLAS side tab on home
+EXPECTED:       N/A — observational
+ACTUAL:         Thin preview panel.
+EVIDENCE:       Snapshot refs e47–e48 during panel open
+RECOMMENDED FIX: Optional: show current route context or recent record in panel.
+
+ID:             CA-WD-033
+TITLE:          Atlas Map usable at 1280x800 laptop width (positive)
+LENS:           RESPONSIVE
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map at 1280x800
+OBSERVED:       headerH 86.19px; graphH 432px; graphW 536.6px; hOverflow 0; coverage matrix visible.
+INTERPRETATION: Primary desktop-adjacent breakpoint works; graph + sidebar list readable.
+REPRO:          Emulate 1280x800 → open Atlas Map
+EXPECTED:       N/A — positive
+ACTUAL:         Functional layout without horizontal scroll.
+EVIDENCE:       CDP Emulation.setDeviceMetricsOverride; screenshot page-2026-07-04T02-02-50-002Z.png
+RECOMMENDED FIX: None; use as responsive baseline.
+
+ID:             CA-WD-034
+TITLE:          Tablet 768px shows cramped nav and truncated graph node labels
+LENS:           RESPONSIVE
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map at 768x1024
+OBSERVED:       Nav buttons ~38–43px wide; graph node text truncates ("Baseline / Overlay / Progra...", "Assessment / Scoping Proced..."); headerH 76px.
+INTERPRETATION: Tablet users get partial labels and tight chrome; graph readability reduced without switching to List tab.
+REPRO:          Emulate 768x1024 → Atlas Map Map tab
+EXPECTED:       Readable node labels or auto-switch to List tab.
+ACTUAL:         Truncated nodes; cramped nav.
+EVIDENCE:       CDP metrics; screenshot page-2026-07-04T02-03-07-757Z.png
+RECOMMENDED FIX: Default List tab at <=768px; increase node min-width or reduce label font scaling.
+
+ID:             CA-WD-035
+TITLE:          Landscape mobile 844x390 hides graph workspace below fold
+LENS:           RESPONSIVE
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map at 844x390
+OBSERVED:       Header + search/filter + instructional copy consume viewport; graph canvas not visible without scroll in screenshot.
+INTERPRETATION: Mobile landscape practitioners cannot orient to map at a glance; reinforces mobile graph failure mode (CA-WD-013).
+REPRO:          Emulate 844x390 → open Atlas Map
+EXPECTED:       Collapsed header or List-first layout in landscape.
+ACTUAL:         Chrome-heavy above-fold experience.
+EVIDENCE:       screenshot page-2026-07-04T02-03-27-609Z.png
+RECOMMENDED FIX: Collapse PageHeader in landscape; default List tab; sticky compact header.
+
+ID:             CA-WD-036
+TITLE:          Focus ring not visible on primary buttons (baseline check)
+LENS:           ACCESSIBILITY
+SEVERITY:       MEDIUM
+CONFIDENCE:     MEDIUM
+LOCATION:       Global button focus states
+OBSERVED:       Runtime.evaluate on focused button: outline none 0px; box-shadow none.
+INTERPRETATION: Keyboard users may lose track of focus despite Skip link presence; needs systematic Tab audit.
+REPRO:          Tab to button → evaluate getComputedStyle outline/boxShadow
+EXPECTED:       Visible :focus-visible ring meeting 3:1 contrast.
+ACTUAL:         No outline or shadow detected on sample.
+EVIDENCE:       CDP Runtime.evaluate focusOutline/focusRing
+RECOMMENDED FIX: Add focus-visible ring token consistent with cyan accent; verify on nav, cards, graph controls.
+
+ID:             CA-WD-037
+TITLE:          Explore empty search state is clear and actionable (positive)
+LENS:           UX
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       #/explore?q=zzzznonexistent999
+OBSERVED:       "No matching records found." plus "Try searching by control ID, topic, baseline, CCI, or source." and Clear search / Open Atlas Map / Start guided path CTAs.
+INTERPRETATION: Edge state matches product voice; good model for other empty states.
+REPRO:          Search nonsense string on Explore
+EXPECTED:       N/A — positive
+ACTUAL:         Helpful empty state.
+EVIDENCE:       Snapshot ref e771 area; Runtime.evaluate emptyText
+RECOMMENDED FIX: Reuse pattern for Compare zero-results and Templates filter-empty.
+
+ID:             CA-WD-038
+TITLE:          Templates inline disclaimer present but low visual weight vs About module
+LENS:           TRUST
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       Template detail before Generate
+OBSERVED:       Plain bordered box text: "Control Atlas is an open-source reference tool. It is not an official government system..." truncates in snapshot; not orange-accent DISCLAIMER styling from About.
+INTERPRETATION: Legal copy exists (better than absent) but does not match trust design system peak (CA-WD-016, CA-WD-027).
+REPRO:          Select template → read disclaimer above Generate
+EXPECTED:       Shared TrustDisclaimer component with accent bar.
+ACTUAL:         Muted inline box; truncated in narrow layout.
+EVIDENCE:       ca-supplement-template-generate.png; snapshot ref e80
+RECOMMENDED FIX: Swap to About-style disclaimer module component.
+
+---
+
+4. UPDATED QUICK WINS (SUPPLEMENT)
+
+---
+
+QUICK WIN: Fix template detail/hub layout overlap on selection
+AREA:      UI
+IMPACT:    HIGH
+EFFORT:    MEDIUM
+ACTION:    Collapse hub filters when templateType param set
+
+QUICK WIN: Deduplicate Compare export toolbar
+AREA:      UI
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Remove second export cluster in mapping trace section
+
+QUICK WIN: Swap Compare/results PageHeader copy by step
+AREA:      UX
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    h1 reflects step 2 inputs / step 3 results
+
+QUICK WIN: Replace Start Here playbook placeholder copy
+AREA:      COPY
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Use playbook.summary in recommendation cards
+
+QUICK WIN: Glossary drawer display names
+AREA:      COPY
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Show title case labels instead of slugs
+
+QUICK WIN: Default Atlas Map to List tab <=768px and landscape
+AREA:      RESPONSIVE
+IMPACT:    HIGH
+EFFORT:    MEDIUM
+ACTION:    Viewport hook + relationshipView=list default
+
+QUICK WIN: Add focus-visible ring to buttons/links
+AREA:      ACCESSIBILITY
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Global :focus-visible outline token
+
+QUICK WIN: Trust disclaimer component at export/generate
+AREA:      TRUST
+IMPACT:    MEDIUM
+EFFORT:    MEDIUM
+ACTION:    Reuse About disclaimer module (CA-WD-027 pattern)
+
+---
+
+5. REMAINING GAPS AFTER SUPPLEMENT
+
+---
+
+* Full keyboard-only journey including graph node selection
+* Screen reader spot check (NVDA/VoiceOver)
+* Automated axe scan / measured WCAG contrast ratios
+* Console/network log capture during session
+* Real physical device touch targets
+* Framework-to-framework Compare results table deep dive
+* STIG vs ATT&CK vs baseline compare variants
+* Record detail List view / Advanced details / non-AC-2 record types
+* Performance metrics (LCP/CLS)
+* Social/OG preview metadata
+* 1440x900 viewport (still UNVERIFIED)
+
+---
+
+6. PARENT REPORT CROSS-REFERENCE
+
+---
+
+Parent findings CA-WD-001 through CA-WD-018 stand; supplement adds CA-WD-019 through CA-WD-038.
+No parent finding overturned. CA-WD-009 and CA-WD-016 recommendations validated and extended
+(CA-WD-030, CA-WD-021, CA-WD-027, CA-WD-038).
+
+Overall launch verdict: CONDITIONAL (unchanged).
+
+---
+
+7. TEMPLATE COMPETITIVE BENCHMARK (I-ASSURE & FREE PEERS)
+
+---
+
+Benchmark date: 2026-07-04
+Method: Live review of competitor/public template sites (no repo source used).
+Control Atlas template substance cross-checked against product test report
+(control_atlas_test_report_CURSOR_2026-07-03.txt, CA-002/004/019/020) and
+supplemental generate/download session (security-plan-starter-2026-07-04.md).
+
+Sites reviewed:
+- I-Assure RMF Templates — https://i-assure.com/products/rmf-templates/
+- I-Assure download sample (AC family) — https://i-assure.com/download/ac-access-control/
+- FedRAMP Rev 5 Documents & Templates — https://www.fedramp.gov/rev5/documents-templates/
+- NIST SP 800-18 Rev. 2 (final, June 2026) — https://csrc.nist.gov/pubs/sp/800/18/r2/final
+- NIST RMF Assessment Cases (Word, by family) — CSRC assess-step download page
+- CivicActions SSP-Toolkit — https://github.com/CivicActions/ssp-toolkit
+- cyberzeshan GRC Framework Toolkit SSP — GitHub markdown template
+
+---
+
+7A. COMPETITOR INVENTORY (WHAT THEY OFFER)
+
+---
+
+I-ASSURE (primary comparator — practitioner community standard for free RMF Word artifacts)
+- Catalog: 18 NIST 800-53 control-family Word templates (AC, AT, AU, CA, CM, CP, IA, IR,
+  MA, MP, PE, PL, PM, PS, RA, SA, SC, SI) plus legacy DIACAP templates.
+- Format: .docx (e.g. RMF_Access Control Plan.docx, 1.77 MB; CA family 64 KB).
+- Structure: Per-family "Plan" documents mapped to NIST 800-53A assessment procedures;
+  individual traceability to assessment procedures stated as design goal.
+- Discovery UX: WordPress download table — family name, download count, date, single Download
+  button per row. No in-browser preview or configuration.
+- Trust signals: "Over 425 ATOs received... never denied by the Approving Authority";
+  per-file download counts (12,000–25,000+ per family); SDVOSB certification badge.
+- Currency: Last updated June–September 2019 (Rev 4/early Rev 5 era; no visible 2024–2026 refresh).
+- Related free tools: Scan Manager (POA&M/RAR from Nessus/SCAP/checklists); STIG-CCI-Control
+  Mapper — extends template ecosystem into automation.
+- Visual design: Functional contractor-site aesthetic (~2018); not cohesively branded; credible
+  to DoD practitioners via social proof counts, not via UI polish.
+
+FEDRAMP.GOV (authoritative cloud ATO package templates)
+- Catalog: Full authorization package — SSP, SAP, SAR, Risk Exposure Table, security test case
+  workbook, baseline-specific Appendix A templates, POA&M Excel template.
+- Format: Word (.docx) and Excel (.xlsx) — required for FedRAMP submission.
+- Structure: Prescriptive sections with instructional text per field; baseline-specific appendices;
+  aligned to NIST SP 800-53 Rev 5 as of Rev 5 transition.
+- Discovery UX: Official .gov document library page; download links; no generator.
+- Trust signals: U.S. government official site; mandatory for FedRAMP path.
+- Currency: Actively maintained for Rev 5 transition (2024–2026 guidance documents reference
+  current templates).
+- Visual design: USWDS-style FedRAMP site; plain but authoritative; beats commercial sites on
+  trust, not delight.
+
+NIST CSRC — SP 800-18 Rev. 2 (June 2026)
+- Catalog: System Security Plan outline example, Privacy Plan outline, C-SCRM Plan outline,
+  Roles & Responsibilities — supplemental DOCX downloads.
+- Format: Official .docx outlines (not full populated baselines).
+- Structure: Defines essential system plan elements correlated to RMF steps; replaces Rev 1 (2006).
+- Discovery UX: Publication detail page with supplemental material links.
+- Trust signals: Canonical NIST source; June 2026 final — newest official SSP structure guidance.
+- Visual design: CSRC standard; reference portal not product UX.
+
+NIST CSRC — RMF Assessment Cases (Word)
+- Catalog: One Word file per assessment case per control; 18 zip files by control family.
+- Format: .docx inside .zip (e.g. AC family = 22 separate assessment case documents).
+- Structure: Deep per-control assessment procedure worksheets — closest official analog to
+  I-Assure's per-procedure traceability.
+- Discovery UX: Dense CSRC download tables with zip-per-family organization.
+- Currency: SP 800-53A Rev 5 era assessment cases.
+- Visual design: Reference/download page; not practitioner-friendly discovery.
+
+CIVICACTIONS SSP-TOOLKIT (GitHub — automation-oriented)
+- Catalog: SSP front matter, control implementation YAML (OpenControl), appendices; Makefile workflow.
+- Format: YAML source → generated Markdown/PDF via compliance-masonry/OSCAL pipeline.
+- Structure: Machine-readable controls intended for continuous compliance automation.
+- Discovery UX: GitHub README; developer onboarding required.
+- Trust signals: CivicActions federal dev shop; GPL/CC0; 52 GitHub stars.
+- Visual design: N/A (developer tool); strongest for CI/CD integration, weakest for ISSO self-serve.
+
+CYBERZESHAN GRC FRAMEWORK TOOLKIT (GitHub — narrative markdown)
+- Catalog: SSP template, SAP template, step-by-step RMF guide (MIT license).
+- Format: Markdown on GitHub.
+- Structure: Excellent narrative SSP outline (system ID, FIPS 199, architecture, laws, per-control
+  implementation sections with prompts) — but only sample controls written out (AC-1, AC-2, AC-3,
+  AC-17, AU-2, etc.), not full baseline enumeration.
+- Discovery UX: GitHub repo browse; no generator.
+- Visual design: Markdown readability good; no integrated product chrome.
+
+---
+
+7B. COMPARISON MATRIX (DESIGN + PRODUCT LENS)
+
+---
+
+| Dimension | Control Atlas | I-Assure | FedRAMP/NIST official | GitHub peers |
+|-----------|---------------|----------|----------------------|--------------|
+| Template discovery UX | Strong — categorized hub, search, filters, cards | Weak — flat download table | Weak — document index pages | Weak — repo browse |
+| Generate/configure UX | Strong — in-browser picker, framework/env/format options | None — static file download | None — static download | None — clone/fork |
+| Visual polish | Strong dark product UI (when layout not overlapping) | Dated WordPress contractor site | Plain .gov | N/A |
+| Output format | Markdown, CSV only | Word (.docx) | Word, Excel | MD, YAML, OSCAL |
+| Practitioner format fit | Poor for eMASS/FedRAMP submitters | Excellent (Word is RMF lingua franca) | Required for FedRAMP | Mixed |
+| SSP depth | Partial — 1,196-row baseline table but inheritance/evidence tables truncated to 1 row (CA-002) | Deep per-family Word plans with assessment-procedure structure | Complete package scaffolds with instructional text | Narrative samples only (cyberzeshan) or YAML (CivicActions) |
+| POA&M / ConMon / STIG checklists | Stub or single-row (5/9 templates incomplete per CA-004) | Scan Manager automates POA&M/RAR; family plans cover CA/SI/etc. | Official FedRAMP POA&M Excel | Not primary focus |
+| Framework/baseline choice | UI exposes framework dropdown; FedRAMP path broken (CA-019); baseline filter advertised but not implemented (CA-020) | Implicit 800-53 family split (not baseline picker) | Baseline-specific appendices explicit | Manual edit |
+| Trust presentation at download | Inline muted disclaimer; not About-module strength (CA-WD-038) | Social proof download counts + ATO claims | Official government authority | License file only |
+| Integration with mapping/explore | Unique strength — templates linked from Start Here, playbooks, map | None — isolated downloads | None | None |
+| Currency (2026) | Generated from June 2026 build manifest data | Frozen ~2019 | Current Rev 5 / SP 800-18r2 | Varies; cyberzeshan references 800-18 Rev 1 |
+| Social proof | None visible (no download counts, version date on template page) | 12k–25k downloads per family | Official mandate | GitHub stars |
+
+---
+
+7C. HOW CONTROL ATLAS STACKS UP (HONEST VERDICT)
+
+---
+
+WHERE CONTROL ATLAS WINS (design and experience)
+1. End-to-end product UX — Only Control Atlas connects "I need an SSP" → pick template → configure
+   → generate → download inside a cohesive compliance map product. I-Assure and NIST are file pantries;
+   FedRAMP is a mandatory forms library. For a practitioner already exploring controls in Control Atlas,
+   the template path is dramatically lower friction than leaving to download .docx files.
+2. Visual generation experience — Templates hub card grid, category pills, and one-click Generate beat
+   every comparator on interface design and modern feel (parent CA-WD-017 cohesion applies when
+   CA-WD-022 overlap bug is fixed).
+3. Full baseline enumeration (select types) — Inheritance Worksheet and Implementation Statement
+   Worksheet export all ~1,196 NIST 800-53 controls programmatically. That beats cyberzeshan's
+   sample-control markdown and matches automation value of CivicActions for row coverage — but
+   delivers it through a click instead of a Makefile.
+4. Privacy/no-upload story — Browser-local generation aligns with federal audience sensitivity;
+   competitors don't emphasize this (I-Assure downloads; FedRAMP assumes desktop editing).
+5. Cross-linking — Playbook "Control Inheritance Model" → Generate Inheritance Worksheet;
+   Start Here results → template CTAs. No free competitor offers this workflow integration.
+
+WHERE CONTROL ATLAS LOSES (substance and practitioner expectations)
+1. Output format — The largest gap. I-Assure, FedRAMP, and NIST assessment cases all deliver Word
+   or Excel. ISSOs, eMASS uploaders, and FedRAMP CSPs live in .docx/.xlsx. Markdown/CSV exports
+   read as "developer prototype" to the core GRC audience regardless of UI polish.
+2. Document depth and submission readiness — I-Assure's 1.77 MB AC Access Control Plan and per-family
+   structure embed 800-53A assessment procedure traceability — the format validators expect. Control
+   Atlas Security Plan Starter truncates Inheritance Summary and Evidence Expectations to one control
+   row (CA-002) while claiming SSP outline status — a user comparing side-by-side with I-Assure or
+   FedRAMP SSP will notice immediately.
+3. Stubs vs promises — Five of nine Control Atlas template types are stubs or fixed checklists (CA-004).
+   I-Assure's catalog is smaller (18 family plans, not 9 artifact types) but each download is a complete,
+   battle-tested document. FedRAMP templates are exhaustive by regulation. Control Atlas over-promises
+   on the Templates hub card copy relative to export substance.
+4. Trust and authority signals — I-Assure leads with "425 ATOs" and 25,462 downloads on AC alone.
+   FedRAMP leads with .gov authority. Control Atlas shows no template version, last-updated date, or
+   download/community proof on the Templates surface — design gap for evaluators asking "who else uses this?"
+5. Currency — I-Assure templates are stale (2019) but still widely used because format is familiar.
+   NIST SP 800-18r2 (June 2026) supersedes 2006 guidance and defines new system plan elements Control
+   Atlas templates do not visibly reference. FedRAMP Rev 5 templates are current. Control Atlas data
+   build is June 2026 but template *structure* does not mirror newest official SSP outline examples.
+6. FedRAMP path — Selecting FedRAMP Rev. 5 framework in Control Atlas yields placeholder output (CA-019).
+   FedRAMP.gov provides the real required templates. For cloud SaaS Start Here recommendations pointing
+   to FedRAMP baselines, this is a critical competitive failure.
+
+NET DESIGN/POSITIONING READ (for template promotion)
+- Control Atlas templates win the "discovery and generation moment" — the UI is 2–3 years ahead of
+  I-Assure's download page in product feel.
+- Control Atlas templates lose the "attach to authorization package moment" — output format and
+  document completeness do not yet compete with I-Assure Word plans or FedRAMP official packages.
+- Honest positioning vs I-Assure: "Interactive blank starters tied to the public map" — not
+  "replacement for I-Assure RMF templates" or "FedRAMP submission package."
+- To stack up visually AND substantively: add .docx export (even if generated from same engine),
+  surface build/version date on Templates hub, show exemplar preview before download, fix truncated
+  SSP sub-tables, and add social proof or official-source badges per template.
+
+---
+
+7D. SIDE-BY-SIDE ARTIFACT COMPARISON (SECURITY PLAN / SSP CLASS)
+
+---
+
+| Attribute | Control Atlas Security Plan Starter | I-Assure RMF (e.g. AC Plan) | FedRAMP SSP template | cyberzeshan SSP.md |
+|-----------|-------------------------------------|----------------------------|----------------------|-------------------|
+| File type | .md / .csv | .docx | .docx (+ appendices) | .md |
+| Size/indicative depth | Multi-table; baseline ~1196 rows; sub-tables 1 row | ~1.77 MB single family | 100+ page scaffold w/ instructions | ~400 lines narrative; ~15 controls exemplified |
+| Control coverage | All baseline IDs in one table; not per-control prose | Per-family deep assessment structure | Full baseline w/ implementation narrative fields | Sample controls only |
+| Inheritance section | Present but truncated (CA-002) | Embedded in family plans / separate worksheets | Required FedRAMP appendix patterns | Section 7 table scaffold |
+| Evidence section | Present but truncated (CA-002) | Via CA/SA/RA family artifacts | SAR/SAP/test case workbook separate | Not included |
+| Assessment procedure traceability | Not evident in export | Core I-Assure value proposition | Via FedRAMP test case workbook | Not included |
+| Plain-language prompts | Minimal in export | Moderate (Word prompts) | Extensive instructional text | Strong bracket prompts |
+
+User who saved security-plan-starter-2026-07-04.md from Control Atlas gets a useful control
+baseline spreadsheet-in-markdown; user who downloads I-Assure RMF_Access Control Plan.docx gets
+a validator-familiar Word artifact with assessment procedure slots. Different jobs — but Control
+Atlas card copy ("Blank System Security Plan (SSP) outline") sets expectation closer to I-Assure/FedRAMP
+than to what the markdown file delivers.
+
+---
+
+7E. NEW FINDINGS FROM COMPETITIVE BENCHMARK
+
+---
+
+ID:             CA-WD-039
+TITLE:          Templates hub outclasses I-Assure on discovery UX but loses on output format fit
+LENS:           UX
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/templates vs https://i-assure.com/products/rmf-templates/
+OBSERVED:       Control Atlas: searchable card hub, categories, in-browser Generate, instant download.
+                I-Assure: 2019 WordPress table, 18 zip/docx links, 12k–25k download counts per family.
+INTERPRETATION: Product wins first impression and workflow; loses when practitioner opens file in Word
+                expecting submission-ready RMF artifact.
+REPRO:          Compare Templates hub UX to I-Assure RMF Templates page; generate CA Atlas SSP md;
+                download I-Assure RMF_Access Control Plan.docx
+EXPECTED:       Competitive free template product matches practitioner output format OR clearly labels
+                non-Word output as engineering starter.
+ACTUAL:         Superior UI; inferior format fit (.md/.csv only).
+EVIDENCE:       Live site review; I-Assure AC page file RMF_Access Control Plan.docx 1.77 MB
+RECOMMENDED FIX: Add .docx export; label Markdown/CSV as "data interchange" format in UI.
+
+ID:             CA-WD-040
+TITLE:          Missing template social proof and freshness signals vs I-Assure download counts
+LENS:           TRUST
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/templates hub and detail panel
+OBSERVED:       I-Assure shows per-template download counts (25,462 AC) and "425 ATOs" claim. Control
+                Atlas shows "9 templates in 4 categories" only — no build date, version, or usage proof.
+INTERPRETATION: Evaluators comparing free template sources will trust I-Assure social proof over prettier UI.
+REPRO:          Open Templates hub; compare to I-Assure family download rows
+EXPECTED:       Dataset version, last-updated, or "generated from [source versions]" on template cards.
+ACTUAL:         No freshness or adoption signals.
+EVIDENCE:       I-Assure product page; Control Atlas supplement snapshot
+RECOMMENDED FIX: Show build-manifest date and source catalog versions on each template card.
+
+ID:             CA-WD-041
+TITLE:          SSP starter over-claims vs I-Assure/FedRAMP/NIST 800-18 official outlines
+LENS:           COPY
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Security Plan Starter card and export
+OBSERVED:       UI: "Blank System Security Plan (SSP) outline with control baseline table and implementation
+                prompts." Export: baseline table full but Inheritance Summary and Evidence Expectations
+                truncated to 1 row (CA-002). NIST SP 800-18r2 (June 2026) defines new system plan elements
+                not reflected. FedRAMP SSP requires extensive instructional sections.
+INTERPRETATION: Competitive copy positions against I-Assure/FedRAMP class; substance delivers partial spreadsheet.
+REPRO:          Generate SSP; compare section completeness to I-Assure docx or NIST 800-18r2 outline
+EXPECTED:       Full outline matching claim OR narrowed card title ("Control baseline worksheet starter").
+ACTUAL:         Partial SSP scaffold with truncated sub-tables.
+EVIDENCE:       CA-002 product test; NIST SP 800-18r2 publication June 2026
+RECOMMENDED FIX: Fix truncation; align section headings to SP 800-18r2 outline; narrow marketing copy until complete.
+
+ID:             CA-WD-042
+TITLE:          Unique integrated template workflow beats all comparators (positive)
+LENS:           UX
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       Start Here results, Playbooks, Templates cross-links
+OBSERVED:       Start Here → Generate Security Plan Starter; Playbook → Open related templates;
+                Templates → View related map. I-Assure/FedRAMP/NIST/GitHub offer no equivalent in-product path.
+INTERPRETATION: Control Atlas's differentiated value is map+template+playbook integration, not raw file parity.
+REPRO:          Complete Start Here; follow template CTA; compare to I-Assure isolated download
+EXPECTED:       N/A — positive differentiator
+ACTUAL:         Cohesive artifact journey inside one product.
+EVIDENCE:       Supplement session Start Here results; playbook detail CTAs
+RECOMMENDED FIX: Marketing should lead with integration story; de-emphasize "replace FedRAMP templates."
+
+ID:             CA-WD-043
+TITLE:          I-Assure companion tools (Scan Manager) set higher automation bar for POA&M/STIG artifacts
+LENS:           TRUST
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Control Atlas POA&M Starter / STIG Evidence Checklist vs I-Assure Scan Manager
+OBSERVED:       I-Assure Scan Manager: free, imports Nessus/SCAP/checklists → POA&M/RAR in minutes.
+                Control Atlas POA&M/ConMon/STIG templates are stubs or single-row (CA-004); STIG data skeleton (CA-003).
+INTERPRETATION: Practitioners comparing free POA&M/STIG tooling will prefer I-Assure ecosystem.
+REPRO:          Read i-assure.com/products/scan-manager/; generate Control Atlas POA&M Starter
+EXPECTED:       STIG/POA&M templates populated or honest "blank only" labeling without STIG implication.
+ACTUAL:         Checklist templates cannot deliver on STIG card copy today.
+EVIDENCE:       I-Assure Scan Manager page; CA-003/CA-004 product test
+RECOMMENDED FIX: Rename STIG checklist until data exists; link to Scan Manager as external reference in Sources.
+
+ID:             CA-WD-044
+TITLE:          FedRAMP and NIST official templates remain authority benchmark for cloud path
+LENS:           TRUST
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Control Atlas FedRAMP framework template option vs fedramp.gov/rev5/documents-templates/
+OBSERVED:       FedRAMP provides mandatory Word/Excel SSP/SAP/SAR/POA&M/test-case templates. Control Atlas
+                FedRAMP framework selection yields placeholder output (CA-019). Start Here recommends
+                FedRAMP baselines for cloud SaaS paths.
+INTERPRETATION: Design/copy creates competitive expectation Control Atlas cannot meet for FedRAMP users.
+REPRO:          Start Here Cloud SaaS → FedRAMP recommendation → Generate with FedRAMP framework
+EXPECTED:       Link out to official FedRAMP templates OR working FedRAMP-aligned export.
+ACTUAL:         Broken/incomplete FedRAMP template path vs authoritative .gov templates.
+EVIDENCE:       CA-019; fedramp.gov documents page; Start Here supplement snapshot
+RECOMMENDED FIX: Until implemented, Start Here should link to FedRAMP templates page; remove broken framework option.
+
+ID:             CA-WD-045
+TITLE:          GitHub markdown SSP templates have richer narrative scaffolding per control sample
+LENS:           COPY
+SEVERITY:       LOW
+CONFIDENCE:     MEDIUM
+LOCATION:       Security Plan Starter markdown export vs cyberzeshan system-security-plan-template.md
+OBSERVED:       cyberzeshan template includes document control block, FIPS 199 tables, architecture sections,
+                laws/regulations table, and per-control Implementation/Control Origin/Responsible Role prompts
+                for exemplar controls. Control Atlas SSP export leads with baseline table rows; less narrative
+                guidance per control in markdown output.
+INTERPRETATION: For markdown-native users, community templates may feel more "SSP-like" despite fewer total rows.
+REPRO:          Compare downloaded security-plan-starter.md structure to cyberzeshan GitHub template
+EXPECTED:       Control Atlas SSP md includes section scaffolding from SP 800-18 outline plus baseline rows.
+ACTUAL:         Table-heavy export; less narrative SSP structure.
+EVIDENCE:       cyberzeshan GitHub raw template; CA-002 row counts
+RECOMMENDED FIX: Merge SP 800-18r2 outline sections into markdown export; add per-control prompt blocks.
+
+---
+
+7F. COMPETITIVE QUICK WINS (TEMPLATE-SPECIFIC)
+
+---
+
+QUICK WIN: Add "Official alternative" links on Templates detail (FedRAMP SSP, I-Assure family plans, NIST 800-18r2)
+AREA:      TRUST
+IMPACT:    HIGH
+EFFORT:    LOW
+ACTION:    Sources-style outbound links per template type — honest positioning beats over-claim
+
+QUICK WIN: Show data build date + source versions on template cards
+AREA:      TRUST
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Pull from build-manifest.json into Templates hub meta
+
+QUICK WIN: Rename Security Plan Starter card until sub-tables fixed
+AREA:      COPY
+IMPACT:    HIGH
+EFFORT:    LOW
+ACTION:    "Control baseline worksheet starter" not "SSP outline" until CA-002 resolved
+
+QUICK WIN: Label Markdown/CSV as "Data formats" and Word as planned/primary
+AREA:      UX
+IMPACT:    HIGH
+EFFORT:    MEDIUM
+ACTION:    Format picker copy aligned to practitioner norms
+
+QUICK WIN: FedRAMP framework option → link to fedramp.gov templates until CA-019 fixed
+AREA:      TRUST
+IMPACT:    HIGH
+EFFORT:    LOW
+ACTION:    Disable broken option with explanation + official link
+
+---
+
+8. ATLAS MAP — DEEP LAYOUT, PLACEMENT & SIZE REVIEW (HARD LOOK)
+
+---
+
+Review date: 2026-07-04
+Scope: #/atlas-map (source hierarchy), #/atlas-map?node=nist-800-53:AC-2 (focused control),
+        Map/List tabs, coverage matrix, side item table, responsive 390–1920.
+Method: Live browser + CDP geometry (getBoundingClientRect), screenshots, accessibility tree.
+Tone: Critical — layout treats the graph as an afterthought beneath marketing chrome.
+
+VERDICT ON ATLAS LAYOUT: FAIL for flagship positioning. The product calls Atlas its signature
+feature, but measured layout allocates most viewport real estate to headers, duplicate search,
+instructional prose, and auxiliary panels — not to the map itself. A practitioner landing on
+Atlas must scroll past ~500px of chrome on desktop before the graph top edge; on mobile the graph
+is effectively absent without scroll. The user's negative reaction is structurally justified.
+
+---
+
+8A. MEASURED LAYOUT FACTS (EVIDENCE)
+
+---
+
+SOURCE HIERARCHY VIEW (#/atlas-map)
+- Viewport 1920×1080: site header 86px; graph canvas ~527×583px (= 27.4% viewport width, 54% height).
+- Content above graph top edge: ~501px (46.4% of 1080px) before graph begins.
+- Side item table (when present): ~848×509px occupying right ~44% of content row while graph squeezed left.
+- Coverage matrix region: ~563×445px; on hierarchy load matrix often below fold (not visible without scroll).
+- Page scroll height: ~1860–1893px — user must scroll to see matrix + footer after graph.
+- React Flow nodes (9): fixed ~60–62px tall; labels truncate ("Control Catalog / Requireme...").
+- Duplicate label rendering in DOM: "AuthorityAuthority", "AC-2AC-2" (title + label stacked without separator).
+- Zoom controls: 7 buttons — React Flow built-in vertical stack PLUS custom Fit/Reset/Zoom-in/out row overlapping at bottom-left (y≈949–977, stacked within 28px height).
+- Edge count: 8; all labeled generic "leads_to" in graph UI.
+
+AC-2 FOCUSED VIEW (#/atlas-map?node=nist-800-53:AC-2)
+- Graph canvas: 527×583px at left offset x≈400 (not centered; dead margin left of content column).
+- Auto zoom: "Diagram zoom level 0.2 x" — twelve nodes rendered as hairline cluster; unreadable without manual zoom.
+- Side connected-item table: 848×509px right column — table wins horizontal space over graph 527 vs 848 (~1.6:1).
+- Matrix region visible at top-right (563×563) competing with graph for attention in same viewport band.
+- Page h1 subcopy changes but PageHeader stack height unchanged — still ~500px before graph.
+
+MOBILE 390×844 (AC-2 focused)
+- Site header wraps to ~212px (prior pass) + Atlas PageHeader + search card + intro paragraph + Map/List tabs.
+- Graph top edge below fold; screenshot shows only chrome — no readable nodes in viewport.
+- List table when selected: starts y≈913px, height≈4189px — four+ screen-heights of list below tabs.
+
+LIST TAB (#/atlas-map?relationshipView=list)
+- List tab can show selected while Map tab also marked selected in same snapshot (conflicting tab state).
+- graphDisplay remains true when List selected — map canvas may not fully hide (display:block).
+- List rows repeat item names twice ("Access Control family — Access Control family") with long provenance blocks per row — extremely verbose for a table/list pattern.
+- Desktop List view screenshot: connected-item rows inside nested cards; table headers truncated ("CONNECTION..."); graph area replaced but PageHeader + search unchanged — still heavy chrome.
+
+VIEWPORT COMPARISON (graph usable area)
+| Viewport | Graph ~size | Chrome above graph | Graph legible without zoom? |
+|----------|-------------|--------------------|-----------------------------|
+| 1920×1080 hierarchy | 527×583 (27% W) | ~501px (46%) | Yes for 9 nodes |
+| 1920×1080 AC-2 | 527×583 (27% W) | ~501px (46%) | NO — 0.2x hairline cluster |
+| 1280×800 (prior) | 537×432 | ~86px header only* | Yes hierarchy; matrix visible |
+| 768×1024 (prior) | wider ratio | ~76px header | Node labels truncate |
+| 390×844 mobile | narrow band | ~212px header + stacks | NO |
+
+*1280 pass had less PageHeader stacking visible — still side table vs graph tension at laptop widths.
+
+---
+
+8B. LAYOUT & INFORMATION ARCHITECTURE PROBLEMS (WHY IT FEELS BAD)
+
+---
+
+1. INVERTED PRIORITY STACK (critical)
+   The visual hierarchy reads: Global nav → Page title → Subtitle → Atlas-only search → three filter
+   checkboxes → long instructional paragraph → Map/List tabs → FINALLY the graph → matrix/table/footer.
+   The map is buried. For a route named "Atlas" and a nav item permanently highlighted as primary,
+   the graph should occupy minimum 60–70% of above-the-fold viewport on desktop, not ~27% width
+   and below 50% vertical offset.
+
+2. TRIPLE SEARCH CONFUSION
+   Header "Search records and glossary" + "Open search" + Atlas-specific "Search Atlas Map" with
+   "Open map" button while already on the map page. Three search affordances compete; "Open map"
+   label implies navigation not in-place filter.
+
+3. SIDE TABLE vs GRAPH WIDTH MISMATCH (AC-2 and hierarchy at wide breakpoints)
+   At 1920px the connected-item table (~848px) is ~1.6× wider than the graph (~527px). The
+   signature visualization is the smaller pane. Practitioners want to see relationships spatially;
+   instead they get a wide metadata table and a postage-stamp graph.
+
+4. COVERAGE MATRIX ORPHANED
+   Matrix is a third visual system (grid heatmap) below or beside graph without clear sizing rules.
+   On hierarchy view it falls below fold; on AC-2 it shares above-the-fold with graph creating
+   visual competition. Neither placement feels intentional.
+
+5. AUTO-ZOOM TO UNREADABLE (AC-2)
+   Default 0.2x zoom fits twelve nodes as horizontal hairlines — defeats purpose of focused map.
+   User must discover zoom controls (7 of them) to make the view usable. First impression: broken.
+
+6. DUPLICATE NODE LABELS
+   Every node shows label text twice concatenated (AC-2AC-2, SP 800-53 Rev. 5SP 800-53 Rev. 5).
+   Reads as rendering bug; erodes trust in graph accuracy.
+
+7. GENERIC EDGE SEMANTICS
+   All edges labeled "leads_to" — visually clutters without semantic value (maps_to, implements,
+   assesses, etc. would differentiate relationship types). Looks like placeholder graph.
+
+8. SCROLL-GATED EXPERIENCE
+   ~1900px page height means Atlas is a scrolling landing page, not a workspace. Footer (404px tall
+   measured) appears after graph+matrix — users hunting for matrix or legend may never scroll.
+
+9. MOBILE IS NON-FUNCTIONAL AS A MAP
+   With ~212px header + PageHeader + search + intro, graph is a sliver. Product should default
+   to List tab and collapse PageHeader on ≤768px; current Map-default mobile is unusable.
+
+10. ATLAS PULL TAB + NAV REDUNDANCY
+    Vertical "ATLAS" tab on every page duplicates nav item already permanently styled as primary CTA.
+    Adds visual noise at right edge without clear distinct function.
+
+11. FILTER CHECKBOXES ABOVE GRAPH
+    Three "Show..." toggles on hierarchy view consume horizontal space; all default on; practitioner
+    value unclear on first visit. Should live in legend drawer or collapsed "Display options."
+
+12. WORDY PANEL INTROS
+    Every graph region preceded by h3 + 2-sentence instructional copy + "Diagram ready: N nodes..."
+    status line. Compare/Explore surfaces are dense too, but Atlas is the worst offender because
+    the copy pushes the actual diagram down.
+
+13. LIST VIEW NOT A CLEAN SWAP
+    List mode keeps heavy map chrome; rows are card-stacked not scannable table; duplicate names;
+    graph may remain in DOM. List should be full-bleed table below compact toolbar, not nested cards.
+
+14. MAX-WIDTH / LEFT MARGIN DEAD SPACE
+    On narrower IDE/panel widths content column hugs left with large empty grid margin — graph feels
+    like a widget in a marketing page, not immersive workspace.
+
+15. TAB STATE BUG
+    Observed Map tab aria-selected true while List tab active/focused — undermines Map/List toggle trust.
+
+---
+
+8C. WHAT GOOD ATLAS LAYOUT WOULD LOOK LIKE (TARGET STATE — NOT IMPLEMENTED)
+
+---
+
+Recommended layout principles for remediation (design notes only):
+
+- Collapse PageHeader on Atlas route to one line: "Atlas · [context]" + compact search inline.
+- Full-bleed graph row: min-height 65vh desktop; graph min-width 60% when side panel open.
+- Side table: collapsible drawer default closed on AC-2; open on node click.
+- Matrix: separate tab or bottom drawer — not competing third panel.
+- Mobile: default List; Map opens fullscreen immersive mode only.
+- Single zoom cluster (4 buttons max); hide React Flow defaults if custom toolbar present.
+- Remove "Open map" on Atlas route; rename to "Go" or integrate search submit.
+- Fix duplicate node label rendering; meaningful edge labels from relationship_type display names.
+- AC-2 focused: default zoom 0.8–1.0 centered on AC-2, not 0.2 fit-all.
+
+---
+
+8D. ATLAS-SPECIFIC FINDINGS
+
+---
+
+ID:             CA-WD-046
+TITLE:          Graph canvas uses only ~27% of viewport width on 1920px desktop
+LENS:           UI
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map and #/atlas-map?node=nist-800-53:AC-2 at 1920×1080
+OBSERVED:       React Flow canvas ~527×583px while side connected-item table ~848×509px.
+INTERPRETATION: Flagship map relegated to minority pane; table dominates layout.
+REPRO:          Open AC-2 focused map at 1920px; measure .react-flow vs table getBoundingClientRect
+EXPECTED:       Graph ≥60% content width or full-bleed with optional collapsible side panel.
+ACTUAL:         Graph ~27.4% viewport width.
+EVIDENCE:       CDP measure mode AC-2; ca-atlas-review-ac2-focused.png
+RECOMMENDED FIX: Collapsible side panel default closed; graph flex-grow 1fr min 60%.
+
+ID:             CA-WD-047
+TITLE:          ~46–53% of viewport height is chrome before graph top edge
+LENS:           UI
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Atlas Map all variants
+OBSERVED:       graph.top ≈501px on 1080px height (46%); earlier 850px viewport showed 53.3%.
+INTERPRETATION: User scrolls through marketing scaffolding to reach the map; contradicts "Atlas" as workspace.
+REPRO:          Load #/atlas-map; measure graph.getBoundingClientRect().top / innerHeight
+EXPECTED:       Graph begins within top 25–30% of viewport on desktop.
+ACTUAL:         ~46–53% offset.
+EVIDENCE:       CDP chromeAboveGraphPct; ca-atlas-review-1920-hierarchy.png
+RECOMMENDED FIX: Compact Atlas toolbar; collapse PageHeader; move filters to drawer.
+
+ID:             CA-WD-048
+TITLE:          AC-2 focused map defaults to 0.2x zoom — nodes unreadable on first paint
+LENS:           UX
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map?node=nist-800-53:AC-2 Map tab
+OBSERVED:       Status text "Diagram zoom level 0.2 x"; screenshot shows hairline horizontal node cluster.
+INTERPRETATION: Focused map first impression looks broken; user must hunt zoom controls.
+REPRO:          Navigate to AC-2 focused map without interaction
+EXPECTED:       Readable nodes centered on AC-2 at ≥0.7x zoom.
+ACTUAL:         0.2x fit-all cluster.
+EVIDENCE:       Snapshot ref e434; ca-atlas-review-ac2-focused.png
+RECOMMENDED FIX: Initial viewport centered on focus node at readable scale; fit-all as secondary action.
+
+ID:             CA-WD-049
+TITLE:          Graph node labels render duplicated text (title + title)
+LENS:           UI
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       All Atlas Map graph nodes
+OBSERVED:       DOM/accessibility: "AC-2AC-2", "AuthorityAuthority", "SP 800-53 Rev. 5SP 800-53 Rev. 5".
+INTERPRETATION: Obvious rendering defect; undermines confidence in graph quality.
+REPRO:          Inspect any .react-flow__node textContent
+EXPECTED:       Single clean label per node.
+ACTUAL:         Duplicated concatenated labels.
+EVIDENCE:       CDP nodeSizes array; hierarchy snapshot node buttons
+RECOMMENDED FIX: Remove duplicate label layer in node component template.
+
+ID:             CA-WD-050
+TITLE:          Seven overlapping zoom/fit controls clutter graph bottom-left
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Atlas Map graph toolbar
+OBSERVED:       React Flow vertical controls (Zoom In/Out/Fit View) plus custom row (Fit to screen, Reset, Zoom in/out) within ~28px vertical overlap zone; Copy map link adjacent.
+INTERPRETATION: Amateur graph UI; wastes canvas-adjacent space; CA-WD-011 confirmed in depth.
+REPRO:          Open Atlas Map; count bottom-left controls
+EXPECTED:       One compact control cluster (≤4 buttons).
+ACTUAL:         7+ controls in overlapping clusters.
+EVIDENCE:       Snapshot refs e401–e407/e442–e449; zoomBtns CDP measure
+RECOMMENDED FIX: Remove React Flow default controls OR custom toolbar — not both.
+
+ID:             CA-WD-051
+TITLE:          Coverage matrix placement inconsistent — below fold or competing with graph
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Atlas Map hierarchy and AC-2 views
+OBSERVED:       Hierarchy: matrix not visible in viewport (scroll required). AC-2: matrix 563×563 visible above/right of graph band.
+INTERPRETATION: Third visualization without clear layout rules; feels bolted on.
+REPRO:          Load hierarchy vs AC-2; note matrix visibility without scroll
+EXPECTED:       Matrix in dedicated tab/drawer OR fixed footer strip with consistent sizing.
+ACTUAL:         Inconsistent placement; often hidden.
+EVIDENCE:       matrixVisibleInViewport false on hierarchy; AC-2 CDP matrix rect
+RECOMMENDED FIX: Matrix as fourth tab or collapsible panel; not inline competitor to graph.
+
+ID:             CA-WD-052
+TITLE:          "Open map" button on Atlas route is confusing redundant affordance
+LENS:           UX
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Atlas Map search row
+OBSERVED:       User already on #/atlas-map; primary action labeled "Open map" next to Atlas-only search field.
+INTERPRETATION: Implies navigation to different surface; should be "Search" or "Focus" on this route.
+REPRO:          Load Atlas Map; read search row CTA label
+EXPECTED:       Context-aware label ("Focus map" / "Search map") or submit on Enter only.
+ACTUAL:         "Open map" while on map page.
+EVIDENCE:       Snapshots refs e395/e48
+RECOMMENDED FIX: Rename CTA; hide when route is atlas-map.
+
+ID:             CA-WD-053
+TITLE:          List view rows duplicate names and use card stack not scannable table
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map?relationshipView=list
+OBSERVED:       Buttons like "Access Control family — Access Control family"; each row includes multiple provenance generic blocks; table header truncated on mobile/desktop.
+INTERPRETATION: List fallback for a11y should be dense and scannable; current layout is slower than graph for sighted users.
+REPRO:          AC-2 focused → List tab
+EXPECTED:       Compact table: Item | Relationship | Target | Action.
+ACTUAL:         Verbose card-list with duplicate labels.
+EVIDENCE:       List snapshot refs e438–e468; ca-atlas-review-ac2-list-1920.png
+RECOMMENDED FIX: Table row component; provenance on expand; dedupe labels.
+
+ID:             CA-WD-054
+TITLE:          Map/List tab state can conflict (both appear selected)
+LENS:           UX
+SEVERITY:       MEDIUM
+CONFIDENCE:     MEDIUM
+LOCATION:       Atlas Map Map/List tabs
+OBSERVED:       Snapshot: List tab active/focused/selected while Map tab also states [selected] on hierarchy after List click.
+INTERPRETATION: Toggle unreliable; users unsure which view is active.
+REPRO:          Click List then snapshot tab states
+EXPECTED:       Exactly one tab selected.
+ACTUAL:         Conflicting selected states observed.
+EVIDENCE:       Snapshot on #/atlas-map after List click refs e399/e400
+RECOMMENDED FIX: Single source of truth for relationshipView; sync aria-selected.
+
+ID:             CA-WD-055
+TITLE:          Mobile Atlas Map graph not visible in viewport without scroll
+LENS:           RESPONSIVE
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map?node=nist-800-53:AC-2 at 390×844
+OBSERVED:       Screenshot shows header + PageHeader + search + intro + tabs only; graph below fold.
+INTERPRETATION: Mobile users cannot orient to map — flagship feature absent above fold.
+REPRO:          Emulate 390×844; open AC-2 Atlas Map Map tab
+EXPECTED:       List default OR fullscreen graph within first screen.
+ACTUAL:         No graph in initial viewport.
+EVIDENCE:       ca-atlas-review-ac2-mobile-390.png; prior CA-WD-013
+RECOMMENDED FIX: Default List on ≤768px; optional "Fullscreen map" FAB.
+
+ID:             CA-WD-056
+TITLE:          Generic "leads_to" edge labels add clutter without semantic value
+LENS:           UI
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       Source hierarchy graph edges
+OBSERVED:       All visible edges labeled "leads_to" in small text on every link.
+INTERPRETATION: Looks like dev placeholder; missed opportunity for relationship semantics.
+REPRO:          Open hierarchy Map; inspect edge labels
+EXPECTED:       Human relationship names or hide labels until hover/focus.
+ACTUAL:         Uniform "leads_to" on all edges.
+EVIDENCE:       ca-atlas-review-1920-hierarchy.png; graph UX section prior review
+RECOMMENDED FIX: Map edge relationship_type to display names; show on hover only.
+
+ID:             CA-WD-057
+TITLE:          Three "Show..." filter checkboxes consume space above graph with unclear first-run value
+LENS:           UI
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map hierarchy (not on AC-2 focused)
+OBSERVED:       Show supporting references / draft-legacy / registry-only — all checked by default, horizontal row above tabs.
+INTERPRETATION: Advanced display options presented as primary chrome; intimidates newcomers.
+REPRO:          Load source hierarchy Atlas Map
+EXPECTED:       Filters in "Display options" collapsible or legend drawer.
+ACTUAL:         Prominent checkbox row above graph.
+EVIDENCE:       Snapshot refs e439–e441; hierarchy screenshot
+RECOMMENDED FIX: Collapse to gear menu; sensible defaults with summary chip.
+
+---
+
+8E. ATLAS LAYOUT QUICK WINS (PRIORITIZED)
+
+---
+
+1. Collapse Atlas PageHeader to single compact bar — reclaim ~200px vertical (CA-WD-047)
+2. Fix duplicate node labels (CA-WD-049) — highest visual bug ROI
+3. AC-2 default zoom to readable scale (CA-WD-048)
+4. Graph flex 65vh / 60% width; side table drawer (CA-WD-046)
+5. Mobile List-default + hide Map until fullscreen (CA-WD-055)
+6. Remove duplicate zoom toolbar (CA-WD-050)
+7. Matrix → tab or drawer (CA-WD-051)
+8. Rename/remove "Open map" on Atlas route (CA-WD-052)
+
+---
+
+8F. ATLAS VERDICT SUMMARY
+
+---
+
+The Atlas Map has strong underlying data and ambition but the current layout sabotages it.
+The page reads as "marketing site with a graph widget" rather than "graph workspace with
+context." Until chrome is collapsed, graph width increased, AC-2 zoom fixed, and mobile
+defaults to List/fullscreen, the user's dislike of Atlas is the correct UX response — not
+a taste mismatch.
+
+Cross-ref prior: CA-WD-011 (duplicate zoom), CA-WD-013 (mobile graph strip), CA-WD-017
+(positive global visual identity — does not extend to Atlas information architecture).
+
+---
+
+================================================================
+END OF SUPPLEMENT
+================================================================

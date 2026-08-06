@@ -1,0 +1,953 @@
+================================================================
+CONTROL ATLAS — INDEPENDENT WEB DESIGN, UX, BRANDING, COPY, AND STYLE REVIEW
+================================================================
+
+AGENT ID:        CURSOR-WD
+DATE/TIME:       2026-07-03T21:48:00-04:00
+URL REVIEWED:    https://backslashbryant.github.io/control-atlas/
+SITE / BRAND:    Control Atlas
+CATEGORY:        Federal cybersecurity compliance / GRC / RMF workspace
+PRIMARY AUDIENCE:Federal GRC/RMF practitioners, ISSOs, assessors, and compliance-minded managers evaluating public reference tooling
+PRIMARY GOAL:    Map public federal cyber guidance (controls, baselines, STIGs, mappings) and produce blank RMF/ATO planning artifacts without login or data upload
+BUILD/VERSION:   NONE FOUND (no visible build stamp, version string, or last-updated date in UI during review)
+BROWSER:         Cursor IDE Browser (Chromium/Electron webview via cursor-ide-browser MCP)
+VIEWPORTS:       1920x1080 (default desktop), 390x844 (emulated mobile), 200% page scale spot-check on record detail
+DEVTOOLS ACCESS: YES (browser_cdp: Runtime.evaluate, Emulation.setDeviceMetricsOverride, Page.setPageScaleFactor)
+JAVASCRIPT REQUIRED: YES (blank shell with loading states until data bundles hydrate; hash SPA)
+
+---
+
+1. EXECUTIVE SUMMARY (BLUF)
+
+---
+
+* Launch / promotion verdict: CONDITIONAL
+
+* Blockers for confident public design/trust promotion:
+  1. CA-WD-001 — Global header brand hides product name behind rotating Ctrl+Alt keyboard metaphor
+  2. CA-WD-002 — Dual competing active-state treatments in primary nav (Atlas pill + route underline)
+  3. CA-WD-003 — Mobile header consumes ~25% of viewport before content
+  4. CA-WD-004 — Explore browse/search surfaces expose internal schema labels (program, requirement, zt activity)
+  5. CA-WD-005 — Control detail "WHAT THIS IS" presents raw catalog prose instead of plain-language meaning
+
+* Control Atlas presents a cohesive dark "compliance cartography" visual identity: deep navy canvas (rgb(11,16,32)), Public Sans body typography, teal-to-blue gradient primary buttons, subtle grid texture, and raised card panels. The home question-led card grid and About & trust page are visually polished and copy-strong. Trust disclaimers appear in footer and About. However, the global chrome undermines brand recognition and wayfinding; mobile layout prioritizes navigation chrome over content; and several high-traffic surfaces leak developer/schema vocabulary or dense official text where practitioners expect translation-first presentation. Atlas Map is visually ambitious but dense on desktop and cramped on mobile. SPA routing works on hash URLs; non-hash paths 404 at GitHub Pages. This is a baseline accessibility assessment per WCAG-EM representative sampling — not a WCAG 2.2 AA conformance claim.
+
+---
+
+2. TOP DESIGN AND TRUST BLOCKERS
+
+---
+
+1. CA-WD-001 — Header brand hides "Control Atlas" behind Ctrl+Alt rotating keyboard metaphor
+2. CA-WD-002 — Atlas nav item permanently styled as filled CTA while route underline shows actual page
+3. CA-WD-003 — Mobile header ~212px tall; hero and graph pushed below fold
+4. CA-WD-004 — Explore category headers use schema tokens (program, requirement, zt activity)
+5. CA-WD-005 — AC-2 detail "WHAT THIS IS" is truncated raw NIST catalog text
+6. CA-WD-006 — Browser tab title static on every route; weak wayfinding in tabs/bookmarks
+7. CA-WD-007 — Record detail repeats "Open in Atlas Map" four times; visual noise and hierarchy collapse
+
+---
+
+3. EXPERIENCE MAP
+
+---
+
+Home (#/)
+  WORKING — Hero, intent card grid, footer disclaimer, Start here + Atlas CTAs render
+
+Start Here (#/start)
+  WORKING — Three-step questionnaire, progress indicator, disabled-until-complete Show recommendation
+
+Atlas Map (#/atlas-map)
+  WORKING — Source hierarchy graph, Map/List tabs, coverage matrix, legend, zoom controls
+
+Atlas Map focused node (#/atlas-map?node=nist-800-53%3AAC-2)
+  WORKING — AC-2 neighborhood graph, matrix, list fallback note for screen readers
+
+Explore (#/explore)
+  PARTIAL — Search works; browse mode shows schema category labels; ~8s initial data load
+
+Explore search (#/explore?q=AC-2)
+  WORKING — Filters to Control (1); Open record navigates correctly
+
+Record detail (#/record/nist-800-53/AC-2)
+  PARTIAL — Rich connections UI; plain-language gap in WHAT THIS IS; nav current state wrong
+
+Compare (#/compare?workbench=intent)
+  WORKING — Intent cards, 3-step progress nav
+
+Templates (#/templates)
+  WORKING — 9 templates in categorized grid, filter chips
+
+Sources (#/sources)
+  WORKING — Canonical links, source cards with trust badges, refine filters
+
+About & trust (#/about)
+  WORKING — Strong is/is-not framing, disclaimer block, next-step CTAs
+
+Playbooks (#/playbooks)
+  UNVERIFIED — Reachable via More menu and footer; not deep-tested this session
+
+Help / Glossary drawer
+  WORKING — Opens from header; Escape closes; Help tab with workflow copy
+
+Open search (header)
+  PARTIAL — Searchbox visible on desktop; separate "Open search" button; behavior differs from Explore search
+
+Atlas pull tab (ATLAS)
+  WORKING — Visible on right edge; collapsed by default
+
+Brand entrance overlay (first visit)
+  UNVERIFIED — Not shown in cold session (may depend on localStorage)
+
+Page not found (#/start-here typo)
+  WORKING — Honest 404 with Go to Home, Start here, Search records recovery
+
+Non-hash URL (/explore)
+  BROKEN — GitHub Pages 404 (expected for hash-router SPA without rewrite)
+
+Footer navigation (all links)
+  WORKING — All tested links navigate
+
+More menu (Playbooks, Templates, Sources)
+  WORKING
+
+Loading states (Explore, record cold load)
+  WORKING — Staged copy with escape hatches to Playbooks/Templates/About
+
+---
+
+4. BRAND AND POSITIONING READOUT
+
+---
+
+APPARENT POSITIONING:
+Control Atlas positions itself as an open-source, browser-only public reference workbench that maps federal cyber guidance and helps practitioners explore controls, relationships, and blank RMF/ATO templates — explicitly not an official government system or authorization tool.
+
+APPARENT AUDIENCE:
+GRC/RMF practitioners, ISSOs, assessors, and technically minded stakeholders who already know terms like AC-2, STIG, CCI, FedRAMP, and RMF — with some onboarding paths for newcomers (Start Here, question-led home cards).
+
+APPARENT BRAND PERSONALITY:
+Dark, technical, cartographic, developer-adjacent (keyboard shortcut brand flourish), earnest and disclaimer-forward on trust pages — closer to "open-source compliance map" than "enterprise GRC platform."
+
+PRIMARY VALUE PROPOSITION:
+"The public map for federal cyber compliance." + "Explore public controls, baselines, STIGs, and compliance patterns — and generate blank RMF/ATO templates without uploading data or creating an account."
+
+PRIMARY CTA: "Start here" (hero) → #/start
+
+SECONDARY CTA: "Atlas →" (hero) → #/atlas-map
+
+TRUST SIGNALS FOUND:
+- Footer: "Control Atlas is an open-source reference tool. It does not replace official guidance. Not an official government system."
+- About page WHAT THIS IS NOT bullets and DISCLAIMER block
+- Sources page provenance cards (active, public, Used in map: Yes)
+- Record detail Primary source: SP 800-53 Rev. 5; Open official source document link
+- Home subfooter: "Open-source. No login. Public data only."
+
+SOURCE / METHODOLOGY SIGNALS FOUND:
+- Sources registry with canonical links (FISMA, SP 800-53 Rev. 5, ATT&CK, D3FEND)
+- Map legend explaining Official mapping / Inferred / Not mapped / Deprecated
+- Atlas Map copy referencing list view for screen-reader access
+
+MAIN BRAND GAP:
+The visible brand chrome (Ctrl+Alt+{Comply|Map|Navigate|Audit}) does not match the product name "Control Atlas" shown in hero, page title, and About — creating immediate brand recognition and trust friction for cold visitors and stakeholders who may only see screenshots or the header.
+
+---
+
+5. UX AND WORKFLOW MATRIX
+
+---
+
+JOURNEY:  First landing impression
+STATUS:   PARTIAL
+STEPS:    Cold load https://backslashbryant.github.io/control-atlas/
+FRICTION: Header shows keyboard metaphor not product name; Atlas nav pill looks selected on Home; hero value prop is clear but tagline repeats in card region
+RESULT:   Practitioner likely understands domain; stakeholder may wonder what "Ctrl+Alt+Audit" means
+IMPACT:   Conversion/trust — first 5 seconds split between polished hero and confusing chrome
+
+JOURNEY:  Primary CTA (Start here)
+STATUS:   COMPLETED
+STEPS:    Home → Start here → #/start questionnaire
+FRICTION: Minimal; strong step indicator and helper copy
+RESULT:   Clear guided onboarding surface
+IMPACT:   Positive first-run path
+
+JOURNEY:  Secondary CTA (Atlas →)
+STATUS:   COMPLETED
+STEPS:    Home → Atlas → → #/atlas-map
+FRICTION: Data load delay; graph + matrix + filters dense on first paint
+RESULT:   Flagship map renders with 9-node hierarchy
+IMPACT:   Strong visual wow; risk of overwhelm for non-experts
+
+JOURNEY:  Header navigation
+STATUS:   PARTIAL
+STEPS:    Clicked Start, Atlas, Explore, Compare across session
+FRICTION: Dual active signals (Atlas pill + current route); brief stale-content flash during transitions
+RESULT:   All primary destinations reachable
+IMPACT:   Persistent low-grade disorientation
+
+JOURNEY:  Footer navigation
+STATUS:   COMPLETED
+STEPS:    Footer links to Start, Atlas, Explore, Compare, Playbooks, Templates, Sources, About & trust
+FRICTION: None observed
+RESULT:   Reliable secondary wayfinding
+IMPACT:   Positive
+
+JOURNEY:  Search for control (Explore)
+STATUS:   COMPLETED
+STEPS:    Explore → type AC-2 → Search → expand Control (1) → Open record
+FRICTION: Must click Search button (Enter alone typed but Search click used); category label "Control (1)" acceptable
+RESULT:   #/record/nist-800-53/AC-2?from=search
+IMPACT:   Core practitioner journey works
+
+JOURNEY:  Inspect control detail
+STATUS:   PARTIAL
+STEPS:    AC-2 record → Connections accordions, source support sidebar
+FRICTION: WHAT THIS IS is raw catalog text; four duplicate Atlas Map CTAs; Explore still marked current in nav
+RESULT:   Relationships and source metadata visible
+IMPACT:   Trust/compression — looks like republished catalog not translated reference
+
+JOURNEY:  Explore graph relationships
+STATUS:   COMPLETED
+STEPS:    Record → Open in Atlas Map → focused AC-2 graph; also Atlas Map foundation hierarchy
+FRICTION: Duplicate zoom control clusters; matrix table header overlaps graph on some layouts
+RESULT:   Map/List tabs, legend, provenance colors explained in text
+IMPACT:   Useful for practitioners; visually dense
+
+JOURNEY:  Inheritance UI presentation
+STATUS:   PARTIAL
+STEPS:    Templates page shows Inheritance Worksheet card; record shows baseline appearance copy
+FRICTION: Did not generate download (out of scope for data); UI labels clear
+RESULT:   Template cards describe purpose in plain language
+IMPACT:   Presentation acceptable; trust depends on export copy/disclaimer at generation time UNVERIFIED
+
+JOURNEY:  Template UI presentation
+STATUS:   COMPLETED
+STEPS:    More menu → Templates → grid of 9 template cards with categories
+FRICTION: Meta copy "without exposing extra options too early" is UX-internal wording
+RESULT:   Clear artifact-first layout
+IMPACT:   Good visual scan; minor copy tone issue
+
+JOURNEY:  Mobile navigation path
+STATUS:   PARTIAL
+STEPS:    390x844 emulation on Home, Compare, Atlas Map
+FRICTION: Header stacks to ~212px; nav wraps to multiple rows; graph workspace tiny
+RESULT:   No horizontal overflow (0px); content reachable with scroll
+IMPACT:   Usable but visually punishing — compliance work on phone feels like afterthought
+
+JOURNEY:  Shareability (deep link refresh)
+STATUS:   COMPLETED
+STEPS:    #/record/nist-800-53/AC-2 → reload → loading state → Account Management renders
+FRICTION: Loading interstitial before content
+RESULT:   Deep link survives refresh
+IMPACT:   Positive for shareability
+
+JOURNEY:  Trust skeptic (About/Sources before action)
+STATUS:   COMPLETED
+STEPS:    About & trust → Sources registry
+FRICTION: None significant
+RESULT:   Clear non-official stance, open-source, browser-only
+IMPACT:   Strong trust presentation on these surfaces
+
+---
+
+6. UI / VISUAL SYSTEM ASSESSMENT
+
+---
+
+Layout and grid:
+- Desktop uses centered max-width workspace with consistent outer padding; home intent cards in responsive grid (3+3+1 orphan seventh card leaves visual hole on wide screens).
+- Atlas Map uses two-column split: graph canvas left, coverage matrix right — effective on desktop; collapses to vertical stack on mobile with graph height severely compressed.
+- Record detail uses two-column card layout (main + sidebar) on desktop; stacks on mobile.
+- Sources and Compare use single-column narrative + card lists — readable.
+- VISUAL ISSUE: Seventh home intent card alone on third row breaks grid rhythm and looks unfinished.
+
+Spacing and alignment:
+- Generous vertical spacing between page header block (eyebrow + h1 + summary) and content on most routes — occasionally repetitive (Sources, Explore, Compare all use same PageHeader scaffold).
+- Record detail action row (Back / Open in Atlas Map / Compare / Copy link) aligns cleanly on desktop.
+- Atlas Map: matrix column headers ("Item", "Authority", "Governance...") can visually collide with graph top edge on desktop screenshot — alignment tension between table and diagram regions.
+- Mobile: header internal padding causes nav buttons to wrap; inconsistent vertical rhythm between wrapped nav rows.
+
+Typography:
+- Body: Public Sans (computed on home).
+- Display h1 ~34px on home hero "Control Atlas" — strong hierarchy.
+- Eyebrow labels (EXPLORE, ATLAS, TEMPLATES, ABOUT & TRUST) in small caps cyan/teal — consistent accent pattern.
+- Section labels (WHAT THIS IS, WHERE IT APPEARS, CONNECTIONS) in tracked small caps — good scanability.
+- VISUAL ISSUE: Connection summary line mixes casing ("disa ccis" lowercase in prose, "DISA CCIs" in bold line) — looks like copy-paste inconsistency not design system.
+- VISUAL ISSUE: Typo spacing "5 group s" in connection count line.
+
+Color and contrast:
+- Background rgb(11,16,32) with slate-100 primary text rgb(248,250,252) — generally strong contrast on headings.
+- Primary CTA buttons use blue-to-teal gradient fill — visually distinctive, modern.
+- Secondary/outline buttons: white border on dark fill — consistent ghost pattern.
+- Atlas nav pill: filled blue even when not current route — reads as primary brand accent but conflicts with nav semantics.
+- Provenance legend uses green/orange/gray dots WITH text labels (Official mapping, Inferred / community, Not mapped) — good; not color-only.
+- Trust badges ("Used in map: Yes") green pills on source cards — readable.
+- Footer disclaimer text small and muted — may approach edge of comfort for long reading at a distance.
+- Sidebar muted explanatory text on cards (e.g., source metadata) appears low-contrast gray-on-charcoal — worth formal contrast verification.
+
+Buttons and links:
+- Pill radius (~999px) on primary/secondary buttons — consistent family.
+- Intent cards use entire card as button with inner title + description + text link — large hit targets on desktop.
+- VISUAL ISSUE: Record detail shows four visually similar "Open in Atlas Map" buttons (header row, connections toolbar, sidebar, what-to-do-next) — breaks hierarchy; all compete at same visual weight.
+- Text links in cards use cyan accent — consistent with brand accent.
+
+Forms and inputs:
+- Search inputs: dark filled field, rounded, magnifier icon inline on Explore — polished.
+- Start Here comboboxes: full-width, labeled, disabled state grayed until prior step complete — clear.
+- Template filter chips horizontal row — active chip filled blue; inactive outline — clear toggle pattern.
+- Header hosts BOTH inline searchbox ("Search records or glossary") AND separate "Open search" button — visually redundant, cluttered header right cluster.
+
+Search and filter controls:
+- Explore Refine results collapsible — hidden by default, good progressive disclosure.
+- Atlas Map filter checkboxes for supporting/draft/registry sources — small but labeled.
+- Sources Refine sources collapsible — consistent pattern.
+
+Graph controls and graph presentation:
+- React Flow-style canvas with dot grid, rounded node rectangles, labeled edges ("leads_to").
+- Dual zoom control sets observed (Zoom In/Out/Fit View AND Fit to screen/Reset view/Zoom in/out) — visual duplication, cluttered control stack.
+- Map legend collapsible button top-right of canvas — appropriate.
+- Selected node: blue border highlight on "Control Catalog / Requirement Set" — clear without relying on color alone.
+- Mini-map/thumbnail not observed; coverage matrix provides secondary visual encoding.
+- Desktop graph readable; mobile graph ~small fraction of viewport after header — visually unusable for relationship comprehension without List tab.
+
+Cards and content blocks:
+- Cards use dark charcoal fill, 1px subtle border, ~12px radius, optional left accent bar (cyan on WHAT THIS IS, orange on DISCLAIMER) — distinctive and consistent on About/record pages.
+- SummaryCard pattern repeats across routes — cohesive.
+- Source cards on Sources page: structured metadata rows, badge top-right — professional.
+
+Panels, modals, and overlays:
+- Help/Glossary drawer: slides over content, Close button named, tab interface Help | Glossary — clean.
+- Loading panel: centered card with cyan LOADING eyebrow, progress bar shimmer, helpful escape copy — visually on-brand.
+- Atlas pull tab: vertical ATLAS label, blue tab on right screen edge — persistent; can overlap scrollbar area.
+
+Imagery / illustration / iconography:
+- Tabler-style line icons in nav and intent cards — consistent weight.
+- No stock photography — appropriate for technical product.
+- Keyboard-key brand treatment in header — unique but visually disconnected from rest of system.
+
+Component consistency:
+- PageHeader eyebrow + h1 + summary pattern repeated across Explore, Compare, Templates, Sources, Atlas — consistent but visually repetitive session-to-session.
+- Footer three-column grid (Control Atlas / NAVIGATE / LEGAL) consistent on all routes.
+
+Interaction states:
+- Nav: underline + aria-current for active route; Atlas pill always filled — inconsistent (CA-WD-002).
+- Focus: Skip to workspace link present; keyboard tab order not fully audited.
+- Hover: not systematically captured; gradient buttons appear to lighten on hover in screenshots.
+- Disabled: Show recommendation button visually muted when incomplete — clear.
+
+Visual polish:
+- Subtle background grid on main panels adds depth without noise — polished touch.
+- SPA transition flash: previous page content visible briefly after nav click before new view hydrates — feels unfinished.
+- Home hero lacks inline search field visible in first paint (search appears in header after load) — minor hierarchy shift.
+- Overall: high craft on card surfaces and About page; global chrome and mobile header undermine premium feel.
+
+---
+
+7. COPY AND MESSAGING ASSESSMENT
+
+---
+
+Hero headline and subheadline:
+- Headline: "Control Atlas" — clear.
+- Subheadline: "The public map for federal cyber compliance." — strong, specific.
+- Supporting paragraph explains controls, STIGs, templates, no account — good.
+- ISSUE: Tagline repeats verbatim in lower home region — redundant.
+
+CTA copy:
+- "Start here" and "Atlas →" — actionable; arrow on secondary CTA slightly informal but acceptable.
+- Intent card CTAs ("Open map", "Start", "Explore") — strong action verbs.
+
+Navigation labels:
+- Start, Atlas, Explore, Compare — concise domain-appropriate.
+- "More" hides Playbooks/Templates/Sources — acceptable progressive disclosure.
+- Header "Open search" vs inline searchbox — confusing duplication of search entry points.
+
+Feature copy:
+- Home question-led cards excellent for newcomer orientation.
+- Compare intent cards well-written with acronym expansions in places (STIG/SRG, ATT&CK, D3FEND).
+
+Graph/explorer labels:
+- FAIL: Browse categories "program (3)", "requirement (5820)", "zt activity (156)", "rmf step (7)" — internal schema not practitioner language.
+- Atlas hierarchy node labels long but domain-appropriate ("Governance / Risk Framework").
+
+Control-detail copy:
+- "Account Management" title good; WHAT THIS IS body is raw NIST prose truncated mid-sentence.
+- Connection summary typo/lowercase: "5 group s : 35 disa ccis..."
+- Sidebar "Official source." + "Primary source: SP 800-53 Rev. 5" — good trust copy.
+
+Template copy:
+- Template descriptions plain-language and artifact-focused — strong.
+- Hub meta: "without exposing extra options too early" — developer UX voice.
+
+Trust / proof / source copy:
+- About page exemplary: is/is-not, disclaimer, browser-only boundary.
+- Footer disclaimer complete.
+
+Voice and tone:
+- Strongest on Home cards, Start Here, About, Compare intents.
+- Weakest in Explore browse headers and Templates hub meta; record fallback text.
+
+Jargon handling:
+- Start Here explains CUI via sensitivity dropdown context.
+- Explore placeholder examples (AC-2, FedRAMP High, CCI-000225) help practitioners; may intimidate pure newcomers.
+
+Objection handling:
+- About handles official status, GRC scope, authorization decisions explicitly.
+- Missing: visible "last updated" or dataset version on home/explore for freshness objections.
+
+SUGGESTED COPY (CA-WD-004):
+Replace "program (3)" with "Federal programs (3)"; "requirement (5820)" with "Requirements (5,820)" or domain-appropriate "Catalog requirements"; "zt activity" with "Zero Trust activities".
+
+SUGGESTED COPY (CA-WD-001):
+Add persistent text "Control Atlas" adjacent to keyboard flourish, or replace rotation with static wordmark on all breakpoints.
+
+---
+
+8. RESPONSIVE REVIEW
+
+---
+
+VIEWPORT: 1920x1080 (desktop default)
+STATUS:   WORKING
+ISSUES:   Atlas Map graph+matrix dense but usable; home grid orphan seventh card; header right cluster crowded (search + Open search + Help + Glossary)
+
+VIEWPORT: 390x844 (mobile emulated)
+STATUS:   PARTIAL
+ISSUES:   Header height 211.95px (~25% viewport); primary nav wraps to ~4 rows; hero headline visible but intent cards stack with heavy scroll; Atlas Map graph reduced to small band; Compare intent cards single-column OK; zero horizontal overflow
+
+VIEWPORT: 844x390 (landscape)
+STATUS:   UNVERIFIED
+
+VIEWPORT: 768x1024 (tablet)
+STATUS:   UNVERIFIED
+
+VIEWPORT: 1280x800 (laptop)
+STATUS:   UNVERIFIED
+
+VIEWPORT: 1440x900 (wide)
+STATUS:   UNVERIFIED
+
+200% zoom spot-check on record detail:
+- Page remained readable; no catastrophic overflow observed in session — formal 200% audit UNVERIFIED on Home and About.
+
+---
+
+9. ACCESSIBILITY BASELINE REVIEW
+
+---
+
+This is a baseline review, not a full WCAG conformance audit.
+
+Keyboard navigation:
+- Skip to workspace link present in accessibility tree on all pages.
+- Tab through header nav, footer links feasible; full keyboard-only journey completion UNVERIFIED for graph node selection.
+
+Focus visibility:
+- Not systematically verified; focus states observed on nav buttons during clicks.
+
+Form and search labels:
+- Explore search: "Search by ID, title, or topic" — labeled.
+- Header searchbox: "Search records and glossary" — labeled.
+- Start Here comboboxes have accessible names including helper descriptions — good.
+
+Contrast issues:
+- Footer disclaimer and card metadata text appear low-contrast visually — spot-check only, not measured to WCAG ratio.
+
+Alt text / non-text content:
+- Icons marked aria-hidden in snapshots where decorative; graph nodes have text labels.
+
+Modal behavior:
+- Help drawer closes on Escape — verified.
+
+Motion concerns:
+- Brand word rotation in header (Ctrl+Alt+{word}) — prefers-reduced-motion behavior UNVERIFIED this session.
+
+Graph accessibility:
+- Atlas Map explicitly directs users to List view for screen-reader access — positive fallback.
+- Map/List tabs present on graph surfaces.
+
+Primary journey accessibility:
+- Search → record → list view path achievable without graph-only dependency — partial pass.
+
+Screen reader full pass: UNVERIFIED
+
+---
+
+10. GRAPH, RELATIONSHIP, AND WORKSPACE USABILITY
+
+---
+
+Whether graph is understandable:
+- Foundation hierarchy (9 categories) communicates ecosystem structure; focused AC-2 map shows clusters (STIG/SRG, DISA CCIs, etc.) — understandable to practitioners with legend help.
+- Non-expert cold user likely overwhelmed without Start Here first.
+
+Graph controls discoverable:
+- Zoom/fit/reset clustered bottom-left; duplicate control sets reduce clarity.
+- Map legend button discoverable top-right.
+- Copy map link present.
+
+Search and filters orientation:
+- Atlas Map search field separate from global header search — two search mental models.
+- Explore search effective for ID lookup.
+
+Selected nodes clear:
+- Blue border on selected hierarchy node — clear.
+
+Relationship meaning clear:
+- Edge label "leads_to" generic; legend explains provenance colors; list view enumerates connections.
+
+Inheritance presentation:
+- Template cards describe inheritance worksheet; record shows baseline appearance (LOW, MODERATE, HIGH) — presentation OK.
+
+Workspace supports GRC tasks:
+- Practitioner can find control, see connections count, jump to compare/map/sources — yes with friction from copy/schema issues.
+
+Recovery from lost:
+- Back to results on record; footer nav; About 404 recovery — adequate.
+
+---
+
+11. TECHNICAL PRESENTATION AND TRUST REVIEW
+
+---
+
+Console errors and warnings:
+- UNVERIFIED — Log.enable not run for full session capture; no visible error UI during browsing.
+
+Failed requests / broken assets:
+- UNVERIFIED — Network.enable not captured; lazy load eventually succeeded on Explore.
+
+Routing and refresh behavior:
+- Hash routes work: #/explore, #/record/..., #/atlas-map, #/start, #/about, #/templates, #/sources, #/compare
+- Hard refresh on #/record/nist-800-53/AC-2: loading state then content — WORKING
+- #/start-here: honest not-found — WORKING
+- Non-hash https://backslashbryant.github.io/control-atlas/explore → GitHub Pages 404
+
+Page metadata:
+- Title all routes: "Control Atlas | The public map for federal cyber compliance" — static
+- Meta description (home evaluate): "Search controls, trace source-backed links, and download blank RMF planning templates."
+
+Favicon:
+- Present (favicon: true on home evaluate)
+
+Perceived performance:
+- Explore/record initial bundle load ~5-8s with loading interstitial — acceptable for static hosting; feels slow on first Compare/Explore entry.
+
+Layout shift or jank:
+- SPA view transition shows stale previous page content until new view renders — noticeable jank.
+
+Trust-damaging technical issues:
+- Static title reduces bookmark/orientation trust.
+- Non-hash URLs 404 — share risk if users omit hash.
+
+---
+
+12. FINDINGS (DETAILED)
+
+---
+
+ID:             CA-WD-001
+TITLE:          Global header displays Ctrl+Alt keyboard metaphor instead of visible product name
+LENS:           BRAND
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Global header .brand button on all routes (e.g. #/)
+OBSERVED:       Visible brand text reads "Ctrl+Alt+Navigate" / "Ctrl+Alt+Comply" / rotating word; aria-label on button is "Control Atlas — home". Computed brandText: "Ctrl+Alt+NavigateComply". Product name "Control Atlas" appears in hero h1 but not in persistent chrome.
+INTERPRETATION: Cold visitors, screenshots, and window thumbnails communicate a keyboard gimmick not a federal compliance product; stakeholders cannot verify they are in the right tool from header alone.
+REPRO:          1. Load https://backslashbryant.github.io/control-atlas/ 2. Observe top-left brand area 3. Note absence of static "Control Atlas" wordmark
+EXPECTED:       Persistent readable product name in global header on all breakpoints.
+ACTUAL:         Rotating Ctrl+Alt+{Comply|Map|Navigate|Audit} keyboard-key visual; name only in aria-label.
+EVIDENCE:       Screenshot ca-home-desktop-1920.png; browser snapshot e1 name "Control Atlas — home" with visible keyboard keys; Runtime.evaluate brandText
+RECOMMENDED FIX: Add static "Control Atlas" text to brand cluster; restrict rotation to decorative aria-hidden span or remove on reduced-motion; keep aria-label.
+SUGGESTED COPY: Control Atlas · public federal compliance map (muted subline)
+HYPOTHESIS:     Intentional developer-culture branding prioritised over enterprise GRC audience recognition.
+
+ID:             CA-WD-002
+TITLE:          Dual competing active-state treatments in primary navigation
+LENS:           UI
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Primary nav on Home, Explore, Compare, About, Templates (e.g. #/explore)
+OBSERVED:       "Atlas" button uses filled blue pill styling at all times. Current route also indicated by underline/current state on actual page (e.g. Explore underlined while Atlas remains filled). On Home, Atlas pill active while user has not selected Atlas route.
+INTERPRETATION: Violates visibility of system status and consistency heuristics; user receives two answers to "where am I?"
+REPRO:          1. Load Home 2. Note Atlas filled blue 3. Click Explore 4. Observe Atlas still filled plus Explore current underline
+EXPECTED:       Exactly one nav item shows active/selected styling per route.
+ACTUAL:         Atlas appears permanently promoted; route item also marked current.
+EVIDENCE:       Screenshots ca-home-desktop-1920.png, ca-atlas-desktop.png; snapshots on #/explore and #/about
+RECOMMENDED FIX: Remove permanent filled styling from Atlas; use same active pattern as other nav items OR distinct non-selected emphasis (icon badge) that does not mimic selection.
+
+ID:             CA-WD-003
+TITLE:          Mobile header consumes approximately 25% of viewport height
+LENS:           RESPONSIVE
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       Global header at 390x844 on Home and Compare
+OBSERVED:       Computed .site-header height 211.95px at 390px width; nav wraps to multiple rows; search + Help + Glossary remain in header stack.
+INTERPRETATION: Mobile-first practitioners lose nearly one quarter of screen to chrome before content; graph and hero CTAs de-emphasized; feels desktop layout reflow not mobile design.
+REPRO:          1. Emulate 390x844 2. Load Home or Compare 3. Measure header height
+EXPECTED:       Mobile header <=96px or collapsible menu/drawer pattern.
+ACTUAL:         ~212px header; wrapped nav rows.
+EVIDENCE:       Screenshot ca-home-mobile-390.png, ca-mobile-390-compare.png; Runtime.evaluate headerH:211.953125
+RECOMMENDED FIX: Collapse nav to hamburger/drawer; single-row brand + menu; move Help/Glossary into menu; sticky compact header on scroll.
+
+ID:             CA-WD-004
+TITLE:          Explore browse mode exposes internal schema category labels
+LENS:           COPY
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/explore browse (before search)
+OBSERVED:       Category accordion headers include "program (3)", "requirement (5820)", "zt activity (156)", "zt capability (45)", "rmf step (7)", "impact category (3)" — lowercase schema tokens with counts.
+INTERPRETATION: Signals database schema not practitioner-facing product; erodes translation-first trust for GRC users; intimidating to newcomers.
+REPRO:          1. Go to #/explore 2. Wait for load 3. Read category headers above fold
+EXPECTED:       Human-readable category names (Federal programs, Requirements, Zero Trust activities, RMF steps).
+ACTUAL:         Internal-style snake_case/lowercase labels.
+EVIDENCE:       Snapshot buttons "program (3)", "requirement (5820)", "zt activity (156)"; screenshot after Explore load
+RECOMMENDED FIX: Map node_type to display names in all browse headers and filters.
+SUGGESTED COPY:  Federal programs (3); Catalog requirements (5,820); Zero Trust activities (156)
+
+ID:             CA-WD-005
+TITLE:          Control detail WHAT THIS IS shows raw catalog prose not plain-language summary
+LENS:           COPY
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/record/nist-800-53/AC-2 — WHAT THIS IS card
+OBSERVED:       Body text begins "Define and document the types of accounts allowed and specifically prohibited..." — semicolon-laden official control language; truncated in UI with no plain-language lead.
+INTERPRETATION: Product promise "plain-language context" on home card broken at the most common practitioner destination; looks like unprocessed catalog dump.
+REPRO:          1. Search AC-2 2. Open record 3. Read WHAT THIS IS card
+EXPECTED:       Short plain-language summary with optional expand for official text.
+ACTUAL:         Raw/truncated catalog description.
+EVIDENCE:       Snapshot ref e66/e122; screenshot record detail at 200% zoom
+RECOMMENDED FIX: Require plain_language_summary for top-traffic controls; fallback to generated one-sentence gloss; move official text to collapsible "Official control text".
+SUGGESTED COPY:  AC-2 requires organizations to manage user accounts throughout their lifecycle — who gets an account, who approves it, and how access is removed when no longer needed.
+
+ID:             CA-WD-006
+TITLE:          Browser tab title static across all routes
+LENS:           TECHNICAL
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       All routes (document.title)
+OBSERVED:       Every navigation kept title "Control Atlas | The public map for federal cyber compliance" including record detail, Templates, Compare.
+INTERPRETATION: Tab/bookmark/history orientation degraded; multi-tab research workflow harder; looks unfinished.
+REPRO:          1. Navigate Home → AC-2 record → Templates 2. Observe browser tab title unchanged
+EXPECTED:       Route-specific titles e.g. "AC-2 Account Management | Control Atlas"
+ACTUAL:         Static global title only.
+EVIDENCE:       Snapshot metadata title field on #/record/nist-800-53/AC-2 and #/templates
+RECOMMENDED FIX: Update document.title on route change using record name or page h1.
+
+ID:             CA-WD-007
+TITLE:          Record detail repeats Open in Atlas Map CTA four times at equal visual weight
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/record/nist-800-53/AC-2
+OBSERVED:       Buttons labeled "Open in Atlas Map" in header action row, connections toolbar, sidebar CONNECTIONS card, and WHAT TO DO NEXT list — all similar filled/outline styling.
+INTERPRETATION: Visual hierarchy collapse; user cannot tell primary vs secondary action; screen feels noisy and template-driven.
+REPRO:          1. Open AC-2 record 2. Count Open in Atlas Map buttons above fold and in sidebar
+EXPECTED:       One primary map entry point; secondary mentions as text links.
+ACTUAL:         Four+ identical CTAs.
+EVIDENCE:       Snapshot refs e42, e45, e54, e57; record detail screenshot
+RECOMMENDED FIX: Single primary header CTA; demote others to text links or consolidate sidebar actions.
+
+ID:             CA-WD-008
+TITLE:          Connection summary copy contains typo and inconsistent acronym casing
+LENS:           COPY
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/record/nist-800-53/AC-2 — Connections summary
+OBSERVED:       Text reads "64 connections across 5 group s : 35 disa ccis, 3 nist baselines..." while adjacent bold line uses "DISA CCIs".
+INTERPRETATION: Undermines polish and trust in a precision domain; looks auto-generated without editorial pass.
+REPRO:          1. Open AC-2 record 2. Read Connections summary paragraph under badge
+EXPECTED:       Clean prose with consistent capitalization.
+ACTUAL:         "group s" typo; lowercase disa ccis/nist/fedramp in same block as title case elsewhere.
+EVIDENCE:       Snapshot ref e70/e126
+RECOMMENDED FIX: Fix template string spacing; enforce display-name formatter for relationship group labels.
+
+ID:             CA-WD-009
+TITLE:          Header hosts redundant search controls (inline field + Open search button)
+LENS:           UI
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Global header all routes after initial load
+OBSERVED:       searchbox "Search records and glossary" visible simultaneously with button "Open search"; placeholder truncates to "gloss..." on some widths.
+INTERPRETATION: Two search affordances with unclear difference; header clutter; recognition-over-recall failure.
+REPRO:          1. Load any inner route 2. Inspect header right cluster
+EXPECTED:       Single search entry with obvious behavior.
+ACTUAL:         Inline field plus separate Open search button.
+EVIDENCE:       Home/desktop and Explore snapshots refs e45/e7
+RECOMMENDED FIX: Merge into one control; overlay on focus/click; remove duplicate.
+
+ID:             CA-WD-010
+TITLE:          SPA navigation flash shows stale page content during route change
+LENS:           UX
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       Transitions e.g. Explore click then #/explore still showing Home hero briefly; Start click showing Atlas content until hydrate
+OBSERVED:       URL updates immediately while prior view content remains visible until new view renders.
+INTERPRETATION: Breaks user control and feedback; feels buggy; trust erosion on slow networks.
+REPRO:          1. From Home click Explore quickly 2. Observe Home hero still visible with #/explore URL
+EXPECTED:       Immediate view swap, skeleton, or loading overlay on route change.
+ACTUAL:         Stale content flash then swap.
+EVIDENCE:       Observed during session navigation sequence Explore click snapshot
+RECOMMENDED FIX: Show route-level skeleton immediately on hash change; suspend outgoing view.
+
+ID:             CA-WD-011
+TITLE:          Atlas Map zoom controls duplicated visually
+LENS:           UI
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map graph toolbar
+OBSERVED:       Buttons for Zoom In, Zoom Out, Fit View, Fit to screen, Reset view, Zoom in, Zoom out, Copy map link — overlapping purposes.
+INTERPRETATION: Control clutter; amateur graph UI polish; wastes canvas-adjacent space.
+REPRO:          1. Open Atlas Map 2. Inspect bottom-left graph controls
+EXPECTED:       Single compact zoom/fit cluster.
+ACTUAL:         Two sets of zoom/fit controls.
+EVIDENCE:       Snapshot refs e52-e58; ca-atlas-desktop.png
+RECOMMENDED FIX: Remove duplicate React Flow built-in controls or custom toolbar — not both.
+
+ID:             CA-WD-012
+TITLE:          Home intent card grid leaves orphan seventh card breaking visual rhythm
+LENS:           UI
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       #/ — "What do you want to do?" region
+OBSERVED:       Six cards in 3+3 grid; seventh "Why trust this mapping?" card alone on third row left-aligned with empty space beside it on wide desktop.
+INTERPRETATION: Grid looks unfinished; weak visual balance on large monitors.
+REPRO:          1. Load Home at 1920px 2. Scroll to intent cards
+EXPECTED:       Balanced grid (2x4, 3+2+2, or full-width trust card).
+ACTUAL:         Orphan single card row.
+EVIDENCE:       ca-home-desktop-1920.png
+RECOMMENDED FIX: Reflow grid to 2 columns on xl breakpoints or span trust card full width.
+
+ID:             CA-WD-013
+TITLE:          Mobile Atlas Map graph workspace too small for visual comprehension
+LENS:           RESPONSIVE
+SEVERITY:       HIGH
+CONFIDENCE:     HIGH
+LOCATION:       #/atlas-map at 390x844
+OBSERVED:       After ~212px header and page intro text, graph canvas reduced to narrow band; nodes unreadable without zoom; matrix below fold.
+INTERPRETATION: Flagship visual feature fails mobile "look and feel" test; practitioners will assume product is desktop-only.
+REPRO:          1. Emulate 390x844 2. Open Atlas Map 3. Assess graph legibility without List tab
+EXPECTED:       Mobile-first graph variant (vertical list default, simplified focus mode, or full-bleed graph toggle).
+ACTUAL:         Tiny illegible diagram strip.
+EVIDENCE:       ca-atlas-mobile-390.png
+RECOMMENDED FIX: Default to List tab on narrow viewports; offer full-screen graph mode; reduce header height (CA-WD-003).
+
+ID:             CA-WD-014
+TITLE:          Templates hub meta copy uses internal UX mechanics wording
+LENS:           COPY
+SEVERITY:       LOW
+CONFIDENCE:     HIGH
+LOCATION:       #/templates hero summary
+OBSERVED:       "generate a blank reference starter without exposing extra options too early"
+INTERPRETATION: Reads like design spec not user benefit; breaks otherwise polished Templates visual.
+REPRO:          1. Open Templates 2. Read subhead under h1
+EXPECTED:       Outcome-focused copy about artifacts produced.
+ACTUAL:         UX implementation commentary.
+EVIDENCE:       Snapshot ref e70
+RECOMMENDED FIX: Reword to artifact outcome.
+SUGGESTED COPY:  Choose the artifact you need, preview what it includes, then download a blank starter backed by public sources.
+
+ID:             CA-WD-015
+TITLE:          Record page nav marks Explore as current while on record detail route
+LENS:           UX
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       #/record/nist-800-53/AC-2 header nav
+OBSERVED:       Explore button states include [current] while h1 is Account Management and breadcrumb shows Explore / AC-2.
+INTERPRETATION: Wayfinding contradiction; user cannot trust nav state; breadcrumb partially compensates.
+REPRO:          1. Open AC-2 from search 2. Inspect nav active states
+EXPECTED:       No primary nav item current OR Explore current only if intentional parent; record context indicated elsewhere.
+ACTUAL:         Explore marked current on record detail.
+EVIDENCE:       Snapshot on #/record/nist-800-53/AC-2 ref e4 states [current]
+RECOMMENDED FIX: Clear nav current on record routes; strengthen breadcrumb styling as primary locator.
+
+ID:             CA-WD-016
+TITLE:          Positive trust presentation on About and Sources pages
+LENS:           TRUST
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       #/about, #/sources
+OBSERVED:       Clear is/is-not structure, orange DISCLAIMER panel, canonical source links, Used in map badges, Open source artifact link label (not "official").
+INTERPRETATION: Best-in-product trust design; should be visual/copy template for other surfaces.
+REPRO:          1. Visit About & trust 2. Visit Sources
+EXPECTED:       N/A — positive observation
+ACTUAL:         Exemplary trust UX writing and visual hierarchy with accent bars.
+EVIDENCE:       About page snapshot heading "What Control Atlas is — and is not"
+RECOMMENDED FIX: Reuse About disclaimer module near Templates generate and Compare export actions.
+
+ID:             CA-WD-017
+TITLE:          Dark cartographic visual identity is cohesive and differentiated
+LENS:           BRAND
+SEVERITY:       POLISH
+CONFIDENCE:     HIGH
+LOCATION:       Global — home, About, record cards, loading states
+OBSERVED:       Consistent deep navy bg, grid texture, cyan eyebrows, gradient CTAs, charcoal cards with subtle borders, left accent bars on trust blocks.
+INTERPRETATION: Product looks like a deliberate brand not a generic Bootstrap admin; suitable for technical federal audience if chrome issues fixed.
+REPRO:          Visual review across Home, About, AC-2, Atlas Map
+EXPECTED:       N/A — positive
+ACTUAL:         Cohesive dark "compliance map" aesthetic.
+EVIDENCE:       ca-home-desktop-1920.png, About screenshot, computed bg rgb(11,16,32)
+RECOMMENDED FIX: Document tokens in public style guide; fix nav/brand exceptions that break cohesion.
+
+ID:             CA-WD-018
+TITLE:          Non-hash URLs return GitHub Pages 404
+LENS:           TECHNICAL
+SEVERITY:       MEDIUM
+CONFIDENCE:     HIGH
+LOCATION:       https://backslashbryant.github.io/control-atlas/explore
+OBSERVED:       Navigating to /control-atlas/explore shows GitHub Pages "File not found" — not SPA.
+INTERPRETATION: Users sharing clean URLs without hash will hit dead end; looks broken to enterprise IT link scanners.
+REPRO:          1. Open https://backslashbryant.github.io/control-atlas/explore 2. Observe 404
+EXPECTED:       Redirect to hash route or SPA fallback.
+ACTUAL:         GitHub 404 page.
+EVIDENCE:       Snapshot title "Page not found · GitHub Pages" at /control-atlas/explore
+RECOMMENDED FIX: 404.html redirect hack or hosting migration with SPA rewrite rules.
+
+---
+
+13. QUICK WINS
+
+---
+
+QUICK WIN: Add static Control Atlas wordmark to header
+AREA:      BRAND
+IMPACT:    HIGH
+EFFORT:    LOW
+ACTION:    Show "Control Atlas" text next to keyboard flourish on all breakpoints
+
+QUICK WIN: Fix Atlas nav permanent filled pill
+AREA:      UI
+IMPACT:    HIGH
+EFFORT:    LOW
+ACTION:    Style Atlas like other nav items; active state route-driven only
+
+QUICK WIN: Replace Explore schema category labels
+AREA:      COPY
+IMPACT:    HIGH
+EFFORT:    MEDIUM
+ACTION:    Display-name map for program, requirement, zt activity, rmf step headers
+
+QUICK WIN: Route-specific document titles
+AREA:      TECHNICAL
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Set title from h1/record ID on each view
+
+QUICK WIN: Fix connection summary typo
+AREA:      COPY
+IMPACT:    LOW
+EFFORT:    LOW
+ACTION:    Correct "group s" and capitalize DISA/NIST/FedRAMP consistently
+
+QUICK WIN: Collapse duplicate Open in Atlas Map buttons on record page
+AREA:      UI
+IMPACT:    MEDIUM
+EFFORT:    LOW
+ACTION:    Keep one primary; demote others to links
+
+QUICK WIN: Mobile default List tab on Atlas Map
+AREA:      RESPONSIVE
+IMPACT:    HIGH
+EFFORT:    MEDIUM
+ACTION:    Detect narrow viewport; default to List; prompt for graph full-screen
+
+QUICK WIN: Route-change loading skeleton
+AREA:      UX
+IMPACT:    MEDIUM
+EFFORT:    MEDIUM
+ACTION:    Immediate skeleton on hash change to prevent stale flash
+
+QUICK WIN: Consolidate header search into one control
+AREA:      UI
+IMPACT:    MEDIUM
+EFFORT:    MEDIUM
+ACTION:    Remove redundant Open search or inline field
+
+QUICK WIN: Rebalance home intent card grid
+AREA:      UI
+IMPACT:    LOW
+EFFORT:    LOW
+ACTION:    Full-width trust card or 2-column layout for seventh item
+
+---
+
+14. STRATEGIC RECOMMENDATIONS
+
+---
+
+RECOMMENDATION: Establish header brand and navigation semantics as a system
+WHY IT MATTERS: CA-WD-001 and CA-WD-002 undermine every page's professional first impression.
+WHAT TO CHANGE: Single wordmark + single active nav pattern; remove gimmick from critical trust surfaces or hide behind easter-egg.
+SUCCESS SIGNAL: Five-second test users name "Control Atlas" from header alone; one nav item shows selected everywhere.
+
+RECOMMENDATION: Mobile shell redesign (compact header + drawer)
+WHY IT MATTERS: CA-WD-003 and CA-WD-013 make flagship features visually unusable on phones.
+WHAT TO CHANGE: <=64px sticky header, hamburger for secondary nav, full-bleed graph option.
+SUCCESS SIGNAL: Primary CTA visible without scroll at 390px; graph/list usable without pinch-zoom.
+
+RECOMMENDATION: Translation-first record detail template
+WHY IT MATTERS: CA-WD-005 breaks core promise at highest-traffic destination type.
+WHAT TO CHANGE: Plain-language block required; official text collapsed; visual distinction between translation and source quote.
+SUCCESS SIGNAL: Newcomer test understands AC-2 in 30 seconds without opening official PDF.
+
+RECOMMENDATION: Visual hierarchy audit for repeated CTAs and page scaffolding
+WHY IT MATTERS: CA-WD-007 and repetitive PageHeader stacks create fatigue and "template" feel on otherwise polished cards.
+WHAT TO CHANGE: One primary action per viewport; collapse eyebrow+summary where h1 suffices; vary density by route importance.
+SUCCESS SIGNAL: Record page actions reduced to 2 prominent buttons; reduced scroll on Sources/Explore intros.
+
+RECOMMENDATION: Graph control simplification and responsive strategy
+WHY IT MATTERS: Duplicate controls and mobile graph strip hurt perceived quality of signature feature.
+WHAT TO CHANGE: Unified toolbar; List-first mobile; optional immersive graph mode.
+SUCCESS SIGNAL: Usability test completes orientation task on 390px without frustration; toolbar control count halved.
+
+RECOMMENDATION: Trust module replication at action points
+WHY IT MATTERS: About/Sources trust is strong (CA-WD-016) but not visually echoed before downloads/compare exports.
+WHAT TO CHANGE: Compact disclaimer card component before Generate/Download on Templates and export on Compare.
+SUCCESS SIGNAL: Users see limitation language before every artifact-producing action.
+
+RECOMMENDATION: SPA hosting and metadata polish
+WHY IT MATTERS: Static titles and hash-only routing look amateur to enterprise evaluators (CA-WD-006, CA-WD-018).
+WHAT TO CHANGE: Per-route titles; 404.html redirect; optional social meta per route.
+SUCCESS SIGNAL: Shared links work in Slack/Teams previews; non-hash paths recover.
+
+---
+
+15. CROSS-CUTTING THEMES
+
+---
+
+* Global chrome (brand + nav) fights the otherwise polished dark cartographic product skin
+* Translation-first promise strong in marketing surfaces, weak at record detail and Explore browse labels
+* Trust copy exemplary on About/Sources; not yet visually propagated to action surfaces
+* Graph flagship visually impressive on desktop, visually fails on mobile without List default
+* PageHeader scaffolding repetition creates sameness across routes
+* SPA transition polish below visual quality of static card components
+* Schema/developer vocabulary visible in user-facing browse headers
+* CTA duplication erodes visual hierarchy on record and graph pages
+
+---
+
+16. WHAT I COULD NOT REVIEW
+
+---
+
+* Brand entrance overlay on true first visit (localStorage may have suppressed)
+* Playbooks deep workflow and pattern detail pages
+* Template generator detail panel, download flow, and pre-download disclaimer visuals
+* Full keyboard-only journey completion including graph node focus order
+* Screen reader spot check (NVDA/VoiceOver)
+* prefers-reduced-motion effect on brand rotation
+* Viewports 768, 844x390 landscape, 1280, 1440 (only 1920 and 390 tested)
+* Real physical device touch target and font rendering
+* Console and network error logs (Log.enable/Network.enable not captured this session)
+* Automated axe scan
+* Full WCAG 2.2 conformance
+* Compare workbench results views and export UI
+* Open search overlay modal behavior in depth
+* Dataset freshness/version display (none found)
+* Performance metrics (LCP/CLS) — subjective load only
+
+================================================================
+END OF REPORT
+================================================================

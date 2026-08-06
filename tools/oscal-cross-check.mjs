@@ -24,11 +24,18 @@ function runCli(args) {
     child.stdout.on('data', (chunk) => { stdout += chunk; });
     child.stderr.on('data', (chunk) => { stderr += chunk; });
     child.on('error', reject);
-    child.on('exit', (code) => resolve({
-      code: code ?? 1,
-      durationMs: Math.round(performance.now() - started),
-      output: `${stdout}\n${stderr}`.trim().slice(0, 4000),
-    }));
+    child.on('exit', (code) => {
+      let rawOutput = `${stdout}\n${stderr}`.trim().slice(0, 4000);
+      const cwd = process.cwd();
+      const fileUri = `file:///${cwd.replace(/\\/g, '/')}`.replace(/ /g, '%20');
+      rawOutput = rawOutput.replaceAll(cwd, '%PROJECT_DIR%');
+      rawOutput = rawOutput.replaceAll(fileUri, 'file:///%PROJECT_DIR%');
+      resolve({
+        code: code ?? 1,
+        durationMs: Math.round(performance.now() - started),
+        output: rawOutput,
+      });
+    });
   });
 }
 

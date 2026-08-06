@@ -21,4 +21,5 @@ paths = [
   '''maps/d3fend-to-800-53.json''',
   '''data/generated/atlas-node-index.json''',
   '''data/generated/atlas-neighborhood/.*\.json''',
+  '''data/generated/catalog-records/.*\.json''',
 ]

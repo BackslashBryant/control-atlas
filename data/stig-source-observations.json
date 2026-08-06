@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-05T10:13:23.289Z",
+  "generated_at": "2026-07-16T10:59:28.823Z",
   "observations": [
     {
       "source_id": "cyber-mil-stig-compilations",
-      "observed_at": "2026-08-05T10:13:23.289Z",
+      "observed_at": "2026-07-16T10:59:28.823Z",
       "url": "https://www.cyber.mil/stigs/compilations/",
       "title": "SRG and STIG Library Compilations",
       "kind": "official_entrypoint",
@@ -18,7 +18,7 @@
     },
     {
       "source_id": "cyber-mil-stig-downloads",
-      "observed_at": "2026-08-05T10:13:23.684Z",
+      "observed_at": "2026-07-16T10:59:29.095Z",
       "url": "https://www.cyber.mil/stigs/downloads",
       "title": "STIG Downloads",
       "kind": "official_entrypoint",
@@ -32,7 +32,7 @@
     },
     {
       "source_id": "cyber-mil-stig-gpo",
-      "observed_at": "2026-08-05T10:13:24.105Z",
+      "observed_at": "2026-07-16T10:59:29.407Z",
       "url": "https://www.cyber.mil/stigs/gpo/",
       "title": "STIG GPO Downloads",
       "kind": "official_entrypoint",
@@ -46,7 +46,7 @@
     },
     {
       "source_id": "stigviewer-catalog",
-      "observed_at": "2026-08-05T10:13:24.481Z",
+      "observed_at": "2026-07-16T10:59:29.689Z",
       "url": "https://www.stigviewer.com/stigs",
       "title": "STIG Viewer",
       "kind": "supplemental_catalog",
@@ -69,7 +69,7 @@
     },
     {
       "source_id": "stigviewer-clkb-api",
-      "observed_at": "2026-08-05T10:13:24.692Z",
+      "observed_at": "2026-07-16T10:59:29.826Z",
       "url": "https://www.stigviewer.com/press-releases/2026-03-16",
       "title": "STIG Viewer",
       "kind": "supplemental_api_announcement",
@@ -78,7 +78,7 @@
     },
     {
       "source_id": "nuwcdivnpt-github-org",
-      "observed_at": "2026-08-05T10:13:25.447Z",
+      "observed_at": "2026-07-16T10:59:30.387Z",
       "url": "https://github.com/NUWCDIVNPT",
       "title": "NUWCDIVNPT · GitHub",
       "kind": "supplemental_tooling_org",
@@ -86,7 +86,7 @@
     },
     {
       "source_id": "nuwcdivnpt-stig-manager",
-      "observed_at": "2026-08-05T10:13:26.157Z",
+      "observed_at": "2026-07-16T10:59:31.030Z",
       "url": "https://github.com/nuwcdivnpt/stig-manager",
       "title": "GitHub - NUWCDIVNPT/stig-manager: An API and client for managing STIG assessments · GitHub",
       "kind": "supplemental_tooling",

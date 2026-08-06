@@ -4,7 +4,7 @@
   "records": [
     {
       "id": "OVERLAYS-CATALOG",
-      "type": "zt-overlay-catalog",
+      "type": "zt_overlay_catalog",
       "framework": "dod-zt",
       "title": "DoD Zero Trust Overlays",
       "family": "Control Overlays",
@@ -12,7 +12,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#executive-summary",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#executive-summary"
       },
       "metadata": {
@@ -29,7 +29,7 @@
       "locator": "ZT_RA_v2.0#section-2.2-TENET-1",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#section-2.2-TENET-1"
       }
     },
@@ -43,7 +43,7 @@
       "locator": "ZT_RA_v2.0#section-2.2-TENET-2",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#section-2.2-TENET-2"
       }
     },
@@ -57,7 +57,7 @@
       "locator": "ZT_RA_v2.0#section-2.2-TENET-3",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#section-2.2-TENET-3"
       }
     },
@@ -71,7 +71,7 @@
       "locator": "ZT_RA_v2.0#section-2.2-TENET-4",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#section-2.2-TENET-4"
       }
     },
@@ -85,7 +85,7 @@
       "locator": "ZT_RA_v2.0#section-2.2-TENET-5",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#section-2.2-TENET-5"
       }
     },
@@ -99,7 +99,7 @@
       "locator": "ZT_RA_v2.0#pillar-1",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-1"
       },
       "metadata": {
@@ -116,7 +116,7 @@
       "locator": "ZT_RA_v2.0#pillar-2",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-2"
       },
       "metadata": {
@@ -133,7 +133,7 @@
       "locator": "ZT_RA_v2.0#pillar-3",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-3"
       },
       "metadata": {
@@ -150,7 +150,7 @@
       "locator": "ZT_RA_v2.0#pillar-4",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-4"
       },
       "metadata": {
@@ -167,7 +167,7 @@
       "locator": "ZT_RA_v2.0#pillar-5",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-5"
       },
       "metadata": {
@@ -184,7 +184,7 @@
       "locator": "ZT_RA_v2.0#pillar-6",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-6"
       },
       "metadata": {
@@ -201,7 +201,7 @@
       "locator": "ZT_RA_v2.0#pillar-7",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-7"
       },
       "metadata": {
@@ -218,7 +218,7 @@
       "locator": "ZT_RA_v2.0#pillar-8",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0#pillar-8"
       },
       "metadata": {
@@ -235,7 +235,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-C",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-C"
       },
       "metadata": {
@@ -260,7 +260,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-D",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-D"
       },
       "metadata": {
@@ -285,7 +285,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-E",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-E"
       },
       "metadata": {
@@ -310,7 +310,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-F",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-F"
       },
       "metadata": {
@@ -335,7 +335,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-G",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-G"
       },
       "metadata": {
@@ -360,7 +360,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-H",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-H"
       },
       "metadata": {
@@ -385,7 +385,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-I",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-I"
       },
       "metadata": {
@@ -410,7 +410,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-B",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Appendix-B"
       },
       "metadata": {
@@ -435,7 +435,7 @@
       "locator": "ZT_RA_v2.0",
       "source": {
         "key": "dod-zt-reference-architecture-v2",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT_RA_v2.0"
       },
       "metadata": {
@@ -460,7 +460,7 @@
       "locator": "DoD-ZTStrategy.pdf",
       "source": {
         "key": "dod-zt-strategy",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "DoD-ZTStrategy.pdf"
       },
       "metadata": {
@@ -485,7 +485,7 @@
       "locator": "ZT-ExecutionRoadmap-v1.1.pdf",
       "source": {
         "key": "dod-zt-execution-roadmap",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZT-ExecutionRoadmap-v1.1.pdf"
       },
       "metadata": {
@@ -510,7 +510,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf"
       },
       "metadata": {
@@ -541,7 +541,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.1"
       },
       "metadata": {
@@ -560,7 +560,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.2"
       },
       "metadata": {
@@ -579,7 +579,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.3"
       },
       "metadata": {
@@ -598,7 +598,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.4"
       },
       "metadata": {
@@ -617,7 +617,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.5"
       },
       "metadata": {
@@ -636,7 +636,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.6",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.6"
       },
       "metadata": {
@@ -655,7 +655,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.7",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.7"
       },
       "metadata": {
@@ -674,7 +674,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.8",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.8"
       },
       "metadata": {
@@ -693,7 +693,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#1.9",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#1.9"
       },
       "metadata": {
@@ -712,7 +712,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.1"
       },
       "metadata": {
@@ -731,7 +731,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.2"
       },
       "metadata": {
@@ -750,7 +750,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.3"
       },
       "metadata": {
@@ -769,7 +769,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.4"
       },
       "metadata": {
@@ -788,7 +788,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.5"
       },
       "metadata": {
@@ -807,7 +807,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.6",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.6"
       },
       "metadata": {
@@ -826,7 +826,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#2.7",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#2.7"
       },
       "metadata": {
@@ -845,7 +845,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#3.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#3.1"
       },
       "metadata": {
@@ -864,7 +864,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#3.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#3.2"
       },
       "metadata": {
@@ -883,7 +883,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#3.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#3.3"
       },
       "metadata": {
@@ -902,7 +902,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#3.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#3.4"
       },
       "metadata": {
@@ -921,7 +921,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#3.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#3.5"
       },
       "metadata": {
@@ -940,7 +940,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.1"
       },
       "metadata": {
@@ -959,7 +959,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.2"
       },
       "metadata": {
@@ -978,7 +978,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.3"
       },
       "metadata": {
@@ -997,7 +997,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.4"
       },
       "metadata": {
@@ -1016,7 +1016,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.5"
       },
       "metadata": {
@@ -1035,7 +1035,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.6",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.6"
       },
       "metadata": {
@@ -1054,7 +1054,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#4.7",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#4.7"
       },
       "metadata": {
@@ -1073,7 +1073,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#5.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#5.1"
       },
       "metadata": {
@@ -1092,7 +1092,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#5.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#5.2"
       },
       "metadata": {
@@ -1111,7 +1111,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#5.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#5.3"
       },
       "metadata": {
@@ -1130,7 +1130,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#5.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#5.4"
       },
       "metadata": {
@@ -1149,7 +1149,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.1"
       },
       "metadata": {
@@ -1168,7 +1168,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.2"
       },
       "metadata": {
@@ -1187,7 +1187,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.3"
       },
       "metadata": {
@@ -1206,7 +1206,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.4"
       },
       "metadata": {
@@ -1225,7 +1225,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.5"
       },
       "metadata": {
@@ -1244,7 +1244,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.6",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.6"
       },
       "metadata": {
@@ -1263,7 +1263,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#6.7",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#6.7"
       },
       "metadata": {
@@ -1282,7 +1282,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.1",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.1"
       },
       "metadata": {
@@ -1301,7 +1301,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.2",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.2"
       },
       "metadata": {
@@ -1320,7 +1320,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.3",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.3"
       },
       "metadata": {
@@ -1339,7 +1339,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.4",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.4"
       },
       "metadata": {
@@ -1358,7 +1358,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.5",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.5"
       },
       "metadata": {
@@ -1377,7 +1377,7 @@
       "locator": "ZTCapabilitiesActivities.pdf#7.6",
       "source": {
         "key": "dod-zt-capabilities",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZTCapabilitiesActivities.pdf#7.6"
       },
       "metadata": {
@@ -1396,7 +1396,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.1"
       },
       "metadata": {
@@ -1415,7 +1415,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.2"
       },
       "metadata": {
@@ -1434,7 +1434,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.3"
       },
       "metadata": {
@@ -1453,7 +1453,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.4"
       },
       "metadata": {
@@ -1472,7 +1472,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.5"
       },
       "metadata": {
@@ -1491,7 +1491,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.6",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.6"
       },
       "metadata": {
@@ -1510,7 +1510,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.7",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.7"
       },
       "metadata": {
@@ -1529,7 +1529,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.8",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.5.8"
       },
       "metadata": {
@@ -1548,7 +1548,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.1.1"
       },
       "metadata": {
@@ -1567,7 +1567,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.1"
       },
       "metadata": {
@@ -1586,7 +1586,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.2"
       },
       "metadata": {
@@ -1605,7 +1605,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.3"
       },
       "metadata": {
@@ -1624,7 +1624,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.4"
       },
       "metadata": {
@@ -1643,7 +1643,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.2.5"
       },
       "metadata": {
@@ -1662,7 +1662,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.1"
       },
       "metadata": {
@@ -1681,7 +1681,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.3"
       },
       "metadata": {
@@ -1700,7 +1700,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.1"
       },
       "metadata": {
@@ -1719,7 +1719,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.2"
       },
       "metadata": {
@@ -1738,7 +1738,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.3.3"
       },
       "metadata": {
@@ -1757,7 +1757,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.1"
       },
       "metadata": {
@@ -1776,7 +1776,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.2"
       },
       "metadata": {
@@ -1795,7 +1795,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.3"
       },
       "metadata": {
@@ -1814,7 +1814,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.4.4"
       },
       "metadata": {
@@ -1833,7 +1833,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.1"
       },
       "metadata": {
@@ -1852,7 +1852,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.2"
       },
       "metadata": {
@@ -1871,7 +1871,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.6.3"
       },
       "metadata": {
@@ -1890,7 +1890,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.2"
       },
       "metadata": {
@@ -1909,7 +1909,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.5"
       },
       "metadata": {
@@ -1928,7 +1928,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.1"
       },
       "metadata": {
@@ -1947,7 +1947,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.5"
       },
       "metadata": {
@@ -1966,7 +1966,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.3"
       },
       "metadata": {
@@ -1985,7 +1985,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.7.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.7.1"
       },
       "metadata": {
@@ -2004,7 +2004,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.2"
       },
       "metadata": {
@@ -2023,7 +2023,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.3"
       },
       "metadata": {
@@ -2042,7 +2042,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.8.4"
       },
       "metadata": {
@@ -2061,7 +2061,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.1"
       },
       "metadata": {
@@ -2080,7 +2080,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.6",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.6"
       },
       "metadata": {
@@ -2099,7 +2099,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.1"
       },
       "metadata": {
@@ -2118,7 +2118,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.6.2"
       },
       "metadata": {
@@ -2137,7 +2137,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.1"
       },
       "metadata": {
@@ -2156,7 +2156,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.2"
       },
       "metadata": {
@@ -2175,7 +2175,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-1.9.3"
       },
       "metadata": {
@@ -2194,7 +2194,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.1"
       },
       "metadata": {
@@ -2213,7 +2213,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.2"
       },
       "metadata": {
@@ -2232,7 +2232,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.3"
       },
       "metadata": {
@@ -2251,7 +2251,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.1.4"
       },
       "metadata": {
@@ -2270,7 +2270,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.2"
       },
       "metadata": {
@@ -2289,7 +2289,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.1"
       },
       "metadata": {
@@ -2308,7 +2308,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.6",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.6"
       },
       "metadata": {
@@ -2327,7 +2327,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.1"
       },
       "metadata": {
@@ -2346,7 +2346,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.4"
       },
       "metadata": {
@@ -2365,7 +2365,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.2.2"
       },
       "metadata": {
@@ -2384,7 +2384,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.2"
       },
       "metadata": {
@@ -2403,7 +2403,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.5.1"
       },
       "metadata": {
@@ -2422,7 +2422,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.5"
       },
       "metadata": {
@@ -2441,7 +2441,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.1"
       },
       "metadata": {
@@ -2460,7 +2460,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.2"
       },
       "metadata": {
@@ -2479,7 +2479,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.3"
       },
       "metadata": {
@@ -2498,7 +2498,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.4"
       },
       "metadata": {
@@ -2517,7 +2517,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.7",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.3.7"
       },
       "metadata": {
@@ -2536,7 +2536,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.1"
       },
       "metadata": {
@@ -2555,7 +2555,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.4"
       },
       "metadata": {
@@ -2574,7 +2574,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.1"
       },
       "metadata": {
@@ -2593,7 +2593,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.4.3"
       },
       "metadata": {
@@ -2612,7 +2612,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.3"
       },
       "metadata": {
@@ -2631,7 +2631,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.6.3"
       },
       "metadata": {
@@ -2650,7 +2650,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.2"
       },
       "metadata": {
@@ -2669,7 +2669,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-2.7.3"
       },
       "metadata": {
@@ -2688,7 +2688,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.1"
       },
       "metadata": {
@@ -2707,7 +2707,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.3"
       },
       "metadata": {
@@ -2726,7 +2726,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.1.1"
       },
       "metadata": {
@@ -2745,7 +2745,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.1"
       },
       "metadata": {
@@ -2764,7 +2764,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.2"
       },
       "metadata": {
@@ -2783,7 +2783,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.2.4"
       },
       "metadata": {
@@ -2802,7 +2802,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.1"
       },
       "metadata": {
@@ -2821,7 +2821,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.3"
       },
       "metadata": {
@@ -2840,7 +2840,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.5"
       },
       "metadata": {
@@ -2859,7 +2859,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.1"
       },
       "metadata": {
@@ -2878,7 +2878,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.2"
       },
       "metadata": {
@@ -2897,7 +2897,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.3.4"
       },
       "metadata": {
@@ -2916,7 +2916,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.2"
       },
       "metadata": {
@@ -2935,7 +2935,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.4"
       },
       "metadata": {
@@ -2954,7 +2954,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.7",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.4.7"
       },
       "metadata": {
@@ -2973,7 +2973,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.1"
       },
       "metadata": {
@@ -2992,7 +2992,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.2"
       },
       "metadata": {
@@ -3011,7 +3011,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.3"
       },
       "metadata": {
@@ -3030,7 +3030,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.3"
       },
       "metadata": {
@@ -3049,7 +3049,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.4"
       },
       "metadata": {
@@ -3068,7 +3068,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-3.5.2"
       },
       "metadata": {
@@ -3087,7 +3087,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.1"
       },
       "metadata": {
@@ -3106,7 +3106,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.4"
       },
       "metadata": {
@@ -3125,7 +3125,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.1.1"
       },
       "metadata": {
@@ -3144,7 +3144,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.1"
       },
       "metadata": {
@@ -3163,7 +3163,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.2"
       },
       "metadata": {
@@ -3182,7 +3182,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.2.3"
       },
       "metadata": {
@@ -3201,7 +3201,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.1"
       },
       "metadata": {
@@ -3220,7 +3220,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.2"
       },
       "metadata": {
@@ -3239,7 +3239,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.3.1"
       },
       "metadata": {
@@ -3258,7 +3258,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.1"
       },
       "metadata": {
@@ -3277,7 +3277,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.1"
       },
       "metadata": {
@@ -3296,7 +3296,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.6",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.6"
       },
       "metadata": {
@@ -3315,7 +3315,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.4"
       },
       "metadata": {
@@ -3334,7 +3334,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.3.5"
       },
       "metadata": {
@@ -3353,7 +3353,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.1"
       },
       "metadata": {
@@ -3372,7 +3372,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.3"
       },
       "metadata": {
@@ -3391,7 +3391,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.2"
       },
       "metadata": {
@@ -3410,7 +3410,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.1"
       },
       "metadata": {
@@ -3429,7 +3429,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.2"
       },
       "metadata": {
@@ -3448,7 +3448,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.4"
       },
       "metadata": {
@@ -3467,7 +3467,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.5"
       },
       "metadata": {
@@ -3486,7 +3486,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.6",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.4.6"
       },
       "metadata": {
@@ -3505,7 +3505,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.2"
       },
       "metadata": {
@@ -3524,7 +3524,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.5.5"
       },
       "metadata": {
@@ -3543,7 +3543,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.6.4"
       },
       "metadata": {
@@ -3562,7 +3562,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.3"
       },
       "metadata": {
@@ -3581,7 +3581,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.2"
       },
       "metadata": {
@@ -3600,7 +3600,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.3"
       },
       "metadata": {
@@ -3619,7 +3619,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.5",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.5"
       },
       "metadata": {
@@ -3638,7 +3638,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.7",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-4.7.7"
       },
       "metadata": {
@@ -3657,7 +3657,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.1"
       },
       "metadata": {
@@ -3676,7 +3676,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.1.2"
       },
       "metadata": {
@@ -3695,7 +3695,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.1"
       },
       "metadata": {
@@ -3714,7 +3714,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.2"
       },
       "metadata": {
@@ -3733,7 +3733,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.3"
       },
       "metadata": {
@@ -3752,7 +3752,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.2.4"
       },
       "metadata": {
@@ -3771,7 +3771,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.2"
       },
       "metadata": {
@@ -3790,7 +3790,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.3.2"
       },
       "metadata": {
@@ -3809,7 +3809,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.4"
       },
       "metadata": {
@@ -3828,7 +3828,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.1"
       },
       "metadata": {
@@ -3847,7 +3847,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-5.4.4"
       },
       "metadata": {
@@ -3866,7 +3866,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.2"
       },
       "metadata": {
@@ -3885,7 +3885,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.1.3"
       },
       "metadata": {
@@ -3904,7 +3904,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.1"
       },
       "metadata": {
@@ -3923,7 +3923,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.2"
       },
       "metadata": {
@@ -3942,7 +3942,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.2.3"
       },
       "metadata": {
@@ -3961,7 +3961,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.1"
       },
       "metadata": {
@@ -3980,7 +3980,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.4.2"
       },
       "metadata": {
@@ -3999,7 +3999,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.1"
       },
       "metadata": {
@@ -4018,7 +4018,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.2"
       },
       "metadata": {
@@ -4037,7 +4037,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.5.3"
       },
       "metadata": {
@@ -4056,7 +4056,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.1"
       },
       "metadata": {
@@ -4075,7 +4075,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.1"
       },
       "metadata": {
@@ -4094,7 +4094,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.6.3"
       },
       "metadata": {
@@ -4113,7 +4113,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.2"
       },
       "metadata": {
@@ -4132,7 +4132,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-6.7.3"
       },
       "metadata": {
@@ -4151,7 +4151,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.1"
       },
       "metadata": {
@@ -4170,7 +4170,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.2"
       },
       "metadata": {
@@ -4189,7 +4189,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.1.3"
       },
       "metadata": {
@@ -4208,7 +4208,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.4"
       },
       "metadata": {
@@ -4227,7 +4227,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.3.1"
       },
       "metadata": {
@@ -4246,7 +4246,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.2.2"
       },
       "metadata": {
@@ -4265,7 +4265,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.1",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.1"
       },
       "metadata": {
@@ -4284,7 +4284,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.2"
       },
       "metadata": {
@@ -4303,7 +4303,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.3",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.3"
       },
       "metadata": {
@@ -4322,7 +4322,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.4",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.4.4"
       },
       "metadata": {
@@ -4341,7 +4341,7 @@
       "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.2",
       "source": {
         "key": "dod-zt-overlays-2024",
-        "snapshot_date": "2026-08-05T10:13:09.638Z",
+        "snapshot_date": "2026-07-16T10:59:20.130Z",
         "locator": "ZeroTrustOverlays-2024Feb.pdf#Activity-7.5.2"
       },
       "metadata": {

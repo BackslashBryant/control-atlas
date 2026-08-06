@@ -3,8 +3,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
-const MAX_FILE_BYTES = 100 * 1024 * 1024;
-const MAX_COMPLETE_SEARCH_GZIP_BYTES = 1_000_000;
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const MAX_COMPLETE_SEARCH_GZIP_BYTES = 300_000;
 
 function walk(path) {
   return readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
@@ -39,7 +39,7 @@ for (const file of files) {
   const size = statSync(file).size;
   total += size;
   if (size > MAX_FILE_BYTES)
-    throw new Error(`${file} exceeds 60 MiB static artifact budget`);
+    throw new Error(`${file} exceeds 20 MiB static artifact budget`);
 }
 checkCompleteSearchBudget();
 

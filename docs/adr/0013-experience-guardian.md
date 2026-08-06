@@ -37,7 +37,7 @@ Use the existing stack with no new dependency:
 
 1. `tools/experience-guardian.mjs` performs fast deterministic copy, token,
    ownership, naming, and active-route coverage checks.
-2. `config/experience-guardian/control-atlas-experience-guardian.md` is the canonical review
+2. `.ai/shared/control-atlas-experience-guardian.md` is the canonical review
    agent instruction.
 3. `config/experience-guardian/copy-ownership.json` owns the boundary between
    product copy, official publisher text, legal material, accessibility labels,

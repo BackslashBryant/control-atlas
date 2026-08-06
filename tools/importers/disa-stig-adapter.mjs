@@ -118,15 +118,13 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
       const cciReferences = [...new Set(cciIds(rule))];
       const titleVal = textValue(rule.title);
       const discussionVal = extractSection(description, 'VulnDiscussion') || stripMarkup(description);
-      const ruleId = rule.id || '';
-      const canonicalId = `${catalogKind === 'stig' ? 'disa-stig' : 'disa-srg'}:${benchmark.id}:${ruleId || vulnId}`;
       records.push({
-        id: canonicalId,
+        id: vulnId,
         type: catalogKind === 'stig' ? 'stig_rule' : 'srg_requirement',
         title: titleVal,
         description: discussionVal,
         severity: rule.severity || '',
-        rule_id: ruleId,
+        rule_id: rule.id || '',
         vuln_id: vulnId,
         stig_id: textValue(rule.version) || textValue(group.title),
         check_text: getCheckText(rule),
@@ -142,8 +140,6 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
           benchmark_id: benchmark.id,
           benchmark_title: benchmarkTitle,
           benchmark_description: benchmarkDescription,
-          canonical_id: canonicalId,
-          legacy_ids: [vulnId, ruleId, textValue(rule.version)].filter(Boolean),
           relationship_catalog: 'disa-cci',
           relationships: cciReferences.map((targetId) => ({
             target_catalog: 'disa-cci',
@@ -230,56 +226,29 @@ function walkArchiveEntries(archive, parentPath = '') {
 export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
   const parsed = { stig: [], srg: [] };
-  const inventory = [];
 
   for (const entry of walkArchiveEntries(archive)) {
+    if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
+    const xml = strFromU8(entry.value);
     const pathLower = entry.entryPath.toLowerCase();
-    
-    if (!/\.(xml|xccdf)$/i.test(entry.entryPath)) {
-      inventory.push({ entryPath: entry.entryPath, status: 'ignored', reason: 'not an XML/XCCDF file' });
-      continue;
-    }
-    
-    if (shouldIgnoreEntry(entry.entryPath)) {
-      const isCui = /(^|\/)(CUI_|CUI\/)/i.test(entry.entryPath);
-      const isSunset = /(^|\/)Sunset/i.test(entry.entryPath);
-      const isDraft = /(^|\/)Draft/i.test(entry.entryPath);
-      const reason = isCui ? 'CUI restricted' : isSunset ? 'Sunset' : isDraft ? 'Draft' : 'Ignored by policy';
-      inventory.push({ entryPath: entry.entryPath, status: 'excluded', reason });
-      continue;
-    }
-    
-    try {
-      const xml = strFromU8(entry.value);
-      const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
-      const document = parseDisaXccdf(xml, {
-        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
-        artifactUrl,
-        entryPath: entry.entryPath,
-        hintKind: pathHint,
-      });
-      parsed[document.catalogKind].push(document);
-      inventory.push({ 
-        entryPath: entry.entryPath, 
-        status: 'ingested', 
-        catalogKind: document.catalogKind,
-        benchmarkId: document.records[0]?.metadata?.benchmark_id || 'unknown',
-        recordCount: document.records.length 
-      });
-    } catch (e) {
-      inventory.push({ entryPath: entry.entryPath, status: 'failed', reason: e.message });
-    }
+    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
+    const document = parseDisaXccdf(xml, {
+      sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+      artifactUrl,
+      entryPath: entry.entryPath,
+      hintKind: pathHint,
+    });
+    parsed[document.catalogKind].push(document);
   }
 
   const checksumValue = checksum(buffer);
-  const stig = parsed.stig.length ? createDocument(sourceKeys.stig, artifactUrl, checksumValue, parsed.stig) : null;
-  const srg = parsed.srg.length ? createDocument(sourceKeys.srg, artifactUrl, checksumValue, parsed.srg) : null;
+  const stig = createDocument(sourceKeys.stig, artifactUrl, checksumValue, parsed.stig);
+  const srg = createDocument(sourceKeys.srg, artifactUrl, checksumValue, parsed.srg);
   const relationships = createRelationshipDocument(
     artifactUrl,
     checksumValue,
     [...parsed.stig, ...parsed.srg].flatMap((entry) => entry.records),
   );
 
-  return { stig, srg, relationships, checksum: checksumValue, inventory };
+  return { stig, srg, relationships, checksum: checksumValue };
 }
-

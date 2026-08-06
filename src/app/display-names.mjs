@@ -6,7 +6,6 @@ const DISPLAY_NAMES = {
     federal_program: 'Federal program',
     federal_utilized: 'Federal utilized',
     federal_referenced: 'Federal referenced',
-    control_atlas_derived: 'Control Atlas derived',
     inferred: 'Inferred',
     official: 'Official',
     dod_published: 'DoD published',
