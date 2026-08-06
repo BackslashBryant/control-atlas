@@ -1,0 +1,87 @@
+# Cursor Indexing Exclusions
+# This file specifies which files and directories Cursor should exclude from codebase indexing.
+# This complements .gitignore but serves a different purpose: optimizing AI indexing performance.
+# Files ignored here will not be indexed by Cursor's AI features, improving performance and relevance.
+
+# Dependencies (large, don't need indexing)
+node_modules/
+jspm_packages/
+bower_components/
+
+# Build outputs (generated code)
+dist/
+build/
+out/
+.next/
+.nuxt/
+.turbo/
+.serverless/
+.fusebox/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.npm/
+.eslintcache/
+.stylelintcache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Test results and coverage
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+*.lcov
+
+# Logs and temporary files
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+*.tgz
+*.tsbuildinfo
+
+# Runtime and temporary data
+pids/
+tmp/
+temp/
+.tern-port
+.node_repl_history
+
+# Package manager files (optional - uncomment if you don't want them indexed)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+.yarn-integrity
+
+# IDE and editor files (already excluded in .gitignore, but explicit here)
+.vscode-test/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Vercel
+.vercel
+
+# Sentry
+.sentryclirc
+
+# Artifacts (test outputs, screenshots, etc.)
+artifacts/
+
+# Large generated documentation (uncomment if you have huge generated docs)
+# docs/generated/

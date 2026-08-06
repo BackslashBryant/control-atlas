@@ -1,0 +1,20 @@
+# Replace the example owners with real BackslashBryant usernames or teams before enabling CODEOWNERS.
+# Example: /docs/ @BackslashBryant/vector-maintainers
+
+# Plan & docs (Vector/Muse)
+/docs/ @BackslashBryant/vector-team
+
+# Dev workflows / CI (Nexus)
+/.github/ @BackslashBryant/nexus-team
+/scripts/hooks/ @BackslashBryant/nexus-team
+/tools/ @BackslashBryant/nexus-team
+
+# Application code path scopes (adjust as your stack evolves)
+/api/ @BackslashBryant/forge-team
+/server/ @BackslashBryant/forge-team
+/app/ @BackslashBryant/link-team
+/components/ @BackslashBryant/link-team
+/tests/ @BackslashBryant/pixel-team
+
+# Fallback
+* @BackslashBryant/core-maintainers
