@@ -25,7 +25,7 @@ Operating rules for agents:
 
 ## Operating Model
 
-1. Cursor is the primary workhorse. Other AI tools adapt through `.ai/shared/`.
+1. Cursor is the primary workhorse.
 2. Personas stay because they make ownership memorable:
    - Vector: specs, planning, lightweight docs/status.
    - Forge: implementation.
@@ -35,7 +35,7 @@ Operating rules for agents:
    - Sentinel: security/risk.
    - Nexus: git, CI, release, deploy, maintenance automation.
 3. Pick one lead persona per task. Do not stage fake full-team reviews.
-4. Setup should be agent-led. If setup state is missing, run `npm run agent:bootstrap -- --apply` and report what it found.
+4. Setup should be agent-led. If setup state is missing, report what it found.
 
 ## Execution Guardrails
 
@@ -143,7 +143,6 @@ Before every commit:
 # Core Engineering Doctrine (project reference)
 
 This repository follows the Core Engineering Doctrine. Canonical, full text:
-C:\Users\OrEo2\.engineering\core-engineering-doctrine.md
 
 Precedence when guidance conflicts (top wins):
 1. Safety, security, legal obligations, data integrity, and explicit user instructions.
