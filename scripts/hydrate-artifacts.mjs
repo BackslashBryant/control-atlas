@@ -117,6 +117,8 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-zt-overlays-2024', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-capabilities', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  // CUI: 32 CFR Part 2002 from the eCFR versioner API (date-pinned = byte-stable).
+  { id: 'artifact-isoo-cui-regulation', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];

@@ -57,6 +57,7 @@ export const FORMATS = new Set([
   'oscal_xml',
   'json',
   'json_ld',
+  'xml',
   'csv',
   'spreadsheet',
   'stix',

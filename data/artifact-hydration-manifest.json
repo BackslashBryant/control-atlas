@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T12:16:39.564Z",
-  "hydrated": 19,
+  "generated_at": "2026-08-07T12:21:06.439Z",
+  "hydrated": 20,
   "removed_orphans": [],
   "results": [
     {
@@ -212,6 +212,16 @@
       "status": "FAILED",
       "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
       "reason": "HTTP 403"
+    },
+    {
+      "id": "artifact-isoo-cui-regulation",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002",
+      "sha256": "sha256:3c595476a48f2b16cec4aacc6d5e78588dafa7ddf4d4c56a5c6bbb2641a1e930",
+      "byte_length": 89692,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-control-atlas-structure",
