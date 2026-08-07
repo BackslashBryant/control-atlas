@@ -16,6 +16,36 @@ const COMMITTED_ARTIFACTS = {
 
 const DL_BASE = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/';
 
+// spec §6: the compilation URL is discovered from the real DL_BASE directory
+// index (an Apache-style listing — public.cyber.mil/stigs/downloads/ itself
+// is JS-rendered and exposes no static zip links from this environment),
+// filtered to "*Library*.zip" entries and sorted by the embedded month name
+// + year rather than plain alphabetical sort (which would pick a 2020 file
+// over a 2026 one — "2" < "A" in ASCII).
+const MONTH_ORDER = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+  july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+};
+function compilationSortKey(filename) {
+  const match = filename.match(/Library_(?:(\d{4})_(\d{2})|([A-Za-z]+)_(\d{4}))/);
+  if (!match) return [0, 0];
+  if (match[1]) return [Number(match[1]), Number(match[2])];
+  const month = MONTH_ORDER[match[3].toLowerCase()] || 0;
+  return [Number(match[4]), month];
+}
+export function findLatestDisaLibraryUrl(directoryHtml) {
+  const files = [...String(directoryHtml).matchAll(/href=["']([^"']*Library[^"']*\.zip)["']/gi)]
+    .map((match) => match[1])
+    .filter((file) => !file.includes('/'));
+  if (!files.length) return null;
+  const [latest] = [...new Set(files)].sort((a, b) => {
+    const [ay, am] = compilationSortKey(a);
+    const [by, bm] = compilationSortKey(b);
+    return by - ay || bm - am;
+  });
+  return `${DL_BASE}${latest}`;
+}
+
 function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;
 }
@@ -53,58 +83,35 @@ function loadCommittedArtifacts() {
   };
 }
 
-async function fetchManifestArtifacts(fetchImpl) {
-  const stigRecords = [];
-  const srgRecords = [];
-  const relationships = [];
-
-  for (const entry of DISA_ARTIFACT_MANIFEST) {
-    const url = `${DL_BASE}${entry.file}`;
-    const response = await fetchImpl(url);
-    if (!response.ok) {
-      throw new Error(`DISA artifact fetch failed: ${response.status} ${url}`);
-    }
-    const archive = new Uint8Array(await response.arrayBuffer());
-    const parsed = parseDisaCompilationArchive(archive, {
-      artifactUrl: url,
-      sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
-      hintKind: entry.hintKind,
-    });
-    stigRecords.push(...parsed.stig.records);
-    srgRecords.push(...parsed.srg.records);
-    relationships.push(...parsed.relationships.relationships);
+// spec §6: discover the latest official compilation from the real
+// directory index, download the exact archive, and parse it — no more
+// static allowlist of individual filenames (the old DISA_ARTIFACT_MANIFEST
+// this replaced was already undefined dead code, silently swallowed into a
+// fallback on every run).
+async function discoverAndFetchCompilation(fetchImpl) {
+  const indexResponse = await fetchImpl(DL_BASE);
+  if (!indexResponse.ok) {
+    throw new Error(`DISA directory index fetch failed: ${indexResponse.status} ${DL_BASE}`);
   }
-
-  const snapshotDate = '2026-07-04';
+  const indexHtml = await indexResponse.text();
+  const compilationUrl = findLatestDisaLibraryUrl(indexHtml);
+  if (!compilationUrl) {
+    throw new Error(`No *Library*.zip compilation found in DISA directory index (${DL_BASE})`);
+  }
+  const zipResponse = await fetchImpl(compilationUrl);
+  if (!zipResponse.ok) {
+    throw new Error(`DISA compilation fetch failed: ${zipResponse.status} ${compilationUrl}`);
+  }
+  const archive = new Uint8Array(await zipResponse.arrayBuffer());
+  const parsed = parseDisaCompilationArchive(archive, {
+    artifactUrl: compilationUrl,
+    sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
+  });
   return {
-    stig: {
-      schema_version: '2.0',
-      source_key: 'disa-stig-library',
-      source_artifact: DISCOVERY_URL,
-      source_version: 'multiple (see per-record source.version)',
-      snapshot_date: snapshotDate,
-      checksum: checksum(JSON.stringify(stigRecords)),
-      records: stigRecords,
-    },
-    srg: {
-      schema_version: '2.0',
-      source_key: 'disa-srg-library',
-      source_artifact: DISCOVERY_URL,
-      source_version: 'multiple (see per-record source.version)',
-      snapshot_date: snapshotDate,
-      checksum: checksum(JSON.stringify(srgRecords)),
-      records: srgRecords,
-    },
-    relationships: {
-      schema_version: '2.0',
-      source_key: 'disa-stig-srg-cci-references',
-      source_artifact: DISCOVERY_URL,
-      source_version: 'multiple (see per-relationship source_locator)',
-      snapshot_date: snapshotDate,
-      checksum: checksum(JSON.stringify(relationships)),
-      provenance: 'Official DISA public STIG and SRG references to CCIs',
-      relationships,
-    },
+    ...parsed,
+    sourceArtifact: compilationUrl,
+    checksum: checksum(archive),
+    fallbackMode: null,
   };
 }
 
@@ -134,15 +141,7 @@ export async function fetchDisaStigs(options = {}) {
   }
 
   try {
-    const parsed = await fetchManifestArtifacts(fetchImpl);
-    return {
-      ...parsed,
-      sourceArtifact: DISCOVERY_URL,
-      checksum: checksum(
-        `${JSON.stringify(parsed.stig)}\n${JSON.stringify(parsed.srg)}\n${JSON.stringify(parsed.relationships)}`,
-      ),
-      fallbackMode: null,
-    };
+    return await discoverAndFetchCompilation(fetchImpl);
   } catch {
     return loadCommittedArtifacts();
   }
@@ -158,6 +157,9 @@ async function main() {
   writeFileSync(join(ROOT, 'maps', 'stig-srg-to-cci.json'), `${JSON.stringify(result.relationships, null, 2)}\n`, 'utf8');
   if (result.fallbackMode) {
     console.log(`DISA fetch fallback: ${result.fallbackMode}`);
+  }
+  if (result.failed?.length) {
+    console.log(`${result.failed.length} archive entr${result.failed.length === 1 ? 'y' : 'ies'} failed to parse (non-benchmark XML, expected in a ~2600-entry compilation): ${result.failed.map((f) => f.entryPath).join(', ')}`);
   }
   console.log(`Wrote ${result.stig.records.length} STIG rules, ${result.srg.records.length} SRG requirements, and ${result.relationships.relationships.length} DISA CCI references`);
 }

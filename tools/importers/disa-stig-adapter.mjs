@@ -226,19 +226,28 @@ function walkArchiveEntries(archive, parentPath = '') {
 export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
   const parsed = { stig: [], srg: [] };
+  const failed = [];
 
   for (const entry of walkArchiveEntries(archive)) {
     if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
     const xml = strFromU8(entry.value);
     const pathLower = entry.entryPath.toLowerCase();
     const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
-    const document = parseDisaXccdf(xml, {
-      sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
-      artifactUrl,
-      entryPath: entry.entryPath,
-      hintKind: pathHint,
-    });
-    parsed[document.catalogKind].push(document);
+    // A ~2600-entry compilation zip real-world includes non-Benchmark XML
+    // (manifests, schemas, malformed one-offs) alongside real STIG/SRG
+    // content — spec §6 classifies these as "failed content", not a reason
+    // to abort parsing the other 99%+ that IS a valid benchmark.
+    try {
+      const document = parseDisaXccdf(xml, {
+        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        artifactUrl,
+        entryPath: entry.entryPath,
+        hintKind: pathHint,
+      });
+      parsed[document.catalogKind].push(document);
+    } catch (error) {
+      failed.push({ entryPath: entry.entryPath, reason: error.message });
+    }
   }
 
   const checksumValue = checksum(buffer);
@@ -250,5 +259,5 @@ export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, h
     [...parsed.stig, ...parsed.srg].flatMap((entry) => entry.records),
   );
 
-  return { stig, srg, relationships, checksum: checksumValue };
+  return { stig, srg, relationships, checksum: checksumValue, failed };
 }
