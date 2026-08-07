@@ -170,15 +170,26 @@ if (registry && nodesRaw && edgesRaw) {
   const nodes = Array.isArray(nodesRaw) ? nodesRaw : nodesRaw.nodes;
   const edges = Array.isArray(edgesRaw) ? edgesRaw : edgesRaw.edges;
   const artifactIds = new Set((registry.artifacts || []).map((a) => a.id));
+  // Quarantined sources (spec-sanctioned): unverifiable with an explicit
+  // reason. Nodes/edges may still cite them; that is a documented exception,
+  // reported (not a fabrication) rather than an integrity failure.
+  const quarantinedIds = new Set((registry.quarantine || []).map((q) => q.id));
+  let quarantinedNodeCitations = 0;
+  let quarantinedEdgeCitations = 0;
   const nodeCounts = new Map();
   const edgeCounts = new Map();
   for (const n of nodes) for (const aid of n.artifact_ids || []) {
     nodeCounts.set(aid, (nodeCounts.get(aid) || 0) + 1);
-    if (!artifactIds.has(aid)) err(`node ${n.id} cites unknown artifact: ${aid}`);
+    if (quarantinedIds.has(aid)) quarantinedNodeCitations += 1;
+    else if (!artifactIds.has(aid)) err(`node ${n.id} cites unknown artifact: ${aid}`);
   }
   for (const e of edges) if (e.source_artifact_id) {
     edgeCounts.set(e.source_artifact_id, (edgeCounts.get(e.source_artifact_id) || 0) + 1);
-    if (!artifactIds.has(e.source_artifact_id)) err(`edge ${e.id} cites unknown source_artifact_id: ${e.source_artifact_id}`);
+    if (quarantinedIds.has(e.source_artifact_id)) quarantinedEdgeCitations += 1;
+    else if (!artifactIds.has(e.source_artifact_id)) err(`edge ${e.id} cites unknown source_artifact_id: ${e.source_artifact_id}`);
+  }
+  if (quarantinedNodeCitations || quarantinedEdgeCitations) {
+    console.log(`NOTE: ${quarantinedNodeCitations} node + ${quarantinedEdgeCitations} edge citations reference quarantined sources (see registry.quarantine for reasons).`);
   }
   for (const art of registry.artifacts || []) {
     const rc = nodeCounts.get(art.id) || 0;

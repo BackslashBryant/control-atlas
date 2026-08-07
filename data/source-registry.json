@@ -2321,27 +2321,6 @@
       "license_or_use": "eCFR Public Domain"
     },
     {
-      "id": "artifact-nara-cui-registry",
-      "publication_source_id": "nara-cui-registry",
-      "name": "NARA CUI Registry Artifact",
-      "display_name": "CUI Program Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2026-06-13",
-      "lifecycle_status": "active",
-      "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-06-13",
-      "artifact_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
-      "byte_length": 1559,
-      "sha256": "sha256:618487691ee9fbb1083f52dba7911be52ccf0573718d97038527b43cdeb3014b",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 2,
-      "relationship_count": 2,
-      "license_or_use": "National Archives Public Domain"
-    },
-    {
       "id": "artifact-disa-cci-list",
       "publication_source_id": "disa-cci-list",
       "name": "DISA Control Correlation Identifier List Artifact",
@@ -2508,27 +2487,6 @@
       "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property"
-    },
-    {
-      "id": "artifact-dod-rai-toolkit",
-      "publication_source_id": "dod-rai-toolkit",
-      "name": "DoD Responsible AI Toolkit Artifact",
-      "display_name": "DoD RAI Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2026-06-09",
-      "lifecycle_status": "active",
-      "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-06-09",
-      "artifact_url": "https://rai.acqbot.com/executive-summary",
-      "byte_length": 4815,
-      "sha256": "sha256:26bed4c4a32b11224c7e42da17655710088685e69933d656a10d476506c1dbeb",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 14,
-      "relationship_count": 13,
-      "license_or_use": "DoD Responsible AI Toolkit Public Domain"
     },
     {
       "id": "artifact-nist-800-53b-baselines",
@@ -2823,111 +2781,6 @@
       "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "NIST CSRC OLIR Program License-free Public Domain"
-    },
-    {
-      "id": "artifact-dod-zt-reference-architecture-v2",
-      "publication_source_id": "dod-zt-reference-architecture-v2",
-      "name": "DoD Zero Trust Reference Architecture Version 2.0 Artifact",
-      "display_name": "DoD Zero Trust Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2022-07",
-      "lifecycle_status": "active",
-      "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-06-15",
-      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
-      "byte_length": 150805,
-      "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 15,
-      "relationship_count": 15,
-      "license_or_use": "Distribution Statement A. Approved for public release."
-    },
-    {
-      "id": "artifact-dod-zt-strategy",
-      "publication_source_id": "dod-zt-strategy",
-      "name": "DoD Zero Trust Strategy Artifact",
-      "display_name": "DoD Zero Trust Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2022-10",
-      "lifecycle_status": "active",
-      "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-06-15",
-      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
-      "byte_length": 150805,
-      "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 1,
-      "relationship_count": 2,
-      "license_or_use": "DoD CIO Library Public Release"
-    },
-    {
-      "id": "artifact-dod-zt-overlays-2024",
-      "publication_source_id": "dod-zt-overlays-2024",
-      "name": "DoD Zero Trust Overlays Artifact",
-      "display_name": "DoD Zero Trust Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2024-02",
-      "lifecycle_status": "active",
-      "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-06-15",
-      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "byte_length": 150805,
-      "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 166,
-      "relationship_count": 965,
-      "license_or_use": "Distribution Statement A. Approved for public release."
-    },
-    {
-      "id": "artifact-dod-zt-capabilities",
-      "publication_source_id": "dod-zt-capabilities",
-      "name": "DoD Zero Trust Capabilities and Activities Artifact",
-      "display_name": "DoD Zero Trust Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2022-11",
-      "lifecycle_status": "active",
-      "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-06-15",
-      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
-      "byte_length": 150805,
-      "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 45,
-      "relationship_count": 45,
-      "license_or_use": "DoD CIO Library Public Release"
-    },
-    {
-      "id": "artifact-dod-zt-execution-roadmap",
-      "publication_source_id": "dod-zt-execution-roadmap",
-      "name": "DoD Zero Trust Capability Execution Roadmap v1.1 Artifact",
-      "display_name": "DoD Zero Trust Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "2024-11",
-      "lifecycle_status": "active",
-      "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-06-15",
-      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
-      "byte_length": 150805,
-      "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
-      "parser": "manual-seed",
-      "parser_version": "1.0.0",
-      "record_count": 1,
-      "relationship_count": 2,
-      "license_or_use": "DoD CIO Library Public Release"
     },
     {
       "id": "artifact-disa-compilation-zip",
@@ -5079,5 +4932,49 @@
         "hash": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6"
       }
     ]
-  }
+  },
+  "quarantine": [
+    {
+      "id": "artifact-nara-cui-registry",
+      "url": "https://www.archives.gov/cui/registry/cui-glossary.html",
+      "reason": "NARA publishes no stable machine-readable CUI registry export (JSON/CSV 404); only JS/HTML category pages (non-byte-stable). CUI structural policy is sourced from the attested isoo-cui-regulation (32 CFR 2002)",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-rai-toolkit",
+      "url": "https://rai.acqbot.com/executive-summary",
+      "reason": "current URL rai.acqbot.com is a non-official third party; official DoD CDAO sources (dodcio.defense.gov, ai.mil) are Akamai 403-blocked from this environment",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-reference-architecture-v2",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "reason": "dodcio.defense.gov returns Akamai HTTP 403 to all automated retrieval from this environment; PDF byte hash unverifiable here",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-strategy",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-overlays-2024",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-capabilities",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
+      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
+      "quarantined_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-execution-roadmap",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
+      "quarantined_at": "2026-08-07"
+    }
+  ]
 }

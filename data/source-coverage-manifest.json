@@ -1,12 +1,12 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T12:39:02.096Z",
+  "generated_at": "2026-08-07T12:41:11.455Z",
   "completeness": {
     "total_publications": 72,
-    "total_artifacts": 37,
+    "total_artifacts": 30,
     "total_catalog_bundles": 3,
-    "manual_seed_artifacts": 7,
-    "provenance_verified": false
+    "manual_seed_artifacts": 0,
+    "provenance_verified": true
   },
   "catalogs": [
     {
@@ -57,5 +57,5 @@
       "completeness_status": "reconciled"
     }
   ],
-  "verification_status": "FAILED"
+  "verification_status": "PASSED"
 }
