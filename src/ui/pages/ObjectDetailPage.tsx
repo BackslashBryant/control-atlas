@@ -61,6 +61,7 @@ import {
   downloadTextFile,
   formatConfidence,
   formatRelationshipLabel,
+  nodeProvenanceBreakdown,
   openAtlasMapForNode,
   sourceTrustSummary,
   sourceUsageSummary,
@@ -210,6 +211,10 @@ export function ObjectDetailPage(props: {
   // CCI/MITRE/STIG correlation groups in the generic Connections accordion.
   // baseControl is additionally redundant there — the record's base control is
   // already the "Part of X" link, sourced independently from `baseControlNode`.
+  const provenanceBreakdown = useMemo(
+    () => nodeProvenanceBreakdown(node, edges, bundle.runtime.getSource),
+    [node, edges, bundle.runtime],
+  );
   const enhancementsGroup = grouped.find((group) => group.id === "enhancements");
   const connectionGroups = grouped.filter(
     (group) => group.id !== "enhancements" && group.id !== "baseControl",
@@ -850,6 +855,22 @@ export function ObjectDetailPage(props: {
             <p className="support-meta">
               Published by: {source?.owner || source?.publisher || "Unavailable"}
             </p>
+            {provenanceBreakdown.importedFrom.length ? (
+              <p className="support-meta">
+                Imported from: {provenanceBreakdown.importedFrom.join(", ")}
+              </p>
+            ) : null}
+            {provenanceBreakdown.enrichedBy.length ? (
+              <p className="support-meta">
+                Enriched by: {provenanceBreakdown.enrichedBy.join(", ")}
+              </p>
+            ) : null}
+            {provenanceBreakdown.connectionsSuppliedBy.length ? (
+              <p className="support-meta">
+                Connections supplied by:{" "}
+                {provenanceBreakdown.connectionsSuppliedBy.join(", ")}
+              </p>
+            ) : null}
             {source ? (
               <p className="support-meta">
                 {sourceCurrentAsOf(source)}
