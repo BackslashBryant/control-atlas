@@ -32,6 +32,7 @@ const RECLASSIFY = [
   { id: 'artifact-cyber-mil-stig-compilations', name: 'DISA STIG Compilations page', owner: 'DISA', url: 'https://www.cyber.mil/stigs/compilations/', license_or_use: 'U.S. Government public domain', authority_class: 'publisher', lifecycle_status: 'active', role: 'reference_only', version: '2026', note: 'Official quarterly compilation index (observation page)' },
   { id: 'artifact-cyber-mil-stig-downloads', name: 'DISA STIG Downloads page', owner: 'DISA', url: 'https://www.cyber.mil/stigs/downloads', license_or_use: 'U.S. Government public domain', authority_class: 'publisher', lifecycle_status: 'active', role: 'reference_only', version: '2026', note: 'Official individual STIG downloads index (observation page)' },
   { id: 'artifact-cyber-mil-stig-gpo', name: 'DISA STIG GPO page', owner: 'DISA', url: 'https://www.cyber.mil/stigs/gpo/', license_or_use: 'U.S. Government public domain', authority_class: 'publisher', lifecycle_status: 'active', role: 'reference_only', version: '2026', note: 'Official Group Policy Object packages index (observation page)' },
+  { id: 'artifact-nist-informative-references', name: 'NIST CSF Informative References', owner: 'NIST', url: 'https://www.nist.gov/cyberframework/informative-references', license_or_use: 'NIST CSRC Terms of Use', authority_class: 'publisher', lifecycle_status: 'active', role: 'reconciliation', version: '2026', note: 'CSF informative references (also embedded in the CSF v2.0 OSCAL catalog artifact)' },
 ];
 
 // Sources that cannot be substantiated as authoritative artifacts at all.

@@ -1,11 +1,11 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T12:36:21.665Z",
+  "generated_at": "2026-08-07T12:39:02.096Z",
   "completeness": {
-    "total_publications": 71,
-    "total_artifacts": 38,
+    "total_publications": 72,
+    "total_artifacts": 37,
     "total_catalog_bundles": 3,
-    "manual_seed_artifacts": 8,
+    "manual_seed_artifacts": 7,
     "provenance_verified": false
   },
   "catalogs": [
@@ -16,7 +16,7 @@
       "excluded_records": 0,
       "missing_records": null,
       "primary_artifacts": 1,
-      "supplemental_artifacts": 1,
+      "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
       "methods": [
         "extracted_from_official_publication",

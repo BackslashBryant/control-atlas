@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T12:34:28.755Z",
-  "hydrated": 29,
+  "generated_at": "2026-08-07T12:38:56.504Z",
+  "hydrated": 30,
   "removed_orphans": [],
   "results": [
     {
@@ -312,6 +312,16 @@
       "byte_length": 893612,
       "record_count": null,
       "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-nist-800-53b-baselines",
+      "status": "OK",
+      "http": "local",
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
+      "sha256": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
+      "byte_length": 1865,
+      "record_count": null,
+      "retrieved_at": "2026-06-09"
     },
     {
       "id": "artifact-control-atlas-structure",
