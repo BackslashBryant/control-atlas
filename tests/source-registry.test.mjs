@@ -5,59 +5,17 @@ import { loadSourceRegistry, validateSourceRegistry } from '../tools/validators/
 
 const registry = JSON.parse(readFileSync('data/source-registry.json', 'utf8'));
 
-test('source registry schema 4.0 validates the federal source contract', () => {
+test('source registry schema 5.0 validates the federal source contract', () => {
   const errors = validateSourceRegistry(registry);
   assert.deepEqual(errors, []);
-  assert.equal(registry.schema_version, '4.0');
-  assert.ok(registry.sources.every((source) => source.provenance_class));
-  assert.ok(registry.sources.every((source) => source.eligibility_status));
-  assert.ok(registry.sources.every((source) => source.lifecycle_status));
-  assert.ok(registry.sources.every((source) => source.access_status));
-  assert.ok(registry.sources.every((source) => source.license_or_use));
-});
-
-test('every source has the locked Phase 6 synchronization model', () => {
-  const expected = {
-    auto_synced: [
-      'disa-cci-list', 'disa-cci-nist-references', 'disa-srg-library',
-      'disa-stig-library', 'disa-stig-srg-cci-references', 'fedramp-2026-rules',
-      'fedramp-rev5',
-      'mitre-attack-enterprise', 'mitre-attack-ics', 'mitre-d3fend-mappings',
-      'mitre-d3fend-ontology', 'nist-800-171-oscal-mappings', 'nist-800-171-rev2',
-      'nist-800-172-rev3', 'nist-800-53a-assessment-procedures',
-      'nist-800-53b-baselines', 'nist-ai-rmf-playbook', 'nist-olir-csf2-to-sp800-53',
-      'nist-oscal', 'nist-ssdf-oscal',
-    ],
-    curated: [
-      'control-atlas-structure',
-      'dod-cmmc-rule', 'dod-rai-toolkit', 'dod-zt-capabilities',
-      'dod-zt-execution-roadmap', 'dod-zt-overlays-2024',
-      'dod-zt-reference-architecture-v2', 'dod-zt-strategy', 'isoo-cui-regulation',
-      'nara-cui-registry', 'nist-800-171', 'nist-800-37-rev2', 'nist-800-53',
-      'nist-800-53-rev4-rev5-crosswalk', 'nist-csf-2', 'nist-ssdf',
-      'nist-fips-199', 'nist-fips-200',
-    ],
-    link_out: [
-      'community-cci-research', 'cyber-mil-stig-compilations',
-      'cyber-mil-stig-downloads', 'cyber-mil-stig-gpo', 'mitre-cis-cci-mappings',
-      'nist-csf-53-supplemental', 'nist-csf11-csf20-crosswalk',
-      'nist-informative-references', 'nist-olir-csf2-to-sp800-171',
-      'nuwcdivnpt-github-org', 'nuwcdivnpt-stig-manager', 'stigviewer-catalog',
-      'stigviewer-clkb-api',
-    ],
-  };
-  const actual = Object.fromEntries(
-    Object.keys(expected).map((model) => [
-      model,
-      registry.freshness.sources
-        .filter((entry) => entry.sync_model === model)
-        .map((entry) => entry.source_id)
-        .sort(),
-    ]),
-  );
-  for (const ids of Object.values(expected)) ids.sort();
-  assert.deepEqual(actual, expected);
-  assert.equal(registry.freshness.stale_after_days, 45);
+  assert.equal(registry.schema_version, '5.0');
+  assert.ok(Array.isArray(registry.publications));
+  assert.ok(Array.isArray(registry.artifacts));
+  assert.ok(Array.isArray(registry.catalog_source_bundles));
+  assert.ok(registry.publications.every((pub) => pub.authority_class));
+  assert.ok(registry.publications.every((pub) => pub.lifecycle_status));
+  assert.ok(registry.publications.every((pub) => pub.access_status));
+  assert.ok(registry.publications.every((pub) => pub.license_or_use));
 });
 
 test('loaded sources expose additive freshness fields', () => {

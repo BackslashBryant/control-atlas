@@ -161,8 +161,18 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
   };
 }
 
+// "Supplemental" folders hold an OLDER revision of a benchmark shipped
+// alongside its current one for reference (e.g. VMW_vSphere_8-0 ships both
+// a current .../ESXi_V2R4_Manual_STIG/ and .../Supplemental/..._V1R1_Manual_STIG/
+// — same vuln IDs, different revision). Real, official content, correctly
+// excluded from the active catalog rather than colliding with the current
+// revision's node/evidence ids.
 function shouldIgnoreEntry(entryPath) {
-  return /(^|\/)(CUI_|CUI\/|Sunset|Draft)/i.test(entryPath);
+  if (/(^|\/)(CUI_|CUI\/|Sunset|Draft)/i.test(entryPath)) return true;
+  // "..._Supplemental/" folders (e.g. U_VMW_vSphere_8-0_Supplemental/) are
+  // not their own path segment named exactly "Supplemental" — match the
+  // word anywhere within a segment, not just as a whole segment.
+  return /Supplemental\//i.test(entryPath);
 }
 
 function createDocument(sourceKey, artifactUrl, checksumValue, parsedDocuments) {
@@ -226,19 +236,28 @@ function walkArchiveEntries(archive, parentPath = '') {
 export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
   const parsed = { stig: [], srg: [] };
+  const failed = [];
 
   for (const entry of walkArchiveEntries(archive)) {
     if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
     const xml = strFromU8(entry.value);
     const pathLower = entry.entryPath.toLowerCase();
     const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
-    const document = parseDisaXccdf(xml, {
-      sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
-      artifactUrl,
-      entryPath: entry.entryPath,
-      hintKind: pathHint,
-    });
-    parsed[document.catalogKind].push(document);
+    // A ~2600-entry compilation zip real-world includes non-Benchmark XML
+    // (manifests, schemas, malformed one-offs) alongside real STIG/SRG
+    // content — spec §6 classifies these as "failed content", not a reason
+    // to abort parsing the other 99%+ that IS a valid benchmark.
+    try {
+      const document = parseDisaXccdf(xml, {
+        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        artifactUrl,
+        entryPath: entry.entryPath,
+        hintKind: pathHint,
+      });
+      parsed[document.catalogKind].push(document);
+    } catch (error) {
+      failed.push({ entryPath: entry.entryPath, reason: error.message });
+    }
   }
 
   const checksumValue = checksum(buffer);
@@ -250,5 +269,5 @@ export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, h
     [...parsed.stig, ...parsed.srg].flatMap((entry) => entry.records),
   );
 
-  return { stig, srg, relationships, checksum: checksumValue };
+  return { stig, srg, relationships, checksum: checksumValue, failed };
 }

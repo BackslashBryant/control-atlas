@@ -10,6 +10,12 @@ import {
 } from '../src/app/structural-hierarchy.mjs';
 
 const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
+// build-framework-data.mjs omits evidence_ids from an edge when it is
+// exactly the mechanical `evidence:<edge-id-suffix>` pattern (a real ~2 MiB
+// budget win — see scripts/build-framework-data.mjs); derive it back here,
+// same as src/app/runtime.mjs's evidenceIdsFor.
+const evidenceIdsFor = (edge) =>
+  edge.evidence_ids !== undefined ? edge.evidence_ids : [`evidence:${edge.id.slice('edge:'.length)}`];
 const isNativeStructuralEdge = (edge, nodeById) =>
   isValidatedStructuralEdge(
     edge,
@@ -114,9 +120,10 @@ test('displayable edges separate semantics, provenance, confidence, and evidence
     assert.ok(edge.confidence);
     // 'editorial' is Control Atlas's own organizing spine (trunk/limb/catalog).
     assert.ok(['published', 'candidate', 'editorial'].includes(edge.publication_status));
-    assert.ok(edge.evidence_ids.length > 0, `missing evidence for ${edge.id}`);
-    assert.ok(edge.evidence_ids.every((id) => evidenceById.has(id)), `unknown evidence for ${edge.id}`);
-    assert.ok(edge.evidence_ids.every((id) => evidenceById.get(id).evidence_quality));
+    const evidenceIds = evidenceIdsFor(edge);
+    assert.ok(evidenceIds.length > 0, `missing evidence for ${edge.id}`);
+    assert.ok(evidenceIds.every((id) => evidenceById.has(id)), `unknown evidence for ${edge.id}`);
+    assert.ok(evidenceIds.every((id) => evidenceById.get(id).evidence_quality));
     assert.notEqual(edge.publication_status, 'blocked');
   }
 });
@@ -427,7 +434,7 @@ test('CSF 2.0 subcategories chain up through Category to Function', () => {
   const functions = nodes.filter((node) => node.node_type === 'function' && node.metadata?.catalog_id === 'csf-2');
   const categories = nodes.filter((node) => node.node_type === 'category' && node.metadata?.catalog_id === 'csf-2');
   assert.equal(functions.length, 6, 'CSF 2.0 has 6 Functions');
-  assert.equal(categories.length, 34, 'CSF 2.0 has 34 Categories');
+  assert.equal(categories.length, 22, 'CSF 2.0 has 22 Categories');
 
   for (const fn of functions) {
     const children = childrenOf.get(fn.id) || [];

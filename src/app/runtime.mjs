@@ -4,6 +4,17 @@ function normalize(value) {
     .toLowerCase();
 }
 
+// build-framework-data.mjs omits evidence_ids from the emitted edge when it
+// is exactly the mechanical `evidence:<edge-id-suffix>` pattern (every edge
+// has exactly one evidence entry, sized 1:1 with the edge, i.e. genuinely
+// redundant JSON — a real ~2.2 MiB budget win, not lost data). Derive it
+// back here rather than storing it on all 28k+ edges.
+function evidenceIdsFor(edge) {
+  if (!edge) return [];
+  if (edge.evidence_ids !== undefined) return edge.evidence_ids;
+  return edge.id ? [`evidence:${edge.id.slice("edge:".length)}`] : [];
+}
+
 const SEARCH_STOP_WORDS = new Set([
   "a",
   "an",
@@ -357,7 +368,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     left.from_item_id.localeCompare(right.from_item_id) ||
     left.to_item_id.localeCompare(right.to_item_id);
   const resolveSourceRefs = (edge) =>
-    (edge?.evidence_ids || [])
+    evidenceIdsFor(edge)
       .map((id) => {
         const entry = evidenceById.get(id);
         const source = sourceById.get(entry?.source_id);
@@ -1052,7 +1063,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     },
     getEvidenceForEdge(edgeId) {
       const edge = edgeById.get(edgeId);
-      return (edge?.evidence_ids || [])
+      return evidenceIdsFor(edge)
         .map((id) => {
           const entry = evidenceById.get(id);
           return entry
@@ -1585,7 +1596,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
               );
             })
             .join("|"),
-          row.edges.flatMap((edge) => edge.evidence_ids || []).join("|"),
+          row.edges.flatMap((edge) => evidenceIdsFor(edge)).join("|"),
         ]);
       }
       return rows.map((row) => row.map(csvCell).join(",")).join("\n");

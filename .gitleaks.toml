@@ -5,6 +5,13 @@ useDefault = true
 
 [allowlist]
 description = "Public catalog identifiers in deterministic artifacts and six audited immutable bootstrap commits are not secrets"
+# NIST OLIR public source-key identifiers (e.g. nist-olir-csf2-to-sp800-171):
+# assigned to a variable named `source_key`, so gitleaks' generic-api-key
+# heuristic trips on their entropy. These are published NIST reference-catalog
+# identifiers, not secrets — exempt the exact value pattern, not a broad class.
+regexes = [
+  '''nist-olir-csf2-to-sp800-\d+''',
+]
 commits = [
   "8993f4968ef5e019f6cdffe0d6bffec606f30b38",
   "b50b12894d042dbfe39aefdf0a379780ec483272",

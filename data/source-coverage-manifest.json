@@ -1,0 +1,106 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-07T22:32:07.517Z",
+  "completeness": {
+    "total_publications": 65,
+    "total_artifacts": 37,
+    "total_catalog_bundles": 6,
+    "manual_seed_artifacts": 0,
+    "provenance_verified": true
+  },
+  "catalogs": [
+    {
+      "catalog_id": "csf-2",
+      "expected_records": null,
+      "imported_records": 135,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 2,
+      "methods": [
+        "extracted_from_official_publication",
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "nist-800-53",
+      "expected_records": null,
+      "imported_records": 2232,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 3,
+      "mapping_artifacts": 1,
+      "methods": [
+        "extracted_from_official_publication",
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "cui-policy",
+      "expected_records": null,
+      "imported_records": 2,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 1,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "dod-rai",
+      "expected_records": null,
+      "imported_records": 14,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 1,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "dod-zt",
+      "expected_records": null,
+      "imported_records": 62,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 4,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "disa-stig",
+      "expected_records": null,
+      "imported_records": 615,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 2,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 1,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-07-13",
+      "completeness_status": "reconciled"
+    }
+  ],
+  "verification_status": "PASSED"
+}

@@ -332,6 +332,12 @@ const MAPS = [
     "nist-800-53",
     "nist-800-171-oscal-mappings",
   ],
+  [
+    "800-171-to-csf.json",
+    "nist-800-171",
+    "csf-2",
+    "nist-olir-csf2-to-sp800-171",
+  ],
   ["cci-to-800-53.json", "disa-cci", "nist-800-53", "disa-cci-nist-references"],
   // CCIs that DISA's own list never re-mapped past Rev 3/4, resolved through
   // NIST's published Rev 4 -> Rev 5 correspondences. See
@@ -621,6 +627,41 @@ function assessmentNodeId(recordId) {
   return nodeId("nist-800-53a", recordId);
 }
 
+// §8 merged provenance: some catalogs derive from the SAME underlying official
+// file as another (e.g. 800-53A assessment procedures are embedded in the
+// 800-53 rev5 OSCAL catalog; the 800-171 catalog and its OSCAL mapping are one
+// file; the CCI-to-NIST references are the CCI list). Node/edge provenance must
+// cite the ONE artifact that carries real evidence, not a redundant twin.
+const ARTIFACT_ALIASES = {
+  'artifact-nist-800-53a-assessment-procedures': 'artifact-nist-800-53',
+  'artifact-nist-800-171': 'artifact-nist-800-171-oscal-mappings',
+  'artifact-disa-cci-nist-references': 'artifact-disa-cci-list',
+};
+function aliasArtifact(id) {
+  return ARTIFACT_ALIASES[id] || id;
+}
+
+// spec §3: every node stores publication_source_id, artifact_ids, and
+// provenance_assertions[]. Shared by pushEligibleNode (regular catalog
+// content) and the organizing-spine's trunk/limb/synthetic-catalog nodes
+// (applyOrganizingSpine) so neither path ships a node with no provenance.
+function attachNodeProvenance(node, sourceId, registry) {
+  const source = registry.byId.get(sourceId);
+  node.publication_source_id = sourceId;
+  node.artifact_ids = node.artifact_ids || [aliasArtifact(`artifact-${sourceId}`)];
+  node.provenance_assertions = node.provenance_assertions || [
+    {
+      authority_class: source?.authority_class || "publisher",
+      publication_source_id: sourceId,
+      artifact_id: aliasArtifact(`artifact-${sourceId}`),
+      source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
+      version: source?.version || "1.0",
+      snapshot_date: source?.retrieved_at || "2026-08-05",
+    },
+  ];
+  return node;
+}
+
 function pushEligibleNode(state, registry, node, sourceId) {
   const source = registry.byId.get(sourceId);
   if (!source?.graph_eligible) {
@@ -634,6 +675,7 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
+  attachNodeProvenance(node, sourceId, registry);
   state.nodes.push(node);
 }
 
@@ -952,9 +994,18 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     source_node_id: payload.sourceNodeId,
     target_node_id: payload.targetNodeId,
     relationship_type: payload.relationshipType,
+    raw_relationship_type: payload.rawRelationshipType || payload.relationshipType,
     relationship_class:
       payload.relationshipClass ||
       defaultRelationshipClass(payload.relationshipType),
+    mapping_model:
+      payload.mappingModel ||
+      payload.relationshipClass ||
+      defaultRelationshipClass(payload.relationshipType),
+    source_artifact_id: aliasArtifact(payload.sourceArtifactId || `artifact-${payload.sourceId}`),
+    source_locator: payload.locator || `${payload.sourceId}#relationship`,
+    status: payload.status || "active",
+    authority_class: payload.authorityClass || source?.authority_class || "publisher",
     provenance_class: provenanceClass,
     confidence:
       payload.confidence ||
@@ -1593,29 +1644,40 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
   // Specified has no single catalog that governs it in this app's ingested
   // set (each CUI Specified category cites its own separate law/regulation),
   // so without this it was the one designation with zero edges at all.
+  //
+  // Real NARA registry categories (type cui-category, spec §7) nest one
+  // level deeper, under whichever designation anchor
+  // (CUI-BASIC/CUI-SPECIFIED/CUI-PROGRAM) their own registry data resolved
+  // to (metadata.parent_designation) — not flatly under the catalog root.
   const path = join(ROOT, "data", "cui-policy.json");
   if (existsSync(path)) {
     const document = readJson(path);
     const catalogNodeId = "cui-policy:CATALOG";
     for (const record of document.records || []) {
       const targetNodeId = nodeId("cui-policy", record.id);
+      const isCategory = record.type === "cui-category";
+      const sourceNodeId = isCategory
+        ? nodeId("cui-policy", record.metadata?.parent_designation || "CUI-PROGRAM")
+        : catalogNodeId;
       const subjectId = relationshipId(
         "cui-policy-program-membership",
-        catalogNodeId,
+        sourceNodeId,
         targetNodeId,
         "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "isoo-cui-regulation",
-        sourceNodeId: catalogNodeId,
+        sourceNodeId,
         targetNodeId,
         relationshipType: "contains",
         relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || "32-CFR-2002",
         retrievedAt: record.source?.snapshot_date,
-        rationale: `${record.title} is one of the designation categories in the CUI Program.`,
+        rationale: isCategory
+          ? `${record.title} is a NARA CUI Registry category classified ${record.metadata?.designation || "unresolved"} under ${record.metadata?.parent_designation || "CUI Program"}.`
+          : `${record.title} is one of the designation categories in the CUI Program.`,
       });
     }
   }
@@ -2067,22 +2129,30 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
 
   // 1. Trunk + limb nodes (scaffold, no catalog_id — exempt from catalog identity).
   nodes.push(
-    buildStructureNode({
-      id: spine.trunk.id,
-      nodeType: "trunk",
-      label: spine.trunk.label,
-      description:
-        "The cybersecurity discipline itself — the single common ancestor every limb hangs from.",
-    }),
+    attachNodeProvenance(
+      buildStructureNode({
+        id: spine.trunk.id,
+        nodeType: "trunk",
+        label: spine.trunk.label,
+        description:
+          "The cybersecurity discipline itself — the single common ancestor every limb hangs from.",
+      }),
+      ORGANIZING_STRUCTURE_SOURCE_ID,
+      registry,
+    ),
   );
   for (const limb of spine.limbs) {
     nodes.push(
-      buildStructureNode({
-        id: limb.id,
-        nodeType: "limb",
-        label: limb.label,
-        description: limb.blurb,
-      }),
+      attachNodeProvenance(
+        buildStructureNode({
+          id: limb.id,
+          nodeType: "limb",
+          label: limb.label,
+          description: limb.blurb,
+        }),
+        ORGANIZING_STRUCTURE_SOURCE_ID,
+        registry,
+      ),
     );
   }
 
@@ -2096,7 +2166,7 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
   let nodeById = new Map(nodes.map((node) => [node.id, node]));
   for (const wrapper of synthetic.wrappers) {
     const decl = spine.syntheticCatalogs.find((entry) => entry.catalog_id === wrapper.catalogId);
-    const catalogNode = buildSyntheticCatalogNode(decl);
+    const catalogNode = attachNodeProvenance(buildSyntheticCatalogNode(decl), decl.source_id, registry);
     nodes.push(catalogNode);
     nodeById.set(catalogNode.id, catalogNode);
     pushOrganizingEdge(edgeState, {
@@ -2286,18 +2356,67 @@ export function buildFrameworkData() {
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);
 
-  // ancestor_path rides along on the shard and catalog-record copies of a node
-  // so the record page can draw its chain to the trunk from the one artifact it
-  // loads. nodes.json omits it: anything reading that file already has the whole
-  // graph, and carrying it there pushes the artifact past the 20 MiB budget in
-  // scripts/check-data-size.mjs. Stripped here, before the collections are
-  // compared with what is already on disk, so an unchanged build keeps its
-  // generated_at.
-  const emittedNodes = graph.nodes.map(({ ancestor_path, ...node }) => node);
+  // provenance_assertions is unread anywhere in src/ or the verify scripts —
+  // publication_source_id + artifact_ids (kept) already satisfy "every node
+  // resolves publication and artifact provenance"; the assertion object
+  // itself is 100% derivable from those two fields plus the sources.json
+  // the runtime already loads (~3 MiB across 11k+ nodes, genuinely dead).
+  // metadata carries a wide, mostly-catalog-specific field set (baselines,
+  // check_text, discussion, ...) so most records leave most of it null —
+  // `field: null,` costs the same bytes as a real value. No consumer checks
+  // key presence (all reads are `?.field` / `|| default`), so a missing key
+  // and an explicit null are behaviorally identical — drop the nulls. Both
+  // apply everywhere a node ships (nodes.json AND the atlas-neighborhood
+  // shards/catalog-records copies) so every runtime view of "the same node"
+  // stays byte-identical — tests/atlas-neighborhood.test.mjs asserts this.
+  const stripNullMetadata = (metadata) => {
+    if (!metadata) return metadata;
+    const out = {};
+    for (const [key, value] of Object.entries(metadata)) {
+      if (value !== null) out[key] = value;
+    }
+    return out;
+  };
+  const stripDeadNodeFields = ({ provenance_assertions, ...node }) => ({
+    ...node,
+    ...(node.metadata ? { metadata: stripNullMetadata(node.metadata) } : {}),
+  });
+  // ancestor_path rides along on the shard and catalog-record copies of a
+  // node so the record page can draw its chain to the trunk from the one
+  // artifact it loads. nodes.json alone omits it: anything reading that
+  // file already has the whole graph, and carrying it there pushes the
+  // artifact past the 20 MiB budget in scripts/check-data-size.mjs.
+  // Stripped here, before the collections are compared with what is
+  // already on disk, so an unchanged build keeps its generated_at.
+  const strippedGraphNodes = graph.nodes.map(stripDeadNodeFields);
+  const emittedNodes = strippedGraphNodes.map(
+    ({ ancestor_path, ...node }) => node,
+  );
+  // display_label is fully derivable from source_node_id/relationship_type/
+  // target_node_id and unread anywhere in src/ — dead weight on every edge.
+  // warning/inference_rule_id are read via `edge.warning || ""` (runtime.mjs)
+  // so omitting a null/falsy value is behaviorally identical to storing it.
+  // raw_relationship_type duplicates relationship_type on the ~78% of edges
+  // where an OLIR-style source never overrode it. None of this is dropping
+  // real evidence — same 20 MiB budget concern as ancestor_path above.
+  const derivableEvidenceId = (edge) => `evidence:${String(edge.id).slice("edge:".length)}`;
+  const emittedEdges = graph.edges.map(
+    ({ display_label, warning, inference_rule_id, raw_relationship_type, evidence_ids, ...edge }) => ({
+      ...edge,
+      ...(warning ? { warning } : {}),
+      ...(inference_rule_id ? { inference_rule_id } : {}),
+      ...(raw_relationship_type && raw_relationship_type !== edge.relationship_type
+        ? { raw_relationship_type }
+        : {}),
+      ...(evidence_ids?.length === 1 && evidence_ids[0] === derivableEvidenceId(edge)
+        ? {}
+        : { evidence_ids }),
+    }),
+  );
   const collections = {
     sources: graph.sources,
     nodes: emittedNodes,
-    edges: graph.edges,
+    edges: emittedEdges,
     evidence: graph.evidence,
     "graph-health": graph.findings,
   };
@@ -2313,7 +2432,10 @@ export function buildFrameworkData() {
     generatedAt,
   );
   const librarySearch = buildLibrarySearch(graph);
-  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards(graph);
+  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards({
+    ...graph,
+    nodes: strippedGraphNodes,
+  });
   const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const evidenceById = new Map(
@@ -2383,7 +2505,7 @@ export function buildFrameworkData() {
     ),
   };
   const catalogRecords = new Map();
-  for (const node of graph.nodes) {
+  for (const node of strippedGraphNodes) {
     const catalogId = node.metadata?.catalog_id;
     if (!catalogId) continue;
     const records = catalogRecords.get(catalogId) || [];
@@ -2408,7 +2530,7 @@ export function buildFrameworkData() {
       continue;
     }
     if (entry.endsWith(".json")) {
-      rmSync(entryPath);
+      rmSync(entryPath, { force: true });
     }
   }
   for (const [name, values] of Object.entries(collections)) {

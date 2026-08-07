@@ -1,0 +1,367 @@
+{
+  "generated_at": "2026-08-07T21:20:38.722Z",
+  "hydrated": 36,
+  "removed_orphans": [],
+  "results": [
+    {
+      "id": "artifact-nist-800-171-rev2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv",
+      "sha256": "sha256:0f4d59413bbcc9998da80495ce46ebfe0475e392803c4d2ed38d9941d83f138d",
+      "byte_length": 113309,
+      "record_count": 117,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-ai-rmf-playbook",
+      "status": "OK",
+      "http": 200,
+      "url": "https://airc.nist.gov/docs/playbook.json",
+      "sha256": "sha256:aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba",
+      "byte_length": 413720,
+      "record_count": 72,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-fedramp-2026-rules",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json",
+      "sha256": "sha256:135707003f0aaa5ceb10d7d32c2681e5b1585a4eaf4403d0d135837787e5ae8e",
+      "byte_length": 567435,
+      "record_count": 5,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-attack-enterprise",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+      "sha256": "sha256:dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+      "byte_length": 53835637,
+      "record_count": 697,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-attack-ics",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+      "sha256": "sha256:08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
+      "byte_length": 4057891,
+      "record_count": 97,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-d3fend-ontology",
+      "status": "OK",
+      "http": 200,
+      "url": "https://d3fend.mitre.org/api/technique/all.json",
+      "sha256": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
+      "byte_length": 36638,
+      "record_count": 271,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-d3fend-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+      "sha256": "sha256:684f0a1872868a64b9046e66111e28cb9f0dc46c08e8f044b803fd8b493260ba",
+      "byte_length": 59995026,
+      "record_count": 16164,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-disa-cci-list",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+      "sha256": "sha256:077cbb6d2ae5f8fdbaaf416d87a34a8621767cdba490f3283feb0c5c35892700",
+      "byte_length": 417323,
+      "record_count": 5137,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-53",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
+      "byte_length": 10442037,
+      "record_count": 1196,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-172-rev3",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json",
+      "sha256": "sha256:21c6df17c7ff1c8330f16334fdddd488ffc10f71051078dd73c18595a33da5ab",
+      "byte_length": 980722,
+      "record_count": 115,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-ssdf",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json",
+      "sha256": "sha256:b01634a5fdb382e7a12660c379a4d0bc3a2b8e29abccf2861834880005137117",
+      "byte_length": 253878,
+      "record_count": 61,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-171-oscal-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+      "sha256": "sha256:21b6f3b118b6e5b305aaed3a0e4b70fa5d1d9aa388a0b92e7d6ddfed69e93ac3",
+      "byte_length": 905711,
+      "record_count": 130,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-fedramp-rev5",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+      "sha256": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
+      "byte_length": 709615,
+      "record_count": 6,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-53-rev4-rev5-crosswalk",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+      "sha256": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
+      "byte_length": 167183,
+      "record_count": 2,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf-53-supplemental",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
+      "sha256": "sha256:8b09e8c5bd11dcfa494d2f5beec2d32d98df934285c0214712d020abefc162f1",
+      "byte_length": 201644,
+      "record_count": 2,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf11-csf20-crosswalk",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx",
+      "sha256": "sha256:3c0f2edc9206a828f6795241af2cf6e2bf390522ca97ff01dfc5156f5d9e52a4",
+      "byte_length": 26451,
+      "record_count": 0,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-olir-csf2-to-sp800-53",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+      "sha256": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
+      "byte_length": 38766,
+      "record_count": 0,
+      "retrieved_at": "2024-02-20"
+    },
+    {
+      "id": "artifact-nist-olir-csf2-to-sp800-171",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
+      "sha256": "sha256:08e50ecfe201417d1b7e257d5b68ee8a69686c8a31d1521c722892732809f0a0",
+      "byte_length": 28991,
+      "record_count": 0,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-reference-architecture-v2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "sha256": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "byte_length": 6733190,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-strategy",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "sha256": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
+      "byte_length": 6141341,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-capabilities",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+      "sha256": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
+      "byte_length": 651809,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-execution-roadmap",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "sha256": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
+      "byte_length": 3540044,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-rai-toolkit",
+      "status": "OK",
+      "http": 200,
+      "url": "https://rai.acqbot.com/executive-summary",
+      "sha256": "sha256:720a7b775d90380a28f0b73f428bae7acb7cf3774be44a4f4b6447abe1fa7f91",
+      "byte_length": 41933,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-ai-mil-responsible-ai",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
+      "sha256": "sha256:4db0df6b9952648cdeaf99a59f64e4778095b7a5816fb5356664c040c2d729aa",
+      "byte_length": 154957,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-isoo-cui-regulation",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002",
+      "sha256": "sha256:3c595476a48f2b16cec4aacc6d5e78588dafa7ddf4d4c56a5c6bbb2641a1e930",
+      "byte_length": 89692,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-cmmc-rule",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=170",
+      "sha256": "sha256:3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628",
+      "byte_length": 178061,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf-2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json",
+      "sha256": "sha256:4836943f21d393f2821df85ada4e6f3c0617243b4ddf44263fe68205400210b4",
+      "byte_length": 349827,
+      "record_count": 219,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-fips-199",
+      "status": "OK",
+      "http": 200,
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf",
+      "sha256": "sha256:73d19f05f71e30f378050f178aa3943c38790bbae56c07f2b5708c5a1a90242f",
+      "byte_length": 80356,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-fips-200",
+      "status": "OK",
+      "http": 200,
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.200.pdf",
+      "sha256": "sha256:107a9b9cdc8eccf37386aec28bbaf2dfaef5cfece17151ceabc3960423243a57",
+      "byte_length": 218892,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-37-rev2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-37r2.pdf",
+      "sha256": "sha256:4f75e1136bb905a654f1bcd9eefefb4108f47597276ee5eec0688f6d96f6a01d",
+      "byte_length": 2270327,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-disa-compilation-zip",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
+      "byte_length": 368971055,
+      "record_count": null,
+      "retrieved_at": "2026-07-13"
+    },
+    {
+      "id": "artifact-disa-stig-library",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c",
+      "byte_length": 2140164,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-disa-srg-library",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562",
+      "byte_length": 3991453,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-disa-stig-srg-cci-references",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542",
+      "byte_length": 893612,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-nist-800-53b-baselines",
+      "status": "OK",
+      "http": "local",
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
+      "sha256": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
+      "byte_length": 1865,
+      "record_count": null,
+      "retrieved_at": "2026-06-09"
+    },
+    {
+      "id": "artifact-control-atlas-structure",
+      "status": "OK",
+      "http": "local",
+      "url": "https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json",
+      "sha256": "sha256:2e3e3a687cb286047a60a3e7539aaece52b1b667e2f5ab6732aa4fac33fd33a4",
+      "byte_length": 6485,
+      "record_count": 10,
+      "retrieved_at": "2026-08-07"
+    }
+  ]
+}

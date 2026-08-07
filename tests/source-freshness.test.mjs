@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { sourceCurrentAsOf, sourceFreshness, sourceSyncLabel } from '../src/shared/source-freshness.mjs';
+import { sourceCurrentAsOf, sourceFreshness } from '../src/shared/source-freshness.mjs';
 
 const now = new Date('2026-07-16T23:59:59.000Z');
 
@@ -23,7 +23,4 @@ test('newcomer-facing freshness wording never calls a stale source current', () 
   assert.equal(sourceCurrentAsOf(fresh, now), 'Version Rev. 5 · Current as of 2026-06-09');
   assert.match(sourceCurrentAsOf(stale, now), /^Freshness check overdue — last checked 2025-01-23\./);
   assert.doesNotMatch(sourceCurrentAsOf(stale, now), /Current as of/);
-  assert.equal(sourceSyncLabel('auto_synced'), 'Automatically synchronized');
-  assert.equal(sourceSyncLabel('curated'), 'Human-reviewed');
-  assert.equal(sourceSyncLabel('link_out'), 'Official link only');
 });

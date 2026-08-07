@@ -8,7 +8,6 @@ import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.
 
 const connectionInventory = connectionInventoryArtifact.connection_inventory;
 const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap.catalogs;
-import { sourceSyncLabel } from "../../shared/source-freshness.mjs";
 import { Button, Panel } from "../components/lsm";
 import {
   PageHeader,
@@ -47,7 +46,7 @@ const SOURCE_LAYER_TABS: Array<{
     id: "ingestion",
     label: "Ingestion provenance",
     description:
-      "Retrieval detail: mirrors, download endpoints, and viewer feeds.",
+      "Update-method detail: mirrors, download endpoints, and viewer feeds.",
   },
   {
     id: "organization",
@@ -126,8 +125,26 @@ export function SourcesPage(props: {
           <div><dt>Version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
           <div><dt>Current through</dt><dd>{selectedSource.last_checked || selectedSource.retrieved_at || "Not recorded"}</dd></div>
           <div><dt>Lifecycle</dt><dd>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)}</dd></div>
-          <div><dt>Retrieval</dt><dd>{sourceSyncLabel(selectedSource.sync_model)}</dd></div>
-          <div><dt>Parser</dt><dd>{selectedSource.metadata?.parser || "Not applicable or not recorded"}</dd></div>
+          {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
+            <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
+          ) : null}
+          <div><dt>Parser</dt><dd>{selectedSource.metadata?.parser || selectedSource.parser || "Not applicable or not recorded"}</dd></div>
+          {typeof selectedSource.record_count === "number" ? (
+            <div><dt>Records</dt><dd>{selectedSource.record_count.toLocaleString()}</dd></div>
+          ) : null}
+          {typeof selectedSource.relationship_count === "number" ? (
+            <div><dt>Relationships</dt><dd>{selectedSource.relationship_count.toLocaleString()}</dd></div>
+          ) : null}
+          {selectedSource.artifact_url ? (
+            <div>
+              <dt>Official link</dt>
+              <dd>
+                <a href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
+                  {selectedSource.artifact_url}
+                </a>
+              </dd>
+            </div>
+          ) : null}
         </dl>
       </Panel>
     );

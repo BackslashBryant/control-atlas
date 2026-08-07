@@ -61,12 +61,16 @@ export function buildSourceRegister(
  * W5 — split the flat register into the three layers the default table used
  * to mix: publication identity, connection/mapping sources, and ingestion
  * artifacts, plus Control Atlas's own organizing source kept out of the
- * publisher list entirely. A source is a canonical publication when a real
- * ingested catalog names it as that catalog's own `source_id` — the build
- * pipeline's own authoritative pointer, not a guess. Everything else is a
- * connection source (crosswalk/mapping/OLIR/reference id or name) or falls
- * through to ingestion provenance (alternate mirrors, viewers, downloads,
- * API endpoints for a publication already registered above).
+ * publisher list entirely.
+ *
+ * Classification reads the registry's own declared `source_role` (schema
+ * 5.0: publication/primary_data/enrichment/mapping/assessment/automation/
+ * reconciliation/reference_only/editorial/historical — see spec §2) — it
+ * does not infer a role from unrelated signals like "does some catalog
+ * happen to cite this id as its source_id". A handful of older publication
+ * records predate that field and instead carry `metadata.identity_kind`
+ * ("publication" | "reference") — those two conventions are read as
+ * equivalent, not guessed at.
  */
 export type SourceLayerId = "publication" | "connection" | "ingestion" | "organization";
 
@@ -77,26 +81,35 @@ export type CatalogSummary = {
   leaf_record_count: number;
 };
 
-const CONNECTION_ID_HINT = /crosswalk|mapping|olir|supplemental|references/i;
-
 export function canonicalSourceIdsFromCatalogs(
   catalogs: CatalogSummary[],
 ): Set<string> {
   return new Set(catalogs.map((catalog) => catalog.source_id));
 }
 
-export function classifySourceLayer(
-  source: any,
-  canonicalSourceIds: Set<string>,
-): SourceLayerId {
-  if (source.provenance_class === "control_atlas_derived") return "organization";
-  if (source.metadata?.identity_kind === "ingestion") return "ingestion";
-  if (canonicalSourceIds.has(source.id)) return "publication";
-  const name = source.display_name || source.name || "";
-  if (CONNECTION_ID_HINT.test(source.id) || CONNECTION_ID_HINT.test(name)) {
-    return "connection";
+const CONNECTION_ROLES = new Set(["mapping"]);
+const INGESTION_ROLES = new Set([
+  "primary_data",
+  "enrichment",
+  "assessment",
+  "automation",
+  "reconciliation",
+  "reference_only",
+  "historical",
+]);
+
+export function classifySourceLayer(source: any): SourceLayerId {
+  if (source.provenance_class === "control_atlas_derived" || source.source_role === "editorial") {
+    return "organization";
   }
-  return "ingestion";
+  const role = source.source_role || source.metadata?.identity_kind;
+  if (role === "publication") return "publication";
+  if (CONNECTION_ROLES.has(role)) return "connection";
+  if (INGESTION_ROLES.has(role) || role === "reference") return "ingestion";
+  // No declared role at all: a bare publication identity (the common case
+  // for records in `publications[]` that have no per-artifact role of
+  // their own — the role concept only applies once content is imported).
+  return "publication";
 }
 
 /** Resolve raw framework/catalog ids (e.g. "disa-cci") to their published
@@ -115,9 +128,6 @@ export function resolveCoverageLabel(
 export type LayeredSourceRow = SourceRegisterRow & {
   recordsRepresented: number | null;
   officialLink: string;
-  // Advanced-only fields — never shown in the default Publication register,
-  // only in the Ingestion provenance tab, per the "raw IDs stay advanced"
-  // rule.
   artifactType: string;
   rawCoverageKeys: string;
 };
@@ -130,7 +140,6 @@ export function buildSourceLayers(
   const rows = buildSourceRegister(sources, filters);
   const sourcesById = new Map(sources.map((source) => [source.id, source]));
   const catalogsById = new Map(catalogs.map((catalog) => [catalog.id, catalog]));
-  const canonicalSourceIds = canonicalSourceIdsFromCatalogs(catalogs);
 
   const layers: Record<SourceLayerId, LayeredSourceRow[]> = {
     organization: [],
@@ -141,14 +150,18 @@ export function buildSourceLayers(
   for (const row of rows) {
     const source = sourcesById.get(row.id);
     if (!source) continue;
-    const layer = classifySourceLayer(source, canonicalSourceIds);
+    const layer = classifySourceLayer(source);
     const catalog = catalogs.find((entry) => entry.source_id === source.id) || null;
     layers[layer].push({
       ...row,
+      publication: source.name || source.display_name || source.id,
       coverage: resolveCoverageLabel(source.metadata?.frameworks || [], catalogsById),
-      recordsRepresented: catalog ? catalog.leaf_record_count : null,
+      recordsRepresented:
+        catalog ? catalog.leaf_record_count
+        : typeof source.record_count === "number" ? source.record_count
+        : null,
       officialLink: source.artifact_url || source.catalog_browse_url || "",
-      artifactType: source.artifact_type || "Not recorded",
+      artifactType: source.format || source.artifact_type || "Not recorded",
       rawCoverageKeys: (source.metadata?.frameworks || []).join(", ") || "Not recorded",
     });
   }

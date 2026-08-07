@@ -146,7 +146,9 @@ export async function fetchFrameworkCatalogs(options = {}) {
   for (const [filename, build] of publicTargets) {
     const doc = build === buildFedrampPublicCatalog
       ? build(SNAPSHOT, fedrampMembership)
-      : build(SNAPSHOT);
+      : build === buildCuiPolicyCatalog
+        ? build(SNAPSHOT, join(ROOT, 'data', 'nara-cui-registry-manifest.json'))
+        : build(SNAPSHOT);
     results.push(writeCatalog(filename, doc));
   }
   return results;

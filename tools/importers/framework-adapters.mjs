@@ -295,39 +295,92 @@ export function buildCmmcPublicCatalog(snapshotDate) {
   ]);
 }
 
-export function buildCuiPolicyCatalog(snapshotDate) {
+function cuiCategoryId(slug) {
+  return `CATEGORY-${String(slug).toUpperCase().replace(/[^A-Z0-9]+/g, '-')}`;
+}
+
+// spec §7 — real NARA CUI Registry categories, subcategories, markings,
+// authorities, Basic/Specified status, and sanctions, read from the manifest
+// scripts/fetch-nara-cui-registry.mjs produces (real HTML-table extraction
+// from archives.gov/cui/registry, not hand-authored). Falls back to an empty
+// list (anchors only) if the manifest hasn't been fetched yet in this
+// environment, so the catalog build never throws on a missing file.
+function loadNaraCuiCategories(registryManifestPath) {
+  if (!registryManifestPath) return [];
+  try {
+    const manifest = JSON.parse(readFileSync(registryManifestPath, 'utf8'));
+    return (manifest.results || []).filter((entry) => entry.status === 'OK');
+  } catch {
+    return [];
+  }
+}
+
+export function buildCuiPolicyCatalog(snapshotDate, registryManifestPath) {
+  const anchors = [
+    {
+      id: 'CUI-PROGRAM',
+      type: 'cui-policy',
+      framework: 'cui-policy',
+      title: 'CUI Program',
+      family: 'Controlled Unclassified Information',
+      description: 'The CUI Program is the executive branch-wide program to standardize CUI handling across federal agencies.',
+      source: source(ISOO_CUI_SOURCE, snapshotDate, '32-cfr-part-2002#cui-program'),
+    },
+    {
+      id: 'CUI-BASIC',
+      type: 'cui-policy',
+      framework: 'cui-policy',
+      title: 'CUI Basic',
+      family: 'Controlled Unclassified Information',
+      description: 'CUI Basic covers information for which the underlying authority does not specify handling controls beyond the uniform CUI controls.',
+      source: source(NARA_CUI_SOURCE, snapshotDate, 'registry/category-list#cui-basic'),
+    },
+    {
+      id: 'CUI-SPECIFIED',
+      type: 'cui-policy',
+      framework: 'cui-policy',
+      title: 'CUI Specified',
+      family: 'Controlled Unclassified Information',
+      description: 'CUI Specified covers information whose underlying authority provides specific handling or dissemination controls.',
+      source: source(NARA_CUI_SOURCE, snapshotDate, 'registry/category-list#cui-specified'),
+    },
+  ];
+
+  const categories = loadNaraCuiCategories(registryManifestPath).map((entry) => {
+    // MIXED categories have at least one Basic-tier authority alongside
+    // Specified ones; UNKNOWN means the detail page had no safeguarding-
+    // authority table to classify from (real gap on NARA's page, not ours).
+    const parentDesignation =
+      entry.designation === 'CUI-SPECIFIED' ? 'CUI-SPECIFIED'
+      : entry.designation === 'CUI-BASIC' || entry.designation === 'MIXED' ? 'CUI-BASIC'
+      : 'CUI-PROGRAM';
+    return {
+      id: cuiCategoryId(entry.slug),
+      type: 'cui-category',
+      framework: 'cui-policy',
+      title: entry.title,
+      family: entry.grouping,
+      description: entry.description || entry.title,
+      source: source(NARA_CUI_SOURCE, snapshotDate, `registry/category-detail/${entry.slug}`),
+      metadata: {
+        parent_designation: parentDesignation,
+        designation: entry.designation,
+        banner_marking: entry.banner_marking,
+        category_marking: entry.category_marking,
+        alternative_banner_markings: entry.alternative_banner_markings,
+        authorities: entry.authorities,
+        detail_url: entry.detail_url,
+        last_modified: entry.last_modified,
+        sha256: entry.sha256,
+        byte_length: entry.byte_length,
+      },
+    };
+  });
+
   return {
     schema_version: '1.0',
     source_key: ISOO_CUI_SOURCE,
-    records: [
-      {
-        id: 'CUI-PROGRAM',
-        type: 'cui-policy',
-        framework: 'cui-policy',
-        title: 'CUI Program',
-        family: 'Controlled Unclassified Information',
-        description: 'The CUI Program is the executive branch-wide program to standardize CUI handling across federal agencies.',
-        source: source(ISOO_CUI_SOURCE, snapshotDate, '32-cfr-part-2002#cui-program'),
-      },
-      {
-        id: 'CUI-BASIC',
-        type: 'cui-policy',
-        framework: 'cui-policy',
-        title: 'CUI Basic',
-        family: 'Controlled Unclassified Information',
-        description: 'CUI Basic covers information for which the underlying authority does not specify handling controls beyond the uniform CUI controls.',
-        source: source(NARA_CUI_SOURCE, snapshotDate, 'cui-glossary#cui-basic'),
-      },
-      {
-        id: 'CUI-SPECIFIED',
-        type: 'cui-policy',
-        framework: 'cui-policy',
-        title: 'CUI Specified',
-        family: 'Controlled Unclassified Information',
-        description: 'CUI Specified covers information whose underlying authority provides specific handling or dissemination controls.',
-        source: source(NARA_CUI_SOURCE, snapshotDate, 'cui-glossary#cui-specified'),
-      },
-    ],
+    records: [...anchors, ...categories],
   };
 }
 

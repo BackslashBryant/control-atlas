@@ -6,7 +6,6 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import {
   sourceCurrentAsOf,
   sourceFreshness,
-  sourceSyncLabel,
 } from "../../shared/source-freshness.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { ButtonLink } from "../components/lsm/Button";
@@ -135,6 +134,60 @@ export function sourceWarnings(source: any) {
     warnings.push(sourceCurrentAsOf(source));
   }
   return warnings;
+}
+
+/**
+ * spec §10 record-page provenance: "Published by / Imported from / Enriched
+ * by / Connections supplied by" — each resolved from the record's own real
+ * artifact_ids and the sources those artifacts declare a source_role for,
+ * never a generic process description. Names, not internal enum values.
+ */
+export function nodeProvenanceBreakdown(
+  node: any,
+  edges: any[],
+  getSource: (id: string) => any,
+) {
+  const nameFor = (source: any) =>
+    source?.display_name || source?.name || null;
+
+  const artifactSources = (node?.artifact_ids || [])
+    .map((id: string) => getSource(id))
+    .filter(Boolean);
+
+  const importedFrom = [
+    ...new Set(
+      artifactSources
+        .filter((s: any) => s.source_role === "primary_data" || !s.source_role)
+        .map(nameFor)
+        .filter(Boolean),
+    ),
+  ] as string[];
+
+  const enrichedBy = [
+    ...new Set(
+      artifactSources
+        .filter((s: any) => s.source_role === "enrichment")
+        .map(nameFor)
+        .filter(Boolean),
+    ),
+  ] as string[];
+
+  const connectionSourceIds = new Set<string>();
+  for (const edge of edges || []) {
+    if (edge.source_artifact_id) connectionSourceIds.add(edge.source_artifact_id);
+    for (const ref of edge.source_refs || []) {
+      if (ref.source_id) connectionSourceIds.add(ref.source_id);
+    }
+  }
+  const connectionsSuppliedBy = [
+    ...new Set(
+      [...connectionSourceIds]
+        .map((id) => nameFor(getSource(id)))
+        .filter(Boolean),
+    ),
+  ] as string[];
+
+  return { importedFrom, enrichedBy, connectionsSuppliedBy };
 }
 
 export function formatRelationshipLabel(edge: any) {
@@ -337,7 +390,6 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       </div>
       <p className="result-summary">Maintained by {source.owner}.</p>
       <p className="support-meta">
-        {sourceSyncLabel(source.sync_model)} ·{" "}
         {sourceFreshness(source).is_stale
           ? `Last checked ${source.last_checked}`
           : sourceCurrentAsOf(source)}

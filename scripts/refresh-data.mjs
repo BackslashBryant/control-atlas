@@ -20,11 +20,14 @@ function run(label, script) {
 async function main() {
   await import('./fetch-framework-catalogs.mjs').then((m) => m.fetchFrameworkCatalogs());
   run('fetch-fedramp-2026-rules', 'fetch-fedramp-2026-rules.mjs');
+  run('fetch-nara-cui-registry', 'fetch-nara-cui-registry.mjs');
+  run('fetch-olir-catalog', 'fetch-olir-catalog.mjs');
   run('fetch-olir-mappings', 'fetch-olir-mappings.mjs');
   run('fetch-ccis', 'fetch-ccis.mjs');
   run('fetch-stig-source-observations', 'fetch-stig-source-observations.mjs');
   run('fetch-disa-stigs', 'fetch-disa-stigs.mjs');
   run('fetch-mitre-data', 'fetch-mitre-data.mjs');
+  run('hydrate-artifacts', 'hydrate-artifacts.mjs');
   run('reconcile-source-freshness', 'reconcile-source-freshness.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
   run('check-data-size', 'check-data-size.mjs');
