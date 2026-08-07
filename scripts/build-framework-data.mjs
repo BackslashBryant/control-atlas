@@ -1634,29 +1634,40 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
   // Specified has no single catalog that governs it in this app's ingested
   // set (each CUI Specified category cites its own separate law/regulation),
   // so without this it was the one designation with zero edges at all.
+  //
+  // Real NARA registry categories (type cui-category, spec §7) nest one
+  // level deeper, under whichever designation anchor
+  // (CUI-BASIC/CUI-SPECIFIED/CUI-PROGRAM) their own registry data resolved
+  // to (metadata.parent_designation) — not flatly under the catalog root.
   const path = join(ROOT, "data", "cui-policy.json");
   if (existsSync(path)) {
     const document = readJson(path);
     const catalogNodeId = "cui-policy:CATALOG";
     for (const record of document.records || []) {
       const targetNodeId = nodeId("cui-policy", record.id);
+      const isCategory = record.type === "cui-category";
+      const sourceNodeId = isCategory
+        ? nodeId("cui-policy", record.metadata?.parent_designation || "CUI-PROGRAM")
+        : catalogNodeId;
       const subjectId = relationshipId(
         "cui-policy-program-membership",
-        catalogNodeId,
+        sourceNodeId,
         targetNodeId,
         "contains",
       );
       addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: record.source?.key || "isoo-cui-regulation",
-        sourceNodeId: catalogNodeId,
+        sourceNodeId,
         targetNodeId,
         relationshipType: "contains",
         relationshipClass: RELATIONSHIP_CLASSES.structural,
         confidence: "derived",
         locator: record.source?.locator || "32-CFR-2002",
         retrievedAt: record.source?.snapshot_date,
-        rationale: `${record.title} is one of the designation categories in the CUI Program.`,
+        rationale: isCategory
+          ? `${record.title} is a NARA CUI Registry category classified ${record.metadata?.designation || "unresolved"} under ${record.metadata?.parent_designation || "CUI Program"}.`
+          : `${record.title} is one of the designation categories in the CUI Program.`,
       });
     }
   }

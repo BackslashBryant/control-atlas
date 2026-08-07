@@ -1,10 +1,10 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T17:47:41.324Z",
+  "generated_at": "2026-08-07T20:48:45.530Z",
   "completeness": {
     "total_publications": 72,
-    "total_artifacts": 30,
-    "total_catalog_bundles": 3,
+    "total_artifacts": 31,
+    "total_catalog_bundles": 4,
     "manual_seed_artifacts": 0,
     "provenance_verified": true
   },
@@ -37,6 +37,21 @@
       "methods": [
         "extracted_from_official_publication",
         "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "completeness_status": "reconciled"
+    },
+    {
+      "catalog_id": "cui-policy",
+      "expected_records": null,
+      "imported_records": 2,
+      "excluded_records": 0,
+      "missing_records": null,
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 1,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
       ],
       "last_refresh": "2026-08-07",
       "completeness_status": "reconciled"

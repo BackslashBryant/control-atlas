@@ -281,11 +281,11 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-06-13",
-      "retrieved_at": "2026-06-13",
-      "retrieval_method": "manual_review",
-      "artifact_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
-      "catalog_browse_url": "https://www.archives.gov/cui/registry/cui-glossary.html",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
+      "artifact_url": "https://www.archives.gov/cui/registry/category-list",
+      "catalog_browse_url": "https://www.archives.gov/cui/registry/category-list",
       "federal_referenced_by": [],
       "graph_eligible": true,
       "metadata": {
@@ -2321,6 +2321,27 @@
       "license_or_use": "eCFR Public Domain"
     },
     {
+      "id": "artifact-nara-cui-registry",
+      "publication_source_id": "nara-cui-registry",
+      "name": "NARA CUI Registry Category List and Category-Detail Pages",
+      "display_name": "NARA CUI Registry Artifact",
+      "source_role": "enrichment",
+      "authority_class": "publisher",
+      "format": "html",
+      "version": "2026-08-07",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://www.archives.gov/cui/registry/category-list",
+      "byte_length": 53932,
+      "sha256": "sha256:daff0bd019663539069bda216e418147b78b44e19198feb76e2781f0c9595fa4",
+      "parser": "nara-cui-registry-html",
+      "parser_version": "1.0.0",
+      "record_count": 127,
+      "relationship_count": 127,
+      "license_or_use": "National Archives Public Domain"
+    },
+    {
       "id": "artifact-disa-cci-list",
       "publication_source_id": "disa-cci-list",
       "name": "DISA Control Correlation Identifier List Artifact",
@@ -2841,6 +2862,20 @@
       "reconciliation_source_ids": [
         "artifact-disa-cci-list"
       ]
+    },
+    {
+      "catalog_id": "cui-policy",
+      "publication_source_id": "isoo-cui-regulation",
+      "primary_artifact_ids": [
+        "artifact-isoo-cui-regulation"
+      ],
+      "enrichment_artifact_ids": [
+        "artifact-nara-cui-registry"
+      ],
+      "mapping_source_ids": [],
+      "assessment_source_ids": [],
+      "automation_source_ids": [],
+      "reconciliation_source_ids": []
     },
     {
       "catalog_id": "disa-stig",
@@ -4935,12 +4970,6 @@
     ]
   },
   "quarantine": [
-    {
-      "id": "artifact-nara-cui-registry",
-      "url": "https://www.archives.gov/cui/registry/cui-glossary.html",
-      "reason": "NARA publishes no stable machine-readable CUI registry export (JSON/CSV 404); only JS/HTML category pages (non-byte-stable). CUI structural policy is sourced from the attested isoo-cui-regulation (32 CFR 2002)",
-      "quarantined_at": "2026-08-07"
-    },
     {
       "id": "artifact-dod-rai-toolkit",
       "url": "https://rai.acqbot.com/executive-summary",

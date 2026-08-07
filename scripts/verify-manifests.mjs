@@ -148,8 +148,14 @@ if (!registry) {
   for (const r of hydration?.results || []) {
     if (r.status === 'OK' && r.sha256) attested.set(r.id, r.sha256);
   }
-  // DISA/OLIR family manifests attest their own artifacts (added as those
-  // pipelines land). Until then their artifacts appear as unattested below.
+  // NARA CUI registry family manifest attests its own artifact: the
+  // category-list page is the entry point artifact-nara-cui-registry
+  // represents; the 125 per-category detail-page hashes it fans out to are
+  // each recorded per-entry in the same manifest (spec §5/§7 pattern).
+  const naraCui = readJson('data/nara-cui-registry-manifest.json');
+  if (naraCui?.list_page?.sha256) {
+    attested.set('artifact-nara-cui-registry', `sha256:${naraCui.list_page.sha256}`);
+  }
   for (const art of artifacts) {
     const a = attested.get(art.id);
     if (!a) {

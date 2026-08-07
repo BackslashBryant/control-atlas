@@ -14,6 +14,7 @@ const EXPECTED_MANIFESTS = [
   'data/disa-artifact-manifest.json',
   'data/olir-catalog-manifest.json',
   'data/artifact-hydration-manifest.json',
+  'data/nara-cui-registry-manifest.json',
 ];
 
 const errors = [];
