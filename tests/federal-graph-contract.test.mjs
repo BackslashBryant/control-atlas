@@ -427,7 +427,7 @@ test('CSF 2.0 subcategories chain up through Category to Function', () => {
   const functions = nodes.filter((node) => node.node_type === 'function' && node.metadata?.catalog_id === 'csf-2');
   const categories = nodes.filter((node) => node.node_type === 'category' && node.metadata?.catalog_id === 'csf-2');
   assert.equal(functions.length, 6, 'CSF 2.0 has 6 Functions');
-  assert.equal(categories.length, 34, 'CSF 2.0 has 34 Categories');
+  assert.equal(categories.length, 22, 'CSF 2.0 has 22 Categories');
 
   for (const fn of functions) {
     const children = childrenOf.get(fn.id) || [];

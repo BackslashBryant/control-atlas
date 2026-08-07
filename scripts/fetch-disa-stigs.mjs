@@ -21,9 +21,8 @@ function checksum(value) {
 }
 
 export function findOfficialDisaCompilationUrl(html) {
-  const matches = [...String(html).matchAll(/https:\/\/dl\.dod\.cyber\.mil\/[^"' ]+\.zip/gi)]
+  const matches = [...String(html).matchAll(/https:\/\/dl\.dod\.cyber\.mil\/[^\s"']*\/U_[^\s"']*STIG[^\s"']*Library[^\s"']*\.zip/gi)]
     .map((match) => match[0])
-    .filter((url) => /U_.*STIG.*Library.*\.zip$/i || /U_.*\.zip$/i.test(url))
     .sort();
   return matches[0] || null;
 }
