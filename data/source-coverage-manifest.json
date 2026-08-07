@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T03:55:12.899Z",
+  "generated_at": "2026-08-07T11:52:20.706Z",
   "completeness": {
     "total_publications": 57,
     "total_artifacts": 57,
@@ -38,7 +38,7 @@
         "extracted_from_official_publication",
         "direct_file_import"
       ],
-      "last_refresh": "2026-07-28",
+      "last_refresh": "2026-08-07",
       "completeness_status": "reconciled"
     },
     {

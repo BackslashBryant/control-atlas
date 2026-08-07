@@ -1,0 +1,126 @@
+{
+  "generated_at": "2026-08-07T11:52:05.580Z",
+  "hydrated": 12,
+  "results": [
+    {
+      "id": "artifact-nist-800-171-rev2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv",
+      "sha256": "sha256:0f4d59413bbcc9998da80495ce46ebfe0475e392803c4d2ed38d9941d83f138d",
+      "byte_length": 113309,
+      "record_count": 117,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-ai-rmf-playbook",
+      "status": "OK",
+      "http": 200,
+      "url": "https://airc.nist.gov/docs/playbook.json",
+      "sha256": "sha256:aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba",
+      "byte_length": 413720,
+      "record_count": 72,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-fedramp-2026-rules",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json",
+      "sha256": "sha256:135707003f0aaa5ceb10d7d32c2681e5b1585a4eaf4403d0d135837787e5ae8e",
+      "byte_length": 567435,
+      "record_count": 5,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-attack-enterprise",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+      "sha256": "sha256:dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+      "byte_length": 53835637,
+      "record_count": 697,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-attack-ics",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+      "sha256": "sha256:08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
+      "byte_length": 4057891,
+      "record_count": 97,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-d3fend-ontology",
+      "status": "OK",
+      "http": 200,
+      "url": "https://d3fend.mitre.org/api/technique/all.json",
+      "sha256": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
+      "byte_length": 36638,
+      "record_count": 271,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-mitre-d3fend-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+      "sha256": "sha256:684f0a1872868a64b9046e66111e28cb9f0dc46c08e8f044b803fd8b493260ba",
+      "byte_length": 59995026,
+      "record_count": 16164,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-disa-cci-list",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+      "sha256": "sha256:077cbb6d2ae5f8fdbaaf416d87a34a8621767cdba490f3283feb0c5c35892700",
+      "byte_length": 417323,
+      "record_count": 5137,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-oscal",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
+      "byte_length": 10442037,
+      "record_count": 1196,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-172-rev3",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json",
+      "sha256": "sha256:21c6df17c7ff1c8330f16334fdddd488ffc10f71051078dd73c18595a33da5ab",
+      "byte_length": 980722,
+      "record_count": 115,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-ssdf-oscal",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json",
+      "sha256": "sha256:b01634a5fdb382e7a12660c379a4d0bc3a2b8e29abccf2861834880005137117",
+      "byte_length": 253878,
+      "record_count": 61,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-control-atlas-structure",
+      "status": "OK",
+      "http": "local",
+      "url": "https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json",
+      "sha256": "sha256:2e3e3a687cb286047a60a3e7539aaece52b1b667e2f5ab6732aa4fac33fd33a4",
+      "byte_length": 6485,
+      "record_count": 10,
+      "retrieved_at": "2026-08-07"
+    }
+  ]
+}
