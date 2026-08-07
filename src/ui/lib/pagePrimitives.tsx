@@ -6,7 +6,6 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import {
   sourceCurrentAsOf,
   sourceFreshness,
-  sourceSyncLabel,
 } from "../../shared/source-freshness.mjs";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { ButtonLink } from "../components/lsm/Button";

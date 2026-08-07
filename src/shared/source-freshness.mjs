@@ -28,12 +28,6 @@ export function sourceFreshness(source, now = new Date()) {
   };
 }
 
-export function sourceSyncLabel(syncModel) {
-  if (syncModel === 'auto_synced') return 'Automatically synchronized';
-  if (syncModel === 'curated') return 'Human-reviewed';
-  return 'Official link only';
-}
-
 export function sourceCurrentAsOf(source, now = new Date()) {
   const freshness = sourceFreshness(source, now);
   if (freshness.is_stale) {

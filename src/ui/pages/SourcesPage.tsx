@@ -46,7 +46,7 @@ const SOURCE_LAYER_TABS: Array<{
     id: "ingestion",
     label: "Ingestion provenance",
     description:
-      "Retrieval detail: mirrors, download endpoints, and viewer feeds.",
+      "Update-method detail: mirrors, download endpoints, and viewer feeds.",
   },
   {
     id: "organization",
@@ -126,7 +126,7 @@ export function SourcesPage(props: {
           <div><dt>Current through</dt><dd>{selectedSource.last_checked || selectedSource.retrieved_at || "Not recorded"}</dd></div>
           <div><dt>Lifecycle</dt><dd>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)}</dd></div>
           {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
-            <div><dt>Update method</dt><dd>{selectedSource.retrieval_method || "Not recorded"}</dd></div>
+            <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
           ) : null}
           <div><dt>Parser</dt><dd>{selectedSource.metadata?.parser || selectedSource.parser || "Not applicable or not recorded"}</dd></div>
         </dl>

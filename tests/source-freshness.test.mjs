@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { sourceCurrentAsOf, sourceFreshness, sourceSyncLabel } from '../src/shared/source-freshness.mjs';
+import { sourceCurrentAsOf, sourceFreshness } from '../src/shared/source-freshness.mjs';
 
 const now = new Date('2026-07-16T23:59:59.000Z');
 

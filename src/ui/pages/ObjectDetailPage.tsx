@@ -25,7 +25,6 @@ import { generateTemplate } from "../../app/template-engine.mjs";
 import {
   sourceCurrentAsOf,
   sourceFreshness,
-  sourceSyncLabel,
 } from "../../shared/source-freshness.mjs";
 import {
   ExpandableChipList,

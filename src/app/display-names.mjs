@@ -96,10 +96,22 @@ const DISPLAY_NAMES = {
     defend_countermeasure: 'D3FEND countermeasure',
   },
   retrieval_method: {
-    download: 'Downloaded copy',
-    api: 'API retrieval',
-    manual: 'Manual capture',
-    import: 'Imported file',
+    // Artifact-specific update-method vocabulary (Schema 5.0 artifacts).
+    api_import: 'API import',
+    direct_file_import: 'Direct file import',
+    official_structured_export: 'Official structured export',
+    repository_snapshot: 'Repository snapshot',
+    extracted_from_official_publication: 'Extracted from official publication',
+    supplemental_mapping: 'Supplemental mapping',
+    reconciliation_source: 'Reconciliation source',
+    reference_only: 'Reference only',
+    // Legacy source-registry vocabulary mapped onto the same labels.
+    api: 'API import',
+    download: 'Direct file import',
+    import: 'Direct file import',
+    committed_artifact: 'Repository snapshot',
+    // `manual_review` / `manual` intentionally fall through to humanization
+    // ("Manual review") until §7 re-derives them from real extraction.
   },
   artifact_type: {
     json: 'JSON data file',
