@@ -11,7 +11,7 @@ function normalize(value) {
 // back here rather than storing it on all 28k+ edges.
 function evidenceIdsFor(edge) {
   if (!edge) return [];
-  if (edge.evidence_ids?.length) return edge.evidence_ids;
+  if (edge.evidence_ids !== undefined) return edge.evidence_ids;
   return edge.id ? [`evidence:${edge.id.slice("edge:".length)}`] : [];
 }
 

@@ -99,8 +99,15 @@ export function validateGraphArtifacts({ sources = [], nodes = [], edges = [], e
     ) {
       errors.push(`edge ${edge.id} is an invalid structural parent relationship`);
     }
-    if (!edge.evidence_ids?.length) errors.push(`edge ${edge.id} must reference evidence`);
-    else if (edge.evidence_ids.some((id) => !evidenceIds.has(id))) errors.push(`edge ${edge.id} references unknown evidence`);
+    // build-framework-data.mjs omits evidence_ids from the emitted edge when
+    // it is exactly the mechanical `evidence:<edge-id-suffix>` pattern (a
+    // real ~2 MiB budget win) — derive it back for validation the same way
+    // src/app/runtime.mjs's evidenceIdsFor does at read time.
+    const resolvedEvidenceIds = edge.evidence_ids !== undefined
+      ? edge.evidence_ids
+      : [`evidence:${String(edge.id).slice('edge:'.length)}`];
+    if (!resolvedEvidenceIds.length) errors.push(`edge ${edge.id} must reference evidence`);
+    else if (resolvedEvidenceIds.some((id) => !evidenceIds.has(id))) errors.push(`edge ${edge.id} references unknown evidence`);
     if (edge.publication_status === 'candidate') {
       if (edge.provenance_class !== 'inferred') errors.push(`candidate edge ${edge.id} must be inferred`);
       if (!edge.confidence?.startsWith('inferred_')) errors.push(`candidate edge ${edge.id} must use inferred confidence`);

@@ -29,7 +29,7 @@ const sourceManifests = JSON.parse(readFileSync('dist/site/data/generated/source
 const indexHtml = readFileSync('dist/site/index.html', 'utf8');
 const assets = readdirSync('dist/site/assets');
 
-assert.equal(registry.registry.schema_version, '4.0');
+assert.equal(registry.registry.schema_version, '5.0');
 assert.ok(nodes.length > 6000, 'normalized federal graph nodes required');
 assert.ok(edges.length > 3000, 'source-backed federal graph edges required');
 assert.equal(edges.length, evidence.length, 'each current edge must have evidence');

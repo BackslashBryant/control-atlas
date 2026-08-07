@@ -15,7 +15,7 @@ const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json
 // budget win — see scripts/build-framework-data.mjs); derive it back here,
 // same as src/app/runtime.mjs's evidenceIdsFor.
 const evidenceIdsFor = (edge) =>
-  edge.evidence_ids?.length ? edge.evidence_ids : [`evidence:${edge.id.slice('edge:'.length)}`];
+  edge.evidence_ids !== undefined ? edge.evidence_ids : [`evidence:${edge.id.slice('edge:'.length)}`];
 const isNativeStructuralEdge = (edge, nodeById) =>
   isValidatedStructuralEdge(
     edge,

@@ -2356,24 +2356,19 @@ export function buildFrameworkData() {
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);
 
-  // ancestor_path rides along on the shard and catalog-record copies of a node
-  // so the record page can draw its chain to the trunk from the one artifact it
-  // loads. nodes.json omits it: anything reading that file already has the whole
-  // graph, and carrying it there pushes the artifact past the 20 MiB budget in
-  // scripts/check-data-size.mjs. Stripped here, before the collections are
-  // compared with what is already on disk, so an unchanged build keeps its
-  // generated_at.
   // provenance_assertions is unread anywhere in src/ or the verify scripts —
   // publication_source_id + artifact_ids (kept) already satisfy "every node
   // resolves publication and artifact provenance"; the assertion object
   // itself is 100% derivable from those two fields plus the sources.json
-  // the runtime already loads. Same real-budget-win reasoning as
-  // ancestor_path above (~3 MiB across 11k+ nodes, all genuinely dead here).
+  // the runtime already loads (~3 MiB across 11k+ nodes, genuinely dead).
   // metadata carries a wide, mostly-catalog-specific field set (baselines,
   // check_text, discussion, ...) so most records leave most of it null —
   // `field: null,` costs the same bytes as a real value. No consumer checks
   // key presence (all reads are `?.field` / `|| default`), so a missing key
-  // and an explicit null are behaviorally identical — drop the nulls.
+  // and an explicit null are behaviorally identical — drop the nulls. Both
+  // apply everywhere a node ships (nodes.json AND the atlas-neighborhood
+  // shards/catalog-records copies) so every runtime view of "the same node"
+  // stays byte-identical — tests/atlas-neighborhood.test.mjs asserts this.
   const stripNullMetadata = (metadata) => {
     if (!metadata) return metadata;
     const out = {};
@@ -2382,11 +2377,20 @@ export function buildFrameworkData() {
     }
     return out;
   };
-  const emittedNodes = graph.nodes.map(
-    ({ ancestor_path, provenance_assertions, ...node }) => ({
-      ...node,
-      ...(node.metadata ? { metadata: stripNullMetadata(node.metadata) } : {}),
-    }),
+  const stripDeadNodeFields = ({ provenance_assertions, ...node }) => ({
+    ...node,
+    ...(node.metadata ? { metadata: stripNullMetadata(node.metadata) } : {}),
+  });
+  // ancestor_path rides along on the shard and catalog-record copies of a
+  // node so the record page can draw its chain to the trunk from the one
+  // artifact it loads. nodes.json alone omits it: anything reading that
+  // file already has the whole graph, and carrying it there pushes the
+  // artifact past the 20 MiB budget in scripts/check-data-size.mjs.
+  // Stripped here, before the collections are compared with what is
+  // already on disk, so an unchanged build keeps its generated_at.
+  const strippedGraphNodes = graph.nodes.map(stripDeadNodeFields);
+  const emittedNodes = strippedGraphNodes.map(
+    ({ ancestor_path, ...node }) => node,
   );
   // display_label is fully derivable from source_node_id/relationship_type/
   // target_node_id and unread anywhere in src/ — dead weight on every edge.
@@ -2428,7 +2432,10 @@ export function buildFrameworkData() {
     generatedAt,
   );
   const librarySearch = buildLibrarySearch(graph);
-  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards(graph);
+  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards({
+    ...graph,
+    nodes: strippedGraphNodes,
+  });
   const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const evidenceById = new Map(
@@ -2498,7 +2505,7 @@ export function buildFrameworkData() {
     ),
   };
   const catalogRecords = new Map();
-  for (const node of graph.nodes) {
+  for (const node of strippedGraphNodes) {
     const catalogId = node.metadata?.catalog_id;
     if (!catalogId) continue;
     const records = catalogRecords.get(catalogId) || [];
