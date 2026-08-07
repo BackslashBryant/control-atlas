@@ -2363,11 +2363,56 @@ export function buildFrameworkData() {
   // scripts/check-data-size.mjs. Stripped here, before the collections are
   // compared with what is already on disk, so an unchanged build keeps its
   // generated_at.
-  const emittedNodes = graph.nodes.map(({ ancestor_path, ...node }) => node);
+  // provenance_assertions is unread anywhere in src/ or the verify scripts —
+  // publication_source_id + artifact_ids (kept) already satisfy "every node
+  // resolves publication and artifact provenance"; the assertion object
+  // itself is 100% derivable from those two fields plus the sources.json
+  // the runtime already loads. Same real-budget-win reasoning as
+  // ancestor_path above (~3 MiB across 11k+ nodes, all genuinely dead here).
+  // metadata carries a wide, mostly-catalog-specific field set (baselines,
+  // check_text, discussion, ...) so most records leave most of it null —
+  // `field: null,` costs the same bytes as a real value. No consumer checks
+  // key presence (all reads are `?.field` / `|| default`), so a missing key
+  // and an explicit null are behaviorally identical — drop the nulls.
+  const stripNullMetadata = (metadata) => {
+    if (!metadata) return metadata;
+    const out = {};
+    for (const [key, value] of Object.entries(metadata)) {
+      if (value !== null) out[key] = value;
+    }
+    return out;
+  };
+  const emittedNodes = graph.nodes.map(
+    ({ ancestor_path, provenance_assertions, ...node }) => ({
+      ...node,
+      ...(node.metadata ? { metadata: stripNullMetadata(node.metadata) } : {}),
+    }),
+  );
+  // display_label is fully derivable from source_node_id/relationship_type/
+  // target_node_id and unread anywhere in src/ — dead weight on every edge.
+  // warning/inference_rule_id are read via `edge.warning || ""` (runtime.mjs)
+  // so omitting a null/falsy value is behaviorally identical to storing it.
+  // raw_relationship_type duplicates relationship_type on the ~78% of edges
+  // where an OLIR-style source never overrode it. None of this is dropping
+  // real evidence — same 20 MiB budget concern as ancestor_path above.
+  const derivableEvidenceId = (edge) => `evidence:${String(edge.id).slice("edge:".length)}`;
+  const emittedEdges = graph.edges.map(
+    ({ display_label, warning, inference_rule_id, raw_relationship_type, evidence_ids, ...edge }) => ({
+      ...edge,
+      ...(warning ? { warning } : {}),
+      ...(inference_rule_id ? { inference_rule_id } : {}),
+      ...(raw_relationship_type && raw_relationship_type !== edge.relationship_type
+        ? { raw_relationship_type }
+        : {}),
+      ...(evidence_ids?.length === 1 && evidence_ids[0] === derivableEvidenceId(edge)
+        ? {}
+        : { evidence_ids }),
+    }),
+  );
   const collections = {
     sources: graph.sources,
     nodes: emittedNodes,
-    edges: graph.edges,
+    edges: emittedEdges,
     evidence: graph.evidence,
     "graph-health": graph.findings,
   };

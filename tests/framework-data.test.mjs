@@ -144,8 +144,13 @@ test("issue 11 graph build emits assessment context and governance artifacts for
       edge.relationship_type === "assesses",
   );
   assert.ok(assessmentEdge, "missing AC-2 assesses edge");
+  // build-framework-data.mjs omits evidence_ids when it's the mechanical
+  // `evidence:<edge-id-suffix>` pattern — derive it back for this check.
+  const assessmentEvidenceIds = assessmentEdge.evidence_ids?.length
+    ? assessmentEdge.evidence_ids
+    : [`evidence:${assessmentEdge.id.slice("edge:".length)}`];
   assert.ok(
-    evidence.some((entry) => assessmentEdge.evidence_ids.includes(entry.id)),
+    evidence.some((entry) => assessmentEvidenceIds.includes(entry.id)),
   );
 
   assert.ok(existsSync("data/generated/build-manifest.json"));

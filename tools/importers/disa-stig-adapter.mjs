@@ -161,8 +161,18 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
   };
 }
 
+// "Supplemental" folders hold an OLDER revision of a benchmark shipped
+// alongside its current one for reference (e.g. VMW_vSphere_8-0 ships both
+// a current .../ESXi_V2R4_Manual_STIG/ and .../Supplemental/..._V1R1_Manual_STIG/
+// — same vuln IDs, different revision). Real, official content, correctly
+// excluded from the active catalog rather than colliding with the current
+// revision's node/evidence ids.
 function shouldIgnoreEntry(entryPath) {
-  return /(^|\/)(CUI_|CUI\/|Sunset|Draft)/i.test(entryPath);
+  if (/(^|\/)(CUI_|CUI\/|Sunset|Draft)/i.test(entryPath)) return true;
+  // "..._Supplemental/" folders (e.g. U_VMW_vSphere_8-0_Supplemental/) are
+  // not their own path segment named exactly "Supplemental" — match the
+  // word anywhere within a segment, not just as a whole segment.
+  return /Supplemental\//i.test(entryPath);
 }
 
 function createDocument(sourceKey, artifactUrl, checksumValue, parsedDocuments) {
