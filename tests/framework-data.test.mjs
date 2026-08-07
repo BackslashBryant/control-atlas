@@ -436,12 +436,16 @@ test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {
     ["nist-800-53:IR-8", "csf-2:CATEGORY-RS.MA"],
     ["nist-800-53:IR-9", "csf-2:CATEGORY-RS.MA"],
   ]) {
+    // spec §5: OLIR relationship models (Concept Crosswalk, Set Theory,
+    // Supportive, Derived Relationship Mapping) are preserved as their real
+    // type, not flattened to the generic "maps_to".
     assert.ok(
       edges.some(
         (edge) =>
           edge.source_node_id === sourceNodeId &&
           edge.target_node_id === targetNodeId &&
-          edge.relationship_type === "maps_to",
+          edge.relationship_type !== "maps_to" &&
+          edge.mapping_model === "correlation",
       ),
       `missing official OLIR grouping mapping ${sourceNodeId} -> ${targetNodeId}`,
     );

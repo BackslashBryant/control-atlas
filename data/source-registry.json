@@ -2748,8 +2748,8 @@
       "source_role": "mapping",
       "authority_class": "publisher",
       "format": "spreadsheet",
-      "version": "2.0-draft",
-      "lifecycle_status": "draft",
+      "version": "2.0-final",
+      "lifecycle_status": "final",
       "retrieval_method": "direct_file_import",
       "retrieved_at": "2024-02-20",
       "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
@@ -2769,8 +2769,8 @@
       "source_role": "mapping",
       "authority_class": "publisher",
       "format": "spreadsheet",
-      "version": "2024-02-20",
-      "lifecycle_status": "draft",
+      "version": "2.0-final",
+      "lifecycle_status": "final",
       "retrieval_method": "direct_file_import",
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
@@ -2779,7 +2779,7 @@
       "parser": "olir-xlsx",
       "parser_version": "1.0.0",
       "record_count": 0,
-      "relationship_count": 0,
+      "relationship_count": 313,
       "license_or_use": "NIST CSRC OLIR Program License-free Public Domain"
     },
     {
@@ -2813,7 +2813,8 @@
       ],
       "enrichment_artifact_ids": [],
       "mapping_source_ids": [
-        "artifact-nist-olir-csf2-to-sp800-53"
+        "artifact-nist-olir-csf2-to-sp800-53",
+        "artifact-nist-olir-csf2-to-sp800-171"
       ],
       "assessment_source_ids": [],
       "automation_source_ids": [],

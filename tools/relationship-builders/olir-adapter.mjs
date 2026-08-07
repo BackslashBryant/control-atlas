@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import readXlsxFile from 'read-excel-file/node';
-import { normalize80053Id } from '../normalizers/oscal-normalize.mjs';
+import { normalize80053Id, normalize800171Id } from '../normalizers/oscal-normalize.mjs';
 
 export function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;
@@ -35,6 +35,10 @@ export async function parseOlirExcel(buffer, options = {}) {
     throw new Error('Focal or Reference columns not found in OLIR sheet');
   }
 
+  const normalizeReferenceId = options.normalizeReferenceId || normalize80053Id;
+  const referenceFrameworkLabel = options.referenceFrameworkLabel || 'SP 800-53';
+  const focalFrameworkLabel = options.focalFrameworkLabel || 'CSF 2.0';
+
   for (const row of rows.slice(1)) {
     const focalCell = String(row[focalIdx] || '').trim();
     const referenceCell = String(row[referenceIdx] || '').trim();
@@ -45,7 +49,7 @@ export async function parseOlirExcel(buffer, options = {}) {
 
     for (const rawRefId of refIds) {
       const refId = rawRefId.replace(/\r?\n/g, '').trim();
-      const controlId = normalize80053Id(refId);
+      const controlId = normalizeReferenceId(refId);
       if (!controlId) continue;
 
       const signature = `${controlId}|${focalId}`;
@@ -69,7 +73,7 @@ export async function parseOlirExcel(buffer, options = {}) {
         target_id: focalId,
         relationship_type: relationshipType,
         raw_relationship_type: rawRelationshipType,
-        why: comment || `NIST OLIR concept crosswalk associates SP 800-53 ${controlId} with CSF 2.0 ${focalId}.`,
+        why: comment || `NIST OLIR concept crosswalk associates ${referenceFrameworkLabel} ${controlId} with ${focalFrameworkLabel} ${focalId}.`,
         source_locator: `${selected.sheet}#${focalId}->${controlId}`,
         olir_status: options.status || 'final',
         owner_authority: options.ownerAuthority !== false,
@@ -113,7 +117,7 @@ export async function fetchBuffer(url) {
 }
 
 export async function build80053ToCsf20Map(options = {}) {
-  const url = options.url || 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/CSFv2.0_to_SP800_53r5_olir.xlsx';
+  const url = options.url || 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx';
   const buffer = options.buffer || await fetchBuffer(url);
   const checksumValue = checksum(buffer);
 
@@ -130,7 +134,41 @@ export async function build80053ToCsf20Map(options = {}) {
     source_version: '2.0-final',
     snapshot_date: new Date().toISOString().slice(0, 10),
     checksum: checksumValue,
-    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-53 Rev 5.2.0 Concept Crosswalk (Final)',
+    // Filename retains "_draft" from NIST's original submission naming, but
+    // the OLIR catalog record (entry #186, CSFv2.0-to-SP-800-53-Rev-5-2-0)
+    // status is Final, NIST owner authority — see spec §5.
+    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-53 Rev 5.2.0 Concept Crosswalk (Final, OLIR catalog #186)',
+    olir_status: 'final',
+    owner_authority: true,
+    submitter: 'NIST',
+    relationships,
+  };
+}
+
+// NIST OLIR catalog entry #179 ("CSF 2.0 to SP 800-171 Rev 3"): NIST owner
+// authority, status Final (see data/olir-catalog-manifest.json). Focal =
+// CSF 2.0 element, Reference = SP 800-171 Rev 3 requirement ID (NN.NN.NN).
+export async function build800171ToCsf20Map(options = {}) {
+  const url = options.url || 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx';
+  const buffer = options.buffer || await fetchBuffer(url);
+  const checksumValue = checksum(buffer);
+
+  const relationships = await parseOlirExcel(buffer, {
+    status: 'final',
+    ownerAuthority: true,
+    submitter: 'NIST',
+    normalizeReferenceId: normalize800171Id,
+    referenceFrameworkLabel: 'SP 800-171 Rev. 3',
+  });
+
+  return {
+    schema_version: '2.0',
+    source_key: 'nist-olir-csf2-to-sp800-171',
+    source_artifact: url,
+    source_version: '2.0-final',
+    snapshot_date: new Date().toISOString().slice(0, 10),
+    checksum: checksumValue,
+    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-171 Rev. 3 Concept Crosswalk (Final, OLIR catalog #179)',
     olir_status: 'final',
     owner_authority: true,
     submitter: 'NIST',

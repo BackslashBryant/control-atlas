@@ -332,6 +332,12 @@ const MAPS = [
     "nist-800-53",
     "nist-800-171-oscal-mappings",
   ],
+  [
+    "800-171-to-csf.json",
+    "nist-800-171",
+    "csf-2",
+    "nist-olir-csf2-to-sp800-171",
+  ],
   ["cci-to-800-53.json", "disa-cci", "nist-800-53", "disa-cci-nist-references"],
   // CCIs that DISA's own list never re-mapped past Rev 3/4, resolved through
   // NIST's published Rev 4 -> Rev 5 correspondences. See
