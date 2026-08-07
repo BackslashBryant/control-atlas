@@ -2189,29 +2189,8 @@
       "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 1217,
-      "relationship_count": 2088,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
-    },
-    {
-      "id": "artifact-nist-800-171",
-      "publication_source_id": "nist-800-171",
-      "name": "NIST SP 800-171 Rev. 3 Artifact",
-      "display_name": "SP 800-171 Rev. 3 Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "publication",
-      "version": "Revision 3",
-      "lifecycle_status": "active",
-      "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-07-28",
-      "artifact_url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
-      "byte_length": 153873,
-      "sha256": "sha256:ab869046d7d6e0dc24c4fa4ed81b42eeba696c904344bb18ce649735330999e5",
-      "parser": "default-parser",
-      "parser_version": "1.0.0",
-      "record_count": 148,
-      "relationship_count": 148,
+      "record_count": 2231,
+      "relationship_count": 3102,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2358,7 +2337,7 @@
       "parser": "cci-xml",
       "parser_version": "1.0.0",
       "record_count": 5137,
-      "relationship_count": 0,
+      "relationship_count": 3838,
       "license_or_use": "DISA STIG / CCI Terms of Use"
     },
     {
@@ -2614,27 +2593,6 @@
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
-      "id": "artifact-nist-800-53a-assessment-procedures",
-      "publication_source_id": "nist-800-53a-assessment-procedures",
-      "name": "NIST SP 800-53A Assessment Procedures Artifact",
-      "display_name": "SP 800-53A Rev. 5 Artifact",
-      "source_role": "assessment",
-      "authority_class": "publisher",
-      "format": "oscal_json",
-      "version": "2026-06-09",
-      "lifecycle_status": "active",
-      "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-06-13",
-      "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
-      "byte_length": 5674572,
-      "sha256": "sha256:604a2211ee8a552336549b1c737f446933c409c4f0f770a540538b3cf070458c",
-      "parser": "oscal-assessment-procedures",
-      "parser_version": "1.0.0",
-      "record_count": 1014,
-      "relationship_count": 1014,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
-    },
-    {
       "id": "artifact-nist-csf-53-supplemental",
       "publication_source_id": "nist-csf-53-supplemental",
       "name": "NIST CSF 1.1 to SP 800-53 Supplemental Mapping Artifact",
@@ -2693,30 +2651,9 @@
       "sha256": "sha256:21b6f3b118b6e5b305aaed3a0e4b70fa5d1d9aa388a0b92e7d6ddfed69e93ac3",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 0,
-      "relationship_count": 157,
+      "record_count": 148,
+      "relationship_count": 305,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
-    },
-    {
-      "id": "artifact-disa-cci-nist-references",
-      "publication_source_id": "disa-cci-nist-references",
-      "name": "DISA CCI NIST SP 800-53 Revision 5 References Artifact",
-      "display_name": "DISA CCI Artifact",
-      "source_role": "primary_data",
-      "authority_class": "publisher",
-      "format": "oscal_xml",
-      "version": "2025-01-23",
-      "lifecycle_status": "active",
-      "retrieval_method": "direct_file_import",
-      "retrieved_at": "2025-01-23",
-      "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
-      "byte_length": 5618096,
-      "sha256": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
-      "parser": "cci-xml",
-      "parser_version": "1.0.0",
-      "record_count": 0,
-      "relationship_count": 3838,
-      "license_or_use": "DISA Terms of Use"
     },
     {
       "id": "artifact-nist-800-53-rev4-rev5-crosswalk",
@@ -3043,11 +2980,11 @@
         "artifact-nist-800-53-rev4-rev5-crosswalk"
       ],
       "assessment_source_ids": [
-        "artifact-nist-800-53a-assessment-procedures"
+        "artifact-nist-800-53"
       ],
       "automation_source_ids": [],
       "reconciliation_source_ids": [
-        "artifact-disa-cci-nist-references"
+        "artifact-disa-cci-list"
       ]
     },
     {

@@ -621,6 +621,20 @@ function assessmentNodeId(recordId) {
   return nodeId("nist-800-53a", recordId);
 }
 
+// §8 merged provenance: some catalogs derive from the SAME underlying official
+// file as another (e.g. 800-53A assessment procedures are embedded in the
+// 800-53 rev5 OSCAL catalog; the 800-171 catalog and its OSCAL mapping are one
+// file; the CCI-to-NIST references are the CCI list). Node/edge provenance must
+// cite the ONE artifact that carries real evidence, not a redundant twin.
+const ARTIFACT_ALIASES = {
+  'artifact-nist-800-53a-assessment-procedures': 'artifact-nist-800-53',
+  'artifact-nist-800-171': 'artifact-nist-800-171-oscal-mappings',
+  'artifact-disa-cci-nist-references': 'artifact-disa-cci-list',
+};
+function aliasArtifact(id) {
+  return ARTIFACT_ALIASES[id] || id;
+}
+
 function pushEligibleNode(state, registry, node, sourceId) {
   const source = registry.byId.get(sourceId);
   if (!source?.graph_eligible) {
@@ -635,12 +649,12 @@ function pushEligibleNode(state, registry, node, sourceId) {
     return;
   }
   node.publication_source_id = sourceId;
-  node.artifact_ids = node.artifact_ids || [`artifact-${sourceId}`];
+  node.artifact_ids = node.artifact_ids || [aliasArtifact(`artifact-${sourceId}`)];
   node.provenance_assertions = node.provenance_assertions || [
     {
       authority_class: source?.authority_class || "publisher",
       publication_source_id: sourceId,
-      artifact_id: `artifact-${sourceId}`,
+      artifact_id: aliasArtifact(`artifact-${sourceId}`),
       source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
       version: source?.version || "1.0",
       snapshot_date: source?.retrieved_at || "2026-08-05",
@@ -972,7 +986,7 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
       payload.mappingModel ||
       payload.relationshipClass ||
       defaultRelationshipClass(payload.relationshipType),
-    source_artifact_id: payload.sourceArtifactId || `artifact-${payload.sourceId}`,
+    source_artifact_id: aliasArtifact(payload.sourceArtifactId || `artifact-${payload.sourceId}`),
     source_locator: payload.locator || `${payload.sourceId}#relationship`,
     status: payload.status || "active",
     authority_class: payload.authorityClass || source?.authority_class || "publisher",
