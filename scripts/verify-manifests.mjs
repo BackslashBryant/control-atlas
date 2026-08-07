@@ -274,8 +274,25 @@ function buildCoverageManifest() {
 }
 
 const coverage = buildCoverageManifest();
+// Preserve generated_at when nothing else changed, so re-running this gate
+// on unchanged inputs produces a zero diff (spec §11 item 10 / item 8:
+// "a second generation run produces no unexplained diff"). Without this the
+// timestamp churned on every run and polluted an otherwise-clean tree.
+const coveragePath = join(ROOT, 'data/source-coverage-manifest.json');
+if (existsSync(coveragePath)) {
+  try {
+    const previous = JSON.parse(readFileSync(coveragePath, 'utf8'));
+    const { generated_at: _prevAt, ...prevRest } = previous;
+    const { generated_at: _newAt, ...newRest } = coverage;
+    if (JSON.stringify(prevRest) === JSON.stringify(newRest)) {
+      coverage.generated_at = previous.generated_at;
+    }
+  } catch {
+    // Corrupt/unreadable prior manifest: fall through and write fresh.
+  }
+}
 writeFileSync(
-  join(ROOT, 'data/source-coverage-manifest.json'),
+  coveragePath,
   JSON.stringify(coverage, null, 2) + '\n',
   'utf8',
 );
