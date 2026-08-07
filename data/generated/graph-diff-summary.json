@@ -1,16 +1,17 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-07T22:11:14.603Z",
+  "generated_at": "2026-08-07T22:20:28.868Z",
   "graph_diff_summary": {
     "kind": "graph_diff_summary",
-    "previous_generated_at": "2026-08-07T22:11:14.603Z",
-    "current_generated_at": "2026-08-07T22:11:14.603Z",
-    "changed_runtime_artifacts": [],
-    "unchanged_runtime_artifacts": [
+    "previous_generated_at": "2026-08-07T22:20:00.561Z",
+    "current_generated_at": "2026-08-07T22:20:28.868Z",
+    "changed_runtime_artifacts": [
       "sources",
       "nodes",
       "edges",
-      "evidence",
+      "evidence"
+    ],
+    "unchanged_runtime_artifacts": [
       "graph-health"
     ]
   }
