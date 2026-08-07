@@ -77,8 +77,6 @@ export type CatalogSummary = {
   leaf_record_count: number;
 };
 
-const CONNECTION_ID_HINT = /crosswalk|mapping|olir|supplemental|references/i;
-
 export function canonicalSourceIdsFromCatalogs(
   catalogs: CatalogSummary[],
 ): Set<string> {
@@ -89,12 +87,17 @@ export function classifySourceLayer(
   source: any,
   canonicalSourceIds: Set<string>,
 ): SourceLayerId {
-  if (source.provenance_class === "control_atlas_derived") return "organization";
-  if (source.metadata?.identity_kind === "ingestion") return "ingestion";
-  if (canonicalSourceIds.has(source.id)) return "publication";
-  const name = source.display_name || source.name || "";
-  if (CONNECTION_ID_HINT.test(source.id) || CONNECTION_ID_HINT.test(name)) {
+  if (source.provenance_class === "control_atlas_derived" || source.source_role === "editorial") {
+    return "organization";
+  }
+  if (source.source_role === "mapping" || source.source_role === "enrichment") {
     return "connection";
+  }
+  if (source.source_role === "primary_data" || source.source_role === "reconciliation" || source.source_role === "assessment" || source.source_role === "automation" || source.metadata?.identity_kind === "ingestion") {
+    return "ingestion";
+  }
+  if (source.source_role === "publication" || canonicalSourceIds.has(source.id) || source.metadata?.identity_kind === "publication") {
+    return "publication";
   }
   return "ingestion";
 }
@@ -115,9 +118,6 @@ export function resolveCoverageLabel(
 export type LayeredSourceRow = SourceRegisterRow & {
   recordsRepresented: number | null;
   officialLink: string;
-  // Advanced-only fields — never shown in the default Publication register,
-  // only in the Ingestion provenance tab, per the "raw IDs stay advanced"
-  // rule.
   artifactType: string;
   rawCoverageKeys: string;
 };
@@ -145,10 +145,11 @@ export function buildSourceLayers(
     const catalog = catalogs.find((entry) => entry.source_id === source.id) || null;
     layers[layer].push({
       ...row,
+      publication: source.name || source.display_name || source.id,
       coverage: resolveCoverageLabel(source.metadata?.frameworks || [], catalogsById),
       recordsRepresented: catalog ? catalog.leaf_record_count : null,
       officialLink: source.artifact_url || source.catalog_browse_url || "",
-      artifactType: source.artifact_type || "Not recorded",
+      artifactType: source.format || source.artifact_type || "Not recorded",
       rawCoverageKeys: (source.metadata?.frameworks || []).join(", ") || "Not recorded",
     });
   }

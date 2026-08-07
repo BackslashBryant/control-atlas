@@ -14,46 +14,24 @@ const COMMITTED_ARTIFACTS = {
   relationships: join(ROOT, 'maps', 'stig-srg-to-cci.json'),
 };
 
-// Product-owner-approved catalog: DISA GENERIC, technology-class STIGs/SRGs only.
-// Never add vendor/product benchmarks (Microsoft, Cisco, RHEL, Kubernetes, Apache, etc.)
-// Each entry is an independently-published DISA zip on dl.dod.cyber.mil (filenames verified
-// against the public.cyber.mil/stigs/downloads/ document library on 2026-07-04). Some zips
-// bundle more than one XCCDF benchmark (e.g. WLAN Mgmt+Platform, EVVM Policy/Session/Endpoint).
-const DISA_ARTIFACT_MANIFEST = [
-  { file: 'U_ASD_V6R4_STIG.zip', hintKind: 'stig', name: 'Application Security and Development STIG' },
-  { file: 'U_Firewall_V3R3_SRG.zip', hintKind: 'srg', name: 'Network Firewall SRG' },
-  { file: 'U_NDM_V5R4_SRG.zip', hintKind: 'srg', name: 'Network Device Management SRG' },
-  { file: 'U_Network_Infrastructure_Policy_V10R7_STIG.zip', hintKind: 'stig', name: 'Network Infrastructure Policy STIG' },
-  { file: 'U_Layer_2_Switch_V3R4_SRG.zip', hintKind: 'srg', name: 'Network Layer 2 Switch SRG' },
-  { file: 'U_Router_V5R2_SRG.zip', hintKind: 'srg', name: 'Network Router SRG' },
-  { file: 'U_Web_Server_V4R4_SRG.zip', hintKind: 'srg', name: 'Web Server SRG' },
-  { file: 'U_Network_WLAN_Y23M10_STIG.zip', hintKind: 'stig', name: 'Network WLAN STIG (AP/Bridge/Controller Mgmt+Platform: covers WLAN Policy, Access Point, Controller)' },
-  { file: 'U_IDPS_V3R4_SRG.zip', hintKind: 'srg', name: 'Intrusion Detection and Prevention System SRG (Wireless IDPS)' },
-  { file: 'U_EVVM_Y26M01_SRG.zip', hintKind: 'srg', name: 'Enterprise Voice, Video, and Messaging SRG (covers Voice Video Services Policy, VVS Session Manager/Local Session Controller, VVS Endpoint)' },
-  { file: 'U_UEM_Y25M10_SRG.zip', hintKind: 'srg', name: 'Unified Endpoint Management SRG (covers Mobile Device Management Server)' },
-  { file: 'U_Application_Server_V4R4_SRG.zip', hintKind: 'srg', name: 'Application Server SRG' },
-  { file: 'U_Database_V4R5_SRG.zip', hintKind: 'srg', name: 'Database SRG' },
-  { file: 'U_Domain_Name_System_V4R2_SRG.zip', hintKind: 'srg', name: 'Domain Name System SRG' },
-  { file: 'U_GPOS_V3R3_SRG.zip', hintKind: 'srg', name: 'General Purpose Operating System SRG' },
-  { file: 'U_VPN_V3R4_SRG.zip', hintKind: 'srg', name: 'VPN SRG' },
-  { file: 'U_Cloud_Computing_Y26M06_SRG.zip', hintKind: 'srg', name: 'Cloud Computing SRG (Mission Owner Network/OS)' },
-  { file: 'U_Traditional_Security_Checklist_V2R8.zip', hintKind: 'stig', name: 'Traditional Security Checklist' },
-];
-
 const DL_BASE = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/';
 
 function checksum(value) {
   return `sha256:${createHash('sha256').update(value).digest('hex')}`;
 }
 
-// Retained for the DISA STIG/SRG compilation-zip path (single-URL bundles). Not used by the
-// per-artifact manifest fetch below, but kept for callers that pass an explicit compilation URL.
 export function findOfficialDisaCompilationUrl(html) {
   const matches = [...String(html).matchAll(/https:\/\/dl\.dod\.cyber\.mil\/[^"' ]+\.zip/gi)]
     .map((match) => match[0])
-    .filter((url) => /U_.*STIG.*Library.*\.zip$/i.test(url))
+    .filter((url) => /U_.*STIG.*Library.*\.zip$/i || /U_.*\.zip$/i.test(url))
     .sort();
   return matches[0] || null;
+}
+
+export function extractDisaZipUrlsFromHtml(html) {
+  const matches = [...String(html).matchAll(/href=["'](https:\/\/dl\.dod\.cyber\.mil\/wp-content\/uploads\/stigs\/zip\/[^"']+\.zip)["']/gi)]
+    .map((match) => match[1]);
+  return [...new Set(matches)];
 }
 
 function readJson(path) {
@@ -61,10 +39,13 @@ function readJson(path) {
 }
 
 function loadCommittedArtifacts() {
+  const stigData = readJson(COMMITTED_ARTIFACTS.stig);
+  const srgData = readJson(COMMITTED_ARTIFACTS.srg);
+  const relData = readJson(COMMITTED_ARTIFACTS.relationships);
   return {
-    stig: readJson(COMMITTED_ARTIFACTS.stig),
-    srg: readJson(COMMITTED_ARTIFACTS.srg),
-    relationships: readJson(COMMITTED_ARTIFACTS.relationships),
+    stig: stigData,
+    srg: srgData,
+    relationships: relData,
     sourceArtifact: DISCOVERY_URL,
     checksum: checksum(
       `${readFileSync(COMMITTED_ARTIFACTS.stig, 'utf8')}\n${readFileSync(COMMITTED_ARTIFACTS.srg, 'utf8')}\n${readFileSync(COMMITTED_ARTIFACTS.relationships, 'utf8')}`,

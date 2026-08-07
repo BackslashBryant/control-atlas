@@ -278,6 +278,10 @@ export function parse80053Catalog(catalogJson, sourceKey) {
 
 function walkCsf(nodes, functionCtx, categoryCtx, records) {
   for (const node of nodes || []) {
+    const statusProp = node.props?.find((p) => p.name === 'status')?.value;
+    if (statusProp === 'withdrawn' || statusProp === 'deprecated' || statusProp === 'historical') {
+      continue;
+    }
     const nextFunctionCtx =
       node.class === 'function'
         ? { id: node.id, title: node.title }
@@ -309,6 +313,15 @@ export function parseCsfCatalog(catalogJson, sourceKey) {
   }
   const records = [];
   walkCsf(catalogJson.catalog?.groups, null, null, records);
+
+  const functions = new Set(records.map((r) => r.function_id).filter(Boolean));
+  const categories = new Set(records.map((r) => r.category_id).filter(Boolean));
+  if (functions.size !== 6 || categories.size !== 22 || records.length !== 106) {
+    throw new Error(
+      `CSF 2.0 catalog validation failed: expected 6 functions, 22 categories, and 106 subcategories. Got ${functions.size} functions, ${categories.size} categories, and ${records.length} subcategories.`,
+    );
+  }
+
   return {
     schema_version: '1.0',
     source_key: sourceKey,

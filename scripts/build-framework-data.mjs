@@ -634,6 +634,18 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
+  node.publication_source_id = sourceId;
+  node.artifact_ids = node.artifact_ids || [`artifact-${sourceId}`];
+  node.provenance_assertions = node.provenance_assertions || [
+    {
+      authority_class: source?.authority_class || "publisher",
+      publication_source_id: sourceId,
+      artifact_id: `artifact-${sourceId}`,
+      source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
+      version: source?.version || "1.0",
+      snapshot_date: source?.retrieved_at || "2026-08-05",
+    },
+  ];
   state.nodes.push(node);
 }
 
@@ -952,9 +964,18 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     source_node_id: payload.sourceNodeId,
     target_node_id: payload.targetNodeId,
     relationship_type: payload.relationshipType,
+    raw_relationship_type: payload.rawRelationshipType || payload.relationshipType,
     relationship_class:
       payload.relationshipClass ||
       defaultRelationshipClass(payload.relationshipType),
+    mapping_model:
+      payload.mappingModel ||
+      payload.relationshipClass ||
+      defaultRelationshipClass(payload.relationshipType),
+    source_artifact_id: payload.sourceArtifactId || `artifact-${payload.sourceId}`,
+    source_locator: payload.locator || `${payload.sourceId}#relationship`,
+    status: payload.status || "active",
+    authority_class: payload.authorityClass || source?.authority_class || "publisher",
     provenance_class: provenanceClass,
     confidence:
       payload.confidence ||
@@ -2408,7 +2429,7 @@ export function buildFrameworkData() {
       continue;
     }
     if (entry.endsWith(".json")) {
-      rmSync(entryPath);
+      rmSync(entryPath, { force: true });
     }
   }
   for (const [name, values] of Object.entries(collections)) {

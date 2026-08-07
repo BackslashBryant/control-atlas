@@ -337,7 +337,6 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       </div>
       <p className="result-summary">Maintained by {source.owner}.</p>
       <p className="support-meta">
-        {sourceSyncLabel(source.sync_model)} ·{" "}
         {sourceFreshness(source).is_stale
           ? `Last checked ${source.last_checked}`
           : sourceCurrentAsOf(source)}

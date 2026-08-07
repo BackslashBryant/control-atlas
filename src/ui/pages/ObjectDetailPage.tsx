@@ -849,12 +849,11 @@ export function ObjectDetailPage(props: {
           >
             <p>{sourceTrustSummary(source)}</p>
             <p className="support-meta">
-              Primary source:{" "}
-              {source?.display_name || source?.name || "Unavailable"}
+              Published by: {source?.owner || source?.publisher || "Unavailable"}
             </p>
             {source ? (
               <p className="support-meta">
-                {sourceSyncLabel(source.sync_model)} · {sourceCurrentAsOf(source)}
+                {sourceCurrentAsOf(source)}
               </p>
             ) : null}
             <div className="card-actions">

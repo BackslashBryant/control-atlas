@@ -55,13 +55,23 @@ export async function parseOlirExcel(buffer, options = {}) {
       const comment = row[commentIdx] ? String(row[commentIdx]).trim() : '';
       const strength = row[strengthIdx] ? String(row[strengthIdx]).trim() : '';
 
+      const rawRelationshipType = strength || 'Concept Crosswalk';
+      let relationshipType = 'Concept Crosswalk';
+      const sLower = rawRelationshipType.toLowerCase();
+      if (sLower.includes('equal') || sLower.includes('equivalent')) relationshipType = 'Set Theory: Equal';
+      else if (sLower.includes('subset')) relationshipType = 'Set Theory: Subset';
+      else if (sLower.includes('superset')) relationshipType = 'Set Theory: Superset';
+      else if (sLower.includes('support')) relationshipType = 'Supportive';
+      else if (sLower.includes('derived')) relationshipType = 'Derived Relationship Mapping';
+
       relationships.push({
         source_id: controlId,
         target_id: focalId,
-        relationship_type: strength.toLowerCase() === 'equivalent' ? 'equivalent_to' : 'maps_to',
+        relationship_type: relationshipType,
+        raw_relationship_type: rawRelationshipType,
         why: comment || `NIST OLIR concept crosswalk associates SP 800-53 ${controlId} with CSF 2.0 ${focalId}.`,
         source_locator: `${selected.sheet}#${focalId}->${controlId}`,
-        olir_status: options.status || 'draft',
+        olir_status: options.status || 'final',
         owner_authority: options.ownerAuthority !== false,
         submitter: options.submitter || 'NIST',
       });
@@ -85,7 +95,8 @@ export function parseOlirCsv(text) {
     return {
       source_id: cols[focalIdx]?.trim(),
       target_id: cols[referenceIdx]?.trim(),
-      relationship_type: cols[relationshipIdx]?.trim() || 'maps_to',
+      relationship_type: cols[relationshipIdx]?.trim() || 'Concept Crosswalk',
+      raw_relationship_type: cols[relationshipIdx]?.trim() || 'Concept Crosswalk',
       olir_status: cols[statusIdx]?.trim() || 'final',
       why: 'Parsed from OLIR CSV fixture.',
       source_locator: `csv#${cols[focalIdx]?.trim()}->${cols[referenceIdx]?.trim()}`,
@@ -102,12 +113,12 @@ export async function fetchBuffer(url) {
 }
 
 export async function build80053ToCsf20Map(options = {}) {
-  const url = options.url || 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx';
+  const url = options.url || 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/CSFv2.0_to_SP800_53r5_olir.xlsx';
   const buffer = options.buffer || await fetchBuffer(url);
   const checksumValue = checksum(buffer);
 
   const relationships = await parseOlirExcel(buffer, {
-    status: 'draft',
+    status: 'final',
     ownerAuthority: true,
     submitter: 'NIST',
   });
@@ -116,11 +127,11 @@ export async function build80053ToCsf20Map(options = {}) {
     schema_version: '2.0',
     source_key: 'nist-olir-csf2-to-sp800-53',
     source_artifact: url,
-    source_version: '2.0-draft',
+    source_version: '2.0-final',
     snapshot_date: new Date().toISOString().slice(0, 10),
     checksum: checksumValue,
-    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-53 Rev 5.2.0 Concept Crosswalk (Draft)',
-    olir_status: 'draft',
+    provenance: 'Official NIST Cybersecurity Framework 2.0 to SP 800-53 Rev 5.2.0 Concept Crosswalk (Final)',
+    olir_status: 'final',
     owner_authority: true,
     submitter: 'NIST',
     relationships,

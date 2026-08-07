@@ -399,17 +399,6 @@
       "category": "Asset Management"
     },
     {
-      "id": "ID.AM-06",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.AM-06",
-      "description": "Cybersecurity roles and responsibilities for the entire workforce and third-party stakeholders (e.g., suppliers, customers, partners) are established",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.AM",
-      "category": "Asset Management"
-    },
-    {
       "id": "ID.AM-07",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -430,105 +419,6 @@
       "function": "IDENTIFY",
       "category_id": "ID.AM",
       "category": "Asset Management"
-    },
-    {
-      "id": "ID.BE-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.BE-01",
-      "description": "The organization’s role in the supply chain is identified and communicated",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.BE",
-      "category": "Business Environment"
-    },
-    {
-      "id": "ID.BE-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.BE-02",
-      "description": "The organization’s place in critical infrastructure and its industry sector is identified and communicated",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.BE",
-      "category": "Business Environment"
-    },
-    {
-      "id": "ID.BE-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.BE-03",
-      "description": "Priorities for organizational mission, objectives, and activities are established and communicated",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.BE",
-      "category": "Business Environment"
-    },
-    {
-      "id": "ID.BE-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.BE-04",
-      "description": "Dependencies and critical functions for delivery of critical services are established",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.BE",
-      "category": "Business Environment"
-    },
-    {
-      "id": "ID.BE-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.BE-05",
-      "description": "Resilience requirements to support delivery of critical services are established for all operating states (e.g. under duress/attack, during recovery, normal operations)",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.BE",
-      "category": "Business Environment"
-    },
-    {
-      "id": "ID.GV-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.GV-01",
-      "description": "Organizational cybersecurity policy is established and communicated",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.GV",
-      "category": "Governance"
-    },
-    {
-      "id": "ID.GV-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.GV-02",
-      "description": "Cybersecurity roles and responsibilities are coordinated and aligned with internal roles and external partners",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.GV",
-      "category": "Governance"
-    },
-    {
-      "id": "ID.GV-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.GV-03",
-      "description": "Legal and regulatory requirements regarding cybersecurity, including privacy and civil liberties obligations, are understood and managed",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.GV",
-      "category": "Governance"
-    },
-    {
-      "id": "ID.GV-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.GV-04",
-      "description": "Governance and risk management processes address cybersecurity risks",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.GV",
-      "category": "Governance"
     },
     {
       "id": "ID.IM-01",
@@ -685,94 +575,6 @@
       "category": "Risk Assessment"
     },
     {
-      "id": "ID.RM-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.RM-01",
-      "description": "Risk management processes are established, managed, and agreed to by organizational stakeholders",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.RM",
-      "category": "Risk Management Strategy"
-    },
-    {
-      "id": "ID.RM-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.RM-02",
-      "description": "Organizational risk tolerance is determined and clearly expressed",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.RM",
-      "category": "Risk Management Strategy"
-    },
-    {
-      "id": "ID.RM-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.RM-03",
-      "description": "The organization’s determination of risk tolerance is informed by its role in critical infrastructure and sector specific risk analysis",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.RM",
-      "category": "Risk Management Strategy"
-    },
-    {
-      "id": "ID.SC-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.SC-01",
-      "description": "Cyber supply chain risk management processes are identified, established, assessed, managed, and agreed to by organizational stakeholders",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.SC",
-      "category": "Supply Chain Risk Management"
-    },
-    {
-      "id": "ID.SC-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.SC-02",
-      "description": "Suppliers and third party partners of information systems, components, and services are identified, prioritized, and assessed using a cyber supply chain risk assessment process",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.SC",
-      "category": "Supply Chain Risk Management"
-    },
-    {
-      "id": "ID.SC-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.SC-03",
-      "description": "Contracts with suppliers and third-party partners are used to implement appropriate measures designed to meet the objectives of an organization’s cybersecurity program and Cyber Supply Chain Risk Management Plan.",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.SC",
-      "category": "Supply Chain Risk Management"
-    },
-    {
-      "id": "ID.SC-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.SC-04",
-      "description": "Suppliers and third-party partners are routinely assessed using audits, test results, or other forms of evaluations to confirm they are meeting their contractual obligations.",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.SC",
-      "category": "Supply Chain Risk Management"
-    },
-    {
-      "id": "ID.SC-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "ID.SC-05",
-      "description": "Response and recovery planning and testing are conducted with suppliers and third-party providers",
-      "function_id": "ID",
-      "function": "IDENTIFY",
-      "category_id": "ID.SC",
-      "category": "Supply Chain Risk Management"
-    },
-    {
       "id": "PR.AA-01",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -839,83 +641,6 @@
       "category": "Identity Management, Authentication, and Access Control"
     },
     {
-      "id": "PR.AC-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-01",
-      "description": "Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-02",
-      "description": "Physical access to assets is managed and protected",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-03",
-      "description": "Remote access is managed",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-04",
-      "description": "Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-05",
-      "description": "Network integrity is protected (e.g., network segregation, network segmentation)",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-06",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-06",
-      "description": "Identities are proofed and bound to credentials and asserted in interactions",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
-      "id": "PR.AC-07",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AC-07",
-      "description": "Users, devices, and other assets are authenticated (e.g., single-factor, multi-factor) commensurate with the risk of the transaction (e.g., individuals’ security and privacy risks and other organizational risks)",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AC",
-      "category": "Identity Management, Authentication and Access Control"
-    },
-    {
       "id": "PR.AT-01",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -932,39 +657,6 @@
       "framework": "csf",
       "title": "PR.AT-02",
       "description": "Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AT",
-      "category": "Awareness and Training"
-    },
-    {
-      "id": "PR.AT-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AT-03",
-      "description": "Third-party stakeholders (e.g., suppliers, customers, partners) understand their roles and responsibilities",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AT",
-      "category": "Awareness and Training"
-    },
-    {
-      "id": "PR.AT-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AT-04",
-      "description": "Senior executives understand their roles and responsibilities",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.AT",
-      "category": "Awareness and Training"
-    },
-    {
-      "id": "PR.AT-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.AT-05",
-      "description": "Physical and cybersecurity personnel understand their roles and responsibilities",
       "function_id": "PR",
       "function": "PROTECT",
       "category_id": "PR.AT",
@@ -993,72 +685,6 @@
       "category": "Data Security"
     },
     {
-      "id": "PR.DS-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-03",
-      "description": "Assets are formally managed throughout removal, transfers, and disposition",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
-      "id": "PR.DS-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-04",
-      "description": "Adequate capacity to ensure availability is maintained",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
-      "id": "PR.DS-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-05",
-      "description": "Protections against data leaks are implemented",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
-      "id": "PR.DS-06",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-06",
-      "description": "Integrity checking mechanisms are used to verify software, firmware, and information integrity",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
-      "id": "PR.DS-07",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-07",
-      "description": "The development and testing environment(s) are separate from the production environment",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
-      "id": "PR.DS-08",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.DS-08",
-      "description": "Integrity checking mechanisms are used to verify hardware integrity",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.DS",
-      "category": "Data Security"
-    },
-    {
       "id": "PR.DS-10",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -1079,138 +705,6 @@
       "function": "PROTECT",
       "category_id": "PR.DS",
       "category": "Data Security"
-    },
-    {
-      "id": "PR.IP-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-01",
-      "description": "A baseline configuration of information technology/industrial control systems is created and maintained incorporating security principles (e.g. concept of least functionality)",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-02",
-      "description": "A System Development Life Cycle to manage systems is implemented",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-03",
-      "description": "Configuration change control processes are in place",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-04",
-      "description": "Backups of information are conducted, maintained, and tested",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-05",
-      "description": "Policy and regulations regarding the physical operating environment for organizational assets are met",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-06",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-06",
-      "description": "Data is destroyed according to policy",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-07",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-07",
-      "description": "Protection processes are improved",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-08",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-08",
-      "description": "Effectiveness of protection technologies is shared",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-09",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-09",
-      "description": "Response plans (Incident Response and Business Continuity) and recovery plans (Incident Recovery and Disaster Recovery) are in place and managed",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-10",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-10",
-      "description": "Response and recovery plans are tested",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-11",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-11",
-      "description": "Cybersecurity is included in human resources practices (e.g., deprovisioning, personnel screening)",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
-    },
-    {
-      "id": "PR.IP-12",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.IP-12",
-      "description": "A vulnerability management plan is developed and implemented",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.IP",
-      "category": "Information Protection Processes and Procedures"
     },
     {
       "id": "PR.IR-01",
@@ -1255,28 +749,6 @@
       "function": "PROTECT",
       "category_id": "PR.IR",
       "category": "Technology Infrastructure Resilience"
-    },
-    {
-      "id": "PR.MA-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.MA-01",
-      "description": "Maintenance and repair of organizational assets are performed and logged, with approved and controlled tools",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.MA",
-      "category": "Maintenance"
-    },
-    {
-      "id": "PR.MA-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.MA-02",
-      "description": "Remote maintenance of organizational assets is approved, logged, and performed in a manner that prevents unauthorized access",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.MA",
-      "category": "Maintenance"
     },
     {
       "id": "PR.PS-01",
@@ -1345,72 +817,6 @@
       "category": "Platform Security"
     },
     {
-      "id": "PR.PT-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.PT-01",
-      "description": "Audit/log records are determined, documented, implemented, and reviewed in accordance with policy",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.PT",
-      "category": "Protective Technology"
-    },
-    {
-      "id": "PR.PT-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.PT-02",
-      "description": "Removable media is protected and its use restricted according to policy",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.PT",
-      "category": "Protective Technology"
-    },
-    {
-      "id": "PR.PT-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.PT-03",
-      "description": "The principle of least functionality is incorporated by configuring systems to provide only essential capabilities",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.PT",
-      "category": "Protective Technology"
-    },
-    {
-      "id": "PR.PT-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.PT-04",
-      "description": "Communications and control networks are protected",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.PT",
-      "category": "Protective Technology"
-    },
-    {
-      "id": "PR.PT-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "PR.PT-05",
-      "description": "Mechanisms (e.g., failsafe, load balancing, hot swap) are implemented to achieve resilience requirements in normal and adverse situations",
-      "function_id": "PR",
-      "function": "PROTECT",
-      "category_id": "PR.PT",
-      "category": "Protective Technology"
-    },
-    {
-      "id": "DE.AE-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.AE-01",
-      "description": "A baseline of network operations and expected data flows for users and systems is established and managed",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.AE",
-      "category": "Adverse Event Analysis"
-    },
-    {
       "id": "DE.AE-02",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -1438,17 +844,6 @@
       "framework": "csf",
       "title": "DE.AE-04",
       "description": "The estimated impact and scope of adverse events are understood",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.AE",
-      "category": "Adverse Event Analysis"
-    },
-    {
-      "id": "DE.AE-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.AE-05",
-      "description": "Incident alert thresholds are established",
       "function_id": "DE",
       "function": "DETECT",
       "category_id": "DE.AE",
@@ -1521,55 +916,11 @@
       "category": "Continuous Monitoring"
     },
     {
-      "id": "DE.CM-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.CM-04",
-      "description": "Malicious code is detected",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.CM",
-      "category": "Continuous Monitoring"
-    },
-    {
-      "id": "DE.CM-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.CM-05",
-      "description": "Unauthorized mobile code is detected",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.CM",
-      "category": "Continuous Monitoring"
-    },
-    {
       "id": "DE.CM-06",
       "type": "csf-subcategory",
       "framework": "csf",
       "title": "DE.CM-06",
       "description": "External service provider activities and services are monitored to find potentially adverse events",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.CM",
-      "category": "Continuous Monitoring"
-    },
-    {
-      "id": "DE.CM-07",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.CM-07",
-      "description": "Monitoring for unauthorized personnel, connections, devices, and software is performed",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.CM",
-      "category": "Continuous Monitoring"
-    },
-    {
-      "id": "DE.CM-08",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.CM-08",
-      "description": "Vulnerability scans are performed",
       "function_id": "DE",
       "function": "DETECT",
       "category_id": "DE.CM",
@@ -1587,110 +938,11 @@
       "category": "Continuous Monitoring"
     },
     {
-      "id": "DE.DP-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.DP-01",
-      "description": "Roles and responsibilities for detection are well defined to ensure accountability",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.DP",
-      "category": "Detection Processes"
-    },
-    {
-      "id": "DE.DP-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.DP-02",
-      "description": "Detection activities comply with all applicable requirements",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.DP",
-      "category": "Detection Processes"
-    },
-    {
-      "id": "DE.DP-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.DP-03",
-      "description": "Detection processes are tested",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.DP",
-      "category": "Detection Processes"
-    },
-    {
-      "id": "DE.DP-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.DP-04",
-      "description": "Event detection information is communicated",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.DP",
-      "category": "Detection Processes"
-    },
-    {
-      "id": "DE.DP-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "DE.DP-05",
-      "description": "Detection processes are continuously improved",
-      "function_id": "DE",
-      "function": "DETECT",
-      "category_id": "DE.DP",
-      "category": "Detection Processes"
-    },
-    {
-      "id": "RS.AN-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.AN-01",
-      "description": "Notifications from detection systems are investigated",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.AN",
-      "category": "Incident Analysis"
-    },
-    {
-      "id": "RS.AN-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.AN-02",
-      "description": "The impact of the incident is understood",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.AN",
-      "category": "Incident Analysis"
-    },
-    {
       "id": "RS.AN-03",
       "type": "csf-subcategory",
       "framework": "csf",
       "title": "RS.AN-03",
       "description": "Analysis is performed to establish what has taken place during an incident and the root cause of the incident",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.AN",
-      "category": "Incident Analysis"
-    },
-    {
-      "id": "RS.AN-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.AN-04",
-      "description": "Incidents are categorized consistent with response plans",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.AN",
-      "category": "Incident Analysis"
-    },
-    {
-      "id": "RS.AN-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.AN-05",
-      "description": "Processes are established to receive, analyze and respond to vulnerabilities disclosed to the organization from internal and external sources (e.g. internal testing, security bulletins, or security researchers)",
       "function_id": "RS",
       "function": "RESPOND",
       "category_id": "RS.AN",
@@ -1730,17 +982,6 @@
       "category": "Incident Analysis"
     },
     {
-      "id": "RS.CO-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.CO-01",
-      "description": "Personnel know their roles and order of operations when a response is needed",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.CO",
-      "category": "Incident Response Reporting and Communication"
-    },
-    {
       "id": "RS.CO-02",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -1761,50 +1002,6 @@
       "function": "RESPOND",
       "category_id": "RS.CO",
       "category": "Incident Response Reporting and Communication"
-    },
-    {
-      "id": "RS.CO-04",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.CO-04",
-      "description": "Coordination with stakeholders occurs consistent with response plans",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.CO",
-      "category": "Incident Response Reporting and Communication"
-    },
-    {
-      "id": "RS.CO-05",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.CO-05",
-      "description": "Voluntary information sharing occurs with external stakeholders to achieve broader cybersecurity situational awareness",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.CO",
-      "category": "Incident Response Reporting and Communication"
-    },
-    {
-      "id": "RS.IM-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.IM-01",
-      "description": "Response plans incorporate lessons learned",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.IM",
-      "category": "Improvements"
-    },
-    {
-      "id": "RS.IM-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.IM-02",
-      "description": "Response strategies are updated",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.IM",
-      "category": "Improvements"
     },
     {
       "id": "RS.MA-01",
@@ -1884,50 +1081,6 @@
       "category": "Incident Mitigation"
     },
     {
-      "id": "RS.MI-03",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.MI-03",
-      "description": "Newly identified vulnerabilities are mitigated or documented as accepted risks",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.MI",
-      "category": "Incident Mitigation"
-    },
-    {
-      "id": "RS.RP-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RS.RP-01",
-      "description": "Response plan is executed during or after an incident",
-      "function_id": "RS",
-      "function": "RESPOND",
-      "category_id": "RS.RP",
-      "category": "Response Planning"
-    },
-    {
-      "id": "RC.CO-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RC.CO-01",
-      "description": "Public relations are managed",
-      "function_id": "RC",
-      "function": "RECOVER",
-      "category_id": "RC.CO",
-      "category": "Incident Recovery Communication"
-    },
-    {
-      "id": "RC.CO-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RC.CO-02",
-      "description": "Reputation is repaired after an incident",
-      "function_id": "RC",
-      "function": "RECOVER",
-      "category_id": "RC.CO",
-      "category": "Incident Recovery Communication"
-    },
-    {
       "id": "RC.CO-03",
       "type": "csf-subcategory",
       "framework": "csf",
@@ -1948,28 +1101,6 @@
       "function": "RECOVER",
       "category_id": "RC.CO",
       "category": "Incident Recovery Communication"
-    },
-    {
-      "id": "RC.IM-01",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RC.IM-01",
-      "description": "Recovery plans incorporate lessons learned",
-      "function_id": "RC",
-      "function": "RECOVER",
-      "category_id": "RC.IM",
-      "category": "Improvements"
-    },
-    {
-      "id": "RC.IM-02",
-      "type": "csf-subcategory",
-      "framework": "csf",
-      "title": "RC.IM-02",
-      "description": "Recovery strategies are updated",
-      "function_id": "RC",
-      "function": "RECOVER",
-      "category_id": "RC.IM",
-      "category": "Improvements"
     },
     {
       "id": "RC.RP-01",
