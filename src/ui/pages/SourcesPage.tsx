@@ -129,9 +129,6 @@ export function SourcesPage(props: {
             <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
           ) : null}
           <div><dt>Parser</dt><dd>{selectedSource.metadata?.parser || selectedSource.parser || "Not applicable or not recorded"}</dd></div>
-          {selectedSource.checksum ? (
-            <div><dt>Checksum</dt><dd className="source-checksum">{selectedSource.checksum}</dd></div>
-          ) : null}
           {typeof selectedSource.record_count === "number" ? (
             <div><dt>Records</dt><dd>{selectedSource.record_count.toLocaleString()}</dd></div>
           ) : null}

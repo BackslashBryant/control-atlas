@@ -130,8 +130,6 @@ export type LayeredSourceRow = SourceRegisterRow & {
   officialLink: string;
   artifactType: string;
   rawCoverageKeys: string;
-  checksum: string;
-  relationshipCount: number | null;
 };
 
 export function buildSourceLayers(
@@ -165,8 +163,6 @@ export function buildSourceLayers(
       officialLink: source.artifact_url || source.catalog_browse_url || "",
       artifactType: source.format || source.artifact_type || "Not recorded",
       rawCoverageKeys: (source.metadata?.frameworks || []).join(", ") || "Not recorded",
-      checksum: source.checksum || "",
-      relationshipCount: typeof source.relationship_count === "number" ? source.relationship_count : null,
     });
   }
   return layers;
