@@ -20,7 +20,7 @@ import readXlsxFile from 'read-excel-file/node';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
-const OUT = join(ROOT, 'data/generated/artifact-hydration.json');
+const OUT = join(ROOT, 'data/artifact-hydration-manifest.json');
 
 // ---- Deterministic record counters keyed by counting method. ----
 function countOscalControls(json) {
@@ -94,10 +94,12 @@ const RESOLUTIONS = [
   { id: 'artifact-mitre-d3fend-ontology', url: 'https://d3fend.mitre.org/api/technique/all.json', format: 'json_ld', parser: 'd3fend-json-ld', parser_version: '1.0.0', count: 'jsonld' },
   { id: 'artifact-mitre-d3fend-mappings', url: 'https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json', format: 'json_ld', parser: 'd3fend-json-ld', parser_version: '1.0.0', count: 'jsonld' },
   { id: 'artifact-disa-cci-list', url: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip', format: 'oscal_xml', parser: 'cci-xml', parser_version: '1.0.0', count: 'cci' },
-  // NIST OSCAL catalog family (pinned v1.5.0).
-  { id: 'artifact-nist-oscal', url: `${OSCAL}/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  // NIST OSCAL catalog family (pinned v1.5.0). These target the graph-cited
+  // artifact ids (artifact-<catalogId>) so node/edge provenance resolves to
+  // real evidence; the fabricated `-oscal`/`-oscal-mappings` twins are removed.
+  { id: 'artifact-nist-800-53', url: `${OSCAL}/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   { id: 'artifact-nist-800-172-rev3', url: `${OSCAL}/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
-  { id: 'artifact-nist-ssdf-oscal', url: `${OSCAL}/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  { id: 'artifact-nist-ssdf', url: `${OSCAL}/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   { id: 'artifact-nist-800-171-oscal-mappings', url: `${OSCAL}/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   // Direct-download spreadsheets (real bytes + first-sheet row counts).
   { id: 'artifact-fedramp-rev5', url: 'https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx', format: 'spreadsheet', parser: 'fedramp-legacy-baseline-workbook', parser_version: '1.0.0', count: 'xlsx' },
@@ -180,10 +182,29 @@ async function main() {
     }
   }
 
+  // Remove fabricated orphan twins whose real evidence now lives under the
+  // graph-cited artifact id. Only ids proven un-cited by the graph belong here.
+  const REMOVE_ORPHANS = [
+    { id: 'artifact-nist-oscal', reason: 'duplicate of artifact-nist-800-53 (same OSCAL rev5 catalog); not graph-cited' },
+    { id: 'artifact-nist-ssdf-oscal', reason: 'duplicate of artifact-nist-ssdf (same SSDF OSCAL catalog); not graph-cited' },
+  ];
+  const removed = [];
+  for (const { id, reason } of REMOVE_ORPHANS) {
+    const idx = registry.artifacts.findIndex((a) => a.id === id);
+    if (idx !== -1) { registry.artifacts.splice(idx, 1); removed.push({ id, reason }); }
+    for (const b of registry.catalog_source_bundles || []) {
+      for (const key of ['primary_artifact_ids', 'enrichment_artifact_ids', 'mapping_source_ids',
+        'assessment_source_ids', 'automation_source_ids', 'reconciliation_source_ids']) {
+        if (Array.isArray(b[key])) b[key] = b[key].filter((x) => x !== id);
+      }
+    }
+  }
+  if (removed.length) console.log(`Removed ${removed.length} fabricated orphan twin(s): ${removed.map((r) => r.id).join(', ')}`);
+
   if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, JSON.stringify({ generated_at: new Date().toISOString(), hydrated: changed, results: log }, null, 2) + '\n', 'utf8');
+  writeFileSync(OUT, JSON.stringify({ generated_at: new Date().toISOString(), hydrated: changed, removed_orphans: removed, results: log }, null, 2) + '\n', 'utf8');
   writeFileSync(REGISTRY, JSON.stringify(registry, null, 2) + '\n', 'utf8');
-  console.log(`\nHydrated ${changed}/${RESOLUTIONS.length} artifacts. Execution log: data/generated/artifact-hydration.json`);
+  console.log(`\nHydrated ${changed}/${RESOLUTIONS.length} artifacts. Execution log: data/artifact-hydration-manifest.json`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

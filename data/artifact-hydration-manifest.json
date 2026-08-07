@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-08-07T11:57:33.040Z",
+  "generated_at": "2026-08-07T12:05:28.834Z",
   "hydrated": 16,
+  "removed_orphans": [
+    {
+      "id": "artifact-nist-oscal",
+      "reason": "duplicate of artifact-nist-800-53 (same OSCAL rev5 catalog); not graph-cited"
+    },
+    {
+      "id": "artifact-nist-ssdf-oscal",
+      "reason": "duplicate of artifact-nist-ssdf (same SSDF OSCAL catalog); not graph-cited"
+    }
+  ],
   "results": [
     {
       "id": "artifact-nist-800-171-rev2",
@@ -83,7 +93,7 @@
       "retrieved_at": "2026-08-07"
     },
     {
-      "id": "artifact-nist-oscal",
+      "id": "artifact-nist-800-53",
       "status": "OK",
       "http": 200,
       "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
@@ -103,7 +113,7 @@
       "retrieved_at": "2026-08-07"
     },
     {
-      "id": "artifact-nist-ssdf-oscal",
+      "id": "artifact-nist-ssdf",
       "status": "OK",
       "http": 200,
       "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json",
