@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T11:52:05.580Z",
-  "hydrated": 12,
+  "generated_at": "2026-08-07T11:57:33.040Z",
+  "hydrated": 16,
   "results": [
     {
       "id": "artifact-nist-800-171-rev2",
@@ -110,6 +110,46 @@
       "sha256": "sha256:b01634a5fdb382e7a12660c379a4d0bc3a2b8e29abccf2861834880005137117",
       "byte_length": 253878,
       "record_count": 61,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-171-oscal-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+      "sha256": "sha256:21b6f3b118b6e5b305aaed3a0e4b70fa5d1d9aa388a0b92e7d6ddfed69e93ac3",
+      "byte_length": 905711,
+      "record_count": 130,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-fedramp-rev5",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+      "sha256": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
+      "byte_length": 709615,
+      "record_count": 6,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-800-53-rev4-rev5-crosswalk",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+      "sha256": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
+      "byte_length": 167183,
+      "record_count": 2,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf-53-supplemental",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
+      "sha256": "sha256:8b09e8c5bd11dcfa494d2f5beec2d32d98df934285c0214712d020abefc162f1",
+      "byte_length": 201644,
+      "record_count": 2,
       "retrieved_at": "2026-08-07"
     },
     {

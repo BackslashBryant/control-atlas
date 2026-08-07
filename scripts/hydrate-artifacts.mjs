@@ -12,9 +12,11 @@
 // untouched and reported so the caller can quarantine it with a reason.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unzipSync } from 'fflate';
+import readXlsxFile from 'read-excel-file/node';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -96,6 +98,11 @@ const RESOLUTIONS = [
   { id: 'artifact-nist-oscal', url: `${OSCAL}/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   { id: 'artifact-nist-800-172-rev3', url: `${OSCAL}/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   { id: 'artifact-nist-ssdf-oscal', url: `${OSCAL}/SP800-218/ver1/json/NIST_SP800-218_ver1_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  { id: 'artifact-nist-800-171-oscal-mappings', url: `${OSCAL}/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  // Direct-download spreadsheets (real bytes + first-sheet row counts).
+  { id: 'artifact-fedramp-rev5', url: 'https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx', format: 'spreadsheet', parser: 'fedramp-legacy-baseline-workbook', parser_version: '1.0.0', count: 'xlsx' },
+  { id: 'artifact-nist-800-53-rev4-rev5-crosswalk', url: 'https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx', format: 'spreadsheet', parser: 'rev4-rev5-crosswalk-xlsx', parser_version: '1.0.0', count: 'xlsx' },
+  { id: 'artifact-nist-csf-53-supplemental', url: 'https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];
@@ -108,6 +115,20 @@ const COUNTERS = {
   csv: (bytes) => countCsvRows(Buffer.from(bytes).toString('utf8')),
   cci: (bytes) => countCciItems(bytes),
 };
+
+// XLSX row count is async (read-excel-file/node reads a file/stream).
+async function countXlsxRows(buf) {
+  const tmp = join(tmpdir(), `ca-hydrate-${createHash('sha1').update(buf).digest('hex').slice(0, 12)}.xlsx`);
+  writeFileSync(tmp, buf);
+  const rows = await readXlsxFile(tmp);
+  return Math.max(0, rows.length - 1); // minus header row
+}
+
+async function countRecords(method, buf) {
+  if (method === 'xlsx') return countXlsxRows(buf);
+  if (method && COUNTERS[method]) return COUNTERS[method](buf);
+  return null;
+}
 
 async function fetchBytes(url) {
   const res = await fetch(url, {
@@ -135,8 +156,7 @@ async function main() {
         : await fetchBytes(r.url);
       const sha256 = 'sha256:' + createHash('sha256').update(buf).digest('hex');
       const byteLength = buf.length;
-      let recordCount = null;
-      if (r.count && COUNTERS[r.count]) recordCount = COUNTERS[r.count](buf);
+      const recordCount = await countRecords(r.count, buf);
       const contentChanged = art.sha256 !== sha256;
       // Preserve retrieved_at when bytes are unchanged (stable re-runs).
       const retrievedAt = contentChanged ? today : (art.retrieved_at && !/placeholder/i.test(art.retrieved_at) ? art.retrieved_at : today);
