@@ -46,8 +46,6 @@
     "test:performance": "npm run build:site && node ./node_modules/@lhci/cli/src/cli.js autorun && node ./tools/summarize-lighthouse.mjs",
     "copy:extract": "node ./tools/extract-ui-copy.mjs",
     "style:check": "npm run copy:extract && node ./tools/run-vale.mjs README.md docs/PRD.md docs/vision.md docs/DESIGN_PRINCIPLES.md artifacts/vale/ui-copy.md",
-    "review:experience:fast": "echo 'Experience guardian removed'",
-    "review:experience": "echo 'Experience guardian removed'",
     "test:style": "node ./tools/test-vale-style.mjs",
     "test:oscal:independent": "node ./tools/oscal-cross-check.mjs",
     "test:e2e:live": "playwright test --config playwright.live.config.mjs",
