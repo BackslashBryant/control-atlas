@@ -641,6 +641,27 @@ function aliasArtifact(id) {
   return ARTIFACT_ALIASES[id] || id;
 }
 
+// spec §3: every node stores publication_source_id, artifact_ids, and
+// provenance_assertions[]. Shared by pushEligibleNode (regular catalog
+// content) and the organizing-spine's trunk/limb/synthetic-catalog nodes
+// (applyOrganizingSpine) so neither path ships a node with no provenance.
+function attachNodeProvenance(node, sourceId, registry) {
+  const source = registry.byId.get(sourceId);
+  node.publication_source_id = sourceId;
+  node.artifact_ids = node.artifact_ids || [aliasArtifact(`artifact-${sourceId}`)];
+  node.provenance_assertions = node.provenance_assertions || [
+    {
+      authority_class: source?.authority_class || "publisher",
+      publication_source_id: sourceId,
+      artifact_id: aliasArtifact(`artifact-${sourceId}`),
+      source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
+      version: source?.version || "1.0",
+      snapshot_date: source?.retrieved_at || "2026-08-05",
+    },
+  ];
+  return node;
+}
+
 function pushEligibleNode(state, registry, node, sourceId) {
   const source = registry.byId.get(sourceId);
   if (!source?.graph_eligible) {
@@ -654,18 +675,7 @@ function pushEligibleNode(state, registry, node, sourceId) {
     });
     return;
   }
-  node.publication_source_id = sourceId;
-  node.artifact_ids = node.artifact_ids || [aliasArtifact(`artifact-${sourceId}`)];
-  node.provenance_assertions = node.provenance_assertions || [
-    {
-      authority_class: source?.authority_class || "publisher",
-      publication_source_id: sourceId,
-      artifact_id: aliasArtifact(`artifact-${sourceId}`),
-      source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
-      version: source?.version || "1.0",
-      snapshot_date: source?.retrieved_at || "2026-08-05",
-    },
-  ];
+  attachNodeProvenance(node, sourceId, registry);
   state.nodes.push(node);
 }
 
@@ -2119,22 +2129,30 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
 
   // 1. Trunk + limb nodes (scaffold, no catalog_id — exempt from catalog identity).
   nodes.push(
-    buildStructureNode({
-      id: spine.trunk.id,
-      nodeType: "trunk",
-      label: spine.trunk.label,
-      description:
-        "The cybersecurity discipline itself — the single common ancestor every limb hangs from.",
-    }),
+    attachNodeProvenance(
+      buildStructureNode({
+        id: spine.trunk.id,
+        nodeType: "trunk",
+        label: spine.trunk.label,
+        description:
+          "The cybersecurity discipline itself — the single common ancestor every limb hangs from.",
+      }),
+      ORGANIZING_STRUCTURE_SOURCE_ID,
+      registry,
+    ),
   );
   for (const limb of spine.limbs) {
     nodes.push(
-      buildStructureNode({
-        id: limb.id,
-        nodeType: "limb",
-        label: limb.label,
-        description: limb.blurb,
-      }),
+      attachNodeProvenance(
+        buildStructureNode({
+          id: limb.id,
+          nodeType: "limb",
+          label: limb.label,
+          description: limb.blurb,
+        }),
+        ORGANIZING_STRUCTURE_SOURCE_ID,
+        registry,
+      ),
     );
   }
 
@@ -2148,7 +2166,7 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
   let nodeById = new Map(nodes.map((node) => [node.id, node]));
   for (const wrapper of synthetic.wrappers) {
     const decl = spine.syntheticCatalogs.find((entry) => entry.catalog_id === wrapper.catalogId);
-    const catalogNode = buildSyntheticCatalogNode(decl);
+    const catalogNode = attachNodeProvenance(buildSyntheticCatalogNode(decl), decl.source_id, registry);
     nodes.push(catalogNode);
     nodeById.set(catalogNode.id, catalogNode);
     pushOrganizingEdge(edgeState, {

@@ -2106,7 +2106,7 @@
       "sha256": "sha256:2e3e3a687cb286047a60a3e7539aaece52b1b667e2f5ab6732aa4fac33fd33a4",
       "parser": "control-atlas-spine",
       "parser_version": "1.0.0",
-      "record_count": 0,
+      "record_count": 10,
       "relationship_count": 0,
       "license_or_use": "Control Atlas editorial structure (product-authored organizing layer)"
     },
@@ -2127,7 +2127,7 @@
       "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 2231,
+      "record_count": 2232,
       "relationship_count": 3102,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
@@ -2316,7 +2316,7 @@
       "sha256": "sha256:077cbb6d2ae5f8fdbaaf416d87a34a8621767cdba490f3283feb0c5c35892700",
       "parser": "cci-xml",
       "parser_version": "1.0.0",
-      "record_count": 5137,
+      "record_count": 5138,
       "relationship_count": 3838,
       "license_or_use": "DISA STIG / CCI Terms of Use"
     },
@@ -2442,7 +2442,7 @@
       "sha256": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
       "parser": "fedramp-legacy-baseline-workbook",
       "parser_version": "1.0.0",
-      "record_count": 4,
+      "record_count": 5,
       "relationship_count": 1045,
       "license_or_use": "GSA FedRAMP Open Source License / Public Domain"
     },
@@ -2484,7 +2484,7 @@
       "sha256": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
       "parser": "oscal-profile",
       "parser_version": "1.5.0",
-      "record_count": 4,
+      "record_count": 5,
       "relationship_count": 902,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
@@ -2505,7 +2505,7 @@
       "sha256": "sha256:73d19f05f71e30f378050f178aa3943c38790bbae56c07f2b5708c5a1a90242f",
       "parser": "pdf-extract",
       "parser_version": "1.0.0",
-      "record_count": 3,
+      "record_count": 4,
       "relationship_count": 3,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
@@ -2526,7 +2526,7 @@
       "sha256": "sha256:107a9b9cdc8eccf37386aec28bbaf2dfaef5cfece17151ceabc3960423243a57",
       "parser": "pdf-extract",
       "parser_version": "1.0.0",
-      "record_count": 17,
+      "record_count": 18,
       "relationship_count": 17,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
@@ -2547,7 +2547,7 @@
       "sha256": "sha256:4f75e1136bb905a654f1bcd9eefefb4108f47597276ee5eec0688f6d96f6a01d",
       "parser": "pdf-extract",
       "parser_version": "1.0.0",
-      "record_count": 7,
+      "record_count": 8,
       "relationship_count": 14,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },

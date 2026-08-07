@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T21:26:43.879Z",
+  "generated_at": "2026-08-07T21:31:56.389Z",
   "completeness": {
     "total_publications": 65,
     "total_artifacts": 37,
@@ -28,7 +28,7 @@
     {
       "catalog_id": "nist-800-53",
       "expected_records": null,
-      "imported_records": 2231,
+      "imported_records": 2232,
       "excluded_records": 0,
       "missing_records": null,
       "primary_artifacts": 1,
