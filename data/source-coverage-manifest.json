@@ -1,9 +1,9 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T12:26:35.590Z",
+  "generated_at": "2026-08-07T12:34:47.788Z",
   "completeness": {
     "total_publications": 71,
-    "total_artifacts": 40,
+    "total_artifacts": 41,
     "total_catalog_bundles": 3,
     "manual_seed_artifacts": 8,
     "provenance_verified": false
@@ -47,13 +47,13 @@
       "imported_records": 615,
       "excluded_records": 0,
       "missing_records": null,
-      "primary_artifacts": 1,
+      "primary_artifacts": 2,
       "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-07-04",
+      "last_refresh": "2026-07-13",
       "completeness_status": "reconciled"
     }
   ],

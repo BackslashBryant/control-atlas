@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T12:26:30.242Z",
-  "hydrated": 25,
+  "generated_at": "2026-08-07T12:34:28.755Z",
+  "hydrated": 29,
   "removed_orphans": [],
   "results": [
     {
@@ -272,6 +272,46 @@
       "byte_length": 2270327,
       "record_count": null,
       "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-disa-compilation-zip",
+      "status": "OK",
+      "http": 200,
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
+      "byte_length": 368971055,
+      "record_count": null,
+      "retrieved_at": "2026-07-13"
+    },
+    {
+      "id": "artifact-disa-stig-library",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c",
+      "byte_length": 2140164,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-disa-srg-library",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562",
+      "byte_length": 3991453,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
+    },
+    {
+      "id": "artifact-disa-stig-srg-cci-references",
+      "status": "OK",
+      "http": "local",
+      "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
+      "sha256": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542",
+      "byte_length": 893612,
+      "record_count": null,
+      "retrieved_at": "2026-07-04"
     },
     {
       "id": "artifact-control-atlas-structure",
