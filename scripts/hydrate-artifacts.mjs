@@ -123,6 +123,10 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-cmmc-rule', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=170', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
   // CSF 2.0 Core from the NIST OSCAL catalog (deterministic, pinned v1.5.0).
   { id: 'artifact-nist-csf-2', url: `${OSCAL}/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  // FIPS 199 / 200 and SP 800-37 Rev 2 official PDFs (nvlpubs, byte-stable).
+  { id: 'artifact-nist-fips-199', url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-nist-fips-200', url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.200.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-nist-800-37-rev2', url: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-37r2.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];
