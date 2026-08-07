@@ -141,6 +141,34 @@ if (!registry) {
   for (const h of regHits) err(`forbidden placeholder/fabricated marker: ${h}`);
 }
 
+// Manifest/runtime agreement: every artifact's record_count and
+// relationship_count must equal the number of generated nodes/edges that cite
+// it (spec §9). Also confirms every generated node/edge resolves to a real
+// artifact (spec §11 provenance resolution).
+const nodesRaw = readJson('data/generated/nodes.json');
+const edgesRaw = readJson('data/generated/edges.json');
+if (registry && nodesRaw && edgesRaw) {
+  const nodes = Array.isArray(nodesRaw) ? nodesRaw : nodesRaw.nodes;
+  const edges = Array.isArray(edgesRaw) ? edgesRaw : edgesRaw.edges;
+  const artifactIds = new Set((registry.artifacts || []).map((a) => a.id));
+  const nodeCounts = new Map();
+  const edgeCounts = new Map();
+  for (const n of nodes) for (const aid of n.artifact_ids || []) {
+    nodeCounts.set(aid, (nodeCounts.get(aid) || 0) + 1);
+    if (!artifactIds.has(aid)) err(`node ${n.id} cites unknown artifact: ${aid}`);
+  }
+  for (const e of edges) if (e.source_artifact_id) {
+    edgeCounts.set(e.source_artifact_id, (edgeCounts.get(e.source_artifact_id) || 0) + 1);
+    if (!artifactIds.has(e.source_artifact_id)) err(`edge ${e.id} cites unknown source_artifact_id: ${e.source_artifact_id}`);
+  }
+  for (const art of registry.artifacts || []) {
+    const rc = nodeCounts.get(art.id) || 0;
+    const relc = edgeCounts.get(art.id) || 0;
+    if (art.record_count !== rc) err(`artifact ${art.id} record_count ${art.record_count} != runtime node count ${rc} (manifest/runtime disagreement)`);
+    if (art.relationship_count !== relc) err(`artifact ${art.id} relationship_count ${art.relationship_count} != runtime edge count ${relc}`);
+  }
+}
+
 // Discovery manifests: real checksums, no forbidden markers.
 const disa = readJson('data/disa-artifact-manifest.json');
 if (disa) {

@@ -1860,7 +1860,7 @@
       "sha256": "sha256:2e3e3a687cb286047a60a3e7539aaece52b1b667e2f5ab6732aa4fac33fd33a4",
       "parser": "control-atlas-spine",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Control Atlas editorial structure (product-authored organizing layer)"
     },
@@ -1881,8 +1881,8 @@
       "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 1196,
-      "relationship_count": 0,
+      "record_count": 1217,
+      "relationship_count": 2088,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -1902,8 +1902,8 @@
       "sha256": "sha256:ab869046d7d6e0dc24c4fa4ed81b42eeba696c904344bb18ce649735330999e5",
       "parser": "default-parser",
       "parser_version": "1.0.0",
-      "record_count": 130,
-      "relationship_count": 0,
+      "record_count": 148,
+      "relationship_count": 148,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -1923,8 +1923,8 @@
       "sha256": "sha256:5c7485b42bdc8c5c89f841bb31c956552f67c0ad0516b495b9945257183917eb",
       "parser": "default-parser",
       "parser_version": "1.0.0",
-      "record_count": 106,
-      "relationship_count": 0,
+      "record_count": 135,
+      "relationship_count": 134,
       "license_or_use": "NIST Terms of Use"
     },
     {
@@ -1944,8 +1944,8 @@
       "sha256": "sha256:b01634a5fdb382e7a12660c379a4d0bc3a2b8e29abccf2861834880005137117",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 61,
-      "relationship_count": 0,
+      "record_count": 47,
+      "relationship_count": 46,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -1965,8 +1965,8 @@
       "sha256": "sha256:0f4d59413bbcc9998da80495ce46ebfe0475e392803c4d2ed38d9941d83f138d",
       "parser": "csv",
       "parser_version": "1.0.0",
-      "record_count": 117,
-      "relationship_count": 0,
+      "record_count": 125,
+      "relationship_count": 125,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -1986,8 +1986,8 @@
       "sha256": "sha256:21c6df17c7ff1c8330f16334fdddd488ffc10f71051078dd73c18595a33da5ab",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 115,
-      "relationship_count": 0,
+      "record_count": 133,
+      "relationship_count": 133,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2007,8 +2007,8 @@
       "sha256": "sha256:618487691ee9fbb1083f52dba7911be52ccf0573718d97038527b43cdeb3014b",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 3,
-      "relationship_count": 0,
+      "record_count": 2,
+      "relationship_count": 1,
       "license_or_use": "eCFR Public Domain"
     },
     {
@@ -2028,8 +2028,8 @@
       "sha256": "sha256:618487691ee9fbb1083f52dba7911be52ccf0573718d97038527b43cdeb3014b",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 3,
-      "relationship_count": 0,
+      "record_count": 2,
+      "relationship_count": 2,
       "license_or_use": "National Archives Public Domain"
     },
     {
@@ -2070,8 +2070,8 @@
       "sha256": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c",
       "parser": "xccdf",
       "parser_version": "1.0.0",
-      "record_count": 603,
-      "relationship_count": 0,
+      "record_count": 615,
+      "relationship_count": 614,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2091,8 +2091,8 @@
       "sha256": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562",
       "parser": "xccdf",
       "parser_version": "1.0.0",
-      "record_count": 1514,
-      "relationship_count": 0,
+      "record_count": 1533,
+      "relationship_count": 1532,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2112,8 +2112,8 @@
       "sha256": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542",
       "parser": "xccdf",
       "parser_version": "1.0.0",
-      "record_count": 2123,
-      "relationship_count": 0,
+      "record_count": 0,
+      "relationship_count": 2123,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2280,8 +2280,8 @@
       "sha256": "sha256:aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba",
       "parser": "ai-rmf-playbook-json",
       "parser_version": "1.0.0",
-      "record_count": 72,
-      "relationship_count": 0,
+      "record_count": 92,
+      "relationship_count": 91,
       "license_or_use": "NIST AI Resource Center Terms of Use"
     },
     {
@@ -2301,8 +2301,8 @@
       "sha256": "sha256:d8a57867903f8d16ba6a795e765367bd03feaebe098014ee4e2d76b68da99a28",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 3,
-      "relationship_count": 0,
+      "record_count": 4,
+      "relationship_count": 115,
       "license_or_use": "32 CFR Part 170 CMMC Program Rule Public Domain"
     },
     {
@@ -2322,8 +2322,8 @@
       "sha256": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
       "parser": "fedramp-legacy-baseline-workbook",
       "parser_version": "1.0.0",
-      "record_count": 6,
-      "relationship_count": 0,
+      "record_count": 4,
+      "relationship_count": 1045,
       "license_or_use": "GSA FedRAMP Open Source License / Public Domain"
     },
     {
@@ -2343,7 +2343,7 @@
       "sha256": "sha256:135707003f0aaa5ceb10d7d32c2681e5b1585a4eaf4403d0d135837787e5ae8e",
       "parser": "fedramp-consolidated-rules-json",
       "parser_version": "1.0.0",
-      "record_count": 5,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property"
     },
@@ -2364,8 +2364,8 @@
       "sha256": "sha256:26bed4c4a32b11224c7e42da17655710088685e69933d656a10d476506c1dbeb",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 11,
-      "relationship_count": 0,
+      "record_count": 14,
+      "relationship_count": 13,
       "license_or_use": "DoD Responsible AI Toolkit Public Domain"
     },
     {
@@ -2386,7 +2386,7 @@
       "parser": "oscal-profile",
       "parser_version": "1.0.0",
       "record_count": 4,
-      "relationship_count": 0,
+      "relationship_count": 902,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2407,7 +2407,7 @@
       "parser": "manual-seed",
       "parser_version": "1.0.0",
       "record_count": 3,
-      "relationship_count": 0,
+      "relationship_count": 3,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2428,7 +2428,7 @@
       "parser": "manual-seed",
       "parser_version": "1.0.0",
       "record_count": 17,
-      "relationship_count": 0,
+      "relationship_count": 17,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2449,7 +2449,7 @@
       "parser": "manual-seed",
       "parser_version": "1.0.0",
       "record_count": 7,
-      "relationship_count": 0,
+      "relationship_count": 14,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2469,8 +2469,8 @@
       "sha256": "sha256:604a2211ee8a552336549b1c737f446933c409c4f0f770a540538b3cf070458c",
       "parser": "oscal-assessment-procedures",
       "parser_version": "1.0.0",
-      "record_count": 1196,
-      "relationship_count": 0,
+      "record_count": 1014,
+      "relationship_count": 1014,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2490,7 +2490,7 @@
       "sha256": "sha256:8b09e8c5bd11dcfa494d2f5beec2d32d98df934285c0214712d020abefc162f1",
       "parser": "olir-xlsx",
       "parser_version": "1.0.0",
-      "record_count": 2,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
@@ -2532,8 +2532,8 @@
       "sha256": "sha256:21b6f3b118b6e5b305aaed3a0e4b70fa5d1d9aa388a0b92e7d6ddfed69e93ac3",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 130,
-      "relationship_count": 0,
+      "record_count": 0,
+      "relationship_count": 157,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2553,8 +2553,8 @@
       "sha256": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
       "parser": "cci-xml",
       "parser_version": "1.0.0",
-      "record_count": 5137,
-      "relationship_count": 0,
+      "record_count": 0,
+      "relationship_count": 3838,
       "license_or_use": "DISA Terms of Use"
     },
     {
@@ -2574,8 +2574,8 @@
       "sha256": "sha256:94465ffc5584e0c968342cfe0492f1c31b2854bed8b61914bf517651a5664570",
       "parser": "rev4-rev5-crosswalk-xlsx",
       "parser_version": "1.0.0",
-      "record_count": 2,
-      "relationship_count": 0,
+      "record_count": 0,
+      "relationship_count": 1506,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -2616,8 +2616,8 @@
       "sha256": "sha256:dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
       "parser": "stix-json",
       "parser_version": "1.0.0",
-      "record_count": 697,
-      "relationship_count": 0,
+      "record_count": 713,
+      "relationship_count": 1187,
       "license_or_use": "MITRE ATT&CK Terms of Use"
     },
     {
@@ -2637,8 +2637,8 @@
       "sha256": "sha256:08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
       "parser": "stix-json",
       "parser_version": "1.0.0",
-      "record_count": 97,
-      "relationship_count": 0,
+      "record_count": 110,
+      "relationship_count": 127,
       "license_or_use": "MITRE ATT&CK Terms of Use"
     },
     {
@@ -2658,8 +2658,8 @@
       "sha256": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
       "parser": "d3fend-json-ld",
       "parser_version": "1.0.0",
-      "record_count": 271,
-      "relationship_count": 0,
+      "record_count": 279,
+      "relationship_count": 278,
       "license_or_use": "MITRE D3FEND Terms of Use"
     },
     {
@@ -2679,8 +2679,8 @@
       "sha256": "sha256:684f0a1872868a64b9046e66111e28cb9f0dc46c08e8f044b803fd8b493260ba",
       "parser": "d3fend-json-ld",
       "parser_version": "1.0.0",
-      "record_count": 16164,
-      "relationship_count": 0,
+      "record_count": 0,
+      "relationship_count": 3163,
       "license_or_use": "MITRE D3FEND Terms of Use"
     },
     {
@@ -2700,7 +2700,7 @@
       "sha256": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
       "parser": "github-json",
       "parser_version": "1.0.0",
-      "record_count": 5137,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Creative Commons Attribution 4.0 International (CC BY 4.0)"
     },
@@ -2721,7 +2721,7 @@
       "sha256": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 5137,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Public Forum Contribution (Reddit Content Policy)"
     },
@@ -2743,7 +2743,7 @@
       "parser": "olir-xlsx",
       "parser_version": "1.0.0",
       "record_count": 0,
-      "relationship_count": 0,
+      "relationship_count": 746,
       "license_or_use": "NIST CSRC OLIR Program License-free Public Domain"
     },
     {
@@ -2784,8 +2784,8 @@
       "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 227,
-      "relationship_count": 0,
+      "record_count": 15,
+      "relationship_count": 15,
       "license_or_use": "Distribution Statement A. Approved for public release."
     },
     {
@@ -2805,8 +2805,8 @@
       "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 227,
-      "relationship_count": 0,
+      "record_count": 1,
+      "relationship_count": 2,
       "license_or_use": "DoD CIO Library Public Release"
     },
     {
@@ -2826,8 +2826,8 @@
       "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 227,
-      "relationship_count": 0,
+      "record_count": 166,
+      "relationship_count": 965,
       "license_or_use": "Distribution Statement A. Approved for public release."
     },
     {
@@ -2847,8 +2847,8 @@
       "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 227,
-      "relationship_count": 0,
+      "record_count": 45,
+      "relationship_count": 45,
       "license_or_use": "DoD CIO Library Public Release"
     },
     {
@@ -2868,8 +2868,8 @@
       "sha256": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
       "parser": "manual-seed",
       "parser_version": "1.0.0",
-      "record_count": 227,
-      "relationship_count": 0,
+      "record_count": 1,
+      "relationship_count": 2,
       "license_or_use": "DoD CIO Library Public Release"
     },
     {
@@ -2889,7 +2889,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     },
@@ -2910,7 +2910,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     },
@@ -2931,7 +2931,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     },
@@ -2952,7 +2952,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     },
@@ -2973,7 +2973,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     },
@@ -2994,7 +2994,7 @@
       "sha256": "sha256:77708bc9c8011a9f1e767cd362cda9ee3b6278695f3deb8e97834d139eec3936",
       "parser": "git-repo-parser",
       "parser_version": "1.0.0",
-      "record_count": 10,
+      "record_count": 0,
       "relationship_count": 0,
       "license_or_use": "Open Source License (MIT/Apache/GPL)"
     }

@@ -11,7 +11,7 @@
     "build:site:incremental": "node ./tools/build-static-site.mjs --reuse-generated",
     "verify:site-artifact": "node ./tools/verify-site-artifact.mjs",
     "cache:key:generated": "node ./tools/generated-data-cache-key.mjs",
-    "build:data": "node ./scripts/build-framework-data.mjs",
+    "build:data": "node ./scripts/build-framework-data.mjs && node ./scripts/reconcile-artifact-counts.mjs",
     "build:xref": "npm run build:data",
     "dev:guarded": "node ./tools/dev-guarded.mjs",
     "audit:deps": "node ./scripts/security/npm-audit.mjs",
