@@ -1,53 +1,89 @@
 #!/usr/bin/env node
-import { readFileSync, existsSync } from 'node:fs';
+// verify:discovery — fail (never warn) when source discovery is incomplete or
+// stale (spec §9): missing manifests, empty discovery, pagination truncation,
+// unaccounted applicable sources, or stale fallback during a fresh-fetch run.
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const FRESH = process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1';
+const STALE_DAYS = 120; // a compilation/catalog older than this in fresh mode is stale fallback
 
 const EXPECTED_MANIFESTS = [
   'data/disa-artifact-manifest.json',
-  'data/olir-catalog-manifest.json'
+  'data/olir-catalog-manifest.json',
+  'data/artifact-hydration-manifest.json',
 ];
 
-function verifyDiscovery() {
-  console.log('Verifying discovery outputs...');
-  
-  let hasError = false;
-  
-  for (const relPath of EXPECTED_MANIFESTS) {
-    const fullPath = join(ROOT, relPath);
-    if (!existsSync(fullPath)) {
-      console.warn(`WARNING: Missing discovery manifest: ${relPath}`);
-      continue;
-    }
-    
-    try {
-      const data = JSON.parse(readFileSync(fullPath, 'utf8'));
-      let count = 0;
-      
-      if (data.artifacts) {
-        count = data.artifacts.length;
-      } else if (data.processed_items) {
-        count = data.processed_items.length;
-      } else if (data.reconciliation && data.reconciliation.inventory_details) {
-        count = data.reconciliation.inventory_details.length;
-      }
-      
-      console.log(`PASS: ${relPath} contains ${count} items.`);
-      if (count === 0) {
-        console.error(`ERROR: ${relPath} is empty.`);
-        hasError = true;
-      }
-    } catch (e) {
-      console.error(`ERROR: Invalid JSON in ${relPath}`);
-      hasError = true;
-    }
+const errors = [];
+const err = (m) => errors.push(m);
+
+function daysOld(iso) {
+  const t = Date.parse(iso);
+  if (Number.isNaN(t)) return Infinity;
+  return (Date.now() - t) / 86400000;
+}
+
+for (const rel of EXPECTED_MANIFESTS) {
+  const full = join(ROOT, rel);
+  if (!existsSync(full)) {
+    err(`missing discovery manifest: ${rel}`);
+    continue;
+  }
+  let data;
+  try {
+    data = JSON.parse(readFileSync(full, 'utf8'));
+  } catch {
+    err(`invalid JSON in ${rel}`);
+    continue;
   }
 
-  if (hasError) {
-    process.exit(1);
+  // Count discovered items across the known manifest shapes.
+  let count = 0;
+  if (Array.isArray(data.results)) count = data.results.length;
+  else if (Array.isArray(data.artifacts)) count = data.artifacts.length;
+  else if (Array.isArray(data.processed_items)) count = data.processed_items.length;
+  else if (data.reconciliation?.inventory_details) count = data.reconciliation.inventory_details.length;
+  else if (Array.isArray(data.searchResults)) count = data.searchResults.length;
+
+  if (count === 0) err(`empty discovery in ${rel}`);
+  else console.log(`PASS: ${rel} — ${count} discovered item(s).`);
+
+  // Pagination truncation: if the manifest declares a total, discovered must meet it.
+  const declaredTotal = data.total_entries ?? data.total ?? data.expected_total;
+  if (Number.isInteger(declaredTotal) && count < declaredTotal) {
+    err(`pagination truncation in ${rel}: discovered ${count} of ${declaredTotal} declared`);
+  }
+
+  // Stale fallback during a fresh run: the discovery evidence must be recent.
+  if (FRESH) {
+    const stamp = data.generated_at || data.retrieval_timestamp || data.retrieved_at;
+    if (!stamp) err(`fresh-mode run but ${rel} has no retrieval timestamp (stale fallback)`);
+    else if (daysOld(stamp) > STALE_DAYS) err(`fresh-mode run but ${rel} is ${Math.round(daysOld(stamp))}d old (stale fallback)`);
   }
 }
 
-verifyDiscovery();
+// Unaccounted applicable sources: every graph-eligible publication that defines
+// a catalog must have discovery evidence (an attested artifact or a manifest).
+const regPath = join(ROOT, 'data/source-registry.json');
+if (existsSync(regPath)) {
+  const reg = JSON.parse(readFileSync(regPath, 'utf8'));
+  const hydration = existsSync(join(ROOT, 'data/artifact-hydration-manifest.json'))
+    ? JSON.parse(readFileSync(join(ROOT, 'data/artifact-hydration-manifest.json'), 'utf8'))
+    : { results: [] };
+  const attested = new Set((hydration.results || []).filter((r) => r.status === 'OK').map((r) => r.id));
+  for (const b of reg.catalog_source_bundles || []) {
+    const hasEvidence = (b.primary_artifact_ids || []).some((id) => attested.has(id));
+    if (!hasEvidence) {
+      err(`catalog ${b.catalog_id} has no attested primary artifact (unaccounted applicable source)`);
+    }
+  }
+}
+
+if (errors.length) {
+  console.error(`FAIL: verify:discovery found ${errors.length} error(s):`);
+  for (const e of errors) console.error(`  - ${e}`);
+  process.exit(1);
+}
+console.log('PASS: discovery verified.');
