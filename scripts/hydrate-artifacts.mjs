@@ -109,6 +109,14 @@ const RESOLUTIONS = [
   { id: 'artifact-nist-csf11-csf20-crosswalk', url: 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
   { id: 'artifact-nist-olir-csf2-to-sp800-53', url: 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
   { id: 'artifact-nist-olir-csf2-to-sp800-171', url: 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
+  // DoD Zero Trust source PDFs (real bytes/hash; record counts come from the
+  // graph reconciler — the reference architecture is the node source, the
+  // others are retained supplemental documents).
+  { id: 'artifact-dod-zt-reference-architecture-v2', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-strategy', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-overlays-2024', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-capabilities', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];

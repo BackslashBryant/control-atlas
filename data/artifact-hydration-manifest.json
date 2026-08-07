@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T12:07:25.045Z",
+  "generated_at": "2026-08-07T12:16:39.564Z",
   "hydrated": 19,
   "removed_orphans": [],
   "results": [
@@ -182,6 +182,36 @@
       "byte_length": 28991,
       "record_count": 0,
       "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-zt-reference-architecture-v2",
+      "status": "FAILED",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "reason": "HTTP 403"
+    },
+    {
+      "id": "artifact-dod-zt-strategy",
+      "status": "FAILED",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "reason": "HTTP 403"
+    },
+    {
+      "id": "artifact-dod-zt-overlays-2024",
+      "status": "FAILED",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "reason": "HTTP 403"
+    },
+    {
+      "id": "artifact-dod-zt-capabilities",
+      "status": "FAILED",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
+      "reason": "HTTP 403"
+    },
+    {
+      "id": "artifact-dod-zt-execution-roadmap",
+      "status": "FAILED",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "reason": "HTTP 403"
     },
     {
       "id": "artifact-control-atlas-structure",
