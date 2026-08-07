@@ -253,7 +253,7 @@
       "access_status": "public",
       "version": "current",
       "retrieved_at": "2026-06-13",
-      "retrieval_method": "manual_review",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
       "catalog_browse_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
       "federal_referenced_by": [],
@@ -262,7 +262,7 @@
         "frameworks": [
           "cui-policy"
         ],
-        "parser": "manual-seed"
+        "parser": "ecfr-xml"
       }
     },
     {
@@ -292,7 +292,7 @@
         "frameworks": [
           "cui-policy"
         ],
-        "parser": "manual-seed"
+        "parser": "nara-cui-registry-html"
       }
     },
     {
@@ -884,7 +884,7 @@
       "access_status": "public",
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
-      "retrieval_method": "manual_review",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "catalog_browse_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
       "federal_referenced_by": [],
@@ -893,7 +893,7 @@
         "frameworks": [
           "cmmc-2"
         ],
-        "parser": "manual-seed"
+        "parser": "ecfr-xml"
       }
     },
     {
@@ -1038,7 +1038,7 @@
       "access_status": "public",
       "version": "2004-02",
       "retrieved_at": "2026-06-13",
-      "retrieval_method": "manual_review",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://csrc.nist.gov/pubs/fips/199/final",
       "catalog_browse_url": "https://csrc.nist.gov/pubs/fips/199/final",
       "federal_referenced_by": [],
@@ -1047,7 +1047,7 @@
         "frameworks": [
           "fips-199"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1067,7 +1067,7 @@
       "access_status": "public",
       "version": "2006-03",
       "retrieved_at": "2026-06-13",
-      "retrieval_method": "manual_review",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://csrc.nist.gov/pubs/fips/200/final",
       "catalog_browse_url": "https://csrc.nist.gov/pubs/fips/200/final",
       "federal_referenced_by": [],
@@ -1076,7 +1076,7 @@
         "frameworks": [
           "fips-200"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1097,7 +1097,7 @@
       "access_status": "public",
       "version": "2018-12",
       "retrieved_at": "2026-06-13",
-      "retrieval_method": "manual_review",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
       "catalog_browse_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
       "federal_referenced_by": [],
@@ -1106,7 +1106,7 @@
         "frameworks": [
           "nist-800-37"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1298,37 +1298,6 @@
             "purpose": "Revision 4 Appendix J privacy controls to Revision 5"
           }
         ]
-      }
-    },
-    {
-      "id": "nist-informative-references",
-      "name": "NIST Informative References",
-      "display_name": "SP 800-53 Rev. 5",
-      "display_group": "NIST",
-      "owner": "NIST",
-      "authority_class": "publisher",
-      "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
-      "license_or_use": "NIST CSRC Terms of Use (Manual Seed Fallback)",
-      "lifecycle_status": "draft",
-      "eligibility_status": "limited",
-      "access_status": "public",
-      "version": "2026-06-09",
-      "retrieved_at": "2026-06-09",
-      "retrieval_method": "manual_review",
-      "artifact_url": "https://www.nist.gov/cyberframework/informative-references",
-      "catalog_browse_url": "https://www.nist.gov/cyberframework/informative-references",
-      "federal_referenced_by": [],
-      "graph_eligible": true,
-      "metadata": {
-        "frameworks": [
-          "nist-800-53",
-          "csf-2"
-        ],
-        "parser": "manual-seed"
       }
     },
     {
@@ -1572,9 +1541,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2022-07",
-      "retrieved_at": "2026-06-15",
-      "retrieval_method": "manual_review",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
       "catalog_browse_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
       "federal_referenced_by": [],
@@ -1583,7 +1552,7 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1601,9 +1570,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2022-10",
-      "retrieved_at": "2026-06-15",
-      "retrieval_method": "direct_file_import",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
       "catalog_browse_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
       "federal_referenced_by": [],
@@ -1612,7 +1581,7 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1661,9 +1630,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2022-11",
-      "retrieved_at": "2026-06-15",
-      "retrieval_method": "direct_file_import",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
       "catalog_browse_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
       "federal_referenced_by": [],
@@ -1672,7 +1641,7 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -1690,9 +1659,9 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2024-11",
-      "retrieved_at": "2026-06-15",
-      "retrieval_method": "direct_file_import",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
       "catalog_browse_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
       "federal_referenced_by": [],
@@ -1701,7 +1670,7 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "manual-seed"
+        "parser": "pdf-extract"
       }
     },
     {
@@ -2175,6 +2144,90 @@
   ],
   "artifacts": [
     {
+      "id": "artifact-dod-zt-reference-architecture-v2",
+      "publication_source_id": "dod-zt-reference-architecture-v2",
+      "name": "DoD Zero Trust Reference Architecture Version 2.0",
+      "display_name": "DoD ZT Reference Architecture Artifact",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "pdf",
+      "version": "2.0",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "byte_length": 6733190,
+      "sha256": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "parser": "pdf-extract",
+      "parser_version": "1.0.0",
+      "record_count": 15,
+      "relationship_count": 15,
+      "license_or_use": "U.S. Government Work / Public Domain"
+    },
+    {
+      "id": "artifact-dod-zt-strategy",
+      "publication_source_id": "dod-zt-strategy",
+      "name": "DoD Zero Trust Strategy",
+      "display_name": "DoD ZT Strategy Artifact",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "pdf",
+      "version": "2022",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "byte_length": 6141341,
+      "sha256": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
+      "parser": "pdf-extract",
+      "parser_version": "1.0.0",
+      "record_count": 1,
+      "relationship_count": 2,
+      "license_or_use": "U.S. Government Work / Public Domain"
+    },
+    {
+      "id": "artifact-dod-zt-capabilities",
+      "publication_source_id": "dod-zt-capabilities",
+      "name": "DoD Zero Trust Capabilities and Activities",
+      "display_name": "DoD ZT Capabilities Artifact",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "pdf",
+      "version": "current",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+      "byte_length": 651809,
+      "sha256": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
+      "parser": "pdf-extract",
+      "parser_version": "1.0.0",
+      "record_count": 45,
+      "relationship_count": 45,
+      "license_or_use": "U.S. Government Work / Public Domain"
+    },
+    {
+      "id": "artifact-dod-zt-execution-roadmap",
+      "publication_source_id": "dod-zt-execution-roadmap",
+      "name": "DoD Zero Trust Capability Execution Roadmap v1.1",
+      "display_name": "DoD ZT Execution Roadmap Artifact",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "pdf",
+      "version": "1.1",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "byte_length": 3540044,
+      "sha256": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
+      "parser": "pdf-extract",
+      "parser_version": "1.0.0",
+      "record_count": 1,
+      "relationship_count": 2,
+      "license_or_use": "U.S. Government Work / Public Domain"
+    },
+    {
       "id": "artifact-control-atlas-structure",
       "publication_source_id": "control-atlas-structure",
       "name": "Control Atlas Structure Artifact",
@@ -2377,7 +2430,7 @@
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
       "byte_length": 154957,
-      "sha256": "sha256:7d7ef76011f9b5c82deaa2a1a04f7bcad23a27bf2f417d5b29091a73fc6fc79b",
+      "sha256": "sha256:4db0df6b9952648cdeaf99a59f64e4778095b7a5816fb5356664c040c2d729aa",
       "parser": "ai-mil-responsible-ai-html",
       "parser_version": "1.0.0",
       "record_count": 0,
@@ -2933,6 +2986,21 @@
       "reconciliation_source_ids": [
         "artifact-ai-mil-responsible-ai"
       ]
+    },
+    {
+      "catalog_id": "dod-zt",
+      "publication_source_id": "dod-zt-reference-architecture-v2",
+      "primary_artifact_ids": [
+        "artifact-dod-zt-reference-architecture-v2",
+        "artifact-dod-zt-strategy",
+        "artifact-dod-zt-capabilities",
+        "artifact-dod-zt-execution-roadmap"
+      ],
+      "enrichment_artifact_ids": [],
+      "mapping_source_ids": [],
+      "assessment_source_ids": [],
+      "automation_source_ids": [],
+      "reconciliation_source_ids": []
     },
     {
       "catalog_id": "disa-stig",
@@ -4260,37 +4328,6 @@
       }
     },
     {
-      "id": "nist-informative-references",
-      "name": "NIST Informative References",
-      "display_name": "SP 800-53 Rev. 5",
-      "display_group": "NIST",
-      "owner": "NIST",
-      "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
-      "version": "2026-06-09",
-      "retrieved_at": "2026-06-09",
-      "retrieval_method": "manual_review",
-      "artifact_url": "https://www.nist.gov/cyberframework/informative-references",
-      "artifact_type": "publication",
-      "checksum": "sha256:07349f327dceffd659cd24ccbefd1b9aec6ac98dface7f46525dc9b47a69f512",
-      "access_status": "public",
-      "license_or_use": "NIST CSRC Terms of Use (Manual Seed Fallback)",
-      "lifecycle_status": "draft",
-      "eligibility_status": "limited",
-      "federal_referenced_by": [],
-      "graph_eligible": true,
-      "metadata": {
-        "frameworks": [
-          "nist-800-53",
-          "csf-2"
-        ],
-        "parser": "manual-seed"
-      }
-    },
-    {
       "id": "mitre-attack-enterprise",
       "name": "MITRE ATT&CK Enterprise",
       "display_name": "ATT&CK Enterprise",
@@ -4927,13 +4964,6 @@
         "hash": "sha256:33294be316ff481b5950adf626be5ae152922942aa6a1b42921b6bcaa265a625"
       },
       {
-        "source_id": "nist-informative-references",
-        "sync_model": "link_out",
-        "last_checked": "2026-06-09",
-        "last_imported": null,
-        "hash": null
-      },
-      {
         "source_id": "mitre-attack-enterprise",
         "sync_model": "auto_synced",
         "last_checked": "2026-07-16",
@@ -5028,33 +5058,9 @@
   },
   "quarantine": [
     {
-      "id": "artifact-dod-zt-reference-architecture-v2",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
-      "reason": "dodcio.defense.gov returns Akamai HTTP 403 to all automated retrieval from this environment; PDF byte hash unverifiable here",
-      "quarantined_at": "2026-08-07"
-    },
-    {
-      "id": "artifact-dod-zt-strategy",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
-      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
-      "quarantined_at": "2026-08-07"
-    },
-    {
       "id": "artifact-dod-zt-overlays-2024",
       "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
-      "quarantined_at": "2026-08-07"
-    },
-    {
-      "id": "artifact-dod-zt-capabilities",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
-      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
-      "quarantined_at": "2026-08-07"
-    },
-    {
-      "id": "artifact-dod-zt-execution-roadmap",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
-      "reason": "dodcio.defense.gov Akamai 403; PDF byte hash unverifiable here",
+      "reason": "URL now returns HTTP 404 and the document is no longer listed on the current DoD Zero Trust /library/ index (verified 2026-08-07) — retired/superseded, not a retrieval failure. The other 4 DoD ZT PDFs at this same host are real and hydrated: dodcio.defense.gov's WAF blocks only the identifying ingestion User-Agent (403), not the request itself (200 with no custom UA) — see artifact-dod-zt-reference-architecture-v2/strategy/capabilities/execution-roadmap.",
       "quarantined_at": "2026-08-07"
     }
   ]

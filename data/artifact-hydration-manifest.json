@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T21:09:35.129Z",
-  "hydrated": 31,
+  "generated_at": "2026-08-07T21:20:38.722Z",
+  "hydrated": 36,
   "removed_orphans": [],
   "results": [
     {
@@ -185,28 +185,43 @@
     },
     {
       "id": "artifact-dod-zt-reference-architecture-v2",
-      "status": "ERROR",
-      "reason": "artifact id not in registry"
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "sha256": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "byte_length": 6733190,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-dod-zt-strategy",
-      "status": "ERROR",
-      "reason": "artifact id not in registry"
-    },
-    {
-      "id": "artifact-dod-zt-overlays-2024",
-      "status": "ERROR",
-      "reason": "artifact id not in registry"
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "sha256": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
+      "byte_length": 6141341,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-dod-zt-capabilities",
-      "status": "ERROR",
-      "reason": "artifact id not in registry"
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+      "sha256": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
+      "byte_length": 651809,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-dod-zt-execution-roadmap",
-      "status": "ERROR",
-      "reason": "artifact id not in registry"
+      "status": "OK",
+      "http": 200,
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "sha256": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
+      "byte_length": 3540044,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-dod-rai-toolkit",
@@ -223,7 +238,7 @@
       "status": "OK",
       "http": 200,
       "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
-      "sha256": "sha256:7d7ef76011f9b5c82deaa2a1a04f7bcad23a27bf2f417d5b29091a73fc6fc79b",
+      "sha256": "sha256:4db0df6b9952648cdeaf99a59f64e4778095b7a5816fb5356664c040c2d729aa",
       "byte_length": 154957,
       "record_count": null,
       "retrieved_at": "2026-08-07"
@@ -246,9 +261,7 @@
       "sha256": "sha256:3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628",
       "byte_length": 178061,
       "record_count": null,
-      "retrieved_at": "2026-08-07",
-      "carried_forward_from": "2026-08-07T21:06:13.086Z",
-      "carried_forward_reason": "HTTP 502"
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-nist-csf-2",
