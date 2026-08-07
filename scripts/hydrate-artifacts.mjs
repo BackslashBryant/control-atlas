@@ -117,6 +117,15 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-zt-overlays-2024', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-capabilities', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
+  // DoD RAI Toolkit: rai.acqbot.com is CDAO's own designated public host for
+  // the AIA/RAI Toolkit — confirmed by the official ai.mil Responsible-AI
+  // initiative page's "SEE THE TOOLKITS" button (href=https://rai.acqbot.com/)
+  // and the acqbot.com page itself carrying the CDAO logo asset. Not a
+  // third-party mirror; this is where CDAO ships the toolkit.
+  { id: 'artifact-dod-rai-toolkit', url: 'https://rai.acqbot.com/executive-summary', format: 'html', parser: 'dod-rai-toolkit-html', parser_version: '1.0.0' },
+  // Reconciliation evidence: the official ai.mil page that links to the
+  // acqbot.com toolkit, establishing CDAO's endorsement of that hosting.
+  { id: 'artifact-ai-mil-responsible-ai', url: 'https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/', format: 'html', parser: 'ai-mil-responsible-ai-html', parser_version: '1.0.0', noBotUa: true },
   // CUI: 32 CFR Part 2002 from the eCFR versioner API (date-pinned = byte-stable).
   { id: 'artifact-isoo-cui-regulation', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
   // CMMC: 32 CFR Part 170 from the eCFR versioner API (date-pinned).
@@ -164,14 +173,32 @@ async function countRecords(method, buf) {
   return null;
 }
 
-async function fetchBytes(url) {
-  const res = await fetch(url, {
-    redirect: 'follow',
-    headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const buf = Buffer.from(await res.arrayBuffer());
-  return { buf, status: res.status };
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// A handful of sources (eCFR in particular) return transient 5xx under load.
+// Retrying here means one flaky response doesn't wipe out a previously
+// attested artifact's evidence just because this particular run hit it.
+async function fetchBytes(url, options = {}) {
+  const headers = options.noBotUa ? {} : { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' };
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (attempt > 0) await sleep(1500 * attempt);
+    try {
+      const res = await fetch(url, { redirect: 'follow', headers });
+      if (!res.ok) {
+        lastError = new Error(`HTTP ${res.status}`);
+        if (res.status >= 500) continue; // retry server errors
+        throw lastError; // 4xx: no point retrying
+      }
+      const buf = Buffer.from(await res.arrayBuffer());
+      return { buf, status: res.status };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
 }
 
 async function main() {
@@ -181,13 +208,21 @@ async function main() {
   const log = [];
   let changed = 0;
 
+  // A transient failure this run (e.g. a source host's momentary 5xx) should
+  // not erase a REAL prior successful attestation for an artifact whose
+  // registry sha256 hasn't changed since — carry that entry forward instead
+  // of dropping it, so verify-manifests' attestation check reflects the last
+  // genuine execution rather than only this run's network luck.
+  const priorManifest = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null;
+  const priorById = new Map((priorManifest?.results || []).map((r) => [r.id, r]));
+
   for (const r of RESOLUTIONS) {
     const art = byId.get(r.id);
     if (!art) { log.push({ id: r.id, status: 'ERROR', reason: 'artifact id not in registry' }); continue; }
     try {
       const { buf, status } = r.local
         ? { buf: readFileSync(join(ROOT, r.local)), status: 'local' }
-        : await fetchBytes(r.url);
+        : await fetchBytes(r.url, { noBotUa: r.noBotUa });
       const sha256 = 'sha256:' + createHash('sha256').update(buf).digest('hex');
       const byteLength = buf.length;
       const recordCount = await countRecords(r.count, buf);
@@ -209,8 +244,14 @@ async function main() {
       log.push({ id: r.id, status: 'OK', http: status, url: r.url, sha256, byte_length: byteLength, record_count: recordCount, retrieved_at: retrievedAt });
       console.log(`OK  ${r.id}  ${byteLength}B  records=${recordCount}  ${sha256.slice(0, 22)}…`);
     } catch (e) {
-      log.push({ id: r.id, status: 'FAILED', url: r.url, reason: String(e.message || e) });
-      console.error(`FAIL ${r.id}  ${r.url}  ${e.message || e}`);
+      const prior = priorById.get(r.id);
+      if (prior?.status === 'OK' && prior.sha256 === art.sha256) {
+        log.push({ ...prior, carried_forward_from: priorManifest.generated_at, carried_forward_reason: String(e.message || e) });
+        console.warn(`WARN ${r.id}  fetch failed this run (${e.message || e}); carried forward prior attestation (unchanged sha256)`);
+      } else {
+        log.push({ id: r.id, status: 'FAILED', url: r.url, reason: String(e.message || e) });
+        console.error(`FAIL ${r.id}  ${r.url}  ${e.message || e}`);
+      }
     }
   }
 

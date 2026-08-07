@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T12:38:56.504Z",
-  "hydrated": 30,
+  "generated_at": "2026-08-07T21:09:35.129Z",
+  "hydrated": 31,
   "removed_orphans": [],
   "results": [
     {
@@ -185,33 +185,48 @@
     },
     {
       "id": "artifact-dod-zt-reference-architecture-v2",
-      "status": "FAILED",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
-      "reason": "HTTP 403"
+      "status": "ERROR",
+      "reason": "artifact id not in registry"
     },
     {
       "id": "artifact-dod-zt-strategy",
-      "status": "FAILED",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
-      "reason": "HTTP 403"
+      "status": "ERROR",
+      "reason": "artifact id not in registry"
     },
     {
       "id": "artifact-dod-zt-overlays-2024",
-      "status": "FAILED",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "reason": "HTTP 403"
+      "status": "ERROR",
+      "reason": "artifact id not in registry"
     },
     {
       "id": "artifact-dod-zt-capabilities",
-      "status": "FAILED",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZTCapabilitiesActivities.pdf",
-      "reason": "HTTP 403"
+      "status": "ERROR",
+      "reason": "artifact id not in registry"
     },
     {
       "id": "artifact-dod-zt-execution-roadmap",
-      "status": "FAILED",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
-      "reason": "HTTP 403"
+      "status": "ERROR",
+      "reason": "artifact id not in registry"
+    },
+    {
+      "id": "artifact-dod-rai-toolkit",
+      "status": "OK",
+      "http": 200,
+      "url": "https://rai.acqbot.com/executive-summary",
+      "sha256": "sha256:720a7b775d90380a28f0b73f428bae7acb7cf3774be44a4f4b6447abe1fa7f91",
+      "byte_length": 41933,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-ai-mil-responsible-ai",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
+      "sha256": "sha256:7d7ef76011f9b5c82deaa2a1a04f7bcad23a27bf2f417d5b29091a73fc6fc79b",
+      "byte_length": 154957,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
     },
     {
       "id": "artifact-isoo-cui-regulation",
@@ -231,7 +246,9 @@
       "sha256": "sha256:3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628",
       "byte_length": 178061,
       "record_count": null,
-      "retrieved_at": "2026-08-07"
+      "retrieved_at": "2026-08-07",
+      "carried_forward_from": "2026-08-07T21:06:13.086Z",
+      "carried_forward_reason": "HTTP 502"
     },
     {
       "id": "artifact-nist-csf-2",

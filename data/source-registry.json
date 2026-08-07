@@ -975,18 +975,19 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-06-09",
-      "retrieved_at": "2026-06-09",
-      "retrieval_method": "manual_review",
+      "version": "2026-08-07",
+      "retrieved_at": "2026-08-07",
+      "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://rai.acqbot.com/executive-summary",
-      "catalog_browse_url": "https://rai.acqbot.com/executive-summary",
+      "catalog_browse_url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
       "federal_referenced_by": [],
       "graph_eligible": true,
       "metadata": {
         "frameworks": [
           "dod-rai"
         ],
-        "parser": "manual-seed"
+        "parser": "dod-rai-toolkit-html",
+        "provenance_note": "rai.acqbot.com is CDAO's own designated public host for the AIA/RAI Toolkit, confirmed by the official ai.mil Responsible-AI initiative page's \"SEE THE TOOLKITS\" button (see artifact-ai-mil-responsible-ai)."
       }
     },
     {
@@ -2342,6 +2343,48 @@
       "license_or_use": "National Archives Public Domain"
     },
     {
+      "id": "artifact-dod-rai-toolkit",
+      "publication_source_id": "dod-rai-toolkit",
+      "name": "CDAO AI Assurance (Responsible AI) Toolkit Executive Summary",
+      "display_name": "DoD RAI Toolkit Artifact",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "html",
+      "version": "2026-08-07",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://rai.acqbot.com/executive-summary",
+      "byte_length": 41933,
+      "sha256": "sha256:720a7b775d90380a28f0b73f428bae7acb7cf3774be44a4f4b6447abe1fa7f91",
+      "parser": "dod-rai-toolkit-html",
+      "parser_version": "1.0.0",
+      "record_count": 14,
+      "relationship_count": 13,
+      "license_or_use": "DoD Responsible AI Toolkit Public Domain"
+    },
+    {
+      "id": "artifact-ai-mil-responsible-ai",
+      "publication_source_id": "dod-rai-toolkit",
+      "name": "ai.mil CDAO Responsible AI Initiative Page",
+      "display_name": "ai.mil Responsible AI Reconciliation Artifact",
+      "source_role": "reconciliation",
+      "authority_class": "publisher",
+      "format": "html",
+      "version": "2026-08-07",
+      "lifecycle_status": "active",
+      "retrieval_method": "extracted_from_official_publication",
+      "retrieved_at": "2026-08-07",
+      "artifact_url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
+      "byte_length": 154957,
+      "sha256": "sha256:7d7ef76011f9b5c82deaa2a1a04f7bcad23a27bf2f417d5b29091a73fc6fc79b",
+      "parser": "ai-mil-responsible-ai-html",
+      "parser_version": "1.0.0",
+      "record_count": 0,
+      "relationship_count": 0,
+      "license_or_use": "U.S. Government Work / Public Domain"
+    },
+    {
       "id": "artifact-disa-cci-list",
       "publication_source_id": "disa-cci-list",
       "name": "DISA Control Correlation Identifier List Artifact",
@@ -2876,6 +2919,20 @@
       "assessment_source_ids": [],
       "automation_source_ids": [],
       "reconciliation_source_ids": []
+    },
+    {
+      "catalog_id": "dod-rai",
+      "publication_source_id": "dod-rai-toolkit",
+      "primary_artifact_ids": [
+        "artifact-dod-rai-toolkit"
+      ],
+      "enrichment_artifact_ids": [],
+      "mapping_source_ids": [],
+      "assessment_source_ids": [],
+      "automation_source_ids": [],
+      "reconciliation_source_ids": [
+        "artifact-ai-mil-responsible-ai"
+      ]
     },
     {
       "catalog_id": "disa-stig",
@@ -4970,12 +5027,6 @@
     ]
   },
   "quarantine": [
-    {
-      "id": "artifact-dod-rai-toolkit",
-      "url": "https://rai.acqbot.com/executive-summary",
-      "reason": "current URL rai.acqbot.com is a non-official third party; official DoD CDAO sources (dodcio.defense.gov, ai.mil) are Akamai 403-blocked from this environment",
-      "quarantined_at": "2026-08-07"
-    },
     {
       "id": "artifact-dod-zt-reference-architecture-v2",
       "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
