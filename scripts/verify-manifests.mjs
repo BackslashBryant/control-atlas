@@ -139,6 +139,25 @@ if (!registry) {
   const regHits = [];
   scanForbidden(registry, 'registry', regHits);
   for (const h of regHits) err(`forbidden placeholder/fabricated marker: ${h}`);
+
+  // Execution attestation: every artifact's sha256 must be proven by a real
+  // download/parse recorded in an execution manifest — not merely well-formed.
+  // This catches fabricated-but-unique hashes the duplicate check cannot.
+  const attested = new Map();
+  const hydration = readJson('data/artifact-hydration-manifest.json');
+  for (const r of hydration?.results || []) {
+    if (r.status === 'OK' && r.sha256) attested.set(r.id, r.sha256);
+  }
+  // DISA/OLIR family manifests attest their own artifacts (added as those
+  // pipelines land). Until then their artifacts appear as unattested below.
+  for (const art of artifacts) {
+    const a = attested.get(art.id);
+    if (!a) {
+      err(`artifact ${art.id} evidence is UNATTESTED (no execution manifest entry proves its sha256)`);
+    } else if (a !== art.sha256) {
+      err(`artifact ${art.id} sha256 disagrees with execution manifest (${art.sha256} != ${a})`);
+    }
+  }
 }
 
 // Manifest/runtime agreement: every artifact's record_count and

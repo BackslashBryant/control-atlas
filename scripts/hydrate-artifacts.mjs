@@ -119,6 +119,10 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   // CUI: 32 CFR Part 2002 from the eCFR versioner API (date-pinned = byte-stable).
   { id: 'artifact-isoo-cui-regulation', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
+  // CMMC: 32 CFR Part 170 from the eCFR versioner API (date-pinned).
+  { id: 'artifact-dod-cmmc-rule', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=170', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
+  // CSF 2.0 Core from the NIST OSCAL catalog (deterministic, pinned v1.5.0).
+  { id: 'artifact-nist-csf-2', url: `${OSCAL}/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T12:21:06.439Z",
-  "hydrated": 20,
+  "generated_at": "2026-08-07T12:25:01.418Z",
+  "hydrated": 22,
   "removed_orphans": [],
   "results": [
     {
@@ -221,6 +221,26 @@
       "sha256": "sha256:3c595476a48f2b16cec4aacc6d5e78588dafa7ddf4d4c56a5c6bbb2641a1e930",
       "byte_length": 89692,
       "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-dod-cmmc-rule",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=170",
+      "sha256": "sha256:3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628",
+      "byte_length": 178061,
+      "record_count": null,
+      "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf-2",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json",
+      "sha256": "sha256:4836943f21d393f2821df85ada4e6f3c0617243b4ddf44263fe68205400210b4",
+      "byte_length": 349827,
+      "record_count": 219,
       "retrieved_at": "2026-08-07"
     },
     {

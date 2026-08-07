@@ -1,11 +1,11 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-07T12:21:11.797Z",
+  "generated_at": "2026-08-07T12:25:06.916Z",
   "completeness": {
     "total_publications": 71,
     "total_artifacts": 40,
     "total_catalog_bundles": 3,
-    "manual_seed_artifacts": 12,
+    "manual_seed_artifacts": 11,
     "provenance_verified": false
   },
   "catalogs": [
@@ -22,7 +22,7 @@
         "extracted_from_official_publication",
         "direct_file_import"
       ],
-      "last_refresh": "2026-07-28",
+      "last_refresh": "2026-08-07",
       "completeness_status": "reconciled"
     },
     {
