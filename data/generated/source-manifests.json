@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-07T21:21:43.233Z",
+  "generated_at": "2026-08-07T21:26:40.180Z",
   "source_manifests": [
     {
       "source_id": "artifact-ai-mil-responsible-ai",
@@ -935,23 +935,6 @@
       "finding_count": 0
     },
     {
-      "source_id": "complianceascode-content",
-      "display_name": "ComplianceAsCode Content and OpenSCAP",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "ComplianceAsCode",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=complianceascode-content",
-      "access_status": "public",
-      "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
-      "finding_count": 0
-    },
-    {
       "source_id": "control-atlas-structure",
       "display_name": "Control Atlas Structure",
       "display_group": "Control Atlas",
@@ -1049,23 +1032,6 @@
       "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
       "access_status": "public",
       "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
-      "finding_count": 0
-    },
-    {
-      "source_id": "cybersecdef-stig",
-      "display_name": "CyberSecDef STIG Repository (Historical)",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "CyberSecDef",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=cybersecdef-stig",
-      "access_status": "public",
-      "lifecycle_status": "historical",
       "graph_eligible": false,
       "node_count": 0,
       "relationship_count": 0,
@@ -1443,23 +1409,6 @@
       "finding_count": 0
     },
     {
-      "source_id": "heimdall-tools",
-      "display_name": "Heimdall Tools Data Converters",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "MITRE",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=heimdall-tools",
-      "access_status": "public",
-      "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
-      "finding_count": 0
-    },
-    {
       "source_id": "isoo-cui-regulation",
       "display_name": "CUI Program",
       "display_group": "Other",
@@ -1483,23 +1432,6 @@
       "node_count": 2,
       "relationship_count": 1,
       "evidence_count": 1,
-      "finding_count": 0
-    },
-    {
-      "source_id": "microsoft-powerstig",
-      "display_name": "Microsoft PowerSTIG / StigRepo",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "Microsoft",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=microsoft-powerstig",
-      "access_status": "public",
-      "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
       "finding_count": 0
     },
     {
@@ -1632,23 +1564,6 @@
       "node_count": 279,
       "relationship_count": 278,
       "evidence_count": 278,
-      "finding_count": 0
-    },
-    {
-      "source_id": "mitre-saf",
-      "display_name": "MITRE Security Automation Framework (SAF)",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "MITRE",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=mitre-saf",
-      "access_status": "public",
-      "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
       "finding_count": 0
     },
     {
@@ -2307,23 +2222,6 @@
       "artifact_url": "https://www.stigviewer.com/press-releases/2026-03-16",
       "artifact_type": "publication",
       "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
-      "access_status": "public",
-      "lifecycle_status": "active",
-      "graph_eligible": false,
-      "node_count": 0,
-      "relationship_count": 0,
-      "evidence_count": 0,
-      "finding_count": 0
-    },
-    {
-      "source_id": "vulcan-framework",
-      "display_name": "Vulcan Security Testing Framework",
-      "display_group": "Supplemental",
-      "frameworks": [],
-      "owner": "MITRE",
-      "version": "2026",
-      "last_checked": "2026-08-05",
-      "artifact_url": "https://github.com/search?q=vulcan-framework",
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": false,
