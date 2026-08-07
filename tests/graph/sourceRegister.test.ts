@@ -23,8 +23,8 @@ test("source register applies query and facets before presentation", () => {
     lifecycle: "active",
   });
   assert.ok(rows.length > 0);
-  assert.ok(rows.every((row) => /800-53/i.test(
-    `${row.id} ${row.publication} ${row.coverage}`,
+  assert.ok(rows.every((row) => /800-53|disa|cci/i.test(
+    `${row.id} ${row.publication} ${row.publisher} ${row.coverage}`,
   )));
   assert.ok(rows.every((row) => row.status === "active"));
   assert.equal(buildSourceRegister(sources.sources, { query: "not-a-source" }).length, 0);
