@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 import {
   parseEnterpriseAttackStix,
@@ -221,11 +222,11 @@ async function main() {
   if (result.fallbackMode && process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') {
     throw new Error(`MITRE refresh required a live upstream fetch but used ${result.fallbackMode}`);
   }
-  writeFileSync(COMMITTED.enterprise, `${JSON.stringify(result.enterprise, null, 2)}\n`, 'utf8');
-  writeFileSync(COMMITTED.ics, `${JSON.stringify(result.ics, null, 2)}\n`, 'utf8');
-  writeFileSync(COMMITTED.d3fend, `${JSON.stringify(result.d3fend, null, 2)}\n`, 'utf8');
-  writeFileSync(COMMITTED.attackMap, `${JSON.stringify(result.attackMap, null, 2)}\n`, 'utf8');
-  writeFileSync(COMMITTED.nistMap, `${JSON.stringify(result.nistMap, null, 2)}\n`, 'utf8');
+  writeJsonAtomically(COMMITTED.enterprise, result.enterprise);
+  writeJsonAtomically(COMMITTED.ics, result.ics);
+  writeJsonAtomically(COMMITTED.d3fend, result.d3fend);
+  writeJsonAtomically(COMMITTED.attackMap, result.attackMap);
+  writeJsonAtomically(COMMITTED.nistMap, result.nistMap);
 
   if (result.fallbackMode) {
     console.log(`MITRE fetch fallback: ${result.fallbackMode}`);

@@ -2,18 +2,18 @@
   "discovery_source": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/",
   "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
   "byte_length": 368971055,
-  "retrieval_timestamp": "2026-08-05T11:44:19.288Z",
+  "retrieval_timestamp": "2026-08-08T22:18:53.848Z",
   "checksum": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
   "reconciliation": {
     "discovered_urls": 1015,
     "compilation_entries": 2616,
-    "ingested_files": 390,
-    "excluded_files": 0,
+    "ingested_files": 378,
+    "excluded_files": 84,
     "failed_files": 1,
-    "ignored_files": 2225,
-    "stig_records_parsed": 17360,
+    "ignored_files": 2153,
+    "stig_records_parsed": 16877,
     "srg_records_parsed": 2516,
-    "cci_relationships": 29095,
+    "cci_relationships": 28412,
     "inventory_details": [
       {
         "entryPath": "_SRG-STIG_Library_Revision_History.pdf",
@@ -1647,53 +1647,53 @@
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-A.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-B.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-C.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-D.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-E.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-F.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-G.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-H.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Supplemental/APPENDIX-I.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_STIG_V1_Release_Memo.pdf",
@@ -5345,8 +5345,8 @@
       },
       {
         "entryPath": "U_MarkLogic_Server_v9_V3R2_STIG.zip/U_MarkLogic_Server_v9_V3R2_Supplemental/ml-filechange-mon (1).sh",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MarkLogic_Server_v9_V3R2_STIG.zip/U_Readme_SRG_and_STIG.pdf",
@@ -5577,23 +5577,23 @@
       },
       {
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Supplemental/ASQL-00-000200-SERVER.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Supplemental/ASQL-00-000300-DATABASE.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Supplemental/AzureSQLDatabaseAudit.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Overview.pdf",
@@ -5649,23 +5649,23 @@
       },
       {
         "entryPath": "U_MS_Azure_SQL_MI_V1R1_STIG.zip/U_MS_Azure_SQL_MI_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_MI_V1R1_STIG.zip/U_MS_Azure_SQL_MI_Supplemental/AzureSQLMIAudit.txt",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_MI_V1R1_STIG.zip/U_MS_Azure_SQL_MI_Supplemental/DatabasePermissions.txt",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Azure_SQL_MI_V1R1_STIG.zip/U_MS_Azure_SQL_MI_Supplemental/Instance permissions assignments to logins and roles.txt",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_Defender_Antivirus_V2R9_STIG.zip/U_MS_Defender_Antivirus_STIG_V1_Release_Memo.pdf",
@@ -6172,33 +6172,33 @@
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/Database permission assignments to users and roles.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/DynamicExec.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/Get SQL Data and Backup Directories.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/Instance permissions assignments to logins and roles.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_V3R3_Supplemental/SQL Server 2016 Audit.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_Readme_SRG_and_STIG.pdf",
@@ -6256,28 +6256,28 @@
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Supplemental/Database permission assignments to users and roles.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Supplemental/Get SQL Data and Backup Directories.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Supplemental/Instance permissions assignments to logins and roles.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Supplemental/SQL Server 2022 Audit.sql",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Revision_History.pdf",
@@ -9010,13 +9010,13 @@
       },
       {
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_Supplemental/VMW_Cloud_Foundation_4.2_STIG_Readiness_Guide_for_Workspace_ONE_Access-Release1.xlsx",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_Supplemental/VMW_Identity_Manager_3.3.x_Smart_Card_Authentication_Configuration_Guide.pdf",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_T-0_Gateway_FW_V1R3_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
@@ -9125,13 +9125,13 @@
       },
       {
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_Supplemental/audit.STIG.rules",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_VAMI_V1R2_Manual_STIG/",
@@ -9387,277 +9387,253 @@
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/audit.STIG.rules",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_ESXi_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_ESXi_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_ESXi_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_ESXi_V1R1_Manual_STIG/U_VMW_vSphere_8-0-ESXi_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_ESXi_STIG",
-        "recordCount": 73
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_vCenter_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_vCenter_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_vCenter_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_vCenter_V1R1_Manual_STIG/U_VMW_vSphere_8-0_vCenter_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_vCenter_STIG",
-        "recordCount": 65
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_EAM_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_EAM_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_EAM_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_EAM_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_EAM_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_EAM_STIG",
-        "recordCount": 34
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Envoy_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Envoy_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Envoy_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Envoy_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Envoy_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_Envoy_STIG",
-        "recordCount": 5
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_Lookup_Svc_STIG",
-        "recordCount": 34
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Perfcharts_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Perfcharts_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Perfcharts_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Perfcharts_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Perfcharts_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_Perfcharts_STIG",
-        "recordCount": 33
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_Photon_OS_4-0_STIG",
-        "recordCount": 104
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_PostgreSQL_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_PostgreSQL_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_PostgreSQL_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_PostgreSQL_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_PostgreSQL_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_PostgreSQL_STIG",
-        "recordCount": 20
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_STS_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_STS_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_STS_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_STS_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_STS_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_STS_STIG",
-        "recordCount": 33
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_UI_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_UI_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_UI_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_UI_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_UI_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_UI_STIG",
-        "recordCount": 33
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_VAMI_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_VAMI_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_VAMI_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_VCSA_VAMI_V1R1_Manual_STIG/U_VMW_vSphere_8-0_VCSA_VAMI_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8-0_VCSA_VAMI_STIG",
-        "recordCount": 24
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_Virtual_Machine_V1R1_Manual_STIG/",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_Virtual_Machine_V1R1_Manual_STIG/DoD-DISA-logos-as-JPEG.jpg",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_Virtual_Machine_V1R1_Manual_STIG/STIG_unclass.xsl",
-        "status": "ignored",
-        "reason": "not an XML/XCCDF file"
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Supplemental/U_VMW_vSphere_8-0_Virtual_Machine_V1R1_Manual_STIG/U_VMW_vSphere_8-0_Virtual_Machine_STIG_V1R1_Manual-xccdf.xml",
-        "status": "ingested",
-        "catalogKind": "stig",
-        "benchmarkId": "VMW_vSphere_8.0_Virtual_Machine_STIG",
-        "recordCount": 25
+        "status": "excluded",
+        "reason": "restricted, sunset, draft, or supplemental content"
       },
       {
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_vCenter_V2R4_Manual_STIG/",

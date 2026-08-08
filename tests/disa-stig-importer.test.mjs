@@ -1,12 +1,15 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import test from 'node:test';
+import { join } from 'node:path';
 import { zipSync, strToU8 } from 'fflate';
 
 import {
   parseDisaXccdf,
   parseDisaCompilationArchive,
+  parseDisaCompilationStream,
 } from '../tools/importers/disa-stig-adapter.mjs';
-import { findOfficialDisaCompilationUrl } from '../scripts/fetch-disa-stigs.mjs';
+import { extractDisaZipUrlsFromHtml, findOfficialDisaCompilationUrl } from '../scripts/fetch-disa-stigs.mjs';
 
 const sampleStigXml = `<?xml version="1.0" encoding="UTF-8"?>
 <Benchmark id="xccdf_mil.disa.stig_benchmark_Windows_11_STIG" xmlns="http://checklists.nist.gov/xccdf/1.2">
@@ -153,6 +156,34 @@ test('DISA compilation parser ignores restricted and sunset content', () => {
   );
 });
 
+test('DISA compilation stream parser matches the archive parser without retaining the outer archive', async () => {
+  const archive = zipSync({
+    'U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml': strToU8(sampleStigXml),
+    'U_STIG_Library/Application_SRG/Application_SRG_Benchmark.xml': strToU8(sampleSrgXml),
+  });
+  const workDir = mkdtempSync(join(process.cwd(), 'tmp', 'disa-parser-test-'));
+  const archivePath = join(workDir, 'library.zip');
+  writeFileSync(archivePath, archive);
+  try {
+    const options = {
+      artifactUrl: 'https://example.test/U_STIG_Library.zip',
+      sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
+    };
+    const buffered = parseDisaCompilationArchive(archive, options);
+    const streamed = await parseDisaCompilationStream(archivePath, options);
+    assert.deepEqual(streamed.stig.records, buffered.stig.records);
+    assert.deepEqual(streamed.srg.records, buffered.srg.records);
+    assert.deepEqual(streamed.relationships.relationships, buffered.relationships.relationships);
+    assert.equal(streamed.checksum, buffered.checksum);
+    assert.deepEqual(
+      streamed.inventory.filter((entry) => entry.status === 'ingested').map((entry) => entry.recordCount),
+      [1, 1],
+    );
+  } finally {
+    rmSync(workDir, { recursive: true, force: true });
+  }
+});
+
 test('official DISA compilation discovery prefers the public U_ library ZIP', () => {
   const html = `
     <html>
@@ -166,6 +197,13 @@ test('official DISA compilation discovery prefers the public U_ library ZIP', ()
   assert.equal(
     findOfficialDisaCompilationUrl(html),
     'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip',
+  );
+});
+
+test('DISA discovery normalizes official relative ZIP links', () => {
+  assert.deepEqual(
+    extractDisaZipUrlsFromHtml('<a href="U_SRG-STIG_Library_July_2026.zip">July library</a>'),
+    ['https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip'],
   );
 });
 

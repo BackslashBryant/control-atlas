@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
+import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 
 const required = [
   'dist/site/index.html',
@@ -20,9 +21,9 @@ const required = [
 for (const path of required) assert.ok(existsSync(path), `${path} is required`);
 
 const registry = loadSourceRegistry(JSON.parse(readFileSync('dist/site/data/source-registry.json', 'utf8')));
-const nodes = JSON.parse(readFileSync('dist/site/data/generated/nodes.json', 'utf8')).nodes;
-const edges = JSON.parse(readFileSync('dist/site/data/generated/edges.json', 'utf8')).edges;
-const evidence = JSON.parse(readFileSync('dist/site/data/generated/evidence.json', 'utf8')).evidence;
+const nodes = readGeneratedCollection('dist/site', 'nodes').nodes;
+const edges = readGeneratedCollection('dist/site', 'edges').edges;
+const evidence = readGeneratedCollection('dist/site', 'evidence').evidence;
 const findings = JSON.parse(readFileSync('dist/site/data/generated/graph-health.json', 'utf8')).findings;
 const buildManifest = JSON.parse(readFileSync('dist/site/data/generated/build-manifest.json', 'utf8')).build_manifest;
 const sourceManifests = JSON.parse(readFileSync('dist/site/data/generated/source-manifests.json', 'utf8')).source_manifests;

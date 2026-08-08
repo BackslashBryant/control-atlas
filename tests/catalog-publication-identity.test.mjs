@@ -2,10 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { validateCatalogPublicationIdentity } from "../src/app/catalog-publication-identity.mjs";
+import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 
-const nodes = JSON.parse(
-  readFileSync("data/generated/nodes.json", "utf8"),
-).nodes;
+const nodes = readGeneratedCollection(".", "nodes").nodes;
 const sources = JSON.parse(
   readFileSync("data/generated/sources.json", "utf8"),
 ).sources;

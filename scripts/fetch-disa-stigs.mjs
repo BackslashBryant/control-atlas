@@ -1,10 +1,16 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createWriteStream, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFile } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { once } from 'node:events';
+import { promisify } from 'node:util';
 
-import { parseDisaCompilationArchive } from '../tools/importers/disa-stig-adapter.mjs';
+import { parseDisaCompilationStream } from '../tools/importers/disa-stig-adapter.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DISCOVERY_URL = 'https://public.cyber.mil/stigs/downloads/';
@@ -58,8 +64,10 @@ export function findOfficialDisaCompilationUrl(html) {
 }
 
 export function extractDisaZipUrlsFromHtml(html) {
-  const matches = [...String(html).matchAll(/href=["'](https:\/\/dl\.dod\.cyber\.mil\/wp-content\/uploads\/stigs\/zip\/[^"']+\.zip)["']/gi)]
-    .map((match) => match[1]);
+  const matches = [...String(html).matchAll(/href=["']([^"']+\.zip)["']/gi)]
+    .map((match) => match[1])
+    .filter((href) => !href.includes('/') || /^https:\/\/dl\.dod\.cyber\.mil\/wp-content\/uploads\/stigs\/zip\//i.test(href))
+    .map((href) => (/^https?:\/\//i.test(href) ? href : `${DL_BASE}${href}`));
   return [...new Set(matches)];
 }
 
@@ -98,21 +106,170 @@ async function discoverAndFetchCompilation(fetchImpl) {
   if (!compilationUrl) {
     throw new Error(`No *Library*.zip compilation found in DISA directory index (${DL_BASE})`);
   }
-  const zipResponse = await fetchImpl(compilationUrl);
-  if (!zipResponse.ok) {
-    throw new Error(`DISA compilation fetch failed: ${zipResponse.status} ${compilationUrl}`);
-  }
-  const archive = new Uint8Array(await zipResponse.arrayBuffer());
-  const parsed = parseDisaCompilationArchive(archive, {
-    artifactUrl: compilationUrl,
-    sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
-  });
+  const result = await fetchAndParseCompilation(compilationUrl, fetchImpl);
   return {
-    ...parsed,
-    sourceArtifact: compilationUrl,
-    checksum: checksum(archive),
-    fallbackMode: null,
+    ...result,
+    discoveredUrls: extractDisaZipUrlsFromHtml(indexHtml).length,
   };
+}
+
+// The public library archive is hundreds of megabytes. Keep it out of the
+// JavaScript heap: stream the response into the repo-ignored tmp directory and
+// let the importer process each ZIP entry independently. The archive is
+// removed immediately after parsing, including on failure.
+async function fetchAndParseCompilation(compilationUrl, fetchImpl) {
+  const tmpRoot = join(ROOT, 'tmp');
+  mkdirSync(tmpRoot, { recursive: true });
+  const workDir = mkdtempSync(join(tmpRoot, 'disa-compilation-'));
+  const archivePath = join(workDir, 'library.zip');
+  try {
+    await downloadCompilation(compilationUrl, archivePath, fetchImpl);
+    const parsed = await parseDisaCompilationStream(archivePath, {
+      artifactUrl: compilationUrl,
+      sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
+    });
+    return {
+      ...parsed,
+      sourceArtifact: compilationUrl,
+      checksum: parsed.checksum,
+      byteLength: statSync(archivePath).size,
+      fallbackMode: null,
+    };
+  } finally {
+    rmSync(workDir, { recursive: true, force: true });
+  }
+}
+
+const RANGE_BYTES = process.platform === 'win32' ? 2 * 1024 * 1024 : 8 * 1024 * 1024;
+const RANGE_RETRIES = 6;
+const execFileAsync = promisify(execFile);
+
+function wait(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+async function writeResponseBody(response, output) {
+  if (!response.body) throw new Error('DISA compilation response had no readable body');
+  for await (const chunk of Readable.fromWeb(response.body)) {
+    if (!output.write(chunk)) await once(output, 'drain');
+  }
+}
+
+async function fetchRange(url, start, end, fetchImpl) {
+  let lastError;
+  for (let attempt = 1; attempt <= RANGE_RETRIES; attempt += 1) {
+    try {
+      const response = await fetchImpl(url, { headers: { Range: `bytes=${start}-${end}` } });
+      if (response.status !== 206) {
+        throw new Error(`expected HTTP 206 for ${start}-${end}, received ${response.status}`);
+      }
+      const range = response.headers?.get?.('content-range') || '';
+      const match = range.match(/^bytes\s+(\d+)-(\d+)\/(\d+)$/i);
+      if (!match || Number(match[1]) !== start || Number(match[2]) !== end) {
+        throw new Error(`DISA range response did not match requested bytes: ${range || 'missing Content-Range'}`);
+      }
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (bytes.length !== end - start + 1) {
+        throw new Error(`DISA range body length ${bytes.length} did not match ${end - start + 1} requested bytes`);
+      }
+      return { bytes, totalBytes: Number(match[3]) };
+    } catch (error) {
+      lastError = error;
+      if (attempt < RANGE_RETRIES) await wait(attempt * 2_000);
+    }
+  }
+  throw lastError;
+}
+
+async function fetchRangeWithCurl(url, start, end, destination) {
+  const rangePath = `${destination}.${start}.part`;
+  let lastError;
+  try {
+    for (let attempt = 1; attempt <= RANGE_RETRIES; attempt += 1) {
+      try {
+        await execFileAsync('curl.exe', [
+          '--fail', '--silent', '--show-error', '--location',
+          '--range', `${start}-${end}`,
+          '--output', rangePath,
+          url,
+        ], { timeout: 60_000 });
+        const bytes = readFileSync(rangePath);
+        if (bytes.length !== end - start + 1) {
+          throw new Error(`DISA curl range body length ${bytes.length} did not match ${end - start + 1} requested bytes`);
+        }
+        return bytes;
+      } catch (error) {
+        lastError = error;
+        if (attempt < RANGE_RETRIES) await wait(attempt * 2_000);
+      }
+    }
+    throw lastError;
+  } finally {
+    rmSync(rangePath, { force: true });
+  }
+}
+
+// Some DISA CDN responses terminate before Node can finish a single 352 MB
+// body. Range retrieval keeps every request bounded and verifies each response
+// before appending it. Servers that do not support ranges retain the ordinary
+// streaming path for compatibility with injected test fetchers.
+async function downloadCompilation(url, destination, fetchImpl) {
+  const probe = await fetchImpl(url, { headers: { Range: 'bytes=0-0' } });
+  const contentRange = probe.headers?.get?.('content-range') || '';
+  const rangeMatch = contentRange.match(/^bytes\s+0-0\/(\d+)$/i);
+  const output = createWriteStream(destination);
+  try {
+    if (probe.status === 206 && rangeMatch) {
+      const totalBytes = Number(rangeMatch[1]);
+      for (let start = 0; start < totalBytes; start += RANGE_BYTES) {
+        const end = Math.min(totalBytes - 1, start + RANGE_BYTES - 1);
+        const range = process.platform === 'win32'
+          ? { bytes: await fetchRangeWithCurl(url, start, end, destination), totalBytes }
+          : await fetchRange(url, start, end, fetchImpl);
+        if (range.totalBytes !== totalBytes) {
+          throw new Error(`DISA range total changed during download (${totalBytes} != ${range.totalBytes})`);
+        }
+        if (!output.write(range.bytes)) await once(output, 'drain');
+      }
+    } else {
+      if (!probe.ok) throw new Error(`DISA compilation fetch failed: ${probe.status} ${url}`);
+      await pipeline(Readable.fromWeb(probe.body), output);
+      return;
+    }
+    output.end();
+    await once(output, 'finish');
+  } catch (error) {
+    output.destroy();
+    throw error;
+  }
+}
+
+function writeDisaArtifactManifest(result) {
+  const inventory = result.inventory || [];
+  const count = (status) => inventory.filter((entry) => entry.status === status).length;
+  const parsedByKind = (kind) => inventory
+    .filter((entry) => entry.status === 'ingested' && entry.catalogKind === kind)
+    .reduce((total, entry) => total + entry.recordCount, 0);
+  const manifest = {
+    discovery_source: DL_BASE,
+    artifact_url: result.sourceArtifact,
+    byte_length: result.byteLength,
+    retrieval_timestamp: new Date().toISOString(),
+    checksum: result.checksum,
+    reconciliation: {
+      discovered_urls: result.discoveredUrls ?? null,
+      compilation_entries: inventory.length,
+      ingested_files: count('ingested'),
+      excluded_files: count('excluded'),
+      failed_files: count('failed'),
+      ignored_files: count('ignored'),
+      stig_records_parsed: parsedByKind('stig'),
+      srg_records_parsed: parsedByKind('srg'),
+      cci_relationships: result.relationships.relationships.length,
+      inventory_details: inventory,
+    },
+  };
+  writeJsonAtomically(join(ROOT, 'data', 'disa-artifact-manifest.json'), manifest);
 }
 
 export async function fetchDisaStigs(options = {}) {
@@ -120,29 +277,18 @@ export async function fetchDisaStigs(options = {}) {
   const explicitUrl = options.compilationUrl || process.env.DISA_STIG_COMPILATION_URL || '';
 
   if (explicitUrl) {
-    const zipResponse = await fetchImpl(explicitUrl);
-    if (!zipResponse.ok) {
+    try {
+      return await fetchAndParseCompilation(explicitUrl, fetchImpl);
+    } catch (error) {
+      if (process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') throw error;
       return loadCommittedArtifacts();
     }
-    const archive = new Uint8Array(await zipResponse.arrayBuffer());
-    const parsed = parseDisaCompilationArchive(archive, {
-      artifactUrl: explicitUrl,
-      sourceKeys: {
-        stig: 'disa-stig-library',
-        srg: 'disa-srg-library',
-      },
-    });
-    return {
-      ...parsed,
-      sourceArtifact: explicitUrl,
-      checksum: checksum(archive),
-      fallbackMode: null,
-    };
   }
 
   try {
     return await discoverAndFetchCompilation(fetchImpl);
-  } catch {
+  } catch (error) {
+    if (process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') throw error;
     return loadCommittedArtifacts();
   }
 }
@@ -152,14 +298,15 @@ async function main() {
   if (result.fallbackMode && process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1') {
     throw new Error(`DISA refresh required a live upstream fetch but used ${result.fallbackMode}`);
   }
-  writeFileSync(join(ROOT, 'data', 'stig-rules.json'), `${JSON.stringify(result.stig, null, 2)}\n`, 'utf8');
-  writeFileSync(join(ROOT, 'data', 'srg-requirements.json'), `${JSON.stringify(result.srg, null, 2)}\n`, 'utf8');
-  writeFileSync(join(ROOT, 'maps', 'stig-srg-to-cci.json'), `${JSON.stringify(result.relationships, null, 2)}\n`, 'utf8');
+  writeJsonAtomically(join(ROOT, 'data', 'stig-rules.json'), result.stig);
+  writeJsonAtomically(join(ROOT, 'data', 'srg-requirements.json'), result.srg);
+  writeJsonAtomically(join(ROOT, 'maps', 'stig-srg-to-cci.json'), result.relationships);
+  if (!result.fallbackMode) writeDisaArtifactManifest(result);
   if (result.fallbackMode) {
     console.log(`DISA fetch fallback: ${result.fallbackMode}`);
   }
   if (result.failed?.length) {
-    console.log(`${result.failed.length} archive entr${result.failed.length === 1 ? 'y' : 'ies'} failed to parse (non-benchmark XML, expected in a ~2600-entry compilation): ${result.failed.map((f) => f.entryPath).join(', ')}`);
+    console.log(`${result.failed.length} archive entr${result.failed.length === 1 ? 'y' : 'ies'} failed to parse: ${result.failed.map((f) => `${f.entryPath} (${f.reason})`).join(', ')}`);
   }
   console.log(`Wrote ${result.stig.records.length} STIG rules, ${result.srg.records.length} SRG requirements, and ${result.relationships.relationships.length} DISA CCI references`);
 }

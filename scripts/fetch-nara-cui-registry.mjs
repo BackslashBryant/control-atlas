@@ -9,10 +9,11 @@
 // both with a real HTML parser (node-html-parser) — no hand-authored
 // category list, no regex-over-flattened-text guessing.
 import { createHash } from 'node:crypto';
-import { writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse as parseHtml } from 'node-html-parser';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LIST_URL = 'https://www.archives.gov/cui/registry/category-list';
@@ -194,11 +195,18 @@ export async function fetchNaraCuiRegistry({ concurrency = 8 } = {}) {
     results,
   };
 
-  writeFileSync(
-    join(ROOT, 'data', 'nara-cui-registry-manifest.json'),
-    `${JSON.stringify(manifest, null, 2)}\n`,
-    'utf8',
+  writeJsonAtomically(join(ROOT, 'data', 'nara-cui-registry-manifest.json'), manifest);
+  const registryPath = join(ROOT, 'data', 'source-registry.json');
+  const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+  const artifact = registry.artifacts?.find(
+    (entry) => entry.id === 'artifact-nara-cui-registry',
   );
+  if (!artifact) throw new Error('Missing artifact-nara-cui-registry in source registry.');
+  artifact.byte_length = listBuffer.length;
+  artifact.sha256 = `sha256:${manifest.list_page.sha256}`;
+  artifact.version = new Date().toISOString().slice(0, 10);
+  artifact.retrieved_at = artifact.version;
+  writeJsonAtomically(registryPath, registry);
 
   return manifest;
 }

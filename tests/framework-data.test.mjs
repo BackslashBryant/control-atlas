@@ -12,9 +12,9 @@ import {
   buildFrameworkData,
   lifecycleStatus,
 } from "../scripts/build-framework-data.mjs";
+import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 
-const generated = (name) =>
-  JSON.parse(readFileSync(`data/generated/${name}.json`, "utf8"));
+const generated = (name) => readGeneratedCollection(".", name);
 const sourceRegistry = JSON.parse(readFileSync("data/source-registry.json", "utf8"));
 let buildResult;
 
@@ -335,8 +335,9 @@ test("epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
   );
 });
 
-test("epic 2 graph build emits one complete compact library search artifact", () => {
+test("epic 2 graph build emits a complete bounded library search artifact", () => {
   const artifact = generated("library-search");
+  const edges = generated("edges").edges;
 
   assert.equal(artifact.schema_version, "1.0");
   assert.equal(artifact.library_search.document_count, buildResult.nodes);
@@ -348,8 +349,8 @@ test("epic 2 graph build emits one complete compact library search artifact", ()
   );
   assert.equal(
     existsSync(join("data", "generated", "library-search")),
-    false,
-    "per-catalog search shards are superseded by the complete compact artifact",
+    true,
+    "full search records are delivered through bounded runtime shards",
   );
   assert.equal(
     existsSync(join("data", "generated", "library-search-manifest.json")),
@@ -367,6 +368,14 @@ test("epic 2 graph build emits one complete compact library search artifact", ()
     ac2.source_name,
     "SP 800-53 Rev. 5",
     "library documents must carry a resolved source name so search-phase result cards can render it before sources.json loads",
+  );
+  assert.equal(
+    ac2.published_connection_count,
+    edges.filter((edge) =>
+      edge.publication_status === "published" &&
+      (edge.source_node_id === ac2.id || edge.target_node_id === ac2.id),
+    ).length,
+    "the search artifact must carry the same published connection total as the record graph",
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");

@@ -171,7 +171,7 @@
       },
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-07-17T00:26:08.267Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "rev5/documents-templates/#LI-SaaS"
       }
     },
@@ -344,7 +344,7 @@
       },
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-07-17T00:26:08.267Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "rev5/documents-templates/#Low"
       }
     },
@@ -684,7 +684,7 @@
       },
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-07-17T00:26:08.267Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "rev5/documents-templates/#Moderate"
       }
     },
@@ -1111,7 +1111,7 @@
       },
       "source": {
         "key": "fedramp-rev5",
-        "snapshot_date": "2026-07-17T00:26:08.267Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "rev5/documents-templates/#High"
       }
     }

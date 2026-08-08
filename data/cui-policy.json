@@ -11,7 +11,7 @@
       "description": "The CUI Program is the executive branch-wide program to standardize CUI handling across federal agencies.",
       "source": {
         "key": "isoo-cui-regulation",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "32-cfr-part-2002#cui-program"
       }
     },
@@ -24,7 +24,7 @@
       "description": "CUI Basic covers information for which the underlying authority does not specify handling controls beyond the uniform CUI controls.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-list#cui-basic"
       }
     },
@@ -37,7 +37,7 @@
       "description": "CUI Specified covers information whose underlying authority provides specific handling or dissemination controls.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-list#cui-specified"
       }
     },
@@ -50,7 +50,7 @@
       "description": "Related to registration information of those who own and operate ammonium nitrate facilities, purchasers of ammonium nitrate, and the regulation of sales and transfers of ammonium nitrate.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/ammonium-nitrate"
       },
       "metadata": {
@@ -70,7 +70,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/ammonium-nitrate",
         "last_modified": "2025-05-07T13:22:59-04:00",
-        "sha256": "38af3f2c43675ce7fe0088a060c0be719531f4c163d806dd2b7d872667341e30",
+        "sha256": "f35ad5d2e9918ae8c9ee9479dfa5f3fb969c47e0a9bdc9f75bc60452135a6ec7",
         "byte_length": 36420
       }
     },
@@ -83,7 +83,7 @@
       "description": "In accordance with Section 550(c) of the Department of Homeland Security Appropriations Act of 2007, the following information, whether transmitted verbally, electronically, or in written form, shall constitute CVI, see (1) - (9).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/chemical-terrorism-vulnerability-information"
       },
       "metadata": {
@@ -112,7 +112,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/chemical-terrorism-vulnerability-information",
         "last_modified": "2025-05-08T09:48:17-04:00",
-        "sha256": "fc5300109ff7451c6fa42f6dfd9faa2c17ca07e2b84d4f82fe3b69d036a634f6",
+        "sha256": "bb20689a42ee4574d278052d1914f13c311663c2acdf0eeae531ddcc05bc0d70",
         "byte_length": 36892
       }
     },
@@ -125,7 +125,7 @@
       "description": "Critical energy infrastructure information means specific engineering, vulnerability, or detailed design information about proposed or existing critical infrastructure that: (i) Relates details about the production, generation, transportation, transmission, or distribution of energy; (ii) Could be useful to a person in planning an attack on critical infrastructure;... and (iii) Does not simply give the general location of the critical infrastructure.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/critical-energy-infrastructure-information"
       },
       "metadata": {
@@ -152,7 +152,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/critical-energy-infrastructure-information",
         "last_modified": "2025-05-07T13:16:33-04:00",
-        "sha256": "a67d6af17873fe7c8b4572d0ff5ab204a9557abbaa5cfb2fe69344e9e00daeec",
+        "sha256": "1cd77f15e7abb83149955fe80c58d0e10ecef58922cd7d00333af0b57bab4c5e",
         "byte_length": 37237
       }
     },
@@ -165,7 +165,7 @@
       "description": "Related to information concerning the continuity of executive branch operations during all-hazards emergencies or other situations that may disrupt normal operations.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/emergency-mgmt"
       },
       "metadata": {
@@ -187,7 +187,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/emergency-mgmt",
         "last_modified": "2026-01-22T10:47:58-05:00",
-        "sha256": "1d71e180f7b29a4773a4c60d3ecbb09c6d698bd7a86ff414efde209f4c6e65f8",
+        "sha256": "66684c15b7fb88d8d20a1f10a1a645d0d8d60d9f232583b750259ad6d6c71821",
         "byte_length": 36440
       }
     },
@@ -200,7 +200,7 @@
       "description": "Systems and assets, whether physical or virtual, so vital that the incapacity or destruction of such may have a debilitating impact on the security, economy, public health or safety, environment, or any combination of these matters, across any Federal, State, regional, territorial, or local jurisdiction.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/critical-infrastructure"
       },
       "metadata": {
@@ -222,7 +222,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/critical-infrastructure",
         "last_modified": "2025-08-22T12:42:56-04:00",
-        "sha256": "a8ad70c19ba0243af3a2f1f02a561e5db9151d5838c6ea8c0749871d93a59f70",
+        "sha256": "1780d55fbaf7f630cb72bc7ad9b244cff0826fe799b21b466807f8c6d308ec44",
         "byte_length": 36899
       }
     },
@@ -235,7 +235,7 @@
       "description": "Related to information that if not protected, could result in adverse effects to information systems. Information system means a discrete set of information resources organized for the collection, processing, maintenance, use, sharing, dissemination, or disposition of information.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/info-systems-vulnerability-info"
       },
       "metadata": {
@@ -264,7 +264,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/info-systems-vulnerability-info",
         "last_modified": "2025-05-07T14:13:12-04:00",
-        "sha256": "302fcbf06cfe7a3c9d0da606590e0c0a5a6863b5f3a49a920f46237e446d01ac",
+        "sha256": "8c5150434d328686e9bd722efe3105006387378a785f01f5a5f902af6b9b3c32",
         "byte_length": 36987
       }
     },
@@ -277,7 +277,7 @@
       "description": "Related to protection of federal buildings, grounds or property.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/physical-security"
       },
       "metadata": {
@@ -306,7 +306,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/physical-security",
         "last_modified": "2026-02-06T08:07:00-05:00",
-        "sha256": "4be4188a3f596fd683a8510690e1aaedd7a2433d3bf46a78a0d97d3b36536790",
+        "sha256": "855ac7b0d6a04d1b29c974e49a9015d5ab61f70015a75e54da4d91f20ef62ada",
         "byte_length": 36131
       }
     },
@@ -319,7 +319,7 @@
       "description": "As defined by 6 USC 131-134, and 6 CFR 29, PCII relates to threats, vulnerabilities, or operational experience related to the national infrastructure. PCII offers protection to private sector infrastructure information voluntarily shared with government entities for purposes of homeland security.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/protected-critical-infrastructure-information"
       },
       "metadata": {
@@ -339,7 +339,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/protected-critical-infrastructure-information",
         "last_modified": "2025-05-13T12:13:39-04:00",
-        "sha256": "f807d321094a6c49fd7fec746292fa43d90921e30d7c45ed430a3989ee38aff1",
+        "sha256": "9c3b38f2b6b7cb9b35e8812435a4afe73326b49e26bdacc0586ab1bad6bf8e1c",
         "byte_length": 36568
       }
     },
@@ -352,7 +352,7 @@
       "description": "Defined as “SAFETY Act Confidential Information” in 6 CFR Part 25, the regulations implementing the Support Anti-terrorism by Fostering Effective Technologies Act of 2002, SAFETY Act Information includes any and all information and data voluntarily submitted to the Department of Homeland Security under this part (including Applications, Pre-Applications, other forms, supporting documents and other materials relating to any of the foregoing, and responses to requests for additional information), including, but not limited to, inventions, devices, Technology, know-how, designs, copyrighted information, trade secrets, confidential business information, analyses, test and evaluation results, manuals, videotapes, contracts, letters, facsimile transmissions, electronic mail and other correspondence, financial information and projections, actuarial calculations, liability estimates, insurance quotations, and business and marketing plans.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/safety-act-info"
       },
       "metadata": {
@@ -381,7 +381,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/safety-act-info",
         "last_modified": "2025-05-07T14:03:20-04:00",
-        "sha256": "78ec1adbbc9db39f0cb69718a19b8584b2911adb4e2129d67c24b40fb6121c0e",
+        "sha256": "6725d6971fc99bfd3a82a5f0bad05a5dfa919103f444a8e9282aea934dc8dd84",
         "byte_length": 37605
       }
     },
@@ -394,7 +394,7 @@
       "description": "Health, safety, and exposure information related to chemical substances, chemical mixtures, and articles as defined under the Toxic Substances Control Act (TSCA).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/toxic-substances"
       },
       "metadata": {
@@ -449,7 +449,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/toxic-substances",
         "last_modified": "2025-05-07T14:01:20-04:00",
-        "sha256": "0e57973e34e7566f19414cfcdbf70ff2ae42d6aa79c7b503cf2305c8f71ffcb0",
+        "sha256": "5230fa010095d3283f4c23e14067af6df1e6795cadb4b90193194df95c02e590",
         "byte_length": 37195
       }
     },
@@ -462,7 +462,7 @@
       "description": "Vulnerability Assessments on the risks and security of public drinking water systems, to include, but not be limited to, a review of pipes and constructed conveyances, physical barriers, water collection, pretreatment, treatment, storage and distribution facilities, electronic, computer or other automated systems which are utilized by the public water system, the use, storage, or handling of various chemicals, and the operation and maintenance of such system.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/water-assessments"
       },
       "metadata": {
@@ -484,7 +484,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/water-assessments",
         "last_modified": "2026-04-06T11:40:34-04:00",
-        "sha256": "a75d7c76c5895f18ec731af8290a561de37b3390efc28c5c9d70c7f74621547e",
+        "sha256": "e05e627965260bfea7598fc37e61327b0a099079bd7169d26e70be87b26e57e1",
         "byte_length": 36813
       }
     },
@@ -497,7 +497,7 @@
       "description": "Controlled Technical Information means technical information with military or space application that is subject to controls on the access, use, reproduction, modification, performance, display, release, disclosure, or dissemination. Controlled technical information is to be marked with one of the distribution statements B through F, in accordance with Department of Defense Instruction 5230.24, \"Distribution Statements of Technical Documents.\" The term does not include information that is lawfully publicly available without restrictions. \"Technical Information\" means technical data or computer software, as those terms are defined in Defense Federal Acquisition Regulation Supplement clause 252.227-7013, \"Rights in Technical Data - Noncommercial Items\" (48 CFR 252.227-7013). Examples of technical information include research and engineering data, engineering drawings, and associated lists, specifications, standards, process sheets, manuals, technical reports, technical orders, catalog-item identifications, data sets, studies and analyses and related information, and computer software executable code and source code.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/controlled-technical-info"
       },
       "metadata": {
@@ -517,7 +517,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/controlled-technical-info",
         "last_modified": "2025-05-08T09:45:45-04:00",
-        "sha256": "9a2f744f53f247e47674d47b63516de0b26254726dd8578c2de83414bd78ab43",
+        "sha256": "2b80999b1a46fbaa64857ff6ac1febe8681c50874b2e9edea45189f3fd18a614",
         "byte_length": 37295
       }
     },
@@ -530,7 +530,7 @@
       "description": "Information that, if disclosed, would reveal vulnerabilities in the DoD critical infrastructure and, if exploited, would likely result in the significant disruption, destruction, or damage of or to DoD operations, property, or facilities, including information regarding the securing and safeguarding of explosives, hazardous chemicals, or pipelines, related to critical infrastructure or protected systems owned or operated on behalf of the DoD, including vulnerability assessments prepared by or on behalf of the DoD, explosives safety information (including storage and handling), and other site-specific information on or relating to installation security.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/dod-critical-infrastructure-security-information"
       },
       "metadata": {
@@ -552,7 +552,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/dod-critical-infrastructure-security-information",
         "last_modified": "2025-05-08T11:48:48-04:00",
-        "sha256": "cd403c2b40fff6d8b8fe0bc7b0f832203cafc1e0e15e07f975019a69debe48ab",
+        "sha256": "1634e91555513c01e965fc04ab700f72103ece990fcca624cfb395778b240ae9",
         "byte_length": 37380
       }
     },
@@ -565,7 +565,7 @@
       "description": "Related to the safety of reactors and associated naval nuclear propulsion plants, and control of radiation and radioactivity associated with naval nuclear propulsion activities, including prescribing and enforcing standards and regulations for these areas as they affect the environment and the safety and health of workers, operators, and the general public.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/naval-nuclear-propulsion-info"
       },
       "metadata": {
@@ -594,7 +594,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/naval-nuclear-propulsion-info",
         "last_modified": "2025-05-07T14:08:51-04:00",
-        "sha256": "72ec97823bccabb11808bfe112e04564aa85a9ed191f81fbc956952bdcf3c15c",
+        "sha256": "46899c3ae90b544eecaea70947c675f955102a713752cf452f17418454829d66",
         "byte_length": 37171
       }
     },
@@ -607,7 +607,7 @@
       "description": "Relating to Department of Defense special nuclear material (SNM), equipment, and facilities, as defined by 32 CFR 223.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/ucni-dod"
       },
       "metadata": {
@@ -636,7 +636,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/ucni-dod",
         "last_modified": "2025-05-08T11:52:40-04:00",
-        "sha256": "faca1951be679eaad95c79e9b0f26ae8caea3c9f5c9307627e96623a97f02b94",
+        "sha256": "0663e8790877edadec42d3c992c4c440016b9011fd2e49c2ab9ebcab60c79403",
         "byte_length": 36516
       }
     },
@@ -649,7 +649,7 @@
       "description": "Unclassified information concerning certain items, commodities, technology, software, or other information whose export could reasonably be expected to adversely affect the United States national security and nonproliferation objectives. To include dual use items; items identified in export administration regulations, international traffic in arms regulations (ITAR) and the munitions list; license applications; and sensitive nuclear technology information.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/export-control"
       },
       "metadata": {
@@ -769,7 +769,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/export-control",
         "last_modified": "2025-05-08T07:04:11-04:00",
-        "sha256": "b1a7c00e0721638146635be3fbdcdd6e276b140cb46fe33a153d361daa0c776e",
+        "sha256": "30ca989c5d0241d50d0325a5fcc7a802c0f154226c920e36f105a23f8cb569d9",
         "byte_length": 39261
       }
     },
@@ -782,7 +782,7 @@
       "description": "Related to the systematic investigation into and study of materials and sources in order to establish facts and reach new conclusions.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/export-controlled-research"
       },
       "metadata": {
@@ -804,7 +804,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/export-controlled-research",
         "last_modified": "2025-05-08T10:16:07-04:00",
-        "sha256": "9c49c8848eb614d3449215965c796f434dbfc3a989613cc689b69bf9926f4304",
+        "sha256": "115d885fcc87a3994a3821f2a8bf4845fd4b726733d31fb9ea42ceea5347ce30",
         "byte_length": 35974
       }
     },
@@ -817,7 +817,7 @@
       "description": "Information that is provided to the government pursuant to the Bank Secrecy Act, including but not limited to, suspicious activity reports (SAR), currency transaction reports (CTR), reports of international transportation of currency or monetary instruments (CMIR), reports of cash payment over $10,000 received in trade or business, and reports of foreign bank and financial accounts (FBAR). Reports filed under the Bank Secrecy Act (BSA), codified in relevant part at 31 U.S.C. § 5311 et seq, are specifically exempt from disclosure under the Freedom of Information Act, codified at 5 U.S.C. § 552, and also may not be disclosed under any State, local, tribal, or territorial “freedom of information,” “open government,” or similar law. See 31 U.S.C. § 5319; 5 U.S.C. § 552(b)(3). These reports (BSA Reports), are maintained in a system of records containing information compiled for law enforcement investigative purposes that has been exempted from the access provisions of the Privacy Act in accordance with 5 U.S.C. §§ 552a(j)(2) and (k)(2). BSA Reports may only be re-disseminated in strict accordance with guidelines established by the Financial Crimes Enforcement Network (FinCEN), the Treasury bureau that administers the BSA. Suspicious Activity Reports, one of the types of required reports filed under the BSA, are required to be kept confidential in accordance with 31 U.S.C. § 5318(g)(2) and implementing regulations. To the extent information falling under the purview of the BSA is collected, accessed, or used for any Federal tax administration purpose, it is also subject to the confidentiality provisions of the Internal Revenue Code, codified at 26 U.S.C. § 6103.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/bank-secrecy"
       },
       "metadata": {
@@ -867,7 +867,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/bank-secrecy",
         "last_modified": "2025-05-08T12:04:05-04:00",
-        "sha256": "f9d00aa6cea1edb1893f24e0b72ba0a3b8825debc56b035fdf0d55b3e4c714ce",
+        "sha256": "2f66ae024d5767b89ab4b2b6f11334fd00ca7799fab4aa874075b94c679ef015",
         "byte_length": 39806
       }
     },
@@ -880,7 +880,7 @@
       "description": "Related to information concerning the federal budget, including authorizations and estimates of income and expenditures.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/budget"
       },
       "metadata": {
@@ -900,7 +900,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/budget",
         "last_modified": "2026-04-02T08:47:33-04:00",
-        "sha256": "ab559a9325bc87fcba7cc662eabbb2e6900ca72f54a78b20d9bc7f33126c6768",
+        "sha256": "1b334ce545b60d734103c6f1bf6ff9a97ca631277806a350102317029c174cb6",
         "byte_length": 35958
       }
     },
@@ -913,7 +913,7 @@
       "description": "Concerning the Officer of the United States Government who is charged with duties relating to fiscal affairs, including auditing, examining accounts, and reporting the financial status of the United States Government.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/comptroller-general"
       },
       "metadata": {
@@ -935,7 +935,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/comptroller-general",
         "last_modified": "2025-07-25T14:09:17-04:00",
-        "sha256": "f91e59e5a45b969dde4bfb84d17466a59ef42c5176b9c57d90cc4431c64935d6",
+        "sha256": "cefa9d8ddc8e24beaf64742a656630dea1d911253f02d8ac232b1e5bcf7f3bdc",
         "byte_length": 36551
       }
     },
@@ -948,7 +948,7 @@
       "description": "Related to information concerning consumer complaints or inquiries concerning financial institutions or consumer financial products and services, and responses to them.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/consumer-complaint-information"
       },
       "metadata": {
@@ -968,7 +968,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/consumer-complaint-information",
         "last_modified": "2025-07-25T14:11:16-04:00",
-        "sha256": "c28d838307b7574515821a16fec62df1ef832dda3f4f5c9ce877bc8763e90916",
+        "sha256": "7db99f29e3ecea9a03767b39375bbd973e2fdedcf8fcf8b0359ffb478b9ef36d",
         "byte_length": 36427
       }
     },
@@ -981,7 +981,7 @@
       "description": "Relating to the computer-based systems used to perform financial transactions electronically.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/electronic-funds-transfer"
       },
       "metadata": {
@@ -1003,7 +1003,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/electronic-funds-transfer",
         "last_modified": "2025-05-08T07:17:16-04:00",
-        "sha256": "cb3f124968bdcfb9ecf356e81dad123fc548d8e535874ae5791fe9a2962cf5a3",
+        "sha256": "ab14dbd1b516ea642c7498885359ddcd696051f955e316a011f573105f57a5de",
         "byte_length": 36411
       }
     },
@@ -1016,7 +1016,7 @@
       "description": "Related to information that the Federal Housing Finance Agency (FHFA) has not made public that is created by, obtained by, or communicated to an FHFA employee in connection with the performance of official duties, regardless of who is in possession of the information, including confidential supervisory information. Confidential supervisory information includes FHFA reports of examination, inspection and visitation, confidential operating and condition reports, and any information derived from, related to, or contained in such reports, or gathered by FHFA in the course of any investigation, suspicious activity report, cease-and- desist order, civil money penalty enforcement order, suspension, removal or prohibition order, or other supervisory or enforcement orders or actions taken under the Federal Housing Enterprises Financial Safety and Soundness Act of 1992, and other conditions as set forth in 12 CFR Part 1214.1.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/fhfa-nonpublic-info"
       },
       "metadata": {
@@ -1038,7 +1038,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/fhfa-nonpublic-info",
         "last_modified": "2025-07-25T14:15:02-04:00",
-        "sha256": "0b3888ae2442d3d5dbe9d0dc8a25926f762f831769aba8a2381f3ebdd307c250",
+        "sha256": "e97aedede778f18a0e89a887f50a7cd72d7b0046dc21cf140edb6d2e42f54f06",
         "byte_length": 37346
       }
     },
@@ -1051,7 +1051,7 @@
       "description": "Related to information connected to an agency's responsibilities to supervise, examine, and evaluate a financial institution.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/financial-supervision-information"
       },
       "metadata": {
@@ -1108,7 +1108,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/financial-supervision-information",
         "last_modified": "2025-07-25T14:11:59-04:00",
-        "sha256": "f46a8d40cd7b5bb1dfefbf18db86ed6bb77eb1edab53bd22deb62a9ab98137a8",
+        "sha256": "c16db692a924203e4d6343abaedfc0a9f872ebb1e833593608ed3e9d7c7381cd",
         "byte_length": 36822
       }
     },
@@ -1121,7 +1121,7 @@
       "description": "Related to the duties, transactions, or otherwise falling under the purview of financial institutions or United States Government fiscal functions. Uses may include, but are not limited to, customer information held by a financial institution.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/financial"
       },
       "metadata": {
@@ -1178,7 +1178,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/financial",
         "last_modified": "2025-05-08T07:20:12-04:00",
-        "sha256": "1e8fb7e44bb8723a36edcb92872ca050a67153613aa8f2212b9e6311b4fb94ca",
+        "sha256": "afa86fb86ea986210179d80b96f1dcc3ec20590681e29eaa7696c9c4174c3fac",
         "byte_length": 37606
       }
     },
@@ -1191,7 +1191,7 @@
       "description": "Relating to entities that provide financial services for its clients or members, and were established (or chartered) by more than one country, and hence are subjects of international law.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/international-financial-institutions"
       },
       "metadata": {
@@ -1213,7 +1213,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/international-financial-institutions",
         "last_modified": "2025-07-25T14:16:20-04:00",
-        "sha256": "f7a2b9ce44537047d3190fb3cb4e0d2d364090fa15a2cb08cae693f7bc978e40",
+        "sha256": "8b3dfb905993941b70b4957aa8d24d73e401ba460fd1c90458adefe1140efa77",
         "byte_length": 36730
       }
     },
@@ -1226,7 +1226,7 @@
       "description": "Relating to methods by which corporations legally unify ownership of assets formerly subject to separate controls.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/mergers"
       },
       "metadata": {
@@ -1255,7 +1255,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/mergers",
         "last_modified": "2025-07-25T14:19:56-04:00",
-        "sha256": "9b2066455402ef0fabd799f78a5d3bd1298e645c7119210af08c1f3eb2442c43",
+        "sha256": "ff09a8fb223525cf71ad5e18ff6e7e11874ec7f441be18ddc5ac23123f0d9e8b",
         "byte_length": 36465
       }
     },
@@ -1268,7 +1268,7 @@
       "description": "Related to the net worth of an individual and/or their affiliates in certain administrative proceedings.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/net-worth"
       },
       "metadata": {
@@ -1290,7 +1290,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/net-worth",
         "last_modified": "2025-05-08T08:06:57-04:00",
-        "sha256": "4fad4349fbb6496a6efa469465866e853cbeefc086bb732acaf9580d23f3ba43",
+        "sha256": "9f70ed5ba9baff984ac73c54678ec2ce71c2e4700e6c727f3b7ce5d2ba46a974",
         "byte_length": 36436
       }
     },
@@ -1303,7 +1303,7 @@
       "description": "Related to post-employment funding provided by an employer.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/retirement"
       },
       "metadata": {
@@ -1346,7 +1346,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/retirement",
         "last_modified": "2025-07-25T14:22:45-04:00",
-        "sha256": "d628fce0e2d2955921a7fc4b2e6a82889f6ded7e684c7a60e8582e8917761496",
+        "sha256": "75a47f7a651e8de5b0e75a3d3da12032e1b07ccb7f0a22f4e08fc010c58ca648",
         "byte_length": 36729
       }
     },
@@ -1359,7 +1359,7 @@
       "description": "Related to refugee applications and associated hearings to grant asylum to foreign nationals in the United States to be recognized as asylees.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/asylee"
       },
       "metadata": {
@@ -1388,7 +1388,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/asylee",
         "last_modified": "2025-07-25T14:24:07-04:00",
-        "sha256": "cc1ec50ff8b7dd94c5b438203064b4942efaea9a4f585216c651e2a2838f988d",
+        "sha256": "6281fb5550e98270c966abfc435a5f762fa89546b15c9c14957994bcedfe6e71",
         "byte_length": 36505
       }
     },
@@ -1401,7 +1401,7 @@
       "description": "Related to information within applications and associated hearings provided by, or that could identify, a battered spouse or child of a US citizen or US permanent resident seeking independent protected status within the United States.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/battered-spouse-or-child"
       },
       "metadata": {
@@ -1428,7 +1428,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/battered-spouse-or-child",
         "last_modified": "2025-05-08T07:25:15-04:00",
-        "sha256": "083ff604b4f86594299a84fabca5925926a1bda79f156059276a18962a2e88ff",
+        "sha256": "08c144ea81547484c1cf9a0676a1f4a6f53f0cfb0c8c74e385a2d3d15bcdce85",
         "byte_length": 36496
       }
     },
@@ -1441,7 +1441,7 @@
       "description": "Related to applications and associated hearings to grant permanent residency to foreign nationals living in the United States.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/permanent-resident-status"
       },
       "metadata": {
@@ -1463,7 +1463,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/permanent-resident-status",
         "last_modified": "2025-07-25T14:26:12-04:00",
-        "sha256": "7494ba347fdd44fc89e028140bae1fd5ce60f30d86a26f1d8bbf9779643b19e7",
+        "sha256": "a8c2e009e92c8bbff2042da704edbb0f66aa6dfc96bb0909198dc09d8796cba0",
         "byte_length": 36487
       }
     },
@@ -1476,7 +1476,7 @@
       "description": "Related to applications for the adjustment of immigration status.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/status-adjustment"
       },
       "metadata": {
@@ -1505,7 +1505,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/status-adjustment",
         "last_modified": "2025-07-25T14:28:49-04:00",
-        "sha256": "53bebec035ace7efa478bd64d86fec1f01e0801db5fa508e9b81b8bc3c16b05c",
+        "sha256": "eccfe2711bbf47b45253609f02153b3ee7f1d32a0b85ce788358d8f9155f8c3e",
         "byte_length": 36520
       }
     },
@@ -1518,7 +1518,7 @@
       "description": "Related to findings that conditions in a given country pose a danger to personal safety due to ongoing armed conflict or an environmental disaster and persons should receive special temporary status to remain in the United States.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/temporary-protected-status"
       },
       "metadata": {
@@ -1547,7 +1547,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/temporary-protected-status",
         "last_modified": "2025-07-25T14:29:56-04:00",
-        "sha256": "37d5b9c5bdd01aa112a7ff61d484afe20e99ac53b084443c614a1658efc36813",
+        "sha256": "fcc8f30084caf708b2dc0b3a091f6ba83d362ae3cba2f4797d9ab7b57f21bcdc",
         "byte_length": 36496
       }
     },
@@ -1560,7 +1560,7 @@
       "description": "Related to identifiable information of persons who have been victims of human trafficking and their family members.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/victims-of-human-trafficking"
       },
       "metadata": {
@@ -1580,7 +1580,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/victims-of-human-trafficking",
         "last_modified": "2025-07-25T14:30:56-04:00",
-        "sha256": "1deb43c6b48121a524617e8d464f2f61569edd36d23b7cc956b2653729564c70",
+        "sha256": "de4d2020eb0a37f83d0fd843d31ef09b47a6045e2e61973f841bcbbe464409f7",
         "byte_length": 36264
       }
     },
@@ -1593,7 +1593,7 @@
       "description": "Related to applications or permits to enter the United States.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/visas"
       },
       "metadata": {
@@ -1615,7 +1615,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/visas",
         "last_modified": "2025-07-25T14:31:57-04:00",
-        "sha256": "ec1e529902150f672cdcfc9a13ec64cc49d6ab63e53575ab4c5b7b62cc7ef89d",
+        "sha256": "de648fd847d5e2ac9229812fcfc30ecb33df5b52fbc2ac2e3fd5278af5fa35f8",
         "byte_length": 36154
       }
     },
@@ -1628,7 +1628,7 @@
       "description": "Information related to the agricultural operation, farming or conservation practices, or the actual land of an agricultural producer or landowner.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/agriculture"
       },
       "metadata": {
@@ -1650,7 +1650,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/agriculture",
         "last_modified": "2025-05-08T07:47:22-04:00",
-        "sha256": "5b3b8769a16d7805999caecce6b950656fda58cced3fcb712a5fc45071a4f040",
+        "sha256": "b7e1f3bc72cbc87edfb93298d6cfbadc3e49321f495caec99bfa49c6ed2d7a6b",
         "byte_length": 36385
       }
     },
@@ -1663,7 +1663,7 @@
       "description": "Related to unclassified and declassified information that is collected from unconsenting individuals under the authority of the Foreign Intelligence Surveillance Act (FISA).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/foreign-intelligence-surveillance-act"
       },
       "metadata": {
@@ -1697,7 +1697,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/foreign-intelligence-surveillance-act",
         "last_modified": "2025-07-25T14:46:05-04:00",
-        "sha256": "93e33b3a3a8e821d816f9bb785fc0060eb341af9ab0e48bdc98b86b9db008527",
+        "sha256": "b16ef569a0bf3cb60f95c6166cdacd1e0a64b942408532e6dc939f885ce10973",
         "byte_length": 36499
       }
     },
@@ -1710,7 +1710,7 @@
       "description": "Related to books, records, papers, documents, and other items produced for an investigation to obtain foreign intelligence information.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/foreign-intelligence-surveillance-act-business-records"
       },
       "metadata": {
@@ -1730,7 +1730,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/foreign-intelligence-surveillance-act-business-records",
         "last_modified": "2025-07-25T14:50:15-04:00",
-        "sha256": "cfaca3252112e01d3650d66545f85be7218293ac66ba3f0777895aeb48629bd7",
+        "sha256": "ca379bd943c2836a8789976b2b3dd0f2e5d7ac7985706a0e50e23444ff521045",
         "byte_length": 36605
       }
     },
@@ -1743,7 +1743,7 @@
       "description": "Related to intelligence activities, sources, or methods.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/intelligence"
       },
       "metadata": {
@@ -1821,7 +1821,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/intelligence",
         "last_modified": "2025-06-12T10:21:31-04:00",
-        "sha256": "922e48edec5562001e52c9ad67a6eda9c68680e9e546cab468fdabb077fac2ee",
+        "sha256": "986608dce6110acd06b8d5bfc3c735c65e1733ea84e10a57bb086257e8eb6155",
         "byte_length": 37628
       }
     },
@@ -1834,7 +1834,7 @@
       "description": "Related to imagery, imagery intelligence, or geospatial information.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/geodetic-product-info"
       },
       "metadata": {
@@ -1854,7 +1854,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/geodetic-product-info",
         "last_modified": "2025-07-25T14:52:49-04:00",
-        "sha256": "9a63d59c496a740b039b7427b8e50bb4506d6276898e2e95a117f73e3542d334",
+        "sha256": "67003131f1b789e22562d1e93e99fa22835c1ec47e089ed6ebac5f7fd677daa3",
         "byte_length": 36200
       }
     },
@@ -1867,7 +1867,7 @@
       "description": "Related to financial records obtained for intelligence or counterintelligence activity, investigation, or analysis.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/intelligence-financial-records"
       },
       "metadata": {
@@ -1887,7 +1887,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/intelligence-financial-records",
         "last_modified": "2025-07-25T14:53:53-04:00",
-        "sha256": "9101673bac59cdc2eafaeb17757099adb61ee5617b6a31de9195303f1e393183",
+        "sha256": "e31ac1d4f37a8d861c35adca1240a1c0346657b9cc45bd0c70b09ee1aafa8525",
         "byte_length": 36394
       }
     },
@@ -1900,7 +1900,7 @@
       "description": "Refers to a category of information that is not intended to be disseminated beyond CIA channels that involves intelligence activities, sources, or methods. This information may also relate to the CIA's organization, functions, names, official titles, salaries, or numbers of personnel.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/internal-data"
       },
       "metadata": {
@@ -1943,7 +1943,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/internal-data",
         "last_modified": "2025-05-08T08:03:33-04:00",
-        "sha256": "7d680a17325d0b558f8d755b04459c63c1af15b4bc2e8199611280b44173e8a1",
+        "sha256": "259ed7b6bd304e521164ed14e91941565c3b0e7494097416359c74d87c157781",
         "byte_length": 37050
       }
     },
@@ -1956,7 +1956,7 @@
       "description": "Critical information determined to give evidence of the planning and execution of sensitive (frequently classified) government activities after going through a formal systematic vetting process in accordance with National Security Presidential Memorandum Number 28. This process identifies unclassified information that must be protected. It almost always results from an agency’s official OPSEC program, or is otherwise commonly approved for use by the CUI Senior Agency Official.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/opsec"
       },
       "metadata": {
@@ -1978,7 +1978,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/opsec",
         "last_modified": "2025-05-12T13:39:55-04:00",
-        "sha256": "732149f1c013d8e6119271679746729d6b5958743ea7717d346af0645053b32b",
+        "sha256": "d65aac04d12354b48cfc5b083973f9d9a90c11b5d04eb257946df1ccf73cbc54",
         "byte_length": 36899
       }
     },
@@ -1991,7 +1991,7 @@
       "description": "Information provided by, otherwise made available by, or produced in cooperation with, a foreign government or international organization that requires protection pursuant to an existing treaty, agreement, bilateral exchange or other obligation under the requirements stipulated in 10 USC 130c(b), when not subject to classification under Executive Order 13526. Title 10 USC 130c(b) may exempt this class of foreign government information from the safeguard provisions otherwise required by Executive Order 13526. Per Title 10 USC 130c(h) the following national security officials are the only ones defined by statute as able to determine such information requires control: (A) The Secretary of Defense, with respect to information of concern to the Department of Defense. (B) The Secretary of Homeland Security, with respect to information of concern to the Coast Guard, as determined by the Secretary, but only while the Coast Guard is not operating as a service in the Navy. (C) The Secretary of Energy, with respect to information concerning the national security programs of the Department of Energy, as determined by the Secretary.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/international-agreements"
       },
       "metadata": {
@@ -2011,7 +2011,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/international-agreements",
         "last_modified": "2025-07-25T15:53:15-04:00",
-        "sha256": "391f7939efe72be01101a1e3e74e63c7884fc6d944f5638175ea21aea7b2537d",
+        "sha256": "01c4ea517676aa79253d365d398856c37ce968c6be190a390d49e30726a13531",
         "byte_length": 37585
       }
     },
@@ -2024,7 +2024,7 @@
       "description": "Related to information obtained during the course of an accident or incident investigation. Including but not limited to information related to wreckage, records, mail, or cargo.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/accident-investigation"
       },
       "metadata": {
@@ -2051,7 +2051,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/accident-investigation",
         "last_modified": "2025-05-08T08:14:00-04:00",
-        "sha256": "03817caec2bdcb74f93e2503022e71e81625aa1590df46624b337f78e188e0ad",
+        "sha256": "f510ef9b308e8324c2ea23852b1c6da9787aebc5081dddbd09dd2ffb60eba5aa",
         "byte_length": 36635
       }
     },
@@ -2064,7 +2064,7 @@
       "description": "Related to information obtained in connection to an investigation into campaign finance and disclosure laws. Usage may include but is not limited to notification or investigation pertaining to financial support of a candidate for election.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/campaign-funds"
       },
       "metadata": {
@@ -2091,7 +2091,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/campaign-funds",
         "last_modified": "2025-07-29T08:57:11-04:00",
-        "sha256": "4f06fb9d7dcc29e866d073243a63ce623331e34055d7e90891c5e91b6afed171",
+        "sha256": "4e273fa87d98ba6b9f30eaa27edff4433242ed7d4a5bf069d945049618f8e745",
         "byte_length": 36405
       }
     },
@@ -2104,7 +2104,7 @@
       "description": "Related to information concerning the mental condition of a person committed to a psychiatric facility.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/committed-person"
       },
       "metadata": {
@@ -2126,7 +2126,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/committed-person",
         "last_modified": "2025-07-29T08:59:03-04:00",
-        "sha256": "b06ccdbbde1ab2951f893b4b83bd637224a3d92571ba45a1a83c2fbb4ea3819f",
+        "sha256": "61b91cbbca1cc0c0b97368c1061b35605b29672bf60432ee51669399cedaebfa",
         "byte_length": 36306
       }
     },
@@ -2139,7 +2139,7 @@
       "description": "Related to the contents of any wire, oral, or electronic communication.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/communications"
       },
       "metadata": {
@@ -2168,7 +2168,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/communications",
         "last_modified": "2025-05-08T09:41:34-04:00",
-        "sha256": "78cdc4228f9bc4089dbbed4be4fcf20f6f164acb94ad1a45e4460a703e7dcd88",
+        "sha256": "9b337b8fcb7396c222ea1ef2978a4208f625fad167a60e231c77c101b58d6649",
         "byte_length": 36510
       }
     },
@@ -2181,7 +2181,7 @@
       "description": "Information obtained by the Drug Enforcement Administration (DEA) or in DEA investigative reports related to controlled substances.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/controlled-substances"
       },
       "metadata": {
@@ -2201,7 +2201,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/controlled-substances",
         "last_modified": "2025-07-29T09:00:37-04:00",
-        "sha256": "72f7ab769a477c8889f7a5beaf7aa8cf0a5fe4423eaf6611c07c5f4a55e9d550",
+        "sha256": "a650c447688c4a8fdab4b0269f2cef2b873021a1bbf4a31d45c5d4f7541a5ac3",
         "byte_length": 36246
       }
     },
@@ -2214,7 +2214,7 @@
       "description": "Related to information collected by criminal justice agencies on individuals consisting of identifiable descriptions and notations of arrests, detentions, indictments, informations, or other formal criminal charges, and any disposition arising therefrom, including acquittal, sentencing, correctional supervision, and release.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/criminal-history-records-info"
       },
       "metadata": {
@@ -2234,7 +2234,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/criminal-history-records-info",
         "last_modified": "2025-07-29T09:04:37-04:00",
-        "sha256": "722fd168c5c65f9fdd39624b575b4bc9bb9c7f13c6f4d4b2040700fee490df19",
+        "sha256": "4ab7e5ab034ebd7ea1356bcafd0c7d13012d8d53ed91431f7e37b1021a9e04d2",
         "byte_length": 36574
       }
     },
@@ -2247,7 +2247,7 @@
       "description": "Related to hereditary material in humans that is used for law enforcement purposes.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/dna"
       },
       "metadata": {
@@ -2267,7 +2267,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/dna",
         "last_modified": "2025-05-08T10:10:06-04:00",
-        "sha256": "c913b54e8c9bf873a32c7dc124dc5fd545f03c777c066baeee57a787b84c4bdd",
+        "sha256": "f59ac0aca2eaabf482355d2426987ae8e1ea23ab1bc5b0a4e898fcdcf7fc5ffd",
         "byte_length": 36028
       }
     },
@@ -2280,7 +2280,7 @@
       "description": "Related to techniques and procedures for law enforcement operations, investigations, prosecutions, or enforcement actions.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/general-law-enforcement"
       },
       "metadata": {
@@ -2309,7 +2309,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/general-law-enforcement",
         "last_modified": "2025-07-29T09:06:44-04:00",
-        "sha256": "b3de3fd25978e3be7588f4f3c2372cb457a48d25f672a5e828df2cc44fde4a47",
+        "sha256": "f38684f1200314dab50bee5ad6aad63dc41777207c43523a7fd92002a7bc5c86",
         "byte_length": 36673
       }
     },
@@ -2322,7 +2322,7 @@
       "description": "Related to the identity of a human source.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/informant"
       },
       "metadata": {
@@ -2372,7 +2372,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/informant",
         "last_modified": "2025-07-29T09:09:44-04:00",
-        "sha256": "826ce9ceac8aa9006eced6503174a209600af670836fb9b63fc3d30f99c3f936",
+        "sha256": "3ae809772b1c0175d9ff2b2375cf72ebac8156e1eca164807b406f9651db1939",
         "byte_length": 36449
       }
     },
@@ -2385,7 +2385,7 @@
       "description": "Related to information obtained during the course of a law enforcement investigation or action, civil or criminal.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/investigation"
       },
       "metadata": {
@@ -2463,7 +2463,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/investigation",
         "last_modified": "2025-05-12T13:49:23-04:00",
-        "sha256": "e6f6ec2e0e02c70c7b8544d3c7b0567303c33192763978b892fdd9412f2deb26",
+        "sha256": "7474c2398aafb835e373489624f5285a3c9fa5c20bac65c04399fd98eff54a64",
         "byte_length": 37347
       }
     },
@@ -2476,7 +2476,7 @@
       "description": "Related to the identity of individual juvenile youths.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/juvenile"
       },
       "metadata": {
@@ -2512,7 +2512,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/juvenile",
         "last_modified": "2025-07-29T09:11:14-04:00",
-        "sha256": "8a4df2f0b98627627ed8c92a215882591a07f87fcef9eb3950f292ae86b7b5f5",
+        "sha256": "dd7788954c5daf993d4858865d85d59dad79f38f45571844aec1ba97f60b9659",
         "byte_length": 36512
       }
     },
@@ -2525,7 +2525,7 @@
       "description": "Related to financial records obtained for law enforcement purposes.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/law-enforcement-financial-records"
       },
       "metadata": {
@@ -2545,7 +2545,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/law-enforcement-financial-records",
         "last_modified": "2025-07-29T09:12:25-04:00",
-        "sha256": "d7673895aff6267cf602f204ef0388ab20ad638e234d9161acd36b78a2597991",
+        "sha256": "01812bd219c0076b990e89df8780da32987d04f52702f6cbe91ea43d0f772177",
         "byte_length": 36314
       }
     },
@@ -2558,7 +2558,7 @@
       "description": "Related to administrative orders sent to compel the recipients of the letters to provide information to federal investigators.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/national-security-letter"
       },
       "metadata": {
@@ -2580,7 +2580,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/national-security-letter",
         "last_modified": "2025-05-08T10:12:07-04:00",
-        "sha256": "5e5136e30ca3bc197400ae8877d19714cdf4201f88ba9470618a42159be6b614",
+        "sha256": "e6aa3ef8494f8d8f505524320e1b364c1d55ffa21311995aba84d9d85193f0ac",
         "byte_length": 36477
       }
     },
@@ -2593,7 +2593,7 @@
       "description": "Related to devices used to identify incoming and outgoing telephone numbers.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/pen-register-trap-and-trace"
       },
       "metadata": {
@@ -2615,7 +2615,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/pen-register-trap-and-trace",
         "last_modified": "2025-07-29T09:13:49-04:00",
-        "sha256": "c0cd28172a2a354a67664dfd901b20640debc0f2448ab5800015c2bfbe65c4c6",
+        "sha256": "aca7841ee79d79d8780da06731e2b7974ec64dc961452c78ec6cce6b54281834",
         "byte_length": 36422
       }
     },
@@ -2628,7 +2628,7 @@
       "description": "Related to the identity of a recipient of a reward.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/reward"
       },
       "metadata": {
@@ -2650,7 +2650,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/reward",
         "last_modified": "2025-07-29T09:14:50-04:00",
-        "sha256": "c0209064eb89c60fddbe8a26f662bebbccfc4696d345eff09e2426e0dc3fb6c4",
+        "sha256": "80a2d97dce06d0593298d728c5633b114f62e8d148cc77decb0c5a7e4f6ac157",
         "byte_length": 36124
       }
     },
@@ -2663,7 +2663,7 @@
       "description": "Related to the identity of a victim of a sex offense.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/sex-crime-victim"
       },
       "metadata": {
@@ -2685,7 +2685,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/sex-crime-victim",
         "last_modified": "2025-05-08T10:16:27-04:00",
-        "sha256": "4b0f82ce29fe203db3f19b1895799e3efc0b4d85b86beef3671f84225e32900b",
+        "sha256": "fc6b502b8216e4dbc6bc57a12a06a32b4aa0530310bc8d8da7cf69a79c55ba5c",
         "byte_length": 36249
       }
     },
@@ -2698,7 +2698,7 @@
       "description": "Related to information gathering and analysis concerning possible threats or acts of a destructive nature.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/terrorist-screening"
       },
       "metadata": {
@@ -2720,7 +2720,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/terrorist-screening",
         "last_modified": "2025-07-29T09:15:47-04:00",
-        "sha256": "c172c7cf42abd3a2d8ed37f4633d62b7fc939b159e31bfbe6f8512c7b1ce9c96",
+        "sha256": "54564899a3abc08725ec1efe1e91f7c49cfe0d30af57b87c2356714c3eaa84bb",
         "byte_length": 36257
       }
     },
@@ -2733,7 +2733,7 @@
       "description": "Identity of anyone providing information relating to a legal violation or illicit or unsafe activity, including information provided by a whistleblower which could reasonably be expected to reveal the identity of a whistleblower.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/whistleblower-identity"
       },
       "metadata": {
@@ -2776,7 +2776,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/whistleblower-identity",
         "last_modified": "2025-07-29T09:19:04-04:00",
-        "sha256": "c56fc0da9015458f622b8f2892ff6d3b9dc3c4f499769c5a3ed867a88c5b2c3f",
+        "sha256": "b03b9b54ae814bda017ce63272c80e999d8165f6e3588215a2c95ec4997fc164",
         "byte_length": 37080
       }
     },
@@ -2789,7 +2789,7 @@
       "description": "Adjudication of agency-related matters including, but not limited to, dispute resolution, settlements, and issuances of orders.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/admin-proceedings"
       },
       "metadata": {
@@ -2902,7 +2902,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/admin-proceedings",
         "last_modified": "2025-05-12T14:16:54-04:00",
-        "sha256": "ca4ee14d828ddcc91134a7793bffce69c549425595e9ed9989c9e23a314aa67b",
+        "sha256": "02ffac968b1404d8bd150b0e525707e9d1968a59941e428a41730e5fbb45c48e",
         "byte_length": 38225
       }
     },
@@ -2915,7 +2915,7 @@
       "description": "From 18 USC 2256(8) \"child pornography\" means any visual depiction, including any photograph, film, video, picture, or computer or computer-generated image or picture, whether made or produced by electronic, mechanical, or other means, of sexually explicit conduct, where— (A) the production of such visual depiction involves the use of a minor engaging in sexually explicit conduct; (B) such visual depiction is a digital image, computer image, or computer-generated image that is, or is indistinguishable from, that of a minor engaging in sexually explicit conduct; or (C) such visual depiction has been created, adapted, or modified to appear that an identifiable minor is engaging in sexually explicit conduct",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/child-pornography"
       },
       "metadata": {
@@ -2935,7 +2935,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/child-pornography",
         "last_modified": "2025-07-29T09:20:11-04:00",
-        "sha256": "22ff7f9b63b535ddb2fc4f55684ec302cc9e953e2e18e5a626bdd51110e74fba",
+        "sha256": "8ac662f4b07b66402eac8405ffa9c4f7272833e68b11762bd0b2bb499347846e",
         "byte_length": 37033
       }
     },
@@ -2948,7 +2948,7 @@
       "description": "Information pertaining to a minor who was a victim, witness, or potential witness to a criminal act.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/child-victim-witness"
       },
       "metadata": {
@@ -2970,7 +2970,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/child-victim-witness",
         "last_modified": "2025-07-29T09:23:35-04:00",
-        "sha256": "921fa8f8daaba9ce540040a2a536a5cc5cc875100b55d3c9d55809cbd3dc48a8",
+        "sha256": "4bb2bf538551687b320426aec5fc18ac70478f4a701590f1c825db5e350f3926",
         "byte_length": 36360
       }
     },
@@ -2983,7 +2983,7 @@
       "description": "Defining agencies' and representatives' duty to negotiate in good faith to include disclosure of certain labor relations training and guidance materials and limiting the issuance of certain subpoenas.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/collective-bargaining"
       },
       "metadata": {
@@ -3005,7 +3005,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/collective-bargaining",
         "last_modified": "2025-05-08T10:23:50-04:00",
-        "sha256": "3321c4cac491ac14cdda2639bce647c3c8cca9e37e2bd2367eda1b09c02931d5",
+        "sha256": "76139a27d8baf6114cc041cd9fb9357235dfe5ae1779d554eeaf1766702eeb97",
         "byte_length": 36558
       }
     },
@@ -3018,7 +3018,7 @@
       "description": "Material obtained pursuant to a federal grand jury subpoena, which includes (1) any reference to a specific sitting grand jury; (2) any documentation or data obtained by a grand jury subpoena if disclosure of such material tends to reveal what transpired before or at the direction of the federal grand jury; (3) documentation prepared specifically for the federal grand jury; and (4) transcripts or other recordings of testimony presented to the federal grand jury.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/federal-grand-jury"
       },
       "metadata": {
@@ -3054,7 +3054,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/federal-grand-jury",
         "last_modified": "2025-07-29T09:27:59-04:00",
-        "sha256": "9893866f93239c9caee0f1c7809749985f5910f574e5cc69d035661ef9d5d9e7",
+        "sha256": "1132c66f30a760c2bcec106da4f10d4ac14c5af664bc9e23d191c4a9230066d1",
         "byte_length": 37495
       }
     },
@@ -3067,7 +3067,7 @@
       "description": "Per 15 USC 78x(f)(4): The term \"privilege\" includes any work-product privilege, attorney-client privilege, governmental privilege, or other privilege recognized under Federal, State, or foreign law. Per 502(g): (1) \"attorney-client privilege\" means the protection that applicable law provides for confidential attorney-client communications, and (2) \"work-product protection\" means the protection that applicable law provides for tangible material (or its intangible equivalent) prepared in anticipation of litigation or for trial. Note: There are two limited dissemination control markings that can be used with this category; Attorney Work Product (AWP), Attorney Client Privilege (AC). These limited dissemination control markings may be used to help identify the type of privilege in the document and limit the dissemination of that information so as to preserve that privilege. These limited dissemination control markings (AWP, AC) may only be used on information protected under the CUI \"Legal Privilege\" category.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/legal-privilege"
       },
       "metadata": {
@@ -3166,7 +3166,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/legal-privilege",
         "last_modified": "2025-07-29T09:41:06-04:00",
-        "sha256": "4142c356541aa9d69100d7c39be642643f6e62803cd5d293a970d98b9029cd4c",
+        "sha256": "0bbb93cc7642dd921662f34dda3eb6e5db9f0c9067bd91696417dc32aa91b0bd",
         "byte_length": 40246
       }
     },
@@ -3179,7 +3179,7 @@
       "description": "Data related to Congress’s legislative, investigatory or oversight responsibilities of the Executive branch of the Federal government. This includes data related to proposed or pending legislation as well as inquiries submitted by Congress to Federal agencies, agency responses to those inquiries and any other information which, if disclosed, would reveal the nature and scope of Congressional inquiries.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/legislative-materials"
       },
       "metadata": {
@@ -3201,7 +3201,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/legislative-materials",
         "last_modified": "2025-05-12T14:59:47-04:00",
-        "sha256": "35b2d0d787291346fdec3bd4a7455ea98d6db1222480fe6b2ffe03e58bba197c",
+        "sha256": "82ce00284f88d6cf13f327e689d12b7b78cd9c115fc97c7bfa8609b740a410f9",
         "byte_length": 36940
       }
     },
@@ -3214,7 +3214,7 @@
       "description": "A report, generally prepared to assist the court in determining the most appropriate sentence for a defendant. It can include an assessment of the nature and seriousness of the offense and should contain details summarizing the background information of the defendant and the crime.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/presentence-report"
       },
       "metadata": {
@@ -3236,7 +3236,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/presentence-report",
         "last_modified": "2025-06-10T11:20:43-04:00",
-        "sha256": "25f627afdd397c4806fb71ec882ed54e9e69e4fa22bc13505f2c9bc1f13d7fea",
+        "sha256": "6fd6081db89e42a54b6f1be5a4c0caa46ac34677bc18b04c1735fd32f1a114d7",
         "byte_length": 36489
       }
     },
@@ -3249,7 +3249,7 @@
       "description": "Information related to previous instances of law enforcement official's apprehension and formal processing of a suspect.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/prior-arrest"
       },
       "metadata": {
@@ -3271,7 +3271,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/prior-arrest",
         "last_modified": "2025-07-29T09:42:03-04:00",
-        "sha256": "d52de7dd17def12b2d530bf9086c6a6758c00d4a4e9c61de9f0127b41eeb8cb6",
+        "sha256": "db8a8e216bd2500bb93b412e6828dcddbedae8aff39b2b003d04cf3d81da3529",
         "byte_length": 36354
       }
     },
@@ -3284,7 +3284,7 @@
       "description": "Stipulation that certain information that would normally fall under discovery rules will not be disclosed for specifically stated reason.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/protective-order"
       },
       "metadata": {
@@ -3369,7 +3369,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/protective-order",
         "last_modified": "2025-05-12T15:11:51-04:00",
-        "sha256": "2acf9fcd9a130a5c8fac65e9fb72c733dc22d94b90bef02580959b707e67cab8",
+        "sha256": "c8b2e7f9aafcd871aeb2153a46e8d257a30de85c28bba844513c4903ce556203",
         "byte_length": 37699
       }
     },
@@ -3382,7 +3382,7 @@
       "description": "Information requiring protection of the name or other details that may identify one who was the victim of a crime.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/victim"
       },
       "metadata": {
@@ -3411,7 +3411,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/victim",
         "last_modified": "2025-07-29T09:43:47-04:00",
-        "sha256": "849388c641ecbca983372bca30dcc0d6e0bdbad7913d9c447db56223f4411772",
+        "sha256": "b5db52704d8953974f4054c47dc5ea2c7ba6cd477ae2b055f4c252b3ab7ddc1c",
         "byte_length": 36465
       }
     },
@@ -3424,7 +3424,7 @@
       "description": "Information related to the secretive details associated with one who has testified or may testify under circumstances that require secrecy of that individual and details pertaining to that person.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/witness-protection"
       },
       "metadata": {
@@ -3453,7 +3453,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/witness-protection",
         "last_modified": "2025-07-29T09:45:07-04:00",
-        "sha256": "7418158a00e60aeeb817ee99c79ed5af9632952c3e839dc751f4e7eb82ba9f8f",
+        "sha256": "b8e69749b5a32685f5a592de37b59399bc4334ade66d380039ccdaa23f07410f",
         "byte_length": 36586
       }
     },
@@ -3466,7 +3466,7 @@
       "description": "Related to information about the nature and location of any archaeological resource for which the excavation or removal requires a permit or other permission.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/archaeological-resources"
       },
       "metadata": {
@@ -3495,7 +3495,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/archaeological-resources",
         "last_modified": "2025-05-08T13:25:44-04:00",
-        "sha256": "3be344f3d51500f279f32a5070b10dc39143c3f3347eb596585a5a04b8d5bfbe",
+        "sha256": "7636a2cc1052d0159e5b6de89effe7db4239ae6dd1c28f1d722862cdb57256ad",
         "byte_length": 36786
       }
     },
@@ -3508,7 +3508,7 @@
       "description": "Related to the location, character, or ownership of historic property.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/historic-properties"
       },
       "metadata": {
@@ -3542,7 +3542,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/historic-properties",
         "last_modified": "2025-07-29T09:46:27-04:00",
-        "sha256": "de2e29ef528cb44f5fabf5906aa3688438516130ea81b5e59b25fc4ef16d6801",
+        "sha256": "7f58bd3a6d1f7bc888f6360b90bda93b10802cba4e3f0b6e5fc55dd0fc574da6",
         "byte_length": 36533
       }
     },
@@ -3555,7 +3555,7 @@
       "description": "Related to information concerning the nature and specific location of a National Park System resource that is endangered, threatened, rare, or commercially valuable, of mineral or paleontological objects within System units, or of objects of cultural patrimony within System units.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/national-park-system-resources"
       },
       "metadata": {
@@ -3575,7 +3575,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/national-park-system-resources",
         "last_modified": "2025-07-29T09:48:10-04:00",
-        "sha256": "e6ba50f060b44ce57931caa829cbe33b59fc423aa0a22880b6deea72b1980ab6",
+        "sha256": "2a319ab1bac7f637568dba68fbe3cca2c4c160f16c59b817170b0239c1976e5b",
         "byte_length": 36399
       }
     },
@@ -3588,7 +3588,7 @@
       "description": "Per the United States Security Authority for NATO, Instruction 1-07, information classified as \"\"NATO Restricted\"\", the fourth level of classification under the North Atlantic Treaty, requires safeguards and protection from public release and disclosure. This category does not apply to information classified NATO Confidential, NATO SECRET or NATO COSMIC TOP SECRET.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/nato-restricted"
       },
       "metadata": {
@@ -3608,7 +3608,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/nato-restricted",
         "last_modified": "2025-05-08T13:43:15-04:00",
-        "sha256": "8d826b2c37912fe7a31c1c6bf7a02b828a51f2e9ba120e1213fa215888130176",
+        "sha256": "8c2df6adb2008b11b962a38d6a3840942c225c6bf9830299973098bb57599471",
         "byte_length": 36762
       }
     },
@@ -3621,7 +3621,7 @@
       "description": "Per the United States Security Authority for NATO, Instruction 1-07, this is information classified as \"NATO Unclassified\", which may only be used for official NATO purposes and may carry administrative or dissemination limitation markings.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/nato-unclassified"
       },
       "metadata": {
@@ -3648,7 +3648,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/nato-unclassified",
         "last_modified": "2026-01-29T10:42:42-05:00",
-        "sha256": "228e61b2105614321c6edb5773aedd7123d53caed6938c11f03d015db5fbe066",
+        "sha256": "031f4f46af235e80a87249e5b40795b3b056a0ef2732e01b7f1577b7a32a6339",
         "byte_length": 36470
       }
     },
@@ -3661,7 +3661,7 @@
       "description": "Related to protection of information concerning nuclear reactors, materials, or security.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/nuclear"
       },
       "metadata": {
@@ -3697,7 +3697,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/nuclear",
         "last_modified": "2025-07-29T13:52:39-04:00",
-        "sha256": "3950969ea8c1a69eaef7a8a3c20c946ddeb60efca42e2a76c74e6bd89e9837db",
+        "sha256": "ffa8df11ce642432ac06f300ff747063346bc71b427c783541bc787b0c69a6a0",
         "byte_length": 36391
       }
     },
@@ -3710,7 +3710,7 @@
       "description": "Related to recommendations to the Secretary of Energy with respect to Department of Energy defense nuclear facilities as determined necessary to ensure adequate protection of public health and safety.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/nuclear-recommendation-material"
       },
       "metadata": {
@@ -3746,7 +3746,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/nuclear-recommendation-material",
         "last_modified": "2025-05-12T14:55:06-04:00",
-        "sha256": "73fbdb412a18f1ea2928344df360d39e1a331b5ab046848bded23e64bd1d622e",
+        "sha256": "bebfdc0c513118a11c88a810df998f55305dcb4cf40ebc9a8150f69f524c7bd9",
         "byte_length": 36610
       }
     },
@@ -3759,7 +3759,7 @@
       "description": "Related to information that could be useful, or could reasonably be expected to be useful, to a terrorist in a potential attack that does not qualify as Safeguards or classified information, including the exact location and quantities of radioactive material, certain detailed design drawings, information on nearby facilities, emergency planning information, and certain assessments of vulnerability and safety analyses.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/nuclear-security-related-info"
       },
       "metadata": {
@@ -3779,7 +3779,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/nuclear-security-related-info",
         "last_modified": "2025-07-29T13:54:01-04:00",
-        "sha256": "b76651d8790f87526c91844dc3ce3b38c34ae46b78067836804b05ec9e36f04a",
+        "sha256": "071e2634f4028cafab1ef716e86d675b8681fd949863ff87101708a21a70c263",
         "byte_length": 37142
       }
     },
@@ -3792,7 +3792,7 @@
       "description": "Pursuant to 42 USC 2011, et seq., and as defined in 10 CFR 73.2, SGI relates to security related information concerning the physical protection of source, byproduct or special nuclear material and the detailed security measures for facilities and information contained within security plans.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/safeguards-info"
       },
       "metadata": {
@@ -3812,7 +3812,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/safeguards-info",
         "last_modified": "2025-07-29T13:56:36-04:00",
-        "sha256": "123abb9cc3c3726ae0c77af9bd5203f3c786e87980be32303a0afb261072d392",
+        "sha256": "c551fb0aedcd8d92ee77605fa76eab4b7af2eb8edc43b816080e11db66479352",
         "byte_length": 36321
       }
     },
@@ -3825,7 +3825,7 @@
       "description": "Relating to certain design and security information concerning nuclear facilities, materials, and weapons, specific to the Department of Energy.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/ucni-doe"
       },
       "metadata": {
@@ -3861,7 +3861,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/ucni-doe",
         "last_modified": "2025-05-13T08:36:08-04:00",
-        "sha256": "c2a2214dc29c4064de44d268ae28288caed3c22286e6ce909362ad859cd82ec3",
+        "sha256": "e7109ec63be81768748c12c11a4cdc4c354a0a6d0224466a78be8aa5e6f5df65",
         "byte_length": 36819
       }
     },
@@ -3874,7 +3874,7 @@
       "description": "Application for patent filed under 35 U.S.C. 111(a) that includes all types of patent applications (i.e., utility, design, plant, and reissue) except provisional applications. The nonprovisional application establishes the filing date and initiates the examination process. A nonprovisional utility patent application must include a specification, including a claim or claims; drawings, when necessary; an oath or declaration; and the prescribed filing fee.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/patent-application"
       },
       "metadata": {
@@ -3910,7 +3910,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/patent-application",
         "last_modified": "2025-07-29T14:09:36-04:00",
-        "sha256": "c9399fb0f79b89bb7a39f5c25d71e4976738fe7a4e3b95e250f336b076bb9054",
+        "sha256": "0322e726bc95b02c81905218db98b3926fbfec059cc196e00bd5ca34d4e27004",
         "byte_length": 37188
       }
     },
@@ -3923,7 +3923,7 @@
       "description": "An invention is any art or process (way of doing or making things), machine, manufacture, design, or composition of matter, or any new and useful improvement thereof, or any variety of plant, which is or may be patentable under the patent laws of the United States, in which the federal government owns or may own a right, title, or interest.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/inventions"
       },
       "metadata": {
@@ -3973,7 +3973,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/inventions",
         "last_modified": "2025-07-29T14:13:27-04:00",
-        "sha256": "0334bcf8d06d2c001c7af18223ca90d8d47dbf1a9998faef0b58262ebb515dfd",
+        "sha256": "1b502ee2f32fa723265987e474dd8396a54043d8077c31b83e19928513536afa",
         "byte_length": 37140
       }
     },
@@ -3986,7 +3986,7 @@
       "description": "An order by the Commissioner of Patents that an invention be kept secret and to withhold the publication of an application or the grant of a patent due to national security concerns.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/secrecy-orders"
       },
       "metadata": {
@@ -4008,7 +4008,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/secrecy-orders",
         "last_modified": "2025-05-08T13:48:29-04:00",
-        "sha256": "800c05a1ac855c08cfb0b03c11adb361b3701a857781ad3ada6b96aeada5a327",
+        "sha256": "73c39ca03832a0f76f32498dfa3256ad9298671619f0e1a17ae4d88850368733",
         "byte_length": 36484
       }
     },
@@ -4021,7 +4021,7 @@
       "description": "Stipulations for a contractor to meet before material may be used in performance of certain contracts.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/contract-use"
       },
       "metadata": {
@@ -4048,7 +4048,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/contract-use",
         "last_modified": "2025-07-29T14:14:39-04:00",
-        "sha256": "e93b0fcf89c4f00667ad9d04b0a0868db1ca8dce37ce5364fa46760c2dbe79ee",
+        "sha256": "a2a3bbf2eb86ed3936616856728bdac365cd1459fcd04a031f22fb34316e83fe",
         "byte_length": 36348
       }
     },
@@ -4061,7 +4061,7 @@
       "description": "Related to information contained within an official document issued by a public registry verifying that a person has died, with information such as the date and time of death, the cause of death, and the signature of the attending or examining physician.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/death-records"
       },
       "metadata": {
@@ -4083,7 +4083,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/death-records",
         "last_modified": "2025-07-29T14:16:12-04:00",
-        "sha256": "d0e185f04bdfe7547741d33182e1716c6f38a83d8e12364d58b8356756bb0fef",
+        "sha256": "a22ab95f05ece6d082257c8b4ab1f579e4b4124fdbc86a5de26929264f7257e0",
         "byte_length": 36287
       }
     },
@@ -4096,7 +4096,7 @@
       "description": "Refers to personal information, or, in some cases, \"personally identifiable information,\" as defined in OMB M-17-12, or \"means of identification\" as defined in 18 USC 1028(d)(7).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/privacy"
       },
       "metadata": {
@@ -4216,7 +4216,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/privacy",
         "last_modified": "2026-07-20T13:15:06-04:00",
-        "sha256": "c1423551d3fc289aa92ba71cea0a9fb1c22ac1e1a6cde5ea375452e2a134ed53",
+        "sha256": "f5c205eeca9d9b24ddccec71e89c3b2df06e7a2a966f108e10046b7f899ddac0",
         "byte_length": 38756
       }
     },
@@ -4229,7 +4229,7 @@
       "description": "The term \"genetic information\" means, with respect to any individual, information about-- (i) such individual's genetic tests, (ii) the genetic tests of family members of such individual, and (iii) the manifestation of a disease or disorder in family members of such individual.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/genetic-info"
       },
       "metadata": {
@@ -4265,7 +4265,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/genetic-info",
         "last_modified": "2025-07-29T14:17:52-04:00",
-        "sha256": "ed3b102515fc75f4e0b8844ee0e90d8869b3806570fb737e4ed15d949c6bd343",
+        "sha256": "8797d26af8a598ff3fd181d03c8b46370eaf9010887307917b118d6035b40f50",
         "byte_length": 36993
       }
     },
@@ -4278,7 +4278,7 @@
       "description": "As per 42 USC 1320d(4), \"health information\" means any information, whether oral or recorded in any form or medium, that (A) is created or received by a health care provider, health plan, public health authority, employer, life insurer, school or university, or health care clearinghouse; and (B) relates to the past, present, or future physical or mental health or condition of an individual, the provision of health care to an individual, or the past, present, or future payment for the provision of health care to an individual.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/health-info"
       },
       "metadata": {
@@ -4489,7 +4489,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/health-info",
         "last_modified": "2025-07-29T14:48:27-04:00",
-        "sha256": "2fd3e0282a218dd14d75843e5bbb36f6d74cfa809d0e865de4e54581c76e2b6b",
+        "sha256": "b674050e4f924f193752a8d5549d9208b991de56783e2c9db38767694cf760d6",
         "byte_length": 41787
       }
     },
@@ -4502,7 +4502,7 @@
       "description": "Related to the identity of a person making a report to the Inspector General of any Executive agency.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/inspector-general-protected"
       },
       "metadata": {
@@ -4566,7 +4566,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/inspector-general-protected",
         "last_modified": "2026-07-20T14:05:31-04:00",
-        "sha256": "b403da4d36cec6c81337c0c936e88905de28d0b346f5c537b9cfef354faa1193",
+        "sha256": "b157fd51476d926d574c5c76d647473d1c16dd0a6287ebe0cd85a19281f0a6e3",
         "byte_length": 37171
       }
     },
@@ -4579,7 +4579,7 @@
       "description": "Any member or former member of the armed forces or affiliated organization of the Department of Defense.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/military-personnel-records"
       },
       "metadata": {
@@ -4629,7 +4629,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/military-personnel-records",
         "last_modified": "2025-07-30T13:40:34-04:00",
-        "sha256": "647069e5b6c59a03b2ef283e5dcfa21d7134c512f291d4847c49e80750a9d0da",
+        "sha256": "0883fba13c9e1349bedf3982fe6eec9c18ce981f846db5e7c1d9a0829529fb18",
         "byte_length": 36563
       }
     },
@@ -4642,7 +4642,7 @@
       "description": "Related to the employees of federal agencies.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/personnel-records"
       },
       "metadata": {
@@ -4671,7 +4671,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/personnel-records",
         "last_modified": "2025-07-30T13:42:57-04:00",
-        "sha256": "4ef3d1cc85c73abfb1681970c9e085f940cf955d26ec388a8e2c8f31bc99848c",
+        "sha256": "2f9083d2641fbedbb7153dd4ee5009c73853e86ea5bb2673595fc7d71d2c55ee",
         "byte_length": 36681
       }
     },
@@ -4684,7 +4684,7 @@
       "description": "As per 20 USC 1232g, the Family Educational Rights and Privacy Act of 1974, an education record which is comprised of those records which are directly related to a student.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/student-records"
       },
       "metadata": {
@@ -4741,7 +4741,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/student-records",
         "last_modified": "2025-05-13T09:31:48-04:00",
-        "sha256": "f8c1bca31430c90075d5b7a524fb53cb33965d91ecf52696f82b2cb63c4cca9f",
+        "sha256": "b6e50398e1a83d3e0e86adb668c85f595f2a0422f9b290442e3d73d78fb7aa9a",
         "byte_length": 37081
       }
     },
@@ -4754,7 +4754,7 @@
       "description": "Material and information relating to, or associated with, the acquisition and procurement of goods and services, including but not limited to, cost or pricing data, contract information, indirect costs and direct labor rates.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/procurement-acquisition"
       },
       "metadata": {
@@ -4788,7 +4788,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/procurement-acquisition",
         "last_modified": "2025-07-30T13:46:39-04:00",
-        "sha256": "2302face62b1804f4cfd28157130f8da5f6ebd7649ce7a6042f076fd61875d83",
+        "sha256": "8277a102a6d756484acee714e6012ef1624599520b73eef70126aab5e6a5fd15",
         "byte_length": 36718
       }
     },
@@ -4801,7 +4801,7 @@
       "description": "Relating to certain \"Small Business Innovation Research Program\" and \"Small Business Technology Transfer Program\" information in a government database, as referenced in 15 USC 638(k)(2).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/small-business-research-and-technology"
       },
       "metadata": {
@@ -4823,7 +4823,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/small-business-research-and-technology",
         "last_modified": "2025-07-30T13:47:59-04:00",
-        "sha256": "79be987b4d0d0205b2f5e04145e82ddfb758c35407f3190472cca97a842888fd",
+        "sha256": "fecdaaa9ac065eee19dd492839d409eea776915cdc05b20d3d8d31398a624440",
         "byte_length": 36804
       }
     },
@@ -4836,7 +4836,7 @@
       "description": "Per FAR 2.101: any of the following information that is prepared for use by an agency for the purpose of evaluating a bid or proposal to enter into an agency procurement contract, if that information has not been previously made available to the public or disclosed publicly: (Items 1-10).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/source-selection"
       },
       "metadata": {
@@ -4970,7 +4970,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/source-selection",
         "last_modified": "2025-07-30T13:52:05-04:00",
-        "sha256": "7b1ff55bab695daff2b90636e3cf2ba38c5923ba18f822f9ad88b45eed85a440",
+        "sha256": "bebf4f300db7e15665b37fc0fd23d8e067bf04dcc8d785e55367e56cfd277ea3",
         "byte_length": 39336
       }
     },
@@ -4983,7 +4983,7 @@
       "description": "Relating to non-public information collected during entity registration in the System for Award Management (SAM), the common source of vendor data for the United States Government.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/entity-registration-info"
       },
       "metadata": {
@@ -5005,7 +5005,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/entity-registration-info",
         "last_modified": "2025-07-30T14:22:02-04:00",
-        "sha256": "c3d7cbee8f98a0c6923b8228e97978e8db7dd1ac43ae1f377e0033d26962b4f5",
+        "sha256": "2eb6cba27fdc4f86910bb0b7918ee209a208f1c79fb9f3ffd7468489103ed66c",
         "byte_length": 36614
       }
     },
@@ -5018,7 +5018,7 @@
       "description": "Material and information relating to, or associated with, a company's products, business, or activities, including but not limited to financial information; data or statements; trade secrets; product research and development; existing and future product designs and performance specifications.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/proprietary-business-info"
       },
       "metadata": {
@@ -5614,7 +5614,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/proprietary-business-info",
         "last_modified": "2025-07-30T14:24:10-04:00",
-        "sha256": "957ee5f328d0d5c776b9a614b522c21d7c5035e9fae2a4464194bfdad5d205c7",
+        "sha256": "7e21a509864b0cbde06686193b5dd8f170519c460744da14c4e1fb093c6bd508",
         "byte_length": 49928
       }
     },
@@ -5627,7 +5627,7 @@
       "description": "Relating to agreements between or among ocean common carriers and marine terminal operators as referenced in 46 USC 40301 and 40306.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/occ-mto-agreements"
       },
       "metadata": {
@@ -5641,7 +5641,7 @@
         "authorities": [],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/occ-mto-agreements",
         "last_modified": "2025-05-12T07:48:41-04:00",
-        "sha256": "424a27160d1f08046d1ad31b2bc9f4322099c84bfe8aa8d2463e3b375773fe24",
+        "sha256": "ef55252a374768e86e0a5c63f8508cf5405b7ad838c1b71744c8a57e893c0f2c",
         "byte_length": 36680
       }
     },
@@ -5654,7 +5654,7 @@
       "description": "Relating to an agreement for the provision of services filed with the Federal Maritime Commission as referenced in 46 USC 40502(b), 46 CFR 530.4, and/or 46 CFR 531.4(a).",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/ocean-common-carrier-service-contracts"
       },
       "metadata": {
@@ -5690,7 +5690,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/ocean-common-carrier-service-contracts",
         "last_modified": "2025-06-24T14:18:31-04:00",
-        "sha256": "df0700e32dc0b820138db17ab3e9903cdc73b9f10837f2d97c6708c13f96b58a",
+        "sha256": "d8f0d5c3fa716c25800c9bf9eb50e78d54b057e2fa222bbdfb6a9a1e3205ede4",
         "byte_length": 36600
       }
     },
@@ -5703,7 +5703,7 @@
       "description": "Relating to the production of a consumer product to include that of a private labeler.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/proprietary-manufacturer"
       },
       "metadata": {
@@ -5723,7 +5723,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/proprietary-manufacturer",
         "last_modified": "2025-06-13T08:09:40-04:00",
-        "sha256": "e389f5d70a8d72872fbfd74b129fee6333558db1abbfbf1674c317472e2f3d44",
+        "sha256": "031e82454bb7a41f1da9281ffbca48cf0c5623a4324ea3455bada7b9e91f8778",
         "byte_length": 36227
       }
     },
@@ -5736,7 +5736,7 @@
       "description": "Concerning or related to the course of business of the United States Postal Service.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/proprietary-postal"
       },
       "metadata": {
@@ -5772,7 +5772,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/proprietary-postal",
         "last_modified": "2025-05-13T09:40:51-04:00",
-        "sha256": "29ed60b2de3a88746555444891cbc31f65cc4eaaebc35ba1221fe8d07a2707f0",
+        "sha256": "b3f6a75a0f3afae696fcffa2eec66a5f891ecacb018fba259f811e3212f323aa",
         "byte_length": 36706
       }
     },
@@ -5785,7 +5785,7 @@
       "description": "Information DHS receives and is required to protect pursuant to an agreement with state, local, tribal, territorial, and private sector partners. DHS receives this information in furtherance of the missions of the Department, including but not limited to, support of the Fusion Center Initiative and activities for cyber information sharing consistent with the Cybersecurity Information Security Act.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/homeland-security-agreement-info"
       },
       "metadata": {
@@ -5805,7 +5805,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/homeland-security-agreement-info",
         "last_modified": "2025-05-08T10:20:27-04:00",
-        "sha256": "205b7e7c2cca2992a578587b69c323359c30bff1d58ffb74a94464d5e5bd9045",
+        "sha256": "c97bdf2161ba9941cc155d546dbc372effa567d4267bac87aa813d14c917dfec",
         "byte_length": 36649
       }
     },
@@ -5818,7 +5818,7 @@
       "description": "Unclassified information of a sensitive nature lawfully created, possessed, or transmitted by DHS in furtherance of its immigration, customs, and other civil and criminal enforcement missions, the unauthorized disclosure of which could adversely impact the mission of the Department.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/homeland-security-enforcement-info"
       },
       "metadata": {
@@ -5838,7 +5838,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/homeland-security-enforcement-info",
         "last_modified": "2025-05-08T10:20:03-04:00",
-        "sha256": "90e6ffbe9945d733056fe130960fb5b69322c6a0209764097188bcd7fb33afee",
+        "sha256": "4481d415fa4426d640fcfcee6074ba8917aa5b01caa335479f2a37de855339c3",
         "byte_length": 36606
       }
     },
@@ -5851,7 +5851,7 @@
       "description": "a. DHS information technology internal systems data revealing infrastructure used for servers, desktops, and networks; application names, version, and release; switching, router, and gateway information; interconnections and access methods; mission or business use/need. Examples of information are systems inventories and enterprise architecture models. Information pertaining to national security systems and eligible for classification under Executive Order 13526 will be classified as appropriate. b. Information regarding developing or current technology, the release of which could hinder the objectives of DHS, compromise a technological advantage or countermeasure, cause a denial of service, or provide an adversary with sufficient information to close, counterfeit, or circumvent a process or system.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/information-systems-vulnerability-info-homeland"
       },
       "metadata": {
@@ -5871,7 +5871,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/information-systems-vulnerability-info-homeland",
         "last_modified": "2025-05-08T10:19:51-04:00",
-        "sha256": "7c6e21b42574ca10d6b3e76f9523467392ae05cc2e86531e6da78eeed0194110",
+        "sha256": "8ad212143438d616faf93e569da9099075725427d318eeae12e6c059b42ae5c6",
         "byte_length": 37403
       }
     },
@@ -5884,7 +5884,7 @@
       "description": "Information DHS receives and is required to protect pursuant to an information sharing agreement or arrangement with a foreign government, an international organization of governments or any element thereof, an international or foreign public or judicial body, or an international or foreign private or non-governmental organization.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/international-agreement-info-homeland"
       },
       "metadata": {
@@ -5904,7 +5904,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/international-agreement-info-homeland",
         "last_modified": "2025-05-08T10:18:55-04:00",
-        "sha256": "9488cd341124fa93751b06c2144db3ad71a0c0f7a1bb7831394bfac478788b47",
+        "sha256": "7dc26678d5eaa8790f649b61af267d373253d2c87c9208b6bacc7e1c4a791726",
         "byte_length": 36708
       }
     },
@@ -5917,7 +5917,7 @@
       "description": "Unclassified information that could constitute an indicator of U.S. Government intentions, capabilities, operations, or activities or otherwise threaten/compromise operations security.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/operations-security-info"
       },
       "metadata": {
@@ -5937,7 +5937,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/operations-security-info",
         "last_modified": "2025-05-08T10:18:20-04:00",
-        "sha256": "bfee859a438ca28ee6ddebb34dbdac250c154fd583e141ba6e5985d38a61ead8",
+        "sha256": "4ad168103591817c669e54c2d27f62f4b5cb1837d7866d711eba8da3531b030b",
         "byte_length": 36298
       }
     },
@@ -5950,7 +5950,7 @@
       "description": "Information that could result in physical risk to DHS personnel or other individuals that DHS is responsible for protecting.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/personnel-security-info"
       },
       "metadata": {
@@ -5970,7 +5970,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/personnel-security-info",
         "last_modified": "2025-05-08T10:17:53-04:00",
-        "sha256": "0d7e9787bae4ac59e9cf42c0acbe2e62f8c52f6190435e198dc07f696d4167c6",
+        "sha256": "c95aa25b7bf96e4722c21d374afdd6554f7badebe7d32656e009e25c941ce9fd",
         "byte_length": 36112
       }
     },
@@ -5983,7 +5983,7 @@
       "description": "Assessments or reports illustrating or disclosing facility infrastructure or security vulnerabilities related to the protection of federal buildings, grounds, or property, such as threat assessments, system security plans, contingency plans, risk management plans, business impact analysis studies, and certification and accreditation documentation.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/physical-security-homeland"
       },
       "metadata": {
@@ -6003,7 +6003,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/physical-security-homeland",
         "last_modified": "2025-05-08T10:17:28-04:00",
-        "sha256": "222ad101d4462ea4b7d1024f733ded7d22b54a06bdbde9a702ef833e469d0194",
+        "sha256": "6a26a6e90621a666b842e1f53b22a4aad7ec4178fff6c3777548f0b61cc72ca6",
         "byte_length": 36617
       }
     },
@@ -6016,7 +6016,7 @@
       "description": "Information referred to as Personally Identifiable Information (PII). PII embodies information that can be used to distinguish or trace an individual's identity, either alone or when combined with other information that is linked or linkable to a specific individual.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/privacy-info"
       },
       "metadata": {
@@ -6049,7 +6049,7 @@
       "description": "A subset of PII that, if lost, compromised, or disclosed without authorization could result in substantial harm, embarrassment, inconvenience, or unfairness to an individual. Some forms of PII are sensitive as stand-alone elements. a. Examples of stand-alone PII include Social Security Numbers (SSN), driver's license or state identification number; Alien Registration Numbers; financial account number; and biometric identifiers such as fingerprint, voiceprint, or iris scan. b. Additional examples of SPII include any groupings of information that contain an individual's name or other unique identifier plus one or more of the following elements: Truncated SSN (such as last four digits) Date of birth (month, day, and year) Citizenship or immigration status Ethnic or religious affiliation Sexual orientation Criminal history Medical information System authentication information such as mother's maiden name, account passwords, or personal identification numbers c. Other PII may be \"sensitive\" depending on its context, such in as a list of employees and their performance rating(s) or an unlisted home address or phone number. In contrast, a business card or public telephone directory of agency employees contains PII but is not sensitive.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/sensitive-personally-identifiable-info"
       },
       "metadata": {
@@ -6069,7 +6069,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/sensitive-personally-identifiable-info",
         "last_modified": "2025-05-08T10:15:53-04:00",
-        "sha256": "a4df8d526ef99c45f2c40438a25f76ab5164c937ed3f37e30bd658728db67e28",
+        "sha256": "8ba2525d8028f0d0f82d6716e8d5449f87424d2ee8fb5209325b2a00b44657b8",
         "byte_length": 38024
       }
     },
@@ -6082,7 +6082,7 @@
       "description": "Information reported to Treasury, the Federal Reserve Board of Governors, or the Federal Reserve Banks as part of the Treasury International Capital (TIC) data reporting system.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/investment-survey"
       },
       "metadata": {
@@ -6111,7 +6111,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/investment-survey",
         "last_modified": "2025-06-24T15:16:54-04:00",
-        "sha256": "a78c64752d9e95d685eaf97da2413c67bf80c277bfd88398b6b89053b8d54bc3",
+        "sha256": "3aa8041f1db082b805ce5de4d66e693228d2005b60c5151bd8c44b3118d4bcd4",
         "byte_length": 36275
       }
     },
@@ -6124,7 +6124,7 @@
       "description": "Related to the data gathered regarding the production of pesticides that specifies the non-disclosure of the identity and location of individual producers.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/pesticide-producer-survey"
       },
       "metadata": {
@@ -6146,7 +6146,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/pesticide-producer-survey",
         "last_modified": "2025-06-13T08:12:47-04:00",
-        "sha256": "234208641ee3949176db352ebd33becfe61b55be16999c2dfc10602ea36655b6",
+        "sha256": "6dd3aed70fcc6b27feee6109b093cacadaf05d478bdc9e9dfb66b4f035d7e42c",
         "byte_length": 36569
       }
     },
@@ -6159,7 +6159,7 @@
       "description": "Refers to information collected by a Federal statistical agency, unit, or program for statistical purposes or used for statistical activities; under law, regulation, or Government-wide policy such 'Statistical' CUI requires: (1) protection from unauthorized disclosure; (2) special handling safeguards; and/or (3) prescribed limits on access or dissemination.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/statistical"
       },
       "metadata": {
@@ -6216,7 +6216,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/statistical",
         "last_modified": "2025-05-12T07:57:51-04:00",
-        "sha256": "4717099f24802c09ea7f8d825364acd45e481b8744d66b75628906b6ccef3485",
+        "sha256": "78be1714e2457b6e50986193566141710f801f6288f59bcc15267cb133ee92c4",
         "byte_length": 37846
       }
     },
@@ -6229,7 +6229,7 @@
       "description": "Related to information gathered by the Bureau of the Census during the process of collecting, compiling, evaluating, analyzing of demographic, economic, and social data pertaining at a specified time to any or all persons in the United States and dissemination is limited to those with special sworn status, who may only use the data for statistical purposes and only for those statistical purposes for which the data was supplied.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/census"
       },
       "metadata": {
@@ -6256,7 +6256,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/census",
         "last_modified": "2025-06-13T08:38:50-04:00",
-        "sha256": "6f936198f7e80d7146a9588cca43555a40a2cf284465c766a063213bd3d3611c",
+        "sha256": "36d209d95bc772b0d433d033a72430c3000ee1e5aff3a7e79ed6eb10d4bf79ef",
         "byte_length": 36731
       }
     },
@@ -6269,7 +6269,7 @@
       "description": "Related to returns and return information which are submitted, gathered, or generated in conjunction with taxpayers’ responsibilities to comply with federal tax provisions in the United States Code. “Returns” includes information that is provided to the government pursuant to Title 26, including tax or information returns, declarations of estimated tax, or claims for refund. “Return information” includes a taxpayer’s identity, the nature, source, or amount of income, or any information received by, recorded by, prepared by, or furnished to the Internal Revenue Service relevant to the determination of tax liability including whether the taxpayer is the subject of investigation. This protection extends to such items as medical, financial, and other personal information submitted to the IRS by taxpayers. Standards (typically tolerances, audit criteria, and law enforcement techniques) related to the selection of returns for examination should only be disclosed to the extent their disclosure would not impair assessment, collection, or enforcement under the Internal Revenue laws. Tax data originating with the IRS generally retains its confidential status even when it resides with agencies other than the IRS.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/federal-taxpayer-info"
       },
       "metadata": {
@@ -6317,7 +6317,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/federal-taxpayer-info",
         "last_modified": "2025-06-13T08:25:22-04:00",
-        "sha256": "ded044f048d29b444e73b1800c19a3d9bb05704a7b9a9c6bd5e5c64a0fe18f01",
+        "sha256": "33181446107898229060eb9c6bf5961ed6e02dd81b3d8b47e08ee3229629aa9a",
         "byte_length": 38628
       }
     },
@@ -6330,7 +6330,7 @@
       "description": "Related to any--(A) agreement entered into with the competent authority of one or more foreign governments pursuant to a tax convention, (B) application for relief under a tax convention, (C) background information related to such agreement or application, (D) document implementing such agreement, and (E) other information exchanged pursuant to a tax convention which is treated as confidential or secret under the tax convention. Tax convention information originating with the IRS generally retains its confidential status even when it resides with agencies other than the IRS.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/tax-convention"
       },
       "metadata": {
@@ -6352,7 +6352,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/tax-convention",
         "last_modified": "2025-05-12T07:59:40-04:00",
-        "sha256": "c6fcefc7039ebbbeffbd4d87e5947ed1e9a9ab0ab6348d6514ba983be37ae0c1",
+        "sha256": "fadb5f32bf32b5fea966b6ebcec439cee0117f78b0693d7ead9d32574bc729fb",
         "byte_length": 36981
       }
     },
@@ -6365,7 +6365,7 @@
       "description": "A local taxpayer advocate (LTA) has the discretion to not disclose to the IRS contact with or information provided by, a taxpayer. Such discretion may result in declinations of requests for information by IRS personnel including cases involving criminal tax investigations or those where the failure to provide information to the IRS would be beneficial to the taxpayer but to the detriment of the IRS. Such discretion does not extend to cases where the LTA believes a taxpayer is using the Taxpayer Advocate’s office to perpetuate fraud on the government or in cases where the information is sought in litigation.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/taxpayer-advocate-info"
       },
       "metadata": {
@@ -6387,7 +6387,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/taxpayer-advocate-info",
         "last_modified": "2025-06-25T11:04:28-04:00",
-        "sha256": "feda981a5ec9cdd3a1b834190b9575405292c441cb570b9a41e28bc2d0c484f9",
+        "sha256": "de697069de429ef914a531dfbb4eff84d536cffcff1d9d8ffdd1c5ba883b6247",
         "byte_length": 37124
       }
     },
@@ -6400,7 +6400,7 @@
       "description": "Rulings, determination letters, technical advice memoranda or Chief Counsel Advice, as those terms are defined in Treasury Regulation 301.6110-2, which are made available for public inspection subject to the withholding of certain types of data as enumerated in Treasury Regulation 301-6110.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/written-determinations"
       },
       "metadata": {
@@ -6420,7 +6420,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/written-determinations",
         "last_modified": "2025-06-13T08:28:54-04:00",
-        "sha256": "d09b385e8bf48e0f57a147a9f6cacad5a0955770b1b4253b8cb9f5342652d2a1",
+        "sha256": "4bcf20e9995a85297a60da30a1dba53f3dfc3d90a742965ba49c6d2bb6b59fb4",
         "byte_length": 36565
       }
     },
@@ -6433,7 +6433,7 @@
       "description": "Related to the establishment, implementation, or modification of a railroad safety risk reduction program or pilot program, if the record is: (1) Supplied to the Secretary (of Transportation) pursuant to that safety risk reduction program or pilot program; or (2) made available for inspection and copying by an officer, employee, or agent of the Secretary pursuant to that safety risk reduction program or pilot program.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/railroad-safety-analysis-records"
       },
       "metadata": {
@@ -6455,7 +6455,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/railroad-safety-analysis-records",
         "last_modified": "2025-06-25T11:19:52-04:00",
-        "sha256": "04c0cab843f5437d77f197e5c32115f805ada2a37363565162f83fc47fc9d090",
+        "sha256": "53cf4d5dd0ec03c410f9514465cc4abfcf6f7b6314bac014b3b421a901b09398",
         "byte_length": 36915
       }
     },
@@ -6468,7 +6468,7 @@
       "description": "As defined in 49 C.F.R. Part 15.5, Sensitive Security Information is information obtained or developed in the conduct of security activities, including research and development, the disclosure of which DOT has determined would constitute an unwarranted invasion of privacy, reveal trade secrets or privileged or confidential information, or be detrimental to transportation safety. As defined in 49 C.F.R. Part 1520.5, Sensitive Security Information is information obtained or developed in the conduct of security activities, including research and development, the disclosure of which DHS/TSA has determined would, among other things, be detrimental to the security of transportation.",
       "source": {
         "key": "nara-cui-registry",
-        "snapshot_date": "2026-08-07T20:44:06.630Z",
+        "snapshot_date": "2026-08-08T22:14:16.429Z",
         "locator": "registry/category-detail/sensitive-security-info"
       },
       "metadata": {
@@ -6495,7 +6495,7 @@
         ],
         "detail_url": "https://www.archives.gov/cui/registry/category-detail/sensitive-security-info",
         "last_modified": "2025-06-13T08:31:15-04:00",
-        "sha256": "1a7f91505b1489b2d6929baddaa6a839b7329bf018a5209401fb716a9440d55e",
+        "sha256": "01f172ad76814fcfd530cc68e2363fe71ab0728ac828fb59dad51306b0335bca",
         "byte_length": 37177
       }
     }

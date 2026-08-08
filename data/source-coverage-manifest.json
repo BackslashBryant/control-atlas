@@ -1,15 +1,15 @@
 {
   "schema_version": "3.0",
-  "generated_at": "2026-08-08T12:28:37.253Z",
+  "generated_at": "2026-08-08T21:16:06.373Z",
   "completeness": {
     "total_publications": 65,
-    "total_artifacts": 37,
-    "total_catalog_bundles": 6,
+    "total_artifacts": 38,
+    "total_catalog_bundles": 7,
     "manual_seed_artifacts": 0,
     "catalog_states": {
-      "reconciled": 0,
-      "partial": 1,
-      "discovered": 5,
+      "reconciled": 3,
+      "partial": 0,
+      "discovered": 4,
       "unknown": 0,
       "quarantined": 0
     },
@@ -18,22 +18,23 @@
   "catalogs": [
     {
       "catalog_id": "csf-2",
-      "completeness_status": "discovered",
-      "expected_records": null,
-      "imported_records": 135,
+      "completeness_status": "reconciled",
+      "expected_records": 106,
+      "imported_records": 106,
       "excluded_records": 0,
-      "missing_records": null,
-      "expected_basis": null,
-      "expected_evidence": null,
+      "missing_records": 0,
+      "expected_basis": "The current NIST CSF 2.0 Reference Tool all-in-one export independently enumerates the active CSF Core subcategories; OSCAL supplies the structural reconciliation.",
+      "expected_evidence": "data/csf-reference-tool-manifest.json#reconciliation.subcategories",
+      "imported_evidence": "data/csf-subcategories.json#reconciliation.subcategories",
       "exclusions": [],
       "primary_artifacts": 1,
-      "supplemental_artifacts": 0,
+      "supplemental_artifacts": 1,
       "mapping_artifacts": 2,
       "methods": [
-        "extracted_from_official_publication",
-        "direct_file_import"
+        "direct_file_import",
+        "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-08",
       "has_shard": true
     },
     {
@@ -45,6 +46,7 @@
       "missing_records": null,
       "expected_basis": null,
       "expected_evidence": null,
+      "imported_evidence": null,
       "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 3,
@@ -53,7 +55,7 @@
         "extracted_from_official_publication",
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-08",
       "has_shard": true
     },
     {
@@ -65,6 +67,7 @@
       "missing_records": null,
       "expected_basis": null,
       "expected_evidence": null,
+      "imported_evidence": null,
       "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 1,
@@ -72,7 +75,7 @@
       "methods": [
         "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-08",
       "has_shard": true
     },
     {
@@ -84,6 +87,7 @@
       "missing_records": null,
       "expected_basis": null,
       "expected_evidence": null,
+      "imported_evidence": null,
       "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 1,
@@ -91,7 +95,7 @@
       "methods": [
         "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-08",
       "has_shard": true
     },
     {
@@ -103,6 +107,7 @@
       "missing_records": null,
       "expected_basis": null,
       "expected_evidence": null,
+      "imported_evidence": null,
       "exclusions": [],
       "primary_artifacts": 4,
       "supplemental_artifacts": 0,
@@ -115,13 +120,14 @@
     },
     {
       "catalog_id": "disa-stig",
-      "completeness_status": "partial",
-      "expected_records": 17360,
-      "imported_records": 615,
+      "completeness_status": "reconciled",
+      "expected_records": 16877,
+      "imported_records": 16877,
       "excluded_records": 0,
-      "missing_records": 16745,
+      "missing_records": 0,
       "expected_basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
       "expected_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+      "imported_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
       "exclusions": [],
       "primary_artifacts": 2,
       "supplemental_artifacts": 0,
@@ -129,7 +135,27 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-07-13",
+      "last_refresh": "2026-08-08",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "disa-srg",
+      "completeness_status": "reconciled",
+      "expected_records": 2516,
+      "imported_records": 2516,
+      "excluded_records": 0,
+      "missing_records": 0,
+      "expected_basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = SRG XCCDF requirement records across all ingested benchmarks.",
+      "expected_evidence": "data/disa-artifact-manifest.json#reconciliation.srg_records_parsed",
+      "imported_evidence": "data/disa-artifact-manifest.json#reconciliation.srg_records_parsed",
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 1,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-08",
       "has_shard": true
     }
   ],

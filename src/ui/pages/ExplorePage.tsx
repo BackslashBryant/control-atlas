@@ -286,7 +286,7 @@ export function ExplorePage(props: {
               const node = detailsReady ? bundle.runtime.getNode(row.document.id) : null;
               const source = detailsReady ? bundle.runtime.getSource(row.document.source_id) : null;
               const relationshipCount = detailsReady
-                ? bundle.runtime.getEdgesForNode(row.document.id, { publication_status: "published" }).length
+                ? Number(row.document.published_connection_count || 0)
                 : 0;
               const path = detailsReady
                 ? (node?.ancestor_path || []).slice(-3).map((entry: any) => entry.label).filter(Boolean).join(" › ")

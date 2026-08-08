@@ -2,12 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 
 function loadSearchRuntime() {
-  const librarySearch = JSON.parse(
-    readFileSync("data/generated/library-search.json", "utf8"),
-  ).library_search;
+  const librarySearch = readGeneratedCollection(".", "library-search").library_search;
 
   return createFederalGraphRuntime({
     sources: [],

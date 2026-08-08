@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from './lib/completeness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -171,8 +172,8 @@ if (!registry) {
 // relationship_count must equal the number of generated nodes/edges that cite
 // it (spec §9). Also confirms every generated node/edge resolves to a real
 // artifact (spec §11 provenance resolution).
-const nodesRaw = readJson('data/generated/nodes.json');
-const edgesRaw = readJson('data/generated/edges.json');
+const nodesRaw = readGeneratedCollection(ROOT, 'nodes');
+const edgesRaw = readGeneratedCollection(ROOT, 'edges');
 if (registry && nodesRaw && edgesRaw) {
   const nodes = Array.isArray(nodesRaw) ? nodesRaw : nodesRaw.nodes;
   const edges = Array.isArray(edgesRaw) ? edgesRaw : edgesRaw.edges;
@@ -263,7 +264,6 @@ function buildCoverageManifest() {
       .map((id) => artifacts.get(id)).filter(Boolean);
     const mapping = (b.mapping_source_ids || []).map((id) => artifacts.get(id)).filter(Boolean);
     const all = [...primary, ...supplemental, ...mapping];
-    const importedRecords = primary.reduce((n, a) => n + (a.record_count || 0), 0);
     const methods = [...new Set(all.map((a) => a.retrieval_method).filter(Boolean))];
     const lastRefresh = all.map((a) => a.retrieved_at).filter(Boolean).sort().pop() || null;
     const hasShard = shardIds.has(b.catalog_id);
@@ -272,6 +272,10 @@ function buildCoverageManifest() {
     // Authoritative expected inventory (independent evidence locator) + reasoned exclusions.
     const ei = b.expected_inventory || null;
     const expected = ei ? resolveExpectedLocator(ei.evidence_locator, readJson) : null;
+    const importedFromEvidence = ei?.imported_evidence_locator
+      ? resolveExpectedLocator(ei.imported_evidence_locator, readJson)
+      : null;
+    const importedRecords = importedFromEvidence ?? primary.reduce((n, a) => n + (a.record_count || 0), 0);
     const exclusions = Array.isArray(ei?.exclusions) ? ei.exclusions : [];
     let excluded = 0;
     for (const ex of exclusions) {
@@ -284,6 +288,9 @@ function buildCoverageManifest() {
     // A declared authoritative source that fails to resolve is an integrity error.
     if (ei && ei.evidence_locator && expected === null) {
       err(`catalog ${b.catalog_id} expected_inventory.evidence_locator did not resolve to an integer: ${ei.evidence_locator}`);
+    }
+    if (ei?.imported_evidence_locator && importedFromEvidence === null) {
+      err(`catalog ${b.catalog_id} expected_inventory.imported_evidence_locator did not resolve to an integer: ${ei.imported_evidence_locator}`);
     }
 
     const primaryQuarantined = primary.length > 0 && primary.every((a) => quarantinedIds.has(a.id));
@@ -309,6 +316,7 @@ function buildCoverageManifest() {
       missing_records: missing,
       expected_basis: ei?.basis || null,
       expected_evidence: ei?.evidence_locator || null,
+      imported_evidence: ei?.imported_evidence_locator || null,
       exclusions: exclusions.map((ex) => ({ count: ex?.count ?? null, reason: ex?.reason ?? null })),
       primary_artifacts: primary.length,
       supplemental_artifacts: supplemental.length,

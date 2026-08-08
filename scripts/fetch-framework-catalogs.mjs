@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 import {
   buildCmmcPublicCatalog,
   buildCuiPolicyCatalog,
@@ -27,9 +28,14 @@ import {
   parse800171Catalog,
   parseCsfCatalog,
 } from '../tools/normalizers/oscal-normalize.mjs';
+import {
+  enrichCsfCatalogFromReferenceTool,
+  parseCsfReferenceToolWorkbook,
+} from '../tools/importers/csf-reference-tool-adapter.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SNAPSHOT = new Date().toISOString();
+const CSF_REFERENCE_TOOL_EXPORT_URL = 'https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all';
 
 const REMOTE_CATALOGS = [
   {
@@ -67,6 +73,25 @@ const REMOTE_CATALOGS = [
     url: 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json',
     outfile: 'csf-subcategories.json',
     parse: parseCsfCatalog,
+    enrich: async (records) => {
+      const response = await fetch(CSF_REFERENCE_TOOL_EXPORT_URL);
+      if (!response.ok) {
+        throw new Error(`CSF Reference Tool export fetch failed: ${response.status} ${CSF_REFERENCE_TOOL_EXPORT_URL}`);
+      }
+      const bytes = Buffer.from(await response.arrayBuffer());
+      const referenceTool = await parseCsfReferenceToolWorkbook(bytes);
+      const enriched = enrichCsfCatalogFromReferenceTool(records, referenceTool);
+      writeJsonAtomically(join(ROOT, 'data', 'csf-reference-tool-manifest.json'), {
+        source: CSF_REFERENCE_TOOL_EXPORT_URL,
+        sha256: `sha256:${createHash('sha256').update(bytes).digest('hex')}`,
+        byte_length: bytes.length,
+        retrieved_at: SNAPSHOT,
+        reconciliation: {
+          ...enriched.reconciliation,
+        },
+      });
+      return enriched.records;
+    },
   },
   {
     id: 'nist-800-171-rev3',
@@ -115,7 +140,7 @@ const PUBLIC_CATALOGS = [
 ];
 
 function writeCatalog(filename, document) {
-  writeFileSync(join(ROOT, 'data', filename), `${JSON.stringify(document, null, 2)}\n`, 'utf8');
+  writeJsonAtomically(join(ROOT, 'data', filename), document);
   return { filename, records: document.records.length };
 }
 
@@ -140,6 +165,12 @@ export async function fetchFrameworkCatalogs(options = {}) {
     let document = target.parse(payload, target.sourceKey || target.id);
     if (target.enrich) {
       document = { ...document, records: await target.enrich(document.records) };
+    }
+    if (target.id === 'nist-csf-2') {
+      document = {
+        ...document,
+        reconciliation: { subcategories: document.records.length },
+      };
     }
     results.push(writeCatalog(target.outfile, document));
   }
