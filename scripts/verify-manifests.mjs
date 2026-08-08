@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from './lib/completeness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SHA256_PREFIXED = /^sha256:[a-f0-9]{64}$/i;
@@ -223,9 +224,32 @@ if (olir) {
   for (const h of hits) err(`OLIR manifest forbidden marker: ${h}`);
 }
 
-// ---- Coverage manifest: computed from real values, per catalog. ----
+// ---- Coverage manifest: computed from real, per-catalog values. ----
+// Completeness states (spec §1):
+//   reconciled  — an authoritative expected inventory was established (an
+//                 integer resolved from an INDEPENDENT evidence locator), every
+//                 exclusion carries a reason, all contributing artifacts are
+//                 provenance-attested with real checksums, and
+//                 expected === imported + excluded + missing with missing === 0.
+//   partial     — expected inventory known, records still missing (missing > 0).
+//   discovered  — records present, but no authoritative expected inventory
+//                 has been established yet.
+//   unknown     — no records and no expectation.
+//   quarantined — the primary evidence is quarantined (unverifiable, reasoned).
+// verify:manifests FAILS if a `reconciled` catalog has null expected/missing
+// counts or a mismatched inventory (spec §1/§10). The classification and
+// locator-resolution logic lives in ./lib/completeness.mjs (unit-tested there).
+const CLASSIFY_ERROR_MESSAGES = {
+  'inventory-over-count': (c, ctx) =>
+    `catalog ${c} imported(${ctx.imported})+excluded(${ctx.excluded}) exceed expected(${ctx.expected}) — inventory over-count`,
+  'reconciled-with-mismatched-inventory': (c, ctx) =>
+    `catalog ${c} labeled reconciled with unresolved/mismatched inventory `
+    + `(expected=${ctx.expected}, imported=${ctx.imported}, excluded=${ctx.excluded}, missing=${ctx.missing})`,
+};
+
 function buildCoverageManifest() {
   const artifacts = new Map((registry?.artifacts || []).map((a) => [a.id, a]));
+  const quarantinedIds = new Set((registry?.quarantine || []).map((q) => q.id));
   const shardDir = join(ROOT, 'data/generated/catalog-records');
   const shardIds = existsSync(shardDir)
     ? new Set(readdirSync(shardDir).filter((f) => f.endsWith('.json')).map((f) => f.replace('.json', '')))
@@ -243,29 +267,69 @@ function buildCoverageManifest() {
     const methods = [...new Set(all.map((a) => a.retrieval_method).filter(Boolean))];
     const lastRefresh = all.map((a) => a.retrieved_at).filter(Boolean).sort().pop() || null;
     const hasShard = shardIds.has(b.catalog_id);
-    const allChecksumsReal = all.every((a) => isRealSha256(a.sha256));
+    const allChecksumsReal = all.length > 0 && all.every((a) => isRealSha256(a.sha256));
+
+    // Authoritative expected inventory (independent evidence locator) + reasoned exclusions.
+    const ei = b.expected_inventory || null;
+    const expected = ei ? resolveExpectedLocator(ei.evidence_locator, readJson) : null;
+    const exclusions = Array.isArray(ei?.exclusions) ? ei.exclusions : [];
+    let excluded = 0;
+    for (const ex of exclusions) {
+      if (!ex || typeof ex.reason !== 'string' || !ex.reason.trim()) {
+        err(`catalog ${b.catalog_id} exclusion missing reason: ${JSON.stringify(ex)}`);
+      }
+      if (Number.isInteger(ex?.count)) excluded += ex.count;
+      else err(`catalog ${b.catalog_id} exclusion has non-integer count: ${JSON.stringify(ex)}`);
+    }
+    // A declared authoritative source that fails to resolve is an integrity error.
+    if (ei && ei.evidence_locator && expected === null) {
+      err(`catalog ${b.catalog_id} expected_inventory.evidence_locator did not resolve to an integer: ${ei.evidence_locator}`);
+    }
+
+    const primaryQuarantined = primary.length > 0 && primary.every((a) => quarantinedIds.has(a.id));
+    const { status, missing, errors: classifyErrors } = classifyCatalog({
+      expected,
+      imported: importedRecords,
+      excluded,
+      allChecksumsReal,
+      primaryQuarantined,
+    });
+    const ctx = { expected, imported: importedRecords, excluded, missing };
+    for (const code of classifyErrors) {
+      const build = CLASSIFY_ERROR_MESSAGES[code];
+      err(build ? build(b.catalog_id, ctx) : `catalog ${b.catalog_id} classification error: ${code}`);
+    }
+
     catalogs.push({
       catalog_id: b.catalog_id,
-      expected_records: null, // authoritative expectation set during per-catalog ingestion (§4–§7)
+      completeness_status: status,
+      expected_records: expected,
       imported_records: importedRecords,
-      excluded_records: 0,
-      missing_records: null,
+      excluded_records: excluded,
+      missing_records: missing,
+      expected_basis: ei?.basis || null,
+      expected_evidence: ei?.evidence_locator || null,
+      exclusions: exclusions.map((ex) => ({ count: ex?.count ?? null, reason: ex?.reason ?? null })),
       primary_artifacts: primary.length,
       supplemental_artifacts: supplemental.length,
       mapping_artifacts: mapping.length,
       methods,
       last_refresh: lastRefresh,
-      completeness_status: hasShard && allChecksumsReal ? 'reconciled' : 'incomplete',
+      has_shard: hasShard,
     });
   }
+  const catalogStates = Object.fromEntries(
+    COMPLETENESS_STATES.map((s) => [s, catalogs.filter((c) => c.completeness_status === s).length]),
+  );
   return {
-    schema_version: '2.0',
+    schema_version: '3.0',
     generated_at: new Date().toISOString(),
     completeness: {
       total_publications: (registry?.publications || []).length,
       total_artifacts: (registry?.artifacts || []).length,
       total_catalog_bundles: (registry?.catalog_source_bundles || []).length,
       manual_seed_artifacts: (registry?.artifacts || []).filter((a) => a.parser === 'manual-seed').length,
+      catalog_states: catalogStates,
       provenance_verified: errors.length === 0,
     },
     catalogs,

@@ -1,20 +1,31 @@
 {
-  "schema_version": "2.0",
-  "generated_at": "2026-08-07T22:32:07.517Z",
+  "schema_version": "3.0",
+  "generated_at": "2026-08-08T12:28:37.253Z",
   "completeness": {
     "total_publications": 65,
     "total_artifacts": 37,
     "total_catalog_bundles": 6,
     "manual_seed_artifacts": 0,
+    "catalog_states": {
+      "reconciled": 0,
+      "partial": 1,
+      "discovered": 5,
+      "unknown": 0,
+      "quarantined": 0
+    },
     "provenance_verified": true
   },
   "catalogs": [
     {
       "catalog_id": "csf-2",
+      "completeness_status": "discovered",
       "expected_records": null,
       "imported_records": 135,
       "excluded_records": 0,
       "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 0,
       "mapping_artifacts": 2,
@@ -23,14 +34,18 @@
         "direct_file_import"
       ],
       "last_refresh": "2026-08-07",
-      "completeness_status": "reconciled"
+      "has_shard": true
     },
     {
       "catalog_id": "nist-800-53",
+      "completeness_status": "discovered",
       "expected_records": null,
       "imported_records": 2232,
       "excluded_records": 0,
       "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 3,
       "mapping_artifacts": 1,
@@ -39,14 +54,18 @@
         "direct_file_import"
       ],
       "last_refresh": "2026-08-07",
-      "completeness_status": "reconciled"
+      "has_shard": true
     },
     {
       "catalog_id": "cui-policy",
+      "completeness_status": "discovered",
       "expected_records": null,
       "imported_records": 2,
       "excluded_records": 0,
       "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 1,
       "mapping_artifacts": 0,
@@ -54,14 +73,18 @@
         "extracted_from_official_publication"
       ],
       "last_refresh": "2026-08-07",
-      "completeness_status": "reconciled"
+      "has_shard": true
     },
     {
       "catalog_id": "dod-rai",
+      "completeness_status": "discovered",
       "expected_records": null,
       "imported_records": 14,
       "excluded_records": 0,
       "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 1,
       "mapping_artifacts": 0,
@@ -69,14 +92,18 @@
         "extracted_from_official_publication"
       ],
       "last_refresh": "2026-08-07",
-      "completeness_status": "reconciled"
+      "has_shard": true
     },
     {
       "catalog_id": "dod-zt",
+      "completeness_status": "discovered",
       "expected_records": null,
       "imported_records": 62,
       "excluded_records": 0,
       "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "exclusions": [],
       "primary_artifacts": 4,
       "supplemental_artifacts": 0,
       "mapping_artifacts": 0,
@@ -84,14 +111,18 @@
         "extracted_from_official_publication"
       ],
       "last_refresh": "2026-08-07",
-      "completeness_status": "reconciled"
+      "has_shard": true
     },
     {
       "catalog_id": "disa-stig",
-      "expected_records": null,
+      "completeness_status": "partial",
+      "expected_records": 17360,
       "imported_records": 615,
       "excluded_records": 0,
-      "missing_records": null,
+      "missing_records": 16745,
+      "expected_basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
+      "expected_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+      "exclusions": [],
       "primary_artifacts": 2,
       "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
@@ -99,7 +130,7 @@
         "direct_file_import"
       ],
       "last_refresh": "2026-07-13",
-      "completeness_status": "reconciled"
+      "has_shard": true
     }
   ],
   "verification_status": "PASSED"

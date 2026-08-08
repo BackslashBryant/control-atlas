@@ -2883,7 +2883,12 @@
       "reconciliation_source_ids": [
         "artifact-stigviewer-catalog",
         "artifact-nuwcdivnpt-stig-manager"
-      ]
+      ],
+      "expected_inventory": {
+        "evidence_locator": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+        "basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
+        "exclusions": []
+      }
     }
   ],
   "sources": [
