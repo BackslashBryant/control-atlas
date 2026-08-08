@@ -16,6 +16,19 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'npm'
+
+      # sync-public.mjs stages dist/site as the public release base, so the
+      # site must be built first — without this the script threw "Run
+      # `npm run build:site` before syncing the public release." on every
+      # push to main.
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build the static site
+        env:
+          CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
+        run: npm run build:site
 
       - name: Stage Public Files
         run: node tools/sync-public.mjs
