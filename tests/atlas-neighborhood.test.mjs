@@ -7,6 +7,7 @@ import {
   atlasNeighborhoodShardId,
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
+import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 
 test("Atlas neighborhood sharding is deterministic and preserves canonical edges", () => {
   const graph = {
@@ -105,11 +106,9 @@ test("Atlas neighborhood records carry the canonical structural path for cold de
 
 test("generated Atlas shards contain only incident canonical edges", () => {
   const canonicalEdges = new Map(
-    JSON.parse(readFileSync("data/generated/edges.json", "utf8")).edges.map((edge) => [edge.id, edge]),
+    readGeneratedCollection(".", "edges").edges.map((edge) => [edge.id, edge]),
   );
-  const canonicalNodes = JSON.parse(
-    readFileSync("data/generated/nodes.json", "utf8"),
-  ).nodes;
+  const canonicalNodes = readGeneratedCollection(".", "nodes").nodes;
   const canonicalNodeById = new Map(
     canonicalNodes.map((node) => [node.id, node]),
   );

@@ -4,14 +4,11 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { displayNameFor, humanizeSlug } from '../src/app/display-names.mjs';
+import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const nodes = JSON.parse(
-  readFileSync(join(ROOT, 'data/generated/nodes.json'), 'utf8'),
-).nodes;
-const edges = JSON.parse(
-  readFileSync(join(ROOT, 'data/generated/edges.json'), 'utf8'),
-).edges;
+const nodes = readGeneratedCollection(ROOT, 'nodes').nodes;
+const edges = readGeneratedCollection(ROOT, 'edges').edges;
 
 function distinct(list, key) {
   return [...new Set(list.map((item) => item[key]).filter(Boolean))].sort();

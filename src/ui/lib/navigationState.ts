@@ -25,7 +25,10 @@ export function requiresFullGraph(state: ViewState) {
     (state.view === "atlas-map" &&
       !state.node &&
       Boolean(
-        state.atlasAxis ||
+        // Opening an area only needs the compact publisher-catalog bootstrap.
+        // The full graph begins when someone chooses a publication or the
+        // process view, where structural records are actually needed.
+        (state.atlasAxis && state.atlasAxis !== "landscape") ||
           state.atlasFramework ||
           state.atlasBaseline ||
           state.atlasFamily ||

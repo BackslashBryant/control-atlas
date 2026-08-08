@@ -135,6 +135,9 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-cmmc-rule', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=170', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
   // CSF 2.0 Core from the NIST OSCAL catalog (deterministic, pinned v1.5.0).
   { id: 'artifact-nist-csf-2', url: `${OSCAL}/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json`, format: 'oscal_json', parser: 'oscal-json', parser_version: '1.5.0', count: 'oscal_catalog' },
+  // The live Reference Tool export carries the current Core together with the
+  // publisher-maintained implementation examples and informative references.
+  { id: 'artifact-nist-csf-reference-tool-export', url: 'https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all', format: 'spreadsheet', parser: 'csf-reference-tool-xlsx', parser_version: '1.0.0' },
   // FIPS 199 / 200 and SP 800-37 Rev 2 official PDFs (nvlpubs, byte-stable).
   { id: 'artifact-nist-fips-199', url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
   { id: 'artifact-nist-fips-200', url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.200.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0' },
@@ -218,11 +221,43 @@ async function main() {
   // genuine execution rather than only this run's network luck.
   const priorManifest = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null;
   const priorById = new Map((priorManifest?.results || []).map((r) => [r.id, r]));
+  const disaCompilation = existsSync(join(ROOT, 'data', 'disa-artifact-manifest.json'))
+    ? JSON.parse(readFileSync(join(ROOT, 'data', 'disa-artifact-manifest.json'), 'utf8'))
+    : null;
 
   for (const r of RESOLUTIONS) {
     const art = byId.get(r.id);
     if (!art) { log.push({ id: r.id, status: 'ERROR', reason: 'artifact id not in registry' }); continue; }
     try {
+      if (r.id === 'artifact-disa-compilation-zip') {
+        const checksum = disaCompilation?.checksum;
+        const byteLength = disaCompilation?.byte_length;
+        const retrievedAt = disaCompilation?.retrieval_timestamp;
+        if (!/^sha256:[a-f0-9]{64}$/i.test(checksum || '') || !Number.isInteger(byteLength) || byteLength <= 0 || !retrievedAt) {
+          throw new Error('fresh DISA compilation attestation is missing or invalid');
+        }
+        if (process.env.CONTROL_ATLAS_REQUIRE_FRESH_FETCH === '1' && !String(retrievedAt).startsWith(today)) {
+          throw new Error(`DISA compilation was not retrieved today: ${retrievedAt}`);
+        }
+        art.artifact_url = disaCompilation.artifact_url;
+        art.sha256 = checksum;
+        art.byte_length = byteLength;
+        art.retrieved_at = String(retrievedAt).slice(0, 10);
+        changed += 1;
+        log.push({
+          id: r.id,
+          status: 'OK',
+          http: 'range-verified',
+          url: disaCompilation.artifact_url,
+          sha256: checksum,
+          byte_length: byteLength,
+          record_count: art.record_count,
+          retrieved_at: art.retrieved_at,
+          attestation: 'fresh DISA compilation range download and parse',
+        });
+        console.log(`OK  ${r.id}  ${byteLength}B  range-verified ${checksum.slice(0, 22)}â€¦`);
+        continue;
+      }
       const { buf, status } = r.local
         ? { buf: readFileSync(join(ROOT, r.local)), status: 'local' }
         : await fetchBytes(r.url, { noBotUa: r.noBotUa });

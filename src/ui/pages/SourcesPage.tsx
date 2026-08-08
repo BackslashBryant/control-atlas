@@ -128,7 +128,6 @@ export function SourcesPage(props: {
           {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
             <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
           ) : null}
-          <div><dt>Parser</dt><dd>{selectedSource.metadata?.parser || selectedSource.parser || "Not applicable or not recorded"}</dd></div>
           {typeof selectedSource.record_count === "number" ? (
             <div><dt>Records</dt><dd>{selectedSource.record_count.toLocaleString()}</dd></div>
           ) : null}

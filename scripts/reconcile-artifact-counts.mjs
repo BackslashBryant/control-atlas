@@ -10,6 +10,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -21,8 +22,8 @@ function readJson(rel) {
 }
 
 const registry = JSON.parse(readFileSync(REGISTRY, 'utf8'));
-const nodesRaw = readJson('data/generated/nodes.json');
-const edgesRaw = readJson('data/generated/edges.json');
+const nodesRaw = readGeneratedCollection(ROOT, 'nodes');
+const edgesRaw = readGeneratedCollection(ROOT, 'edges');
 if (!nodesRaw || !edgesRaw) {
   console.error('reconcile-artifact-counts: run build:data first (missing generated nodes/edges).');
   process.exit(1);

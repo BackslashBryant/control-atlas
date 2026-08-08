@@ -150,7 +150,7 @@ export function CommonsPage(props: {
         ) : !resultsVisible ? (
           <section aria-labelledby="resource-collections-heading" className="resource-collections" id="resources-results">
             <div className="resource-section-heading">
-              <div><p className="eyebrow">Curated starting points</p><h2 id="resource-collections-heading">Browse eight practical collections</h2></div>
+              <div><p className="eyebrow">Practical starting points</p><h2 id="resource-collections-heading">Browse eight practical collections</h2></div>
               <button onClick={() => update({ showAll: "true" })} type="button">Browse all {resources.length} resources <IconArrowRight aria-hidden="true" size={16} /></button>
             </div>
             <div className="resource-collection-grid">

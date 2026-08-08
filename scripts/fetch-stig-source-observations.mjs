@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 import {
   parseCyberMilLanding,
@@ -82,7 +82,7 @@ export async function fetchStigSourceObservations(options = {}) {
 
 async function main() {
   const document = await fetchStigSourceObservations();
-  writeFileSync(OUTPUT_PATH, `${JSON.stringify(document, null, 2)}\n`, 'utf8');
+  writeJsonAtomically(OUTPUT_PATH, document);
   console.log(`Wrote ${document.observations.length} STIG source observations`);
 }
 

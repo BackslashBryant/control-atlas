@@ -3,13 +3,14 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { CATALOG_TIERS } from '../scripts/build-framework-data.mjs';
+import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 import {
   RELATIONSHIP_CLASSES,
   isValidatedStructuralEdge,
   isValidatedStructuralPointer,
 } from '../src/app/structural-hierarchy.mjs';
 
-const generated = (name) => JSON.parse(readFileSync(`data/generated/${name}.json`, 'utf8'));
+const generated = (name) => readGeneratedCollection('.', name);
 // build-framework-data.mjs omits evidence_ids from an edge when it is
 // exactly the mechanical `evidence:<edge-id-suffix>` pattern (a real ~2 MiB
 // budget win — see scripts/build-framework-data.mjs); derive it back here,
@@ -385,18 +386,18 @@ test('DISA STIG and SRG records carry full, untruncated check and fix text', () 
       [],
       `${nodeType} records must carry metadata.fix_text`,
     );
-    const truncated = records
-      .filter(
-        (node) =>
-          node.metadata.check_text.endsWith('...') ||
-          node.metadata.fix_text.endsWith('...'),
-      )
-      .map((node) => node.id);
-    assert.deepEqual(
-      truncated,
-      [],
-      `${nodeType} records must not have their check_text/fix_text truncated`,
-    );
+    const sourceRecords = JSON.parse(
+      readFileSync(
+        nodeType === 'stig_rule' ? 'data/stig-rules.json' : 'data/srg-requirements.json',
+        'utf8',
+      ),
+    ).records;
+    const sourceById = new Map(sourceRecords.map((record) => [record.id, record]));
+    for (const node of records) {
+      const source = sourceById.get(node.metadata?.item_id);
+      assert.equal(node.metadata.check_text, source?.check_text, `${node.id} check text must match the parsed publisher record`);
+      assert.equal(node.metadata.fix_text, source?.fix_text, `${node.id} fix text must match the parsed publisher record`);
+    }
   }
 });
 
@@ -447,6 +448,19 @@ test('CSF 2.0 subcategories chain up through Category to Function', () => {
   for (const category of categories) {
     const children = childrenOf.get(category.id) || [];
     assert.ok(children.length > 0, `${category.id} should include at least one subcategory`);
+  }
+});
+
+test('CSF records retain the Reference Tool examples, informative references, and both contributing artifacts', () => {
+  const nodes = generated('nodes').nodes.filter((node) =>
+    node.metadata?.catalog_id === 'csf-2' && node.node_type === 'requirement',
+  );
+  assert.equal(nodes.length, 106);
+  for (const node of nodes) {
+    assert.ok(node.metadata?.implementation_examples?.length, `${node.id} is missing Reference Tool implementation examples`);
+    assert.ok(node.metadata?.informative_references?.length, `${node.id} is missing Reference Tool informative references`);
+    assert.ok(node.artifact_ids?.includes('artifact-nist-csf-reference-tool-export'), `${node.id} is missing Reference Tool provenance`);
+    assert.ok(node.artifact_ids?.includes('artifact-nist-csf-2'), `${node.id} is missing OSCAL reconciliation provenance`);
   }
 });
 

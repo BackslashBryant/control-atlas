@@ -3,8 +3,8 @@
   "source_key": "mitre-d3fend-ontology",
   "source_artifact": "https://d3fend.mitre.org/api/technique/all.json",
   "source_version": "4",
-  "snapshot_date": "2026-08-02",
-  "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
+  "snapshot_date": "2026-08-08",
+  "checksum": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
   "provenance": "MITRE D3FEND defensive technique catalog",
   "records": [
     {
@@ -22,7 +22,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AA"
       }
@@ -46,7 +46,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ABPI"
       }
@@ -66,7 +66,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ACA"
       }
@@ -86,7 +86,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ACH"
       }
@@ -106,7 +106,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AEM"
       }
@@ -126,7 +126,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AH"
       }
@@ -149,7 +149,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AI"
       }
@@ -169,7 +169,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AL"
       }
@@ -189,7 +189,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ALLM"
       }
@@ -209,7 +209,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AM"
       }
@@ -229,7 +229,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AMED"
       }
@@ -249,7 +249,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ANAA"
       }
@@ -269,7 +269,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ANCI"
       }
@@ -289,7 +289,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ANET"
       }
@@ -309,7 +309,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-APA"
       }
@@ -329,7 +329,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-APCA"
       }
@@ -349,7 +349,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-APLM"
       }
@@ -369,7 +369,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-APM"
       }
@@ -389,7 +389,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AVE"
       }
@@ -409,7 +409,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-AZET"
       }
@@ -429,7 +429,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-BA"
       }
@@ -449,7 +449,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-BAN"
       }
@@ -469,7 +469,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-BDI"
       }
@@ -489,7 +489,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-BMA"
       }
@@ -509,7 +509,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-BSE"
       }
@@ -529,7 +529,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CA"
       }
@@ -549,7 +549,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CAA"
       }
@@ -569,7 +569,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CBAN"
       }
@@ -589,7 +589,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CCSA"
       }
@@ -609,7 +609,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CDP"
       }
@@ -629,7 +629,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CE"
       }
@@ -649,7 +649,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CERO"
       }
@@ -669,7 +669,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CF"
       }
@@ -689,7 +689,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CFC"
       }
@@ -709,7 +709,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CFI"
       }
@@ -729,7 +729,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CH"
       }
@@ -749,7 +749,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CHN"
       }
@@ -769,7 +769,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CI"
       }
@@ -789,7 +789,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CIA"
       }
@@ -809,7 +809,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CM"
       }
@@ -829,7 +829,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CNE"
       }
@@ -849,7 +849,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CNR"
       }
@@ -869,7 +869,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CNS"
       }
@@ -889,7 +889,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CP"
       }
@@ -909,7 +909,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CQ"
       }
@@ -929,7 +929,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CR"
       }
@@ -949,7 +949,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CRO"
       }
@@ -969,7 +969,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CS"
       }
@@ -989,7 +989,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CSPP"
       }
@@ -1009,7 +1009,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CTS"
       }
@@ -1029,7 +1029,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-CV"
       }
@@ -1052,7 +1052,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DA"
       }
@@ -1072,7 +1072,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DAM"
       }
@@ -1092,7 +1092,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DCE"
       }
@@ -1112,7 +1112,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DE"
       }
@@ -1135,7 +1135,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DEM"
       }
@@ -1155,7 +1155,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DENCR"
       }
@@ -1175,7 +1175,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DF"
       }
@@ -1198,7 +1198,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DI"
       }
@@ -1218,7 +1218,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DKE"
       }
@@ -1238,7 +1238,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DKF"
       }
@@ -1258,7 +1258,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DKP"
       }
@@ -1278,7 +1278,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DLIC"
       }
@@ -1298,7 +1298,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DLV"
       }
@@ -1318,7 +1318,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNL"
       }
@@ -1338,7 +1338,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNR"
       }
@@ -1358,7 +1358,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNRA"
       }
@@ -1378,7 +1378,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNSAL"
       }
@@ -1398,7 +1398,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNSCE"
       }
@@ -1418,7 +1418,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNSDL"
       }
@@ -1438,7 +1438,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DNSTA"
       }
@@ -1458,7 +1458,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DO"
       }
@@ -1478,7 +1478,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DP"
       }
@@ -1498,7 +1498,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DPLM"
       }
@@ -1518,7 +1518,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DPR"
       }
@@ -1538,7 +1538,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DQSA"
       }
@@ -1558,7 +1558,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DRA"
       }
@@ -1578,7 +1578,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DRT"
       }
@@ -1598,7 +1598,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DST"
       }
@@ -1618,7 +1618,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DTP"
       }
@@ -1638,7 +1638,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-DUC"
       }
@@ -1658,7 +1658,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EAL"
       }
@@ -1678,7 +1678,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EBWSAM"
       }
@@ -1698,7 +1698,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EDL"
       }
@@ -1718,7 +1718,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EF"
       }
@@ -1738,7 +1738,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EFA"
       }
@@ -1758,7 +1758,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EHB"
       }
@@ -1778,7 +1778,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EHPV"
       }
@@ -1798,7 +1798,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EI"
       }
@@ -1821,7 +1821,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ELM"
       }
@@ -1841,7 +1841,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EMH"
       }
@@ -1861,7 +1861,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-EPL"
       }
@@ -1881,7 +1881,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ER"
       }
@@ -1901,7 +1901,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ET"
       }
@@ -1921,7 +1921,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FA"
       }
@@ -1941,7 +1941,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FAPA"
       }
@@ -1961,7 +1961,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FBA"
       }
@@ -1981,7 +1981,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FC"
       }
@@ -2001,7 +2001,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FCA"
       }
@@ -2021,7 +2021,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FCDC"
       }
@@ -2041,7 +2041,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FCOA"
       }
@@ -2064,7 +2064,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FCR"
       }
@@ -2084,7 +2084,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FE"
       }
@@ -2104,7 +2104,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FEMC"
       }
@@ -2124,7 +2124,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FEV"
       }
@@ -2144,7 +2144,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FFV"
       }
@@ -2164,7 +2164,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FH"
       }
@@ -2184,7 +2184,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FHRA"
       }
@@ -2204,7 +2204,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FIM"
       }
@@ -2224,7 +2224,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FISV"
       }
@@ -2244,7 +2244,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FMBV"
       }
@@ -2264,7 +2264,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FMCV"
       }
@@ -2284,7 +2284,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FMVV"
       }
@@ -2304,7 +2304,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FRDDL"
       }
@@ -2324,7 +2324,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FRIDL"
       }
@@ -2344,7 +2344,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-FV"
       }
@@ -2364,7 +2364,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HBPI"
       }
@@ -2384,7 +2384,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HBWP"
       }
@@ -2407,7 +2407,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HCI"
       }
@@ -2427,7 +2427,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HD"
       }
@@ -2447,7 +2447,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HDDL"
       }
@@ -2467,7 +2467,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HDL"
       }
@@ -2487,7 +2487,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HR"
       }
@@ -2507,7 +2507,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-HS"
       }
@@ -2527,7 +2527,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IAA"
       }
@@ -2547,7 +2547,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IBCA"
       }
@@ -2567,7 +2567,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ID"
       }
@@ -2587,7 +2587,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IDA"
       }
@@ -2607,7 +2607,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IHN"
       }
@@ -2627,7 +2627,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IOPR"
       }
@@ -2647,7 +2647,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IPCTA"
       }
@@ -2667,7 +2667,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IPRA"
       }
@@ -2687,7 +2687,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IRA"
       }
@@ -2707,7 +2707,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-IRV"
       }
@@ -2727,7 +2727,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ISVA"
       }
@@ -2747,7 +2747,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ITF"
       }
@@ -2767,7 +2767,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-JFAPA"
       }
@@ -2787,7 +2787,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-KBPI"
       }
@@ -2807,7 +2807,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-LAM"
       }
@@ -2827,7 +2827,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-LAMED"
       }
@@ -2847,7 +2847,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-LFAM"
       }
@@ -2867,7 +2867,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-LFP"
       }
@@ -2887,7 +2887,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-LLM"
       }
@@ -2910,7 +2910,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MA"
       }
@@ -2930,7 +2930,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MAN"
       }
@@ -2950,7 +2950,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MBSV"
       }
@@ -2970,7 +2970,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MBT"
       }
@@ -2990,7 +2990,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MENCR"
       }
@@ -3010,7 +3010,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MFA"
       }
@@ -3030,7 +3030,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MH"
       }
@@ -3053,7 +3053,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-MSM"
       }
@@ -3073,7 +3073,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NAM"
       }
@@ -3093,7 +3093,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NI"
       }
@@ -3113,7 +3113,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NM"
       }
@@ -3136,7 +3136,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NNI"
       }
@@ -3156,7 +3156,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NPC"
       }
@@ -3176,7 +3176,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NRAM"
       }
@@ -3196,7 +3196,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NTA"
       }
@@ -3216,7 +3216,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NTCD"
       }
@@ -3236,7 +3236,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NTF"
       }
@@ -3261,7 +3261,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NTPM"
       }
@@ -3281,7 +3281,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NTSA"
       }
@@ -3301,7 +3301,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-NVA"
       }
@@ -3321,7 +3321,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OAM"
       }
@@ -3341,7 +3341,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ODM"
       }
@@ -3361,7 +3361,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OE"
       }
@@ -3381,7 +3381,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OLV"
       }
@@ -3401,7 +3401,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OM"
       }
@@ -3421,7 +3421,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OMM"
       }
@@ -3441,7 +3441,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OPM"
       }
@@ -3461,7 +3461,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OPR"
       }
@@ -3481,7 +3481,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ORA"
       }
@@ -3501,7 +3501,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OSM"
       }
@@ -3521,7 +3521,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OTF"
       }
@@ -3541,7 +3541,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OTP"
       }
@@ -3561,7 +3561,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-OVAR"
       }
@@ -3581,7 +3581,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PA"
       }
@@ -3601,7 +3601,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PAM"
       }
@@ -3621,7 +3621,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PAN"
       }
@@ -3641,7 +3641,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PBWSAM"
       }
@@ -3661,7 +3661,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PCA"
       }
@@ -3681,7 +3681,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PCSV"
       }
@@ -3701,7 +3701,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PE"
       }
@@ -3721,7 +3721,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PEH"
       }
@@ -3741,7 +3741,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PFV"
       }
@@ -3764,7 +3764,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PH"
       }
@@ -3784,7 +3784,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PHAM"
       }
@@ -3804,7 +3804,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PHDURA"
       }
@@ -3824,7 +3824,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PLA"
       }
@@ -3844,7 +3844,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PLLM"
       }
@@ -3864,7 +3864,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PLM"
       }
@@ -3884,7 +3884,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PM"
       }
@@ -3904,7 +3904,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PMAD"
       }
@@ -3924,7 +3924,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PR"
       }
@@ -3944,7 +3944,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PS"
       }
@@ -3964,7 +3964,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PSA"
       }
@@ -3987,7 +3987,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PSEP"
       }
@@ -4010,7 +4010,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PSM"
       }
@@ -4030,7 +4030,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PSMD"
       }
@@ -4050,7 +4050,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PT"
       }
@@ -4070,7 +4070,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PUM"
       }
@@ -4090,7 +4090,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PV"
       }
@@ -4110,7 +4110,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-PWA"
       }
@@ -4130,7 +4130,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RA"
       }
@@ -4150,7 +4150,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RAM"
       }
@@ -4170,7 +4170,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RAPA"
       }
@@ -4190,7 +4190,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RC"
       }
@@ -4210,7 +4210,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RD"
       }
@@ -4230,7 +4230,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RDI"
       }
@@ -4250,7 +4250,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RE"
       }
@@ -4270,7 +4270,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RF"
       }
@@ -4290,7 +4290,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RFAM"
       }
@@ -4310,7 +4310,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RFS"
       }
@@ -4330,7 +4330,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RFUM"
       }
@@ -4350,7 +4350,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RH"
       }
@@ -4370,7 +4370,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RIC"
       }
@@ -4390,7 +4390,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RKD"
       }
@@ -4410,7 +4410,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RN"
       }
@@ -4430,7 +4430,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RNA"
       }
@@ -4450,7 +4450,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RO"
       }
@@ -4470,7 +4470,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RPA"
       }
@@ -4490,7 +4490,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RRID"
       }
@@ -4510,7 +4510,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RS"
       }
@@ -4530,7 +4530,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RTA"
       }
@@ -4550,7 +4550,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RTSD"
       }
@@ -4570,7 +4570,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-RUAA"
       }
@@ -4593,7 +4593,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SAOR"
       }
@@ -4613,7 +4613,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SBV"
       }
@@ -4633,7 +4633,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SCA"
       }
@@ -4653,7 +4653,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SCF"
       }
@@ -4673,7 +4673,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SCH"
       }
@@ -4693,7 +4693,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SCP"
       }
@@ -4713,7 +4713,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SDA"
       }
@@ -4733,7 +4733,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SDM"
       }
@@ -4753,7 +4753,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SEA"
       }
@@ -4773,7 +4773,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SFA"
       }
@@ -4793,7 +4793,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SFCV"
       }
@@ -4813,7 +4813,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SFV"
       }
@@ -4833,7 +4833,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SHN"
       }
@@ -4856,7 +4856,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SICA"
       }
@@ -4876,7 +4876,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SJA"
       }
@@ -4896,7 +4896,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SMRA"
       }
@@ -4916,7 +4916,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SPP"
       }
@@ -4936,7 +4936,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SRA"
       }
@@ -4956,7 +4956,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SSC"
       }
@@ -4976,7 +4976,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ST"
       }
@@ -4996,7 +4996,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SU"
       }
@@ -5016,7 +5016,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SVCDM"
       }
@@ -5039,7 +5039,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SWI"
       }
@@ -5059,7 +5059,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SYSDM"
       }
@@ -5079,7 +5079,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SYSM"
       }
@@ -5099,7 +5099,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-SYSVA"
       }
@@ -5119,7 +5119,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-TAAN"
       }
@@ -5139,7 +5139,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-TB"
       }
@@ -5159,7 +5159,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-TBA"
       }
@@ -5182,7 +5182,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-TBI"
       }
@@ -5202,7 +5202,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-TL"
       }
@@ -5222,7 +5222,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-UA"
       }
@@ -5242,7 +5242,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-UAP"
       }
@@ -5265,7 +5265,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-UBA"
       }
@@ -5285,7 +5285,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-UDTA"
       }
@@ -5305,9 +5305,29 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-UGLPA"
+      }
+    },
+    {
+      "id": "D3-UGPH",
+      "type": "defend_countermeasure",
+      "title": "D3-UGPH User Group Permissions",
+      "description": "Access control where access is determined based on attributes associated with users and the objects being accessed.",
+      "status": "active",
+      "family": "Isolate",
+      "metadata": {
+        "technique_slug": "UserGroupPermissions",
+        "synonym": "Role Based Access Controls",
+        "tactic_id": "Isolate",
+        "tactic_title": "Isolate"
+      },
+      "source": {
+        "key": "mitre-d3fend-ontology",
+        "snapshot_date": "2026-08-08",
+        "version": "4",
+        "locator": "technique/all.json#D3-UGPH"
       }
     },
     {
@@ -5325,7 +5345,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-ULA"
       }
@@ -5345,7 +5365,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-URA"
       }
@@ -5365,7 +5385,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-USICA"
       }
@@ -5385,7 +5405,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-VI"
       }
@@ -5408,7 +5428,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-VS"
       }
@@ -5428,7 +5448,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-VTV"
       }
@@ -5448,7 +5468,7 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-WSAA"
       }
@@ -5468,29 +5488,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
+        "snapshot_date": "2026-08-08",
         "version": "4",
         "locator": "technique/all.json#D3-WSAM"
-      }
-    },
-    {
-      "id": "D3F-UGPH",
-      "type": "defend_countermeasure",
-      "title": "D3F-UGPH User Group Permissions",
-      "description": "Access control where access is determined based on attributes associated with users and the objects being accessed.",
-      "status": "active",
-      "family": "Isolate",
-      "metadata": {
-        "technique_slug": "UserGroupPermissions",
-        "synonym": "Role Based Access Controls",
-        "tactic_id": "Isolate",
-        "tactic_title": "Isolate"
-      },
-      "source": {
-        "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-02",
-        "version": "4",
-        "locator": "technique/all.json#D3F-UGPH"
       }
     }
   ]

@@ -14,6 +14,7 @@ import {
   serializeViewState,
 } from "../../src/ui/lib/viewState";
 import spine from "../../data/curated/tree-spine.json";
+import { readGeneratedCollection } from "../../scripts/lib/generated-graph-artifacts.mjs";
 
 const nodes: AtlasDrillNode[] = [
   node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),
@@ -210,12 +211,8 @@ test("CA-ATL-005: the Atlas selector groups every catalog under its limb in trun
 });
 
 test("generated selector groups all catalogs under their limbs, no dead ends, empty limbs kept", () => {
-  const generatedNodes = JSON.parse(
-    readFileSync("data/generated/nodes.json", "utf8"),
-  ).nodes as AtlasDrillNode[];
-  const generatedEdges = JSON.parse(
-    readFileSync("data/generated/edges.json", "utf8"),
-  ).edges as AtlasDrillEdge[];
+  const generatedNodes = readGeneratedCollection(".", "nodes").nodes as AtlasDrillNode[];
+  const generatedEdges = readGeneratedCollection(".", "edges").edges as AtlasDrillEdge[];
   const model = buildAtlasDrilldownModel({
     nodes: generatedNodes,
     edges: generatedEdges,

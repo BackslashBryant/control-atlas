@@ -4,7 +4,7 @@ title = "Control Atlas gitleaks config"
 useDefault = true
 
 [allowlist]
-description = "Public catalog identifiers in deterministic artifacts and six audited immutable bootstrap commits are not secrets"
+description = "Public catalog identifiers and publisher-released artifacts containing credential-shaped instructional examples are not secrets"
 # NIST OLIR public source-key identifiers (e.g. nist-olir-csf2-to-sp800-171):
 # assigned to a variable named `source_key`, so gitleaks' generic-api-key
 # heuristic trips on their entropy. These are published NIST reference-catalog
@@ -29,4 +29,10 @@ paths = [
   '''data/generated/atlas-node-index.json''',
   '''data/generated/atlas-neighborhood/.*\.json''',
   '''data/generated/catalog-records/.*\.json''',
+  # DISA publishes its checklists verbatim, including instructional sample
+  # credentials. These three paths contain only that publisher material or its
+  # deterministic record shards; application source remains fully scanned.
+  '''data/generated/graph-data/.*\.json''',
+  '''data/srg-requirements\.json''',
+  '''data/stig-rules\.json''',
 ]

@@ -79,6 +79,18 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
   );
   assert.equal(atlasLanding.fullGraph, false);
 
+  const atlasPublicationChoice = runtimeArtifactPlan(
+    normalizeViewState("atlas-map", {
+      atlasAxis: "landscape",
+      atlasLimb: "atlas:LIMB-COMPLIANCE",
+    }),
+  );
+  assert.equal(
+    atlasPublicationChoice.fullGraph,
+    false,
+    "opening an area keeps its publication list responsive from the catalog bootstrap",
+  );
+
   const atlasStructure = runtimeArtifactPlan(
     normalizeViewState("atlas-map", { atlasAxis: "framework" }),
   );

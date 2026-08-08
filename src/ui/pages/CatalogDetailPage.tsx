@@ -73,9 +73,12 @@ export function CatalogDetailPage(props: {
   const records = bundle.runtime
     .getNodes({ catalog_id: catalog.id })
     .filter((record: any) => !NON_LEAF_NODE_TYPES.has(record.node_type));
+  const publishedGroups = bundle.catalogPublishedGroups || [];
   const families = [
     ...new Set(
-      records.map((record: any) => record.metadata?.family).filter(Boolean),
+      publishedGroups.length
+        ? publishedGroups.map((group) => group.name)
+        : records.map((record: any) => record.metadata?.family).filter(Boolean),
     ),
   ].sort() as string[];
   const query = state.query.trim().toLowerCase();
@@ -92,12 +95,17 @@ export function CatalogDetailPage(props: {
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(query))),
   );
-  const tierGroups = families.map((name) => ({
-    name,
-    count: records.filter(
-      (record: any) => record.metadata?.family === name,
-    ).length,
-  }));
+  const tierGroups = publishedGroups.length
+    ? publishedGroups.map((group) => ({
+        name: group.name,
+        count: group.record_count,
+      }))
+    : families.map((name) => ({
+        name,
+        count: records.filter(
+          (record: any) => record.metadata?.family === name,
+        ).length,
+      }));
   const showTierBrowser =
     families.length > 1 &&
     state.browseAll !== "true" &&
@@ -260,13 +268,15 @@ export function CatalogDetailPage(props: {
                   </button>
                 ))}
               </div>
-              <button
-                className="link-button"
-                onClick={() => update({ browseAll: "true", page: "" })}
-                type="button"
-              >
-                Browse all {records.length.toLocaleString()} {profile.recordLabel}
-              </button>
+              {publishedGroups.length ? null : (
+                <button
+                  className="link-button"
+                  onClick={() => update({ browseAll: "true", page: "" })}
+                  type="button"
+                >
+                  Browse all {records.length.toLocaleString()} {profile.recordLabel}
+                </button>
+              )}
             </>
           ) : !pageIsValid ? (
             <div className="empty-state">

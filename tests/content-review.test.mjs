@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
+import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
@@ -252,7 +253,7 @@ test('Home is an entry surface, not a lesson about the data model', () => {
 
 test('Home capability previews use real records without hard-coded graph edges', async () => {
   const { readFileSync: read } = await import('node:fs');
-  const library = JSON.parse(read('data/generated/library-search.json', 'utf8')).library_search.documents;
+  const library = readGeneratedCollection('.', 'library-search').library_search.documents;
   const ids = new Set(library.map((record) => record.id));
   assert.ok(ids.has('nist-800-171:3.17.1'));
   assert.ok(ids.has('mitre-attack:T1195.002'));

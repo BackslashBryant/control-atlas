@@ -9,6 +9,7 @@ import {
   type AncestorNode,
   type AncestorEdge,
 } from "../../src/ui/lib/ancestorPath.ts";
+import { readGeneratedCollection } from "../../scripts/lib/generated-graph-artifacts.mjs";
 
 function graphFrom(nodes: AncestorNode[], edges: AncestorEdge[] = []) {
   return buildAncestorGraph(nodes, edges);
@@ -346,12 +347,8 @@ test("A.4: a structural parent still wins over any organizing hop (regression gu
 });
 
 test("AC-2 generated ancestry now walks up through the organizing spine to the trunk", () => {
-  const nodes = JSON.parse(
-    readFileSync("data/generated/nodes.json", "utf8"),
-  ).nodes as AncestorNode[];
-  const edges = JSON.parse(
-    readFileSync("data/generated/edges.json", "utf8"),
-  ).edges as AncestorEdge[];
+  const nodes = readGeneratedCollection(".", "nodes").nodes as AncestorNode[];
+  const edges = readGeneratedCollection(".", "edges").edges as AncestorEdge[];
 
   const chain = ancestorChain("nist-800-53:AC-2", graphFrom(nodes, edges));
   assert.deepEqual(
@@ -372,12 +369,8 @@ test("AC-2 generated ancestry now walks up through the organizing spine to the t
 });
 
 test("A.4: a generated CCI now reaches the trunk through its assessment objective", () => {
-  const nodes = JSON.parse(
-    readFileSync("data/generated/nodes.json", "utf8"),
-  ).nodes as AncestorNode[];
-  const edges = JSON.parse(
-    readFileSync("data/generated/edges.json", "utf8"),
-  ).edges as AncestorEdge[];
+  const nodes = readGeneratedCollection(".", "nodes").nodes as AncestorNode[];
+  const edges = readGeneratedCollection(".", "edges").edges as AncestorEdge[];
 
   const chain = ancestorChain("disa-cci:CCI-000015", graphFrom(nodes, edges));
   const ids = chain.map((link) => link.id);

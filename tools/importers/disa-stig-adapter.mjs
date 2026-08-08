@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import yauzl from 'yauzl';
 import { unzipSync, strFromU8 } from 'fflate';
 
 const parser = new XMLParser({
@@ -175,49 +177,69 @@ function shouldIgnoreEntry(entryPath) {
   return /Supplemental\//i.test(entryPath);
 }
 
-function createDocument(sourceKey, artifactUrl, checksumValue, parsedDocuments) {
-  const first = parsedDocuments[0];
+function createDocument(sourceKey, artifactUrl, checksumValue, records, sourceMetadata) {
   return {
     schema_version: '2.0',
     source_key: sourceKey,
     source_artifact: artifactUrl,
-    source_version: first?.source_version || '',
-    snapshot_date: first?.snapshot_date || '',
+    source_version: sourceMetadata.source_version || '',
+    snapshot_date: sourceMetadata.snapshot_date || '',
     checksum: checksumValue,
-    records: parsedDocuments.flatMap((entry) => entry.records).map((record) => ({
-      ...record,
-      metadata: {
-        ...record.metadata,
-        relationships: [],
-      },
-    })),
+    records,
   };
 }
 
-function createRelationshipDocument(artifactUrl, checksumValue, records) {
-  const relationships = records.flatMap((record) =>
-    asArray(record.metadata?.relationships).map((relationship) => ({
-      source_catalog: record.type === 'stig_rule' ? 'disa-stig' : 'disa-srg',
-      source_id: record.id,
-      target_catalog: relationship.target_catalog,
-      target_id: relationship.target_id,
-      relationship_type: relationship.relationship_type,
-      why: `The official DISA ${record.type === 'stig_rule' ? 'STIG' : 'SRG'} content references ${relationship.target_id}.`,
-      source_locator: record.source.locator,
-      evidence_source: 'disa-stig-srg-cci-references',
-    })),
-  );
+function createRelationshipDocument(artifactUrl, checksumValue, relationshipSeeds, sourceMetadata) {
+  const relationships = relationshipSeeds.map((seed) => ({
+    ...seed,
+    why: `The official DISA ${seed.source_catalog === 'disa-stig' ? 'STIG' : 'SRG'} content references ${seed.target_id}.`,
+    evidence_source: 'disa-stig-srg-cci-references',
+  }));
 
   return {
     schema_version: '2.0',
     source_key: 'disa-stig-srg-cci-references',
     source_artifact: artifactUrl,
-    source_version: records[0]?.source?.version || '',
-    snapshot_date: records[0]?.source?.snapshot_date || '',
+    source_version: sourceMetadata.source_version || '',
+    snapshot_date: sourceMetadata.snapshot_date || '',
     checksum: checksumValue,
     provenance: 'Official DISA public STIG/SRG references to CCIs',
     relationships,
   };
+}
+
+function createAccumulator() {
+  return {
+    records: { stig: [], srg: [] },
+    relationshipSeeds: [],
+    sourceMetadata: { stig: {}, srg: {} },
+  };
+}
+
+function appendDocument(accumulator, document) {
+  const kind = document.catalogKind;
+  const sourceMetadata = accumulator.sourceMetadata[kind];
+  if (!sourceMetadata.source_version) {
+    sourceMetadata.source_version = document.source_version;
+    sourceMetadata.snapshot_date = document.snapshot_date;
+  }
+
+  for (const record of document.records) {
+    for (const relationship of asArray(record.metadata?.relationships)) {
+      accumulator.relationshipSeeds.push({
+        source_catalog: record.type === 'stig_rule' ? 'disa-stig' : 'disa-srg',
+        source_id: record.id,
+        target_catalog: relationship.target_catalog,
+        target_id: relationship.target_id,
+        relationship_type: relationship.relationship_type,
+        source_locator: record.source.locator,
+      });
+    }
+    accumulator.records[kind].push({
+      ...record,
+      metadata: { ...record.metadata, relationships: [] },
+    });
+  }
 }
 
 function walkArchiveEntries(archive, parentPath = '') {
@@ -235,7 +257,7 @@ function walkArchiveEntries(archive, parentPath = '') {
 
 export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, hintKind }) {
   const archive = unzipSync(buffer);
-  const parsed = { stig: [], srg: [] };
+  const accumulator = createAccumulator();
   const failed = [];
 
   for (const entry of walkArchiveEntries(archive)) {
@@ -254,20 +276,139 @@ export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, h
         entryPath: entry.entryPath,
         hintKind: pathHint,
       });
-      parsed[document.catalogKind].push(document);
+      appendDocument(accumulator, document);
     } catch (error) {
       failed.push({ entryPath: entry.entryPath, reason: error.message });
     }
   }
 
   const checksumValue = checksum(buffer);
-  const stig = createDocument(sourceKeys.stig, artifactUrl, checksumValue, parsed.stig);
-  const srg = createDocument(sourceKeys.srg, artifactUrl, checksumValue, parsed.srg);
+  const stig = createDocument(sourceKeys.stig, artifactUrl, checksumValue, accumulator.records.stig, accumulator.sourceMetadata.stig);
+  const srg = createDocument(sourceKeys.srg, artifactUrl, checksumValue, accumulator.records.srg, accumulator.sourceMetadata.srg);
   const relationships = createRelationshipDocument(
     artifactUrl,
     checksumValue,
-    [...parsed.stig, ...parsed.srg].flatMap((entry) => entry.records),
+    accumulator.relationshipSeeds,
+    accumulator.sourceMetadata.stig.source_version ? accumulator.sourceMetadata.stig : accumulator.sourceMetadata.srg,
   );
 
   return { stig, srg, relationships, checksum: checksumValue, failed };
+}
+
+function concatU8(chunks) {
+  let total = 0;
+  for (const c of chunks) total += c.length;
+  const out = new Uint8Array(total);
+  let offset = 0;
+  for (const c of chunks) { out.set(c, offset); offset += c.length; }
+  return out;
+}
+
+async function readStreamU8(stream) {
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(new Uint8Array(chunk));
+  return concatU8(chunks);
+}
+
+async function checksumFile(filePath) {
+  const hash = createHash('sha256');
+  for await (const chunk of createReadStream(filePath)) hash.update(chunk);
+  return `sha256:${hash.digest('hex')}`;
+}
+
+// Streaming equivalent of parseDisaCompilationArchive that never holds the full
+// (~352 MB) compilation buffer in memory. yauzl reads the outer archive from its
+// central directory and yields one bounded entry stream at a time; each inner
+// benchmark ZIP is then unzipped in isolation. Peak memory is one benchmark
+// package plus the parser working set. Produces byte-identical records to the
+// buffer path and the same file-content sha256.
+export async function parseDisaCompilationStream(filePath, { artifactUrl, sourceKeys, hintKind }) {
+  const accumulator = createAccumulator();
+  const failed = [];
+  const inventory = [];
+
+  const handleXccdf = (entryPath, xmlU8) => {
+    if (shouldIgnoreEntry(entryPath)) {
+      inventory.push({ entryPath, status: 'excluded', reason: 'restricted, sunset, draft, or supplemental content' });
+      return;
+    }
+    if (!/\.(xml|xccdf)$/i.test(entryPath)) {
+      inventory.push({ entryPath, status: 'ignored', reason: 'not an XML/XCCDF file' });
+      return;
+    }
+    const xml = strFromU8(xmlU8);
+    const pathLower = entryPath.toLowerCase();
+    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
+    try {
+      const document = parseDisaXccdf(xml, {
+        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        artifactUrl,
+        entryPath,
+        hintKind: pathHint,
+      });
+      appendDocument(accumulator, document);
+      inventory.push({
+        entryPath,
+        status: 'ingested',
+        catalogKind: document.catalogKind,
+        benchmarkId: document.records[0]?.metadata?.benchmark_id || null,
+        recordCount: document.records.length,
+      });
+    } catch (error) {
+      failed.push({ entryPath, reason: error.message });
+      inventory.push({ entryPath, status: 'failed', reason: error.message });
+    }
+  };
+
+  const handleInnerZip = (entryPath, zipU8) => {
+    let inner;
+    try {
+      inner = unzipSync(zipU8);
+    } catch (error) {
+      failed.push({ entryPath, reason: `inner unzip failed: ${error.message}` });
+      inventory.push({ entryPath, status: 'failed', reason: `inner unzip failed: ${error.message}` });
+      return;
+    }
+    for (const sub of walkArchiveEntries(inner, entryPath)) handleXccdf(sub.entryPath, sub.value);
+  };
+
+  const outer = await yauzl.openPromise(filePath, { lazyEntries: true, validateEntrySizes: true });
+  try {
+    for await (const entry of outer.eachEntry()) {
+      if (/\/$/.test(entry.fileName)) continue;
+      const isZip = /\.zip$/i.test(entry.fileName);
+      const isXml = /\.(xml|xccdf)$/i.test(entry.fileName);
+      if (!isZip && !isXml) {
+        inventory.push({ entryPath: entry.fileName, status: 'ignored', reason: 'not an XML/XCCDF file' });
+        continue;
+      }
+      try {
+        const entryStream = await outer.openReadStreamPromise(entry);
+        const value = await readStreamU8(entryStream);
+        if (isZip) handleInnerZip(entry.fileName, value);
+        else handleXccdf(entry.fileName, value);
+        // The complete library is large enough that retaining a completed
+        // inner archive until V8 chooses its next collection risks exhausting
+        // an 8 GB developer machine. Production CI may expose GC too; this is
+        // a memory-pressure hint only and never changes parsed output.
+        globalThis.gc?.();
+      } catch (error) {
+        failed.push({ entryPath: entry.fileName, reason: error.message });
+        inventory.push({ entryPath: entry.fileName, status: 'failed', reason: error.message });
+      }
+    }
+  } finally {
+    outer.close();
+  }
+
+  const checksumValue = await checksumFile(filePath);
+  const stig = createDocument(sourceKeys.stig, artifactUrl, checksumValue, accumulator.records.stig, accumulator.sourceMetadata.stig);
+  const srg = createDocument(sourceKeys.srg, artifactUrl, checksumValue, accumulator.records.srg, accumulator.sourceMetadata.srg);
+  const relationships = createRelationshipDocument(
+    artifactUrl,
+    checksumValue,
+    accumulator.relationshipSeeds,
+    accumulator.sourceMetadata.stig.source_version ? accumulator.sourceMetadata.stig : accumulator.sourceMetadata.srg,
+  );
+  return { stig, srg, relationships, checksum: checksumValue, failed, inventory };
 }

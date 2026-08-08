@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
 
 const registry = loadSourceRegistry(JSON.parse(readFileSync('data/source-registry.json', 'utf8')));
 const graph = {
   sources: JSON.parse(readFileSync('data/generated/sources.json', 'utf8')).sources,
-  nodes: JSON.parse(readFileSync('data/generated/nodes.json', 'utf8')).nodes,
-  edges: JSON.parse(readFileSync('data/generated/edges.json', 'utf8')).edges,
-  evidence: JSON.parse(readFileSync('data/generated/evidence.json', 'utf8')).evidence,
+  nodes: readGeneratedCollection(join(dirname(fileURLToPath(import.meta.url)), '..'), 'nodes').nodes,
+  edges: readGeneratedCollection(join(dirname(fileURLToPath(import.meta.url)), '..'), 'edges').edges,
+  evidence: readGeneratedCollection(join(dirname(fileURLToPath(import.meta.url)), '..'), 'evidence').evidence,
   findings: JSON.parse(readFileSync('data/generated/graph-health.json', 'utf8')).findings,
 };
 const buildManifest = JSON.parse(readFileSync('data/generated/build-manifest.json', 'utf8')).build_manifest;

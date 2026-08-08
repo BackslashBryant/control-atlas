@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T21:20:38.722Z",
-  "hydrated": 36,
+  "generated_at": "2026-08-08T22:19:25.203Z",
+  "hydrated": 37,
   "removed_orphans": [],
   "results": [
     {
@@ -238,10 +238,10 @@
       "status": "OK",
       "http": 200,
       "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
-      "sha256": "sha256:4db0df6b9952648cdeaf99a59f64e4778095b7a5816fb5356664c040c2d729aa",
+      "sha256": "sha256:bd6a03a07c90f593ff4a6905a01ce5cdd7644351fcd1c7d06074d4048cddb9fb",
       "byte_length": 154957,
       "record_count": null,
-      "retrieved_at": "2026-08-07"
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-isoo-cui-regulation",
@@ -272,6 +272,16 @@
       "byte_length": 349827,
       "record_count": 219,
       "retrieved_at": "2026-08-07"
+    },
+    {
+      "id": "artifact-nist-csf-reference-tool-export",
+      "status": "OK",
+      "http": 200,
+      "url": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
+      "sha256": "sha256:1407844d11e32be7c128723810b595ba5d8a64d1f78a1a8045667b9170a3b732",
+      "byte_length": 144519,
+      "record_count": null,
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-nist-fips-199",
@@ -306,52 +316,53 @@
     {
       "id": "artifact-disa-compilation-zip",
       "status": "OK",
-      "http": 200,
+      "http": "range-verified",
       "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
       "sha256": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
       "byte_length": 368971055,
-      "record_count": null,
-      "retrieved_at": "2026-07-13"
+      "record_count": 0,
+      "retrieved_at": "2026-08-08",
+      "attestation": "fresh DISA compilation range download and parse"
     },
     {
       "id": "artifact-disa-stig-library",
       "status": "OK",
       "http": "local",
       "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "sha256": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c",
-      "byte_length": 2140164,
+      "sha256": "sha256:f4017407e7155471395d88b59154a6280648a42503bf94cfc230b784f012920c",
+      "byte_length": 51135007,
       "record_count": null,
-      "retrieved_at": "2026-07-04"
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-disa-srg-library",
       "status": "OK",
       "http": "local",
       "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "sha256": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562",
-      "byte_length": 3991453,
+      "sha256": "sha256:36c27cf13a397e28a4492fe85c030481b7847728c6ff9d9d89df1ba0d32cc62f",
+      "byte_length": 6584035,
       "record_count": null,
-      "retrieved_at": "2026-07-04"
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-disa-stig-srg-cci-references",
       "status": "OK",
       "http": "local",
       "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "sha256": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542",
-      "byte_length": 893612,
+      "sha256": "sha256:668d049b8a490d008c33dcd06cd8a1f70dfe1fcb7dd62841e5270944cd998dd5",
+      "byte_length": 13257105,
       "record_count": null,
-      "retrieved_at": "2026-07-04"
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-nist-800-53b-baselines",
       "status": "OK",
       "http": "local",
       "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
-      "sha256": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
+      "sha256": "sha256:9d25f3d1d0d3fd0222da2a2fc72958e88ec4733bcecb84b0586f732409310810",
       "byte_length": 1865,
       "record_count": null,
-      "retrieved_at": "2026-06-09"
+      "retrieved_at": "2026-08-08"
     },
     {
       "id": "artifact-control-atlas-structure",

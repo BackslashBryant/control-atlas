@@ -58,6 +58,11 @@ export type RuntimeBundle = {
   runtime: ReturnType<typeof createFederalGraphRuntime>;
   templateRegistry: TemplateRegistry;
   catalogSummaries?: Array<Record<string, any>>;
+  catalogPublishedGroups?: Array<{
+    name: string;
+    path: string;
+    record_count: number;
+  }>;
   catalogRecordsReady?: boolean;
   officialArtifactRegistry?: OfficialArtifactRegistry;
   complianceWorkflowRegistry?: ComplianceWorkflowRegistry;
@@ -143,6 +148,7 @@ type LibrarySearchBootstrap = {
 
 export type RuntimeArtifactPlan = {
   catalogBootstrap: boolean;
+  catalogFamily: string;
   catalogId: string;
   commons: boolean;
   fullGraph: boolean;
@@ -151,6 +157,15 @@ export type RuntimeArtifactPlan = {
   registries: boolean;
   sources: boolean;
 };
+
+function isAtlasOrientationState(state: ViewState) {
+  return (
+    state.view === "atlas-map" &&
+    !state.node &&
+    (!state.atlasAxis ||
+      (state.atlasAxis === "landscape" && !state.atlasFramework))
+  );
+}
 
 export function runtimeArtifactPlan(
   state: ViewState,
@@ -173,7 +188,7 @@ export function runtimeArtifactPlan(
     (state.view === "atlas-map" &&
       !state.node &&
       Boolean(
-        state.atlasAxis ||
+        (state.atlasAxis && state.atlasAxis !== "landscape") ||
           state.atlasFramework ||
           state.atlasBaseline ||
           state.atlasFamily ||
@@ -196,6 +211,8 @@ export function runtimeArtifactPlan(
       buildDetailRequested,
     catalogId:
       state.view === "catalog-detail" ? state.catalog : "",
+    catalogFamily:
+      state.view === "catalog-detail" ? state.family : "",
     commons:
       state.view === "commons" ||
       state.view === "commons-detail" ||
@@ -242,7 +259,7 @@ export async function preloadRuntimeArtifacts(state: ViewState) {
   const plan = runtimeArtifactPlan(state);
   const requests: Array<Promise<unknown>> = [];
   const add = (path: string) => requests.push(fetchArtifact(path));
-  const atlasLanding = state.view === "atlas-map" && !state.node && !state.atlasAxis;
+  const atlasLanding = isAtlasOrientationState(state);
 
   if ((plan.librarySearch && !atlasLanding) || plan.fullGraph) {
     add(artifactPath("library-search.json"));
@@ -411,6 +428,21 @@ async function fetchCollection(path: string, key: string) {
   if (artifact.schema_version !== "1.0" || !Array.isArray(artifact[key])) {
     throw new Error(`Invalid ${key} graph artifact.`);
   }
+  const shards = artifact.sharded_collection?.shards;
+  if (Array.isArray(shards)) {
+    const chunks = await Promise.all(
+      shards.map((shard: { path?: string }) => {
+        if (!shard.path) throw new Error(`Invalid ${key} graph shard.`);
+        return fetchArtifact(artifactPath(shard.path));
+      }),
+    );
+    return chunks.flatMap((chunk) => {
+      if (!Array.isArray(chunk[key])) {
+        throw new Error(`Invalid ${key} graph shard.`);
+      }
+      return chunk[key];
+    });
+  }
   return artifact[key];
 }
 
@@ -550,8 +582,28 @@ async function loadLibrarySearchBootstrap(): Promise<LibrarySearchBootstrap> {
       artifactPath("library-search.json"),
     )) as {
       library_search: LibrarySearchArtifact;
+      sharded_collection?: {
+        shards?: Array<{ path?: string }>;
+      };
     };
-    return { librarySearch: artifact.library_search };
+    const shards = artifact.sharded_collection?.shards || [];
+    if (!shards.length) return { librarySearch: artifact.library_search };
+    const chunks = await Promise.all(
+      shards.map((shard) => {
+        if (!shard.path) throw new Error("Invalid library search shard.");
+        return fetchArtifact(artifactPath(shard.path)) as Promise<{
+          library_search?: { documents?: Array<Record<string, unknown>> };
+        }>;
+      }),
+    );
+    return {
+      librarySearch: {
+        ...artifact.library_search,
+        documents: chunks.flatMap(
+          (chunk) => chunk.library_search?.documents || [],
+        ),
+      },
+    };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Unable to load the library search artifact: ${message}`, {
@@ -801,12 +853,35 @@ async function loadRouteScopedPhase(
         | { catalog_bootstrap?: CatalogBootstrap }
         | null
     )?.catalog_bootstrap || {};
-  const catalogNodes =
+  const catalogRecords =
     (
       catalogRecordsArtifact as
-        | { catalog_records?: { nodes?: Array<Record<string, any>> } }
+        | {
+            catalog_records?: {
+              nodes?: Array<Record<string, any>>;
+              published_groups?: Array<{
+                name: string;
+                path: string;
+                record_count: number;
+              }>;
+              sharded_by?: string;
+            };
+          }
         | null
-    )?.catalog_records?.nodes || [];
+    )?.catalog_records;
+  const catalogPublishedGroups = catalogRecords?.published_groups || [];
+  const selectedPublishedGroup = catalogPublishedGroups.find(
+    (group) => group.name === plan.catalogFamily,
+  );
+  const selectedCatalogRecordsArtifact = selectedPublishedGroup
+    ? ((await fetchArtifact(
+        artifactPath(`catalog-records/${selectedPublishedGroup.path}`),
+      )) as { catalog_records?: { nodes?: Array<Record<string, any>> } })
+    : null;
+  const catalogNodes =
+    selectedCatalogRecordsArtifact?.catalog_records?.nodes ||
+    catalogRecords?.nodes ||
+    [];
   const recordNodes = record?.nodes || [];
   const nodes = catalogNodes.length
     ? catalogNodes
@@ -849,6 +924,7 @@ async function loadRouteScopedPhase(
         (commonsDatasetRaw as CommonsResourceDataset) || undefined,
       mappingSources: catalogBootstrap.mapping_sources || {},
       catalogSummaries: catalogBootstrap.catalogs || [],
+      catalogPublishedGroups,
       catalogRecordsReady: plan.catalogId ? true : undefined,
       routeReady: true,
       graphReady: false,
@@ -917,7 +993,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
     if (
       handlers.state.view === "atlas-map" &&
       !handlers.state.node &&
-      !handlers.state.atlasAxis &&
+      isAtlasOrientationState(handlers.state) &&
       !plan.fullGraph
     ) {
       const orientationPhase = await loadRouteScopedPhase({

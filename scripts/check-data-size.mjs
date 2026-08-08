@@ -19,9 +19,14 @@ function checkCompleteSearchBudget() {
     return;
   }
 
-  const compressedBytes = gzipSync(readFileSync(artifactPath), {
-    level: 9,
-  }).byteLength;
+  const artifact = JSON.parse(readFileSync(artifactPath, "utf8"));
+  const shardPaths = artifact.sharded_collection?.shards?.map((shard) => shard.path);
+  const paths = Array.isArray(shardPaths) && shardPaths.length
+    ? shardPaths.map((path) => join("data", "generated", path))
+    : [artifactPath];
+  const compressedBytes = Math.max(
+    ...paths.map((path) => gzipSync(readFileSync(path), { level: 9 }).byteLength),
+  );
   if (compressedBytes > MAX_COMPLETE_SEARCH_GZIP_BYTES) {
     throw new Error(
       `Complete library search artifact exceeds ${MAX_COMPLETE_SEARCH_GZIP_BYTES} compressed bytes: ${compressedBytes}`,
@@ -29,11 +34,13 @@ function checkCompleteSearchBudget() {
   }
 
   console.log(
-    `Complete search budget check passed: ${compressedBytes} compressed bytes`,
+    `Search shard budget check passed: largest shard ${compressedBytes} compressed bytes`,
   );
 }
 
-const files = walk("data");
+// Raw publisher snapshots are refresh evidence, not static browser payloads.
+// The deployment budget applies to the generated runtime artifacts.
+const files = walk(join("data", "generated"));
 let total = 0;
 for (const file of files) {
   const size = statSync(file).size;

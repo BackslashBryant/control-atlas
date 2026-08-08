@@ -2153,6 +2153,27 @@
       "license_or_use": "NIST Terms of Use"
     },
     {
+      "id": "artifact-nist-csf-reference-tool-export",
+      "publication_source_id": "nist-csf-2",
+      "name": "NIST CSF 2.0 Reference Tool All-in-One Export",
+      "display_name": "CSF 2.0 Reference Tool Export",
+      "source_role": "primary_data",
+      "authority_class": "publisher",
+      "format": "spreadsheet",
+      "version": "CSF 2.0 online export",
+      "lifecycle_status": "active",
+      "retrieval_method": "direct_file_import",
+      "retrieved_at": "2026-08-08",
+      "artifact_url": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
+      "byte_length": 144519,
+      "sha256": "sha256:1407844d11e32be7c128723810b595ba5d8a64d1f78a1a8045667b9170a3b732",
+      "parser": "csf-reference-tool-xlsx",
+      "parser_version": "1.0.0",
+      "record_count": 106,
+      "relationship_count": 0,
+      "license_or_use": "NIST Terms of Use"
+    },
+    {
       "id": "artifact-nist-ssdf",
       "publication_source_id": "nist-ssdf",
       "name": "NIST SP 800-218 Secure Software Development Framework Artifact",
@@ -2244,13 +2265,13 @@
       "source_role": "enrichment",
       "authority_class": "publisher",
       "format": "html",
-      "version": "2026-08-07",
+      "version": "2026-08-08",
       "lifecycle_status": "active",
       "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-08-07",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://www.archives.gov/cui/registry/category-list",
       "byte_length": 53932,
-      "sha256": "sha256:daff0bd019663539069bda216e418147b78b44e19198feb76e2781f0c9595fa4",
+      "sha256": "sha256:13b8c9cb5559df6fab4a2974ca318d2de891f2bd9a9058f1b17f21449d8c552e",
       "parser": "nara-cui-registry-html",
       "parser_version": "1.0.0",
       "record_count": 127,
@@ -2289,10 +2310,10 @@
       "version": "2026-08-07",
       "lifecycle_status": "active",
       "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-08-07",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
       "byte_length": 154957,
-      "sha256": "sha256:4db0df6b9952648cdeaf99a59f64e4778095b7a5816fb5356664c040c2d729aa",
+      "sha256": "sha256:bd6a03a07c90f593ff4a6905a01ce5cdd7644351fcd1c7d06074d4048cddb9fb",
       "parser": "ai-mil-responsible-ai-html",
       "parser_version": "1.0.0",
       "record_count": 0,
@@ -2331,14 +2352,14 @@
       "version": "multiple (see per-record source.version)",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-07-04",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "byte_length": 2140164,
-      "sha256": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c",
+      "byte_length": 51135007,
+      "sha256": "sha256:f4017407e7155471395d88b59154a6280648a42503bf94cfc230b784f012920c",
       "parser": "xccdf",
       "parser_version": "1.0.0",
-      "record_count": 615,
-      "relationship_count": 614,
+      "record_count": 17231,
+      "relationship_count": 17230,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2352,14 +2373,14 @@
       "version": "multiple (see per-record source.version)",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-07-04",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "byte_length": 3991453,
-      "sha256": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562",
+      "byte_length": 6584035,
+      "sha256": "sha256:36c27cf13a397e28a4492fe85c030481b7847728c6ff9d9d89df1ba0d32cc62f",
       "parser": "xccdf",
       "parser_version": "1.0.0",
-      "record_count": 1533,
-      "relationship_count": 1532,
+      "record_count": 2542,
+      "relationship_count": 2541,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2373,14 +2394,14 @@
       "version": "multiple (see per-relationship source_locator)",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-07-04",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
-      "byte_length": 893612,
-      "sha256": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542",
+      "byte_length": 13257105,
+      "sha256": "sha256:668d049b8a490d008c33dcd06cd8a1f70dfe1fcb7dd62841e5270944cd998dd5",
       "parser": "xccdf",
       "parser_version": "1.0.0",
       "record_count": 0,
-      "relationship_count": 2123,
+      "relationship_count": 28412,
       "license_or_use": "DISA STIG Terms of Use"
     },
     {
@@ -2478,10 +2499,10 @@
       "version": "2026-06-09",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-06-09",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
       "byte_length": 1865,
-      "sha256": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
+      "sha256": "sha256:9d25f3d1d0d3fd0222da2a2fc72958e88ec4733bcecb84b0586f732409310810",
       "parser": "oscal-profile",
       "parser_version": "1.5.0",
       "record_count": 5,
@@ -2716,7 +2737,7 @@
       "parser": "d3fend-json-ld",
       "parser_version": "1.0.0",
       "record_count": 0,
-      "relationship_count": 3163,
+      "relationship_count": 3796,
       "license_or_use": "MITRE D3FEND Terms of Use"
     },
     {
@@ -2772,7 +2793,7 @@
       "version": "July 2026",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-07-13",
+      "retrieved_at": "2026-08-08",
       "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
       "byte_length": 368971055,
       "sha256": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
@@ -2788,7 +2809,7 @@
       "catalog_id": "csf-2",
       "publication_source_id": "nist-csf-2",
       "primary_artifact_ids": [
-        "artifact-nist-csf-2"
+        "artifact-nist-csf-reference-tool-export"
       ],
       "enrichment_artifact_ids": [],
       "mapping_source_ids": [
@@ -2798,8 +2819,14 @@
       "assessment_source_ids": [],
       "automation_source_ids": [],
       "reconciliation_source_ids": [
-        "artifact-nist-informative-references"
-      ]
+        "artifact-nist-csf-2"
+      ],
+      "expected_inventory": {
+        "basis": "The current NIST CSF 2.0 Reference Tool all-in-one export independently enumerates the active CSF Core subcategories; OSCAL supplies the structural reconciliation.",
+        "evidence_locator": "data/csf-reference-tool-manifest.json#reconciliation.subcategories",
+        "imported_evidence_locator": "data/csf-subcategories.json#reconciliation.subcategories",
+        "exclusions": []
+      }
     },
     {
       "catalog_id": "nist-800-53",
@@ -2883,7 +2910,33 @@
       "reconciliation_source_ids": [
         "artifact-stigviewer-catalog",
         "artifact-nuwcdivnpt-stig-manager"
-      ]
+      ],
+      "expected_inventory": {
+        "evidence_locator": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+        "imported_evidence_locator": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+        "basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
+        "exclusions": []
+      }
+    },
+    {
+      "catalog_id": "disa-srg",
+      "publication_source_id": "disa-srg-library",
+      "primary_artifact_ids": [
+        "artifact-disa-srg-library"
+      ],
+      "enrichment_artifact_ids": [],
+      "mapping_source_ids": [
+        "artifact-disa-stig-srg-cci-references"
+      ],
+      "assessment_source_ids": [],
+      "automation_source_ids": [],
+      "reconciliation_source_ids": [],
+      "expected_inventory": {
+        "evidence_locator": "data/disa-artifact-manifest.json#reconciliation.srg_records_parsed",
+        "imported_evidence_locator": "data/disa-artifact-manifest.json#reconciliation.srg_records_parsed",
+        "basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = SRG XCCDF requirement records across all ingested benchmarks.",
+        "exclusions": []
+      }
     }
   ],
   "sources": [
@@ -3222,7 +3275,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see per-record source.version)",
+      "version": "V3R7",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -3282,7 +3335,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see per-record source.version)",
+      "version": "V2R2",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -3402,7 +3455,7 @@
       "mandate_basis": [
         "DoD cybersecurity program"
       ],
-      "version": "multiple (see per-relationship source_locator)",
+      "version": "V3R7",
       "retrieved_at": "2026-07-04",
       "retrieval_method": "download",
       "artifact_url": "https://public.cyber.mil/stigs/downloads/",
@@ -4197,7 +4250,7 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-05-12",
+      "version": "2026-08-05",
       "retrieved_at": "2026-06-19",
       "retrieval_method": "download",
       "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
@@ -4224,7 +4277,7 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-05-12",
+      "version": "2026-08-05",
       "retrieved_at": "2026-06-19",
       "retrieval_method": "download",
       "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
@@ -4278,7 +4331,7 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-07-16",
+      "version": "2026-08-08",
       "retrieved_at": "2026-06-19",
       "retrieval_method": "api",
       "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
@@ -4364,7 +4417,7 @@
         "FISMA",
         "FIPS 200"
       ],
-      "version": "2.0-draft",
+      "version": "2.0-final",
       "retrieved_at": "2024-02-20",
       "retrieval_method": "download",
       "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
@@ -4576,9 +4629,9 @@
       {
         "source_id": "nist-oscal",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:604a2211ee8a552336549b1c737f446933c409c4f0f770a540538b3cf070458c"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:59cd4f90a51561452b620d5b47f7702b549b502844d91363efd346495e9986bf"
       },
       {
         "source_id": "nist-800-53",
@@ -4611,16 +4664,16 @@
       {
         "source_id": "nist-800-171-rev2",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:104e771de71e7bb236cfc2d1dd61a5f2e3cdd5d27a1dd410bcb06ec59cf25e01"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:da79c181fd0f4c2298c0474608b4ea559469a09955b4fb9c5e7a70b498109540"
       },
       {
         "source_id": "nist-800-172-rev3",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:4f4c7680f6939aabbf248a8f155730eca85272ddc39c92f3e122390f6398fa88"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:8402917cf67e528d53193c2ad056e7e02e35e7d330d0095f6cc5863e0b406e6b"
       },
       {
         "source_id": "isoo-cui-regulation",
@@ -4639,93 +4692,93 @@
       {
         "source_id": "disa-cci-list",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:b37b11384fa8e13b8a4df0d024c697ba6809ecd100ef56bd76136b0c23d340d4"
       },
       {
         "source_id": "disa-stig-library",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:cee04c6ae0223d31412bb947791c22a6406d1bffcfd9f074ae2907cf89cf155c"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:69ae1bef675f654927c4d42485ff90b4b4a3e4efa1b0b533792e1e41922ba9dd"
       },
       {
         "source_id": "disa-srg-library",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:68b38ffc7f2188e75fed351042a336a862e63b5245b6d3f9040659005c4a9562"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:aeae45f2b89005f215890b9fd3841bb7ceb1c9e2aff3dd5beb7fe7440127abf0"
       },
       {
         "source_id": "disa-stig-srg-cci-references",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:cb75f1e7a3adbed546895f514e2e7a6faef2544f32ec1489c150949556d07542"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:b166976a9baba6846fedb2b65e76c435f60b2bcc174b84f9a4de34d08b1fe89a"
       },
       {
         "source_id": "cyber-mil-stig-compilations",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "cyber-mil-stig-downloads",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "cyber-mil-stig-gpo",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "stigviewer-catalog",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "stigviewer-clkb-api",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "nuwcdivnpt-github-org",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "nuwcdivnpt-stig-manager",
         "sync_model": "link_out",
-        "last_checked": "2026-07-16",
+        "last_checked": "2026-08-08",
         "last_imported": null,
         "hash": null
       },
       {
         "source_id": "nist-ai-rmf-playbook",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:d361279c73c695dd21aca7c66ee744a97a38441da88372297590c51db89dc374"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:7f5b942ef16b1efacc76d6eb1f58d393dd1d43c51fd9e9e7cd655f0b6ec50616"
       },
       {
         "source_id": "nist-ssdf-oscal",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:3dfc33408f60a9674edd05f41c75086b0d61f073b8b9908482f08a05ae9827e5"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:d711a85a4f88f7053544eead9e29d4d22846b60c85d01f01140af292a2d8e6f6"
       },
       {
         "source_id": "dod-cmmc-rule",
@@ -4737,16 +4790,16 @@
       {
         "source_id": "fedramp-rev5",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:ffb7d9fad51a0c64f0ecfc8f2b53e7980247cc5405281de652a2de29f053fa98"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:a2bb86150a66f34a3c70e68c6361cd3d85fd46b92c3c474be6bc007dc355d860"
       },
       {
         "source_id": "fedramp-2026-rules",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:3269d6ea6febcde7a404950186327dd07b756a32b20d727c2efad7c2b9255833"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:69b96bf9a3b53b40c8b35af8b5192b2c8a9455223e7cb4ba93dd73d395345d19"
       },
       {
         "source_id": "dod-rai-toolkit",
@@ -4758,9 +4811,9 @@
       {
         "source_id": "nist-800-53b-baselines",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398"
       },
       {
         "source_id": "nist-fips-199",
@@ -4786,9 +4839,9 @@
       {
         "source_id": "nist-800-53a-assessment-procedures",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:604a2211ee8a552336549b1c737f446933c409c4f0f770a540538b3cf070458c"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:46f808428e0d517f1e0c13a36296e746060b61a4dc36e391252c9fbc7887e13d"
       },
       {
         "source_id": "nist-csf-53-supplemental",
@@ -4807,16 +4860,16 @@
       {
         "source_id": "nist-800-171-oscal-mappings",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:ab869046d7d6e0dc24c4fa4ed81b42eeba696c904344bb18ce649735330999e5"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:6edfe9c55fb66ff884220cc5863c6ee1431af993a8004c5a9b9149ae1d0d2c55"
       },
       {
         "source_id": "disa-cci-nist-references",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:cbe530bfa300eb783cdae2083e791f719439ef7c15ace8740328f79f10ef985e"
       },
       {
         "source_id": "nist-800-53-rev4-rev5-crosswalk",
@@ -4828,30 +4881,30 @@
       {
         "source_id": "mitre-attack-enterprise",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:f8973b763572c3c573135f635705ac3375f6bec1cc71a9ac2c3a079f953fa9b8"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:2ad89bef5a5e72438977a945f45401c078872d5950738eb7a74d45f47e04859b"
       },
       {
         "source_id": "mitre-attack-ics",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:0c93de2d1d4a469cd0c09a416e298313387611849ef47f8db4b95272f3387510"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:55349b0908badf25f6e450ddc1819afba87d2455e0822ff36bfd1d94b131f782"
       },
       {
         "source_id": "mitre-d3fend-ontology",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:1844a27572d6a6e3af2333317339704f8f519bfe2079bd2ebceed2cc5d0cb1d3"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:78b218e94e19e5854056b7190efd0be9de1120b55fc671574d4531641b153aaa"
       },
       {
         "source_id": "mitre-d3fend-mappings",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:1844a27572d6a6e3af2333317339704f8f519bfe2079bd2ebceed2cc5d0cb1d3"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:26ae40742c04a30b5c6905988838a6c2fc1fa4cc7a85ad430990a914293958fd"
       },
       {
         "source_id": "mitre-cis-cci-mappings",
@@ -4870,9 +4923,9 @@
       {
         "source_id": "nist-olir-csf2-to-sp800-53",
         "sync_model": "auto_synced",
-        "last_checked": "2026-07-16",
-        "last_imported": "2026-07-16",
-        "hash": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f"
+        "last_checked": "2026-08-08",
+        "last_imported": "2026-08-08",
+        "hash": "sha256:31eeb5114751a86f0e216e88a73e10f858165f7aa08fee3cfc8b7730263ca0a1"
       },
       {
         "source_id": "nist-olir-csf2-to-sp800-171",

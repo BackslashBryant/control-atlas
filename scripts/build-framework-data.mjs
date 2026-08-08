@@ -8,6 +8,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
@@ -48,6 +49,8 @@ const RUNTIME_COLLECTIONS = [
   "evidence",
   "graph-health",
 ];
+const SHARDED_RUNTIME_COLLECTIONS = new Set(["nodes", "edges", "evidence"]);
+const RUNTIME_COLLECTION_SHARD_COUNT = 64;
 const GOVERNANCE_FILES = [
   "build-manifest.json",
   "source-manifests.json",
@@ -648,7 +651,11 @@ function aliasArtifact(id) {
 function attachNodeProvenance(node, sourceId, registry) {
   const source = registry.byId.get(sourceId);
   node.publication_source_id = sourceId;
-  node.artifact_ids = node.artifact_ids || [aliasArtifact(`artifact-${sourceId}`)];
+  node.artifact_ids = node.artifact_ids || [
+    aliasArtifact(node.metadata?.primary_artifact_id || `artifact-${sourceId}`),
+    ...(node.metadata?.contributing_artifact_ids || []).map(aliasArtifact),
+    ...(node.metadata?.enrichment_artifact_ids || []).map(aliasArtifact),
+  ];
   node.provenance_assertions = node.provenance_assertions || [
     {
       authority_class: source?.authority_class || "publisher",
@@ -854,6 +861,11 @@ function buildNodes(registry) {
             superseded_by: record.metadata?.superseded_by || null,
             discussion: record.metadata?.discussion || null,
             related_controls: record.metadata?.related_controls || null,
+            implementation_examples: record.metadata?.implementation_examples || null,
+            informative_references: record.metadata?.informative_references || null,
+            primary_artifact_id: record.metadata?.primary_artifact_id || null,
+            contributing_artifact_ids: record.metadata?.contributing_artifact_ids || null,
+            enrichment_artifact_ids: record.metadata?.enrichment_artifact_ids || null,
             // Duplicated onto the control's own node (not just the separate
             // assessment_procedure node buildAssessmentNode below emits) so a
             // viewer sees it without a full-graph fetch: atlas-neighborhood
@@ -1790,6 +1802,10 @@ function artifact(collection, values, generatedAt) {
   };
 }
 
+function collectionFingerprint(values) {
+  return createHash("sha256").update(JSON.stringify(values)).digest("hex");
+}
+
 function existingGeneratedAt(collections) {
   let generatedAt = null;
   for (const [name, values] of Object.entries(collections)) {
@@ -1800,6 +1816,13 @@ function existingGeneratedAt(collections) {
     if (!existing.generated_at || existing.schema_version !== "1.0")
       return null;
     if (generatedAt && existing.generated_at !== generatedAt) return null;
+    if (SHARDED_RUNTIME_COLLECTIONS.has(name)) {
+      if (existing.sharded_collection?.content_sha256 !== collectionFingerprint(values)) {
+        return null;
+      }
+      generatedAt ||= existing.generated_at;
+      continue;
+    }
     if (JSON.stringify(existing[collection]) !== JSON.stringify(values))
       return null;
     generatedAt = existing.generated_at;
@@ -1812,7 +1835,8 @@ function loadExistingCollections() {
   for (const name of RUNTIME_COLLECTIONS) {
     const path = join(GENERATED, `${name}.json`);
     if (!existsSync(path)) continue;
-    previous[name] = readJson(path);
+    const existing = readJson(path);
+    previous[name] = existing.sharded_collection ? null : existing;
   }
   return previous;
 }
@@ -1894,6 +1918,13 @@ function buildLibraryDocuments(graph) {
   const sourceById = new Map(
     graph.sources.map((source) => [source.id, source]),
   );
+  const publishedConnectionCounts = new Map();
+  for (const edge of graph.edges) {
+    if (edge.publication_status && edge.publication_status !== "published") continue;
+    for (const nodeId of [edge.source_node_id, edge.target_node_id]) {
+      publishedConnectionCounts.set(nodeId, (publishedConnectionCounts.get(nodeId) || 0) + 1);
+    }
+  }
   return graph.nodes.map((node) => {
     const source = sourceById.get(node.source_id);
     const itemId = node.metadata?.item_id || node.id;
@@ -1910,6 +1941,7 @@ function buildLibraryDocuments(graph) {
       catalog_id: node.metadata?.catalog_id || "",
       control_family: node.metadata?.family || "",
       severity: node.metadata?.severity || "",
+      published_connection_count: publishedConnectionCounts.get(node.id) || 0,
     };
   });
 }
@@ -2432,10 +2464,6 @@ export function buildFrameworkData() {
     generatedAt,
   );
   const librarySearch = buildLibrarySearch(graph);
-  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards({
-    ...graph,
-    nodes: strippedGraphNodes,
-  });
   const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const evidenceById = new Map(
@@ -2504,7 +2532,7 @@ export function buildFrameworkData() {
       ]),
     ),
   };
-  const catalogRecords = new Map();
+const catalogRecords = new Map();
   for (const node of strippedGraphNodes) {
     const catalogId = node.metadata?.catalog_id;
     if (!catalogId) continue;
@@ -2524,7 +2552,8 @@ export function buildFrameworkData() {
     if (
       entry === "library-search" ||
       entry === "atlas-neighborhood" ||
-      entry === "catalog-records"
+      entry === "catalog-records" ||
+      entry === "graph-data"
     ) {
       rmSync(entryPath, { recursive: true, force: true });
       continue;
@@ -2535,6 +2564,36 @@ export function buildFrameworkData() {
   }
   for (const [name, values] of Object.entries(collections)) {
     const collection = name === "graph-health" ? "findings" : name;
+    if (SHARDED_RUNTIME_COLLECTIONS.has(name)) {
+      const shardDir = join(GENERATED, "graph-data", name);
+      mkdirSync(shardDir, { recursive: true });
+      const chunkSize = Math.ceil(values.length / RUNTIME_COLLECTION_SHARD_COUNT);
+      const shards = [];
+      for (let index = 0; index < values.length; index += chunkSize) {
+        const shardId = String(shards.length).padStart(3, "0");
+        const path = `graph-data/${name}/${shardId}.json`;
+        const chunk = values.slice(index, index + chunkSize);
+        writeFileSync(
+          join(GENERATED, path),
+          `${JSON.stringify(artifact(collection, chunk, generatedAt))}\n`,
+          "utf8",
+        );
+        shards.push({ path, record_count: chunk.length });
+      }
+      const manifest = artifact(collection, [], generatedAt);
+      manifest.sharded_collection = {
+        collection,
+        record_count: values.length,
+        content_sha256: collectionFingerprint(values),
+        shards,
+      };
+      writeFileSync(
+        join(GENERATED, `${name}.json`),
+        `${JSON.stringify(manifest)}\n`,
+        "utf8",
+      );
+      continue;
+    }
     const value = artifact(collection, values, generatedAt);
     writeFileSync(
       join(GENERATED, `${name}.json`),
@@ -2578,14 +2637,138 @@ export function buildFrameworkData() {
     "utf8",
   );
 
+  // Search remains comprehensive, but it is not an initial-route payload.
+  // Split it into bounded static files so a reader opens only the search data
+  // when they search, while preserving every record and its title.
+  const librarySearchDir = join(GENERATED, "library-search");
+  mkdirSync(librarySearchDir, { recursive: true });
+  const searchChunkSize = Math.ceil(librarySearch.documents.length / 64);
+  const searchShards = [];
+  for (let index = 0; index < librarySearch.documents.length; index += searchChunkSize) {
+    const shardId = String(searchShards.length).padStart(3, "0");
+    const path = `library-search/${shardId}.json`;
+    const documents = librarySearch.documents.slice(index, index + searchChunkSize);
+    writeFileSync(
+      join(GENERATED, path),
+      `${JSON.stringify(artifact("library_search", { documents }, generatedAt))}\n`,
+      "utf8",
+    );
+    searchShards.push({ path, record_count: documents.length });
+  }
+  const librarySearchManifest = artifact(
+    "library_search",
+    { ...librarySearch, documents: [] },
+    generatedAt,
+  );
+  librarySearchManifest.sharded_collection = {
+    collection: "library_search",
+    record_count: librarySearch.documents.length,
+    shards: searchShards,
+  };
   writeFileSync(
     join(GENERATED, "library-search.json"),
+    `${JSON.stringify(librarySearchManifest)}\n`,
+    "utf8",
+  );
+
+  writeFileSync(
+    join(GENERATED, "catalog-bootstrap.json"),
     `${JSON.stringify(
-      artifact("library_search", librarySearch, generatedAt),
+      artifact("catalog_bootstrap", catalogBootstrap, generatedAt),
     )}\n`,
     "utf8",
   );
 
+  const catalogRecordsDir = join(GENERATED, "catalog-records");
+  mkdirSync(catalogRecordsDir, { recursive: true });
+  for (const [catalogId, nodes] of catalogRecords) {
+    // DISA publishes individual STIG/SRG benchmarks. Keep the catalog landing
+    // page small and load one published benchmark at a time; a single complete
+    // STIG record artifact is larger than the static-file budget and delays a
+    // reader who only needs one publication.
+    if (catalogId === "disa-stig" || catalogId === "disa-srg") {
+      const groups = new Map();
+      for (const node of nodes) {
+        if (node.node_type === "catalog" || node.node_type === "benchmark") {
+          continue;
+        }
+        const family = node.metadata?.family;
+        if (!family) {
+          throw new Error(`${catalogId} record ${node.id} has no published benchmark`);
+        }
+        const groupNodes = groups.get(family) || [];
+        groupNodes.push(node);
+        groups.set(family, groupNodes);
+      }
+      const catalogDir = join(catalogRecordsDir, catalogId);
+      mkdirSync(catalogDir, { recursive: true });
+      const groupPaths = new Set();
+      const publishedGroups = [...groups.entries()]
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([name, groupNodes]) => {
+          const filename = `${slugKey(name)}.json`;
+          if (groupPaths.has(filename)) {
+            throw new Error(`${catalogId} published benchmark path collision: ${filename}`);
+          }
+          groupPaths.add(filename);
+          const path = `${catalogId}/${filename}`;
+          writeFileSync(
+            join(catalogRecordsDir, path),
+            `${JSON.stringify(
+              artifact(
+                "catalog_records",
+                { catalog_id: catalogId, published_group: name, nodes: groupNodes },
+                generatedAt,
+              ),
+            )}\n`,
+            "utf8",
+          );
+          return { name, path, record_count: groupNodes.length };
+        });
+      writeFileSync(
+        join(catalogRecordsDir, `${catalogId}.json`),
+        `${JSON.stringify(
+          artifact(
+            "catalog_records",
+            {
+              catalog_id: catalogId,
+              sharded_by: "published_benchmark",
+              record_count: publishedGroups.reduce(
+                (count, group) => count + group.record_count,
+                0,
+              ),
+              published_groups: publishedGroups,
+              nodes: [],
+            },
+            generatedAt,
+          ),
+        )}\n`,
+        "utf8",
+      );
+      continue;
+    }
+    writeFileSync(
+      join(catalogRecordsDir, `${catalogId}.json`),
+      `${JSON.stringify(
+        artifact(
+          "catalog_records",
+          { catalog_id: catalogId, nodes },
+          generatedAt,
+        ),
+      )}\n`,
+      "utf8",
+    );
+  }
+
+  // Generate neighborhood shards only after the catalog records have been
+  // serialized. Each structure is a complete view of the graph; retaining
+  // both while serializing the largest DISA catalog can exceed a constrained
+  // workstation's native allocation limit even though each artifact itself is
+  // within its size budget.
+  const atlasNeighborhoodShards = buildAtlasNeighborhoodShards({
+    ...graph,
+    nodes: strippedGraphNodes,
+  });
   mkdirSync(ATLAS_NEIGHBORHOOD_DIR, { recursive: true });
   const atlasShardManifest = [];
   for (const shard of atlasNeighborhoodShards) {
@@ -2612,7 +2795,6 @@ export function buildFrameworkData() {
       bytes: statSync(join(GENERATED, shardPath)).size,
     });
   }
-
   writeFileSync(
     join(GENERATED, "atlas-neighborhood-manifest.json"),
     `${JSON.stringify(
@@ -2631,30 +2813,6 @@ export function buildFrameworkData() {
     )}\n`,
     "utf8",
   );
-
-  writeFileSync(
-    join(GENERATED, "catalog-bootstrap.json"),
-    `${JSON.stringify(
-      artifact("catalog_bootstrap", catalogBootstrap, generatedAt),
-    )}\n`,
-    "utf8",
-  );
-
-  const catalogRecordsDir = join(GENERATED, "catalog-records");
-  mkdirSync(catalogRecordsDir, { recursive: true });
-  for (const [catalogId, nodes] of catalogRecords) {
-    writeFileSync(
-      join(catalogRecordsDir, `${catalogId}.json`),
-      `${JSON.stringify(
-        artifact(
-          "catalog_records",
-          { catalog_id: catalogId, nodes },
-          generatedAt,
-        ),
-      )}\n`,
-      "utf8",
-    );
-  }
 
   return {
     sources: graph.sources.length,
