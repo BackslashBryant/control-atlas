@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import test from 'node:test';
 import { join } from 'node:path';
 import { zipSync, strToU8 } from 'fflate';
@@ -161,7 +161,9 @@ test('DISA compilation stream parser matches the archive parser without retainin
     'U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml': strToU8(sampleStigXml),
     'U_STIG_Library/Application_SRG/Application_SRG_Benchmark.xml': strToU8(sampleSrgXml),
   });
-  const workDir = mkdtempSync(join(process.cwd(), 'tmp', 'disa-parser-test-'));
+  const tempRoot = join(process.cwd(), 'tmp');
+  mkdirSync(tempRoot, { recursive: true });
+  const workDir = mkdtempSync(join(tempRoot, 'disa-parser-test-'));
   const archivePath = join(workDir, 'library.zip');
   writeFileSync(archivePath, archive);
   try {
