@@ -338,6 +338,7 @@ test("epic 2 graph build emits DISA STIG and SRG nodes plus official CCI referen
 test("epic 2 graph build emits a complete bounded library search artifact", () => {
   const artifact = generated("library-search");
   const edges = generated("edges").edges;
+  const nodes = generated("nodes").nodes;
 
   assert.equal(artifact.schema_version, "1.0");
   assert.equal(artifact.library_search.document_count, buildResult.nodes);
@@ -370,6 +371,11 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
     "library documents must carry a resolved source name so search-phase result cards can render it before sources.json loads",
   );
   assert.equal(
+    ac2.publisher_name,
+    "NIST",
+    "every search document must carry the official publisher before sources.json loads",
+  );
+  assert.equal(
     ac2.published_connection_count,
     edges.filter((edge) =>
       edge.publication_status === "published" &&
@@ -379,10 +385,27 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");
+  assert.ok(
+    ac2.published_connection_catalog_count > 0,
+    "search results with mappings must identify how many publications they connect to",
+  );
   assert.equal(
     ac2.description_available,
     true,
-    "search must disclose when published record text is available without duplicating it in the bootstrap",
+    "search must disclose when published record text is available",
+  );
+  const officialDescription = nodes
+    .find((entry) => entry.id === ac2.id)
+    .metadata.description.replace(/\s+/g, " ")
+    .trim();
+  assert.ok(
+    ac2.official_text_preview.length >= 120 &&
+      ac2.official_text_preview.length <= 181,
+    "search must carry a bounded excerpt of the official text",
+  );
+  assert.ok(
+    officialDescription.startsWith(ac2.official_text_preview.replace(/…$/, "")),
+    "the preview must be copied from the official record text",
   );
   assert.equal(
     ac2.description,
@@ -390,6 +413,10 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
     "full published text belongs to the record payload, not the search bootstrap",
   );
   assert.equal(ac2.plain_language_summary, undefined);
+  assert.ok(
+    artifact.library_search.facets.publishers.includes("NIST"),
+    "publisher must be available as a search facet",
+  );
 });
 
 test("zero-padded OLIR mapping endpoints resolve to catalog nodes", () => {

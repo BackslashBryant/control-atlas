@@ -23,7 +23,7 @@ test("V1 workflow 01 — find a known identifier", async ({ page }) => {
 
 test("V1 workflow 02 — search a topic without an identifier", async ({ page }) => {
   await open(page, "/#/search?q=account%20management");
-  await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
+  await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue(
     "account management",
   );
   await expect(page.locator("#library-results .search-result-row").first()).toBeVisible();
@@ -73,7 +73,7 @@ test("V1 workflow 05 — follow a record and return without losing search state"
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
   await page.getByRole("button", { name: "Back to results" }).click();
   await expect(page).toHaveURL(/#\/search\?q=AC-2/);
-  await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue("AC-2");
+  await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue("AC-2");
 });
 
 test("V1 workflow 06 — explore one record through Connections, Hierarchy, and the full list", async ({

@@ -24,10 +24,10 @@ test("short official text is not altered", () => {
   });
 });
 
-test("compact search records preserve a truthful official-description status", () => {
+test("compact search records use the transported official preview", () => {
   assert.equal(
-    officialDescriptionOrStatus({ description_available: true }),
-    "Official description available — open this record to read it.",
+    officialDescriptionOrStatus({ official_text_preview: "Publisher wording preview." }),
+    "Publisher wording preview.",
   );
   assert.equal(
     officialDescriptionOrStatus({}),

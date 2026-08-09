@@ -565,6 +565,7 @@ export function App() {
                 onOpenHelp={openHelp}
                 onOpenNode={openNode}
                 onOpenNodeByItemId={openNodeByItemId}
+                onOpenSearch={() => setSearchOverlayOpen(true)}
                 onRequestFullGraph={requestFullGraph}
                 onRetryLoad={retryLoad}
                 setHelpOpen={setHelpOpen}
@@ -627,6 +628,7 @@ function AppContent(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string, from?: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
+  onOpenSearch: () => void;
   onRequestFullGraph: () => void;
   onOpenGlossary: (termId?: string) => void;
   onOpenHelp: () => void;
@@ -640,6 +642,7 @@ function AppContent(props: {
     onNavigate,
     onOpenNode,
     onOpenNodeByItemId,
+    onOpenSearch,
     onRequestFullGraph,
     onOpenGlossary,
     onOpenHelp,
@@ -692,7 +695,7 @@ function AppContent(props: {
   }
 
   if (state.view === "home") {
-    return <HomePage onNavigate={onNavigate} />;
+    return <HomePage onNavigate={onNavigate} onOpenSearch={onOpenSearch} />;
   }
 
   if (state.view === "not-found") {

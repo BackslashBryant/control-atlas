@@ -5,7 +5,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
-import { officialDescriptionOrStatus } from "../lib/officialText";
+import { GLOBAL_SEARCH_PLACEHOLDER } from "../../shared/product-identity";
+import { recordDisplayTitle } from "../lib/recordTitle";
+import {
+  MarkedSearchText,
+  publisherPublicationLabel,
+  searchPreviewText,
+} from "../lib/searchPresentation";
 import {
   resourceAccessLabel,
   resourceTypeLabel,
@@ -27,6 +33,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
   const { bundle, open, onOpenChange, onNavigate, onOpenNode } = props;
   const [query, setQuery] = useState("");
   const [submitStatus, setSubmitStatus] = useState("");
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const composingRef = useRef(false);
   const focusSearchResultsOnCloseRef = useRef(false);
 
@@ -34,6 +41,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
     if (!open) {
       setQuery("");
       setSubmitStatus("");
+      setHighlightedIndex(-1);
     }
   }, [open]);
 
@@ -87,6 +95,18 @@ export function SearchOverlay(props: SearchOverlayProps) {
     };
   }, [bundle, query]);
 
+  const suggestions = useMemo(() => [
+    ...results.libraryResults.map((document: any) => ({ id: document.id, kind: "library" })),
+    ...results.guideResults.map((guide) => ({ id: guide.id, kind: "guide" })),
+    ...results.sourceResults.map((source: any) => ({ id: source.id, kind: "source" })),
+    ...results.resourceResults.map((document) => ({ id: document.id, kind: "resource" })),
+    ...results.communityResults.map((document) => ({ id: document.id, kind: "community" })),
+  ], [results]);
+
+  useEffect(() => {
+    setHighlightedIndex(-1);
+  }, [query]);
+
   function openResult(nodeId: string) {
     onOpenChange(false);
     onOpenNode(nodeId, "search");
@@ -103,9 +123,28 @@ export function SearchOverlay(props: SearchOverlayProps) {
     onNavigate("search", { query: query.trim() });
   }
 
-  function openCommons() {
-    onOpenChange(false);
-    onNavigate("commons", { query: query.trim() });
+  function activateSuggestion(suggestion: { id: string; kind: string }) {
+    if (suggestion.kind === "library") {
+      openResult(suggestion.id);
+      return;
+    }
+    if (suggestion.kind === "guide") {
+      onOpenChange(false);
+      onNavigate("patterns", { pattern: suggestion.id });
+      return;
+    }
+    if (suggestion.kind === "source") {
+      onOpenChange(false);
+      onNavigate("sources", { source: suggestion.id });
+      return;
+    }
+    openCommonsResult(suggestion.id);
+  }
+
+  function suggestionIndex(kind: string, id: string) {
+    return suggestions.findIndex(
+      (suggestion) => suggestion.kind === kind && suggestion.id === id,
+    );
   }
 
   return (
@@ -131,6 +170,11 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 setSubmitStatus("Enter an identifier, title, or topic to search.");
                 return;
               }
+              const highlightedSuggestion = suggestions[highlightedIndex];
+              if (highlightedSuggestion) {
+                activateSuggestion(highlightedSuggestion);
+                return;
+              }
               openExplore();
             }}
             role="search"
@@ -141,6 +185,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <div className="search-input search-overlay-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
+                aria-activedescendant={highlightedIndex >= 0 ? `search-suggestion-${highlightedIndex}` : undefined}
                 aria-label="Search Control Atlas"
                 autoFocus
                 id="global-search-query"
@@ -148,7 +193,16 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 onChange={(event) => { setQuery(event.target.value); setSubmitStatus(""); }}
                 onCompositionEnd={() => { composingRef.current = false; }}
                 onCompositionStart={() => { composingRef.current = true; }}
-                placeholder="Search controls, STIGs, tools, templates, or resources..."
+                onKeyDown={(event) => {
+                  if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+                  event.preventDefault();
+                  if (suggestions.length === 0) return;
+                  setHighlightedIndex((current) => {
+                    if (event.key === "ArrowDown") return (current + 1) % suggestions.length;
+                    return current <= 0 ? suggestions.length - 1 : current - 1;
+                  });
+                }}
+                placeholder={GLOBAL_SEARCH_PLACEHOLDER}
                 type="search"
                 value={query}
               />
@@ -187,16 +241,25 @@ export function SearchOverlay(props: SearchOverlayProps) {
                   </div>
                   <ul className="search-overlay-results">
                     {results.libraryResults.map((document: any) => {
+                      const index = suggestionIndex("library", document.id);
+                      const title = `${publisherPublicationLabel(document)} · ${recordDisplayTitle({
+                        id: document.id,
+                        node_type: document.object_type,
+                        metadata: { item_id: document.item_id, title: document.title },
+                      })}`;
                       return (
                         <li key={document.id}>
                           <button
                             aria-label={document.title || document.item_id}
-                            className="search-overlay-result"
+                            className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
+                            id={`search-suggestion-${index}`}
                             onClick={() => openResult(document.id)}
+                            onFocus={() => setHighlightedIndex(index)}
+                            onMouseEnter={() => setHighlightedIndex(index)}
                             type="button"
                           >
                             <span className="search-overlay-result-title">
-                              {document.title || document.item_id}
+                              <MarkedSearchText query={query} text={title} />
                             </span>
                             <span className="search-overlay-result-meta">
                               <code>{document.item_id}</code>
@@ -204,7 +267,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               {displayNameFor("object_type", document.object_type)}
                             </span>
                             <span className="search-overlay-result-summary">
-                              {officialDescriptionOrStatus(document)}
+                              <MarkedSearchText query={query} text={searchPreviewText(document)} />
                             </span>
                           </button>
                         </li>
@@ -220,23 +283,27 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     Guides ({results.guideResults.length})
                   </div>
                   <ul className="search-overlay-results">
-                    {results.guideResults.map((guide) => (
-                      <li key={guide.id}>
+                    {results.guideResults.map((guide) => {
+                      const index = suggestionIndex("guide", guide.id);
+                      return <li key={guide.id}>
                         <button
                           aria-label={guide.title}
-                          className="search-overlay-result"
+                          className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
+                          id={`search-suggestion-${index}`}
                           onClick={() => {
                             onOpenChange(false);
                             onNavigate("patterns", { pattern: guide.id });
                           }}
+                          onFocus={() => setHighlightedIndex(index)}
+                          onMouseEnter={() => setHighlightedIndex(index)}
                           type="button"
                         >
-                          <span className="search-overlay-result-title">{guide.title}</span>
+                          <span className="search-overlay-result-title"><MarkedSearchText query={query} text={`Control Atlas · ${guide.title}`} /></span>
                           <span className="search-overlay-result-meta">Control Atlas guide · topic match</span>
-                          <span className="search-overlay-result-summary">{guide.summary}</span>
+                          <span className="search-overlay-result-summary"><MarkedSearchText query={query} text={guide.summary} /></span>
                         </button>
-                      </li>
-                    ))}
+                      </li>;
+                    })}
                   </ul>
                 </div>
               ) : null}
@@ -247,26 +314,31 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     Sources ({results.sourceResults.length})
                   </div>
                   <ul className="search-overlay-results">
-                    {results.sourceResults.map((source: any) => (
-                      <li key={source.id}>
+                    {results.sourceResults.map((source: any) => {
+                      const index = suggestionIndex("source", source.id);
+                      const publisher = source.publisher || source.agency || source.display_group || source.owner || "Source owner";
+                      return <li key={source.id}>
                         <button
                           aria-label={source.display_name || source.name || source.id}
-                          className="search-overlay-result"
+                          className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
+                          id={`search-suggestion-${index}`}
                           onClick={() => {
                             onOpenChange(false);
                             onNavigate("sources", { source: source.id });
                           }}
+                          onFocus={() => setHighlightedIndex(index)}
+                          onMouseEnter={() => setHighlightedIndex(index)}
                           type="button"
                         >
                           <span className="search-overlay-result-title">
-                            {source.display_name || source.name || source.id}
+                            <MarkedSearchText query={query} text={`${publisher} · ${source.display_name || source.name || source.id}`} />
                           </span>
                           <span className="search-overlay-result-meta">
-                            {source.publisher || "Source owner"} · identity match
+                            {publisher} · identity match
                           </span>
                         </button>
-                      </li>
-                    ))}
+                      </li>;
+                    })}
                   </ul>
                 </div>
               ) : null}
@@ -277,16 +349,20 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     Tools and resources ({results.resourceResults.length})
                   </div>
                   <ul className="search-overlay-results">
-                    {results.resourceResults.map((doc) => (
-                      <li key={doc.id}>
+                    {results.resourceResults.map((doc) => {
+                      const index = suggestionIndex("resource", doc.id);
+                      return <li key={doc.id}>
                         <button
                           aria-label={doc.name}
-                          className="search-overlay-result"
+                          className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
+                          id={`search-suggestion-${index}`}
                           onClick={() => openCommonsResult(doc.id)}
+                          onFocus={() => setHighlightedIndex(index)}
+                          onMouseEnter={() => setHighlightedIndex(index)}
                           type="button"
                         >
                           <span className="search-overlay-result-title flex items-center justify-between">
-                            <span>{doc.name}</span>
+                            <span><MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} /></span>
                             <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
                               {resourceTypeLabel(doc.resourceType)}
                             </span>
@@ -297,11 +373,11 @@ export function SearchOverlay(props: SearchOverlayProps) {
                             {resourceAccessLabel(doc)}
                           </span>
                           <span className="search-overlay-result-summary">
-                            {doc.summary}
+                            <MarkedSearchText query={query} text={doc.summary} />
                           </span>
                         </button>
-                      </li>
-                    ))}
+                      </li>;
+                    })}
                   </ul>
                 </div>
               ) : null}
@@ -312,16 +388,20 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     Communities ({results.communityResults.length})
                   </div>
                   <ul className="search-overlay-results">
-                    {results.communityResults.map((doc) => (
-                      <li key={doc.id}>
+                    {results.communityResults.map((doc) => {
+                      const index = suggestionIndex("community", doc.id);
+                      return <li key={doc.id}>
                         <button
                           aria-label={doc.name}
-                          className="search-overlay-result"
+                          className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
+                          id={`search-suggestion-${index}`}
                           onClick={() => openCommonsResult(doc.id)}
+                          onFocus={() => setHighlightedIndex(index)}
+                          onMouseEnter={() => setHighlightedIndex(index)}
                           type="button"
                         >
                           <span className="search-overlay-result-title">
-                            {doc.name}
+                            <MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} />
                           </span>
                           <span className="search-overlay-result-meta">
                             <code>{doc.publisher}</code>
@@ -329,11 +409,11 @@ export function SearchOverlay(props: SearchOverlayProps) {
                             {resourceAccessLabel(doc)}
                           </span>
                           <span className="search-overlay-result-summary">
-                            {doc.summary}
+                            <MarkedSearchText query={query} text={doc.summary} />
                           </span>
                         </button>
-                      </li>
-                    ))}
+                      </li>;
+                    })}
                   </ul>
                 </div>
               ) : null}
@@ -344,9 +424,6 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <div className="card-actions flex gap-2">
               <Button variant="secondary" onClick={openExplore} type="button">
                 View all search results
-              </Button>
-              <Button variant="secondary" onClick={openCommons} type="button">
-                Search resources
               </Button>
             </div>
           ) : null}

@@ -55,6 +55,7 @@ export type ViewState =
       view: "search";
       query: string;
       filter: string;
+      publisher: string;
       objectType: string;
       sourceClass: string;
       controlFamily: string;
@@ -171,6 +172,7 @@ function searchState(): ViewState {
     view: "search",
     query: "",
     filter: "",
+    publisher: "",
     objectType: "",
     sourceClass: "",
     controlFamily: "",
@@ -442,6 +444,7 @@ export function parseViewState(search: string): ViewState {
     view: "search",
     query,
     filter: params.get("filter") || "",
+    publisher: params.get("publisher") || "",
     objectType: params.get("objectType") || "",
     sourceClass: params.get("sourceClass") || "",
     controlFamily: params.get("controlFamily") || "",
@@ -688,6 +691,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "view", "search");
     setIfValue(params, "q", state.query);
     setIfValue(params, "filter", state.filter);
+    setIfValue(params, "publisher", state.publisher);
     setIfValue(params, "objectType", state.objectType);
     setIfValue(params, "sourceClass", state.sourceClass);
     setIfValue(params, "controlFamily", state.controlFamily);

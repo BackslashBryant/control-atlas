@@ -25,7 +25,7 @@ test("search overlay starts clean after closing an unfinished search", async ({
   await expect(input).toHaveValue("");
 });
 
-test("labels compact records with available official descriptions accurately", async ({
+test("renders transported official descriptions in compact search results", async ({
   page,
 }) => {
   await gotoApp(page, "/?view=explore");
@@ -44,7 +44,7 @@ test("labels compact records with available official descriptions accurately", a
     .filter({ hasText: "DE.AE-02" })
     .first();
   await expect(result).toContainText(
-    "Official description available — open this record to read it.",
+    "Potentially adverse events are analyzed to better understand associated activities",
   );
   await expect(result).not.toContainText(
     "No narrative description was published for this record.",
