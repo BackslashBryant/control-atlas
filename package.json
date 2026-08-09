@@ -106,7 +106,7 @@
     "ajv-formats": "^3.0.1",
     "eslint": "^10.5.0",
     "fast-xml-parser": "^5.10.1",
-    "globals": "^17.7.0",
+    "globals": "^17.9.0",
     "pdf-parse": "^2.4.5",
     "read-excel-file": "^9.2.0",
     "tailwindcss": "^4.3.3",
