@@ -100,7 +100,7 @@ export function StartHerePage(props: {
           </div>
           <div className="start-here-followups">
             <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onOpen={() => onNavigate("catalog-detail", { catalog: plan.thenReview.catalogId })} role="Then review" />
-            <button className="start-here-publication" onClick={() => onNavigate(plan.action.view as ViewState["view"])} type="button"><span><small>Then act</small><strong>{plan.action.label}</strong><span>Continue with the selected goal still visible in this plan.</span></span><IconArrowRight aria-hidden="true" size={18} /></button>
+            <button className="start-here-publication" onClick={() => onNavigate(plan.action.view as ViewState["view"], plan.action.patch as Partial<ViewState> | undefined)} type="button"><span><small>Then act</small><strong>{plan.action.label}</strong><span>Continue with the selected goal still visible in this plan.</span></span><IconArrowRight aria-hidden="true" size={18} /></button>
           </div>
           <div className="card-actions">
             <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>

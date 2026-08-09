@@ -25,7 +25,6 @@ const PREVIEWS = [
     navigate: (onNavigate: Navigate) =>
       onNavigate("library-detail", {
         node: "nist-800-171:3.17.1",
-        from: "home",
       }),
   },
   {

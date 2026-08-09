@@ -56,12 +56,15 @@ export type ViewState =
       query: string;
       filter: string;
       publisher: string;
+      kind: string;
       objectType: string;
       sourceClass: string;
       controlFamily: string;
       severity: string;
       connectedOnly: string;
       sort: string;
+      viewMode: "list" | "map";
+      collection: string;
     }
   | {
       view: "catalog-detail";
@@ -78,8 +81,6 @@ export type ViewState =
   | {
       view: "library-detail";
       node: string;
-      from?: string;
-      returnTo?: string;
       relationshipView?: string;
       relationshipType?: string;
       provenance?: string;
@@ -153,7 +154,6 @@ export type ViewState =
   | {
       view: "commons-detail";
       id: string;
-      from?: string;
     }
   | { view: "start-here"; goal: string; context: string }
   | {
@@ -173,12 +173,15 @@ function searchState(): ViewState {
     query: "",
     filter: "",
     publisher: "",
+    kind: "",
     objectType: "",
     sourceClass: "",
     controlFamily: "",
     severity: "",
     connectedOnly: "",
     sort: "relevance",
+    viewMode: "list",
+    collection: "",
   };
 }
 
@@ -192,7 +195,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     atlasBaseline: "",
     atlasFamily: "",
     atlasRmfStep: "",
-    relationshipView: "path",
+    relationshipView: "",
     relationshipType: "",
     provenance: "",
     confidence: "",
@@ -306,8 +309,6 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       node: params.get("node") || "",
-      from: params.get("from") || "",
-      returnTo: params.get("returnTo") || "",
       relationshipView: params.get("relationshipView") || "",
       relationshipType: params.get("relationshipType") || "",
       provenance: params.get("provenance") || "",
@@ -420,7 +421,6 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       id: params.get("id") || "",
-      from: params.get("from") || "",
     };
   }
 
@@ -445,6 +445,7 @@ export function parseViewState(search: string): ViewState {
     query,
     filter: params.get("filter") || "",
     publisher: params.get("publisher") || "",
+    kind: params.get("kind") || "",
     objectType: params.get("objectType") || "",
     sourceClass: params.get("sourceClass") || "",
     controlFamily: params.get("controlFamily") || "",
@@ -453,6 +454,8 @@ export function parseViewState(search: string): ViewState {
     sort: ["relevance", "identifier", "title", "publication"].includes(params.get("sort") || "")
       ? params.get("sort") || "relevance"
       : "relevance",
+    viewMode: params.get("view") === "map" ? "map" : "list",
+    collection: params.get("collection") || "",
   };
 }
 
@@ -478,11 +481,6 @@ export function normalizeViewState(
       view,
       node:
         (state as Extract<ViewState, { view: "library-detail" }>).node || "",
-      from:
-        (state as Extract<ViewState, { view: "library-detail" }>).from || "",
-      returnTo:
-        (state as Extract<ViewState, { view: "library-detail" }>).returnTo ||
-        "",
       relationshipView:
         (state as Extract<ViewState, { view: "library-detail" }>)
           .relationshipView || "",
@@ -601,7 +599,6 @@ export function normalizeViewState(
     return {
       view,
       id: incoming.id || "",
-      from: incoming.from || "",
     };
   }
 
@@ -692,12 +689,15 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "q", state.query);
     setIfValue(params, "filter", state.filter);
     setIfValue(params, "publisher", state.publisher);
+    setIfValue(params, "kind", state.kind);
     setIfValue(params, "objectType", state.objectType);
     setIfValue(params, "sourceClass", state.sourceClass);
     setIfValue(params, "controlFamily", state.controlFamily);
     setIfValue(params, "severity", state.severity);
     setIfValue(params, "connectedOnly", state.connectedOnly);
     if (state.sort !== "relevance") setIfValue(params, "sort", state.sort);
+    if (state.viewMode === "map") setIfValue(params, "view", "map");
+    setIfValue(params, "collection", state.collection);
   } else if (state.view === "catalog-detail") {
     params.set("view", state.view);
     setIfValue(params, "catalog", state.catalog);
@@ -712,8 +712,6 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "library-detail") {
     params.set("view", state.view);
     setIfValue(params, "node", state.node);
-    setIfValue(params, "from", state.from || "");
-    setIfValue(params, "returnTo", state.returnTo || "");
     if (state.relationshipView === "map") {
       params.set("relationshipView", "map");
     } else if (
@@ -795,7 +793,6 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
     setIfValue(params, "id", state.id);
-    setIfValue(params, "from", state.from || "");
   } else if (state.view === "start-here") {
     params.set("view", state.view);
     setIfValue(params, "goal", state.goal);

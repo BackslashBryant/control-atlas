@@ -26,7 +26,7 @@ type SearchOverlayProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 };
 
 export function SearchOverlay(props: SearchOverlayProps) {
@@ -109,12 +109,12 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
   function openResult(nodeId: string) {
     onOpenChange(false);
-    onOpenNode(nodeId, "search");
+    onOpenNode(nodeId);
   }
 
   function openCommonsResult(id: string) {
     onOpenChange(false);
-    onNavigate("commons-detail", { id, from: "search" });
+    onNavigate("commons-detail", { id });
   }
 
   function openExplore() {

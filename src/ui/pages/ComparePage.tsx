@@ -100,7 +100,7 @@ export function ComparePage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "matrix" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const compareResultsRef = useRef<HTMLElement | null>(null);

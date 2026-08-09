@@ -14,9 +14,8 @@ import type { ViewState } from "../lib/viewState";
 
 type TopNavProps = {
   viewState: ViewState;
-  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>, reset?: boolean) => void;
   onOpenSearch: () => void;
-  onOpenHelp: () => void;
 };
 
 function useMediaMatch(query: string) {
@@ -37,15 +36,14 @@ export function TopNav(props: TopNavProps) {
     viewState,
     onNavigate,
     onOpenSearch,
-    onOpenHelp,
   } = props;
 
   const activeView = activeNavForState(viewState);
   // Kept in sync with styles/orbital.css's desktop/mobile contract. Primary
   // product navigation remains visible at ordinary desktop widths.
   // see that rule's comment for the width budget this threshold is based on.
-  const compactNavigation = useMediaMatch("(max-width: 1023px)");
-  const compactHeader = useMediaMatch("(max-width: 1279px)");
+  const compactHeader = useMediaMatch("(max-width: 1023px)");
+  const compactNavigation = compactHeader;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
@@ -129,7 +127,7 @@ export function TopNav(props: TopNavProps) {
     patch?: Record<string, string>,
   ) {
     setMobileMenuOpen(false);
-    onNavigate(view, patch as Partial<ViewState> | undefined);
+    onNavigate(view, patch as Partial<ViewState> | undefined, true);
   }
 
   return (
@@ -185,20 +183,6 @@ export function TopNav(props: TopNavProps) {
               {item.label}
             </Button>
           ))}
-          <Button
-            variant="secondary"
-            className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
-            onClick={onOpenHelp}
-          >
-            Help
-          </Button>
-          <Button
-            variant="primary"
-            className="!min-h-[36px]"
-            onClick={() => onNavigate("start-here")}
-          >
-            Start here
-          </Button>
         </nav> : null}
         <button
           aria-controls="mobile-nav-sheet"
@@ -249,25 +233,6 @@ export function TopNav(props: TopNavProps) {
               </div>
             ))}
           </nav>
-          <div className="mobile-nav-sheet-actions p-[16px]">
-            <Button
-              variant="primary"
-              className="w-full"
-              onClick={() => navigate("start-here")}
-            >
-              Start here
-            </Button>
-            <Button
-              variant="secondary"
-              className="w-full"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenHelp();
-              }}
-            >
-              Help
-            </Button>
-          </div>
         </div>
       ) : null}
     </header>

@@ -178,15 +178,14 @@ test('Start here plans are traceable to real publications and routes', async () 
   assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
 });
 
-test('primary navigation uses the current public names', () => {
+test('primary navigation uses the Phase 3 three-door information architecture', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [view, label] of [
-    ['atlas-map', 'Atlas'],
-    ['catalog-detail', 'Library'],
+    ['start-here', 'Start here'],
     ['search', 'Library'],
-    ['matrix', 'Compare'],
     ['patterns', 'Guides'],
-    ['templates', 'Documents'],
+    ['sources', 'Sources'],
+    ['about', 'About'],
   ]) {
     assert.match(
       routeIdentity,
@@ -194,31 +193,24 @@ test('primary navigation uses the current public names', () => {
       `${view} must render as "${label}"`,
     );
   }
-  // Search results are a state of Library, not a sixth destination.
-  assert.match(routeIdentity, /search: "catalog-detail"/);
+  assert.match(routeIdentity, /search: "search"/);
 
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
   const primaryViews = [...navigation.matchAll(/view: "([a-z-]+)",\n\s+path: routeIdentityFor/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(primaryViews.slice(0, 5), [
-    'atlas-map',
-    'catalog-detail',
-    'matrix',
-    'patterns',
-    'templates',
-  ]);
-  // Resources is utility navigation, not a primary destination.
-  assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "commons"/);
+  assert.deepEqual(primaryViews.slice(0, 3), ['start-here', 'search', 'patterns']);
+  assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
+  assert.doesNotMatch(navigation, /view: "atlas-map"|view: "matrix"|view: "templates"|view: "commons"/);
 });
 
-test('old public-name URLs and the new ones both resolve', () => {
+test('old public paths redirect into the Phase 3 canonical hierarchy', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [alias, canonical] of [
-    ['/atlas', '/explore'],
-    ['/library', '/catalog'],
-    ['/guides', '/learn'],
-    ['/documents', '/build'],
+    ['/explore', '/atlas'],
+    ['/search', '/library'],
+    ['/learn', '/guides'],
+    ['/help', '/about'],
   ]) {
     assert.match(
       routeIdentity,

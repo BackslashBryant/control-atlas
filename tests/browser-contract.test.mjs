@@ -52,7 +52,7 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
-test('shell removes the old mode toggle and uses the current translation-first nav order', () => {
+test('shell exposes exactly three primary doors and two subordinate utilities', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
@@ -60,15 +60,15 @@ test('shell removes the old mode toggle and uses the current translation-first n
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   assert.match(navigation, /PRIMARY_NAV_ITEMS/);
   assert.match(navigation, /routeIdentityFor/);
-  assert.match(routeIdentity, /label: "Atlas"/);
+  assert.match(routeIdentity, /label: "Start here"/);
   assert.match(routeIdentity, /label: "Library"/);
-  assert.match(routeIdentity, /label: "Compare"/);
   assert.match(routeIdentity, /label: "Guides"/);
-  assert.match(routeIdentity, /label: "Documents"/);
-  assert.match(routeIdentity, /Resources/);
-  assert.match(routeIdentity, /Start here/);
   assert.match(routeIdentity, /Sources/);
-  assert.match(navigation, /DISCOVERY_SECTION_LABEL = "Find and compare"/);
+  assert.match(routeIdentity, /About/);
+  assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "search"[\s\S]*view: "patterns"/);
+  assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
+  assert.doesNotMatch(navigation, /view: "atlas-map"|view: "matrix"|view: "templates"|view: "commons"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -325,7 +325,7 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(html, />Manage risk or supply chain</);
   assert.match(html, /class="home-capability-previews"/);
   assert.match(html, /T1195\.002/);
-  assert.match(html, /data-route="#\/build\/documents"/);
+  assert.match(html, /data-route="#\/start\?goal=document"/);
   assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 7);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
@@ -404,7 +404,7 @@ test('result-affecting controls have one visible workbench owner', () => {
   );
 });
 
-test('Build stays locally coherent while Resources owns a top-level route', () => {
+test('Build stays locally coherent while Library owns resource discovery', () => {
   const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
   const buildRouteState = readFileSync('src/ui/lib/buildRouteState.ts', 'utf8');
   const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
@@ -420,14 +420,14 @@ test('Build stays locally coherent while Resources owns a top-level route', () =
   assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
   assert.doesNotMatch(resourceDetail, /BuildLocalNav/);
   assert.match(resourcesPage, /<p className="eyebrow">Resources<\/p>/);
-  assert.match(resourceDetail, /Back to Resources/);
+  assert.match(resourceDetail, /<IconArrowLeft[^>]+\/>Back<\/button>/);
 });
 
 test('route interactions keep canonical context and synchronize visible state', () => {
   const searchOverlay = readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8');
   const atlasMap = readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8');
   const explore = readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8');
-  assert.match(searchOverlay, /onOpenNode\(nodeId,\s*"search"\)/);
+  assert.match(searchOverlay, /onOpenNode\(nodeId\)/);
   assert.match(atlasMap, /loadAtlasNeighborhood\(nodeId\)/);
   assert.match(atlasMap, /buildAtlasGroups\(record, filters\)/);
   assert.match(atlasMap, /buildAtlasRows\(record, filters\)/);
@@ -478,14 +478,15 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 
-test('Learn is a real explanation product with visible provenance boundaries', () => {
+test('Guides remain explanatory while product help is consolidated into About', () => {
   const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
   assert.match(playbooksPage, /Control Atlas explanation/);
   assert.match(playbooksPage, /Official references/);
   assert.match(playbooksPage, /Limitations/);
-  // Product-operation articles moved to the Help drawer; Guides lists
-  // practitioner guides only.
   assert.doesNotMatch(playbooksPage, /learnArticles\.map/);
-  assert.match(readFileSync('src/ui/components/GlossaryDrawer.tsx', 'utf8'), /learnArticles\.map/);
+  const glossary = readFileSync('src/ui/components/GlossaryDrawer.tsx', 'utf8');
+  const about = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
+  assert.doesNotMatch(glossary, /learnArticles\.map|<Dialog\.Title>Help|>Help</);
+  assert.match(about, /Help using Control Atlas/);
   assert.doesNotMatch(playbooksPage, /Recommended for new users|No public playbooks are available yet/);
 });

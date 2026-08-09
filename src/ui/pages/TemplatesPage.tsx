@@ -1473,7 +1473,6 @@ export function TemplatesPage(props: {
                           onSelectDetail={(id) =>
                             onNavigate("commons-detail", {
                               id,
-                              from: "templates",
                             })
                           }
                           resource={resource}

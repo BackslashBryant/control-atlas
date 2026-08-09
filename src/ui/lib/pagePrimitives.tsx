@@ -472,7 +472,7 @@ export function SelectField(props: {
   hint?: string;
   label: string;
   value: string;
-  options: Array<{ value: string; label: string }>;
+  options: Array<{ value: string; label: string; disabled?: boolean }>;
   onChange: (value: string) => void;
   disabled?: boolean;
 }) {
@@ -489,7 +489,7 @@ export function SelectField(props: {
       >
         <option value="">{props.emptyLabel || "All"}</option>
         {props.options.map((option) => (
-          <option key={`${props.label}-${option.value}`} value={option.value}>
+          <option disabled={option.disabled} key={`${props.label}-${option.value}`} value={option.value}>
             {option.label}
           </option>
         ))}

@@ -247,7 +247,7 @@ function resourceSuggestion(
     reason,
     destination: {
       view: "commons-detail",
-      patch: { id: resource.id, from: "record" },
+      patch: { id: resource.id },
     },
     resource,
     structural: false,

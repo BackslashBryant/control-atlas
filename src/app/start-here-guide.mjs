@@ -6,12 +6,13 @@
 // so once.
 
 export const START_HERE_GOALS = Object.freeze([
-  { id: "understand", label: "Understand requirements" },
-  { id: "select", label: "Select or scope controls" },
-  { id: "implement", label: "Implement requirements" },
-  { id: "assess", label: "Prepare for assessment" },
-  { id: "findings", label: "Address findings" },
-  { id: "monitor", label: "Monitor a system" },
+  { id: "understand", label: "Understand a requirement" },
+  { id: "implement", label: "Secure or build a system" },
+  { id: "assess", label: "Assess or authorize" },
+  { id: "operate", label: "Operate or defend" },
+  { id: "risk", label: "Manage risk or supply chain" },
+  { id: "document", label: "Produce a document" },
+  { id: "tools", label: "Find a tool, template, portal, training source, or community" },
 ]);
 
 export const START_HERE_CONTEXTS = Object.freeze([
@@ -66,10 +67,6 @@ const GOAL_STEPS = {
     thenReview: "nist-800-37",
     action: { label: "Read the Guides", view: "patterns" },
   },
-  select: {
-    thenReview: "nist-800-53b",
-    action: { label: "Compare baselines", view: "matrix" },
-  },
   implement: {
     thenReview: "disa-stig",
     action: { label: "Trace connections in the Atlas", view: "atlas-map" },
@@ -78,13 +75,21 @@ const GOAL_STEPS = {
     thenReview: "nist-800-53a",
     action: { label: "Create a starter document", view: "templates" },
   },
-  findings: {
-    thenReview: "nist-800-53a",
-    action: { label: "Create a starter document", view: "templates" },
-  },
-  monitor: {
+  operate: {
     thenReview: "nist-800-37",
     action: { label: "Trace connections in the Atlas", view: "atlas-map" },
+  },
+  risk: {
+    thenReview: "nist-800-171-rev2",
+    action: { label: "Search supply-chain material", view: "search", patch: { query: "supply chain" } },
+  },
+  document: {
+    thenReview: "nist-800-53a",
+    action: { label: "Create a starter document", view: "templates", patch: { buildSection: "documents" } },
+  },
+  tools: {
+    thenReview: "nist-800-37",
+    action: { label: "Browse tools and communities", view: "search", patch: { kind: "tools-communities" } },
   },
 };
 

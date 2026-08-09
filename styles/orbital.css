@@ -1718,18 +1718,9 @@ details > summary {
   font: 400 var(--ca-text-sm) / 1.5 var(--ca-font-body);
 }
 
-/* 2026-08-03: recomputed after utility navigation grew from 3 items
-   (Sources/Help/Start here) to 5 (Resources/Sources/About/Help/Start here).
-   The five-section primary nav plus five-section utility nav now needs
-   ~1479px of header width before the two groups start overlapping (brand 228
-   + nav 481 + nav margin 32 + actions 658 + gaps 48 + padding 32). Below
-   1520px the mobile sheet takes over instead: it lists every primary nav item
-   plus Help/Glossary, so nothing becomes less reachable. This replaces the
-   previous behaviour where `.primary-nav { overflow-x: auto }` silently
-   overlapped nav buttons with the actions column on ordinary laptop widths
-   (grid items ignore their track's width when content can't fit, rather than
-   clipping — the box model exception `min-width: auto` makes for grid). */
-@media (max-width: 1519px) {
+/* Epic 12's three primary doors and two utilities fit from 1024px upward.
+   Keep this breakpoint aligned with TopNav.tsx. */
+@media (max-width: 1023px) {
   .site-header .primary-nav {
     display: none;
   }

@@ -15,9 +15,8 @@ export function PlaybooksPage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNodeByItemId: (itemId: string) => void;
   onOpenGlossary: (termId?: string) => void;
-  setHelpOpen: (open: boolean) => void;
 }) {
-  const { state, onNavigate, setHelpOpen } = props;
+  const { state, onNavigate } = props;
   const selected = learnArticleById(state.pattern);
 
   if (!selected) {
@@ -45,10 +44,8 @@ export function PlaybooksPage(props: {
           ))}
         </section>
 
-        {/* Product-operation articles live in Help, not in the guide list.
-            Their routes still resolve, so existing links keep working. */}
         <div className="card-actions">
-          <Button onClick={() => setHelpOpen(true)} type="button" variant="secondary">
+          <Button onClick={() => onNavigate("about")} type="button" variant="secondary">
             How to use Control Atlas
           </Button>
         </div>

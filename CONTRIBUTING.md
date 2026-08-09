@@ -26,6 +26,19 @@ Future work must preserve this order:
 
 No roadmap item may be accepted unless it identifies the user confusion it reduces and the action it enables.
 
+## Permanent Placement Rule
+
+Every addition has one home:
+
+- New content becomes a Library facet value.
+- A new content action becomes a record action or Library bulk mode.
+- A new explanation becomes a Guide.
+- A new provenance or trust surface belongs in Sources or the footer.
+
+Only a genuinely new product earns a primary navigation slot. A new source,
+publication, record type, resource collection, comparison, export, generator,
+annotation, or explanation does not.
+
 ## Before Starting
 
 1. Read `docs/PRD.md`, `docs/architecture/ARCHITECTURE.md`, `docs/roadmap.md`, and the relevant ADRs.

@@ -8,7 +8,7 @@ import {
 export function AboutPage() {
   return (
     <Panel>
-      <PageHeader primary summary={PRODUCT_DEFINITION} title="About Control Atlas" />
+      <PageHeader primary summary={PRODUCT_DEFINITION} title="About" />
 
       <div className="flex flex-col gap-[24px]">
         <SummaryCard title="What it contains">
@@ -24,6 +24,15 @@ export function AboutPage() {
           <p>
             No account. No uploads. The workbench runs in your browser and does
             not store organizational data.
+          </p>
+        </SummaryCard>
+
+        <SummaryCard title="Help using Control Atlas">
+          <p>
+            Start here turns the work in front of you into a short starting
+            plan. Library searches and filters the complete corpus. Guides
+            explain how to use public cybersecurity material. Search remains
+            available in the header from every route.
           </p>
         </SummaryCard>
 

@@ -6,7 +6,7 @@ import {
   waitForAppReady,
 } from "./support.mjs";
 
-const QUERY_ROUTE = "/#/search?q=access+control";
+const QUERY_ROUTE = "/#/library?q=access+control";
 const GLOBAL_PLACEHOLDER =
   "Search controls, clauses, STIGs, ATT&CK, guides, tools, or communities…";
 
@@ -54,8 +54,8 @@ test("Phase 2 search results answer access-control questions before the click", 
   expect(railBox.y).toBeGreaterThanOrEqual(0);
   expect(railBox.y).toBeLessThan(900);
   await expect(rail.getByText("Publisher", { exact: true })).toBeVisible();
-  await expect(rail.getByText("Record type", { exact: true })).toBeVisible();
-  await expect(rail.getByText("Framework", { exact: true })).toBeVisible();
+  await expect(rail.getByText("Content kind", { exact: true })).toBeVisible();
+  await expect(rail.getByText("Publication", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Show 25 more" }).click();
   await expect(rows).toHaveCount(50);
@@ -127,7 +127,7 @@ test("Phase 2 overlay keeps symmetric input geometry and preserves both Enter pa
   expect(geometry.inputBackground).toBe(geometry.background);
 
   await input.press("Enter");
-  await expect(page).toHaveURL(/#\/search\?q=access(?:\+|%20)control/);
+  await expect(page).toHaveURL(/#\/library\?q=access(?:\+|%20)control/);
 
   await page.getByRole("button", { name: "Open search" }).click();
   const nextInput = page.getByRole("dialog", { name: "Search Control Atlas" })
@@ -137,8 +137,8 @@ test("Phase 2 overlay keeps symmetric input geometry and preserves both Enter pa
   await nextInput.press("ArrowDown");
   await expect(nextInput).toHaveAttribute("aria-activedescendant", /search-suggestion-\d+/);
   await nextInput.press("Enter");
-  await expect(page).not.toHaveURL(/#\/search(?:\?|$)/);
-  await expect(page).toHaveURL(/#\/(record|patterns|sources|commons)/);
+  await expect(page).not.toHaveURL(/#\/library(?:\?|$)/);
+  await expect(page).toHaveURL(/#\/(record|guides|sources|library\/resource)/);
 });
 
 for (const viewport of [
@@ -150,7 +150,7 @@ for (const viewport of [
     test.setTimeout(240_000);
     await page.setViewportSize(viewport);
 
-    for (const route of [QUERY_ROUTE, "/#/catalog", "/#/catalog/nist-800-53"]) {
+    for (const route of [QUERY_ROUTE, "/#/library", "/#/library/publication/nist-800-53"]) {
       await gotoApp(page, route);
       await waitForAppReady(page, { allowPartial: true });
       const searches = page.locator(".catalog-search:visible");

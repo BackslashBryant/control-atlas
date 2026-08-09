@@ -1,6 +1,14 @@
 import { ALL_NAV_ITEMS } from "../lib/navigation";
+import sourceRegistry from "../../../data/source-registry.json";
 import { PRODUCT_FOOTER_NOTICE } from "../../shared/product-identity";
 import type { ViewState } from "../lib/viewState";
+
+const LAST_UPDATED = new Intl.DateTimeFormat("en-US", {
+  day: "numeric",
+  month: "long",
+  timeZone: "UTC",
+  year: "numeric",
+}).format(new Date(sourceRegistry.generated_at));
 
 export function SiteFooter(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
@@ -31,7 +39,7 @@ export function SiteFooter(props: {
         </div>
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[16px] text-[var(--ca-text)]">About</strong>
-          <p className="text-[var(--ca-text-muted)] text-[13px] mb-[12px]">Open-source (MIT)</p>
+          <p className="text-[var(--ca-text-muted)] text-[13px] mb-[12px]">Open source under the MIT license.</p>
           <button
             className="text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px] bg-transparent border-0 cursor-pointer p-0 transition-colors"
             onClick={() => props.onNavigate("about")}
@@ -40,10 +48,14 @@ export function SiteFooter(props: {
           >
             About
           </button>
+          <a className="block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank">Submit resource</a>
+          <a className="block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank">Report a problem</a>
         </div>
       </div>
-      <div className="max-w-[1280px] mx-auto border-t border-[var(--ca-border)] pt-[24px]">
+      <div className="max-w-[1280px] mx-auto border-t border-[var(--ca-border)] pt-[24px] flex flex-wrap gap-x-[24px] gap-y-[8px]">
         <p className="text-[var(--ca-text-subtle)] text-[12px]">{PRODUCT_FOOTER_NOTICE}</p>
+        <p className="text-[var(--ca-text-subtle)] text-[12px]">Last updated {LAST_UPDATED}.</p>
+        <button className="text-[var(--ca-text-subtle)] hover:text-[var(--ca-secondary)] text-[12px] bg-transparent border-0 cursor-pointer p-0" onClick={() => props.onNavigate("sources")} role="link" type="button">Source attribution</button>
       </div>
     </footer>
   );

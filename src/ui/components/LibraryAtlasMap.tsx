@@ -1,0 +1,55 @@
+import { IconMap } from "@tabler/icons-react";
+
+export type LibraryMapItem = {
+  id: string;
+  kind: string;
+  label: string;
+  group: string;
+  onOpen: () => void;
+};
+
+export function LibraryAtlasMap(props: {
+  items: LibraryMapItem[];
+  onOpenAtlas: () => void;
+}) {
+  const groups = new Map<string, LibraryMapItem[]>();
+  for (const item of props.items) {
+    const key = item.group || "Other published material";
+    groups.set(key, [...(groups.get(key) || []), item]);
+  }
+
+  return (
+    <section aria-label="Atlas map of Library results" className="library-atlas-map" data-map-node-count={props.items.length}>
+      <header className="library-atlas-map__header">
+        <div>
+          <p className="eyebrow">Atlas map</p>
+          <h2>{props.items.length.toLocaleString()} mapped result{props.items.length === 1 ? "" : "s"}</h2>
+          <p>The current Library query is grouped by publication or source. Open any record to expand its immediate Atlas neighborhood.</p>
+        </div>
+        <button className="button button--secondary" onClick={props.onOpenAtlas} type="button">
+          <IconMap aria-hidden="true" size={17} /> Zoom out to the whole Atlas
+        </button>
+      </header>
+      {props.items.length ? (
+        <div className="library-atlas-map__groups">
+          {[...groups.entries()].map(([group, items]) => (
+            <section className="library-atlas-map__group" key={group}>
+              <h3>{group} <span>{items.length}</span></h3>
+              <div className="library-atlas-map__nodes">
+                {items.slice(0, 100).map((item) => (
+                  <button className="library-map-node" data-map-node-id={item.id} key={`${item.kind}:${item.id}`} onClick={item.onOpen} type="button">
+                    <small>{item.kind}</small>
+                    <strong>{item.label}</strong>
+                  </button>
+                ))}
+              </div>
+              {items.length > 100 ? <p className="muted">Showing 100 of {items.length.toLocaleString()} in this publication.</p> : null}
+            </section>
+          ))}
+        </div>
+      ) : (
+        <p className="empty-state">No records match this Library view.</p>
+      )}
+    </section>
+  );
+}
