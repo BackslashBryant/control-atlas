@@ -371,10 +371,10 @@ function activePathEdges(nodes: AtlasTreeNode[], edges: AtlasTreeEdge[], activeN
 
 function useCompactAtlas() {
   const [compact, setCompact] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(max-width: 800px)").matches,
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches,
   );
   useEffect(() => {
-    const query = window.matchMedia("(max-width: 800px)");
+    const query = window.matchMedia("(max-width: 1024px)");
     const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);

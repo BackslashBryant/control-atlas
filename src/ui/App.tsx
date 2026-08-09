@@ -124,6 +124,26 @@ const GlossaryDrawer = lazy(() =>
 // through that one transition so discarded invalid link settings are visible.
 let pendingRouteRecovery = "";
 
+const PROGRESSIVE_SHELL_SELECTORS = [
+  "[data-skip-workspace]",
+  "[data-static-header]",
+  "[data-static-home]",
+  "[data-static-route]",
+  "[data-static-search]",
+];
+
+function releaseProgressiveShell(root: HTMLElement) {
+  for (const selector of PROGRESSIVE_SHELL_SELECTORS) {
+    root.querySelector(selector)?.remove();
+  }
+  root.dataset.progressiveShellReleased = "true";
+  delete root.dataset.routeHydrated;
+  delete root.dataset.staticRouteActive;
+  delete root.dataset.staticRouteKind;
+  delete root.dataset.staticRoutePersistent;
+  delete root.dataset.staticSearchActive;
+}
+
 function readHashLocation() {
   const value = window.location.hash.replace(/^#/, "") || "/";
   const queryIndex = value.indexOf("?");
@@ -179,6 +199,7 @@ export function App() {
     if (!root) return;
     root.dataset.reactShellReady = chromeReady ? "true" : "false";
     root.dataset.reactActive = chromeReady ? "true" : "false";
+    if (chromeReady) releaseProgressiveShell(root);
   }, [chromeReady, viewState.view]);
 
   useEffect(() => {

@@ -27,7 +27,7 @@ import {
 } from "../lib/catalogCoverage";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import { Badge, SelectField, openAtlasMapForNode } from "../lib/pagePrimitives";
+import { Badge, PageHeader, SelectField, openAtlasMapForNode } from "../lib/pagePrimitives";
 import { Button, Panel } from "../components/lsm";
 
 type SearchState = Extract<ViewState, { view: "search" }>;
@@ -235,17 +235,17 @@ export function ExplorePage(props: {
 
   return (
     <Panel className="search-results-panel border-0 !bg-transparent p-0" data-visual-identity="classified-research-search">
-      <header className="page-header" data-route-primary-header="true">
-        <div className="page-header-row">
-          <div><h1>Library</h1><p className="page-summary">One ranked view across published records, guides, documents, resources, communities, and sources.</p></div>
-          <Button onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button" variant="secondary">Browse publications</Button>
-        </div>
-      </header>
+      <PageHeader
+        action={<Button onClick={() => onNavigate("catalog-detail", { catalog: "" })} type="button" variant="secondary">Browse publications</Button>}
+        primary
+        summary="One ranked view across published records, guides, documents, resources, communities, and sources."
+        title="Library"
+      />
 
       <form className="search-results-query-row" onSubmit={(event) => { event.preventDefault(); if (!composingRef.current) resultsRef.current?.focus(); }} role="search">
         <label className="catalog-search search-results-query">
           <IconSearch aria-hidden="true" size={18} />
-          <input aria-label="Search query" id="library-search-query" name="query" onChange={(event) => onNavigate("search", { query: event.target.value })} onCompositionEnd={() => { composingRef.current = false; }} onCompositionStart={() => { composingRef.current = true; }} placeholder="Search by identifier, title, or topic" type="search" value={state.query} />
+          <input aria-label="Search by ID, title, or topic" id="library-search-query" name="query" onChange={(event) => onNavigate("search", { query: event.target.value })} onCompositionEnd={() => { composingRef.current = false; }} onCompositionStart={() => { composingRef.current = true; }} placeholder="Search by identifier, title, or topic" type="search" value={state.query} />
         </label>
         <Button type="submit" variant="secondary">Search</Button>
       </form>

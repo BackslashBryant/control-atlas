@@ -28,6 +28,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
   const [query, setQuery] = useState("");
   const [submitStatus, setSubmitStatus] = useState("");
   const composingRef = useRef(false);
+  const focusSearchResultsOnCloseRef = useRef(false);
 
   useEffect(() => {
     if (!open) {
@@ -97,8 +98,8 @@ export function SearchOverlay(props: SearchOverlayProps) {
   }
 
   function openExplore() {
+    focusSearchResultsOnCloseRef.current = true;
     onOpenChange(false);
-    requestSearchResultsFocus();
     onNavigate("search", { query: query.trim() });
   }
 
@@ -111,7 +112,16 @@ export function SearchOverlay(props: SearchOverlayProps) {
     <Dialog.Root onOpenChange={onOpenChange} open={open}>
       <Dialog.Portal>
         <Dialog.Overlay className="drawer-overlay search-overlay-backdrop" />
-        <Dialog.Content aria-label="Search Control Atlas" className="search-overlay">
+        <Dialog.Content
+          aria-label="Search Control Atlas"
+          className="search-overlay"
+          onCloseAutoFocus={(event) => {
+            if (!focusSearchResultsOnCloseRef.current) return;
+            focusSearchResultsOnCloseRef.current = false;
+            event.preventDefault();
+            requestSearchResultsFocus();
+          }}
+        >
           <form
             className="search-overlay-header"
             onSubmit={(event) => {

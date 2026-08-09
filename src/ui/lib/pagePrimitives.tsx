@@ -200,35 +200,41 @@ export function formatConfidence(value: string) {
 
 export function PageHeader(props: {
   eyebrow?: string;
-  title: string;
+  title: ReactNode;
   summary?: string;
   action?: ReactNode;
   primary?: boolean;
 }) {
   return (
-    <header
-      className="page-header"
-      data-route-primary-header={props.primary ? "true" : undefined}
-    >
-      {props.eyebrow ? (
-        <p className="eyebrow" data-route-primary-copy="true">
-          {props.eyebrow}
-        </p>
-      ) : null}
-      <div className="page-header-row">
-        <div data-route-primary-copy="true">
+    <>
+      <header
+        className="page-header"
+        data-route-primary-header={props.primary ? "true" : undefined}
+      >
+        <div className="page-header-title" data-route-primary-copy="true">
+          {props.eyebrow ? (
+            <span className="eyebrow page-header-eyebrow">
+              {props.eyebrow}
+            </span>
+          ) : null}
           <h1>{props.title}</h1>
+        </div>
+      </header>
+      {props.summary || props.action ? (
+        <div className="page-header-support">
           {props.summary ? (
-            <p className="page-summary">{props.summary}</p>
+            <p className="page-summary" data-route-primary-copy="true">
+              {props.summary}
+            </p>
+          ) : null}
+          {props.action ? (
+            <div className="page-header-action" data-route-primary-support="true">
+              {props.action}
+            </div>
           ) : null}
         </div>
-        {props.action ? (
-          <div className="page-header-action" data-route-primary-support="true">
-            {props.action}
-          </div>
-        ) : null}
-      </div>
-    </header>
+      ) : null}
+    </>
   );
 }
 

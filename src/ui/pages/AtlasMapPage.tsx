@@ -39,7 +39,7 @@ import {
 import { catalogProfileFor } from "../lib/catalogProfiles";
 import treeSpine from "../../../data/curated/tree-spine.json";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
-import { scrollElementBelowHeader } from "../lib/pagePrimitives";
+import { PageHeader, scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
 import {
   loadAtlasNeighborhood,
@@ -217,49 +217,34 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <header className="atlas-workspace-header" data-route-primary-header="true">
-        <div className="atlas-workspace-header-text" data-route-primary-copy="true">
-          {record ? (
-            <p className="eyebrow">
-              {bundle.runtime
-                .getCatalogs()
-                .find(
-                  (catalog: any) =>
-                    catalog.id === record.center_node.metadata?.catalog_id,
-                )?.name ||
-                bundle.runtime.getSource(record.center_node.source_id)
-                  ?.display_name ||
-                record.center_node.metadata?.catalog_id ||
-                ""}
-            </p>
-          ) : null}
-          <h1>
-            {record ? (
-              <button
-                className="atlas-record-title-link"
-                onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
-                type="button"
-              >
-                {focusedAtlasTitle(record)}
-              </button>
-            ) : "Atlas"}
-          </h1>
-          {!record ? (
-            <p className="page-summary">
-              See the full cyber landscape, then zoom into an area, publication, or record.
-            </p>
-          ) : (
-            <p className="atlas-workspace-description">
-              {officialTextPreview(
-                bundle.runtime.getLibraryDocument(record.center_node.id)
-                  ?.description ||
-                  "No narrative description was published for this record.",
-                160,
-              ).preview}
-            </p>
-          )}
-        </div>
-      </header>
+      <PageHeader
+        eyebrow={record ? (
+          bundle.runtime
+            .getCatalogs()
+            .find(
+              (catalog: any) =>
+                catalog.id === record.center_node.metadata?.catalog_id,
+            )?.name ||
+          bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
+          record.center_node.metadata?.catalog_id ||
+          ""
+        ) : undefined}
+        primary
+        summary={record ? officialTextPreview(
+          bundle.runtime.getLibraryDocument(record.center_node.id)?.description ||
+            "No narrative description was published for this record.",
+          160,
+        ).preview : "See the full cyber landscape, then zoom into an area, publication, or record."}
+        title={record ? (
+          <button
+            className="atlas-record-title-link"
+            onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+            type="button"
+          >
+            {focusedAtlasTitle(record)}
+          </button>
+        ) : "Atlas"}
+      />
 
       <form className="atlas-map-command" onSubmit={submitSearch}>
         <label className="visually-hidden" htmlFor="atlas-search">
