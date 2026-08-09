@@ -41,7 +41,9 @@ test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results",
   ).toBeVisible();
 
   await open(page, "/#/search?q=account");
-  expect(await page.locator("#library-results .search-result-row").count()).toBeGreaterThan(1);
+  await expect
+    .poll(() => page.locator("#library-results .search-result-row").count())
+    .toBeGreaterThan(1);
 
   await open(page, "/#/search?q=qzxv9417nohit");
   await expect(
