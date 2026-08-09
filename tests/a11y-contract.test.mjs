@@ -220,7 +220,8 @@ test("Home makes Start Here the sole primary action, retains direct Search, and 
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   assert.match(homePage, /className="home-start-here"/);
   assert.match(homePage, /onNavigate\("start-here"\)/);
-  assert.match(homePage, /className="home-search"/);
+  assert.match(homePage, /className="home-search home-search-trigger"/);
+  assert.match(homePage, /onClick=\{onOpenSearch\}/);
   assert.match(homePage, /Search Control Atlas/);
   assert.match(homePage, /Understand a requirement/);
   assert.match(homePage, /Operate or defend/);

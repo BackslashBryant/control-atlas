@@ -436,36 +436,9 @@ function CatalogInventory(props: {
     <section className="panel catalog-index" data-visual-identity="publisher-research-library">
       <PageHeader
         primary
-        summary="Search every published record, or browse the publications they come from."
+        summary="Browse official publications, then filter the records inside one publication."
         title="Library"
       />
-      {/* Library merge: searching records and browsing publications are the
-          same destination, so the record search runs from here instead of
-          making the reader pick a surface first. */}
-      <form
-        className="library-record-search"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const query = String(
-            new FormData(event.currentTarget).get("libraryQuery") || "",
-          ).trim();
-          if (query) onNavigate("search", { query });
-        }}
-        role="search"
-      >
-        <label className="catalog-search">
-          <IconSearch aria-hidden="true" size={18} />
-          <input
-            aria-label="Search published records"
-            name="libraryQuery"
-            placeholder="Search by identifier, title, or topic"
-            type="search"
-          />
-        </label>
-        <Button type="submit" variant="primary">
-          Search records
-        </Button>
-      </form>
       <h2 className="library-browse-heading">Browse publications</h2>
       <WorkbenchControlSurface
         className="catalog-inventory-control-surface"

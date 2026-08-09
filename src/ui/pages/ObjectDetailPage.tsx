@@ -673,7 +673,9 @@ export function ObjectDetailPage(props: {
                     View as list
                   </Button>
                 ) : null}
-                <Badge tone="info">{edges.length} connections</Badge>
+                <span data-published-connection-count={edges.length}>
+                  <Badge tone="info">{edges.length} connections</Badge>
+                </span>
               </div>
             </div>
 

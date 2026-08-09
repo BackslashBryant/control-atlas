@@ -8,6 +8,9 @@ export const PRODUCT_DEFINITION =
 export const PRODUCT_HERO =
   "Find the requirement, trace it to the source, and follow it into implementation and assessment.";
 
+export const GLOBAL_SEARCH_PLACEHOLDER =
+  "Search controls, clauses, STIGs, ATT&CK, guides, tools, or communities…";
+
 export const PRODUCT_DECISION_BOUNDARY =
   "Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.";
 

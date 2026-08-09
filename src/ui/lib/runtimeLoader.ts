@@ -6,6 +6,7 @@ import type {
   CommonsSearchIndex,
 } from "./commonsTypes";
 import type { ViewState } from "./viewState";
+import { expandLibrarySearchTransport } from "./librarySearchTransport";
 
 const CACHE_VERSION = RUNTIME_CACHE_VERSION;
 const artifactCache = new Map<string, Promise<unknown>>();
@@ -47,6 +48,7 @@ export type LibrarySearchArtifact = {
   document_count?: number;
   facets?: {
     objectTypes: string[];
+    publishers: string[];
     sourceClasses: string[];
     controlFamilies: string[];
     severities: string[];
@@ -364,55 +366,6 @@ async function parseJsonResponseOffThread(response: Response) {
     }, { once: true });
     worker.postMessage({ bytes }, [bytes]);
   });
-}
-
-async function expandLibrarySearchTransport(value: unknown) {
-  if (!value || typeof value !== "object") return value;
-  const artifact = value as Record<string, unknown>;
-  const library = artifact.library_search;
-  if (!library || typeof library !== "object") return value;
-  const transport = library as {
-    transport_columns?: unknown[][];
-    transport_format?: string;
-  } & Record<string, unknown>;
-  if (
-    transport.transport_format !== "columns-v1" ||
-    !Array.isArray(transport.transport_columns) ||
-    transport.transport_columns.length !== 11
-  ) {
-    return value;
-  }
-  const columns = transport.transport_columns;
-  const documents: Array<Record<string, unknown>> = [];
-  const chunkSize = 500;
-  for (let index = 0; index < columns[0].length; index += chunkSize) {
-    const end = Math.min(index + chunkSize, columns[0].length);
-    for (let documentIndex = index; documentIndex < end; documentIndex += 1) {
-      documents.push({
-        id: columns[0][documentIndex],
-        item_id: columns[1][documentIndex],
-        title: columns[2][documentIndex],
-        description_available: columns[3][documentIndex],
-        object_type: columns[4][documentIndex],
-        source_id: columns[5][documentIndex],
-        source_name: columns[6][documentIndex],
-        source_class: columns[7][documentIndex],
-        catalog_id: columns[8][documentIndex],
-        control_family: columns[9][documentIndex],
-        severity: columns[10][documentIndex],
-      });
-    }
-    if (end < columns[0].length) {
-      await new Promise<void>((resume) => window.setTimeout(resume, 0));
-    }
-  }
-  const metadata = { ...transport };
-  delete metadata.transport_columns;
-  delete metadata.transport_format;
-  return {
-    ...artifact,
-    library_search: { ...metadata, documents },
-  };
 }
 
 export function compressedArtifactPath(path: string) {

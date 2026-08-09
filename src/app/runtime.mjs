@@ -144,7 +144,8 @@ function matchesLibraryFacet(document, filters = {}) {
     (!filters.control_family ||
       document.control_family === filters.control_family) &&
     (!filters.severity || document.severity === filters.severity) &&
-    (!filters.catalog_id || document.catalog_id === filters.catalog_id)
+    (!filters.catalog_id || document.catalog_id === filters.catalog_id) &&
+    (!filters.publisher_name || document.publisher_name === filters.publisher_name)
   );
 }
 
@@ -1005,6 +1006,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
             title,
             normalize(document.control_family),
             normalize(document.source_name),
+            normalize(document.publisher_name),
+            normalize(document.official_text_preview),
           ].join(" ");
         if (!searchTerms.every((term) => searchableText.includes(term))) {
           continue;

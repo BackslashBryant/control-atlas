@@ -9,15 +9,18 @@ import {
   IconShieldLock,
   IconTool,
 } from "@tabler/icons-react";
-import { useState } from "react";
 
-import { PRODUCT_HERO } from "../../shared/product-identity";
+import {
+  GLOBAL_SEARCH_PLACEHOLDER,
+  PRODUCT_HERO,
+} from "../../shared/product-identity";
 import { HomeCapabilityPreviews } from "../components/HomeCapabilityPreviews";
-import { Button, Input } from "../components/lsm";
+import { Button } from "../components/lsm";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
+  onOpenSearch: () => void;
 };
 
 // Work-first entrances. Each route carries useful state so a person lands in
@@ -80,9 +83,7 @@ const HOME_ENTRANCES = [
   },
 ] as const;
 
-export function HomePage({ onNavigate }: HomePageProps) {
-  const [searchDraft, setSearchDraft] = useState("");
-
+export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
   return (
     <section
       aria-labelledby="home-title"
@@ -102,27 +103,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <p className="home-brand-line">{PRODUCT_HERO}</p>
           </header>
 
-          <form
-            className="home-search"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const query = searchDraft.trim();
-              if (query) onNavigate("search", { query });
-            }}
-            role="search"
+          <button
+            aria-label="Search Control Atlas"
+            className="home-search home-search-trigger"
+            onClick={onOpenSearch}
+            type="button"
           >
             <IconSearch aria-hidden="true" size={20} stroke={2} />
-            <Input
-              aria-label="Search Control Atlas"
-              onChange={(event) => setSearchDraft(event.target.value)}
-              placeholder="Search controls, clauses, STIGs, ATT&CK, guides, tools, or communities…"
-              type="search"
-              value={searchDraft}
-            />
-            <Button type="submit" variant="secondary">
-              Search
-            </Button>
-          </form>
+            <span>{GLOBAL_SEARCH_PLACEHOLDER}</span>
+            <span className="home-search-trigger__action">Search</span>
+          </button>
 
           <div className="home-primary-actions">
             <Button

@@ -1914,15 +1914,36 @@ function createBuildManifest(graph) {
   };
 }
 
+function compactOfficialText(text, limit = 180) {
+  const normalized = String(text || "").replace(/\s+/g, " ").trim();
+  if (normalized.length <= limit) return normalized;
+  const candidate = normalized.slice(0, limit + 1);
+  const lastBreak = candidate.lastIndexOf(" ");
+  const boundary = lastBreak >= Math.floor(limit * 0.8) ? lastBreak : limit;
+  return `${normalized.slice(0, boundary).trimEnd()}…`;
+}
+
 function buildLibraryDocuments(graph) {
   const sourceById = new Map(
     graph.sources.map((source) => [source.id, source]),
   );
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const publishedConnectionCounts = new Map();
+  const publishedConnectionCatalogs = new Map();
   for (const edge of graph.edges) {
     if (edge.publication_status && edge.publication_status !== "published") continue;
-    for (const nodeId of [edge.source_node_id, edge.target_node_id]) {
+    for (const [nodeId, counterpartId] of [
+      [edge.source_node_id, edge.target_node_id],
+      [edge.target_node_id, edge.source_node_id],
+    ]) {
       publishedConnectionCounts.set(nodeId, (publishedConnectionCounts.get(nodeId) || 0) + 1);
+      const counterpart = nodeById.get(counterpartId);
+      const catalogId = counterpart?.metadata?.catalog_id || counterpart?.source_id;
+      if (catalogId) {
+        const catalogs = publishedConnectionCatalogs.get(nodeId) || new Set();
+        catalogs.add(catalogId);
+        publishedConnectionCatalogs.set(nodeId, catalogs);
+      }
     }
   }
   return graph.nodes.map((node) => {
@@ -1934,14 +1955,18 @@ function buildLibraryDocuments(graph) {
       item_id: itemId,
       title,
       description_available: Boolean(node.metadata?.description?.trim()),
+      official_text_preview: compactOfficialText(node.metadata?.description),
       object_type: node.node_type,
       source_id: node.source_id,
       source_name: source?.display_name || source?.name || "",
+      publisher_name: source?.display_group || source?.owner || "",
       source_class: source?.provenance_class || "",
       catalog_id: node.metadata?.catalog_id || "",
       control_family: node.metadata?.family || "",
       severity: node.metadata?.severity || "",
       published_connection_count: publishedConnectionCounts.get(node.id) || 0,
+      published_connection_catalog_count:
+        publishedConnectionCatalogs.get(node.id)?.size || 0,
     };
   });
 }
@@ -1954,6 +1979,7 @@ function buildLibrarySearch(graph) {
     document_count: documents.length,
     facets: {
       objectTypes: facetValues("object_type"),
+      publishers: facetValues("publisher_name"),
       sourceClasses: facetValues("source_class"),
       controlFamilies: facetValues("control_family"),
       severities: facetValues("severity"),
