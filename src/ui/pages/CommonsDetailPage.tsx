@@ -11,6 +11,7 @@ import { useMemo, useState, type ReactNode } from "react";
 
 import "../../../styles/resources.css";
 import { ResourceIdentityMark } from "../components/CommonsResourceCard";
+import { AppLink } from "../components/AppLink";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
@@ -34,7 +35,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   const resource = useMemo(() => dataset?.resources.find((entry) => entry.id === id) as CommonsResource | undefined, [dataset, id]);
 
   if (!resource) {
-    return <main className="resource-detail-page"><section className="empty-state"><IconAlertTriangle aria-hidden="true" size={36} /><h1>Resource not found</h1><p>This directory does not contain “{id}”.</p><button onClick={() => onNavigate("commons")} type="button">Return to Resources</button></section></main>;
+    return <div className="resource-detail-page"><section className="empty-state"><IconAlertTriangle aria-hidden="true" size={36} /><h1>Resource not found</h1><p>This directory does not contain “{id}”.</p><AppLink onNavigate={onNavigate} view="commons">Return to Resources</AppLink></section></div>;
   }
 
   const parent = resource.parentEcosystemId ? dataset?.resources.find((entry) => entry.id === resource.parentEcosystemId) : null;
@@ -50,16 +51,11 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   };
-  const goBack = () => {
-    if (window.history.state?.controlAtlasInternalNavigation) window.history.back();
-    else onNavigate("commons");
-  };
-
   return (
-    <main className="resource-detail-page">
+    <div className="resource-detail-page">
       <div className="ca-content-container resource-detail-shell">
         <nav aria-label="Resource detail actions" className="resource-detail-nav">
-          <button onClick={goBack} type="button"><IconArrowLeft aria-hidden="true" size={16} />Back</button>
+          <AppLink onNavigate={onNavigate} view="commons"><IconArrowLeft aria-hidden="true" size={16} />Back</AppLink>
           <div>
             <button onClick={copyLink} type="button">{copied ? <IconCheck aria-hidden="true" size={15} /> : <IconCopy aria-hidden="true" size={15} />}{copied ? "Link copied" : "Copy link"}</button>
             <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={15} />Report a problem</a>
@@ -98,13 +94,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
           <aside className="resource-detail-side">
             <DetailSection title="Ecosystem context">
-              {parent ? <button className="resource-context-link" onClick={() => onNavigate("commons-detail", { id: parent.id })} type="button"><span>Parent</span><strong>{parent.name}</strong></button> : <p>This is a top-level resource.</p>}
-              {children.map((child) => <button className="resource-context-link" key={child.id} onClick={() => onNavigate("commons-detail", { id: child.id })} type="button"><span>Related service</span><strong>{child.name}</strong></button>)}
-              {collections.map((collection) => <button className="resource-context-link" key={collection.id} onClick={() => onNavigate("commons", { collection: collection.id, showAll: "true" })} type="button"><span>Collection</span><strong>{collection.title}</strong></button>)}
+              {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ id: parent.id }} view="commons-detail"><span>Parent</span><strong>{parent.name}</strong></AppLink> : <p>This is a top-level resource.</p>}
+              {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
+              {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
             </DetailSection>
             <DetailSection title="Related publications">
               <p>Search Library for governing publications and source records related to this resource.</p>
-              <button className="resource-library-search" onClick={() => onNavigate("search", { query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName })} type="button"><IconBook2 aria-hidden="true" size={16} />Search related publications</button>
+              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search related publications</AppLink>
             </DetailSection>
             <DetailSection title="Maintenance">
               <dl className="resource-detail-facts stacked"><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{display(resource.verificationMethod || "manual review")}</dd></div></dl>
@@ -112,7 +108,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
           </aside>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

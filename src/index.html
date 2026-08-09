@@ -28,7 +28,7 @@
     <!-- The same persistent header React renders on every route. It paints
          before React boots so Home never appears without global navigation. -->
     <header class="site-header" data-static-header>
-      <button aria-label="Control Atlas &mdash; home" class="brand" data-route="#/" type="button">
+      <a aria-label="Control Atlas &mdash; home" class="brand" data-route="#/" href="#/">
         <span aria-hidden="true" class="brand-icon-mark">
           <svg fill="none" viewBox="0 0 80 80">
             <path d="M 61.2 61.2 A 30 30 0 1 1 61.2 18.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="7"></path>
@@ -48,17 +48,17 @@
             </span>
           </span>
         </span>
-      </button>
+      </a>
       <nav aria-label="Primary navigation" class="primary-nav ml-[32px] self-end mb-[-1px]">
-        <button data-route="#/start" type="button">Start here</button>
-        <button data-route="#/library" type="button">Library</button>
-        <button data-route="#/guides" type="button">Guides</button>
+        <a data-route="#/start" href="#/start">Start here</a>
+        <a data-route="#/library" href="#/library">Library</a>
+        <a data-route="#/guides" href="#/guides">Guides</a>
       </nav>
       <div class="header-actions">
         <button aria-label="Open search" class="button button--secondary header-search-trigger" data-static-search-open type="button"><svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span>Search</span></button>
         <nav aria-label="Utility navigation" class="header-actions-text">
-          <button data-route="#/sources" type="button">Sources</button>
-          <button data-route="#/about" type="button">About</button>
+          <a data-route="#/sources" href="#/sources">Sources</a>
+          <a data-route="#/about" href="#/about">About</a>
         </nav>
         <button aria-label="Open navigation menu" class="mobile-nav-toggle" data-static-menu-boot type="button">
           <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
@@ -93,20 +93,20 @@
                 <button class="button button--secondary" type="submit">Search</button>
               </form>
               <div class="home-primary-actions">
-                <button class="button button--primary home-start-here" data-route="#/start" type="button">Start with your work</button>
-                <button class="home-inline-link" data-route="#/library" type="button">Browse official publications</button>
+                <a class="button button--primary home-start-here" data-route="#/start" href="#/start">Start with your work</a>
+                <a class="home-inline-link" data-route="#/library" href="#/library">Browse official publications</a>
               </div>
             </div>
           </div>
 
           <nav aria-label="Start from your work" class="home-secondary-grid">
-            <button class="home-secondary-action" data-route="#/start?goal=understand" type="button"><span><strong>Understand a requirement</strong><small>Start with controls and requirements, then keep the source attached.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=implement" type="button"><span><strong>Secure or build a system</strong><small>Move into implementation work and technical checks.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=assess" type="button"><span><strong>Assess or authorize</strong><small>Open published methods and package work.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=operate" type="button"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=risk" type="button"><span><strong>Manage risk or supply chain</strong><small>Find CUI, CMMC, SBOM, and product-assurance material.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=document" type="button"><span><strong>Produce a document</strong><small>Choose the work product, then add source context.</small></span></button>
-            <button class="home-secondary-action" data-route="#/start?goal=tools" type="button"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Search the practitioner ecosystem without mixing it into publisher hierarchy.</small></span></button>
+            <a class="home-secondary-action" data-route="#/start?goal=understand" href="#/start?goal=understand"><span><strong>Understand a requirement</strong><small>Start with controls and requirements, then keep the source attached.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=implement" href="#/start?goal=implement"><span><strong>Secure or build a system</strong><small>Move into implementation work and technical checks.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=assess" href="#/start?goal=assess"><span><strong>Assess or authorize</strong><small>Open published methods and package work.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=operate" href="#/start?goal=operate"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=risk" href="#/start?goal=risk"><span><strong>Manage risk or supply chain</strong><small>Find CUI, CMMC, SBOM, and product-assurance material.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=document" href="#/start?goal=document"><span><strong>Produce a document</strong><small>Choose the work product, then add source context.</small></span></a>
+            <a class="home-secondary-action" data-route="#/start?goal=tools" href="#/start?goal=tools"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Search the practitioner ecosystem without mixing it into publisher hierarchy.</small></span></a>
           </nav>
 
           <section aria-labelledby="home-capabilities-title" class="home-capability-previews">
@@ -114,15 +114,15 @@
             <div class="home-capability-grid">
               <article class="home-capability-preview home-capability-preview--source-chain">
                 <div class="home-capability-copy"><p class="home-capability-eyebrow">Published chain</p><h3>Trace a supply-chain requirement</h3><p>Open SP 800-171 3.17.1 with its publisher, structural path, official text, and cited connections intact.</p><small>SP 800-171 &middot; Supply Chain Risk Management &middot; 3.17.1</small></div>
-                <button class="home-capability-action" data-route="#/record/nist-800-171/3.17.1" type="button">Open the record</button>
+                <a class="home-capability-action" data-route="#/record/nist-800-171/3.17.1" href="#/record/nist-800-171/3.17.1">Open the record</a>
               </article>
               <article class="home-capability-preview home-capability-preview--threat-defense">
                 <div class="home-capability-copy"><p class="home-capability-eyebrow">Threat and defense</p><h3>Follow a software supply-chain technique</h3><p>Start with ATT&amp;CK T1195.002, then inspect only the defensive relationships a publisher actually records.</p><small>ATT&amp;CK &middot; Initial Access &middot; T1195.002</small></div>
-                <button class="home-capability-action" data-route="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map" type="button">Open in the Atlas</button>
+                <a class="home-capability-action" data-route="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map" href="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map">Open in the Atlas</a>
               </article>
               <article class="home-capability-preview home-capability-preview--working-output">
                 <div class="home-capability-copy"><p class="home-capability-eyebrow">Working output</p><h3>Prepare an assessment</h3><p>Move through published inputs, readiness checks, and starter documents for assessment planning.</p><small>Task &middot; Prepare for a security assessment</small></div>
-                <button class="home-capability-action" data-route="#/build/tasks/prepare-security-assessment" type="button">Open the task</button>
+                <a class="home-capability-action" data-route="#/build/tasks/prepare-security-assessment" href="#/build/tasks/prepare-security-assessment">Open the task</a>
               </article>
             </div>
           </section>

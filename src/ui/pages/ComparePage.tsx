@@ -38,6 +38,8 @@ import {
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { CompareCrosswalk, ViewState } from "../lib/viewState";
 import { Button, Panel } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
+import { RecordLink } from "../components/RecordLink";
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -900,7 +902,7 @@ export function ComparePage(props: {
                 </Button>
                 <details>
                   <summary>Check the data source</summary>
-                  <Button variant="secondary" className="disclosure-actions" onClick={() => onNavigate("sources")} type="button">Review sources</Button>
+                  <AppLink className="disclosure-actions" onNavigate={onNavigate} variant="secondary" view="sources">Review sources</AppLink>
                 </details>
               </div>
             </section>
@@ -1116,16 +1118,16 @@ export function ComparePage(props: {
                                       className="chain-link-item"
                                       key={node.id}
                                     >
-                                      <button
+                                      <RecordLink
                                         className="link-action"
-                                        onClick={() => onOpenNode(node.id)}
-                                        type="button"
+                                        nodeId={node.id}
+                                        onOpenNode={onOpenNode}
                                       >
                                         <strong>
                                           {node.metadata?.item_id || node.id}
                                         </strong>{" "}
                                         — {node.metadata?.title || node.label}
-                                      </button>
+                                      </RecordLink>
                                     </li>
                                   ),
                                 )
@@ -1164,13 +1166,13 @@ export function ComparePage(props: {
           <p className="notice-inline" role="note">
             ATT&CK ICS coverage is still partial in the public map. A missing
             ICS technique link is not proof that no control relationship exists.{" "}
-            <button
+            <AppLink
               className="text-link"
-              onClick={() => onNavigate("sources")}
-              type="button"
+              onNavigate={onNavigate}
+              view="sources"
             >
               Review sources
-            </button>
+            </AppLink>
           </p>
           <WorkbenchControlSurface
             className="compare-control-surface"
@@ -1372,16 +1374,16 @@ export function ComparePage(props: {
                                       className="chain-link-item"
                                       key={node.id}
                                     >
-                                      <button
+                                      <RecordLink
                                         className="link-action"
-                                        onClick={() => onOpenNode(node.id)}
-                                        type="button"
+                                        nodeId={node.id}
+                                        onOpenNode={onOpenNode}
                                       >
                                         <strong>
                                           {node.metadata?.item_id || node.id}
                                         </strong>{" "}
                                         — {node.metadata?.title || node.label}
-                                      </button>
+                                      </RecordLink>
                                     </li>
                                   ),
                                 )

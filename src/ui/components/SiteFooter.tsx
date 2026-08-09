@@ -2,6 +2,7 @@ import { ALL_NAV_ITEMS } from "../lib/navigation";
 import sourceRegistry from "../../../data/source-registry.json";
 import { PRODUCT_FOOTER_NOTICE } from "../../shared/product-identity";
 import type { ViewState } from "../lib/viewState";
+import { AppLink } from "./AppLink";
 
 const LAST_UPDATED = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -25,14 +26,14 @@ export function SiteFooter(props: {
           <ul className="flex flex-col gap-[12px] p-0 m-0 list-none">
             {ALL_NAV_ITEMS.map((item) => (
               <li key={item.label}>
-                <button
-                  className="text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px] bg-transparent border-0 cursor-pointer p-0 transition-colors"
-                  onClick={() => props.onNavigate(item.view, item.patch)}
-                  role="link"
-                  type="button"
+                <AppLink
+                  className="footer-link text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px] transition-colors"
+                  onNavigate={props.onNavigate}
+                  patch={item.patch}
+                  view={item.view}
                 >
                   {item.label}
-                </button>
+                </AppLink>
               </li>
             ))}
           </ul>
@@ -40,22 +41,21 @@ export function SiteFooter(props: {
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[16px] text-[var(--ca-text)]">About</strong>
           <p className="text-[var(--ca-text-muted)] text-[13px] mb-[12px]">Open source under the MIT license.</p>
-          <button
-            className="text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px] bg-transparent border-0 cursor-pointer p-0 transition-colors"
-            onClick={() => props.onNavigate("about")}
-            role="link"
-            type="button"
+          <AppLink
+            className="footer-link text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px] transition-colors"
+            onNavigate={props.onNavigate}
+            view="about"
           >
             About
-          </button>
-          <a className="block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank">Submit resource</a>
-          <a className="block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank">Report a problem</a>
+          </AppLink>
+          <a className="footer-link block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank">Submit resource</a>
+          <a className="footer-link block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank">Report a problem</a>
         </div>
       </div>
       <div className="max-w-[1280px] mx-auto border-t border-[var(--ca-border)] pt-[24px] flex flex-wrap gap-x-[24px] gap-y-[8px]">
         <p className="text-[var(--ca-text-subtle)] text-[12px]">{PRODUCT_FOOTER_NOTICE}</p>
         <p className="text-[var(--ca-text-subtle)] text-[12px]">Last updated {LAST_UPDATED}.</p>
-        <button className="text-[var(--ca-text-subtle)] hover:text-[var(--ca-secondary)] text-[12px] bg-transparent border-0 cursor-pointer p-0" onClick={() => props.onNavigate("sources")} role="link" type="button">Source attribution</button>
+        <AppLink className="footer-link text-[var(--ca-text-subtle)] hover:text-[var(--ca-secondary)] text-[12px]" onNavigate={props.onNavigate} view="sources">Source attribution</AppLink>
       </div>
     </footer>
   );

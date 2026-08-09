@@ -2,6 +2,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { ProvenanceBadge } from "../lib/compareHelpers";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
+import { RecordLink } from "./RecordLink";
 
 type TableRow = {
   edge: {
@@ -73,13 +74,13 @@ export function RelationshipGraphTable(props: {
                 key={`${edge.id || edge.relationship_type}-${counterpart.id}`}
               >
               <td data-label="Connected item">
-                <button
+                <RecordLink
                   className="link-action"
-                  onClick={() => onOpenNode(counterpart.id)}
-                  type="button"
+                  nodeId={counterpart.id}
+                  onOpenNode={onOpenNode}
                 >
                   <strong>{itemId}</strong> — {title}
-                </button>
+                </RecordLink>
               </td>
               <td data-label="Connection">
                 {displayNameFor("relationship_type", edge.relationship_type)}

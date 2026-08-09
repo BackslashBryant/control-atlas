@@ -9,6 +9,7 @@ import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.
 const connectionInventory = connectionInventoryArtifact.connection_inventory;
 const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap.catalogs;
 import { Button, Panel } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 import {
   PageHeader,
   SelectField,
@@ -111,13 +112,14 @@ export function SourcesPage(props: {
   if (selectedSource) {
     return (
       <Panel className="sources-page" data-visual-identity="provenance-ledger">
-        <button
+        <AppLink
           className="link-action"
-          onClick={() => onNavigate("sources", { ...state, source: "" })}
-          type="button"
+          onNavigate={onNavigate}
+          patch={{ ...state, source: "" }}
+          view="sources"
         >
           ← Back to sources
-        </button>
+        </AppLink>
         <PageHeader
           eyebrow="Source detail"
           primary
@@ -168,9 +170,9 @@ export function SourcesPage(props: {
 
       <p className="sources-resource-boundary">
         Tools, templates, datasets, training, and communities are a Library facet.{" "}
-        <button onClick={() => onNavigate("search", { kind: "tools-communities" })} type="button">
+        <AppLink onNavigate={onNavigate} patch={{ kind: "tools-communities" }} view="search">
           Open Tools &amp; communities
-        </button>
+        </AppLink>
       </p>
 
       {/* Restored 2026-08-01. This disclosure was dropped from the page while
@@ -385,12 +387,13 @@ export function SourcesPage(props: {
                 {activeLayer === "ingestion" ? (
                   <>
                     <strong role="cell">
-                      <button
-                        onClick={() => onNavigate("sources", { ...state, source: row.id })}
-                        type="button"
+                      <AppLink
+                        onNavigate={onNavigate}
+                        patch={{ ...state, source: row.id }}
+                        view="sources"
                       >
                         {row.id}
-                      </button>
+                      </AppLink>
                       <small>{row.publication}</small>
                     </strong>
                     <span role="cell">{row.publisher}</span>
@@ -404,12 +407,13 @@ export function SourcesPage(props: {
                 ) : (
                   <>
                     <strong role="cell">
-                      <button
-                        onClick={() => onNavigate("sources", { ...state, source: row.id })}
-                        type="button"
+                      <AppLink
+                        onNavigate={onNavigate}
+                        patch={{ ...state, source: row.id }}
+                        view="sources"
                       >
                         {row.publication}
-                      </button>
+                      </AppLink>
                     </strong>
                     <span role="cell">{row.publisher}</span>
                     <span role="cell">

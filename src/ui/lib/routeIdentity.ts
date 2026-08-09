@@ -44,7 +44,10 @@ const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   // Library tab stays selected while a query is open.
   search: "search",
   "catalog-detail": "search",
-  "library-detail": "search",
+  // A record has its own canonical /record route and is not itself a primary
+  // navigation destination. Do not imply Library ownership based on how the
+  // visitor arrived.
+  "library-detail": null,
   matrix: "search",
   patterns: "patterns",
   templates: "start-here",

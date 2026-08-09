@@ -220,7 +220,10 @@ test("search and glossary dialogs expose accessible control names", () => {
 test("Home makes Start Here the sole primary action, retains direct Search, and keeps RMF optional", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   assert.match(homePage, /className="home-start-here"/);
-  assert.match(homePage, /onNavigate\("start-here"\)/);
+  assert.match(
+    homePage,
+    /<AppLink\s+className="home-start-here"[\s\S]*?view="start-here"/,
+  );
   assert.match(homePage, /className="home-search home-search-trigger"/);
   assert.match(homePage, /onClick=\{onOpenSearch\}/);
   assert.match(homePage, /Search Control Atlas/);

@@ -49,6 +49,7 @@ import {
   scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
 import { Panel, Button, ButtonLink } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 
 type TemplateRecord = {
   template_id?: string;
@@ -1000,12 +1001,9 @@ export function TemplatesPage(props: {
         primary
         action={
           selectedTemplate ? (
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("templates", { templateType: "" })}
-            >
+            <AppLink onNavigate={onNavigate} patch={{ templateType: "" }} variant="secondary" view="templates">
               Back to starter documents
-            </Button>
+            </AppLink>
           ) : undefined
         }
         summary={buildOverview
@@ -1037,16 +1035,10 @@ export function TemplatesPage(props: {
                 body={lane.description}
                 icon={<Icon aria-hidden="true" size={22} stroke={1.8} />}
                 key={lane.id}
-                onClick={() =>
-                  lane.id === "resources"
-                    ? onNavigate("commons")
-                    : onNavigate("templates", {
-                        buildSection: lane.id,
-                        task: "",
-                        templateType: "",
-                      })
-                }
+                onNavigate={onNavigate}
+                patch={lane.id === "resources" ? undefined : { buildSection: lane.id, task: "", templateType: "" }}
                 title={lane.label}
+                view={lane.id === "resources" ? "commons" : "templates"}
               />
             );
           })}
@@ -1077,16 +1069,18 @@ export function TemplatesPage(props: {
                   icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
                   actionLabel="Open task"
                   selected={state.task === workflow.workflow_id}
-                  onClick={() => {
+                  onNavigate={onNavigate}
+                  onBeforeNavigate={() => {
                     setShowAllOfficialResources(false);
                     setShowCompleteOfficialCatalog(false);
                     setShowAllTools(false);
-                    onNavigate("templates", { buildSection: "tasks", task: workflow.workflow_id, templateType: "" });
                     window.setTimeout(
                       () => workflowDetailRef.current?.focus(),
                       0,
                     );
                   }}
+                  patch={{ buildSection: "tasks", task: workflow.workflow_id, templateType: "" }}
+                  view="templates"
                 />
               ))}
             </div>
@@ -1102,16 +1096,18 @@ export function TemplatesPage(props: {
                       icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
                       actionLabel="Open task"
                       selected={state.task === workflow.workflow_id}
-                      onClick={() => {
+                      onNavigate={onNavigate}
+                      onBeforeNavigate={() => {
                         setShowAllOfficialResources(false);
                         setShowCompleteOfficialCatalog(false);
                         setShowAllTools(false);
-                        onNavigate("templates", { buildSection: "tasks", task: workflow.workflow_id, templateType: "" });
                         window.setTimeout(
                           () => workflowDetailRef.current?.focus(),
                           0,
                         );
                       }}
+                      patch={{ buildSection: "tasks", task: workflow.workflow_id, templateType: "" }}
+                      view="templates"
                     />
                   ))}
                 </div>
@@ -1161,12 +1157,9 @@ export function TemplatesPage(props: {
                   </h2>
                   <p className="page-summary">{selectedWorkflow.summary}</p>
                 </div>
-                <Button
-                  variant="secondary"
-                  onClick={() => onNavigate("templates", { buildSection: "tasks", task: "", templateType: "" })}
-                >
+                <AppLink onNavigate={onNavigate} patch={{ buildSection: "tasks", task: "", templateType: "" }} variant="secondary" view="templates">
                   Browse tasks
-                </Button>
+                </AppLink>
               </div>
               {/* The method — outcomes, steps, readiness — is reference, not a
                   gate. It used to sit between the user's stated intent and the
@@ -1284,19 +1277,10 @@ export function TemplatesPage(props: {
                         body={template.description}
                         icon={<IconFileDescription size={20} stroke={1.8} />}
                         key={template.name}
-                        onClick={() =>
-                          onNavigate("templates", {
-                            buildSection: "documents",
-                            task: "",
-                            templateType: template.name,
-                            framework: state.framework || "",
-                            format: template.supported_formats?.[0] || "docx",
-                            environment: state.environment || "",
-                            baseline: "",
-                            controlFamily: "",
-                          })
-                        }
+                        onNavigate={onNavigate}
+                        patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                         title={template.display_name}
+                        view="templates"
                       />
                     ))}
                   </div>
@@ -1316,19 +1300,10 @@ export function TemplatesPage(props: {
                       body={template.description}
                       icon={<IconFileDescription size={20} stroke={1.8} />}
                       key={template.name}
-                      onClick={() =>
-                          onNavigate("templates", {
-                            buildSection: "documents",
-                            task: "",
-                            templateType: template.name,
-                          framework: state.framework || "",
-                          format: template.supported_formats?.[0] || "docx",
-                          environment: state.environment || "",
-                          baseline: "",
-                          controlFamily: "",
-                        })
-                      }
+                      onNavigate={onNavigate}
+                      patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                       title={template.display_name}
+                      view="templates"
                     />
                   ))}
                 </div>
@@ -1467,27 +1442,21 @@ export function TemplatesPage(props: {
                       {group.resources.map((resource) => (
                         <CommonsResourceCard
                           key={resource.id}
-                          onNavigateSearch={(query) =>
-                            onNavigate("commons", { query })
-                          }
-                          onSelectDetail={(id) =>
-                            onNavigate("commons-detail", {
-                              id,
-                            })
-                          }
+                          onNavigate={onNavigate}
                           resource={resource}
                         />
                       ))}
                     </div>
                   </div>
                 ))}
-                <Button
-                  variant="secondary"
+                <AppLink
                   className="nexus-show-more"
-                  onClick={() => onNavigate("commons", {})}
+                  onNavigate={onNavigate}
+                  variant="secondary"
+                  view="commons"
                 >
                   Browse all {communityResources.length} resources
-                </Button>
+                </AppLink>
               </>
             )}
           </section>

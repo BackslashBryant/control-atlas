@@ -4,7 +4,8 @@ import {
   learnArticleById,
   practitionerGuides,
 } from "../../app/learn-content.mjs";
-import { Button, Panel } from "../components/lsm";
+import { Panel } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -29,10 +30,11 @@ export function PlaybooksPage(props: {
         />
         <section aria-label="Practitioner guides" className="learn-article-grid">
           {practitionerGuides.map((article) => (
-            <button
+            <AppLink
               key={article.id}
-              onClick={() => onNavigate("patterns", { pattern: article.id })}
-              type="button"
+              onNavigate={onNavigate}
+              patch={{ pattern: article.id }}
+              view="patterns"
             >
               <IconBook2 aria-hidden="true" size={20} />
               <span>
@@ -40,14 +42,14 @@ export function PlaybooksPage(props: {
                 <small>{article.summary}</small>
               </span>
               <IconArrowRight aria-hidden="true" size={18} />
-            </button>
+            </AppLink>
           ))}
         </section>
 
         <div className="card-actions">
-          <Button onClick={() => onNavigate("about")} type="button" variant="secondary">
+          <AppLink onNavigate={onNavigate} variant="secondary" view="about">
             How to use Control Atlas
-          </Button>
+          </AppLink>
         </div>
       </Panel>
     );
@@ -57,13 +59,9 @@ export function PlaybooksPage(props: {
     <Panel data-visual-identity="practitioner-field-manual">
       <PageHeader
         action={
-          <Button
-            onClick={() => onNavigate("patterns", { pattern: "" })}
-            type="button"
-            variant="secondary"
-          >
+          <AppLink onNavigate={onNavigate} patch={{ pattern: "" }} variant="secondary" view="patterns">
             Back to Guides
-          </Button>
+          </AppLink>
         }
         eyebrow={selected.kind === "practitioner" ? "Practitioner guide" : "Control Atlas explanation"}
         summary={selected.summary}
@@ -102,18 +100,14 @@ export function PlaybooksPage(props: {
             ))}
           </ul>
         </section>
-        <Button
-          onClick={() =>
-            onNavigate(
-              selected.nextAction.view as ViewState["view"],
-              selected.nextAction.patch as Partial<ViewState> | undefined,
-            )
-          }
-          type="button"
+        <AppLink
+          onNavigate={onNavigate}
+          patch={selected.nextAction.patch as Partial<ViewState> | undefined}
           variant="primary"
+          view={selected.nextAction.view as ViewState["view"]}
         >
           {selected.nextAction.label}
-        </Button>
+        </AppLink>
       </div>
     </Panel>
   );

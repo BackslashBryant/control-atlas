@@ -5,6 +5,7 @@ import {
   type CatalogCoverage,
 } from "../lib/catalogCoverage";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { AppLink } from "./AppLink";
 
 export function useCatalogCoverage(bundle: RuntimeBundle) {
   return buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1);
@@ -34,9 +35,9 @@ export function CatalogCoverageNotice(props: {
       <span className="catalog-coverage-chip-detail">
         Low map coverage — a missing link is not proof that no relationship
         exists.{" "}
-        <button className="text-link" onClick={onNavigateSources} type="button">
+        <AppLink className="text-link" onNavigate={onNavigateSources} view="sources">
           Review sources
-        </button>
+        </AppLink>
       </span>
     </p>
   );

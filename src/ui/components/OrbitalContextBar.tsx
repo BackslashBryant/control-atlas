@@ -2,6 +2,7 @@ import { IconArrowLeft } from "@tabler/icons-react";
 
 import type { ViewState } from "../lib/viewState";
 import { routeIdentityFor } from "../lib/routeIdentity";
+import { AppLink } from "./AppLink";
 
 type RouteContext = {
   depth: 0 | 1 | 2;
@@ -182,19 +183,15 @@ export function OrbitalContextBar(props: {
           </span>
         ) : null}
         {context.back ? (
-          <button
+          <AppLink
             className="orbital-context-return"
-            onClick={() =>
-              props.onNavigate(
-                context.back!.view,
-                context.back!.patch,
-              )
-            }
-            type="button"
+            onNavigate={props.onNavigate}
+            patch={context.back.patch}
+            view={context.back.view}
           >
             <IconArrowLeft aria-hidden="true" size={16} stroke={1.5} />
             {context.back.label}
-          </button>
+          </AppLink>
         ) : null}
       </div>
     </div>

@@ -18,6 +18,8 @@ import {
 } from "@tabler/icons-react";
 
 import type { CommonsResource } from "../lib/commonsTypes";
+import type { ViewState } from "../lib/viewState";
+import { AppLink } from "./AppLink";
 import {
   resourceAccessLabel,
   resourceBrandIdentity,
@@ -26,7 +28,7 @@ import {
 
 type CommonsResourceCardProps = {
   resource: CommonsResource;
-  onSelectDetail?: (id: string) => void;
+  onNavigate?: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onNavigateSearch?: (query: string) => void;
 };
 
@@ -73,7 +75,7 @@ export function ResourceIdentityMark({ resource }: { resource: CommonsResource }
 
 export function CommonsResourceCard({
   resource,
-  onSelectDetail,
+  onNavigate,
 }: CommonsResourceCardProps) {
   const identity = resourceBrandIdentity(resource);
   const cardPurpose =
@@ -89,13 +91,15 @@ export function CommonsResourceCard({
           <ResourceIdentityMark resource={resource} />
           <div className="resource-card-heading">
             <h3 className="text-lg font-semibold text-[var(--ca-text)] group-hover:text-[var(--ca-primary)] transition-colors">
-              {onSelectDetail ? (
-                <button
+              {onNavigate ? (
+                <AppLink
                   className="text-left hover:underline focus:outline-none focus:text-[var(--ca-primary)]"
-                  onClick={() => onSelectDetail(resource.id)}
+                  onNavigate={onNavigate}
+                  patch={{ id: resource.id }}
+                  view="commons-detail"
                 >
                   {resource.name}
-                </button>
+                </AppLink>
               ) : (
                 resource.name
               )}
@@ -128,13 +132,15 @@ export function CommonsResourceCard({
           <IconExternalLink aria-hidden="true" size={14} />
         </a>
 
-        {onSelectDetail ? (
-          <button
+        {onNavigate ? (
+          <AppLink
             className="px-3 py-1.5 rounded-sm border border-[var(--ca-border-strong)] bg-transparent hover:bg-[var(--ca-surface-raised)] text-[var(--ca-text)] text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--ca-border-strong)]"
-            onClick={() => onSelectDetail(resource.id)}
+            onNavigate={onNavigate}
+            patch={{ id: resource.id }}
+            view="commons-detail"
           >
             Details
-          </button>
+          </AppLink>
         ) : null}
       </div>
     </article>

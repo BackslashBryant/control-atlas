@@ -19,7 +19,7 @@ import {
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import { Button } from "./lsm/Button";
+import { AppLink } from "./AppLink";
 
 type SearchOverlayProps = {
   bundle: RuntimeBundle | null;
@@ -249,18 +249,19 @@ export function SearchOverlay(props: SearchOverlayProps) {
                       })}`;
                       return (
                         <li key={document.id}>
-                          <button
+                          <AppLink
                             aria-label={document.title || document.item_id}
                             className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                             id={`search-suggestion-${index}`}
-                            onClick={() => openResult(document.id)}
                             onFocus={() => setHighlightedIndex(index)}
                             onMouseEnter={() => setHighlightedIndex(index)}
-                            type="button"
+                            onNavigate={onNavigate}
+                            patch={{ node: document.id }}
+                            view="library-detail"
                           >
-                            <span className="search-overlay-result-title">
+                            <h3 className="search-overlay-result-title">
                               <MarkedSearchText query={query} text={title} />
-                            </span>
+                            </h3>
                             <span className="search-overlay-result-meta">
                               <code>{document.item_id}</code>
                               {" · "}
@@ -269,7 +270,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                             <span className="search-overlay-result-summary">
                               <MarkedSearchText query={query} text={searchPreviewText(document)} />
                             </span>
-                          </button>
+                          </AppLink>
                         </li>
                       );
                     })}
@@ -286,22 +287,20 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     {results.guideResults.map((guide) => {
                       const index = suggestionIndex("guide", guide.id);
                       return <li key={guide.id}>
-                        <button
+                        <AppLink
                           aria-label={guide.title}
                           className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                           id={`search-suggestion-${index}`}
-                          onClick={() => {
-                            onOpenChange(false);
-                            onNavigate("patterns", { pattern: guide.id });
-                          }}
                           onFocus={() => setHighlightedIndex(index)}
                           onMouseEnter={() => setHighlightedIndex(index)}
-                          type="button"
+                          onNavigate={onNavigate}
+                          patch={{ pattern: guide.id }}
+                          view="patterns"
                         >
-                          <span className="search-overlay-result-title"><MarkedSearchText query={query} text={`Control Atlas · ${guide.title}`} /></span>
+                          <h3 className="search-overlay-result-title"><MarkedSearchText query={query} text={`Control Atlas · ${guide.title}`} /></h3>
                           <span className="search-overlay-result-meta">Control Atlas guide · topic match</span>
                           <span className="search-overlay-result-summary"><MarkedSearchText query={query} text={guide.summary} /></span>
-                        </button>
+                        </AppLink>
                       </li>;
                     })}
                   </ul>
@@ -318,25 +317,23 @@ export function SearchOverlay(props: SearchOverlayProps) {
                       const index = suggestionIndex("source", source.id);
                       const publisher = source.publisher || source.agency || source.display_group || source.owner || "Source owner";
                       return <li key={source.id}>
-                        <button
+                        <AppLink
                           aria-label={source.display_name || source.name || source.id}
                           className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                           id={`search-suggestion-${index}`}
-                          onClick={() => {
-                            onOpenChange(false);
-                            onNavigate("sources", { source: source.id });
-                          }}
                           onFocus={() => setHighlightedIndex(index)}
                           onMouseEnter={() => setHighlightedIndex(index)}
-                          type="button"
+                          onNavigate={onNavigate}
+                          patch={{ source: source.id }}
+                          view="sources"
                         >
-                          <span className="search-overlay-result-title">
+                          <h3 className="search-overlay-result-title">
                             <MarkedSearchText query={query} text={`${publisher} · ${source.display_name || source.name || source.id}`} />
-                          </span>
+                          </h3>
                           <span className="search-overlay-result-meta">
                             {publisher} · identity match
                           </span>
-                        </button>
+                        </AppLink>
                       </li>;
                     })}
                   </ul>
@@ -352,21 +349,22 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     {results.resourceResults.map((doc) => {
                       const index = suggestionIndex("resource", doc.id);
                       return <li key={doc.id}>
-                        <button
+                        <AppLink
                           aria-label={doc.name}
                           className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                           id={`search-suggestion-${index}`}
-                          onClick={() => openCommonsResult(doc.id)}
                           onFocus={() => setHighlightedIndex(index)}
                           onMouseEnter={() => setHighlightedIndex(index)}
-                          type="button"
+                          onNavigate={onNavigate}
+                          patch={{ id: doc.id }}
+                          view="commons-detail"
                         >
-                          <span className="search-overlay-result-title flex items-center justify-between">
+                          <h3 className="search-overlay-result-title flex items-center justify-between">
                             <span><MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} /></span>
                             <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
                               {resourceTypeLabel(doc.resourceType)}
                             </span>
-                          </span>
+                          </h3>
                           <span className="search-overlay-result-meta">
                             <code>{doc.publisher}</code>
                             {" · "}
@@ -375,7 +373,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />
                           </span>
-                        </button>
+                        </AppLink>
                       </li>;
                     })}
                   </ul>
@@ -391,18 +389,19 @@ export function SearchOverlay(props: SearchOverlayProps) {
                     {results.communityResults.map((doc) => {
                       const index = suggestionIndex("community", doc.id);
                       return <li key={doc.id}>
-                        <button
+                        <AppLink
                           aria-label={doc.name}
                           className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                           id={`search-suggestion-${index}`}
-                          onClick={() => openCommonsResult(doc.id)}
                           onFocus={() => setHighlightedIndex(index)}
                           onMouseEnter={() => setHighlightedIndex(index)}
-                          type="button"
+                          onNavigate={onNavigate}
+                          patch={{ id: doc.id }}
+                          view="commons-detail"
                         >
-                          <span className="search-overlay-result-title">
+                          <h3 className="search-overlay-result-title">
                             <MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} />
-                          </span>
+                          </h3>
                           <span className="search-overlay-result-meta">
                             <code>{doc.publisher}</code>
                             {" · "}
@@ -411,7 +410,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />
                           </span>
-                        </button>
+                        </AppLink>
                       </li>;
                     })}
                   </ul>
@@ -422,9 +421,9 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
           {query.trim() ? (
             <div className="card-actions flex gap-2">
-              <Button variant="secondary" onClick={openExplore} type="button">
+              <AppLink onNavigate={onNavigate} patch={{ query: query.trim() }} variant="secondary" view="search">
                 View all search results
-              </Button>
+              </AppLink>
             </div>
           ) : null}
         </Dialog.Content>

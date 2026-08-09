@@ -31,6 +31,26 @@ body {
   background-size: 24px 24px, 24px 24px, auto, auto, auto;
 }
 
+/* Phase 5 mobile interaction contract. This lives in the final stylesheet so
+   the legacy universal min-width reset cannot shrink real touch targets. */
+@media (max-width: 640px) {
+  body a[href]:not(.visually-hidden),
+  body button:not(.visually-hidden),
+  body input:not([type="hidden"]):not(.visually-hidden),
+  body select:not(.visually-hidden),
+  body textarea:not(.visually-hidden),
+  body summary:not(.visually-hidden) {
+    box-sizing: border-box;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  body a[href]:not(.visually-hidden) {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
 #root {
   display: grid;
   align-content: start;
@@ -480,7 +500,7 @@ body {
   flex-shrink: 0;
 }
 
-.primary-nav button {
+.primary-nav a {
   min-height: 68px;
   padding-inline: var(--ca-space-3);
   border: 0;
@@ -496,7 +516,7 @@ body {
 }
 
 @media (min-width: 1024px) and (max-width: 1519px) {
-  .primary-nav button {
+  .primary-nav a {
     padding-inline: var(--ca-space-2);
   }
 
@@ -509,10 +529,10 @@ body {
   }
 }
 
-.primary-nav button.active,
-.primary-nav button.nav-active,
-.primary-nav button:hover,
-.primary-nav button:focus-visible {
+.primary-nav a.active,
+.primary-nav a.nav-active,
+.primary-nav a:hover,
+.primary-nav a:focus-visible {
   border-bottom-color: var(--ca-primary);
   background: color-mix(in srgb, var(--ca-primary) 8%, transparent);
   color: var(--ca-text);
@@ -1744,7 +1764,7 @@ details > summary {
     display: flex;
   }
 
-  .primary-nav button {
+  .primary-nav a {
     padding-inline: var(--ca-space-2);
   }
 }

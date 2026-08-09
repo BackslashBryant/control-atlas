@@ -40,6 +40,7 @@ import { RecordContextRail } from "../components/RecordContextRail";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { QuickIntentCard } from "../components/QuickIntentCard";
+import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
 import {
   glossaryTermsForDocument,
 } from "../lib/glossarySearch.mjs";
@@ -60,7 +61,6 @@ import {
   formatConfidence,
   formatRelationshipLabel,
   nodeProvenanceBreakdown,
-  openAtlasMapForNode,
   sourceTrustSummary,
   sourceUsageSummary,
   sourceWarnings,
@@ -137,7 +137,7 @@ function renderOdpText(text: string): ReactNode {
   return nodes;
 }
 
-import { Button, Panel } from "../components/lsm";
+import { Button, ButtonLink, Panel } from "../components/lsm";
 
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
@@ -220,13 +220,9 @@ export function ObjectDetailPage(props: {
       <section className="notice">
         <h1>Item not found</h1>
         <p>This deep link does not match a current public library entry.</p>
-        <Button
-          variant="primary"
-          onClick={() => onNavigate("search")}
-          type="button"
-        >
+        <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Back to Explore
-        </Button>
+        </AppLink>
       </section>
     );
   }
@@ -239,13 +235,9 @@ export function ObjectDetailPage(props: {
           This graph record is not present in the current search catalog, so
           its identity cannot be shown reliably.
         </p>
-        <Button
-          variant="primary"
-          onClick={() => onNavigate("search")}
-          type="button"
-        >
+        <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Return to Search
-        </Button>
+        </AppLink>
       </section>
     );
   }
@@ -266,14 +258,6 @@ export function ObjectDetailPage(props: {
   const relatedGlossaryTerms = glossaryTermsForDocument(document);
   const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
 
-  function goBack() {
-    if (window.history.state?.controlAtlasInternalNavigation) {
-      window.history.back();
-      return;
-    }
-    onNavigate("search");
-  }
-
   return (
     <section
       className="detail-page"
@@ -290,54 +274,45 @@ export function ObjectDetailPage(props: {
         eyebrow={displayNameFor("object_type", document.object_type)}
         action={
           <div className="page-header-actions">
-            <Button
+            <AppLink
+              onClick={(event) => {
+                if (
+                  !shouldInterceptAppLink(event) ||
+                  !window.history.state?.controlAtlasInternalNavigation
+                ) return;
+                event.preventDefault();
+                window.history.back();
+              }}
+              onNavigate={onNavigate}
               variant="secondary"
-              onClick={goBack}
-              type="button"
+              view="search"
             >
               Back
-            </Button>
+            </AppLink>
             {officialSourceUrl ? (
-              <Button
+              <ButtonLink
+                href={officialSourceUrl}
+                rel="noopener noreferrer"
+                target="_blank"
                 variant="primary"
-                onClick={() => window.open(officialSourceUrl, "_blank", "noopener,noreferrer")}
-                type="button"
               >
                 Open official source
-              </Button>
+              </ButtonLink>
             ) : null}
-            <Button
-              variant="secondary"
-              onClick={() => openAtlasMapForNode(onNavigate, state.node)}
-              type="button"
-            >
+            <AppLink onNavigate={onNavigate} patch={{ node: state.node }} variant="secondary" view="atlas-map">
               See this in the Atlas map
-            </Button>
+            </AppLink>
             {/* Secondary actions collapse into one affordance so the record
                 opens with a single obvious next step rather than four peers. */}
             <details className="record-actions-menu">
               <summary>More actions</summary>
               <div className="record-actions-popover">
-                <Button
-                  variant="secondary"
-                  onClick={() =>
-                    onNavigate("matrix", {
-                      crosswalk: "relationships",
-                      items: document.item_id,
-                      source: node.metadata?.catalog_id || "",
-                    })
-                  }
-                  type="button"
-                >
+                <AppLink onNavigate={onNavigate} patch={{ crosswalk: "relationships", items: document.item_id, source: node.metadata?.catalog_id || "" }} variant="secondary" view="matrix">
                   Compare
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => onNavigate("templates", { framework: document.catalog_id })}
-                  type="button"
-                >
+                </AppLink>
+                <AppLink onNavigate={onNavigate} patch={{ framework: document.catalog_id }} variant="secondary" view="templates">
                   Produce a document
-                </Button>
+                </AppLink>
                 <Button
                   variant="secondary"
                   onClick={() => {
@@ -431,13 +406,9 @@ export function ObjectDetailPage(props: {
             <p className="support-meta">{sourceCurrentAsOf(source)}</p>
           ) : null}
           <div className="card-actions">
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("sources", { source: source?.id || "" })}
-              type="button"
-            >
+            <AppLink onNavigate={onNavigate} patch={{ source: source?.id || "" }} variant="secondary" view="sources">
               View data sources
-            </Button>
+            </AppLink>
           </div>
         </SummaryCard>
       </section>
@@ -450,15 +421,14 @@ export function ObjectDetailPage(props: {
 
       {isEnhancement && baseControlNode ? (
         <p className="record-parent-link">
-          <button
+          <AppLink
             className="link-action quiet"
-            onClick={() =>
-              onOpenNode(baseControlNode.id)
-            }
-            type="button"
+            onNavigate={onNavigate}
+            patch={{ node: baseControlNode.id }}
+            view="library-detail"
           >
             Part of {baseItemId}
-          </button>
+          </AppLink>
         </p>
       ) : null}
 
@@ -467,18 +437,17 @@ export function ObjectDetailPage(props: {
           <span className="record-decomposition-label">Decomposes into</span>
           <div className="badge-row">
             {enhancementsGroup.items.map((item: any) => (
-              <button
+              <AppLink
                 className="badge-button"
                 key={item.counterpart.id}
-                onClick={() =>
-                  onOpenNode(item.counterpart.id)
-                }
-                type="button"
+                onNavigate={onNavigate}
+                patch={{ node: item.counterpart.id }}
+                view="library-detail"
               >
                 <Badge>
                   {item.counterpart.metadata?.item_id || item.counterpart.id}
                 </Badge>
-              </button>
+              </AppLink>
             ))}
           </div>
         </div>
@@ -493,15 +462,14 @@ export function ObjectDetailPage(props: {
               {supersededByNodes.map((supersededNode, index) => (
                 <Fragment key={supersededNode.id}>
                   {index > 0 ? ", " : ""}
-                  <button
+                  <AppLink
                     className="link-action quiet"
-                    onClick={() =>
-                      onOpenNode(supersededNode.id)
-                    }
-                    type="button"
+                    onNavigate={onNavigate}
+                    patch={{ node: supersededNode.id }}
+                    view="library-detail"
                   >
                     {supersededNode.metadata?.item_id || supersededNode.id}
-                  </button>
+                  </AppLink>
                 </Fragment>
               ))}
             </span>

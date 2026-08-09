@@ -6,6 +6,7 @@ import {
 import { useMemo } from "react";
 
 import { Button, ButtonLink } from "../components/lsm/Button";
+import { AppLink } from "../components/AppLink";
 import {
   paginateCatalogRecords,
   publicationSourceForCatalog,
@@ -57,13 +58,9 @@ export function CatalogDetailPage(props: {
       <section className="notice">
         <h1>Catalog not found</h1>
         <p>This catalog is not available in the current public data set.</p>
-        <Button
-          onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
-          type="button"
-          variant="primary"
-        >
+        <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Back to Library
-        </Button>
+        </AppLink>
       </section>
     );
   }
@@ -126,13 +123,13 @@ export function CatalogDetailPage(props: {
 
   return (
     <section className="panel catalog-detail-page" data-visual-identity="publisher-research-library">
-      <button
+      <AppLink
         className="back-link"
-        onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
-        type="button"
+        onNavigate={onNavigate}
+        view="search"
       >
         <IconArrowLeft aria-hidden="true" size={17} /> Back to Catalog
-      </button>
+      </AppLink>
 
       <header className="catalog-detail-hero" data-route-primary-header="true">
         <p className="eyebrow" data-route-primary-copy="true">Published structure · {catalog.display_group}</p>
@@ -284,30 +281,27 @@ export function CatalogDetailPage(props: {
               <p>
                 This filter has {pageCount} page{pageCount === 1 ? "" : "s"}.
               </p>
-              <Button
-                onClick={() => update({ page: String(pageCount) })}
-                type="button"
-                variant="secondary"
-              >
+              <AppLink onNavigate={onNavigate} patch={{ ...state, page: String(pageCount) }} variant="secondary" view="catalog-detail">
                 Open the last available page
-              </Button>
+              </AppLink>
             </div>
           ) : pageRecords.length ? (
             <>
-              <div className="catalog-record-list">
+              <ul className="catalog-record-list">
                 {pageRecords.map((record: any) => {
                   const itemId = record.metadata?.item_id || record.id;
                   const title = record.metadata?.title || itemId;
                   return (
-                    <article className="catalog-record-row" key={record.id}>
-                      <button
+                    <li key={record.id}><article className="catalog-record-row">
+                      <h3><AppLink
                         className="catalog-record-title"
-                        onClick={() => onOpenNode(record.id)}
-                        type="button"
+                        onNavigate={onNavigate}
+                        patch={{ node: record.id }}
+                        view="library-detail"
                       >
                         <strong>{itemId}</strong>
                         {title !== itemId ? <span>{title}</span> : null}
-                      </button>
+                      </AppLink></h3>
                       <p>
                         {record.description ||
                           "No narrative description was published for this record."}
@@ -315,40 +309,19 @@ export function CatalogDetailPage(props: {
                       {record.metadata?.family ? (
                         <small>{record.metadata.family}</small>
                       ) : null}
-                    </article>
+                    </article></li>
                   );
                 })}
-              </div>
+              </ul>
               <nav aria-label="Catalog result pages" className="catalog-pagination">
-                <Button
-                  disabled={requestedPage === 1}
-                  onClick={() =>
-                    update({
-                      page:
-                        requestedPage - 1 === 1
-                          ? ""
-                          : String(requestedPage - 1),
-                    })
-                  }
-                  type="button"
-                  variant="secondary"
-                >
-                  Previous
-                </Button>
+                {requestedPage === 1 ? <span aria-disabled="true" className="catalog-pagination-disabled">Previous</span> : <AppLink onNavigate={onNavigate} patch={{ ...state, page: requestedPage - 1 === 1 ? "" : String(requestedPage - 1) }} variant="secondary" view="catalog-detail">Previous</AppLink>}
                 <span>
                   Page {requestedPage} of {pageCount} · showing{" "}
                   {(requestedPage - 1) * PAGE_SIZE + 1}–
                   {(requestedPage - 1) * PAGE_SIZE + pageRecords.length} of{" "}
                   {matchingRecords.length.toLocaleString()}
                 </span>
-                <Button
-                  disabled={requestedPage === pageCount}
-                  onClick={() => update({ page: String(requestedPage + 1) })}
-                  type="button"
-                  variant="secondary"
-                >
-                  Next
-                </Button>
+                {requestedPage === pageCount ? <span aria-disabled="true" className="catalog-pagination-disabled">Next</span> : <AppLink onNavigate={onNavigate} patch={{ ...state, page: String(requestedPage + 1) }} variant="secondary" view="catalog-detail">Next</AppLink>}
               </nav>
             </>
           ) : (
@@ -487,21 +460,16 @@ function CatalogInventory(props: {
         {grouped.map((group) => (
         <section className="catalog-index-group" key={group.label}>
           <h2 className="catalog-index-group-label">{group.label}</h2>
-          <div className="catalog-index-list">
+          <ul className="catalog-index-list">
             {group.rows.map(({ entry, profile, publisher, lifecycle }) => (
-              <button
+              <li key={entry.id}><AppLink
                 className="catalog-index-row"
-                key={entry.id}
-                onClick={() =>
-                  onNavigate("catalog-detail", {
-                    ...emptyCatalogState(),
-                    catalog: entry.id,
-                  })
-                }
-                type="button"
+                onNavigate={onNavigate}
+                patch={{ ...emptyCatalogState(), catalog: entry.id }}
+                view="catalog-detail"
               >
                 <span>
-                  <strong>{entry.name}</strong>
+                  <h3>{entry.name}</h3>
                   <small>{profile.synopsis}</small>
                   {[publisher, profile.area, lifecycle].filter(Boolean).length ? (
                     <small className="catalog-index-row-meta">
@@ -513,9 +481,9 @@ function CatalogInventory(props: {
                   {(entry.leaf_record_count ?? entry.node_count).toLocaleString()}{" "}
                   {profile.recordLabel}
                 </span>
-              </button>
+              </AppLink></li>
             ))}
-          </div>
+          </ul>
         </section>
         ))}
         {eligible.length === 0 ? (

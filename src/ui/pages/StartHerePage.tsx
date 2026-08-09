@@ -9,6 +9,7 @@ import {
   startingPlanFor,
 } from "../../app/start-here-guide.mjs";
 import { Panel, Button } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 import { catalogProfileFor } from "../lib/catalogProfiles";
 import { PageHeader } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -24,18 +25,18 @@ function PlanStep(props: {
   role: string;
   catalogId: string;
   bundle: RuntimeBundle | null;
-  onOpen: () => void;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const name = publicationName(props.bundle, props.catalogId);
   return (
-    <button className="start-here-publication" onClick={props.onOpen} type="button">
+    <AppLink className="start-here-publication" onNavigate={props.onNavigate} patch={{ catalog: props.catalogId }} view="catalog-detail">
       <span>
         <small>{props.role}</small>
         <strong>{name}</strong>
         <span>{catalogProfileFor(props.catalogId, name).synopsis}</span>
       </span>
       <IconArrowRight aria-hidden="true" size={18} />
-    </button>
+    </AppLink>
   );
 }
 
@@ -96,11 +97,11 @@ export function StartHerePage(props: {
           <p className="notice-inline">Control Atlas does not decide what applies to your system.</p>
           <div className="start-here-primary-destination">
             <span><small>Next destination</small><strong>{publicationName(bundle, plan.startWith.catalogId)} publication view</strong><span>Publisher structure, records, coverage status, and source links.</span></span>
-            <Button onClick={() => onNavigate("catalog-detail", { catalog: plan.startWith.catalogId })} type="button" variant="primary">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></Button>
+            <AppLink onNavigate={onNavigate} patch={{ catalog: plan.startWith.catalogId }} variant="primary" view="catalog-detail">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></AppLink>
           </div>
           <div className="start-here-followups">
-            <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onOpen={() => onNavigate("catalog-detail", { catalog: plan.thenReview.catalogId })} role="Then review" />
-            <button className="start-here-publication" onClick={() => onNavigate(plan.action.view as ViewState["view"], plan.action.patch as Partial<ViewState> | undefined)} type="button"><span><small>Then act</small><strong>{plan.action.label}</strong><span>Continue with the selected goal still visible in this plan.</span></span><IconArrowRight aria-hidden="true" size={18} /></button>
+            <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
+            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Continue with the selected goal still visible in this plan.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
           </div>
           <div className="card-actions">
             <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>
@@ -109,7 +110,7 @@ export function StartHerePage(props: {
         </section>
       ) : null}
 
-      <div className="start-here-search-link"><Button onClick={() => onNavigate("search", { query: "" })} type="button" variant="secondary"><IconSearch aria-hidden="true" size={18} />Search the Library instead</Button></div>
+      <div className="start-here-search-link"><AppLink onNavigate={onNavigate} patch={{ query: "" }} variant="secondary" view="search"><IconSearch aria-hidden="true" size={18} />Search the Library instead</AppLink></div>
     </Panel>
   );
 }

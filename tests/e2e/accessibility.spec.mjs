@@ -70,12 +70,12 @@ const ROUTES = [
     path: "/#/record/nist-800-53/AC-2",
   },
   {
-    label: "record detail graph map",
-    path: "/#/record/nist-800-53/AC-2?relationshipView=map",
+    label: "focused Atlas graph map",
+    path: "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map",
   },
   {
-    label: "record detail graph list",
-    path: "/#/record/nist-800-53/AC-2?relationshipView=list",
+    label: "focused Atlas graph list",
+    path: "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=list",
   },
   { label: "compare hub", path: "/#/compare" },
   {
@@ -145,21 +145,20 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   ).toEqual([]);
 });
 
-test("a11y: library detail relationship table has no serious or critical violations", async ({
+test("a11y: focused Atlas relationship table has no serious or critical violations", async ({
   page,
 }) => {
   await gotoApp(
     page,
-    "/#/record/nist-800-53/AC-2?relationshipView=list",
+    "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=list",
   );
   await waitForAppReady(page, { allowPartial: true });
   await dismissOnboarding(page);
   await waitForSkeletonsSettled(page);
-
   await expect(
     page.getByRole("table", { name: "Relationship table" }),
   ).toBeVisible();
-  await assertNoBlockingViolations(page, "library detail relationship table");
+  await assertNoBlockingViolations(page, "focused Atlas relationship table");
 });
 
 test("a11y: skip link moves keyboard focus to the workspace", async ({
