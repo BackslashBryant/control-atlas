@@ -108,26 +108,31 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
 test("Phase 3 record identity is canonical across Library, Atlas, and direct paths", async ({ page }) => {
   test.setTimeout(180_000);
   await page.setViewportSize({ width: 1440, height: 900 });
-  const breadcrumbs = [];
+  const breadcrumb = page.locator("[data-canonical-breadcrumb]");
+
+  await gotoApp(page, "/#/record/nist-800-53/AC-2");
+  await waitForAppReady(page, { allowPartial: true });
+  await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", /\S/);
+  const canonicalBreadcrumb = await breadcrumb.getAttribute("data-canonical-breadcrumb");
+  expect(canonicalBreadcrumb).toBeTruthy();
 
   await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page, { allowPartial: true });
   await page.locator('[data-record-id="nist-800-53:AC-2"] .search-result-primary').click();
   await waitForAppReady(page, { allowPartial: true });
-  breadcrumbs.push(await page.locator("[data-canonical-breadcrumb]").getAttribute("data-canonical-breadcrumb"));
+  await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
   await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] button[aria-current="page"]')).toHaveText("Library");
   await expect(page.getByRole("button", { name: "See this in the Atlas map", exact: true })).toBeVisible();
 
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page, { allowPartial: true });
-  breadcrumbs.push(await page.locator("[data-canonical-breadcrumb]").getAttribute("data-canonical-breadcrumb"));
+  await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
   await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] button[aria-current="page"]')).toHaveText("Library");
 
   await gotoApp(page, "/#/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary");
   await waitForAppReady(page, { allowPartial: true });
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2$/);
-  breadcrumbs.push(await page.locator("[data-canonical-breadcrumb]").getAttribute("data-canonical-breadcrumb"));
-  expect(breadcrumbs.every((value) => value && value === breadcrumbs[0])).toBe(true);
+  await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
 });
 
 test("Phase 3 List and Map preserve Library state and never drop non-empty results", async ({ page }) => {
