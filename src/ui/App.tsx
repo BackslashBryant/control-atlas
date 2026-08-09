@@ -20,7 +20,6 @@ import {
 } from "./components/LibrarySkeleton";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
-import type { HelpTab } from "./components/GlossaryDrawer";
 import { Button } from "./components/lsm/Button";
 import {
   OrbitalContextBar,
@@ -30,7 +29,6 @@ import { userFacingLoadError } from "../app/display-names.mjs";
 import type { RuntimeBundle } from "./lib/runtimeLoader";
 import { HomePage } from "./pages/HomePage";
 import {
-  activeNavForState,
   isStaticViewWithoutBundle,
   requiresFullGraph,
 } from "./lib/navigationState";
@@ -162,7 +160,11 @@ export function App() {
       if (options?.replace) {
         window.history.replaceState(null, "", target);
       } else {
-        window.history.pushState(null, "", target);
+        window.history.pushState(
+          { ...(window.history.state || {}), controlAtlasInternalNavigation: true },
+          "",
+          target,
+        );
       }
       notifyRouteCommitted();
       setLocation(readHashLocation());
@@ -182,7 +184,6 @@ export function App() {
   const [loadSlow, setLoadSlow] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
-  const [helpTab, setHelpTab] = useState<HelpTab>("glossary");
   const [glossaryFocusTermId, setGlossaryFocusTermId] = useState("");
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [graphRequested, setGraphRequested] = useState(false);
@@ -439,9 +440,13 @@ export function App() {
   function navigate(
     nextView: ViewState["view"],
     patch: Partial<ViewState> = {},
+    reset = false,
   ) {
+    const current = latestNavStateRef.current;
     const nextState = normalizeViewState(nextView, {
-      ...(latestNavStateRef.current as Record<string, unknown>),
+      ...(!reset && current.view === nextView
+        ? (current as Record<string, unknown>)
+        : {}),
       ...(patch as Record<string, unknown>),
     } as Partial<ViewState>);
     const nextLocation = serializeHashLocation(nextState);
@@ -456,13 +461,8 @@ export function App() {
   const navigateRef = useRef(navigate);
   navigateRef.current = navigate;
 
-  function openNode(nodeId: string, from = activeNavForState(viewState)) {
-    const currentState = latestNavStateRef.current;
-    const returnTo =
-      currentState.view === "library-detail"
-        ? currentState.returnTo || "/catalog"
-        : serializeHashLocation(currentState);
-    navigate("library-detail", { node: nodeId, from, returnTo });
+  function openNode(nodeId: string) {
+    navigate("library-detail", { node: nodeId });
   }
 
   function openNodeByItemId(itemId: string) {
@@ -484,13 +484,6 @@ export function App() {
 
   function openGlossary(termId = "") {
     setGlossaryFocusTermId(termId);
-    setHelpTab("glossary");
-    setHelpOpen(true);
-  }
-
-  function openHelp() {
-    setGlossaryFocusTermId("");
-    setHelpTab("guide");
     setHelpOpen(true);
   }
 
@@ -530,7 +523,6 @@ export function App() {
       </a>
       {chromeReady ? <TopNav
         onNavigate={navigate}
-        onOpenHelp={() => openHelp()}
         onOpenSearch={() => setSearchOverlayOpen(true)}
         viewState={viewState}
       /> : null}
@@ -562,13 +554,11 @@ export function App() {
                 loadError={loadError}
                 onNavigate={navigate}
                 onOpenGlossary={openGlossary}
-                onOpenHelp={openHelp}
                 onOpenNode={openNode}
                 onOpenNodeByItemId={openNodeByItemId}
                 onOpenSearch={() => setSearchOverlayOpen(true)}
                 onRequestFullGraph={requestFullGraph}
                 onRetryLoad={retryLoad}
-                setHelpOpen={setHelpOpen}
                 state={viewState}
               />
             </Suspense>
@@ -603,10 +593,8 @@ export function App() {
           <GlossaryDrawer
             bundle={bundle}
             focusTermId={glossaryFocusTermId}
-            helpTab={helpTab}
             onNavigate={navigate}
             onOpenNode={openNode}
-            onTabChange={setHelpTab}
             open
             setOpen={(open) => {
               setHelpOpen(open);
@@ -626,14 +614,12 @@ function AppContent(props: {
   loadError: string;
   state: ViewState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
   onOpenNodeByItemId: (itemId: string) => void;
   onOpenSearch: () => void;
   onRequestFullGraph: () => void;
   onOpenGlossary: (termId?: string) => void;
-  onOpenHelp: () => void;
   onRetryLoad: () => void;
-  setHelpOpen: (open: boolean) => void;
 }) {
   const {
     bundle,
@@ -645,9 +631,7 @@ function AppContent(props: {
     onOpenSearch,
     onRequestFullGraph,
     onOpenGlossary,
-    onOpenHelp,
     onRetryLoad,
-    setHelpOpen,
   } = props;
 
   const graphReady = Boolean(bundle?.graphReady);
@@ -822,7 +806,6 @@ function AppContent(props: {
         onNavigate={onNavigate}
         onOpenGlossary={onOpenGlossary}
         onOpenNodeByItemId={onOpenNodeByItemId}
-        setHelpOpen={setHelpOpen}
         state={state}
       />
     );
@@ -876,10 +859,8 @@ function AppContent(props: {
       graphReady={graphReady}
       onNavigate={onNavigate}
       onOpenGlossary={onOpenGlossary}
-      onOpenHelp={onOpenHelp}
       onOpenNode={onOpenNode}
       onRequestFullGraph={onRequestFullGraph}
-      setHelpOpen={setHelpOpen}
       state={state}
     />
   );

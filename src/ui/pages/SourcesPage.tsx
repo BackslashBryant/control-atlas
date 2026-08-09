@@ -159,9 +159,9 @@ export function SourcesPage(props: {
       />
 
       <p className="sources-resource-boundary">
-        Tools, templates, datasets, training, and communities are in Resources.{" "}
-        <button onClick={() => onNavigate("commons")} type="button">
-          Open Resources
+        Tools, templates, datasets, training, and communities are a Library facet.{" "}
+        <button onClick={() => onNavigate("search", { kind: "tools-communities" })} type="button">
+          Open Tools &amp; communities
         </button>
       </p>
 

@@ -55,7 +55,7 @@ function isHomeHash() {
 }
 
 function isSearchHash() {
-  return window.location.hash.replace(/^#/, '').startsWith('/search');
+  return window.location.hash.replace(/^#/, '').startsWith('/library');
 }
 
 function staticSearchQuery() {
@@ -265,7 +265,7 @@ function focusSearchResultsWhenReady() {
 function connectStaticSearch() {
   rootElement
     .querySelector<HTMLElement>('[data-static-search-catalog]')
-    ?.addEventListener('click', () => navigateFromStaticHome('#/catalog'));
+    ?.addEventListener('click', () => navigateFromStaticHome('#/library'));
   rootElement
     .querySelector<HTMLFormElement>('[data-static-search-form]')
     ?.addEventListener('submit', (event) => {
@@ -274,7 +274,7 @@ function connectStaticSearch() {
         '[data-static-search-input]',
       );
       const query = input?.value.trim() || '';
-      const target = `#/search${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+      const target = `#/library${query ? `?q=${encodeURIComponent(query)}` : ''}`;
       focusSearchResultsWhenReady();
       navigateFromStaticHome(target);
     });
@@ -338,7 +338,7 @@ function connectStaticHome() {
       event.preventDefault();
       const query = new FormData(event.currentTarget as HTMLFormElement).get('query');
       if (typeof query === 'string' && query.trim()) {
-        navigateFromStaticHome(`#/search?q=${encodeURIComponent(query.trim())}`);
+        navigateFromStaticHome(`#/library?q=${encodeURIComponent(query.trim())}`);
       }
     });
 

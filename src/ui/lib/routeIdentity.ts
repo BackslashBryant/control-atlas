@@ -21,16 +21,16 @@ export type RouteIdentity = {
 const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   home: { path: "/", label: "Home", title: "Home", contextLabel: "Home", analyticsName: "home" },
   "start-here": { path: "/start", label: "Start here", title: "Start here", contextLabel: "Start here", analyticsName: "start_here" },
-  "atlas-map": { path: "/explore", label: "Atlas", title: "Atlas", contextLabel: "Atlas", analyticsName: "explore" },
-  search: { path: "/search", label: "Library", title: "Library", contextLabel: "Search results", analyticsName: "search" },
-  "catalog-detail": { path: "/catalog", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "catalog" },
+  "atlas-map": { path: "/atlas", label: "Atlas map", title: "Atlas map", contextLabel: "Atlas map", analyticsName: "atlas" },
+  search: { path: "/library", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "library" },
+  "catalog-detail": { path: "/library/publication", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "publication" },
   "library-detail": { path: "/record", label: "Record", title: "Record", contextLabel: "Record", analyticsName: "record_detail" },
   matrix: { path: "/compare", label: "Compare", title: "Compare", contextLabel: "Compare", analyticsName: "compare" },
-  patterns: { path: "/learn", label: "Guides", title: "Guides", contextLabel: "Guides", analyticsName: "learn" },
+  patterns: { path: "/guides", label: "Guides", title: "Guides", contextLabel: "Guides", analyticsName: "guides" },
   templates: { path: "/build", label: "Documents", title: "Documents", contextLabel: "Documents", analyticsName: "build" },
   sources: { path: "/sources", label: "Sources", title: "Sources", contextLabel: "Sources", analyticsName: "sources" },
-  commons: { path: "/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
-  "commons-detail": { path: "/resources", label: "Resource", title: "Resource", contextLabel: "Resource", analyticsName: "resource_detail" },
+  commons: { path: "/library", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "library_resources" },
+  "commons-detail": { path: "/library/resource", label: "Library", title: "Resource", contextLabel: "Library", analyticsName: "resource_detail" },
   about: { path: "/about", label: "About", title: "About", contextLabel: "About", analyticsName: "about" },
   retired: { path: "/retired", label: "Retired identifier", title: "Retired identifier", contextLabel: "Retired identifier", analyticsName: "retired_identifier" },
   "not-found": { path: "/not-found", label: "Page not found", title: "Page not found", contextLabel: "Page not found", analyticsName: "not_found" },
@@ -39,26 +39,26 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
 const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   home: null,
   "start-here": "start-here",
-  "atlas-map": "atlas-map",
+  "atlas-map": "search",
   // Search results are a state of Library, not a separate destination, so the
   // Library tab stays selected while a query is open.
-  search: "catalog-detail",
-  "catalog-detail": "catalog-detail",
-  "library-detail": "catalog-detail",
-  matrix: "matrix",
+  search: "search",
+  "catalog-detail": "search",
+  "library-detail": "search",
+  matrix: "search",
   patterns: "patterns",
-  templates: "templates",
+  templates: "start-here",
   sources: "sources",
-  commons: "commons",
-  "commons-detail": "commons",
-  about: null,
-  retired: "catalog-detail",
+  commons: "search",
+  "commons-detail": "search",
+  about: "about",
+  retired: "search",
   "not-found": null,
 };
 
 const RECOVERY_VIEW_BY_VIEW: Record<AppView, AppView> = {
   home: "home",
-  "start-here": "sources",
+  "start-here": "start-here",
   "atlas-map": "atlas-map",
   search: "search",
   "catalog-detail": "catalog-detail",
@@ -76,6 +76,7 @@ const RECOVERY_VIEW_BY_VIEW: Record<AppView, AppView> = {
 
 export const CANONICAL_DESTINATION_VIEWS = Object.freeze([
   "home",
+  "start-here",
   "search",
   "atlas-map",
   "catalog-detail",
@@ -120,19 +121,9 @@ const ATLAS_PARAMS = new Set([
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
-const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "objectType", "sourceClass", "controlFamily", "severity", "connectedOnly", "sort"]);
+const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "objectType", "controlFamily", "connectedOnly", "sort", "view", "collection"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "audience", "accessType", "resourceType", "category", "collection", "owner", "costType", "sort", "showAll"]);
-const RESOURCE_FACET_VALUES: Readonly<Record<string, readonly string[]>> = {
-  category: ["rules", "catalogs", "templates", "tools", "community", "reference"],
-  collection: ["dod-cybersecurity-portals", "reciprocity-authorization-reuse", "implementation-assessment-tools", "product-assurance-approved-products", "cloud-devsecops-software-factories", "cmmc-defense-industrial-base", "cyber-workforce-training", "practitioner-communities"],
-  lifecycle: ["Prepare", "Categorize", "Select", "Implement", "Assess", "Authorize", "Operate", "Monitor"],
-  accessType: ["public", "free_account", "cac_required", "dod_network_required", "invitation_required", "access_varies"],
-  costType: ["free", "no_cost", "varies"],
-  resourceType: ["catalog", "community_forum", "dataset", "documentation", "ecosystem", "government_portal", "historical_reference", "instruction", "marketplace", "matrix", "product_directory", "restricted_service", "service_portal", "specification", "template", "tool", "training"],
-  sort: ["relevance", "name", "checked"],
-};
-const DETAIL_PARAMS = new Set(["from", "returnTo", "relationshipView", "relationshipType", "provenance", "confidence", "nodeType", "includeCandidates", "relationshipSearch"]);
+const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
 const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
 const LEARN_PARAMS = new Set(["pattern"]);
@@ -180,6 +171,10 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       discarded = true;
       continue;
     }
+    if (key === "view" && value !== "map") {
+      discarded = true;
+      continue;
+    }
     if (key === "page" && !/^[1-9]\d*$/.test(value)) {
       discarded = true;
       continue;
@@ -187,18 +182,6 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
     next.set(key, value);
   }
   return { params: next, discarded };
-}
-
-function validateResourceFacetValues(params: URLSearchParams): boolean {
-  let discarded = false;
-  for (const [key, allowed] of Object.entries(RESOURCE_FACET_VALUES)) {
-    const value = params.get(key);
-    if (value && !allowed.includes(value)) {
-      params.delete(key);
-      discarded = true;
-    }
-  }
-  return discarded;
 }
 
 function withParams(path: string, params: URLSearchParams): string {
@@ -210,16 +193,13 @@ function withParams(path: string, params: URLSearchParams): string {
  * Resolves every supported hash path into its one canonical URL. This is the
  * only compatibility table and is deliberately independent from rendering.
  */
-/**
- * The 2026-08 public names (Atlas, Library, Guides, Documents) are accepted as
- * URLs and resolved to the existing canonical paths. Old bookmarks keep
- * working; new names are never a dead link.
- */
+/** Old public paths remain accepted while every new link uses the canonical IA. */
 const PUBLIC_NAME_ALIASES: Readonly<Record<string, string>> = {
-  "/atlas": "/explore",
-  "/library": "/catalog",
-  "/guides": "/learn",
+  "/explore": "/atlas",
+  "/search": "/library",
+  "/learn": "/guides",
   "/documents": "/build",
+  "/help": "/about",
 };
 
 function resolvePublicNameAlias(path: string): string {
@@ -239,6 +219,17 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   let params = incoming;
   let discarded = false;
 
+  if (path === "/catalog") {
+    path = "/library";
+  } else if (/^\/catalog\/[^/]+$/.test(path)) {
+    path = path.replace(/^\/catalog/, "/library/publication");
+  } else if (path === "/resources") {
+    path = "/library";
+    params.set("kind", "tools-communities");
+  } else if (/^\/resources\/[^/]+$/.test(path)) {
+    path = path.replace(/^\/resources/, "/library/resource");
+  }
+
   // The startup shim owns pre-hash `?view=...` links. Preserve them until it
   // moves the full query into the HashRouter instead of discarding state first.
   if (path === "/" && (params.has("view") || params.has("q"))) {
@@ -256,21 +247,21 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   }
 
   if (path === "/build/resources") {
-    path = "/resources";
+    path = "/library";
+    params.set("kind", "tools-communities");
   } else if (/^\/build\/resources\/[^/]+$/.test(path)) {
-    path = path.replace(/^\/build\/resources/, "/resources");
+    path = path.replace(/^\/build\/resources/, "/library/resource");
   }
 
   let permitted: Set<string> | null = null;
-  if (path === "/explore") permitted = ATLAS_PARAMS;
-  if (path === "/search") permitted = SEARCH_PARAMS;
-  if (path === "/catalog" || /^\/catalog\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
-  if (path === "/resources") permitted = RESOURCE_PARAMS;
-  if (/^\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
+  if (path === "/atlas") permitted = ATLAS_PARAMS;
+  if (path === "/library") permitted = SEARCH_PARAMS;
+  if (/^\/library\/publication\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
+  if (/^\/library\/resource\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare") permitted = COMPARE_PARAMS;
-  if (path === "/learn") permitted = LEARN_PARAMS;
+  if (path === "/guides") permitted = LEARN_PARAMS;
   if (path === "/build" || /^\/build\/(?:tasks(?:\/[^/]+)?|documents(?:\/[^/]+)?)$/.test(path)) permitted = BUILD_PARAMS;
   if (path === "/sources") permitted = SOURCE_PARAMS;
   if (path === "/retired") permitted = RETIRED_PARAMS;
@@ -278,7 +269,6 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     const result = permittedParams(params, permitted);
     params = result.params;
     discarded ||= result.discarded;
-    if (path === "/resources") discarded ||= validateResourceFacetValues(params);
   } else if (params.size > 0 && !path.startsWith("/catalog/")) {
     params = new URLSearchParams();
     discarded = true;

@@ -211,9 +211,10 @@ test("search and glossary dialogs expose accessible control names", () => {
     "utf8",
   );
   assert.match(searchOverlay, /aria-label="Search Control Atlas"/);
-  assert.match(glossaryDrawer, /aria-label="Close help and glossary"/);
-  assert.match(glossaryDrawer, /glossaryTabRef\.current\?\.focus\(\)/);
-  assert.match(glossaryDrawer, /helpTabRef\.current\?\.focus\(\)/);
+  assert.match(glossaryDrawer, /aria-label="Close glossary"/);
+  assert.match(glossaryDrawer, /<Dialog\.Title>Glossary<\/Dialog\.Title>/);
+  assert.match(glossaryDrawer, /htmlFor="glossary-search"/);
+  assert.match(glossaryDrawer, /id="glossary-search"/);
 });
 
 test("Home makes Start Here the sole primary action, retains direct Search, and keeps RMF optional", () => {
@@ -223,9 +224,10 @@ test("Home makes Start Here the sole primary action, retains direct Search, and 
   assert.match(homePage, /className="home-search home-search-trigger"/);
   assert.match(homePage, /onClick=\{onOpenSearch\}/);
   assert.match(homePage, /Search Control Atlas/);
-  assert.match(homePage, /Understand a requirement/);
-  assert.match(homePage, /Operate or defend/);
-  assert.match(homePage, /Produce a document/);
+  assert.match(homePage, /labelForGoal\("understand"\)/);
+  assert.match(homePage, /labelForGoal\("operate"\)/);
+  assert.match(homePage, /labelForGoal\("document"\)/);
+  assert.match(homePage, /labelForGoal\("tools"\)/);
   assert.match(homePage, /HomeCapabilityPreviews/);
   assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);

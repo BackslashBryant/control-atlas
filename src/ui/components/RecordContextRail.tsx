@@ -27,7 +27,7 @@ export function RecordContextRail(props: {
   document: any;
   publishedBuckets: PublishedBucket[];
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 }) {
   const {
     bundle,
@@ -73,7 +73,7 @@ export function RecordContextRail(props: {
                   {bucket.items.slice(0, 4).map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => onOpenNode(item.id, "record")}
+                      onClick={() => onOpenNode(item.id)}
                       type="button"
                     >
                       <span>{item.label}</span>

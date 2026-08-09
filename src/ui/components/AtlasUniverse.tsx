@@ -158,9 +158,7 @@ function landscapeProjection(
     const area = byId.get(position.id);
     if (!area) continue;
     const counts = areaCounts(area, summaries);
-    const meta = counts.publications
-      ? `${counts.publications} publication${counts.publications === 1 ? "" : "s"} / ${counts.records.toLocaleString()} records`
-      : "Connected work surface";
+    const meta = `${counts.publications} publication${counts.publications === 1 ? "" : "s"} / ${counts.records.toLocaleString()} records`;
     nodes.push(
       treeNode(
         area.id,
@@ -633,7 +631,7 @@ function AtlasUniverseMobile(props: {
                 else props.onOpenArea(item);
               }} type="button">
                 <strong>{item.label}</strong>
-                <span>{counts.publications ? `${counts.publications} publications / ${counts.records.toLocaleString()} records` : "Connected work surface"}</span>
+                <span>{counts.publications} publication{counts.publications === 1 ? "" : "s"} / {counts.records.toLocaleString()} records</span>
               </button>
             );
           }

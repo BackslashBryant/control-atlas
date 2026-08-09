@@ -50,19 +50,15 @@
         </span>
       </button>
       <nav aria-label="Primary navigation" class="primary-nav ml-[32px] self-end mb-[-1px]">
-        <button data-route="#/explore" type="button">Atlas</button>
-        <button data-route="#/catalog" type="button">Library</button>
-        <button data-route="#/compare" type="button">Compare</button>
-        <button data-route="#/learn" type="button">Guides</button>
-        <button data-route="#/build" type="button">Documents</button>
+        <button data-route="#/start" type="button">Start here</button>
+        <button data-route="#/library" type="button">Library</button>
+        <button data-route="#/guides" type="button">Guides</button>
       </nav>
       <div class="header-actions">
         <button aria-label="Open search" class="button button--secondary header-search-trigger" data-static-search-open type="button"><svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span>Search</span></button>
         <nav aria-label="Utility navigation" class="header-actions-text">
-          <button data-route="#/resources" type="button">Resources</button>
           <button data-route="#/sources" type="button">Sources</button>
           <button data-route="#/about" type="button">About</button>
-          <button class="button button--primary" data-route="#/start" type="button">Start here</button>
         </nav>
         <button aria-label="Open navigation menu" class="mobile-nav-toggle" data-static-menu-boot type="button">
           <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
@@ -98,20 +94,19 @@
               </form>
               <div class="home-primary-actions">
                 <button class="button button--primary home-start-here" data-route="#/start" type="button">Start with your work</button>
-                <button class="home-inline-link" data-route="#/catalog" type="button">Browse official publications</button>
+                <button class="home-inline-link" data-route="#/library" type="button">Browse official publications</button>
               </div>
             </div>
-            <div class="home-work-map" aria-label="The work Control Atlas covers"><span>Govern</span><span>Build</span><span>Assess</span><span>Operate</span><span>Defend</span></div>
           </div>
 
           <nav aria-label="Start from your work" class="home-secondary-grid">
             <button class="home-secondary-action" data-route="#/start?goal=understand" type="button"><span><strong>Understand a requirement</strong><small>Start with controls and requirements, then keep the source attached.</small></span></button>
             <button class="home-secondary-action" data-route="#/start?goal=implement" type="button"><span><strong>Secure or build a system</strong><small>Move into implementation work and technical checks.</small></span></button>
             <button class="home-secondary-action" data-route="#/start?goal=assess" type="button"><span><strong>Assess or authorize</strong><small>Open published methods and package work.</small></span></button>
-            <button class="home-secondary-action" data-route="#/explore?atlasLimb=atlas%3ALIMB-THREAT" type="button"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></button>
-            <button class="home-secondary-action" data-route="#/search?q=supply%20chain" type="button"><span><strong>Manage risk or supply chain</strong><small>Find CUI, CMMC, SBOM, and product-assurance material.</small></span></button>
-            <button class="home-secondary-action" data-route="#/build/documents" type="button"><span><strong>Produce a document</strong><small>Choose the work product, then add source context.</small></span></button>
-            <button class="home-secondary-action" data-route="#/resources?showAll=true" type="button"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Search the practitioner ecosystem without mixing it into publisher hierarchy.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=operate" type="button"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=risk" type="button"><span><strong>Manage risk or supply chain</strong><small>Find CUI, CMMC, SBOM, and product-assurance material.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=document" type="button"><span><strong>Produce a document</strong><small>Choose the work product, then add source context.</small></span></button>
+            <button class="home-secondary-action" data-route="#/start?goal=tools" type="button"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Search the practitioner ecosystem without mixing it into publisher hierarchy.</small></span></button>
           </nav>
 
           <section aria-labelledby="home-capabilities-title" class="home-capability-previews">
@@ -123,7 +118,7 @@
               </article>
               <article class="home-capability-preview home-capability-preview--threat-defense">
                 <div class="home-capability-copy"><p class="home-capability-eyebrow">Threat and defense</p><h3>Follow a software supply-chain technique</h3><p>Start with ATT&amp;CK T1195.002, then inspect only the defensive relationships a publisher actually records.</p><small>ATT&amp;CK &middot; Initial Access &middot; T1195.002</small></div>
-                <button class="home-capability-action" data-route="#/explore?node=mitre-attack%3AT1195.002&amp;relationshipView=map" type="button">Open in the Atlas</button>
+                <button class="home-capability-action" data-route="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map" type="button">Open in the Atlas</button>
               </article>
               <article class="home-capability-preview home-capability-preview--working-output">
                 <div class="home-capability-copy"><p class="home-capability-eyebrow">Working output</p><h3>Prepare an assessment</h3><p>Move through published inputs, readiness checks, and starter documents for assessment planning.</p><small>Task &middot; Prepare for a security assessment</small></div>
@@ -137,7 +132,7 @@
       </section>
     </main>
     <footer class="home-footer">
-      <p>Free and open source, not a government system. Every record keeps its publisher and source attached.</p>
+      <p>Free and open source, not a government system. Every record keeps its publisher and source attached. Last updated August 7, 2026.</p>
     </footer>
     </div>
     <section

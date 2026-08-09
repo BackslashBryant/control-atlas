@@ -12,7 +12,7 @@ test("V1 workflow 01 — find a known identifier", async ({ page }) => {
   await open(page, "/#/");
   await page.getByRole("searchbox", { name: "Search Control Atlas" }).fill("AC-2");
   await page.getByRole("search").getByRole("button", { name: "Search" }).click();
-  await expect(page).toHaveURL(/#\/search\?q=AC-2/);
+  await expect(page).toHaveURL(/#\/library\?q=AC-2/);
   await expect(
     page.getByRole("article", {
       name: "AC-2 — Account Management",
@@ -71,8 +71,8 @@ test("V1 workflow 05 — follow a record and return without losing search state"
     .getByRole("button", { name: "AC-2 — Account Management" })
     .click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
-  await page.getByRole("button", { name: "Back to results" }).click();
-  await expect(page).toHaveURL(/#\/search\?q=AC-2/);
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(page).toHaveURL(/#\/library\?q=AC-2/);
   await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue("AC-2");
 });
 
@@ -86,7 +86,7 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
     page.getByRole("region", { name: "Relationship map" }),
   ).toBeVisible();
   // Orientation stays on screen without opening anything.
-  await expect(page.locator(".atlas-workspace-crumb")).toContainText(
+  await expect(page.locator("[data-canonical-breadcrumb]")).toContainText(
     "SP 800-53 Rev. 5",
   );
 
@@ -142,9 +142,10 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
   await open(page, "/#/resources?q=OSCAL");
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work", level: 1 })).toBeVisible();
-  await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
-  await expect(page.getByRole("region", { name: "Resource results" })).toBeVisible();
+  await expect(page).toHaveURL(/#\/library\?q=OSCAL&kind=tools-communities/);
+  await expect(page.getByRole("heading", { name: "Library", level: 1 })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Filter results by ID, title, or topic" })).toHaveValue("OSCAL");
+  await expect(page.locator('[data-result-class="resource"]').first()).toBeVisible();
 });
 
 test("V1 workflow 10 — recover from invalid settings, missing records, and empty filters", async ({
@@ -159,18 +160,19 @@ test("V1 workflow 10 — recover from invalid settings, missing records, and emp
 test("V1 workflow 11 — refresh and browser history preserve valid URL state", async ({
   page,
 }) => {
-  const owner = "National Institute of Standards and Technology";
-  await open(page, `/#/resources?owner=${encodeURIComponent(owner)}`);
-  const filters = page.getByRole("button", { name: /^Filters/ });
-  await filters.click();
-  const ownerFilter = page.getByLabel("Owner");
-  await expect(ownerFilter).toHaveValue(owner);
+  await open(page, "/#/library?q=AC-2&kind=requirements&sort=identifier");
+  const kindFilter = page.getByLabel("Content kind");
+  const sort = page.getByLabel("Sort search results");
+  await expect(kindFilter).toHaveValue("requirements");
+  await expect(sort).toHaveValue("identifier");
   await page.reload();
-  await expect(ownerFilter).toHaveValue(owner);
-  await filters.click();
-  await ownerFilter.selectOption("");
+  await expect(kindFilter).toHaveValue("requirements");
+  await expect(sort).toHaveValue("identifier");
+  await sort.selectOption("title");
+  await expect(page).toHaveURL(/sort=title/);
   await page.goBack();
-  await expect(ownerFilter).toHaveValue(owner);
+  await expect(kindFilter).toHaveValue("requirements");
+  await expect(sort).toHaveValue("identifier");
 });
 
 test("V1 workflow 12 — defining work reflows at mobile, tablet, and desktop widths", async ({

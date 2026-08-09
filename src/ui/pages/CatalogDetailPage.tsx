@@ -32,7 +32,7 @@ export function CatalogDetailPage(props: {
   bundle: RuntimeBundle;
   state: CatalogState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const catalogs =
@@ -302,7 +302,7 @@ export function CatalogDetailPage(props: {
                     <article className="catalog-record-row" key={record.id}>
                       <button
                         className="catalog-record-title"
-                        onClick={() => onOpenNode(record.id, "catalog-detail")}
+                        onClick={() => onOpenNode(record.id)}
                         type="button"
                       >
                         <strong>{itemId}</strong>

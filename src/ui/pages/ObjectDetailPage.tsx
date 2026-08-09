@@ -37,8 +37,7 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { RecordContextRail } from "../components/RecordContextRail";
-import { StickyDetailBar } from "../components/StickyDetailBar";
-import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
+import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { QuickIntentCard } from "../components/QuickIntentCard";
@@ -48,7 +47,7 @@ import {
 import { serializeHashUrl } from "../lib/hashRoutes";
 import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
-import type { ViewState } from "../lib/viewState";
+import { normalizeViewState, type ViewState } from "../lib/viewState";
 import { officialTextPreview } from "../lib/officialText";
 import {
   Badge,
@@ -186,7 +185,7 @@ export function ObjectDetailPage(props: {
   state: Extract<ViewState, { view: "library-detail" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenGlossary: (termId?: string) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenGlossary, onOpenNode } = props;
   const node = bundle.runtime.getNode(state.node);
@@ -343,55 +342,11 @@ export function ObjectDetailPage(props: {
   ];
 
   const relatedGlossaryTerms = glossaryTermsForDocument(document);
-  const originLabel =
-    state.from === "search"
-      ? "Back to results"
-      : state.from === "atlas-map"
-        ? "Back to Explore"
-        : state.from === "start-here"
-          ? "Back to source navigator"
-          : state.from === "patterns"
-            ? "Back to Guides"
-      : state.from === "matrix"
-              ? "Back to comparison"
-              : state.from === "catalog-detail"
-                ? "Back to Catalog"
-              // The unrecognized-origin fallback calls onNavigate("search")
-              // below, not Explore — the label must say where it actually
-              // goes, and must not read as a peer of the primary "Open in
-              // Explore" action beside it.
-              : "Back to Search";
+  const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
 
-  function returnToOrigin() {
-    if (state.returnTo && Number(window.history.state?.idx || 0) > 0) {
+  function goBack() {
+    if (window.history.state?.controlAtlasInternalNavigation) {
       window.history.back();
-      return;
-    }
-    if (
-      state.returnTo?.startsWith("/") &&
-      !state.returnTo.startsWith("//")
-    ) {
-      window.location.hash = state.returnTo;
-      return;
-    }
-    if (state.from === "atlas-map") {
-      onNavigate("atlas-map", { node: document.id });
-      return;
-    }
-    if (state.from === "start-here") {
-      onNavigate("start-here");
-      return;
-    }
-    if (state.from === "patterns") {
-      onNavigate("patterns");
-      return;
-    }
-    if (state.from === "matrix") {
-      onNavigate("matrix");
-      return;
-    }
-    if (state.from === "catalog-detail") {
-      onNavigate("catalog-detail", { catalog: document.catalog_id });
       return;
     }
     onNavigate("search");
@@ -408,18 +363,6 @@ export function ObjectDetailPage(props: {
             : "publisher-research-record"
       }
     >
-      <StickyDetailBar
-        enabled={state.from === "search"}
-        itemLabel={document.item_id}
-        onCompare={() =>
-          onNavigate("matrix", {
-            crosswalk: "relationships",
-            items: document.item_id,
-            source: node.metadata?.catalog_id || "",
-          })
-        }
-        onOpenAtlasMap={() => openAtlasMapForNode(onNavigate, state.node)}
-      />
       <PageHeader
         primary
         eyebrow={displayNameFor("object_type", document.object_type)}
@@ -427,20 +370,27 @@ export function ObjectDetailPage(props: {
           <div className="page-header-actions">
             <Button
               variant="secondary"
-              onClick={returnToOrigin}
+              onClick={goBack}
               type="button"
             >
-              {originLabel}
+              Back
             </Button>
-            {edges.length ? (
+            {officialSourceUrl ? (
               <Button
                 variant="primary"
-                onClick={() => openAtlasMapForNode(onNavigate, state.node)}
+                onClick={() => window.open(officialSourceUrl, "_blank", "noopener,noreferrer")}
                 type="button"
               >
-                Open in the Atlas
+                Open official source
               </Button>
             ) : null}
+            <Button
+              variant="secondary"
+              onClick={() => openAtlasMapForNode(onNavigate, state.node)}
+              type="button"
+            >
+              See this in the Atlas map
+            </Button>
             {/* Secondary actions collapse into one affordance so the record
                 opens with a single obvious next step rather than four peers. */}
             <details className="record-actions-menu">
@@ -461,9 +411,16 @@ export function ObjectDetailPage(props: {
                 </Button>
                 <Button
                   variant="secondary"
+                  onClick={() => onNavigate("templates", { framework: document.catalog_id })}
+                  type="button"
+                >
+                  Produce a document
+                </Button>
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     void copyText(
-                      `${window.location.origin}${window.location.pathname}${serializeHashUrl(state)}`,
+                      `${window.location.origin}${window.location.pathname}${serializeHashUrl(normalizeViewState("library-detail", { view: "library-detail", node: document.id }))}`,
                     );
                   }}
                   type="button"
@@ -566,11 +523,7 @@ export function ObjectDetailPage(props: {
       <section className="atlas-structural-position" data-record-section="hierarchy">
         <p className="eyebrow">Hierarchy</p>
         <h2>Where this sits</h2>
-        <WhereThisSitsRail
-          bundle={bundle}
-          nodeId={node.id}
-          onOpenNode={(id) => onOpenNode(id, state.from || "search")}
-        />
+        <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} />
       </section>
 
       {isEnhancement && baseControlNode ? (
@@ -578,7 +531,7 @@ export function ObjectDetailPage(props: {
           <button
             className="link-action quiet"
             onClick={() =>
-              onOpenNode(baseControlNode.id, state.from || "search")
+              onOpenNode(baseControlNode.id)
             }
             type="button"
           >
@@ -596,7 +549,7 @@ export function ObjectDetailPage(props: {
                 className="badge-button"
                 key={item.counterpart.id}
                 onClick={() =>
-                  onOpenNode(item.counterpart.id, state.from || "search")
+                  onOpenNode(item.counterpart.id)
                 }
                 type="button"
               >
@@ -621,7 +574,7 @@ export function ObjectDetailPage(props: {
                   <button
                     className="link-action quiet"
                     onClick={() =>
-                      onOpenNode(supersededNode.id, state.from || "search")
+                      onOpenNode(supersededNode.id)
                     }
                     type="button"
                   >
@@ -664,7 +617,6 @@ export function ObjectDetailPage(props: {
                     onClick={() =>
                       onNavigate("library-detail", {
                         node: state.node,
-                        from: state.from,
                         relationshipView: "list",
                       })
                     }
@@ -694,7 +646,7 @@ export function ObjectDetailPage(props: {
                         <button
                           className="badge-button"
                           key={item.id}
-                          onClick={() => onOpenNode(item.id, state.from || "search")}
+                          onClick={() => onOpenNode(item.id)}
                           type="button"
                         >
                           <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
@@ -726,18 +678,14 @@ export function ObjectDetailPage(props: {
                 onFilterChange={(patch) =>
                   onNavigate("library-detail", {
                     node: state.node,
-                    from: state.from,
                     relationshipView: state.relationshipView || "map",
                     ...relationshipFiltersToPatch(patch),
                   })
                 }
-                onOpenNode={(nodeId) =>
-                  onOpenNode(nodeId, state.from || "search")
-                }
+                onOpenNode={(nodeId) => onOpenNode(nodeId)}
                 onViewChange={(view) =>
                   onNavigate("library-detail", {
                     node: state.node,
-                    from: state.from,
                     relationshipView: view,
                     relationshipType: state.relationshipType,
                     provenance: state.provenance,
@@ -757,9 +705,7 @@ export function ObjectDetailPage(props: {
             <RelationshipGroupsSection
               formatRelationshipLabel={formatRelationshipLabel}
               groups={connectionGroups}
-              onOpenNode={(nodeId) =>
-                onOpenNode(nodeId, state.from || "search")
-              }
+              onOpenNode={(nodeId) => onOpenNode(nodeId)}
               onOpenGroupIdsChange={setOpenRelationshipGroupIds}
               openGroupIds={openRelationshipGroupIds}
               source={source}

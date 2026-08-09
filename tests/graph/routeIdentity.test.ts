@@ -8,110 +8,70 @@ import {
   routeIdentityFor,
   selectedNavFor,
 } from "../../src/ui/lib/routeIdentity";
-import { parseHashLocation } from "../../src/ui/lib/hashRoutes";
+import { parseHashLocation, serializeHashLocation } from "../../src/ui/lib/hashRoutes";
+import { normalizeViewState } from "../../src/ui/lib/viewState";
 
-test("route matrix preserves current durable destinations", () => {
+test("Phase 3 durable paths and old bookmarks resolve to one canonical IA", () => {
   const cases = [
-    {
-      input: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
-      canonical: "/explore?node=nist-800-53%3AAC-2&atlasAxis=framework&relationshipView=map",
-    },
-    {
-      input: "/resources/official-nist-sp800-53-r5?from=templates",
-      canonical: "/resources/official-nist-sp800-53-r5?from=templates",
-    },
-    {
-      input: "/build?templateType=security_plan_starter&format=docx",
-      canonical: "/build/documents/security_plan_starter?format=docx",
-    },
-    {
-      input: "/resources?category=tools&lane=open_source&resourceType=tool",
-      canonical: "/resources?category=tools&lane=open_source&resourceType=tool",
-    },
-    {
-      input: "/search?q=access+control&connectedOnly=true",
-      canonical: "/search?q=access+control&connectedOnly=true",
-    },
-    {
-      input: "/catalog/nist-800-53?q=account&family=AC&browseAll=true",
-      canonical: "/catalog/nist-800-53?q=account&family=AC&browseAll=true",
-    },
-    {
-      input: "/build/documents?category=assessment&q=plan",
-      canonical: "/build/documents?category=assessment&q=plan",
-    },
-    {
-      input: "/start?step=dataSensitivity&systemType=Cloud+SaaS",
-      canonical: "/start",
-    },
-    { input: "/?view=templates&templateType=security_plan_starter", canonical: "/?view=templates&templateType=security_plan_starter" },
-  ];
+    ["/atlas?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas?node=nist-800-53%3AAC-2&relationshipView=map"],
+    ["/explore?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas?node=nist-800-53%3AAC-2&relationshipView=map"],
+    ["/search?q=access+control&connectedOnly=true", "/library?q=access+control&connectedOnly=true"],
+    ["/catalog", "/library"],
+    ["/catalog/nist-800-53?q=account&family=AC", "/library/publication/nist-800-53?q=account&family=AC"],
+    ["/resources", "/library?kind=tools-communities"],
+    ["/resources?collection=open-source&q=oscal", "/library?collection=open-source&q=oscal&kind=tools-communities"],
+    ["/resources/official-nist-sp800-53-r5?from=templates", "/library/resource/official-nist-sp800-53-r5"],
+    ["/learn", "/guides"],
+    ["/help", "/about"],
+  ] as const;
 
-  for (const { input, canonical } of cases) {
+  for (const [input, canonical] of cases) {
     const resolved = canonicalizeHashLocation(input);
     assert.equal(resolved.canonicalPath, canonical, input);
     assert.equal(resolved.requiresReplace, input !== canonical, input);
   }
 });
 
-test("invalid parameters are discarded with a visible recovery contract", () => {
-  const resolved = canonicalizeHashLocation(
-    "/explore?relationshipView=unsupported&sourceView=unknown&bogus=value",
+test("unsupported state and arrival-state parameters are stripped", () => {
+  const atlas = canonicalizeHashLocation(
+    "/atlas?relationshipView=unsupported&sourceView=unknown&bogus=value",
   );
+  assert.equal(atlas.canonicalPath, "/atlas");
+  assert.match(atlas.recoveryMessage, /removed/i);
 
-  assert.equal(resolved.canonicalPath, "/explore");
-  assert.match(resolved.recoveryMessage, /removed|could not/i);
+  const record = canonicalizeHashLocation(
+    "/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary%3Fq%3DAC-2",
+  );
+  assert.equal(record.canonicalPath, "/record/nist-800-53/AC-2");
+  assert.match(record.recoveryMessage, /removed/i);
 });
 
-test("invalid Resources facet state recovers to the valid canonical browse scope", () => {
-  const resolved = canonicalizeHashLocation("/resources?category=made-up&lifecycle=Archive");
-  assert.equal(resolved.canonicalPath, "/resources");
-  assert.match(resolved.recoveryMessage, /removed|could not/i);
-});
-
-test("current Resources work stages survive canonicalization", () => {
-  const resolved = canonicalizeHashLocation("/resources?lifecycle=Monitor");
-  assert.equal(resolved.canonicalPath, "/resources?lifecycle=Monitor");
-  assert.equal(resolved.requiresReplace, false);
-});
-
-test("former Build-nested Resources links redirect to the top-level spoke", () => {
-  const browse = canonicalizeHashLocation(
-    "/build/resources?category=tools&lane=open_source",
-  );
-  assert.equal(
-    browse.canonicalPath,
-    "/resources?category=tools&lane=open_source",
-  );
-  assert.equal(browse.requiresReplace, true);
-
-  const detail = canonicalizeHashLocation(
-    "/build/resources/official-nist-sp800-53-r5?from=templates",
-  );
-  assert.equal(
-    detail.canonicalPath,
-    "/resources/official-nist-sp800-53-r5?from=templates",
-  );
-  assert.equal(
-    parseHashLocation(
-      "/build/resources/official-nist-sp800-53-r5",
-      "?from=templates",
-    ).view,
-    "commons-detail",
-  );
-});
-
-test("invalid comparison and boolean state fails closed", () => {
+test("invalid comparison and Library boolean state still fail closed", () => {
   const compare = canonicalizeHashLocation("/compare?crosswalk=decide-for-me&source=nist-800-53");
   assert.equal(compare.canonicalPath, "/compare?source=nist-800-53");
   assert.match(compare.recoveryMessage, /removed/i);
 
-  const search = canonicalizeHashLocation("/search?q=AC-2&connectedOnly=yes");
-  assert.equal(search.canonicalPath, "/search?q=AC-2");
-  assert.match(search.recoveryMessage, /removed/i);
+  const library = canonicalizeHashLocation("/library?q=AC-2&connectedOnly=yes");
+  assert.equal(library.canonicalPath, "/library?q=AC-2");
+  assert.match(library.recoveryMessage, /removed/i);
 });
 
-test("every routable state has one approved display identity", () => {
+test("Build and former Build-resource bookmarks retain their durable content", () => {
+  assert.equal(
+    canonicalizeHashLocation("/build?templateType=security_plan_starter&format=docx").canonicalPath,
+    "/build/documents/security_plan_starter?format=docx",
+  );
+  assert.equal(
+    canonicalizeHashLocation("/build/resources/official-nist-sp800-53-r5?from=templates").canonicalPath,
+    "/library/resource/official-nist-sp800-53-r5",
+  );
+  assert.equal(
+    canonicalizeHashLocation("/build/resources?category=tools&lane=open_source").canonicalPath,
+    "/library?kind=tools-communities",
+  );
+});
+
+test("every app state has one approved display identity", () => {
   for (const view of [
     "home", "start-here", "atlas-map", "search", "catalog-detail",
     "library-detail", "matrix", "patterns", "templates", "sources",
@@ -121,159 +81,91 @@ test("every routable state has one approved display identity", () => {
     assert.ok(identity.label, view);
     assert.ok(identity.title, view);
     assert.ok(identity.contextLabel, view);
+    assert.ok(recoveryViewFor(view), view);
   }
 
-  assert.equal(routeIdentityFor("atlas-map").label, "Atlas");
-  assert.equal(routeIdentityFor("search").label, "Library");
-  assert.equal(routeIdentityFor("catalog-detail").label, "Library");
-  assert.equal(routeIdentityFor("patterns").label, "Guides");
-  assert.equal(routeIdentityFor("templates").label, "Documents");
-  assert.equal(routeIdentityFor("commons").label, "Resources");
+  assert.equal(routeIdentityFor("start-here").path, "/start");
+  assert.equal(routeIdentityFor("search").path, "/library");
+  assert.equal(routeIdentityFor("patterns").path, "/guides");
+  assert.equal(routeIdentityFor("atlas-map").path, "/atlas");
+  assert.equal(routeIdentityFor("sources").path, "/sources");
+  assert.equal(routeIdentityFor("about").path, "/about");
 });
 
-test("canonical destinations own URL, label, title, navigation, analytics, context, and recovery identity", () => {
-  const expected = [
-    ["home", "/", "Home", null, "home"],
-    ["search", "/search", "Library", "catalog-detail", "search"],
-    ["atlas-map", "/explore", "Atlas", "atlas-map", "explore"],
-    ["catalog-detail", "/catalog", "Library", "catalog-detail", "catalog"],
-    ["library-detail", "/record", "Record", "catalog-detail", "record_detail"],
-    ["matrix", "/compare", "Compare", "matrix", "compare"],
-    ["patterns", "/learn", "Guides", "patterns", "learn"],
-    ["templates", "/build", "Documents", "templates", "build"],
-    ["commons", "/resources", "Resources", "commons", "resources"],
-    ["sources", "/sources", "Sources", "sources", "sources"],
-    ["about", "/about", "About", null, "about"],
-  ];
+test("the three primary doors and two utilities own consistent active navigation", () => {
+  assert.equal(selectedNavFor("start-here"), "start-here");
+  for (const view of ["search", "catalog-detail", "library-detail", "atlas-map", "matrix", "commons", "commons-detail"] as const) {
+    assert.equal(selectedNavFor(view), "search", view);
+  }
+  assert.equal(selectedNavFor("patterns"), "patterns");
+  assert.equal(selectedNavFor("sources"), "sources");
+  assert.equal(selectedNavFor("about"), "about");
 
-  assert.deepEqual(
-    CANONICAL_DESTINATIONS.map((destination) => [
-      destination.view,
-      destination.path,
-      destination.label,
-      selectedNavFor(destination.view),
-      destination.analyticsName,
-    ]),
-    expected,
+  const destinations = new Map(CANONICAL_DESTINATIONS.map((entry) => [entry.view, entry]));
+  assert.equal(destinations.get("start-here")?.label, "Start here");
+  assert.equal(destinations.get("search")?.label, "Library");
+  assert.equal(destinations.get("patterns")?.label, "Guides");
+});
+
+test("record URLs serialize canonically without arrival or presentation state", () => {
+  const detail = normalizeViewState("library-detail", {
+    view: "library-detail",
+    node: "nist-800-53:AC-2",
+    relationshipView: "map",
+  });
+  assert.equal(serializeHashLocation(detail), "/record/nist-800-53/AC-2");
+  assert.match(`https://example.test/#${serializeHashLocation(detail)}`, /^https:\/\/[^?]+#\/record\/[^?]+$/);
+
+  const parsed = parseHashLocation(
+    "/record/nist-800-53/AC-2",
+    "?from=search&returnTo=%2Flibrary",
   );
-  for (const destination of CANONICAL_DESTINATIONS) {
-    assert.equal(destination.title, destination.label, destination.view);
-    // Search results are Library in navigation but name their own state in
-    // the context bar, so contextLabel is allowed to differ there.
-    if (destination.view !== "search") {
-      assert.equal(destination.contextLabel, destination.label, destination.view);
-    }
-    assert.ok(recoveryViewFor(destination.view), destination.view);
-    assert.doesNotMatch(destination.label, /atlas-map|catalog-detail|templates|patterns/);
-  }
+  assert.equal(parsed.view, "library-detail");
+  assert.equal((parsed as Extract<typeof parsed, { view: "library-detail" }>).node, "nist-800-53:AC-2");
 });
 
-test("retired aliases no longer redirect and resolve to the not-found state", () => {
-  for (const legacyPath of [
-    "/menu", "/home", "/start-here", "/atlas-map", "/map",
-    "/browse", "/compare-controls", "/source", "/playbooks",
-    "/playbook", "/templates", "/template", "/build/community", "/commons",
-    "/resource-bazaar", "/bazaar", "/hub",
-    "/object/nist-800-53/AC-2",
-  ]) {
-    const canonical = canonicalizeHashLocation(legacyPath);
-    assert.equal(canonical.canonicalPath, legacyPath, legacyPath);
-    assert.equal(canonical.requiresReplace, false, legacyPath);
-    assert.equal(parseHashLocation(legacyPath, "").view, "not-found", legacyPath);
-  }
+test("durable Phase 3 view fields survive canonicalization", () => {
+  const samples = [
+    ["/atlas", {
+      node: "nist-800-53:AC-2",
+      atlasAxis: "framework",
+      atlasLimb: "atlas:LIMB-COMPLIANCE",
+      atlasFramework: "nist-800-53",
+      atlasBaseline: "nist-800-53b:MODERATE",
+      atlasFamily: "nist-800-53:AC",
+      atlasRmfStep: "nist-800-37:RMF-SELECT",
+      relationshipView: "map",
+    }],
+    ["/library", {
+      q: "access control",
+      kind: "requirements",
+      objectType: "control",
+      publisher: "National Institute of Standards and Technology",
+      connectedOnly: "true",
+      sort: "identifier",
+      view: "map",
+    }],
+    ["/library/publication/nist-800-53", { q: "AC", family: "AC", page: "2", area: "Compliance" }],
+    ["/start", { goal: "assess", context: "fedramp" }],
+  ] as const;
 
-  const legacyDetail = canonicalizeHashLocation("/commons-detail?id=official-nist-sp800-53-r5");
-  assert.equal(legacyDetail.canonicalPath, "/commons-detail");
-  assert.equal(parseHashLocation("/commons-detail", "").view, "not-found");
-});
-
-test("query-bearing Explore links do not transfer into Search after alias retirement", () => {
-  const canonical = canonicalizeHashLocation("/explore?q=account+management&objectType=control");
-  assert.equal(canonical.canonicalPath, "/explore");
-  assert.match(canonical.recoveryMessage, /removed/i);
-  assert.equal(parseHashLocation("/explore", "").view, "atlas-map");
-});
-
-// Guard added 2026-08-01 after Start Here's limb routing shipped dead: the new
-// atlasLimb field round-tripped through viewState fine, so every unit test
-// passed, but canonicalizeHashLocation silently stripped it as an unsupported
-// parameter and the link landed on a generic page with a recovery message.
-// A route field that the canonicalizer does not allow is a field that does not
-// exist in production, so assert every one of them survives a round trip.
-test("every durable view field survives canonicalization", () => {
-  const SAMPLES: Array<[string, Record<string, string>]> = [
-    [
-      "/explore",
-      {
-        node: "nist-800-53:AC-2",
-        atlasAxis: "framework",
-        atlasLimb: "atlas:LIMB-COMPLIANCE",
-        atlasFramework: "nist-800-53",
-        atlasBaseline: "nist-800-53b:MODERATE",
-        atlasFamily: "nist-800-53:AC",
-        atlasRmfStep: "nist-800-37:RMF-SELECT",
-        relationshipView: "path",
-      },
-    ],
-    ["/search", { q: "access control", objectType: "control" }],
-    ["/catalog", { q: "AC", family: "AC", page: "2", area: "Compliance" }],
-    [
-      "/resources",
-      { q: "reddit", lane: "practitioner", category: "community" },
-    ],
-  ];
-
-  for (const [path, params] of SAMPLES) {
+  for (const [path, params] of samples) {
     for (const [key, value] of Object.entries(params)) {
-      const url = `${path}?${key}=${encodeURIComponent(value)}`;
-      const canonical = canonicalizeHashLocation(url);
-      assert.ok(
-        canonical.canonicalPath.includes(`${key}=`),
-        `${key} was stripped from ${path}: ${canonical.canonicalPath}`,
-      );
-      assert.equal(
-        canonical.recoveryMessage,
-        "",
-        `${key} on ${path} triggered a recovery message`,
-      );
+      const canonical = canonicalizeHashLocation(`${path}?${key}=${encodeURIComponent(value)}`);
+      assert.ok(canonical.canonicalPath.includes(`${key}=`), `${key} was stripped from ${path}`);
+      assert.equal(canonical.recoveryMessage, "", `${key} triggered recovery on ${path}`);
     }
   }
 });
 
-// 2026-08-03: the public names are Atlas, Library, Guides, and Documents. Both
-// the new name and the long-standing canonical path must reach the surface, so
-// no existing bookmark breaks and no new name is a dead link.
-test("public-name URLs resolve to their canonical surface", () => {
-  for (const [alias, canonicalPath, view] of [
-    ["/atlas", "/explore", "atlas-map"],
-    ["/library", "/catalog", "catalog-detail"],
-    ["/guides", "/learn", "patterns"],
-    ["/documents", "/build", "templates"],
-    ["/library/nist-800-53", "/catalog/nist-800-53", "catalog-detail"],
-  ] as const) {
-    const canonical = canonicalizeHashLocation(alias);
-    assert.equal(canonical.canonicalPath, canonicalPath, alias);
-    assert.equal(canonical.requiresReplace, true, alias);
-    assert.equal(parseHashLocation(alias, "").view, view, alias);
+test("unrecognized retired aliases remain honest not-found routes", () => {
+  for (const path of [
+    "/menu", "/home", "/start-here", "/atlas-map", "/map", "/browse",
+    "/compare-controls", "/source", "/playbooks", "/playbook", "/templates",
+    "/template", "/build/community", "/commons", "/resource-bazaar", "/bazaar",
+    "/hub", "/object/nist-800-53/AC-2", "/commons-detail",
+  ]) {
+    assert.equal(canonicalizeHashLocation(path).canonicalPath, path);
+    assert.equal(parseHashLocation(path, "").view, "not-found", path);
   }
-
-  // The canonical paths keep working untouched.
-  for (const [path, view] of [
-    ["/explore", "atlas-map"],
-    ["/catalog", "catalog-detail"],
-    ["/learn", "patterns"],
-    ["/build", "templates"],
-  ] as const) {
-    assert.equal(canonicalizeHashLocation(path).requiresReplace, false, path);
-    assert.equal(parseHashLocation(path, "").view, view, path);
-  }
-});
-
-test("Start here answers survive canonicalization", () => {
-  const canonical = canonicalizeHashLocation("/start?goal=assess&context=fedramp");
-  assert.equal(canonical.canonicalPath, "/start?goal=assess&context=fedramp");
-  const state = parseHashLocation("/start", "?goal=assess&context=fedramp");
-  assert.equal(state.view, "start-here");
-  assert.equal((state as { goal: string }).goal, "assess");
-  assert.equal((state as { context: string }).context, "fedramp");
 });

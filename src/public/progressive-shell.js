@@ -44,7 +44,7 @@
     var route = segments[0] || "";
     var query = routeUrl.searchParams;
 
-    if (route === "explore") {
+    if (route === "atlas") {
       var rawNode = query.get("node") || "";
       var nodeParts = decode(rawNode).split(":");
       var identifier = nodeParts[nodeParts.length - 1] || "";
@@ -59,11 +59,11 @@
             eyebrow: "Atlas",
             kind: "atlas",
             summary: "Pick an area, then a publication, then a record.",
-            title: "Atlas"
+            title: "Atlas map"
           };
     }
-    if (route === "catalog") {
-      var catalogId = decode(segments[1] || "");
+    if (route === "library") {
+      var catalogId = segments[1] === "publication" ? decode(segments[2] || "") : "";
       return catalogId
         ? {
             eyebrow: "Published structure",
@@ -102,15 +102,6 @@
         title: segments[1] === "tasks" ? "Tasks" : "Documents"
       };
     }
-    if (route === "resources" || route === "resources-detail") {
-      if (segments.length > 1) return null;
-      return {
-        eyebrow: "Resources",
-        kind: "resources",
-        summary: "Tools, portals, training, templates, and practitioner communities.",
-        title: "Find the ecosystem around the work"
-      };
-    }
     if (route === "sources") {
       if (query.get("source")) return null;
       return {
@@ -128,7 +119,7 @@
         title: "Start here"
       };
     }
-    if (route === "learn") {
+    if (route === "guides") {
       if (query.get("pattern")) return null;
       return {
         eyebrow: "Guides",
@@ -142,7 +133,7 @@
         eyebrow: "About",
         kind: "about",
         summary: "A public-source workbench for governing, securing, assessing, operating, and defending systems.",
-        title: "About Control Atlas"
+        title: "About"
       };
     }
     return null;
@@ -154,7 +145,7 @@
   }
 
   function isSearch() {
-    return window.location.hash.replace(/^#/, "").indexOf("/search") === 0;
+    return window.location.hash.replace(/^#/, "").indexOf("/library") === 0;
   }
 
   function setHidden(element, hidden) {

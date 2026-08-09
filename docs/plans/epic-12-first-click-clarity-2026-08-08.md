@@ -524,6 +524,27 @@ If a proposal fits none of the four, it is a new product — and that is the onl
 - A relocation audit table exists listing every moved surface and a verified click path to it.
 - A visible `<footer>` exists on every route.
 
+### 3.7 Permanent relocation audit
+
+The tested click path is the durable discovery path. Redirects preserve old
+bookmarks without restoring a retired primary-navigation destination.
+
+| Moved surface | Old route | New home | Redirect | Tested click path |
+|---|---|---|---|---|
+| Atlas overview | `#/explore` | Library `List \| Map` lens and `#/atlas` overview | `#/explore` → `#/atlas` | Library → Map → Open the Atlas |
+| Atlas record focus | `#/explore?node=…` | Record secondary action and `#/atlas?node=…` | Old query is preserved on `#/atlas` | Library result → record → See this in the Atlas map |
+| Compare | `#/compare` | Record action and Library multi-select mode | Existing deep link remains available | Library → Compare records; record → More actions → Compare |
+| Documents | `#/build/documents` | Start-here outcome and record action | Existing deep link remains available | Start here → Produce a document; record → More actions → Produce a document |
+| Tasks | `#/build/tasks` | Start-here outcome | Existing deep link remains available | Start here → selected goal → starting plan |
+| Resources directory | `#/resources` | Tools & communities Library facet | `#/resources` → `#/library?kind=tools-communities` | Library → Content kind → Tools & communities |
+| Curated resource collections | `#/resources?collection=…` | Saved Library views | Collection is preserved on the Library redirect | Library → saved collection link |
+| Resource detail | `#/resources/:id` | Canonical Library resource detail | `#/resources/:id` → `#/library/resource/:id` | Library resource result → resource detail |
+| Catalog | `#/catalog` | Library | `#/catalog` → `#/library` | Primary navigation → Library |
+| Publication detail | `#/catalog/:id` | Library publication detail | `#/catalog/:id` → `#/library/publication/:id` | Library → publication result |
+| Search | `#/search` | Persistent header control and Library result set | `#/search` → `#/library` with query preserved | Header → Search → Library results |
+| Help | `#/help` | About | `#/help` → `#/about` | Utility navigation → About → Help using Control Atlas |
+| Guides | `#/learn` | Guides | `#/learn` → `#/guides` | Primary navigation → Guides |
+
 ## Phase 4 — Say it in English
 
 *Closes C1–C6, and the "AI-slop" objection.*

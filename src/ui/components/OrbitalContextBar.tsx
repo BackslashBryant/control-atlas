@@ -25,17 +25,11 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         scope: "Control Atlas",
       };
     case "library-detail": {
-      const [catalog = ""] = state.node.split(":", 1);
       return {
         depth: 2,
         mode: "operational",
         label: routeIdentityFor("library-detail").contextLabel,
         scope: entityName || "Record detail",
-        back: {
-          label: "Library",
-          view: "catalog-detail",
-          patch: { view: "catalog-detail", catalog },
-        },
       };
     }
     case "commons-detail":

@@ -19,6 +19,7 @@ import {
 import { displayNameFor } from "../../app/display-names.mjs";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasUniverse } from "../components/AtlasUniverse";
+import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
@@ -56,7 +57,7 @@ type AtlasMapPageProps = {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "atlas-map" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string, from?: string) => void;
+  onOpenNode: (nodeId: string) => void;
 };
 
 type AtlasView = "path" | "map" | "list";
@@ -238,12 +239,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         title={record ? (
           <button
             className="atlas-record-title-link"
-            onClick={() => onOpenNode(record.center_node.id, "atlas-map")}
+            onClick={() => onOpenNode(record.center_node.id)}
             type="button"
           >
             {focusedAtlasTitle(record)}
           </button>
-        ) : "Atlas"}
+        ) : "Atlas map"}
       />
 
       <form className="atlas-map-command" onSubmit={submitSearch}>
@@ -395,12 +396,6 @@ function FocusedAtlas(props: {
     () => buildStructuralChildren(record),
     [record],
   );
-  // Same chain the Hierarchy panel renders, flattened to one orientation line
-  // so the record's position never leaves the screen.
-  const structuralCrumbs = useMemo(
-    () => record.structural_path.map((link) => link.label).filter(Boolean),
-    [record],
-  );
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
   const centerLabel = record.center_node.metadata?.item_id || record.center_node.id;
@@ -547,16 +542,7 @@ function FocusedAtlas(props: {
 
   return (
     <div className="atlas-focused-shell">
-      {/* A compact, always-visible orientation line. The full hierarchy lives
-          in the Hierarchy panel; it is supporting context, not a workspace. */}
-      <p className="atlas-workspace-crumb">
-        <span className="eyebrow">{centerPublication}</span>
-        {record.structural_path.length ? (
-          <span className="atlas-workspace-crumb-path">
-            {structuralCrumbs.join(" › ")}
-          </span>
-        ) : null}
-      </p>
+      <CanonicalBreadcrumb bundle={bundle} nodeId={record.center_node.id} />
       {/* One record workspace, not three competing modes. Connections is the
           product; Hierarchy and the complete list are supporting panels.
           relationshipView still round-trips through the URL so every existing
@@ -814,7 +800,7 @@ function FocusedAtlas(props: {
                     <h2>
                       <button
                         className="atlas-record-title-link"
-                        onClick={() => onOpenNode(inspectedId, "atlas-map")}
+                        onClick={() => onOpenNode(inspectedId)}
                         type="button"
                       >
                         {inspectedItemId}
@@ -1339,7 +1325,7 @@ function AtlasGuidedPath(props: {
                 <li key={`${result.id}:${result.relationshipType}`}>
                   <button
                     className="atlas-path-record"
-                    onClick={() => onOpenNode(result.id, "atlas-map")}
+                    onClick={() => onOpenNode(result.id)}
                     type="button"
                   >
                     <span className="atlas-path-record-text">

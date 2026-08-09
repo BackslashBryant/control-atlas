@@ -14,6 +14,7 @@ import {
   GLOBAL_SEARCH_PLACEHOLDER,
   PRODUCT_HERO,
 } from "../../shared/product-identity";
+import { labelForGoal } from "../../app/start-here-guide.mjs";
 import { HomeCapabilityPreviews } from "../components/HomeCapabilityPreviews";
 import { Button } from "../components/lsm";
 import type { ViewState } from "../lib/viewState";
@@ -27,7 +28,7 @@ type HomePageProps = {
 // the relevant workflow without first learning Control Atlas's feature names.
 const HOME_ENTRANCES = [
   {
-    label: "Understand a requirement",
+    label: labelForGoal("understand"),
     description:
       "Start with controls and requirements, then keep the source attached.",
     icon: IconFileSearch,
@@ -35,7 +36,7 @@ const HOME_ENTRANCES = [
     patch: { goal: "understand" },
   },
   {
-    label: "Secure or build a system",
+    label: labelForGoal("implement"),
     description:
       "Move from requirements into implementation work and technical checks.",
     icon: IconShieldLock,
@@ -43,7 +44,7 @@ const HOME_ENTRANCES = [
     patch: { goal: "implement" },
   },
   {
-    label: "Assess or authorize",
+    label: labelForGoal("assess"),
     description:
       "Open the assessment path, published methods, and package work.",
     icon: IconBinaryTree,
@@ -51,35 +52,35 @@ const HOME_ENTRANCES = [
     patch: { goal: "assess" },
   },
   {
-    label: "Operate or defend",
+    label: labelForGoal("operate"),
     description:
       "Explore adversary techniques, defenses, monitoring, and operations.",
     icon: IconRadar,
-    view: "atlas-map",
-    patch: { atlasLimb: "atlas:LIMB-THREAT" },
+    view: "start-here",
+    patch: { goal: "operate" },
   },
   {
-    label: "Manage risk or supply chain",
+    label: labelForGoal("risk"),
     description:
       "Find requirements, CUI and CMMC material, SBOM resources, and assurance tools.",
     icon: IconBriefcase,
-    view: "search",
-    patch: { query: "supply chain" },
+    view: "start-here",
+    patch: { goal: "risk" },
   },
   {
-    label: "Produce a document",
+    label: labelForGoal("document"),
     description: "Choose the work product first, then add source context.",
     icon: IconClipboardList,
-    view: "templates",
-    patch: { buildSection: "documents" },
+    view: "start-here",
+    patch: { goal: "document" },
   },
   {
-    label: "Find a tool, template, portal, training source, or community",
+    label: labelForGoal("tools"),
     description:
       "Search the practitioner ecosystem without mixing it into publisher hierarchy.",
     icon: IconTool,
-    view: "commons",
-    patch: { showAll: "true" },
+    view: "start-here",
+    patch: { goal: "tools" },
   },
 ] as const;
 
@@ -134,13 +135,6 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
           </div>
         </div>
 
-        <div className="home-work-map" aria-label="The work Control Atlas covers">
-          <span>Govern</span>
-          <span>Build</span>
-          <span>Assess</span>
-          <span>Operate</span>
-          <span>Defend</span>
-        </div>
       </div>
 
       <nav aria-label="Start from your work" className="home-secondary-grid">

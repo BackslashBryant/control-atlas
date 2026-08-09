@@ -170,7 +170,7 @@ export function CommonsPage(props: {
               <div className="resources-result-status"><p aria-live="polite" role="status">Showing {filtered.length} of {resources.length}</p><button onClick={reset} type="button">Back to collections</button></div>
             </div>
             <div className="resources-result-grid">
-              {filtered.map((resource) => <CommonsResourceCard key={resource.id} onSelectDetail={(id) => onNavigate("commons-detail", { id, from: "commons" })} resource={resource} />)}
+              {filtered.map((resource) => <CommonsResourceCard key={resource.id} onSelectDetail={(id) => onNavigate("commons-detail", { id })} resource={resource} />)}
             </div>
           </section>
         ) : (

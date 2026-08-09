@@ -83,7 +83,7 @@ export function ContextualCommonsModule({
             <div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => onNavigate?.("commons-detail", { id: res.id, from: contextType })}
+                  onClick={() => onNavigate?.("commons-detail", { id: res.id })}
                   className="text-xs font-semibold bg-transparent text-[var(--ca-text)] hover:text-[var(--ca-primary)] text-left"
                 >
                   {res.name}

@@ -29,7 +29,6 @@ function display(value: string) {
 
 export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   const id = viewState.view === "commons-detail" ? viewState.id : "";
-  const fromResources = viewState.view === "commons-detail" && Boolean(viewState.from);
   const [copied, setCopied] = useState(false);
   const dataset = bundle?.commonsDataset;
   const resource = useMemo(() => dataset?.resources.find((entry) => entry.id === id) as CommonsResource | undefined, [dataset, id]);
@@ -52,7 +51,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     window.setTimeout(() => setCopied(false), 1800);
   };
   const goBack = () => {
-    if (fromResources && window.history.length > 1) window.history.back();
+    if (window.history.state?.controlAtlasInternalNavigation) window.history.back();
     else onNavigate("commons");
   };
 
@@ -60,7 +59,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     <main className="resource-detail-page">
       <div className="ca-content-container resource-detail-shell">
         <nav aria-label="Resource detail actions" className="resource-detail-nav">
-          <button onClick={goBack} type="button"><IconArrowLeft aria-hidden="true" size={16} />Back to Resources</button>
+          <button onClick={goBack} type="button"><IconArrowLeft aria-hidden="true" size={16} />Back</button>
           <div>
             <button onClick={copyLink} type="button">{copied ? <IconCheck aria-hidden="true" size={15} /> : <IconCopy aria-hidden="true" size={15} />}{copied ? "Link copied" : "Copy link"}</button>
             <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={15} />Report a problem</a>
@@ -99,8 +98,8 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
           <aside className="resource-detail-side">
             <DetailSection title="Ecosystem context">
-              {parent ? <button className="resource-context-link" onClick={() => onNavigate("commons-detail", { id: parent.id, from: "commons" })} type="button"><span>Parent</span><strong>{parent.name}</strong></button> : <p>This is a top-level resource.</p>}
-              {children.map((child) => <button className="resource-context-link" key={child.id} onClick={() => onNavigate("commons-detail", { id: child.id, from: "commons" })} type="button"><span>Related service</span><strong>{child.name}</strong></button>)}
+              {parent ? <button className="resource-context-link" onClick={() => onNavigate("commons-detail", { id: parent.id })} type="button"><span>Parent</span><strong>{parent.name}</strong></button> : <p>This is a top-level resource.</p>}
+              {children.map((child) => <button className="resource-context-link" key={child.id} onClick={() => onNavigate("commons-detail", { id: child.id })} type="button"><span>Related service</span><strong>{child.name}</strong></button>)}
               {collections.map((collection) => <button className="resource-context-link" key={collection.id} onClick={() => onNavigate("commons", { collection: collection.id, showAll: "true" })} type="button"><span>Collection</span><strong>{collection.title}</strong></button>)}
             </DetailSection>
             <DetailSection title="Related publications">
