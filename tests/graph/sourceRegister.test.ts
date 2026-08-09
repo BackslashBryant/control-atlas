@@ -29,3 +29,11 @@ test("source register applies query and facets before presentation", () => {
   assert.ok(rows.every((row) => row.status === "active"));
   assert.equal(buildSourceRegister(sources.sources, { query: "not-a-source" }).length, 0);
 });
+
+test("source register filters by a named publisher without exposing source taxonomy", () => {
+  const publisher = sources.sources.find((source) => source.owner)?.owner;
+  assert.ok(publisher);
+  const rows = buildSourceRegister(sources.sources, { publisher });
+  assert.ok(rows.length > 0);
+  assert.ok(rows.every((row) => row.publisher === publisher));
+});

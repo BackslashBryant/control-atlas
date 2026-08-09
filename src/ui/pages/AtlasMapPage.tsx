@@ -1201,7 +1201,7 @@ function AtlasGuidedPath(props: {
       !family ? (
         <>
           <p className="atlas-path-prompt">
-            Which publisher-declared group do you want to open?
+            Which publisher group do you want to open?
           </p>
           <div className="atlas-ancestry-family-grid">
             {frameworkUnits.map((choice) => (
@@ -1315,8 +1315,8 @@ function AtlasGuidedPath(props: {
             <p className="eyebrow">Published relationships</p>
             <h2>{rmfStep.label}</h2>
             <p>
-              These are the records the public graph directly connects to this
-              step. A program may require additional work products.
+              Published sources link these records to this step. A program may
+              require additional work products.
             </p>
           </header>
           {rmfStep.results.length ? (
@@ -1518,7 +1518,7 @@ function AtlasLoadFailure(props: {
   return (
     <section className="atlas-no-connections" role="alert">
       <h2>{props.error ? "Connections could not be loaded." : "This record is not in the Atlas."}</h2>
-      <p>{props.error ? "The small connection file did not load. Try again or continue through Search." : "The link may be stale or the record may not be part of the current public graph."}</p>
+      <p>{props.error ? "The connection list did not load. Try again or continue through Search." : "The link may be stale or the record may not have a cited Atlas connection."}</p>
       <div className="card-actions">
         <Button variant="primary" onClick={props.onSearch} type="button">Search records</Button>
         <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>

@@ -154,17 +154,19 @@ test("semantic route snapshot: AC-2 record page locks section IDs, group counts,
   await expect(page.getByText("Discussion", { exact: true })).toHaveCount(1);
 });
 
-test("CCI classification agrees between the record page's chip summary and Explore's Map lens", async ({
+test("CCI classification agrees between the record connection and Explore's Map lens", async ({
   page,
 }) => {
   await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const correlatedRow = page
-    .locator(".tree-relationship-class-row")
-    .filter({ hasText: "Correlated through" });
-  await expect(correlatedRow).toBeVisible();
+  const disaGroup = page.locator('#connection-group-disa');
+  await disaGroup.locator('.relationship-group-trigger').click();
+  const citedConnection = disaGroup.locator('[data-record-connection-id]').first();
+  await expect(citedConnection).toBeVisible();
+  await expect(citedConnection.locator('.relationship-meta')).toContainText("Maps to");
+  await expect(citedConnection.locator('.relationship-citation')).not.toBeEmpty();
 
   await gotoApp(page, "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page);

@@ -28,12 +28,12 @@ test("Home is a universal, work-first front door", async ({ page }) => {
   await expect(page.getByText("ATT&CK · Initial Access · T1195.002")).toBeVisible();
 });
 
-test("record keeps official material primary and separates published facts from suggestions", async ({
+test("record keeps official material primary and separates cited links from suggestions", async ({
   page,
 }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
   await expect(page.getByText("Official description", { exact: true })).toBeVisible();
-  await expect(page.getByText("Published fact")).toBeVisible();
+  await expect(page.locator(".connection-rollup")).toContainText("published links");
   const editorial = page.locator('[data-editorial-boundary="explicit"]');
   await expect(editorial).toBeVisible();
   await expect(editorial.getByText("Control Atlas suggestions", { exact: true }).first()).toBeVisible();

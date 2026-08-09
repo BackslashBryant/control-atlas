@@ -104,7 +104,7 @@ export function sourceTrustSummary(source: any) {
 export function sourceUsageSummary(source: any) {
   return source?.graph_eligible && source?.eligibility_status === "eligible"
     ? "Its published records and mappings appear in search, comparison, and Atlas connections"
-    : "Control Atlas links to this source for reference but does not import its records into Atlas connections";
+    : "Control Atlas links to this source for reference; its records are not part of search, comparison, or Atlas connections";
 }
 
 export function sourceWarnings(source: any) {
@@ -114,7 +114,7 @@ export function sourceWarnings(source: any) {
   }
   if (!source.graph_eligible || source.eligibility_status === "excluded") {
     warnings.push(
-      "This source is linked for reference; its records are not imported into Atlas connections.",
+      "This source is linked for reference; its records are not part of search, comparison, or Atlas connections.",
     );
   }
   if (
@@ -137,8 +137,8 @@ export function sourceWarnings(source: any) {
 }
 
 /**
- * spec §10 record-page provenance: "Published by / Imported from / Enriched
- * by / Connections supplied by" — each resolved from the record's own real
+ * Record-page provenance resolves "Published by / From / Enriched by /
+ * Connections supplied by" from the record's own real
  * artifact_ids and the sources those artifacts declare a source_role for,
  * never a generic process description. Names, not internal enum values.
  */
@@ -147,8 +147,12 @@ export function nodeProvenanceBreakdown(
   edges: any[],
   getSource: (id: string) => any,
 ) {
-  const nameFor = (source: any) =>
-    source?.display_name || source?.name || null;
+  const nameFor = (source: any) => {
+    const name = source?.display_name || source?.name || null;
+    return typeof name === "string"
+      ? name.replace(/\s+Artifact$/i, "")
+      : name;
+  };
 
   const artifactSources = (node?.artifact_ids || [])
     .map((id: string) => getSource(id))

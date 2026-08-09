@@ -4,6 +4,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { useState } from "react";
 
 import { ProvenanceTerm } from "./ProvenanceTerm";
+import { displayNameFor } from "../../app/display-names.mjs";
 import { Button } from "./lsm/Button";
 
 const PAGE_SIZE = 10;
@@ -23,7 +24,13 @@ export type RelationshipGroup = {
         catalog_id?: string;
       };
     };
-    edge: { relationship_type?: string };
+    edge: {
+      id?: string;
+      relationship_type?: string;
+      provenance_class?: string;
+      source_artifact_id?: string;
+      source_refs?: Array<{ source_id?: string; locator?: string }>;
+    };
   }>;
 };
 
@@ -33,8 +40,6 @@ export function RelationshipGroupsSection(props: {
   onOpenNode: (nodeId: string) => void;
   onOpenGroupIdsChange?: (groupIds: string[]) => void;
   openGroupIds?: string[];
-  sourceTrustSummary: (source: unknown) => string;
-  source: unknown;
 }) {
   const totalItems = props.groups.reduce(
     (sum, group) => sum + group.items.length,
@@ -66,8 +71,6 @@ export function RelationshipGroupsSection(props: {
             group={group}
             key={group.id}
             onOpenNode={props.onOpenNode}
-            source={props.source}
-            sourceTrustSummary={props.sourceTrustSummary}
           />
         ))}
       </Accordion.Root>
@@ -79,8 +82,6 @@ function RelationshipGroupItem(props: {
   group: RelationshipGroup;
   formatRelationshipLabel: (edge: { relationship_type?: string }) => string;
   onOpenNode: (nodeId: string) => void;
-  sourceTrustSummary: (source: unknown) => string;
-  source: unknown;
 }) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { group } = props;
@@ -102,11 +103,11 @@ function RelationshipGroupItem(props: {
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Content className="accordion-content">
-        <p className="relationship-group-description">{group.description}</p>
         <div className="stack compact">
           {visibleItems.map((item) => (
             <button
               className="relationship-card"
+              data-record-connection-id={item.edge.id}
               key={`${group.id}-${item.counterpart.id}`}
               onClick={() => props.onOpenNode(item.counterpart.id)}
               type="button"
@@ -127,8 +128,22 @@ function RelationshipGroupItem(props: {
                 <span>{props.formatRelationshipLabel(item.edge)}</span>
                 <ProvenanceTerm
                   kind="provenance"
-                  value={(props.source as { provenance_class?: string })?.provenance_class || "federal_published"}
+                  value={item.edge.provenance_class || "federal_published"}
                 />
+                {item.edge.source_refs?.length || item.edge.source_artifact_id ? (
+                  <span className="relationship-citation">
+                    From: {item.edge.source_refs?.length
+                      ? item.edge.source_refs.map((reference) => {
+                      const source = reference.source_id
+                        ? displayNameFor("source_id", reference.source_id)
+                        : "Published source";
+                      return reference.locator
+                        ? `${source} — ${reference.locator}`
+                        : source;
+                    }).join("; ")
+                      : displayNameFor("source_id", item.edge.source_artifact_id || "")}
+                  </span>
+                ) : null}
               </div>
             </button>
           ))}

@@ -181,7 +181,7 @@ export const practitionerGuides = Object.freeze([
     whereItSits: "DISA publishes Security Requirements Guides (SRGs, technology-class) and STIGs (product-specific), revising both on a recurring schedule.",
     whenItMatters: "When implementing or auditing a specific product — the STIG version and its revision date determine which rules apply.",
     explanation: "A STIG moves from a Security Requirements Guide (SRG, a technology-class baseline) to a product-specific STIG, gets periodically revised as DISA reassesses risk, and is retired or superseded when a newer version or the product itself is deprecated.",
-    limitations: "Control Atlas shows the published STIG/SRG rule text and revision it has ingested. It does not track whether a newer revision has since been released — check the DISA library directly for currency.",
+    limitations: "Control Atlas shows the published STIG/SRG rule text and revision from the cited public source. It does not track whether a newer revision has since been released — check the DISA library directly for currency.",
     nextAction: { label: "Browse DISA STIG in Catalog", view: "catalog-detail", patch: { catalog: "disa-stig" } },
     citations: [
       { sourceId: "disa-stig-library", role: "official-subject-source", label: "DISA Security Technical Implementation Guides (STIGs)", url: "https://www.cyber.mil/stigs/", supports: "Publishes the STIG/SRG lifecycle this guide describes." },

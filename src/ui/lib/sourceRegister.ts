@@ -12,6 +12,7 @@ export type SourceRegisterRow = {
 
 export type SourceRegisterFilters = {
   query?: string;
+  publisher?: string;
   provenance?: string;
   eligibility?: string;
   lifecycle?: string;
@@ -25,6 +26,7 @@ export function buildSourceRegister(
   const query = (filters.query || "").trim().toLocaleLowerCase();
   return sources
     .filter((source) => {
+      if (filters.publisher && source.owner !== filters.publisher) return false;
       if (filters.provenance && source.provenance_class !== filters.provenance) return false;
       if (filters.eligibility && source.eligibility_status !== filters.eligibility) return false;
       if (filters.lifecycle && source.lifecycle_status !== filters.lifecycle) return false;

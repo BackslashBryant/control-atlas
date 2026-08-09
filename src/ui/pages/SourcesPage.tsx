@@ -44,9 +44,9 @@ const SOURCE_LAYER_TABS: Array<{
   },
   {
     id: "ingestion",
-    label: "Ingestion provenance",
+    label: "Source files",
     description:
-      "Update-method detail: mirrors, download endpoints, and viewer feeds.",
+      "Files and feeds retrieved from each publisher, with their verified dates.",
   },
   {
     id: "organization",
@@ -68,6 +68,7 @@ export function SourcesPage(props: {
     : null;
   const registerFilters = {
     query: state.query,
+    publisher: state.publisher,
     provenance: state.provenance,
     eligibility: state.eligibility,
     lifecycle: state.lifecycle,
@@ -80,6 +81,7 @@ export function SourcesPage(props: {
       state.access,
       state.eligibility,
       state.lifecycle,
+      state.publisher,
       state.provenance,
       state.query,
     ],
@@ -91,6 +93,7 @@ export function SourcesPage(props: {
       state.access,
       state.eligibility,
       state.lifecycle,
+      state.publisher,
       state.provenance,
       state.query,
     ],
@@ -98,7 +101,12 @@ export function SourcesPage(props: {
   const [activeLayer, setActiveLayer] = useState<SourceLayerId>("publication");
   const activeRows = layers[activeLayer];
   const distinct = (key: string) =>
-    [...new Set(allSources.map((source: any) => source[key]).filter(Boolean))] as string[];
+    ([...new Set(allSources.map((source: any) => source[key]).filter(Boolean))] as string[])
+      .sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" }));
+  const publisherOptions = distinct("owner").map((value) => ({ value, label: value }));
+  const statusOptions = distinct("lifecycle_status")
+    .map((value) => ({ value, label: displayNameFor("lifecycle_status", value) }))
+    .sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }));
 
   if (selectedSource) {
     return (
@@ -270,46 +278,24 @@ export function SourcesPage(props: {
             </div>
           </label>
           <div className="source-register-filters">
-            <SelectField
-              emptyLabel="All source types"
-              label="Source type"
-              onChange={(provenance) => onNavigate("sources", { ...state, provenance })}
-              options={distinct("provenance_class").map((value) => ({
-                value,
-                label: displayNameFor("provenance_class", value),
-              }))}
-              value={state.provenance}
-            />
-            <SelectField
-              emptyLabel="All statuses"
-              label="Status"
-              onChange={(lifecycle) => onNavigate("sources", { ...state, lifecycle })}
-              options={distinct("lifecycle_status").map((value) => ({
-                value,
-                label: displayNameFor("lifecycle_status", value),
-              }))}
-              value={state.lifecycle}
-            />
-            <SelectField
-              emptyLabel="All map states"
-              label="Map inclusion"
-              onChange={(eligibility) => onNavigate("sources", { ...state, eligibility })}
-              options={distinct("eligibility_status").map((value) => ({
-                value,
-                label: displayNameFor("eligibility_status", value),
-              }))}
-              value={state.eligibility}
-            />
-            <SelectField
-              emptyLabel="All access levels"
-              label="Access"
-              onChange={(access) => onNavigate("sources", { ...state, access })}
-              options={distinct("access_status").map((value) => ({
-                value,
-                label: displayNameFor("access_status", value),
-              }))}
-              value={state.access}
-            />
+            {publisherOptions.length >= 2 ? (
+              <SelectField
+                emptyLabel="All publishers"
+                label="Publisher"
+                onChange={(publisher) => onNavigate("sources", { ...state, publisher })}
+                options={publisherOptions}
+                value={state.publisher}
+              />
+            ) : null}
+            {statusOptions.length >= 2 ? (
+              <SelectField
+                emptyLabel="All statuses"
+                label="Status"
+                onChange={(lifecycle) => onNavigate("sources", { ...state, lifecycle })}
+                options={statusOptions}
+                value={state.lifecycle}
+              />
+            ) : null}
           </div>
           <p aria-live="polite" className="source-register-total">
             {rows.length} of {allSources.length} sources
@@ -317,11 +303,8 @@ export function SourcesPage(props: {
         </div>
       </WorkbenchControlSurface>
 
-      {/* W5: three layers, not one mixed table — publication identity,
-          connection/mapping sources, and ingestion artifacts each get their
-          own tab instead of one register that conflates all three (plus
-          Control Atlas's own organizing source, kept out of the publisher
-          list entirely). */}
+      {/* Publication identity, mapping sources, retrieved source files, and
+          Control Atlas's organizing structure remain separate views. */}
       <div aria-label="Source register layers" className="source-view-toggle" role="tablist">
         {SOURCE_LAYER_TABS.map((tab) => (
           <button
@@ -373,7 +356,7 @@ export function SourcesPage(props: {
             <div className="source-register-heading" role="row">
               {activeLayer === "ingestion" ? (
                 <>
-                  <span role="columnheader">Feed / artifact</span>
+                  <span role="columnheader">File or feed</span>
                   <span role="columnheader">Publisher</span>
                   <span role="columnheader">Format</span>
                   <span role="columnheader">Retrieved</span>
@@ -450,6 +433,7 @@ export function SourcesPage(props: {
               onClick={() =>
                 onNavigate("sources", {
                   query: "",
+                  publisher: "",
                   provenance: "",
                   eligibility: "",
                   lifecycle: "",

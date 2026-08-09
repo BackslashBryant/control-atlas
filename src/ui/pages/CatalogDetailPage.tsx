@@ -473,14 +473,6 @@ function CatalogInventory(props: {
           value={state.publisher}
         />
         <InventorySelect
-          label="Lifecycle"
-          onChange={(lifecycle) => update({ lifecycle })}
-          options={[...new Set(rows.map((row) => row.lifecycle))]
-            .filter(Boolean)
-            .sort()}
-          value={state.lifecycle}
-        />
-        <InventorySelect
           label="Record type (advanced)"
           onChange={(type) => update({ type })}
           options={[...new Set(rows.map((row) => row.profile.recordLabel))].sort()}

@@ -68,7 +68,10 @@ export function RelationshipGraphTable(props: {
           {rows.map(({ edge, counterpart, itemId, title, lensLabel }) => {
             const explanation = relationshipExplanation(edge);
             return (
-              <tr key={`${edge.id || edge.relationship_type}-${counterpart.id}`}>
+              <tr
+                data-record-connection-id={edge.id}
+                key={`${edge.id || edge.relationship_type}-${counterpart.id}`}
+              >
               <td data-label="Connected item">
                 <button
                   className="link-action"

@@ -1,9 +1,4 @@
-import {
-  IconArrowRight,
-  IconBook2,
-  IconExternalLink,
-  IconSparkles,
-} from "@tabler/icons-react";
+import { IconBook2, IconExternalLink, IconSparkles } from "@tabler/icons-react";
 import { useMemo } from "react";
 
 import type { CommonsResource } from "../lib/commonsTypes";
@@ -13,29 +8,18 @@ import {
 } from "../lib/contextualMatching";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
-import { Badge, SummaryCard } from "../lib/pagePrimitives";
-
-type PublishedBucket = {
-  id: string;
-  label: string;
-  items: Array<{ id: string; label: string }>;
-};
 
 export function RecordContextRail(props: {
   bundle: RuntimeBundle;
   node: any;
   document: any;
-  publishedBuckets: PublishedBucket[];
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string) => void;
 }) {
   const {
     bundle,
     node,
     document,
-    publishedBuckets,
     onNavigate,
-    onOpenNode,
   } = props;
   const resources = (bundle.commonsDataset?.resources || []) as CommonsResource[];
   const suggestions = useMemo(
@@ -59,34 +43,6 @@ export function RecordContextRail(props: {
 
   return (
     <div className="record-context-rail" data-editorial-boundary="explicit">
-      {publishedBuckets.length ? (
-        <SummaryCard title="Published connections" tone="trust">
-          <p className="record-context-owner">
-            <Badge tone="success">Published fact</Badge>
-            Only published graph relationships with citations appear here.
-          </p>
-          <div className="record-context-published">
-            {publishedBuckets.map((bucket) => (
-              <section key={bucket.id}>
-                <h3>{bucket.label}</h3>
-                <div className="record-context-link-list">
-                  {bucket.items.slice(0, 4).map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => onOpenNode(item.id)}
-                      type="button"
-                    >
-                      <span>{item.label}</span>
-                      <IconArrowRight aria-hidden="true" size={14} />
-                    </button>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        </SummaryCard>
-      ) : null}
-
       {suggestionGroups.map(([group, entries]) => (
         <section
           aria-labelledby={`suggestion-${group.replace(/\W+/g, "-").toLowerCase()}`}
